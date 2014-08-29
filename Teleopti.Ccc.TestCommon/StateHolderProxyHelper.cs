@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			var signalBroker = new SignalBroker(null, MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] {}, new Time(new Now()));
+			MessageBrokerContainer.Configure(null, new IConnectionKeepAliveStrategy[] {}, MessageFilterManager.Instance);
+			var signalBroker = MessageBrokerContainer.CompositeClient();
 			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null);
 			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
         {
             using(mocks.Record())
             {
-                Expect.Call(mb.ConnectionString).Return("Any");
+                Expect.Call(mb.ServerUrl).Return("Any");
                 Expect.Call(mb.IsAlive)
                     .Return(true);
             }
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
         {
             using (mocks.Record())
             {
-                Expect.Call(mb.ConnectionString).Return(null);
+                Expect.Call(mb.ServerUrl).Return(null);
             }
             using (mocks.Playback())
             {
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck
         {
             using (mocks.Record())
             {
-                Expect.Call(mb.ConnectionString).Return("Any");
+                Expect.Call(mb.ServerUrl).Return("Any");
                 Expect.Call(mb.IsAlive)
                     .Return(false);
             }

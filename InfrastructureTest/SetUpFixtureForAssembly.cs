@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
 
-			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
+			MessageBrokerContainer.Configure(null, null, MessageFilterManager.Instance);
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
 									MessageBrokerContainer.CompositeClient(), null);

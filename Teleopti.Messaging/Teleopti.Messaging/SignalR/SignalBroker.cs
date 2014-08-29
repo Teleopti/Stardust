@@ -1,125 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Client.Hubs;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
-using log4net;
-using Teleopti.Messaging.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBroker : IMessageBroker
 	{
-		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
-		private readonly ITime _time;
-		private string _serverUrl;
-		private IHandleHubConnection _connection;
-		private IStateAccessor _stateAccessor;
-		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalBroker));
-
 		private readonly IMessageFilterManager _filterManager;
+		private readonly ISignalRClient _signalRClient;
 		private SignalBrokerCommands _signalBrokerCommands;
 		private MessageBrokerSender _messageBrokerSender;
 		private MessageBrokerListener _messageBrokerListener;
 
-		public SignalBroker(string serverUrl, IMessageFilterManager typeFilter, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
+		public SignalBroker(IMessageFilterManager typeFilter, ISignalRClient signalRClient)
 		{
-			_serverUrl = serverUrl;
-
-			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
-			ServicePointManager.DefaultConnectionLimit = 50;
-
-			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-
-			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
-			_time = time;
 			_filterManager = typeFilter;
-		}
-
-		private static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-		{
-			return true;
-		}
-
-		private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-		{
-			if (e.Observed) return;
-			_logger.Debug("An unobserved task failed.", e.Exception);
-			e.SetObserved();
+			_signalRClient = signalRClient;
 		}
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{
-			if (string.IsNullOrEmpty(_serverUrl))
-				return;
-
-			var connection = new SignalConnection(
-				MakeHubConnection,
-				() => _messageBrokerListener.ReregisterSubscriptions(),
-				_connectionKeepAliveStrategy,
-				_time);
-
-			_connection = connection;
-			_stateAccessor = connection;
-
-			_signalBrokerCommands = new SignalBrokerCommands(_logger, this);
+			_signalBrokerCommands = new SignalBrokerCommands(_signalRClient);
 			_messageBrokerSender = new MessageBrokerSender(_signalBrokerCommands, _filterManager);
 			_messageBrokerListener = new MessageBrokerListener(_signalBrokerCommands);
+			_signalRClient.RegisterCallbacks(_messageBrokerListener.OnNotification, _messageBrokerListener.ReregisterSubscriptions);
 
-			_connection.StartConnection(_messageBrokerListener.OnNotification, useLongPolling);
-		}
-
-		public void Call(string methodName, params object[] args)
-		{
-			if (_stateAccessor == null)
-				return;
-			_stateAccessor.IfProxyConnected(p =>
-			{
-				var task = p.Invoke(methodName, args);
-
-				task.ContinueWith(t =>
-				{
-					if (t.IsFaulted && t.Exception != null)
-						_logger.Info("An error occurred on task calling " + methodName, t.Exception);
-				}, TaskContinuationOptions.OnlyOnFaulted);
-			});
+			_signalRClient.StartBrokerService(useLongPolling);
 		}
 
 		public bool IsAlive
 		{
-			get { return _connection != null && _connection.IsConnected(); }
+			get { return _signalRClient.IsAlive; }
 		}
 
 		public void Dispose()
 		{
-			if (_connection == null) return;
-			_connection.CloseConnection();
-			_connection = null;
-			_stateAccessor = null;
+			_signalRClient.Dispose();
 		}
 
-		[CLSCompliant(false)]
-		protected virtual IHubConnectionWrapper MakeHubConnection()
-		{
-			return new HubConnectionWrapper(new HubConnection(_serverUrl));
-		}
-
-		public void StopBrokerService()
-		{
-			if (_connection != null)
-			{
-				_connection.CloseConnection();
-			}
-		}
-
-		public string ConnectionString { get { return _serverUrl; } set { _serverUrl = value; } }
+		public string ServerUrl { get { return _signalRClient.ServerUrl; } set { _signalRClient.ServerUrl = value; } }
 
 
 

@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled)
 		{
-			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.WinCode.Main
         	
 			var sendToServiceBus = new ServiceBusSender();
 			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
+			MessageBrokerContainer.Configure(null, null, null);
 			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),

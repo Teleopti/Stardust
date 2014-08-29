@@ -2,8 +2,10 @@ using System;
 
 namespace Teleopti.Interfaces.MessageBroker.Client
 {
-	public interface IMessageBroker : IDisposable, ISignalRClient, IMessageBrokerSender, IMessageBrokerListener
+	public interface IMessageBroker : IDisposable, IMessageBrokerSender, IMessageBrokerListener
 	{
-        string ConnectionString { get; set; }
-    }
+		bool IsAlive { get; }
+		string ServerUrl { get; set; }
+		void StartBrokerService(bool useLongPolling = false);
+	}
 }

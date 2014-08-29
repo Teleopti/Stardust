@@ -8,13 +8,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resource
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.SignalR;
@@ -30,7 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_messageBroker == null)
 			{
-				var broker = new SignalBroker(TestSiteConfigurationSetup.URL.ToString(), MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
+				MessageBrokerContainer.Configure(null, new IConnectionKeepAliveStrategy[] { }, null);
+				var broker = MessageBrokerContainer.CompositeClient();
 				broker.StartBrokerService();
 				_messageBroker = broker;
 			}

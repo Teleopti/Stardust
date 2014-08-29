@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Security;
-using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
@@ -11,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
-using Teleopti.Messaging.Exceptions;
 using log4net;
 using Teleopti.Messaging.SignalR.Wrappers;
 
@@ -35,15 +33,26 @@ namespace Teleopti.Messaging.SignalR
 	public static class MessageBrokerContainer
 	{
 		private static string _serverUrl;
+		private static IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private static IMessageFilterManager _messageFilter;
+
 		private static ISignalRClient _client;
 		private static IMessageSender _sender;
 		private static IMessageBroker _compositeClient;
 
-		public static void Configure(string serverUrl, IMessageFilterManager messageFilter)
+		public static void Configure(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, IMessageFilterManager messageFilter)
 		{
 			_serverUrl = serverUrl;
+			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_messageFilter = messageFilter;
+			_client = null;
+			_sender = null;
+			_compositeClient = null;
+		}
+
+		private static IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy()
+		{
+			return _connectionKeepAliveStrategy ?? (_connectionKeepAliveStrategy = new IConnectionKeepAliveStrategy[] {new RestartOnClosed(), new RecreateOnNoPingReply()});
 		}
 
 		private static IMessageFilterManager messageFilter()
@@ -53,17 +62,12 @@ namespace Teleopti.Messaging.SignalR
 
 		public static ISignalRClient SignalRClient()
 		{
-			return _client ?? (_client = new SignalRClient(_serverUrl, new IConnectionKeepAliveStrategy[] {}, new Time(new Now())));
+			return _client ?? (_client = new SignalRClient(_serverUrl, connectionKeepAliveStrategy(), new Time(new Now())));
 		}
 
 		public static IMessageBroker CompositeClient()
 		{
-			if (_compositeClient == null)
-				_compositeClient = new SignalBroker(_serverUrl, messageFilter(), new IConnectionKeepAliveStrategy[] { new RestartOnClosed(), new RecreateOnNoPingReply() }, new Time(new Now()))
-				{
-					ConnectionString = _serverUrl
-				};
-			return _compositeClient;
+			return _compositeClient ?? (_compositeClient = new SignalBroker(messageFilter(), SignalRClient()));
 		}
 
 		public static IMessageSender Sender()
@@ -72,18 +76,24 @@ namespace Teleopti.Messaging.SignalR
 		}
 	}
 
+	public interface IReceiveNotification
+	{
+		void OnNotification(Notification notification);
+	}
+
 	public class SignalRClient : ISignalRClient
 	{
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
-		private readonly string _serverUrl;
 		private IHandleHubConnection _connection;
 		private IStateAccessor _stateAccessor;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalRClient));
+		private Action<Notification> _onNotification = n => { };
+		private Action _afterConnectionCreated = () => { };
 
 		public SignalRClient(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
-			_serverUrl = serverUrl;
+			ServerUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -108,19 +118,19 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{
-			if (string.IsNullOrEmpty(_serverUrl))
+			if (string.IsNullOrEmpty(ServerUrl))
 				return;
 
 			var connection = new SignalConnection(
 				MakeHubConnection,
-				() => { },
+				_afterConnectionCreated,
 				_connectionKeepAliveStrategy,
 				_time);
 
 			_connection = connection;
 			_stateAccessor = connection;
 
-			_connection.StartConnection(null, useLongPolling);
+			_connection.StartConnection(_onNotification, useLongPolling);
 		}
 
 		public void Call(string methodName, params object[] args)
@@ -139,10 +149,18 @@ namespace Teleopti.Messaging.SignalR
 			});
 		}
 
+		public void RegisterCallbacks(Action<Notification> onNotification, Action afterConnectionCreated)
+		{
+			_onNotification = onNotification;
+			_afterConnectionCreated = afterConnectionCreated;
+		}
+
 		public bool IsAlive
 		{
 			get { return _connection != null && _connection.IsConnected(); }
 		}
+
+		public string ServerUrl { get; set; }
 
 		public virtual void Dispose()
 		{
@@ -155,7 +173,7 @@ namespace Teleopti.Messaging.SignalR
 		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
-			return new HubConnectionWrapper(new HubConnection(_serverUrl));
+			return new HubConnectionWrapper(new HubConnection(ServerUrl));
 		}
 
 	}

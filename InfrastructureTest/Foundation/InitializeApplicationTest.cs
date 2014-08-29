@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					.Constraints(
 					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
 				messBroker.StartBrokerService();
-				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
+				Expect.Call(messBroker.ServerUrl).PropertyBehavior();
 			}
 
 			using (new StateHolderModificationContext())
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					.Constraints(
 					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
 				messBroker.StartBrokerService();
-				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
+				Expect.Call(messBroker.ServerUrl).PropertyBehavior();
 			}
 
 			using (new StateHolderModificationContext())
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void VerifyDefaultProperty()
 		{
-			MessageBrokerContainer.Configure(null, MessageFilterManager.Instance);
+			MessageBrokerContainer.Configure(null, null, null);
 			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()), 
 				MessageBrokerContainer.CompositeClient());
 		}

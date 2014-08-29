@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var currentHttpContext = CurrentHttpContext("http://my.url.com", "/app/");
 			var settings = MockRepository.GenerateMock<ISettings>();
 			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
-			messageBroker.Stub(x => x.ConnectionString).PropertyBehavior();
+			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			target.Execute();
 
-			messageBroker.ConnectionString.Should().Be("http://my.url.com/app/");
+			messageBroker.ServerUrl.Should().Be("http://my.url.com/app/");
 		}
 
 		[Test]
@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var settings = MockRepository.GenerateMock<ISettings>();
 			settings.Stub(x => x.MessageBroker()).Return("http://my.broker.com/path/");
 			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
-			messageBroker.Stub(x => x.ConnectionString).PropertyBehavior();
+			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			target.Execute();
 
-			messageBroker.ConnectionString.Should().Be(@"http://my.broker.com/path/");
+			messageBroker.ServerUrl.Should().Be(@"http://my.broker.com/path/");
 		}
 
 		[Test]

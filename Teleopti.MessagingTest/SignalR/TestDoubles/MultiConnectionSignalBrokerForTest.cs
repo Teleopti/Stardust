@@ -9,20 +9,31 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class MultiConnectionSignalBrokerForTest : SignalBroker
 	{
-		private readonly Queue<IHubConnectionWrapper> _hubConnections;
 
-		public MultiConnectionSignalBrokerForTest(IMessageFilterManager typeFilter,
-			IEnumerable<IHubConnectionWrapper> hubConnections, IConnectionKeepAliveStrategy connectionKeepAliveStrategy,
+		public MultiConnectionSignalBrokerForTest(
+			IMessageFilterManager typeFilter,
+			IEnumerable<IHubConnectionWrapper> hubConnections, 
+			IConnectionKeepAliveStrategy connectionKeepAliveStrategy,
 			ITime time)
-			: base(null, typeFilter, new[] {connectionKeepAliveStrategy}, time)
+			: base(typeFilter, new signalRClientForTest(hubConnections, connectionKeepAliveStrategy, time))
 		{
-			_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
-			ConnectionString = "http://neeedsToBeSet";
 		}
 
-		protected override IHubConnectionWrapper MakeHubConnection()
+		private class signalRClientForTest : SignalRClient
 		{
-			return _hubConnections.Dequeue();
+			private readonly Queue<IHubConnectionWrapper> _hubConnections;
+
+			public signalRClientForTest(IEnumerable<IHubConnectionWrapper> hubConnections, IConnectionKeepAliveStrategy connectionKeepAliveStrategy, ITime time)
+				: base("http://neeedsToBeSet", new[] { connectionKeepAliveStrategy }, time)
+			{
+				_hubConnections = new Queue<IHubConnectionWrapper>(hubConnections);
+			}
+
+			protected override IHubConnectionWrapper MakeHubConnection()
+			{
+				return _hubConnections.Dequeue();
+			}
 		}
+
 	}
 }

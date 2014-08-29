@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.SignalR;
@@ -8,18 +8,25 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class SignalBrokerForTest : SignalBroker
 	{
-		private readonly IHubConnectionWrapper _hubConnection;
-
 		public SignalBrokerForTest(IMessageFilterManager typeFilter, IHubConnectionWrapper hubConnection)
-			: base(null, typeFilter, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()))
+			: base(typeFilter, new signalRClientForTest(hubConnection))
 		{
-			_hubConnection = hubConnection;
-			ConnectionString = "http://neeedsToBeSet";
 		}
 
-		protected override IHubConnectionWrapper MakeHubConnection()
+		private class signalRClientForTest : SignalRClient
 		{
-			return _hubConnection;
+			private readonly IHubConnectionWrapper _hubConnection;
+
+			public signalRClientForTest(IHubConnectionWrapper hubConnection)
+				: base("http://neeedsToBeSet", new IConnectionKeepAliveStrategy[] { }, new Time(new Now()))
+			{
+				_hubConnection = hubConnection;
+			}
+
+			protected override IHubConnectionWrapper MakeHubConnection()
+			{
+				return _hubConnection;
+			}
 		}
 
 	}

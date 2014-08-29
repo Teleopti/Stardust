@@ -7,16 +7,15 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalBrokerCommands
 	{
-		private readonly ILog _logger;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalBrokerCommands));
 		private readonly ISignalRClient _client;
 		private const string notifyclients = "NotifyClients";
 		private const string notifyclientsmultiple = "NotifyClientsMultiple";
 		private const string addsubscription = "AddSubscription";
 		private const string removesubscription = "RemoveSubscription";
 
-		public SignalBrokerCommands(ILog logger, ISignalRClient client)
+		public SignalBrokerCommands(ISignalRClient client)
 		{
-			_logger = logger;
 			_client = client;
 		}
 
