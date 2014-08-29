@@ -67,6 +67,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void Call(string methodName, params object[] args)
 		{
+			_logger.Debug(methodName);
 			if (_stateAccessor == null)
 				return;
 			_stateAccessor.IfProxyConnected(p =>
