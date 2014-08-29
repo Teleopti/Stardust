@@ -4304,7 +4304,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (scenarios[i].Restricted && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
 					scenarios.RemoveAt(i);
 			}
-			
+
+            if (RightToLeftLayout) flowLayoutExportToScenario.ReverseRows = true;
+
 			foreach (var scenario in scenarios)
 			{
 				if (_scenario.Description.Name == scenario.Description.Name) continue;
