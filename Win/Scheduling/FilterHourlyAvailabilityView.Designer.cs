@@ -204,9 +204,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.datePicker.Calendar.BottomHeight = 25;
 			this.datePicker.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.datePicker.Calendar.DayNamesColor = System.Drawing.Color.Empty;
-			this.datePicker.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.datePicker.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.datePicker.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.datePicker.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.datePicker.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.datePicker.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.datePicker.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.datePicker.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -222,6 +222,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.Name = "monthCalendar";
 			this.datePicker.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.datePicker.Calendar.SelectedDates = new System.DateTime[0];
+			this.datePicker.Calendar.ShowWeekNumbers = true;
 			this.datePicker.Calendar.Size = new System.Drawing.Size(292, 174);
 			this.datePicker.Calendar.SizeToFit = true;
 			this.datePicker.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;

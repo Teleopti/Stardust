@@ -203,9 +203,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.datePicker.Calendar.BottomHeight = 25;
 			this.datePicker.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.datePicker.Calendar.DayNamesColor = System.Drawing.Color.Empty;
-			this.datePicker.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.datePicker.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.datePicker.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.datePicker.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.datePicker.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.datePicker.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.datePicker.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.datePicker.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -221,6 +221,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.Calendar.Name = "monthCalendar";
 			this.datePicker.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.datePicker.Calendar.SelectedDates = new System.DateTime[0];
+			this.datePicker.Calendar.ShowWeekNumbers = true;
 			this.datePicker.Calendar.Size = new System.Drawing.Size(292, 174);
 			this.datePicker.Calendar.SizeToFit = true;
 			this.datePicker.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -232,7 +233,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// 
 			this.datePicker.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.datePicker.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.datePicker.Calendar.NoneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.Calendar.NoneButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.datePicker.Calendar.NoneButton.ForeColor = System.Drawing.Color.White;
 			this.datePicker.Calendar.NoneButton.IsBackStageButton = false;
@@ -244,7 +245,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// 
 			this.datePicker.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.datePicker.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.datePicker.Calendar.TodayButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.datePicker.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
 			this.datePicker.Calendar.TodayButton.IsBackStageButton = false;
@@ -259,7 +260,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.datePicker.DropDownImage = null;
 			this.datePicker.DropDownNormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.DropDownPressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.datePicker.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(191)))), ((int)(((byte)(237)))));
+			this.datePicker.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.datePicker.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.datePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.datePicker.Location = new System.Drawing.Point(84, 20);
