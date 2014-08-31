@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonManageMultisiteDistributions = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItemActionSkillAddNewWorkload = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.SkillsMenuItemJobHistory = new System.Windows.Forms.ToolStripButton();
 			this.toolStripMenuItemActionSkillDelete1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemActionSkillProperties = new System.Windows.Forms.ToolStripButton();
-			this.SkillsMenuItemJobHistory = new System.Windows.Forms.ToolStripButton();
 			this.toolStripWorkload = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabelActions = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripMenuItemActionWorkloadNewWorkload = new System.Windows.Forms.ToolStripMenuItem();
@@ -216,20 +216,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.contextMenuStripSkills.BackColor = System.Drawing.Color.White;
 			this.contextMenuStripSkills.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuCreateForecast,
+            this.toolStripMenuItemManageDayTemplates,
+            this.toolStripMenuItemSkillsImportForecast,
+            this.toolStripSeparator3,
+            this.xxQuickForecastToolStripMenuItem,
             this.toolStripMenuItemSkillNew,
             this.toolStripMenuItemMultisiteSkillNew,
             this.toolStripMenuItemWorkloadNew,
-            this.toolStripSeparator3,
-            this.toolStripMenuItemManageDayTemplates,
             this.toolStripMenuItemManageMultisiteDistributions,
-            this.toolStripMenuCreateForecast,
-            this.xxQuickForecastToolStripMenuItem,
             this.toolStripSeparator9,
             this.toolStripMenuItemSkillsDelete,
-            this.toolStripMenuItemSkillsProperties,
-            this.toolStripMenuItemSkillsImportForecast});
+            this.toolStripMenuItemSkillsProperties});
 			this.contextMenuStripSkills.Name = "contextMenuStripForecasts";
-			this.contextMenuStripSkills.Size = new System.Drawing.Size(241, 236);
+			this.contextMenuStripSkills.Size = new System.Drawing.Size(241, 258);
 			// 
 			// toolStripMenuItemSkillNew
 			// 
@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripSkills.Office12Mode = false;
 			this.toolStripSkills.Padding = new System.Windows.Forms.Padding(1);
 			this.toolStripSkills.ShowCaption = false;
-			this.toolStripSkills.Size = new System.Drawing.Size(242, 563);
+			this.toolStripSkills.Size = new System.Drawing.Size(242, 302);
 			this.toolStripSkills.TabIndex = 5;
 			this.toolStripSkills.Text = "xxActions";
 			this.toolStripSkills.Visible = false;
@@ -684,6 +684,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(239, 6);
 			// 
+			// SkillsMenuItemJobHistory
+			// 
+			this.SkillsMenuItemJobHistory.BackColor = System.Drawing.Color.White;
+			this.SkillsMenuItemJobHistory.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Reports_variant_32x32;
+			this.SkillsMenuItemJobHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.SkillsMenuItemJobHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.SkillsMenuItemJobHistory.Name = "SkillsMenuItemJobHistory";
+			this.SkillsMenuItemJobHistory.Padding = new System.Windows.Forms.Padding(4);
+			this.SkillsMenuItemJobHistory.Size = new System.Drawing.Size(110, 29);
+			this.SkillsMenuItemJobHistory.Text = "xxJobHistory";
+			this.SkillsMenuItemJobHistory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.SkillsMenuItemJobHistory.Click += new System.EventHandler(this.toolStripMenuItemJobHistoryClick);
+			// 
 			// toolStripMenuItemActionSkillDelete1
 			// 
 			this.toolStripMenuItemActionSkillDelete1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete_small;
@@ -691,7 +704,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemActionSkillDelete1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripMenuItemActionSkillDelete1.Name = "toolStripMenuItemActionSkillDelete1";
 			this.toolStripMenuItemActionSkillDelete1.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripMenuItemActionSkillDelete1.Size = new System.Drawing.Size(239, 29);
+			this.toolStripMenuItemActionSkillDelete1.Size = new System.Drawing.Size(107, 29);
 			this.toolStripMenuItemActionSkillDelete1.Text = "xxDeleteSkill";
 			this.toolStripMenuItemActionSkillDelete1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemActionSkillDelete1.Click += new System.EventHandler(this.toolStripMenuItemActionSkillDeleteClick);
@@ -708,23 +721,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemActionSkillProperties.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemActionSkillProperties.Name = "toolStripMenuItemActionSkillProperties";
 			this.toolStripMenuItemActionSkillProperties.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripMenuItemActionSkillProperties.Size = new System.Drawing.Size(239, 29);
+			this.toolStripMenuItemActionSkillProperties.Size = new System.Drawing.Size(168, 29);
 			this.toolStripMenuItemActionSkillProperties.Text = "xxPropertiesThreeDots";
 			this.toolStripMenuItemActionSkillProperties.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemActionSkillProperties.Click += new System.EventHandler(this.toolStripMenuItemActionSkillPropertiesClick);
-			// 
-			// SkillsMenuItemJobHistory
-			// 
-			this.SkillsMenuItemJobHistory.BackColor = System.Drawing.Color.White;
-			this.SkillsMenuItemJobHistory.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Reports_variant_32x32;
-			this.SkillsMenuItemJobHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.SkillsMenuItemJobHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.SkillsMenuItemJobHistory.Name = "SkillsMenuItemJobHistory";
-			this.SkillsMenuItemJobHistory.Padding = new System.Windows.Forms.Padding(4);
-			this.SkillsMenuItemJobHistory.Size = new System.Drawing.Size(239, 29);
-			this.SkillsMenuItemJobHistory.Text = "xxJobHistory";
-			this.SkillsMenuItemJobHistory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.SkillsMenuItemJobHistory.Click += new System.EventHandler(this.toolStripMenuItemJobHistoryClick);
 			// 
 			// toolStripWorkload
 			// 
