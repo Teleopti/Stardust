@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -20,11 +21,13 @@ namespace Teleopti.Ccc.Win.Commands
 	{
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private readonly IMatrixUserLockLocker _matrixUserLockLocker;
+		private readonly IMatrixNotPermittedLocker _matrixNotPermittedLocker;
 
-		public MatrixListFactory(ISchedulerStateHolder schedulerStateHolder, IMatrixUserLockLocker matrixUserLockLocker)
+		public MatrixListFactory(ISchedulerStateHolder schedulerStateHolder, IMatrixUserLockLocker matrixUserLockLocker, IMatrixNotPermittedLocker matrixNotPermittedLocker)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_matrixUserLockLocker = matrixUserLockLocker;
+			_matrixNotPermittedLocker = matrixNotPermittedLocker;
 		}
 
 		public IList<IScheduleMatrixPro> CreateMatrixListAll(DateOnlyPeriod selectedPeriod)
@@ -55,6 +58,7 @@ namespace Teleopti.Ccc.Win.Commands
 				new ScheduleMatrixListCreator(_schedulerStateHolder.SchedulingResultState).CreateMatrixListFromScheduleParts(scheduleDays);
 
 			_matrixUserLockLocker.Execute(scheduleDays, matrixes, selectedPeriod);
+			_matrixNotPermittedLocker.Execute(matrixes);
 
 			return matrixes;
 		} 

@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _shiftCategoryFairnessHolder = null;
         }
 
-        private class PersistableScheduleDataForAuthorization
+        public class PersistableScheduleDataForAuthorization
         {
 			private readonly IPersistableScheduleData _persistableScheduleData;
 

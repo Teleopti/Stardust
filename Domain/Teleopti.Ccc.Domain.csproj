@@ -427,6 +427,7 @@
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\DayOffRulesValidator.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLocker.cs" />
     <Compile Include="Optimization\DaysOffLegalStateValidatorsFactory.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterEx.cs" />
     <Compile Include="Optimization\TeamBlock\AllTeamMembersInSelectionSpecification.cs" />
@@ -507,7 +508,7 @@
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
-    <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
@@ -607,9 +608,9 @@
     <Compile Include="Optimization\ForecastScheduleValuePair.cs" />
     <Compile Include="Optimization\IDailySkillForecastAndScheduledValueCalculator.cs" />
     <Compile Include="Optimization\ISkillExtractor.cs" />
-    <Compile Include="Optimization\MatrixPersonalShiftLocker.cs" />
-    <Compile Include="Optimization\MatrixMeetingDayLocker.cs" />
-    <Compile Include="Optimization\MatrixNoMainShiftLocker.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixPersonalShiftLocker.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixMeetingDayLocker.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixNoMainShiftLocker.cs" />
     <Compile Include="Optimization\DayOffDecisionMakerExecuter.cs" />
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractor.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractor.cs" />
@@ -617,7 +618,7 @@
     <Compile Include="Optimization\IntradayOptimizer2.cs" />
     <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\DayOffOptimizer.cs" />
-    <Compile Include="Optimization\MatrixOvertimeLocker.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixOvertimeLocker.cs" />
     <Compile Include="Optimization\ResourceCalculateDaysDecider.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />
