@@ -73,6 +73,16 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Budgets_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Budgets_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ccc_Activities_settings2 {
             get {
                 object obj = ResourceManager.GetObject("ccc_Activities_settings2", resourceCulture);
@@ -476,16 +486,6 @@ namespace Teleopti.Ccc.Win.Properties {
         internal static System.Drawing.Bitmap ccc_FindAgent {
             get {
                 object obj = ResourceManager.GetObject("ccc_FindAgent", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ccc_Forecasts {
-            get {
-                object obj = ResourceManager.GetObject("ccc_Forecasts", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1893,6 +1893,16 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Forecasts2_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Forecasts2_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap heart_8x8 {
             get {
                 object obj = ResourceManager.GetObject("heart_8x8", resourceCulture);
@@ -1937,6 +1947,16 @@ namespace Teleopti.Ccc.Win.Properties {
             get {
                 object obj = ResourceManager.GetObject("Intraday", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Intraday_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Intraday_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2071,6 +2091,16 @@ namespace Teleopti.Ccc.Win.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Payroll_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Payroll_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon People {
@@ -2081,12 +2111,32 @@ namespace Teleopti.Ccc.Win.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap People_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("People_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Performance_Manager {
             get {
                 object obj = ResourceManager.GetObject("Performance_Manager", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Performance_Manager_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Performance_Manager_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2123,6 +2173,16 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Reports_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Reports_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap right_round_32 {
             get {
                 object obj = ResourceManager.GetObject("right_round_32", resourceCulture);
@@ -2147,6 +2207,16 @@ namespace Teleopti.Ccc.Win.Properties {
             get {
                 object obj = ResourceManager.GetObject("Schedules", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Schedules_filled_simplified_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Schedules_filled_simplified_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2183,6 +2253,16 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Shifts_filled_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Shifts_filled_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap StartTime {
             get {
                 object obj = ResourceManager.GetObject("StartTime", resourceCulture);
@@ -2207,6 +2287,16 @@ namespace Teleopti.Ccc.Win.Properties {
             get {
                 object obj = ResourceManager.GetObject("Teleopti_WFM_main_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Teleopti_WFM_main_icon_simplified_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Teleopti_WFM_main_icon_simplified_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2283,16 +2373,6 @@ namespace Teleopti.Ccc.Win.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap WFM_Forecasts {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Forecasts", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap WFM_Intraday {
             get {
                 object obj = ResourceManager.GetObject("WFM_Intraday", resourceCulture);
@@ -2336,16 +2416,6 @@ namespace Teleopti.Ccc.Win.Properties {
         internal static System.Drawing.Bitmap WFM_Reports {
             get {
                 object obj = ResourceManager.GetObject("WFM_Reports", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap WFM_Schedules {
-            get {
-                object obj = ResourceManager.GetObject("WFM_Schedules", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -230,7 +230,7 @@
 			// pictureBox1
 			// 
 			this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBox1.Image = global::Teleopti.Ccc.Win.Properties.Resources.WFM_Schedules;
+			this.pictureBox1.Image = global::Teleopti.Ccc.Win.Properties.Resources.Teleopti_WFM_main_icon_simplified_16x16;
 			this.pictureBox1.Location = new System.Drawing.Point(350, 11);
 			this.pictureBox1.Name = "pictureBox1";
 			this.tableLayoutPanel1.SetRowSpan(this.pictureBox1, 3);

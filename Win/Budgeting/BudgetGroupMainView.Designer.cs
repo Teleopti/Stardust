@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 			// toolStripButtonLoadForecastedHours
 			// 
 			this.ribbonControlAdvFixed1.SetDescription(this.toolStripButtonLoadForecastedHours, "");
-			this.toolStripButtonLoadForecastedHours.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
+			this.toolStripButtonLoadForecastedHours.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_16x16;
 			resources.ApplyResources(this.toolStripButtonLoadForecastedHours, "toolStripButtonLoadForecastedHours");
 			this.toolStripButtonLoadForecastedHours.Name = "toolStripButtonLoadForecastedHours";
 			this.toolStripButtonLoadForecastedHours.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;

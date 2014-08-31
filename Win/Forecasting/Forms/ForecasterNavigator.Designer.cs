@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// toolStripMenuCreateForecast
 			// 
-			this.toolStripMenuCreateForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
+			this.toolStripMenuCreateForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_16x16;
 			this.toolStripMenuCreateForecast.Name = "toolStripMenuCreateForecast";
 			this.toolStripMenuCreateForecast.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.toolStripMenuCreateForecast.Size = new System.Drawing.Size(240, 22);
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			// xxEditForecastThreeDotsToolStripMenuItem
 			// 
-			this.xxEditForecastThreeDotsToolStripMenuItem.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
+			this.xxEditForecastThreeDotsToolStripMenuItem.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_16x16;
 			this.xxEditForecastThreeDotsToolStripMenuItem.Name = "xxEditForecastThreeDotsToolStripMenuItem";
 			this.xxEditForecastThreeDotsToolStripMenuItem.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.xxEditForecastThreeDotsToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
@@ -578,7 +578,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// toolStripMenuItemActionSkillPrepareSkill
 			// 
 			this.toolStripMenuItemActionSkillPrepareSkill.BackColor = System.Drawing.Color.White;
-			this.toolStripMenuItemActionSkillPrepareSkill.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
+			this.toolStripMenuItemActionSkillPrepareSkill.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_16x16;
 			this.toolStripMenuItemActionSkillPrepareSkill.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemActionSkillPrepareSkill.Name = "toolStripMenuItemActionSkillPrepareSkill";
 			this.toolStripMenuItemActionSkillPrepareSkill.Padding = new System.Windows.Forms.Padding(4);
@@ -814,7 +814,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// toolStripButtonEditForecast
 			// 
 			this.toolStripButtonEditForecast.BackColor = System.Drawing.Color.White;
-			this.toolStripButtonEditForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
+			this.toolStripButtonEditForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_16x16;
 			this.toolStripButtonEditForecast.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonEditForecast.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonEditForecast.Name = "toolStripButtonEditForecast";

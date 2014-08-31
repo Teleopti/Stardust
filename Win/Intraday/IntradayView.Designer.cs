@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			// toolStripButtonChangeForecast
 			// 
 			this.ribbonControlAdv1.SetDescription(this.toolStripButtonChangeForecast, "");
-			this.toolStripButtonChangeForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
+			this.toolStripButtonChangeForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_16x16;
 			this.toolStripButtonChangeForecast.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonChangeForecast.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonChangeForecast.Name = "toolStripButtonChangeForecast";
