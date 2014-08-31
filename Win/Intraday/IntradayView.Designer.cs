@@ -100,11 +100,13 @@ namespace Teleopti.Ccc.Win.Intraday
 			// 
 			// statusStripExLastUpdate
 			// 
+			this.statusStripExLastUpdate.BeforeTouchSize = new System.Drawing.Size(895, 22);
 			this.statusStripExLastUpdate.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
 			this.statusStripExLastUpdate.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelLastUpdate,
             this.statusStripButtonServerUnavailable});
 			this.statusStripExLastUpdate.Location = new System.Drawing.Point(6, 653);
+			this.statusStripExLastUpdate.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(255)))));
 			this.statusStripExLastUpdate.Name = "statusStripExLastUpdate";
 			this.statusStripExLastUpdate.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Managed;
 			this.statusStripExLastUpdate.Size = new System.Drawing.Size(895, 22);
@@ -139,12 +141,16 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemChart);
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItem1);
 			this.ribbonControlAdv1.Header.AddQuickItem(new Syncfusion.Windows.Forms.Tools.QuickButtonReflectable(toolStripButtonQuickAccessSave));
+			this.ribbonControlAdv1.HideMenuButtonToolTip = false;
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
 			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
-			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
+			this.ribbonControlAdv1.MenuButtonEnabled = true;
+			this.ribbonControlAdv1.MenuButtonFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ribbonControlAdv1.MenuButtonText = "";
+			this.ribbonControlAdv1.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(114)))), ((int)(((byte)(198)))));
 			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			// 
 			// ribbonControlAdv1.OfficeMenu
 			// 
@@ -154,12 +160,18 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(146, 88);
 			this.ribbonControlAdv1.OfficeMenu.SystemPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonExit});
+			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
+			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemHome;
+			this.ribbonControlAdv1.Show2010CustomizeQuickItemDialog = false;
+			this.ribbonControlAdv1.ShowRibbonDisplayOptionButton = true;
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(905, 150);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "StartMenu";
 			this.ribbonControlAdv1.TabIndex = 0;
 			this.ribbonControlAdv1.Text = "yyribbonControlAdv1";
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
+			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.Black;
 			// 
 			// toolStripTabItemHome
 			// 
@@ -224,7 +236,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripButtonChangeForecast.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonChangeForecast.Name = "toolStripButtonChangeForecast";
 			this.SetShortcut(this.toolStripButtonChangeForecast, System.Windows.Forms.Keys.None);
-			this.toolStripButtonChangeForecast.Size = new System.Drawing.Size(76, 81);
+			this.toolStripButtonChangeForecast.Size = new System.Drawing.Size(76, 85);
 			this.toolStripButtonChangeForecast.Text = "xxReforecast";
 			this.toolStripButtonChangeForecast.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonChangeForecast, false);
@@ -312,8 +324,10 @@ namespace Teleopti.Ccc.Win.Intraday
 			// 
 			this.contextMenuStripExViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemRemove});
+			this.contextMenuStripExViews.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuStripExViews.Name = "contextMenuStripExViews";
 			this.contextMenuStripExViews.Size = new System.Drawing.Size(118, 26);
+			this.contextMenuStripExViews.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Default;
 			// 
 			// toolStripMenuItemRemove
 			// 
@@ -405,6 +419,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripButtonHelp.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonHelp.Name = "toolStripButtonHelp";
+			this.SetShortcut(this.toolStripButtonHelp, System.Windows.Forms.Keys.None);
 			this.toolStripButtonHelp.Size = new System.Drawing.Size(78, 36);
 			this.toolStripButtonHelp.Text = "xxHelp";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonHelp, true);

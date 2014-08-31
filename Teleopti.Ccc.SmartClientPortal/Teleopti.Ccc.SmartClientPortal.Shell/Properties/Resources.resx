@@ -185,12 +185,6 @@
   <data name="Budgets_filled_space_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Budgets_filled_space_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Forecasts_filled_simplified_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Forecasts_filled_simplified_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Forecasts_filled_space_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Forecasts_filled_space_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Intraday_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Intraday_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -235,5 +229,11 @@
   </data>
   <data name="Teleopti_WFM_main_icon_simplified_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Teleopti-WFM-main-icon_simplified-16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Forecasts2_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Forecasts2_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Forecasts2_filled_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Forecasts2_filled_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

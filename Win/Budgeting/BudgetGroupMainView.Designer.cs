@@ -127,10 +127,10 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.backStage1.AllowDrop = true;
 			this.backStage1.BeforeTouchSize = new System.Drawing.Size(1217, 792);
 			this.backStage1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.backStage1.Controls.Add(this.backStageButton1);
 			this.backStage1.Controls.Add(this.backStageSeparator1);
-			this.backStage1.Controls.Add(this.backStageButton2);
 			this.backStage1.Controls.Add(this.backStageSeparator2);
+			this.backStage1.Controls.Add(this.backStageButton1);
+			this.backStage1.Controls.Add(this.backStageButton2);
 			this.backStage1.Controls.Add(this.backStageButton3);
 			this.backStage1.Controls.Add(this.backStageButton4);
 			this.backStage1.Name = "backStage1";
@@ -235,7 +235,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			this.ribbonControlAdvFixed1.SetUseInCustomQuickAccessDialog(this.toolStripButton1, true);
 			this.ribbonControlAdvFixed1.SetUseInQuickAccessMenu(this.toolStripButton1, false);
 			this.toolStripButton1.Click += new System.EventHandler(this.btnSaveClick);
-			this.toolStripButton1.Text = "xxSave";
 			// 
 			// toolStripEx1
 			// 

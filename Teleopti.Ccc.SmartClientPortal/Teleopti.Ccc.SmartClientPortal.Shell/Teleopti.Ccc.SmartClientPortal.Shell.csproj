@@ -348,11 +348,12 @@
     <None Include="Resources\Shifts_filled_16x16.png" />
     <None Include="Resources\Teleopti-WFM-main-icon_simplified-16x16.png" />
     <None Include="Resources\PeopleWFM.ico" />
+    <None Include="Resources\Forecasts2_filled_32x32.png" />
+    <None Include="Resources\Forecasts2_filled_16x16.png" />
     <Content Include="StaticPage.min.html">
       <DependentUpon>StaticPage.html</DependentUpon>
     </Content>
     <Content Include="TeleoptiWFM.ico" />
-    <Content Include="WFM-Circle-1.ico" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -368,7 +369,6 @@
     <None Include="Resources\Schedules_small.png" />
     <None Include="Resources\Shifts_small.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
-    <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Teleopti.Ccc.snk">

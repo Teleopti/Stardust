@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
-						outlookBarSmartPartInfo.Icon = Resources.Forecasts_filled_space_32x32;
+						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;

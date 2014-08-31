@@ -3648,6 +3648,7 @@
     </None>
     <None Include="Forecasting\Forms\Forecaster.cd" />
     <None Include="Resources\ccc_Activities_settings2.png" />
+    <None Include="Resources\Budgets.ico" />
     <Content Include="Resources\bullet_black.png" />
     <Content Include="Resources\bullet_white.png" />
     <Content Include="Resources\ccc_Add.png" />
@@ -3815,6 +3816,7 @@
     <Content Include="Resources\ccc_varning_yellow _16x16.png" />
     <Content Include="Resources\double_arrow_down.png" />
     <Content Include="Resources\double_arrow_up.png" />
+    <None Include="Resources\Forecasts.ico" />
     <Content Include="Resources\graphhs.png" />
     <Content Include="Resources\heart_8x8.png" />
     <Content Include="Resources\help_32.png" />
@@ -3822,9 +3824,9 @@
     <Content Include="Resources\hierarchipanel-loader.gif" />
     <Content Include="Resources\information_16.png" />
     <Content Include="Resources\information_32.png" />
-    <None Include="Resources\intraday.ico" />
     <None Include="Resources\Magifier_zoom_out.png" />
     <None Include="Resources\leftarrow.png" />
+    <None Include="Resources\Intraday.ico" />
     <Content Include="Resources\intraday.png" />
     <Content Include="Resources\leftScale.png" />
     <None Include="Resources\left_round-32.png" />
@@ -3838,16 +3840,18 @@
     <Content Include="Resources\magnifier_8x8.png" />
     <None Include="Resources\Magnifier_zoom_in.png" />
     <None Include="Resources\options.ico" />
-    <None Include="Resources\people.ico" />
     <None Include="Resources\NewMeeting.PNG" />
     <None Include="Resources\Open.PNG" />
     <None Include="Resources\pinned.jpg" />
-    <None Include="Resources\Performance-Manager.ico" />
     <None Include="Resources\mail_delete.png" />
+    <None Include="Resources\Payroll.ico" />
+    <None Include="Resources\People.ico" />
+    <None Include="Resources\Performance-Manager.ico" />
     <Content Include="Resources\period.png" />
     <Content Include="Resources\process.ico" />
     <None Include="Resources\rights.ico" />
     <Content Include="Resources\Refresh1.ico" />
+    <None Include="Resources\Reports.ico" />
     <Content Include="Resources\rightScale.png" />
     <Content Include="Resources\RightToLeft.bmp" />
     <None Include="Resources\scheduler.ico" />
@@ -3856,7 +3860,7 @@
     <Content Include="Resources\Scorecard.gif" />
     <None Include="Resources\StartTime.PNG" />
     <None Include="Resources\shiftEditor_16x16.png" />
-    <None Include="Resources\shifts.ico" />
+    <None Include="Resources\Shifts.ico" />
     <Content Include="Resources\Skill_Inactive_8bit_BG.png" />
     <Content Include="Resources\skill_retail.png" />
     <Content Include="Resources\Sort.TIF" />

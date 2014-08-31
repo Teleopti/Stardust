@@ -120,9 +120,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Forecasts_filled_simplified_16x16 {
+        public static System.Drawing.Bitmap Forecasts2_filled_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Forecasts_filled_simplified_16x16", resourceCulture);
+                object obj = ResourceManager.GetObject("Forecasts2_filled_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -130,9 +130,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Forecasts_filled_space_32x32 {
+        public static System.Drawing.Bitmap Forecasts2_filled_32x32 {
             get {
-                object obj = ResourceManager.GetObject("Forecasts_filled_space_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Forecasts2_filled_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
