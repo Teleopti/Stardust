@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
     /// <summary>
     /// Locks the days with full day, or part day Absence or days that is not scheduled
