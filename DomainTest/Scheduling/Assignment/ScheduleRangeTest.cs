@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
 		}
 
-		[Test]
+		[Test, Ignore("Micke ska prata med Roger")]
 		public void VerifyCalculatedContractTimeHolderAndCalculatedScheduleDaysOff()
 		{
 			_target.CalculatedContractTimeHolder = TimeSpan.FromMinutes(24);
