@@ -209,8 +209,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Record())
 			{
-				fullPermission(true);
-                Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(true).Repeat.Twice();
+				fullPermission(false);
+                Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(false).Repeat.Twice();
 			}
             using (_mocks.Playback())
             {
