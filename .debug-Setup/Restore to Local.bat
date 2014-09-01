@@ -61,7 +61,6 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%COMPUTERNAME%
-SET INSTANCE=%COMPUTERNAME%\SQL2008R2
 
 ::Build DbManager
 ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
