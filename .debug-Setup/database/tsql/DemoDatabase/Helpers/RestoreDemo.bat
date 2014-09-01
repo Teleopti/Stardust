@@ -103,4 +103,3 @@ ECHO fix data for Demo. Done!
 ECHO.
 net start teleoptiEtlService
 net start "Teleopti Service Bus"
-PAUSE
