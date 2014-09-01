@@ -67,10 +67,12 @@
 				teamId,
 				function () {
 					$('.realtimeadherenceagents').attr("data-subscription-done", " ");
-				});
+				},
+				true);
 			}
 
 			if (options.id === 'MultipleTeams') {
+				subscriptions.unsubscribeAdherence();
 				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', {
 					enabled: function() {
 						var teams = amplify.store('MultipleTeams');

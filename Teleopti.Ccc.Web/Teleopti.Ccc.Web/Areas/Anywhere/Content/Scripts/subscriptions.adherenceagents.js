@@ -25,8 +25,10 @@ define([
 			return startPromise;
 		},
 
-		subscribeAdherence: function (callback, teamId, subscriptionDone) {
-			unsubscribeAdherence();
+		subscribeAdherence: function (callback, teamId, subscriptionDone, multipleSubscription) {
+			if (!multipleSubscription) {
+				unsubscribeAdherence();
+			}
 			startPromise.done(function () {
 				agentAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'AgentsAdherenceMessage',
