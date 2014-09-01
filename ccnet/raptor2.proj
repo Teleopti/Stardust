@@ -12,7 +12,6 @@
 		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
-		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
 	
 		<ASCompile>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</ASCompile>
 		<ASCompile Condition="'$(computername)' == 'Teleopti629'">C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</ASCompile>
@@ -46,7 +45,6 @@
 	<PropertyGroup>
 		<NUnitExe>"$(NugetPackages)\NUnit.Runners.2.6.2\tools\nunit-console.exe"</NUnitExe>
 		<NUnitArgs>/nologo /noshadow /config=$(Configuration) /domain=Multiple</NUnitArgs>
-		<TrunkDbCreator>"$(CCNetWorkingDirectory)\Database\Tools\VersionTry.bat"</TrunkDbCreator>
 
 		<CoverageReports>
 			<Report>
