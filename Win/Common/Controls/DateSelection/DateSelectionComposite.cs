@@ -14,15 +14,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			if (!DesignMode) SetTexts();
 		  }
 		 
-
 		public event EventHandler<DateRangeChangedEventArgs> DateRangeChanged;
-
-		private void dateSelectionControl1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
-		{
-			periodListSelectionBox1.AddSelectedDates(new List<DateOnlyPeriod>(e.SelectedDates));
-		}
-
-		
+	
 		internal void AddSelectedDates(IList<DateOnlyPeriod> selectedDates)
 		{
 			periodListSelectionBox1.AddSelectedDates(selectedDates);
@@ -96,6 +89,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		internal void SetSelectedDates(IList<DateOnlyPeriod> selectedDates)
 		{
 			periodListSelectionBox1.SetSelectedDates(selectedDates);
+		}
+
+		private void dateSelectionControl1AddButtonClicked(object sender, DateRangeChangedEventArgs e)
+		{
+			periodListSelectionBox1.AddSelectedDates(new List<DateOnlyPeriod>(e.SelectedDates));
 		}
 	}
 }

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateSelectionControl1.ShowTabArea = true;
 			this.dateSelectionControl1.Size = new System.Drawing.Size(169, 207);
 			this.dateSelectionControl1.TabIndex = 9;
-			this.dateSelectionControl1.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionControl1DateRangeChanged);
+			this.dateSelectionControl1.AddButtonClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dateSelectionControl1AddButtonClicked);
 			// 
 			// DateSelectionComposite
 			// 

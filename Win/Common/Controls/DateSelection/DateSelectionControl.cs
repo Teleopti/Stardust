@@ -40,10 +40,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		}
 
 		public event EventHandler<DateRangeChangedEventArgs> DateRangeChanged;
+		public event EventHandler<DateRangeChangedEventArgs> AddButtonClicked;
 
 		private void dateSelectionCalendar1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
 		{
 			onDateRangeChanged(e.SelectedDates);
+			raiseButtonClicked(e);
 		}
 
 		private void dateSelectionFromTo1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		private void dateSelectionRolling1DateRangeChanged(object sender, DateRangeChangedEventArgs e)
 		{
 			onDateRangeChanged(e.SelectedDates);
+			raiseButtonClicked(e);
 		}
 
 		private void onDateRangeChanged(ReadOnlyCollection<DateOnlyPeriod> dates)
@@ -152,6 +155,21 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			{
 				return false;
 			}
+		}
+
+		private void raiseButtonClicked(DateRangeChangedEventArgs e)
+		{
+			if (!dateSelectionFromTo1.IsWorkPeriodValid) return;
+			var handler = AddButtonClicked;
+			if (handler != null)
+			{
+				handler.Invoke(this, e);
+			}
+		}
+
+		private void dateSelectionFromTo1ButtonClickedNoValidation(object sender, EventArgs e)
+		{
+			raiseButtonClicked(new DateRangeChangedEventArgs(new ReadOnlyCollection<DateOnlyPeriod>(dateSelectionFromTo1.GetSelectedDates())));
 		}
 	}
 }

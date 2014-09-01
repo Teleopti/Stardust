@@ -3,36 +3,36 @@ using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 {
-    partial class DateSelectionFromTo : BaseUserControl
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	 partial class DateSelectionFromTo : BaseUserControl
+	 {
+		  /// <summary> 
+		  /// Required designer variable.
+		  /// </summary>
+		  private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-                if (_errorProvider != null)
-                    _errorProvider.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		  /// <summary> 
+		  /// Clean up any resources being used.
+		  /// </summary>
+		  /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		  protected override void Dispose(bool disposing)
+		  {
+				if (disposing && (components != null))
+				{
+					 components.Dispose();
+					 if (_errorProvider != null)
+						  _errorProvider.Dispose();
+				}
+				base.Dispose(disposing);
+		  }
 
-        #region Component Designer generated code
+		  #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		  /// <summary> 
+		  /// Required method for Designer support - do not modify 
+		  /// the contents of this method with the code editor.
+		  /// </summary>
+		  private void InitializeComponent()
+		  {
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelTargetPeriod = new System.Windows.Forms.Label();
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.btnApplyChangedPeriod.TabIndex = 3;
 			this.btnApplyChangedPeriod.Text = "xxApply";
 			this.btnApplyChangedPeriod.UseVisualStyle = true;
-			this.btnApplyChangedPeriod.Click += new System.EventHandler(this.btnApplyChangedPeriod_Click);
+			this.btnApplyChangedPeriod.Click += new System.EventHandler(this.btnApplyChangedPeriodClick);
 			// 
 			// DateSelectionFromTo
 			// 
@@ -292,16 +292,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvWorkAStartDate)).EndInit();
 			this.ResumeLayout(false);
 
-        }
+		  }
 
-        #endregion
+		  #endregion
 
-        private System.Windows.Forms.Label labelTargetPeriodTo;
-        private System.Windows.Forms.Label labelTargetPeriod;
-        private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvWorkEndPeriod;
-        private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvWorkAStartDate;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private ErrorProvider _errorProvider = new ErrorProvider();
-        private Syncfusion.Windows.Forms.ButtonAdv btnApplyChangedPeriod;
-    }
+		  private System.Windows.Forms.Label labelTargetPeriodTo;
+		  private System.Windows.Forms.Label labelTargetPeriod;
+		  private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvWorkEndPeriod;
+		  private Syncfusion.Windows.Forms.Tools.DateTimePickerAdv dateTimePickerAdvWorkAStartDate;
+		  private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		  private ErrorProvider _errorProvider = new ErrorProvider();
+		  private Syncfusion.Windows.Forms.ButtonAdv btnApplyChangedPeriod;
+	 }
 }
