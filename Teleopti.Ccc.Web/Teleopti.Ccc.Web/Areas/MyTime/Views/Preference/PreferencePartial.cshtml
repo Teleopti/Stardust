@@ -287,7 +287,7 @@
 											<div class="preference-indicator">
 												<span class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></span>
 											</div>
-											<div class="label label-default preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
+											<div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
 											<div class="preference-indicator">
 												<!-- ko if: tooltipText -->
 												<div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
