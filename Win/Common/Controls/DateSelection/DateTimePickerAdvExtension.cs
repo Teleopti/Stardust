@@ -4,6 +4,7 @@ using System.Reflection;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
@@ -46,6 +47,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		/// - bugfix 22929: Bulgarian date format not displayed well in most calendar controls:
 		/// seems that CalendarSizeToFit property does not work with the BG culture
 		/// - taking care of ISO8601 weeknumbers
+		/// Ola 2014-09-01 it is actually all cultures with shortestdaynames that is just one letter that has this problem
+		/// just let us use hardcoded with everywhere
 		/// </remarks>
 		public static void SetCultureInfoSafe(this DateTimePickerAdv dateTimePickerAdv, CultureInfo cultureInfo)
 		{
@@ -56,65 +59,37 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			dateTimePickerAdv.Calendar.Iso8601CalenderFormat =
 				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
 
-			if (cultureInfo.LCID == 1026
-				&& dateTimePickerAdv.CalendarSizeToFit )
-			{
-				dateTimePickerAdv.CalendarSizeToFit = false;
-				dateTimePickerAdv.CalendarSize = new Size(205, 175);
-			}
-			//when right to left the calendar get to small so the numbers are not displayed correctly
-			if (TeleoptiPrincipal.Current != null && ((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-			{
-				dateTimePickerAdv.CalendarSizeToFit = false;
-				dateTimePickerAdv.CalendarSize = new Size(205, 175);
-			}
+			
+			dateTimePickerAdv.CalendarSizeToFit = false;
+			dateTimePickerAdv.CalendarSize = new Size(240, 175);
+			dateTimePickerAdv.Calendar.TodayButton.Text = Resources.Today;
+			dateTimePickerAdv.Calendar.NoneButton.Text = Resources.None;
 		}
 
 		public static void SetCalendarMetroStyle(this DateTimePickerAdv dateTimePickerAdv)
 		{
 			dateTimePickerAdv.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			dateTimePickerAdv.Calendar.AllowMultipleSelection = false;
-			dateTimePickerAdv.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			dateTimePickerAdv.Calendar.BorderColor = Color.FromArgb(209, 211, 212);
 			dateTimePickerAdv.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			dateTimePickerAdv.Calendar.BottomHeight = 25;
-			dateTimePickerAdv.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			dateTimePickerAdv.Calendar.DayNamesColor = System.Drawing.SystemColors.ControlText;
-			dateTimePickerAdv.Calendar.DayNamesFont = new System.Drawing.Font("Segoe", 8.25F, System.Drawing.FontStyle.Bold);
-			dateTimePickerAdv.Calendar.DaysFont = new System.Drawing.Font("Segoe", 8F);
-			dateTimePickerAdv.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
-			dateTimePickerAdv.Calendar.Font = new System.Drawing.Font("Segoe", 8F);
-			dateTimePickerAdv.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;
+			dateTimePickerAdv.Calendar.DayNamesColor = Color.FromArgb(0, 153, 255);
+			dateTimePickerAdv.Calendar.DayNamesFont = new Font("Segoe", 9F);
+			dateTimePickerAdv.Calendar.DaysFont = new Font("Segoe", 9F);
+			dateTimePickerAdv.Calendar.Font = new Font("Segoe", 8F);
+			dateTimePickerAdv.Calendar.ForeColor = SystemColors.ControlText;
 			dateTimePickerAdv.Calendar.GridLines = Syncfusion.Windows.Forms.Grid.GridBorderStyle.None;
-			dateTimePickerAdv.Calendar.HeaderEndColor = System.Drawing.Color.White;
-			dateTimePickerAdv.Calendar.HeaderHeight = 34;
-			dateTimePickerAdv.Calendar.HeaderStartColor = System.Drawing.Color.White;
-			dateTimePickerAdv.Calendar.HighlightColor = System.Drawing.Color.White;
-			dateTimePickerAdv.Calendar.Iso8601CalenderFormat = false;
-			dateTimePickerAdv.Calendar.Location = new System.Drawing.Point(0, 0);
-			dateTimePickerAdv.Calendar.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			dateTimePickerAdv.Calendar.Name = "monthCalendar";
-			dateTimePickerAdv.Calendar.Office2007Theme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			dateTimePickerAdv.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
-			dateTimePickerAdv.Calendar.SelectedDates = new System.DateTime[0];
+			dateTimePickerAdv.Calendar.HeaderEndColor = Color.White;
+			dateTimePickerAdv.Calendar.HeaderStartColor = Color.White;
+			dateTimePickerAdv.Calendar.HighlightColor = Color.White;
+			dateTimePickerAdv.Calendar.Location = new Point(0, 0);
+			dateTimePickerAdv.Calendar.MetroColor = Color.FromArgb(0, 153, 255);
 			dateTimePickerAdv.Calendar.ShowWeekNumbers = true;
-			dateTimePickerAdv.Calendar.Size = new System.Drawing.Size(209, 174);
-			dateTimePickerAdv.Calendar.SizeToFit = true;
 			dateTimePickerAdv.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			dateTimePickerAdv.Calendar.TabIndex = 0;
 			dateTimePickerAdv.Calendar.ThemedEnabledGrid = true;
-			dateTimePickerAdv.Calendar.WeekInterior = new BrushInfo();
-			dateTimePickerAdv.Calendar.WeekFont = new System.Drawing.Font("Segoe", 8F, FontStyle.Bold);
-			// 
-			// 
-			// 
+			dateTimePickerAdv.Calendar.WeekFont = new Font("Segoe", 9F);
 			dateTimePickerAdv.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			dateTimePickerAdv.Calendar.TodayButton.BeforeTouchSize = new System.Drawing.Size(75, 23);
-			dateTimePickerAdv.Calendar.TodayButton.ForeColor = System.Drawing.Color.White;
+			dateTimePickerAdv.Calendar.TodayButton.ForeColor = Color.White;
 			dateTimePickerAdv.Calendar.TodayButton.IsBackStageButton = false;
-			dateTimePickerAdv.Calendar.TodayButton.Location = new System.Drawing.Point(2, 1);
-			dateTimePickerAdv.Calendar.TodayButton.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			dateTimePickerAdv.Calendar.TodayButton.Size = new System.Drawing.Size(134, 21);
-			dateTimePickerAdv.Calendar.TodayButton.Text = "Today";
 			dateTimePickerAdv.Calendar.TodayButton.UseVisualStyle = true;
 		}
 	}
