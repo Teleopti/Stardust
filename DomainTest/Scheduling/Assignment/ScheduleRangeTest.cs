@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
 		}
 
-		[Test, Ignore("Micke ska prata med Roger")]
+		[Test]
 		public void VerifyCalculatedContractTimeHolderAndCalculatedScheduleDaysOff()
 		{
 			_target.CalculatedContractTimeHolder = TimeSpan.FromMinutes(24);
@@ -209,8 +209,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Record())
 			{
-				fullPermission(false);
-                Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(false).Repeat.Twice();
+				fullPermission(true);
+                Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(true).Repeat.Twice();
 			}
             using (_mocks.Playback())
             {
