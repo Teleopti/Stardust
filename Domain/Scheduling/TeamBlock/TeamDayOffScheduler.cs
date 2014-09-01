@@ -103,28 +103,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                      IPerson person, DateOnly scheduleDate,
 		                      out IEffectiveRestriction restriction)
 		{
-			var selectedMatrixesForTeam = new List<IScheduleMatrixPro>();
+			var selectedMatrixesForOnePerson = new List<IScheduleMatrixPro>();
 			var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
 
 			List<IScheduleMatrixPro> matrixesOfOneTeam;
-			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, groupPerson, scheduleDate, out matrixesOfOneTeam);
+			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, groupPerson, scheduleDate, out matrixesOfOneTeam, person);
 
 			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
 			{
-				if (selectedPersons.Contains(scheduleMatrixPro.Person))
-					selectedMatrixesForTeam.Add(scheduleMatrixPro);
+				var currentPerson = scheduleMatrixPro.Person;
+				if (selectedPersons.Contains(currentPerson) && currentPerson == person)
+					selectedMatrixesForOnePerson.Add(scheduleMatrixPro);
 			}
 
-			return selectedMatrixesForTeam;
+			return selectedMatrixesForOnePerson;
 		}
 
-		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions,
-	                                                     IGroupPerson groupPerson, DateOnly scheduleDate,
-	                                                     out List<IScheduleMatrixPro> matrixesOfOneTeam)
+		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 	    {
 	        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 			var groupMembers = groupPerson.GroupMembers.ToList();
-			var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupMembers,
+			var restriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson( person,
 	                                                                               scheduleDate, schedulingOptions,
 	                                                                               scheduleDictionary);
 			var matrixesOfOne = matrixListAll.Where(x => groupMembers.Contains(x.Person)).ToList();
