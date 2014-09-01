@@ -76,8 +76,8 @@ SET TELEOPTIANALYTICS_BAKFILE=%ROOTDIR%\..\TeleoptiAnalytics_Demo.bak
 SET TELEOPTIAGG_BAKFILE=%ROOTDIR%\..\TeleoptiCCC7Agg_Demo.bak
 SET TELEOPTICCC_BAKFILE=%ROOTDIR%\..\TeleoptiCCC7_Demo.bak
 SET TELEOPTIANALYTICS=TeleoptiAnalytics_Demo
-SET TELEOPTIAGG=TeleoptiCCC7Agg_Demo
-SET TELEOPTICCC=TeleoptiCCC7_Demo
+SET TELEOPTIAGG=TeleoptiAgg_Demo
+SET TELEOPTICCC=TeleoptiApp_Demo
 SET SQLLogin=TeleoptiDemoUser
 SET SQLPwd=TeleoptiDemoPwd2
 cls
