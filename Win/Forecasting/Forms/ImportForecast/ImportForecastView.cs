@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 {
-    public partial class ImportForecastView : BaseRibbonForm, IImportForecastView
+    public partial class ImportForecastView : BaseDialogForm, IImportForecastView
     {
         public ImportForecastView()
         {

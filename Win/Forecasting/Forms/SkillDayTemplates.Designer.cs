@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SkillDayTemplates));
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.tabControlAdvWeekDays = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvDay0 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
@@ -316,10 +315,10 @@
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.gradientPanel1);
 			this.Controls.Add(this.ribbonControlAdv1);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(281, 39);
 			this.Name = "SkillDayTemplates";
 			this.Padding = new System.Windows.Forms.Padding(1, 0, 1, 0);
+			this.ShowIcon = false;
 			this.Text = "xxSkillDayTemplates";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
