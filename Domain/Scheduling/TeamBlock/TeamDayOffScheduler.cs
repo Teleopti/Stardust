@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var group = groupPersonBuilderForOptimization.BuildGroup(person, scheduleDate);
 
 			List<IScheduleMatrixPro> matrixesOfOneTeam;
-			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, groupPerson, scheduleDate, out matrixesOfOneTeam, person);
+			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam, person);
 
 			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return selectedMatrixesForOnePerson;
 		}
 
-		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
+		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 	    {
 	        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 			var groupMembers = group.GroupMembers.ToList();
