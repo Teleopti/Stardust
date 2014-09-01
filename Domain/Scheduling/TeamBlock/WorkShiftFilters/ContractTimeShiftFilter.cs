@@ -39,7 +39,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			{
 				_workShiftMinMaxCalculator.ResetCache();
 				var minMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
-				if (!minMax.HasValue) continue;
+				if (minMax.HasValue)
+				{
+					if (minMax.Value.Minimum == TimeSpan.Zero && minMax.Value.Maximum == TimeSpan.Zero)
+						continue;
+				}
+				else
+				{
+					continue;
+				}
 				if (!allowedMinMax.HasValue)
 					allowedMinMax = minMax;
 				else
