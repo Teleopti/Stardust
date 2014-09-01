@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 																		}))
 				.ForMember(d => d.Badges, o => o.ResolveUsing(s =>
 				{
-					var badges = _badgeProvider.GetBadges(s.Person.Id);
+					var badges = _badgeProvider.GetBadges(s.Person);
 					if (badges == null)
 						return null;
 

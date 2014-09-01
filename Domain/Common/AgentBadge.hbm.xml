@@ -4,36 +4,37 @@
 									 namespace="Teleopti.Ccc.Domain.Common"
 									 default-access="field.camelcase-underscore">
 
-	<class name="AgentBadge">
-		<cache usage ="read-write"/>
-		<id name="Id"
-				type="guid"
-				access="nosetter.camelcase-underscore"
-				unsaved-value="null">
-			<generator class="guid.comb" />
-		</id>
-		<many-to-one class="Teleopti.Ccc.Domain.Common.Person"
-					name ="Parent"
-					column="Person"
-					not-null="true" foreign-key="FK_AgentBadge_Person_Person"/>
+  <class name="AgentBadge">
+	<cache usage ="read-write"/>
+	<id name="Id"
+			type="guid"
+			access="nosetter.camelcase-underscore"
+			unsaved-value="null">
+	  <generator class="guid.comb" />
+	</id>
 
-		<property name="BronzeBadge"
-							type="int"
-							not-null="true" />
+	<many-to-one name ="Person"
+				 class="Teleopti.Ccc.Domain.Common.Person"
+				 column="Person"
+				 not-null="true"
+				 foreign-key="FK_AgentBadge_Person_Person"/>
+	<property name="BronzeBadge"
+						type="int"
+						not-null="true" />
 
-		<property name="SilverBadge"
-							type="int"
-							not-null="true" />
+	<property name="SilverBadge"
+						type="int"
+						not-null="true" />
 
-		<property name="GoldBadge"
-							type="int"
-							not-null="true" />
+	<property name="GoldBadge"
+						type="int"
+						not-null="true" />
 
-		<property name="BadgeType"
-							type="int"
-							not-null="true" />
-		<property name="LastCalculatedDate"
-							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="true" />
-	</class>
+	<property name="BadgeType"
+						type="int"
+						not-null="true" />
+	<property name="LastCalculatedDate"
+						type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+						not-null="true" />
+  </class>
 </hibernate-mapping>

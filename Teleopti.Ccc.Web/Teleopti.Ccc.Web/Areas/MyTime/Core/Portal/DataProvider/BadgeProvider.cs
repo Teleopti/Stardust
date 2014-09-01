@@ -8,22 +8,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 	public class BadgeProvider : IBadgeProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPersonRepository _repository;
+		private readonly IAgentBadgeRepository _badgeRepository;
 
-		public BadgeProvider(ILoggedOnUser loggedOnUser, IPersonRepository repository)
+		public BadgeProvider(ILoggedOnUser loggedOnUser, IAgentBadgeRepository badgeRepository)
 		{
 			_loggedOnUser = loggedOnUser;
-			_repository = repository;
+			_badgeRepository = badgeRepository;
 		}
 
 		public IEnumerable<IAgentBadge> GetBadges()
 		{
 			IEnumerable<IAgentBadge> result = null;
-			var guid = _loggedOnUser.CurrentUser().Id;
-			if (guid != null)
+			var person = _loggedOnUser.CurrentUser();
+			if (person != null)
 			{
-				var userId = (Guid) guid;
-				result = _repository.Load(userId).Badges;
+				result = _badgeRepository.Find(person);
 			}
 			return result;
 		}

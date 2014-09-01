@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
 	public interface ITeamScheduleBadgeProvider
 	{
-		IEnumerable<IAgentBadge> GetBadges(Guid? personId);
+		IEnumerable<IAgentBadge> GetBadges(IPerson person);
 	}
 }

@@ -6,6 +6,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
@@ -123,8 +124,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				throw  new ArgumentException(@"BadgeType", string.Format("\"{0}\" is not a valid badge type.", BadgeType));
 			}
 
+			var rep = new PersonRepository(uow);
+			var people = rep.LoadAll();
+			var person = people.First(p => p.Name == user.Name);
+
 			AgentBadge = new AgentBadge
 			{
+				Person = person,
 				BadgeType = badgeType,
 				BronzeBadge = Bronze,
 				SilverBadge = Silver,
@@ -132,10 +138,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				LastCalculatedDate = new DateOnly(LastCalculatedDate)
 			};
 
-			var rep = new PersonRepository(uow);
-			var people = rep.LoadAll();
-			var person = people.First(p => p.Name == user.Name);
-			person.AddBadge(AgentBadge, 5, 2);
+			var badgeRep = new AgentBadgeRepository(uow);
+			badgeRep.Add(AgentBadge);
 		}
 	}
 }

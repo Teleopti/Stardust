@@ -120,6 +120,7 @@
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
+    <Compile Include="Domain\IAgentBadgeRepository.cs" />
     <Compile Include="Domain\IAgentBadgeThresholdSettings.cs" />
     <Compile Include="Domain\ITeleoptiDiagnosticsInformation.cs" />
     <Compile Include="Domain\ITime.cs" />

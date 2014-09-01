@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Common
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		private IAuthenticationInfo _authenticationInfo;
-	    private ISet<IAgentBadge> _badges = new HashSet<IAgentBadge>();
 
 	    public Person()
         {
@@ -208,43 +207,6 @@ namespace Teleopti.Ccc.Domain.Common
 		   modify.RemoveExternalLogOn(externalLogOn);
 		   addPersonActivityStartingEvent();
 	   }
-
-	    public virtual void AddBadge(IAgentBadge agentBadge, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
-	    {
-		    if (_badges.Any(x => x.BadgeType == agentBadge.BadgeType))
-		    {
-			    var existedBadge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
-			    existedBadge.BronzeBadge += agentBadge.BronzeBadge;
-			    existedBadge.BronzeBadgeAdded = agentBadge.BronzeBadgeAdded;
-			    existedBadge.SilverBadge += agentBadge.SilverBadge;
-			    existedBadge.SilverBadgeAdded = agentBadge.SilverBadgeAdded;
-			    existedBadge.GoldBadge += agentBadge.GoldBadge;
-			    existedBadge.GoldBadgeAdded = agentBadge.GoldBadgeAdded;
-			    existedBadge.LastCalculatedDate = agentBadge.LastCalculatedDate;
-		    }
-		    else
-		    {
-			    agentBadge.SetParent(this);
-			    _badges.Add(agentBadge);
-		    }
-		    //Update according to rate.
-		    var badge = _badges.Single(x => x.BadgeType == agentBadge.BadgeType);
-		    if (badge.BronzeBadge >= silverToBronzeBadgeRate)
-		    {
-			    badge.SilverBadge = badge.SilverBadge + badge.BronzeBadge/silverToBronzeBadgeRate;
-			    badge.SilverBadgeAdded = true;
-			    badge.BronzeBadge = badge.BronzeBadge%silverToBronzeBadgeRate;
-			    badge.BronzeBadgeAdded = false;
-		    }
-
-		    if (badge.SilverBadge >= goldToSilverBadgeRate)
-		    {
-			    badge.GoldBadge = badge.GoldBadge + badge.SilverBadge/goldToSilverBadgeRate;
-			    badge.GoldBadgeAdded = true;
-			    badge.SilverBadge = badge.SilverBadge%goldToSilverBadgeRate;
-			    badge.SilverBadgeAdded = false;
-		    }
-	    }
 
 	    // adding this event so servicebus and rta do a check if person should be monitored in rta
 		private void addPersonActivityStartingEvent()
@@ -967,11 +929,6 @@ namespace Teleopti.Ccc.Domain.Common
 				return new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
 			}
 		}
-
-	    public virtual ISet<IAgentBadge> Badges
-	    {
-			get { return _badges; }
-	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)

@@ -7,20 +7,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
 	public class TeamScheduleBadgeProvider : ITeamScheduleBadgeProvider
 	{
-		private readonly IPersonRepository _repository;
+		private readonly IAgentBadgeRepository _repository;
 
-		public TeamScheduleBadgeProvider(IPersonRepository repository)
+		public TeamScheduleBadgeProvider(IAgentBadgeRepository repository)
 		{
 			_repository = repository;
 		}
 
-		public IEnumerable<IAgentBadge> GetBadges(Guid? personId)
+		public IEnumerable<IAgentBadge> GetBadges(IPerson person)
 		{
 			IEnumerable<IAgentBadge> result = null;
-			if (personId != null)
+			if (person != null)
 			{
-				var userId = (Guid) personId;
-				result = _repository.Load(userId).Badges;
+				result = _repository.Find(person);
 			}
 			return result;
 		}

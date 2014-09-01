@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
+		private readonly IAgentBadgeRepository _badgeRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPushMessagePersister _msgPersister;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		public CalculateBadgeConsumer(
 									IServiceBus serviceBus, 
 									IAgentBadgeSettingsRepository settingsRepository, 
+									IAgentBadgeRepository badgeRepository,
 									IPersonRepository personRepository, 
 									IGlobalSettingDataRepository globalSettingRep,
 									IPushMessagePersister msgPersister, 
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
+			_badgeRepository = badgeRepository;
 			_personRepository = personRepository;
 			_globalSettingRep = globalSettingRep;
 			_msgPersister = msgPersister;
@@ -84,23 +87,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				ICollection<IPerson> allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
-				var peopleGotABadgeForAdherence = _calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, new DateOnly(message.CalculationDate),
+				var calculateDate = new DateOnly(message.CalculationDate);
+				var newAwardedBadgesForAdherence = _calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
 					adherenceReportSetting.CalculationMethod, setting).ToList();
-				var peopleGotABadgeForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode,
-					new DateOnly(message.CalculationDate), setting).ToList();
-				var peopleGotAbadgeForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
-					new DateOnly(message.CalculationDate), setting).ToList();
+				var newAwardedBadgesForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+				var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
+					calculateDate, setting).ToList();
 
 				if (Logger.IsDebugEnabled)
 				{
-					Logger.DebugFormat("Total {0} agents will get new badge for adherence", peopleGotABadgeForAdherence.Count());
-					Logger.DebugFormat("Total {0} agents will get new badge for AHT", peopleGotABadgeForAHT.Count());
-					Logger.DebugFormat("Total {0} agents will get new badge for answered calls", peopleGotAbadgeForAnsweredCalls.Count());
+					Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+					Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+					Logger.DebugFormat("Total {0} agents will get new badge for answered calls", newAwardedBadgesForAnsweredCalls.Count());
 				}
+
 				// send message
-				sendMessagesToPeopleGotABadge(peopleGotABadgeForAHT, BadgeType.AverageHandlingTime, setting);
-				sendMessagesToPeopleGotABadge(peopleGotABadgeForAdherence, BadgeType.Adherence, setting);
-				sendMessagesToPeopleGotABadge(peopleGotAbadgeForAnsweredCalls, BadgeType.AnsweredCalls, setting);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting);
+
 				uow.PersistAll();
 			}
 
@@ -123,13 +128,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 		}
 
-		private void sendMessagesToPeopleGotABadge(IEnumerable<IPerson> peopleGotABadge, BadgeType badgeType,
-			IAgentBadgeThresholdSettings setting)
+		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadge> newAwardedBadges, IAgentBadgeThresholdSettings setting)
 		{
-			foreach (var person in peopleGotABadge)
+			foreach (var badge in newAwardedBadges)
 			{
-				
-				var badge = person.Badges.Single(x => x.BadgeType == badgeType);
+				var person = badge.Person;
+				var badgeType = badge.BadgeType;
 				switch (badgeType)
 				{
 					case BadgeType.AverageHandlingTime:
