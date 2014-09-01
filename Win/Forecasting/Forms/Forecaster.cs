@@ -7,12 +7,11 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools.Enums;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.WpfControls.Common;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
-using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
@@ -34,7 +33,6 @@ using Teleopti.Ccc.Win.Common.Controls.ToolStripGallery;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
@@ -756,7 +754,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				c.Click -= scenarioMenuItem_Click;
 			});
-			flowLayoutExportToScenario.ContainerControl.Controls.Clear();
 		}
 
 		private ButtonAdv createExportScenarioButton(IScenario scenario)
@@ -2393,6 +2390,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			backgroundWorker1.RunWorkerCompleted -= backgroundWorker1_RunWorkerCompleted;
 			backgroundWorker1.DoWork -= backgroundWorker1_DoWork;
 			backgroundWorker1.ProgressChanged -= backgroundWorker1_ProgressChanged;
+
 			EntityEventAggregator.EntitiesNeedsRefresh -= MainScreen_EntitiesNeedsRefresh;
 		}
 
