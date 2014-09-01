@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 						continue;
 					}
 					executes++;
-					bool result = _teamBlockMoveTimeOptimizer.OptimizeMatrix( optimizerPreferences, matrixList, rollbackService, periodValueCalculator, schedulingResultStateHolder, matrix);
+					bool result = _teamBlockMoveTimeOptimizer.OptimizeMatrix(optimizerPreferences, matrixList, rollbackService, periodValueCalculator, schedulingResultStateHolder, matrix, matrixesOnSelectedperiod);
 					if (!result)
 					{
 						activeMatrixes.Remove(matrix);
