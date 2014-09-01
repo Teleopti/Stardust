@@ -30,6 +30,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		    return ret;
 		}
 
+		public IEffectiveRestriction GetEffectiveRestrictionForSinglePerson(
+			IPerson person,
+			DateOnly dateOnly,
+			ISchedulingOptions options,
+			IScheduleDictionary scheduleDictionary)
+		{
+			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+			IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
+			return GetEffectiveRestriction(scheduleDay, options);
+		}
+
 		public IEffectiveRestriction GetEffectiveRestriction(
             IEnumerable<IPerson> groupPersons, 
             DateOnly dateOnly, 

@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			      .Return(_groupPerson);
 			Expect.Call(_groupPerson.GroupMembers).Return(_selectedPersons);
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_selectedPersons, new DateOnly(2013, 2, 1),
+			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson (_person1, new DateOnly(2013, 2, 1),
 			                                                                 _schedulingOptions, _scheduleDictionary))
 			      .Return(_effectiveRestriction);
 			Expect.Call(_scheduleMatrixPro.Person).Return(_person1);

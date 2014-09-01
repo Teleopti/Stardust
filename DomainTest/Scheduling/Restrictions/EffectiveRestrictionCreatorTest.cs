@@ -218,5 +218,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			Assert.IsTrue(EffectiveRestrictionCreator.OptionsConflictWithRestrictions(_options, effectiveRestriction));
 
 		}
+
+		[Test]
+		public void VerifyThatTherestrictionAreCreatedForSinglePerson()
+		{
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var person1 = _mocks.StrictMock<IPerson>();
+			var range1 = _mocks.StrictMock<IScheduleRange>();
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			ISchedulingOptions options = new SchedulingOptions();
+			IEffectiveRestriction restriction1 = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)), new EndTimeLimitation(),
+																	  new WorkTimeLimitation(), null, null, null,
+																	  new List<IActivityRestriction>());
+
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleDictionary[person1]).Return(range1);
+				Expect.Call(range1.ScheduledDay(dateOnly)).Return(_scheduleDay);
+				Expect.Call(() => _extractor.Extract(_scheduleDay));
+				Expect.Call(_extractor.CombinedRestriction(options)).Return(restriction1);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+			}
+
+			IEffectiveRestriction ret;
+			using (_mocks.Playback())
+			{
+				ret = _target.GetEffectiveRestrictionForSinglePerson(person1, dateOnly, options, scheduleDictionary);
+			}
+
+			Assert.AreEqual(restriction1, ret);
+
+		}
 	}
 }

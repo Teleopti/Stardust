@@ -24,5 +24,19 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="scheduleDictionary">The schedule dictionary.</param>
 		/// <returns></returns>
 		IEffectiveRestriction GetEffectiveRestriction(IEnumerable<IPerson> groupPersons, DateOnly dateOnly, ISchedulingOptions options, IScheduleDictionary scheduleDictionary);
+
+		/// <summary>
+		/// Get the effective restrictions for a person
+		/// </summary>
+		/// <param name="person">The person</param>
+		/// <param name="dateOnly">The date only.</param>
+		/// <param name="options">The options.</param>
+		/// <param name="scheduleDictionary">The schedule dictionary.</param>
+		/// <returns></returns>
+		IEffectiveRestriction GetEffectiveRestrictionForSinglePerson(
+			IPerson person,
+			DateOnly dateOnly,
+			ISchedulingOptions options,
+			IScheduleDictionary scheduleDictionary);
 	}
 }
