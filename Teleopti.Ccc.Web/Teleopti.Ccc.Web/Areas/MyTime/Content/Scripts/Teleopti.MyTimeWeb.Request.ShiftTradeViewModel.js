@@ -40,6 +40,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.selectedTeamInternal = ko.observable();
 	self.missingMyTeam = ko.observable();
 	self.myTeamId = ko.observable();
+	self.maxShiftsPerPage = 20;
 	self.selectedPageIndex = ko.observable(1);
 	self.pageCount = ko.observable(1);
 	self.selectablePages = ko.observableArray();
@@ -61,6 +62,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.subject = ko.observable();
 	self.message = ko.observable();
 
+	self.getDateWithFormat = function () {
+		return self.requestedDateInternal().format(self.DatePickerFormat());
+	};
+
 	self.sortByDate = function() {
 		if (self.chooseHistorys().length > 1) {
 			self.chooseHistorys.sort(function(a, b) {
@@ -80,7 +85,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				dates.push(chooseHistoryViewModel.selectedDateInFormat());
 			});
 		} else {
-			dates.push(self.requestedDateInternal().format(self.DatePickerFormat()));
+			dates.push(self.getDateWithFormat());
 		}
 
 		return dates;
@@ -355,15 +360,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 		return allTeamIds;
 	}
-
-	self.loadSchedule = function (value) {
-		
-		if (value != undefined) {
-			if (value != "allTeams") {
+	
+	self.loadSchedule = function (teamId) {
+		if (teamId != undefined) {
+			if (teamId != "allTeams") {
 				if (self.isFiltered()) {
-					self.loadScheduleForOneTeamFilterTime();
+					self.loadScheduleForOneTeamFilterTime(teamId);
 				} else {
-					self.loadOneTeamSchedule();
+					self.loadOneTeamSchedule(self.getDateWithFormat(), teamId);
 				}
 			} else {
 				if (self.isFiltered()) {
@@ -673,7 +677,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		return canvasWidth;
 	};
 
-	self.redrawLayers = function (){
+	self.redrawLayers = function() {
 		var canvasWidth;
 
 		if (self.isReadyLoaded()) {
@@ -686,34 +690,34 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		self.layerCanvasPixelWidth(canvasWidth);
 
 		if (self.mySchedule() != undefined) {
-			$.each(self.mySchedule().layers, function (index, selfScheduleAddShiftTrade) {
+			$.each(self.mySchedule().layers, function(index, selfScheduleAddShiftTrade) {
 				selfScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
 			});
 		}
 
 		if (self.possibleTradeSchedules() != undefined) {
-			$.each(self.possibleTradeSchedules(), function (index, selfPersonScheduleAddShiftTrade) {
-				$.each(selfPersonScheduleAddShiftTrade.layers, function (index, selfScheduleAddShiftTrade) {
+			$.each(self.possibleTradeSchedules(), function(index, selfPersonScheduleAddShiftTrade) {
+				$.each(selfPersonScheduleAddShiftTrade.layers, function(index, selfScheduleAddShiftTrade) {
 					selfScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
 				});
 			});
 		}
 		if (self.chooseHistorys() != undefined) {
-			$.each(self.chooseHistorys(), function (index, chooseHistory) {
+			$.each(self.chooseHistorys(), function(index, chooseHistory) {
 				chooseHistory.canvasPixelWidth(canvasWidth);
 			});
 		}
 		if (self.hours() != undefined) {
-			$.each(self.hours(), function (index, hour) {
+			$.each(self.hours(), function(index, hour) {
 				hour.pixelPerMinute(self.pixelPerMinute());
 			});
 		}
-	}
+	};
 	/*these functions are for schedule loading process only, its logic only according to loading schedule*/
 
-	self.loadOneTeamSchedule = function() {
+	self.loadOneTeamSchedule = function(date, teamId) {
 		if (self.IsLoading()) return;
-		var take = 20;
+		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
 
 		ajax.Ajax({
@@ -722,8 +726,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				selectedDate: self.requestedDateInternal().format(self.DatePickerFormat()),
-				teamId: self.selectedTeamInternal(),
+				selectedDate: date,
+				teamId: teamId,
 				Take: take,
 				Skip: skip
 			},
@@ -757,9 +761,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
-	self.loadScheduleForAllTeams = function(allTeamIds) {
+	self.loadScheduleForAllTeams = function (date, allTeamIds) {
 		if (self.IsLoading()) return;
-		var take = 20;
+		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
 
 		ajax.Ajax({
@@ -768,7 +772,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				selectedDate: self.requestedDateInternal().format(self.DatePickerFormat()),
+				selectedDate: date,
 				teamIds: allTeamIds.join(","),
 				Take: take,
 				Skip: skip
@@ -803,9 +807,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
-	self.loadScheduleForOneTeamFilterTime = function() {
+	self.loadScheduleForOneTeamFilterTime = function (date, teamId) {
 		if (self.IsLoading()) return;
-		var take = 20;
+		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
 
 		ajax.Ajax({
@@ -814,8 +818,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				selectedDate: self.requestedDateInternal().format(self.DatePickerFormat()),
-				teamId: self.selectedTeamInternal(),
+				selectedDate: date,
+				teamId: teamId,
 				filteredStartTimes: self.filteredStartTimesText().join(","),
 				filteredEndTimes: self.filteredEndTimesText().join(","),
 				isDayOff: self.isDayoffFiltered(),
@@ -852,9 +856,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
-	self.loadScheduleForAllTeamsFilterTime = function (allTeamIds) {
+	self.loadScheduleForAllTeamsFilterTime = function (date, allTeamIds) {
 		if (self.IsLoading()) return;
-		var take = 20;
+		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
 
 		ajax.Ajax({
@@ -863,7 +867,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				selectedDate: self.requestedDateInternal().format(self.DatePickerFormat()),
+				selectedDate: date,
 				teamIds: allTeamIds.join(","),
 				filteredStartTimes: self.filteredStartTimesText().join(","),
 				filteredEndTimes: self.filteredEndTimesText().join(","),

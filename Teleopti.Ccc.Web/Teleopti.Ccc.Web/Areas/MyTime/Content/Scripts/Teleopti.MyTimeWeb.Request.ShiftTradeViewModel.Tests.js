@@ -3,6 +3,15 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+	test("should get date with format", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
+
+		var result = viewModel.getDateWithFormat();
+
+		equal(result, "1995-12-25");
+	});
+
 	test("shift trade date should be invalid when it is not in an open period", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		var periodStart = moment("2014-08-01", "YYYY-MM-DD");
