@@ -2,7 +2,11 @@
 :SETVAR TELEOPTICCC Training_TeleoptiCCC7
 :SETVAR TELEOPTIANALYTICS Training_TeleoptiAnalytics
 :SETVAR TELEOPTIAGG Training_TeleoptiCCCAgg
+:SETVAR TELEOPTICCC main_DemoSales_TeleoptiCCC7
+:SETVAR TELEOPTIANALYTICS main_DemoSales_TeleoptiAnalytics
+:SETVAR TELEOPTIAGG main_DemoSales_TeleoptiCCCAgg
 */
+
 SET NOCOUNT ON
 ----------------
 --#29068 - Delete PersonalSettings, but keep Intraday settings
@@ -13,31 +17,49 @@ where [key] not in (
 	)
 
 ----------------
+-- NOTE the Pre Req: Restore of Agg and Analytics databases!
+----------------
+
+----------------
+--Move Queue stat one year forward, monday map to monday.
+----------------
+declare @TemplateStartDate datetime
+declare @NewStartDate datetime
+declare @DaysToAdd int
+
+set @TemplateStartDate = '2013-02-04'
+set @NewStartDate  =  '2014-02-03'
+select @DaysToAdd = datediff(day,@TemplateStartDate,@NewStartDate)
+
+update $(TELEOPTIAGG).dbo.queue_logg
+set date_from = dateadd(day,@DaysToAdd,date_from)
+
+update $(TELEOPTIAGG).dbo.agent_logg
+set date_from = dateadd(day,@DaysToAdd,date_from)
+GO
+
+----------------
 --Add agent statistics from Agg 4 week data
 ----------------
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
-set @TemplateEndDate = '2013-03-03'
-set @TemplateStartDate = '2013-02-04'
-
-delete from $(TELEOPTIAGG).dbo.agent_logg where date_from > @TemplateEndDate --unwanted days after template period
-
-declare @MondayLastWeek datetime
-declare @datediffMondayTwoWeeksAgo int
+declare @MondayThreeWeeksAgo datetime
 declare @PeriodsToAdd int
 declare @TemplateLength int
 declare @AddDays int
 
+set @TemplateStartDate = '2013-02-04'
+set @TemplateEndDate = '2013-03-03'
 set @PeriodsToAdd = 0
 select @TemplateLength=datediff(DD,@TemplateStartDate,@TemplateEndDate)+1
 
 --get monday of last week
-SELECT @MondayLastWeek=DATEADD(wk, DATEDIFF(wk,7,GETDATE()), 0)
+SELECT @MondayThreeWeeksAgo=DATEADD(wk, DATEDIFF(wk,21,GETDATE()), 0)
 
 WHILE @PeriodsToAdd < 9 --9x4 = 41 weeks
 BEGIN
 	--Days to add for next
-	select @AddDays=datediff(DAY,@TemplateStartDate,@MondayLastWeek)+@TemplateLength*@PeriodsToAdd
+	select @AddDays=datediff(DAY,@TemplateStartDate,@MondayThreeWeeksAgo)+@TemplateLength*@PeriodsToAdd
 
 	insert into $(TELEOPTIAGG).dbo.agent_logg
 	select
@@ -50,6 +72,46 @@ BEGIN
 
 	select @PeriodsToAdd = @PeriodsToAdd + 1
 END
+GO
+
+----------------
+-- Move Deviation data
+----------------
+declare @TemplateEndDate datetime
+declare @TemplateStartDate datetime
+declare @DaysToAdd int
+declare @MondayThreeWeeksAgo datetime
+
+set @TemplateStartDate = '2013-02-04'
+set @TemplateEndDate = '2013-03-03'
+
+SELECT @MondayThreeWeeksAgo=DATEADD(wk, DATEDIFF(wk,21,GETDATE()), 0)
+SELECT @DaysToAdd = datediff(d,@TemplateStartDate,@MondayThreeWeeksAgo)
+
+update $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
+set
+	date_id = date_id + @DaysToAdd,
+	shift_startdate_id = shift_startdate_id + @DaysToAdd
+GO
+
+----------------
+--load all CTI stat from Agg
+----------------
+declare @start_date smalldatetime
+declare @end_date smalldatetime
+SELECT 
+	@start_date=isnull(min(date_date), '1999-12-31'),
+	@end_date=isnull(max(date_date), '1999-12-31')
+FROM $(TELEOPTIANALYTICS).mart.dim_date
+WHERE 
+	date_id > -1
+
+exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_load @start_date,@end_date,-2
+GO
+exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_queue_load @start_date,@end_date,-2
+GO
+exec $(TELEOPTIANALYTICS).mart.etl_fact_queue_load @start_date,@end_date,-2
+GO
 
 ----------------
 --Add one ETL job - Nightly -10/+20
@@ -84,16 +146,4 @@ exec $(TELEOPTIANALYTICS).mart.etl_job_save_schedule_period @schedule_id=@main_j
 exec $(TELEOPTIANALYTICS).mart.etl_job_save_schedule_period @schedule_id=@main_job_schedule_id,@job_name=N'Forecast',@relative_period_start=@relative_period_start,@relative_period_end=@relative_period_end
 exec $(TELEOPTIANALYTICS).mart.etl_job_save_schedule_period @schedule_id=@main_job_schedule_id,@job_name=N'Agent Statistics',@relative_period_start=@relative_period_start,@relative_period_end=@relative_period_end
 exec $(TELEOPTIANALYTICS).mart.etl_job_save_schedule_period @schedule_id=@main_job_schedule_id,@job_name=N'Queue Statistics',@relative_period_start=@relative_period_start,@relative_period_end=@relative_period_end
-
---Add agent stat to mart directly -10 t0 +20
-declare @start_date smalldatetime
-declare @end_date smalldatetime
-select @start_date=DATEADD(dd, -10, DATEDIFF(dd, 0, GETDATE()))
-select @end_date=DATEADD(dd, 20, DATEDIFF(dd, 0, GETDATE()))
-exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_load @start_date,@end_date,-2
-exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_queue_load @start_date,@end_date,-2
-
---get all queue data
-select @start_date='2000-01-01'
-select @end_date='2020-12-31'
-exec $(TELEOPTIANALYTICS).mart.etl_fact_queue_load @start_date,@end_date,-2
+GO

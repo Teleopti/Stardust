@@ -1,8 +1,9 @@
 /*
-:SETVAR TELEOPTICCC Training_TeleoptiCCC7
-:SETVAR TELEOPTIANALYTICS Training_TeleoptiAnalytics
-:SETVAR TELEOPTIAGG Training_TeleoptiCCCAgg
+:SETVAR TELEOPTICCC TeleoptiCCC7_Demo
+:SETVAR TELEOPTIANALYTICS TeleoptiAnalytics_Demo
+:SETVAR TELEOPTIAGG TeleoptiCCC7Agg_Demo
 */
+
 SET NOCOUNT ON
 ----------------
 --Adding a cool user
@@ -38,14 +39,9 @@ BEGIN
 	ORDER BY pp.Parent,p.UpdatedOn desc --perferable:oldest, "non"-agent
 END
 
-SET @delim = '\'
-SELECT @csv=system_user
 
-SELECT @commaindex = CHARINDEX(@delim, @csv)
-	
-SELECT @WinDomain = LEFT(@csv, @commaindex-1)
-
-SELECT @WinUser = RIGHT(@csv, LEN(@csv) - @commaindex)
+SELECT @WinDomain = '$(USERDOMAIN)'
+SELECT @WinUser = '$(USERNAME)'
 
 --delete all Windows domains as they stall IIS -> AD-lookup in TeleoptiPM
 DELETE FROM $(TELEOPTICCC).dbo.WindowsAuthenticationInfo

@@ -56,6 +56,7 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%COMPUTERNAME%
+SET INSTANCE=%COMPUTERNAME%\SQL2008R2
 
 ::Build DbManager
 ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
@@ -275,14 +276,19 @@ ECHO.
 ECHO ------
 ECHO Upgrade databases ...
 
+::check if we need to create Agg (no stat)
+SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIAGG%'" -h-1 > "%temp%\FindDB.txt"
+findstr /I /C:"%TELEOPTIAGG%" "%temp%\FindDB.txt" > NUL
+if %errorlevel% NEQ 0 SET CreateAgg=-C
+
+::check if we need to create Agg (no stat)
+SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIANALYTICS%'" -h-1 > "%temp%\FindDB.txt"
+findstr /I /C:"%TELEOPTIANALYTICS%" "%temp%\FindDB.txt" > NUL
+if %errorlevel% NEQ 0 SET CreateAnalytics=-C
+
 ::create or patch Analytics
 %DBMANAGER% -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > NUL
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
-
-::check if we need to create Agg (no stat)
-SQLCMD -S. -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIAGG%'" -h-1 > "%temp%\FindDB.txt"
-findstr /I /C:"%TELEOPTIAGG%" "%temp%\FindDB.txt" > NUL
-if %errorlevel% NEQ 0 SET CreateAgg=-C
 
 ::Create or Patch Agg
 %DBMANAGER% -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" > NUL
@@ -316,6 +322,7 @@ ECHO ------
 ECHO.
 
 CD "%ROOTDIR%"
+PAUSE
 
 IF "%IFFLOW%"=="y" (
 ECHO ------
