@@ -76,8 +76,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			this.dateTimePickerAdv1.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.dateTimePickerAdv1.Calendar.TabIndex = 0;
 			this.dateTimePickerAdv1.Calendar.ThemedEnabledGrid = true;
-			this.dateTimePickerAdv1.Calendar.WeekFont = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
+			this.dateTimePickerAdv1.Calendar.WeekFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdv1.Calendar.WeekInterior = new Syncfusion.Drawing.BrushInfo();
+			this.dateTimePickerAdv1.Calendar.WeekTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(153)))), ((int)(((byte)(51)))));
 			// 
 			// 
 			// 

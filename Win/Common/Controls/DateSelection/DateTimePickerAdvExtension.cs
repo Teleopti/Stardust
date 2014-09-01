@@ -64,6 +64,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			dateTimePickerAdv.CalendarSize = new Size(240, 175);
 			dateTimePickerAdv.Calendar.TodayButton.Text = Resources.Today;
 			dateTimePickerAdv.Calendar.NoneButton.Text = Resources.None;
+			dateTimePickerAdv.Calendar.WeekFont = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+			dateTimePickerAdv.Calendar.WeekInterior = new BrushInfo();
+			dateTimePickerAdv.Calendar.WeekTextColor = Color.FromArgb(255, 153, 51);
 		}
 
 		public static void SetCalendarMetroStyle(this DateTimePickerAdv dateTimePickerAdv)
