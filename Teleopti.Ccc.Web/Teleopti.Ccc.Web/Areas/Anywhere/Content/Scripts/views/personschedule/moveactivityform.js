@@ -36,6 +36,10 @@
 		self.ianaTimeZone = ko.observable();
 		self.ianaTimeZoneOther = ko.observable();
 		self.IsOtherTimezone = ko.observable(false);
+		self.formHasChanged = ko.computed(function () {
+			if (!self.OldStartMinutes() || !self.StartTime()) return false;
+			return !self.getStartTimeFromMinutes(self.OldStartMinutes()).isSame(self.StartTime());
+		});
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
@@ -106,7 +110,7 @@
 			return self.getMinutesFromTime(self.StartTime());
 		};
 
-	    this.getStartTimeFromMinutes = function(minutes) {
+	    self.getStartTimeFromMinutes = function(minutes) {
 	        var date = self.ScheduleDate();
 	        return moment([date.year(), date.month(), date.date(), minutes / 60, minutes % 60]);
 	    };
@@ -184,5 +188,8 @@
 	        var time = self.SelectedStartMinutes();
 	        self.StartTime(moment([date.year(), date.month(), date.date(), time / 60, time % 60]));
 	    };
+		self.cancel = function() {
+			navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
+		};
 	};
 });

@@ -235,7 +235,8 @@
 															</div>
 															<!-- /ko -->
 															<div>
-																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.MoveActivity, click: Apply"></button>
+																<button class="btn btn-default apply" data-bind="text: $root.Resources.Cancel, click: cancel"></button>
+																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage() || !formHasChanged(), text: $root.Resources.MoveActivity, click: Apply"></button>
 															</div>
 														</td>
 														<td></td>
