@@ -11,7 +11,6 @@
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<Company>Teleopti</Company>
 		<ProductName>Teleopti WFM</ProductName>
-		<TfsLibraryLocation>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
 		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
 		<Configuration>Release</Configuration>
