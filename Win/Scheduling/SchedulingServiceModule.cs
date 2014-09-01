@@ -245,6 +245,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			 builder.RegisterType<TeamBlockMoveTimeOptimizer>().As<ITeamBlockMoveTimeOptimizer>();
 			 builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>();
 			 builder.RegisterType<ConstructAndScheduleSingleDayTeamBlock>().As<IConstructAndScheduleSingleDayTeamBlock>();
+			 builder.RegisterType<DeleteSelectedDaysForTeam>().As<IDeleteSelectedDaysForTeam>();
 	    }
 
 	    private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)

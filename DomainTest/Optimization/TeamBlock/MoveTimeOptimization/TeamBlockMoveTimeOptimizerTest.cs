@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private ITeamBlockMoveTimeDescisionMaker _decisionMaker;
-		private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IConstructAndScheduleSingleDayTeamBlock _constructAndScheduleSingleDayTeamBlock;
 		private IPeriodValueCalculator _periodValueCalculator;
@@ -37,6 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IVisualLayerCollection _visualLayerCollection1;
 		private IVisualLayerCollection _visualLayerCollection2;
 		private IScheduleDayPro _scheduleDayPro2;
+		private IDeleteSelectedDaysForTeam _deleteSelectedDaysForTeam;
+		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 
 		[SetUp]
 		public void Setup()
@@ -44,10 +45,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_mock = new MockRepository();
 			_schedulingOptionsCreator = _mock.StrictMock<ISchedulingOptionsCreator>();
 			_decisionMaker = _mock.StrictMock<ITeamBlockMoveTimeDescisionMaker>();
-			_deleteAndResourceCalculateService = _mock.StrictMock<IDeleteAndResourceCalculateService>();
 			_resourceOptimizationHelper = _mock.StrictMock<IResourceOptimizationHelper>();
 			_constructAndScheduleSingleDayTeamBlock = _mock.StrictMock<IConstructAndScheduleSingleDayTeamBlock>();
-			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _deleteAndResourceCalculateService, _resourceOptimizationHelper, _constructAndScheduleSingleDayTeamBlock);
+			_deleteSelectedDaysForTeam = _mock.StrictMock<IDeleteSelectedDaysForTeam>();
+			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _resourceOptimizationHelper, _constructAndScheduleSingleDayTeamBlock,_deleteSelectedDaysForTeam);
 			_matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro> { _matrix1 };
 			_schedulingOptions = new SchedulingOptions();
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_projectionService2 = _mock.StrictMock<IProjectionService>();
 			_visualLayerCollection1 = _mock.StrictMock<IVisualLayerCollection>();
 			_visualLayerCollection2 = _mock.StrictMock<IVisualLayerCollection>();
+			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
 		}
 
 		[ Test]
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			using (_mock.Playback())
 			{
 				Assert.IsFalse(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-					_schedulingResultStateHolder, _matrix1));
+					_schedulingResultStateHolder, _matrix1,_matrixList));
 			}
 		}
 
@@ -110,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			using (_mock.Playback())
 			{
 				Assert.IsFalse(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-					_schedulingResultStateHolder, _matrix1));
+					_schedulingResultStateHolder, _matrix1, _matrixList));
 			}
 		}
 
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				using (_mock.Playback())
 				{
 					Assert.IsTrue(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-						_schedulingResultStateHolder, _matrix1));
+						_schedulingResultStateHolder, _matrix1, _matrixList));
 				}
 			}
 			using (_mock.Playback())
@@ -146,6 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		[Test]
 		public void ShouldOptimizeSuccessfully()
 		{
+			var datePeriod = new DateOnlyPeriod(2014, 05, 13, 2014, 05, 15);
 			using (_mock.Record())
 			{
 				using (_mock.Record())
@@ -154,13 +157,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
 					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 
+					Expect.Call(()=>_deleteSelectedDaysForTeam.PerformDelete(_matrixList, _today, _today.AddDays(1), _rollbackService, true));
+					Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.Twice() ;
+					Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(datePeriod).Repeat.Twice() ;
+
 					Expect.Call(() => _rollbackService.ClearModificationCollection());
 					commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(7));
 					commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(8));
 
-					Expect.Call(
-						_deleteAndResourceCalculateService.DeleteWithResourceCalculation(
-							new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _rollbackService, true));
 					Expect.Call(_constructAndScheduleSingleDayTeamBlock.Schedule(_matrixList, _today, _matrix1, _schedulingOptions,
 						_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _optimizationPreferences)).IgnoreArguments() .Return(true);
 					Expect.Call(_constructAndScheduleSingleDayTeamBlock.Schedule(_matrixList, _today.AddDays(1), _matrix1, _schedulingOptions,
@@ -170,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				using (_mock.Playback())
 				{
 					Assert.IsTrue(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-						_schedulingResultStateHolder, _matrix1));
+						_schedulingResultStateHolder, _matrix1, _matrixList));
 				}
 			}
 			using (_mock.Playback())
