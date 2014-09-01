@@ -44,14 +44,13 @@ SELECT @WinDomain = '$(USERDOMAIN)'
 SELECT @WinUser = '$(USERNAME)'
 
 --delete all Windows domains as they stall IIS -> AD-lookup in TeleoptiPM
-DELETE FROM $(TELEOPTICCC).dbo.WindowsAuthenticationInfo
+DELETE FROM $(TELEOPTICCC).dbo.AuthenticationInfo
 
 --insert current user and connect to @userid
-INSERT INTO $(TELEOPTICCC).dbo.WindowsAuthenticationInfo
-SELECT
-	Person=@userid,
-	WindowsLogOnName=@WinUser,
-	DomainName=@WinDomain
+declare @identity nvarchar(100)
+select @identity=@WinDomain + N'\' + @WinUser
+INSERT INTO $(TELEOPTICCC).dbo.AuthenticationInfo
+SELECT @userid,@identity
 
 --Add currect user to IIS-users: update aspnet_users
 UPDATE $(TELEOPTIANALYTICS).dbo.aspnet_Users
