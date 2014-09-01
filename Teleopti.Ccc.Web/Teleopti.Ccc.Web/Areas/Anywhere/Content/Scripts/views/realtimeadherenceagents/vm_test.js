@@ -211,10 +211,10 @@
 					vm.fillAgents([agent1, agent2]);
 					vm.fillAgentsStates([agent1State, agent2State]);
 
-					vm.filter("'Ready'");
+					vm.filter('"Not ready"');
 
 					assert.equals(vm.filteredAgents().length, 1);
-					assert.equals(vm.filteredAgents()[0].State(), "Ready");
+					assert.equals(vm.filteredAgents()[0].State(), "Not ready");
 				},
 				"should only display agents thats not matching negating quoted searchwords": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
