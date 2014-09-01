@@ -523,8 +523,24 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private void getStartAndEndTimes(out DateTime startDateTime, out DateTime endDateTime)
 		{
 			GridModelSelections gridModelSelections = scheduleControl1.GetScheduleHost().Model.Selections;
+			if (scheduleControl1 == null)
+				MessageBox.Show("scheduleControl1 == null");
+			if(scheduleControl1.GetScheduleHost() == null)
+				MessageBox.Show("GetScheduleHost() == null");
+			if(scheduleControl1.GetScheduleHost().Model == null)
+				MessageBox.Show("Model == null");
+			if (gridModelSelections == null)
+				MessageBox.Show("gridModelSelections == null");
+
 			GridRangeInfoList selectedRowRange = gridModelSelections.GetSelectedRows(false, true);
+			if (selectedRowRange == null)
+				MessageBox.Show("selectedRowRange == null");
+
+			if (scheduleControl1.Appearance == null)
+				MessageBox.Show("scheduleControl1.Appearance == null");
 			int divisionPerHour = scheduleControl1.Appearance.DivisionsPerHour;
+			
+
 			startDateTime = DateTime.MinValue;
 			endDateTime = DateTime.MinValue;
 			//for multiple or single selection
@@ -545,8 +561,18 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
 					int col = 0;
 					var selCol = gridModelSelections.GetSelectedCols(true, true);
+					if (selCol == null)
+						MessageBox.Show("selCol == null");
+
+					if (scheduleControl1.Calendar == null)
+						MessageBox.Show("selCol.Count == 0");
 					if (selCol[0].Left > 3)
 						col = selCol[0].Left / 31;
+
+					if (scheduleControl1.Calendar == null)
+						MessageBox.Show("scheduleControl1.Calendar == null");
+					if (scheduleControl1.Calendar.SelectedDates == null)
+						MessageBox.Show("Calendar.SelectedDates == null");
 
 					if(scheduleControl1.Calendar.SelectedDates.Count -1 > col) //<- var lika med här
 						_clickedDate = scheduleControl1.Calendar.SelectedDates[col];
