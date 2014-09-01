@@ -47,6 +47,7 @@
 					   VerticalAlignment="Stretch" 
 					   AutoGenerateColumns="False"
                        SelectionMode="Extended" 
+						IsReadOnly="True"
 					   EnableRowVirtualization="true"
 					   EnableColumnVirtualization="true"
                        VirtualizingStackPanel.VirtualizationMode="Standard" 
