@@ -291,6 +291,7 @@ Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer, m
 	self.pixelPerMinute = ko.observable(layer.pixelPerMinute());
 	self.minutesSinceTimeLineStart = ko.observable(minutesSinceTimeLineStart);
 	self.lengthInMinutes = ko.observable(layer.lengthInMinutes());
+	self.titleHeader = layer.titleHeader;
 	self.leftPx = ko.computed(function () {
 		return (self.minutesSinceTimeLineStart() * self.pixelPerMinute()) + 'px';
 	});
