@@ -2036,9 +2036,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Analyzer\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Common\AgentBadgeThresholdSettings.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadge.hbm.xml" />
