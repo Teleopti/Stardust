@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
 			dateSelectionControl1.ShowTabArea = false;
+			dateSelectionControl1.SelectTab(2);
 		}
 
 

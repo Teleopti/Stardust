@@ -83,6 +83,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			set { tabPageAdvRolling.TabVisible = value; }
 		}
 
+		public void SelectTab(int index)
+		{
+			if(tabControlAdvDateSelection.TabPages.Count-1 > index) return;
+			tabControlAdvDateSelection.SelectedIndex = index;
+		}
+
 		[DefaultValue(true), Browsable(true), Category("Teleopti Appearance")]
 		public bool ShowDateSelectionFromTo
 		{

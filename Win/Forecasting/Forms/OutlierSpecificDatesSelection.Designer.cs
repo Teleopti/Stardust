@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.dateSelectionControl1.ShowAddButtons = false;
 			this.dateSelectionControl1.ShowDateSelectionFromTo = false;
 			this.dateSelectionControl1.ShowDateSelectionRolling = false;
-			this.dateSelectionControl1.ShowTabArea = true;
+			this.dateSelectionControl1.ShowTabArea = false;
 			this.dateSelectionControl1.Size = new System.Drawing.Size(200, 231);
 			this.dateSelectionControl1.TabIndex = 4;
 			// 
