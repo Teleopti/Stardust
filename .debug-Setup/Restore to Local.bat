@@ -322,7 +322,6 @@ ECHO ------
 ECHO.
 
 CD "%ROOTDIR%"
-PAUSE
 
 IF "%IFFLOW%"=="y" (
 ECHO ------
