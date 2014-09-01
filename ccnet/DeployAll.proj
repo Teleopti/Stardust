@@ -309,7 +309,7 @@
 
 			<!-- DemoDatabase -->
 			<DemoDatabase
-			Include="$(CCNetWorkingDirectory)\Database\Tools\Wise\DemoDatabase\**\*.*"/>
+			Include="$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\DemoDatabase\**\*.*"/>
 
 			<!-- ForecastDatabase -->
 			<ForecastDatabase

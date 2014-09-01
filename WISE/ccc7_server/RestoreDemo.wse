@@ -28,10 +28,10 @@ item: Global
   Variable Default1=HIDE
   Variable Flags1=00001000
   Variable Name2=_SYS_
-  Variable Default2=C:\windows\system32
+  Variable Default2=C:\Windows\system32
   Variable Flags2=00001000
   Variable Name3=_WIN_
-  Variable Default3=C:\windows
+  Variable Default3=C:\Windows
   Variable Flags3=00001000
   Variable Name4=_WISE_
   Variable Default4=C:\PROGRA~2\Altiris\Wise\WISESC~1
@@ -50,18 +50,18 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_SERVER_PASS
+  Variable Value1=SQL_SERVER_AUTH
   Variable Name2=_PROP_VAR_
-  Variable Value2=SPASS
+  Variable Value2=SAUTH
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=MYUSERNAME
+  Variable Value1=SQL_SERVER_PASS
   Variable Name2=_PROP_VAR_
-  Variable Value2=MYUSER
+  Variable Value2=SPASS
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -77,74 +77,29 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_SERVER_AUTH
-  Variable Name2=_PROP_VAR_
-  Variable Value2=SAUTH
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_USER_AUTH
-  Variable Name2=_PROP_VAR_
-  Variable Value2=AUTH
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
   Variable Value1=DATABASEINSTALLER
   Variable Name2=_PROP_VAR_
   Variable Value2=DIR
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
-item: Set Variable
-  Variable=U
-end
 item: If/While Statement
   Variable=SAUTH
   Value=NT
 end
-item: Set Variable
-  Variable=SA
-  Value=-E
-end
-item: Else Statement
-end
-item: Set Variable
-  Variable=SA
-  Value=-U"%SUSER%" -P"%SPASS%"
-end
-item: End Block
-end
-remarked item: Display Message
-  Title=aa
-  Text=SQLCMD -S%SRV% -Dmaster %SA% -v BakDir = "%DIR%DemoDatabase" -i"%DIR%DemoDatabase\RestoreDemo.sql" -o c:\out.txt
-end
-item: Remark
-  Text=Restore 3xDatabases
-end
 item: Execute Program
-  Pathname=SQLCMD
-  Command Line=-S"%SRV%" -dmaster %SA% -vBakDir="%DIR%DemoDatabase" -vDataDir="%DIR%DemoDatabase" -i"%DIR%DemoDatabase\RestoreDemo.sql"
+  Pathname=CMD
+  Command Line=/C "%DIR%DemoDatabase\Helpers\RestoreDemo.bat"
   Default Directory=%DIR%
   Flags=00000110
 end
-item: If/While Statement
-  Variable=INSTALL_RESULT
-  Value=0
-  Flags=00000001
+item: Else Statement
 end
-item: Display Message
-  Title=Database Restored Failed
-  Text=Database Restored Failed
-  Flags=00001000
-end
-item: Exit Installation
-  Flags=1
+item: Execute Program
+  Pathname=CMD
+  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" %SUSER% %SPASS%"
+  Default Directory=%DIR%
+  Flags=00000110
 end
 item: End Block
 end
