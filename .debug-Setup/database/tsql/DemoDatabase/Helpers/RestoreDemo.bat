@@ -89,16 +89,16 @@ SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\CreateLoginDropUsers.sql" -v T
 ECHO restoring databases. Done!
 ECHO.
 ECHO patching databases ...
-"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -DTeleoptiCCC7_Demo -OTeleoptiCCC7 %SA% -R -LTeleoptiDemoUser:TeleoptiDemoPwd2 > NUL
-"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -DTeleoptiCCC7Agg_Demo -OTeleoptiCCCAgg %SA% -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2 > NUL
-"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -DTeleoptiAnalytics_Demo -OTeleoptiAnalytics %SA% -T -R -LTeleoptiDemoUser:TeleoptiDemoPwd2 > NUL
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" %SA2% > NUL
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" %SA2% > NUL
+"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTICCC% -OTeleoptiCCC7 %SA% -R -L%SQLLogin%:%SQLPwd% > "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIAGG% -OTeleoptiCCCAgg %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIANALYTICS% -OTeleoptiAnalytics %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
 ECHO patching databases. Done!
 ECHO.
 ECHO fix data for Demo ...
-SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\AddingTeleoptiPermissions.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%"
-SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\MoveDataInDemo.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" > NUL
+SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\AddingTeleoptiPermissions.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" > "%ROOTDIR%\..\fixDatainDB.log"
+SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\MoveDataInDemo.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" >> "%ROOTDIR%\..\fixDatainDB.log"
 ECHO fix data for Demo. Done!
 ECHO.
 net start teleoptiEtlService
