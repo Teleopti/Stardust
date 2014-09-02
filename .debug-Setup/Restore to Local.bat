@@ -324,7 +324,7 @@ SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\AddingTe
 ECHO Done!
 ECHO ------
 ECHO.
-PAUSE
+
 CD "%ROOTDIR%"
 
 IF "%IFFLOW%"=="y" (
