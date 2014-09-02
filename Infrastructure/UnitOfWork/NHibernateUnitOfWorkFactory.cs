@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using NHibernate;
-using NHibernate.Context;
 using NHibernate.Engine;
 using NHibernate.Stat;
 using Teleopti.Ccc.Domain.Common.Messaging;
@@ -84,11 +83,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				SessionContextBinder.IsolationLevel(session),
 				SessionContextBinder.Initiator(session)
 				);
-		}
-
-		public bool HasCurrentUnitOfWork()
-		{
-			return CurrentSessionContext.HasBind(_factory);
 		}
 
 		public IAuditSetter AuditSetting

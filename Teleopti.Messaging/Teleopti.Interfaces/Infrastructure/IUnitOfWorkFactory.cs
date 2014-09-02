@@ -67,12 +67,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		IUnitOfWork CurrentUnitOfWork();
 
 		/// <summary>
-		/// Returns if curent uow exists
-		/// </summary>
-		/// <returns></returns>
-		bool HasCurrentUnitOfWork();
-
-		/// <summary>
 		/// Returns the audit setting delegate used by auditing
 		/// </summary>
 		IAuditSetter AuditSetting { get; }

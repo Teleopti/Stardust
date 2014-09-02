@@ -8,10 +8,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     /// <summary>
     /// Unitofwork factory for connections against Matrix
     /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2008-04-22
-    /// </remarks>
     public class NHibernateUnitOfWorkMatrixFactory : NHibernateUnitOfWorkFactory
     {
         private const string notStatefulSupport = "This IUnitOfWorkFactory does not support stateful IUnitOfWorks";
@@ -25,7 +21,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         {
             throw new NotSupportedException(notStatefulSupport);
         }
-
     }
-
 }

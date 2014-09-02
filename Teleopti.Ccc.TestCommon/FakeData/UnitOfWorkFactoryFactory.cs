@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -33,11 +32,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             {
                 throw new NotImplementedException();
             }
-
-        	public bool HasCurrentUnitOfWork()
-        	{
-				throw new NotImplementedException();
-        	}
 
         	public IAuditSetter AuditSetting
         	{

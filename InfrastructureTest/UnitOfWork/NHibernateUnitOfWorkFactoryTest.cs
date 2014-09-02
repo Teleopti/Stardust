@@ -68,24 +68,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			mocks.VerifyAll();
 		}
 
-		[Test]
-		public void ShouldHaveCurrentUnitOfWork()
-		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				UnitOfWorkFactory.Current.HasCurrentUnitOfWork()
-					.Should().Be.True();
-			}
-		}
-
-		[Test]
-		public void ShouldNotHaveCurrentUnitOfWork()
-		{
-			UnitOfWorkFactory.Current.HasCurrentUnitOfWork()
-				.Should().Be.False();
-
-		}
-
 		/// <summary>
 		/// Verifies the session factory is not null.
 		/// </summary>
