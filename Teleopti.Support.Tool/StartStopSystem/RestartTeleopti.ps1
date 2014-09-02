@@ -127,9 +127,9 @@ function fnAddTrustedSite ([string]$Site)
     }
     
 
-    $Site = $Site -replace "/$", "" #remove trailing slash
     $Site = $Site -replace "http://", ""
     $Site = $Site -replace "https://", ""
+    $Site = $Site.Split("/")[0].ToLower()
 
     $regpath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\" +$Site
     $Escregpath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains\" +$Site
