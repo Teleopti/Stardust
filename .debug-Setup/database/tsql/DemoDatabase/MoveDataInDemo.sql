@@ -78,6 +78,10 @@ GO
 -- Move Deviation data
 ----------------
 truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
+update $(TELEOPTIANALYTICS).mart.fact_schedule_deviation_template
+set
+	date_id = date_id - 365,
+	shift_startdate_id = shift_startdate_id - 365
 go
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
