@@ -292,26 +292,26 @@ findstr /I /C:"%TELEOPTIANALYTICS%" "%temp%\FindDB.txt" > NUL
 if %errorlevel% NEQ 0 SET CreateAnalytics=-C
 
 ::create or patch Analytics
-%DBMANAGER% -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > NUL
+%DBMANAGER% -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 
 ::Create or Patch Agg
-%DBMANAGER% -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" > NUL
+%DBMANAGER% -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
 
 ::Upgrade Raptor DB to latest version
 CD "%DBMANAGERPATH%"
-%DBMANAGER% -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" > NUL
+%DBMANAGER% -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
 ::move SalesDemo to specific dates
 %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" -EE
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" -EE >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" -EE
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" -EE >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ECHO Upgrade databases. Done!
@@ -325,7 +325,7 @@ SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\AddingTe
 ECHO Done!
 ECHO ------
 ECHO.
-
+PAUSE
 CD "%ROOTDIR%"
 
 IF "%IFFLOW%"=="y" (
