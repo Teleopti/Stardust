@@ -920,7 +920,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	});
 
 	self.filterTime.subscribe(function () {
-		if (self.isFilterByTimeEnabled()) {
+		if (self.filterStartTimeList().length == 13) {//12 time range and 1 dayoff
 			self.prepareLoad();
 			self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 		}
@@ -971,17 +971,17 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	};
 
 	self.setTimeFilters = function(hourTexts) {
-		self.filterStartTimeList.removeAll();
-		self.filterEndTimeList.removeAll();
-		var rangStart = 0;
-		for (var i = 0; i < 24; i += 2) {
-			var rangEnd = rangStart + 2;
-			var hourText = hourTexts[i] + " - " + hourTexts[i + 2];
-			var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(hourText, rangStart, rangEnd, false, false);
-			var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
-			self.filterStartTimeList.push(filterStartTime);
-			self.filterEndTimeList.push(filterEndTime);
-			rangStart += 2;
+		if (self.filterStartTimeList().length == 0) {
+			var rangStart = 0;
+			for (var i = 0; i < 24; i += 2) {
+				var rangEnd = rangStart + 2;
+				var hourText = hourTexts[i] + " - " + hourTexts[i + 2];
+				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(hourText, rangStart, rangEnd, false, false);
+				var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
+				self.filterStartTimeList.push(filterStartTime);
+				self.filterEndTimeList.push(filterEndTime);
+				rangStart += 2;
+			}
 		}
 	};
 
