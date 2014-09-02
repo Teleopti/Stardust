@@ -3,6 +3,16 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+	test("should set date picker range", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		var now = moment("Dec 25, 1995");
+
+		viewModel.setDatePickerRange(now, 1, 2);
+
+		equal(viewModel.openPeriodStartDate().format("YYYY-MM-DD"), "1995-12-26");
+		equal(viewModel.openPeriodEndDate().format("YYYY-MM-DD"), "1995-12-27");
+	});
+
 	test("should get date with format", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.requestedDateInternal(moment("Dec 25, 1995"));

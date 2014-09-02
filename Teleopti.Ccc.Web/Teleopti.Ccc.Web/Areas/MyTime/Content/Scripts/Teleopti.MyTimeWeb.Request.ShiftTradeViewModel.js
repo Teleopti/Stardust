@@ -13,7 +13,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	var self = this;
 	self.layerCanvasPixelWidth = ko.observable();
 
-	self.now = null;
 	self.weekStart = ko.observable(1);
 	self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days', -1));
 	self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
@@ -599,9 +598,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			type: 'GET',
 			success: function(data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
-					self.now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
-					self.setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
-					var requestedDate = moment(self.now).add('days', data.OpenPeriodRelativeStart);
+					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
+					self.setDatePickerRange(now, data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
+					var requestedDate = moment(now).add('days', data.OpenPeriodRelativeStart);
 					if (date && Object.prototype.toString.call(date) === '[object Date]') {
 						var md = moment(date);
 						if (self.isRequestedDateValid(md)) {
@@ -920,7 +919,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	});
 
 	self.filterTime.subscribe(function () {
-		if (self.filterStartTimeList().length == 13) {//12 time range and 1 dayoff
+		if (self.filterStartTimeList().length == 13) {//12 time ranges and 1 dayoff
 			self.prepareLoad();
 			self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 		}
@@ -1007,8 +1006,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
-	self.setDatePickerRange = function(relativeStart, relativeEnd) {
-		self.openPeriodStartDate(moment(self.now).add('days', relativeStart));
-		self.openPeriodEndDate(moment(self.now).add('days', relativeEnd));
+	self.setDatePickerRange = function(now, relativeStart, relativeEnd) {
+		self.openPeriodStartDate(moment(now).add('days', relativeStart));
+		self.openPeriodEndDate(moment(now).add('days', relativeEnd));
 	};
 };
