@@ -14,19 +14,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	[TestFixture]
 	public class AgentBadgeCalculatorTest
 	{
-		private const string _timezoneCode = "";
+		private const string timezoneCode = "";
 
 		private IAgentBadgeCalculator _calculator;
 		private DateOnly _calculateDateOnly;
 		private Guid _lastPersonId;
 		private List<IPerson> _allPersons;
 		private IStatisticRepository _statisticRepository;
+		private IAgentBadgeRepository _badgeRepository;
 		private AgentBadgeThresholdSettings _badgeSetting;
 
 		[SetUp]
 		public void Setup()
 		{
-			_badgeSetting = new AgentBadgeThresholdSettings()
+			_badgeSetting = new AgentBadgeThresholdSettings
 			{
 				AdherenceThreshold = new Percent(0.6),
 				AHTThreshold = new TimeSpan(0, 5, 0),
@@ -52,36 +53,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						_timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
+						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
 				.IgnoreArguments().Return(new List<Guid> {_lastPersonId});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(_timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
 				.IgnoreArguments()
 				.Return(new List<Guid> {_lastPersonId});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(_timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
 				.IgnoreArguments()
 				.Return(new List<Guid> {_lastPersonId});
 
-			_calculator = new AgentBadgeCalculator(_statisticRepository);
+			_badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
+			_badgeRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
+
+			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeRepository);
 		}
 
 		[Test]
 		public void ShouldCalculateAdherenceBadgeForCorrectAgents()
 		{
-			var result = _calculator.CalculateAdherenceBadges(_allPersons, _timezoneCode, _calculateDateOnly,
+			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 				_badgeSetting);
 
-			var lastPerson = result.First(x => x.Id == _lastPersonId);
-
-			Assert.IsNotNull(lastPerson);
-
-			var badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.Adherence);
+			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.BronzeBadge, 1);
 			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
 		}
@@ -89,14 +89,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldCalculateAHTBadgeForCorrectAgents()
 		{
-			var result = _calculator.CalculateAHTBadges(_allPersons, _timezoneCode, _calculateDateOnly,
+			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				_badgeSetting);
 
-			var lastPerson = result.First(x => x.Id == _lastPersonId);
-
-			Assert.IsNotNull(lastPerson);
-
-			var badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.AverageHandlingTime);
+			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.BronzeBadge, 1);
 			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
 		}
@@ -104,14 +100,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldCalculateAnsweredCallsBadgeForCorrectAgents()
 		{
-			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, _timezoneCode, _calculateDateOnly,
+			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				_badgeSetting);
 
-			var lastPerson = result.First(x => x.Id == _lastPersonId);
-
-			Assert.IsNotNull(lastPerson);
-
-			var badge = lastPerson.Badges.Single(x => x.BadgeType == BadgeType.AnsweredCalls);
+			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.BronzeBadge, 1);
 			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
 		}
