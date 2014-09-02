@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("person", person);
 
-			ICollection<IAgentBadge> retList = Session.CreateCriteria(typeof(AgentBadge), "badge")
-							.Add(Restrictions.Eq("Person", person))
-							.List<IAgentBadge>();
-			return retList;
+			ICollection<IAgentBadge> result = Session.CreateCriteria(typeof(AgentBadge), "badge")
+				.Add(Restrictions.Eq("Person", person))
+				.List<IAgentBadge>();
+			return result;
 		}
 
 		public IAgentBadge Find(IPerson person, BadgeType badgeType)
@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			InParameter.NotNull("person", person);
 			InParameter.NotNull("badgeType", badgeType);
 
-			ICollection<IAgentBadge> retList = Session.CreateCriteria(typeof(AgentBadge), "badge")
-							.Add(Restrictions.Eq("Person", person))
-							.Add(Restrictions.Eq("BadgeType", (int)badgeType))
-							.List<IAgentBadge>();
-			return retList.Any() ? retList.First() : null;
+			var result = Session.CreateCriteria(typeof(AgentBadge), "badge")
+				.Add(Restrictions.Eq("Person", person))
+				.Add(Restrictions.Eq("BadgeType", (int)badgeType))
+				.UniqueResult<IAgentBadge>();
+			return result;
 		}
 	}
 }
