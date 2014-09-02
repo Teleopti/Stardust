@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var identity = ((ITeleoptiIdentity)_currentTeleoptiPrincipal.Current().Identity);
 			if (!identity.IsAuthenticated)
 			{
-				throw new PermissionException(youAreNotLoggedOn);				
+				throw new PermissionException(youAreNotLoggedOn);
 			}
 			return identity.DataSource.Application;
 		}
