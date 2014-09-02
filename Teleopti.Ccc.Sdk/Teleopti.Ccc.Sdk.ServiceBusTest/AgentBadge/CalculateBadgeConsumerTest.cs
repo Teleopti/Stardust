@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IServiceBus serviceBus;
 		private IAgentBadgeSettingsRepository badgeSettingsRepository;
 		private IStatisticRepository statisticRepository;
+		private IAgentBadgeRepository badgeRepository;
 		private IPersonRepository personRepository;
 		private IGlobalSettingDataRepository globalSettingRepository;
 		private IPushMessagePersister msgRepository;
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new List<IAgentBadgeThresholdSettings> {new AgentBadgeThresholdSettings {EnableBadge = true}});
 
 			statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(
 				x => x.FindPeopleInOrganization(new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9)), false))
@@ -57,10 +58,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			msgRepository = MockRepository.GenerateMock<IPushMessagePersister>();
 			now = MockRepository.GenerateMock<INow>();
-			calculator = new AgentBadgeCalculator(statisticRepository);
+			calculator = new AgentBadgeCalculator(statisticRepository, badgeRepository);
 			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository,
-				msgRepository, 
-				unitOfWorkFactory, calculator, now);
+				msgRepository, unitOfWorkFactory, calculator, now);
 		}
 		[Test]
 		public void ShouldSendCalculateBadgeMessageAtRightTime()
