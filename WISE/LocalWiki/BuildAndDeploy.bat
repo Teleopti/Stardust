@@ -3,12 +3,12 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 SET Dependencies=\\a380\T-Files\RnD\MSI_Dependencies\localWiki
-SET DeploymentRoot=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki
+SET DeploymentRoot=\\A380\T-Files\Product\Teleopti CCC\v8\LocalWiki
 SET Deployment=%DeploymentRoot%\Latest
 
 SET WorkingFolder=C:\temp\localWiki
-SET WebURL=http://wiki.teleopti.com/TeleoptiCCC
-SET OutputFolder=wiki.teleopti.com\TeleoptiCCC
+SET WebURL=http://wiki.teleopti.com/TeleoptiWFM
+SET OutputFolder=wiki.teleopti.com\TeleoptiWFM
 
 ::all good so far
 SET /A ERRORLEV=0
