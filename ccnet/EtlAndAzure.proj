@@ -24,7 +24,7 @@
 		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiAnalyticsArgs>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
-		<BakDir>\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase</BakDir>
+		<BakDir>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\DemoDatabase</BakDir>
 		<LogObjectId>1</LogObjectId>
 	
 </PropertyGroup>

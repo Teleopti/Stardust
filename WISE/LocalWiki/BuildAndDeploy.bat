@@ -2,7 +2,7 @@
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
-SET Dependencies=\\hebe\Installation\Dependencies\localWiki
+SET Dependencies=\\a380\T-Files\RnD\MSI_Dependencies\localWiki
 SET Deployment=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki\Latest
 
 SET WorkingFolder=C:\temp\localWiki
