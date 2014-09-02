@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.WpfControls.Common;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
 using Syncfusion.Windows.Forms.Chart;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 	public partial class Forecaster : BaseRibbonForm, IFinishWorkload
 	{
-		private ILog _logger = LogManager.GetLogger(typeof(Forecaster));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(Forecaster));
 
 		private ISkill _skill;
 		private IMultisiteSkill _multisiteSkill;
@@ -85,14 +84,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		#region Private
 
-		/// <summary>
-		/// Sets the colors.
-		/// </summary>
-		/// <remarks>
-		/// Created by: östenp
-		/// Created date: 2008-03-27
-		/// </remarks>
-		private void SetColors()
+
+		private void setColors()
 		{
 			Color ribbonContextTabColor = ColorHelper.RibbonContextTabColor();
 			for (int i = 0; i < ribbonControlAdv1.TabGroups.Count; i++)
@@ -101,16 +94,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		/// <summary>
-		/// Sets the permissions on the form controls.
-		/// <remarks>
-		/// Created By: niclash
-		/// Created Date: 10-30-2008
-		/// </remarks>
-		/// </summary>
-		private void SetPermissionOnControls()
+		private void setPermissionOnControls()
 		{
-			toolStripButtonSystemOptions.Enabled =
+			backStageButtonOptions.Enabled =
 				 PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
@@ -132,11 +118,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		}
 
 
-		private void Save(Func<bool> callback)
+		private void save(Func<bool> callback)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new Action<Func<bool>>(Save), callback);
+				BeginInvoke(new Action<Func<bool>>(save), callback);
 				return;
 			}
 
@@ -450,7 +436,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				initializeSkillWorkload();
 
-				reloadScenarioMenuItems();
+				loadScenarioMenuItems();
 			}
 			catch (DataSourceException dataSourceException)
 			{
@@ -693,7 +679,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			initializeTexts();
 			initializeEvents();
-			SetPermissionOnControls();
+			setPermissionOnControls();
 			SetToolStripsToPreferredSize();
 
 			backgroundWorker1.WorkerSupportsCancellation = true;
@@ -731,20 +717,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripTextBoxNewScenario.Text = "(" + UserTexts.Resources.NewScenario + ")";
 		}
 
-		private void reloadScenarioMenuItems()
+		private void loadScenarioMenuItems()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);
 				IList<IScenario> scenarios = scenarioRepository.FindAllSorted();
 
-				clearExistingExportScenarioButtons();
 				foreach (var scenario in scenarios)
 				{
-					if (_scenario.Description.Name == scenario.Description.Name) continue;
 					var button = createExportScenarioButton(scenario);
 					flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
 				}
+			}
+			setExportVisability();
+		}
+
+		private void setExportVisability()
+		{
+			foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls.OfType<ButtonAdv>())
+			{
+				control.Visible = !((Scenario) control.Tag).Equals(_scenario);
 			}
 		}
 
@@ -766,7 +759,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				Appearance = ButtonAppearance.Metro,
 				UseVisualStyle = true,
 				Tag = scenario,
-				BackColor = Color.FromArgb(((int) (((byte) (0)))), ((int) (((byte) (153)))), ((int) (((byte) (255)))))
+				BackColor = Color.FromArgb(0, 153, 255)
 			};
 
 			button.Font.ChangeToBold();
@@ -962,7 +955,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
 			}
 
-			SetColors();
+			setColors();
 			RibbonTemplatePanelsClose();
 			ribbonControlAdv1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 			Application.DoEvents();
@@ -1492,7 +1485,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void btnSave_click(object sender, EventArgs e)
 		{
 			if (ValidateForm())
-				Save(null);
+				save(null);
 		}
 
 		private void toolStripButtonForecastWorkflow_Click(object sender, EventArgs e)
@@ -2458,7 +2451,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					EntityEventAggregator.EntitiesNeedsRefresh += MainScreen_EntitiesNeedsRefresh;
 
 					reloadDetailViews();
-					reloadScenarioMenuItems();
+					setExportVisability();
 
 					Cursor = Cursors.Default;
 				}
@@ -2505,7 +2498,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void backStageButtonSave_Click(object sender, EventArgs e)
 		{
 			if (ValidateForm())
-				Save(null);
+				save(null);
 		}
 
 		private void backStageButtonClose_Click(object sender, EventArgs e)
