@@ -79,54 +79,48 @@
 		</div>
 	</header>
 
-	<section data-bind="template: 'page'">
-	</section>
-
-	<script type="text/html" id="page">
-		<div class="container">
-			<div class="row">
-				<br />
-				<div class="col-md-6">
-					<form>
-						<fieldset>
-							<h2>Scenario</h2>
-							<label>Scenario</label>
-							<select disabled="disabled" class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', optionsValue: 'Name', value: ScenarioName, enable: EnableForm"></select>
-							<label>Configuration</label>
-							<textarea disabled="disabled" class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown', enable: EnableForm"></textarea>
-							<label></label>
-							<button disabled="disabled" class="btn btn-lg btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled, click: Run"></button>
-						</fieldset>
-					</form>
-				</div>
-				<div class="col-md-6">
-					<h2>Progress</h2>
-					<!-- ko foreach: ProgressItems() -->
-					<p class="message-count">
-						<span class="message-successes label label-success" data-bind="text: Successes"></span>
-						<span class="message-failures label label-danger" data-bind="text: Failures"></span>
-						<span class="message-target label label-info" data-bind="text: Target"></span>
-						<span data-bind="text: Text"></span>
-					</p>
-					<!-- /ko -->
-				</div>
-				<div class="col-md-6">
-					<h2>Result</h2>
-					<p class="total-run-time"><span class="label label-info" data-bind="text: TotalRunTime"></span>Total run time</p>
-					<p class="total-time-to-send-commands"><span class="label label-info" data-bind="text: TotalTimeToSendCommands"></span>Total time to send commands</p>
-					<p class="scenarios-per-second"><span class="label label-info" data-bind="text: ScenariosPerSecond"></span>Scenarios per second</p>
-				</div>
-				<div class="col-md-6" data-bind="if: RunDone">
-					<h2></h2>
-					<div class="alert alert-success result-success">Finished!</div>
-				</div>
-				<div class="col-md-6">
-					<h2>Hey!!  :-)</h2>
-					<div data-bind="html: Text"></div>
-				</div>
+	<div class="container">
+		<div class="row">
+			<br />
+			<div class="col-md-6">
+				<form>
+					<fieldset>
+						<h2>Scenario</h2>
+						<label>Scenario</label>
+						<select disabled="disabled" class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', optionsValue: 'Name', value: ScenarioName, enable: EnableForm"></select>
+						<label>Configuration</label>
+						<textarea disabled="disabled" class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown', enable: EnableForm"></textarea>
+						<label></label>
+						<button disabled="disabled" class="btn btn-lg btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled, click: Run"></button>
+					</fieldset>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<h2>Progress</h2>
+				<!-- ko foreach: ProgressItems() -->
+				<p class="message-count">
+					<span class="message-successes label label-success" data-bind="text: Successes"></span>
+					<span class="message-failures label label-danger" data-bind="text: Failures"></span>
+					<span class="message-target label label-info" data-bind="text: Target"></span>
+					<span data-bind="text: Text"></span>
+				</p>
+				<!-- /ko -->
+			</div>
+			<div class="col-md-6">
+				<h2>Result</h2>
+				<p class="total-run-time"><span class="label label-info" data-bind="text: TotalRunTime"></span>Total run time</p>
+				<p class="total-time-to-send-commands"><span class="label label-info" data-bind="text: TotalTimeToSendCommands"></span>Total time to send commands</p>
+				<p class="scenarios-per-second"><span class="label label-info" data-bind="text: ScenariosPerSecond"></span>Scenarios per second</p>
+			</div>
+			<div class="col-md-6" data-bind="if: RunDone">
+				<h2></h2>
+				<div class="alert alert-success result-success">Finished!</div>
+			</div>
+			<div class="col-md-6">
+				<h2>Hey!!  :-)</h2>
+				<div data-bind="html: Text"></div>
 			</div>
 		</div>
-	</script>
-
+	</div>
 </body>
 </html>

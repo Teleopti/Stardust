@@ -38,15 +38,13 @@ define([
 			return !values.RunDone();
 		});
 
-		this.ConfigurationLoading = ko.computed(function () {
-			return ajax.Active();
-		});
-
 		this.EnableForm = ko.computed(function () {
-			if (self.Running())
+			if (self.Running()) {
 				return false;
-			if (self.ConfigurationLoading())
+			}
+			if (ajax.Active()) {
 				return false;
+			}
 			return true;
 		});
 
