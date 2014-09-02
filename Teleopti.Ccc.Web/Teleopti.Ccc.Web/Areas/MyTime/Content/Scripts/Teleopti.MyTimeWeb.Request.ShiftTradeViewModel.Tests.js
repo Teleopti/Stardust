@@ -352,6 +352,41 @@ $(document).ready(function () {
 		equal(viewModel.selectablePages().length, 5);
 	});
 
+	test("should recognize time filter with start time", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.filteredStartTimesText.push("6:00 - 8:00");
+
+		var result = viewModel.isFiltered();
+
+		equal(result, true);
+	});
+
+	test("should recognize time filter with end time", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.filteredEndTimesText.push("6:00 - 8:00");
+
+		var result = viewModel.isFiltered();
+
+		equal(result, true);
+	});
+
+	test("should recognize time filter with dayoff", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.isDayoffFiltered(true);
+
+		var result = viewModel.isFiltered();
+
+		equal(result, true);
+	});
+
+	test("should recognize is not filtered by time filter", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+
+		var result = viewModel.isFiltered();
+
+		equal(result, false);
+	});
+
 	test("should filter checked start time", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		var isChecked = true;
