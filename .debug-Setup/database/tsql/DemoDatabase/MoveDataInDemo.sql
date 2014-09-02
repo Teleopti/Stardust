@@ -170,8 +170,8 @@ set @TemplateEndDate = '2013-03-03'
 SELECT @MondayThreeWeeksAgo=DATEADD(wk, DATEDIFF(wk,21,GETDATE()), 0)
 SELECT @DaysToAdd = datediff(d,@TemplateStartDate,@MondayThreeWeeksAgo)
 
-insert into $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
-select * from $(TELEOPTIANALYTICS).mart.fact_schedule_deviation_template
+--insert into $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
+--select * from $(TELEOPTIANALYTICS).mart.fact_schedule_deviation_template
 
 update $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
 set
