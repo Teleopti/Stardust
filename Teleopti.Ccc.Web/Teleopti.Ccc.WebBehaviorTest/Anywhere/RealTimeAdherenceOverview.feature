@@ -650,7 +650,6 @@ Scenario: Should display sites of a selected business unit
 	Then I should see the site 'Paris'
 
 @OnlyRunIfEnabled('RTA_MonitorMultipleBusinessUnits_28348')
-@Ignore
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
 	Given  the current time is '2014-01-21 12:30:00'
 	And I have a role with
@@ -702,11 +701,11 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I view Real time adherence overview
-	And the browser time is '2014-01-21 12:45:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And I choose business unit 'Business Unit 1'
 	And I click the site 'Paris'
-	And I click the team 'Red'
+	And I view real time adherence for team 'Red'
+	And the browser time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |
