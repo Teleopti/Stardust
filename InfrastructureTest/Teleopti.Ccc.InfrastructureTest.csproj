@@ -166,6 +166,7 @@
     <Compile Include="Foundation\AvailableApplicationIdentityDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
+    <Compile Include="Repositories\AgentBadgeRepositoryTest.cs" />
     <Compile Include="Repositories\AgentBadgeSettingsRepositoryTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
