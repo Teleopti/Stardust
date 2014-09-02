@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resource
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -15,7 +16,10 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Client.Composite;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -60,6 +64,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
 					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
 			}
+
+			registerMessageBroker(builder);
+		}
+
+		private static void registerMessageBroker(ContainerBuilder builder)
+		{
+			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
+			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
+			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
+
+			builder.RegisterType<SignalRClient>()
+				.As<ISignalRClient>()
+				.WithParameter(new NamedParameter("serverUrl", null))
+				.SingleInstance();
+			builder.RegisterType<SignalRSender>()
+				.As<Interfaces.MessageBroker.Client.IMessageSender>()
+				.SingleInstance();
+
+			builder.RegisterType<MessageBrokerCompositeClient>()
+				.As<IMessageBrokerComposite>()
+				.As<IMessageCreator>()
+				.As<IMessageListener>()
+				.SingleInstance();
 		}
 
     	private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)
