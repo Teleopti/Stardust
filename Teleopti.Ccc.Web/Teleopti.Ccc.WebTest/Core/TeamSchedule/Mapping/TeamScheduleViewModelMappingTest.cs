@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		{
 			var badges = new List<AgentBadge>() {new AgentBadge()};
 			var person = new Person();
-			badgeProvider.Stub(x => x.GetBadges(person.Id)).Return(badges);
+			badgeProvider.Stub(x => x.GetBadges(person)).Return(badges);
 			var result = Mapper.Map<TeamScheduleDayDomainData, AgentScheduleViewModel>(new TeamScheduleDayDomainData()
 																						{
 																							Person = person
