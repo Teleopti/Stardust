@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,7 +18,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
-		private readonly IAgentBadgeRepository _badgeRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPushMessagePersister _msgPersister;
@@ -31,8 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public CalculateBadgeConsumer(
 									IServiceBus serviceBus, 
-									IAgentBadgeSettingsRepository settingsRepository, 
-									IAgentBadgeRepository badgeRepository,
+									IAgentBadgeSettingsRepository settingsRepository,
 									IPersonRepository personRepository, 
 									IGlobalSettingDataRepository globalSettingRep,
 									IPushMessagePersister msgPersister, 
@@ -42,7 +38,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
-			_badgeRepository = badgeRepository;
 			_personRepository = personRepository;
 			_globalSettingRep = globalSettingRep;
 			_msgPersister = msgPersister;
