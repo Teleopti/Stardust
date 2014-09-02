@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Commands
 			if (!_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockMoveTimeBetweenDays_22407))
 				return;
 			_teamBlockMoveTimeBetweenDaysService.ReportProgress  += moveTimePerformed;
-			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder, selectedPersons, matrixesOnSelectedperiod);
+			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder, selectedPersons, selectedPeriod);
 			_teamBlockMoveTimeBetweenDaysService.ReportProgress  -= moveTimePerformed;
 		}
 
