@@ -3,7 +3,8 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 SET Dependencies=\\a380\T-Files\RnD\MSI_Dependencies\localWiki
-SET Deployment=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki\Latest
+SET DeploymentRoot=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki
+SET Deployment=%DeploymentRoot%\Latest
 
 SET WorkingFolder=C:\temp\localWiki
 SET WebURL=http://wiki.teleopti.com/TeleoptiCCC
@@ -17,7 +18,7 @@ cls
 ::prepare an archive folder
 For /f "tokens=1-2 delims=/:" %%a in ("%TIME%") do (set mytime=%%a%%b)
 For /f "tokens=1-4 delims=-" %%a in ("%date%") do (set mydate=%%a%%b%%c)
-set DeploymentArchive=\\A380\T-Files\Product\Teleopti CCC\v7\LocalWiki\Archive\%mydate%_%mytime%
+set DeploymentArchive=%DeploymentRoot%\Archive\%mydate%_%mytime%
 
 ::archive previous wiki
 if not exist "%Deployment%" mkdir "%Deployment%"
