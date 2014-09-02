@@ -616,7 +616,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
-	/*these functions are for schedule loading process only, the sequence logic only according to loading schedule*/
 	self.setPagingInfo = function(pageCount) {
 		self.pageCount(pageCount);
 
@@ -711,7 +710,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			});
 		}
 	};
-	/*these functions are for schedule loading process only, the sequence logic only according to loading schedule*/
 
 	self.loadOneTeamSchedule = function(date, teamId) {
 		if (self.IsLoading()) return;
