@@ -201,5 +201,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			teamInfo4.ClearLocks();
 			Assert.AreEqual(2, teamInfo4.UnLockedMembers().Count());
 		}
+
+		[Test]
+		public void ShouldReturnMatrixesForUnlocedMembers()
+		{
+			var groupPerson = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
+			var teamInfo = new TeamInfo(groupPerson, _groupMatrixes);
+			teamInfo.LockMember(_person2);
+			var tempDatePeriod = new DateOnlyPeriod(_date, _date);
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.Person).Return(_person1);
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(tempDatePeriod);
+
+				Expect.Call(_matrix2.Person).Return(_person2);
+
+			}
+			using (_mocks.Playback())
+			{
+				var result = teamInfo.MatrixesForUnlockedMembersAndPeriod(tempDatePeriod);
+				Assert.AreEqual(1, result.Count());
+				Assert.AreEqual(_matrix,result.First());
+			}
+		}
 	}
 }

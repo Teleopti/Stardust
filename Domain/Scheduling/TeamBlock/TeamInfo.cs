@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		IScheduleMatrixPro MatrixForMemberAndDate(IPerson groupMember, DateOnly dateOnly);
 		IEnumerable<IScheduleMatrixPro> MatrixesForMemberAndPeriod(IPerson groupMember, DateOnlyPeriod period);
 		void ClearLocks();
+		IEnumerable<IScheduleMatrixPro> MatrixesForUnlockedMembersAndPeriod(DateOnlyPeriod dateOnlyPeriod);
 	}
 
 	public class TeamInfo : ITeamInfo
@@ -148,6 +149,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void ClearLocks()
 		{
 			_lockedMembers.Clear();
+		}
+
+		public IEnumerable<IScheduleMatrixPro> MatrixesForUnlockedMembersAndPeriod(DateOnlyPeriod dateOnlyPeriod)
+		{
+			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
+			foreach (var scheduleMatrixPro in MatrixesForGroup())
+			{
+				if ((UnLockedMembers().Contains( scheduleMatrixPro.Person) )
+						&&  ( scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(dateOnlyPeriod) != null))
+					ret.Add(scheduleMatrixPro);
+			}
+
+			return ret;
 		}
 
 		public override int GetHashCode()
