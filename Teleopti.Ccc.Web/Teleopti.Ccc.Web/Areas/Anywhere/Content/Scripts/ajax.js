@@ -1,10 +1,12 @@
 define(
     [
         'jquery',
-        'errorview'
+        'errorview',
+		'resources'
     ], function(
         $,
-        errorview
+        errorview,
+		resources
     ) {
 
     	
@@ -36,13 +38,18 @@ define(
                 	}
 
                     var message = {
-                        title: "Ajax error!",
+                    	title: "Ajax error!",
                         message: {
                             status: jqXHR.status || "",
                             textStatus: textStatus || "",
                             errorThrown: errorThrown || "",
                         }
                     };
+
+	                if (!jqXHR.status) {
+		                message = resources.ServerUnavailable;
+	                }
+
                     errorview.display(message);
                 };
                 return $.ajax(options);
