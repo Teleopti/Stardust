@@ -89,7 +89,7 @@ SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\CreateLoginDropUsers.sql" -v T
 ECHO restoring databases. Done!
 ECHO.
 ECHO patching databases ...
-"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTICCC% -OTeleoptiCCC7 %SA% -R -L%SQLLogin%:%SQLPwd% > "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTICCC% -OTeleoptiCCC7 %SA% -T -R -L%SQLLogin%:%SQLPwd% > "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIAGG% -OTeleoptiCCCAgg %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIANALYTICS% -OTeleoptiAnalytics %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
