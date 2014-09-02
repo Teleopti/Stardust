@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             if (disposing)
             {
-                UnhookEvents();
-                ReleaseManagedResources();
+                unhookEvents();
+                releaseManagedResources();
                 if(components != null)
                     components.Dispose();
             }
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonExit.Text = "xxExitTELEOPTICCC";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonExit, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonExit, false);
-			this.toolStripButtonExit.Click += new System.EventHandler(this.toolStripButtonExit_Click);
+			this.toolStripButtonExit.Click += new System.EventHandler(this.toolStripButtonExitClick);
 			// 
 			// toolStripExCurrentChart
 			// 
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlWorkloads.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlWorkloads.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlWorkloads.ThemesEnabled = true;
-			this.tabControlWorkloads.SelectedIndexChanged += new System.EventHandler(this.tabControlWorkloads_SelectedIndexChanged);
+			this.tabControlWorkloads.SelectedIndexChanged += new System.EventHandler(this.tabControlWorkloadsSelectedIndexChanged);
 			// 
 			// tabPage1
 			// 
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.tabControlAdvMultisiteSkill.TabIndex = 7;
 			this.tabControlAdvMultisiteSkill.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
 			this.tabControlAdvMultisiteSkill.ThemesEnabled = true;
-			this.tabControlAdvMultisiteSkill.SelectedIndexChanged += new System.EventHandler(this.tabControlAdvMultisiteSkill_SelectedIndexChanged);
+			this.tabControlAdvMultisiteSkill.SelectedIndexChanged += new System.EventHandler(this.tabControlAdvMultisiteSkillSelectedIndexChanged);
 			// 
 			// tabPageAdvMultisiteSkill
 			// 
@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButtonSave.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonSave.TabIndex = 3;
 			this.backStageButtonSave.Text = "xxSave";
-			this.backStageButtonSave.Click += new System.EventHandler(this.backStageButtonSave_Click);
+			this.backStageButtonSave.Click += new System.EventHandler(this.backStageButtonSaveClick);
 			// 
 			// backStageTabExportTo
 			// 
@@ -450,7 +450,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButtonClose.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonClose.TabIndex = 5;
 			this.backStageButtonClose.Text = "xxClose";
-			this.backStageButtonClose.Click += new System.EventHandler(this.backStageButtonClose_Click);
+			this.backStageButtonClose.Click += new System.EventHandler(this.backStageButtonCloseClick);
 			// 
 			// backStageButtonOptions
 			// 
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonOptions.TabIndex = 6;
 			this.backStageButtonOptions.Text = "xxOptions";
-			this.backStageButtonOptions.Click += new System.EventHandler(this.backStageButtonOptions_Click);
+			this.backStageButtonOptions.Click += new System.EventHandler(this.backStageButtonOptionsClick);
 			// 
 			// backStageButton4
 			// 
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.backStageButton4.Size = new System.Drawing.Size(111, 25);
 			this.backStageButton4.TabIndex = 7;
 			this.backStageButton4.Text = "xxExitTELEOPTICCC";
-			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4_Click);
+			this.backStageButton4.Click += new System.EventHandler(this.backStageButton4Click);
 			// 
 			// toolStripTabItemHome
 			// 
@@ -590,7 +590,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonForecastWorkflow.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonForecastWorkflow, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonForecastWorkflow, false);
-			this.toolStripButtonForecastWorkflow.Click += new System.EventHandler(this.toolStripButtonForecastWorkflow_Click);
+			this.toolStripButtonForecastWorkflow.Click += new System.EventHandler(this.toolStripButtonForecastWorkflowClick);
 			// 
 			// toolStripExNumber
 			// 
@@ -627,7 +627,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonIncreaseDecimals.Text = "xxIncreaseDecimals";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonIncreaseDecimals, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonIncreaseDecimals, false);
-			this.toolStripButtonIncreaseDecimals.Click += new System.EventHandler(this.toolStripButtonIncreaseDecimals_Click);
+			this.toolStripButtonIncreaseDecimals.Click += new System.EventHandler(this.toolStripButtonIncreaseDecimalsClick);
 			// 
 			// toolStripButtonDecreaseDecimals
 			// 
@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonDecreaseDecimals.Text = "xxDecreaseDecimals";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonDecreaseDecimals, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonDecreaseDecimals, false);
-			this.toolStripButtonDecreaseDecimals.Click += new System.EventHandler(this.toolStripButtonDecreaseDecimals_Click);
+			this.toolStripButtonDecreaseDecimals.Click += new System.EventHandler(this.toolStripButtonDecreaseDecimalsClick);
 			// 
 			// toolStripExShow
 			// 
@@ -681,7 +681,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonShowGraph.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowGraph, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonShowGraph, false);
-			this.toolStripButtonShowGraph.Click += new System.EventHandler(this.toolStripButtonShowGraph_Click);
+			this.toolStripButtonShowGraph.Click += new System.EventHandler(this.toolStripButtonShowGraphClick);
 			// 
 			// toolStripButtonShowSkillView
 			// 
@@ -699,7 +699,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonShowSkillView.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowSkillView, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonShowSkillView, false);
-			this.toolStripButtonShowSkillView.Click += new System.EventHandler(this.toolStripButtonShowSkillView_Click);
+			this.toolStripButtonShowSkillView.Click += new System.EventHandler(this.toolStripButtonShowSkillViewClick);
 			// 
 			// toolStripTabItemChart
 			// 
@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrint.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPrint, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonPrint, false);
-			this.toolStripButtonPrint.Click += new System.EventHandler(this.toolStripButtonPrint_Click);
+			this.toolStripButtonPrint.Click += new System.EventHandler(this.toolStripButtonPrintClick);
 			// 
 			// toolStripButtonPrintPreview
 			// 
@@ -807,7 +807,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonPrintPreview.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPrintPreview, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonPrintPreview, false);
-			this.toolStripButtonPrintPreview.Click += new System.EventHandler(this.toolStripButtonPrintPreview_Click);
+			this.toolStripButtonPrintPreview.Click += new System.EventHandler(this.toolStripButtonPrintPreviewClick);
 			// 
 			// toolStripTabItemSkill
 			// 
@@ -874,8 +874,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripGallerySkill.ShowToolTip = true;
 			this.teleoptiToolStripGallerySkill.Size = new System.Drawing.Size(519, 60);
 			this.teleoptiToolStripGallerySkill.Text = "yy";
-			this.teleoptiToolStripGallerySkill.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGallerySkill_ItemClicked);
-			this.teleoptiToolStripGallerySkill.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGallerySkill_GalleryItemClicked);
+			this.teleoptiToolStripGallerySkill.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGallerySkillItemClicked);
+			this.teleoptiToolStripGallerySkill.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGallerySkillGalleryItemClicked);
 			// 
 			// toolStripSeparator2
 			// 
@@ -896,7 +896,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripBtnCreateSkillTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripBtnCreateSkillTemplate, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripBtnCreateSkillTemplate, false);
-			this.toolStripBtnCreateSkillTemplate.Click += new System.EventHandler(this.toolStripBtnCreateSkillTemplate_Click);
+			this.toolStripBtnCreateSkillTemplate.Click += new System.EventHandler(this.toolStripBtnCreateSkillTemplateClick);
 			// 
 			// toolStripButtonResetSkillTemplates
 			// 
@@ -911,7 +911,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetSkillTemplates, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonResetSkillTemplates, false);
-			this.toolStripButtonResetSkillTemplates.Click += new System.EventHandler(this.toolStripButtonResetSkillTemplates_Click);
+			this.toolStripButtonResetSkillTemplates.Click += new System.EventHandler(this.toolStripButtonResetSkillTemplatesClick);
 			// 
 			// toolStripButtonLongtermSkillTemplates
 			// 
@@ -993,8 +993,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripGalleryWorkload.ShowToolTip = true;
 			this.teleoptiToolStripGalleryWorkload.Size = new System.Drawing.Size(519, 60);
 			this.teleoptiToolStripGalleryWorkload.Text = "yy";
-			this.teleoptiToolStripGalleryWorkload.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryWorkload_ItemClicked);
-			this.teleoptiToolStripGalleryWorkload.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGalleryWorkload_GalleryItemClicked);
+			this.teleoptiToolStripGalleryWorkload.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryWorkloadItemClicked);
+			this.teleoptiToolStripGalleryWorkload.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGalleryWorkloadGalleryItemClicked);
 			// 
 			// toolStripSeparator1
 			// 
@@ -1015,7 +1015,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonCreateNewTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonCreateNewTemplate, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonCreateNewTemplate, false);
-			this.toolStripButtonCreateNewTemplate.Click += new System.EventHandler(this.toolStripButtonCreateNewTemplate_Click);
+			this.toolStripButtonCreateNewTemplate.Click += new System.EventHandler(this.toolStripButtonCreateNewTemplateClick);
 			// 
 			// toolStripButtonResetWorkloadTemplates
 			// 
@@ -1030,7 +1030,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetWorkloadTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetWorkloadTemplates, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonResetWorkloadTemplates, false);
-			this.toolStripButtonResetWorkloadTemplates.Click += new System.EventHandler(this.toolStripButtonResetWorkloadTemplates_Click);
+			this.toolStripButtonResetWorkloadTemplates.Click += new System.EventHandler(this.toolStripButtonResetWorkloadTemplatesClick);
 			// 
 			// toolStripButtonLongtermWorkloadTemplates
 			// 
@@ -1045,7 +1045,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonLongtermWorkloadTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonLongtermWorkloadTemplates, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonLongtermWorkloadTemplates, false);
-			this.toolStripButtonLongtermWorkloadTemplates.Click += new System.EventHandler(this.toolStripButtonLongtermWorkloadTemplates_Click);
+			this.toolStripButtonLongtermWorkloadTemplates.Click += new System.EventHandler(this.toolStripButtonLongtermWorkloadTemplatesClick);
 			// 
 			// toolStripTabItemMultisite
 			// 
@@ -1112,8 +1112,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.teleoptiToolStripGalleryMultisiteSkill.ShowToolTip = true;
 			this.teleoptiToolStripGalleryMultisiteSkill.Size = new System.Drawing.Size(519, 60);
 			this.teleoptiToolStripGalleryMultisiteSkill.Text = "yy";
-			this.teleoptiToolStripGalleryMultisiteSkill.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryMultisiteSkill_ItemClicked);
-			this.teleoptiToolStripGalleryMultisiteSkill.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGalleryMultisiteSkill_GalleryItemClicked);
+			this.teleoptiToolStripGalleryMultisiteSkill.ItemClicked += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs>(this.teleoptiToolStripGalleryMultisiteSkillItemClicked);
+			this.teleoptiToolStripGalleryMultisiteSkill.GalleryItemClicked += new Syncfusion.Windows.Forms.Tools.ToolStripGalleryItemEventHandler(this.teleoptiToolStripGalleryMultisiteSkillGalleryItemClicked);
 			// 
 			// toolStripSeparator4
 			// 
@@ -1134,7 +1134,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripBtnCreateMultisiteTemplate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripBtnCreateMultisiteTemplate, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripBtnCreateMultisiteTemplate, false);
-			this.toolStripBtnCreateMultisiteTemplate.Click += new System.EventHandler(this.toolStripButtonCreateNewMultisiteTemplate_Click);
+			this.toolStripBtnCreateMultisiteTemplate.Click += new System.EventHandler(this.toolStripButtonCreateNewMultisiteTemplateClick);
 			// 
 			// toolStripButtonResetMultisiteSkillTemplates
 			// 
@@ -1149,7 +1149,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonResetMultisiteSkillTemplates.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetMultisiteSkillTemplates, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonResetMultisiteSkillTemplates, false);
-			this.toolStripButtonResetMultisiteSkillTemplates.Click += new System.EventHandler(this.toolStripButtonResetMultisiteSkillTemplates_Click);
+			this.toolStripButtonResetMultisiteSkillTemplates.Click += new System.EventHandler(this.toolStripButtonResetMultisiteSkillTemplatesClick);
 			// 
 			// toolStripButtonMultisiteSkillLongtermTemplates
 			// 
@@ -1182,7 +1182,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonSave2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSave2, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSave2, false);
-			this.toolStripButtonSave2.Click += new System.EventHandler(this.btnSave_click);
+			this.toolStripButtonSave2.Click += new System.EventHandler(this.btnSaveClick);
 			// 
 			// officeDropDownButtonSaveToScenario
 			// 
@@ -1211,8 +1211,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.SetShortcut(this.toolStripTextBoxNewScenario, System.Windows.Forms.Keys.None);
 			this.toolStripTextBoxNewScenario.Size = new System.Drawing.Size(150, 23);
 			this.toolStripTextBoxNewScenario.Text = "(New Scenario)";
-			this.toolStripTextBoxNewScenario.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxNewScenario_KeyPress);
-			this.toolStripTextBoxNewScenario.TextChanged += new System.EventHandler(this.toolStripTextBoxNewScenario_TextChanged);
+			this.toolStripTextBoxNewScenario.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.toolStripTextBoxNewScenarioKeyPress);
+			this.toolStripTextBoxNewScenario.TextChanged += new System.EventHandler(this.toolStripTextBoxNewScenarioTextChanged);
 			// 
 			// toolStripSeparator3
 			// 
@@ -1234,7 +1234,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonHelp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonHelp, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonHelp, false);
-			this.toolStripButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
+			this.toolStripButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelpClick);
 			// 
 			// toolStripSeparator5
 			// 
@@ -1258,7 +1258,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonClose.ToolTipText = "xxClose";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonClose, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonClose, false);
-			this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButtonClose_Click);
+			this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButtonCloseClick);
 			// 
 			// toolStripButtonSystemOptions
 			// 
@@ -1271,7 +1271,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripButtonSystemOptions.Text = "xxOptions";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSystemOptions, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSystemOptions, false);
-			this.toolStripButtonSystemOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
+			this.toolStripButtonSystemOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptionsClick);
 			// 
 			// statusStripEx1
 			// 
@@ -1312,14 +1312,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// backgroundWorkerSave
 			// 
 			this.backgroundWorkerSave.WorkerReportsProgress = true;
-			this.backgroundWorkerSave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerSave_DoWork);
-			this.backgroundWorkerSave.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerSave_ProgressChanged);
-			this.backgroundWorkerSave.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerSave_RunWorkerCompleted);
+			this.backgroundWorkerSave.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerSaveDoWork);
+			this.backgroundWorkerSave.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerSaveProgressChanged);
+			this.backgroundWorkerSave.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerSaveRunWorkerCompleted);
 			// 
 			// backgroundWorkerApplyStandardTemplates
 			// 
-			this.backgroundWorkerApplyStandardTemplates.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerApplyStandardTemplates_DoWork);
-			this.backgroundWorkerApplyStandardTemplates.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerApplyStandardTemplates_RunWorkerCompleted);
+			this.backgroundWorkerApplyStandardTemplates.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerApplyStandardTemplatesDoWork);
+			this.backgroundWorkerApplyStandardTemplates.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerApplyStandardTemplatesRunWorkerCompleted);
 			// 
 			// flowLayoutExportToScenario
 			// 

@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void setColors()
 		{
-			Color ribbonContextTabColor = ColorHelper.RibbonContextTabColor();
+			var ribbonContextTabColor = ColorHelper.RibbonContextTabColor();
 			for (int i = 0; i < ribbonControlAdv1.TabGroups.Count; i++)
 			{
 				ribbonControlAdv1.TabGroups[i].Color = ribbonContextTabColor;
@@ -109,10 +108,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			splitContainer2.Panel1.Controls.Add(_chartControl);
 
 			_zoomButtonsEventArgs = new ZoomButtonsEventArgs
-																	{
-																		Interval = _currentForecasterSettings.ChartInterval,
-																		Target = _currentForecasterSettings.TemplateTarget
-																	};
+			{
+				Interval = _currentForecasterSettings.ChartInterval,
+				Target = _currentForecasterSettings.TemplateTarget
+			};
 
 			reloadChart();
 		}
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			showProgressBar();
 
-			DisableAllControlsExceptCancelLoadButton();
+			disableAllControlsExceptCancelLoadButton();
 			if (!backgroundWorkerSave.IsBusy)
 				backgroundWorkerSave.RunWorkerAsync(callback);
 		}
@@ -147,7 +146,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void exitEditMode()
 		{
-			var currentSkillView = GetCurrentSkillDetailView();
+			var currentSkillView = getCurrentSkillDetailView();
 			if (currentSkillView != null)
 			{
 				var currentGrid = currentSkillView.CurrentGrid as GridControl;
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 
-			var currentWorkloadView = GetCurrentWorkloadDetailView();
+			var currentWorkloadView = getCurrentWorkloadDetailView();
 			if (currentWorkloadView != null)
 			{
 				var currentGrid = currentWorkloadView.CurrentGrid as GridControl;
@@ -168,14 +167,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void ChoppedSave()
+		private void choppedSave()
 		{
-			ChoppedSaveSkillDays(_dirtyForecastDayContainer.DirtyChildSkillDays);
-			ChoppedSaveSkillDays(_dirtyForecastDayContainer.DirtySkillDays);
-			ChoppedSaveMultisiteDays();
+			choppedSaveSkillDays(_dirtyForecastDayContainer.DirtyChildSkillDays);
+			choppedSaveSkillDays(_dirtyForecastDayContainer.DirtySkillDays);
+			choppedSaveMultisiteDays();
 		}
 
-		private void ChoppedSaveSkillDays(ICollection<ISkillDay> dirtyList)
+		private void choppedSaveSkillDays(IEnumerable<ISkillDay> dirtyList)
 		{
 			var dirtySkillDays = new List<ISkillDay>();
 			dirtySkillDays.AddRange(dirtyList);
@@ -192,11 +191,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					}
 					catch (OptimisticLockException)
 					{
-						AddUnsavedDay(skillDay.CurrentDate);
+						addUnsavedDay(skillDay.CurrentDate);
 					}
 					catch (ConstraintViolationException)
 					{
-						AddUnsavedDay(skillDay.CurrentDate);
+						addUnsavedDay(skillDay.CurrentDate);
 					}
 				}
 				reportSavingProgress(1);
@@ -217,7 +216,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				_dirtyForecastDayContainer.DirtyMultisiteDays.Remove(multisiteDay);
 		}
 
-		private void ChoppedSaveMultisiteDays()
+		private void choppedSaveMultisiteDays()
 		{
 			var dirtyMultisiteDays = new List<IMultisiteDay>();
 			dirtyMultisiteDays.AddRange(_dirtyForecastDayContainer.DirtyMultisiteDays);
@@ -234,11 +233,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					}
 					catch (OptimisticLockException)
 					{
-						AddUnsavedDay(multisiteDay.MultisiteDayDate);
+						addUnsavedDay(multisiteDay.MultisiteDayDate);
 					}
 					catch (ConstraintViolationException)
 					{
-						AddUnsavedDay(multisiteDay.MultisiteDayDate);
+						addUnsavedDay(multisiteDay.MultisiteDayDate);
 					}
 				}
 				reportSavingProgress(1);
@@ -253,32 +252,32 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void AddUnsavedDay(DateOnly localCurrentDate)
+		private void addUnsavedDay(DateOnly localCurrentDate)
 		{
 			var unsavedSkillDay = new UnsavedDayInfo(localCurrentDate, _scenario);
 			if (!_unsavedSkillDays.Contains(unsavedSkillDay))
 				_unsavedSkillDays.Add(unsavedSkillDay);
 		}
 
-		private void InformUserOfUnsavedData()
+		private void informUserOfUnsavedData()
 		{
 			if (_unsavedSkillDays.Count == 0) return;
 
-			OptimisticLockExceptionInformation();
+			optimisticLockExceptionInformation();
 		}
 
-		private void OptimisticLockExceptionInformation()
+		private void optimisticLockExceptionInformation()
 		{
 			var unsavedSkillDays = _unsavedSkillDays.UnsavedDaysOrderedByDate;
 			var messageBox =
 				new MessageBoxWithListView(
 					UserTexts.Resources.SomeoneChangedTheSameDataBeforeYouDot + UserTexts.Resources.TheDaysListedBelowWillNotBeSavedDot, UserTexts.Resources.Warning,
 					unsavedSkillDays);
-			MarkUnsavedDays();
+			markUnsavedDays();
 			messageBox.ShowDialog();
 		}
 
-		private void MarkUnsavedDays()
+		private void markUnsavedDays()
 		{
 			_skillDayCalculator.InvokeDatesUnsaved(_unsavedSkillDays);
 			foreach (var detailView in _detailViews)
@@ -287,7 +286,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private bool ValidateForm()
+		private bool validateForm()
 		{
 			try
 			{
@@ -302,15 +301,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return true;
 		}
 
-		private DialogResult AskToCommitChanges()
+		private DialogResult askToCommitChanges()
 		{
 			DialogResult result = ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade, UserTexts.Resources.Save);
 			return result;
 		}
 
-		#region backgroundworker
-
-		private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorker1DoWork(object sender, DoWorkEventArgs e)
 		{
 			if (e.Cancel) return;
 
@@ -323,7 +320,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 																																																			());
 
 				unitOfWork.Reassociate(_skill);
-				if (IsMultisiteSkill)
+				if (isMultisiteSkill)
 				{
 					foreach (var childSkill in _multisiteSkill.ChildSkills)
 					{
@@ -340,8 +337,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				statHelper = new StatisticHelper(
 					new RepositoryFactory(),
 					unitOfWork);
-				statHelper.StatusChanged += _statHelper_StatusChanged;
-				LoadSkillDays(unitOfWork, statHelper);
+				statHelper.StatusChanged += statHelperStatusChanged;
+				loadSkillDays(unitOfWork, statHelper);
 
 				_skillChartSetting = new ForecasterChartSetting(TemplateTarget.Skill);
 				_skillChartSetting.Initialize();
@@ -352,15 +349,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 			backgroundWorker1.ReportProgress(1, UserTexts.Resources.Done);
 
-			statHelper.StatusChanged -= _statHelper_StatusChanged;
+			statHelper.StatusChanged -= statHelperStatusChanged;
 		}
 
-		private void LoadSkillDays(IUnitOfWork unitOfWork, StatisticHelper statHelper)
+		private void loadSkillDays(IUnitOfWork unitOfWork, StatisticHelper statHelper)
 		{
 			var periodToLoad = SkillDayCalculator.GetPeriodToLoad(_dateTimePeriod);
 			IList<ISkillDay> skillDays = statHelper.LoadStatisticData(periodToLoad, _skill, _scenario,
 																																_longterm);
-			if (IsMultisiteSkill)
+			if (isMultisiteSkill)
 			{
 				backgroundWorker1.ReportProgress(5, UserTexts.Resources.MultisiteSkillLoading);
 				var multisiteDays = MultisiteHelper.LoadMultisiteDays(
@@ -384,11 +381,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void EnableOrDisableGridControls(bool enable)
+		private void enableOrDisableGridControls(bool enable)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new Action<bool>(EnableOrDisableGridControls), enable);
+				BeginInvoke(new Action<bool>(enableOrDisableGridControls), enable);
 			}
 			else
 			{
@@ -400,12 +397,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		void _statHelper_StatusChanged(object sender, StatusChangedEventArgs e)
+		void statHelperStatusChanged(object sender, StatusChangedEventArgs e)
 		{
 			backgroundWorker1.ReportProgress(5, UserTexts.Resources.DataSourceLoading);
 		}
 
-		private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorker1ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			var text = (string)e.UserState;
 			if (toolStripStatusLabelInfo.Text.Equals(UserTexts.Resources.CancelLoading))
@@ -416,7 +413,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorker1RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (IsDisposed) return;
 			if (e.Cancelled) return;
@@ -430,7 +427,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			throwIfExceptionOccurred(e);
 
-			LoadDisplayOptionsFromSetting();
+			loadDisplayOptionsFromSetting();
 
 			try
 			{
@@ -450,10 +447,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 
 			//Listen to future changes
-			EntityEventAggregator.EntitiesNeedsRefresh += MainScreen_EntitiesNeedsRefresh;
-			_chartControl.ChartRegionMouseEnter += _chartControl_ChartRegionMouseEnter;
+			EntityEventAggregator.EntitiesNeedsRefresh += mainScreenEntitiesNeedsRefresh;
+			_chartControl.ChartRegionMouseEnter += chartControlChartRegionMouseEnter;
 			toolStripProgressBarMain.Step++;
-			_chartControl.ChartRegionClick += _chartControl_ChartRegionClick;
+			_chartControl.ChartRegionClick += chartControlChartRegionClick;
 			toolStripProgressBarMain.Visible = false;
 			toolStripStatusLabelInfo.Visible = false;
 			toolStripTabItemMultisite.Visible = false;
@@ -469,11 +466,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				foreach (var multisiteDay in multisiteSkillDayCalculator.MultisiteDays)
 				{
-					multisiteDay.ValueChanged += multisiteDay_ValueChanged;
-					multisiteDay.MultisiteSkillDay.StaffRecalculated += skillDay_StaffRecalculated;
+					multisiteDay.ValueChanged += multisiteDayValueChanged;
+					multisiteDay.MultisiteSkillDay.StaffRecalculated += skillDayStaffRecalculated;
 					foreach (var childSkillDay in multisiteDay.ChildSkillDays)
 					{
-						childSkillDay.StaffRecalculated += childSkillDay_StaffRecalculated;
+						childSkillDay.StaffRecalculated += childSkillDayStaffRecalculated;
 					}
 				}
 			}
@@ -481,11 +478,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				foreach (var skillDay in _skillDayCalculator.SkillDays)
 				{
-					skillDay.StaffRecalculated += skillDay_StaffRecalculated;
+					skillDay.StaffRecalculated += skillDayStaffRecalculated;
 				}
 			}
 
-			EnableAllControlsExceptCancelLoadButton();
+			enableAllControlsExceptCancelLoadButton();
 
 			_detailViews.First().CurrentDay = _dateTimePeriod.StartDate;
 			LogPointOutput.LogInfo("Forecast.LoadAndOpenSkill", "Completed");
@@ -496,7 +493,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			if (e.Error != null)
 			{
-				Exception ex = new Exception("Background thread exception", e.Error);
+				var ex = new Exception("Background thread exception", e.Error);
 				throw ex;
 			}
 		}
@@ -519,7 +516,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return false;
 		}
 
-		private void childSkillDay_StaffRecalculated(object sender, EventArgs e)
+		private void childSkillDayStaffRecalculated(object sender, EventArgs e)
 		{
 			var skillDay = sender as ISkillDay;
 			if (skillDay == null) return;
@@ -527,7 +524,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				_dirtyForecastDayContainer.DirtyChildSkillDays.Add(skillDay);
 		}
 
-		private void multisiteDay_ValueChanged(object sender, EventArgs e)
+		private void multisiteDayValueChanged(object sender, EventArgs e)
 		{
 			var multisiteDay = sender as IMultisiteDay;
 			if (multisiteDay == null) return;
@@ -535,7 +532,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				_dirtyForecastDayContainer.DirtyMultisiteDays.Add(multisiteDay);
 		}
 
-		private void skillDay_StaffRecalculated(object sender, EventArgs e)
+		private void skillDayStaffRecalculated(object sender, EventArgs e)
 		{
 			var skillDay = sender as ISkillDay;
 			if (skillDay == null) return;
@@ -573,7 +570,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					 _skill.Name, " | ",
 													 UserTexts.Resources.ScenarioColon, " ",
 													 _scenario.Description.Name);
-			SetGridOpeningGridViews();
+			setGridOpeningGridViews();
 			Cursor = Cursors.Default;
 		}
 
@@ -582,7 +579,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				unitOfWork.Reassociate(_skill);
-				if (IsMultisiteSkill)
+				if (isMultisiteSkill)
 				{
 					foreach (var childSkill in _multisiteSkill.ChildSkills)
 					{
@@ -598,7 +595,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				LazyLoadingManager.Initialize(_skillDayCalculator.Skill.WorkloadCollection);
 				foreach (TemplateTarget templateTarget in Enum.GetValues(typeof(TemplateTarget)))
 				{
-					CreateTemplateGalleryRibbonBar(templateTarget, false, false);
+					createTemplateGalleryRibbonBar(templateTarget, false, false);
 				}
 			}
 		}
@@ -609,7 +606,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripStatusLabelInfo.Text = UserTexts.Resources.WorkloadDaysLoaded;
 			toolStripProgressBarMain.Step++;
 
-			if (IsMultisiteSkill)
+			if (isMultisiteSkill)
 			{
 				loadMultisiteSkillDetailViews();
 			}
@@ -624,7 +621,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripProgressBarMain.Step++;
 		}
 
-		private void DisableAllControlsExceptCancelLoadButton()
+		private void disableAllControlsExceptCancelLoadButton()
 		{
 			officeDropDownButtonSaveToScenario.Enabled = false;
 			toolStripButtonForecastWorkflow.Enabled = false;
@@ -632,11 +629,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripTabItemChart.Enabled = false;
 			ControlBox = false;
 
-			EnableOrDisableGridControls(false);
+			enableOrDisableGridControls(false);
 			ribbonControlAdv1.Enabled = false;
 		}
 
-		private void EnableAllControlsExceptCancelLoadButton()
+		private void enableAllControlsExceptCancelLoadButton()
 		{
 			officeDropDownButtonSaveToScenario.Enabled = true;
 			toolStripButtonForecastWorkflow.Enabled = true;
@@ -644,7 +641,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripTabItemChart.Enabled = true;
 			ControlBox = true;
 
-			EnableOrDisableGridControls(true);
+			enableOrDisableGridControls(true);
 			ribbonControlAdv1.Enabled = true;
 		}
 		#endregion
@@ -655,7 +652,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			try
 			{
-				LoadSkill(_skill);
+				loadSkill(_skill);
 			}
 			catch (DataSourceException dataSourceException)
 			{
@@ -668,49 +665,35 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				throw;
 			}
 
-			if (_skill.WorkloadCollection.Count() == 0)
+			if (!_skill.WorkloadCollection.Any())
 			{
 				Close();
 				return;
 			}
 
 			Cursor = Cursors.WaitCursor;
-			DisableAllControlsExceptCancelLoadButton();
+			disableAllControlsExceptCancelLoadButton();
 
 			initializeTexts();
 			initializeEvents();
 			setPermissionOnControls();
-			SetToolStripsToPreferredSize();
+			setToolStripsToPreferredSize();
 
 			backgroundWorker1.WorkerSupportsCancellation = true;
 			backgroundWorker1.WorkerReportsProgress = true;
-			backgroundWorker1.RunWorkerCompleted += backgroundWorker1_RunWorkerCompleted;
-			backgroundWorker1.DoWork += backgroundWorker1_DoWork;
-			backgroundWorker1.ProgressChanged += backgroundWorker1_ProgressChanged;
+			backgroundWorker1.RunWorkerCompleted += backgroundWorker1RunWorkerCompleted;
+			backgroundWorker1.DoWork += backgroundWorker1DoWork;
+			backgroundWorker1.ProgressChanged += backgroundWorker1ProgressChanged;
 
 			backgroundWorker1.RunWorkerAsync();
 		}
 
-		/// <summary>
-		/// Some events are not shown in a controls event list, initialize them here.
-		/// </summary>
-		/// <remarks>
-		/// Created by: henryg
-		/// Created date: 2008-12-18
-		/// </remarks>
 		private void initializeEvents()
 		{
-			toolStripTextBoxNewScenario.GotFocus += toolStripTextBoxNewScenario_GotFocus;
-			toolStripTextBoxNewScenario.LostFocus += toolStripTextBoxNewScenario_LostFocus;
+			toolStripTextBoxNewScenario.GotFocus += toolStripTextBoxNewScenarioGotFocus;
+			toolStripTextBoxNewScenario.LostFocus += toolStripTextBoxNewScenarioLostFocus;
 		}
 
-		/// <summary>
-		/// Initializes texts that wont load automatically.
-		/// </summary>
-		/// <remarks>
-		/// Created by: henryg
-		/// Created date: 2008-12-18
-		/// </remarks>
 		private void initializeTexts()
 		{
 			officeDropDownButtonSaveToScenario.DropDownText = UserTexts.Resources.SaveAsScenario;
@@ -735,7 +718,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void setExportVisability()
 		{
-			foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls.OfType<ButtonAdv>())
+			foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls.OfType<ExportControl>())
 			{
 				control.Visible = !((Scenario) control.Tag).Equals(_scenario);
 			}
@@ -743,41 +726,30 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void clearExistingExportScenarioButtons()
 		{
-			flowLayoutExportToScenario.ContainerControl.Controls.OfType<ButtonAdv>().ForEach(c =>
+			flowLayoutExportToScenario.ContainerControl.Controls.OfType<ExportControl>().ForEach(c =>
 			{
-				c.Click -= scenarioMenuItem_Click;
+				c.Click -= scenarioMenuItemClick;
 			});
 		}
 
-		private ButtonAdv createExportScenarioButton(IScenario scenario)
+		private ExportControl createExportScenarioButton(IScenario scenario)
 		{
-			var button = new ButtonAdv
-			{
-				Text = scenario.Description.Name,
-				Width = 300,
-				Height = 80,
-				Appearance = ButtonAppearance.Metro,
-				UseVisualStyle = true,
-				Tag = scenario,
-				BackColor = Color.FromArgb(0, 153, 255)
-			};
-
-			button.Font.ChangeToBold();
-			button.Click += scenarioMenuItem_Click;
+			var button = new ExportControl(scenario);
+			button.Click += scenarioMenuItemClick;
 			return button;
 		}
 
-		private void scenarioMenuItem_Click(object sender, EventArgs e)
+		private void scenarioMenuItemClick(object sender, EventArgs e)
 		{
-			var scenario = (IScenario)((ButtonAdv)sender).Tag;
-			SaveForecastToScenario(scenario);
+			var scenario = (IScenario)((ExportControl)sender).Tag;
+			saveForecastToScenario(scenario);
 		}
 
-		private void SaveForecastToScenario(IScenario scenario)
+		private void saveForecastToScenario(IScenario scenario)
 		{
 			Cursor = Cursors.WaitCursor;
 
-			EntityEventAggregator.EntitiesNeedsRefresh -= MainScreen_EntitiesNeedsRefresh;
+			EntityEventAggregator.EntitiesNeedsRefresh -= mainScreenEntitiesNeedsRefresh;
 
 			initializeProgressBarBeforeSaveForecastToScenario();
 
@@ -787,7 +759,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				backgroundWorkerSave.RunWorkerAsync(scenario);
 		}
 
-		private void saveForecastToScenarioCommand_ProgressReporter(object sender, CustomEventArgs<int> e)
+		private void saveForecastToScenarioCommandProgressReporter(object sender, CustomEventArgs<int> e)
 		{
 			reportSavingProgress(e.Value);
 		}
@@ -812,10 +784,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripStatusLabelInfo.Text = UserTexts.Resources.Save;
 			toolStripStatusLabelInfo.Visible = true;
 
-			DisableAllControlsExceptCancelLoadButton();
+			disableAllControlsExceptCancelLoadButton();
 		}
 
-		private void _chartControl_ChartRegionClick(object sender, ChartRegionMouseEventArgs e)
+		private void chartControlChartRegionClick(object sender, ChartRegionMouseEventArgs e)
 		{
 			int column = (int)Math.Round(GridChartManager.GetIntervalValueForChartPoint(_chartControl, e.Point));
 
@@ -823,7 +795,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_timeNavigationControl.SetSelectedDate(_currentLocalDate);
 		}
 
-		private void MainScreen_EntitiesNeedsRefresh(object sender, EntitiesUpdatedEventArgs e)
+		private void mainScreenEntitiesNeedsRefresh(object sender, EntitiesUpdatedEventArgs e)
 		{
 			if (e.EntityStatus == DomainUpdateType.Delete)
 			{
@@ -840,31 +812,31 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			if (InvokeRequired)
 			{
-				BeginInvoke(new Action<object, EntitiesUpdatedEventArgs>(MainScreen_EntitiesNeedsRefresh), sender, e);
+				BeginInvoke(new Action<object, EntitiesUpdatedEventArgs>(mainScreenEntitiesNeedsRefresh), sender, e);
 				return;
 			}
 			if (typeof(IWorkload).IsAssignableFrom(e.EntityType))
 			{
-				CreateTemplateGalleryRibbonBar(TemplateTarget.Workload, true, true);
+				createTemplateGalleryRibbonBar(TemplateTarget.Workload, true, true);
 			}
 			else if (typeof(IMultisiteSkill).IsAssignableFrom(e.EntityType) &&
 					e.UpdatedIds.Contains(_skill.Id.Value))
 			{
-				CreateTemplateGalleryRibbonBar(TemplateTarget.Multisite, true, true);
-				CreateTemplateGalleryRibbonBar(TemplateTarget.Skill, true, true);
+				createTemplateGalleryRibbonBar(TemplateTarget.Multisite, true, true);
+				createTemplateGalleryRibbonBar(TemplateTarget.Skill, true, true);
 			}
 			else if (typeof(ISkill).IsAssignableFrom(e.EntityType) ||
 							 typeof(IChildSkill).IsAssignableFrom(e.EntityType))
 			{
-				CreateTemplateGalleryRibbonBar(TemplateTarget.Skill, true, true);
+				createTemplateGalleryRibbonBar(TemplateTarget.Skill, true, true);
 			}
 			else if (typeof(ISkillDay).IsAssignableFrom(e.EntityType))
 			{
-				RefreshSkillDays(e.UpdatedIds);
+				refreshSkillDays(e.UpdatedIds);
 			}
 		}
 
-		private void RefreshSkillDays(IEnumerable<Guid> guidList)
+		private void refreshSkillDays(IEnumerable<Guid> guidList)
 		{
 			bool currentSkillInvolved = false;
 			bool currentPeriodInvolved = false;
@@ -903,11 +875,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripStatusLabelInfo.Text = UserTexts.Resources.LoadingThreeDots;
 			officeDropDownButtonSaveToScenario.Enabled = false;
 
-			EntityEventAggregator.EntitiesNeedsRefresh -= MainScreen_EntitiesNeedsRefresh;
-			_chartControl.ChartRegionMouseEnter -= _chartControl_ChartRegionMouseEnter;
-			_chartControl.ChartRegionClick -= _chartControl_ChartRegionClick;
+			EntityEventAggregator.EntitiesNeedsRefresh -= mainScreenEntitiesNeedsRefresh;
+			_chartControl.ChartRegionMouseEnter -= chartControlChartRegionMouseEnter;
+			_chartControl.ChartRegionClick -= chartControlChartRegionClick;
 
-			LoadSkill(_skill);
+			loadSkill(_skill);
 			if (backgroundWorker1.IsBusy)
 			{
 				backgroundWorker1.CancelAsync();
@@ -915,11 +887,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			backgroundWorker1.RunWorkerAsync();
 		}
 
-		private void detailView_ValuesChanged(object sender, EventArgs e)
+		private void detailViewValuesChanged(object sender, EventArgs e)
 		{
 			if (InvokeRequired)
 			{
-				BeginInvoke(new EventHandler(detailView_ValuesChanged), sender, e);
+				BeginInvoke(new EventHandler(detailViewValuesChanged), sender, e);
 				return;
 			}
 			RefreshTabs();
@@ -935,17 +907,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (_gridChartManager != null) _gridChartManager.ReloadChart();
 		}
 
-		#endregion
-
-		#region Public
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Forecaster"/> class.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
 		protected Forecaster()
 		{
 			InitializeComponent();
@@ -956,7 +917,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 
 			setColors();
-			RibbonTemplatePanelsClose();
+			ribbonTemplatePanelsClose();
 			ribbonControlAdv1.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
 			Application.DoEvents();
 
@@ -966,31 +927,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripProgressBarMain.Step++;
 		}
 
-		/// <summary>
-		/// Sets the grid opening grid views.
-		/// </summary>
-		/// <remarks>
-		/// Created by: ostenpe
-		/// Created date: 2008-06-09
-		/// </remarks>
-		private void SetGridOpeningGridViews()
+		private void setGridOpeningGridViews()
 		{
-			SetGridZoomLevel(TemplateTarget.Workload, _currentForecasterSettings.WorkingInterval);
-			SetGridZoomLevel(TemplateTarget.Skill, _currentForecasterSettings.WorkingIntervalSkill);
+			setGridZoomLevel(TemplateTarget.Workload, _currentForecasterSettings.WorkingInterval);
+			setGridZoomLevel(TemplateTarget.Skill, _currentForecasterSettings.WorkingIntervalSkill);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Forecaster"/> class.
-		/// </summary>
-		/// <param name="skill">The skill.</param>
-		/// <param name="dateTimePeriod">The date time period.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <param name="longterm">if set to <c>true</c> [longterm].</param>
-		/// <param name="toggleManager"></param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
 		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager)
 			: this()
 		{
@@ -998,30 +940,30 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_dateTimePeriod = dateTimePeriod;
 
 			_zoomButtons = new ZoomButtons();
-			_zoomButtons.ZoomChanged += buttons_ZoomChanged;
-			ToolStripControlHost host3 = new ToolStripControlHost(_zoomButtons);
+			_zoomButtons.ZoomChanged += buttonsZoomChanged;
+			var host3 = new ToolStripControlHost(_zoomButtons);
 			toolStripExZoomBtns.Items.Add(host3);
 
 			_zoomButtonsChart = new GridViewInChartButtons();
-			_zoomButtonsChart.ZoomChanged += _zoomButtonsChart_ZoomChanged;
-			ToolStripControlHost host4 = new ToolStripControlHost(_zoomButtonsChart);
+			_zoomButtonsChart.ZoomChanged += zoomButtonsChartZoomChanged;
+			var host4 = new ToolStripControlHost(_zoomButtonsChart);
 			toolStripExChartViews.Items.Add(host4);
 
 			_timeNavigationControl = new DateNavigateControl();
 			_timeNavigationControl.SetAvailableTimeSpan(_dateTimePeriod);
-			_timeNavigationControl.SelectedDateChanged += _timeNavigationControl_SelectedDateChanged;
-			ToolStripControlHost hostDatepicker = new ToolStripControlHost(_timeNavigationControl);
+			_timeNavigationControl.SelectedDateChanged += timeNavigationControlSelectedDateChanged;
+			var hostDatepicker = new ToolStripControlHost(_timeNavigationControl);
 			toolStripExDatePicker.Items.Add(hostDatepicker);
 
-			SetUpClipboard();
+			setUpClipboard();
 
 			_gridrowInChartSetting = new GridRowInChartSettingButtons();
-			ToolStripControlHost chartsetteinghost = new ToolStripControlHost(_gridrowInChartSetting);
+			var chartsetteinghost = new ToolStripControlHost(_gridrowInChartSetting);
 			toolStripExGridRowInChartButtons.Items.Add(chartsetteinghost);
 			_gridrowInChartSetting.SetButtons();
 
-			_gridrowInChartSetting.LineInChartSettingsChanged += _gridlinesInChartSettings_LineInChartSettingsChanged;
-			_gridrowInChartSetting.LineInChartEnabledChanged += _gridrowInChartSetting_LineInChartEnabledChanged;
+			_gridrowInChartSetting.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
+			_gridrowInChartSetting.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
 
 			_skill = skill;
 			_scenario = scenario;
@@ -1039,17 +981,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			toolStripProgressBarMain.Step++;
 		}
 
-		private void LoadDisplayOptionsFromSetting()
+		private void loadDisplayOptionsFromSetting()
 		{
-			SplitterManager.ShowGraph = _currentForecasterSettings.ShowGraph;
+			splitterManager.ShowGraph = _currentForecasterSettings.ShowGraph;
 			toolStripButtonShowGraph.Checked = _currentForecasterSettings.ShowGraph;
 			_showGraph = _currentForecasterSettings.ShowGraph;
-			SplitterManager.ShowSkillView = _currentForecasterSettings.ShowSkillView;
+			splitterManager.ShowSkillView = _currentForecasterSettings.ShowSkillView;
 			toolStripButtonShowSkillView.Checked = _currentForecasterSettings.ShowSkillView;
 			_showSkillView = _currentForecasterSettings.ShowSkillView;
 		}
 
-		private void LoadSkill(ISkill skill)
+		private void loadSkill(ISkill skill)
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -1065,27 +1007,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void SetUpClipboard()
+		private void setUpClipboard()
 		{
 			_clipboardControl = new ClipboardControl();
-			ToolStripControlHost hostClipboardControl = new ToolStripControlHost(_clipboardControl);
+			var hostClipboardControl = new ToolStripControlHost(_clipboardControl);
 			toolStripEx1.Items.Add(hostClipboardControl);
 			var copySpecialButton = new ToolStripButton { Text = UserTexts.Resources.CopySpecial, Tag = "special" };
-			copySpecialButton.Click += (s, e) => OperateOnActiveGridControl(GridHelper.CopySelectedValuesAndHeadersToPublicClipboard);
+			copySpecialButton.Click += (s, e) => operateOnActiveGridControl(GridHelper.CopySelectedValuesAndHeadersToPublicClipboard);
 			_clipboardControl.CopySpecialItems.Add(copySpecialButton);
-			_clipboardControl.CutClicked += (s, e) => OperateOnActiveGridControl(x => x.CutPaste.Cut());
-			_clipboardControl.CopyClicked += (s, e) => OperateOnActiveGridControl(x => x.CutPaste.Copy());
-			_clipboardControl.PasteClicked += (s, e) => OperateOnActiveGridControl(x => x.CutPaste.Paste());
+			_clipboardControl.CutClicked += (s, e) => operateOnActiveGridControl(x => x.CutPaste.Cut());
+			_clipboardControl.CopyClicked += (s, e) => operateOnActiveGridControl(x => x.CutPaste.Copy());
+			_clipboardControl.PasteClicked += (s, e) => operateOnActiveGridControl(x => x.CutPaste.Paste());
 		}
 
-		private void OperateOnActiveGridControl(Action<GridControl> operation)
+		private void operateOnActiveGridControl(Action<GridControl> operation)
 		{
 			var theGrid = new ColorHelper().GetActiveControl(ActiveControl) as GridControl;
 			if (theGrid != null)
 				operation.Invoke(theGrid);
 		}
 
-		private void _gridrowInChartSetting_LineInChartEnabledChanged(object sender, GridlineInChartButtonEventArgs e)
+		private void gridrowInChartSettingLineInChartEnabledChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
 			_gridChartManager.UpdateChartSettings(_currentSelectedGrid, _currentSelectedGridRow, _gridrowInChartSetting, e.Enabled);
 			if (_gridChartManager.CurrentGrid != _currentSelectedGrid)
@@ -1094,14 +1036,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void _gridlinesInChartSettings_LineInChartSettingsChanged(object sender, GridlineInChartButtonEventArgs e)
+		private void gridlinesInChartSettingsLineInChartSettingsChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
 			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis, e.LineColor);
 		}
 
-		private void buttons_ZoomChanged(object sender, ZoomButtonsEventArgs e)
+		private void buttonsZoomChanged(object sender, ZoomButtonsEventArgs e)
 		{
-			SetGridZoomLevel(e.Target, e.Interval);
+			setGridZoomLevel(e.Target, e.Interval);
 			if (e.Target == TemplateTarget.Workload)
 			{
 				_currentForecasterSettings.WorkingInterval = e.Interval;
@@ -1112,7 +1054,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void SetGridZoomLevel(TemplateTarget target, WorkingInterval workingInterval)
+		private void setGridZoomLevel(TemplateTarget target, WorkingInterval workingInterval)
 		{
 			if (_zoomButtons != null) _zoomButtons.CheckButton(target, workingInterval);
 			foreach (AbstractDetailView detailView in _detailViews)
@@ -1127,16 +1069,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void _zoomButtonsChart_ZoomChanged(object sender, ZoomButtonsEventArgs e)
+		private void zoomButtonsChartZoomChanged(object sender, ZoomButtonsEventArgs e)
 		{
 			e.GridKey = string.Empty;
-			SetChartZoomLevel(e);
+			setChartZoomLevel(e);
 			_zoomButtonsEventArgs = e;
 			_currentForecasterSettings.ChartInterval = _zoomButtonsEventArgs.Interval;
 			_currentForecasterSettings.TemplateTarget = _zoomButtonsEventArgs.Target;
 		}
 
-		private void SetChartZoomLevel(ZoomButtonsEventArgs e)
+		private void setChartZoomLevel(ZoomButtonsEventArgs e)
 		{
 			string name;
 			string type;
@@ -1144,14 +1086,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (e.Target == TemplateTarget.Workload)
 			{
 				type = UserTexts.Resources.Workload;
-				name = ((WorkloadDetailView)GetCurrentWorkloadDetailView()).Workload.Name;
-				id = ((WorkloadDetailView)GetCurrentWorkloadDetailView()).Workload.Id.GetValueOrDefault();
+				name = ((WorkloadDetailView)getCurrentWorkloadDetailView()).Workload.Name;
+				id = ((WorkloadDetailView)getCurrentWorkloadDetailView()).Workload.Id.GetValueOrDefault();
 			}
 			else //multisite how do i work it?
 			{
 				type = UserTexts.Resources.Skill;
 				ISkill skill = null;
-				AbstractDetailView undeterminedDetailView = GetCurrentSkillDetailView();
+				AbstractDetailView undeterminedDetailView = getCurrentSkillDetailView();
 				var skillDetailView = undeterminedDetailView as SkillDetailView;
 				var multisiteSkillDetailView = undeterminedDetailView as MultisiteSkillDetailView;
 				var childSkillDetailView = undeterminedDetailView as ChildSkillDetailView;
@@ -1193,7 +1135,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (_zoomButtonsChart != null) _zoomButtonsChart.CheckSingleButton(e.Target, e.Interval);
 		}
 
-		private void SetToolStripsToPreferredSize()
+		private void setToolStripsToPreferredSize()
 		{
 			toolStripExChartViews.Size = toolStripExChartViews.PreferredSize;
 			toolStripExCurrentChart.Size = toolStripExCurrentChart.PreferredSize;
@@ -1207,20 +1149,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void reloadChart()
 		{
-			SetChartZoomLevel(_zoomButtonsEventArgs);
+			setChartZoomLevel(_zoomButtonsEventArgs);
 		}
 
-		/// <summary>
-		/// Gets a value indicating whether this instance is multisite skill.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is multisite skill; otherwise, <c>false</c>.
-		/// </value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-04-24
-		/// </remarks>
-		private bool IsMultisiteSkill
+		private bool isMultisiteSkill
 		{
 			get { return (_multisiteSkill != null); }
 		}
@@ -1235,10 +1167,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (IWorkload workload in _skill.WorkloadCollection)
 			{
 				TabPageAdv tabPage = ColorHelper.CreateTabPage(workload.Name, workload.Description);
-				WorkloadDetailView workloadDetailView = new WorkloadDetailView(
-						(SkillDayCalculator)_skillDayCalculator, workload, _workloadChartSetting);
-				workloadDetailView.Name = "Workload";
-				InitializeDetailView(workloadDetailView);
+				var workloadDetailView = new WorkloadDetailView(
+						(SkillDayCalculator)_skillDayCalculator, workload, _workloadChartSetting) {Name = "Workload"};
+				initializeDetailView(workloadDetailView);
 				tabControlWorkloads.TabPages.Add(tabPage);
 				tabPage.Controls.Add(workloadDetailView);
 				foreach (KeyValuePair<string, TeleoptiGridControl> pair in workloadDetailView.GridCollection)
@@ -1252,12 +1183,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void loadMultisiteSkillDetailViews()
 		{
-			MultisiteSkillDayCalculator multisiteCalculator = _skillDayCalculator as MultisiteSkillDayCalculator;
+			var multisiteCalculator = _skillDayCalculator as MultisiteSkillDayCalculator;
 			tabControlAdvMultisiteSkill.TabPages.Clear();
 			TabPageAdv tabPage = ColorHelper.CreateTabPage(_multisiteSkill.Name, _multisiteSkill.Description);
-			MultisiteSkillDetailView multisiteSkillDetailView = new MultisiteSkillDetailView(multisiteCalculator, _skillChartSetting);
-			multisiteSkillDetailView.Name = "MultiSkill";
-			InitializeDetailView(multisiteSkillDetailView);
+			var multisiteSkillDetailView = new MultisiteSkillDetailView(multisiteCalculator, _skillChartSetting)
+			{
+				Name = "MultiSkill"
+			};
+			initializeDetailView(multisiteSkillDetailView);
 			tabControlAdvMultisiteSkill.TabPages.Add(tabPage);
 			tabPage.Controls.Add(multisiteSkillDetailView);
 
@@ -1265,9 +1198,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				tabPage = ColorHelper.CreateTabPage(childSkill.Name, childSkill.Description);
 
-				ChildSkillDetailView childSkillDetailView = new ChildSkillDetailView(multisiteCalculator, childSkill, _skillChartSetting);
-				childSkillDetailView.Name = "MultiSkill";
-				InitializeDetailView(childSkillDetailView);
+				var childSkillDetailView = new ChildSkillDetailView(multisiteCalculator, childSkill, _skillChartSetting)
+				{
+					Name = "MultiSkill"
+				};
+				initializeDetailView(childSkillDetailView);
 				tabControlAdvMultisiteSkill.TabPages.Add(tabPage);
 				tabPage.Controls.Add(childSkillDetailView);
 
@@ -1299,19 +1234,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		#endregion
-
-		private void detailView_WorkingIntervalChanged(object sender, WorkingIntervalChangedEventArgs e)
+		private void detailViewWorkingIntervalChanged(object sender, WorkingIntervalChangedEventArgs e)
 		{
 			if (_noChangesRightNow) return;
 			_noChangesRightNow = true;
 
-			AbstractDetailView myabstractDetailView = sender as AbstractDetailView;
-			ShowTabGroup(myabstractDetailView.TargetType, myabstractDetailView.CurrentWorkingInterval);
+			var myabstractDetailView = sender as AbstractDetailView;
+			showTabGroup(myabstractDetailView.TargetType, myabstractDetailView.CurrentWorkingInterval);
 			if (myabstractDetailView is MultisiteSkillDetailView)
-				ShowTabGroup(TemplateTarget.Multisite, myabstractDetailView.CurrentWorkingInterval); //Both skill and multisite should be shown
+				showTabGroup(TemplateTarget.Multisite, myabstractDetailView.CurrentWorkingInterval); //Both skill and multisite should be shown
 			if (myabstractDetailView is ChildSkillDetailView)
-				ShowTabGroup(TemplateTarget.Multisite, WorkingInterval.Custom); //Never show multisite template tab for child skill detail views
+				showTabGroup(TemplateTarget.Multisite, WorkingInterval.Custom); //Never show multisite template tab for child skill detail views
 
 			foreach (var detailView in _detailViews)
 			{
@@ -1335,21 +1268,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			reloadChart();
 		}
 
-		private IForecastTemplateOwner GetRefreshedAggregateRoot(TemplateTarget templateTarget, bool refresh)
+		private IForecastTemplateOwner getRefreshedAggregateRoot(TemplateTarget templateTarget, bool refresh)
 		{
 			IForecastTemplateOwner root = null;
 			switch (templateTarget)
 			{
 				case TemplateTarget.Skill:
-					AbstractDetailView detailView = GetCurrentSkillDetailView();
+					AbstractDetailView detailView = getCurrentSkillDetailView();
 					root = (ISkill)detailView.GetType().GetProperty("Skill")
 							.GetValue(detailView, BindingFlags.Instance | BindingFlags.Public, null, null, CultureInfo.InvariantCulture);
 					break;
 				case TemplateTarget.Multisite:
-					AbstractDetailView multisiteDetailView = GetCurrentSkillDetailView() as MultisiteSkillDetailView;
+					AbstractDetailView multisiteDetailView = getCurrentSkillDetailView() as MultisiteSkillDetailView;
 					if (multisiteDetailView == null)
 					{
-						multisiteDetailView = GetCurrentSkillDetailView() as ChildSkillDetailView;
+						multisiteDetailView = getCurrentSkillDetailView() as ChildSkillDetailView;
 					}
 					if (multisiteDetailView != null)
 					{
@@ -1358,7 +1291,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					}
 					break;
 				case TemplateTarget.Workload:
-					WorkloadDetailView workloadDetailView = GetCurrentWorkloadDetailView() as WorkloadDetailView;
+					var workloadDetailView = getCurrentWorkloadDetailView() as WorkloadDetailView;
 					if (workloadDetailView != null) root = workloadDetailView.Workload;
 					break;
 			}
@@ -1367,7 +1300,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return root;
 		}
 
-		private TeleoptiToolStripGallery GetTemplateToolStripGallery(TemplateTarget templateTarget)
+		private TeleoptiToolStripGallery getTemplateToolStripGallery(TemplateTarget templateTarget)
 		{
 			TeleoptiToolStripGallery toolStripGallery = null;
 			switch (templateTarget)
@@ -1385,26 +1318,26 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return toolStripGallery;
 		}
 
-		private void ShowTabGroup(TemplateTarget templateTarget, WorkingInterval workingInterval)
+		private void showTabGroup(TemplateTarget templateTarget, WorkingInterval workingInterval)
 		{
 			bool visible = (workingInterval == WorkingInterval.Day);
-			var toolStrip = GetTemplateToolStripGallery(templateTarget);
+			var toolStrip = getTemplateToolStripGallery(templateTarget);
 			if (toolStrip == null) return;
 
 			toolStrip.ParentRibbonTab.Visible = visible;
 		}
 
-		private AbstractDetailView GetCurrentWorkloadDetailView()
+		private AbstractDetailView getCurrentWorkloadDetailView()
 		{
 			return tabControlWorkloads.SelectedTab.Controls[0] as AbstractDetailView;
 		}
 
-		private AbstractDetailView GetCurrentSkillDetailView()
+		private AbstractDetailView getCurrentSkillDetailView()
 		{
 			return tabControlAdvMultisiteSkill.SelectedTab.Controls[0] as AbstractDetailView;
 		}
 
-		private void RibbonTemplatePanelsClose()
+		private void ribbonTemplatePanelsClose()
 		{
 			foreach (var tabGroup in ribbonControlAdv1.TabGroups.OfType<ToolStripTabGroup>())
 			{
@@ -1417,9 +1350,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			tabControlAdvMultisiteSkill.ItemSize = new Size(1, 0);
 			tabControlAdvMultisiteSkill.TabPages.Clear();
 			TabPageAdv tabPage = ColorHelper.CreateTabPage(_skill.Name, _skill.Description);
-			SkillDetailView skillDetailView = new SkillDetailView((SkillDayCalculator)_skillDayCalculator, _skill, _skillChartSetting);
-			skillDetailView.Name = "Skill";
-			InitializeDetailView(skillDetailView);
+			var skillDetailView = new SkillDetailView((SkillDayCalculator)_skillDayCalculator, _skill, _skillChartSetting)
+			{
+				Name = "Skill"
+			};
+			initializeDetailView(skillDetailView);
 			tabControlAdvMultisiteSkill.TabPages.Add(tabPage);
 			tabPage.Controls.Add(skillDetailView);
 
@@ -1434,22 +1369,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void InitializeDetailView(AbstractDetailView detailView)
+		private void initializeDetailView(AbstractDetailView detailView)
 		{
 			detailView.Dock = DockStyle.Fill;
-			detailView.WorkingIntervalChanged += detailView_WorkingIntervalChanged;
-			detailView.TemplateSelected += detailView_TemplateSelected;
-			detailView.ValuesChanged += detailView_ValuesChanged;
-			detailView.CellClicked += detailView_CellClicked;
+			detailView.WorkingIntervalChanged += detailViewWorkingIntervalChanged;
+			detailView.TemplateSelected += detailViewTemplateSelected;
+			detailView.ValuesChanged += detailViewValuesChanged;
+			detailView.CellClicked += detailViewCellClicked;
 			_detailViews.Add(detailView);
 		}
 
-		private void detailView_TemplateSelected(object sender, TemplateEventArgs e)
+		private void detailViewTemplateSelected(object sender, TemplateEventArgs e)
 		{
-			SelectTemplateInToolstrip(GetTemplateToolStripGallery(e.TemplateTarget), e.TemplateName);
+			selectTemplateInToolstrip(getTemplateToolStripGallery(e.TemplateTarget), e.TemplateName);
 		}
-		#region date navigation
-		private void _timeNavigationControl_SelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
+
+		private void timeNavigationControlSelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
 		{
 			_currentLocalDate = e.Value;
 			_currentLocalDateTime = e.Value.Date;
@@ -1459,8 +1394,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				item.CurrentTimeOfDay = _currentLocalDateTime.TimeOfDay;
 			}
 		}
-
-		#endregion
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -1472,7 +1405,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				switch (keyData)
 				{
 					case Keys.Control | Keys.S:
-						btnSave_click(this, EventArgs.Empty);
+						btnSaveClick(this, EventArgs.Empty);
 						break;
 				}
 			}
@@ -1480,19 +1413,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
-		#region ribbon events
-
-		private void btnSave_click(object sender, EventArgs e)
+		private void btnSaveClick(object sender, EventArgs e)
 		{
-			if (ValidateForm())
+			if (validateForm())
 				save(null);
 		}
 
-		private void toolStripButtonForecastWorkflow_Click(object sender, EventArgs e)
+		private void toolStripButtonForecastWorkflowClick(object sender, EventArgs e)
 		{
-			IWorkload workload = GetRefreshedAggregateRoot(TemplateTarget.Workload, false) as Workload;
+			IWorkload workload = getRefreshedAggregateRoot(TemplateTarget.Workload, false) as Workload;
 			if (workload == null) return;
-			if (CheckToClose())
+			if (checkToClose())
 			{
 				workload = getWorkload(workload);
 				using (var workflow = new ForecastWorkflow(workload, _scenario, _dateTimePeriod,
@@ -1521,7 +1452,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return workload;
 		}
 
-		private void toolStripButtonIncreaseDecimals_Click(object sender, EventArgs e)
+		private void toolStripButtonIncreaseDecimalsClick(object sender, EventArgs e)
 		{
 			_currentForecasterSettings.NumericCellVariableDecimals++;
 			foreach (KeyValuePair<string, TeleoptiGridControl> keyValuePair in _gridCollection)
@@ -1530,7 +1461,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripButtonDecreaseDecimals_Click(object sender, EventArgs e)
+		private void toolStripButtonDecreaseDecimalsClick(object sender, EventArgs e)
 		{
 			if (_currentForecasterSettings.NumericCellVariableDecimals < 1)
 				return;
@@ -1541,10 +1472,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				keyValuePair.Value.ChangeNumberOfDecimals(-1);
 			}
 		}
-
-		#endregion
-
-		#region form closing
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
@@ -1561,13 +1488,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 
 			base.OnFormClosing(e);
-			if (CheckToClose())
+			if (checkToClose())
 			{
-				SetDisplaySettings();
+				setDisplaySettings();
 
 				try
 				{
-					SaveSettings();
+					saveSettings();
 				}
 				catch (DataSourceException dataSourceException)
 				{
@@ -1580,7 +1507,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void SaveSettings()
+		private void saveSettings()
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -1592,9 +1519,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void SaveDisplaySettings()
+		private void saveDisplaySettings()
 		{
-			SetDisplaySettings();
+			setDisplaySettings();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var repository = new PersonalSettingDataRepository(uow);
@@ -1603,25 +1530,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void SetDisplaySettings()
+		private void setDisplaySettings()
 		{
 			_currentForecasterSettings.ShowGraph = _showGraph;
 			_currentForecasterSettings.ShowSkillView = _showSkillView;
 		}
 
-
-		/// <summary>
-		/// Handles the Click event of the toolStripButtonExit control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		/// <remarks>
-		/// Created by: ostenpe
-		/// Created date: 2008-04-17
-		/// </remarks>
-		private void toolStripButtonExit_Click(object sender, EventArgs e)
+		private void toolStripButtonExitClick(object sender, EventArgs e)
 		{
-			SaveDisplaySettings();
+			saveDisplaySettings();
 			if (!CloseAllOtherForms(this))
 				return; // a form was canceled
 
@@ -1631,23 +1548,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				return;
 			Application.Exit();
 		}
-		#endregion
 
-		#region Chart interactivity
-		/// <summary>
-		/// Handles the CellClicked event of the detailView control.
-		/// </summary>
-		/// <param name="sender">The source of the event.</param>
-		/// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2008-05-08
-		/// changed by:ostenp
-		/// removed all referense to the chartsettingbuttons since they now are an own usercontrol
-		/// </remarks>
-		void detailView_CellClicked(object sender, EventArgs e)
+		void detailViewCellClicked(object sender, EventArgs e)
 		{
-			AbstractDetailView abstractDetailView = sender as AbstractDetailView;
+			var abstractDetailView = sender as AbstractDetailView;
 
 			if (abstractDetailView != null)
 			{
@@ -1667,7 +1571,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripButtonPrint_Click(object sender, EventArgs e)
+		private void toolStripButtonPrintClick(object sender, EventArgs e)
 		{
 			if (_chartControl == null) return;
 
@@ -1689,8 +1593,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-
-		private void toolStripButtonPrintPreview_Click(object sender, EventArgs e)
+		private void toolStripButtonPrintPreviewClick(object sender, EventArgs e)
 		{
 			if (_chartControl == null) return;
 
@@ -1709,14 +1612,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void tabControlWorkloads_SelectedIndexChanged(object sender, EventArgs e)
+		private void tabControlWorkloadsSelectedIndexChanged(object sender, EventArgs e)
 		{
 			TabPageAdv tabPage = ((TabControlAdv)sender).SelectedTab;
 			if (tabPage == null) return;
 
-			CreateTemplateGalleryRibbonBar(TemplateTarget.Workload, false, false);
+			createTemplateGalleryRibbonBar(TemplateTarget.Workload, false, false);
 
-			AbstractDetailView detailView = tabPage.Controls[0] as AbstractDetailView;
+			var detailView = tabPage.Controls[0] as AbstractDetailView;
 			triggerDetailViewWorkingIntervalChanged(detailView);
 
 			_zoomButtonsEventArgs.GridKey = string.Empty;
@@ -1727,99 +1630,87 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			if (detailView == null) return;
 
-			detailView_WorkingIntervalChanged(detailView, new WorkingIntervalChangedEventArgs
-																											 {
-																												 NewStartDate = detailView.CurrentDay,
-																												 NewTimeOfDay = detailView.CurrentTimeOfDay,
-																												 NewWorkingInterval = detailView.CurrentWorkingInterval
-																											 });
+			detailViewWorkingIntervalChanged(detailView, new WorkingIntervalChangedEventArgs
+			{
+				NewStartDate = detailView.CurrentDay,
+				NewTimeOfDay = detailView.CurrentTimeOfDay,
+				NewWorkingInterval = detailView.CurrentWorkingInterval
+			});
 		}
 
-		private void tabControlAdvMultisiteSkill_SelectedIndexChanged(object sender, EventArgs e)
+		private void tabControlAdvMultisiteSkillSelectedIndexChanged(object sender, EventArgs e)
 		{
 			TabPageAdv tabPage = ((TabControlAdv)sender).SelectedTab;
 			if (tabPage == null) return;
 
 			//Recreate template list
-			CreateTemplateGalleryRibbonBar(TemplateTarget.Multisite, false, false);
-			CreateTemplateGalleryRibbonBar(TemplateTarget.Skill, false, false);
+			createTemplateGalleryRibbonBar(TemplateTarget.Multisite, false, false);
+			createTemplateGalleryRibbonBar(TemplateTarget.Skill, false, false);
 
-			AbstractDetailView detailView = tabPage.Controls[0] as AbstractDetailView;
+			var detailView = tabPage.Controls[0] as AbstractDetailView;
 			triggerDetailViewWorkingIntervalChanged(detailView);
 
 			_zoomButtonsEventArgs.GridKey = string.Empty;
 			reloadChart();
 		}
 
-		private void _chartControl_ChartRegionMouseEnter(object sender, ChartRegionMouseEventArgs e)
+		private void chartControlChartRegionMouseEnter(object sender, ChartRegionMouseEventArgs e)
 		{
 			GridChartManager.SetChartToolTip(e.Region, _chartControl);
 		}
 
-		#endregion
-
-		#region Handle Template in ToolStripGallery
-
-		private void teleoptiToolStripGallerySkill_ItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGallerySkillItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;
-			SetupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Skill);
+			setupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Skill);
 		}
 
-		private void teleoptiToolStripGalleryWorkload_ItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGalleryWorkloadItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;
-			SetupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Workload);
+			setupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Workload);
 		}
 
-		private void teleoptiToolStripGalleryMultisiteSkill_ItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+		private void teleoptiToolStripGalleryMultisiteSkillItemClicked(object sender, Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
 		{
 			if (e.ClickedItem == null) return;
 			if (e.ClickedItem.Tag as bool? == true) return;
-			SetupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Multisite);
+			setupGalleryItem(e.ContextMenuStrip, e.ClickedItem.Text, TemplateTarget.Multisite);
 		}
 
-		private void SetupGalleryItem(ContextMenuStrip contextMenu, string templateName, TemplateTarget templateTarget)
+		private void setupGalleryItem(ContextMenuStrip contextMenu, string templateName, TemplateTarget templateTarget)
 		{
-			var templateInfo = new TemplateEventArgs();
-			templateInfo.TemplateTarget = templateTarget;
-			templateInfo.TemplateName = templateName;
+			var templateInfo = new TemplateEventArgs {TemplateTarget = templateTarget, TemplateName = templateName};
 
-			ToolStripItem itemEdit = new ToolStripMenuItem();
-			itemEdit.Text = UserTexts.Resources.Edit;
-			itemEdit.Tag = templateInfo;
-			itemEdit.Click += itemEdit_Click;
+			var itemEdit = new ToolStripMenuItem {Text = UserTexts.Resources.Edit, Tag = templateInfo};
+			itemEdit.Click += itemEditClick;
 			contextMenu.Items.Add(itemEdit);
 
-			ToolStripItem itemRemove = new ToolStripMenuItem();
-			itemRemove.Text = UserTexts.Resources.Delete;
-			itemRemove.Tag = templateInfo;
-			itemRemove.Click += itemRemove_Click;
+			var itemRemove = new ToolStripMenuItem {Text = UserTexts.Resources.Delete, Tag = templateInfo};
+			itemRemove.Click += itemRemoveClick;
 			contextMenu.Items.Add(itemRemove);
 
-			ToolStripItem itemRename = new ToolStripMenuItem();
-			itemRename.Text = UserTexts.Resources.Rename;
-			itemRename.Tag = templateInfo;
-			itemRename.Click += itemRename_Click;
+			var itemRename = new ToolStripMenuItem {Text = UserTexts.Resources.Rename, Tag = templateInfo};
+			itemRename.Click += itemRenameClick;
 			contextMenu.Items.Add(itemRename);
 		}
 
-		private void itemRemove_Click(object sender, EventArgs e)
+		private void itemRemoveClick(object sender, EventArgs e)
 		{
-			ToolStripItem selectedItem = sender as ToolStripItem;
+			var selectedItem = sender as ToolStripItem;
 			if (selectedItem == null) return;
 
-			TemplateEventArgs templateInfo = selectedItem.Tag as TemplateEventArgs;
+			var templateInfo = selectedItem.Tag as TemplateEventArgs;
 			if (templateInfo == null) return;
 
-			AttemptDatabaseConnectionDependentAction(() =>
-					DeleteTemplate(templateInfo.TemplateTarget, templateInfo.TemplateName)
+			attemptDatabaseConnectionDependentAction(() =>
+					deleteTemplate(templateInfo.TemplateTarget, templateInfo.TemplateName)
 				);
 		}
 
-		private bool AttemptDatabaseConnectionDependentAction(System.Action action)
+		private bool attemptDatabaseConnectionDependentAction(System.Action action)
 		{
 			try
 			{
@@ -1834,106 +1725,105 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void itemEdit_Click(object sender, EventArgs e)
+		private void itemEditClick(object sender, EventArgs e)
 		{
-			ToolStripItem selectedItem = sender as ToolStripItem;
+			var selectedItem = sender as ToolStripItem;
 			if (selectedItem == null) return;
 
-			TemplateEventArgs templateInfo = selectedItem.Tag as TemplateEventArgs;
+			var templateInfo = selectedItem.Tag as TemplateEventArgs;
 			if (templateInfo == null) return;
 
-			AttemptDatabaseConnectionDependentAction(() =>
-				EditTemplate(templateInfo.TemplateTarget, templateInfo.TemplateName)
+			attemptDatabaseConnectionDependentAction(() =>
+				editTemplate(templateInfo.TemplateTarget, templateInfo.TemplateName)
 				);
 		}
 
 
-		private void itemRename_Click(object sender, EventArgs e)
+		private void itemRenameClick(object sender, EventArgs e)
 		{
-			ToolStripItem selectedItem = sender as ToolStripItem;
+			var selectedItem = sender as ToolStripItem;
 			if (selectedItem == null) return;
 
-			TemplateEventArgs templateInfo = selectedItem.Tag as TemplateEventArgs;
+			var templateInfo = selectedItem.Tag as TemplateEventArgs;
 			if (templateInfo == null) return;
 
-			AttemptDatabaseConnectionDependentAction(() =>
-				RenameTemplate(templateInfo.TemplateTarget, templateInfo.TemplateName)
+			attemptDatabaseConnectionDependentAction(() =>
+				renameTemplate(templateInfo.TemplateTarget, templateInfo.TemplateName)
 				);
 		}
 
-		private void teleoptiToolStripGallerySkill_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
+		private void teleoptiToolStripGallerySkillGalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
 		{
-			ApplyTemplate(TemplateTarget.Skill, e.GalleryItem.Text);
+			applyTemplate(TemplateTarget.Skill, e.GalleryItem.Text);
 		}
 
-		private void teleoptiToolStripGalleryWorkload_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
+		private void teleoptiToolStripGalleryWorkloadGalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
 		{
-			ApplyTemplate(TemplateTarget.Workload, e.GalleryItem.Text);
+			applyTemplate(TemplateTarget.Workload, e.GalleryItem.Text);
 		}
 
-		private void teleoptiToolStripGalleryMultisiteSkill_GalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
+		private void teleoptiToolStripGalleryMultisiteSkillGalleryItemClicked(object sender, ToolStripGalleryItemEventArgs e)
 		{
-			ApplyTemplate(TemplateTarget.Multisite, e.GalleryItem.Text);
+			applyTemplate(TemplateTarget.Multisite, e.GalleryItem.Text);
 		}
 
-		private void ApplyTemplate(TemplateTarget templateTarget, string templateName)
+		private void applyTemplate(TemplateTarget templateTarget, string templateName)
 		{
 			switch (templateTarget)
 			{
 				case TemplateTarget.Workload:
-					GetCurrentWorkloadDetailView().SetTemplate(templateName, templateTarget);
+					getCurrentWorkloadDetailView().SetTemplate(templateName, templateTarget);
 					break;
 				case TemplateTarget.Skill:
 				case TemplateTarget.Multisite:
-					GetCurrentSkillDetailView().SetTemplate(templateName, templateTarget);
+					getCurrentSkillDetailView().SetTemplate(templateName, templateTarget);
 					break;
 			}
 		}
 
-		private void ResetTemplate(TemplateTarget templateTarget)
+		private void resetTemplate(TemplateTarget templateTarget)
 		{
 			switch (templateTarget)
 			{
 				case TemplateTarget.Workload:
-					GetCurrentWorkloadDetailView().ResetTemplates(templateTarget);
+					getCurrentWorkloadDetailView().ResetTemplates(templateTarget);
 					break;
 				case TemplateTarget.Skill:
 				case TemplateTarget.Multisite:
-					GetCurrentSkillDetailView().ResetTemplates(templateTarget);
+					getCurrentSkillDetailView().ResetTemplates(templateTarget);
 					break;
 			}
 		}
-		private void ResetLongterm()
+		private void resetLongterm()
 		{
-			GetCurrentWorkloadDetailView().ResetLongterm();
+			getCurrentWorkloadDetailView().ResetLongterm();
 		}
 
-		private static void SelectTemplateInToolstrip(TeleoptiToolStripGallery toolStrip, string templateName)
+		private static void selectTemplateInToolstrip(TeleoptiToolStripGallery toolStrip, string templateName)
 		{
 			if (toolStrip == null) return;
 			toolStrip.SetCheckedItem(toolStrip.Items.OfType<ToolStripGalleryItem>().FirstOrDefault(t => t.Text == templateName));
 		}
 
-		private void toolStripButtonCreateNewMultisiteTemplate_Click(object sender, EventArgs e)
+		private void toolStripButtonCreateNewMultisiteTemplateClick(object sender, EventArgs e)
 		{
-			AbstractDetailView detailView;
 			EditMultisiteDayTemplate editTemplate = null;
-			var success = AttemptDatabaseConnectionDependentAction(() =>
-																																 {
-																																	 detailView = GetCurrentSkillDetailView();
-																																	 MultisiteSkill multisiteSkill =
-																																			 detailView.GetType().GetProperty("Skill")
-																																					 .GetValue(detailView,
-																																										 BindingFlags.Instance |
-																																										 BindingFlags.Public, null,
-																																										 null,
-																																										 CultureInfo.
-																																												 InvariantCulture) as
-																																			 MultisiteSkill;
-																																	 if (multisiteSkill == null) return;
+			var success = attemptDatabaseConnectionDependentAction(() =>
+			{
+				AbstractDetailView detailView = getCurrentSkillDetailView();
+				var multisiteSkill =
+					detailView.GetType().GetProperty("Skill")
+						.GetValue(detailView,
+							BindingFlags.Instance |
+							BindingFlags.Public, null,
+							null,
+							CultureInfo.
+								InvariantCulture) as
+						MultisiteSkill;
+				if (multisiteSkill == null) return;
 
-																																	 editTemplate = new EditMultisiteDayTemplate(multisiteSkill);
-																																 });
+				editTemplate = new EditMultisiteDayTemplate(multisiteSkill);
+			});
 			if (!success)
 				return;
 
@@ -1943,23 +1833,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				if (
 						ShowConfirmationMessage(UserTexts.Resources.ApplyNewTemplateQuestion, UserTexts.Resources.Template) ==
 						DialogResult.Yes)
-					ApplyTemplate(TemplateTarget.Multisite, editTemplate.TemplateName);
+					applyTemplate(TemplateTarget.Multisite, editTemplate.TemplateName);
 			}
 			editTemplate.Dispose();
 		}
 
-		private void toolStripBtnCreateSkillTemplate_Click(object sender, EventArgs e)
+		private void toolStripBtnCreateSkillTemplateClick(object sender, EventArgs e)
 		{
-			AbstractDetailView detailView;
 			EditSkillDayTemplate editTemplate = null;
-			var success = AttemptDatabaseConnectionDependentAction(() =>
-																															{
-																																detailView = GetCurrentSkillDetailView();
-																																editTemplate = new EditSkillDayTemplate(
-																																		(Skill)detailView.GetType().GetProperty("Skill")
-																																			.GetValue(detailView, BindingFlags.Instance | BindingFlags.Public, null, null, CultureInfo.InvariantCulture)
-																																	);
-																															});
+			var success = attemptDatabaseConnectionDependentAction(() =>
+			{
+				AbstractDetailView detailView = getCurrentSkillDetailView();
+				editTemplate = new EditSkillDayTemplate(
+					(Skill) detailView.GetType().GetProperty("Skill")
+						.GetValue(detailView, BindingFlags.Instance | BindingFlags.Public, null, null, CultureInfo.InvariantCulture)
+					);
+			});
 			if (!success)
 				return;
 
@@ -1967,25 +1856,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				//If this works, ask the user if she would like to apply the template right away!
 				if (
-						ShowConfirmationMessage(UserTexts.Resources.ApplyNewTemplateQuestion, UserTexts.Resources.Template) ==
-						DialogResult.Yes)
-					ApplyTemplate(TemplateTarget.Skill, editTemplate.TemplateName);
+					ShowConfirmationMessage(UserTexts.Resources.ApplyNewTemplateQuestion, UserTexts.Resources.Template) ==
+					DialogResult.Yes)
+					applyTemplate(TemplateTarget.Skill, editTemplate.TemplateName);
 			}
 			editTemplate.Dispose();
 		}
 
-		private void toolStripButtonCreateNewTemplate_Click(object sender, EventArgs e)
+		private void toolStripButtonCreateNewTemplateClick(object sender, EventArgs e)
 		{
 			//TODO! Need a way to get open hours from current workload day
 			//For now I'm using the default times (8-17)
 			IList<TimePeriod> openHours = new List<TimePeriod>();
 			EditWorkloadDayTemplate editTemplate = null;
 			var success =
-				AttemptDatabaseConnectionDependentAction(() =>
-																								 editTemplate =
-																								 new EditWorkloadDayTemplate(
-																									((WorkloadDetailView)GetCurrentWorkloadDetailView()).Workload,
-																									openHours));
+				attemptDatabaseConnectionDependentAction(() =>
+					editTemplate =
+						new EditWorkloadDayTemplate(
+							((WorkloadDetailView) getCurrentWorkloadDetailView()).Workload, openHours));
 
 			if (!success)
 				return;
@@ -1995,20 +1883,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				if (
 					ShowConfirmationMessage(UserTexts.Resources.ApplyNewTemplateQuestion, UserTexts.Resources.Template) ==
 					DialogResult.Yes)
-					ApplyTemplate(TemplateTarget.Workload, editTemplate.TemplateName);
+					applyTemplate(TemplateTarget.Workload, editTemplate.TemplateName);
 			}
 			editTemplate.Dispose();
 		}
 
-		private void CreateTemplateGalleryRibbonBar(TemplateTarget templateTarget, bool refresh, bool force)
+		private void createTemplateGalleryRibbonBar(TemplateTarget templateTarget, bool refresh, bool force)
 		{
-			TeleoptiToolStripGallery galleryControl = GetTemplateToolStripGallery(templateTarget);
+			TeleoptiToolStripGallery galleryControl = getTemplateToolStripGallery(templateTarget);
 			if (galleryControl == null) return;
 
 			if (tabControlWorkloads.SelectedTab == null || tabControlAdvMultisiteSkill.SelectedTab == null) return;
 
 			IForecastTemplateOwner rootEntity;
-			var templateList = GetTemplates(templateTarget, refresh, out rootEntity);
+			var templateList = getTemplates(templateTarget, refresh, out rootEntity);
 
 			if (force == false &&
 					galleryControl.Tag == rootEntity) return;
@@ -2025,7 +1913,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					if (templateList.Count > 0)
 					{
 						IForecastDayTemplate template = templateList[(int)dayOfWeek];
-						galleryControl.Items.Add(GetGalleryItem(template));
+						galleryControl.Items.Add(getGalleryItem(template));
 					}
 				}
 			}
@@ -2037,7 +1925,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					if (templateList.Count > 0)
 					{
 						IForecastDayTemplate template = templateList[i];
-						galleryControl.Items.Add(GetGalleryItem(template));
+						galleryControl.Items.Add(getGalleryItem(template));
 					}
 				}
 			}
@@ -2049,13 +1937,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			foreach (var template in sortedTemplates.Where(i => !i.Value.DayOfWeek.HasValue))
 			{
-				galleryControl.Items.Add(GetGalleryItem(template.Value));
+				galleryControl.Items.Add(getGalleryItem(template.Value));
 			}
 
 			galleryControl.Tag = rootEntity;
 		}
 
-		private ToolStripGalleryItem GetGalleryItem(IForecastDayTemplate template)
+		private ToolStripGalleryItem getGalleryItem(IForecastDayTemplate template)
 		{
 			var galleryItem = new ToolStripGalleryItem();
 			galleryItem.Text = template.Name;
@@ -2074,9 +1962,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return galleryItem;
 		}
 
-		private void RemoveDayTemplate(TemplateTarget target, string templateName)
+		private void removeDayTemplate(TemplateTarget target, string templateName)
 		{
-			IForecastTemplateOwner rootEntity = GetRefreshedAggregateRoot(target, false);
+			IForecastTemplateOwner rootEntity = getRefreshedAggregateRoot(target, false);
 
 			IEnumerable<IRootChangeInfo> changedRoots;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -2090,24 +1978,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			EntityEventAggregator.TriggerEntitiesNeedRefresh(null, changedRoots);
 		}
 
-		private void EditTemplate(TemplateTarget target, string templateName)
+		private void editTemplate(TemplateTarget target, string templateName)
 		{
-			IForecastTemplateOwner rootEntity = GetRefreshedAggregateRoot(target, false);
+			IForecastTemplateOwner rootEntity = getRefreshedAggregateRoot(target, false);
 			IForecastDayTemplate template = rootEntity.TryFindTemplateByName(target, templateName);
 			if (template == null) return;
 
 			switch (target)
 			{
 				case TemplateTarget.Multisite:
-					EditMultisiteDayTemplate editMultisiteTemplate = new EditMultisiteDayTemplate((MultisiteDayTemplate)template);
+					var editMultisiteTemplate = new EditMultisiteDayTemplate((MultisiteDayTemplate)template);
 					editMultisiteTemplate.Show(this);
 					break;
 				case TemplateTarget.Workload:
-					EditWorkloadDayTemplate editWorkloadTemplate = new EditWorkloadDayTemplate((WorkloadDayTemplate)template);
+					var editWorkloadTemplate = new EditWorkloadDayTemplate((WorkloadDayTemplate)template);
 					editWorkloadTemplate.Show(this);
 					break;
 				case TemplateTarget.Skill:
-					EditSkillDayTemplate editSkillTemplate = new EditSkillDayTemplate((ISkillDayTemplate)template);
+					var editSkillTemplate = new EditSkillDayTemplate((ISkillDayTemplate)template);
 					editSkillTemplate.Show(this);
 					break;
 			}
@@ -2116,37 +2004,37 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		// get this from metadata? asks KlasM. RogerK and RobinK replies that it is ok to hardcode for now 
 		private const int templateNameMaxLength = 50;
 
-		private void RenameTemplate(TemplateTarget target, string originalTemplateName)
+		private void renameTemplate(TemplateTarget target, string originalTemplateName)
 		{
-			var ctrl = new PromptTextBox(new RenameTemplateTag { Target = target, OriginalTemplateName = originalTemplateName },
-					originalTemplateName, UserTexts.Resources.Template, templateNameMaxLength, ValidateWorkloadRenameName);
+			var ctrl = new PromptTextBox(new renameTemplateTag { Target = target, OriginalTemplateName = originalTemplateName },
+					originalTemplateName, UserTexts.Resources.Template, templateNameMaxLength, validateWorkloadRenameName);
 			ctrl.SetHelpId("NameForecastTemplate");
-			ctrl.NameThisView += ctrl_RenameTemplate;
+			ctrl.NameThisView += ctrlRenameTemplate;
 			ctrl.ShowDialog(this);
 		}
 
-		private bool ValidateWorkloadRenameName(string newName)
+		private bool validateWorkloadRenameName(string newName)
 		{
 			return
-				((WorkloadDetailView)GetCurrentWorkloadDetailView()).Workload.TemplateWeekCollection
-																														 .All(t => t.Value.Name.ToUpperInvariant() != newName.ToUpperInvariant());
+				((WorkloadDetailView) getCurrentWorkloadDetailView()).Workload.TemplateWeekCollection.All(
+					t => t.Value.Name.ToUpperInvariant() != newName.ToUpperInvariant());
 		}
 
-		private class RenameTemplateTag
+		private class renameTemplateTag
 		{
 			public TemplateTarget Target { get; set; }
 			public string OriginalTemplateName { get; set; }
 		}
 
-		private void ctrl_RenameTemplate(object sender, CustomEventArgs<TupleItem> e)
+		private void ctrlRenameTemplate(object sender, CustomEventArgs<TupleItem> e)
 		{
-			RenameTemplateTag templateTag = (RenameTemplateTag)e.Value.ValueMember;
+			var templateTag = (renameTemplateTag)e.Value.ValueMember;
 			string newName = e.Value.Text;
 			if (newName != templateTag.OriginalTemplateName)
 			{
 				try
 				{
-					SaveTemplateWithNewName(newName, templateTag);
+					saveTemplateWithNewName(newName, templateTag);
 				}
 				catch (DataSourceException dataSourceException)
 				{
@@ -2155,9 +2043,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void SaveTemplateWithNewName(string newName, RenameTemplateTag templateTag)
+		private void saveTemplateWithNewName(string newName, renameTemplateTag templateTag)
 		{
-			IForecastTemplateOwner rootEntity = GetRefreshedAggregateRoot(templateTag.Target, false);
+			IForecastTemplateOwner rootEntity = getRefreshedAggregateRoot(templateTag.Target, false);
 
 			IEnumerable<IRootChangeInfo> changedRoots;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -2177,15 +2065,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			RefreshTabs();
 		}
 
-		private void DeleteTemplate(TemplateTarget target, string templateName)
+		private void deleteTemplate(TemplateTarget target, string templateName)
 		{
-			RemoveDayTemplate(target, templateName);
+			removeDayTemplate(target, templateName);
 			RefreshTabs();
 		}
 
-		private IDictionary<int, IForecastDayTemplate> GetTemplates(TemplateTarget templateTarget, bool refresh, out IForecastTemplateOwner rootEntity)
+		private IDictionary<int, IForecastDayTemplate> getTemplates(TemplateTarget templateTarget, bool refresh, out IForecastTemplateOwner rootEntity)
 		{
-			rootEntity = GetRefreshedAggregateRoot(templateTarget, refresh);
+			rootEntity = getRefreshedAggregateRoot(templateTarget, refresh);
 			IDictionary<int, IForecastDayTemplate> result = null;
 			if (rootEntity != null)
 			{
@@ -2195,53 +2083,51 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return result;
 		}
 
-		private void toolStripButtonResetMultisiteSkillTemplates_Click(object sender, EventArgs e)
+		private void toolStripButtonResetMultisiteSkillTemplatesClick(object sender, EventArgs e)
 		{
-			DisableAllControlsExceptCancelLoadButton();
+			disableAllControlsExceptCancelLoadButton();
 
 			backgroundWorkerApplyStandardTemplates.RunWorkerAsync(TemplateTarget.Multisite);
 		}
 
-		private void toolStripButtonResetWorkloadTemplates_Click(object sender, EventArgs e)
+		private void toolStripButtonResetWorkloadTemplatesClick(object sender, EventArgs e)
 		{
-			DisableAllControlsExceptCancelLoadButton();
+			disableAllControlsExceptCancelLoadButton();
 
 			backgroundWorkerApplyStandardTemplates.RunWorkerAsync(TemplateTarget.Workload);
 		}
 
-		private void toolStripButtonResetSkillTemplates_Click(object sender, EventArgs e)
+		private void toolStripButtonResetSkillTemplatesClick(object sender, EventArgs e)
 		{
-			DisableAllControlsExceptCancelLoadButton();
+			disableAllControlsExceptCancelLoadButton();
 
 			backgroundWorkerApplyStandardTemplates.RunWorkerAsync(TemplateTarget.Skill);
 		}
 
-		#endregion
-
-		private void toolStripButtonClose_Click(object sender, EventArgs e)
+		private void toolStripButtonCloseClick(object sender, EventArgs e)
 		{
-			SaveDisplaySettings();
+			saveDisplaySettings();
 			Close();
 		}
 
-		private void toolStripButtonHelp_Click(object sender, EventArgs e)
+		private void toolStripButtonHelpClick(object sender, EventArgs e)
 		{
 			ViewBase.ShowHelp(this, false);
 		}
 
-		private bool CheckToClose()
+		private bool checkToClose()
 		{
-			if (!IsDirtyListEmpty())
+			if (!isDirtyListEmpty())
 			{
-				switch (AskToCommitChanges())
+				switch (askToCommitChanges())
 				{
 					case DialogResult.Yes:
-						if (!ValidateForm()) //Validation is only done if the user would like to save and something is dirty
+						if (!validateForm()) //Validation is only done if the user would like to save and something is dirty
 							return false;
 						showProgressBar();
 						try
 						{
-							ChoppedSave();
+							choppedSave();
 						}
 						catch (DataSourceException ex)
 						{
@@ -2249,7 +2135,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							datasourceExceptionOccurred(ex);
 							return false;
 						}
-						InformUserOfUnsavedData();
+						informUserOfUnsavedData();
 						if (_unsavedSkillDays.Count > 0)
 							return false;
 						break;
@@ -2262,12 +2148,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			return true;
 		}
 
-		private bool IsDirtyListEmpty()
+		private bool isDirtyListEmpty()
 		{
 			return _dirtyForecastDayContainer.IsEmpty();
 		}
 
-		private void toolStripButtonSystemOptions_Click(object sender, EventArgs e)
+		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -2280,21 +2166,23 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripButtonShowGraph_Click(object sender, EventArgs e)
+		private void toolStripButtonShowGraphClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowGraph.Checked = !toolStripButtonShowGraph.Checked;
-			SplitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
+			splitterManager.ShowGraph = toolStripButtonShowGraph.Checked;
 			_showGraph = toolStripButtonShowGraph.Checked;
 			splitContainer2.Panel1.Controls.Remove(_chartControl);
 			addChart();
 		}
-		private void toolStripButtonShowSkillView_Click(object sender, EventArgs e)
+
+		private void toolStripButtonShowSkillViewClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowSkillView.Checked = !toolStripButtonShowSkillView.Checked;
-			SplitterManager.ShowSkillView = toolStripButtonShowSkillView.Checked;
+			splitterManager.ShowSkillView = toolStripButtonShowSkillView.Checked;
 			_showSkillView = toolStripButtonShowSkillView.Checked;
 		}
-		private SplitterManager SplitterManager
+
+		private SplitterManager splitterManager
 		{
 			get
 			{
@@ -2310,9 +2198,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		#region toolStripTextBoxNewScenarioEvents
-
-		private void toolStripTextBoxNewScenario_TextChanged(object sender, EventArgs e)
+		private void toolStripTextBoxNewScenarioTextChanged(object sender, EventArgs e)
 		{
 			if (toolStripTextBoxNewScenario.Text == "(" + UserTexts.Resources.NewScenario + ")")
 			{
@@ -2324,7 +2210,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripTextBoxNewScenario_KeyPress(object sender, KeyPressEventArgs e)
+		private void toolStripTextBoxNewScenarioKeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar == (char)Keys.Return)
 			{
@@ -2339,21 +2225,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						scenarioRepository.Add(newScenario);
 						unitOfWork.PersistAll();
 					}
-					SaveForecastToScenario(newScenario);
+					saveForecastToScenario(newScenario);
 				}
 			}
 		}
 
-		void toolStripTextBoxNewScenario_LostFocus(object sender, EventArgs e)
+		void toolStripTextBoxNewScenarioLostFocus(object sender, EventArgs e)
 		{
-			Font italicFont = new Font(toolStripTextBoxNewScenario.Font.FontFamily, toolStripTextBoxNewScenario.Font.SizeInPoints, FontStyle.Italic);
+			var italicFont = new Font(toolStripTextBoxNewScenario.Font.FontFamily, toolStripTextBoxNewScenario.Font.SizeInPoints, FontStyle.Italic);
 			toolStripTextBoxNewScenario.Font = italicFont;
 			toolStripTextBoxNewScenario.Text = "(" + UserTexts.Resources.NewScenario + ")";
 		}
 
-		void toolStripTextBoxNewScenario_GotFocus(object sender, EventArgs e)
+		void toolStripTextBoxNewScenarioGotFocus(object sender, EventArgs e)
 		{
-			string scenarioName = (string)toolStripTextBoxNewScenario.Tag;
+			var scenarioName = (string)toolStripTextBoxNewScenario.Tag;
 			if (string.IsNullOrEmpty(scenarioName))
 			{
 				toolStripTextBoxNewScenario.Text = "";
@@ -2362,40 +2248,39 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				toolStripTextBoxNewScenario.Text = (string)toolStripTextBoxNewScenario.Tag;
 			}
-			Font regularFont = new Font(toolStripTextBoxNewScenario.Font.FontFamily, toolStripTextBoxNewScenario.Font.SizeInPoints, FontStyle.Regular);
+			var regularFont = new Font(toolStripTextBoxNewScenario.Font.FontFamily, toolStripTextBoxNewScenario.Font.SizeInPoints, FontStyle.Regular);
 			toolStripTextBoxNewScenario.Font = regularFont;
 			//toolStripTextBoxNewScenario.Font.ChangeToRegular(); // Doesn't work... /Henry
 		}
-		#endregion
-
-		private void UnhookEvents()
+		
+		private void unhookEvents()
 		{
-			_zoomButtons.ZoomChanged -= buttons_ZoomChanged;
-			_zoomButtonsChart.ZoomChanged -= _zoomButtonsChart_ZoomChanged;
-			_timeNavigationControl.SelectedDateChanged -= _timeNavigationControl_SelectedDateChanged;
-			_gridrowInChartSetting.LineInChartSettingsChanged -= _gridlinesInChartSettings_LineInChartSettingsChanged;
-			_gridrowInChartSetting.LineInChartEnabledChanged -= _gridrowInChartSetting_LineInChartEnabledChanged;
+			_zoomButtons.ZoomChanged -= buttonsZoomChanged;
+			_zoomButtonsChart.ZoomChanged -= zoomButtonsChartZoomChanged;
+			_timeNavigationControl.SelectedDateChanged -= timeNavigationControlSelectedDateChanged;
+			_gridrowInChartSetting.LineInChartSettingsChanged -= gridlinesInChartSettingsLineInChartSettingsChanged;
+			_gridrowInChartSetting.LineInChartEnabledChanged -= gridrowInChartSettingLineInChartEnabledChanged;
 			if (_chartControl != null)
 			{
-				_chartControl.ChartRegionClick -= _chartControl_ChartRegionClick;
-				_chartControl.ChartRegionMouseEnter -= _chartControl_ChartRegionMouseEnter;
+				_chartControl.ChartRegionClick -= chartControlChartRegionClick;
+				_chartControl.ChartRegionMouseEnter -= chartControlChartRegionMouseEnter;
 			}
-			backgroundWorker1.RunWorkerCompleted -= backgroundWorker1_RunWorkerCompleted;
-			backgroundWorker1.DoWork -= backgroundWorker1_DoWork;
-			backgroundWorker1.ProgressChanged -= backgroundWorker1_ProgressChanged;
+			backgroundWorker1.RunWorkerCompleted -= backgroundWorker1RunWorkerCompleted;
+			backgroundWorker1.DoWork -= backgroundWorker1DoWork;
+			backgroundWorker1.ProgressChanged -= backgroundWorker1ProgressChanged;
 
-			EntityEventAggregator.EntitiesNeedsRefresh -= MainScreen_EntitiesNeedsRefresh;
+			EntityEventAggregator.EntitiesNeedsRefresh -= mainScreenEntitiesNeedsRefresh;
 		}
 
-		private void ReleaseManagedResources()
+		private void releaseManagedResources()
 		{
 			clearExistingExportScenarioButtons();
 			foreach (AbstractDetailView detailView in _detailViews)
 			{
-				detailView.WorkingIntervalChanged -= detailView_WorkingIntervalChanged;
-				detailView.TemplateSelected -= detailView_TemplateSelected;
-				detailView.ValuesChanged -= detailView_ValuesChanged;
-				detailView.CellClicked -= detailView_CellClicked;
+				detailView.WorkingIntervalChanged -= detailViewWorkingIntervalChanged;
+				detailView.TemplateSelected -= detailViewTemplateSelected;
+				detailView.ValuesChanged -= detailViewValuesChanged;
+				detailView.CellClicked -= detailViewCellClicked;
 				detailView.Dispose();
 			}
 			_detailViews.Clear();
@@ -2411,32 +2296,32 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripButtonLongtermWorkloadTemplates_Click(object sender, EventArgs e)
+		private void toolStripButtonLongtermWorkloadTemplatesClick(object sender, EventArgs e)
 		{
-			ResetLongterm();
+			resetLongterm();
 		}
 
-		private void backgroundWorkerSave_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerSaveDoWork(object sender, DoWorkEventArgs e)
 		{
 			var scenario = e.Argument as IScenario;
 			if (scenario != null)
 			{
 				var command = new SaveForecastToScenarioCommand(_skill, _skillDayCalculator, _dateTimePeriod);
-				command.ProgressReporter += saveForecastToScenarioCommand_ProgressReporter;
+				command.ProgressReporter += saveForecastToScenarioCommandProgressReporter;
 				e.Result = command.Execute(scenario);
-				command.ProgressReporter -= saveForecastToScenarioCommand_ProgressReporter;
+				command.ProgressReporter -= saveForecastToScenarioCommandProgressReporter;
 			}
-			else ChoppedSave();
+			else choppedSave();
 		}
 
-		private void backgroundWorkerSave_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		private void backgroundWorkerSaveProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			var progressBarIncrement = toolStripProgressBarMain.Value;
 			if (progressBarIncrement + 1 >= toolStripProgressBarMain.Minimum && progressBarIncrement + 1 <= toolStripProgressBarMain.Maximum)
 				toolStripProgressBarMain.Value++;
 		}
 
-		private void backgroundWorkerSave_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerSaveRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (IsDisposed) return;
 			if (e.Error == null)
@@ -2448,7 +2333,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					_scenario = result.NewScenario;
 					_skillDayCalculator = result.SkillDayCalculator;
 
-					EntityEventAggregator.EntitiesNeedsRefresh += MainScreen_EntitiesNeedsRefresh;
+					EntityEventAggregator.EntitiesNeedsRefresh += mainScreenEntitiesNeedsRefresh;
 
 					reloadDetailViews();
 					setExportVisability();
@@ -2465,17 +2350,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				throwIfExceptionOccurred(e);
 			}
 
-			EnableAllControlsExceptCancelLoadButton();
+			enableAllControlsExceptCancelLoadButton();
 
-			InformUserOfUnsavedData();
+			informUserOfUnsavedData();
 		}
 
-		private void backgroundWorkerApplyStandardTemplates_DoWork(object sender, DoWorkEventArgs e)
+		private void backgroundWorkerApplyStandardTemplatesDoWork(object sender, DoWorkEventArgs e)
 		{
-			ResetTemplate((TemplateTarget)e.Argument);
+			resetTemplate((TemplateTarget)e.Argument);
 		}
 
-		private void backgroundWorkerApplyStandardTemplates_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void backgroundWorkerApplyStandardTemplatesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (IsDisposed) return;
 
@@ -2484,7 +2369,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 			throwIfExceptionOccurred(e);
 
-			EnableAllControlsExceptCancelLoadButton();
+			enableAllControlsExceptCancelLoadButton();
 
 			toolStripProgressBarMain.Visible = false;
 		}
@@ -2495,19 +2380,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			//throw new NotImplementedException();
 		}
 
-		private void backStageButtonSave_Click(object sender, EventArgs e)
+		private void backStageButtonSaveClick(object sender, EventArgs e)
 		{
-			if (ValidateForm())
+			if (validateForm())
 				save(null);
 		}
 
-		private void backStageButtonClose_Click(object sender, EventArgs e)
+		private void backStageButtonCloseClick(object sender, EventArgs e)
 		{
-			SaveDisplaySettings();
+			saveDisplaySettings();
 			Close();
 		}
 
-		private void backStageButtonOptions_Click(object sender, EventArgs e)
+		private void backStageButtonOptionsClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -2520,9 +2405,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void backStageButton4_Click(object sender, EventArgs e)
+		private void backStageButton4Click(object sender, EventArgs e)
 		{
-			SaveDisplaySettings();
+			saveDisplaySettings();
 			if (!CloseAllOtherForms(this))
 				return; // a form was canceled
 

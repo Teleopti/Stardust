@@ -674,6 +674,12 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\ExportControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\ExportControl.Designer.cs">
+      <DependentUpon>ExportControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Grouping\PersonSelectorViewNew.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2557,6 +2563,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\ExportControl.resx">
+      <DependentUpon>ExportControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ExportPages\FileExportFinished.resx">
       <DependentUpon>FileExportFinished.cs</DependentUpon>

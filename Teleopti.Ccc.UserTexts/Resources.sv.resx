@@ -11712,4 +11712,12 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Ange egenskaper för skiftkategorier</value>
     <comment>Used as a header in options</comment>
   </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Spara prognosen i ett annat scenario</value>
+    <comment>description on the exports in file menu in forecast</comment>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Spara till </value>
+    <comment>Which scenario to saev the forecast</comment>
+  </data>
 </root>

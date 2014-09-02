@@ -12282,4 +12282,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Enter property values for shift categories</value>
     <comment>Used as a header in options</comment>
   </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Save the forecast to another scenario</value>
+    <comment>description on the exports in file menu in forecast</comment>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Save to </value>
+    <comment>Which scenario to saev the forecast</comment>
+  </data>
 </root>
