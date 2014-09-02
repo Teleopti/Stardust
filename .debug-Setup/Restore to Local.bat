@@ -304,8 +304,7 @@ CD "%DBMANAGERPATH%"
 %DBMANAGER% -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
-::move SalesDemo to specific dates
-%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
+IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" -EE >> "%ROOTDIR%\upgradeDB.log"
