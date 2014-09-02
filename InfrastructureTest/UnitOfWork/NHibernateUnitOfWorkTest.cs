@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			session = mocks.StrictMock<ISession>();
 			messageBroker = mocks.StrictMock<IMessageBrokerComposite>();
 			pushMessageService = mocks.DynamicMock<ISendPushMessageWhenRootAlteredService>();
-			uow = new TestUnitOfWork(session, messageBroker, pushMessageService, null);
+			uow = new testUnitOfWork(session, messageBroker, pushMessageService, null);
 		}
 
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			Expect.Call(sessImpl.Interceptor)
 				 .Return(interceptor);
 			mocks.ReplayAll();
-			TestUnitOfWork testUow = new TestUnitOfWork(session, messageBroker, null, null);
+			testUnitOfWork testUow = new testUnitOfWork(session, messageBroker, null, null);
 			Assert.AreEqual(testUow.ShowInternalInterceptor, interceptor);
 			Assert.AreEqual(testUow.ShowInternalInterceptor, interceptor);
 		}
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifySessionPropertyIsSet()
 		{
-			Assert.AreSame(session, ((TestUnitOfWork)uow).ShowInternalSession);
+			Assert.AreSame(session, ((testUnitOfWork)uow).ShowInternalSession);
 		}
 
 		/// <summary>
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void SessionMustNotBeNull()
 		{
-			using (new TestUnitOfWork(null, messageBroker, null, null)) { }
+			using (new testUnitOfWork(null, messageBroker, null, null)) { }
 		}
 
 		[Test]
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			session = mocks.DynamicMock<ISession>();
 			messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
-			uow = new TestUnitOfWork(session, messageBroker,pushMessageService,new []{messageSender});
+			uow = new testUnitOfWork(session, messageBroker,pushMessageService,new []{messageSender});
 
 			AggregateRootInterceptor interceptor = new AggregateRootInterceptor();
 
@@ -455,11 +455,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 		}
 
-
-		private class TestUnitOfWork : NHibernateUnitOfWork
+		private class testUnitOfWork : NHibernateUnitOfWork
 		{
-			public TestUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
-				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, (s, i) => {}, TransactionIsolationLevel.Default, null)
+			public testUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
+				: base(mock, messageBroker, denormalizers, null, pushMessageService, StaticSessionContextBinder.UnbindStatic, (s, i) => { }, TransactionIsolationLevel.Default, null)
 			{
 			}
 

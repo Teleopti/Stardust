@@ -10,9 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -149,7 +147,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			nhibSession.EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", buId);
 			nhibSession.EnableFilter("deletedFlagFilter");
 			nhibSession.EnableFilter("deletedPeopleFilter");
-			Bind(nhibSession, isolationLevel);
+			SessionContextBinder.Bind(nhibSession, isolationLevel);
 			return nhibSession;
 		}
 
@@ -198,20 +196,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 		#endregion
-
-		internal void Bind(ISession session, TransactionIsolationLevel isolationLevel)
-		{
-			SessionContextBinder.Bind(session, isolationLevel);
-		}
-
-		internal void Unbind(ISession session)
-		{
-			SessionContextBinder.Unbind(session);
-		}
-
-		public static void UnbindStatic(ISession session)
-		{
-			StaticSessionContextBinder.UnbindStatic(session);
-		}
 	}
 }
