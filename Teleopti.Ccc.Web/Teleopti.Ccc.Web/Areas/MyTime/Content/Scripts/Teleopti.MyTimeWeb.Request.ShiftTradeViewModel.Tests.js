@@ -239,13 +239,49 @@ $(document).ready(function () {
 		equal(viewModel.missingMyTeam(), false);
 	});
 
-	test("should hide page view selector when no data", function() {
+	test("should hide page view when no data", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
-		viewModel.pageCount(0);
 
-		viewModel.setPageVisiblity();
+		viewModel.setPagingInfo(0);
 
 		equal(viewModel.isPageVisible(), false);
+	});
+
+	test("should show page view when there is data", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+
+		viewModel.setPagingInfo(1);
+
+		equal(viewModel.isPageVisible(), true);
+	});
+
+	test("should not init selectable pages when it has data", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(1));
+
+		viewModel.setPagingInfo(2);
+
+		equal(viewModel.selectablePages().length, 1);
+	});
+
+	test("should set page count when set paging infos", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+
+		viewModel.setPagingInfo(2);
+
+		equal(viewModel.pageCount(), 2);
+	});
+
+	test("should set paging info", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.selectedPageIndex(1);
+
+		viewModel.selectedPageIndex(2);
+		viewModel.setPagingInfo(2);
+		
+		equal(viewModel.pageCount(), 2);
+		equal(viewModel.selectablePages().length, 2);
+		equal(viewModel.selectablePages()[1].isSelected(), true);
 	});
 
 	test("should can select page", function () {
@@ -294,18 +330,6 @@ $(document).ready(function () {
 		equal(viewModel.isMore(), true);
 		equal(viewModel.isPreviousMore(), false);
 		equal(viewModel.selectablePages().length, 5);
-	});
-
-	test("should update selected page", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
-		viewModel.selectedPageIndex(1);
-		viewModel.initSelectablePages(4);
-
-		viewModel.selectedPageIndex(2);
-		viewModel.updateSelectedPage();
-
-		equal(viewModel.selectablePages().length, 4);
-		equal(viewModel.selectablePages()[1].isSelected(), true);
 	});
 
 	test("should go to last page without previous more", function () {
