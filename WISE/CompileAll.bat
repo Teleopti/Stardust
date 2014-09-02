@@ -46,20 +46,23 @@ SET WISEDIR=%WISEDIR:~0,-1%
 ::remove \wise
 SET SRCDIR=%WISEDIR:~0,-5%
 
-IF EXIST "%WISEDIR%\Machines\%COMPUTERNAME%.bat" (
-ECHO Setting machine config
-CALL "%WISEDIR%\Machines\%COMPUTERNAME%.bat"
-) ELSE (
-SET ERRORLEV=2
-GOTO error
-)
-IF %errorlevel% NEQ 0 (
-SET ERRORLEV=3
-GOTO EOF
-)
+::IF EXIST "%WISEDIR%\Machines\%COMPUTERNAME%.bat" (
+::ECHO Setting machine config
+::CALL "%WISEDIR%\Machines\%COMPUTERNAME%.bat"
+::) ELSE (
+::SET ERRORLEV=2
+::GOTO error
+::)
+::IF %errorlevel% NEQ 0 (
+::SET ERRORLEV=3
+::GOTO EOF
+::)
 
 ::This is were we put src files after successful build
 SET HISTORYDIR=%DEPLOYSHARE%\%Version%
+
+::This must be before the drive mapping below
+SET WORKINGDIR=C:\Temp\WiseWORKINGDIR
 
 ::Hardcoded drive letter used inside WISE project.
 SET WISEDRIVELETTER=K:
@@ -94,9 +97,14 @@ SET WISESOURCEFILE=%WISEDRIVELETTER%\Src
 SET WISEPROJFILE=%WISESOURCEFILE%\WISE
 SET DYNAMICCONTENT=%WISESOURCEFILE%\WiseArtifact
 SET DEPENDENCIES=%WISEDRIVELETTER%\Dependencies
+SET DEPENDENCIESSRC=\\a380\t-files\RnD\MSI_Dependencies
 ECHO WISESOURCEFILE: %WISESOURCEFILE%
 ECHO WISEPROJFILE: %WISEPROJFILE%
 ECHO DYNAMICCONTENT: %DYNAMICCONTENT%
+SET WISEEXE=C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe
+SET WISESCRIPT=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe
+SET DEPLOYSHARE=D:\Installation\PreviousBuilds
+SET AZUREOUTDIR=D:\Installation\Azure
 
 ::Set Product folders. note: Folder namd must correspond to .wsi-file name. See: sub batch file: CompileWise.bat
 SET ccc7_server=ccc7_server
@@ -160,11 +168,10 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\S
 ROBOCOPY "%DEPENDENCIESSRC%\images" "%WISESOURCEFILE%\images" /MIR
 
 ::get short version
-if not "%version:~-2%"==".0" (
+if "%Version:~0,-6%"=="7.5.390" (
 set shortVersion=%Version:~0,-6%
 ) else (
-CALL "%WISEDIR%\head.bat" 1 "%DEPENDENCIESSRC%\wsi\" > %temp%\Version.txt
-SET /p shortVersion= < %temp%\Version.txt
+set shortVersion=Default
 )
 
 if exist "%DEPENDENCIESSRC%\wsi\%shortVersion%" (
