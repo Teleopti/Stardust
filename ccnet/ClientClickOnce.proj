@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-	<Mage>\\hebe\Installation\Dependencies\ccc7_server\mage.exe</Mage>
+	<Mage>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\mage.exe</Mage>
 	<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
 

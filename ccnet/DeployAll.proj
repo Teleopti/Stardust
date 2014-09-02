@@ -21,7 +21,7 @@
 		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
 		<DocSrcPath>\\integration\Documentation</DocSrcPath>
 		<MSIShare>D:\Installation\msi</MSIShare>
-		<Dependencies>\\hebe\Installation\Dependencies</Dependencies>
+		<Dependencies>\\a380\T-Files\RnD\MSI_Dependencies</Dependencies>
 		<ObfuscateCmd>$(CCNetWorkingDirectory)\ccnet\Obfuscate\RunObfuscation.cmd</ObfuscateCmd>
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>

@@ -24,8 +24,8 @@ SET ConfigPath=%AzureWork%
 SET ContentDest=%AzureWork%\AzureContent
 SET ContentSource=%AZUREDIR%\..
 SET output=%AZUREOUTDIR%\%version%
-SET Dependencies=\\hebe\Installation\Dependencies\ccc7_server
-SET AzureDependencies=\\hebe\Installation\Dependencies\ccc7_azure
+SET Dependencies=\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server
+SET AzureDependencies=\\a380\T-Files\RnD\MSI_Dependencies\ccc7_azure
 
 ::Get us to correct reletive location
 %DriveLetter%
