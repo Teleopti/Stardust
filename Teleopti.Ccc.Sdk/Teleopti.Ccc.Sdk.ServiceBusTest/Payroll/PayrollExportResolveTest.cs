@@ -7,6 +7,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
@@ -14,19 +15,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
     [TestFixture]
     public class PayrollExportResolveTest
     {
-			private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-
-        [SetUp]
-        public void Setup()
-        {
-            var mocks = new MockRepository();
-            _unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-        }
-
-        [Test]
+	    [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()
         {
-            UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
+    		var unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+            UnitOfWorkFactoryContainer.Current = unitOfWorkFactory;
 
 			var builder = new ContainerBuilder();
 			builder.RegisterType<PayrollExportConsumer>().As<ConsumerOf<RunPayrollExport>>();
@@ -34,6 +27,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<PayrollContainerInstaller>();
+
+			var client = MockRepository.GenerateMock<ISignalRClient>();
+			builder.Register(x => client).As<ISignalRClient>();
 
 			using (var container = builder.Build())
 			{

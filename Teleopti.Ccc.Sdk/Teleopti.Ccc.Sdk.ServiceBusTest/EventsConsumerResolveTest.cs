@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		public void ShouldResolveEventsConsumer()
 		{
 			var bus = MockRepository.GenerateMock<IServiceBus>();
-			var client = MockRepository.GenerateMock<ISignalRClient>();
 			var builder = new ContainerBuilder();
 			builder.RegisterType<EventsConsumer>().As<ConsumerOf<IEvent>>();
 			
@@ -30,7 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterModule<ServiceBusEventsPublisherModule>();
-			
+
+			var client = MockRepository.GenerateMock<ISignalRClient>();
 			builder.Register(x => client).As<ISignalRClient>();
 			builder.Register(x => bus).As<IServiceBus>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();

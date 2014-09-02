@@ -8,6 +8,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
@@ -15,31 +16,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     [TestFixture]
     public class ImportForecastsToSkillConsumerResolveTest
     {
-			private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-        private IServiceBus _serviceBus;
-
-        [SetUp]
-        public void Setup()
-        {
-            var mocks = new MockRepository();
-						_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _serviceBus = mocks.DynamicMock<IServiceBus>();
-        }
-
         [Test]
         public void ShouldResolveImportForecastsToSkillConsumer()
-        {
-            UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
+		{
+			var mocks = new MockRepository();
+			var unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			var serviceBus = mocks.DynamicMock<IServiceBus>();
+            UnitOfWorkFactoryContainer.Current = unitOfWorkFactory;
 
             var builder = new ContainerBuilder();
-            builder.RegisterInstance(_serviceBus).As<IServiceBus>();
+            builder.RegisterInstance(serviceBus).As<IServiceBus>();
             builder.RegisterType<ImportForecastsToSkillConsumer>().As<ConsumerOf<ImportForecastsToSkill>>();
             builder.RegisterType<SaveForecastToSkillCommand>().As<ISaveForecastToSkillCommand>();
             builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
 			builder.RegisterModule<RepositoryModule>();
             builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
             builder.RegisterModule<ForecastContainerInstaller>();
-            
+
+			var client = MockRepository.GenerateMock<ISignalRClient>();
+			builder.Register(x => client).As<ISignalRClient>();
+
             using (var container = builder.Build())
             {
                 container.Resolve<ConsumerOf<ImportForecastsToSkill>>().Should().Not.Be.Null();

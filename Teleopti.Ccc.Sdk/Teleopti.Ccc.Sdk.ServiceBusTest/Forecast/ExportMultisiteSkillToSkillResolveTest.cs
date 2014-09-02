@@ -7,6 +7,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
@@ -14,24 +15,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class ExportMultisiteSkillToSkillResolveTest
 	{
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private IServiceBus _serviceBus;
-
-		[SetUp]
-		public void Setup()
-		{
-			var mocks = new MockRepository();
-			_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-			_serviceBus = mocks.DynamicMock<IServiceBus>();
-		}
-
 		[Test]
 		public void ShouldResolveNewAbsenceRequestConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
+			var unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var serviceBus = MockRepository.GenerateMock<IServiceBus>();
+			UnitOfWorkFactoryContainer.Current = unitOfWorkFactory;
 
 			var builder = new ContainerBuilder();
-			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
+			builder.RegisterInstance(serviceBus).As<IServiceBus>();
 			builder.RegisterType<ExportMultisiteSkillToSkillConsumer>().As<ConsumerOf<ExportMultisiteSkillToSkill>>();
 
 			builder.RegisterModule<RepositoryModule>();
@@ -39,6 +31,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<ImportForecastContainerInstaller>();
+
+			var client = MockRepository.GenerateMock<ISignalRClient>();
+			builder.Register(x => client).As<ISignalRClient>();
 
 			using (var container = builder.Build())
 			{
