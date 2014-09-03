@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 
 		[SetUp]

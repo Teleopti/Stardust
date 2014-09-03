@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_shiftNudgeDirective = new ShiftNudgeDirective();
+			_resourceCalulateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 		}
 
 		[ Test]
