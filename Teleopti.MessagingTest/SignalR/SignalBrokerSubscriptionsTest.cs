@@ -67,7 +67,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
-			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => {}, typeof(IInterfaceForTest));
+			Assert.DoesNotThrow(() => target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => {}, typeof(IInterfaceForTest)));
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxySubscribableFake(subscription);
 			var target = MessageBrokerCompositeClientForTest.Make(new MessageFilterManagerFake(), stubHubConnection(hubProxy));
 
-			target.UnregisterSubscription((sender, args) => {});
+			Assert.DoesNotThrow(() => target.UnregisterSubscription((sender, args) => {}));
 		}
 
 		[Test]

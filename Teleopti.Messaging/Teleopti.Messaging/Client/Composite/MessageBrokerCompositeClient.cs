@@ -9,15 +9,15 @@ namespace Teleopti.Messaging.Client.Composite
 	public class MessageBrokerCompositeClient : IMessageBrokerComposite
 	{
 		private readonly ISignalRClient _signalRClient;
-		private readonly MessageListener _messageBrokerListener;
+		private readonly MessageListener _messageListener;
 		private readonly MessageCreator _messageCreator;
 
 		public MessageBrokerCompositeClient(IMessageFilterManager typeFilter, ISignalRClient signalRClient, IMessageSender messageSender)
 		{
 			_signalRClient = signalRClient;
-			_messageBrokerListener = new MessageListener(_signalRClient);
+			_messageListener = new MessageListener(_signalRClient);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
-			_signalRClient.RegisterCallbacks(_messageBrokerListener.OnNotification, _messageBrokerListener.ReregisterSubscriptions);
+			_signalRClient.RegisterCallbacks(_messageListener.OnNotification, _messageListener.ReregisterSubscriptions);
 		}
 
 		public void StartBrokerService(bool useLongPolling = false)
@@ -54,32 +54,32 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
-			_messageBrokerListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType);
+			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType);
 		}
 
 		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
 		{
-			_messageBrokerListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType);
+			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType);
 		}
 
 		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			_messageBrokerListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType, startDate, endDate);
+			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			_messageBrokerListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectId, domainObjectType, startDate, endDate);
+			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
-			_messageBrokerListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType, startDate, endDate);
+			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType, startDate, endDate);
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_messageBrokerListener.UnregisterSubscription(eventMessageHandler);
+			_messageListener.UnregisterSubscription(eventMessageHandler);
 		}
 
 	}
