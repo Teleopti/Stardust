@@ -76,7 +76,7 @@
 			this.buttonAdvCancel.TabIndex = 2;
 			this.buttonAdvCancel.Text = "xxCancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
-			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancel_Click);
+			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
 			// buttonAdvSave
 			// 
@@ -95,7 +95,7 @@
 			this.buttonAdvSave.Text = "xxOk";
 			this.buttonAdvSave.UseVisualStyle = true;
 			this.buttonAdvSave.UseVisualStyleBackColor = false;
-			this.buttonAdvSave.Click += new System.EventHandler(this.buttonAdvSave_Click);
+			this.buttonAdvSave.Click += new System.EventHandler(this.buttonAdvSaveClick);
 			// 
 			// textBoxExt1
 			// 
