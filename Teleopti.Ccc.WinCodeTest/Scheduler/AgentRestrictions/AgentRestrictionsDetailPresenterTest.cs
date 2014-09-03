@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
 				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.HasLayers).Return(true).Repeat.AtLeastOnce(); // this line indicates that the day is scheduled
-				Expect.Call(visualLayerCollection.ContractTime()).Return(new TimeSpan(0, 8, 0, 0)).Repeat.AtLeastOnce();
+				Expect.Call(visualLayerCollection.WorkTime()).Return(new TimeSpan(0, 8, 0, 0)).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
