@@ -39,7 +39,7 @@ set date_from = dateadd(day,@DaysToAdd,date_from)
 GO
 
 ----------------
---Add agent statistics from Agg 4 week data
+--Copy agent statistics from Agg template - 4 week data
 ----------------
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
@@ -75,32 +75,42 @@ END
 GO
 
 ----------------
--- Move Deviation data
+--Copy deviation date from template - 4 week data
 ----------------
-truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
-update $(TELEOPTIANALYTICS).mart.fact_schedule_deviation_template
-set
-	date_id = date_id - 365,
-	shift_startdate_id = shift_startdate_id - 365
-go
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
-declare @DaysToAdd int
 declare @MondayThreeWeeksAgo datetime
+declare @PeriodsToAdd int
+declare @TemplateLength int
+declare @AddDays int
 
 set @TemplateStartDate = '2013-02-04'
 set @TemplateEndDate = '2013-03-03'
+set @PeriodsToAdd = 0
+select @TemplateLength=datediff(DD,@TemplateStartDate,@TemplateEndDate)+1
 
+--get monday of last week
 SELECT @MondayThreeWeeksAgo=DATEADD(wk, DATEDIFF(wk,21,GETDATE()), 0)
-SELECT @DaysToAdd = datediff(d,@TemplateStartDate,@MondayThreeWeeksAgo)
 
-insert into $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
-select * from $(TELEOPTIANALYTICS).mart.fact_schedule_deviation_template
+WHILE @PeriodsToAdd < 9 --9x4 = 41 weeks
+BEGIN
+	--Days to add for next
+	select @AddDays=datediff(DAY,@TemplateStartDate,@MondayThreeWeeksAgo)+@TemplateLength*@PeriodsToAdd
 
-update $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
-set
-	date_id = date_id + @DaysToAdd,
-	shift_startdate_id = shift_startdate_id + @DaysToAdd
+	insert into $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
+	select
+	date_id+@AddDays,
+	interval_id, person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, business_unit_id, datasource_id, insert_date, update_date, is_logged_in,
+	shift_startdate_id+@AddDays,
+	shift_startinterval_id
+	from $(TELEOPTIANALYTICS).mart.fact_schedule_deviation f
+	inner join $(TELEOPTIANALYTICS).mart.dim_date d
+		on d.date_id = f.date_id
+	where d.date_date <= @TemplateEndDate
+	order by 2
+
+	select @PeriodsToAdd = @PeriodsToAdd + 1
+END
 GO
 
 ----------------
