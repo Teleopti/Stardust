@@ -522,13 +522,14 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
 		private void getStartAndEndTimes(out DateTime startDateTime, out DateTime endDateTime)
 		{
-			GridModelSelections gridModelSelections = scheduleControl1.GetScheduleHost().Model.Selections;
 			if (scheduleControl1 == null)
 				MessageBox.Show("scheduleControl1 == null");
 			if(scheduleControl1.GetScheduleHost() == null)
 				MessageBox.Show("GetScheduleHost() == null");
 			if(scheduleControl1.GetScheduleHost().Model == null)
 				MessageBox.Show("Model == null");
+			
+			GridModelSelections gridModelSelections = scheduleControl1.GetScheduleHost().Model.Selections;
 			if (gridModelSelections == null)
 				MessageBox.Show("gridModelSelections == null");
 
