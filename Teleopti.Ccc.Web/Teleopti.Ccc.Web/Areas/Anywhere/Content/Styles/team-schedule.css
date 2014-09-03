@@ -6,7 +6,7 @@ sh
 
 .team-schedule .time-line 
 {
-	left: 121px; /* 105 + 8 + 8    first column with paddings */
+	left: 221px; /* 205 + 8 + 8    first column with paddings */
 	width: 100%;
 }
 
@@ -39,10 +39,17 @@ sh
 }
 
 .team-schedule .person-name-column {
-	max-width: 105px !important;
-	min-width: 105px !important;
-	width: 105px !important;
+	max-width: 205px !important;
+	min-width: 205px !important;
+	width: 205px !important;
 	overflow: hidden;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.person-name-column-menu {
+	min-width: 205px !important;
+	font-size: 12px;
 }
 .team-schedule .contract-time-column {
 	max-width: 100px !important;
@@ -55,6 +62,9 @@ sh
 	width: auto;
 }
 
+.btn-group  a:hover {
+	color: #0099ff;
+}
 .team-schedule tbody tr
 {
 	cursor: pointer;
