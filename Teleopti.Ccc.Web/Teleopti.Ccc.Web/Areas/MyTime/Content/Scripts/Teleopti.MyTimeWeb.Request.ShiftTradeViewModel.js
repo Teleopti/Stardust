@@ -968,40 +968,39 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	};
 
 	self.setTimeFilters = function(hourTexts) {
-		if (self.filterStartTimeList().length == 0) {
-			var rangStart = 0;
-			for (var i = 0; i < 24; i += 2) {
-				var rangEnd = rangStart + 2;
-				var hourText = hourTexts[i] + " - " + hourTexts[i + 2];
-				var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(hourText, rangStart, rangEnd, false, false);
-				var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
-				self.filterStartTimeList.push(filterStartTime);
-				self.filterEndTimeList.push(filterEndTime);
-				rangStart += 2;
-			}
+		var rangStart = 0;
+		for (var i = 0; i < 24; i += 2) {
+			var rangEnd = rangStart + 2;
+			var hourText = hourTexts[i] + " - " + hourTexts[i + 2];
+			var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(hourText, rangStart, rangEnd, false, false);
+			var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
+			self.filterStartTimeList.push(filterStartTime);
+			self.filterEndTimeList.push(filterEndTime);
+			rangStart += 2;
 		}
 	};
 
-	self.loadFilterTimes = function() {
-		var dayOffNames = "";
-
-		ajax.Ajax({
-			url: "RequestsShiftTradeScheduleFilter/Get",
-			dataType: "json",
-			type: 'GET',
-			contentType: 'application/json; charset=utf-8',
-			success: function(data) {
-				//set dayoff only in start time filter
-				if (data != null) {
-					self.setTimeFilters(data.HourTexts);
-					$.each(data.DayOffShortNames, function(idx, name) {
-						if (idx < data.DayOffShortNames.length - 1) dayOffNames += name + ", ";
-						else dayOffNames += name;
-					});
-					self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
+	self.loadFilterTimes = function () {
+		if (self.filterStartTimeList().length == 0) {
+			var dayOffNames = "";
+			ajax.Ajax({
+				url: "RequestsShiftTradeScheduleFilter/Get",
+				dataType: "json",
+				type: 'GET',
+				contentType: 'application/json; charset=utf-8',
+				success: function(data) {
+					//set dayoff only in start time filter
+					if (data != null) {
+						self.setTimeFilters(data.HourTexts);
+						$.each(data.DayOffShortNames, function(idx, name) {
+							if (idx < data.DayOffShortNames.length - 1) dayOffNames += name + ", ";
+							else dayOffNames += name;
+						});
+						self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
+					}
 				}
-			}
-		});
+			});
+		}
 	};
 
 	self.setDatePickerRange = function(now, relativeStart, relativeEnd) {
