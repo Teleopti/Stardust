@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExGridRowInChartButtons.Name = "toolStripExGridRowInChartButtons";
 			this.toolStripExGridRowInChartButtons.Office12Mode = false;
 			this.toolStripExGridRowInChartButtons.ShowLauncher = false;
-			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(263, 91);
+			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(263, 0);
 			this.toolStripExGridRowInChartButtons.TabIndex = 1;
 			this.toolStripExGridRowInChartButtons.Text = "xxGridRowsInChart";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExGridRowInChartButtons, true);

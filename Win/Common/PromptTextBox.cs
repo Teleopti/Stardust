@@ -5,7 +5,7 @@ using Teleopti.Ccc.Win.Common.Controls;
 
 namespace Teleopti.Ccc.Win.Common
 {
-    public partial class PromptTextBox : BaseRibbonForm
+    public partial class PromptTextBox : BaseDialogForm
     {
         internal event EventHandler<CustomEventArgs<TupleItem>> NameThisView;
         private readonly object _tag;
