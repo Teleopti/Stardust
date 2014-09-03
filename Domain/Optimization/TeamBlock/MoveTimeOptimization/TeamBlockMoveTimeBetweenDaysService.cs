@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons,
-			DateOnlyPeriod selectedPeriod);
+			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
@@ -28,7 +28,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public TeamBlockMoveTimeBetweenDaysService(ITeamBlockMoveTimeOptimizer teamBlockMoveTimeOptimizer, IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks)
+		public TeamBlockMoveTimeBetweenDaysService(ITeamBlockMoveTimeOptimizer teamBlockMoveTimeOptimizer,
+			IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
+			IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks)
 		{
 			_teamBlockMoveTimeOptimizer = teamBlockMoveTimeOptimizer;
 			_constructTeamBlock = constructTeamBlock;
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		public void Execute(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList,
 			ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons,
-			DateOnlyPeriod selectedPeriod)
+			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var blocksToWorkWith = _constructTeamBlock.Construct(matrixList, selectedPeriod, selectedPersons,
 				optimizerPreferences.Extra.BlockTypeValue,
@@ -58,27 +60,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			{
 				var team = activeTeams.GetRandom(activeTeams.Count(), true).FirstOrDefault();
 				if (team == null) break;
-				var selectedMatrixes = team.MatrixesForUnlockedMembersAndPeriod(selectedPeriod).ToList();
+				var selectedMatrixes = team.MatrixesForMemberAndPeriod(team.GroupMembers.First(), selectedPeriod).ToList();
 				if (_cancelMe)
 					break;
 				IEnumerable<IScheduleMatrixPro> shuffledMatrixes =selectedMatrixes.GetRandom(selectedMatrixes.Count, true);
-				int executes = 0;
+
 				foreach (var matrix in shuffledMatrixes)
 				{
 					if (_cancelMe)
 						break;
-					executes++;
-					bool result = _teamBlockMoveTimeOptimizer.OptimizeMatrix(optimizerPreferences, matrixList, rollbackService,
-						periodValueCalculator, schedulingResultStateHolder, matrix, selectedMatrixes);
+					bool result = _teamBlockMoveTimeOptimizer.OptimizeTeam(optimizerPreferences, team, matrix, rollbackService,
+						periodValueCalculator, schedulingResultStateHolder, resourceCalculateDelayer);
 					if (!result)
 					{
-						//	continue;
 						activeTeams.Remove(team);
 					}
 					double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 					if (_cancelMe)
 						break;
-					string who = Resources.MoveTimeOn + matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
+					string who = Resources.MoveTimeOn + "("+ activeTeams.Count + ")" + team.Name;
 					string success;
 					if (!result)
 					{
@@ -93,8 +93,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 			}
 		}
-
-
 
 		public void OnReportProgress(string message)
 		{

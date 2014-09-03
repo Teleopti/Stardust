@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private  IVisualLayerCollection _mainshiftProjection;
         private TimeZoneInfo _localTimeZoneInfo;
         private DayOfWeek _dayOfWeek;
-    	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+    	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         protected ShiftProjectionCache()
         { }

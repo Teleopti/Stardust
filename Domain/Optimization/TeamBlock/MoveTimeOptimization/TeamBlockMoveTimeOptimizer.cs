@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
@@ -9,109 +11,128 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 {
 	public interface ITeamBlockMoveTimeOptimizer
 	{
-		bool OptimizeMatrix(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> matrixesOnSelectedperiod);
+		bool OptimizeTeam(IOptimizationPreferences optimizerPreferences, ITeamInfo teamInfo, IScheduleMatrixPro matrix, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer);
 	}
 
 	public class TeamBlockMoveTimeOptimizer : ITeamBlockMoveTimeOptimizer
 	{
 		private readonly ISchedulingOptionsCreator  _schedulingOptionsCreator;
 		private readonly ITeamBlockMoveTimeDescisionMaker _decisionMaker;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IConstructAndScheduleSingleDayTeamBlock _constructAndScheduleSingleDayTeamBlock;
-		private readonly IDeleteSelectedDaysForTeam _deleteSelectedDaysForTeam;
+		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 
-		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,ITeamBlockMoveTimeDescisionMaker decisionMaker, IResourceOptimizationHelper resourceOptimizationHelper,  IConstructAndScheduleSingleDayTeamBlock constructAndScheduleSingleDayTeamBlock, IDeleteSelectedDaysForTeam deleteSelectedDaysForTeam)
+		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,
+			ITeamBlockMoveTimeDescisionMaker decisionMaker, ITeamBlockClearer teamBlockClearer,
+			ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation)
 		{
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_decisionMaker = decisionMaker;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_constructAndScheduleSingleDayTeamBlock = constructAndScheduleSingleDayTeamBlock;
-			_deleteSelectedDaysForTeam = deleteSelectedDaysForTeam;
+			_teamBlockClearer = teamBlockClearer;
+			_teamBlockInfoFactory = teamBlockInfoFactory;
+			_teamBlockScheduler = teamBlockScheduler;
+			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		}
-		public bool OptimizeMatrix(IOptimizationPreferences optimizerPreferences, IList<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleMatrixPro matrix, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
-		{
 
+		public bool OptimizeTeam(IOptimizationPreferences optimizerPreferences, ITeamInfo teamInfo, IScheduleMatrixPro matrix, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer)
+		{
+			rollbackService.ClearModificationCollection();
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 
 			double oldPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 			IList<DateOnly> daysToBeMoved = _decisionMaker.Execute(matrix, optimizerPreferences);
 			if (daysToBeMoved.Count == 0)
 				return false;
-			rollbackService.ClearModificationCollection();
+
 			IScheduleDayPro firstDay = matrix.GetScheduleDayByKey(daysToBeMoved[0]);
 			DateOnly firstDayDate = daysToBeMoved[0];
 			IScheduleDay firstScheduleDay = firstDay.DaySchedulePart();
-			var originalFirstScheduleDay = (IScheduleDay)firstScheduleDay.Clone();
 			TimeSpan firstDayContractTime = firstScheduleDay.ProjectionService().CreateProjection().ContractTime();
 
 			IScheduleDayPro secondDay = matrix.GetScheduleDayByKey(daysToBeMoved[1]);
 			DateOnly secondDayDate = daysToBeMoved[1];
 			IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
-			var originalSecondScheduleDay = (IScheduleDay)secondScheduleDay.Clone();
 			TimeSpan secondDayContractTime = secondScheduleDay.ProjectionService().CreateProjection().ContractTime();
+
+			TimeSpan totalContractTimeBefore = firstDayContractTime.Add(secondDayContractTime);
 
 			if (firstDayDate == secondDayDate)
 				return false;
 
 			if (firstDayContractTime > secondDayContractTime)
 			{
-				lockDay(matrix, secondDayDate);
+				lockDay(teamInfo, secondDayDate);
 				return true;
 			}
 
 			//delete schedule on the two days
-			_deleteSelectedDaysForTeam.PerformDelete( matrixesOnSelectedperiod, firstDayDate, secondDayDate, rollbackService,schedulingOptions.ConsiderShortBreaks);
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-																							schedulingOptions.ConsiderShortBreaks);
+			var firstTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, firstDayDate,
+				schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, firstTeamBlock);
+
+			var secondTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, secondDayDate,
+				schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, secondTeamBlock);
+																			
+			var shiftNudgeDirective = new ShiftNudgeDirective();
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-			var matrixForTeamOnGivenDate =
-				matrixesOnSelectedperiod.Where(s => s.SchedulePeriod.DateOnlyPeriod.DayCollection().Contains(firstDayDate )); 
-			if (!scheduleTeamBlock(matrixList, firstDayDate,matrixForTeamOnGivenDate, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, originalFirstScheduleDay, optimizerPreferences))
+			var success = _teamBlockScheduler.ScheduleTeamBlockDay(firstTeamBlock, firstDayDate, schedulingOptions,
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+
+			if (!success)
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				return false;
-			schedulingOptions.WorkShiftLengthHintOption  =  WorkShiftLengthHintOption.Free;
-			matrixForTeamOnGivenDate =
-				matrixesOnSelectedperiod.Where(s => s.SchedulePeriod.DateOnlyPeriod.DayCollection().Contains(secondDayDate)); 
-			if (!scheduleTeamBlock(matrixList, secondDayDate,matrixForTeamOnGivenDate, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, originalSecondScheduleDay, optimizerPreferences))
+			}
+
+			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
+			success = _teamBlockScheduler.ScheduleTeamBlockDay(secondTeamBlock, secondDayDate, schedulingOptions,
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+
+			if (!success)
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				return false;
+			}
+
+			//IScheduleDayPro firstDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[0]);
+			//IScheduleDay firstScheduleDay1 = firstDay1.DaySchedulePart();
+			//TimeSpan firstDayContractTime1 = firstScheduleDay1.ProjectionService().CreateProjection().ContractTime();
+
+			//IScheduleDayPro secondDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[1]);
+			//IScheduleDay secondScheduleDay1 = secondDay1.DaySchedulePart();
+			//TimeSpan secondDayContractTime1 = secondScheduleDay1.ProjectionService().CreateProjection().ContractTime();
+
+			//TimeSpan totalContractTimeAfter = firstDayContractTime1.Add(secondDayContractTime1);
+			//if (totalContractTimeBefore != totalContractTimeAfter)
+			//{
+			//	_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+			//	return false;
+			//}
 
 
 			double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 			bool isPeriodBetter = newPeriodValue < oldPeriodValue;
 			if (!isPeriodBetter)
 			{
-				rollbackService.Rollback();
-				lockDay(matrix, firstDayDate);
-				lockDay(matrix, secondDayDate);
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				lockDay(teamInfo, firstDayDate);
+				lockDay(teamInfo, secondDayDate);
 				return true;
 			}
 
 			return true;
 		}
-		
-		private void safeCalculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
+	
+		private void lockDay(ITeamInfo team, DateOnly day)
 		{
-			resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period());
-		}
-
-		private bool scheduleTeamBlock(IList<IScheduleMatrixPro> matrixList, DateOnly dayDate, IEnumerable<IScheduleMatrixPro> forTeamOnGivenDate, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDay originalScheduleDay, IOptimizationPreferences optimizationPreferences)
-		{
-
-			foreach (var matrix in forTeamOnGivenDate)
+			foreach (var matrix in team.MatrixesForGroupAndDate(day))
 			{
-				if (!_constructAndScheduleSingleDayTeamBlock.Schedule(matrixList, dayDate, matrix, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, optimizationPreferences))
-				{
-					rollbackService.Rollback();
-					safeCalculateDate(dayDate, originalScheduleDay, resourceCalculateDelayer);
-					return false;
-				}
+				matrix.LockPeriod(new DateOnlyPeriod(day, day));
 			}
-			return true;
-		}
 
-		
-		private void lockDay(IScheduleMatrixPro matrix, DateOnly day)
-		{
-			matrix.LockPeriod(new DateOnlyPeriod(day, day));
 		}
 
 	}

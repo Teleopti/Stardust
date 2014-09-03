@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -13,16 +14,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
         private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
+	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
 
-        public ShiftProjectionCacheManager(IShiftFromMasterActivityService shiftFromMasterActivityService, 
-            IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
-            IRuleSetProjectionEntityService ruleSetProjectionEntityService)
+	    public ShiftProjectionCacheManager(IShiftFromMasterActivityService shiftFromMasterActivityService, 
+            IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
+			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
+            IRuleSetProjectionEntityService ruleSetProjectionEntityService,
+			IWorkShiftFromEditableShift workShiftFromEditableShift)
         {
             _shiftFromMasterActivityService = shiftFromMasterActivityService;
             _ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
 		    _ruleSetProjectionEntityService = ruleSetProjectionEntityService;
+	        _workShiftFromEditableShift = workShiftFromEditableShift;
         }
+
+	    public IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, DateOnly currentDate, TimeZoneInfo agentTimeZone)
+	    {
+		    var workShift = _workShiftFromEditableShift.Convert(shift, currentDate);
+		    var ret = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
+			ret.SetDate(currentDate, agentTimeZone);
+
+		    return ret;
+	    }
 
 	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly,
 		    TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)

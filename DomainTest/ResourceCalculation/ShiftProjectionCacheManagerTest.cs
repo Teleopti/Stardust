@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -26,8 +27,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IShiftFromMasterActivityService _shiftFromMasterActivityService;
         private IRuleSetDeletedActivityChecker _activityChecker;
     	private IRuleSetDeletedShiftCategoryChecker _shiftCategoryChecker;
+	    private IWorkShiftFromEditableShift _workShiftFromEditableShift;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _shiftFromMasterActivityService = _mocks.StrictMock<IShiftFromMasterActivityService>();
             _activityChecker = _mocks.StrictMock<IRuleSetDeletedActivityChecker>();
         	_shiftCategoryChecker = _mocks.StrictMock<IRuleSetDeletedShiftCategoryChecker>();
-            _target = new ShiftProjectionCacheManager(_shiftFromMasterActivityService, _activityChecker, _shiftCategoryChecker, _ruleSetProjectionEntityService);
+		    _workShiftFromEditableShift = _mocks.StrictMock<IWorkShiftFromEditableShift>();
+            _target = new ShiftProjectionCacheManager(_shiftFromMasterActivityService, _activityChecker, _shiftCategoryChecker, _ruleSetProjectionEntityService, _workShiftFromEditableShift);
             _ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             _ruleSet = _mocks.StrictMock<IWorkShiftRuleSet>();
             

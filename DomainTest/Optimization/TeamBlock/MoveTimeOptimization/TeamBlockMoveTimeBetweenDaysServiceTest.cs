@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NHibernate.Hql.Ast;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -35,6 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private ITeamBlockInfo _teamBlockInfo;
 		private ITeamInfo _teamInfo;
 		private IBlockInfo _blockInfo;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private IEnumerable<IPerson> _groupMembers;
 
 		[SetUp]
 		public void Setup()
@@ -56,6 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
 			_blockInfo = _mock.StrictMock<IBlockInfo>();
 			_teamBlockInfo = new TeamBlockInfo(_teamInfo,_blockInfo);
+			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
+			_groupMembers = new List<IPerson> {_person1};
 		}
 
 		[Test]
@@ -72,19 +77,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					_optimizationPreferences.Extra.BlockTypeValue, _optimizationPreferences.Extra.TeamGroupPage)).Return(teamBlockList );
 				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockList, selectedPersons, _selectedPeriod)).Return(teamBlockList);
 				Expect.Call(_filterForNoneLockedTeamBlocks.Filter(teamBlockList)).Return(teamBlockList.ToList());
-				Expect.Call(_teamInfo.MatrixesForUnlockedMembersAndPeriod(_selectedPeriod)).Return(matrixesOnSelectedperiod);
-				Expect.Call(_matrix1.Person).Return(_person1).Repeat.AtLeastOnce() ;
-				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeMatrix(_optimizationPreferences, matrixList, _rollbackService,
-					_periodValueCalculator, _schedulingResultStateHolder, _matrix1, matrixesOnSelectedperiod)).Return(false);
+				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers);
+				Expect.Call(_teamInfo.MatrixesForMemberAndPeriod(_person1, _selectedPeriod)).Return(matrixesOnSelectedperiod);
+				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _resourceCalculateDelayer)).Return(false);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
 					.Return(0.815689).Repeat.AtLeastOnce() ;
+				Expect.Call(_teamInfo.Name).Return("hej");
 
 			}
 			using (_mock.Playback())
 			{
 				
 				_target.Execute(_optimizationPreferences, matrixList, _rollbackService, _periodValueCalculator,
-					_schedulingResultStateHolder, selectedPersons,_selectedPeriod);
+					_schedulingResultStateHolder, selectedPersons,_selectedPeriod, _resourceCalculateDelayer);
 			}
 		}
 
@@ -103,11 +109,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					_optimizationPreferences.Extra.BlockTypeValue, _optimizationPreferences.Extra.TeamGroupPage)).Return(teamBlockList);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockList, selectedPersons, _selectedPeriod)).Return(teamBlockList);
 				Expect.Call(_filterForNoneLockedTeamBlocks.Filter(teamBlockList)).Return(teamBlockList.ToList());
-				Expect.Call(_teamInfo.MatrixesForUnlockedMembersAndPeriod(_selectedPeriod)).Return(matrixesOnSelectedperiod).Repeat.AtLeastOnce() ;
-				Expect.Call(_matrix1.Person).Return(_person1);
-				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeMatrix(_optimizationPreferences, matrixList, _rollbackService,
-					_periodValueCalculator, _schedulingResultStateHolder, _matrix1, matrixesOnSelectedperiod)).Return(true);
+				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
+				Expect.Call(_teamInfo.MatrixesForMemberAndPeriod(_person1, _selectedPeriod)).Return(matrixesOnSelectedperiod).Repeat.Twice();
+				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _resourceCalculateDelayer)).Return(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(0.815689);
+				Expect.Call(_teamInfo.Name).Return("hej");
 
 			}
 			using (_mock.Playback())
@@ -115,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				_target.ReportProgress += testCancel;
 				_cancel = true;
 				_target.Execute(_optimizationPreferences, matrixList, _rollbackService, _periodValueCalculator,
-					_schedulingResultStateHolder, selectedPersons, _selectedPeriod );
+					_schedulingResultStateHolder, selectedPersons, _selectedPeriod,_resourceCalculateDelayer);
 				_target.ReportProgress -= testCancel;
 			}
 		}

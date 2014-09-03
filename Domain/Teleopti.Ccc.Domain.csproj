@@ -337,8 +337,6 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
-    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ConstructAndScheduleSingleDayTeamBlock.cs" />
-    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DeleteSelectedDaysForTeam.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
@@ -706,6 +704,7 @@
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandler.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\ValidNumberOfDayOffInAWeekSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
@@ -1163,6 +1162,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilter.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFromEditableShift.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\DayOfWeekMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\Multiplicator.cs" />
