@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ArrayList _persons = new ArrayList();
 		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
+		private ArrayList _parsedPersonList;
 
 		public FilterMultiplePersons()
 		{
@@ -42,6 +43,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridListControlSelectedItems.MultiColumn = true;
 			gridListControlSelectedItems.Grid.QueryCellInfo += Grid_QueryCellInfo;
 			gridListControlSelectedItems.BorderStyle = BorderStyle.None;
+
+			_parsedPersonList = new ArrayList();
+			gridListControlCustomSearch.DataSource = _parsedPersonList;
+			gridListControlCustomSearch.MultiColumn = true;
+			gridListControlCustomSearch.Grid.QueryCellInfo += Grid_QueryCellInfo;
+			gridListControlCustomSearch.BorderStyle = BorderStyle.None;
 
 			
 		}
@@ -180,6 +187,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		}
 
+		private void fillDuplicatesItemsGrid()
+		{
+			gridListControlCustomSearch.BeginUpdate();
+			gridListControlCustomSearch.DataSource = _parsedPersonList;
+			if (_parsedPersonList.Count > 0)
+					gridListControlCustomSearch.ValueMember = "Person";
+			gridListControlCustomSearch.MultiColumn = true;
+			gridListControlCustomSearch.Grid.ColHiddenEntries.Add(new GridColHidden(0));
+			gridListControlCustomSearch.Grid.ColHiddenEntries.Add(new GridColHidden(4));
+			if (_parsedPersonList.Count > 0)
+					gridListControlCustomSearch.SetSelected(0, true);
+			gridListControlCustomSearch.EndUpdate();
+		}
+
 		private void addPersonInFinalGrid(IPerson person)
 		{
 			_searchablePersons.Remove(person);
@@ -205,6 +226,67 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var person = (IPerson)gridListControl1.SelectedValue;
 			addPersonInFinalGrid(person );
+		}
+
+		private void buttonAdvParse_Click(object sender, EventArgs e)
+		{
+			var inputText = textBoxCustomSearch.Text;
+			var inputTextArray = inputText.Split(',');
+			CultureInfo cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+
+			_parsedPersonList.Clear();
+			var actualInput = new List<String>();
+			actualInput.AddRange(inputTextArray);
+			foreach (var expected in inputTextArray)
+			{
+				string lowerSearchText = expected.ToLower(cultureInfo);
+				ICollection<IPerson> personQuery =
+					(from
+						person in _searchablePersons 
+					 where
+						 person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Contains(lowerSearchText) ||
+						 person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Replace(",", "").Contains(lowerSearchText) ||
+						 person.Name.ToString(NameOrderOption.FirstNameLastName).ToLower(cultureInfo).Contains(lowerSearchText) ||
+						 person.EmploymentNumber.ToLower(cultureInfo).Contains(lowerSearchText) ||
+						 (
+							(person.ApplicationAuthenticationInfo != null) &&
+							person.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(cultureInfo).Contains(lowerSearchText)
+						 )
+					 select person).ToList();
+				if (personQuery.Count == 1)
+				{
+					_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(personQuery.First()));
+					actualInput.Remove(expected);
+				}
+				else if (personQuery.Count > 1)
+				{
+					foreach (var person in personQuery)
+					{
+						var tempPerson = new FilterMultiplePersonGridControlItem(person);
+						if (!_userSelectedPersonList.Contains(tempPerson ))
+							_parsedPersonList.Add(tempPerson );
+					}
+					actualInput.Remove(expected);
+				}
+				
+			}
+			textBoxCustomSearch.Text = String.Join(",", actualInput);
+
+			fillDuplicatesItemsGrid();
+
+			gridListControlSelectedItems.BeginUpdate();
+			gridListControlSelectedItems.DataSource = _userSelectedPersonList;
+			if (_userSelectedPersonList.Count > 0)
+				gridListControlSelectedItems.ValueMember = "Person";
+
+			gridListControlSelectedItems.MultiColumn = true;
+
+			gridListControlSelectedItems.Grid.ColHiddenEntries.Add(new GridColHidden(0));
+			gridListControlSelectedItems.Grid.ColHiddenEntries.Add(new GridColHidden(4));
+
+			if (_userSelectedPersonList.Count > 0)
+				gridListControlSelectedItems.SetSelected(0, true);
+			gridListControlSelectedItems.EndUpdate();
 		}
 	}
 

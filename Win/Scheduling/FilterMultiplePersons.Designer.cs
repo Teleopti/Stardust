@@ -44,6 +44,15 @@
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tabPageAdvCustom = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.panel6 = new System.Windows.Forms.Panel();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.textBoxCustomSearch = new System.Windows.Forms.TextBox();
+			this.panel8 = new System.Windows.Forms.Panel();
+			this.gridListControlCustomSearch = new Syncfusion.Windows.Forms.Grid.GridListControl();
+			this.panel9 = new System.Windows.Forms.Panel();
+			this.buttonAdvParse = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.panel7 = new System.Windows.Forms.Panel();
+			this.label3 = new System.Windows.Forms.Label();
 			this.gridListControlSelectedItems = new Syncfusion.Windows.Forms.Grid.GridListControl();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.label2 = new System.Windows.Forms.Label();
@@ -60,6 +69,13 @@
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridListControl1)).BeginInit();
 			this.panel2.SuspendLayout();
+			this.tabPageAdvCustom.SuspendLayout();
+			this.panel6.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
+			this.panel8.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridListControlCustomSearch)).BeginInit();
+			this.panel9.SuspendLayout();
+			this.panel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridListControlSelectedItems)).BeginInit();
 			this.panel3.SuspendLayout();
 			this.SuspendLayout();
@@ -160,21 +176,21 @@
 			this.splitContainer1.Panel2.Controls.Add(this.gridListControlSelectedItems);
 			this.splitContainer1.Panel2.Controls.Add(this.panel3);
 			this.splitContainer1.Size = new System.Drawing.Size(528, 715);
-			this.splitContainer1.SplitterDistance = 418;
+			this.splitContainer1.SplitterDistance = 455;
 			this.splitContainer1.SplitterWidth = 6;
 			this.splitContainer1.TabIndex = 1;
 			// 
 			// tabControlAdv1
 			// 
 			this.tabControlAdv1.ActiveTabColor = System.Drawing.Color.Gray;
-			this.tabControlAdv1.BeforeTouchSize = new System.Drawing.Size(528, 418);
+			this.tabControlAdv1.BeforeTouchSize = new System.Drawing.Size(528, 455);
 			this.tabControlAdv1.Controls.Add(this.tabPageAdvDefault);
 			this.tabControlAdv1.Controls.Add(this.tabPageAdvCustom);
 			this.tabControlAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlAdv1.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdv1.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdv1.Name = "tabControlAdv1";
-			this.tabControlAdv1.Size = new System.Drawing.Size(528, 418);
+			this.tabControlAdv1.Size = new System.Drawing.Size(528, 455);
 			this.tabControlAdv1.TabIndex = 4;
 			this.tabControlAdv1.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlAdv1.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -187,7 +203,7 @@
 			this.tabPageAdvDefault.Location = new System.Drawing.Point(1, 30);
 			this.tabPageAdvDefault.Name = "tabPageAdvDefault";
 			this.tabPageAdvDefault.ShowCloseButton = true;
-			this.tabPageAdvDefault.Size = new System.Drawing.Size(525, 386);
+			this.tabPageAdvDefault.Size = new System.Drawing.Size(525, 423);
 			this.tabPageAdvDefault.TabIndex = 1;
 			this.tabPageAdvDefault.Text = "xxDefault";
 			this.tabPageAdvDefault.ThemesEnabled = false;
@@ -199,7 +215,7 @@
 			this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel5.Location = new System.Drawing.Point(0, 0);
 			this.panel5.Name = "panel5";
-			this.panel5.Size = new System.Drawing.Size(525, 386);
+			this.panel5.Size = new System.Drawing.Size(525, 423);
 			this.panel5.TabIndex = 1;
 			// 
 			// tableLayoutPanel1
@@ -215,7 +231,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(525, 360);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(525, 397);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// gridListControl1
@@ -235,7 +251,7 @@
 			this.gridListControl1.Properties.MarkColHeader = false;
 			this.gridListControl1.Properties.MarkRowHeader = false;
 			this.gridListControl1.SelectedIndex = -1;
-			this.gridListControl1.Size = new System.Drawing.Size(528, 323);
+			this.gridListControl1.Size = new System.Drawing.Size(528, 360);
 			this.gridListControl1.TabIndex = 3;
 			this.gridListControl1.ThemesEnabled = true;
 			this.gridListControl1.TopIndex = 0;
@@ -272,15 +288,131 @@
 			// 
 			// tabPageAdvCustom
 			// 
+			this.tabPageAdvCustom.Controls.Add(this.panel6);
 			this.tabPageAdvCustom.Image = null;
 			this.tabPageAdvCustom.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageAdvCustom.Location = new System.Drawing.Point(1, 30);
 			this.tabPageAdvCustom.Name = "tabPageAdvCustom";
 			this.tabPageAdvCustom.ShowCloseButton = true;
-			this.tabPageAdvCustom.Size = new System.Drawing.Size(525, 386);
+			this.tabPageAdvCustom.Size = new System.Drawing.Size(525, 423);
 			this.tabPageAdvCustom.TabIndex = 2;
 			this.tabPageAdvCustom.Text = "xxCustom";
 			this.tabPageAdvCustom.ThemesEnabled = false;
+			// 
+			// panel6
+			// 
+			this.panel6.Controls.Add(this.tableLayoutPanel2);
+			this.panel6.Controls.Add(this.panel7);
+			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel6.Location = new System.Drawing.Point(0, 0);
+			this.panel6.Name = "panel6";
+			this.panel6.Size = new System.Drawing.Size(525, 423);
+			this.panel6.TabIndex = 2;
+			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.Controls.Add(this.textBoxCustomSearch, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.panel8, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.panel9, 0, 1);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 26);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 67F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(525, 397);
+			this.tableLayoutPanel2.TabIndex = 3;
+			// 
+			// textBoxCustomSearch
+			// 
+			this.textBoxCustomSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxCustomSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+			this.textBoxCustomSearch.Location = new System.Drawing.Point(3, 0);
+			this.textBoxCustomSearch.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+			this.textBoxCustomSearch.Name = "textBoxCustomSearch";
+			this.textBoxCustomSearch.Size = new System.Drawing.Size(528, 21);
+			this.textBoxCustomSearch.TabIndex = 5;
+			// 
+			// panel8
+			// 
+			this.panel8.Controls.Add(this.gridListControlCustomSearch);
+			this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel8.Location = new System.Drawing.Point(3, 56);
+			this.panel8.Name = "panel8";
+			this.panel8.Size = new System.Drawing.Size(528, 338);
+			this.panel8.TabIndex = 4;
+			// 
+			// gridListControlCustomSearch
+			// 
+			this.gridListControlCustomSearch.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
+			this.gridListControlCustomSearch.BackColor = System.Drawing.SystemColors.Control;
+			this.gridListControlCustomSearch.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.gridListControlCustomSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gridListControlCustomSearch.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
+			this.gridListControlCustomSearch.ItemHeight = 20;
+			this.gridListControlCustomSearch.Location = new System.Drawing.Point(0, 0);
+			this.gridListControlCustomSearch.MultiColumn = false;
+			this.gridListControlCustomSearch.Name = "gridListControlCustomSearch";
+			this.gridListControlCustomSearch.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
+			this.gridListControlCustomSearch.Properties.ForceImmediateRepaint = false;
+			this.gridListControlCustomSearch.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
+			this.gridListControlCustomSearch.Properties.MarkColHeader = false;
+			this.gridListControlCustomSearch.Properties.MarkRowHeader = false;
+			this.gridListControlCustomSearch.SelectedIndex = -1;
+			this.gridListControlCustomSearch.Size = new System.Drawing.Size(528, 338);
+			this.gridListControlCustomSearch.TabIndex = 4;
+			this.gridListControlCustomSearch.ThemesEnabled = true;
+			this.gridListControlCustomSearch.TopIndex = 0;
+			// 
+			// panel9
+			// 
+			this.panel9.Controls.Add(this.buttonAdvParse);
+			this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel9.Location = new System.Drawing.Point(3, 25);
+			this.panel9.Name = "panel9";
+			this.panel9.Size = new System.Drawing.Size(528, 25);
+			this.panel9.TabIndex = 6;
+			// 
+			// buttonAdvParse
+			// 
+			this.buttonAdvParse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvParse.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvParse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvParse.BeforeTouchSize = new System.Drawing.Size(95, 27);
+			this.buttonAdvParse.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonAdvParse.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvParse.IsBackStageButton = false;
+			this.buttonAdvParse.Location = new System.Drawing.Point(423, -2);
+			this.buttonAdvParse.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
+			this.buttonAdvParse.Name = "buttonAdvParse";
+			this.buttonAdvParse.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvParse.Size = new System.Drawing.Size(95, 27);
+			this.buttonAdvParse.TabIndex = 6;
+			this.buttonAdvParse.Text = "xxParse";
+			this.buttonAdvParse.UseVisualStyle = true;
+			this.buttonAdvParse.Click += new System.EventHandler(this.buttonAdvParse_Click);
+			// 
+			// panel7
+			// 
+			this.panel7.Controls.Add(this.label3);
+			this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel7.Location = new System.Drawing.Point(0, 0);
+			this.panel7.Name = "panel7";
+			this.panel7.Size = new System.Drawing.Size(525, 26);
+			this.panel7.TabIndex = 4;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(12, 9);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(52, 15);
+			this.label3.TabIndex = 0;
+			this.label3.Text = "xxSearch";
 			// 
 			// gridListControlSelectedItems
 			// 
@@ -299,7 +431,7 @@
 			this.gridListControlSelectedItems.Properties.MarkColHeader = false;
 			this.gridListControlSelectedItems.Properties.MarkRowHeader = false;
 			this.gridListControlSelectedItems.SelectedIndex = -1;
-			this.gridListControlSelectedItems.Size = new System.Drawing.Size(528, 270);
+			this.gridListControlSelectedItems.Size = new System.Drawing.Size(528, 233);
 			this.gridListControlSelectedItems.TabIndex = 4;
 			this.gridListControlSelectedItems.ThemesEnabled = true;
 			this.gridListControlSelectedItems.TopIndex = 0;
@@ -355,6 +487,15 @@
 			((System.ComponentModel.ISupportInitialize)(this.gridListControl1)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
+			this.tabPageAdvCustom.ResumeLayout(false);
+			this.panel6.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
+			this.panel8.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.gridListControlCustomSearch)).EndInit();
+			this.panel9.ResumeLayout(false);
+			this.panel7.ResumeLayout(false);
+			this.panel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridListControlSelectedItems)).EndInit();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
@@ -382,6 +523,15 @@
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label label2;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvCustom;
+		private System.Windows.Forms.Panel panel6;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.Panel panel7;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox textBoxCustomSearch;
+		private System.Windows.Forms.Panel panel8;
+		private Syncfusion.Windows.Forms.Grid.GridListControl gridListControlCustomSearch;
+		private System.Windows.Forms.Panel panel9;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvParse;
 
 	}
 }
