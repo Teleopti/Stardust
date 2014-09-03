@@ -21,12 +21,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IScheduleMatrixPro _matrix1;
 		private ISchedulingOptions _schedulingOptions;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
-		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private ITeamBlockMoveTimeDescisionMaker _decisionMaker;
-		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IPeriodValueCalculator _periodValueCalculator;
 		private DateOnly _today;
 		private IScheduleDayPro _scheduleDayPro1;
@@ -37,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IVisualLayerCollection _visualLayerCollection1;
 		private IVisualLayerCollection _visualLayerCollection2;
 		private IScheduleDayPro _scheduleDayPro2;
-		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 		private ITeamBlockClearer _teamBlockClearer;
 		private ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private ITeamBlockScheduler _teamBlockScheduler;
@@ -45,23 +42,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IResourceCalculateDelayer _resourceCalulateDelayer;
 		private ITeamBlockInfo _teamBlockInfo;
 		private ShiftNudgeDirective _shiftNudgeDirective;
+		private ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_schedulingOptionsCreator = _mock.StrictMock<ISchedulingOptionsCreator>();
+			_safeRollbackAndResourceCalculation = _mock.StrictMock<ISafeRollbackAndResourceCalculation>();
 			_decisionMaker = _mock.StrictMock<ITeamBlockMoveTimeDescisionMaker>();
-			_resourceOptimizationHelper = _mock.StrictMock<IResourceOptimizationHelper>();
 			_teamBlockClearer = _mock.StrictMock<ITeamBlockClearer>();
 			_teamBlockInfoFactory = _mock.StrictMock<ITeamBlockInfoFactory>();
 			_teamBlockScheduler = _mock.StrictMock<ITeamBlockScheduler>();
-			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _teamBlockClearer, _teamBlockInfoFactory, _teamBlockScheduler);
+			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _teamBlockClearer, _teamBlockInfoFactory, _teamBlockScheduler, _safeRollbackAndResourceCalculation);
 			_matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro> { _matrix1 };
 			_schedulingOptions = new SchedulingOptions();
 			_rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 			_optimizationPreferences = new OptimizationPreferences();
 			_periodValueCalculator = _mock.StrictMock<IPeriodValueCalculator>();
@@ -74,9 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_projectionService2 = _mock.StrictMock<IProjectionService>();
 			_visualLayerCollection1 = _mock.StrictMock<IVisualLayerCollection>();
 			_visualLayerCollection2 = _mock.StrictMock<IVisualLayerCollection>();
-			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
-			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_shiftNudgeDirective = new ShiftNudgeDirective();
 		}

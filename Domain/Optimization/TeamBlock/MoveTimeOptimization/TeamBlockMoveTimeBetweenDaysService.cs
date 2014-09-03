@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			{
 				var team = activeTeams.GetRandom(activeTeams.Count(), true).FirstOrDefault();
 				if (team == null) break;
-				var selectedMatrixes = team.MatrixesForUnlockedMembersAndPeriod(selectedPeriod).ToList();
+				var selectedMatrixes = team.MatrixesForMemberAndPeriod(team.GroupMembers.First(), selectedPeriod).ToList();
 				if (_cancelMe)
 					break;
 				IEnumerable<IScheduleMatrixPro> shuffledMatrixes =selectedMatrixes.GetRandom(selectedMatrixes.Count, true);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 					if (_cancelMe)
 						break;
-					string who = Resources.MoveTimeOn + team.Name;
+					string who = Resources.MoveTimeOn + "("+ activeTeams.Count + ")" + team.Name;
 					string success;
 					if (!result)
 					{

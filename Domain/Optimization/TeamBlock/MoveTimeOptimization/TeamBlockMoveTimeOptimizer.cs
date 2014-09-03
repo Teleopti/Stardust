@@ -21,16 +21,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 
 		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockMoveTimeDescisionMaker decisionMaker, ITeamBlockClearer teamBlockClearer,
-			ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler)
+			ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation)
 		{
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_decisionMaker = decisionMaker;
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockScheduler = teamBlockScheduler;
+			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		}
 
 		public bool OptimizeTeam(IOptimizationPreferences optimizerPreferences, ITeamInfo teamInfo, IScheduleMatrixPro matrix, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -52,6 +55,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			DateOnly secondDayDate = daysToBeMoved[1];
 			IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
 			TimeSpan secondDayContractTime = secondScheduleDay.ProjectionService().CreateProjection().ContractTime();
+
+			TimeSpan totalContractTimeBefore = firstDayContractTime.Add(secondDayContractTime);
 
 			if (firstDayDate == secondDayDate)
 				return false;
@@ -77,20 +82,42 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 
 			if (!success)
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				return false;
+			}
 
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 			success = _teamBlockScheduler.ScheduleTeamBlockDay(secondTeamBlock, secondDayDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 
 			if (!success)
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				return false;
+			}
+
+			//IScheduleDayPro firstDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[0]);
+			//IScheduleDay firstScheduleDay1 = firstDay1.DaySchedulePart();
+			//TimeSpan firstDayContractTime1 = firstScheduleDay1.ProjectionService().CreateProjection().ContractTime();
+
+			//IScheduleDayPro secondDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[1]);
+			//IScheduleDay secondScheduleDay1 = secondDay1.DaySchedulePart();
+			//TimeSpan secondDayContractTime1 = secondScheduleDay1.ProjectionService().CreateProjection().ContractTime();
+
+			//TimeSpan totalContractTimeAfter = firstDayContractTime1.Add(secondDayContractTime1);
+			//if (totalContractTimeBefore != totalContractTimeAfter)
+			//{
+			//	_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+			//	return false;
+			//}
+
 
 			double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 			bool isPeriodBetter = newPeriodValue < oldPeriodValue;
 			if (!isPeriodBetter)
 			{
-				rollbackService.Rollback();
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				lockDay(teamInfo, firstDayDate);
 				lockDay(teamInfo, secondDayDate);
 				return true;
