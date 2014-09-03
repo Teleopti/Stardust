@@ -99,10 +99,10 @@ BEGIN
 
 	insert into $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
 	select
-	date_id+@AddDays,
-	interval_id, person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, business_unit_id, datasource_id, insert_date, update_date, is_logged_in,
-	shift_startdate_id+@AddDays,
-	shift_startinterval_id
+	f.date_id+@AddDays,
+	f.interval_id, f.person_id, f.scheduled_ready_time_s, f.ready_time_s, f.contract_time_s, f.deviation_schedule_s, f.deviation_schedule_ready_s, f.deviation_contract_s, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.is_logged_in,
+	f.shift_startdate_id+@AddDays,
+	f.shift_startinterval_id
 	from $(TELEOPTIANALYTICS).mart.fact_schedule_deviation f
 	inner join $(TELEOPTIANALYTICS).mart.dim_date d
 		on d.date_id = f.date_id
