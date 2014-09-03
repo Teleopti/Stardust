@@ -21,21 +21,16 @@ where [key] not in (
 ----------------
 
 ----------------
---Move Queue stat one year forward, monday map to monday.
+--Move agent and Queue stat one year forward, monday map to monday.
 ----------------
-declare @TemplateStartDate datetime
-declare @NewStartDate datetime
 declare @DaysToAdd int
-
-set @TemplateStartDate = '2013-02-04'
-set @NewStartDate  =  '2014-02-03'
-select @DaysToAdd = datediff(day,@TemplateStartDate,@NewStartDate)
+set @DaysToAdd = 365
 
 update $(TELEOPTIAGG).dbo.queue_logg
 set date_from = dateadd(day,@DaysToAdd,date_from)
-
 update $(TELEOPTIAGG).dbo.agent_logg
 set date_from = dateadd(day,@DaysToAdd,date_from)
+
 GO
 
 ----------------
@@ -48,8 +43,8 @@ declare @PeriodsToAdd int
 declare @TemplateLength int
 declare @AddDays int
 
-set @TemplateStartDate = '2013-02-04'
-set @TemplateEndDate = '2013-03-03'
+set @TemplateStartDate = '2014-02-03'
+set @TemplateEndDate = '2014-03-02'
 set @PeriodsToAdd = 0
 select @TemplateLength=datediff(DD,@TemplateStartDate,@TemplateEndDate)+1
 
@@ -75,7 +70,25 @@ END
 GO
 
 ----------------
---Copy deviation date from template - 4 week data
+--load all agent,queue,agent_queue from Agg int Mart
+----------------
+declare @start_date smalldatetime
+declare @end_date smalldatetime
+
+SELECT 
+	@start_date=isnull(min(date_date), '1999-12-31'),
+	@end_date=isnull(max(date_date), '1999-12-31')
+FROM $(TELEOPTIANALYTICS).mart.dim_date
+WHERE 
+	date_id > -1
+
+exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_load @start_date,@end_date,-2
+exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_queue_load @start_date,@end_date,-2
+exec $(TELEOPTIANALYTICS).mart.etl_fact_queue_load @start_date,@end_date,-2
+GO
+
+----------------
+--create + copy deviation date from template - 4 week data
 ----------------
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
@@ -84,8 +97,13 @@ declare @PeriodsToAdd int
 declare @TemplateLength int
 declare @AddDays int
 
-set @TemplateStartDate = '2013-02-04'
-set @TemplateEndDate = '2013-03-03'
+set @TemplateStartDate = '2014-02-03'
+set @TemplateEndDate = '2014-03-02'
+
+--create
+exec $(TELEOPTIANALYTICS).mart.etl_fact_schedule_deviation_load @TemplateStartDate,@TemplateEndDate,'928DD0BC-BF40-412E-B970-9B5E015AADEA',0,0
+
+--copy
 set @PeriodsToAdd = 0
 select @TemplateLength=datediff(DD,@TemplateStartDate,@TemplateEndDate)+1
 
@@ -107,27 +125,29 @@ BEGIN
 	inner join $(TELEOPTIANALYTICS).mart.dim_date d
 		on d.date_id = f.date_id
 	where d.date_date <= @TemplateEndDate
-	order by 2
+
+	insert into $(TELEOPTIANALYTICS).mart.fact_schedule
+	select
+	f.schedule_date_id+@AddDays,
+	f.person_id, f.interval_id,
+	dateadd(dd,@AddDays,f.activity_starttime),
+	f.scenario_id, f.activity_id, f.absence_id,
+	f.activity_startdate_id+@AddDays,
+	f.activity_enddate_id+@AddDays,
+	dateadd(dd,@AddDays,f.activity_endtime),
+	f.shift_startdate_id+@AddDays,
+	dateadd(dd,@AddDays,f.shift_starttime),
+	f.shift_enddate_id+@AddDays,
+	dateadd(dd,@AddDays,f.shift_endtime),
+	f.shift_startinterval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.last_publish, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
+	
+	from $(TELEOPTIANALYTICS).mart.fact_schedule f
+	inner join $(TELEOPTIANALYTICS).mart.dim_date d
+		on d.date_id = f.schedule_date_id
+	where d.date_date <= @TemplateEndDate
 
 	select @PeriodsToAdd = @PeriodsToAdd + 1
 END
-GO
-
-----------------
---load all CTI stat from Agg
-----------------
-declare @start_date smalldatetime
-declare @end_date smalldatetime
-SELECT 
-	@start_date=isnull(min(date_date), '1999-12-31'),
-	@end_date=isnull(max(date_date), '1999-12-31')
-FROM $(TELEOPTIANALYTICS).mart.dim_date
-WHERE 
-	date_id > -1
-
-exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_load @start_date,@end_date,-2
-exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_queue_load @start_date,@end_date,-2
-exec $(TELEOPTIANALYTICS).mart.etl_fact_queue_load @start_date,@end_date,-2
 GO
 
 ----------------

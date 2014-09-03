@@ -82,6 +82,7 @@ SET SQLLogin=TeleoptiDemoUser
 SET SQLPwd=TeleoptiDemoPwd2
 cls
 ECHO restoring databases ...
+
 SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\RestoreDatabase.sql" -v BAKFILE="%TELEOPTICCC_BAKFILE%" -v DATAFOLDER="xp_instance_regread" -v DATABASENAME="%TELEOPTICCC%" > "%ROOTDIR%\..\restoreDB.log"
 SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\RestoreAnalytics.sql" -v BAKFILE="%TELEOPTIANALYTICS_BAKFILE%" -v DATAFOLDER="xp_instance_regread" -v DATABASENAME="%TELEOPTIANALYTICS%" >> "%ROOTDIR%\..\restoreDB.log"
 SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\RestoreDatabase.sql" -v BAKFILE="%TELEOPTIAGG_BAKFILE%" -v DATAFOLDER="xp_instance_regread" -v DATABASENAME="%TELEOPTIAGG%"  >> "%ROOTDIR%\..\restoreDB.log"
