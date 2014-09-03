@@ -111,16 +111,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				if (index >= _model.DetailData().Count)break;
 				_model.DetailData().TryGetValue(index, out preferenceCellData);
 
-				// added as a bugfix for 22545 (In Restriction View, the weekly minimum and maximum values are not calculated correct)
 				var projection = preferenceCellData.SchedulePart.ProjectionService().CreateProjection();
 				if (preferenceCellData.SchedulingOption.UseScheduling &&
 				    projection.HasLayers)
 				{
-				    var contractTime = projection.ContractTime();
-				    minTime = minTime.Add(contractTime);
-				    maxTime = maxTime.Add(contractTime);
+					var workTime = projection.WorkTime();
+					minTime = minTime.Add(workTime);
+					maxTime = maxTime.Add(workTime);
 				}
-				// end bugfix
+				
 				else
 					if (preferenceCellData.EffectiveRestriction != null)
 					{
