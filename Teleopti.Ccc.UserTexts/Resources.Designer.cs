@@ -27577,7 +27577,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new bronze badge! Your adherence is above {0}% for one day..
+        ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string YouGotANewBronzeBadgeForAdherence {
             get {
@@ -27586,7 +27586,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new bronze badge! Your handling time is below {0} seconds for one day..
+        ///   Looks up a localized string similar to You got a new bronze badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds..
         /// </summary>
         public static string YouGotANewBronzeBadgeForAHT {
             get {
@@ -27595,7 +27595,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new bronze badge! You have answered {0} or more calls in one day..
+        ///   Looks up a localized string similar to You got a new bronze badge! You have answered more than {0} calls in {1:yyyy-MM-dd}..
         /// </summary>
         public static string YouGotANewBronzeBadgeForAnsweredCalls {
             get {
@@ -27604,7 +27604,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new gold badge! Your adherence is above {0}% on {1} different days..
+        ///   Looks up a localized string similar to You got a new gold badge! Your adherence is above {0} on {1} different days..
         /// </summary>
         public static string YouGotANewGoldBadgeForAdherence {
             get {
@@ -27631,7 +27631,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new silver badge! Your adherence is above {0}% on {1} different days..
+        ///   Looks up a localized string similar to You got a new silver badge! Your adherence is above {0} on {1} different days..
         /// </summary>
         public static string YouGotANewSilverBadgeForAdherence {
             get {

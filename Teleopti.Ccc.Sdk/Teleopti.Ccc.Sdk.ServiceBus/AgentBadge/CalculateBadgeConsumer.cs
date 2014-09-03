@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 
 				// send message
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting);
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting);
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate);
 
 				uow.PersistAll();
 			}
@@ -119,12 +119,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}", message.TimeZoneCode,
-						nextMessageShouldBeProcessed);
+						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}",
+						message.TimeZoneCode, nextMessageShouldBeProcessed);
 			}
 		}
 
-		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadge> newAwardedBadges, IAgentBadgeThresholdSettings setting)
+		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadge> newAwardedBadges,
+			IAgentBadgeThresholdSettings setting, DateOnly calculateDate)
 		{
 			foreach (var badge in newAwardedBadges)
 			{
@@ -160,19 +161,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				if (badge.BronzeBadgeAdded)
 				{
-					var message = string.Format(bronzeBadgeMessageTemplate, threshold);
+					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
 					sendBronzeBadgeMessage(person, badgeType, message);
 				}
 
 				if (badge.SilverBadgeAdded)
 				{
-					var message = string.Format(silverBadgeMessageTemplate, threshold);
+					var message = string.Format(silverBadgeMessageTemplate, threshold, setting.SilverToBronzeBadgeRate);
 					sendSilverBadgeMessage(person, badgeType, message);
 				}
 
 				if (badge.GoldBadgeAdded)
 				{
-					var message = string.Format(goldBadgeMessageTemplate, threshold);
+					var message = string.Format(goldBadgeMessageTemplate, threshold,
+						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
 					sendGoldBadgeMessage(person, badgeType, message);
 				}
 			}
