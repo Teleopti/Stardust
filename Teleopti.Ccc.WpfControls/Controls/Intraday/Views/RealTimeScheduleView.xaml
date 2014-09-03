@@ -82,8 +82,8 @@
                        EnableColumnVirtualization="True"
                        VirtualizingStackPanel.VirtualizationMode="Standard"
 					   EnableRowVirtualization="False"
-                       VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
-                       HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
+                       VerticalGridLinesBrush="DarkGray"
+                       HorizontalGridLinesBrush="DarkGray"
 					   x:Name="RealTimeDataGrid"
 					   x:FieldModifier="private"
 					   ContextMenu="{StaticResource ContextMenuCopy}"
@@ -92,7 +92,7 @@
 			
 			<!--AgentName Column-->
 			<DataGrid.Columns>
-				<DataGridTextColumn HeaderStyle="{StaticResource SpecialLeftHeader}"
+				<DataGridTextColumn  HeaderStyle="{StaticResource SpecialLeftHeader}"
                                              Header="{x:Static Member=userTexts:Resources.AgentName}" 
                                              Width="Auto"
                                              CanUserSort="True"
