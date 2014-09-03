@@ -2430,6 +2430,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
 			{
 				Refresh();
+                validatePersons();
 				return;
 			}
 
@@ -2516,8 +2517,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setThreadCulture();
 			if (_scheduleView != null)
 			{
-				if (!_validation)
-					_personsToValidate.Clear();
 				_scheduleView.ValidatePersons(_personsToValidate);
 			}
 		}
@@ -2907,6 +2906,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_requestView != null && _requestView.NeedUpdate)
 				{
+                   
 					_requestView.UpdatePersonRequestViewModel();
 					_requestView.NeedUpdate = false;
 				}
@@ -4500,7 +4500,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_restrictionPersonsToReload.Add(e.ModifiedPerson);
 
-				if (e.Modifier == ScheduleModifier.UndoRedo)
+				if (e.Modifier == ScheduleModifier.UndoRedo || e.Modifier == ScheduleModifier.Request)
 					_personsToValidate.Add(e.ModifiedPerson);
 
 				_lastModifiedPart = e;
