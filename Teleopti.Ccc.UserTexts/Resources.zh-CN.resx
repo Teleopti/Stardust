@@ -8947,7 +8947,7 @@ Teleopti R&amp;D</value>
     <value>可能有一个子技能和一个或两个父技能重名，或者多个子技能有同样的名称；请检查多站点技能的属性。预测模块会关闭。</value>
   </data>
   <data name="AuditingPageName" xml:space="preserve">
-    <value>审查中</value>
+    <value>审计跟踪</value>
   </data>
   <data name="AuditingReportAbsence" xml:space="preserve">
     <value>缺勤</value>
@@ -8977,7 +8977,7 @@ Teleopti R&amp;D</value>
     <value>使用季节性调整时间储备</value>
   </data>
   <data name="NoRequestsFound" xml:space="preserve">
-    <value>未发现需求</value>
+    <value>未发现申请</value>
   </data>
   <data name="MoveColon" xml:space="preserve">
     <value>优化：</value>
@@ -8989,7 +8989,7 @@ Teleopti R&amp;D</value>
     <value>缺少主题</value>
   </data>
   <data name="ChooseScheduleTagToChange" xml:space="preserve">
-    <value>选择班表标签来变更</value>
+    <value>选择要更改的班表标签</value>
   </data>
   <data name="DeleteTag" xml:space="preserve">
     <value>删除标签</value>
