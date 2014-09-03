@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
             	
                 encryptedAppSettings.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
-				MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance);
             	var application =
             		new InitializeApplication(
             			new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus()),
@@ -174,7 +173,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					return;
 				}
 
-				MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance);
 				var application =
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
