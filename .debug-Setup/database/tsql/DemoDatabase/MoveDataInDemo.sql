@@ -202,6 +202,7 @@ BEGIN
 
 	insert into $(TELEOPTIANALYTICS).mart.fact_schedule
 	select
+	f.shift_startdate_local_id+@AddDays,
 	f.schedule_date_id+@AddDays,
 	f.person_id, f.interval_id,
 	dateadd(dd,@AddDays,f.activity_starttime),
@@ -213,8 +214,7 @@ BEGIN
 	dateadd(dd,@AddDays,f.shift_starttime),
 	f.shift_enddate_id+@AddDays,
 	dateadd(dd,@AddDays,f.shift_endtime),
-	f.shift_startinterval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.last_publish, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
-	
+	f.shift_startinterval_id, f.shift_endinterval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
 	from $(TELEOPTIANALYTICS).mart.fact_schedule f
 	inner join $(TELEOPTIANALYTICS).mart.dim_date d
 		on d.date_id = f.schedule_date_id
