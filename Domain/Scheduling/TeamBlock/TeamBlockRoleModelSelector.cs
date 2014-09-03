@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private readonly IMaxSeatSkillAggregator  _maxSeatSkillAggregator;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
-		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
