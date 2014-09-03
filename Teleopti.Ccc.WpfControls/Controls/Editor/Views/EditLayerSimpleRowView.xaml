@@ -178,8 +178,8 @@
                   HorizontalAlignment="Right"
                   VerticalAlignment="Center" IsHitTestVisible="False">
 				</Path>
-				
-				<Button Command="{Binding Path=UpdateLayerCommand.Command}"
+
+				<Button Padding="15,0" Command="{Binding Path=UpdateLayerCommand.Command}"
 				    MaxHeight="22"
                     Grid.Column="4"
 				    Content="{x:Static UserTexts:Resources.Update}" IsDefault="True" Focusable="True">

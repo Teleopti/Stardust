@@ -3829,6 +3829,7 @@
     <None Include="Resources\Forecasts.ico" />
     <None Include="Resources\Forecasts_filled_simplified_16x16.png" />
     <None Include="Resources\Forecasts2_filled_16x16.png" />
+    <None Include="Resources\Forecasts2_filled_32x32.png" />
     <Content Include="Resources\graphhs.png" />
     <Content Include="Resources\heart_8x8.png" />
     <Content Include="Resources\help_32.png" />
