@@ -7,7 +7,6 @@
         <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="..\..\Resources\CommonBrushes.xaml"/>
-            <ResourceDictionary Source="..\..\Resources\Common.xaml"/>
         </ResourceDictionary.MergedDictionaries>
         
         <DataTemplate DataType="{x:Type WincodeInterop:MultipleHostViewModel}" x:Key="View">
