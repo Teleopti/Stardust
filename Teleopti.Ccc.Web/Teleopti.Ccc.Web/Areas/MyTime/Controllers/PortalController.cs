@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		public ActionResult Index()
 		{
-			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.AgentPortal);
+			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.MyTime);
 
 			var portalViewModel = _viewModelFactory.CreatePortalViewModel();
 			return View(portalViewModel);
