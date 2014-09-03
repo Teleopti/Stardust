@@ -165,6 +165,16 @@ GO
 ----------------
 --create + copy deviation date from template - 4 week data
 ----------------
+--run v8 convert to local date
+declare @count int
+set @count=1
+WHILE @count > 0
+BEGIN
+	EXEC $(TELEOPTIANALYTICS).[mart].[etl_execute_delayed_job]
+	SELECT @count=count(*)
+	FROM $(TELEOPTIANALYTICS).mart.etl_job_delayed
+END 
+
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
 declare @MondayThreeWeeksAgo datetime
