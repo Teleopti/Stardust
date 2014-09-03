@@ -12,20 +12,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 	[TestFixture]
 	public class MessageBrokerHubTest
 	{
-		public void ShouldHaveCoverageForLogging()
-		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
-			var hubBuilder = new TestHubBuilder();
-			var client = hubBuilder.FakeClient("onEventMessage", new Action<Notification, string>((n, r) => { }));
-			hubBuilder.SetupHub(target, client);
-			target.Logger = MockRepository.GenerateMock<ILog>();
-			target.Logger.Stub(x => x.IsDebugEnabled).Return(true);
-
-			target.AddSubscription(new Subscription());
-			target.RemoveSubscription("something");
-			target.NotifyClients(new Notification());
-		}
-
+		[Test]
 		public void ShouldSubscribe()
 		{
 			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
@@ -72,10 +59,10 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var _ponged = false;
 			var client = hubBuilder.FakeClient(
 				"Pong",
-				new Action(() =>
+				() =>
 				{
 					_ponged = true;
-				}));
+				});
 			hubBuilder.SetupHub(target, client);
 
 			target.Ping();
@@ -91,10 +78,10 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var pongedWith = 0d;
 			var client = hubBuilder.FakeClient<double>(
 				"Pong",
-				new Action<double>((d) =>
+				d =>
 				{
 					pongedWith = d;
-				}));
+				});
 			hubBuilder.SetupHub(target, client);
 
 			target.PingWithId(12);
@@ -113,10 +100,10 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var numberOfpongs = 0;
 			var client = hubBuilder.FakeClient(
 				"Pong",
-				new Action(() =>
+				() =>
 				{
 					numberOfpongs++;
-				}));
+				});
 			hubBuilder.SetupHub(target, client);
 
 			

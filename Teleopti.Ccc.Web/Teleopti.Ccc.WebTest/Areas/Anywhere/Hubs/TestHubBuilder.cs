@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -11,27 +9,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	public class TestHubBuilder
 	{
-		public dynamic FakeClient(string methodName, Action action)
-		{
-			IDictionary<string, object> caller = new ExpandoObject();
-			caller[methodName] = action;
-			return caller;
-		}
-
-		public dynamic FakeClient<T>(string methodName, Action<T> action)
-		{
-			IDictionary<string, object> caller = new ExpandoObject();
-			caller[methodName] = action;
-			return caller;
-		}
-
-		public dynamic FakeClient<T, T2>(string methodName, Action<T, T2> action)
-		{
-			IDictionary<string, object> caller = new ExpandoObject();
-			caller[methodName] = action;
-			return caller;
-		}
-
 		public void SetupHub(TestableHub hub)
 		{
 			hub.Context = new HubCallerContext(null, "connection");
@@ -53,6 +30,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var task = Task.Factory.StartNew(() => { });
 			Task.WaitAll(task);
 			return task;
+		}
+
+
+		public dynamic FakeClient(string methodName, Action action)
+		{
+			return new FakeClientBuilder().Make(methodName, action);
+		}
+
+		public dynamic FakeClient<T>(string methodName, Action<T> action)
+		{
+			return new FakeClientBuilder().Make(methodName, action);
+		}
+
+		public dynamic FakeClient<T, T2>(string methodName, Action<T, T2> action)
+		{
+			return new FakeClientBuilder().Make(methodName, action);
 		}
 	}
 }
