@@ -244,8 +244,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			 builder.RegisterType<TeamBlockMoveTimeBetweenDaysService>().As<ITeamBlockMoveTimeBetweenDaysService>();
 			 builder.RegisterType<TeamBlockMoveTimeOptimizer>().As<ITeamBlockMoveTimeOptimizer>();
 			 builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>();
-			 builder.RegisterType<ConstructAndScheduleSingleDayTeamBlock>().As<IConstructAndScheduleSingleDayTeamBlock>();
-			 builder.RegisterType<DeleteSelectedDaysForTeam>().As<IDeleteSelectedDaysForTeam>();
 	    }
 
 	    private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
@@ -381,7 +379,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockOpenHourService>().As<ITeamBlockOpenHourService>();
 			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>();
 			builder.RegisterType<ActivityIntervalDataCreator>().As<IActivityIntervalDataCreator>();
-			//IActivityIntervalDataCreator
+			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>();
+			builder.RegisterType<FirstShiftInTeamBlockFinder>().As<IFirstShiftInTeamBlockFinder>();
+			//IFirstShiftInTeamBlockFinder
 		}
 
         private void registerTeamBlockOptimizationService(ContainerBuilder builder)

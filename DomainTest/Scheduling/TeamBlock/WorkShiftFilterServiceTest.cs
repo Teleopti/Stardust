@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var caches = getCashes();
 			using (_mocks.Record())
 			{
+				Expect.Call(_matrix.Person).Return(_person);
 				Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
@@ -249,6 +250,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var caches = getCashes();
 			using (_mocks.Record())
 			{
+				Expect.Call(_matrix.Person).Return(_person);
 				Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
@@ -288,6 +290,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var caches = getCashes();
 			using (_mocks.Record())
 			{
+				Expect.Call(_matrix.Person).Return(_person);
 				Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
@@ -361,6 +364,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var caches = getCashes();
 			using (_mocks.Record())
 			{
+				Expect.Call(_matrix.Person).Return(_person);
 				Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))

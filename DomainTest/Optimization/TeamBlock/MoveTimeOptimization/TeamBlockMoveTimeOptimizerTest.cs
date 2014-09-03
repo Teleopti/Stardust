@@ -4,8 +4,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
@@ -25,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private ITeamBlockMoveTimeDescisionMaker _decisionMaker;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
-		private IConstructAndScheduleSingleDayTeamBlock _constructAndScheduleSingleDayTeamBlock;
 		private IPeriodValueCalculator _periodValueCalculator;
 		private DateOnly _today;
 		private IScheduleDayPro _scheduleDayPro1;
@@ -36,8 +37,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private IVisualLayerCollection _visualLayerCollection1;
 		private IVisualLayerCollection _visualLayerCollection2;
 		private IScheduleDayPro _scheduleDayPro2;
-		private IDeleteSelectedDaysForTeam _deleteSelectedDaysForTeam;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
+		private ITeamBlockClearer _teamBlockClearer;
+		private ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private ITeamBlockScheduler _teamBlockScheduler;
+		private ITeamInfo _teamInfo;
+		private IResourceCalculateDelayer _resourceCalulateDelayer;
+		private ITeamBlockInfo _teamBlockInfo;
+		private ShiftNudgeDirective _shiftNudgeDirective;
 
 		[SetUp]
 		public void Setup()
@@ -46,9 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_schedulingOptionsCreator = _mock.StrictMock<ISchedulingOptionsCreator>();
 			_decisionMaker = _mock.StrictMock<ITeamBlockMoveTimeDescisionMaker>();
 			_resourceOptimizationHelper = _mock.StrictMock<IResourceOptimizationHelper>();
-			_constructAndScheduleSingleDayTeamBlock = _mock.StrictMock<IConstructAndScheduleSingleDayTeamBlock>();
-			_deleteSelectedDaysForTeam = _mock.StrictMock<IDeleteSelectedDaysForTeam>();
-			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _resourceOptimizationHelper, _constructAndScheduleSingleDayTeamBlock,_deleteSelectedDaysForTeam);
+			_teamBlockClearer = _mock.StrictMock<ITeamBlockClearer>();
+			_teamBlockInfoFactory = _mock.StrictMock<ITeamBlockInfoFactory>();
+			_teamBlockScheduler = _mock.StrictMock<ITeamBlockScheduler>();
+			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _teamBlockClearer, _teamBlockInfoFactory, _teamBlockScheduler);
 			_matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro> { _matrix1 };
 			_schedulingOptions = new SchedulingOptions();
@@ -67,6 +75,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_visualLayerCollection1 = _mock.StrictMock<IVisualLayerCollection>();
 			_visualLayerCollection2 = _mock.StrictMock<IVisualLayerCollection>();
 			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
+			_teamInfo = _mock.StrictMock<ITeamInfo>();
+			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
+			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
+			_shiftNudgeDirective = new ShiftNudgeDirective();
 		}
 
 		[ Test]
@@ -74,14 +86,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
 				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly>());
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsFalse(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-					_schedulingResultStateHolder, _matrix1,_matrixList));
+				Assert.IsFalse(_target.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _resourceCalulateDelayer));
 			}
 		}
 
@@ -89,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		{
 			Expect.Call(_matrix1.GetScheduleDayByKey(date)).Return(scheduleDayPro);
 			Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
-			Expect.Call(scheduleDay.Clone()).Return(scheduleDay);
+			
 			Expect.Call(scheduleDay.ProjectionService()).Return(projectionService);
 			Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
 			Expect.Call(visualLayerCollection.ContractTime()).Return(contractTime);
@@ -111,16 +124,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsFalse(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-					_schedulingResultStateHolder, _matrix1, _matrixList));
+				Assert.IsFalse(_target.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _resourceCalulateDelayer));
 			}
 		}
 
 		[ Test]
 		public void ShouldReturnTrueIfHigherContractTime()
 		{
-			using (_mock.Record())
-			{
+
 				using (_mock.Record())
 				{
 					Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
@@ -131,56 +143,52 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(8));
 					commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(7));
 
+					Expect.Call(_teamInfo.MatrixesForGroupAndDate(new DateOnly(2014,5,15))).Return(_matrixList);
 					Expect.Call(() => _matrix1.LockPeriod(new DateOnlyPeriod(_today.AddDays(1), _today.AddDays(1))));
 				}
 				using (_mock.Playback())
 				{
-					Assert.IsTrue(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-						_schedulingResultStateHolder, _matrix1, _matrixList));
+					Assert.IsTrue(_target.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _resourceCalulateDelayer));
 				}
-			}
-			using (_mock.Playback())
-			{
 
-			}
 		}
 
 		[Test]
 		public void ShouldOptimizeSuccessfully()
 		{
-			var datePeriod = new DateOnlyPeriod(2014, 05, 13, 2014, 05, 15);
-			using (_mock.Record())
-			{
+
+
 				using (_mock.Record())
 				{
+					Expect.Call(() => _rollbackService.ClearModificationCollection());
 					Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+					Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 14),
+						_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+					Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+					Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 15),
+						_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+					Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
 					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
 
-					Expect.Call(()=>_deleteSelectedDaysForTeam.PerformDelete(_matrixList, _today, _today.AddDays(1), _rollbackService, true));
-					Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.Twice() ;
-					Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(datePeriod).Repeat.Twice() ;
-
-					Expect.Call(() => _rollbackService.ClearModificationCollection());
+					Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 14), _schedulingOptions,
+						_rollbackService, _resourceCalulateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).IgnoreArguments().Return(true);
+					Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 15), _schedulingOptions,
+						_rollbackService, _resourceCalulateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).IgnoreArguments().Return(true);
+					
 					commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(7));
 					commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(8));
 
-					Expect.Call(_constructAndScheduleSingleDayTeamBlock.Schedule(_matrixList, _today, _matrix1, _schedulingOptions,
-						_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _optimizationPreferences)).IgnoreArguments() .Return(true);
-					Expect.Call(_constructAndScheduleSingleDayTeamBlock.Schedule(_matrixList, _today.AddDays(1), _matrix1, _schedulingOptions,
-						_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _optimizationPreferences)).IgnoreArguments().Return(true);
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(4);
 				}
 				using (_mock.Playback())
 				{
-					Assert.IsTrue(_target.OptimizeMatrix(_optimizationPreferences, _matrixList, _rollbackService, _periodValueCalculator,
-						_schedulingResultStateHolder, _matrix1, _matrixList));
+					Assert.IsTrue(_target.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+					_schedulingResultStateHolder, _resourceCalulateDelayer));
 				}
-			}
-			using (_mock.Playback())
-			{
+			
 
-			}
 		}
 	}
 }

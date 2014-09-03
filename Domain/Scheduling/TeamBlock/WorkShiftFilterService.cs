@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
 				person.PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
+
 			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 				person, matrixList, isSameOpenHoursInBlock);
 			shiftList = runFiltersForRoleModel2(shiftList, teamBlockInfo, finderResult);
@@ -196,7 +197,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (sameOpenHours)
             {
                 shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, finderResult);
-                shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
+	            IScheduleMatrixPro matrixForPerson = null;
+	            foreach (var scheduleMatrixPro in matrixList)
+	            {
+		            if (scheduleMatrixPro.Person.Equals(person))
+		            {
+			            matrixForPerson = scheduleMatrixPro;
+						break;
+		            }
+	            }
+				shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions);
             }
             
             

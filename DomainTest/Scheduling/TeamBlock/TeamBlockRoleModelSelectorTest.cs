@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private PeriodValueCalculationParameters _periodValueCalculationParameters;
 		private IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private IMaxSeatSkillAggregator _maxSeatSkillAggregator;
+		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 
 		[SetUp]
 		public void Setup()
@@ -54,13 +56,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
 			_maxSeatInformationGeneratorBasedOnIntervals = _mocks.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			_maxSeatSkillAggregator = _mocks.StrictMock<IMaxSeatSkillAggregator>();
+			_firstShiftInTeamBlockFinder = _mocks.StrictMock<IFirstShiftInTeamBlockFinder>();
 			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
 													 _workShiftSelector,
 													 _schedulingResultStateHolder,
-													 _activityIntervalDataCreator, _maxSeatInformationGeneratorBasedOnIntervals, _maxSeatSkillAggregator);
-			_periodValueCalculationParameters = new PeriodValueCalculationParameters(_schedulingOptions.WorkShiftLengthHintOption,
-																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false, new Dictionary<DateTime, IntervalLevelMaxSeatInfo >(), false);
+													 _activityIntervalDataCreator, 
+													 _maxSeatInformationGeneratorBasedOnIntervals, 
+													 _maxSeatSkillAggregator,
+													 _firstShiftInTeamBlockFinder);
+			_periodValueCalculationParameters = new PeriodValueCalculationParameters(
+				_schedulingOptions.WorkShiftLengthHintOption,
+				_schedulingOptions.UseMinimumPersons,
+				_schedulingOptions.UseMaximumPersons, MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, false,
+				new Dictionary<DateTime, IntervalLevelMaxSeatInfo>(), false);
 		}
 
 		[Test]
@@ -86,6 +94,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			using (_mocks.Record())
 			{
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedulingResultStateHolder))
+					.Return(null);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo);
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers);
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
@@ -115,6 +125,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedulingResultStateHolder))
+					.Return(null);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);
@@ -151,6 +163,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlockInfo, _person, _dateOnly, _schedulingResultStateHolder))
+					.Return(null);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teaminfo).Repeat.Twice();
 				Expect.Call(_teaminfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
 				Expect.Call(_restrictionAggregator.Aggregate(_dateOnly, _person, _teamBlockInfo, _schedulingOptions)).Return(restriction);

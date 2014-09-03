@@ -11,5 +11,7 @@ namespace Teleopti.Interfaces.Domain
        
         IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly, TimeZoneInfo timeZone,
                                                     IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded);
+
+	    IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, DateOnly currentDate, TimeZoneInfo agentTimeZone);
     }
 }
