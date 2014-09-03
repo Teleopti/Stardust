@@ -54,7 +54,24 @@ SELECT @userid,@identity
 
 --Add currect user to IIS-users: update aspnet_users
 UPDATE $(TELEOPTIANALYTICS).dbo.aspnet_Users
-SET UserName=system_user,LoweredUserName=system_user
+SET
+	UserName=@WinDomain+'\'+@WinUser,
+	LoweredUserName=@WinDomain+'\'+@WinUser
 WHERE userid=@userid
 
+update $(TELEOPTIANALYTICS).dbo.aspnet_Users
+set LoweredUserName = lower(LoweredUserName)
+
 --Add permissions on all reports
+truncate table $(TELEOPTIANALYTICS).mart.permission_report
+
+insert into $(TELEOPTIANALYTICS).mart.permission_report
+select @userid,t.team_id,0,bu.business_unit_id,1,getdate(),Id
+from $(TELEOPTIANALYTICS).mart.report
+inner join $(TELEOPTIANALYTICS).mart.dim_team t
+            on 1=1
+            and t.team_id > -1
+inner join $(TELEOPTIANALYTICS).mart.dim_business_unit bu
+            on 1=1
+            and bu.business_unit_id > -1
+GO

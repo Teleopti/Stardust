@@ -1,6 +1,8 @@
-:SETVAR TELEOPTIAGG main_DemoSales_TeleoptiCCCAgg
-:SETVAR TELEOPTIANALYTICS DJ
-:SETVAR TELEOPTIAPP main_DemoSales_TeleoptiCCC7
+:SETVAR TELEOPTIAGG TeleoptiCCC7Agg_Demo
+:SETVAR TELEOPTIANALYTICS TeleoptiAnalytics_Demo
+:SETVAR TELEOPTIAPP TeleoptiCCC7_Demo
+USE master
+GO
 
 declare @SQL2008R2 nvarchar(5)
 declare @productversion nvarchar(5)
@@ -10,51 +12,104 @@ set @productversion = substring(cast(SERVERPROPERTY('productversion') as nvarcha
 IF @productversion<>@SQL2008R2
 Raiserror ('You must fix and backup your demo database on SQL 2008 R2 in order for others to restore databases on that version',20,1) WITH LOG
 
---delete all fact data
+--delete fact data that can be re-created from Agg + schedule
 truncate table $(TELEOPTIANALYTICS).mart.fact_agent
 truncate table $(TELEOPTIANALYTICS).mart.fact_queue
 truncate table $(TELEOPTIANALYTICS).mart.fact_agent_queue
-truncate table $(TELEOPTIANALYTICS).mart.fact_agent_skill
-truncate table $(TELEOPTIANALYTICS).mart.fact_forecast_workload
-truncate table $(TELEOPTIANALYTICS).mart.fact_hourly_availability
-truncate table $(TELEOPTIANALYTICS).mart.fact_kpi_targets_team
 truncate table $(TELEOPTIANALYTICS).mart.fact_quality
-truncate table $(TELEOPTIANALYTICS).mart.fact_request
-truncate table $(TELEOPTIANALYTICS).mart.fact_requested_days
-truncate table $(TELEOPTIANALYTICS).mart.fact_schedule
-truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_day_count
---truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
-truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_forecast_skill
-truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_preference
-truncate table $(TELEOPTIANALYTICS).mart.bridge_time_zone
+truncate table $(TELEOPTIANALYTICS).mart.fact_schedule_deviation
 
---clean out unwanted data
+--clean out unwanted data from Agg
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
 set @TemplateEndDate = '2013-03-03'
 set @TemplateStartDate = '2013-02-04'
 
-delete from f
-FROM $(TELEOPTIANALYTICS).mart.fact_schedule_deviation f
-INNER JOIN $(TELEOPTIANALYTICS).mart.dim_date d
-	ON d.date_id = f.date_id
- WHERE d.date_date > @TemplateEndDate --unwanted days after template period
 delete from $(TELEOPTIAGG).dbo.agent_logg where date_from > @TemplateEndDate --unwanted days after template period
 delete from $(TELEOPTIAGG).dbo.queue_logg where date_from > @TemplateEndDate --unwanted days after template period
 
 update $(TELEOPTIANALYTICS).dbo.aspnet_users set LoweredUserName=''
 update $(TELEOPTIANALYTICS).dbo.aspnet_users set UserName=''
 
-delete b
-from $(TELEOPTIANALYTICS).mart.dim_date d
-inner join $(TELEOPTIANALYTICS).mart.bridge_time_zone b
-on d.date_id = b.date_id
-where d.date_date > '2015-05-20 00:00:00'
+--clean out unwanted fact data from Analytics
+set @TemplateStartDate = '2014-02-03'
+set @TemplateEndDate = '2014-03-02'
 
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_forecast_workload f
+where date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_hourly_availability f
+where date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_request f
+where request_start_date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_requested_days f
+where request_date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_schedule f
+where schedule_date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_schedule_day_count f
+where date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_schedule_forecast_skill f
+where date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+
+delete f
+from $(TELEOPTIANALYTICS).mart.fact_schedule_preference f
+where date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @TemplateStartDate and @TemplateEndDate
+	)
+GO
+
+declare @DatesEndDate datetime
+declare @DatesStartDate datetime
+set @DatesStartDate = '2013-02-04'
+set @DatesEndDate = '2015-05-20'
+
+delete b
+from $(TELEOPTIANALYTICS).mart.bridge_time_zone b
+where date_id not in (
+	select date_id from $(TELEOPTIANALYTICS).mart.dim_date d
+	where d.date_date between @DatesStartDate-1 and @DatesEndDate+1
+	)
+
+GO
 delete from $(TELEOPTIAPP).dbo.WindowsAuthenticationInfo
 delete $(TELEOPTIAPP).dbo.license
 delete $(TELEOPTIAPP).dbo.licensestatus
 
+GO
 truncate table $(TELEOPTIANALYTICS).stage.stg_request
 truncate table $(TELEOPTIANALYTICS).stage.stg_skill
 truncate table $(TELEOPTIANALYTICS).stage.stg_schedule_changed
@@ -110,7 +165,6 @@ dbcc shrinkfile(TeleoptiAnalytics_Mart,1)
 GO
 dbcc shrinkfile(TeleoptiAnalytics_Log,1)
 GO
-
 sp_helpfile
 GO
 
@@ -133,9 +187,12 @@ sp_helpfile
 GO
 
 --backup
+use master
+GO
 backup database $(TELEOPTIAGG) TO disk='c:\TeleoptiCCC7Agg_Demo.bak' WITH INIT, stats=5
 backup database $(TELEOPTIAPP) TO disk='c:\TeleoptiCCC7_Demo.bak' WITH INIT, stats=5
 backup database $(TELEOPTIANALYTICS) TO disk='c:\TeleoptiAnalytics_Demo.bak' WITH INIT, stats=5
 backup database $(TELEOPTIAGG) TO disk='c:\DemoSales_TeleoptiCCCAgg.bak' WITH INIT, stats=5
 backup database $(TELEOPTIAPP) TO disk='c:\DemoSales_TeleoptiCCC7.bak' WITH INIT, stats=5
 backup database $(TELEOPTIANALYTICS) TO disk='c:\DemoSales_TeleoptiAnalytics.bak' WITH INIT, stats=5
+GO
