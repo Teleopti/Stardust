@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
-			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
+			var businessUnit = businessUnits.Single(b => b.Name == businessUnitName);
 			
 			if (result.Successful)
 			{
