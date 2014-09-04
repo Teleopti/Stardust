@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Globalization;
@@ -265,8 +266,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_tmpTimer.Enabled = false;
 			updateShiftEditor();
-            if(_showInfoPanel && RightToLeftLayout) schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
-			enableRibbonForRequests(_currentZoomLevel.Equals(ZoomLevel.RequestView));
+            if(_showInfoPanel) schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
 		private void dateNavigateControlClosedPopup(object sender, EventArgs e)
@@ -3847,15 +3847,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void enableRibbonForRequests(bool value)
 		{
-			toolStripTabItem1.Visible = value;
-			toolStripTabItemHome.Visible = !value;
+			toolStripTabItem1.Enabled = value;
+			toolStripTabItemHome.Enabled = !value;
+
+			var textInfo = TeleoptiPrincipal.Current.Regional.Culture.TextInfo;
+			var home = textInfo.ToUpper(Resources.Home);
+			var requests = textInfo.ToUpper(Resources.RequestsMenu);
+
 			if (value)
 			{
 				updateRequestCommandsAvailability();
 				toolStripTabItem1.Checked = true;
+				toolStripTabItem1.Text = requests;
+				toolStripTabItemHome.Text = string.Empty;
 			}
 			else
 			{
+				toolStripTabItemHome.Text = home;
+				toolStripTabItem1.Text = string.Empty;
 				toolStripExHandleRequests.Enabled = false;
 			}
 		}
@@ -6190,7 +6199,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void backStage1VisibleChanged(object sender, EventArgs e)
         {
-	        if (!backStage1.Visible) _tmpTimer.Enabled = true;
+			if (!backStage1.Visible && RightToLeftLayout) _tmpTimer.Enabled = true;
         }
 
 		private void toolStripSplitButtonSchedule_EnabledChanged(object sender, EventArgs e)
