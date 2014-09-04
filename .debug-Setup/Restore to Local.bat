@@ -329,7 +329,7 @@ ECHO.
 
 CD "%ROOTDIR%"
 
-IF "%IFFLOW%"=="y" (
+IF "%Customer%"=="DemoSales" (
 ECHO ------
 ECHO Move DemoSales data ...
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\MoveDataInDemo.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" >> "%ROOTDIR%\fixData.log"
