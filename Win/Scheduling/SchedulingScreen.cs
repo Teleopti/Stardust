@@ -265,7 +265,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_tmpTimer.Enabled = false;
 			updateShiftEditor();
-            if(_showInfoPanel) schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+            if(_showInfoPanel && RightToLeftLayout) schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+			enableRibbonForRequests(_currentZoomLevel.Equals(ZoomLevel.RequestView));
 		}
 
 		private void dateNavigateControlClosedPopup(object sender, EventArgs e)
@@ -6189,7 +6190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void backStage1VisibleChanged(object sender, EventArgs e)
         {
-            if (!backStage1.Visible && RightToLeftLayout) _tmpTimer.Enabled = true;
+	        if (!backStage1.Visible) _tmpTimer.Enabled = true;
         }
 
 		private void toolStripSplitButtonSchedule_EnabledChanged(object sender, EventArgs e)
