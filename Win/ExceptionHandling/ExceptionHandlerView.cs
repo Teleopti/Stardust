@@ -2,14 +2,14 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 
 namespace Teleopti.Ccc.Win.ExceptionHandling
 {
-    public partial class ExceptionHandlerView : Form, IExceptionHandlerView, ILocalized
+    public partial class ExceptionHandlerView : BaseDialogForm, IExceptionHandlerView
     {
-        private ExceptionHandlerPresenter _exceptionHandlerPresenter;
+        private readonly ExceptionHandlerPresenter _exceptionHandlerPresenter;
 
         public ExceptionHandlerView(ExceptionHandlerModel exceptionHandlerModel):this()
         {
@@ -96,21 +96,20 @@ namespace Teleopti.Ccc.Win.ExceptionHandling
             get { return RightToLeft; }
         }
 
-        private void buttonPopEmail_Click(object sender, EventArgs e)
+        private void buttonPopEmailClick(object sender, EventArgs e)
         {
             _exceptionHandlerPresenter.PopEmail();
         }
 
-        private void buttonCloseApplication_Click(object sender, EventArgs e)
+        private void buttonCloseApplicationClick(object sender, EventArgs e)
         {
             _exceptionHandlerPresenter.Close();
         }
 
-        private void linkLabelCopy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkLabelCopyLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             _exceptionHandlerPresenter.CopyToClipboard();
         }
 
-        public void SetTexts() { new LanguageResourceHelper().SetTexts(this); }
     }
 }
