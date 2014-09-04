@@ -58,14 +58,14 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(587, 693);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(587, 689);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// treeViewAdvLoV
 			// 
 			this.treeViewAdvLoV.AccelerateScrolling = Syncfusion.Windows.Forms.AccelerateScrollingBehavior.Immediate;
 			this.treeViewAdvLoV.BackColor = System.Drawing.Color.White;
-			this.treeViewAdvLoV.BeforeTouchSize = new System.Drawing.Size(581, 654);
+			this.treeViewAdvLoV.BeforeTouchSize = new System.Drawing.Size(581, 650);
 			this.treeViewAdvLoV.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewAdvLoV.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.treeViewAdvLoV.CanSelectDisabledNode = false;
@@ -91,7 +91,7 @@
 			this.treeViewAdvLoV.ShowCheckBoxes = true;
 			this.treeViewAdvLoV.ShowFocusRect = false;
 			this.treeViewAdvLoV.ShowPlusMinus = false;
-			this.treeViewAdvLoV.Size = new System.Drawing.Size(581, 654);
+			this.treeViewAdvLoV.Size = new System.Drawing.Size(581, 650);
 			this.treeViewAdvLoV.SortWithChildNodes = true;
 			this.treeViewAdvLoV.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewAdvLoV.TabIndex = 33;
@@ -116,7 +116,7 @@
 			this.btnOk.Dock = System.Windows.Forms.DockStyle.Right;
 			this.btnOk.ForeColor = System.Drawing.Color.White;
 			this.btnOk.IsBackStageButton = false;
-			this.btnOk.Location = new System.Drawing.Point(497, 663);
+			this.btnOk.Location = new System.Drawing.Point(497, 659);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(87, 27);
 			this.btnOk.TabIndex = 34;
@@ -128,7 +128,9 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(587, 693);
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ClientSize = new System.Drawing.Size(587, 689);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.HelpButton = false;

@@ -73,9 +73,9 @@
 			this.dateTimePickerAdv1.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdv1.Calendar.BottomHeight = 25;
 			this.dateTimePickerAdv1.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
-			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.Color.Black;
-			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
+			this.dateTimePickerAdv1.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.dateTimePickerAdv1.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.dateTimePickerAdv1.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.dateTimePickerAdv1.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateTimePickerAdv1.Calendar.Font = new System.Drawing.Font("Tahoma", 8F);
 			this.dateTimePickerAdv1.Calendar.ForeColor = System.Drawing.SystemColors.ControlText;

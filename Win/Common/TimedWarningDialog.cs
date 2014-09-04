@@ -11,7 +11,7 @@ using Point=System.Drawing.Point;
 
 namespace Teleopti.Ccc.Win.Common
 {
-    public partial class TimedWarningDialog : BaseRibbonForm
+    public partial class TimedWarningDialog : BaseDialogForm
     {
 
         private Timer _timer;

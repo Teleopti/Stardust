@@ -3,63 +3,56 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Windows.Forms;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common
 {
-	public partial class MessageBoxWithListView : BaseRibbonForm
-    {
-        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
-        public MessageBoxWithListView(string text, string caption, IEnumerable<IUnsavedDayInfo> detailList)
+	public partial class MessageBoxWithListView : BaseDialogForm
+	{
+		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
+		public MessageBoxWithListView(string text, string caption, IEnumerable<IUnsavedDayInfo> detailList)
 		{
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
-			SetColor(); 
-			
-			SetMessage(text);
-			SetCaption(caption);
-            SetListView(detailList);
-		}
-		
-		private void SetColor()
-		{
-			BackColor = ColorHelper.DialogBackColor();
+
+			setMessage(text);
+			setCaption(caption);
+			setListView(detailList);
 		}
 
-        private void SetListView(IEnumerable<IUnsavedDayInfo> detailList)
+		private void setListView(IEnumerable<IUnsavedDayInfo> detailList)
 		{
 			listViewDetails.Items.Clear();
 			var id = 1;
 			foreach (var detail in detailList)
 			{
-			    var item = new ListViewItem(Convert.ToString(id++, CultureInfo.CurrentCulture));
-			    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, detail.DateTime.ToShortDateString(CultureInfo.CurrentUICulture)));
-			    item.SubItems.Add(new ListViewItem.ListViewSubItem(item, detail.Scenario.Description.Name));
-			    listViewDetails.Items.Add(item);
+				var item = new ListViewItem(Convert.ToString(id++, CultureInfo.CurrentCulture));
+				item.SubItems.Add(new ListViewItem.ListViewSubItem(item, detail.DateTime.ToShortDateString(CultureInfo.CurrentUICulture)));
+				item.SubItems.Add(new ListViewItem.ListViewSubItem(item, detail.Scenario.Description.Name));
+				listViewDetails.Items.Add(item);
 			}
-            listViewDetails.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+			listViewDetails.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 		}
 
-		private void SetCaption(string caption)
+		private void setCaption(string caption)
 		{
 			Text = caption;
 		}
 
-		private void SetMessage(string text)
+		private void setMessage(string text)
 		{
 			lableMessage.Text = text;
 		}
 
-		private void listViewDetails_KeyDown(object sender, KeyEventArgs e)
+		private void listViewDetailsKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode == Keys.C)
-				Copy();
+				copy();
 			else if (e.Control && e.KeyCode == Keys.A)
-				SelectAllFromListView();
+				selectAllFromListView();
 		}
 
-		private void SelectAllFromListView()
+		private void selectAllFromListView()
 		{
 			foreach (ListViewItem item in listViewDetails.Items)
 			{
@@ -67,17 +60,17 @@ namespace Teleopti.Ccc.Win.Common
 			}
 		}
 
-		private void Copy()
+		private void copy()
 		{
-		    _externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
+			_externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
 			var str = new StringBuilder();
-            foreach (ColumnHeader header in listViewDetails.Columns)
-            {
-                str.Append(header.Text); str.Append('\t');
-            }
+			foreach (ColumnHeader header in listViewDetails.Columns)
+			{
+				str.Append(header.Text); str.Append('\t');
+			}
 			str.AppendLine();
 
-			foreach(ListViewItem item in listViewDetails.SelectedItems)
+			foreach (ListViewItem item in listViewDetails.SelectedItems)
 			{
 				foreach (ListViewItem.ListViewSubItem subitem in item.SubItems)
 				{
@@ -85,13 +78,13 @@ namespace Teleopti.Ccc.Win.Common
 				}
 				str.AppendLine();
 			}
-			
+
 			var dataObject = new DataObject();
 			dataObject.SetData(DataFormats.Text, true, str);
-		    _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetDataObject(dataObject, true));
+			_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetDataObject(dataObject, true));
 		}
 
-		private void listViewDetails_MouseUp(object sender, MouseEventArgs e)
+		private void listViewDetailsMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
 			{
@@ -100,15 +93,15 @@ namespace Teleopti.Ccc.Win.Common
 			}
 		}
 
-		private void ToolStripMenuItemCopy_Click(object sender, EventArgs e)
+		private void toolStripMenuItemCopyClick(object sender, EventArgs e)
 		{
-			Copy();
+			copy();
 		}
 
-        private void buttonOk_Click_1(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-            Close();
-        }
+		private void buttonOkClick1(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
+			Close();
+		}
 	}
 }

@@ -103,14 +103,14 @@
 			this.buttonAdvCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(101, 31);
+			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(405, 194);
-			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(12, 12, 12, 12);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(419, 198);
+			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(12);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvCancel.Size = new System.Drawing.Size(101, 31);
+			this.buttonAdvCancel.Size = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.TabIndex = 7;
 			this.buttonAdvCancel.Text = "Cancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
@@ -173,7 +173,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
-			this.BorderColor = System.Drawing.Color.Blue;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
 			this.ClientSize = new System.Drawing.Size(518, 237);
 			this.ControlBox = false;

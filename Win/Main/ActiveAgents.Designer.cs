@@ -38,21 +38,24 @@
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(720, 676);
+			this.textBox1.Size = new System.Drawing.Size(707, 776);
 			this.textBox1.TabIndex = 0;
-			this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+			this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1KeyDown);
 			// 
 			// ActiveAgents
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(720, 676);
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ClientSize = new System.Drawing.Size(707, 776);
 			this.Controls.Add(this.textBox1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MinimizeBox = false;
 			this.Name = "ActiveAgents";
 			this.ShowIcon = false;
 			this.Text = "ActiveAgents";
-			this.Load += new System.EventHandler(this.ActiveAgents_Load);
+			this.Load += new System.EventHandler(this.activeAgentsLoad);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

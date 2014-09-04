@@ -43,15 +43,15 @@
 			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvCancel.AutoSize = true;
 			this.buttonAdvCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(402, 536);
-			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(10);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(534, 615);
+			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvCancel.Size = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.TabIndex = 4;
 			this.buttonAdvCancel.Text = "xxCancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
@@ -63,15 +63,15 @@
 			this.buttonAdvApply.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvApply.AutoSize = true;
 			this.buttonAdvApply.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvApply.BeforeTouchSize = new System.Drawing.Size(75, 23);
+			this.buttonAdvApply.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonAdvApply.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonAdvApply.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvApply.IsBackStageButton = false;
-			this.buttonAdvApply.Location = new System.Drawing.Point(559, 536);
-			this.buttonAdvApply.Margin = new System.Windows.Forms.Padding(10);
+			this.buttonAdvApply.Location = new System.Drawing.Point(654, 615);
+			this.buttonAdvApply.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvApply.Name = "buttonAdvApply";
 			this.buttonAdvApply.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvApply.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvApply.Size = new System.Drawing.Size(87, 27);
 			this.buttonAdvApply.TabIndex = 5;
 			this.buttonAdvApply.Text = "xxAccept";
 			this.buttonAdvApply.UseVisualStyle = true;
@@ -81,21 +81,22 @@
 			// 
 			this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
 			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.20649F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.79351F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvApply, 2, 2);
 			this.tableLayoutPanel1.Controls.Add(this.buttonAdvCancel, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.textBoxAgreement, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.139535F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.139534F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 91.86047F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 43F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(644, 569);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(751, 652);
 			this.tableLayoutPanel1.TabIndex = 6;
 			// 
 			// label1
@@ -103,8 +104,8 @@
 			this.label1.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.label1, 3);
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(10, 10);
-			this.label1.Margin = new System.Windows.Forms.Padding(10);
+			this.label1.Location = new System.Drawing.Point(12, 12);
+			this.label1.Margin = new System.Windows.Forms.Padding(12, 12, 12, 12);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(57, 20);
 			this.label1.TabIndex = 6;
@@ -115,20 +116,23 @@
 			this.textBoxAgreement.BackColor = System.Drawing.SystemColors.Window;
 			this.tableLayoutPanel1.SetColumnSpan(this.textBoxAgreement, 3);
 			this.textBoxAgreement.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxAgreement.Location = new System.Drawing.Point(3, 45);
+			this.textBoxAgreement.Location = new System.Drawing.Point(3, 51);
 			this.textBoxAgreement.Multiline = true;
 			this.textBoxAgreement.Name = "textBoxAgreement";
 			this.textBoxAgreement.ReadOnly = true;
 			this.textBoxAgreement.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxAgreement.Size = new System.Drawing.Size(638, 477);
+			this.textBoxAgreement.Size = new System.Drawing.Size(745, 547);
 			this.textBoxAgreement.TabIndex = 7;
 			// 
 			// LicenseAgreementForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(644, 569);
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ClientSize = new System.Drawing.Size(751, 652);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MinimizeBox = false;
 			this.Name = "LicenseAgreementForm";
 			this.ShowIcon = false;

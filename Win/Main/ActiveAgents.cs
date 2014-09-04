@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
 
 namespace Teleopti.Ccc.Win.Main
 {
-	public partial class ActiveAgents : Form
+	public partial class ActiveAgents : BaseDialogForm
 	{
 		public ActiveAgents()
 		{
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Win.Main
 			}
 		}
 
-		private void textBox1_KeyDown(object sender, KeyEventArgs e)
+		private void textBox1KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Control && e.KeyCode.Equals(Keys.A))
 			{
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Win.Main
 			}
 		}
 
-		private void ActiveAgents_Load(object sender, EventArgs e)
+		private void activeAgentsLoad(object sender, EventArgs e)
 		{
 			Text = Resources.ActiveAgents;
 		}

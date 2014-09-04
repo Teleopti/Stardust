@@ -28,41 +28,41 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelWarning = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // labelWarning
-            // 
-            this.labelWarning.BackColor = System.Drawing.Color.Transparent;
-            this.labelWarning.Location = new System.Drawing.Point(13, 13);
-            this.labelWarning.Name = "labelWarning";
-            this.labelWarning.Size = new System.Drawing.Size(175, 78);
-            this.labelWarning.TabIndex = 0;
-            this.labelWarning.Text = "warning warning - nuclear attack!";
-            // 
-            // TimedWarningDialog
-            // 
-            this.Appearance = Syncfusion.Windows.Forms.Tools.RibbonForm.AppearanceType.Normal;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Borders = new System.Windows.Forms.Padding(0);
-            this.ClientSize = new System.Drawing.Size(200, 100);
-            this.ControlBox = false;
-            this.Controls.Add(this.labelWarning);
-            this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "TimedWarningDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = " ";
-            this.TopMost = true;
-            this.ResumeLayout(false);
+			this.labelWarning = new System.Windows.Forms.Label();
+			this.SuspendLayout();
+			// 
+			// labelWarning
+			// 
+			this.labelWarning.BackColor = System.Drawing.Color.Transparent;
+			this.labelWarning.Location = new System.Drawing.Point(15, 17);
+			this.labelWarning.Name = "labelWarning";
+			this.labelWarning.Size = new System.Drawing.Size(204, 102);
+			this.labelWarning.TabIndex = 0;
+			this.labelWarning.Text = "warning warning - nuclear attack!";
+			// 
+			// TimedWarningDialog
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.Color.White;
+			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			this.ClientSize = new System.Drawing.Size(233, 130);
+			this.ControlBox = false;
+			this.Controls.Add(this.labelWarning);
+			this.DoubleBuffered = true;
+			this.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "TimedWarningDialog";
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+			this.Text = " ";
+			this.TopMost = true;
+			this.ResumeLayout(false);
 
         }
 

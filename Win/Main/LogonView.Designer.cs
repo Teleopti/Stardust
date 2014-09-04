@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Main
 			this.labelVersion.AutoSize = true;
 			this.labelVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.labelVersion.Location = new System.Drawing.Point(1, 206);
+			this.labelVersion.Location = new System.Drawing.Point(1, 202);
 			this.labelVersion.Name = "labelVersion";
 			this.labelVersion.Size = new System.Drawing.Size(124, 15);
 			this.labelVersion.TabIndex = 2;
@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.Win.Main
 			this.BackColor = System.Drawing.Color.White;
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.ClientSize = new System.Drawing.Size(425, 224);
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.ClientSize = new System.Drawing.Size(425, 220);
 			this.Controls.Add(this.pictureBox2);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.labelVersion);
