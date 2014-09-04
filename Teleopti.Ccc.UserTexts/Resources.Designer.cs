@@ -1304,20 +1304,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Advance.
-        /// </summary>
-        public static string Advance {
-            get {
-                return ResourceManager.GetString("Advance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Advanced.
         /// </summary>
         public static string Advanced {
             get {
                 return ResourceManager.GetString("Advanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Advanced Filter.
+        /// </summary>
+        public static string AdvancedFilter {
+            get {
+                return ResourceManager.GetString("AdvancedFilter", resourceCulture);
             }
         }
         
@@ -8757,6 +8757,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FilteredList {
             get {
                 return ResourceManager.GetString("FilteredList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtered Results.
+        /// </summary>
+        public static string FilteredResults {
+            get {
+                return ResourceManager.GetString("FilteredResults", resourceCulture);
             }
         }
         
@@ -17935,6 +17944,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Possible Matches.
+        /// </summary>
+        public static string PossibleMatches {
+            get {
+                return ResourceManager.GetString("PossibleMatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Powered by Teleopti WFM.
         /// </summary>
         public static string PoweredByTeleoptCCC {
@@ -19602,6 +19620,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResolutionMin {
             get {
                 return ResourceManager.GetString("ResolutionMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolve.
+        /// </summary>
+        public static string Resolve {
+            get {
+                return ResourceManager.GetString("Resolve", resourceCulture);
             }
         }
         
@@ -22609,6 +22636,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowDetails {
             get {
                 return ResourceManager.GetString("ShowDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Duplicate Recipient.
+        /// </summary>
+        public static string ShowDuplicateRecipient {
+            get {
+                return ResourceManager.GetString("ShowDuplicateRecipient", resourceCulture);
             }
         }
         

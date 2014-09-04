@@ -1,77 +1,142 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Common;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
 	public partial class FilterMultiplePersons : BaseDialogForm
 	{
-		//private SearchPersonPresenter _presenter;
 		private ArrayList _persons = new ArrayList();
 		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
-		private ArrayList _parsedPersonList;
+		private List<String > _duplicateInputText;
+		private bool _textChangedRunning = false;
+
+		public ArrayList  UserSelectedPerson 
+		{ 
+			get { return _userSelectedPersonList; }
+			set { _userSelectedPersonList = value; }
+		}
 
 		public FilterMultiplePersons()
 		{
 			InitializeComponent();
 			if(!DesignMode )
 				SetTexts();
-			gridListControl1.DataSource = _persons;
-			gridListControl1.MultiColumn = true;
-			gridListControl1.Grid.MouseDoubleClick += gridMouseDoubleClick;
-			gridListControl1.Grid.QueryCellInfo += Grid_QueryCellInfo;
-			gridListControl1.Grid.KeyDown += gridKeyDown;
-			gridListControl1.BorderStyle = BorderStyle.None;
-
-			_userSelectedPersonList = new ArrayList();
-			gridListControlSelectedItems.DataSource = _userSelectedPersonList;
-			gridListControlSelectedItems.MultiColumn = true;
-			gridListControlSelectedItems.Grid.QueryCellInfo += Grid_QueryCellInfo;
-			gridListControlSelectedItems.BorderStyle = BorderStyle.None;
-
-			_parsedPersonList = new ArrayList();
-			gridListControlCustomSearch.DataSource = _parsedPersonList;
-			gridListControlCustomSearch.MultiColumn = true;
-			gridListControlCustomSearch.Grid.QueryCellInfo += Grid_QueryCellInfo;
-			gridListControlCustomSearch.BorderStyle = BorderStyle.None;
-
-			
+			_duplicateInputText = new List<string>();
+			initializeDefaultSearchGrid();
+			initializeResultGrid();
 		}
 
-		#region "Grid related functions"
+		#region "Default search grid"
+
+		private void initializeDefaultSearchGrid()
+		{
+			gridListControlDefaultSearch.DataSource = _persons;
+			gridListControlDefaultSearch.MultiColumn = true;
+			gridListControlDefaultSearch.Grid.MouseDoubleClick += gridMouseDoubleClick;
+			gridListControlDefaultSearch.Grid.QueryCellInfo += Grid_QueryCellInfo;
+			gridListControlDefaultSearch.Grid.KeyDown += gridKeyDown;
+			gridListControlDefaultSearch.BorderStyle = BorderStyle.None;
+		}
+
+		private void fillGridListControlDefaultSearch()
+		{
+			IEnumerable<IPerson> found = Search(textBox1.Text);
+
+			gridListControlDefaultSearch.BeginUpdate();
+			_persons.Clear();
+
+			if (!string.IsNullOrEmpty(textBox1.Text))
+			{
+				foreach (IPerson person in found)
+				{
+					_persons.Add(new FilterMultiplePersonGridControlItem(person));
+				}
+
+				gridListControlDefaultSearch.DataSource = _persons;
+				if (_persons.Count > 0)
+					gridListControlDefaultSearch.ValueMember = "Person";
+
+				gridListControlDefaultSearch.MultiColumn = true;
+
+				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(0));
+				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(5));
+
+				if (_persons.Count > 0)
+					gridListControlDefaultSearch.SetSelected(0, true);
+
+			}
+
+			gridListControlDefaultSearch.EndUpdate();
+
+		}
+
+		private void gridMouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			if (gridListControlDefaultSearch.SelectedItem == null) return;
+			var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
+
+			if (person != null)
+			{
+				addPersonInResultGridFromDefaultSearch(person);
+			}
+		}
+
 		private void gridKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
 			{
-				if (gridListControl1.SelectedItem == null) return;
-				var person = (IPerson)gridListControl1.SelectedValue;
+				if (gridListControlDefaultSearch.SelectedItem == null) return;
+				var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
 
 				if (person != null)
 				{
-					addPersonInFinalGrid(person);
-					var handler = ItemDoubleClick;
-					if (handler != null)
-					{
-						handler(this, EventArgs.Empty);
-					}
+					addPersonInResultGridFromDefaultSearch(person);
 				}
 			}
 		}
+
+		#endregion
+
+		#region "Result grid"
+
+		private void refurbishItemsInResultGrid()
+		{
+			gridListControlResult.BeginUpdate();
+			gridListControlResult.DataSource = _userSelectedPersonList;
+			if (_userSelectedPersonList.Count > 0)
+				gridListControlResult.ValueMember = "Person";
+
+			gridListControlResult.MultiColumn = true;
+
+			gridListControlResult.Grid.ColHiddenEntries.Add(new GridColHidden(0));
+			gridListControlResult.Grid.ColHiddenEntries.Add(new GridColHidden(5));
+
+			if (_userSelectedPersonList.Count > 0)
+				gridListControlResult.SetSelected(0, true);
+			gridListControlResult.EndUpdate();
+		}
+
+		private void initializeResultGrid()
+		{
+			_userSelectedPersonList = new ArrayList();
+			gridListControlResult.DataSource = _userSelectedPersonList;
+			gridListControlResult.MultiColumn = true;
+			gridListControlResult.Grid.QueryCellInfo += Grid_QueryCellInfo;
+			gridListControlResult.BorderStyle = BorderStyle.None;
+		}
+		#endregion
+		
+		#region "Grid Common functions"
 
 		private void Grid_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
@@ -92,29 +157,29 @@ namespace Teleopti.Ccc.Win.Scheduling
 				e.Style.Text = UserTexts.Resources.ApplicationLogon;
 				e.Handled = true;
 			}
-		}
 
-		private void gridMouseDoubleClick(object sender, MouseEventArgs e)
-		{
-			if (gridListControl1.SelectedItem == null) return;
-			var person = (IPerson)gridListControl1.SelectedValue;
-
-			if (person != null)
+			if (e.RowIndex <= 0 && e.ColIndex == 4)
 			{
-				addPersonInFinalGrid(person);
-				var handler = ItemDoubleClick;
-				if (handler != null)
-					handler(this, EventArgs.Empty);
+				e.Style.Text = UserTexts.Resources.Email;
+				e.Handled = true;
 			}
+
 		}
 
-		public event EventHandler<EventArgs> ItemDoubleClick;
+		private void addPersonInResultGridFromDefaultSearch(IPerson person)
+		{
+			_searchablePersons.Remove(person);
+			fillGridListControlDefaultSearch();
+			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person));
+			refurbishItemsInResultGrid();
+		}
+		
 		#endregion
 
 		public IPerson SelectedPerson()
 		{
-			if (gridListControl1.SelectedItem != null)
-				return (IPerson) gridListControl1.SelectedValue;
+			if (gridListControlDefaultSearch.SelectedItem != null)
+				return (IPerson) gridListControlDefaultSearch.SelectedValue;
 
 			return null;
 		}
@@ -127,7 +192,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void textBox1TextChanged(object sender, EventArgs e)
 		{
-			FillGridListControl();
+			fillGridListControlDefaultSearch();
 		}
 
 		public ICollection<IPerson> Search(string searchText)
@@ -145,114 +210,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 						 (
 							(person.ApplicationAuthenticationInfo != null) &&
 							person.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(cultureInfo).Contains(lowerSearchText)
-						 )
+						 ) || 
+						 person.Email.ToLower(cultureInfo).Contains(lowerSearchText )
 					 select person).ToList();
 
 			return personQuery;
 
 		}
-
-		public void FillGridListControl()
-		{
-			IEnumerable<IPerson> found = Search(textBox1.Text);
-
-			gridListControl1.BeginUpdate();
-			_persons.Clear();
-
-			if (!string.IsNullOrEmpty(textBox1.Text))
-			{
-				foreach (IPerson person in found)
-				{
-					_persons.Add(new FilterMultiplePersonGridControlItem(person));
-				}
-
-				gridListControl1.DataSource = _persons;
-				//Ola: in some installations you get an error here if the list is empty
-				//on my machine it just jumps out with no error. I think this will fix bug 11978
-				// it only happens when the FIRST search returns an empty list
-				if (_persons.Count > 0)
-					gridListControl1.ValueMember = "Person";
-
-				gridListControl1.MultiColumn = true;
-
-				gridListControl1.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-				gridListControl1.Grid.ColHiddenEntries.Add(new GridColHidden(4));
-
-				if (_persons.Count > 0)
-					gridListControl1.SetSelected(0, true);
-
-			}
-
-			gridListControl1.EndUpdate();
-
-		}
-
-		private void fillDuplicatesItemsGrid()
-		{
-			gridListControlCustomSearch.BeginUpdate();
-			gridListControlCustomSearch.DataSource = _parsedPersonList;
-			if (_parsedPersonList.Count > 0)
-					gridListControlCustomSearch.ValueMember = "Person";
-			gridListControlCustomSearch.MultiColumn = true;
-			gridListControlCustomSearch.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-			gridListControlCustomSearch.Grid.ColHiddenEntries.Add(new GridColHidden(4));
-			if (_parsedPersonList.Count > 0)
-					gridListControlCustomSearch.SetSelected(0, true);
-			gridListControlCustomSearch.EndUpdate();
-		}
-
-		private void addPersonInFinalGrid(IPerson person)
-		{
-			_searchablePersons.Remove(person);
-			FillGridListControl();
-			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person));
-			gridListControlSelectedItems.BeginUpdate();
-			gridListControlSelectedItems.DataSource = _userSelectedPersonList;
-			if (_userSelectedPersonList.Count > 0)
-				gridListControlSelectedItems.ValueMember = "Person";
-
-			gridListControlSelectedItems.MultiColumn = true;
-
-			gridListControlSelectedItems.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-			gridListControlSelectedItems.Grid.ColHiddenEntries.Add(new GridColHidden(4));
-
-			if (_userSelectedPersonList.Count > 0)
-				gridListControlSelectedItems.SetSelected(0, true);
-			gridListControlSelectedItems.EndUpdate();
-
-		}
-
+		
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
-			var person = (IPerson)gridListControl1.SelectedValue;
-			addPersonInFinalGrid(person );
+			var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
+			addPersonInResultGridFromDefaultSearch(person );
 		}
 
 		private void buttonAdvParse_Click(object sender, EventArgs e)
 		{
 			var inputText = textBoxCustomSearch.Text;
-			var inputTextArray = inputText.Split(',');
+			var currentDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+			var inputTextArray = inputText.Split(new[] { currentDelimiter.First() }, StringSplitOptions.RemoveEmptyEntries);
 			CultureInfo cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
-
-			_parsedPersonList.Clear();
+			_duplicateInputText.Clear();
 			var actualInput = new List<String>();
 			actualInput.AddRange(inputTextArray);
 			foreach (var expected in inputTextArray)
 			{
 				string lowerSearchText = expected.ToLower(cultureInfo);
-				ICollection<IPerson> personQuery =
-					(from
-						person in _searchablePersons 
-					 where
-						 person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Contains(lowerSearchText) ||
-						 person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Replace(",", "").Contains(lowerSearchText) ||
-						 person.Name.ToString(NameOrderOption.FirstNameLastName).ToLower(cultureInfo).Contains(lowerSearchText) ||
-						 person.EmploymentNumber.ToLower(cultureInfo).Contains(lowerSearchText) ||
-						 (
-							(person.ApplicationAuthenticationInfo != null) &&
-							person.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(cultureInfo).Contains(lowerSearchText)
-						 )
-					 select person).ToList();
+				var personQuery = Search(lowerSearchText);
 				if (personQuery.Count == 1)
 				{
 					_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(personQuery.First()));
@@ -263,30 +247,96 @@ namespace Teleopti.Ccc.Win.Scheduling
 					foreach (var person in personQuery)
 					{
 						var tempPerson = new FilterMultiplePersonGridControlItem(person);
-						if (!_userSelectedPersonList.Contains(tempPerson ))
-							_parsedPersonList.Add(tempPerson );
+						if (!_userSelectedPersonList.Contains(tempPerson))
+						{
+							_duplicateInputText.Add(expected );
+							break;
+						}
 					}
 					actualInput.Remove(expected);
 				}
 				
 			}
-			textBoxCustomSearch.Text = String.Join(",", actualInput);
+			actualInput.AddRange(_duplicateInputText);
+			textBoxCustomSearch.Text = String.Join(currentDelimiter.First().ToString(), actualInput);
+			//if (_duplicateInputText.Count > 0)
+			//{
+			//	checkBoxAdvShowDuplicateRecipient.Visible = true;
+			//	textBox2.Visible = true;
+			//	textBox2.Text = string.Join(currentDelimiter.First().ToString(), _duplicateInputText);
+			//	splitContainer1.SplitterDistance = 143;
+			//}
+			//else
+			//{
+			//	checkBoxAdvShowDuplicateRecipient.Visible = false;
+			//	splitContainer1.SplitterDistance = 92;
+			//}
 
-			fillDuplicatesItemsGrid();
+			refurbishItemsInResultGrid();
 
-			gridListControlSelectedItems.BeginUpdate();
-			gridListControlSelectedItems.DataSource = _userSelectedPersonList;
-			if (_userSelectedPersonList.Count > 0)
-				gridListControlSelectedItems.ValueMember = "Person";
+		}
 
-			gridListControlSelectedItems.MultiColumn = true;
+		public HashSet<Guid> SelectedPersonGuids()
+		{
+			var selectedPersonGuid = new HashSet<Guid>();
+			foreach (FilterMultiplePersonGridControlItem person in _userSelectedPersonList)
+			{
+				selectedPersonGuid.Add(person.Person.Id.Value );
+			}
+			return selectedPersonGuid;
+		}
 
-			gridListControlSelectedItems.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-			gridListControlSelectedItems.Grid.ColHiddenEntries.Add(new GridColHidden(4));
+		private void textBoxCustomSearch_TextChanged(object sender, EventArgs e)
+		{
+			if (_textChangedRunning)
+				return;
 
-			if (_userSelectedPersonList.Count > 0)
-				gridListControlSelectedItems.SetSelected(0, true);
-			gridListControlSelectedItems.EndUpdate();
+			_textChangedRunning = true;
+
+			var pasted = textBoxCustomSearch.Text;
+			//should be loggedon culture, problem to be solved is separator could be more than one char
+			var currentDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
+			var preprocessed =
+				pasted.Replace("\r\n", currentDelimiter)
+					.Replace("\n\r", currentDelimiter)
+					.Replace("\r", currentDelimiter)
+					.Replace("\n", currentDelimiter) 
+					.Replace("\t", currentDelimiter);
+			textBoxCustomSearch.Text = preprocessed;
+			_textChangedRunning = false;
+		}
+
+
+		private void tabControlAdv1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			
+			var current = (sender as TabControlAdv);
+			if (current == null) return;
+			if (current.SelectedTab  == tabPageAdvCustom)
+			{
+				buttonAdd.Visible = false;
+				splitContainer1.SplitterDistance = 92;
+			}
+			else
+			{
+				buttonAdd.Visible = true;
+				splitContainer1.SplitterDistance = 227;
+			}
+		}
+
+		private void checkBoxAdvShowUnresolved_CheckedChanged(object sender, EventArgs e)
+		{
+			if (checkBoxAdvShowDuplicateRecipient.Checked)
+			{
+				splitContainer1.SplitterDistance = 143;
+				textBox2.Visible = true;
+			}
+			else
+			{
+				splitContainer1.SplitterDistance = 92;
+				textBox2.Visible = false;
+			}
+
 		}
 	}
 
@@ -319,6 +369,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_person.ApplicationAuthenticationInfo!=null)
 					return  _person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+				return string.Empty;
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+		public string EmailAddress
+		{
+			get
+			{
+				if (_person.Email != null)
+					return _person.Email;
 				return string.Empty;
 			}
 		}

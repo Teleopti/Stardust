@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -18,6 +19,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private PersonsFilterView(){}
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 		private ICollection<IPerson> _selectedPersons;
+		private FilterMultiplePersons _filterMultiplePersons;
+		private bool _getTheGuidsFromAdvanceFilter = false;
 
 		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IDictionary<Guid, IPerson> selectedPersons, IComponentContext componentContext,
 			IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids)
@@ -48,13 +51,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		   
 			SetTexts();
-			buttonAdvance.Visible = ShowAdvancedFilter;
+			buttonAdvance.Visible = true;
 			_selectedPersons = selectedPersons.Values ;
 
 		}
 
 		public HashSet<Guid> SelectedAgentGuids()
 		{
+			if (_getTheGuidsFromAdvanceFilter)
+				return _filterMultiplePersons.SelectedPersonGuids();
 			return _personSelectorPresenter.CheckedPersonGuids;
 		}
 
@@ -67,17 +72,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void buttonAdvance_Click(object sender, EventArgs e)
 		{
-			using (FilterMultiplePersons filterMultiplePersons = new FilterMultiplePersons())
+			_getTheGuidsFromAdvanceFilter = false;
+			using (_filterMultiplePersons = new FilterMultiplePersons())
 			{
-				//filterMultiplePersons.SetPresenter(new SearchPersonPresenter(new FilterMultiplePersons()));
-				filterMultiplePersons.SetSearchablePersons(_selectedPersons );
-				filterMultiplePersons.ShowDialog(this);
+				_filterMultiplePersons.SetSearchablePersons(_selectedPersons );
+				_filterMultiplePersons.ShowDialog(this);
 
-				if (filterMultiplePersons.DialogResult == DialogResult.OK)
+				if (_filterMultiplePersons.DialogResult == DialogResult.OK)
 				{
-					
+					_getTheGuidsFromAdvanceFilter = true;
 				}
 			}
+			DialogResult = DialogResult.OK;
 		}
 	}
 }

@@ -12266,10 +12266,6 @@ Reduce the complexity to use these shifts.</value>
   <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
     <value>You got a new silver badge! You have answered {0} or more calls each day on {1} different days.</value>
   </data>
-  <data name="Advance" xml:space="preserve">
-    <value>Advance</value>
-    <comment>Advance filter option used in scheduler filter</comment>
-  </data>
   <data name="FilteredList" xml:space="preserve">
     <value>Filtered List</value>
     <comment>The filtered list is the result that the user constructed using the advance filter</comment>
@@ -12290,4 +12286,24 @@ Reduce the complexity to use these shifts.</value>
     <value>Save to </value>
     <comment>Which scenario to saev the forecast</comment>
   </data>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Filtered Results</value>
+    <comment>The filtered results that the user will select</comment>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Possible Matches</value>
+    <comment>The possible matches in the advanced filter</comment>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Advanced Filter</value>
+    <comment>The UI of advanced filter</comment>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Resolve</value>
+    <comment>The parser that is used to parse multiple recipients in advance filtering</comment>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Show Duplicate Recipient</value>
+    <comment>To show duplicates that are found duing advance filtering</comment>
 </root>

@@ -92,7 +92,7 @@
 			this.buttonAdvance.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvance.Size = new System.Drawing.Size(87, 27);
 			this.buttonAdvance.TabIndex = 6;
-			this.buttonAdvance.Text = "xxAdvance";
+			this.buttonAdvance.Text = "xxAdvanced";
 			this.buttonAdvance.UseVisualStyle = true;
 			this.buttonAdvance.Click += new System.EventHandler(this.buttonAdvance_Click);
 			// 
