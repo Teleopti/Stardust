@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	    public EmptyResult ClearConnections()
 	    {
 		    SqlConnection.ClearAllPools();
+			Response.Cookies.Clear();
 				return new EmptyResult();
 	    }
 
