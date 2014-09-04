@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		}
 
 		[Then(@"I should see must change password page with warning '(.*)'")]
+		[When(@"I see must change password page with warning '(.*)'")]
 		public void ThenIShouldSeeMustChangePasswordPageWithWarning(string resourceText)
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery("#PasswordAlreadyExpired");

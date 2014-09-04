@@ -76,7 +76,7 @@ Scenario: Skip change password when password will expire soon
 Scenario: See change password when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
-	| Last Password Change X Days Ago | 30    |
+	| Last Password Change X Days Ago | 31    |
 	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -88,11 +88,10 @@ Scenario: See change password when password already expired
 	Then I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I should not see skip button
 
-@ignore
 Scenario: Manually navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
-	| Last Password Change X Days Ago | 30    |
+	| Last Password Change X Days Ago | 31    |
 	And I have user credential with
 	| Field    | Value     |
 	| UserName | aa        |
@@ -101,6 +100,7 @@ Scenario: Manually navigate to other page when sign in with password already exp
 	| Field    | Value     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
+	And I see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I manually navigate to week schedule page
 	Then I should see the sign in page
 
