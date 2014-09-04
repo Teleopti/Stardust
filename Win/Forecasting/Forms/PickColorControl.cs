@@ -5,70 +5,53 @@ using Teleopti.Ccc.Win.Common;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
-    public partial class PickColorControl : BaseUserControl
-    {
-        public PickColorControl()
-        {
-            InitializeComponent();
-            if (!DesignMode) SetTexts();
-        }
-        
-        void dropDownBarItem2_BeforePopupItemPaint(object sender, Syncfusion.Windows.Forms.Tools.XPMenus.PopupItemPaintEventArgs drawItemInfo)
-        {
-            popupControlContainer1.Visible = true;
-        }
+	public partial class PickColorControl : BaseUserControl
+	{
+		public PickColorControl()
+		{
+			InitializeComponent();
+			if (!DesignMode) SetTexts();
+		}
 
-        public event EventHandler<ColorPickerUIAdv.ColorPickedEventArgs> ColorChanged;
-        private void colorPickerUIAdv1_Picked(object sender, ColorPickerUIAdv.ColorPickedEventArgs args)
-        {
-            //Set the GradientLabel color
-            gradientLabel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(
-                Syncfusion.Drawing.GradientStyle.Vertical, new System.Drawing.Color[]
-                                                               {
-                                                                   Color.WhiteSmoke, args.Color, Color.WhiteSmoke
-                                                               });
+		void dropDownBarItem2BeforePopupItemPaint(object sender, Syncfusion.Windows.Forms.Tools.XPMenus.PopupItemPaintEventArgs drawItemInfo)
+		{
+			popupControlContainer1.Visible = true;
+		}
 
-            // Ensures that the PopupControlContainer is closed after the selection of a color.          
-            ColorPickerUIAdv cc = sender as ColorPickerUIAdv;
-            Syncfusion.Windows.Forms.PopupControlContainer pcc =
-                cc.Parent as Syncfusion.Windows.Forms.PopupControlContainer;
-            pcc.HidePopup(Syncfusion.Windows.Forms.PopupCloseType.Done);
-            popupControlContainer1.Size = colorPickerUIAdv1.Size;
+		public event EventHandler<ColorPickerUIAdv.ColorPickedEventArgs> ColorChanged;
+		private void colorPickerUiAdv1Picked(object sender, ColorPickerUIAdv.ColorPickedEventArgs args)
+		{
+			pictureBox1.BackColor = args.Color;
 
-        	var handler = ColorChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, args);
-            }
-        }
+			// Ensures that the PopupControlContainer is closed after the selection of a color.          
+			var cc = sender as ColorPickerUIAdv;
+			if (cc == null) return;
 
-        public void SetEnabled(bool enable)
-        {
-            Enabled = enable;
-        }
-        //public void SetColor(Color color)
-        //{
-        //    this.gradientLabel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, new System.Drawing.Color[] {
-        //   Color.WhiteSmoke, color, Color.WhiteSmoke});
-        //}
+			var pcc =
+				 cc.Parent as Syncfusion.Windows.Forms.PopupControlContainer;
+			if (pcc == null) return;
+			pcc.HidePopup(Syncfusion.Windows.Forms.PopupCloseType.Done);
+			popupControlContainer1.Size = colorPickerUIAdv1.Size;
 
-        public Color ThisColor
-        {
-            get
-            {
-                
-                 return gradientLabel1.BackgroundColor.GradientColors[1];
-            }
-            set
-            {
-              
-                gradientLabel1.BackgroundColor =
-                    new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical,
-                                                     new System.Drawing.Color[]
-                                                         {
-                                                             Color.WhiteSmoke,    value, Color.WhiteSmoke
-                                                         });
-            }
-        }
-    }
+			var handler = ColorChanged;
+			if (handler != null)
+			{
+				handler.Invoke(this, args);
+			}
+		}
+
+		public void SetEnabled(bool enable)
+		{
+			Enabled = enable;
+		}
+
+		public Color ThisColor
+		{
+			get { return pictureBox1.BackColor; }
+			set
+			{
+				pictureBox1.BackColor = value;
+			}
+		}
+	}
 }

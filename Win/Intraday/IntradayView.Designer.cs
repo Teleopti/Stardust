@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
 			this.ribbonControlAdv1.RibbonStyle = Syncfusion.Windows.Forms.Tools.RibbonStyle.Office2013;
 			this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemHome;
@@ -174,6 +175,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.ribbonControlAdv1.TitleFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ribbonControlAdv1.BeforeContextMenuOpen += new Syncfusion.Windows.Forms.Tools.RibbonControlAdv.OnRightClick(this.ribbonControlAdv1BeforeContextMenuOpen);
 			// 
 			// toolStripTabItemHome
 			// 
@@ -198,7 +200,6 @@ namespace Teleopti.Ccc.Win.Intraday
 			// 
 			// toolStripEx1
 			// 
-			this.toolStripEx1.AutoSize = false;
 			this.ribbonControlAdv1.SetDescription(this.toolStripEx1, "");
 			this.toolStripEx1.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripEx1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripEx1.Office12Mode = false;
 			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(10, 0, 1, 0);
 			this.toolStripEx1.ShowLauncher = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(100, 91);
+			this.toolStripEx1.Size = new System.Drawing.Size(70, 91);
 			this.toolStripEx1.TabIndex = 3;
 			this.toolStripEx1.Text = "xxFileProperCase";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx1, true);
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			// 
 			this.toolStripButtonMainSave.AutoToolTip = false;
 			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMainSave, "");
-			this.toolStripButtonMainSave.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Save;
+			this.toolStripButtonMainSave.Image = global::Teleopti.Ccc.Win.Properties.Resources.save;
 			this.toolStripButtonMainSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonMainSave.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonMainSave.Name = "toolStripButtonMainSave";
@@ -243,7 +244,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExDatePicker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExDatePicker.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExDatePicker.Image = null;
-			this.toolStripExDatePicker.Location = new System.Drawing.Point(102, 1);
+			this.toolStripExDatePicker.Location = new System.Drawing.Point(72, 1);
 			this.toolStripExDatePicker.Name = "toolStripExDatePicker";
 			this.toolStripExDatePicker.Office12Mode = false;
 			this.toolStripExDatePicker.ShowLauncher = false;
@@ -262,12 +263,12 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExChangeForecast.Image = null;
 			this.toolStripExChangeForecast.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonChangeForecast});
-			this.toolStripExChangeForecast.Location = new System.Drawing.Point(210, 1);
+			this.toolStripExChangeForecast.Location = new System.Drawing.Point(180, 1);
 			this.toolStripExChangeForecast.Name = "toolStripExChangeForecast";
 			this.toolStripExChangeForecast.Office12Mode = false;
 			this.toolStripExChangeForecast.ShowCaption = false;
 			this.toolStripExChangeForecast.ShowLauncher = false;
-			this.toolStripExChangeForecast.Size = new System.Drawing.Size(114, 87);
+			this.toolStripExChangeForecast.Size = new System.Drawing.Size(114, 91);
 			this.toolStripExChangeForecast.TabIndex = 1;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExChangeForecast, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExChangeForecast, false);
@@ -276,12 +277,12 @@ namespace Teleopti.Ccc.Win.Intraday
 			// toolStripButtonChangeForecast
 			// 
 			this.ribbonControlAdv1.SetDescription(this.toolStripButtonChangeForecast, "");
-			this.toolStripButtonChangeForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.Forecasts2_filled_32x32;
+			this.toolStripButtonChangeForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.refresh;
 			this.toolStripButtonChangeForecast.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonChangeForecast.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonChangeForecast.Name = "toolStripButtonChangeForecast";
 			this.SetShortcut(this.toolStripButtonChangeForecast, System.Windows.Forms.Keys.None);
-			this.toolStripButtonChangeForecast.Size = new System.Drawing.Size(76, 84);
+			this.toolStripButtonChangeForecast.Size = new System.Drawing.Size(76, 88);
 			this.toolStripButtonChangeForecast.Text = "xxReforecast";
 			this.toolStripButtonChangeForecast.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonChangeForecast.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -320,7 +321,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExGridRowInChartButtons.Name = "toolStripExGridRowInChartButtons";
 			this.toolStripExGridRowInChartButtons.Office12Mode = false;
 			this.toolStripExGridRowInChartButtons.ShowLauncher = false;
-			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(263, 0);
+			this.toolStripExGridRowInChartButtons.Size = new System.Drawing.Size(263, 91);
 			this.toolStripExGridRowInChartButtons.TabIndex = 1;
 			this.toolStripExGridRowInChartButtons.Text = "xxGridRowsInChart";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExGridRowInChartButtons, true);
@@ -363,7 +364,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripExLayouts.Office12Mode = false;
 			this.toolStripExLayouts.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
 			this.toolStripExLayouts.ShowLauncher = false;
-			this.toolStripExLayouts.Size = new System.Drawing.Size(675, 91);
+			this.toolStripExLayouts.Size = new System.Drawing.Size(675, 0);
 			this.toolStripExLayouts.TabIndex = 0;
 			this.toolStripExLayouts.Text = "Views";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExLayouts, true);
@@ -426,7 +427,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripButtonNewView.Margin = new System.Windows.Forms.Padding(7, 1, 0, 2);
 			this.toolStripButtonNewView.Name = "toolStripButtonNewView";
 			this.SetShortcut(this.toolStripButtonNewView, System.Windows.Forms.Keys.None);
-			this.toolStripButtonNewView.Size = new System.Drawing.Size(45, 75);
+			this.toolStripButtonNewView.Size = new System.Drawing.Size(45, 0);
 			this.toolStripButtonNewView.Text = "xxNew";
 			this.toolStripButtonNewView.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonNewView, true);
@@ -441,7 +442,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripButtonResetLayout.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonResetLayout.Name = "toolStripButtonResetLayout";
 			this.SetShortcut(this.toolStripButtonResetLayout, System.Windows.Forms.Keys.None);
-			this.toolStripButtonResetLayout.Size = new System.Drawing.Size(85, 75);
+			this.toolStripButtonResetLayout.Size = new System.Drawing.Size(85, 0);
 			this.toolStripButtonResetLayout.Text = "xxResetLayout";
 			this.toolStripButtonResetLayout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonResetLayout, true);

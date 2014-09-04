@@ -3867,6 +3867,7 @@
     <Content Include="Resources\period.png" />
     <Content Include="Resources\process.ico" />
     <None Include="Resources\rights.ico" />
+    <None Include="Resources\refresh.png" />
     <Content Include="Resources\Refresh1.ico" />
     <None Include="Resources\Reports.ico" />
     <None Include="Resources\Reports_filled_16x16.png" />
@@ -3876,6 +3877,7 @@
     <None Include="Resources\right_round-32.png" />
     <None Include="Resources\Schedules.ico" />
     <None Include="Resources\Schedules_filled_simplified_16x16.png" />
+    <None Include="Resources\save.png" />
     <Content Include="Resources\Scorecard.gif" />
     <None Include="Resources\StartTime.PNG" />
     <None Include="Resources\shiftEditor_16x16.png" />

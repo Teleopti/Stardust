@@ -643,5 +643,10 @@ namespace Teleopti.Ccc.Win.Intraday
 			}
 		}
 
+		private void ribbonControlAdv1BeforeContextMenuOpen(object sender, ContextMenuEventArgs e)
+		{
+			e.Cancel = true;
+		}
+
 	}
 }

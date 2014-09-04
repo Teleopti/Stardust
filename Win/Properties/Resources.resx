@@ -121,11 +121,8 @@
   <data name="ccc_tree_BU" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_tree_BU.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Realtime_adherence_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Realtime_adherence_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_LineGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_LineGraph.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Budgets_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Budgets_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_BusinessUnit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_BusinessUnit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,9 +136,6 @@
   <data name="ccc_Template2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Template2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_PrayerPlanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_PrayerPlanner.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_schedule_Weekview_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_schedule_Weekview_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -151,8 +145,8 @@
   <data name="Schedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Schedules.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Template_5_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Template_5_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Template_6_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Template_6_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Queue2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Queue2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,17 +184,14 @@
   <data name="ccc_Undo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Undo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_SkillGridWeek" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_SkillGridWeek.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_schedule_Period_view_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_schedule_Period_view_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_SkillGeneral_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SkillGeneral_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Template_6_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Template_6_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_result_view_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_result_view_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="right_round_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\right_round-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -241,14 +232,17 @@
   <data name="ccc_Redo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Redo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ccc_SkillTelephone_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SkillTelephone_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Unlock" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Unlock.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Scorecard" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\scorecard.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="test_delete_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\test_delete_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="leftarrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\leftarrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -279,6 +273,9 @@
   </data>
   <data name="ccc_SwapShifts_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SwapShifts_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="magnifier_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\magnifier_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Cut_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Cut_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -321,6 +318,9 @@
   </data>
   <data name="ccc_ChartRightAxis2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ChartRightAxis2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scorecard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\scorecard.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Template_SpecialDays_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Template_SpecialDays_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -427,8 +427,8 @@
   <data name="ccc_schedule_Period_view_32x321" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_schedule_Period_view_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_result_view_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_result_view_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Reports_variant_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Reports_variant_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -445,6 +445,9 @@
   <data name="ccc_CreateForecast" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_CreateForecast.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ccc_Template_5_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Template_5_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ccc_Paste_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Paste_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -459,9 +462,6 @@
   </data>
   <data name="Forecasts2_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Forecasts2_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_SchedulerSchedule" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_SchedulerSchedule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Skill_Backoffice_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Skill_Backoffice_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -484,9 +484,6 @@
   <data name="ccc_temp_DeleteGroup4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_person_period_view_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_person_period_view_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_OpenForecastWorkflow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ForecastCreate.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -502,14 +499,17 @@
   <data name="help_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\help_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Tree_Team" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Tree_Team.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Forecasts2_filled_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Forecasts2_filled_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Site_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Site_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WFM-Intraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFM-Intraday.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Realtime_adherence_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Realtime_adherence_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_EnableGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_EnableGraph.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -520,14 +520,14 @@
   <data name="WFM_Payroll_Integration" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WFM-Payroll-Integration - Copy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Budgets_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Budgets_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_temp_DeleteGroup6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Copy_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Copy_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_Template_1_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Template_1_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Template_4_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Template_4_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -541,8 +541,8 @@
   <data name="ccc_tree_Agent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_tree_Agent.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="magnifier_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\magnifier_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Tree_Team" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Tree_Team.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_schedule_IntradayView_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_schedule_IntradayView_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -583,8 +583,8 @@
   <data name="ccc_Workload" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Workload.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_ChartLeftAxis2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_ChartLeftAxis2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Agent_Request_OK_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Agent_Request_OK_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_SkillGridIntraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SkillGridIntraday.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -670,8 +670,8 @@
   <data name="ccc_temp_DeleteGroup7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_ShiftBag" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_ShiftBag.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="help_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\help_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -685,8 +685,8 @@
   <data name="ccc_role_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_role_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="magnifier_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\magnifier_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_SchedulerSchedule" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_SchedulerSchedule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_PeoplePeriodView" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_PeoplePeriodView.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -700,11 +700,14 @@
   <data name="Intraday_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Intraday_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ccc_Export2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Export2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ccc_temp_DeleteGroup9" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_GroupPage_preeview_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_GroupPage_preeview_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="magnifier_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\magnifier_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Filter.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -718,11 +721,11 @@
   <data name="ccc_tree_User" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_tree_User.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Add_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Add_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Rotations" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Rotations.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Export2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Export2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_PrayerPlanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_PrayerPlanner.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_ContractSchedule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ContractSchedule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -739,8 +742,8 @@
   <data name="TeleoptiWFMLogin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TeleoptiWFMLogin.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Right_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Right_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_LineGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_LineGraph.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Teleopti_WFM_main_icon256" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Teleopti-WFM-main-icon256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -748,8 +751,8 @@
   <data name="Performance_Manager_filled_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Performance-Manager_filled_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Agent_Request_OK_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Agent_Request_OK_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="StartTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\StartTime.PNG;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -781,8 +784,11 @@
   <data name="LoginHeaderText" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LoginHeaderText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Template_1_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Template_1_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Right_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Right_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ccc_ShiftBag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_ShiftBag.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Cancel_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Cancel_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -793,8 +799,8 @@
   <data name="ccc_ShiftLimitationsFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_ShiftLimitationsFilter.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="test_delete_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\test_delete_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_person_period_view_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_person_period_view_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_SkillGeneral" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SkillGeneral.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -805,23 +811,23 @@
   <data name="ccc_SkillGridMonth" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_SkillGridMonth.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Right" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Right.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_Add_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_Add_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pinned" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pinned.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Reports_variant_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Reports_variant_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_GroupPage_preeview_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_GroupPage_preeview_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Agent_NewRequest_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Agent_NewRequest_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ccc_ChartLeftAxis2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_ChartLeftAxis2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="heart_8x8" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\heart_8x8.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Copy_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Copy_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -829,13 +835,13 @@
   <data name="ccc_Intraday_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Intraday_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Rotations" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Rotations.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ccc_SkillGridWeek" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ccc_SkillGridWeek.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Delete_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Delete_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Forecasts2_filled_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Forecasts2_filled_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
