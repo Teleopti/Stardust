@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 
@@ -7,15 +8,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
 	public partial class PickColorControl : BaseUserControl
 	{
+		readonly PopupControlContainer popupControlContainer1 = new PopupControlContainer();
+
 		public PickColorControl()
 		{
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
-		}
-
-		void dropDownBarItem2BeforePopupItemPaint(object sender, Syncfusion.Windows.Forms.Tools.XPMenus.PopupItemPaintEventArgs drawItemInfo)
-		{
-			popupControlContainer1.Visible = true;
+			dropDownBarItem2.PopupControlContainer = popupControlContainer1;
+			popupControlContainer1.Controls.Add(colorPickerUIAdv1);
+			popupControlContainer1.Size = colorPickerUIAdv1.Size;
 		}
 
 		public event EventHandler<ColorPickerUIAdv.ColorPickedEventArgs> ColorChanged;
@@ -27,10 +28,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			var cc = sender as ColorPickerUIAdv;
 			if (cc == null) return;
 
-			var pcc =
-				 cc.Parent as Syncfusion.Windows.Forms.PopupControlContainer;
+			var pcc = cc.Parent as PopupControlContainer;
 			if (pcc == null) return;
-			pcc.HidePopup(Syncfusion.Windows.Forms.PopupCloseType.Done);
+			pcc.HidePopup(PopupCloseType.Done);
 			popupControlContainer1.Size = colorPickerUIAdv1.Size;
 
 			var handler = ColorChanged;
