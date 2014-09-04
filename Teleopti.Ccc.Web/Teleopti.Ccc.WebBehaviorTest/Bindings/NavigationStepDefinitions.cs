@@ -96,6 +96,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIGoToMytimeWeb()
 		{
 			DataMaker.Data().ApplyDelayed();
+			Navigation.GotoWeekSchedulePageNoWait();
+		}
+
+		[When(@"I logon to mytime web")]
+		public void WhenILogonToMytimeWeb()
+		{
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoWeekSchedulePage();
 		}
 

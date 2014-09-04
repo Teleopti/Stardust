@@ -20,7 +20,7 @@ Scenario: Logon as another user
 	| UserName | Ashley     |
 	| Password | password   |
 	| Role     | Agent role |
-	When I go to mytime web
+	When I logon to mytime web
 	And I choose to sign out
 	And I choose teleopti identity provider
 	And I try to signin with
