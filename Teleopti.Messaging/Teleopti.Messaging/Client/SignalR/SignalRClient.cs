@@ -98,7 +98,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		public virtual void Dispose()
 		{
 			if (_connection == null) return;
-			_connection.CloseConnection();
+			_connection.Dispose();
 			_connection = null;
 			_stateAccessor = null;
 		}

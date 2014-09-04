@@ -108,7 +108,7 @@ namespace Teleopti.Messaging.Client.SignalR
 			}
 		}
 
-		public void CloseConnection()
+		public void Dispose()
 		{
 			try
 			{
