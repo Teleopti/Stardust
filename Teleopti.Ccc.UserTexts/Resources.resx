@@ -12284,8 +12284,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="SaveToSpace" xml:space="preserve">
     <value>Save to </value>
-    <comment>Which scenario to saev the forecast</comment>
-  </data>
+    <comment>Which scenario to save the forecast</comment>
   </data>
   <data name="FilteredResults" xml:space="preserve">
     <value>Filtered Results</value>
@@ -12306,4 +12305,5 @@ Reduce the complexity to use these shifts.</value>
   <data name="ShowDuplicateRecipient" xml:space="preserve">
     <value>Show Duplicate Recipient</value>
     <comment>To show duplicates that are found duing advance filtering</comment>
+  </data>
 </root>
