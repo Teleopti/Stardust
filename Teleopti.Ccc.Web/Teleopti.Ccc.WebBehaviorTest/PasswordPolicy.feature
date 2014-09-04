@@ -88,6 +88,7 @@ Scenario: See change password when password already expired
 	Then I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I should not see skip button
 
+@ignore
 Scenario: Manually navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
