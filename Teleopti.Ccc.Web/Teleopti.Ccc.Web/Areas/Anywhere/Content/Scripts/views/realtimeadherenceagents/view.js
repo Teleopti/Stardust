@@ -60,15 +60,20 @@
 					}
 				});
 
-
-				subscriptions.subscribeAdherence(function (notification) {
-					viewModel.updateFromNotification(notification);
-				},
-				teamId,
-				function () {
-					$('.realtimeadherenceagents').attr("data-subscription-done", " ");
-				},
-				true);
+				ajax.ajax({
+					url: "Teams/GetBusinessUnitId?teamId=" + teamId,
+					success: function(businessUnitId) {
+						subscriptions.subscribeAdherence(function(notification) {
+								viewModel.updateFromNotification(notification);
+							},
+							businessUnitId,
+							teamId,
+							function() {
+								$('.realtimeadherenceagents').attr("data-subscription-done", " ");
+							},
+							true);
+					}
+				});
 			}
 
 			if (options.id === 'MultipleTeams') {

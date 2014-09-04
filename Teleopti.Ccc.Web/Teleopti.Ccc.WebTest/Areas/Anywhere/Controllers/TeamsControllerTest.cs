@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldGetTeamsForSite()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new TeamsController(siteRepository, null,null);
+			var target = new TeamsController(siteRepository, null,null,null);
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team {Description = new Description("team1")};
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
-			var target = new TeamsController(siteRepository, numberOfAgentsQuery,null);
+			var target = new TeamsController(siteRepository, numberOfAgentsQuery,null,null);
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team { Description = new Description(" ") };
@@ -63,12 +65,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var teamId = Guid.NewGuid();
 			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();
 			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId)).Return(expected);
-			var target = new TeamsController(null, null, teamAdherenceAggregator);
+			var target = new TeamsController(null, null, teamAdherenceAggregator,null);
 
 			var result = target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
 
 			result.Id.Should().Be(teamId.ToString());
 			result.OutOfAdherence.Should().Be(expected);
+		}
+
+
+		[Test]
+		public void ShouldGetBusinessUnitIdFromTeamId()
+		{
+			var site = new Site(" ").WithId();
+			var bu = new BusinessUnit(" ").WithId();
+			site.SetBusinessUnit(bu);
+			var team = new Team().WithId();
+			team.Site = site;
+			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+			teamRepository.Stub(x => x.Get(team.Id.GetValueOrDefault())).Return(team);
+			var target = new TeamsController(null, null, null, teamRepository);
+
+			var result = target.GetBusinessUnitId(team.Id.ToString());
+			result.Data.Should().Be(bu.Id.GetValueOrDefault());
 		}
 	}
 }

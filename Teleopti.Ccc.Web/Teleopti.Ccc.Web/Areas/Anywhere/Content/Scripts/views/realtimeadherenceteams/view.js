@@ -45,6 +45,20 @@
 				}
 			});
 
+			ajax.ajax({
+				url: "Sites/GetBusinessUnitId?siteId=" + siteId,
+				success: function (businessUnitId) {
+					subscriptions.subscribeAdherence(function (notification) {
+						viewModel.updateFromNotification(notification);
+					},
+					businessUnitId,
+					siteId,
+					function () {
+						$('.realtimeadherenceteams').attr("data-subscription-done", " ");
+					});
+				}
+			});
+
 			var checkFeature = function() {
 				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
 			}
@@ -77,14 +91,6 @@
 					})(viewModel.teams()[i]);
 				}
 			};
-
-			subscriptions.subscribeAdherence(function (notification) {
-				viewModel.updateFromNotification(notification);
-			},
-			siteId,
-			function () {
-				$('.realtimeadherenceteams').attr("data-subscription-done"," ");
-			});
 		},
 	};
 });

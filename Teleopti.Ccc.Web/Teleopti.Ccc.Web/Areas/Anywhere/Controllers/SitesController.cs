@@ -74,5 +74,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				OutOfAdherence = outOfAdherence
 			}, JsonRequestBehavior.AllowGet);
 		}
+		
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetBusinessUnitId(string siteId)
+		{
+			var site = _siteRepository.Get(new Guid(siteId));
+			return Json(site.BusinessUnit.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
+		}
 	}
 }

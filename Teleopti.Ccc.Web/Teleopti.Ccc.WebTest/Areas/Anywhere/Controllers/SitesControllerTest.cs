@@ -7,6 +7,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
@@ -92,6 +94,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Id.Should().Be("");
 			result.Name.Should().Be("");
 			result.NumberOfAgents.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldGetBusinessUnitIdFromSiteId()
+		{
+			var site = new Site(" ").WithId();
+			var bu = new BusinessUnit(" ").WithId();
+			site.SetBusinessUnit(bu);
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			siteRepository.Stub(x => x.Get(site.Id.GetValueOrDefault())).Return(site);
+			var target = new SitesController(siteRepository, null, null);
+
+			var result = target.GetBusinessUnitId(site.Id.ToString());
+			result.Data.Should().Be(bu.Id.GetValueOrDefault());
 		}
 	}
 }

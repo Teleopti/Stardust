@@ -15,12 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ITeamAdherenceAggregator _teamAdherenceAggregator;
+		private readonly ITeamRepository _teamRepository;
 
-		public TeamsController(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader, ITeamAdherenceAggregator teamAdherenceAggregator)
+		public TeamsController(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader, ITeamAdherenceAggregator teamAdherenceAggregator, ITeamRepository teamRepository)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_teamAdherenceAggregator = teamAdherenceAggregator;
+			_teamRepository = teamRepository;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -57,6 +59,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				Id = teamId,
 				OutOfAdherence = outOfAdherence
 			}, JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult GetBusinessUnitId(string teamId)
+		{
+			var team = _teamRepository.Get(new Guid(teamId));
+			return Json(team.BusinessUnitExplicit.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
