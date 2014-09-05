@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
 			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
 			clientsContext.Stub(x => x.Group(null)).IgnoreArguments().Return(client);
-			var target = new MessageBrokerController(() => hubContext);
+			var target = new MessageBrokerController { HubContext  = () => hubContext};
 
 			target.NotifyClients(new Notification());
 			
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 					route = r
 				}).ToArray();
 
-			var target = new MessageBrokerController(() => hubContext);
+			var target = new MessageBrokerController { HubContext = () => hubContext };
 			
 			target.NotifyClients(notification);
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 					notification = n
 				}).ToArray();
 
-			var target = new MessageBrokerController(() => hubContext);
+			var target = new MessageBrokerController { HubContext = () => hubContext };
 
 			target.NotifyClientsMultiple(notifications);
 

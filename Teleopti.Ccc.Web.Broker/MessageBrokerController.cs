@@ -1,29 +1,30 @@
 using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-	public class MessageBrokerController
+	public class MessageBrokerController : Controller
 	{
-		private readonly Func<IHubContext> _hubContext;
+		public Func<IHubContext> HubContext = () => GlobalHost.ConnectionManager.GetHubContext<MessageBrokerHub>();
+
 		private readonly MessageBrokerServer _server;
 
-		public MessageBrokerController(Func<IHubContext> hubContext)
+		public MessageBrokerController()
 		{
 			_server = new MessageBrokerServer(new ActionImmediate());
-			_hubContext = hubContext;
 		}
 
 		public void NotifyClients(Notification notification)
 		{
-			_server.NotifyClients(_hubContext().Clients, "POST", notification);
+			_server.NotifyClients(HubContext().Clients, "POST", notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			_server.NotifyClientsMultiple(_hubContext().Clients, "POST", notifications);
+			_server.NotifyClientsMultiple(HubContext().Clients, "POST", notifications);
 		}
 	}
 }
