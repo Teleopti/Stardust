@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNet.SignalR;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -9,22 +8,22 @@ namespace Teleopti.Ccc.Web.Broker
 	public class MessageBrokerController
 	{
 		private readonly Func<IHubContext> _hubContext;
+		private readonly MessageBrokerServer _server;
 
 		public MessageBrokerController(Func<IHubContext> hubContext)
 		{
+			_server = new MessageBrokerServer(new ActionImmediate());
 			_hubContext = hubContext;
 		}
 
 		public void NotifyClients(Notification notification)
 		{
-			notification.Routes().ForEach(r =>
-				_hubContext().Clients.Group(MessageBrokerServer.RouteToGroupName(r)).onEventMessage(notification, r)
-				);
+			_server.NotifyClients(_hubContext().Clients, "POST", notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			notifications.ForEach(NotifyClients);
+			_server.NotifyClientsMultiple(_hubContext().Clients, "POST", notifications);
 		}
 	}
 }
