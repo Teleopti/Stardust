@@ -3,6 +3,7 @@
 Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	var self = this;
 	
+	self.isSetAgentDescriptionEnabled = ko.observable(false);
 	self.culturesLoaded = ko.observable(false);
 	self.avoidReload = false;
 	self.cultures = ko.observableArray();
@@ -107,6 +108,17 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	};
+
+	self.featureCheck = function () {
+		ajax.Ajax({
+			url: "../ToggleHandler/IsEnabled?toggle=Settings_SetAgentDescription_23257",
+			success: function (data) {
+				if (data.IsEnabled) {
+					self.isSetAgentDescriptionEnabled(true);
+				}
 			}
 		});
 	};

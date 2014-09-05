@@ -3,6 +3,44 @@ $(document).ready(function() {
 
 	module("Teleopti.MyTimeWeb.Settings.SettingsViewModel");
 	
+	test("should enable set agent description", function () {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "../ToggleHandler/IsEnabled?toggle=Settings_SetAgentDescription_23257") {
+					options.success(
+						{
+							IsEnabled: true
+						}
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Settings.SettingsViewModel(ajax);
+
+		viewModel.featureCheck();
+
+		equal(viewModel.isSetAgentDescriptionEnabled(), true);
+	});
+
+	test("should disable set agent description", function () {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "../ToggleHandler/IsEnabled?toggle=Settings_SetAgentDescription_23257") {
+					options.success(
+						{
+							IsEnabled: false
+						}
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Settings.SettingsViewModel(ajax);
+
+		viewModel.featureCheck();
+
+		equal(viewModel.isSetAgentDescriptionEnabled(), false);
+	});
+
 	test("should load cultrues", function () {
 		var cultures = [{ id: "1", text: "Culture A" },
 			{ id: "2", text: "Culture B" },
