@@ -88,6 +88,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Teleopti-WFM-main-icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -503,6 +506,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Teleopti-WFM-main-icon.ico" />
     <EmbeddedResource Include="AgentPreferenceView\ClipboardControl.resx">
       <DependentUpon>ClipboardControl.cs</DependentUpon>
       <SubType>Designer</SubType>
