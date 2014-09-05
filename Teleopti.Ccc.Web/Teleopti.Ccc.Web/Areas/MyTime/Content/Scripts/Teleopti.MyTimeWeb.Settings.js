@@ -13,121 +13,9 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;
 
-    var settingsViewModel = function() {
-        var self = this;
-
-	    self.culturesLoaded = ko.observable(false);
-        self.avoidReload = false;
-        self.cultures = ko.observableArray();
-        self.selectedUiCulture = ko.observable();
-        self.selectedCulture = ko.observable();
-
-        self.CalendarSharingActive = ko.observable(false);
-	    self.CalendarUrl = ko.observable();
-	    self.ActivateCalendarSharing = function() {
-	        _setCalendarLinkStatus(true);
-	    };
-	    self.DeactivateCalendarSharing = function() {
-	    	_setCalendarLinkStatus(false);
-	    };
-
-	    self.IsNotificationSupported = ko.computed(function() {
-		    if (window.webkitNotifications)
-		    	return true;
-		    return false;
-	    });
-	    self.RequestNotificationPermission = function () {
-		    if (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0) {
-			    window.webkitNotifications.requestPermission();
-		    }
-	    };
-
-        self.selectedUiCulture.subscribe(function(newValue) {
-            if (!self.avoidReload)
-                _selectorChanged(newValue, "Settings/UpdateUiCulture");
-        });
-        
-        self.selectedCulture.subscribe(function (newValue) {
-            if (!self.avoidReload)
-                _selectorChanged(newValue, "Settings/UpdateCulture");
-        });
-
-    };
-
     function _bindData() {
         ko.applyBindings(vm, $('#page')[0]);
     };
-
-	function _loadCultures() {
-		return ajax.Ajax({
-	        url: "Settings/Cultures",
-	        dataType: "json",
-	        type: "GET",
-	        global: false,
-	        cache: false,
-	        success: function (data, textStatus, jqXHR) {
-	        	vm.cultures(data.Cultures);
-	            vm.avoidReload = true;
-	            vm.selectedUiCulture(data.ChoosenUiCulture.id);
-	            vm.selectedCulture(data.ChoosenCulture.id);
-	            vm.avoidReload = false;
-		        vm.culturesLoaded(true);
-	        }
-	    });
-	}
-    
-	function _selectorChanged(value, url) {
-		var data = { LCID: value };
-		ajax.Ajax({
-			url: url,
-			contentType: 'application/json; charset=utf-8',
-			type: "PUT",
-			data: JSON.stringify(data),
-			success: function (data, textStatus, jqXHR) {
-				ajax.CallWhenAllAjaxCompleted(function () {
-					location.reload();
-				});
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
-	}
-	
-	function _getCalendarLinkStatus() {
-		if ($(".share-my-calendar").length == 0)
-			return null;
-		return ajax.Ajax({
-			url: "Settings/CalendarLinkStatus",
-			contentType: 'application/json; charset=utf-8',
-			dataType: "json",
-			type: "GET",
-			success: function (data, textStatus, jqXHR) {
-				vm.CalendarSharingActive(data.IsActive);
-				vm.CalendarUrl(data.Url);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
-		});
-	}
-    
-	function _setCalendarLinkStatus(isActive) {
-	    ajax.Ajax({
-	    	url: "Settings/SetCalendarLinkStatus",
-	    	contentType: 'application/json; charset=utf-8',
-	    	dataType: "json",
-	        type: "POST",
-	        data: JSON.stringify({IsActive: isActive}),
-	        success: function (data, textStatus, jqXHR) {
-	        	vm.CalendarSharingActive(data.IsActive);
-	        	vm.CalendarUrl(data.Url);
-	        },
-	        error: function (jqXHR, textStatus, errorThrown) {
-	            Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-	        }
-	    });
-	}
     
 	function _cleanBindings() {
 	    ko.cleanNode($('#page')[0]);
@@ -143,8 +31,8 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		},
 		PartialInit: function (readyForInteraction, completelyLoaded) {
 			$('#Test-Picker').select2();
-		    vm = new settingsViewModel();
-		    $.when(_loadCultures(), _getCalendarLinkStatus())
+			vm = new Teleopti.MyTimeWeb.Settings.SettingsViewModel(ajax);
+		    $.when(vm.loadCultures(), vm.getCalendarLinkStatus())
 				.done(function () {
 					readyForInteraction();
 					completelyLoaded();
