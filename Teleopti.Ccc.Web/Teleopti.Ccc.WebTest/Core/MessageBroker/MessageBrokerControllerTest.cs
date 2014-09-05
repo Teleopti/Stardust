@@ -43,18 +43,15 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
 
-			var expects = notification.Routes()
-				.Select(route =>
+			var expects = (
+				from r in notification.Routes()
+				let client = MockRepository.GenerateMock<IOnEventMessageClient>()
+				select new
 				{
-					var client = MockRepository.GenerateMock<IOnEventMessageClient>();
-					clientsContext.Stub(x => x.Group(MessageBrokerHub.RouteToGroupName(route))).Return(client);
-					return new
-					{
-						client,
-						route
-					};
-				})
-				.ToArray();
+					client = stubClient(r, clientsContext),
+					route = r
+				}).ToArray();
+
 			var target = new MessageBrokerController(() => hubContext);
 			
 			target.NotifyClients(notification);
@@ -62,6 +59,40 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			expects.ForEach(c =>
 				c.client.AssertWasCalled(x => x.onEventMessage(notification, c.route))
 				);
+		}
+
+		[Test]
+		public void ShouldNotifyClientsMultiple()
+		{
+			var notifications = new[] { new Notification() { DataSource = "one" }, new Notification() { DataSource = "two" } };
+			var hubContext = MockRepository.GenerateStub<IHubContext>();
+			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext>();
+			hubContext.Stub(x => x.Clients).Return(clientsContext);
+
+			var expects = (
+				from n in notifications
+				from r in n.Routes()
+				select new
+				{
+					client = stubClient(r, clientsContext),
+					route = r,
+					notification = n
+				}).ToArray();
+
+			var target = new MessageBrokerController(() => hubContext);
+
+			target.NotifyClientsMultiple(notifications);
+
+			expects.ForEach(c =>
+				c.client.AssertWasCalled(x => x.onEventMessage(c.notification, c.route))
+				);
+		}
+
+		private IOnEventMessageClient stubClient(string r, IHubConnectionContext clientsContext)
+		{
+			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
+			clientsContext.Stub(x => x.Group(MessageBrokerHub.RouteToGroupName(r))).Return(client);
+			return client;
 		}
 
 		public interface IOnEventMessageClient
@@ -84,6 +115,11 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			notification.Routes().ForEach(r =>
 				_hubContext().Clients.Group(MessageBrokerHub.RouteToGroupName(r)).onEventMessage(notification, r)
 				);
+		}
+
+		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
+		{
+			notifications.ForEach(NotifyClients);
 		}
 	}
 }
