@@ -163,6 +163,7 @@
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Repositories\AgentBadgeRepository.cs" />
     <Compile Include="Repositories\AgentBadgeSettingsRepository.cs" />
+    <Compile Include="Repositories\AgentBadgeTransactionRepository.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverrider.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
