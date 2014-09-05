@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Linq;
 using Castle.Core.Internal;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-using SharpTestsEx;
 using Teleopti.Ccc.Web.Broker;
-using Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs;
 using Teleopti.Interfaces.MessageBroker;
-using Extensions = Teleopti.Ccc.Domain.Collection.Extensions;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 {
@@ -91,35 +82,13 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		private IOnEventMessageClient stubClient(string r, IHubConnectionContext clientsContext)
 		{
 			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
-			clientsContext.Stub(x => x.Group(MessageBrokerHub.RouteToGroupName(r))).Return(client);
+			clientsContext.Stub(x => x.Group(MessageBrokerServer.RouteToGroupName(r))).Return(client);
 			return client;
 		}
 
 		public interface IOnEventMessageClient
 		{
 			void onEventMessage(Notification notification, string route);
-		}
-	}
-
-	public class MessageBrokerController
-	{
-		private readonly Func<IHubContext> _hubContext;
-
-		public MessageBrokerController(Func<IHubContext> hubContext)
-		{
-			_hubContext = hubContext;
-		}
-
-		public void NotifyClients(Notification notification)
-		{
-			notification.Routes().ForEach(r =>
-				_hubContext().Clients.Group(MessageBrokerHub.RouteToGroupName(r)).onEventMessage(notification, r)
-				);
-		}
-
-		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
-		{
-			notifications.ForEach(NotifyClients);
 		}
 	}
 }

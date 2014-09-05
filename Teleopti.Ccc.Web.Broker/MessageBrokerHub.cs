@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Configuration;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
 using Teleopti.Interfaces.MessageBroker;
@@ -16,9 +12,11 @@ namespace Teleopti.Ccc.Web.Broker
 
 		private IActionScheduler _actionScheduler;
 		private readonly IBeforeSubscribe _beforeSubscribe;
+		private readonly MessageBrokerServer _server;
 
 		public MessageBrokerHub(IActionScheduler actionScheduler, IBeforeSubscribe beforeSubscribe)
 		{
+			_server = new MessageBrokerServer(actionScheduler);
 			_actionScheduler = actionScheduler;
 			_beforeSubscribe = beforeSubscribe;
 		}
@@ -32,11 +30,11 @@ namespace Teleopti.Ccc.Web.Broker
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId,
-								   route, RouteToGroupName(route));
+								   route, MessageBrokerServer.RouteToGroupName(route));
 			}
-			
 
-			Groups.Add(Context.ConnectionId, RouteToGroupName(route))
+
+			Groups.Add(Context.ConnectionId, MessageBrokerServer.RouteToGroupName(route))
 				  .ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
 
 			return route;
@@ -52,40 +50,14 @@ namespace Teleopti.Ccc.Web.Broker
 			Groups.Remove(Context.ConnectionId, route);
 		}
 
-		public static string RouteToGroupName(string route)
-		{
-			//gethashcode won't work in 100% of the cases...
-			UInt64 hashedValue = 3074457345618258791ul;
-			for (int i = 0; i < route.Length; i++)
-			{
-				hashedValue += route[i];
-				hashedValue *= 3074457345618258799ul;
-			}
-			return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
-		}
-
 		public void NotifyClients(Notification notification)
 		{
-			var routes = notification.Routes();
-
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("New notification from client {0} with (DomainUpdateType: {1}) (Routes: {2}) (Id: {3}).",
-								   Context.ConnectionId, notification.DomainUpdateType, string.Join(", ", routes),
-								   string.Join(", ", routes.Select(RouteToGroupName)));
-
-			foreach (var route in routes)
-			{
-				var r = route;
-				_actionScheduler.Do(() => Clients.Group(RouteToGroupName(r)).onEventMessage(notification, r));
-			}
+			_server.NotifyClients(Clients, Context.ConnectionId, notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			foreach (var notification in notifications)
-			{
-				NotifyClients(notification);
-			}
+			_server.NotifyClientsMultiple(Clients, Context.ConnectionId, notifications);
 		}
 
 		public void Ping()
