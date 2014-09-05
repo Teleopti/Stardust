@@ -23,6 +23,7 @@
 		RTA_RtaLastStatesOverview_27789,
 		RTA_DrilldownToAllAgentsInOneTeam_25234,
 		RTA_MonitorMultipleBusinessUnits_28348,
+		RTA_ChangeScheduleInAgentStateView_29934,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
@@ -30,7 +31,7 @@
 		RTA_ViewAgentsForMultipleTeams_28967,
 
 		MyTimeWeb_AgentBadge_28913,
-    Portal_NewLandingpage_29415,
+		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415
 	}
 }
