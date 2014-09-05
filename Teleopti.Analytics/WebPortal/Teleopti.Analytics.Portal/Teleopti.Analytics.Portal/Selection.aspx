@@ -9,7 +9,7 @@
     <script src="Scripts/persianDatepicker.min.js" type="text/javascript"></script>
     <link href="Css/persianDatepicker-default.css" rel="stylesheet" />
     <title>Selection</title>
-    <link rel="shortcut icon" href="~/Images/favicon.ico"/>
+    <link rel="shortcut icon" href="~/Images/favicon.ico?v=2"/>
 </head>
 <body>
     <form id="aspnetForm" runat="server">

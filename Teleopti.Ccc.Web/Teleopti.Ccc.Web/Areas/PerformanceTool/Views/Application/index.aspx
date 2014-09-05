@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
 	<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />
 
-	<link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	<link href="content/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon" />
 
 	<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
 	<script src="Areas/PerformanceTool/Content/Scripts/require/configuration.js"></script>

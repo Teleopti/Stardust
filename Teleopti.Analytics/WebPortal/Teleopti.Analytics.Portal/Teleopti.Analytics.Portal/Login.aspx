@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head runat="server">
     <title>Teleopti WFM Login</title>
-    <link rel="shortcut icon" href="~/Images/favicon.ico"/>
+    <link rel="shortcut icon" href="~/Images/favicon.ico?v=2"/>
 </head>
 <body >
     <form id="form1" runat="server" >  

@@ -50,7 +50,7 @@
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
 				if (webNotification() && !isShowing(notifyText)) {
 					var timeout = 5000;
-					var iconUrl = baseUrl + 'content/favicon.ico';
+					var iconUrl = baseUrl + 'content/favicon.ico?v=2';
 					var decodedText = $('<div />').html(notifyText).text();
 					var notification = window.webkitNotifications.createNotification(iconUrl, header, decodedText);
 					notification.show();

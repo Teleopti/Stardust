@@ -29,7 +29,7 @@
 		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/realtimeadherence.css" />
 
         
-        <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+        <link href="content/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon"/>
         
 	    <script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
 		<script src="Areas/Anywhere/Content/Scripts/require/configuration.js"></script>
