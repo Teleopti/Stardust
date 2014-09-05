@@ -79,6 +79,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#bu-picker", businessUnitName);
 		}
 
+		[When(@"I select agent state of '(.*)'")]
+		public void WhenISelectAgentStateOf(string p0)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{
 			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";
