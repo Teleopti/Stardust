@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void HideForm()
 		{
-			Hide();
+			Close();
 		}
 
 		public void SetPermissionOnAbsences(bool permission)

@@ -274,8 +274,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
             guardAction(owner =>
             {
-                var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions,
-                    owner.MultiplicatorDefinitionSet) {Text = Resources.PasteSpecial};
+                var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions,owner.MultiplicatorDefinitionSet) {Text = Resources.PasteSpecial};
                 pasteSpecial.ShowDialog();
 
                 if (_scheduleView() != null)

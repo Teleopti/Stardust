@@ -269,6 +269,7 @@
 			this.MinimizeBox = false;
 			this.Name = "FormClipboardSpecial";
 			this.ShowIcon = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxSpecial";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formClipboardSpecialFormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertime)).EndInit();
