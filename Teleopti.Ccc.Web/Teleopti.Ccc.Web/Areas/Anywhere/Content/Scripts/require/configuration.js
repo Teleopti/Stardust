@@ -4,7 +4,7 @@ var requireconfiguration = {
 		jquery: '../../../../Content/jquery/jquery-1.10.2',
 		jqueryui: '../../../../Content/jqueryui/jquery-ui-1.10.2.custom.min',
 		lazy: '../../../../Content/lazy/lazy.min',
-		knockout: '../../../../Content/Scripts/knockout-2.2.1',
+		knockout: '../Scripts/knockout-3.2.0',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
 		moment: '../../../../Content/moment/moment',

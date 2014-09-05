@@ -206,6 +206,7 @@ define([
 	}
 
 	function _initTrackingNotification(personId) {
+		ko.cleanNode($('#notification-container')[0]);
 		ko.applyBindings(notificationsViewModel, $('#notification-container')[0]);
 		trackingmessages.subscribeTrackingMessage(personId, function (notification) {
 			var data = JSON.parse(notification.BinaryData);
@@ -224,6 +225,7 @@ define([
 				_initTrackingNotification(responseData.PersonId);
 			}
 		});
+		ko.cleanNode($('nav')[0]);
 		ko.applyBindings(menu, $('nav')[0]);
 	}
 

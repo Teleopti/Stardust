@@ -83,7 +83,7 @@ define([
 					return;
 				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
-
+			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 		},
 

@@ -48,7 +48,7 @@ define([
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
-		});
+		}).extend({ notify: 'always' });
 
 		this.EndTimeOtherTimeZone = ko.computed(function () {
 			if (self.EndTime() && ianaTimeZone && ianaTimeZoneOther) {
@@ -57,7 +57,7 @@ define([
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
-		});
+		}).extend({ notify: 'always' });
 
 		this.visibleLayers = ko.computed(function () {
 			var shift = self.WorkingShift();
@@ -67,7 +67,7 @@ define([
 					.toArray();
 			}
 			return [];
-		});
+		}).extend({ notify: 'always' });
 
 		this.ShiftStart = ko.computed(function () {
 			var visibleLayers = self.visibleLayers();
@@ -75,7 +75,7 @@ define([
 				return moment(self.Date()).add("minutes", visibleLayers[0].StartMinutes());
 			}
 			return moment(self.Date()).startOf('d');
-		});
+		}).extend({ notify: 'always' });
 
 		this.ShiftEnd = ko.computed(function () {
 			var visibleLayers = self.visibleLayers();
@@ -83,7 +83,7 @@ define([
 				return moment(self.Date()).add("minutes", visibleLayers[visibleLayers.length - 1].EndMinutes());
 			}
 			return moment(self.Date()).startOf('d').add('d', 1);
-		});
+		}).extend({ notify: 'always' });
 		
 		var getMomentFromInput = function (input) {
 			var momentInput = moment(input, resources.TimeFormatForMoment);
@@ -117,7 +117,7 @@ define([
 				return false;
 			}
 			return false;
-		});
+		}).extend({ notify: 'always' });
 
 		this.ValidEndTime = ko.computed(function () {
 			if (!self.PossbileStartTimeWithinShift())
@@ -127,7 +127,7 @@ define([
 				return false;
 			}
 			return true;
-		});
+		}).extend({ notify: 'always' });
 		
 		this.ErrorMessage = ko.computed(function () {
 			if (!self.PossbileStartTimeWithinShift()) {
@@ -137,7 +137,7 @@ define([
 				return resources.InvalidEndTime;
 			}
 			return undefined;
-		});
+		}).extend({ notify: 'always' });
 		
 		this.SetData = function (data) {
 			groupId = data.GroupId;

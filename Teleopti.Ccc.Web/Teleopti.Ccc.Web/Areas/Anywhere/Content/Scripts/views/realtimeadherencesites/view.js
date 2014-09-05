@@ -36,7 +36,7 @@
 		display: function (options) {
 
 			viewModel = realTimeAdherenceViewModel();
-
+			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			viewModel.load();

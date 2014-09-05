@@ -28,7 +28,7 @@ define([
 			resize.onresize(function () {
 				viewModel.setTimelineWidth($('.time-line-for').width());
 			});
-
+			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 		},
 
