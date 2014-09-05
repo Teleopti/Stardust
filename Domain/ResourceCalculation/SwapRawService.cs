@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -57,36 +56,54 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						continue;
 				}
 				
-				
-
 				var tempDayOneHasSwapData = copyData(selectionOne[i], tempDayOne);
 				var tempDayTwoHasSwapData = copyData(selectionTwo[i], tempDayTwo);
 			
 				if (tempDayTwoHasSwapData)
 				{
+					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
 					selectionOne[i].Merge(tempDayTwo, false);
-					schedulePartModifyAndRollbackService.Modify(selectionOne[i]);
+					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);
 				}
 				else if (tempDayOneHasSwapData)
 				{
+					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
 					selectionOne[i].DeleteOvertime();
 					selectionOne[i].Merge(selectionOne[i], true);
-					schedulePartModifyAndRollbackService.Modify(selectionOne[i]);	
+					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);	
 				}
-
 
 				if (tempDayOneHasSwapData)
 				{
+					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
 					selectionTwo[i].DeleteOvertime();
 					selectionTwo[i].Merge(tempDayOne, false);
-					schedulePartModifyAndRollbackService.Modify(selectionTwo[i]);
+					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 				else if (tempDayTwoHasSwapData)
 				{
+					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
 					selectionTwo[i].Merge(selectionTwo[i], true);
-					schedulePartModifyAndRollbackService.Modify(selectionTwo[i]);
+					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 			}
+		}
+
+		private IEnumerable<IPersonAbsence> getAndRemoveAbsences(IScheduleDay scheduleDay)
+		{
+			var tmpAbsences = scheduleDay.PersonAbsenceCollection();
+			scheduleDay.Clear<IPersonAbsence>();
+			return tmpAbsences;
+		}
+
+		private void modifyDay(IEnumerable<IPersonAbsence> preservedAbsences, IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		{
+			foreach (var personAbsence in preservedAbsences)
+			{
+				scheduleDay.Add(personAbsence);
+			}
+
+			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 		}
 
 		private static bool copyData(IScheduleDay scheduleDay, IScheduleDay tempDay)
