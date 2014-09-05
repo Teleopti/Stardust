@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// tableLayoutPanelBody
 			// 
 			this.tableLayoutPanelBody.ColumnCount = 2;
-			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 262F));
+			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 320F));
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAnsweredCalls, 0, 3);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAHT, 0, 4);
@@ -105,9 +105,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// labelSetThresholdForAnsweredCalls
 			// 
 			this.labelSetThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetThresholdForAnsweredCalls.Location = new System.Drawing.Point(3, 90);
+			this.labelSetThresholdForAnsweredCalls.AutoSize = true;
+			this.labelSetThresholdForAnsweredCalls.Location = new System.Drawing.Point(3, 93);
 			this.labelSetThresholdForAnsweredCalls.Name = "labelSetThresholdForAnsweredCalls";
-			this.labelSetThresholdForAnsweredCalls.Size = new System.Drawing.Size(197, 20);
+			this.labelSetThresholdForAnsweredCalls.Size = new System.Drawing.Size(213, 15);
 			this.labelSetThresholdForAnsweredCalls.TabIndex = 0;
 			this.labelSetThresholdForAnsweredCalls.Text = "xxSetBadgeThresholdForAnsweredCalls";
 			this.labelSetThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -115,11 +116,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// labelSetThresholdForAHT
 			// 
 			this.labelSetThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetThresholdForAHT.Location = new System.Drawing.Point(3, 124);
+			this.labelSetThresholdForAHT.AutoSize = true;
+			this.labelSetThresholdForAHT.Location = new System.Drawing.Point(3, 125);
 			this.labelSetThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.labelSetThresholdForAHT.Name = "labelSetThresholdForAHT";
 			this.labelSetThresholdForAHT.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelSetThresholdForAHT.Size = new System.Drawing.Size(197, 20);
+			this.labelSetThresholdForAHT.Size = new System.Drawing.Size(160, 18);
 			this.labelSetThresholdForAHT.TabIndex = 3;
 			this.labelSetThresholdForAHT.Text = "xxSetBadgeThresholdForAHT";
 			this.labelSetThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -127,11 +129,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// labelSetThresholdForAdherence
 			// 
 			this.labelSetThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetThresholdForAdherence.Location = new System.Drawing.Point(3, 159);
+			this.labelSetThresholdForAdherence.AutoSize = true;
+			this.labelSetThresholdForAdherence.Location = new System.Drawing.Point(3, 160);
 			this.labelSetThresholdForAdherence.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.labelSetThresholdForAdherence.Name = "labelSetThresholdForAdherence";
 			this.labelSetThresholdForAdherence.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelSetThresholdForAdherence.Size = new System.Drawing.Size(197, 20);
+			this.labelSetThresholdForAdherence.Size = new System.Drawing.Size(193, 18);
 			this.labelSetThresholdForAdherence.TabIndex = 3;
 			this.labelSetThresholdForAdherence.Text = "xxSetBadgeThresholdForAdherence";
 			this.labelSetThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -143,7 +146,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(115, 23);
 			this.doubleTextBoxThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.doubleTextBoxThresholdForAdherence.DoubleValue = 0D;
-			this.doubleTextBoxThresholdForAdherence.Location = new System.Drawing.Point(265, 159);
+			this.doubleTextBoxThresholdForAdherence.Location = new System.Drawing.Point(323, 159);
 			this.doubleTextBoxThresholdForAdherence.MaxValue = 100D;
 			this.doubleTextBoxThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.doubleTextBoxThresholdForAdherence.MinValue = 0D;
@@ -179,7 +182,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// numericUpDownGoldenToSilverBadgeRate
 			// 
 			this.numericUpDownGoldenToSilverBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownGoldenToSilverBadgeRate.Location = new System.Drawing.Point(265, 242);
+			this.numericUpDownGoldenToSilverBadgeRate.Location = new System.Drawing.Point(323, 242);
 			this.numericUpDownGoldenToSilverBadgeRate.Minimum = new decimal(new int[] {
             2,
             0,
@@ -197,7 +200,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// numericUpDownSilverToBronzeBadgeRate
 			// 
 			this.numericUpDownSilverToBronzeBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(265, 207);
+			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(323, 207);
 			this.numericUpDownSilverToBronzeBadgeRate.Minimum = new decimal(new int[] {
             2,
             0,
@@ -215,7 +218,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// numericUpDownThresholdForAnsweredCalls
 			// 
 			this.numericUpDownThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownThresholdForAnsweredCalls.Location = new System.Drawing.Point(265, 89);
+			this.numericUpDownThresholdForAnsweredCalls.Location = new System.Drawing.Point(323, 89);
 			this.numericUpDownThresholdForAnsweredCalls.Name = "numericUpDownThresholdForAnsweredCalls";
 			this.numericUpDownThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
 			this.numericUpDownThresholdForAnsweredCalls.TabIndex = 2;
@@ -226,15 +229,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.AllowNegativeValues = true;
 			this.timeSpanTextBoxThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.timeSpanTextBoxThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(265, 124);
+			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(323, 124);
 			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
+			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
-			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(118, 25);
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(211, 25);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 242;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -362,7 +365,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
 			this.label1.ForeColor = System.Drawing.Color.GhostWhite;
@@ -378,8 +381,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// buttonDeleteContract
 			// 
 			this.buttonDeleteContract.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonDeleteContract.BeforeTouchSize = new System.Drawing.Size(24, 25);
 			this.buttonDeleteContract.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
 			this.buttonDeleteContract.IsBackStageButton = false;
