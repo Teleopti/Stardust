@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Web.Broker
 
 		private readonly MessageBrokerServer _server;
 
-		public MessageBrokerController()
+		public MessageBrokerController(IActionScheduler actionScheduler)
 		{
-			_server = new MessageBrokerServer(new ActionImmediate());
+			_server = new MessageBrokerServer(actionScheduler);
 		}
 
 		public void NotifyClients(Notification notification)
