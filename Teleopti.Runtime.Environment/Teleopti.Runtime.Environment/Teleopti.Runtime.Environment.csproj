@@ -40,8 +40,7 @@
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EO.WebBrowser">
