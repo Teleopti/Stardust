@@ -1,9 +1,10 @@
 ﻿define([
     'resources',
     'knockout',
-    'helpers'
+    'helpers',
+	'views/realtimeadherenceagents/agent-menu',
 ],
-    function (resources, ko, helpers
+    function (resources, ko, helpers,menu
         ) {
         return function () {
 
@@ -26,8 +27,10 @@
             that.EnteredCurrentAlarm = ko.observable();
             that.TextWeight = ko.observable();
             that.TextColor = ko.observable();
+            that.Selected = ko.observable(false);
+	        that.Menu = new menu();
 
-            that.fill = function (data, name, offset, teamName) {
+	        that.fill = function (data, name, offset, teamName) {
                 that.PersonId = data.PersonId;
                 that.Name = name;
                 that.TeamName = teamName;

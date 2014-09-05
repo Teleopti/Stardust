@@ -66,7 +66,7 @@
 				assert.equals(vm.agentStates()[0].EnteredCurrentAlarm(), moment.utc(state1.StateStart).add(-600, 'minutes').format());
 				assert.equals(vm.agentStates()[0].Activity(), state1.Activity);
 				assert.equals(vm.agentStates()[0].NextActivity(), state1.NextActivity);
-				assert.equals(moment(vm.agentStates()[0].NextActivityStartTime().format('HH:mm'), moment.utc(state1.NextActivityStartTime).add(-600, 'minutes').format('HH:mm'));
+				assert.equals(vm.agentStates()[0].NextActivityStartTime(), moment.utc(state1.NextActivityStartTime).add(-600, 'minutes').format());
 				assert.equals(vm.agentStates()[0].Alarm(), state1.Alarm);
 				assert.equals(vm.agentStates()[0].AlarmColor(), 'rgba(' + hexToRgb(state1.AlarmColor) + ', 0.6)');
 				assert.equals(vm.agentStates()[0].AlarmStart(), moment.utc(state1.AlarmStart).add(-600, 'minutes').format());
@@ -75,7 +75,7 @@
 				assert.equals(vm.agentStates()[1].EnteredCurrentAlarm(), moment.utc(state1.StateStart).add(-600, 'minutes').format());
 				assert.equals(vm.agentStates()[1].Activity(), state2.Activity);
 				assert.equals(vm.agentStates()[1].NextActivity(), state2.NextActivity);
-				assert.equals(vm.agentStates()[1].NextActivityStartTime(), moment.utc(state2.NextActivityStartTime).add(-600, 'minutes').format('HH:mm'));
+				assert.equals(vm.agentStates()[1].NextActivityStartTime(), moment.utc(state2.NextActivityStartTime).add(-600, 'minutes').format());
 				assert.equals(vm.agentStates()[1].Alarm(), state2.Alarm);
 				assert.equals(vm.agentStates()[1].AlarmColor(), 'rgba(' + hexToRgb(state2.AlarmColor) + ', 0.6)');
 				assert.equals(vm.agentStates()[1].AlarmStart(), moment.utc(state2.AlarmStart).add(-600, 'minutes').format());
@@ -142,6 +142,19 @@
 				vm.fillAgentsStates([state]);
 
 				assert.equals(vm.agentStates()[0].Alarm(), undefined);
+			},
+			"should select an agent": function () {
+				var state = {
+					PersonId: 'guid1'
+				};
+				var agent = { PersonId: "guid1" };
+				var vm = viewModel();
+				vm.fillAgents([agent]);
+				vm.fillAgentsStates([state]);
+				var agentStateClicked = vm.getAgentState("guid1");
+				vm.SelectAgent(agentStateClicked);
+				var selectedAgentState = vm.getSelectedAgentState();
+				assert.equals(selectedAgentState[0], agentStateClicked);
 			},
 			"filtering:": {
 				"should only display matching agents": function() {

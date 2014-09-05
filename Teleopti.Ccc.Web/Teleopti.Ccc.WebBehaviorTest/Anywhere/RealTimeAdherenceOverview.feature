@@ -730,6 +730,8 @@ Scenario: Should be able to add an activity in agent state overview
 	 | Name                                   | Team leader |
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
+	And there is a datasouce with id 6
+	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
@@ -741,7 +743,6 @@ Scenario: Should be able to add an activity in agent state overview
 	| End time		| 2014-01-21 14:00 |
 	| Activity		| Phone            |
 	When I view real time adherence for team 'Red'
-	And the browser time is '2014-01-21 12:45:00'
 	And I select agent state of 'Pierre Baldi'
 	And I click 'add activity' in schedule menu
 	And I input these add activity values

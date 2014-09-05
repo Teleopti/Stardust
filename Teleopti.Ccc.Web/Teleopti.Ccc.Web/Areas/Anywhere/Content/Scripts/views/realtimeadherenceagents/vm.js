@@ -13,6 +13,12 @@
 	return function () {
 
 		var that = {};
+		that.Resources = resources;
+		that.permissionAddFullDayAbsence = ko.observable();
+		that.permissionAddIntradayAbsence = ko.observable();
+		that.permissionRemoveAbsence = ko.observable();
+		that.permissionAddActivity = ko.observable();
+		that.permissionMoveActivity = ko.observable();
 
 		that.agents = []; 
 		that.agentStates = ko.observableArray();
@@ -73,7 +79,7 @@
 				that.agents.forEach(function(agent) {
 					existingState = that.getExistingAgentState(agent.PersonId);
 					if (existingState.length !== 0) {
-						existingState[0].fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);
+						existingState[0].fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);			
 					} else {
 						newagentState = agentstate();
 						newagentState.fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);
@@ -108,6 +114,12 @@
 				});
 			return agent[0];
 		};
+		that.getAgentState = function (id) {
+			var agentState = that.agentStates().filter(function (item) {
+				return item.PersonId === id;
+				});
+			return agentState[0];
+		};
 		that.refreshAlarmTime = function () {
 			that.agentStates().forEach(function (item) {
 				item.refreshAlarmTime();
@@ -119,6 +131,24 @@
 			data.Id = notification.DomainId;
 			that.fillAgentsStates(data.AgentStates);
 		};
+
+		that.SelectAgent = function (agentStateClicked) {
+			that.deselectAll();
+			agentStateClicked.Selected(true);
+		}
+
+		that.getSelectedAgentState = function() {
+			var selectedAgentState = that.agentStates().filter(function (obj) {
+				return obj.Selected() === true;
+			});
+			return selectedAgentState;
+		}
+
+		that.deselectAll = function() {
+			that.agentStates().forEach(function (agentState) {
+				agentState.Selected(false);
+			});
+		}
 
 		return that;
 	};

@@ -7,7 +7,8 @@
 	'ajax',
 	'resources',
 	'amplify',
-	'toggleQuerier'
+	'toggleQuerier',
+	'permissions'
 ], function (
 	ko,
 	view,
@@ -17,7 +18,8 @@
 	ajax,
 	resources,
 	amplify,
-	toggleQuerier
+	toggleQuerier,
+	permissions
 ) {
 	var viewModel;
 	return {
@@ -107,6 +109,15 @@
 			} else {
 				populateViewModel(options.id);
 			}
+
+			permissions.get().done(function (data) {
+				viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
+				viewModel.permissionAddIntradayAbsence(data.IsAddIntradayAbsenceAvailable);
+				viewModel.permissionRemoveAbsence(data.IsRemoveAbsenceAvailable);
+				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
+				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
+			});
+
 		}
 	};
 });
