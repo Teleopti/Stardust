@@ -10,22 +10,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
 	public class AgentBadgeCalculator : IAgentBadgeCalculator
 	{
-		const string badgeDescriptionTemplate = "{0} bronze badge(s), {1} silver badge(s) and {2} gold badge(s) for {3}";
-
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(AgentBadgeCalculator));
 		private readonly IStatisticRepository _statisticRepository;
-		private readonly IAgentBadgeRepository _badgeRepository;
+		private readonly IAgentBadgeTransactionRepository _transactionRepository;
+		private readonly INow _now;
 
-		public AgentBadgeCalculator(IStatisticRepository statisticRepository, IAgentBadgeRepository badgeRepository)
+		public AgentBadgeCalculator(IStatisticRepository statisticRepository, IAgentBadgeTransactionRepository transactionRepository, INow now)
 		{
 			_statisticRepository = statisticRepository;
-			_badgeRepository = badgeRepository;
+			_transactionRepository = transactionRepository;
+			_now = now;
 		}
 
-		protected IList<IAgentBadge> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge,
+		protected IList<IAgentBadgeTransaction> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge,
 			BadgeType badgeType, int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date)
 		{
-			var newAwardedBadges = new List<IAgentBadge>();
+			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 
 			var agentsListShouldGetBadge = agentsThatShouldGetBadge as IList<Guid> ?? agentsThatShouldGetBadge.ToList();
 			if (!agentsListShouldGetBadge.Any())
@@ -38,64 +38,36 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					agentsListShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
 						.Where(a => a != null))
 			{
-				var badge = _badgeRepository.Find(person, badgeType);
+				var badge = _transactionRepository.Find(person, badgeType, date);
 
-				if (badge == null || badge.LastCalculatedDate < date)
+				if (badge == null)
 				{
 					if (Logger.IsDebugEnabled)
 					{
-						if (badge == null)
-						{
-							Logger.DebugFormat("Award badge to agent {0} (ID: {1}), this agent has no badge for {2} yet.",
-								person.Name, person.Id, badgeType);
-						}
-						else
-						{
-							var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
-								badgeType);
-							Logger.DebugFormat(
-								"Award badge to agent {0} (ID: {1}), Now this agent has {2}.", person.Name, person.Id, badgeDesc);
-						}
+						Logger.DebugFormat("Award {0} badge to agent {1} (ID: {2}).",
+							badgeType, person.Name, person.Id);
 					}
 
-					var newBadge = new Domain.Common.AgentBadge
+					var newBadge = new Domain.Common.AgentBadgeTransaction
 					{
 						Person = person,
-						BronzeBadge = 1,
-						BronzeBadgeAdded = true,
+						Amount = 1,
 						BadgeType = badgeType,
-						LastCalculatedDate = date
+						CalculatedDate = date,
+						Description = "",
+						InsertedOn = _now.UtcDateTime()
 					};
-					if (badge == null)
-					{
-						badge = newBadge;
-						_badgeRepository.Add(badge);
-					}
-					else
-					{
-						badge.AddBadge(newBadge, silverToBronzeBadgeRate, goldToSilverBadgeRate);
-					}
 
-					newAwardedBadges.Add(badge);
-
-					if (Logger.IsDebugEnabled)
-					{
-						var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
-							badgeType);
-						Logger.DebugFormat(
-							"Now the agent {0} (ID: {1}) has {2}.", person.Name, person.Id, badgeDesc);
-					}
+					_transactionRepository.Add(newBadge);
+					newAwardedBadges.Add(newBadge);
 				}
 				else
 				{
 					if (Logger.IsDebugEnabled)
 					{
-						var badgeDesc = string.Format(badgeDescriptionTemplate, badge.BronzeBadge, badge.SilverBadge, badge.GoldBadge,
-							badgeType);
 						Logger.DebugFormat(
-							"Last {0} badge calculated date {1:yyyy-MM-dd} of agent {2} (ID: {3}) is not earlier than {4:yyyy-MM-dd}, "
-							+ "no badge will awarded. now this agent has {5}.",
-							badgeType, badge.LastCalculatedDate.Date, person.Name, person.Id, date.Date, badgeDesc);
+							"Agent {0} (ID: {1}) already get {2} badge for {3:yyyy-MM-dd}, no duplicate badge will awarded.",
+							person.Name, person.Id, badgeType, date.Date);
 					}
 				}
 			}
@@ -103,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadge> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+		public IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
 			IAgentBadgeThresholdSettings setting)
 		{
@@ -116,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			var personList = allPersons.ToList();
-			var newAwardedBadges = new List<IAgentBadge>();
+			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList =
 				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold);
 
@@ -148,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadge> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, IAgentBadgeThresholdSettings setting)
 		{
 			if (Logger.IsDebugEnabled)
@@ -160,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			var personList = allPersons.ToList();
-			var newAwardedBadges = new List<IAgentBadge>();
+			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
 			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
 
@@ -190,7 +162,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadge> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+		public IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, IAgentBadgeThresholdSettings setting)
 		{
 			if (Logger.IsDebugEnabled)
@@ -202,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			var personList = allPersons.ToList();
-			var newAwardedBadges = new List<IAgentBadge>();
+			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold);
 			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
 

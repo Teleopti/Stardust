@@ -6,14 +6,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
 	public interface IAgentBadgeCalculator
 	{
-		IEnumerable<IAgentBadge> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+		IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
 			IAgentBadgeThresholdSettings setting);
 
-		IEnumerable<IAgentBadge> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+		IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, IAgentBadgeThresholdSettings setting);
 
-		IEnumerable<IAgentBadge> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+		IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, IAgentBadgeThresholdSettings setting);
 	}
 }

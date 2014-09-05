@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			// Set badge calculation start at 5:00 AM
 			// Just hard code it now, the best solution is to trigger it from ETL
 			var nextMessageShouldBeProcessed =
-				TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
+ TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -81,25 +81,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 
-				ICollection<IPerson> allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
+				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var calculateDate = new DateOnly(message.CalculationDate);
+
 				var newAwardedBadgesForAdherence = _calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
 					adherenceReportSetting.CalculationMethod, setting).ToList();
-				var newAwardedBadgesForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
-				var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
-					calculateDate, setting).ToList();
-
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+				}
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate);
+
+				var newAwardedBadgesForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+				if (Logger.IsDebugEnabled)
+				{
 					Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+				}
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate);
+
+				var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
+					calculateDate, setting).ToList();
+				if (Logger.IsDebugEnabled)
+				{
 					Logger.DebugFormat("Total {0} agents will get new badge for answered calls", newAwardedBadgesForAnsweredCalls.Count());
 				}
-
-				// send message
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate);
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate);
 				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate);
 
 				uow.PersistAll();
@@ -124,8 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 		}
 
-		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadge> newAwardedBadges,
-			IAgentBadgeThresholdSettings setting, DateOnly calculateDate)
+		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges, IAgentBadgeThresholdSettings setting, DateOnly calculateDate)
 		{
 			foreach (var badge in newAwardedBadges)
 			{
@@ -159,6 +164,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						break;
 				}
 
+				/*
 				if (badge.BronzeBadgeAdded)
 				{
 					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
@@ -177,6 +183,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
 					sendGoldBadgeMessage(person, badgeType, message);
 				}
+				//*/
 			}
 		}
 
