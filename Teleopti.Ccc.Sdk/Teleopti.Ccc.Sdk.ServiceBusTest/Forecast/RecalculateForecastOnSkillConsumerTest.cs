@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class RecalculateForecastOnSkillConsumerTest
 	{
-		private MockRepository _mocks;
 		private RecalculateForecastOnSkillConsumer _target;
 		private IScenarioRepository _scenarioRepository;
 		private ISkillDayRepository _skillDayRepository;
@@ -30,53 +29,50 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_scenarioRepository = _mocks.DynamicMock<IScenarioRepository>();
-			_skillDayRepository = _mocks.DynamicMock<ISkillDayRepository>();
-			_skillRepository = _mocks.DynamicMock<ISkillRepository>();
-			_currentunitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-			_unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-			_statisticLoader = _mocks.DynamicMock<IStatisticLoader>();
-			_reforecastPercentCalculator = _mocks.DynamicMock<IReforecastPercentCalculator>();
+			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			_skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			_currentunitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_statisticLoader = MockRepository.GenerateMock<IStatisticLoader>();
+			_reforecastPercentCalculator = MockRepository.GenerateMock<IReforecastPercentCalculator>();
 			_target = new RecalculateForecastOnSkillConsumer(_scenarioRepository, _skillDayRepository, _skillRepository,
 															 _currentunitOfWorkFactory, _statisticLoader, _reforecastPercentCalculator);
-			_uow = _mocks.DynamicMock<IUnitOfWork>();
+			_uow = MockRepository.GenerateMock<IUnitOfWork>();
 		}
 
 		[Test]
 		public void ShouldOnlyDoDefaultScenario()
 		{
 			var scenarioId = Guid.NewGuid();
-			_scenario = _mocks.StrictMock<IScenario>();
+			_scenario = MockRepository.GenerateStrictMock<IScenario>();
 			var message = new RecalculateForecastOnSkillMessageCollection {ScenarioId = scenarioId};
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-			Expect.Call(_scenario.DefaultScenario).Return(false);
-			_mocks.ReplayAll();
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
+			_scenario.Stub(x => x.DefaultScenario).Return(false);
 			_target.Consume(message);
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldSkipIfWrongSkillId()
 		{
 			var scenarioId = Guid.NewGuid();
-			_scenario = _mocks.StrictMock<IScenario>();
+			_scenario = MockRepository.GenerateStrictMock<IScenario>();
 			var skillMessage = new RecalculateForecastOnSkillMessage();
 			var message = new RecalculateForecastOnSkillMessageCollection
 			              	{
 			              		ScenarioId = scenarioId,
 			              		MessageCollection = new Collection<RecalculateForecastOnSkillMessage> {skillMessage}
 			              	};
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-			Expect.Call(_scenario.DefaultScenario).Return(true);
-			Expect.Call(_skillRepository.Get(Guid.Empty)).Return(null);
-			_mocks.ReplayAll();
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
+			_scenario.Stub(x => x.DefaultScenario).Return(true);
+			_skillRepository.Stub(x => x.Get(Guid.Empty)).Return(null);
+			
 			_target.Consume(message);
-			_mocks.VerifyAll();
+			
 		}
 
 		[Test]
@@ -86,31 +82,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillId = Guid.NewGuid();
 			var workloadId = Guid.NewGuid();
 			var timezone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-			_scenario = _mocks.StrictMock<IScenario>();
-			var skill = _mocks.DynamicMock<ISkill>();
+			_scenario = MockRepository.GenerateStrictMock<IScenario>();
+			var skill = MockRepository.GenerateMock<ISkill>();
 			var skillMessage = new RecalculateForecastOnSkillMessage { SkillId = skillId, WorkloadIds = new Collection<Guid> { workloadId } };
 			var message = new RecalculateForecastOnSkillMessageCollection
 			{
 				ScenarioId = scenarioId,
 				MessageCollection = new Collection<RecalculateForecastOnSkillMessage> { skillMessage }
 			};
-			var skillDay = _mocks.DynamicMock<ISkillDay>();
-			var workloadDay = _mocks.DynamicMock<IWorkloadDay>();
-			var workload = _mocks.DynamicMock<IWorkload>();
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-			Expect.Call(_scenario.DefaultScenario).Return(true);
-			Expect.Call(_skillRepository.Get(skillId)).Return(skill);
-			Expect.Call(skill.TimeZone).Return(timezone);
-			Expect.Call(_skillDayRepository.FindRange(new DateOnlyPeriod(), skill, _scenario)).IgnoreArguments().Return(
+			var skillDay = MockRepository.GenerateMock<ISkillDay>();
+			var workloadDay = MockRepository.GenerateMock<IWorkloadDay>();
+			var workload = MockRepository.GenerateMock<IWorkload>();
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
+			_scenario.Stub(x => x.DefaultScenario).Return(true);
+			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
+			skill.Stub(x => x.TimeZone).Return(timezone);
+			_skillDayRepository.Stub(x => x.FindRange(new DateOnlyPeriod(), skill, _scenario)).IgnoreArguments().Return(
 				new Collection<ISkillDay>{skillDay});
-			Expect.Call(skillDay.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new List<IWorkloadDay> { workloadDay }));
-			Expect.Call(workloadDay.Workload).Return(workload);
-			Expect.Call(workload.Id).Return(Guid.NewGuid());
-			_mocks.ReplayAll();
+			skillDay.Stub(x => x.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new List<IWorkloadDay> { workloadDay }));
+			workloadDay.Stub(x => x.Workload).Return(workload);
+			workload.Stub(x => x.Id).Return(Guid.NewGuid());
 			_target.Consume(message);
-			_mocks.VerifyAll();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -120,34 +114,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillId = Guid.NewGuid();
 			var workloadId = Guid.NewGuid();
 			var timezone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-			_scenario = _mocks.StrictMock<IScenario>();
-			var skill = _mocks.DynamicMock<ISkill>();
+			_scenario = MockRepository.GenerateStrictMock<IScenario>();
+			var skill = MockRepository.GenerateMock<ISkill>();
 			var skillMessage = new RecalculateForecastOnSkillMessage { SkillId = skillId, WorkloadIds = new Collection<Guid> { workloadId } };
 			var message = new RecalculateForecastOnSkillMessageCollection
 			{
 				ScenarioId = scenarioId,
 				MessageCollection = new Collection<RecalculateForecastOnSkillMessage> { skillMessage }
 			};
-			var skillDay = _mocks.DynamicMock<ISkillDay>();
-			var workloadDay = _mocks.DynamicMock<IWorkloadDay>();
-			var workload = _mocks.DynamicMock<IWorkload>();
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-			Expect.Call(_scenario.DefaultScenario).Return(true);
-			Expect.Call(_skillRepository.Get(skillId)).Return(skill);
-			Expect.Call(skill.TimeZone).Return(timezone);
-			Expect.Call(_skillDayRepository.FindRange(new DateOnlyPeriod(), skill, _scenario)).IgnoreArguments().Return(
+			var skillDay = MockRepository.GenerateMock<ISkillDay>();
+			var workloadDay = MockRepository.GenerateStrictMock<IWorkloadDay>();
+			var workload = MockRepository.GenerateMock<IWorkload>();
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
+			_scenario.Stub(x => x.DefaultScenario).Return(true);
+			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
+			skill.Stub(x => x.TimeZone).Return(timezone);
+			_skillDayRepository.Stub(x => x.FindRange(new DateOnlyPeriod(), skill, _scenario)).IgnoreArguments().Return(
 				new Collection<ISkillDay> { skillDay });
-			Expect.Call(skillDay.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new List<IWorkloadDay> { workloadDay }));
-			Expect.Call(workloadDay.Workload).Return(workload);
-			Expect.Call(workload.Id).Return(workloadId);
-			Expect.Call(_statisticLoader.Execute(new DateTimePeriod(), workloadDay, null)).IgnoreArguments().Return(
+			skillDay.Stub(x => x.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new List<IWorkloadDay> { workloadDay }));
+			workloadDay.Stub(x => x.Workload).Return(workload);
+			workload.Stub(x => x.Id).Return(workloadId);
+			_statisticLoader.Stub(x => x.Execute(new DateTimePeriod(), workloadDay, null)).IgnoreArguments().Return(
 				new DateTime(2012, 12, 18));
-			Expect.Call(_reforecastPercentCalculator.Calculate(workloadDay, new DateTime(2012, 12, 18))).Return(1.1);
-			_mocks.ReplayAll();
+			_reforecastPercentCalculator.Stub(x => x.Calculate(workloadDay, new DateTime(2012, 12, 18))).Return(1.1);
+			workloadDay.Stub(x => x.Tasks).Return(100);
+			workloadDay.Stub(x => x.Tasks).SetPropertyWithArgument(100 * 1.1);
+			workloadDay.Stub(x => x.CampaignTasks).SetPropertyWithArgument(new Percent(0));
 			_target.Consume(message);
-			_mocks.VerifyAll();
 		}
 	}
 
