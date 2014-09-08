@@ -237,8 +237,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				string lowerSearchText = expected.ToLower(cultureInfo);
 				var personQuery = Search(lowerSearchText);
-				if (personQuery.Count == 1)
+				if (personQuery.Count == 1 )
 				{
+					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First());
+					if (_userSelectedPersonList.Contains(gridColumnPerson)) continue;
 					_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(personQuery.First()));
 					actualInput.Remove(expected);
 				}
@@ -338,6 +340,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 		}
+
+		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+		{
+
+		}
 	}
 
 
@@ -388,6 +395,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public IPerson Person
 		{
 			get { return _person; }
+		}
+
+		public override bool Equals(object o)
+		{
+			var compareTo = (FilterMultiplePersonGridControlItem ) o;
+			if (Person == compareTo.Person ) return true;
+			return false;
 		}
 	}
 

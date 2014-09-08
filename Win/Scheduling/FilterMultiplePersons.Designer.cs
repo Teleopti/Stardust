@@ -88,7 +88,7 @@
 			this.panel4.Location = new System.Drawing.Point(0, 0);
 			this.panel4.Name = "panel4";
 			this.panel4.Size = new System.Drawing.Size(528, 715);
-			this.panel4.TabIndex = 5;
+			this.panel4.TabIndex = 0;
 			// 
 			// panel1
 			// 
@@ -100,7 +100,7 @@
 			this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(528, 41);
-			this.panel1.TabIndex = 2;
+			this.panel1.TabIndex = 0;
 			// 
 			// buttonAdd
 			// 
@@ -116,7 +116,7 @@
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdd.Size = new System.Drawing.Size(95, 27);
-			this.buttonAdd.TabIndex = 6;
+			this.buttonAdd.TabIndex = 9;
 			this.buttonAdd.Text = "xxAdd";
 			this.buttonAdd.UseVisualStyle = true;
 			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
@@ -136,7 +136,7 @@
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonCancel.Size = new System.Drawing.Size(95, 27);
-			this.buttonCancel.TabIndex = 5;
+			this.buttonCancel.TabIndex = 11;
 			this.buttonCancel.Text = "xxCancel";
 			this.buttonCancel.UseVisualStyle = true;
 			// 
@@ -155,7 +155,7 @@
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonOk.Size = new System.Drawing.Size(95, 27);
-			this.buttonOk.TabIndex = 4;
+			this.buttonOk.TabIndex = 10;
 			this.buttonOk.Text = "xxOK";
 			this.buttonOk.UseVisualStyle = true;
 			// 
@@ -265,7 +265,8 @@
 			this.gridListControlDefaultSearch.Properties.MarkRowHeader = false;
 			this.gridListControlDefaultSearch.SelectedIndex = -1;
 			this.gridListControlDefaultSearch.Size = new System.Drawing.Size(520, 124);
-			this.gridListControlDefaultSearch.TabIndex = 3;
+			this.gridListControlDefaultSearch.TabIndex = 0;
+			this.gridListControlDefaultSearch.TabStop = false;
 			this.gridListControlDefaultSearch.ThemesEnabled = true;
 			this.gridListControlDefaultSearch.TopIndex = 0;
 			// 
@@ -288,8 +289,9 @@
 			this.textBox1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(433, 21);
-			this.textBox1.TabIndex = 1;
+			this.textBox1.TabIndex = 0;
 			this.textBox1.TextChanged += new System.EventHandler(this.textBox1TextChanged);
+			this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
 			// 
 			// label1
 			// 
@@ -345,7 +347,8 @@
 			this.textBox2.ReadOnly = true;
 			this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
 			this.textBox2.Size = new System.Drawing.Size(526, 48);
-			this.textBox2.TabIndex = 0;
+			this.textBox2.TabIndex = 34;
+			this.textBox2.TabStop = false;
 			this.textBox2.Visible = false;
 			// 
 			// panel9
@@ -368,7 +371,8 @@
 			this.checkBoxAdvShowDuplicateRecipient.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvShowDuplicateRecipient.Name = "checkBoxAdvShowDuplicateRecipient";
 			this.checkBoxAdvShowDuplicateRecipient.Size = new System.Drawing.Size(254, 21);
-			this.checkBoxAdvShowDuplicateRecipient.TabIndex = 7;
+			this.checkBoxAdvShowDuplicateRecipient.TabIndex = 33;
+			this.checkBoxAdvShowDuplicateRecipient.TabStop = false;
 			this.checkBoxAdvShowDuplicateRecipient.Text = "xxShowDuplicateRecipient";
 			this.checkBoxAdvShowDuplicateRecipient.ThemesEnabled = false;
 			this.checkBoxAdvShowDuplicateRecipient.Visible = false;
@@ -388,7 +392,7 @@
 			this.buttonAdvParse.Name = "buttonAdvParse";
 			this.buttonAdvParse.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvParse.Size = new System.Drawing.Size(95, 27);
-			this.buttonAdvParse.TabIndex = 6;
+			this.buttonAdvParse.TabIndex = 1;
 			this.buttonAdvParse.Text = "xxResolve";
 			this.buttonAdvParse.UseVisualStyle = true;
 			this.buttonAdvParse.Click += new System.EventHandler(this.buttonAdvParse_Click);
@@ -413,7 +417,7 @@
 			this.textBoxCustomSearch.Multiline = true;
 			this.textBoxCustomSearch.Name = "textBoxCustomSearch";
 			this.textBoxCustomSearch.Size = new System.Drawing.Size(436, 20);
-			this.textBoxCustomSearch.TabIndex = 5;
+			this.textBoxCustomSearch.TabIndex = 0;
 			this.textBoxCustomSearch.TextChanged += new System.EventHandler(this.textBoxCustomSearch_TextChanged);
 			// 
 			// label3
@@ -444,7 +448,8 @@
 			this.gridListControlResult.Properties.MarkRowHeader = false;
 			this.gridListControlResult.SelectedIndex = -1;
 			this.gridListControlResult.Size = new System.Drawing.Size(528, 478);
-			this.gridListControlResult.TabIndex = 4;
+			this.gridListControlResult.TabIndex = 3;
+			this.gridListControlResult.TabStop = false;
 			this.gridListControlResult.ThemesEnabled = true;
 			this.gridListControlResult.TopIndex = 0;
 			// 
