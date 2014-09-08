@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Move activity
+﻿Feature: Move activity
 	As a team leader
 	I want to move an activity for one agent
 

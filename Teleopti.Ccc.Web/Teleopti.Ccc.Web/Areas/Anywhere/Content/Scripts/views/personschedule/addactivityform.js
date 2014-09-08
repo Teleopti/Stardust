@@ -158,7 +158,7 @@ define([
 			if (self.StartTime() && self.EndTime()) {
 				startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), self.ianaTimeZone(), self.ScheduleDate);
 				endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), self.ianaTimeZone(), self.ScheduleDate);
-				if (startTimeAsMoment.diff(self.endTimeAsMoment) < 0) {
+				if (startTimeAsMoment.diff(endTimeAsMoment) < 0) {
 					if (self.intersectWithShift())
 						return true;
 					startTimeAsMoment.add('d', 1);

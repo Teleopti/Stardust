@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Manage agent schedule in other time zone
+﻿Feature: Manage agent schedule in other time zone
 	In order to manage a schedule for an agent in another time zone
 	As a team leader
 	I want to see the time in both my time zone as well as the agent's

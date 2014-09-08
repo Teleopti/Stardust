@@ -274,7 +274,10 @@ define([
 	    };
 
 	    this.initMoveActivityForm = function() {
-	        self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
+	    	self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
+	    	if (!self.MoveActivityForm.ScheduleDate()) {
+	    		self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+		    }
 	    };
 	};
 });

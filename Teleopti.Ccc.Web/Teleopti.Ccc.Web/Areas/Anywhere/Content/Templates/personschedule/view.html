@@ -29,7 +29,7 @@
 					<tbody>
 						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }, css:{'time-zone-style': IsOtherTimeZone()}">
 							<td class="person-name person-name-column">
-								<!-- ko if: IsOtherTimeZone() -->
+								<!-- ko if: IsOtherTimeZone -->
 								<div class="other-time-zone-name-div">
 									<i class="glyphicon glyphicon-globe"></i>
 									<span class="small other-time-zone-short" data-bind="text: TimeZoneNameShort"></span>
@@ -47,9 +47,9 @@
 		}">
 									</div>
 									<!-- /ko -->
-									<!-- ko if: IsDayOff() -->
+									<!-- ko if: IsDayOff -->
 									<!-- ko with: DayOff -->
-									<!-- ko if: OverlapsTimeLine() -->
+									<!-- ko if: OverlapsTimeLine -->
 									<div class="dayoff absolute" data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }" style="top: 13px"></div>
 									<!-- /ko -->
 									<!-- /ko -->
@@ -412,9 +412,9 @@
 		},
 		attr: {
 				'data-start-time': StartTime,
-				'data-length-minutes': LengthMinutes()
+				'data-length-minutes': LengthMinutes
 		},
-		css: Active()
+		css: Active
 		">
 	</div>
 	<!-- /ko -->
