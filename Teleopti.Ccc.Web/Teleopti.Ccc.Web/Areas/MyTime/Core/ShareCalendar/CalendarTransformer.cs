@@ -3,6 +3,7 @@ using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Interfaces;
 using Event = DDay.iCal.Event;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar

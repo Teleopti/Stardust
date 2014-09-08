@@ -609,6 +609,8 @@
     <Compile Include="Domain\ILogWriter.cs" />
     <Compile Include="Domain\WorkTimeSource.cs" />
     <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
+    <Compile Include="IJsonDeserializer.cs" />
+    <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
@@ -818,6 +820,7 @@
     <Compile Include="Domain\UnderstaffingDetails.cs" />
     <Compile Include="Messages\Rta\StartUpBusinessUnit.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
+    <Compile Include="ToStringSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

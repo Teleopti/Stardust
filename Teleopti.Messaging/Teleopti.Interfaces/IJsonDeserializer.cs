@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Domain.ApplicationLayer
+﻿namespace Teleopti.Interfaces
 {
 	public interface IJsonDeserializer
 	{
