@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (!(templateTaskPeriod.Period.StartDateTime > lastPeriodEndToUse))
 				{
-					sumTasks += templateTaskPeriod.Tasks;
+					sumTasks += templateTaskPeriod.TotalTasks;
 					sumStat += templateTaskPeriod.StatisticTask.StatOfferedTasks;
 				}
 

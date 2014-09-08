@@ -132,11 +132,11 @@
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExScenario);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExFilter);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripTools);
+			resources.ApplyResources(this.toolStripTabItem1.Panel, "ribbonControlAdv1.ribbonPanel1");
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.ShowCaption = true;
 			this.toolStripTabItem1.Panel.ShowLauncher = false;
-			resources.ApplyResources(this.toolStripTabItem1.Panel, "ribbonControlAdv1.ribbonPanel1");
 			this.toolStripTabItem1.Position = 0;
 			this.SetShortcut(this.toolStripTabItem1, System.Windows.Forms.Keys.None);
 			resources.ApplyResources(this.toolStripTabItem1, "toolStripTabItem1");

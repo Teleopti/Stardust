@@ -16,7 +16,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 		self.setCalendarLinkStatus(true);
 	};
 	self.DeactivateCalendarSharing = function () {
-		self.ssetCalendarLinkStatus(false);
+		self.setCalendarLinkStatus(false);
 	};
 
 	self.IsNotificationSupported = ko.computed(function () {

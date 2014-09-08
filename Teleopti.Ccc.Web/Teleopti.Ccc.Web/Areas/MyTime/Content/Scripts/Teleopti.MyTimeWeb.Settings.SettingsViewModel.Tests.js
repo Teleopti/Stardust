@@ -41,7 +41,7 @@ $(document).ready(function() {
 		equal(viewModel.isSetAgentDescriptionEnabled(), false);
 	});
 
-	test("should load cultrues", function () {
+	test("should load cultures", function () {
 		var cultures = [{ id: "1", text: "Culture A" },
 			{ id: "2", text: "Culture B" },
 			{ id: "3", text: "Culture C" }];

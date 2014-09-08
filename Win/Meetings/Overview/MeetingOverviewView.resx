@@ -128,12 +128,348 @@
   <data name="ribbonControlAdv1.MenuButtonVisible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="ribbonControlAdv1.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 65</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>48</value>
+  </metadata>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="toolStripButtonClose.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="toolStripButtonClose.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
+  </data>
+  <data name="&gt;&gt;toolStripTabItem1.Name" xml:space="preserve">
+    <value>toolStripTabItem1</value>
+  </data>
+  <data name="&gt;&gt;toolStripTabItem1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripTabItem, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonAdd.Name" xml:space="preserve">
+    <value>toolStripButtonAdd</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonAdd.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonOpen.Name" xml:space="preserve">
+    <value>toolStripButtonOpen</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonOpen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonDelete.Name" xml:space="preserve">
+    <value>toolStripButtonDelete</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonCut.Name" xml:space="preserve">
+    <value>toolStripButtonCut</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonCut.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonCopy.Name" xml:space="preserve">
+    <value>toolStripButtonCopy</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonCopy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonPaste.Name" xml:space="preserve">
+    <value>toolStripButtonPaste</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonPaste.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripComboBoxScenario.Name" xml:space="preserve">
+    <value>toolStripComboBoxScenario</value>
+  </data>
+  <data name="&gt;&gt;toolStripComboBoxScenario.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonFilter.Name" xml:space="preserve">
+    <value>toolStripButtonFilter</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonFetchForUser.Name" xml:space="preserve">
+    <value>toolStripButtonFetchForUser</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonFetchForUser.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripPanelItem1.Name" xml:space="preserve">
+    <value>toolStripPanelItem1</value>
+  </data>
+  <data name="&gt;&gt;toolStripPanelItem1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripPanelItem, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripComboBoxResolution.Name" xml:space="preserve">
+    <value>toolStripComboBoxResolution</value>
+  </data>
+  <data name="&gt;&gt;toolStripComboBoxResolution.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripLabel1.Name" xml:space="preserve">
+    <value>toolStripLabel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripLabel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonExport.Name" xml:space="preserve">
+    <value>toolStripButtonExport</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonExport.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonClose.Name" xml:space="preserve">
+    <value>toolStripButtonClose</value>
+  </data>
+  <data name="&gt;&gt;toolStripButtonClose.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemNew.Name" xml:space="preserve">
+    <value>toolStripMenuItemNew</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemNew.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemOpen.Name" xml:space="preserve">
+    <value>toolStripMenuItemOpen</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemOpen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemDelete.Name" xml:space="preserve">
+    <value>toolStripMenuItemDelete</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemCut.Name" xml:space="preserve">
+    <value>toolStripMenuItemCut</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemCut.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemCopy.Name" xml:space="preserve">
+    <value>toolStripMenuItemCopy</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemCopy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemPaste.Name" xml:space="preserve">
+    <value>toolStripMenuItemPaste</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemPaste.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MeetingOverviewView</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Teleopti.Ccc.Win.Common.BaseRibbonForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="toolStripButtonClose.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 36</value>
+  </data>
+  <data name="toolStripButtonClose.Text" xml:space="preserve">
+    <value>xxClose</value>
+  </data>
+  <data name="ribbonControlAdv1.OfficeMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 84</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Name" xml:space="preserve">
+    <value>ribbonControlAdv1.OfficeMenu</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <metadata name="toolStripTabItem1.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </metadata>
+  <metadata name="toolStripExEdit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>394, 58</value>
+  </metadata>
+  <data name="toolStripExEdit.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripExEdit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 1</value>
+  </data>
+  <data name="toolStripExEdit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 75</value>
+  </data>
+  <data name="toolStripExEdit.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="toolStripExEdit.Text" xml:space="preserve">
+    <value>xxEdit</value>
+  </data>
+  <data name="&gt;&gt;toolStripExEdit.Name" xml:space="preserve">
+    <value>toolStripExEdit</value>
+  </data>
+  <data name="&gt;&gt;toolStripExEdit.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripExEdit.Parent" xml:space="preserve">
+    <value>ribbonControlAdv1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripExEdit.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="toolStripExClipboard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>532, 58</value>
+  </metadata>
+  <data name="toolStripExClipboard.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripExClipboard.Location" type="System.Drawing.Point, System.Drawing">
+    <value>156, 1</value>
+  </data>
+  <data name="toolStripExClipboard.Size" type="System.Drawing.Size, System.Drawing">
+    <value>145, 75</value>
+  </data>
+  <data name="toolStripExClipboard.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="toolStripExClipboard.Text" xml:space="preserve">
+    <value>xxClipboard</value>
+  </data>
+  <data name="&gt;&gt;toolStripExClipboard.Name" xml:space="preserve">
+    <value>toolStripExClipboard</value>
+  </data>
+  <data name="&gt;&gt;toolStripExClipboard.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripExClipboard.Parent" xml:space="preserve">
+    <value>ribbonControlAdv1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripExClipboard.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="toolStripExScenario.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>649, 58</value>
+  </metadata>
+  <data name="toolStripExScenario.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripExScenario.Location" type="System.Drawing.Point, System.Drawing">
+    <value>303, 1</value>
+  </data>
+  <data name="toolStripExScenario.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 75</value>
+  </data>
+  <data name="toolStripExScenario.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="toolStripExScenario.Text" xml:space="preserve">
+    <value>xxScenario</value>
+  </data>
+  <data name="&gt;&gt;toolStripExScenario.Name" xml:space="preserve">
+    <value>toolStripExScenario</value>
+  </data>
+  <data name="&gt;&gt;toolStripExScenario.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripExScenario.Parent" xml:space="preserve">
+    <value>ribbonControlAdv1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripExScenario.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <metadata name="toolStripExFilter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>806, 58</value>
+  </metadata>
+  <data name="toolStripExFilter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripExFilter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>454, 1</value>
+  </data>
+  <data name="toolStripExFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>379, 75</value>
+  </data>
+  <data name="toolStripExFilter.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="toolStripExFilter.Text" xml:space="preserve">
+    <value>xxDisplay</value>
+  </data>
+  <data name="&gt;&gt;toolStripExFilter.Name" xml:space="preserve">
+    <value>toolStripExFilter</value>
+  </data>
+  <data name="&gt;&gt;toolStripExFilter.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripExFilter.Parent" xml:space="preserve">
+    <value>ribbonControlAdv1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripExFilter.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <metadata name="toolStripTools.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 58</value>
+  </metadata>
+  <data name="toolStripTools.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripTools.Location" type="System.Drawing.Point, System.Drawing">
+    <value>835, 1</value>
+  </data>
+  <data name="toolStripTools.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 75</value>
+  </data>
+  <data name="toolStripTools.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="&gt;&gt;toolStripTools.Name" xml:space="preserve">
+    <value>toolStripTools</value>
+  </data>
+  <data name="&gt;&gt;toolStripTools.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;toolStripTools.Parent" xml:space="preserve">
+    <value>ribbonControlAdv1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripTools.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="ribbonControlAdv1.ribbonPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 0, 5, 0</value>
+  </data>
+  <data name="ribbonControlAdv1.ribbonPanel1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 1, 41, 0</value>
+  </data>
+  <data name="ribbonControlAdv1.ribbonPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="ribbonControlAdv1.ribbonPanel1.Text" xml:space="preserve">
+    <value>XXMeetings</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Name" xml:space="preserve">
+    <value>ribbonControlAdv1.ribbonPanel1</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Parent" xml:space="preserve">
+    <value>ribbonControlAdv1</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -142,13 +478,10 @@
     <value>48</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
+    <value>7, 15</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1102, 651</value>
-  </data>
-  <data name="scheduleControl1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
+    <value>1398, 745</value>
   </data>
   <data name="scheduleControl1.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -159,104 +492,6 @@
   <metadata name="contextMenuStripSchedule.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 13</value>
   </metadata>
-  <data name="toolStripMenuItemNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-        MafenmvGfwDMFVl1QtXx+QAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="toolStripMenuItemNew.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="toolStripMenuItemNew.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="toolStripMenuItemNew.Text" xml:space="preserve">
-    <value>xxAdd</value>
-  </data>
-  <data name="toolStripMenuItemOpen.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="toolStripMenuItemOpen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="toolStripMenuItemOpen.Text" xml:space="preserve">
-    <value>xxOpen</value>
-  </data>
-  <data name="toolStripMenuItemDelete.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>Del</value>
-  </data>
-  <data name="toolStripMenuItemDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="toolStripMenuItemDelete.Text" xml:space="preserve">
-    <value>xxDelete</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 6</value>
-  </data>
-  <data name="toolStripMenuItemCut.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>Ctrl+X</value>
-  </data>
-  <data name="toolStripMenuItemCut.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="toolStripMenuItemCut.Text" xml:space="preserve">
-    <value>xxCut</value>
-  </data>
-  <data name="toolStripMenuItemCopy.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>Ctrl+C</value>
-  </data>
-  <data name="toolStripMenuItemCopy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="toolStripMenuItemCopy.Text" xml:space="preserve">
-    <value>xxCopy</value>
-  </data>
-  <data name="toolStripMenuItemPaste.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>Ctrl+V</value>
-  </data>
-  <data name="toolStripMenuItemPaste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="toolStripMenuItemPaste.Text" xml:space="preserve">
-    <value>xxPaste</value>
-  </data>
   <data name="contextMenuStripSchedule.Size" type="System.Drawing.Size, System.Drawing">
     <value>155, 142</value>
   </data>
@@ -266,14 +501,17 @@
   <data name="&gt;&gt;contextMenuStripSchedule.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="scheduleControl1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <data name="scheduleControl1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 8.25pt</value>
+    <value>Segoe UI, 9pt</value>
   </data>
   <data name="scheduleControl1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 137</value>
+    <value>1, 134</value>
   </data>
   <data name="scheduleControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1096, 508</value>
+    <value>1396, 611</value>
   </data>
   <data name="scheduleControl1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -291,7 +529,7 @@
     <value>1</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt</value>
+    <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -964,6 +1202,9 @@
         QgghhBBCCCGEENJF/h/E5SZ2CLOhSgAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>320, 149</value>
+  </data>
   <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 0, 1, 0</value>
   </data>
@@ -1108,29 +1349,32 @@
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>Teleopti.Ccc.Win.Common.BaseRibbonForm, Teleopti.Ccc.Win, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
   </data>
-  <data name="toolStripButtonClose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 36</value>
+  <data name="toolStripTabItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 25</value>
   </data>
-  <data name="toolStripButtonClose.Text" xml:space="preserve">
-    <value>xxClose</value>
+  <data name="toolStripTabItem1.Text" xml:space="preserve">
+    <value>XXMeetings</value>
   </data>
-  <data name="ribbonControlAdv1.OfficeMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 84</value>
+  <data name="ribbonControlAdv1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1400, 134</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Name" xml:space="preserve">
-    <value>ribbonControlAdv1.OfficeMenu</value>
+  <data name="ribbonControlAdv1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.OfficeMenu.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.MenuDropDown, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  <data name="ribbonControlAdv1.Text" xml:space="preserve">
+    <value>ribbonControlAdv1</value>
   </data>
-  <metadata name="toolStripTabItem1.TabGroup" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value />
-  </metadata>
-  <metadata name="toolStripExEdit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>394, 58</value>
-  </metadata>
-  <data name="toolStripExEdit.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
+  <data name="&gt;&gt;ribbonControlAdv1.Name" xml:space="preserve">
+    <value>ribbonControlAdv1</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.Type" xml:space="preserve">
+    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ribbonControlAdv1.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="toolStripButtonAdd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1218,36 +1462,6 @@
   <data name="toolStripButtonDelete.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
     <value>ImageAboveText</value>
   </data>
-  <data name="toolStripExEdit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 1</value>
-  </data>
-  <data name="toolStripExEdit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 75</value>
-  </data>
-  <data name="toolStripExEdit.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="toolStripExEdit.Text" xml:space="preserve">
-    <value>xxEdit</value>
-  </data>
-  <data name="&gt;&gt;toolStripExEdit.Name" xml:space="preserve">
-    <value>toolStripExEdit</value>
-  </data>
-  <data name="&gt;&gt;toolStripExEdit.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="&gt;&gt;toolStripExEdit.Parent" xml:space="preserve">
-    <value>ribbonControlAdv1.ribbonPanel1</value>
-  </data>
-  <data name="&gt;&gt;toolStripExEdit.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="toolStripExClipboard.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>532, 58</value>
-  </metadata>
-  <data name="toolStripExClipboard.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
-  </data>
   <data name="toolStripButtonCut.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -1293,68 +1507,8 @@
   <data name="toolStripButtonPaste.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
     <value>ImageAboveText</value>
   </data>
-  <data name="toolStripExClipboard.Location" type="System.Drawing.Point, System.Drawing">
-    <value>187, 1</value>
-  </data>
-  <data name="toolStripExClipboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 75</value>
-  </data>
-  <data name="toolStripExClipboard.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="toolStripExClipboard.Text" xml:space="preserve">
-    <value>xxClipboard</value>
-  </data>
-  <data name="&gt;&gt;toolStripExClipboard.Name" xml:space="preserve">
-    <value>toolStripExClipboard</value>
-  </data>
-  <data name="&gt;&gt;toolStripExClipboard.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="&gt;&gt;toolStripExClipboard.Parent" xml:space="preserve">
-    <value>ribbonControlAdv1.ribbonPanel1</value>
-  </data>
-  <data name="&gt;&gt;toolStripExClipboard.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <metadata name="toolStripExScenario.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>649, 58</value>
-  </metadata>
-  <data name="toolStripExScenario.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
-  </data>
   <data name="toolStripComboBoxScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 62</value>
-  </data>
-  <data name="toolStripExScenario.Location" type="System.Drawing.Point, System.Drawing">
-    <value>334, 1</value>
-  </data>
-  <data name="toolStripExScenario.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 75</value>
-  </data>
-  <data name="toolStripExScenario.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="toolStripExScenario.Text" xml:space="preserve">
-    <value>xxScenario</value>
-  </data>
-  <data name="&gt;&gt;toolStripExScenario.Name" xml:space="preserve">
-    <value>toolStripExScenario</value>
-  </data>
-  <data name="&gt;&gt;toolStripExScenario.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="&gt;&gt;toolStripExScenario.Parent" xml:space="preserve">
-    <value>ribbonControlAdv1.ribbonPanel1</value>
-  </data>
-  <data name="&gt;&gt;toolStripExScenario.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <metadata name="toolStripExFilter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>806, 58</value>
-  </metadata>
-  <data name="toolStripExFilter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
+    <value>140, 62</value>
   </data>
   <data name="toolStripButtonFilter.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
@@ -1389,50 +1543,20 @@
   <data name="toolStripButtonFetchForUser.ToolTipText" xml:space="preserve">
     <value>xxAlsoShowsMeetingsCreatedByMe</value>
   </data>
+  <data name="toolStripPanelItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 62</value>
+  </data>
+  <data name="toolStripPanelItem1.Text" xml:space="preserve">
+    <value>toolStripPanelItem1</value>
+  </data>
   <data name="toolStripComboBoxResolution.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 31</value>
+    <value>140, 31</value>
   </data>
   <data name="toolStripLabel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 15</value>
   </data>
   <data name="toolStripLabel1.Text" xml:space="preserve">
     <value>xxResolutionMin</value>
-  </data>
-  <data name="toolStripPanelItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 62</value>
-  </data>
-  <data name="toolStripPanelItem1.Text" xml:space="preserve">
-    <value>toolStripPanelItem1</value>
-  </data>
-  <data name="toolStripExFilter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>466, 1</value>
-  </data>
-  <data name="toolStripExFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>360, 75</value>
-  </data>
-  <data name="toolStripExFilter.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="toolStripExFilter.Text" xml:space="preserve">
-    <value>xxDisplay</value>
-  </data>
-  <data name="&gt;&gt;toolStripExFilter.Name" xml:space="preserve">
-    <value>toolStripExFilter</value>
-  </data>
-  <data name="&gt;&gt;toolStripExFilter.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="&gt;&gt;toolStripExFilter.Parent" xml:space="preserve">
-    <value>ribbonControlAdv1.ribbonPanel1</value>
-  </data>
-  <data name="&gt;&gt;toolStripExFilter.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <metadata name="toolStripTools.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 58</value>
-  </metadata>
-  <data name="toolStripTools.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
   </data>
   <data name="toolStripButtonExport.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
@@ -1449,70 +1573,102 @@
   <data name="toolStripButtonExport.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
     <value>ImageAboveText</value>
   </data>
-  <data name="toolStripTools.Location" type="System.Drawing.Point, System.Drawing">
-    <value>828, 1</value>
+  <data name="toolStripMenuItemNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        MafenmvGfwDMFVl1QtXx+QAAAABJRU5ErkJggg==
+</value>
   </data>
-  <data name="toolStripTools.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 75</value>
+  <data name="toolStripMenuItemNew.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
   </data>
-  <data name="toolStripTools.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
+  <data name="toolStripMenuItemNew.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 22</value>
   </data>
-  <data name="&gt;&gt;toolStripTools.Name" xml:space="preserve">
-    <value>toolStripTools</value>
+  <data name="toolStripMenuItemNew.Text" xml:space="preserve">
+    <value>xxAdd</value>
   </data>
-  <data name="&gt;&gt;toolStripTools.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.ToolStripEx, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  <data name="toolStripMenuItemOpen.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
   </data>
-  <data name="&gt;&gt;toolStripTools.Parent" xml:space="preserve">
-    <value>ribbonControlAdv1.ribbonPanel1</value>
+  <data name="toolStripMenuItemOpen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 22</value>
   </data>
-  <data name="&gt;&gt;toolStripTools.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="toolStripMenuItemOpen.Text" xml:space="preserve">
+    <value>xxOpen</value>
   </data>
-  <data name="ribbonControlAdv1.ribbonPanel1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="toolStripMenuItemDelete.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Del</value>
   </data>
-  <data name="ribbonControlAdv1.ribbonPanel1.Text" xml:space="preserve">
-    <value>XXMeetings</value>
+  <data name="toolStripMenuItemDelete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 22</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Name" xml:space="preserve">
-    <value>ribbonControlAdv1.ribbonPanel1</value>
+  <data name="toolStripMenuItemDelete.Text" xml:space="preserve">
+    <value>xxDelete</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonPanel, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 6</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.Parent" xml:space="preserve">
-    <value>ribbonControlAdv1</value>
+  <data name="toolStripMenuItemCut.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+X</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.ribbonPanel1.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="toolStripMenuItemCut.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 22</value>
   </data>
-  <data name="toolStripTabItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 25</value>
+  <data name="toolStripMenuItemCut.Text" xml:space="preserve">
+    <value>xxCut</value>
   </data>
-  <data name="toolStripTabItem1.Text" xml:space="preserve">
-    <value>XXMeetings</value>
+  <data name="toolStripMenuItemCopy.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+C</value>
   </data>
-  <data name="ribbonControlAdv1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1104, 134</value>
+  <data name="toolStripMenuItemCopy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 22</value>
   </data>
-  <data name="ribbonControlAdv1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="toolStripMenuItemCopy.Text" xml:space="preserve">
+    <value>xxCopy</value>
   </data>
-  <data name="ribbonControlAdv1.Text" xml:space="preserve">
-    <value>ribbonControlAdv1</value>
+  <data name="toolStripMenuItemPaste.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+V</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.Name" xml:space="preserve">
-    <value>ribbonControlAdv1</value>
+  <data name="toolStripMenuItemPaste.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 22</value>
   </data>
-  <data name="&gt;&gt;ribbonControlAdv1.Type" xml:space="preserve">
-    <value>Syncfusion.Windows.Forms.Tools.RibbonControlAdv, Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdv1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;ribbonControlAdv1.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="toolStripMenuItemPaste.Text" xml:space="preserve">
+    <value>xxPaste</value>
   </data>
 </root>

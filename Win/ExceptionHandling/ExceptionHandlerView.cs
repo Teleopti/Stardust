@@ -64,8 +64,6 @@ namespace Teleopti.Ccc.Win.ExceptionHandling
         {
             DialogResult = DialogResult.None;
             BackColor = color;
-            buttonPopEmail.BackColor = color;
-            buttonCloseApplication.BackColor = color;
             labelInformationText.BackColor = color;
         }
 

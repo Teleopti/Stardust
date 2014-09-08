@@ -51,12 +51,13 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			ScheduleGrid.DisplayStrings[4] = "";//hide the text area in all day area in day view
 			ScheduleGrid.DisplayStrings[3] = "";
 			scheduleControl1.Appearance.WorkWeekHeaderFormat = "d dddd";
+			// for bug 29606
+			scheduleControl1.ScheduleType = ScheduleViewType.WorkWeek;
 
 			scheduleControl1.Visible = false;
 			// to set visible in CustomWeek
 			_nextButton = scheduleControl1.CaptionPanel.Controls[1];
 			_previousButton = scheduleControl1.CaptionPanel.Controls[2];
-
 			_dataProvider.CreateListObjectList();
 
 			_calendarAndTextPanel = new CalendarAndTextPanel();
@@ -64,12 +65,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			resizeCalendarToNavigationPanel();
 
 			scheduleControl1.Appearance.VisualStyle = GridVisualStyles.Office2007Blue;
-			scheduleControl1.Appearance.WorkWeekHeaderForeColor = Color.White;
-			scheduleControl1.Appearance.WorkWeekHeaderBackColor = Color.FromArgb(200,224,255);
-			
 			scheduleControl1.Appearance.WeekCalendarStartDayOfWeek =
 				CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
-
 			
 			if (toolStripComboBoxScenario.ComboBox != null)
 			{
@@ -96,7 +93,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			scheduleControl1.NavigationPanel.Resize += navigationPanelResize;
 			scheduleControl1.Appearance.ScheduleAppointmentTipFormat = "[subject]\r\n[content]\r\n\r\n[marker]";
 			scheduleControl1.DataSource = _dataProvider;
-			//Padding = new Padding(2);
+			Padding = new Padding(2);
 		}
 
 		void comboBoxSelectedIndexChanged(object sender, EventArgs e)
@@ -107,9 +104,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
 			_previousButton.Visible = true;
 			_nextButton.Visible = true;
+			scheduleControl1.Appearance.CaptionBackColor = Color.White;
 		}
-
-		
 
 		private void meetingOverviewViewShown(object sender, EventArgs e)
 		{
@@ -132,7 +128,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			//using a lot of cpu and memory, don't know why
 			// don't use it for now
 			//scheduleControl1.GetScheduleHost().Schedule.Appearance.VisualStyle = GridVisualStyles.Metro;
-			
+
+			scheduleControl1.NavigationPanel.Width = 220;
 		   scheduleControl1.Calendar.Visible = false;
 			_calendarAndTextPanel.BringToFront();
 		   scheduleControl1.Culture = CultureInfo.CurrentUICulture;
@@ -144,6 +141,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		   _previousButton.Visible = true;
 			scheduleControl1.Visible = true;
 			ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlAdv1BeforeContextMenuOpen;
+			
+			scheduleControl1.Appearance.CaptionBackColor = Color.White;
 		}
 
 		static void ribbonControlAdv1BeforeContextMenuOpen(object sender, Syncfusion.Windows.Forms.Tools.ContextMenuEventArgs e)

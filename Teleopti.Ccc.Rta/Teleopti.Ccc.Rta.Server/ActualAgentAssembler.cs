@@ -188,7 +188,6 @@ namespace Teleopti.Ccc.Rta.Server
 					AlarmStart = timestamp,
 					PlatformTypeId = platformTypeId,
 					ReceivedTime = timestamp,
-					StateStart = DateTime.UtcNow,
 					OriginalDataSourceId = originalSourceId,
 					BusinessUnit = businessUnitId
 				};

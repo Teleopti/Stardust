@@ -27,9 +27,9 @@ namespace Teleopti.Analytics.Parameters
         private bool _isReportPermissionGranted;
         private Guid _groupPageCode;
 
-        internal static Guid CurrentUserCode;
-        internal static Guid BuCode;
-        internal static int LangId;
+		  internal static Guid CurrentUserCode;
+		  internal static Guid BuCode;
+		  internal static int LangId;
 
 		internal static string _ConnectionString = ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
         //public static string _Database;
