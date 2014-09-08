@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var isEnabled = false;
 			try
 			{
-				//isEnabled = toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+				isEnabled = toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
 			}
 			catch (JsonReaderException)
 			{
