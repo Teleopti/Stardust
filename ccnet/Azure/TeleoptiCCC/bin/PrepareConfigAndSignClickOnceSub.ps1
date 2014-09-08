@@ -1,6 +1,22 @@
 ##===========
 ## Functions
 ##===========
+function Get-ScriptDirectory
+{
+    $Invocation = (Get-Variable MyInvocation -Scope 1).Value;
+    if($Invocation.PSScriptRoot)
+    {
+        $Invocation.PSScriptRoot;
+    }
+    Elseif($Invocation.MyCommand.Path)
+    {
+        Split-Path $Invocation.MyCommand.Path
+    }
+    else
+    {
+        $Invocation.InvocationName.Substring(0,$Invocation.InvocationName.LastIndexOf("\"));
+    }
+}
 
 function Test-Administrator
 {
@@ -121,10 +137,8 @@ function CopyFileFromBlobStorage {
 ##===========
 ## Main
 ##===========
-function main {
-Param(
-  [string]$directory
-  )
+$directory = Get-ScriptDirectory
+write-host $directory
 $computer = gc env:computername
 
 ## Name of the job, name of source in Windows Event Log
@@ -232,5 +246,4 @@ Catch [Exception]
 Finally
 {
     Write-Host "done"
-}
 }
