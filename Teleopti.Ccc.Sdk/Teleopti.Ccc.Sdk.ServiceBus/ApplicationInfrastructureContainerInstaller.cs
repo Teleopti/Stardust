@@ -5,9 +5,11 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
@@ -15,6 +17,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -32,10 +35,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				.As<IMessageListener>()
 				.SingleInstance()
 				.ExternallyOwned();
-			builder.Register(c => MessageBrokerContainerDontUse.Sender())
-				.As<Interfaces.MessageBroker.Client.IMessageSender>()
+
+			builder.RegisterType<HttpSender>()
+				.WithParameter(new NamedParameter("url", ConfigurationManager.AppSettings["MessageBroker"]))
+				.As<HttpSender>()
 				.SingleInstance();
 
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205) 
+				? c.Resolve<HttpSender>() : MessageBrokerContainerDontUse.Sender())
+				.As<Interfaces.MessageBroker.Client.IMessageSender>()
+				.SingleInstance();
+	
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();

@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
         {
         	return true;
-        }
-		
+        }		
     }
 }
