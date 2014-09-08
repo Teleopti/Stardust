@@ -7,7 +7,7 @@ define([
 	'lazy',
 	'guidgenerator',
 	'notifications',
-	'momentTimezoneData'
+	'shared/timezone-display'
 ], function (
 	ko,
 	navigation,
@@ -17,7 +17,7 @@ define([
 	lazy,
 	guidgenerator,
 	notificationsViewModel,
-	momentTimezoneData
+	timezoneDisplay
     ) {
 
 	return function () {
@@ -40,25 +40,13 @@ define([
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
-		this.getMomentFromInput = function (input) {
-			var momentInput = moment(input, resources.TimeFormatForMoment);
-			if (!self.ScheduleDate() || !self.ianaTimeZone())
-				return moment().add('h', momentInput.hours()).add('m', momentInput.minutes());
-			return self.ScheduleDate().clone().add('h', momentInput.hours()).add('m', momentInput.minutes());
-		};
-
-		this.IsOtherTimezone = ko.computed(function() {
-			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = self.getMomentFromInput(self.StartTime());
-				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
-				return otherTime.format('HH:mm') != userTime.format('HH:mm');
-			}
-			return false;
+		this.IsOtherTimezone = ko.computed(function () {
+			return timezoneDisplay.IsOtherTimeZone(self.ianaTimeZone(), self.ianaTimeZoneOther(), self.StartTime(), self.ScheduleDate());
 		});
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = self.getMomentFromInput(self.StartTime());
+				var userTime = timezoneDisplay.FromTimeInput(self.StartTime(), self.ianaTimeZone(), self.ScheduleDate);
 				var otherTime = userTime.tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
@@ -66,9 +54,12 @@ define([
 		});
 
 		this.EndTimeOtherTimeZone = ko.computed(function () {
-			if (self.EndTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = self.getMomentFromInput(self.EndTime());
-				var otherTime = userTime.tz(self.ianaTimeZoneOther());
+			var endTime = self.EndTime();
+			var ianaTimeZone = self.ianaTimeZone();
+			var ianaTimeZoneOther = self.ianaTimeZoneOther();
+			if (endTime && ianaTimeZone && ianaTimeZoneOther) {
+				var userTime = timezoneDisplay.FromTimeInput(endTime, ianaTimeZone, self.ScheduleDate);
+				var otherTime = userTime.tz(ianaTimeZoneOther);
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -78,7 +69,7 @@ define([
 			personId = data.PersonId;
 			groupId = data.GroupId;
 			personName = data.PersonName;
-			self.ScheduleDate(momentTimezoneData.tz(data.Date.format('YYYY-MM-DD'),data.IanaTimeZoneLoggedOnUser));
+			self.ScheduleDate(timezoneDisplay.FromDate(data.Date, data.IanaTimeZoneLoggedOnUser));
 			self.ActivityTypes(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
 			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
@@ -165,8 +156,8 @@ define([
 
 		this.PossbileIntersectWithShift = ko.computed(function () {
 			if (self.StartTime() && self.EndTime()) {
-				startTimeAsMoment = self.getMomentFromInput(self.StartTime());
-				endTimeAsMoment = self.getMomentFromInput(self.EndTime());
+				startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), self.ianaTimeZone(), self.ScheduleDate);
+				endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), self.ianaTimeZone(), self.ScheduleDate);
 				if (startTimeAsMoment.diff(self.endTimeAsMoment) < 0) {
 					if (self.intersectWithShift())
 						return true;

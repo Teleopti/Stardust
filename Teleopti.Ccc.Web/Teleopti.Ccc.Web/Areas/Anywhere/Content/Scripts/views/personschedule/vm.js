@@ -1,7 +1,6 @@
 define([
 	'knockout',
 	'moment',
-	'momentTimezoneData',
 	'navigation',
 	'shared/timeline',
 	'views/personschedule/person',
@@ -11,6 +10,7 @@ define([
 	'views/personschedule/addintradayabsenceform',
 	'views/personschedule/moveactivityform',
 	'shared/group-page',
+	'shared/timezone-display',
 	'helpers',
 	'resources',
 	'select2',
@@ -18,7 +18,6 @@ define([
 ], function (
 	ko,
 	moment,
-	momentTimezoneData,
 	navigation,
 	timeLineViewModel,
 	personViewModel,
@@ -28,6 +27,7 @@ define([
 	addIntradayAbsenceFormViewModel,
 	moveActivityFormViewModel,
 	groupPageViewModel,
+	timezoneDisplay,
 	helpers,
 	resources,
 	select2,
@@ -154,13 +154,12 @@ define([
             self.initMoveActivityForm();
 		};
 
-		this.IsOtherTimeZone = ko.computed(function() {
-			if (self.TimeLine.IanaTimeZoneLoggedOnUser() && self.TimeLine.IanaTimeZoneOther()) {
-				var userTime = moment().tz(self.TimeLine.IanaTimeZoneLoggedOnUser());
-				var otherTime = userTime.clone().tz(self.TimeLine.IanaTimeZoneOther());
-				return otherTime.format('ha z') != userTime.format('ha z');
-			}
-			return undefined;
+		this.IsOtherTimeZone = ko.computed(function () {
+			return timezoneDisplay.IsOtherTimeZone(self.TimeLine.IanaTimeZoneLoggedOnUser(), self.TimeLine.IanaTimeZoneOther(), '01:00', function() {
+				if (self.ScheduleDate())
+					return self.ScheduleDate();
+				return moment().startOf('day');
+			}());
 		});
 
 		var getTimeZoneNameShort = function (timeZoneName) {

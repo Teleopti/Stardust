@@ -6,7 +6,7 @@
     'errorview',
 	'guidgenerator',
 	'notifications',
-	'momentTimezoneData'
+	'shared/timezone-display'
 ], function (
 	ko,
 	resources,
@@ -15,7 +15,7 @@
     errorview,
 	guidgenerator,
 	notificationsViewModel,
-	momentTimezoneData
+	timezoneDisplay
     ) {
 
 	return function () {
@@ -64,7 +64,7 @@
 			self.PersonId(data.PersonId);
 			personName = data.PersonName;
 			self.GroupId(data.GroupId);
-			self.ScheduleDate(momentTimezoneData.tz(data.Date.format('YYYY-MM-DD'), data.IanaTimeZoneLoggedOnUser));
+			self.ScheduleDate(timezoneDisplay.FromDate(data.Date, data.IanaTimeZoneLoggedOnUser));
 			self.Activities(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
 			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);

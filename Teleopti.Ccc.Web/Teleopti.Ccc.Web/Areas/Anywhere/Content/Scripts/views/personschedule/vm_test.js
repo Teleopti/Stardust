@@ -365,24 +365,13 @@
 									Minutes: 60
 								}
 							]
-						},
-						{
-							Date: '2014-06-16',
-							PersonId: 2,
-							Projection: [
-								{
-									Start: '2014-06-16 16:00',
-									Minutes: 20
-								}
-							]
 						}
 					];
-					vm.setTimelineWidth(600);
 					vm.AddingActivity(true);
 					vm.UpdateData({ PersonId: 1,IanaTimeZoneLoggedOnUser: 'Europe/Istanbul',IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
-					assert.equals(vm.Layers().size(), 2);
+					assert.equals(vm.Layers().size(), 1);
 
 					vm.AddActivityForm.StartTime('09:00');
 					vm.AddActivityForm.EndTime('11:00');
@@ -398,36 +387,17 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 8:00',
-									Minutes: 60
-								}
-							]
-						},
-						{
-							Date: '2014-06-16',
-							PersonId: 2,
-							Projection: [
-								{
-									Start: '2014-06-16 16:00',
-									Minutes: 20
-								}
-							]
-						}
-					];
-
+					
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin', PersonAbsences: [{ StartTime: '2014-06-16 08:00', EndTime: '2014-06-16 10:00' }] });
-					vm.UpdateSchedules(data);
+					vm.UpdateSchedules([]);
 
-					assert.equals(vm.Absences()[0].StartTime(), moment('2014-06-16 08:00').format());
-					assert.equals(vm.Absences()[0].EndTime(), moment('2014-06-16 10:00').format());
-					assert.equals(vm.Absences()[0].StartTimeOtherTimeZone(), moment('2014-06-16 07:00').format());
-					assert.equals(vm.Absences()[0].EndTimeOtherTimeZone(), moment('2014-06-16 09:00').format());
+					assert.equals(vm.Absences().length, 1);
+
+					var absence = vm.Absences()[0];
+					assert.equals(absence.StartTime(), moment('2014-06-16 08:00').format());
+					assert.equals(absence.EndTime(), moment('2014-06-16 10:00').format());
+					assert.equals(absence.StartTimeOtherTimeZone(), moment('2014-06-16 07:00').format());
+					assert.equals(absence.EndTimeOtherTimeZone(), moment('2014-06-16 09:00').format());
 				},
 
 				"should convert my local times to agent's timezone for display when adding intraday absence": function () {
@@ -445,16 +415,6 @@
 								{
 									Start: '2014-06-16 8:00',
 									Minutes: 60
-								}
-							]
-						},
-						{
-							Date: '2014-06-16',
-							PersonId: 2,
-							Projection: [
-								{
-									Start: '2014-06-16 16:00',
-									Minutes: 20
 								}
 							]
 						}
@@ -488,11 +448,6 @@
 							Projection: [
 								{
 									Start: '2013-11-18 14:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								},
-								{
-									Start: '2013-11-18 18:00',
 									Minutes: 240,
 									ActivityId: "guid"
 								}
