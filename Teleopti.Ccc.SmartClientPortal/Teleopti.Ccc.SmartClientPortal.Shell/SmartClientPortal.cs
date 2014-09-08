@@ -30,8 +30,11 @@ using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.Payroll;
+using Teleopti.Ccc.Win.PeopleAdmin.Controls;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.Win.Permissions;
+using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.Win.Sikuli;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -578,11 +581,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				navigator.RefreshNavigator();
 			}
+			
+			if (uc is ForecasterNavigator)
+				((ForecasterNavigator)uc).SetMainOwner(this);
+
 			if (uc is ForecasterNavigator || uc is PayrollExportNavigator)
 			{
 				webControl1.Visible = false;
 				return;
 			}
+
+			if (uc is SchedulerNavigator || uc is PeopleNavigator)
+				((INavigationPanel)uc).SetMainOwner(this);
+
+			if(uc is ShiftsNavigationPanel)
+				((ShiftsNavigationPanel)uc).SetMainOwner(this);
 
 			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) return;
 			

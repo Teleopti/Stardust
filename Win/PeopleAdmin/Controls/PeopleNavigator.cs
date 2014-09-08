@@ -43,8 +43,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private readonly IEventAggregator _localEventAggregator;
         private readonly IEventAggregator _globalEventAggregator;
         private ICurrentScenario _currentScenario;
+	    private IWin32Window _mainWindow;
 
-        public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
+	    public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
             : this()
         {
             _portalSettings = portalSettings;
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         	                                                                             		filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople);
 
-        	                                                                             		openPeopleAdmin(state, filteredPeopleHolder);
+        	                                                                             		openPeopleAdmin(state, filteredPeopleHolder, _mainWindow);
         	                                                                             	});
         }
 
@@ -168,9 +169,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private void openPeopleAdmin(WorksheetStateHolder stateHolder, FilteredPeopleHolder filteredPeopleHolder)
+        private void openPeopleAdmin(WorksheetStateHolder stateHolder, FilteredPeopleHolder filteredPeopleHolder, IWin32Window mainWindow)
         {
-           new PeopleWorksheet(stateHolder, filteredPeopleHolder, _globalEventAggregator, _componentContext).Show();   
+			new PeopleWorksheet(stateHolder, filteredPeopleHolder, _globalEventAggregator, _componentContext).Show(mainWindow);   
         }
 
         private void tsAddGroupPageClick(object sender, EventArgs e)
@@ -231,7 +232,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                 filteredPeopleHolder.LoadIt();
                 
                 state.AddAndSavePerson(0, filteredPeopleHolder);
-                openPeopleAdmin(state, filteredPeopleHolder);
+                openPeopleAdmin(state, filteredPeopleHolder, _mainWindow);
             });
             
             Cursor.Current = Cursors.Default;
@@ -294,7 +295,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             set { tsEditGroupPage.Enabled = value; }
         }
 
-        public bool OpenEnabled
+	    public void SetMainOwner(IWin32Window mainWindow)
+	    {
+		    _mainWindow = mainWindow;
+	    }
+
+	    public bool OpenEnabled
         {
             get { return toolStripButtonOpen.Enabled; }
             set

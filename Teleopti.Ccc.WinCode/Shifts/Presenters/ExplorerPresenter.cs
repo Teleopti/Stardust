@@ -176,11 +176,11 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             return ret;
         }
 
-        public void Show()
+        public void Show(IWin32Window mainWindow)
         {
             setDefaultSegment();
             loadAll();
-            _view.Show(this);
+            _view.Show(this, mainWindow);
         }
 
        

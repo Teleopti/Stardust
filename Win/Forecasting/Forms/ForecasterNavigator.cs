@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler =
 			new GracefulDataSourceExceptionHandler();
 
+		private IWin32Window _mainWindow;
+
 		public ForecasterNavigator()
 		{
 			InitializeComponent();
@@ -100,6 +102,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			//splitContainer1.SplitterDistance = splitContainer1.Height - portalSettings.ForecasterActionPaneHeight;
 
 			setVisibility();
+		}
+
+		public void SetMainOwner(IWin32Window mainWindow)
+		{
+			_mainWindow = mainWindow;
 		}
 
 		#region Event handling when entities are updated
@@ -1025,7 +1032,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			Cursor = Cursors.WaitCursor;
 			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager);
-			forecaster.Show();
+			forecaster.Show(_mainWindow);
 			Cursor = Cursors.Default;
 		}
 

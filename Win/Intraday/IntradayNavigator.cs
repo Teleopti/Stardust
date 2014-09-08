@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Intraday
         	                                                                             			var entityCollection = new Collection<IEntity>();
         	                                                                             			entityCollection.AddRange(persons.Cast<IEntity>());
 
-        	                                                                             			StartModule(new DateOnlyPeriod(DateOnly.Today,DateOnly.Today), scenario,true, true, true, false,entityCollection);
+        	                                                                             			StartModule(new DateOnlyPeriod(DateOnly.Today,DateOnly.Today), scenario,true, true, true, false,entityCollection, null);
         	                                                                             		}
         	                                                                             	});
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Intraday
             get { return _intraday ?? (_intraday = new OpenPeriodIntradayMode()); }
         }
 
-        protected override void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection)
+        protected override void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, IWin32Window ownerWindow)
         {
             var intradayView = _intradayViewFactory.Create(selectedPeriod, scenario, entityCollection);
             ((Control)intradayView).Show();

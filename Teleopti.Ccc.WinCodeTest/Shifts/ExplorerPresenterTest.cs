@@ -162,10 +162,10 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
 
             setLoadExpectations();
 
-            Expect.Call(() => _view.Show(_target));
+            Expect.Call(() => _view.Show(_target, null));
             _mock.ReplayAll();
 
-            _target.Show();
+            _target.Show(null);
 
             Assert.AreEqual(_activities.Count, _target.Model.ActivityCollection.Count);
             Assert.AreEqual(_categories.Count, _target.Model.CategoryCollection.Count);

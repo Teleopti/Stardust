@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Shifts.Views;
+﻿using System.Windows.Forms;
+using Teleopti.Ccc.WinCode.Shifts.Views;
 
 namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 {
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
         bool Persist();
 
         bool CheckForUnsavedData();
-        
-        void Show();
+
+		void Show(IWin32Window mainWindow);
 
     }
 }

@@ -513,10 +513,10 @@ namespace Teleopti.Ccc.Win.Shifts
 			}
 		}
 
-		public void Show(IExplorerPresenter explorerPresenter)
+		public void Show(IExplorerPresenter explorerPresenter, IWin32Window mainWindow)
 		{
 			Presenter = explorerPresenter;
-			Show();
+			Show(mainWindow);
 		}
 
 		public void ForceRefreshNavigationView()

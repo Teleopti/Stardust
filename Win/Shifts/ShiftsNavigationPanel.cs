@@ -8,8 +8,9 @@ namespace Teleopti.Ccc.Win.Shifts
     public partial class ShiftsNavigationPanel : Common.BaseUserControl
     {
         private readonly ShiftsModule.IShiftsExplorerFactory _shiftsExplorerFactory;
+	    private IWin32Window _mainWindow;
 
-        public ShiftsNavigationPanel(ShiftsModule.IShiftsExplorerFactory shiftsExplorerFactory)
+	    public ShiftsNavigationPanel(ShiftsModule.IShiftsExplorerFactory shiftsExplorerFactory)
         {
             _shiftsExplorerFactory = shiftsExplorerFactory;
             InitializeComponent();
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
             try
             {
-                _shiftsExplorerFactory.Create();
+                _shiftsExplorerFactory.Create(_mainWindow);
             }
             catch (DataSourceException dataSourceException)
             {
@@ -41,6 +42,11 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             open();
         }
+
+	    public void SetMainOwner(IWin32Window mainWindow)
+	    {
+		    _mainWindow = mainWindow;
+	    }
 
 		private void toolStripButton1_Click(object sender, System.EventArgs e)
 		{

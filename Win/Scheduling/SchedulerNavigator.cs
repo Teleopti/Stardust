@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
 		private IScheduleNavigatorPresenter _myPresenter;
 		private readonly IEventAggregator _localEventAggregator;
-		
+		private IWin32Window _mainWindow;
+
 		public SchedulerNavigator()
 		{
 			InitializeComponent();
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (openSchedule.ShowDialog() != DialogResult.Cancel)
 				{
 					LogPointOutput.LogInfo("Scheduler.LoadAndOptimizeData:openWizard", "Started");
-					StartModule(openSchedule.SelectedPeriod, openSchedule.Scenario, openSchedule.Shrinkage, openSchedule.Calculation, openSchedule.Validation, openSchedule.TeamLeaderMode, entityList);
+					StartModule(openSchedule.SelectedPeriod, openSchedule.Scenario, openSchedule.Shrinkage, openSchedule.Calculation, openSchedule.Validation, openSchedule.TeamLeaderMode, entityList, _mainWindow);
 				}
 			}
 
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		protected virtual void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage,
-			bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection)
+			bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, IWin32Window ownerWindow)
 		{
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>{
 				var sc = new SchedulingScreen(_container,
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 														   validation,
 														   teamLeaderMode,
 														   entityCollection);
-				sc.Show();
+				sc.Show(ownerWindow);
 			});
 		}
 
@@ -274,6 +275,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonShowMeetingsClick(object sender, EventArgs e)
 		{
 			_localEventAggregator.GetEvent<OpenMeetingsOverviewClicked>().Publish("");
+		}
+
+		public void SetMainOwner(IWin32Window mainWindow)
+		{
+			_mainWindow = mainWindow;
 		}
 
 		public bool AddGroupPageEnabled

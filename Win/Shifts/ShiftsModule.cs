@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Shifts
     {
         public interface IShiftsExplorerFactory
         {
-            IExplorerView Create();
+            IExplorerView Create(IWin32Window mainWindow);
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Win.Shifts
                 _innerScopes = new Dictionary<IExplorerView, ILifetimeScope>();
             }
 
-            public IExplorerView Create()
+            public IExplorerView Create(IWin32Window mainWindow)
             {
                 try
                 {
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Shifts
                     var inner = lifetimeScope.BeginLifetimeScope();
 
                     var explorerPresenter = inner.Resolve<IExplorerPresenter>();
-                    explorerPresenter.Show();
+					explorerPresenter.Show(mainWindow);
                     var shiftsView = inner.Resolve<IExplorerView>();
                     var form = (Form)shiftsView;
                     //correct event?

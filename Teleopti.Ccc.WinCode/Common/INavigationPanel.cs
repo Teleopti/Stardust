@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.WinCode.Common
         bool DeleteGroupPageEnabled { get; set; }
         bool ModifyGroupPageEnabled { get; set; }
         Cursor Cursor { get; set; }
+	    void SetMainOwner(IWin32Window mainWindow);
     }
 }
