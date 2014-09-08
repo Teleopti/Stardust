@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using Autofac;
-using Newtonsoft.Json;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -26,19 +24,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
-			var isEnabled = false;
-			try
-			{
-				isEnabled = toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
-			}
-			catch (JsonReaderException)
-			{
-				return;
-			}
-			if (!isEnabled)
+			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913))
 				return;
 
-			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
+			foreach (
+				var dataSource in
+					StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
@@ -49,9 +40,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				foreach (var businessUnitId in businessUnitCollection)
 				{
-					bus.Send(new BadgeCalculationInitMessage { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow});
+					bus.Send(new BadgeCalculationInitMessage
+					{
+						Datasource = dataSource.DataSourceName,
+						BusinessUnitId = businessUnitId,
+						Timestamp = DateTime.UtcNow
+					});
 					Logger.DebugFormat(
-						"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}", dataSource.DataSourceName,
+						"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}",
+						dataSource.DataSourceName,
 						businessUnitId);
 				}
 			}
