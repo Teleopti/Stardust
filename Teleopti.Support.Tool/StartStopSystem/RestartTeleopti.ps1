@@ -299,7 +299,9 @@ Try
 
 	$isAzure = fnIsAzure
 	$BaseUrl = BaseUrl-get $isAzure
-    fnAddTrustedSite $BaseUrl	
+	if (!$isAzure) {
+		fnAddTrustedSite $BaseUrl	
+		}
 	TeleoptiWindowsServices-Stop $isAzure
 	IIS-Restart
 	write-host "sleep 5 seconds for IIS to restart ..."

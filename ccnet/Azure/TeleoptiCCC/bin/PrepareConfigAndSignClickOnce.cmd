@@ -5,5 +5,6 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 ::allow un-signed
 powershell set-executionpolicy unrestricted
 ::execute
-powershell ". %DIRECTORY%\PrepareConfigAndSignClickOnce.ps1; main -directory \"%DIRECTORY%\""
+ECHO powershell . .\PrepareConfigAndSignClickOnce.ps1 -ScriptPath "%DIRECTORY%\PrepareConfigAndSignClickOnceSub.ps1" > PrepareConfigAndSignClickOnce.log
+powershell . .\PrepareConfigAndSignClickOnce.ps1 -ScriptPath "%DIRECTORY%\PrepareConfigAndSignClickOnceSub.ps1" >> PrepareConfigAndSignClickOnce.log
 exit %ERRORLEVEL%
