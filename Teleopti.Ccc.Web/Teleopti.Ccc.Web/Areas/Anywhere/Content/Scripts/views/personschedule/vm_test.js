@@ -44,6 +44,39 @@
 					}, 2);
 				},
 
+				"should create timeline for other timezone": function (done) {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20140616'
+					});
+					var data = [
+						{
+							Date: '2014-06-16',
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2014-06-16 12:00',
+									Minutes: 60
+								}
+							]
+						}
+					];
+
+					vm.AddingActivity(true);
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateSchedules(data);
+
+					setTimeout(function () {
+						assert.equals(vm.TimeLine.StartTime(), "12:00");
+						assert.equals(vm.TimeLine.EndTime(), "13:00");
+						assert.equals(vm.TimeLine.StartTimeOtherTimeZone(), "11:00");
+						assert.equals(vm.TimeLine.EndTimeOtherTimeZone(), "12:00");
+						done();
+					}, 2);
+				},
+
 				"should not consider nightshifts from yesterday when creating timeline": function (done) {
 					var vm = new viewModel();
 
@@ -134,7 +167,7 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					assert.equals(vm.MoveActivityForm.PersonId(), 1);
@@ -169,12 +202,12 @@
 						}
 					];
 				    vm.MovingActivity(true);
-					vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD') });
+				    vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD') });
 					vm.UpdateSchedules(data);
 
 					var momentExpected = moment('2013-11-18 15:00', 'YYYY-MM-DD HH:mm');
 					vm.MoveActivityForm.DisplayedStartTime('15:00');
-					assert.equals(vm.MoveActivityForm.StartTime().format(), momentExpected.format());
+					assert.equals(vm.MoveActivityForm.StartTime().format('HH:mm'), momentExpected.format('HH:mm'));
 				},
 
 				"should update DisplayedStartTime when startTime changes": function () {
@@ -314,6 +347,168 @@
 					});
 					
 				},
+
+				"should convert my local times to agent's timezone for display when adding activity": function () {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20140616'
+					});
+					var data = [
+						{
+							Date: '2014-06-16',
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2014-06-16 8:00',
+									Minutes: 60
+								}
+							]
+						},
+						{
+							Date: '2014-06-16',
+							PersonId: 2,
+							Projection: [
+								{
+									Start: '2014-06-16 16:00',
+									Minutes: 20
+								}
+							]
+						}
+					];
+					vm.setTimelineWidth(600);
+					vm.AddingActivity(true);
+					vm.UpdateData({ PersonId: 1,IanaTimeZoneLoggedOnUser: 'Europe/Istanbul',IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateSchedules(data);
+
+					assert.equals(vm.Layers().size(), 2);
+
+					vm.AddActivityForm.StartTime('09:00');
+					vm.AddActivityForm.EndTime('11:00');
+
+					assert.equals(vm.AddActivityForm.StartTimeOtherTimeZone(), '08:00');
+					assert.equals(vm.AddActivityForm.EndTimeOtherTimeZone(), '10:00');
+				},
+
+				"should convert my local times to agent's timezone for display when removing absence": function () {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20140616'
+					});
+					var data = [
+						{
+							Date: '2014-06-16',
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2014-06-16 8:00',
+									Minutes: 60
+								}
+							]
+						},
+						{
+							Date: '2014-06-16',
+							PersonId: 2,
+							Projection: [
+								{
+									Start: '2014-06-16 16:00',
+									Minutes: 20
+								}
+							]
+						}
+					];
+
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin', PersonAbsences: [{ StartTime: '2014-06-16 08:00', EndTime: '2014-06-16 10:00' }] });
+					vm.UpdateSchedules(data);
+
+					assert.equals(vm.Absences()[0].StartTime(), moment('2014-06-16 08:00').format());
+					assert.equals(vm.Absences()[0].EndTime(), moment('2014-06-16 10:00').format());
+					assert.equals(vm.Absences()[0].StartTimeOtherTimeZone(), moment('2014-06-16 07:00').format());
+					assert.equals(vm.Absences()[0].EndTimeOtherTimeZone(), moment('2014-06-16 09:00').format());
+				},
+
+				"should convert my local times to agent's timezone for display when adding intraday absence": function () {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20140616'
+					});
+					var data = [
+						{
+							Date: '2014-06-16',
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2014-06-16 8:00',
+									Minutes: 60
+								}
+							]
+						},
+						{
+							Date: '2014-06-16',
+							PersonId: 2,
+							Projection: [
+								{
+									Start: '2014-06-16 16:00',
+									Minutes: 20
+								}
+							]
+						}
+					];
+					vm.setTimelineWidth(600);
+					vm.AddingIntradayAbsence(true);
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateSchedules(data);
+
+					vm.AddIntradayAbsenceForm.StartTime('09:00');
+					vm.AddIntradayAbsenceForm.EndTime('11:00');
+
+					assert.equals(vm.AddIntradayAbsenceForm.StartTimeOtherTimeZone(), '08:00');
+					assert.equals(vm.AddIntradayAbsenceForm.EndTimeOtherTimeZone(), '10:00');
+				},
+
+
+				"should convert my local times to agent's timezone for display when moving activity": function () {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20131118',
+						groupid: 2,
+						minutes: 840
+					});
+
+					var data = [
+						{
+							PersonId: 1,
+							Projection: [
+								{
+									Start: '2013-11-18 14:00',
+									Minutes: 240,
+									ActivityId: "guid"
+								},
+								{
+									Start: '2013-11-18 18:00',
+									Minutes: 240,
+									ActivityId: "guid"
+								}
+							]
+						}
+					];
+
+					vm.MovingActivity(true);
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateSchedules(data);
+
+					vm.MoveActivityForm.DisplayedStartTime('15:00');
+
+					assert.equals(vm.MoveActivityForm.StartTimeOtherTimeZone(), '14:00');
+				},
+
 
 				"should not input a start time that makes the layer outside of the shift in move activity form" : function() {
 					var vm = new viewModel();

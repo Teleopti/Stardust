@@ -10,7 +10,9 @@ define([
 
     	return function (timeline, minutes, hideLabel, ianaTimeZoneLoggedOnUser, ianaTimeZoneOther) {
 
-        	var time = moment().startOf('day').add('minutes', minutes);
+    		var time = moment().startOf('day').add('minutes', minutes);
+		    if (ianaTimeZoneLoggedOnUser)
+			    time = moment.tz(ianaTimeZoneLoggedOnUser).startOf('day').add('minutes', minutes);
 	        var formattedTime = time.format(resources.TimeFormatForMoment);
 
             this.Minutes = function() {
@@ -19,8 +21,7 @@ define([
 
 		    var getTimeForOtherTimeZone = function() {
 		    	if (ianaTimeZoneLoggedOnUser && ianaTimeZoneOther) {
-		    		var userTime = time.tz(ianaTimeZoneLoggedOnUser);
-				    var otherTime = userTime.tz(ianaTimeZoneOther);
+				    var otherTime = time.clone().tz(ianaTimeZoneOther);
 				    return otherTime.format(resources.TimeFormatForMoment);
 		    	}
 			    return "";

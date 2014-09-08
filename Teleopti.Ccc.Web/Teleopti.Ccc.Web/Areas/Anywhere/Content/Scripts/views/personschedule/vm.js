@@ -236,7 +236,6 @@ define([
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 
 			if (self.MovingActivity()) {
-			    self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
                 self.MoveActivityForm.WorkingShift(self.WorkingShift());
                 var selectedLayer = self.SelectedLayer();
                 self.MoveActivityForm.update(selectedLayer);
@@ -277,7 +276,6 @@ define([
 
 	    this.initMoveActivityForm = function() {
 	        self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
-	        self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
 	    };
 	};
 });

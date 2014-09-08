@@ -33,20 +33,28 @@ define([
 			this.ScheduleDate = ko.observable(moment(data.StartTime).startOf('day'));
 			this.ianaTimeZone = ko.observable(data.IanaTimeZoneLoggedOnUser);
 			this.ianaTimeZoneOther = ko.observable(data.IanaTimeZoneOther);
-			this.IsOtherTimezone = ko.observable(false);
 
 			var getTimeZoneNameShort = function (timeZoneName) {
+				if (!timeZoneName) return undefined;
 				var end = timeZoneName.indexOf(')');
 				return timeZoneName.substring(1, end);
 			};
 
 			this.TimeZoneNameShort = ko.observable(getTimeZoneNameShort(data.TimeZoneName));
 			
+			this.IsOtherTimezone = ko.computed(function () {
+				if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+					var userTime = moment.tz(self.ianaTimeZone());
+					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+					return otherTime.format('HH:mm') != userTime.format('HH:mm');
+				}
+				return false;
+			});
+
 			this.StartTimeOtherTimeZone = ko.computed(function () {
 				if (self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-					var userTime = moment(data.StartTime).tz(self.ianaTimeZone());
+					var userTime = moment.tz(data.StartTime, self.ianaTimeZone());
 					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
-					self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
 					return otherTime.format(resources.DateTimeFormatForMoment);
 				}
 				return undefined;
@@ -54,7 +62,7 @@ define([
 
 			this.EndTimeOtherTimeZone = ko.computed(function () {
 				if (self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-					var userTime = moment(data.EndTime).tz(self.ianaTimeZone());
+					var userTime = moment.tz(data.EndTime, self.ianaTimeZone());
 					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 					return otherTime.format(resources.DateTimeFormatForMoment);
 				}

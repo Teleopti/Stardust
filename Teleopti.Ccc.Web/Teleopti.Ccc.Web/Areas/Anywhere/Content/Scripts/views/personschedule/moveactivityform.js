@@ -5,7 +5,8 @@
 	'navigation',
     'errorview',
 	'guidgenerator',
-	'notifications'
+	'notifications',
+	'momentTimezoneData'
 ], function (
 	ko,
 	resources,
@@ -13,7 +14,8 @@
 	navigation,
     errorview,
 	guidgenerator,
-	notificationsViewModel
+	notificationsViewModel,
+	momentTimezoneData
     ) {
 
 	return function () {
@@ -35,17 +37,24 @@
 		self.TimeZoneName = ko.observable();
 		self.ianaTimeZone = ko.observable();
 		self.ianaTimeZoneOther = ko.observable();
-		self.IsOtherTimezone = ko.observable(false);
 		self.formHasChanged = ko.computed(function () {
 			if (!self.OldStartMinutes() || !self.StartTime()) return false;
 			return !self.getStartTimeFromMinutes(self.OldStartMinutes()).isSame(self.StartTime());
 		});
 
+		this.IsOtherTimezone = ko.computed(function () {
+			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = self.StartTime().clone();
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				return otherTime.format('HH:mm') != userTime.format('HH:mm');
+			}
+			return false;
+		});
+
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
+				var userTime = self.StartTime().clone();
 				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
-				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -55,7 +64,7 @@
 			self.PersonId(data.PersonId);
 			personName = data.PersonName;
 			self.GroupId(data.GroupId);
-			self.ScheduleDate(data.Date);
+			self.ScheduleDate(momentTimezoneData.tz(data.Date.format('YYYY-MM-DD'), data.IanaTimeZoneLoggedOnUser));
 			self.Activities(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
 			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
@@ -165,9 +174,13 @@
 		var getMomentFromInput = function (input) {
 		    var momentInput = moment(input, resources.TimeFormatForMoment);
 		    var date = self.ScheduleDate();
+			if (!date)
+				date = moment().startOf('day');
+			date = date.clone().add('h', momentInput.hours()).add('m', momentInput.minutes());
 		    if (!beforeMidnight(momentInput) && self.shiftOverMidnight())
-		        return moment([date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute()]).add(1, 'day');
-			return moment([date.year(), date.month(), date.date(), momentInput.hour(), momentInput.minute()]);
+		        date.add(1, 'day');
+
+			return date;
 		};
 
 	    this.shiftOverMidnight = function() {

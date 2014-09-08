@@ -6,7 +6,8 @@ define([
 	'timepicker',
 	'lazy',
 	'guidgenerator',
-	'notifications'
+	'notifications',
+	'momentTimezoneData'
 ], function (
 	ko,
 	navigation,
@@ -15,7 +16,8 @@ define([
 	timepicker,
 	lazy,
 	guidgenerator,
-	notificationsViewModel
+	notificationsViewModel,
+	momentTimezoneData
     ) {
 
 	return function () {
@@ -31,19 +33,33 @@ define([
 		this.TimeZoneName = ko.observable();
 		this.ianaTimeZone = ko.observable();
 		this.ianaTimeZoneOther = ko.observable();
-		this.IsOtherTimezone = ko.observable(false);
-
+		
 		var personId;
 		var personName;
 		var groupId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
+		this.getMomentFromInput = function (input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			if (!self.ScheduleDate() || !self.ianaTimeZone())
+				return moment().add('h', momentInput.hours()).add('m', momentInput.minutes());
+			return self.ScheduleDate().clone().add('h', momentInput.hours()).add('m', momentInput.minutes());
+		};
+
+		this.IsOtherTimezone = ko.computed(function() {
+			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+				var userTime = self.getMomentFromInput(self.StartTime());
+				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				return otherTime.format('HH:mm') != userTime.format('HH:mm');
+			}
+			return false;
+		});
+
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = getMomentFromInput(self.StartTime()).tz(self.ianaTimeZone());
-				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
-				self.IsOtherTimezone(otherTime.format('ha z')!=userTime.format('ha z'));
+				var userTime = self.getMomentFromInput(self.StartTime());
+				var otherTime = userTime.tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -51,8 +67,8 @@ define([
 
 		this.EndTimeOtherTimeZone = ko.computed(function () {
 			if (self.EndTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = getMomentFromInput(self.EndTime()).tz(self.ianaTimeZone());
-				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
+				var userTime = self.getMomentFromInput(self.EndTime());
+				var otherTime = userTime.tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -62,7 +78,7 @@ define([
 			personId = data.PersonId;
 			groupId = data.GroupId;
 			personName = data.PersonName;
-			self.ScheduleDate(data.Date);
+			self.ScheduleDate(momentTimezoneData.tz(data.Date.format('YYYY-MM-DD'),data.IanaTimeZoneLoggedOnUser));
 			self.ActivityTypes(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
 			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
@@ -92,11 +108,6 @@ define([
 				}
 			);
 			notificationsViewModel.AddNotification(trackId, resources.AddingActivityFor + " " + personName + "... ");
-		};
-
-		var getMomentFromInput = function (input) {
-			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.ScheduleDate()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
 		this.visibleLayers = ko.computed(function () {
@@ -148,30 +159,25 @@ define([
 		});
 		
 		
-		var intersectWithShift = function () {
+		this.intersectWithShift = function () {
 			return endTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) <= 0;
-		};
-
-		var getMomentFromInput = function (input) {
-			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.ScheduleDate()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
 		this.PossbileIntersectWithShift = ko.computed(function () {
 			if (self.StartTime() && self.EndTime()) {
-				startTimeAsMoment = getMomentFromInput(self.StartTime());
-				endTimeAsMoment = getMomentFromInput(self.EndTime());
-				if (startTimeAsMoment.diff(endTimeAsMoment) < 0) {
-					if (intersectWithShift())
+				startTimeAsMoment = self.getMomentFromInput(self.StartTime());
+				endTimeAsMoment = self.getMomentFromInput(self.EndTime());
+				if (startTimeAsMoment.diff(self.endTimeAsMoment) < 0) {
+					if (self.intersectWithShift())
 						return true;
 					startTimeAsMoment.add('d', 1);
 					endTimeAsMoment.add('d', 1);
-					if (intersectWithShift())
+					if (self.intersectWithShift())
 						return true;
 					return false;
 				} else {
 					endTimeAsMoment.add('d', 1);
-					if (intersectWithShift())
+					if (self.intersectWithShift())
 						return true;
 					return false;
 				}

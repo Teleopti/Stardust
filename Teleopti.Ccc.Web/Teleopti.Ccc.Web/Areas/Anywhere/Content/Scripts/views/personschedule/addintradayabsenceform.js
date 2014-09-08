@@ -6,7 +6,8 @@ define([
 	'timepicker',
 	'lazy',
 	'guidgenerator',
-	'notifications'
+	'notifications',
+	'momentTimezoneData'
 ], function (
 	ko,
 	navigation,
@@ -15,7 +16,8 @@ define([
 	timepicker,
 	lazy,
 	guidgenerator,
-	notificationsViewModel
+	notificationsViewModel,
+	momentTimezoneData
 	) {
 
 	return function () {
@@ -30,7 +32,6 @@ define([
 		this.WorkingShift = ko.observable();
 
 		this.TimeZoneName = ko.observable();
-		this.IsOtherTimezone = ko.observable(false);
 		
 		var groupId;
 		var personId;
@@ -40,11 +41,19 @@ define([
 		var ianaTimeZone;
 		var ianaTimeZoneOther;
 
+		this.IsOtherTimezone = ko.computed(function () {
+			if (self.StartTime() && ianaTimeZone && ianaTimeZoneOther) {
+				var userTime = getMomentFromInput(self.StartTime());
+				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
+				return otherTime.format('HH:mm') != userTime.format('HH:mm');
+			}
+			return false;
+		});
+
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && ianaTimeZone && ianaTimeZoneOther) {
 				var userTime = getMomentFromInput(self.StartTime()).tz(ianaTimeZone);
 				var otherTime = userTime.clone().tz(ianaTimeZoneOther);
-				self.IsOtherTimezone(otherTime.format('ha z') != userTime.format('ha z'));
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -87,7 +96,9 @@ define([
 		
 		var getMomentFromInput = function (input) {
 			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+			if (!self.Date() || !ianaTimeZone)
+				return moment().add('h', momentInput.hours()).add('m', momentInput.minutes());
+			return self.Date().clone().add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
 		var startTimeWithinShift = function () {
@@ -143,12 +154,12 @@ define([
 			groupId = data.GroupId;
 			personId = data.PersonId;
 			personName = data.PersonName;
-			self.Date(data.Date);
+			self.Date(momentTimezoneData.tz(data.Date.format('YYYY-MM-DD'), data.IanaTimeZoneLoggedOnUser));
+			ianaTimeZone = data.IanaTimeZoneLoggedOnUser;
+			ianaTimeZoneOther = data.IanaTimeZoneOther;
 
 			if (data.DefaultIntradayAbsenceData) {
 				self.TimeZoneName(data.TimeZoneName);
-				ianaTimeZone = data.IanaTimeZoneLoggedOnUser;
-				ianaTimeZoneOther = data.IanaTimeZoneOther;
 				self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
 				self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
 				startTimeAsMoment = getMomentFromInput(self.StartTime());
