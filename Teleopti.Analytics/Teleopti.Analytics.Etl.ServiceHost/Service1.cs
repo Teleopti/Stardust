@@ -15,12 +15,8 @@ namespace Teleopti.Analytics.Etl.ServiceHost
 
 		protected override void OnStart(string[] args)
 		{
-			var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-			var cube = ConfigurationManager.AppSettings["cube"];
-			var pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
-
-			_serviceLogic = new EtlJobStarter(connectionString, cube, pmInstallation);
-			_serviceLogic.NeedToStopService += new System.EventHandler(_serviceLogic_NeedToStopService);
+			_serviceLogic = new EtlJobStarter(new EtlConfigReader());
+			_serviceLogic.NeedToStopService += _serviceLogic_NeedToStopService;
 			_serviceLogic.Start();
 		}
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Timers;
 using Teleopti.Analytics.Etl.Common;
@@ -32,15 +33,16 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 
 		public event EventHandler NeedToStopService;
 
-		public EtlJobStarter(string connectionString, string cube, string pmInstallation)
+		public EtlJobStarter(EtlConfigReader configReader)
 		{
 			XmlConfigurator.Configure();
 
 			try
 			{
-				_connectionString = connectionString;
-				_cube = cube;
-				_pmInstallation = pmInstallation;
+				var config = configReader.Read();
+				_connectionString = config.ConnectionString;
+				_cube = config.Cube;
+				_pmInstallation = config.PmInstallation;
 				_jobHelper = new JobHelper();
 				_timer = new Timer(10000);
 				_timer.Elapsed += Tick;
@@ -184,5 +186,24 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				}
 			}
 		}
+	}
+
+	public class EtlConfigReader
+	{
+		public EtlConfig Read()
+		{
+			var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+			var cube = ConfigurationManager.AppSettings["cube"];
+			var pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
+
+			return new EtlConfig { ConnectionString = connectionString, Cube = cube, PmInstallation = pmInstallation };
+		}
+	}
+
+	public struct EtlConfig
+	{
+		public string ConnectionString;
+		public string Cube;
+		public string PmInstallation;
 	}
 }
