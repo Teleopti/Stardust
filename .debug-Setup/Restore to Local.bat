@@ -318,7 +318,7 @@ ECHO ------
 ECHO.
 
 ::manipulate data and permissions
-IF %Customer% neq "SGISikuli" (
+IF "%Customer%" neq "SGISikuli" (
 ECHO ------
 ECHO Adding current Win User as xxAdmin role ...
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\AddingTeleoptiPermissions.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" > "%ROOTDIR%\fixData.log"
