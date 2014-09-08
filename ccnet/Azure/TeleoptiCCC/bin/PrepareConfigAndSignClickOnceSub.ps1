@@ -215,10 +215,23 @@ Try
     if ($LastExitCode -ne 0) {
         throw "SupportTool generated an error!"
     }
-
+    
+    #more - show content of ETL + Service bus config
+    $AzureConfigFiles = $SupportToolFolder + "\ConfigFiles\AzureConfigFiles.txt"
+    get-content $AzureConfigFiles | ForEach-Object {
+        $temp = ([string] $SupportToolFolder + "\" + $_).split(",")
+        if (!$temp[0].EndsWith(".txt")) {
+            write-host "--------------------"
+            write-host $temp[0]
+            write-host "--------------------"
+            get-content $temp[0]
+            }
+     }
+    
     #Sign ClickOnce
     $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
-    CD e:
+    $dir = $directory[0]+$directory[1]
+    CD $dir
     Set-Location $ClickOnceSignPath
     $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
 
