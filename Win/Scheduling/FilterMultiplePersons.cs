@@ -403,6 +403,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (Person == compareTo.Person ) return true;
 			return false;
 		}
+
+		public override int GetHashCode()
+		{
+			return Person.Id.GetHashCode();
+		}
 	}
 
 }
