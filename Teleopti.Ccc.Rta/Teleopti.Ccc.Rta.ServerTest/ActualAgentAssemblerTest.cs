@@ -553,7 +553,25 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var result = _target.GetAgentState(_guid, _guid, _guid, "stateCode", _dateTime, new TimeSpan(), new DateTime(), "2");
 			result.State.Should().Be.EqualTo("Logged out");
 		}
-		
+
+		[Test]
+		public void ShouldNotSetStateStartWhenNoAlarm()
+		{
+			var defaultStateStart = new DateTime(1900, 1, 1);
+			var timestamp = DateTime.Now;
+			var databaseReader = MockRepository.GenerateStub<IDatabaseReader>();
+			var layerExtractor = MockRepository.GenerateStub<ICurrentAndNextLayerExtractor>();
+			var alarmMapper = MockRepository.GenerateStub<IAlarmMapper>();
+			var target = new ActualAgentAssembler(databaseReader, layerExtractor, null, alarmMapper);
+			databaseReader.Stub(x => x.GetReadModel(Guid.Empty)).Return(new ScheduleLayer[] {null, null});
+			layerExtractor.Stub(x => x.CurrentLayerAndNext(timestamp, new ScheduleLayer[] {null, null}))
+				.Return(new Tuple<ScheduleLayer, ScheduleLayer>(null, null));
+
+			var actualAgetState = target.GetAgentState(Guid.Empty, Guid.Empty, Guid.Empty, "", timestamp, new TimeSpan(), null, "");
+
+			actualAgetState.StateStart.Should().Be.EqualTo(defaultStateStart);
+		}
+
 		private IActualAgentState initializeAgentStateWithDefaults()
 		{
 			return new ActualAgentState
