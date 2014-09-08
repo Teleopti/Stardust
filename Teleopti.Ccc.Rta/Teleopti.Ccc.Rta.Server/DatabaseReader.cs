@@ -203,34 +203,36 @@ namespace Teleopti.Ccc.Rta.Server
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
+					if (reader.IsDBNull(reader.GetOrdinal("AlarmTypeId")))
+					{
+						continue;
+					}
 					var rtaAlarmLight = new RtaAlarmLight
-						{
-							StateGroupName = !reader.IsDBNull(reader.GetOrdinal("StateGroupName"))
-												 ? reader.GetString(reader.GetOrdinal("StateGroupName"))
-												 : "",
-							StateGroupId = !reader.IsDBNull(reader.GetOrdinal("StateGroupId"))
-												 ? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
-												 : Guid.Empty,
-							ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
-											 ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
-											 : Guid.Empty,
-							DisplayColor = !reader.IsDBNull(reader.GetOrdinal("DisplayColor"))
-												 ? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
-												 : 0,
-							StaffingEffect = !reader.IsDBNull(reader.GetOrdinal("StaffingEffect"))
-												 ? reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
-												 : 0,
-							AlarmTypeId = !reader.IsDBNull(reader.GetOrdinal("AlarmTypeId"))
-												? reader.GetGuid(reader.GetOrdinal("AlarmTypeId"))
-												: Guid.Empty,
-							Name = !reader.IsDBNull(reader.GetOrdinal("Name"))
-										 ? reader.GetString(reader.GetOrdinal("Name"))
-										 : "",
-							ThresholdTime = !reader.IsDBNull(reader.GetOrdinal("ThresholdTime"))
-												? reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
-												: 0,
-							BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"))
-						};
+					{
+						AlarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId")),
+						StateGroupName = !reader.IsDBNull(reader.GetOrdinal("StateGroupName"))
+							? reader.GetString(reader.GetOrdinal("StateGroupName"))
+							: "",
+						StateGroupId = !reader.IsDBNull(reader.GetOrdinal("StateGroupId"))
+							? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
+							: Guid.Empty,
+						ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
+							? reader.GetGuid(reader.GetOrdinal("ActivityId"))
+							: Guid.Empty,
+						DisplayColor = !reader.IsDBNull(reader.GetOrdinal("DisplayColor"))
+							? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
+							: 0,
+						StaffingEffect = !reader.IsDBNull(reader.GetOrdinal("StaffingEffect"))
+							? reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
+							: 0,
+						Name = !reader.IsDBNull(reader.GetOrdinal("Name"))
+							? reader.GetString(reader.GetOrdinal("Name"))
+							: "",
+						ThresholdTime = !reader.IsDBNull(reader.GetOrdinal("ThresholdTime"))
+							? reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
+							: 0,
+						BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"))
+					};
 					stateGroups.Add(rtaAlarmLight);
 				}
 				reader.Close();
