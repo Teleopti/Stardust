@@ -70,6 +70,7 @@ Scenario: Add after midnight on night shift
 	| End time   | 02:00  |
 	| Color      | Yellow |
 
+@ignore
 Scenario: Add over midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

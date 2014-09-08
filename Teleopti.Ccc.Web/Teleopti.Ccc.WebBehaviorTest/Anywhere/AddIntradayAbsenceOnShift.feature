@@ -158,6 +158,7 @@ Scenario: Adding overlapping of shift
 	| End time   | 17:00 |
 	| Color      | Red   |
 
+@ignore
 Scenario: Prevent invalid times
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

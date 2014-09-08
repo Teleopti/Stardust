@@ -79,9 +79,9 @@ define([
 		this.Apply = function () {
 			var trackId = guidgenerator.newGuid();
 			var requestData = JSON.stringify({
-				Date: self.ScheduleDate().format(),
-				StartTime: startTimeAsMoment.format(),
-				EndTime: endTimeAsMoment.format(),
+				Date: self.ScheduleDate().format('YYYY-MM-DD HH:mm'),
+				StartTime: startTimeAsMoment.format('YYYY-MM-DD HH:mm'),
+				EndTime: endTimeAsMoment.format('YYYY-MM-DD HH:mm'),
 				ActivityId: self.Activity(),
 				PersonId: personId,
 				TrackedCommandInfo: { TrackId: trackId }

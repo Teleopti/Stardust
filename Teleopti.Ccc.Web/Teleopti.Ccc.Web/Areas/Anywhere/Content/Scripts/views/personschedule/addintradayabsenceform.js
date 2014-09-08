@@ -166,8 +166,8 @@ define([
 		this.Apply = function() {
 			var trackId = guidgenerator.newGuid();
 			var requestData = JSON.stringify({
-				StartTime: startTimeAsMoment.format(),
-				EndTime: endTimeAsMoment.format(),
+				StartTime: startTimeAsMoment.format('YYYY-MM-DD HH:mm'),
+				EndTime: endTimeAsMoment.format('YYYY-MM-DD HH:mm'),
 				AbsenceId: self.Absence(),
 				PersonId: personId,
 				TrackedCommandInfo: { TrackId: trackId }

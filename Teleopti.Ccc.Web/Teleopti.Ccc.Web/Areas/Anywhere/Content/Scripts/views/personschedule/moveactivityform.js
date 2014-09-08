@@ -134,9 +134,9 @@
 	        var trackId = guidgenerator.newGuid();
 			var requestData = JSON.stringify({
 				AgentId: self.PersonId(),
-				ScheduleDate: self.ScheduleDate().format(),
-				NewStartTime: self.StartTime().format(),
-				OldStartTime: moment(self.getStartTimeFromMinutes(self.OldStartMinutes())).format(),
+				ScheduleDate: self.ScheduleDate().format('YYYY-MM-DD HH:mm'),
+				NewStartTime: self.StartTime().format('YYYY-MM-DD HH:mm'),
+				OldStartTime: moment(self.getStartTimeFromMinutes(self.OldStartMinutes())).format('YYYY-MM-DD HH:mm'),
 				ActivityId: activity.Id,
 				OldProjectionLayerLength: self.ProjectionLength(),
 				TrackedCommandInfo: { TrackId: trackId }
