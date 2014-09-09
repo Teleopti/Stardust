@@ -477,6 +477,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FilterMultiplePersons";
+			this.HelpButton = true;
 			this.ShowIcon = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "xxAdvancedFilter";

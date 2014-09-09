@@ -228,8 +228,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
-			var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
-			addPersonInResultGridFromDefaultSearch(person );
+			if (gridListControlDefaultSearch.SelectedValue != null)
+			{
+				var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
+				addPersonInResultGridFromDefaultSearch(person);
+			}
 		}
 
 		private void buttonAdvParse_Click(object sender, EventArgs e)

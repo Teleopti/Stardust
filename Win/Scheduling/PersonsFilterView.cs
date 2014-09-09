@@ -59,7 +59,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public HashSet<Guid> SelectedAgentGuids()
 		{
 			if (_getTheGuidsFromAdvanceFilter)
+			{
+				_getTheGuidsFromAdvanceFilter = false;
 				return _filterMultiplePersons.SelectedPersonGuids();
+			}
+				
 			return _personSelectorPresenter.CheckedPersonGuids;
 		}
 
