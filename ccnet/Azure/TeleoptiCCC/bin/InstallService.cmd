@@ -43,6 +43,8 @@ IF NOT ERRORLEVEL 1060 (
 ECHO Service status after install [%ServiceBus%] >> Install.log
 SC QUERY %ServiceBus%  >> Install.log
 
+sc failure "%ServiceBus%" reset= 0 actions= restart/60000/restart/60000/restart/60000
+
 ECHO. >> Install.log
 ECHO Done install! >> Install.log
 
