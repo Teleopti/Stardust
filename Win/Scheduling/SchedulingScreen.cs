@@ -620,7 +620,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				SikuliHelper.EnterValidator();
+				SikuliHelper.EnterValidator(this);
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -2056,16 +2056,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			switch (SikuliHelper.SikuliValidator)
 			{
 				case SikuliValidatorRegister.SelectValidator.Schedule:
-					SikuliHelper.AssertValidation(assertSikuliScheduling);
+					SikuliHelper.AssertValidation(assertSikuliScheduling, this);
 					break;
 				case SikuliValidatorRegister.SelectValidator.Optimize:
-					SikuliHelper.AssertValidation(assertSikuliOptimizing);
+					SikuliHelper.AssertValidation(assertSikuliOptimizing, this);
 					break;
 				case SikuliValidatorRegister.SelectValidator.DeleteAll:
-					SikuliHelper.AssertValidation(assertSikuliDeleteAll);
+					SikuliHelper.AssertValidation(assertSikuliDeleteAll, this);
 					break;
 				default:
-					SikuliHelper.ShowTaskDone();
+					SikuliHelper.ShowTaskDone(this);
 					break;
 			}
 		}
@@ -2440,7 +2440,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			SikuliHelper.ShowLoaded();
+			SikuliHelper.ShowLoaded(this);
 		}
 
 		private void setupRequestViewButtonStates()
@@ -5225,6 +5225,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
             // bug 28705 hide it so we don't get strange paint events
             Hide();
+			Owner.Activate();
 			if (_schedulerState != null && _schedulerState.Schedules != null)
 			{
 				_schedulerState.Schedules.Clear();

@@ -24,11 +24,11 @@ namespace Teleopti.Ccc.Win.Sikuli
 			TestMode = mode;
 		}
 
-		public static void EnterValidator()
+		public static void EnterValidator(IWin32Window owner)
 		{
 			using (var dialog = new SikuliEnterValidatorDialog())
 			{
-				dialog.ShowDialog();
+				dialog.ShowDialog(owner);
 				if (dialog.DialogResult == DialogResult.OK)
 				{
 					SikuliValidator = dialog.GetValidatorName;
@@ -36,30 +36,30 @@ namespace Teleopti.Ccc.Win.Sikuli
 			}
 		}
 
-		public static void ShowLoaded()
+		public static void ShowLoaded(IWin32Window owner)
 		{
 			if (!TestMode)
 				return;
 			var testView = new SikuliResultView { Header = "Loaded" };
-			testView.ShowDialog();
+			testView.ShowDialog(owner);
 		}
 
-		public static void ShowTaskDone()
+		public static void ShowTaskDone(IWin32Window owner)
 		{
 			if (!TestMode)
 				return;
 			var testView = new SikuliResultView { Header = "Task Done" };
-			testView.ShowDialog();
+			testView.ShowDialog(owner);
 		}
 
-		public static void AssertValidation(Func<SikuliValidationResult> assertFunc)
+		public static void AssertValidation(Func<SikuliValidationResult> assertFunc, IWin32Window owner)
 		{
 			if (!TestMode)
 				return;
 			var assertResult = assertFunc();
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
-			testView.ShowDialog();
+			testView.ShowDialog(owner);
 			SikuliValidator = SikuliValidatorRegister.SelectValidator.None;
 		}
 
