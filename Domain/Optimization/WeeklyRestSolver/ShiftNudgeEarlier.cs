@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -50,6 +51,15 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue && effectiveRestriction.EndTimeLimitation.StartTime.Value > latestEndTime)
 				return false;
+
+			var matrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(shiftDate);
+
+			foreach (var scheduleMatrixPro in matrixes)
+			{
+				var isLocked = scheduleMatrixPro.UnlockedDays.All(scheduleDayPro => !scheduleDayPro.Day.Equals(shiftDate));
+				if (isLocked) 
+					return false;
+			}
 
 			var adjustedEndTimeLimitation = new EndTimeLimitation(effectiveRestriction.EndTimeLimitation.StartTime, latestEndTime);
 			var adjustedEffectiveRestriction = new EffectiveRestriction(effectiveRestriction.StartTimeLimitation,

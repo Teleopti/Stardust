@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -30,6 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private IPersonAssignment _personAssignment;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IBlockInfo _blockInfo;
+		private ITeamInfo _teamInfo;
+		private IScheduleMatrixPro _scheduleMatrixPro;
+		private IScheduleDayPro _scheduleDayPro;
 
 		[SetUp]
 		public void Setup()
@@ -49,6 +53,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(), period);
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_blockInfo = _mocks.StrictMock<IBlockInfo>();
+			_teamInfo = _mocks.StrictMock<ITeamInfo>();
+			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 		}
 
 		[Test]
@@ -56,10 +63,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		{
 			var effectiveRestriction = new EffectiveRestriction();
 			var adjustedEffectiveRestriction = new EffectiveRestriction();
+			var matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var unlocked = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 
 			using (_mocks.Record())
 			{
 				commonMocks(effectiveRestriction);
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_personAssignment.Date)).Return(matrixes);
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(unlocked);
+				Expect.Call(_scheduleDayPro.Day).Return(_personAssignment.Date);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
@@ -81,12 +94,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		public void ShouldReturnFalseIfNotNudgeSuccess()
 		{
 			var effectiveRestriction = new EffectiveRestriction();
-
 			var adjustedEffectiveRestriction = new EffectiveRestriction();
+
+			var matrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var unlocked = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
 
 			using (_mocks.Record())
 			{
 				commonMocks(effectiveRestriction);
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_personAssignment.Date)).Return(matrixes);
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(unlocked);
+				Expect.Call(_scheduleDayPro.Day).Return(_personAssignment.Date);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
@@ -126,6 +145,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				bool result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer,
 					_teamBlockInfo, _schedulingResultStateHolder);
 				Assert.IsFalse(result);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfLocked()
+		{
+			var effectiveRestriction = new EffectiveRestriction();
+			var matrixes = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
+			var unlocked = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>());
+
+			using (_mocks.Record())
+			{
+				commonMocks(effectiveRestriction);
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_personAssignment.Date)).Return(matrixes);
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(unlocked);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _teamBlockInfo, _schedulingResultStateHolder);
+				Assert.IsFalse(result);	
 			}
 		}
 
