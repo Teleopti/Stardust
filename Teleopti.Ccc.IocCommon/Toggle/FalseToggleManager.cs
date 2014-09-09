@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {

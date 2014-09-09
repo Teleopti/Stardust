@@ -165,6 +165,7 @@
     <Compile Include="Repositories\AgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverrider.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
+    <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />
