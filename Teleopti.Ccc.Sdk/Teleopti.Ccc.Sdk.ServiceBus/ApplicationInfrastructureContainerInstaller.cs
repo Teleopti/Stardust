@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using Autofac;
+using Autofac.Core;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
@@ -23,6 +25,7 @@ using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
+using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -40,16 +43,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				.As<IMessageBrokerComposite>()
 				.As<IMessageCreator>()
 				.As<IMessageListener>()
-				.SingleInstance()
-				.ExternallyOwned();
+				.SingleInstance();
 
 			builder.RegisterType<SignalRClient>()
 				.As<ISignalRClient>()
+				.As<IMessageBrokerUrl>()
 				.WithParameter(new NamedParameter("serverUrl", null))
 				.SingleInstance();
 
 			builder.RegisterType<HttpSender>()
-				.WithParameter(new NamedParameter("url", ConfigurationManager.AppSettings["MessageBroker"]))
 				.As<HttpSender>()
 				.SingleInstance();
 

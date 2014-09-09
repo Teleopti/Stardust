@@ -135,7 +135,7 @@
     <Compile Include="ApplicationLayer\EventsConsumerTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
-    <Compile Include="Container\MessageBrokerTest.cs" />
+    <Compile Include="Container\ContainerConfigurationTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerResolveTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />

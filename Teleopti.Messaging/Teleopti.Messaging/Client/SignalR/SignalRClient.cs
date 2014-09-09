@@ -25,7 +25,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public SignalRClient(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
 		{
-			ServerUrl = serverUrl;
+			Url = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -50,7 +50,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void StartBrokerService(bool useLongPolling = false)
 		{
-			if (string.IsNullOrEmpty(ServerUrl))
+			if (string.IsNullOrEmpty(Url))
 				return;
 
 			var connection = new SignalRConnection(
@@ -93,7 +93,13 @@ namespace Teleopti.Messaging.Client.SignalR
 			get { return _connection != null && _connection.IsConnected(); }
 		}
 
-		public string ServerUrl { get; set; }
+
+		public void Configure(string url)
+		{
+			Url = url;
+		}
+
+		public string Url { get; private set; }
 
 		public virtual void Dispose()
 		{
@@ -106,7 +112,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
-			return new HubConnectionWrapper(new HubConnection(ServerUrl));
+			return new HubConnectionWrapper(new HubConnection(Url));
 		}
 
 	}

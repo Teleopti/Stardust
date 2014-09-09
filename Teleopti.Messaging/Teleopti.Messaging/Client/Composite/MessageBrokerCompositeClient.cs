@@ -35,7 +35,7 @@ namespace Teleopti.Messaging.Client.Composite
 			_signalRClient.Dispose();
 		}
 
-		public string ServerUrl { get { return _signalRClient.ServerUrl; } set { _signalRClient.ServerUrl = value; } }
+		public string ServerUrl { get { return _signalRClient.Url; } set { _signalRClient.Configure(value); } }
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{

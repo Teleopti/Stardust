@@ -11,7 +11,7 @@ using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 {
-	public class MessageBrokerTest
+	public class ContainerConfigurationTest
 	{
 		[Test]
 		public void ShouldResolveMessageSender()

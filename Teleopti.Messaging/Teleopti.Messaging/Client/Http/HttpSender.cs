@@ -10,25 +10,32 @@ namespace Teleopti.Messaging.Client.Http
 {
 	public class HttpSender : IMessageSender
 	{
+		private readonly IMessageBrokerUrl _url;
 		private readonly IJsonSerializer _seralizer;
-		private readonly string _url;
 
 		public Action<HttpClient, string, HttpContent> PostAsync =
 			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
 
 		private readonly HttpClient _httpClient = new HttpClient();
 
-		public HttpSender(string url, IJsonSerializer seralizer)
+		public HttpSender(IMessageBrokerUrl url, IJsonSerializer seralizer)
 		{
+			_url = url;
 			_seralizer = seralizer ?? new ToStringSerializer();
-			var brokerUri = new Uri(url ?? "x://");
-			_url = new Uri(brokerUri, "/MessageBroker/NotifyClients").ToString();
+		}
+
+		private string url()
+		{
+			var brokerUri = new Uri("x://");
+			if (_url != null && _url.Url != null)
+				brokerUri = new Uri(_url.Url);
+			return new Uri(brokerUri, "/MessageBroker/NotifyClients").ToString();
 		}
 
 		public void Send(Notification notification)
 		{
 			var content = _seralizer.SerializeObject(notification);
-			PostAsync(_httpClient, _url, new StringContent(content));
+			PostAsync(_httpClient, url(), new StringContent(content));
 		}
 
 		public void SendMultiple(IEnumerable<Notification> notifications)

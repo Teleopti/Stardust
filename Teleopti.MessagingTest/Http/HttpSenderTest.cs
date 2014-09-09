@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http
@@ -17,7 +18,7 @@ namespace Teleopti.MessagingTest.Http
 		public void ShouldPost()
 		{
 			var poster = MockRepository.GenerateMock<IPoster>();
-			var target = new HttpSender(null, null) {PostAsync = (client, url, content) => poster.PostAsync(client, url, content)};
+			var target = new HttpSender(new MutableUrl(), null) {PostAsync = (client, url, content) => poster.PostAsync(client, url, content)};
 			
 			target.Send(new Notification());
 
@@ -29,7 +30,9 @@ namespace Teleopti.MessagingTest.Http
 			[Values("http://a/", "http://a")] string url)
 		{
 			var postedUrl = "";
-			var target = new HttpSender(url, null) {PostAsync = (c, u, cn) => postedUrl = u};
+			var mutableUrl = new MutableUrl();
+			var target = new HttpSender(mutableUrl, null) { PostAsync = (c, u, cn) => postedUrl = u };
+			mutableUrl.Configure(url);
 
 			target.Send(new Notification());
 
