@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -95,6 +96,44 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			{
 				var shiftsList = _target.Filter(_dateOnly, _person, shifts, _finderResult);
 				Assert.That(shiftsList.Count, Is.EqualTo(1));
+			}
+		}
+
+		[Test]
+		public void ShouldHandleMeetingWithNoPersonAssignment()
+		{
+			var period = new DateTimePeriod(new DateTime(2013, 3, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2013, 3, 1, 14, 0, 0, DateTimeKind.Utc));
+			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
+			var shifts = new List<IShiftProjectionCache> {shiftProjectionCache};
+			var meeting = _mocks.StrictMock<IPersonMeeting>();
+			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
+			var currentDate = new DateTime(2013, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var phone = ActivityFactory.CreateActivity("phone");
+			phone.AllowOverwrite = true;
+			phone.InWorkTime = true;
+			var phoneLayer = new List<IVisualLayer> { new VisualLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17)), phone, null) };
+			var layerCollection = new VisualLayerCollection(null, phoneLayer, new ProjectionPayloadMerger());
+			var editableShift = new EditableShift(new ShiftCategory("hepp"));
+			editableShift.LayerCollection.Add(new EditableShiftLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
+				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
+				Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
+				Expect.Call(meeting.Period).Return(period).Repeat.AtLeastOnce();
+				Expect.Call(shiftProjectionCache.MainShiftProjection).Return(layerCollection).Repeat.AtLeastOnce();
+				Expect.Call(shiftProjectionCache.SchedulingDate).Return(currentDate);
+				Expect.Call(shiftProjectionCache.TheMainShift).Return(editableShift);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(editableShift, meetings)).IgnoreArguments().Return(true);
+			}
+
+			using (_mocks.Record())
+			{
+				var shiftList = _target.Filter(_dateOnly, _person, shifts, _finderResult);
+				Assert.That(shiftList.Count, Is.EqualTo(1));
 			}
 		}
 

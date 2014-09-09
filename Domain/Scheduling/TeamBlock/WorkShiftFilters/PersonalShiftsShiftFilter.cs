@@ -46,10 +46,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 					var mainShift = shiftProjectionCache.TheMainShift;
 					var movedShift = mainShift.MoveTo(new DateOnly(shiftProjectionCache.SchedulingDate.Date), dateOnly);
+
 					if (!_personalShiftMeetingTimeChecker.CheckTimeMeeting(movedShift, meetings))
 						continue;
 
-					if (!_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(movedShift, personalAssignment))
+					if (personalAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(movedShift, personalAssignment))
 						continue;
 
 					workShiftsWithinPeriod.Add(shiftProjectionCache);
