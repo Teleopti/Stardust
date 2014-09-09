@@ -81,6 +81,7 @@ param([bool]$IsAzure)
     }
 	fnServiceStart -ServiceName $ServiceBus
 	fnServiceStart -ServiceName $EtlService
+    & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
 }
 
 function fnServiceStart{
