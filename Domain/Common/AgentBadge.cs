@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -6,93 +5,103 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class AgentBadge : SimpleAggregateRoot, IAgentBadge
 	{
-		private IPerson _person;
-		private BadgeType _badgeType;
+		private int _totalAmount;
+		private bool _initialized;
+		private int _lastAmount;
+		private bool _bronzeBadgeAdded;
+		private bool _silverBadgeAdded;
+		private bool _goldBadgeAdded;
 
-		private int _bronzeBadge;
-		private int _silverBadge;
-		private int _goldBadge;
+		public IPerson Person { get; set; }
+		public BadgeType BadgeType { get; set; }
 
-		private DateOnly _lastCalculatedDate;
-
-		public virtual IPerson Person
+		public int TotalAmount
 		{
-			get { return _person; }
-			set { _person = value; }
-		}
-
-		public virtual int BronzeBadge
-		{
-			get { return _bronzeBadge; }
-			set { _bronzeBadge = value; }
-		}
-
-		public virtual int SilverBadge
-		{
-			get { return _silverBadge; }
-			set { _silverBadge = value; }
-		}
-
-		public virtual int GoldBadge
-		{
-			get { return _goldBadge; }
-			set { _goldBadge = value; }
-		}
-
-		public virtual BadgeType BadgeType
-		{
-			get { return _badgeType; }
-			set { _badgeType = value; }
-		}
-
-		public virtual DateOnly LastCalculatedDate
-		{
-			get { return _lastCalculatedDate; }
-			set { _lastCalculatedDate = value; }
-		}
-
-		public virtual bool BronzeBadgeAdded { get; set; }
-		public virtual bool SilverBadgeAdded { get; set; }
-		public virtual bool GoldBadgeAdded { get; set; }
-
-		/// <summary>
-		/// Add a new badge to current badge
-		/// </summary>
-		/// <param name="newBadge">New badge</param>
-		/// <param name="silverToBronzeBadgeRate">The rate exchange bronze badge to silver badge.</param>
-		/// <param name="goldToSilverBadgeRate">The rate exchange silver badge to gold badge.</param>
-		public virtual void AddBadge(IAgentBadge newBadge, int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
-		{
-			InParameter.MustBeTrue("newBadge", newBadge.BadgeType == BadgeType);
-			InParameter.ValueMustBeLargerThanZero("silverToBronzeBadgeRate", silverToBronzeBadgeRate);
-			InParameter.ValueMustBeLargerThanZero("goldToSilverBadgeRate", goldToSilverBadgeRate);
-
-			BronzeBadge += newBadge.BronzeBadge;
-			SilverBadge += newBadge.SilverBadge;
-			GoldBadge += newBadge.GoldBadge;
-
-			BronzeBadgeAdded = newBadge.BronzeBadgeAdded;
-			SilverBadgeAdded = newBadge.SilverBadgeAdded;
-			GoldBadgeAdded = newBadge.GoldBadgeAdded;
-			
-			LastCalculatedDate = newBadge.LastCalculatedDate;
-
-			//Update according to rate.
-			if (BronzeBadge >= silverToBronzeBadgeRate)
+			get { return _totalAmount; }
+			set
 			{
-				SilverBadge = SilverBadge + BronzeBadge / silverToBronzeBadgeRate;
-				SilverBadgeAdded = true;
-				BronzeBadge = BronzeBadge % silverToBronzeBadgeRate;
-				BronzeBadgeAdded = false;
-			}
-
-			if (SilverBadge >= goldToSilverBadgeRate)
-			{
-				GoldBadge = GoldBadge + SilverBadge / goldToSilverBadgeRate;
-				GoldBadgeAdded = true;
-				SilverBadge = SilverBadge % goldToSilverBadgeRate;
-				SilverBadgeAdded = false;
+				if (!_initialized)
+				{
+					_lastAmount = value;
+					_totalAmount = value;
+					_initialized = true;
+				}
+				else
+				{
+					_lastAmount = _totalAmount;
+					_totalAmount = value;
+				}
 			}
 		}
+
+		public DateOnly LastCalculatedDate { get; set; }
+
+		public int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
+		{
+			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
+			return getBronzeBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+		}
+
+		public int GetSilverBadge(int silverToBronzeRate, int goldToSilverRate)
+		{
+			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
+			return getSilverBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+		}
+
+		public int GetGoldBadge(int silverToBronzeRate, int goldToSilverRate)
+		{
+			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
+			return getGoldBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+		}
+
+		public bool IsBronzeBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
+		{
+			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
+			return _bronzeBadgeAdded;
+		}
+
+		public bool IsSilverBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
+		{
+			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
+			return _silverBadgeAdded;
+		}
+
+		public bool IsGoldBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
+		{
+			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
+			return _goldBadgeAdded;
+		}
+
+		private void updateBadgeAddedFlag(int silverToBronzeRate, int goldToSilverRate)
+		{
+			var previousBronzeBadge = getBronzeBadgeCount(_lastAmount, silverToBronzeRate, goldToSilverRate);
+			var previousSilverBadge = getSilverBadgeCount(_lastAmount, silverToBronzeRate, goldToSilverRate);
+			var previousGoldBadge = getGoldBadgeCount(_lastAmount, silverToBronzeRate, goldToSilverRate);
+
+			var currentBronzeBadge = getBronzeBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+			var currentSilverBadge = getSilverBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+			var currentGoldBadge = getGoldBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+
+			_bronzeBadgeAdded = currentBronzeBadge > previousBronzeBadge;
+			_silverBadgeAdded = currentSilverBadge > previousSilverBadge;
+			_goldBadgeAdded = currentGoldBadge > previousGoldBadge;
+		}
+
+		#region Calculate badge count
+		private static int getGoldBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
+		{
+			return amount / (silverToBronzeRate * goldToSilverRate);
+		}
+
+		private static int getSilverBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
+		{
+			return (amount / silverToBronzeRate) % goldToSilverRate;
+		}
+
+		private static int getBronzeBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
+		{
+			return amount % (goldToSilverRate * silverToBronzeRate);
+		}
+		#endregion
 	}
 }

@@ -2,25 +2,72 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IAgentBadge : IAggregateRoot
 	{
-		IPerson Person { get; }
+		/// <summary>
+		/// Person own the badges
+		/// </summary>
+		IPerson Person { get; set; }
+
+		/// <summary>
+		/// Badge type
+		/// </summary>
 		BadgeType BadgeType { get; set; }
 
-		int BronzeBadge { get; set; }
-		int SilverBadge { get; set; }
-		int GoldBadge { get; set; }
+		/// <summary>
+		/// Total amount of badges
+		/// </summary>
+		int TotalAmount { get; set; }
 
-		bool BronzeBadgeAdded { get; set; }
-		bool SilverBadgeAdded { get; set; }
-		bool GoldBadgeAdded { get; set; }
-
+		/// <summary>
+		/// Last badge calculate date
+		/// </summary>
 		DateOnly LastCalculatedDate { get; set; }
 
 		/// <summary>
-		/// Add a new badge to current badge
+		/// Indicate if bronze badge added.
 		/// </summary>
-		/// <param name="newBadge">New badge</param>
-		/// <param name="silverToBronzeBadgeRate">The rate exchange bronze badge to silver badge.</param>
-		/// <param name="goldToSilverBadgeRate">The rate exchange silver badge to gold badge.</param>
-		void AddBadge(IAgentBadge newBadge, int silverToBronzeBadgeRate, int goldToSilverBadgeRate);
+		/// <param name="silverToBronzeRate"></param>
+		/// <param name="goldToSilverRate"></param>
+		/// <returns></returns>
+		bool IsSilverBadgeAdded(int silverToBronzeRate, int goldToSilverRate);
+
+		/// <summary>
+		/// Indicate if silver badge added.
+		/// </summary>
+		/// <param name="silverToBronzeRate"></param>
+		/// <param name="goldToSilverRate"></param>
+		/// <returns></returns>
+		bool IsBronzeBadgeAdded(int silverToBronzeRate, int goldToSilverRate);
+
+		/// <summary>
+		/// Indicate if gold badge added
+		/// </summary>
+		/// <param name="silverToBronzeRate"></param>
+		/// <param name="goldToSilverRate"></param>
+		/// <returns></returns>
+		bool IsGoldBadgeAdded(int silverToBronzeRate, int goldToSilverRate);
+		
+		/// <summary>
+		/// Get bronze badge count
+		/// </summary>
+		/// <param name="silverToBronzeRate"></param>
+		/// <param name="goldToSilverRate"></param>
+		/// <returns></returns>
+		int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate);
+
+		/// <summary>
+		/// Get silver badge count
+		/// </summary>
+		/// <param name="silverToBronzeRate"></param>
+		/// <param name="goldToSilverRate"></param>
+		/// <returns></returns>
+		int GetSilverBadge(int silverToBronzeRate, int goldToSilverRate);
+
+		/// <summary>
+		/// Get gold badge count
+		/// </summary>
+		/// <param name="silverToBronzeRate"></param>
+		/// <param name="goldToSilverRate"></param>
+		/// <returns></returns>
+		int GetGoldBadge(int silverToBronzeRate, int goldToSilverRate);
 	}
 }

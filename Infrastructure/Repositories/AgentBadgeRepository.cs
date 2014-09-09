@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -25,9 +28,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("person", person);
 
-			ICollection<IAgentBadge> result = Session.CreateCriteria(typeof(AgentBadge), "badge")
-				.Add(Restrictions.Eq("Person", person))
-				.List<IAgentBadge>();
+			const string query = @"select BadgeType, TotalAmount, LastCalculatedDate "
+				+ "from AgentBadge where Person = :person";
+			var result = Session.CreateSQLQuery(query)
+					.SetGuid("person", (Guid)person.Id)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
+					.SetReadOnly(true)
+					.List<IAgentBadge>();
+			foreach (var agentBadge in result)
+			{
+				agentBadge.Person = person;
+			}
 			return result;
 		}
 
@@ -35,11 +46,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("person", person);
 			InParameter.NotNull("badgeType", badgeType);
-
-			var result = Session.CreateCriteria(typeof(AgentBadge), "badge")
-				.Add(Restrictions.Eq("Person", person))
-				.Add(Restrictions.Eq("BadgeType", (int)badgeType))
-				.UniqueResult<IAgentBadge>();
+			const string query = @"select BadgeType, TotalAmount, LastCalculatedDate "
+				+ "from AgentBadge where Person = :person and BadgeType=:badgeType";
+			var result = Session.CreateSQLQuery(query)
+					.SetGuid("person", (Guid)person.Id)
+					.SetInt16("badgeType", (Int16)badgeType)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
+					.SetReadOnly(true)
+					.UniqueResult<IAgentBadge>();
+			result.Person = person;
 			return result;
 		}
 	}
