@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<System.Web.Mvc.HandleErrorInfo>" %>
+<%@ Import Namespace="AuthBridge.Configuration" %>
 
 <script runat="server">
 
@@ -9,6 +10,29 @@
 			exTrace.Visible = true;
 		exMessage.Text = ex.Message;
 		exTrace.Text = ex.StackTrace;
+
+		returnToScopeApplication();
+	}
+
+	private void returnToScopeApplication()
+	{
+		var configuration = ConfigurationManager.GetSection("authBridge/multiProtocolIssuer") as MultiProtocolIssuerSection;
+		var scope = configuration.Scopes.OfType<ScopeElement>().FirstOrDefault();
+		if (scope != null)
+		{
+			clearFederationContext();
+			Response.Redirect(scope.Uri.Replace("Test/HandleReturn", ""), true);
+		}
+	}
+
+	private void clearFederationContext()
+	{
+		if (Request.Cookies["FederationContext"] != null)
+		{
+			HttpCookie myCookie = new HttpCookie("FederationContext");
+			myCookie.Expires = DateTime.Now.AddDays(-1d);
+			Response.Cookies.Add(myCookie);
+		}
 	}
 
 </script>
