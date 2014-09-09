@@ -375,6 +375,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ValidNumberOfDayOffInAWeekSpecification>().As<IValidNumberOfDayOffInAWeekSpecification>();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
+	        builder.RegisterType<TeamBlockScheduler>().As<TeamBlockScheduler>();
 	        builder.Register(c =>
 	        {
 		        //ugly hack. should be two different implementations instead
