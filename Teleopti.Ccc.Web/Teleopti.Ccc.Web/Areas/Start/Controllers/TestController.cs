@@ -91,11 +91,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	    public EmptyResult ClearConnections()
 	    {
 		    SqlConnection.ClearAllPools();
-			Response.Cookies.Clear();
-				return new EmptyResult();
+		    var cookies = Request.Cookies.AllKeys.ToList();
+		    foreach (var cookieKey in cookies)
+		    {
+			    HttpCookie myCookie = new HttpCookie(cookieKey);
+			    myCookie.Expires = DateTime.Now.AddDays(-1d);
+			    Response.Cookies.Add(myCookie);
+		    }
+		    return new EmptyResult();
 	    }
 
-		public ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
+	    public ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
