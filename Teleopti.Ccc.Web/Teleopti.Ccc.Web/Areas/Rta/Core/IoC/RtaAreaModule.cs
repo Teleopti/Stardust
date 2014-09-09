@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.IoC
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule(new RealTimeContainerInstaller(_mbCacheModule));
+			builder.RegisterModule(new RtaCommonModule(_mbCacheModule));
 			builder.RegisterType<TeleoptiRtaService>().AsSelf().As<ITeleoptiRtaService>().SingleInstance();
 		}
 	}

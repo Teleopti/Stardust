@@ -14,11 +14,11 @@ using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public class RealTimeContainerInstaller : Module
+	public class RtaCommonModule : Module
 	{
 		private readonly CacheBuilder _cacheBuilder;
 
-		public RealTimeContainerInstaller(MbCacheModule mbCacheModule)
+		public RtaCommonModule(MbCacheModule mbCacheModule)
 		{
 			_cacheBuilder = mbCacheModule.Builder;
 		}

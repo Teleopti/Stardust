@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using MbCache.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -11,12 +10,12 @@ using Teleopti.Ccc.Rta.Server.Adherence;
 
 namespace Teleopti.Ccc.Rta.ServerTest
 {
-	public class IocTest
+	public class ContainerConfigurationTest
 	{
 		[Test]
 		public void ShouldResolveRtaDataHandler()
 		{
-			using (var container = RtaContainerBuilder.CreateBuilder().Build())
+			using (var container = new ContainerConfiguration().Configure().Build())
 			{
 				container.Resolve<IRtaDataHandler>()
 					.Should().Not.Be.Null();
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldResolveAdherenceAggregator()
 		{
-			using (var container = RtaContainerBuilder.CreateBuilder().Build())
+			using (var container = new ContainerConfiguration().Configure().Build())
 			{
 				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
 					.Single().GetType().Should().Be<AdherenceAggregator>();
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldResolveAdherenceAggregatorInitializor()
 		{
-			using (var container = RtaContainerBuilder.CreateBuilder().Build())
+			using (var container = new ContainerConfiguration().Configure().Build())
 			{
 				container.Resolve<AdherenceAggregatorInitializor>()
 					.Should().Not.Be.Null();
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldCachePersonOrganizationProvider()
 		{
-			var builder = RtaContainerBuilder.CreateBuilder();
+			var builder = new ContainerConfiguration().Configure();
 			builder.RegisterType<organizationReader>().As<IPersonOrganizationReader>();
 			using (var container = builder.Build())
 			{

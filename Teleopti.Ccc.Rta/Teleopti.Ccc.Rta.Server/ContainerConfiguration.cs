@@ -3,15 +3,14 @@ using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public static class RtaContainerBuilder
+	public class ContainerConfiguration
 	{
-		 public static Autofac.ContainerBuilder CreateBuilder()
+		 public ContainerBuilder Configure()
 		 {
 			 var builder = new ContainerBuilder();
-
 			 var mbCacheModule = new MbCacheModule(null);
 			 builder.RegisterModule(mbCacheModule);
-			 builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
+			 builder.RegisterModule(new RtaCommonModule(mbCacheModule));
 			 return builder;
 		 }
 	}

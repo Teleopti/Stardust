@@ -158,7 +158,7 @@
     <Compile Include="Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="AlarmMapper.cs" />
     <Compile Include="Resolvers\PersonWithBusinessUnit.cs" />
-    <Compile Include="RtaContainerBuilder.cs" />
+    <Compile Include="ContainerConfiguration.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
     <Compile Include="DatabaseReader.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
@@ -174,7 +174,7 @@
     <Compile Include="Resolvers\IPersonResolver.cs" />
     <Compile Include="Resolvers\PersonResolver.cs" />
     <Compile Include="Resolvers\DataSourceResolver.cs" />
-    <Compile Include="RealTimeContainerInstaller.cs" />
+    <Compile Include="RtaCommonModule.cs" />
     <Compile Include="RtaAlarmLight.cs" />
     <Compile Include="RtaDataHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
