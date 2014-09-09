@@ -2,6 +2,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -248,7 +249,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 	    private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
         {
-            builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade >();
+				builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>()
+							.As<TeamBlockDayOffFairnessOptimizationServiceFacade>();
+				builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>()
+							.As<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>();
+		    builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_Seniority_11111)
+			    ? (ITeamBlockDayOffFairnessOptimizationServiceFacade)c.Resolve<TeamBlockDayOffFairnessOptimizationServiceFacade>()
+			    : c.Resolve<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>())
+					.As<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
+
             builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
             builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
             builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();
