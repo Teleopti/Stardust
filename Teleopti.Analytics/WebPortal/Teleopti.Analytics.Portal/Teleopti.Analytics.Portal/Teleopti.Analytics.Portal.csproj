@@ -456,7 +456,9 @@
     <EmbeddedResource Include="Reports\Ccc\report_absence_time_per_absence.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Ccc\report_absence_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_absence_time_per_agent.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Ccc\report_IMPROVE.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_scheduled_agents_per_activity.rdlc">
       <SubType>Designer</SubType>

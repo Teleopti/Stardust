@@ -11,7 +11,7 @@
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server">
         </asp:ScriptManager>
-        <rsweb:ReportViewer BackColor="#96bacc" Height="670px" ShowBackButton="False" DocumentMapCollapsed="true" HyperlinkTarget="ReportViewer"  ID="ReportViewer1" runat="server"  Width="100%">
+        <rsweb:ReportViewer style="font-family:Segoe UI" BackColor="#80bfea" Height="670px" ShowBackButton="False" DocumentMapCollapsed="true" HyperlinkTarget="ReportViewer"  ID="ReportViewer1" runat="server"  Width="100%">
         </rsweb:ReportViewer>       
     </form>
 </body>

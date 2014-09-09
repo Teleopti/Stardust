@@ -9,7 +9,7 @@ namespace Teleopti.Analytics.Parameters
 	/// <summary>
 	/// Summary description for ParameterListBoxVertical.
 	/// </summary>
-	class ParameterListBoxVertical :ParameterBase
+	class ParameterListBoxVertical : ParameterBase
 	{
 		private Label _Label;
 		private ListBox _ListBox;
@@ -21,7 +21,12 @@ namespace Teleopti.Analytics.Parameters
 		private Image _ButtonMoveAllBack;
 		private Image _ButtonMoveOneBack;
 		private RequiredFieldValidator _Validator;
-		
+
+		public ParameterListBoxVertical(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
+
 		public override ControlCollection Controls
 		{
 			get
@@ -31,30 +36,30 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
-	    protected override void Clear()
-	    {
-	    }
+		protected override void Clear()
+		{
+		}
 
-	    protected override void SetData()
+		protected override void SetData()
 		{
 			EnsureChildControls();
 			Value = _TextBox.Text;
 			ParameterText = _TextBoxText.Text;
 		}
 
-		protected override void CreateChildControls() 
+		protected override void CreateChildControls()
 		{
 			_Label = new Label();
 			_ListBox = new ListBox
-			               {
-			                   SelectionMode = ListSelectionMode.Multiple,
-			                   Width = new Unit("300"),
-			                   Height = new Unit("150"),
-			                   CssClass = "ControlStyle",
-			                   DataTextField = "name",
-			                   DataValueField = "id"
-			               };
-		    
+								{
+									SelectionMode = ListSelectionMode.Multiple,
+									Width = new Unit("300"),
+									Height = new Unit("150"),
+									CssClass = "ControlStyle",
+									DataTextField = "name",
+									DataValueField = "id"
+								};
+
 			_ListBox.ID = "Double" + Dbid;
 			_Validator = new RequiredFieldValidator
 				{
@@ -71,7 +76,7 @@ namespace Teleopti.Analytics.Parameters
 			_ListBox2.SelectionMode = ListSelectionMode.Multiple;
 			_ListBox2.Width = new Unit("300");
 			_ListBox2.Height = new Unit("150");
-			_ListBox2.CssClass = "ControlStyle";			
+			_ListBox2.CssClass = "ControlStyle";
 			_ListBox2.ID = "Double2" + Dbid.ToString();
 
 			_TextBox = new TextBox();
@@ -86,19 +91,19 @@ namespace Teleopti.Analytics.Parameters
 
 			_Validator.ControlToValidate = _TextBox.ID;
 			_Validator.Text = "*";
-		
+
 			_Validator.ErrorMessage = Selector.ErrorMessage + " '" + Text + "'";
 			_Validator.Display = ValidatorDisplay.Dynamic;
 
 			//Hidden textBox			
 
-			_TextBox.TextChanged +=new EventHandler(_TextBox_TextChanged);
+			_TextBox.TextChanged += new EventHandler(_TextBox_TextChanged);
 
 			//"Knappar" av imagetyp för att slippa att sidan skickas vid klick
 
 			_ButtonMoveOne = new Image();
 			_ButtonMoveOne.ID = "ButtonOne" + Dbid.ToString();
-			
+
 			_ButtonMoveAll = new Image();
 			_ButtonMoveAll.ID = "ButtonAll" + Dbid.ToString();
 
@@ -121,7 +126,7 @@ namespace Teleopti.Analytics.Parameters
 			if (!Page.IsPostBack)
 			{
 				LoadData();
-				
+
 			}
 		}
 		protected override void BindData()
@@ -130,7 +135,7 @@ namespace Teleopti.Analytics.Parameters
 			_ListBox.DataBind();
 			string delimStr = ",";
 			char[] delimiter = delimStr.ToCharArray();
-	
+
 			_ListBox2.Items.Clear();
 			_TextBoxText.Text = "";
 			_TextBox.Text = "";
@@ -139,24 +144,24 @@ namespace Teleopti.Analytics.Parameters
 			foreach (string s in myPresetArr)
 			{
 				int mCount = _ListBox.Items.Count - 1;
-				int i=0;
+				int i = 0;
 				while (i <= mCount)
 				{
 					if (_ListBox.Items[i].Value == s)
 					{
 						_ListBox2.Items.Add(_ListBox.Items[i]);
 						_TextBoxText.Text = _TextBoxText.Text + _ListBox.Items[i].Text + ",";
-						_TextBox.Text = _TextBox.Text  + _ListBox.Items[i].Value.ToString() + ",";
+						_TextBox.Text = _TextBox.Text + _ListBox.Items[i].Value.ToString() + ",";
 						_ListBox.Items.Remove(_ListBox.Items[i]);
 						break;
 					}
-					i ++;
+					i++;
 				}
 			}
 			if (_TextBoxText.Text.Length > 0)
 			{
-				_TextBoxText.Text = _TextBoxText.Text.Substring(0,_TextBoxText.Text.Length -1);
-				_TextBox.Text = _TextBox.Text.Substring(0,_TextBox.Text.Length -1);
+				_TextBoxText.Text = _TextBoxText.Text.Substring(0, _TextBoxText.Text.Length - 1);
+				_TextBox.Text = _TextBox.Text.Substring(0, _TextBox.Text.Length - 1);
 			}
 			if (_ListBox2.Items.Count == 0)
 			{
@@ -179,7 +184,7 @@ namespace Teleopti.Analytics.Parameters
 			string _ButtonMoveOneIMG = GetClientFileUrl("down_dark.gif");
 			_ButtonMoveOne.Attributes.Add("onMouseDown", "changepic('" + _ButtonMoveOne.ClientID + "','" + _ButtonMoveOneIMG + "')");
 			_ButtonMoveOne.Attributes.Add("onMouseOut", "changepic('" + _ButtonMoveOne.ClientID + "','" + _ButtonMoveOne.ImageUrl + "')");
-			_ButtonMoveOne.Attributes.Add("onClick", "moveListItem('" + _ListBox.ClientID + "','" + _ListBox2.ClientID + "',0 ,'" + _ListBox2.ClientID + "','" + _TextBox.ClientID + "')");			
+			_ButtonMoveOne.Attributes.Add("onClick", "moveListItem('" + _ListBox.ClientID + "','" + _ListBox2.ClientID + "',0 ,'" + _ListBox2.ClientID + "','" + _TextBox.ClientID + "')");
 
 			string _ButtonMoveAllIMG = GetClientFileUrl("down_all_dark.gif");
 			_ButtonMoveAll.Attributes.Add("onMouseDown", "changepic('" + _ButtonMoveAll.ClientID + "','" + _ButtonMoveAllIMG + "')");
@@ -202,7 +207,7 @@ namespace Teleopti.Analytics.Parameters
 			_ButtonMoveAllBack.Attributes.Add("onMouseUp", "changepic('" + _ButtonMoveAllBack.ClientID + "','" + _ButtonMoveAllBack.ImageUrl + "')");
 
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,Selector._LabelWidth.ToString());			
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
 			_Label.RenderControl(writer);
 			writer.RenderEndTag();
 
@@ -210,15 +215,15 @@ namespace Teleopti.Analytics.Parameters
 
 			writer.WriteBeginTag("TABLE");
 
-			writer.WriteAttribute("class","ControlBody");
-			writer.WriteAttribute("border","0");
-			writer.WriteAttribute("cellspacing","0");
-			writer.WriteAttribute("cellpadding","0");
+			writer.WriteAttribute("class", "ControlBody");
+			writer.WriteAttribute("border", "0");
+			writer.WriteAttribute("cellspacing", "0");
+			writer.WriteAttribute("cellpadding", "0");
 			writer.Write(HtmlTextWriter.TagRightChar);//
 			writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
 			writer.WriteBeginTag("td");
-			writer.WriteAttribute("align","left");
+			writer.WriteAttribute("align", "left");
 			writer.Write(HtmlTextWriter.TagRightChar);
 			_ListBox.RenderControl(writer);
 			writer.WriteEndTag("td");
@@ -228,38 +233,38 @@ namespace Teleopti.Analytics.Parameters
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 
 			writer.WriteBeginTag("TABLE");
-			writer.WriteAttribute("class","ControlBody");
-			writer.WriteAttribute("border","0");
-			writer.WriteAttribute("cellspacing","0");
-			writer.WriteAttribute("cellpadding","0");
+			writer.WriteAttribute("class", "ControlBody");
+			writer.WriteAttribute("border", "0");
+			writer.WriteAttribute("cellspacing", "0");
+			writer.WriteAttribute("cellpadding", "0");
 			writer.Write(HtmlTextWriter.TagRightChar);//
 
 			writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
 			writer.WriteBeginTag("td");
 			writer.WriteAttribute("width", "75", true);
-			writer.WriteAttribute("align","center");
+			writer.WriteAttribute("align", "center");
 			writer.Write(HtmlTextWriter.TagRightChar);
 			_ButtonMoveAll.RenderControl(writer);
 			writer.WriteEndTag("td");
 
 			writer.WriteBeginTag("td");
 			writer.WriteAttribute("width", "75", true);
-			writer.WriteAttribute("align","center");
+			writer.WriteAttribute("align", "center");
 			writer.Write(HtmlTextWriter.TagRightChar);
 			_ButtonMoveOne.RenderControl(writer);
-			writer.WriteEndTag("td");			
-		
-			writer.WriteBeginTag("td");			
+			writer.WriteEndTag("td");
+
+			writer.WriteBeginTag("td");
 			writer.WriteAttribute("width", "75", true);
-			writer.WriteAttribute("align","center");
+			writer.WriteAttribute("align", "center");
 			writer.Write(HtmlTextWriter.TagRightChar);
 			_ButtonMoveOneBack.RenderControl(writer);
 			writer.WriteEndTag("td");
 
-			writer.WriteBeginTag("td");			
+			writer.WriteBeginTag("td");
 			writer.WriteAttribute("width", "75", true);
-			writer.WriteAttribute("align","center");
+			writer.WriteAttribute("align", "center");
 			writer.Write(HtmlTextWriter.TagRightChar);
 			_ButtonMoveAllBack.RenderControl(writer);
 			writer.WriteEndTag("td");
@@ -278,21 +283,21 @@ namespace Teleopti.Analytics.Parameters
 			_ListBox2.RenderControl(writer);
 			writer.RenderEndTag();//td
 			writer.RenderEndTag();//tr
-			
+
 			writer.WriteEndTag("TABLE");
 
 
 			writer.WriteBeginTag("td");	//Viktig
-			writer.WriteAttribute("valign","bottom");
+			writer.WriteAttribute("valign", "bottom");
 			writer.Write(HtmlTextWriter.TagRightChar);
 
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,"20");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "20");
 			Panel _Panel = new Panel();
 			_Panel.Height = new Unit("20");
-		    if (Display)
-		    {
-                _Panel.Controls.Add(_Validator);
-		    }
+			if (Display)
+			{
+				_Panel.Controls.Add(_Validator);
+			}
 			_Panel.Controls.Add(_TextBox);
 			Controls.Add(_Panel);
 			_Panel.RenderControl(writer);
@@ -302,14 +307,14 @@ namespace Teleopti.Analytics.Parameters
 
 		protected override void SetAutoPostBack()
 		{
-			EnsureChildControls();			
+			EnsureChildControls();
 		}
 
 		private void _TextBox_TextChanged(object sender, EventArgs e)
 		{
 			Value = _TextBox.Text;
 			DefaultValue = Value.ToString();
-			_valid = true;
+			Valid = true;
 			SaveSetting();
 			LoadData();
 
@@ -328,10 +333,10 @@ namespace Teleopti.Analytics.Parameters
 		{
 			base.OnPreRender(e);
 			string scriptKey = "MoveItemToListBox:" + "1000";
-		{
-			string scriptBlock =
-				@"<script language=""JavaScript"">
-               <!--
+			{
+				string scriptBlock =
+					@"<script language=""JavaScript"">
+					<!--
 				
 				function changepic(button,pic) 
 				{
@@ -371,11 +376,11 @@ namespace Teleopti.Analytics.Parameters
 					txtVal.value = str;
 					document.body.style.cursor  = 'default';
 				}
-                -->
-               </script>";
+					 -->
+					</script>";
 
-            Page.ClientScript.RegisterClientScriptBlock(GetType(),scriptKey, scriptBlock);
-		}
+				Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
+			}
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Image = System.Web.UI.WebControls.Image;
@@ -23,10 +22,14 @@ namespace Teleopti.Analytics.Parameters
 		private Image _buttonMoveAllBack;
 		private Image _buttonMoveOneBack;
 		private RequiredFieldValidator _validator;
-	 
+
 		//public static readonly object EventListChanged = new object();
 
 
+		public ParameterListBox(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
 
 		public override ControlCollection Controls
 		{
@@ -41,7 +44,7 @@ namespace Teleopti.Analytics.Parameters
 		{
 			_listBox.Items.Clear();
 			_listBox2.Items.Clear();
-           
+
 		}
 
 		protected override void SetData()
@@ -61,29 +64,29 @@ namespace Teleopti.Analytics.Parameters
 					Value = "";
 					ParameterText = "";
 				}
-				_valid = _validator.IsValid;
+				Valid = _validator.IsValid;
 			}
 			else
 			{
 				Value = DBNull.Value;
-				_valid = true;
+				Valid = true;
 			}
 		}
 
 		protected override void CreateChildControls()
 		{
-			_label = new Label {Text = Text};
+			_label = new Label { Text = Text };
 
 			_listBox = new ListBox
-						   {
-							   SelectionMode = ListSelectionMode.Multiple,
-							   Width = new Unit(100, UnitType.Percentage),
-							   Height = new Unit("150"),
-							   CssClass = "ControlStyle",
-							   DataTextField = "name",
-							   DataValueField = "id",
-							   ID = "List" + Dbid
-						   };
+							{
+								SelectionMode = ListSelectionMode.Multiple,
+								Width = new Unit(100, UnitType.Percentage),
+								Height = new Unit("150"),
+								CssClass = "ControlStyle",
+								DataTextField = "name",
+								DataValueField = "id",
+								ID = "List" + Dbid
+							};
 
 			_listBox2 = new ListBox
 							{
@@ -109,7 +112,7 @@ namespace Teleopti.Analytics.Parameters
 								Height = new Unit("0"),
 								ID = "TextHiddenText" + Dbid
 							};
-            _textBoxText.TextMode = TextBoxMode.MultiLine;
+			_textBoxText.TextMode = TextBoxMode.MultiLine;
 			_textBoxText.Style.Add("position", "absolute");
 			_textBoxText.Style.Add("left", "-10px");
 
@@ -195,9 +198,9 @@ namespace Teleopti.Analytics.Parameters
 			}
 			if (_textBoxText.Text.Length > 0)
 			{
-                _textBoxText.Text = _textBoxText.Text.Substring(0, _textBoxText.Text.Length - 1);
-                _textBox.Text = _textBox.Text.Substring(0, _textBox.Text.Length - 1);
-			    //_textBoxText.Text = HttpUtility.HtmlEncode(_textBoxText.Text.Substring(0, _textBoxText.Text.Length - 1));
+				_textBoxText.Text = _textBoxText.Text.Substring(0, _textBoxText.Text.Length - 1);
+				_textBox.Text = _textBox.Text.Substring(0, _textBox.Text.Length - 1);
+				//_textBoxText.Text = HttpUtility.HtmlEncode(_textBoxText.Text.Substring(0, _textBoxText.Text.Length - 1));
 			}
 			if (_listBox2.Items.Count == 0)
 			{
@@ -319,7 +322,7 @@ namespace Teleopti.Analytics.Parameters
 		{
 			Value = _textBox.Text;
 			DefaultValue = Value.ToString();
-			_valid = true;
+			Valid = true;
 			SaveSetting();
 			LoadData();
 
@@ -343,7 +346,7 @@ namespace Teleopti.Analytics.Parameters
 
 			{
 				const string scriptBlock = @"<script language=""JavaScript"">
-               <!--
+					<!--
 				
 				function changepic(button,pic) 
 				{
@@ -359,7 +362,7 @@ namespace Teleopti.Analytics.Parameters
 					var lstVal = document.getElementById(ListVal);
 					var txtVal = document.getElementById(TextVal);
 					var txtText = document.getElementById(TextText);
-                    
+						  
 					for (i=0;i<lstFrom.length;i++)
 					{
 						if ((lstFrom[i].selected) || (Type ==1))
@@ -386,13 +389,13 @@ namespace Teleopti.Analytics.Parameters
 					if (SubmitOrNo == 'Yes')
 						{window.document.getElementById('aspnetForm').submit();}
 				}
-                function callMoveOneButton(buttonId)
-                {
-                    var btnMoveOnlyOne = document.getElementById(buttonId);
-                    btnMoveOnlyOne.click();
-                }
-                -->
-               </script>";
+					 function callMoveOneButton(buttonId)
+					 {
+						  var btnMoveOnlyOne = document.getElementById(buttonId);
+						  btnMoveOnlyOne.click();
+					 }
+					 -->
+					</script>";
 
 				Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
 			}

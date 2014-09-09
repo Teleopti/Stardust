@@ -13,9 +13,14 @@ namespace Teleopti.Analytics.Parameters
 	class ParameterCombo : ParameterBase
 	{
 		private Label _label;
-		protected DropDownList _dropDown;
+		protected DropDownList DropDown;
 		private RequiredFieldValidator _validator;
-		
+
+		public ParameterCombo(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
+
 		public override ControlCollection Controls
 		{
 			get
@@ -25,62 +30,62 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
-	    public DropDownList DropDownList
-	    {
-            get { return _dropDown; }
-	    }
+		public DropDownList DropDownList
+		{
+			get { return DropDown; }
+		}
 
-		
+
 		protected override void SetAutoPostBack()
 		{
 			EnsureChildControls();
-			_dropDown.AutoPostBack = true;
-			_dropDown.SelectedIndexChanged += DropDownSelectedIndexChanged;
+			DropDown.AutoPostBack = true;
+			DropDown.SelectedIndexChanged += DropDownSelectedIndexChanged;
 		}
 
-	    protected override void Clear()
-	    {
-	        
-	    }
+		protected override void Clear()
+		{
 
-	    protected override void SetData()
+		}
+
+		protected override void SetData()
 		{
 			EnsureChildControls();
-	        if (Display)
-	        {
-                _validator.Validate();
-                if (_validator.IsValid)
-                {
-                    Value = _dropDown.SelectedValue;
-                    ParameterText = _dropDown.SelectedItem.Text;
-                }
-                _valid = _validator.IsValid;
-	        }
-	        else
-	        {
-	            Value = DBNull.Value;
-	            _valid = true;
-	        }
+			if (Display)
+			{
+				_validator.Validate();
+				if (_validator.IsValid)
+				{
+					Value = DropDown.SelectedValue;
+					ParameterText = DropDown.SelectedItem.Text;
+				}
+				Valid = _validator.IsValid;
+			}
+			else
+			{
+				Value = DBNull.Value;
+				Valid = true;
+			}
 		}
 
-		protected override void CreateChildControls() 
+		protected override void CreateChildControls()
 		{
-			
-			_label = new Label();
-			
-			_dropDown = new DropDownList
-			                {
-			                    Width = new Unit(100, UnitType.Percentage),
-			                    CssClass = "ControlStyle",
-			                    DataTextField = "name",
-			                    DataValueField = "id"
-			                };
 
-		    
-			_dropDown.ID = "Drop" + Dbid;
+			_label = new Label();
+
+			DropDown = new DropDownList
+								 {
+									 Width = new Unit(100, UnitType.Percentage),
+									 CssClass = "ControlStyle",
+									 DataTextField = "name",
+									 DataValueField = "id"
+								 };
+
+
+			DropDown.ID = "Drop" + Dbid;
 			_validator = new RequiredFieldValidator
 				{
-					ControlToValidate = _dropDown.ID,
+					ControlToValidate = DropDown.ID,
 					Text = "*",
 					ErrorMessage = Selector.ErrorMessage + " '" + Text + "'",
 					Display = ValidatorDisplay.Dynamic,
@@ -89,80 +94,80 @@ namespace Teleopti.Analytics.Parameters
 
 			_label.Text = Text;
 			base.Controls.Add(_label);
-			base.Controls.Add(_dropDown);
-            AddValidator(_validator);
+			base.Controls.Add(DropDown);
+			AddValidator(_validator);
 
 			if (!Page.IsPostBack)
 			{
-				LoadData();				
+				LoadData();
 			}
 		}
-		
+
 		protected override void BindData()
 		{
-			_dropDown.DataSource = MyData.Tables[0];
-			_dropDown.DataBind();
+			DropDown.DataSource = MyData.Tables[0];
+			DropDown.DataBind();
 
-            if (DefaultValue == "-99")
-		    {
-                ListItem myItem =_dropDown.Items[_dropDown.Items.Count - 1];
-		        myItem.Selected = true;
-                return;
-		    }
+			if (DefaultValue == "-99")
+			{
+				ListItem myItem = DropDown.Items[DropDown.Items.Count - 1];
+				myItem.Selected = true;
+				return;
+			}
 			if (DefaultValue == "-95")
 			{
 				//Change the default value from the control data
 				foreach (DataRow row in MyData.Tables[0].Rows)
 				{
-					if ((bool) row["default_value"])
+					if ((bool)row["default_value"])
 					{
 						DefaultValue = row["id"].ToString();
 						break;
 					}
 				}
 			}
-		    
-			foreach( ListItem myItem in _dropDown.Items)
+
+			foreach (ListItem myItem in DropDown.Items)
 			{
-				if (myItem.Value ==  DefaultValue)
+				if (myItem.Value == DefaultValue)
 				{
 					myItem.Selected = true;
 					break;
 				}
 			}
-		}		
+		}
 
 		protected override void RenderContents(HtmlTextWriter writer)//Ritar upp kontrollerna
 		{
 			Debug.Assert(_label != null);
-			Debug.Assert(_dropDown != null);
+			Debug.Assert(DropDown != null);
 			Debug.Assert(_validator != null);
 
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,Selector._LabelWidth.ToString());
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:0px 0px 0px 0px");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_label.RenderControl(writer);
 			writer.RenderEndTag();
 
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,Selector._List1Width.ToString());
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:3px 0px 3px 0px");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._List1Width.ToString());
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:3px 0px 3px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
-			_dropDown.RenderControl(writer);
+			DropDown.RenderControl(writer);
 			writer.RenderEndTag();
-			
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:0px 0px 0px 0px");
+
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			writer.RenderEndTag();
 
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,"20");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "20");
 			_validator.RenderControl(writer);
 			writer.RenderEndTag();
 		}
 
 		private void DropDownSelectedIndexChanged(object sender, EventArgs e)
 		{
-			Value = _dropDown.SelectedValue;
+			Value = DropDown.SelectedValue;
 
 			foreach (ParameterBase ctrl in Dependent)
 			{

@@ -8,12 +8,18 @@ namespace Teleopti.Analytics.Parameters
 	class ParameterComboPeriodType : ParameterCombo
 	{
 		private const int weekPeriod = 5;
+
+		public ParameterComboPeriodType(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
+
 		protected override void BindData()
 		{
-			_dropDown.DataSource = MyData.Tables[0];
-			_dropDown.DataBind();
+			DropDown.DataSource = MyData.Tables[0];
+			DropDown.DataBind();
 
-			foreach (ListItem myItem in _dropDown.Items)
+			foreach (ListItem myItem in DropDown.Items)
 			{
 				if (myItem.Value == DefaultValue)
 					myItem.Selected = true;
@@ -24,10 +30,10 @@ namespace Teleopti.Analytics.Parameters
 
 		private static bool hideWeekPeriodType()
 		{
-			return InvalidCultures.Contains(Thread.CurrentThread.CurrentCulture.Name);
+			return invalidCultures.Contains(Thread.CurrentThread.CurrentCulture.Name);
 		}
 
-		private static List<string> InvalidCultures
+		private static List<string> invalidCultures
 		{
 			get
 			{

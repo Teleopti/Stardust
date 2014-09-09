@@ -7,10 +7,15 @@ namespace Teleopti.Analytics.Parameters
 	/// <summary>
 	/// Summary description for ParameterCheck.
 	/// </summary>
-	class ParameterCheck :ParameterBase
+	class ParameterCheck : ParameterBase
 	{
 		private CheckBox _chkBox;
 		private Label _label;
+
+		public ParameterCheck(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
 
 		public override ControlCollection Controls
 		{
@@ -21,30 +26,30 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
-        protected override void Clear()
-        {
-        }
+		protected override void Clear()
+		{
+		}
 
-	    protected override void SetData()
+		protected override void SetData()
 		{
 			EnsureChildControls();
 			Value = _chkBox.Checked;
-			_valid = true;
+			Valid = true;
 		}
 
-		protected override void CreateChildControls() 
+		protected override void CreateChildControls()
 		{
-			_label = new Label {Text = Text};
-		    _chkBox = new CheckBox {ID = "ChkBox" + Dbid};
+			_label = new Label { Text = Text };
+			_chkBox = new CheckBox { ID = "ChkBox" + Dbid };
 
-		    _chkBox.CheckedChanged += chkBoxCheckedChanged;
+			_chkBox.CheckedChanged += chkBoxCheckedChanged;
 
 			base.Controls.Add(_label);
 			base.Controls.Add(_chkBox);
 
 			if (!Page.IsPostBack)
 			{
-				LoadData();		
+				LoadData();
 			}
 		}
 
@@ -56,22 +61,22 @@ namespace Teleopti.Analytics.Parameters
 				_chkBox.Checked = Convert.ToBoolean(s);
 			}
 			catch
-			{}
+			{ }
 		}
 
 		protected override void SetAutoPostBack()
 		{
-			EnsureChildControls();		
+			EnsureChildControls();
 		}
 
 		protected override void RenderContents(HtmlTextWriter writer)//Ritar ut kontrollerna
 		{
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,Selector._LabelWidth.ToString());
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:0px 0px 0px 0px");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_label.RenderControl(writer);
 			writer.RenderEndTag();
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:3px 0px 3px 0px");
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:3px 0px 3px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_chkBox.RenderControl(writer);
 			writer.RenderEndTag();

@@ -11,8 +11,19 @@ namespace Teleopti.Analytics.Portal
 
 		protected void Selector_OnInit(object sender, EventArgs e)
 		{
+			if (!TryParseGuid(Request.QueryString["REPORTID"], out _reportId))
+				return;
+			if (!string.IsNullOrEmpty(Request.QueryString.Get("BUID")))
+			{
+				BusinessUnitCode = new Guid(Request.QueryString["BUID"]);
+			}
+
+			Parameter.ReportId = ReportId;
+			Parameter.UserCode = UserCode;
+			Parameter.BusinessUnitCode = BusinessUnitCode;
+			Parameter.LanguageId = LangId;
 		}
-		
+
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			if (Page.IsPostBack)
@@ -21,14 +32,14 @@ namespace Teleopti.Analytics.Portal
 
 			LoggedOnUser.Text = LoggedOnUserInformation;
 			if (!Page.IsPostBack)
-				CheckStandardReportOrPerformanceManager();
+				checkStandardReportOrPerformanceManager();
 
 			Parameter.ReportId = ReportId;
 			Parameter.GroupPageCode = GroupPageCode;
 			Parameter.UserCode = UserCode;
 			Parameter.BusinessUnitCode = BusinessUnitCode;
 			Parameter.LanguageId = LangId;
-			
+
 			SignOutButton.Text = Resources.ResSignOut;
 
 			if (Parameter.IsReportPermissionGranted)
@@ -39,21 +50,21 @@ namespace Teleopti.Analytics.Portal
 				{
 					DataRow r = tableProps.Rows[0];
 					string resKey = r["report_name_resource_key"].ToString();
-                    var caption = ReportTexts.Resources.ResourceManager.GetString(resKey);
-                    if(string.IsNullOrEmpty(caption))
-                        caption = r["name"].ToString();
-                    labelRepCaption.Text = caption;
-					ImageButtonHelp.ToolTip = ReportTexts.Resources.ResHelp;
+					var caption = Resources.ResourceManager.GetString(resKey);
+					if (string.IsNullOrEmpty(caption))
+						caption = r["name"].ToString();
+					labelRepCaption.Text = caption;
+					ImageButtonHelp.ToolTip = Resources.ResHelp;
 
-					string url = HelpLinkBuilder.GetStandardReportHelpLink((string) r["help_key"]);
-					
+					string url = HelpLinkBuilder.GetStandardReportHelpLink((string)r["help_key"]);
+
 					ImageButtonHelp.OnClientClick = "javascript: window.open('" + url + "', 'HelpWindow', 'width=800, heigth=450, scrollbars=yes, resizable=yes') ; return false";
 					Page.Title = labelRepCaption.Text;
 				}
 
-				buttonShow.ToolTip = ReportTexts.Resources.ResShowReport;
-				CPEReports.ExpandedText = ReportTexts.Resources.CommonCollapse;
-				CPEReports.CollapsedText = ReportTexts.Resources.CommonExpand;
+				buttonShow.ToolTip = Resources.ResShowReport;
+				CPEReports.ExpandedText = Resources.CommonCollapse;
+				CPEReports.CollapsedText = Resources.CommonExpand;
 			}
 			else
 			{
@@ -61,12 +72,12 @@ namespace Teleopti.Analytics.Portal
 				buttonShow.Visible = false;
 				labelPermissionDenied.Visible = true;
 				ImageButtonHelp.Visible = false;
-				labelPermissionDenied.Text = ReportTexts.Resources.ResPermissionDenied;
+				labelPermissionDenied.Text = Resources.ResPermissionDenied;
 				labelRepCaption.Text = "";
 			}
 		}
 
-		private void CheckStandardReportOrPerformanceManager()
+		private void checkStandardReportOrPerformanceManager()
 		{
 			if (IsBrowseTargetPerformanceManager)
 				Response.Redirect(PerformanceManagerUrl, true);
@@ -77,7 +88,7 @@ namespace Teleopti.Analytics.Portal
 				Response.End();
 		}
 
-		protected void ButtonShow_Click(object sender, System.Web.UI.ImageClickEventArgs e)
+		protected void ButtonShowClick(object sender, System.Web.UI.ImageClickEventArgs e)
 		{
 			if (Parameter.IsValid)
 			{
@@ -90,7 +101,7 @@ namespace Teleopti.Analytics.Portal
 				string[] queryStringValues = { HiddenID.Value, BusinessUnitCode.ToString(), HiddenUserID.Value, uniqueKey.ToString() };
 				string rdlcSource =
 					Page.ResolveUrl(
-						String.Format(CultureInfo.CurrentCulture,"~/ReportViewer.aspx?REPORTID={0}&BUID={1}&USERID={2}&PARAMETERSKEY={3}", queryStringValues));
+						String.Format(CultureInfo.CurrentCulture, "~/ReportViewer.aspx?REPORTID={0}&BUID={1}&USERID={2}&PARAMETERSKEY={3}", queryStringValues));
 
 				//imgLoading.Visible = true;
 				ViewerFrame.Attributes.Add("src", rdlcSource);
@@ -99,7 +110,5 @@ namespace Teleopti.Analytics.Portal
 				CPEReports.ClientState = "true";
 			}
 		}
-
-		
 	}
 }

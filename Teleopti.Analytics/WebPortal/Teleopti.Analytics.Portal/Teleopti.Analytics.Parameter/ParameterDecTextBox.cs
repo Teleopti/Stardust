@@ -8,11 +8,16 @@ namespace Teleopti.Analytics.Parameters
 	/// <summary>
 	/// Summary description for ParameterDecTextBox.
 	/// </summary>
-	class ParameterDecTextBox :ParameterBase
+	class ParameterDecTextBox : ParameterBase
 	{
 		private TextBox _textBox;
 		private Label _label;
 		private CompareValidator _validator;
+
+		public ParameterDecTextBox(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
 
 		public override ControlCollection Controls
 		{
@@ -22,18 +27,18 @@ namespace Teleopti.Analytics.Parameters
 				return base.Controls;
 			}
 		}
-		
+
 		protected override void SetAutoPostBack()
 		{
 			EnsureChildControls();
 		}
 
-	    protected override void Clear()
-	    {
-	        
-	    }
+		protected override void Clear()
+		{
 
-	    protected override void SetData()
+		}
+
+		protected override void SetData()
 		{
 			EnsureChildControls();
 			_validator.Validate();
@@ -41,30 +46,30 @@ namespace Teleopti.Analytics.Parameters
 			{
 				Value = _textBox.Text;
 			}
-			_valid = _validator.IsValid;
+			Valid = _validator.IsValid;
 		}
 
 		protected override void CreateChildControls()//Ritar upp kontrollerna
 		{
-			_label = new Label {Text = Text};
-		    _textBox = new TextBox {ID = "txtBox" + Dbid, Width = Selector._List1Width, CssClass = "ControlStyle"};
+			_label = new Label { Text = Text };
+			_textBox = new TextBox { ID = "txtBox" + Dbid, Width = Selector._List1Width, CssClass = "ControlStyle" };
 
-		    //Kontrollerar att värdet är av decimaltyp samt är större än noll
+			//Kontrollerar att värdet är av decimaltyp samt är större än noll
 
 			_validator = new CompareValidator
-			                 {
-			                     ControlToValidate = _textBox.ID,
-			                     ValueToCompare = "0",
-			                     Type = ValidationDataType.Double,
-			                     Operator = ValidationCompareOperator.GreaterThan,
-			                     EnableClientScript = true,
-			                     Display = ValidatorDisplay.Dynamic,
-			                     Text = "*",
-			                     ErrorMessage = Selector.ErrorMessageValText + " '" + Text + "'",
-								 ForeColor = Color.Red
-			                 };
+								  {
+									  ControlToValidate = _textBox.ID,
+									  ValueToCompare = "0",
+									  Type = ValidationDataType.Double,
+									  Operator = ValidationCompareOperator.GreaterThan,
+									  EnableClientScript = true,
+									  Display = ValidatorDisplay.Dynamic,
+									  Text = "*",
+									  ErrorMessage = Selector.ErrorMessageValText + " '" + Text + "'",
+									  ForeColor = Color.Red
+								  };
 
-		    _textBox.TextChanged += textBoxTextChanged;
+			_textBox.TextChanged += textBoxTextChanged;
 
 			base.Controls.Add(_label);
 			base.Controls.Add(_textBox);
@@ -72,7 +77,7 @@ namespace Teleopti.Analytics.Parameters
 
 			if (!Page.IsPostBack)
 			{
-				LoadData();				
+				LoadData();
 			}
 		}
 
@@ -84,13 +89,13 @@ namespace Teleopti.Analytics.Parameters
 
 		protected override void RenderContents(HtmlTextWriter writer)
 		{
-			writer.AddStyleAttribute(HtmlTextWriterStyle.Width,Selector._LabelWidth.ToString());
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:0px 0px 0px 0px");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, Selector._LabelWidth.ToString());
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_label.RenderControl(writer);
 			writer.RenderEndTag();
 
-			writer.AddAttribute(HtmlTextWriterAttribute.Style,"padding:3px 0px 3px 0px");
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:3px 0px 3px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_textBox.RenderControl(writer);
 			_validator.RenderControl(writer);

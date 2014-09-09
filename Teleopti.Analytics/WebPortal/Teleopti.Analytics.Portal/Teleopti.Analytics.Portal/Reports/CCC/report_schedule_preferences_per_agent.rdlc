@@ -6,10 +6,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>3.67309cm</Width>
+              <Width>5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>10.15845cm</Width>
+              <Width>16.50845cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>4.66847cm</Width>
@@ -61,7 +61,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -74,7 +74,7 @@
                             <TextRun>
                               <Value>=Parameters!ResScenarioColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -87,11 +87,10 @@
                       <rd:DefaultName>textbox3</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -107,7 +106,7 @@
                             <TextRun>
                               <Value>=Parameters!scenario_id.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -120,11 +119,10 @@
                       <rd:DefaultName>textbox11</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -147,6 +145,7 @@
                             <TextRun>
                               <Value>=Parameters!ResGroupPageColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -156,10 +155,10 @@
                       </Paragraphs>
                       <rd:DefaultName>Textbox30</rd:DefaultName>
                       <Style>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -175,7 +174,7 @@
                             <TextRun>
                               <Value>=Parameters!group_page_code.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -187,11 +186,10 @@
                       </Paragraphs>
                       <rd:DefaultName>Textbox38</rd:DefaultName>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -214,6 +212,7 @@
                             <TextRun>
                               <Value>=Parameters!ResGroupPageGroupColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -226,10 +225,10 @@
                         <ToggleItem>textbox56</ToggleItem>
                       </Visibility>
                       <Style>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -245,7 +244,7 @@
                             <TextRun>
                               <Value>=Parameters!group_page_group_set.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -260,11 +259,10 @@
                         <ToggleItem>textbox56</ToggleItem>
                       </Visibility>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -274,7 +272,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -287,6 +285,7 @@
                             <TextRun>
                               <Value>=Parameters!ResSiteNameColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -301,10 +300,10 @@
                       </Visibility>
                       <Style>
                         <Border />
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -320,7 +319,7 @@
                             <TextRun>
                               <Value>=Parameters!site_id.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -337,11 +336,10 @@
                       </Visibility>
                       <Style>
                         <Border />
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -351,7 +349,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -364,7 +362,7 @@
                             <TextRun>
                               <Value>=Parameters!ResTeamNameColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -381,11 +379,10 @@
                       </Visibility>
                       <Style>
                         <Border />
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -401,7 +398,7 @@
                             <TextRun>
                               <Value>=Parameters!team_set.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -418,11 +415,10 @@
                       </Visibility>
                       <Style>
                         <Border />
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -432,7 +428,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -445,7 +441,7 @@
                             <TextRun>
                               <Value>=Parameters!ResDateColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -458,11 +454,10 @@
                       <rd:DefaultName>textbox9</rd:DefaultName>
                       <ZIndex>8</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -478,7 +473,7 @@
                             <TextRun>
                               <Value>=iif(Parameters!date_from.Value&lt;&gt;Parameters!date_to.Value,Parameters!date_from.Value +" - " + Parameters!date_to.Value,Parameters!date_to.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -491,11 +486,10 @@
                       <rd:DefaultName>textbox10</rd:DefaultName>
                       <ZIndex>7</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -559,15 +553,15 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25001cm</Left>
-        <Height>3.7cm</Height>
-        <Width>18.50001cm</Width>
+        <Height>4.1cm</Height>
+        <Width>26.17692cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>4.25cm</Width>
+              <Width>10.81566cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>4.49999cm</Width>
@@ -582,7 +576,7 @@
               <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.25003cm</Width>
+              <Width>3.36128cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -600,6 +594,7 @@
                             <TextRun>
                               <Value>=Parameters!ResAgentName.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -633,6 +628,7 @@
                             <TextRun>
                               <Value>=Parameters!ResPreferenceCategory.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -666,6 +662,7 @@
                             <TextRun>
                               <Value>=Parameters!ResMustHaves.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -698,6 +695,7 @@
                             <TextRun>
                               <Value>=Parameters!ResFulfilled.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -731,6 +729,7 @@
                             <TextRun>
                               <Value>=Parameters!ResUnfulfilled.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -764,6 +763,7 @@
                             <TextRun>
                               <Value>=Parameters!ResFulfillmentPercent.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -802,6 +802,7 @@
                             <TextRun>
                               <Value>=Parameters!ResTotalsColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -827,7 +828,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -843,6 +843,7 @@
                             <TextRun>
                               <Value />
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -869,7 +870,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -885,6 +885,7 @@
                             <TextRun>
                               <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -906,7 +907,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -922,6 +922,7 @@
                             <TextRun>
                               <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -943,7 +944,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -959,6 +959,7 @@
                             <TextRun>
                               <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -980,7 +981,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -999,6 +999,7 @@ iif(sum(Fields!preferences_requested.Value)&gt;0,
 sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1020,7 +1021,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1028,7 +1028,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.55cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1041,6 +1041,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Fields!person_name.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1057,7 +1058,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1073,6 +1073,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value />
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1087,7 +1088,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1103,6 +1103,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1118,7 +1119,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1134,6 +1134,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1149,7 +1150,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1165,6 +1165,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1180,7 +1181,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1199,6 +1199,7 @@ iif(sum(Fields!preferences_requested.Value)&gt;0,
 sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1214,7 +1215,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1222,7 +1222,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.55cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1234,7 +1234,9 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                           <TextRuns>
                             <TextRun>
                               <Value />
-                              <Style />
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -1246,7 +1248,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1262,6 +1263,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Fields!preference_name.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1277,7 +1279,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1293,6 +1294,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1307,7 +1309,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1323,6 +1324,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Fields!preferences_fulfilled.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1338,7 +1340,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1354,6 +1355,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Fields!preferences_unfulfilled.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1368,7 +1370,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1384,6 +1385,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=FormatPercent(Fields!fulfillment.Value,1)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1399,7 +1401,6 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -1420,6 +1421,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Parameters!ResTotalsColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1461,6 +1463,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value />
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1503,6 +1506,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1540,6 +1544,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1577,6 +1582,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                             <TextRun>
                               <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1617,6 +1623,7 @@ iif(sum(Fields!preferences_requested.Value)&gt;0,
 sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1654,22 +1661,22 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>4.25cm</Width>
+                            <Width>10.81566cm</Width>
                           </TablixColumn>
                           <TablixColumn>
                             <Width>4.49999cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>2.5cm</Width>
+                            <Width>2.46827cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>2.49999cm</Width>
+                            <Width>2.50644cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>2.54167cm</Width>
+                            <Width>2.52527cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>2.20836cm</Width>
+                            <Width>3.36128cm</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
@@ -1715,6 +1722,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                                           <TextRun>
                                             <Value>=Fields!preference_name.Value</Value>
                                             <Style>
+                                              <FontFamily>Segoe UI</FontFamily>
                                               <Color>DimGray</Color>
                                             </Style>
                                           </TextRun>
@@ -1747,6 +1755,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                                           <TextRun>
                                             <Value>=sum(Fields!must_haves.Value)</Value>
                                             <Style>
+                                              <FontFamily>Segoe UI</FontFamily>
                                               <Color>DimGray</Color>
                                             </Style>
                                           </TextRun>
@@ -1778,6 +1787,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                                           <TextRun>
                                             <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                                             <Style>
+                                              <FontFamily>Segoe UI</FontFamily>
                                               <Color>DimGray</Color>
                                             </Style>
                                           </TextRun>
@@ -1810,6 +1820,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                                           <TextRun>
                                             <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                                             <Style>
+                                              <FontFamily>Segoe UI</FontFamily>
                                               <Color>DimGray</Color>
                                             </Style>
                                           </TextRun>
@@ -1841,6 +1852,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                                           <TextRun>
                                             <Value>=FormatPercent(iif(sum(Fields!preferences_requested.Value)&gt;0,sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0),1)</Value>
                                             <Style>
+                                              <FontFamily>Segoe UI</FontFamily>
                                               <Color>DimGray</Color>
                                             </Style>
                                           </TextRun>
@@ -2001,16 +2013,16 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
         </PageBreak>
         <Top>4.52761cm</Top>
         <Left>0.25001cm</Left>
-        <Height>3.7cm</Height>
-        <Width>18.50001cm</Width>
+        <Height>3.8cm</Height>
+        <Width>26.17692cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
     </ReportItems>
-    <Height>8.22761cm</Height>
+    <Height>9cm</Height>
     <Style />
   </Body>
-  <Width>19.05396cm</Width>
+  <Width>27cm</Width>
   <Page>
     <PageHeader>
       <Height>2cm</Height>
@@ -2026,6 +2038,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                 <TextRun>
                   <Value>=Parameters!ResReportPreferencesPerAgent.Value</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>22pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -2039,7 +2052,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
           <rd:DefaultName>textbox4</rd:DefaultName>
           <Left>0.25001cm</Left>
           <Height>1.50529cm</Height>
-          <Width>14.5cm</Width>
+          <Width>21.22042cm</Width>
           <Style>
             <Border>
               <Color>#d3e5ef</Color>
@@ -2064,6 +2077,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                 <TextRun>
                   <Value>=Format(Globals.ExecutionTime, "g")</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -2075,7 +2089,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox7</rd:DefaultName>
-          <Left>15.00001cm</Left>
+          <Left>22.93751cm</Left>
           <Height>0.5cm</Height>
           <Width>3.75cm</Width>
           <ZIndex>1</ZIndex>
@@ -2095,6 +2109,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                 <TextRun>
                   <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -2107,7 +2122,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
           </Paragraphs>
           <rd:DefaultName>textbox1</rd:DefaultName>
           <Top>0.5cm</Top>
-          <Left>16.50001cm</Left>
+          <Left>24.43751cm</Left>
           <Height>0.5cm</Height>
           <Width>2.25cm</Width>
           <ZIndex>2</ZIndex>
@@ -2122,7 +2137,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
           <Top>1.75cm</Top>
           <Left>0.25001cm</Left>
           <Height>0cm</Height>
-          <Width>18.75cm</Width>
+          <Width>26.24999cm</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -2162,7 +2177,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
           </Paragraphs>
           <Top>0.17639cm</Top>
           <Height>0.50265cm</Height>
-          <Width>18.75cm</Width>
+          <Width>26.42693cm</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>

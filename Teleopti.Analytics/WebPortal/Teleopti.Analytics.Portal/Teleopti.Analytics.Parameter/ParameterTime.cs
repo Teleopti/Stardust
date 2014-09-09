@@ -16,6 +16,11 @@ namespace Teleopti.Analytics.Parameters
 		private DropDownList _dropDown;
 		private RequiredFieldValidator _validator;
 
+		public ParameterTime(UserReportParams userReportParams)
+			: base(userReportParams)
+		{
+		}
+
 		public override ControlCollection Controls
 		{
 			get
@@ -48,12 +53,12 @@ namespace Teleopti.Analytics.Parameters
 					Value = _dropDown.SelectedValue;
 					ParameterText = _dropDown.SelectedItem.Text;
 				}
-				_valid = _validator.IsValid;
+				Valid = _validator.IsValid;
 			}
 			else
 			{
 				Value = DBNull.Value;
-				_valid = true;
+				Valid = true;
 			}
 		}
 
