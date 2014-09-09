@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
@@ -35,7 +36,7 @@ namespace Teleopti.Messaging.Client.Http
 		public void Send(Notification notification)
 		{
 			var content = _seralizer.SerializeObject(notification);
-			PostAsync(_httpClient, url(), new StringContent(content));
+			PostAsync(_httpClient, url(), new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 
 		public void SendMultiple(IEnumerable<Notification> notifications)

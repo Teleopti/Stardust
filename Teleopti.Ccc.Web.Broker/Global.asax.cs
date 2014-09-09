@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Broker
 			log4net.Config.XmlConfigurator.Configure();
 
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>();
+			containerBuilder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
 			containerBuilder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>();
 			containerBuilder.RegisterHubs(typeof (MessageBrokerHub).Assembly);
 			containerBuilder.RegisterControllers(typeof(MessageBrokerController).Assembly);

@@ -57,12 +57,13 @@ namespace Teleopti.MessagingTest.Http
 			var notification = new Notification();
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notification)).Return("serialized!");
-			var postedContent = "";
-			var target = new HttpSender(null, serializer) { PostAsync = (c, u, cn) => postedContent = cn.ReadAsStringAsync().Result };
+			HttpContent postedContent = null;
+			var target = new HttpSender(null, serializer) {PostAsync = (c, u, cn) => { postedContent = cn; }};
 
 			target.Send(notification);
 
-			postedContent.Should().Be("serialized!");
+			postedContent.ReadAsStringAsync().Result.Should().Be("serialized!");
+			postedContent.Headers.ContentType.MediaType.Should().Be("application/json");
 		}
 
 		[Test]
