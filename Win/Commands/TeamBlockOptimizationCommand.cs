@@ -316,7 +316,10 @@ namespace Teleopti.Ccc.Win.Commands
 					_teamBlockCleaner,
 					_teamBlockMaxSeatChecker,
 					_dailyTargetValueCalculatorForTeamBlock,
-					_teamBlockSteadyStateValidator, _toggleManager
+					_teamBlockSteadyStateValidator,
+					//this shouldn't be here.
+					//should be two different impl of the interface instead
+					_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)
 					);
 
 			teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;

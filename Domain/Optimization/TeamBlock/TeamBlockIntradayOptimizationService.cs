@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
+		private readonly bool _isMaxSeatToggleEnabled;
 		private bool _cancelMe;
-		private readonly IToggleManager _toggleManager;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -47,7 +47,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
-			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator, IToggleManager toggleManager)
+			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
+			//remove this - instead use two different impl of (a smaller interface of) ITeamBlockIntradayOptimizationService
+			bool isMaxSeatToggleEnabled)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
-			_toggleManager = toggleManager;
+			_isMaxSeatToggleEnabled = isMaxSeatToggleEnabled;
 			_teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
@@ -73,7 +75,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData);
-			var isMaxSeatToggleEnabled = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
-					schedulingResultStateHolder, isMaxSeatToggleEnabled);
+					schedulingResultStateHolder, _isMaxSeatToggleEnabled);
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
