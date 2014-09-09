@@ -13,43 +13,53 @@ using log4net.Config;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
-	public class ConfigFileDefaultHost : MarshalByRefObject, IApplicationHost
+	public class ConfigFileDefaultHost : IApplicationHost
 	{
 		private readonly ILog logger = LogManager.GetLogger(typeof(DefaultHost));
 		private string assemblyName;
-		private AbstractBootStrapper bootStrapper;
+		private AbstractBootStrapper _bootStrapper;
 		private IStartable startable;
 		private string bootStrapperName;
 		private BusConfigurationSection hostConfiguration;
+
+		public ConfigFileDefaultHost(string fileName, AbstractBootStrapper bootStrapper)
+		{
+			_bootStrapper = bootStrapper;
+			useFileBasedBusConfiguration(fileName);
+		}
+
+		private void useFileBasedBusConfiguration(string fileName)
+		{
+			var config =
+				ConfigurationManager.OpenMappedMachineConfiguration(new ConfigurationFileMap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName))).GetSection("rhino.esb");
+			if (config == null)
+				throw new ArgumentNullException(fileName, "test");
+			hostConfiguration = config as BusConfigurationSection;
+		}
 
 		public IStartable Bus
 		{
 			get { return startable; }
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
-		public void SetBootStrapperTypeName(string typeName)
+		public void SetBootStrapperTypeName(string type)
 		{
-			bootStrapperName = typeName;
+			bootStrapperName = type;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Strapper"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BootStrapper")]
-		public void Start<TBootStrapper>()
-			where TBootStrapper : AbstractBootStrapper
+		public void Start(string assembly)
 		{
-			SetBootStrapperTypeName(typeof(TBootStrapper).FullName);
-			Start(typeof(TBootStrapper).Assembly.FullName);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
-		public void Start(string asmName)
-		{
-			InitializeBus(asmName);
+			InitializeBus(assembly);
 
 			startable.Start();
 
-			bootStrapper.EndStart();
+			_bootStrapper.EndStart();
+		}
+
+		public void Start()
+		{
+			SetBootStrapperTypeName(_bootStrapper.GetType().FullName);
+			Start(_bootStrapper.GetType().Assembly.FullName);
 		}
 
 		private void InitializeBus(string asmName)
@@ -62,35 +72,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			CreateBootStrapper();
 
-			log4net.GlobalContext.Properties["BusName"] = bootStrapper.GetType().Namespace;
+			log4net.GlobalContext.Properties["BusName"] = _bootStrapper.GetType().Namespace;
 
 			InitializeContainer();
 
-			bootStrapper.BeginStart();
+			_bootStrapper.BeginStart();
 
 			logger.Debug("Starting bus");
-			startable = bootStrapper.GetInstance<IStartable>();
+			startable = _bootStrapper.GetInstance<IStartable>();
 		}
 
 		private void InitializeContainer()
 		{
-			bootStrapper.InitializeContainer();
+			_bootStrapper.InitializeContainer();
 			if (hostConfiguration==null) throw new AbandonedMutexException();
 			if (hostConfiguration != null)
 			{
-				bootStrapper.UseConfiguration(hostConfiguration);
+				_bootStrapper.UseConfiguration(hostConfiguration);
 			}
 		}
 
 		private void CreateBootStrapper()
 		{
-			logger.DebugFormat("Loading {0}", assemblyName);
-			var assembly = Assembly.Load(assemblyName);
+			//logger.DebugFormat("Loading {0}", assemblyName);
+			//var assembly = Assembly.Load(assemblyName);
 
-			Type bootStrapperType = null;
+			//Type bootStrapperType = null;
 
-			if (string.IsNullOrEmpty(bootStrapperName) == false)
-				bootStrapperType = assembly.GetType(bootStrapperName);
+			//if (string.IsNullOrEmpty(bootStrapperName) == false)
+			//	bootStrapperType = assembly.GetType(bootStrapperName);
 
 			var queueConnection = ConfigurationManager.ConnectionStrings["Queue"];
 			if (queueConnection!=null)
@@ -98,68 +108,52 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				QueueConnectionStringContainer.ConnectionString = queueConnection.ConnectionString;
 			}
 
-			bootStrapperType = bootStrapperType ??
-				GetAutoBootStrapperType(assembly);
-			try
-			{
-				bootStrapper = (AbstractBootStrapper)Activator.CreateInstance(bootStrapperType);
-			}
-			catch (Exception e)
-			{
-				throw new InvalidOperationException("Failed to create " + bootStrapperType + ".", e);
-			}
+			//bootStrapperType = bootStrapperType ??
+			//	GetAutoBootStrapperType(assembly);
+			//try
+			//{
+			//	_bootStrapper = (AbstractBootStrapper)Activator.CreateInstance(bootStrapperType);
+			//}
+			//catch (Exception e)
+			//{
+			//	throw new InvalidOperationException("Failed to create " + bootStrapperType + ".", e);
+			//}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "strapper")]
-		private static Type GetAutoBootStrapperType(Assembly assembly)
-		{
-			var bootStrappers = assembly.GetTypes()
-				.Where(x => typeof(AbstractBootStrapper).IsAssignableFrom(x) && x.IsAbstract == false)
-				.ToArray();
+		//private static Type GetAutoBootStrapperType(Assembly assembly)
+		//{
+		//	var bootStrappers = assembly.GetTypes()
+		//		.Where(x => typeof(AbstractBootStrapper).IsAssignableFrom(x) && x.IsAbstract == false)
+		//		.ToArray();
 
-			if (bootStrappers.Length == 0)
-				throw new InvalidOperationException("Could not find a boot strapper for " + assembly);
+		//	if (bootStrappers.Length == 0)
+		//		throw new InvalidOperationException("Could not find a boot strapper for " + assembly);
 
-			if (bootStrappers.Length > 1)
-			{
-				throw new InvalidOperationException("Found more than one boot strapper for " + assembly +
-					" you need to specify which boot strapper to use: " + Environment.NewLine +
-					string.Join(Environment.NewLine, bootStrappers.Select(x => x.FullName).ToArray()));
-			}
+		//	if (bootStrappers.Length > 1)
+		//	{
+		//		throw new InvalidOperationException("Found more than one boot strapper for " + assembly +
+		//			" you need to specify which boot strapper to use: " + Environment.NewLine +
+		//			string.Join(Environment.NewLine, bootStrappers.Select(x => x.FullName).ToArray()));
+		//	}
 
-			return bootStrappers[0];
-		}
+		//	return bootStrappers[0];
+		//}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly")]
 		public void Dispose()
 		{
-			if (bootStrapper != null)
-				bootStrapper.Dispose();
+			if (_bootStrapper != null)
+				_bootStrapper.Dispose();
 			if (startable != null)
 				startable.Dispose();
 		}
 
-		public override object InitializeLifetimeService()
-		{
-			return null; //singleton
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
 		public void InitialDeployment(string asmName, string user)
 		{
 			InitializeBus(asmName);
-			bootStrapper.ExecuteDeploymentActions(user);
+			_bootStrapper.ExecuteDeploymentActions(user);
 
-			bootStrapper.ExecuteEnvironmentValidationActions();
+			_bootStrapper.ExecuteEnvironmentValidationActions();
 		}
 
-		public void UseFileBasedBusConfiguration(string fileName)
-		{
-			var config =
-				ConfigurationManager.OpenMappedMachineConfiguration(new ConfigurationFileMap(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName))).GetSection("rhino.esb");
-			if (config==null)
-				throw new ArgumentNullException(fileName,"test");
-			hostConfiguration = config as BusConfigurationSection;
-		}
 	}
 }

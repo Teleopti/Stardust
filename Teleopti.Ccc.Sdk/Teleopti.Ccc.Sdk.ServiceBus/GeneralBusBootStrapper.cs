@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	public class GeneralBusBootStrapper : BusBootStrapper
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(GeneralBusBootStrapper));
+
+		public GeneralBusBootStrapper(IContainer container) : base(container)
+		{
+		}
+
 		protected override void OnEndStart()
 		{
 			var bus = Container.Resolve<IServiceBus>();

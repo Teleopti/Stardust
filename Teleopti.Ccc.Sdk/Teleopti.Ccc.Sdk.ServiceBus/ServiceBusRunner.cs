@@ -3,8 +3,10 @@ using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using Autofac;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -52,19 +54,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Start()
 		{
-			try
-			{
+			//try
+			//{
 				HostServiceStart();
-			}
-			catch (InvalidOperationException exception)
-			{
-				log.Error("An exception was encountered upon starting the Teleopti Service Bus.",exception);
-				if (_startupExceptionHandler!=null)
-				{
-					_startupExceptionHandler.Invoke(exception);
-				}
-				throw;
-			}
+			//}
+			//catch (InvalidOperationException exception)
+			//{
+			//	log.Error("An exception was encountered upon starting the Teleopti Service Bus.",exception);
+			//	if (_startupExceptionHandler!=null)
+			//	{
+			//		_startupExceptionHandler.Invoke(exception);
+			//	}
+			//	throw;
+			//}
 		}
 		
 		private void HostServiceStart()
@@ -78,27 +80,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			_requestBus = new ConfigFileDefaultHost();
-			_requestBus.UseFileBasedBusConfiguration("RequestQueue.config");
-			_requestBus.Start<BusBootStrapper>();
+			var container = new ContainerBuilder().Build();
+			var containerconfiguration = new ContainerConfiguration(container);
+			containerconfiguration.Configure();
 
-			_generalBus = new ConfigFileDefaultHost();
-			_generalBus.UseFileBasedBusConfiguration("GeneralQueue.config");
-			_generalBus.Start<GeneralBusBootStrapper>();
+			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(container));
+			_requestBus.Start();
 
-			_denormalizeBus = new ConfigFileDefaultHost();
-			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
-			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
+			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(container));
+			_generalBus.Start();
 
-			_rtaBus = new ConfigFileDefaultHost();
-			_rtaBus.UseFileBasedBusConfiguration("RtaQueue.config");
-			_rtaBus.Start<RtaBusBootStrapper>();
+			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(container));
+			_denormalizeBus.Start();
+
+			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(container));
+			_rtaBus.Start();
 			
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-			_payrollBus = new ConfigFileDefaultHost();
-			_payrollBus.UseFileBasedBusConfiguration("PayrollQueue.config");
-			_payrollBus.Start<BusBootStrapper>();
+			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(container));
+			_payrollBus.Start();
+
 			AppDomain.MonitoringIsEnabled = true;
 		}
 
@@ -121,7 +123,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			DisposeBusHosts();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void DisposeBusHosts()
 		{
 			if (_requestBus != null)
