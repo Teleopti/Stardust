@@ -1,9 +1,9 @@
---Name: Xinfeng, Erik
+--Name: Xinfeng
 --Date: 2014-09-05  
 --Desc: Add new table for agent badges transaction and change AgentBadge table to view
 --------------------------------------------------------------------------------------------------------------------
 CREATE TABLE [dbo].[AgentBadgeTransaction](
-	[Id] int NOT NULL IDENTITY (-2147483648, 1),
+	[Id] uniqueidentifier NOT NULL,
     [Person] uniqueidentifier NOT NULL,
     [BadgeType] int NOT NULL, --AnsweredCallsBadge=0,AverageHandlingTimeBadge=1,AdherenceBadge=2
     [Amount] smallint,
@@ -17,6 +17,13 @@ ALTER TABLE [dbo].[AgentBadgeTransaction] ADD  CONSTRAINT [PK_AgentBadgeTransact
 (
     [Id] ASC
 )
+GO
+
+ALTER TABLE [dbo].[AgentBadgeTransaction] WITH CHECK ADD CONSTRAINT [FK_AgentBadgeTransaction_Person_Person] FOREIGN KEY([Person])
+REFERENCES [dbo].[Person] ([Id])
+GO
+
+ALTER TABLE [dbo].[AgentBadgeTransaction] CHECK CONSTRAINT [FK_AgentBadgeTransaction_Person_Person]
 GO
 
 CREATE CLUSTERED INDEX [CIX_AgentBadgeTransaction_Person] ON [dbo].[AgentBadgeTransaction]
@@ -44,12 +51,10 @@ GO
 CREATE VIEW [dbo].[AgentBadge]
 WITH SCHEMABINDING
 AS
-
 SELECT Person,
        BadgeType,
        sum(Amount) AS 'TotalAmount',
        max(CalculatedDate) AS 'LastCalculatedDate'
   FROM dbo.AgentBadgeTransaction
 GROUP BY person, BadgeType
-
 GO
