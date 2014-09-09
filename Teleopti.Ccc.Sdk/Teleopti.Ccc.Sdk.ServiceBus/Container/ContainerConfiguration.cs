@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<AuthenticationModule>();
 			build.RegisterModule<DateAndTimeModule>();
 			build.RegisterModule<SerializationContainerInstaller>();
-			build.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			build.RegisterModule<MessageBrokerModule>();
+			build.RegisterModule<ServiceBusCommonModule>();
 			build.RegisterModule<PayrollContainerInstaller>();
 			build.RegisterModule<RequestContainerInstaller>();
 			build.RegisterModule<SchedulingContainerInstaller>();

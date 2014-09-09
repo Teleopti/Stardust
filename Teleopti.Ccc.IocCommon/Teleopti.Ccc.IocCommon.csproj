@@ -130,6 +130,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\MessageBrokerModule.cs" />
     <Compile Include="Configuration\ResourceHandlerModule.cs" />
     <Compile Include="Configuration\AuthenticationCachedModule.cs" />
     <Compile Include="Configuration\AuthenticationModule.cs" />

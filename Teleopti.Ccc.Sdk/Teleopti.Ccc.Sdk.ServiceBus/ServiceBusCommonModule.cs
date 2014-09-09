@@ -7,64 +7,29 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Client.Composite;
-using Teleopti.Messaging.Client.Http;
-using Teleopti.Messaging.Client.SignalR;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public class ApplicationInfrastructureContainerInstaller : Module
+	public class ServiceBusCommonModule : Module
 	{
 		[ThreadStatic] private static IJobResultFeedback jobResultFeedback;
 
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
-
-			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
-
-			builder.RegisterType<MessageBrokerCompositeClient>()
-				.As<IMessageBrokerComposite>()
-				.As<IMessageCreator>()
-				.As<IMessageListener>()
-				.SingleInstance();
-
-			builder.RegisterType<SignalRClient>()
-				.As<ISignalRClient>()
-				.As<IMessageBrokerUrl>()
-				.WithParameter(new NamedParameter("serverUrl", null))
-				.SingleInstance();
-
-			builder.RegisterType<HttpSender>()
-				.As<HttpSender>()
-				.SingleInstance();
-
-			builder.RegisterType<SignalRSender>()
-				.As<SignalRSender>()
-				.SingleInstance();
-
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205)
-				? c.Resolve<HttpSender>() : (Interfaces.MessageBroker.Client.IMessageSender) c.Resolve<SignalRSender>())
-				.As<Interfaces.MessageBroker.Client.IMessageSender>()
-				.SingleInstance();
-	
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
