@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
@@ -33,7 +34,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				SetTexts();
 			_duplicateInputText = new List<string>();
 			initializeDefaultSearchGrid();
-			initializeResultGrid();
+			initializeBothResultResultGrids( );
+		}
+
+		private void initializeBothResultResultGrids()
+		{
+			initializeResultGrid(gridListControlResult);
+			initializeResultGrid(gridListControlResult2);
 		}
 
 		#region "Default search grid"
@@ -109,30 +116,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region "Result grid"
 
-		private void refurbishItemsInResultGrid()
+		private void refurbishItemsInResultGrid(GridListControl  gridListControl)
 		{
-			gridListControlResult.BeginUpdate();
-			gridListControlResult.DataSource = _userSelectedPersonList;
+			gridListControl.BeginUpdate();
+			gridListControl.DataSource = _userSelectedPersonList;
 			if (_userSelectedPersonList.Count > 0)
-				gridListControlResult.ValueMember = "Person";
+				gridListControl.ValueMember = "Person";
 
-			gridListControlResult.MultiColumn = true;
+			gridListControl.MultiColumn = true;
 
-			gridListControlResult.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-			gridListControlResult.Grid.ColHiddenEntries.Add(new GridColHidden(5));
+			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(0));
+			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(5));
 
 			if (_userSelectedPersonList.Count > 0)
-				gridListControlResult.SetSelected(0, true);
-			gridListControlResult.EndUpdate();
+				gridListControl.SetSelected(0, true);
+			gridListControl.EndUpdate();
 		}
 
-		private void initializeResultGrid()
+		private void initializeResultGrid(GridListControl gridListControl)
 		{
 			_userSelectedPersonList = new ArrayList();
-			gridListControlResult.DataSource = _userSelectedPersonList;
-			gridListControlResult.MultiColumn = true;
-			gridListControlResult.Grid.QueryCellInfo += Grid_QueryCellInfo;
-			gridListControlResult.BorderStyle = BorderStyle.None;
+			gridListControl.DataSource = _userSelectedPersonList;
+			gridListControl.MultiColumn = true;
+			gridListControl.Grid.QueryCellInfo += Grid_QueryCellInfo;
+			gridListControl.BorderStyle = BorderStyle.None;
 		}
 		#endregion
 		
@@ -171,7 +178,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_searchablePersons.Remove(person);
 			fillGridListControlDefaultSearch();
 			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person));
-			refurbishItemsInResultGrid();
+			refurbishItemsInResultGrid(gridListControlResult);
+			refurbishItemsInResultGrid(gridListControlResult2);
 		}
 		
 		#endregion
@@ -261,20 +269,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			actualInput.AddRange(_duplicateInputText);
 			textBoxCustomSearch.Text = String.Join(currentDelimiter.First().ToString(), actualInput);
-			//if (_duplicateInputText.Count > 0)
-			//{
-			//	checkBoxAdvShowDuplicateRecipient.Visible = true;
-			//	textBox2.Visible = true;
-			//	textBox2.Text = string.Join(currentDelimiter.First().ToString(), _duplicateInputText);
-			//	splitContainer1.SplitterDistance = 143;
-			//}
-			//else
-			//{
-			//	checkBoxAdvShowDuplicateRecipient.Visible = false;
-			//	splitContainer1.SplitterDistance = 92;
-			//}
-
-			refurbishItemsInResultGrid();
+			refurbishItemsInResultGrid(gridListControlResult);
+			refurbishItemsInResultGrid(gridListControlResult2);
 
 		}
 
@@ -308,42 +304,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_textChangedRunning = false;
 		}
 
+		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar == '\r')
+			{
+				if (gridListControlDefaultSearch.SelectedValue != null)
+				{
+					var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
+					addPersonInResultGridFromDefaultSearch(person);
+				}
+			}
+		}
 
 		private void tabControlAdv1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			
 			var current = (sender as TabControlAdv);
 			if (current == null) return;
-			if (current.SelectedTab  == tabPageAdvCustom)
+			if (current.SelectedTab == tabPageAdvCustom)
 			{
 				buttonAdd.Visible = false;
-				splitContainer1.SplitterDistance = 92;
 			}
 			else
 			{
 				buttonAdd.Visible = true;
-				splitContainer1.SplitterDistance = 227;
 			}
-		}
-
-		private void checkBoxAdvShowUnresolved_CheckedChanged(object sender, EventArgs e)
-		{
-			if (checkBoxAdvShowDuplicateRecipient.Checked)
-			{
-				splitContainer1.SplitterDistance = 143;
-				textBox2.Visible = true;
-			}
-			else
-			{
-				splitContainer1.SplitterDistance = 92;
-				textBox2.Visible = false;
-			}
-
-		}
-
-		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
-		{
-
 		}
 	}
 
