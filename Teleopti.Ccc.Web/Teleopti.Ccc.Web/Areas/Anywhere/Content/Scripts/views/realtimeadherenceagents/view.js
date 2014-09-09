@@ -32,7 +32,6 @@
 			viewModel = realTimeAdherenceViewModel();
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
-
 			setInterval(function () {
 				viewModel.refreshAlarmTime();
 			}, 1000);
@@ -118,6 +117,11 @@
 				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
 			});
 
+			toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
+				enabled: function() {
+					viewModel.changeSchedule(true);
+				}
+			});
 		}
 	};
 });

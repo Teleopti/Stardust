@@ -1,12 +1,12 @@
 ﻿<div class="realtimeadherenceagents container">
 	<ul class="breadcrumb">
 		<li><a href="#realtimeadherencesites" data-bind="text: resources.RealTimeAdherence"></a></li>
-		<li><a  data-bind="text: siteName, attr:{href: siteURI}"></a></li>
+		<li><a data-bind="text: siteName, attr:{href: siteURI}"></a></li>
 		<li class="active" data-bind="text: teamName">Red</li>
 	</ul>
 	<div align="right">
 		<form class="form-control">
-			Filter: <input type="text" data-bind="value: filter, valueUpdate: 'input'"/>
+			Filter: <input type="text" data-bind="value: filter, valueUpdate: 'input'" />
 		</form>
 	</div>
 	<div class="panel panel-default">
@@ -34,23 +34,176 @@
 					<td data-bind="text: Alarm"></td>
 					<td data-bind="text: AlarmTime"></td>
 				</tr>
+				<!-- ko if: $root.changeSchedule-->
 				<!-- ko if: Selected -->
-				<tr class="person-menu">
-					<td class="person-name-column-menu" data-bind="text: Name"></td>
-					<td class="schedule-column" colspan="2">
-						<div class="schedule-menu">
-							<!-- ko with: Menu -->
-							<div class="btn-group">
-								<!-- ko if: $root.permissionAddActivity -->
-								<a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+				<tr>
+					<td colspan="8">
+						<div class="row">
+							<div class="col-md-12">
+								<!-- ko if: $root.Loading -->
+								<div><span data-bind="text: $root.Resources.LoadingThreeDots"></span></div>
+								<!-- /ko -->
+								<!-- ko if: !$root.Loading() -->
+								<div class="relative">
+									<!-- ko with: $root.TimeLine -->
+									<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $root.SortedPersons().length > 0">
+										<div class="relative">
+											<div data-bind="foreach: Times">
+												<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+												<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+											</div>
+										</div>
+									</div>
+									<!-- /ko -->
+
+									<table class="table table-hover" data-bind="if: $root.SortedPersons().length > 0">
+										<thead>
+											<tr>
+												<th></th>
+												<th></th>
+												<th class="contract-time contract-time-title"><span data-bind="text: $root.Resources.ContractTime"></span></th>
+											</tr>
+										</thead>
+										<tbody data-bind="foreach: $root.SortedPersons">
+											<tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }">
+												<td class="person-name person-name-column">
+													<div class="person-name nowrap" data-bind="text: Name, click: $root.SelectPerson"></div>
+												</td>
+												<td class="schedule schedule-column" data-bind="click: $root.SelectPerson">
+													<div class="relative time-line-for">
+														<!-- ko foreach: Shifts -->
+														<div class="shift" data-bind="
+    template: {
+        name: 'layerTemplate',
+        foreach: Layers
+    }
+									">
+														</div>
+														<!-- /ko -->
+														<!-- ko foreach: DayOffs -->
+														<!-- ko if: OverlapsTimeLine -->
+														<div class="dayoff absolute"
+														     data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+															<!-- ko if: $root.DisplayDescriptions -->
+															<!-- ko if: HasOverlapingLayers($parent)-->
+															<span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
+															<span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
+															<!-- /ko -->
+															<!-- ko ifnot: HasOverlapingLayers($parent)-->
+															<span class="label label-default layer-description" data-bind="text: DayOffName"></span>
+															<!-- /ko -->
+															<!-- /ko -->
+														</div>
+														<!-- /ko -->
+														<!-- /ko -->
+													</div>
+												</td>
+												<td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
+											</tr>
+
+											<!-- ko foreach: Shifts -->
+											<!-- ko foreach: Layers -->
+											<!-- ko if: Selected -->
+											<tr class="shift-menu">
+												<td class="person-name-column"></td>
+												<td class="schedule-column" colspan="2">
+													<div class="activity-details" data-bind="style: { 'margin-left': StartPixels() + 'px' }">
+														<p>
+															<span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + ' - ' + EndTime()"></span>
+														</p>
+													</div>
+
+													<div class="shift-details" data-bind="if: $root.DisplayDescriptions, style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+														<!-- ko foreach: $parent.DistinctLayers -->
+														<span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
+														<!-- /ko -->
+													</div>
+
+													<div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+														<!-- ko with: $parent.ShiftMenu -->
+														<div class="btn-group">
+															<!-- ko if: $root.permissionAddFullDayAbsence -->
+															<a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+															<!-- /ko-->
+															<!-- ko if: $root.permissionAddIntradayAbsence -->
+															<a href="#" class="btn btn-sm add-intraday-absence" data-bind="click: $data.AddIntradayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
+															<!-- /ko-->
+															<!-- ko if: $root.permissionAddActivity -->
+															<a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+															<!-- /ko-->
+															<!-- ko if: $root.permissionRemoveAbsence -->
+															<a href="#" class="btn btn-sm remove-absence" data-bind="click: $data.RemoveAbsence"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
+															<!-- /ko-->
+															<!-- ko if: $root.permissionMoveActivity -->
+															<!-- ko if: $root.moveActivityVisible -->
+															<a href="#" class="btn btn-sm move-activity" data-bind="click: $data.moveActivity.bind($parent)"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
+															<!-- /ko-->
+															<!-- /ko-->
+														</div>
+														<!-- /ko -->
+													</div>
+												</td>
+											</tr>
+											<!-- /ko -->
+											<!-- /ko -->
+											<!-- /ko -->
+											<!-- ko if: Selected -->
+											<tr class="person-menu">
+												<td class="person-name-column-menu"></td>
+												<td class="schedule-column" colspan="2">
+													<div class="schedule-menu">
+														<!-- ko with: Menu -->
+														<div class="btn-group">
+															<!-- ko if: $root.permissionAddFullDayAbsence -->
+															<a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+															<!-- /ko -->
+															<!-- ko if: $root.permissionAddActivity -->
+															<a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+															<!-- /ko -->
+														</div>
+														<!-- /ko -->
+													</div>
+												</td>
+											</tr>
+											<!-- /ko -->
+
+										</tbody>
+									</table>
+								</div>
 								<!-- /ko -->
 							</div>
-							<!-- /ko -->
 						</div>
 					</td>
 				</tr>
+				<!-- /ko -->
 				<!-- /ko -->
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<script id="layerTemplate" type="text/html">
+	<!-- ko if: OverlapsTimeLine -->
+	<div class="layer absolute floatleft" data-bind="
+    style: {
+        left: StartPixels() + 'px',
+        width: LengthPixels() + 'px',
+        backgroundColor: Color
+    },
+    attr: {
+        'data-start-time': StartTime,
+        'data-length-minutes': LengthMinutes(),
+    },
+    click: function () {
+        return $root.SelectLayer($data, $parent.PersonId);
+    },
+    clickBubble: false
+	">
+		<!-- ko if: IsFullDayAbsence && $parent.Layers().length == 1 -->
+		<!-- ko if: $root.DisplayDescriptions -->
+		<span class="label label-default layer-description" data-bind="text: Description"></span>
+		<!-- /ko -->
+		<!-- /ko -->
+	</div>
+	<!-- /ko -->
+</script>
