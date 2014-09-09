@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IAgentBadgeCalculator _calculator;
 		private readonly INow _now;
+		private readonly IAgentBadgeRepository _badgeRepository;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 
 		public CalculateBadgeConsumer(
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 									IPushMessagePersister msgPersister, 
 									ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 									IAgentBadgeCalculator calculator,
+									IAgentBadgeRepository badgeRepository,
 									INow now)
 		{
 			_serviceBus = serviceBus;
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_calculator = calculator;
 			_now = now;
+			_badgeRepository = badgeRepository;
 		}
 
 		/// <summary>
@@ -67,8 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			// Set badge calculation start at 5:00 AM
 			// Just hard code it now, the best solution is to trigger it from ETL
-			var nextMessageShouldBeProcessed =
- TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
+			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -91,14 +93,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
 				}
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
 
 				var newAwardedBadgesForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
 				if (Logger.IsDebugEnabled)
 				{
 					Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
 				}
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
 
 				var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
 					calculateDate, setting).ToList();
@@ -106,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					Logger.DebugFormat("Total {0} agents will get new badge for answered calls", newAwardedBadgesForAnsweredCalls.Count());
 				}
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate);
+				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
 
 				uow.PersistAll();
 			}
@@ -130,12 +132,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 		}
 
-		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges, IAgentBadgeThresholdSettings setting, DateOnly calculateDate)
+		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,
+			IAgentBadgeThresholdSettings setting, DateOnly calculateDate, BadgeType badgeType)
 		{
-			foreach (var badge in newAwardedBadges)
+			var agentBadgeTransactions = newAwardedBadges as IList<IAgentBadgeTransaction> ?? newAwardedBadges.ToList();
+
+			var existedBadges = _badgeRepository.Find(agentBadgeTransactions.Select(
+				x => x.Person.Id != null ? (Guid)x.Person.Id : new Guid()), badgeType);
+			foreach (var badgeTransaction in agentBadgeTransactions)
 			{
-				var person = badge.Person;
-				var badgeType = badge.BadgeType;
+				var person = badgeTransaction.Person;
+
+				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadge
+				{
+					Person = (Guid)person.Id,
+					TotalAmount = 0,
+					BadgeType = badgeType
+				};
+
+				existedBadge.TotalAmount += badgeTransaction.Amount;
 
 				var bronzeBadgeMessageTemplate = string.Empty;
 				var silverBadgeMessageTemplate = string.Empty;
@@ -164,26 +179,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						break;
 				}
 
-				/*
-				if (badge.BronzeBadgeAdded)
+				if (existedBadge.IsBronzeBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
 					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
 					sendBronzeBadgeMessage(person, badgeType, message);
 				}
 
-				if (badge.SilverBadgeAdded)
+				if (existedBadge.IsSilverBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
 					var message = string.Format(silverBadgeMessageTemplate, threshold, setting.SilverToBronzeBadgeRate);
 					sendSilverBadgeMessage(person, badgeType, message);
 				}
 
-				if (badge.GoldBadgeAdded)
+				if (existedBadge.IsGoldBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
 					var message = string.Format(goldBadgeMessageTemplate, threshold,
 						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
 					sendGoldBadgeMessage(person, badgeType, message);
 				}
-				//*/
 			}
 		}
 

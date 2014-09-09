@@ -1,3 +1,5 @@
+using System;
+
 namespace Teleopti.Interfaces.Domain
 {
 	public interface IAgentBadge : IAggregateRoot
@@ -5,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Person own the badges
 		/// </summary>
-		IPerson Person { get; set; }
+		Guid Person { get; set; }
 
 		/// <summary>
 		/// Badge type

@@ -1,9 +1,18 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
 	public interface IAgentBadgeRepository : IRepository<IAgentBadge>
 	{
+		/// <summary>
+		/// Find badge of specific badge type and persons
+		/// </summary>
+		/// <param name="personIdList"></param>
+		/// <param name="badgeType"></param>
+		/// <returns></returns>
+		ICollection<IAgentBadge> Find(IEnumerable<Guid> personIdList, BadgeType badgeType);
+
 		/// <summary>
 		/// Find badges for the agent.
 		/// </summary>

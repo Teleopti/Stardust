@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -5,17 +6,30 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class AgentBadge : SimpleAggregateRoot, IAgentBadge
 	{
-		private int _totalAmount;
 		private bool _initialized;
 		private int _lastAmount;
 		private bool _bronzeBadgeAdded;
 		private bool _silverBadgeAdded;
 		private bool _goldBadgeAdded;
 
-		public IPerson Person { get; set; }
-		public BadgeType BadgeType { get; set; }
+		private Guid _person;
+		private BadgeType _badgeType;
+		private int _totalAmount;
+		private DateOnly _lastCalculatedDate;
 
-		public int TotalAmount
+		public virtual Guid Person
+		{
+			get { return _person; }
+			set { _person = value; }
+		}
+
+		public virtual BadgeType BadgeType
+		{
+			get { return _badgeType; }
+			set { _badgeType = value; }
+		}
+
+		public virtual int TotalAmount
 		{
 			get { return _totalAmount; }
 			set
@@ -34,39 +48,43 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-		public DateOnly LastCalculatedDate { get; set; }
+		public virtual DateOnly LastCalculatedDate
+		{
+			get { return _lastCalculatedDate; }
+			set { _lastCalculatedDate = value; }
+		}
 
-		public int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
+		public virtual int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
 			return getBronzeBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
 		}
 
-		public int GetSilverBadge(int silverToBronzeRate, int goldToSilverRate)
+		public virtual int GetSilverBadge(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
 			return getSilverBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
 		}
 
-		public int GetGoldBadge(int silverToBronzeRate, int goldToSilverRate)
+		public virtual int GetGoldBadge(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
 			return getGoldBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
 		}
 
-		public bool IsBronzeBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
+		public virtual bool IsBronzeBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
 			return _bronzeBadgeAdded;
 		}
 
-		public bool IsSilverBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
+		public virtual bool IsSilverBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
 			return _silverBadgeAdded;
 		}
 
-		public bool IsGoldBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
+		public virtual bool IsGoldBadgeAdded(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
 			return _goldBadgeAdded;

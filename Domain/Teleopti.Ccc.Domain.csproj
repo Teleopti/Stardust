@@ -2038,8 +2038,9 @@
   <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Common\AgentBadgeThresholdSettings.hbm.xml" />
-    <EmbeddedResource Include="Common\AgentBadge.hbm.xml" />
-    <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml" />
+    <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

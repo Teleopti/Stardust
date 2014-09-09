@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
@@ -24,21 +25,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		public ICollection<IAgentBadge> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
+		{
+			var idList = personIdList as Guid[] ?? personIdList.ToArray();
+			if (!idList.Any())
+			{
+				return new List<IAgentBadge>();
+			}
+
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
+				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList)";
+			var result = Session.CreateSQLQuery(query)
+				.SetParameterList("personIdList", idList)
+				.SetInt16("badgeType", (Int16)badgeType)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
+				.SetReadOnly(true)
+				.List<IAgentBadge>();
+			return result;
+		}
+
 		public ICollection<IAgentBadge> Find(IPerson person)
 		{
 			InParameter.NotNull("person", person);
 
-			const string query = @"select BadgeType, TotalAmount, LastCalculatedDate "
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
 				+ "from AgentBadge where Person = :person";
 			var result = Session.CreateSQLQuery(query)
 					.SetGuid("person", (Guid)person.Id)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.List<IAgentBadge>();
-			foreach (var agentBadge in result)
-			{
-				agentBadge.Person = person;
-			}
 			return result;
 		}
 
@@ -46,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull("person", person);
 			InParameter.NotNull("badgeType", badgeType);
-			const string query = @"select BadgeType, TotalAmount, LastCalculatedDate "
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
 				+ "from AgentBadge where Person = :person and BadgeType=:badgeType";
 			var result = Session.CreateSQLQuery(query)
 					.SetGuid("person", (Guid)person.Id)
@@ -54,7 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadge>();
-			result.Person = person;
 			return result;
 		}
 	}
