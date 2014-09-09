@@ -33,6 +33,10 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_AgentBadgeTransaction] ON [dbo].[AgentBadge
 )
 GO
 
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]'))
+DROP TABLE [dbo].[AgentBadge]
+GO
+
 IF EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadge]'))
 DROP VIEW [dbo].[AgentBadge]
 GO
