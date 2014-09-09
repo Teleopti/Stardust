@@ -4,7 +4,7 @@
 				   namespace="Teleopti.Ccc.Domain.Common"
 				   default-access="field.camelcase-underscore">
 
-  <class name="AgentBadge">
+  <class name="AgentBadgeTransaction">
 	<cache usage ="read-write"/>
 
 	<id name="Id"
@@ -18,7 +18,7 @@
 				 class="Teleopti.Ccc.Domain.Common.Person"
 				 column="Person"
 				 not-null="true"
-				 foreign-key="FK_AgentBadge_Person_Person"/>
+				 foreign-key="FK_AgentBadgeTransaction_Person_Person"/>
 
 	<property name="BadgeType"
 			  type="int"
