@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 
@@ -15,11 +16,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 		[Test]
 		public void ShouldResolveMessageSender()
 		{
-			
 			using (var container = new ContainerBuilder().Build())
 			{
 				new ContainerConfiguration(container).Configure();
 				container.Resolve<IMessageSender>()
+					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveMessageBrokerCompositeClient()
+		{
+			using (var container = new ContainerBuilder().Build())
+			{
+				new ContainerConfiguration(container).Configure();
+				container.Resolve<IMessageBrokerComposite>()
 					.Should().Not.Be.Null();
 			}
 		}
@@ -32,16 +43,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			using (var container = new ContainerBuilder().Build())
 			{
 				new ContainerConfiguration(container).Configure();
-
-
-
 				var temp = new ContainerBuilder();
 				temp.Register(c => toggleManager).As<IToggleManager>();
 				temp.Update(container);
-
-
 				container.Resolve<IMessageSender>()
-					.Should().Be.OfType<SignalRSender>();
+					.Should().Be.SameInstanceAs(container.Resolve<SignalRSender>());
 			}
 		}
 

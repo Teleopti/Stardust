@@ -14,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "NHibernate"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public void ReadConfiguration(MessageSenderCreator creator)
+		public void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker)
         {
             lock (LockObject)
             {
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             	var application =
             		new InitializeApplication(
             			new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus()),
-						MessageBrokerContainerDontUse.CompositeClient());
+						messageBroker());
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
                                                                    EncryptionConstants.Image2), null);
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_xmlFilePath = xmlFilePath;
 		}
 
-		public void ReadConfiguration(MessageSenderCreator creator)
+		public void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker)
 		{
 			lock (LockObject)
 			{
@@ -176,8 +177,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var application =
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
-						                       DataSourceConfigurationSetter.ForServiceBus()),
-						MessageBrokerContainerDontUse.CompositeClient());
+							DataSourceConfigurationSetter.ForServiceBus()),
+						messageBroker());
 				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
 
 				Logger.Info("Initialized application");
@@ -187,6 +188,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
     public interface IConfigurationReader
     {
-		void ReadConfiguration(MessageSenderCreator creator);
+		void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker);
     }
 }
