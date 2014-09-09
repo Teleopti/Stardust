@@ -39,6 +39,8 @@
 	<!-- Entry point for CCNet -->
   <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
+		
+		<CallTarget Targets="CallJenkinsForDeployment"/>
 	</Target>
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
@@ -77,6 +79,11 @@
 	</ItemGroup>
 
 
+	<Target Name="CallJenkinsForDeployment" Condition="'$(CCNetProject)' == 'BuildMSI-main'">
+	<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
+                FailOnNon2xxResponse="true" />
+	</Target>
+	
 	<Target Name="Obfuscate">
 		<Message Importance="high" Text="Obfuscate ..."/>
 		<Message Importance="high" Text="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
