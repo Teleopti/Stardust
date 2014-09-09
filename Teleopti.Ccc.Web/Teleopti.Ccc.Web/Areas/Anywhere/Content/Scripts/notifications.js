@@ -51,11 +51,11 @@ define(
 			cssClazz = "alert alert-warning alert-dismissible";
 			setTimeout(function () {
 				updateNotification(trackId, 5);
-			}, 15000);
+			}, 25000);
 		}
 		if (status === 5) {
-			msg = match.OriginalMessage + " " + resources.FailedWithExclamation + " " + resources.PleaseRefreshThePageWithExclamation;
-			cssClazz = "alert alert-danger alert-dismissible";
+			msg = match.OriginalMessage + " " + resources.PleaseRefreshThePageWithExclamation;
+			cssClazz = "alert alert-warning alert-dismissible";
 		}
 		match.Message(msg);
 		match.Css(cssClazz);
