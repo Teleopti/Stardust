@@ -229,6 +229,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		}
 	};
 
+	self.cleanTimeFiler = function() {
+		self.filteredStartTimesText.removeAll();
+		self.filteredEndTimesText.removeAll();
+		
+		$.each(self.filterStartTimeList(), function (idx, filter) {
+			if (filter.isChecked()) filter.isChecked(false);
+		});
+
+		$.each(self.filterEndTimeList(), function (idx, filter) {
+			if (filter.isChecked()) filter.isChecked(false);
+		});
+	};
+
 	self.chooseAgent = function(agent) {
 		//hide or show all agents
 		$.each(self.possibleTradeSchedules(), function(index, value) {
@@ -240,9 +253,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			//rk - don't really like to put DOM stuff here...
 			window.scrollTo(0, 0);
 			self.setSendEnableStatus();
+
+			self.cleanTimeFiler();
 		}
 		self.agentChoosed(agent);
 		self.errorMessage('');
+
 		if (self.isTradeForMultiDaysEnabled() && agent != null) {
 			self.add();
 		}
@@ -267,13 +283,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				Message: self.message(),
 				PersonToId: self.agentChoosed().personId
 			}),
-			success: function (data) {
+			success: function(data) {
 				self.agentChoosed(null);
 				self.setSendEnableStatus();
 				self.hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.errorMessage(data.Errors.join('</br>'));
@@ -283,7 +299,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
-	}
+	};
 
 	self.sendRequest = function() {
 		self.isSendEnabled(false);
@@ -347,7 +363,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			return false;
 		}
 		return true;
-	}
+	};
 
 	self.getAllTeamIds = function() {
 		var allTeamIds = [];
@@ -358,8 +374,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		}
 
 		return allTeamIds;
-	}
-	
+	};
+
 	self.loadSchedule = function (date, teamId) {
 		if (teamId != undefined) {
 			if (teamId != "allTeams") {

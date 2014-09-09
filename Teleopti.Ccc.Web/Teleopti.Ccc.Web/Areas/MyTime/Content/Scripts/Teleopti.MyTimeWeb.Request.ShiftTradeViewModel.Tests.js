@@ -3,6 +3,27 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+	test("should clean filter when choose agent", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.filteredStartTimesText.push("6:00-8:00");
+		viewModel.filteredEndTimesText.push("16:00-18:00");
+		viewModel.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView("6:00-8:00", 6, 8, true, false));
+		viewModel.filterEndTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView("16:00-18:00", 16, 18, true, false));
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", null, false);
+		viewModel.redrawLayers = function () {};
+
+		viewModel.chooseAgent(agent);
+
+		equal(viewModel.filteredStartTimesText().length, 0);
+		equal(viewModel.filteredEndTimesText().length, 0);
+		for (var i = 0; i < viewModel.filterStartTimeList().length; ++i) {
+			equal(viewModel.filterStartTimeList()[i].isChecked(), false);
+		}
+		for (var j = 0; j < viewModel.filterEndTimeList().length; ++j) {
+			equal(viewModel.filterEndTimeList()[j].isChecked(), false);
+		}
+	});
+
 	test("should set date picker range", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		var now = moment("Dec 25, 1995");
