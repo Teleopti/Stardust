@@ -30,19 +30,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private readonly bool _isMaxSeatToggleEnabled;
 		private bool _cancelMe;
-		private readonly IToggleManager  _toggleManager;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
 		                          ITeamBlockRoleModelSelector roleModelSelector,
 									ITeamBlockClearer teamBlockClearer, 
-									ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IToggleManager toggleManager)
+									ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
+									//remove this - instead use two different impl of (a smaller interface of) ITeamBlockScheduler
+									bool isMaxSeatToggleEnabled)
 		{
 			_singleDayScheduler = singleDayScheduler;
 			_roleModelSelector = roleModelSelector;
 			_teamBlockClearer = teamBlockClearer;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
-			_toggleManager = toggleManager;
+			_isMaxSeatToggleEnabled = isMaxSeatToggleEnabled;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -61,9 +63,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
-			var isMaxSeatToggleEnabled = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
+			//var isMaxSeatToggleEnabled = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
 			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, isMaxSeatToggleEnabled);
+				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);
 
 			if (roleModelShift == null)
 			{
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, isMaxSeatToggleEnabled);
+				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, _isMaxSeatToggleEnabled);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
 			{
@@ -86,9 +88,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-						schedulingOptions, shiftNudgeDirective.EffectiveRestriction,isMaxSeatToggleEnabled );
+						schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective,isMaxSeatToggleEnabled );
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, _isMaxSeatToggleEnabled);
 				}
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}

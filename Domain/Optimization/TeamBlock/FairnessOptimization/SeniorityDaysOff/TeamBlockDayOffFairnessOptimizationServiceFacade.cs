@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		{
 		}
 
-		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress {add{} remove{}}
 	}
 
     public class TeamBlockDayOffFairnessOptimizationServiceFacade : ITeamBlockDayOffFairnessOptimizationServiceFacade
