@@ -25,23 +25,25 @@ namespace Teleopti.Messaging.Client.Http
 			_seralizer = seralizer ?? new ToStringSerializer();
 		}
 
-		private string url()
+		private string url(string call)
 		{
-			var brokerUri = new Uri("x://");
-			if (_url != null && _url.Url != null)
-				brokerUri = new Uri(_url.Url);
-			return new Uri(brokerUri, "/MessageBroker/NotifyClients").ToString();
+			if (_url == null)
+				return null;
+			if (string.IsNullOrEmpty(_url.Url))
+				return null;
+			return new Uri(new Uri(_url.Url), call).ToString();
 		}
 
 		public void Send(Notification notification)
 		{
 			var content = _seralizer.SerializeObject(notification);
-			PostAsync(_httpClient, url(), new StringContent(content, Encoding.UTF8, "application/json"));
+			PostAsync(_httpClient, url("/MessageBroker/NotifyClients"), new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 
 		public void SendMultiple(IEnumerable<Notification> notifications)
 		{
-			notifications.ForEach(Send);
+			var content = _seralizer.SerializeObject(notifications);
+			PostAsync(_httpClient, url("/MessageBroker/NotifyClientsMultiple"), new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 	}
 }

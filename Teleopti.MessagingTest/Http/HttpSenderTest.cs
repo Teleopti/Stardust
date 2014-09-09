@@ -71,14 +71,24 @@ namespace Teleopti.MessagingTest.Http
 		{
 			var notifications = new[] {new Notification {DataSource = "one"}, new Notification {DataSource = "two"}};
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
-			serializer.Stub(x => x.SerializeObject(notifications[0])).Return("one");
-			serializer.Stub(x => x.SerializeObject(notifications[1])).Return("two");
-			var postedContent = new List<string>();
-			var target = new HttpSender(null, serializer) { PostAsync = (c, u, cn) => postedContent.Add(cn.ReadAsStringAsync().Result) };
+			serializer.Stub(x => x.SerializeObject(notifications)).Return("many");
+			HttpContent postedContent = null;
+			var postedUrl = "";
+			var url = new MutableUrl();
+			var target = new HttpSender(url, serializer)
+			{
+				PostAsync = (c, u, cn) =>
+				{
+					postedUrl = u;
+					postedContent = cn;
+				}
+			};
+			url.Configure("http://a");
 
 			target.SendMultiple(notifications);
 
-			postedContent.Should().Have.SameValuesAs(new[] {"one", "two"});
+			postedContent.ReadAsStringAsync().Result.Should().Be("many");
+			postedUrl.Should().Be("http://a/MessageBroker/NotifyClientsMultiple");
 		}
 
 		public interface IPoster
