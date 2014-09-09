@@ -12225,7 +12225,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Message when week contains to little work time</comment>
   </data>
   <data name="DeleteSkill" xml:space="preserve">
-    <value>Delelete skill</value>
+    <value>Delete skill</value>
     <comment>Delete skill</comment>
   </data>
   <data name="StartPage" xml:space="preserve">

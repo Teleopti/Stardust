@@ -160,7 +160,7 @@
     <value>Nieobecność</value>
   </data>
   <data name="ResRequestTypeShiftTrade" xml:space="preserve">
-    <value>Zamiana Zmiany</value>
+    <value>Zamiana Dyżuru</value>
   </data>
   <data name="ResRequestTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -337,7 +337,7 @@
     <value>Absencja (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Dotrzymanie (%)</value>
+    <value>Przestrzeganie (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
     <value>Odebrane Połączenia na Zaplanowaną Godzinę Telefoniczną</value>
@@ -490,13 +490,13 @@
     <value>Metryki Agenta:</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
-    <value>Dotrzymanie (%)</value>
+    <value>Przestrzeganie (%)</value>
   </data>
   <data name="ResAgentDate" xml:space="preserve">
     <value>Agent / Data</value>
   </data>
   <data name="ResAdherenceCalculationColon" xml:space="preserve">
-    <value>Kalkulacja Dotrzymania:</value>
+    <value>Kalkulacja Przestrzegania:</value>
   </data>
   <data name="ResDeviationMinute" xml:space="preserve">
     <value>Odchylenie (m)</value>
@@ -508,7 +508,7 @@
     <value>Poprzedni</value>
   </data>
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
-    <value>Dotrzymanie / Przedział (%)</value>
+    <value>Przestrzeganie / Przedział (%)</value>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
     <value>Odchylenie / Przedział (m)</value>
@@ -649,7 +649,7 @@
     <value>Preferencje Odrzucone</value>
   </data>
   <data name="ResPreferencesRequested" xml:space="preserve">
-    <value>Preferencje Żądane</value>
+    <value>Preferencje Wniosku</value>
   </data>
   <data name="ResPreferenceCategory" xml:space="preserve">
     <value>Kategoria Preferencji</value>
@@ -763,7 +763,7 @@
     <value>Czynność</value>
   </data>
   <data name="ResAdherence" xml:space="preserve">
-    <value>Dotrzymanie</value>
+    <value>Przestrzeganie</value>
   </data>
   <data name="ResAll" xml:space="preserve">
     <value>Wszystko</value>
@@ -802,10 +802,10 @@
     <value>Nie Zdefiniowane</value>
   </data>
   <data name="ResShiftCategory" xml:space="preserve">
-    <value>Kategoria Zmiany</value>
+    <value>Kategoria Dyżuru</value>
   </data>
   <data name="ResShiftStartTime" xml:space="preserve">
-    <value>Początek Zmiany</value>
+    <value>Początek Dyżuru</value>
   </data>
   <data name="ResThursday" xml:space="preserve">
     <value>Czwartek</value>
@@ -850,31 +850,31 @@
     <value>Nadgodziny (gg:mm)</value>
   </data>
   <data name="ResShiftEndTime" xml:space="preserve">
-    <value>Czas Zakończenia Zmiany</value>
+    <value>Czas Zakończenia Dyżuru</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Kategoria Zmiany i Całodzienna Nieobecność na Dzień</value>
+    <value>Kategoria Dyżuru i Całodzienna Nieobecność na Dzień</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Żądania na Agenta</value>
+    <value>Wnioski na Agenta</value>
   </data>
   <data name="ResRequestStatusPending" xml:space="preserve">
     <value>W Trakcie</value>
   </data>
   <data name="ResRequestTypeColon" xml:space="preserve">
-    <value>Typ żądania:</value>
+    <value>Typ wniosku:</value>
   </data>
   <data name="ResRequestsDayCount" xml:space="preserve">
     <value>Żądane dni:</value>
   </data>
   <data name="ResRequestsStartDayCount" xml:space="preserve">
-    <value>Żądania</value>
+    <value>Wnioski</value>
   </data>
   <data name="ResApplicationDate" xml:space="preserve">
     <value>Data Aplikacji</value>
   </data>
   <data name="ResRequestPeriod" xml:space="preserve">
-    <value>Okres Żądania</value>
+    <value>Okres Wniosku</value>
   </data>
   <data name="RedirectNow" xml:space="preserve">
     <value>Przekieruj Teraz</value>
@@ -883,10 +883,10 @@
     <value>Twoja sesja wygasła ze względu na brak aktywności. Zostaniesz przekierowany do strony logowania.</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>Dotrzymanie na Agenta</value>
+    <value>Przestrzeganie na Agenta</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>Dotrzymanie na Dzień</value>
+    <value>Przestrzeganie na Dzień</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
     <value>Zaplanowani Agenci na Czynność</value>
@@ -895,13 +895,13 @@
     <value>Podsumowanie</value>
   </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
-    <value>Data (rozpoczęcie zmiany):</value>
+    <value>Data (rozpoczęcie dyżuru):</value>
   </data>
   <data name="ResShiftStartDateFromColon" xml:space="preserve">
-    <value>Data Od (rozpoczęcie zmiany):</value>
+    <value>Data Od (rozpoczęcie dyżuru):</value>
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
-    <value>Data Do (rozpoczęcie zmiany):</value>
+    <value>Data Do (rozpoczęcie dyżuru):</value>
   </data>
   <data name="RepViewerNoMoreMatches" xml:space="preserve">
     <value>Nie znaleziono więcej dopasowań.</value>
@@ -1027,13 +1027,13 @@
     <value>Relatywna Różnica wraz z Przycięciem (%)</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>Kategoria Zmiany na Dzień</value>
+    <value>Kategoria Dyżuru na Dzień</value>
   </data>
   <data name="ResShiftCategoryColon" xml:space="preserve">
-    <value>Kategoria Zmiany:</value>
+    <value>Kategoria Dyżuru:</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Kategoria Zmiany i Całodniowa Nieobecność na Agenta</value>
+    <value>Kategoria Dyżuru i Całodniowa Nieobecność na Agenta</value>
   </data>
   <data name="ResSelections" xml:space="preserve">
     <value>Wybory</value>
@@ -1072,13 +1072,13 @@
     <value>Czas Gotowości / Zaplanowany Czas Gotowości</value>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Czas Gotowości / Zaplanowany Czas Gotowości (wraz z czasem przed i po rozpoczęciu zmiany)</value>
+    <value>Czas Gotowości / Zaplanowany Czas Gotowości (wraz z czasem przed i po rozpoczęciu dyżuru)</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
     <value>Procent Nie Pełnych Etatów</value>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>Zbiór Zmian</value>
+    <value>Aktówka Dyżurów</value>
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
     <value>Strona Grupy:</value>

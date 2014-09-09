@@ -328,10 +328,10 @@
     <value>Wytnij Urlop</value>
   </data>
   <data name="CutPersonalShift" xml:space="preserve">
-    <value>Wytnij Osobistą Zmianę</value>
+    <value>Wytnij Osobisty Dyżur</value>
   </data>
   <data name="CutShift" xml:space="preserve">
-    <value>Wytnij Zmianę</value>
+    <value>Wytnij Dyżur</value>
   </data>
   <data name="CutSpecial" xml:space="preserve">
     <value>Wytnij Specjalnie</value>
@@ -508,10 +508,10 @@
     <value>&amp;Dostosuj Pasek Szybkiego Uruchamiania...</value>
   </data>
   <data name="DeletePersonalShift" xml:space="preserve">
-    <value>Usuń Osobistą Zmianę</value>
+    <value>Usuń Osobistą Dyżur</value>
   </data>
   <data name="DeleteShift" xml:space="preserve">
-    <value>Usuń Zmianę</value>
+    <value>Usuń Dyżur</value>
   </data>
   <data name="DeleteSkillThreeDots" xml:space="preserve">
     <value>Usuń Umiejętność...</value>
@@ -703,7 +703,7 @@
     <value>Wakacje</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Początek</value>
+    <value>Start</value>
   </data>
   <data name="IndexACW" xml:space="preserve">
     <value>Indeks ACW</value>
@@ -757,7 +757,7 @@
     <value>Nieobecności (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Przyleganie (%)</value>
+    <value>Przestrzeganie (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
     <value>Odebrane połączenia na zadany czas</value>
@@ -832,10 +832,10 @@
     <value>Zablokuj Wybrane</value>
   </data>
   <data name="LockShiftCategories" xml:space="preserve">
-    <value>Zablokuj Kategorie Zmian</value>
+    <value>Zablokuj Kategorie Dyżuru</value>
   </data>
   <data name="LockShiftCategory" xml:space="preserve">
-    <value>Zablokuj Kategorie Zmiany</value>
+    <value>Zablokuj Kategorie Dyżuru</value>
   </data>
   <data name="LogObject" xml:space="preserve">
     <value>Loguj Objekt</value>
@@ -964,10 +964,10 @@
     <value>Nieobecność nie wybrana</value>
   </data>
   <data name="AbsenceRequest" xml:space="preserve">
-    <value>Żądanie Nieobecności</value>
+    <value>Wniosek nieobecności</value>
   </data>
   <data name="AbsenceRequestsWeb" xml:space="preserve">
-    <value>Żądania Nieobecności</value>
+    <value>Wnioski o Nieobecność</value>
   </data>
   <data name="CreateAbsenceRequest" xml:space="preserve">
     <value>Żądania Nieobecności</value>
@@ -1042,22 +1042,22 @@
     <value>Aktualne</value>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
-    <value>Faktyczny czas pracy po połączeniu</value>
+    <value>Aktualny czas pracy po połączeniu</value>
   </data>
   <data name="ActualAgents" xml:space="preserve">
-    <value>Faktyczni agenci</value>
+    <value>Aktualni agenci</value>
   </data>
   <data name="ActualEmployees" xml:space="preserve">
     <value>Aktualni Pracownicy</value>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
-    <value>Faktyczny czas obsługi</value>
+    <value>Aktualny czas obsługi</value>
   </data>
   <data name="ActualServiceLevel" xml:space="preserve">
     <value>Aktualny poziom obsługi</value>
   </data>
   <data name="ActualTalkTime" xml:space="preserve">
-    <value>Faktyczny czas rozmowy</value>
+    <value>Aktualny czas rozmowy</value>
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Dodaj Aktywność...</value>
@@ -1105,7 +1105,7 @@
     <value>Nowe Hasło</value>
   </data>
   <data name="NewShift" xml:space="preserve">
-    <value>Nowa Zmiana</value>
+    <value>Nowy Dyżur</value>
   </data>
   <data name="NewSkillThreeDots" xml:space="preserve">
     <value>Nowa Umiejętność...</value>
@@ -1129,7 +1129,7 @@
     <value>Brak dostępnych funkcji</value>
   </data>
   <data name="None" xml:space="preserve">
-    <value>Żaden</value>
+    <value>Brak</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Notatka</value>
@@ -1162,10 +1162,10 @@
     <value>Pracownik#</value>
   </data>
   <data name="MinimizeTheRibbon" xml:space="preserve">
-    <value>Zm&amp;niejsz taśmę</value>
+    <value>Zm&amp;niejsz wstążke</value>
   </data>
   <data name="MinimumAgents" xml:space="preserve">
-    <value>Minimum agentów</value>
+    <value>Minimalnie agentów</value>
   </data>
   <data name="MoreToComeThreeDots" xml:space="preserve">
     <value>Więcej...</value>
@@ -1237,7 +1237,7 @@
     <value>Wydarzenie specjalne</value>
   </data>
   <data name="OverlappningShifts" xml:space="preserve">
-    <value>Nakładające się zmiany</value>
+    <value>Nakładające się dyżyry</value>
   </data>
   <data name="OverView" xml:space="preserve">
     <value>Przegląd</value>
@@ -1267,7 +1267,7 @@
     <value>Wklej Nieobecność</value>
   </data>
   <data name="PasteAssignment" xml:space="preserve">
-    <value>Wklej Zmianę</value>
+    <value>Wklej Dyżur</value>
   </data>
   <data name="PasteDayOff" xml:space="preserve">
     <value>Wklej Dzień wolny</value>
@@ -1276,7 +1276,7 @@
     <value>Wklej Nowe</value>
   </data>
   <data name="PastePersonalShift" xml:space="preserve">
-    <value>Wklej Osobistą Zmianę</value>
+    <value>Wklej Osobistą Dyżur</value>
   </data>
   <data name="PasteSpecial" xml:space="preserve">
     <value>Wklej Specjalne</value>
@@ -1324,10 +1324,10 @@
     <value>[wypełniacz]</value>
   </data>
   <data name="PlaceQuickAccessToolbarAboveTheRibbon" xml:space="preserve">
-    <value>&amp;Pasek szybkiego dostępu nad taśmą</value>
+    <value>&amp;Pasek szybkiego dostępu nad wstążką</value>
   </data>
   <data name="PlaceQuickAccessToolbarBelowTheRibbon" xml:space="preserve">
-    <value>&amp;Pasek szybkiego dostępu pod taśmą</value>
+    <value>&amp;Pasek szybkiego dostępu pod wstążką</value>
   </data>
   <data name="PlanDayOffs" xml:space="preserve">
     <value>Zaplanuj dni wolne</value>
@@ -1561,7 +1561,7 @@
     <value>Wybrane wyjątki</value>
   </data>
   <data name="SelectHistoricalData" xml:space="preserve">
-    <value>Wybrane dane histowyczne</value>
+    <value>Wybrane dane historyczne</value>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
     <value>Wybierz lokalizację:</value>
@@ -1585,16 +1585,16 @@
     <value>Ustaw trend ręcznie</value>
   </data>
   <data name="Shift" xml:space="preserve">
-    <value>Zmiana</value>
+    <value>Dyżur</value>
   </data>
   <data name="ShiftCategoryColon" xml:space="preserve">
-    <value>Kategoria zmiany:</value>
+    <value>Kategoria dyżuru:</value>
   </data>
   <data name="ShiftCreator" xml:space="preserve">
-    <value>Zmiany</value>
+    <value>Dyżury</value>
   </data>
   <data name="ShiftEditor" xml:space="preserve">
-    <value>Edytor zmian</value>
+    <value>Edytor dyżurów</value>
   </data>
   <data name="ShowAbsence" xml:space="preserve">
     <value>Pokaż nieobecność</value>
@@ -1603,22 +1603,22 @@
     <value>Pokaż szczegóły</value>
   </data>
   <data name="ShowMainShift" xml:space="preserve">
-    <value>Pokaż zmianę</value>
+    <value>Pokaż Dyżur</value>
   </data>
   <data name="ShowNext" xml:space="preserve">
     <value>Pokaż następne</value>
   </data>
   <data name="ShowNextShift" xml:space="preserve">
-    <value>Pokaż następną zmianę</value>
+    <value>Pokaż następny Dyżur</value>
   </data>
   <data name="ShowPersonalShifts" xml:space="preserve">
-    <value>Pokaż osobiste zmiany</value>
+    <value>Pokaż osobiste Dyżury</value>
   </data>
   <data name="ShowPrevious" xml:space="preserve">
     <value>Pokaż poprzednie</value>
   </data>
   <data name="ShowPreviousShift" xml:space="preserve">
-    <value>Pokaż poprzednią zmianę</value>
+    <value>Pokaż poprzedni Dyżur</value>
   </data>
   <data name="Shrinkage" xml:space="preserve">
     <value>Zmniejszenie</value>
@@ -1882,7 +1882,7 @@
     <value>Reguła zmian</value>
   </data>
   <data name="Workshiftruleset" xml:space="preserve">
-    <value>Zestaw reguł zmiany</value>
+    <value>Zestaw reguł zdyżurów</value>
   </data>
   <data name="Year" xml:space="preserve">
     <value>Rok</value>
@@ -1966,7 +1966,7 @@
     <value>Średnie użycie w dniach nietypowych</value>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>Worek zmian</value>
+    <value>Aktówka Dyżurów</value>
   </data>
   <data name="AgentName" xml:space="preserve">
     <value>Agent</value>
@@ -1981,7 +1981,7 @@
     <value>Nowe żądanie nieobecności</value>
   </data>
   <data name="Requests" xml:space="preserve">
-    <value>Żądania</value>
+    <value>Wnioski</value>
   </data>
   <data name="PrintSchedule" xml:space="preserve">
     <value>Drukuj plan</value>
@@ -2017,10 +2017,10 @@
     <value>Skasuj specjalne</value>
   </data>
   <data name="PasteShift" xml:space="preserve">
-    <value>Wklej zmianę</value>
+    <value>Wklej Dyżur</value>
   </data>
   <data name="Shifts" xml:space="preserve">
-    <value>Zmiany</value>
+    <value>Dyżury</value>
   </data>
   <data name="AddMainLayer" xml:space="preserve">
     <value>Dodaj główną warstwę</value>
@@ -2179,7 +2179,7 @@
     <value>Procent niepełnego czasu pracy</value>
   </data>
   <data name="GroupByPersonPeriodRulesetBag" xml:space="preserve">
-    <value>Worek zmian</value>
+    <value>Aktówka Dyżurów</value>
   </data>
   <data name="GroupPage" xml:space="preserve">
     <value>Strona grupy</value>
@@ -2272,7 +2272,7 @@
     <value>Rodzaj zatrudnienia:</value>
   </data>
   <data name="NameColon" xml:space="preserve">
-    <value>Imię i nazwisko:</value>
+    <value>Nazwa:</value>
   </data>
   <data name="NightlyRestTimeColon" xml:space="preserve">
     <value>Czas odpoczynku nocnego:</value>
@@ -2488,7 +2488,7 @@
     <value>Zestawy reguł</value>
   </data>
   <data name="ShiftBags" xml:space="preserve">
-    <value>Worki zmian</value>
+    <value>Aktówka Dyżurów</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>Czas</value>
@@ -2500,7 +2500,7 @@
     <value>Różnica względna</value>
   </data>
   <data name="StandardDeviation" xml:space="preserve">
-    <value>Dewiacja standardowa</value>
+    <value>Standardowe odchylenie</value>
   </data>
   <data name="ChangeInterval" xml:space="preserve">
     <value>Zmiana interwału</value>
@@ -2545,7 +2545,7 @@
     <value>Wybierz rotację</value>
   </data>
   <data name="ShiftCategory" xml:space="preserve">
-    <value>Kategoria zmiany</value>
+    <value>Kategoria dyżuru</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Ukryj</value>
@@ -2638,16 +2638,16 @@
     <value>Ten tydzień zawiera zbyt dużo czasu pracy ({0}) a maksimum wynosi {1}.</value>
   </data>
   <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
-    <value>Wymagany jest czas odpoczynku dziennego minimum {0} między zmianami. Między {1} i {2} jest tylko {3} godzin.</value>
+    <value>Wymagany jest czas odpoczynku dziennego minimum {0} między dyżurami. Między {1} i {2} jest tylko {3} godzin.</value>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
     <value>Pracownik {0} nie ma zdefiniowanego kontraktu dla aktualnej daty {1}.</value>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage1" xml:space="preserve">
-    <value>Jest już zmiana w tym interwale. Inna zmiana jest w interwale {0}-{1}, ta zmiana jest w interwale {2}-{3}.</value>
+    <value>Jest już dyżur w tym interwale. Inny dyżur jest w interwale {0}-{1}, ten dyżur jest w interwale {2}-{3}.</value>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage2" xml:space="preserve">
-    <value>Są dwie nakładające się zmiany</value>
+    <value>Są dwa nakładające się dyżury</value>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
     <value>Wybierz kolumnę opcjonalną do zmiany</value>
@@ -2980,10 +2980,10 @@
     <value>Zmień przydział</value>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
-    <value>Zmień główną zmianę</value>
+    <value>Zmień główny dyżur</value>
   </data>
   <data name="ModifyPersonalShift" xml:space="preserve">
-    <value>Zmień osobistą zmianę</value>
+    <value>Zmień osobisty dyżur</value>
   </data>
   <data name="ModifyPersonNameAndPassword" xml:space="preserve">
     <value>Zmień nazwę i hasło</value>
@@ -3016,7 +3016,7 @@
     <value>Nowy zestaw reguł</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Zmiany - Teleopti WFM</value>
+    <value>Dyżury - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nazwa zestawu reguł &gt;</value>
@@ -3061,7 +3061,7 @@
     <value>Nowe ograniczenie</value>
   </data>
   <data name="NewRuleSetBag" xml:space="preserve">
-    <value>Nowy worek zmian</value>
+    <value>Nowa Aktówka Dyżurów</value>
   </data>
   <data name="PasteActivity" xml:space="preserve">
     <value>Wklej aktywność</value>
@@ -3223,7 +3223,7 @@
     <value>Status</value>
   </data>
   <data name="RequestTypeShiftTrade" xml:space="preserve">
-    <value>Wymiana zmian</value>
+    <value>Wymiana dyżuru</value>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
     <value>Średni czas odpowiedzi</value>
@@ -3382,13 +3382,13 @@
     <value>Znaleziono zduplikowane dane użytkownika!</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>Prognoza a faktyczny przydział pracy</value>
+    <value>Prognoza a Aktualny przydział pracy</value>
   </data>
   <data name="WorkShiftsAfter" xml:space="preserve">
-    <value>Zmiany po</value>
+    <value>Dyżury po</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Czas gotowości i czas zaplanowany (zawiera czas przed i po rozpoczęciu zmiany)</value>
+    <value>Czas gotowości i czas zaplanowany (zawiera czas przed i po rozpoczęciu dyżuru)</value>
   </data>
   <data name="ConsiderWeekAfter" xml:space="preserve">
     <value>Spróbuj tydzień po</value>
@@ -3478,7 +3478,7 @@
     <value>Nowa grupa stanu</value>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
-    <value>Dotrzymanie w czasie rzeczywistym</value>
+    <value>Przestrzeganie w czasie rzeczywistym</value>
   </data>
   <data name="SetAsDefaultStateGroup" xml:space="preserve">
     <value>Ustaw jako domyślną grupę stanu</value>
@@ -3517,19 +3517,19 @@
     <value>Lokalizacja</value>
   </data>
   <data name="AddOvertime" xml:space="preserve">
-    <value>Dodaj nadgodziny</value>
+    <value>Dodaj Nadgodziny</value>
   </data>
   <data name="AddPersonTimeActivity" xml:space="preserve">
     <value>Dodaj aktywność czasową</value>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>Prośba o zamianę zmian</value>
+    <value>Prośba o zamianę dyżuru</value>
   </data>
   <data name="Respond" xml:space="preserve">
     <value>Odpowiedz</value>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>Nowa prośba o zamianę zmian</value>
+    <value>Nowa prośba o zamianę dyżuru</value>
   </data>
   <data name="EarlyStart" xml:space="preserve">
     <value>Wczesne rozpoczęcie</value>
@@ -3652,7 +3652,7 @@
     <value>Nowe żądanie tekstowe</value>
   </data>
   <data name="TextRequest" xml:space="preserve">
-    <value>Żądanie tekstowe</value>
+    <value>Wniosek tekstowy</value>
   </data>
   <data name="ChangeYourOrganizationTree" xml:space="preserve">
     <value>Zmień strukturę organizacji</value>
@@ -3727,16 +3727,16 @@
     <value>Musisz podać opis</value>
   </data>
   <data name="NewShiftCategory" xml:space="preserve">
-    <value>Nowa kategoria zmiany</value>
+    <value>Nowa Kategoria dyżuru</value>
   </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
-    <value>Wybierz kategorię zmiany do edycji</value>
+    <value>Wybierz kategorię dyżuru do edycji</value>
   </data>
   <data name="EnterSettingsForShiftCategory" xml:space="preserve">
-    <value>Podaj ustawienia dla kategorii zmiany</value>
+    <value>Podaj ustawienia dla kategorii dyżuru</value>
   </data>
   <data name="ManageShiftCategories" xml:space="preserve">
-    <value>Zarządzaj kategoriami zmian</value>
+    <value>Zarządzaj kategoriami dyżurów</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>Informacja</value>
@@ -3769,10 +3769,10 @@
     <value>Wybierz dostępność:</value>
   </data>
   <data name="AddAbsenceThreeDots" xml:space="preserve">
-    <value>Dodaj nieobecność...</value>
+    <value>Dodaj Nieobecność...</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
-    <value>Dodaj aktywność osobistą...</value>
+    <value>Dodaj Aktywność Osobistą...</value>
   </data>
   <data name="GroupIsNotEmpty" xml:space="preserve">
     <value>Grupa nie jest pusta</value>
@@ -3871,7 +3871,7 @@
     <value>Jeden lub więcej komunikatów było za długie. Spróbuj krótszego komunikatu.</value>
   </data>
   <data name="AddShiftCategory" xml:space="preserve">
-    <value>Dodaj kategorię zmian</value>
+    <value>Dodaj kategorię dyżuru</value>
   </data>
   <data name="NewShiftCategoryShortName" xml:space="preserve">
     <value>XX</value>
@@ -3901,7 +3901,7 @@
     <value>Dostępności nie udało się załadować. Może ich nie być w bazie danych.</value>
   </data>
   <data name="Adherence" xml:space="preserve">
-    <value>Dotrzymanie</value>
+    <value>Przestrzeganie</value>
   </data>
   <data name="InvalidAgentName" xml:space="preserve">
     <value>Błędna nazwa</value>
@@ -3979,10 +3979,10 @@
     <value>Skasuj scenariusz</value>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
-    <value>Pośba o zamianę zmiany</value>
+    <value>Pośba o zamianę Dyżuru</value>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>Żądanie tekstowe</value>
+    <value>Wniosek tekstowy</value>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
     <value>Karty wyników</value>
@@ -4000,10 +4000,10 @@
     <value>Optymalizuj</value>
   </data>
   <data name="ManageRTA" xml:space="preserve">
-    <value>Zarządzaj dotrzymaniem w czasie rzeczywistym</value>
+    <value>Zarządzaj Przestrzeganiem w czasie rzeczywistym</value>
   </data>
   <data name="SelectShiftCategory" xml:space="preserve">
-    <value>Wybierz kategorię zmiany</value>
+    <value>Wybierz kategorię Dyżuru</value>
   </data>
   <data name="DeleteRotation" xml:space="preserve">
     <value>Skasuj rotację</value>
@@ -4057,7 +4057,7 @@
     <value>Kotwica:</value>
   </data>
   <data name="ChooseDaysOffToChange" xml:space="preserve">
-    <value>Wybierz dzień wolny do zmiany</value>
+    <value>Wybierz dzień wolny do zamiany</value>
   </data>
   <data name="DaysOffColon" xml:space="preserve">
     <value>Dni wolne:</value>
@@ -4114,7 +4114,7 @@
     <value>Używaj preferowanych</value>
   </data>
   <data name="UseShiftCategory" xml:space="preserve">
-    <value>Używaj kategorii zmiany</value>
+    <value>Używaj kategorii Dyżuru</value>
   </data>
   <data name="NewPartTimePercentage" xml:space="preserve">
     <value>Nowy procent niepełnego czasu pracy</value>
@@ -4399,10 +4399,10 @@ Szczegóły błędu:
     <value>Twój klucz licencyjny jest ważny do {0}, nie zapomnij go odnowić zanim wygaśnie</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Łącznie niedotrzymane:</value>
+    <value>Łącznie poza Przestrzeganiem:</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Czas gotowości faktyczny i planowany</value>
+    <value>Czas Gotowości faktyczny i planowany</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Wy&amp;bierz</value>
@@ -4596,7 +4596,7 @@ Dostępne opcje: {4}</value>
     <value>Przenieś maks. dni wolnych</value>
   </data>
   <data name="MoveMaxShifts" xml:space="preserve">
-    <value>Przenieś maks. zmian</value>
+    <value>Przenieś maks. Dyżurów</value>
   </data>
   <data name="MaxDuration" xml:space="preserve">
     <value>Maks. długość</value>
@@ -4749,13 +4749,13 @@ Dostępne opcje: {4}</value>
     <value>Planowany czas na agenta</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>Planowani a faktyczni agenci</value>
+    <value>Planowani a Aktualni agenci</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Kategoria zmiany i całodzienne nieobecności na agenta</value>
+    <value>Kategoria Dyżurui całodzienne nieobecności na agenta</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>Kategoria zmiany na dzień</value>
+    <value>Kategoria Dyżuru na dzień</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
     <value>Miara zespołu</value>
@@ -4770,7 +4770,7 @@ Dostępne opcje: {4}</value>
     <value>Krótka nazwa:</value>
   </data>
   <data name="MultiplicatorTypeOBTime" xml:space="preserve">
-    <value>Przydział zmiany</value>
+    <value>Przydział Dyżuru</value>
   </data>
   <data name="NewMultiplicator" xml:space="preserve">
     <value>Nowy mnożnik</value>
@@ -4806,13 +4806,13 @@ Dostępne opcje: {4}</value>
     <value>Filtruj wg ograniczeń okresu osobistego</value>
   </data>
   <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
-    <value>Nie można znaleźć zmian pasujących do czasu kontraktu</value>
+    <value>Nie można znaleźć dyżurów pasujących do czasu kontraktu</value>
   </data>
   <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
-    <value>Zmiany w okresie:</value>
+    <value>Dyżury w okresie:</value>
   </data>
   <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
-    <value>Zmiany z czasem kontraktu pomiędzy</value>
+    <value>Dyżury z czasem kontraktu pomiędzy</value>
   </data>
   <data name="TheDayIsNotAvailableForScheduling" xml:space="preserve">
     <value>Ten dzień nie jest dostępny do planowania</value>
@@ -4824,7 +4824,7 @@ Dostępne opcje: {4}</value>
     <value>Ten dzień jest wolny w rotacji</value>
   </data>
   <data name="GetsShiftListToStartWith" xml:space="preserve">
-    <value>Pobiera początkową listę zmian</value>
+    <value>Pobiera początkową listę dyżurów</value>
   </data>
   <data name="NoAvailabilityDefinedFor" xml:space="preserve">
     <value>Brak zdefiniowanej dostępności dla {0}</value>
@@ -4845,7 +4845,7 @@ Dostępne opcje: {4}</value>
     <value>Brak zdefiniowanego okresu planowania dla daty</value>
   </data>
   <data name="NoWorkShiftsWereAvailable" xml:space="preserve">
-    <value>Brak dostępnych zmian roboczych</value>
+    <value>Brak dostępnych dyżurów</value>
   </data>
   <data name="PersonName" xml:space="preserve">
     <value>Nazwa</value>
@@ -4875,7 +4875,7 @@ Dostępne opcje: {4}</value>
     <value>Pokaż tylko nieudane próby</value>
   </data>
   <data name="WorkShiftsBefore" xml:space="preserve">
-    <value>Zmiany przed</value>
+    <value>Dyżury przed</value>
   </data>
   <data name="TheRecurrencePatternIsNotValid" xml:space="preserve">
     <value>Wzór powtarzania jest błędny</value>
@@ -4971,10 +4971,10 @@ Dostępne opcje: {4}</value>
     <value>Nie podano nazwy</value>
   </data>
   <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
-    <value>Filtruj wg ograniczeń czasu kontraktu (zmiany z czasem kontraktu od {0} do {1})</value>
+    <value>Filtruj wg ograniczeń czasu kontraktu (dyżury z czasem kontraktu od {0} do {1})</value>
   </data>
   <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
-    <value>Filtruj wg ograniczeń osobistego okresu (zmiany w okresie {0}-{1})</value>
+    <value>Filtruj wg ograniczeń osobistego okresu (dyżury w okresie {0}-{1})</value>
   </data>
   <data name="DefaultDefinitionSetName" xml:space="preserve">
     <value>Zestaw definicji</value>
@@ -5028,7 +5028,7 @@ Dostępne opcje: {4}</value>
     <value>Brak aktywności w bazie danych</value>
   </data>
   <data name="ZeroShiftCategoriesInDb" xml:space="preserve">
-    <value>Brak kategorii zmian w bazie danych</value>
+    <value>Brak kategorii dyżurów w bazie danych</value>
   </data>
   <data name="DeleteContract" xml:space="preserve">
     <value>Skasuj kontrakt</value>
@@ -5049,7 +5049,7 @@ Dostępne opcje: {4}</value>
     <value>Wczytywanie nieudane. Zamknij plik jeśli jest otwarty.</value>
   </data>
   <data name="HighestStdev" xml:space="preserve">
-    <value>Maks. standardowa dewiacja</value>
+    <value>Maks. standardowe odchylenie</value>
   </data>
   <data name="IntervalStdev" xml:space="preserve">
     <value>Interwałowa standardowa dewiacja</value>
@@ -5183,7 +5183,7 @@ Stworzone: {1}</value>
 Aktualizowane: {1}</value>
   </data>
   <data name="AddToBags" xml:space="preserve">
-    <value>Dodaj do worków zmian</value>
+    <value>Dodaj do aktówki dyżurów</value>
   </data>
   <data name="SelectBags" xml:space="preserve">
     <value>Wybierz worki</value>
@@ -5270,10 +5270,10 @@ Aktualizowane: {1}</value>
     <value>Zablokuj zapis planu</value>
   </data>
   <data name="Bags" xml:space="preserve">
-    <value>Worki</value>
+    <value>Aktówki</value>
   </data>
   <data name="RecentWorkShiftRuleSets" xml:space="preserve">
-    <value>Zestawy reguł niedawnej zmiany roboczej</value>
+    <value>Zestawy reguł ostatnich dyżurów</value>
   </data>
   <data name="ViewPointTimeZone" xml:space="preserve">
     <value>Punkt widzenia (strefa czasowa)</value>
@@ -5360,7 +5360,7 @@ Aktualizowane: {1}</value>
     <value>Karta wyników agenta</value>
   </data>
   <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
-    <value>Filtruj wg ograniczeń czasu pracy (zmiany z czasem kontraktu od {0} do {1})</value>
+    <value>Filtruj wg ograniczeń czasu pracy dyżury z czasem kontraktu od {0} do {1})</value>
   </data>
   <data name="Excluded" xml:space="preserve">
     <value>Objęte</value>
@@ -5522,7 +5522,7 @@ Aktualizowane: {1}</value>
     <value>Nie zachowuj</value>
   </data>
   <data name="KeepShiftCategory" xml:space="preserve">
-    <value>Zachowaj kategorię zmiany</value>
+    <value>Zachowaj kategorię dyżuru</value>
   </data>
   <data name="KeepStartAndEndTime" xml:space="preserve">
     <value>Zachowaj czasy rozpoczęcia i zakończenia</value>
@@ -5643,7 +5643,7 @@ Można w tym czasie korzystać z innych funkcji systemu.</value>
     <value>Niezaplanowane</value>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Kalkulacja dotrzymania</value>
+    <value>Kalkulacja przestrzegania</value>
   </data>
   <data name="DateFromColon" xml:space="preserve">
     <value>Od dnia:</value>
@@ -5755,7 +5755,7 @@ Dział Rozwoju Teleopti</value>
     <value>Ładowanie wyglądu...</value>
   </data>
   <data name="LoadingRealTimeAdherenceDataThreeDots" xml:space="preserve">
-    <value>Ładowanie danych dotrzymana w czasie rzeczywistym...</value>
+    <value>Ładowanie danych Przestrzegania w czasie rzeczywistym...</value>
   </data>
   <data name="RegisteringWithMessageBrokerThreeDots" xml:space="preserve">
     <value>Rejestrowanie z brokerem wiadomości...</value>
@@ -5836,10 +5836,10 @@ Dział Rozwoju Teleopti</value>
     <value>Wybierz polecenie z</value>
   </data>
   <data name="ShowQuickAccessToolbarAboveRibbon" xml:space="preserve">
-    <value>Pokaż pasek szybkiego dostępu nad taśmą</value>
+    <value>Pokaż pasek szybkiego dostępu nad wstążką</value>
   </data>
   <data name="ShowQuickAccessToolbarBelowRibbon" xml:space="preserve">
-    <value>Pokaż pasek szybkiego dostępu pod taśmą</value>
+    <value>Pokaż pasek szybkiego dostępu pod wstążką</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
     <value>Wybrany obszar dla {0} agent(ów)</value>
@@ -5879,25 +5879,25 @@ Dział Rozwoju Teleopti</value>
 Dzień tygodnia</value>
   </data>
   <data name="DeviationAEWColon" xml:space="preserve">
-    <value>Dewiacja AEW:</value>
+    <value>Odchylenie AEW:</value>
   </data>
   <data name="DeviationAFWColon" xml:space="preserve">
-    <value>Dewiacja AFW:</value>
+    <value>Odchylenie AFW:</value>
   </data>
   <data name="DeviationATWColon" xml:space="preserve">
-    <value>Dewiacja ATW:</value>
+    <value>Odchylenie ATW:</value>
   </data>
   <data name="DeviationEmailsColon" xml:space="preserve">
-    <value>Dewiacja emaili:</value>
+    <value>Odchylenie emaili:</value>
   </data>
   <data name="DeviationFacsimilesColon" xml:space="preserve">
-    <value>Dewiacja faksów:</value>
+    <value>Odchylenie faksów:</value>
   </data>
   <data name="DeviationHandlingTimeColon" xml:space="preserve">
-    <value>Dewiacja czasu obsługi:</value>
+    <value>Odchylenie czasu obsługi:</value>
   </data>
   <data name="DeviationTasksColon" xml:space="preserve">
-    <value>Dewiacja zadań:</value>
+    <value>Odchylenie zadań:</value>
   </data>
   <data name="DataColon" xml:space="preserve">
     <value>Dane:</value>
@@ -5933,16 +5933,16 @@ Dzień tygodnia</value>
     <value>Szczegóły</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>Prośba o zamianę zmiany {0}-{1} została zaakceptowana przez drugą osobę.</value>
+    <value>Prośba o zamianę dyżuru {0}-{1} została zaakceptowana przez drugą osobę.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Prośba o zamianę zmiany {0}-{1} została zaaprobowania.</value>
+    <value>Prośba o zamianę dyżuru {0}-{1} została zaaprobowania.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>Odmowa prośby o zamianę zmiany {0}-{1}.</value>
+    <value>Odmowa prośby o zamianę dyżuru {0}-{1}.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>Prośba o zamianę zmiany {0}-{1} musi być zaakceptowana ponownie z powodu zmiany planu pracy.</value>
+    <value>Prośba o zamianę dyżuru {0}-{1} musi być zaakceptowana ponownie z powodu zmiany planu pracy.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
     <value>Żądanie tekstowe zostało zaaprobowane.</value>
@@ -5960,7 +5960,7 @@ Dzień tygodnia</value>
     <value>Czy na pewno skasować spotkanie {0}?</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>Nowa prośba o zamianę zmiany {0}-{1}, zaakceptuj lub odmów na swojej liście żądań.</value>
+    <value>Nowa prośba o zamianę dyżuru {0}-{1}, zaakceptuj lub odmów na swojej liście żądań.</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
     <value>Zaaprobowane</value>
@@ -6005,7 +6005,7 @@ Dzień tygodnia</value>
     <value>Usuń dni</value>
   </data>
   <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
-    <value>Musisz podać przynajmniej jedną date w prośbie o zamianę zmiany.</value>
+    <value>Musisz podać przynajmniej jedną date w prośbie o zamianę dyżuru.</value>
   </data>
   <data name="FilterDays" xml:space="preserve">
     <value>Filtruj dni</value>
@@ -6061,7 +6061,7 @@ Okres</value>
     <value>Potrzeby biznesowe</value>
   </data>
   <data name="Fairness" xml:space="preserve">
-    <value>Uczciwość</value>
+    <value>Bezstronność</value>
   </data>
   <data name="FairnessOrientation" xml:space="preserve">
     <value>Orientacja uczciwości</value>
@@ -6112,7 +6112,7 @@ Okres</value>
     <value>Wynik</value>
   </data>
   <data name="ShiftsPerDay" xml:space="preserve">
-    <value>Zmiany na dzień</value>
+    <value>Dyżury na dzień</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
     <value>Załączony plik PDF zawiera twój plan na {0} do {1}.</value>
@@ -6193,10 +6193,10 @@ Okres</value>
     <value>Maksymalny czas pracy nie może być mniejszy od minimalnego.</value>
   </data>
   <data name="ShiftsPerDayHeader" xml:space="preserve">
-    <value>Zmian na dzień</value>
+    <value>Dyżury na dzień</value>
   </data>
   <data name="NoShiftsAvailableForThisPreference" xml:space="preserve">
-    <value>Brak zmian dla tej preferencji</value>
+    <value>Brak dyżurów dla tej preferencji</value>
   </data>
   <data name="PerPeriod" xml:space="preserve">
     <value>Na okres</value>
@@ -6205,13 +6205,13 @@ Okres</value>
     <value>Na tydzień</value>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
-    <value>Ograniczenia kategorii zmian</value>
+    <value>Ograniczenia kategorii dyżuru</value>
   </data>
   <data name="ResetLayout" xml:space="preserve">
     <value>Resetuj rozłożenie</value>
   </data>
   <data name="UseShiftCategoryRestrictions" xml:space="preserve">
-    <value>Użyj ograniczeń kategorii zmian</value>
+    <value>Użyj ograniczeń kategorii dyżurów</value>
   </data>
   <data name="InputError" xml:space="preserve">
     <value>Błąd wejścia</value>
@@ -6226,10 +6226,10 @@ Okres</value>
     <value>Spróbuj tydzień wcześniej</value>
   </data>
   <data name="MustHave" xml:space="preserve">
-    <value>Musi mieć</value>
+    <value>Konieczne</value>
   </data>
   <data name="MustHaveCapitalized" xml:space="preserve">
-    <value>Musi mieć</value>
+    <value>Konieczne</value>
   </data>
   <data name="Confidential" xml:space="preserve">
     <value>Poufne</value>
@@ -6250,7 +6250,7 @@ Okres</value>
     <value>Zobacz poufne</value>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>Prośba o zamianę zmian została odrzucona przez odbiorcę</value>
+    <value>Prośba o zamianę dyżuru została odrzucona przez odbiorcę</value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
     <value>Wniosek o nieobecność został odrzucony automatycznie. Nie posiadasz na swoim koncie wystarczającego czasu.</value>
@@ -6265,7 +6265,7 @@ Okres</value>
     <value>Nowe</value>
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
-    <value>Nie wybrano istniejącaj zmiany</value>
+    <value>Nie wybrano istniejącego dyżuru</value>
   </data>
   <data name="BetweenDayOff" xml:space="preserve">
     <value>Między dniami wolnymi</value>
@@ -6277,7 +6277,7 @@ Okres</value>
     <value>Użyj planowania blokowego</value>
   </data>
   <data name="UsePreferencesMustHavesOnly" xml:space="preserve">
-    <value>Użyj preferencji musi mieć tylko</value>
+    <value>Użyj tylko preferencji Konieczne</value>
   </data>
   <data name="Left" xml:space="preserve">
     <value>Pozostało</value>
@@ -6292,16 +6292,16 @@ Okres</value>
     <value>Rodzaj śledzenia</value>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
-    <value>Konflikt wcześniej zaplanowanych kategorii zmian, niedozwolony blok</value>
+    <value>Konflikt wcześniej zaplanowanych kategorii dyżurów, niedozwolony blok</value>
   </data>
   <data name="ActualHeads" xml:space="preserve">
-    <value>Faktyczne pogłowie</value>
+    <value>Aktualnie osób</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
     <value>Czy zastosować nowy wzór do wybranych dni?</value>
   </data>
   <data name="YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset" xml:space="preserve">
-    <value>Musisz mieć przynajmniej jedną aktywność i kategorię zmiany przed tworzeniem zestawu reguł.</value>
+    <value>Musisz mieć przynajmniej jedną aktywność i kategorię dyżuru przed tworzeniem zestawu reguł.</value>
   </data>
   <data name="PublishingDateSchedule" xml:space="preserve">
     <value>Data publikacji
@@ -6380,7 +6380,7 @@ Plan</value>
     <value>Zestaw kontroli przebiego pracy</value>
   </data>
   <data name="ModifySelection" xml:space="preserve">
-    <value>Zmień wybór</value>
+    <value>Zmień zaznaczone</value>
   </data>
   <data name="ChangeInPercent" xml:space="preserve">
     <value>Procent</value>
@@ -6398,7 +6398,7 @@ Plan</value>
     <value>Modyfikuj przez wprowadzenie</value>
   </data>
   <data name="NewTotal" xml:space="preserve">
-    <value>Nowa suma łączna</value>
+    <value>Nowa suma</value>
   </data>
   <data name="NumberOfMembers" xml:space="preserve">
     <value>Liczba komórek</value>
@@ -6458,7 +6458,7 @@ Okres: {3}</value>
     <value>Koniec</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Początek</value>
+    <value>Start</value>
   </data>
   <data name="AddFromToPeriod" xml:space="preserve">
     <value>Dodaj okres od-do</value>
@@ -6587,25 +6587,25 @@ Okres: {3}</value>
     <value>Data początku musi być wcześniejsza od końca</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>Zamiana zmiany odrzucona ponieważ wybrane daty nie są otwarte na żądania.</value>
+    <value>Zamiana dyżuru odrzucona ponieważ wybrane daty nie są otwarte na żądania.</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
-    <value>Zamiana zmiany odrzucona ponieważ twoje umiejętności są inne niż drugiej osoby.</value>
+    <value>Zamiana dyżuru odrzucona ponieważ twoje umiejętności są inne niż drugiej osoby.</value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>Zamiana zmiany odrzucona ponieważ zestaw kontroli przebiegu pracy jest inny niż u drugiej osoby.</value>
+    <value>Zamiana dyżuru odrzucona ponieważ zestaw kontroli przebiegu pracy jest inny niż u drugiej osoby.</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
-    <value>Zamiana zmiany odrzucona ponieważ przekracza tolerancję planowanego czasu kontraktu.</value>
+    <value>Zamiana dyżuru odrzucona ponieważ przekracza tolerancję planowanego czasu kontraktu.</value>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
-    <value>Zamiana zmiany odrzucona ponieważ nie ma zdefiniowanego zestawu kontroli przebiegu pracy.</value>
+    <value>Zamiana dyżuru odrzucona ponieważ nie ma zdefiniowanego zestawu kontroli przebiegu pracy.</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
-    <value>Prośby o zamianę zmiany</value>
+    <value>Prośby o zamianę dyżuru</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Kategorie zmian dostępne do preferencji</value>
+    <value>Kategorie dyżurów dostępne do preferencji</value>
   </data>
   <data name="DaysOffAvailableForExtendedPreferences" xml:space="preserve">
     <value>Dni wolne dostępne do preferencji</value>
@@ -6620,7 +6620,7 @@ Okres: {3}</value>
     <value>h:mm</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>Otwarte na prośby o zamianę zmiany</value>
+    <value>Otwarte na prośby o zamianę dyżuru</value>
   </data>
   <data name="PosNeg" xml:space="preserve">
     <value>+/-</value>
@@ -6665,10 +6665,10 @@ Okres: {3}</value>
     <value>Sugeruj czas pomiędzy:</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage" xml:space="preserve">
-    <value>Ten tydzień zawiera za wiele zmian kategorii {0}.</value>
+    <value>Ten tydzień zawiera zbyt wiele dyżurów kategorii {0}.</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage2" xml:space="preserve">
-    <value>Ten okres ma za dużo zmian kategorii {0}.</value>
+    <value>Ten okres zawiera zbyt wiele dyżurów kategorii {0}.</value>
   </data>
   <data name="AvoidColon" xml:space="preserve">
     <value>Unikaj:</value>
@@ -6692,7 +6692,7 @@ Okres: {3}</value>
     <value>Filtruj wg preferencji aktywności</value>
   </data>
   <data name="NotAllowedShiftCategories" xml:space="preserve">
-    <value>zabronione kategorie zmian</value>
+    <value>zabronione kategorie Dyżurów</value>
   </data>
   <data name="YouDontHaveAWorkflowControlSet" xml:space="preserve">
     <value>Nie masz zestawu kontroli przebiegu pracy</value>
@@ -6731,7 +6731,7 @@ Okres: {3}</value>
     <value>Skopiuj do planera</value>
   </data>
   <data name="PasteShiftFromShifts" xml:space="preserve">
-    <value>Wklej zmianę ze zmian</value>
+    <value>Wklej Dyżur z Dyżurów</value>
   </data>
   <data name="Unsuccessful" xml:space="preserve">
     <value>Nieudane</value>
@@ -6817,10 +6817,10 @@ Jeśli ten błąd wystąpi ponownie, sprawdź czy nowe hasło jest zgodne z poli
     <value>Ten tydzień nie zawiera wymaganego ({0}) tygodniowego czasu odpoczynku.</value>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
-    <value>Optymalizacja długości zmian</value>
+    <value>Optymalizacja długości dyżurów</value>
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
-    <value>Prośba o zamianę zmiany nie może być zaakceptowana z powodu błędu.
+    <value>Prośba o zamianę dyżuru nie może być zaakceptowana z powodu błędu.
 Błąd: {0}</value>
   </data>
   <data name="SaveOrCancel" xml:space="preserve">
@@ -6993,7 +6993,7 @@ Długoterminowy</value>
     <value>Błędny okres planu</value>
   </data>
   <data name="ErrorMessageNotConsistentShiftCategories" xml:space="preserve">
-    <value>Nie można zaplanować zespołu ponieważ ma już inne kategorie zmian</value>
+    <value>Nie można zaplanować zespołu ponieważ ma już inne kategorie dyżurów</value>
   </data>
   <data name="NetNetStaff" xml:space="preserve">
     <value>Załoga netto netto</value>
@@ -7149,7 +7149,7 @@ Długoterminowy</value>
     <value>Przekroczony limit maksimum stanowisk</value>
   </data>
   <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
-    <value>Użyj preferencji musi mieć tylko</value>
+    <value>Użyj tylko preferencji Konieczne</value>
   </data>
   <data name="UseMaxSeats" xml:space="preserve">
     <value>Użyj maks. stanowisk</value>
@@ -7185,13 +7185,13 @@ Długoterminowy</value>
     <value>Czy na pewno skasować plan kontraktu '{0}'?</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
-    <value>Równo z każdej kategorii zmian</value>
+    <value>Równo z każdej kategorii dyżurów</value>
   </data>
   <data name="FairnessSystemUsedForScheduling" xml:space="preserve">
     <value>System ucziwości w planowaniu</value>
   </data>
   <data name="PointsPerShiftCategory" xml:space="preserve">
-    <value>Punkty wg kategorii zmiany</value>
+    <value>Punkty wg kategorii dyżurów</value>
   </data>
   <data name="RenameEfficiencyShrinkageRow" xml:space="preserve">
     <value>Zmień nazwę zmniejszenia efektywności</value>
@@ -7218,7 +7218,7 @@ Długoterminowy</value>
     <value>Zobacz kalkulację okresu planu</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
-    <value>Zmiana z aktywnością główną nie może być używana w planie!</value>
+    <value>Dyżur z aktywnością główną nie może być używana w planie!</value>
   </data>
   <data name="PasteError" xml:space="preserve">
     <value>Błąd wklejania</value>
@@ -7344,7 +7344,7 @@ Długoterminowy</value>
     <value>Następny dzień:</value>
   </data>
   <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Brak zmian dla tej dostępności.</value>
+    <value>Brak dyżurów dla tej dostępności.</value>
   </data>
   <data name="StudentAvailabilityPeriod" xml:space="preserve">
     <value>Okres dostępności</value>
@@ -7374,16 +7374,16 @@ Długoterminowy</value>
     <value>Informacja prawna</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
-    <value>Zamiana zmian nie może być przeprowadzona z powodu nieobecności w czasie zmiany.</value>
+    <value>Zamiana dyżuru nie może być przeprowadzona z powodu nieobecności w czasie dyżuru.</value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
-    <value>Odmowa zamiany zmiany ponieważ aktywność osobista znalazła się poza czasem zmiany.</value>
+    <value>Odmowa zamiany dyżuru ponieważ aktywność osobista znalazła się poza czasem dyżuru.</value>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>Odmowa zamiany zmiany ponieważ spotkanie znalazło się poza czasem zmiany.</value>
+    <value>Odmowa zamiany dyżuru ponieważ spotkanie znalazło się poza czasem dyżuru.</value>
   </data>
   <data name="ConflictingShiftCategories" xml:space="preserve">
-    <value>Kategoria zmian w restrykcjach w konflikcie z kategorią zmiany w opcjach.</value>
+    <value>Kategoria dyżurów w restrykcjach w konflikcie z kategorią dyżuru w opcjach.</value>
   </data>
   <data name="DataSourceRequired" xml:space="preserve">
     <value>Wymagane źródło danych</value>
@@ -7401,10 +7401,10 @@ Długoterminowy</value>
     <value>Wszystkie spełnione dni wolne</value>
   </data>
   <data name="AllFulFilledShifts" xml:space="preserve">
-    <value>Wszystkie spełnione zmiany</value>
+    <value>Wszystkie wypełnione Dyżury</value>
   </data>
   <data name="AllShifts" xml:space="preserve">
-    <value>Wszystkie zmiany</value>
+    <value>Wszystkie Dyżury</value>
   </data>
   <data name="AllUnavailable" xml:space="preserve">
     <value>Wszyscy niedostępni</value>
@@ -7455,10 +7455,10 @@ Długoterminowy</value>
     <value>Dopasowana różnica</value>
   </data>
   <data name="AllFulfilledMustHave" xml:space="preserve">
-    <value>Wszystkie spełnione muszą mieć</value>
+    <value>Wszystkie spełnione Konieczne</value>
   </data>
   <data name="AllMustHave" xml:space="preserve">
-    <value>Wszystkie muszą mieć</value>
+    <value>Wszystkie Konieczne</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
     <value>{0} blokuje zamknięcie aplikacji. Wymusić zamknięcie?</value>
@@ -7599,7 +7599,7 @@ Aktywne opcje:
     <value>Użyj dopasowanych wartości</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Kategoria zmiany i całodzienna nieobecność na dzień</value>
+    <value>Kategoria Dyżuru i całodzienna nieobecność na dzień</value>
   </data>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
     <value>Umiejętność podrzędna ma taką samą nazwę jak nadrzędna lub więcej niż jedna umiejętność podrzędna ma taką samą nazwę. Sprawdź właściwości umiejętności dla wielu lokalizacji. Prognozowanie zostanie zamknięte.</value>
@@ -7632,7 +7632,7 @@ Aktywne opcje:
     <value>Modyfikowane</value>
   </data>
   <data name="AuditingReportShift" xml:space="preserve">
-    <value>Zmiana</value>
+    <value>Dyżur</value>
   </data>
   <data name="AuditingTurnOnLong" xml:space="preserve">
     <value>Inicjować audyt? Może to zająć kilka minut.</value>
@@ -7704,7 +7704,7 @@ Aktywne opcje:
     <value>Optymalizuj:</value>
   </data>
   <data name="ShiftsWithinDay" xml:space="preserve">
-    <value>Zmiany w ciągu dnia</value>
+    <value>Dyżury w ciągu dnia</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
     <value>Czas między dniami</value>
@@ -7797,7 +7797,7 @@ Aktywne opcje:
     <value>Procent niepełnego czasu pracy</value>
   </data>
   <data name="PersonFinderFieldShiftBag" xml:space="preserve">
-    <value>Worek zmian</value>
+    <value>Aktówka Dyżurów</value>
   </data>
   <data name="PersonFinderFieldSkill" xml:space="preserve">
     <value>Umiejętność</value>
@@ -7836,7 +7836,7 @@ Aktywne opcje:
     <value>Wybierz aktywność!</value>
   </data>
   <data name="NoShiftsFound" xml:space="preserve">
-    <value>Nie znaleziono zmian.</value>
+    <value>Nie znaleziono dyżurów.</value>
   </data>
   <data name="FindThreeDots" xml:space="preserve">
     <value>Znajdź...</value>
@@ -7857,7 +7857,7 @@ Aktywne opcje:
     <value>Przetwarzanie w tle...</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Żądania na agenta</value>
+    <value>Wnioski na agenta</value>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>Wartość docelowa</value>
@@ -7911,7 +7911,7 @@ Aktywne opcje:
     <value>Format daty</value>
   </data>
   <data name="Block" xml:space="preserve">
-    <value>Blok</value>
+    <value>Blokuj</value>
   </data>
   <data name="ConsecutiveDaysOff" xml:space="preserve">
     <value>Następujące dni wolne</value>
@@ -7935,13 +7935,13 @@ Aktywne opcje:
     <value>Pełne weekendy wolne</value>
   </data>
   <data name="KeepExistingDaysOff" xml:space="preserve">
-    <value>Utrzymaj obecne dni wolne</value>
+    <value>Zachowaj obecne dni wolne</value>
   </data>
   <data name="KeepShiftCategories" xml:space="preserve">
-    <value>Utrzymaj kategorie zmian</value>
+    <value>Utrzymaj kategorie dyżuru</value>
   </data>
   <data name="KeepShifts" xml:space="preserve">
-    <value>Utrzymaj zmiany</value>
+    <value>Utrzymaj dyżury</value>
   </data>
   <data name="KeepStartEndTimes" xml:space="preserve">
     <value>Utrzymaj czas rozpoczęcia i zakończenia</value>
@@ -7956,19 +7956,19 @@ Aktywne opcje:
     <value>Minimum załogi</value>
   </data>
   <data name="MustHaves" xml:space="preserve">
-    <value>Wymagane</value>
+    <value>Konieczne</value>
   </data>
   <data name="OptimizationSteps" xml:space="preserve">
     <value>Kroki optymalizacji</value>
   </data>
   <data name="ShiftLimits" xml:space="preserve">
-    <value>Limity zmiany</value>
+    <value>Limity dyżurów</value>
   </data>
   <data name="ShiftSelection" xml:space="preserve">
-    <value>Wybór zmiany</value>
+    <value>Wybór dyżuru</value>
   </data>
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
-    <value>Zmiany dla elastycznego czasu pracy</value>
+    <value>Dyżury dla elastycznego czasu pracy</value>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
     <value>Dostępności godzinowe</value>
@@ -7998,7 +7998,7 @@ Aktywne opcje:
     <value>Nie można skontaktować się z Teleopti Customer Web!</value>
   </data>
   <data name="RequestHistory" xml:space="preserve">
-    <value>Historia żądań</value>
+    <value>Historia wniosków</value>
   </data>
   <data name="ViewHistory" xml:space="preserve">
     <value>Zobacz historię</value>
@@ -8037,7 +8037,7 @@ Aktywne opcje:
     <value>Zobacz historię prac</value>
   </data>
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
-    <value>Eksportuj zmiany na dzień do PDF</value>
+    <value>Eksportuj dyżury na dzień do PDF</value>
   </data>
   <data name="ShowPublicNote" xml:space="preserve">
     <value>Pokaż publiczną notkę</value>
@@ -8046,10 +8046,10 @@ Aktywne opcje:
     <value>Spełnienie dostępności</value>
   </data>
   <data name="NoAvailableShifts" xml:space="preserve">
-    <value>Brak dostępnych zmian</value>
+    <value>Brak dostępnych dyżurów</value>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
-    <value>Spełnienie wymagań</value>
+    <value>Spełnienie wymagań Konieczne</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>Spełnienie preferencji</value>
@@ -8067,22 +8067,22 @@ Aktywne opcje:
     <value>Spełnienie dostępności godzinowej</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
-    <value>Nowa prośba o zamianę zmiany {0}, akceptuj lub odrzuć na swojej liście żądań.</value>
+    <value>Nowa prośba o zamianę dyzuru {0}, akceptuj lub odrzuć na swojej liście żądań.</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Kalkulacja zasobów co:</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>Prośba o zamnianę zmiany {0} zaakceptowana przez drugą osobę.</value>
+    <value>Prośba o zamnianę dyżuru {0} zaakceptowana przez drugą osobę.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>Prośba o zamianę zmiany {0} została zaaprobowana.</value>
+    <value>Prośba o zamianę dyżuru {0} została zaaprobowana.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>Prośba o zamianę zmiany {0} została odrzucona.</value>
+    <value>Prośba o zamianę dyżuru {0} została odrzucona.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>Prośba o zamianę zmiany {0} musi zostać ponownie zaakceptowana z powodu zmiany planu.</value>
+    <value>Prośba o zamianę dyżuru {0} musi zostać ponownie zaakceptowana z powodu zmiany planu.</value>
   </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
     <value>Zasób zewnętrzny w użyciu</value>
@@ -8094,7 +8094,7 @@ Aktywne opcje:
     <value>Importuj prognozę z pliku</value>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
-    <value>Poproś o dodatki</value>
+    <value>Wniosek o dodatki</value>
   </data>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
     <value>Pokaż tylko dostępne do zamiany</value>
@@ -8136,7 +8136,7 @@ Aktywne opcje:
     <value>Twoje preferencje mogą skutkować {0} godzinami.</value>
   </data>
   <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
-    <value>Twoje preferencje mogą skutkować godzinami od {0} do {1}.</value>
+    <value>Twoje preferencje mogą skutkować ilością godzin od {0} do {1}.</value>
   </data>
   <data name="YouShouldWorkXHours" xml:space="preserve">
     <value>Powinieneś pracować {0} godzin.</value>
@@ -8217,7 +8217,7 @@ Aktywne opcje:
     <value>Taki sam czas zakończenia</value>
   </data>
   <data name="SameShiftCategory" xml:space="preserve">
-    <value>Taka sama kategoria zmiany</value>
+    <value>Taka sama kategoria dyżuru</value>
   </data>
   <data name="SameStartTime" xml:space="preserve">
     <value>Taki sam czas rozpoczęcia</value>
@@ -8322,13 +8322,13 @@ Aktywne opcje:
     <value>Brak aktywności</value>
   </data>
   <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
-    <value>Wybierz przynajmniej jedną z opcji "Kategoria zmiany", "Czas rozpoczęcia" lub "Czas zakończenia" w Optymalizacji zespołów.</value>
+    <value>Wybierz przynajmniej jedną z opcji "Kategoria dyżuru", "Czas rozpoczęcia" lub "Czas zakończenia" w Optymalizacji zespołów.</value>
   </data>
   <data name="SchedulingOptionMessageBox" xml:space="preserve">
     <value>Opcje planowania</value>
   </data>
   <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
-    <value>Wybierz przynajmniej jedną z opcji "Kategoria zmiany", "Czas rozpoczęcia" lub "Czas zakończenia" w Planowaniu zespołów.</value>
+    <value>Wybierz przynajmniej jedną z opcji "Kategoria dyżuru", "Czas rozpoczęcia" lub "Czas zakończenia" w Planowaniu zespołów.</value>
   </data>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Zarządzaj ustawieniami SMS</value>
@@ -8394,22 +8394,22 @@ Aktywne opcje:
     <value>Takie same dni wolne</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>Dotrzymanie wg agenta</value>
+    <value>Przestrzeganie na agenta</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>Dotrzymanie wg dnia</value>
+    <value>Przestrzeganie na dzień</value>
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>Wybierz zestaw umiejętności.</value>
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
-    <value>Planuj tylko preferencje wymagane</value>
+    <value>Planuj tylko preferencje Konieczne</value>
   </data>
   <data name="AllowMeetings" xml:space="preserve">
     <value>Zezwól na spotkania</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
-    <value>Kategorie zmian</value>
+    <value>Kategorie dyżurów</value>
   </data>
   <data name="AfterCheckingAgainstActivities" xml:space="preserve">
     <value>Po sprawdzeniu z aktywnościami</value>
@@ -8490,7 +8490,7 @@ Aktywne opcje:
     <value>(Windows)</value>
   </data>
   <data name="UseAverageShiftLengths" xml:space="preserve">
-    <value>Użyj średnich długości zmian</value>
+    <value>Użyj średnich długości dyżuru</value>
   </data>
   <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
     <value>Logowanie nieudane! KONTO ZABLOKOWANE.</value>
@@ -8529,16 +8529,16 @@ Aktywne opcje:
     <value>Błąd przy zapisywaniu twoich zmian. Prawdopodobnie ktoś usunął dane, nad któymi pracowałeś. Aby zachować poprawność danych, strona zostanie zamknięta. Dokonane zmiany zostały utracone.</value>
   </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
-    <value>Data (początek zmian):</value>
+    <value>Data (początek dyżuru):</value>
   </data>
   <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
-    <value>Brak agentów do zamiany zmian</value>
+    <value>Brak agentów do zamiany dyżuru</value>
   </data>
   <data name="ResShiftStartDateFromColon" xml:space="preserve">
-    <value>Data od (początek zmian):</value>
+    <value>Data od (początek dyżuru):</value>
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
-    <value>Data do (początek zmian):</value>
+    <value>Data do (początek dyżuru):</value>
   </data>
   <data name="Little" xml:space="preserve">
     <value>Lekko</value>
@@ -8571,7 +8571,7 @@ Aktywne opcje:
     <value>Szybka prognoza zostanie wykonana w tle po zakończeniu tego asystenta. Sprawdź status w historii prac.</value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Nie można wyświetlić planu kiedy status prośby o zamianę zmian jest Nowy, Odmówiony lub Zaakceptowany.</value>
+    <value>Nie można wyświetlić planu kiedy status prośby o zamianę dyżuru jest Nowy, Odmówiony lub Zaakceptowany.</value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Nazwa nowego wzoru</value>
@@ -8700,18 +8700,18 @@ Aktywne opcje:
     <value>Krytyczny brak załogi dnia: {0} od</value>
   </data>
   <data name="CurrentNumberOfShifts" xml:space="preserve">
-    <value>Aktualna liczba zmian:</value>
+    <value>Aktualna liczba dyżurów:</value>
   </data>
   <data name="GeneratingShifts" xml:space="preserve">
-    <value>Tworzenie zmian</value>
+    <value>Tworzenie dyżuru</value>
   </data>
   <data name="ShiftGenerationStop" xml:space="preserve">
-    <value>Stop! Te raguły są zbyt skomplikowane i nie można stworzyć zmianw granicach limitów.
-Zmiany wg tej reguły nie będą dostępne do planowania i optymalizacji.
+    <value>Stop! Te reguły są zbyt skomplikowane i nie można stworzyć dyżurów w granicach limitów.
+Dyżury wg tej reguły nie będą dostępne do planowania i optymalizacji.
 Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
   </data>
   <data name="ShiftGenerationWarning" xml:space="preserve">
-    <value>Uwaga! Tworzenie zmian według tych reguł trwa zbyt długo. Spowoduje to problemy z planowaniem i optymalizacją w następnych krokach!</value>
+    <value>Uwaga! Tworzenie dyżurów według tych reguł trwa zbyt długo. Spowoduje to problemy z planowaniem i optymalizacją w następnych krokach!</value>
   </data>
   <data name="TooComplexRuleset" xml:space="preserve">
     <value>jest zbyt skomplikowane!</value>
@@ -8732,10 +8732,10 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Wiadomości ({0})</value>
   </data>
   <data name="BudgetGroupHeadCount" xml:space="preserve">
-    <value>Pogłowie grupy budżetowej</value>
+    <value>Ilość osób grupy budżetowej</value>
   </data>
   <data name="HeadCount" xml:space="preserve">
-    <value>Pogłowie</value>
+    <value>Ilość osób</value>
   </data>
   <data name="NotEnoughAllowance" xml:space="preserve">
     <value>Nie wystarcza przydziału na dzień:</value>
@@ -8753,10 +8753,10 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Zespół jednego agenta</value>
   </data>
   <data name="SameShift" xml:space="preserve">
-    <value>Ta sama zmiana</value>
+    <value>Ten sam dyżur</value>
   </data>
   <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
-    <value>Wybierz przynajmniej jedną z opcji "Ta sama kategoria zmiany", "Ten sam czas rozpoczęcia" lub "Ta sama zamiana" w Optymalizacji bloku</value>
+    <value>Wybierz przynajmniej jedną z opcji "Ta sama kategoria dyżuru", "Ten sam czas rozpoczęcia" lub "Ta sama zamiana" w Optymalizacji bloku</value>
   </data>
   <data name="HourShort" xml:space="preserve">
     <value>h</value>
@@ -8765,7 +8765,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Potwierdź usuwanie</value>
   </data>
   <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
-    <value>Nie można przesunąć zmiany na inny dzień, zamiast tego utwórz nową</value>
+    <value>Nie można przesunąć dyżuru na inny dzień, zamiast tego utwórz nowy</value>
   </data>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
     <value>Szansa na pozytywne rozpatrzenie wniosku o nieobeczność:</value>
@@ -8801,7 +8801,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Okres bloku zespołu jest w niedopuszczalnym stanie.</value>
   </data>
   <data name="SelectAtleastOneBlockOption" xml:space="preserve">
-    <value>Wybierz przynajmniej jedną z opcji "Kategoria zmiany", "Ten sam czas rozpoczęcia" lub "Ta sama zamiana" w Planowaniu bloku</value>
+    <value>Wybierz przynajmniej jedną z opcji "Kategoria dyżuru", "Ten sam czas rozpoczęcia" lub "Ta sama zamiana" w Planowaniu bloku</value>
   </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
     <value>Prośba o nieobecność została odrzucona. Niektóe dni w żądanym okresie nie są dostępne do tej operacji. Możesz wysłać prośbę dla następującego okresu: {0}.</value>
@@ -8810,7 +8810,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Maks. zadań równolegle:</value>
   </data>
   <data name="ViewActiveAgents" xml:space="preserve">
-    <value>Zobacz aktywnych agentó</value>
+    <value>Zobacz aktywnych agentów</value>
   </data>
   <data name="SkillTypeChat" xml:space="preserve">
     <value>Czat</value>
@@ -8909,7 +8909,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Ignoruj kontaktowy odpoczynek tygodniowy</value>
   </data>
   <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
-    <value>Przedłuż zakończenie istniejących zmian</value>
+    <value>Przedłuż zakończenie istniejących dyżurów</value>
   </data>
   <data name="OvertimeDurationColon" xml:space="preserve">
     <value>Czas nadgodzin:</value>
@@ -8996,7 +8996,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Spełnienie (%)</value>
   </data>
   <data name="ResMustHaves" xml:space="preserve">
-    <value>Wymagane</value>
+    <value>Konieczne</value>
   </data>
   <data name="ResUnfulfilled" xml:space="preserve">
     <value>Niespełnione</value>
@@ -9008,7 +9008,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Podaj ustawienia dla scenariusza</value>
   </data>
   <data name="ShiftCategoryHeader" xml:space="preserve">
-    <value>Kategoria zmian</value>
+    <value>Kategoria dyżuru</value>
   </data>
   <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
     <value>Przełącz punkt widzenia wybranego agenta</value>
@@ -9038,7 +9038,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Procent niepełnego czasu pracy</value>
   </data>
   <data name="RuleSetBagLower" xml:space="preserve">
-    <value>Worek zmian</value>
+    <value>Aktówka dyżurów</value>
   </data>
   <data name="TrackerTypeHeader" xml:space="preserve">
     <value>Typ śledzenia</value>
@@ -9068,19 +9068,19 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Rozdział</value>
   </data>
   <data name="ShiftAsOvertime" xml:space="preserve">
-    <value>Zmiana jako nadgodziny</value>
+    <value>Dyżur jako nadgodziny</value>
   </data>
   <data name="PerDate" xml:space="preserve">
     <value>Według daty</value>
   </data>
   <data name="ShiftCategoryDistribution" xml:space="preserve">
-    <value>Rozdział kategorii zmian</value>
+    <value>Dystrybucja kategorii dyżurów</value>
   </data>
   <data name="PerAgent" xml:space="preserve">
     <value>Według agenta</value>
   </data>
   <data name="PerShiftCategory" xml:space="preserve">
-    <value>Według kategorii zmiany</value>
+    <value>Według kategorii dyżuru</value>
   </data>
   <data name="AnalysisInfo" xml:space="preserve">
     <value>Informacja analityczna</value>
@@ -9116,7 +9116,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Próba wypełnienia dni niezaplanowanych...</value>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
-    <value>Zamiana zmian odmówiona ponieważ zmiany mają różne daty.</value>
+    <value>Zamiana dyżuru odmówiona ponieważ dyżury mają różne daty.</value>
   </data>
   <data name="AddIntradayAbsence" xml:space="preserve">
     <value>Dodaj nieobecność w ciągu dnia</value>
@@ -9134,7 +9134,7 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Czas w stanie wg agenta</value>
   </data>
   <data name="DetailedAdherence" xml:space="preserve">
-    <value>Dotrzymanie szczegółowo</value>
+    <value>Przestrzeganie szczegółowo</value>
   </data>
   <data name="MyReportWeb" xml:space="preserve">
     <value>MójRaport</value>
@@ -9146,10 +9146,10 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
     <value>Błędny czas zakończenia.</value>
   </data>
   <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
-    <value>Dodaj nieobecność w ciągu dnia do istniejącej zmiany.</value>
+    <value>Dodaj nieobecność w ciągu dnia do istniejącego dyżuru.</value>
   </data>
   <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
-    <value>Nie możesz utworzyć drugiej zmiany przez dodanie aktywności.</value>
+    <value>Nie możesz utworzyć drugiego dyżuru przez dodanie aktywności.</value>
   </data>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
     <value>W tym dniu nie jesteś już pracownikiem</value>
@@ -9177,5 +9177,305 @@ Zmniejsz stopień komplikacji aby użyć tych zmian.</value>
   </data>
   <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
     <value>Nie masz dostępu do żadnych zespołów.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Porównaj z zespołami z</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Nieprawidłowa ilość godzin an tydzień, możliwy powód: Maksimum godzin tygodniowo jest mniejsze niż minimum godzin tygodniowo.</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Pomiędzy dniami wolnymi</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Limity kategorii Dyżuru nie są sprawdzane jeśli jest wybrany zespół lub blok.</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Kroki optymalizacyjne "Dyżury dla elastycznego czasu pracy", "Dni wolne dla elastycznego czasu pracy" i "kategoria ograniczenia Dyżurów" nie są wykonywane, gdy wybrane jest zespół lub blok.</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Czas Gotowości / Planowany Czas Gotowości</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Harmonogram musi zostać przeładowany</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Punkty Dni Wolnych:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Punkty Stażu:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Punkty Kategorii Dyżuru:</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Przestrzeganie szczegółowo</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Podsumowanie</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Harmonogram Miesięczny</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Ranking stażu</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Przegląd w Czasie Rzeczywistym Przestrzegania</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Podgląd Konta Osobistego</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Przejdź</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Wybierz co najmniej jedną osobę</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Tylko dostępni agenci</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Poza Przestrzeganiem</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Czas ostrzeżenia agenta przed zmianą aktywności (w sekundach)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Przynajmniej jeden dzień nie może zostać zaplanowany</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Zezwól na Powiadomienia na Pulpicie</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Brak dostępnego źródła danych.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Zaloguj jako inny użytkownik</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Zaloguj z:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Zaloguj jako Inny Użytkownik</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Oblicz Stan Prawny</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>sek.</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>Bieżący dyżur kończy się {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Następna aktywność ({0}) rozpocznie się {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Rozwiązywanie tygodniowych przerw dla {0} {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Planowanie Zespołu</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;No Block&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;No Team&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Harmonogram w Okresie</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Desktop</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Mobile</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Przesuń czas na</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Następna Aktywność</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Czas Rozpoczęcia Następnej Aktywności</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Czas w Statusie</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Minimalny Czas na Tydzień:</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Wyszedłeś poza tygodniowy limit czasu pracy.</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Metryki Kolejki</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Czas Alarmu</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Serwer niedostępny. W związku z tym, niektóre funkcje nie mogą być aktywowane.</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Ranking stażu rosnąco</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Ranking stażu malejąco</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>PLIK</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Otwarte Dyżury...</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Przenieś Aktywność</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Mój Koszyk Wymiany:</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Widok Kompaktowy</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Wnioski</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Wszystkie Zespoły</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Odznaka Agenta</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Próg Odebranych Połączeń:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Średnia Progu Czasu Obsługi (HH:mm:ss): </value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Próg Przestrzegania (%): </value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>Srebrna odznaka równa się liczbie odznak brązowych:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>Złota odznaka równa się liczbie odznak srebrnych:</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Włącz odznakę agenta</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Dodawanie aktywności dla</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Dodawanie całodniowej nieobecności dla</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Dodawanie nieobecności w ciągu dnia dla</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Nie powiodło się!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Przenoszenie aktywności dla</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Usuwanie nieobecności dla</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Odśwież stronę!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Spróbuj jeszcze raz!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Sukces!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Gratulacje!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Plik</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Wyloguj</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Zaloguj</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Jesteś niezalogowany.</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Tydzień zawiera zbyt mało czasu pracy ({0}). Minimum jest {1}.</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Usuń umiejętność</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Strona startowa</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Proszę skonfigurować swój adres e-mail, aby uzyskać dostęp do zasobów Teleopti.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Masz nową brązową odznakę! Twoje przestrzeganie w {1:yyyy-MM-dd} jest powyżej {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Masz nową brązową odznakę! Średni czas obsługi w {1: rrrr-MM-dd} jest poniżej {0} sekund.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Masz nową brązową odznakę! Odebrałeś więcej niż {0} rozmów w {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Masz nową złotą odznakę! Twoje przestrzeganie jest powyżej {0} w ciągu {1} różnych dni.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Masz nową złotą odznakę! Twój czas obsługi jest poniżej {0} sekund w ciągu {1} różnych dni.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Masz nową złotą odznakę! Odebrałeś więcej niż {0} rozmów w każdym z {1} różnych dni.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Masz nową srebrną odznakę! Twoje przestrzeganie jest powyżej {0} w ciągu {1} różnych dni.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Masz nową srebrną odznakę! Twój czas obsługi jest poniżej {0} sekund w ciągu {1} różnych dni.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Masz nową srebrną odznakę!  Odebrałeś więcej niż {0} rozmów w każdym z {1} różnych dni.</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Filtrowana Lista</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filtruj Wiele Osób</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Wprowadź wartości właściwości dla kategorii dyżurów</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Zapisz prognozę do innego scenariusza</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Zapisz do</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Filtrowane Wyniki</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Możliwe Dopasowania</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Filtr Zaawansowany</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Rozwiąż</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Pokaż Powielonych Odbiorców</value>
   </data>
 </root>
