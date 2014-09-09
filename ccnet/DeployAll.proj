@@ -36,10 +36,6 @@
 		<MSIShare>D:\Installation\PBImsi</MSIShare>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(CCNetProject)' == 'BuildMSI-root'" >
-		<MSIShare>\\neptune\LatestMsi</MSIShare>
-	</PropertyGroup>
-
 	<!-- Entry point for CCNet -->
   <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
