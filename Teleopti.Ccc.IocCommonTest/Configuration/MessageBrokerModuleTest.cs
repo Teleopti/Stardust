@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldResolveNoKeepAliveStrategies()
+		public void ShouldResolveKeepAliveStrategies()
 		{
 			using (var container = BuildContainer())
 			{
