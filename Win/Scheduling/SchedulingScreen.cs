@@ -37,6 +37,7 @@ using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.Win.Sikuli;
+using Teleopti.Ccc.Win.Sikuli.Validators;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -2054,157 +2055,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
+			TabPageAdv skillTabPage = _tabSkillData.TabPages[0];
+			var totalSkill = skillTabPage.Tag as IAggregateSkill;
+
 			switch (SikuliHelper.SikuliValidator)
 			{
 				case SikuliValidatorRegister.SelectValidator.Schedule:
-					SikuliHelper.AssertValidation(assertSikuliScheduling, this);
+					SikuliHelper.AssertValidation(new SchedulerValidator(_schedulerState, totalSkill), this);
 					break;
 				case SikuliValidatorRegister.SelectValidator.Optimize:
-					SikuliHelper.AssertValidation(assertSikuliOptimizing, this);
+					SikuliHelper.AssertValidation(new OptimizerValidator(_schedulerState, totalSkill), this);
 					break;
 				case SikuliValidatorRegister.SelectValidator.DeleteAll:
-					SikuliHelper.AssertValidation(assertSikuliDeleteAll, this);
+					SikuliHelper.AssertValidation(new DeleteAllValidator(_schedulerState, totalSkill), this);
 					break;
 				default:
 					SikuliHelper.ShowTaskDone(this);
 					break;
 			}
 		}
-
-		#region sikuli
-		// todo: move it to own class
-
-		private SikuliValidationResult assertSikuliScheduling()
-		{
-			var result = new SikuliValidationResult(true);
-			var scheduledHours = getDailyScheduledHoursForFullPeriod();
-			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
-			result.Details.AppendLine("Details:");
-			if (checkResult)
-				result.Details.AppendLine("Scheduled hours pattern : OK");
-			else
-			{
-				result.Details.AppendLine("Scheduled hours pattern : Fail");
-				result.Result = false;
-			}
-			return result;
-		}
-
-
-		private SikuliValidationResult assertSikuliOptimizing()
-		{
-			SikuliValidationResult result = new SikuliValidationResult(true);
-			var std = getStandardDeviationForPeriod();
-			result.Details.AppendLine("Details:");
-			result.AppendLimitValueLine("Period StdDev", "0,2", std.ToString());
-			if (!std.HasValue || std.Value > 0.2)
-			{
-				result.Result = false;
-			}
-			return result;
-		}
-
-		private SikuliValidationResult assertSikuliDeleteAll()
-		{
-			SikuliValidationResult result = new SikuliValidationResult(true);
-			var scheduledHours = getDailyScheduledHoursForFullPeriod();
-			result.Details.AppendLine("Details:");
-			if (scheduledHours.Any(d => d.HasValue && d.Value > 0))
-			{
-				result.Details.AppendLine("Scheduled hours = 0 : Fail");
-				result.Result = false;
-				return result;
-			}
-			result.Details.AppendLine("Scheduled hours = 0 : OK");
-			return result;
-		}
-
-		private bool checkScheduledHoursPatternForScheduler(IEnumerable<double?> dailyValues)
-		{
-			const int groupSize = 7;
-			var groupedDailyValues = split(dailyValues.ToList(), groupSize);
-			foreach (var group in groupedDailyValues)
-			{
-				for (int i = 0; i < groupSize; i++)
-				{
-					if(!group[i].HasValue)
-						return false;
-					if (i <= 4)
-					{
-						if (!group[i].Value.Equals(210d))
-							return false;
-					}
-					else
-					{
-						if (!group[i].Value.Equals(0))
-							return false;
-					}
-				}
-			}
-			return true;
-		}
-
-		private static IEnumerable<List<double?>> split(IEnumerable<double?> source, int groupSize)
-		{
-			return source
-				.Select((x, i) => new { Index = i, Value = x })
-				.GroupBy(x => x.Index / groupSize)
-				.Select(x => x.Select(v => v.Value).ToList())
-				.ToList();
-		}
-
-		private IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod()
-		{
-				TabPageAdv skillTabPage = _tabSkillData.TabPages[0];
-				var totalSkill = skillTabPage.Tag as IAggregateSkill;
-				var period = _schedulerState.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(_schedulerState.TimeZoneInfo);
-				var skillStaffPeriodsTotal = _schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					totalSkill, period);
-
-				var dailySkillStaffPeriodsForFullPeriod = new List<IList<ISkillStaffPeriod>>();
-
-				foreach (var day in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
-				{
-					var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(_schedulerState.TimeZoneInfo);
-					var skillStaffPeriods = skillStaffPeriodsTotal.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
-					dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriods);
-				}
-			return dailySkillStaffPeriodsForFullPeriod;
-		}
-
-		private IEnumerable<double?> getDailyScheduledHoursForFullPeriod()
-		{
-			try
-			{
-				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod();
-				var dailyScheduledHours = 
-					skillStaffPeriodsOfFullPeriod.Select(SkillStaffPeriodHelper.ScheduledHours).ToList();
-				return dailyScheduledHours;
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
-		private double? getStandardDeviationForPeriod()
-		{
-			try
-			{
-				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod();
-				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
-				if (result.HasValue)
-					return Math.Round(result.Value, 2);
-				return null;
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
-
-		#endregion // sikuli
 
 		private void disableScheduleButtonsOnNonCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
 		{

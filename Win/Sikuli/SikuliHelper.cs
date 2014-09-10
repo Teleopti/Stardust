@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.Win.Sikuli
 			testView.ShowDialog(owner);
 		}
 
-		public static void AssertValidation(Func<SikuliValidationResult> assertFunc, IWin32Window owner)
+		public static void AssertValidation(ISikuliValidator validator, IWin32Window owner)
 		{
 			if (!TestMode)
 				return;
-			var assertResult = assertFunc();
+			var assertResult = validator.Validate();
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog(owner);

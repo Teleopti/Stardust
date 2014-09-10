@@ -687,6 +687,7 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="Sikuli\ISikuliValidator.cs" />
     <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2510,6 +2511,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
+    <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
+    <Compile Include="Sikuli\Validators\DeleteAllValidator.cs" />
+    <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
+    <Compile Include="Sikuli\Validators\ValidatorHelper.cs" />
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
