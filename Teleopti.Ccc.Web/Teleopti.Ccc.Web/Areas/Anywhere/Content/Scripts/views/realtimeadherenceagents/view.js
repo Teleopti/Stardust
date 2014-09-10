@@ -110,16 +110,12 @@
 			}
 
 			permissions.get().done(function (data) {
-				viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
-				viewModel.permissionAddIntradayAbsence(data.IsAddIntradayAbsenceAvailable);
-				viewModel.permissionRemoveAbsence(data.IsRemoveAbsenceAvailable);
 				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
-				viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
 			});
 
 			toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
 				enabled: function() {
-					viewModel.changeSchedule(true);
+					viewModel.changeScheduleAvailable(true);
 				}
 			});
 		}

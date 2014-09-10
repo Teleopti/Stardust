@@ -1,11 +1,13 @@
-﻿define([
+﻿define(['navigation'
 ], function (
+	navigation
 	) {
 
 	return function () {
 		var self = this;
 
-		self.AddActivity = function () {
+		this.changeSchedule = function () {
+			navigation.GoToTeamSchedule(self.groupId, self.personId, self.date);
 		};
 	};
 });

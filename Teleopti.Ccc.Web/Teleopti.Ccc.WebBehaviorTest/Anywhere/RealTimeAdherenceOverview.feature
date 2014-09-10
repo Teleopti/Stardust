@@ -718,7 +718,6 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 		| Alarm Color              | Red              |
 
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
-@ignore
 Scenario: Should be able to change schedule from agent state overview
 	Given  the current time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'

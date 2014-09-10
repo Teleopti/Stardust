@@ -41,65 +41,9 @@
 	vertical-align: middle;
 }
 
-.panel, .table {
-	background-color: transparent !important;
-}
-.realtimeadherenceagents .time-line 
-{
-	left: 221px; /* 205 + 8 + 8    first column with paddings */
-	width: 100%;
-}
-
-.realtimeadherenceagents .time-line,
-.realtimeadherenceagents .time-line div
-{
-	height: 100%;
-	z-index: -10;
-}
-
-.realtimeadherenceagents .time-line .ruler {
-	height: 100%;
-	width: 1px;
-	background-color: rgba(0,0,0,0.2);
-	z-index: 100;
-}
-.realtimeadherenceagents .time-line .label {
-	font-size: xx-small;
-	height: 12px;
-	z-index: 111;
- }
- 
-.realtimeadherenceagents .person
-{
-}
-
 .realtimeadherenceagents .person.selected-person
 {
 	background-color: rgb(245, 245, 245);
-}
-
-.realtimeadherenceagents .person-name-column {
-	max-width: 205px !important;
-	min-width: 205px !important;
-	width: 205px !important;
-	overflow: hidden;
-	padding-left: 2px;
-	padding-right: 2px;
-}
-
-.person-name-column-menu {
-	min-width: 205px !important;
-	font-size: 12px;
-}
-.realtimeadherenceagents .contract-time-column {
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
-}
-.realtimeadherenceagents .schedule-column {
-	padding-left: 17px;
-	padding-right: 0;
-	width: auto;
 }
 
 .btn-group  a:hover {
@@ -110,140 +54,12 @@
 	cursor: pointer;
 }
 
-.realtimeadherenceagents .dayoff 
-{
-	text-align: center;
-	top: -8px;
-	height: 36px;
-    background-size: 11px 11px;
-    background-image: 
-        linear-gradient(135deg,
-        transparent,
-        transparent 7px,
-        rgba(0,0,0,0.2) 8px,
-        transparent 8px,
-        transparent
-        );
-}
-.no-cssgradients .realtimeadherenceagents .dayoff 
-{
-	background-color: beige;
-}
-
-
-
 .realtimeadherenceagents .person-menu,
 .realtimeadherenceagents .person-menu:hover > td
 {
 	background: #eeeeee;
 }
 
-.realtimeadherenceagents .shift-menu,
-.realtimeadherenceagents .shift-menu:hover > td
-{
-	background: #eeeeee;
-}
-
-.realtimeadherenceagents .shift-details .label {
-	text-shadow: none;
-	margin-bottom: 10px;
-}
-.realtimeadherenceagents .activity-details .label {
-	text-shadow: none;
-}
-
-.realtimeadherenceagents .shift .layer
-{
-	z-index: 10;	
-	height: 22px;
-	text-align: center;
-}
-.realtimeadherenceagents .shift .layer:first-of-type
-{
-	-webkit-border-radius: 4px 0px 0px 4px;
-	   -moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
-}
-.realtimeadherenceagents .shift .layer:last-of-type
-{
-	-webkit-border-radius: 0px 4px 4px 0px;
-	   -moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
-}
-.realtimeadherenceagents .shift .layer:only-child
-{
-	-webkit-border-radius: 4px 4px 4px 4px;
-	   -moz-border-radius: 4px 4px 4px 4px;
-			border-radius: 4px 4px 4px 4px;
-}
-.realtimeadherenceagents .shift .layer .layer-description {
-	background-color: white;
-	color: #606060;
-	text-shadow: none;
-}
-.realtimeadherenceagents .dayoff .layer-description {
-	margin: 9px;
-	text-shadow: none;
-}
-.realtimeadherenceagents .shift .layer .drop {
-    top: 21px;
-}
-.realtimeadherenceagents .shift .layer .drop .arrow {
-    left: -8px;
-    top: -8px;
-    border-left: 8px solid transparent;
-    border-bottom: 8px solid red;
-    border-right: 8px solid transparent;
-    border-top: 8px solid transparent;
-}
-.realtimeadherenceagents .shift .layer .drop .circle {
-    top: 4px;
-    left: -10px;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 10px;
-}
-
-
-
-.realtimeadherenceagents .resources td {
-    padding-top: 3px;
-}
-
-.realtimeadherenceagents .contract-time-title {
-	padding-top: 14px;
-	padding-bottom: 2px;
-}
-.realtimeadherenceagents .contract-time 
-{
-	text-align: right;
-	overflow: hidden;
-}
-
-.realtimeadherenceagents .date-input {
-    cursor: pointer;
-    background-color: #FFFFFF;
-}
-
-@media (max-width: 1199px) {
-
-	.realtimeadherenceagents .contract-time {
-		display: none;
-	}
-	.realtimeadherenceagents .work-time {
-		display: none;
-	}
-}
-
-.activity-form {
-	min-width: 160px;
-}
-
 .realtimeadherenceagents th {
 	vertical-align: middle !important;
-}
-
-#date-picker {
-    width: 360px;
 }

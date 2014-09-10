@@ -3,34 +3,24 @@
 		'views/realtimeadherenceagents/agentstate',
 		'views/realtimeadherenceagents/agent',
 		'views/realtimeadherenceagents/filter',
-		'subscriptions.personschedule',
-		'helpers',
-		'shared/timeline',
 		'resources',
-		'lazy',
-		'views/teamschedule/person',
-		'resizeevent'
+		'ajax',
+		'helpers',
+		'views/realtimeadherenceagents/agent-menu'
 ],
 	function (ko,
 		agentstate,
 		agent,
 		filterService,
-		personsubscriptions,
-		helpers,
-		timeLineViewModel,
 		resources,
-		lazy,
-		personViewModel,
-		resize) {
+		ajax,
+		helpers,
+		menu) {
 	return function () {
 
 		var that = {};
 		that.Resources = resources;
-		that.permissionAddFullDayAbsence = ko.observable();
-		that.permissionAddIntradayAbsence = ko.observable();
-		that.permissionRemoveAbsence = ko.observable();
 		that.permissionAddActivity = ko.observable();
-		that.permissionMoveActivity = ko.observable();
 
 		that.agents = []; 
 		that.agentStates = ko.observableArray();
@@ -40,7 +30,11 @@
 		that.siteId = ko.observable();
 		that.siteURI = ko.observable();
 		that.filter = ko.observable();
-		
+		that.groupId = ko.observable();
+		that.changeScheduleAvailable = ko.observable(false);
+		that.menu = new menu();
+		that.selectedPersonId = ko.observable();
+
 		that.filteredAgents = ko.computed(function() {
 			var filter = that.filter();
 			if (!filter) {
@@ -147,11 +141,23 @@
 		that.SelectAgent = function (agentStateClicked) {
 			if (agentStateClicked.Selected())
 				that.deselectAll();
-			else
+			else {
 				agentStateClicked.Selected(true);
-			that.unsubscribePersonSchedule();
-			if (agentStateClicked.Selected())
-				that.subscribePersonSchedule(agentStateClicked.PersonId);
+				var selectedAgentState = that.agentStates().filter(function (obj) {
+					return obj.Selected() === true;
+				});
+				that.selectedPersonId(selectedAgentState[0].PersonId);
+				var selectedPersonId = that.selectedPersonId();
+				var today = moment((new Date).getTime());
+				ajax.ajax({
+					url: "Agents/Team?personId=" + selectedPersonId + "&date=" + helpers.Date.ToServer(today),
+					success: function (groupId) {
+						that.menu.groupId = groupId;
+						that.menu.personId = selectedPersonId;
+						that.menu.date = today;
+					}
+				});
+			}
 		}
 
 		that.getSelectedAgentState = function() {
@@ -161,129 +167,12 @@
 			return selectedAgentState;
 		}
 
-		that.selectedPersonId = function() {
-			var selectedAgentState = that.agentStates().filter(function (obj) {
-				return obj.Selected() === true;
-			});
-			if (selectedAgentState)
-				return selectedAgentState[0].PersonId;
-			return undefined;
-		}
-
 		that.deselectAll = function() {
 			that.agentStates().forEach(function (agentState) {
 				agentState.Selected(false);
 			});
 		}
-
-		that.changeSchedule = ko.observable(false);
-		that.Loading = ko.observable(true);
-
-		that.Persons = ko.observableArray();
-		that.SortedPersons = ko.computed(function () {
-			return that.Persons().sort(function (first, second) {
-				first = first.OrderBy();
-				second = second.OrderBy();
-				return first == second ? 0 : (first < second ? -1 : 1);
-			});
-		});
-
-		var layers = function () {
-			return lazy(that.Persons())
-				.map(function (x) { return x.Shifts(); })
-				.flatten()
-				.map(function (x) { return x.Layers(); })
-				.flatten();
-		};
-
-		that.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
 		
-		var today = moment();
-		resize.onresize(function () {
-			that.TimeLine.WidthPixels($('.time-line-for').width());
-		});
-
-		that.subscribePersonSchedule = function (personId) {
-			personsubscriptions.subscribePersonSchedule(
-				personId,
-				helpers.Date.ToServer(today),
-				function (data) {
-					updateSchedule(data);
-					that.Loading(false);
-					resize.notify();
-				}
-			);
-		}
-
-		that.unsubscribePersonSchedule = function () {
-			personsubscriptions.unsubscribePersonSchedule();
-		}
-
-		var personForId = function (id, personArray) {
-			if (!id)
-				return undefined;
-			var personvm = lazy(personArray)
-				.filter(function (x) { return x.Id == id; })
-				.first();
-			if (!personvm) {
-				personvm = new personViewModel({ Id: id });
-				personArray.push(personvm);
-			}
-			return personvm;
-		};
-
-		var updateSchedule = function(data) {
-			that.Persons([]);
-			var personArray = [];
-
-			var schedule = data;
-			schedule.Offset = today;
-			schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
-			var personvm = personForId(that.selectedPersonId(), personArray);
-			personvm.AddData(schedule, that.TimeLine);
-
-			that.Persons.push.apply(that.Persons, personArray);
-		};
-
-		that.SelectPerson = function (person) {
-			deselectAllPersonsExcept(person);
-			deselectAllLayersExcept();
-
-			person.Selected(!person.Selected());
-		};
-
-		that.SelectLayer = function (layer) {
-			deselectAllPersonsExcept();
-			deselectAllLayersExcept(layer);
-
-			layer.Selected(!layer.Selected());
-		};
-
-		var deselectAllPersonsExcept = function (person) {
-			var selectedPersons = lazy(that.Persons())
-				.filter(function (x) {
-					if (person && x === person)
-						return false;
-					return x.Selected();
-				});
-			selectedPersons.each(function (x) {
-				x.Selected(false);
-			});
-		};
-
-		var deselectAllLayersExcept = function (layer) {
-			var selectedLayers = layers()
-				   .filter(function (x) {
-				   	if (layer && x === layer) {
-				   		return false;
-				   	}
-				   	return x.Selected();
-				   });
-			selectedLayers.each(function (x) {
-				x.Selected(false);
-			});
-		};
-
 		return that;
 	};
 }
