@@ -34,7 +34,7 @@ set date_from = dateadd(day,@DaysToAdd,date_from)
 GO
 
 ----------------
---Copy agent statistics from Agg template - 4 week data
+--Copy agent and Queue statistics from Agg template - 4 week data
 ----------------
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
@@ -62,8 +62,15 @@ BEGIN
 	dateadd(day,@AddDays,date_from),
 	interval, agent_id, agent_name, avail_dur, tot_work_dur, talking_call_dur, pause_dur, wait_dur, wrap_up_dur, answ_call_cnt, direct_out_call_cnt, direct_out_call_dur, direct_in_call_cnt, direct_in_call_dur, transfer_out_call_cnt, admin_dur
 	from $(TELEOPTIAGG).dbo.agent_logg
-	where date_from <= @TemplateEndDate
-	order by 2
+	where date_from between @TemplateStartDate and  @TemplateEndDate
+
+	insert into $(TELEOPTIAGG).dbo.queue_logg
+	select
+	queue,
+	dateadd(day,@AddDays,date_from),
+	interval, offd_direct_call_cnt, overflow_in_call_cnt, aband_call_cnt, overflow_out_call_cnt, answ_call_cnt, queued_and_answ_call_dur, queued_and_aband_call_dur, talking_call_dur, wrap_up_dur, queued_answ_longest_que_dur, queued_aband_longest_que_dur, avg_avail_member_cnt, ans_servicelevel_cnt, wait_dur, aband_short_call_cnt, aband_within_sl_cnt
+	from $(TELEOPTIAGG).dbo.queue_logg
+	where date_from between @TemplateStartDate and  @TemplateEndDate
 
 	select @PeriodsToAdd = @PeriodsToAdd + 1
 END
