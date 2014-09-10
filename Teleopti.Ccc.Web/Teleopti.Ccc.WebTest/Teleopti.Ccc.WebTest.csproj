@@ -247,7 +247,7 @@
     <Compile Include="Areas\SSO\SSOAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MessageControllerTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\MessageBrokerControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserDataControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferencePeriodFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />

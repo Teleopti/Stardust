@@ -4,11 +4,11 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	public class MessageBrokerController : Controller
+	public class UserDataController : Controller
 	{
 		private readonly IUserDataFactory _userDataFactory;
 
-		public MessageBrokerController(IUserDataFactory userDataFactory)
+		public UserDataController(IUserDataFactory userDataFactory)
 		{
 			_userDataFactory = userDataFactory;
 		}

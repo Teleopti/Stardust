@@ -178,7 +178,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function _listenForEvents(listeners) {
 		ajax.Ajax({
-			url: 'MessageBroker/FetchUserData',
+			url: 'UserData/FetchUserData',
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {
@@ -186,8 +186,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					url: data.Url,
 					callback: listeners,
 					domainType: 'IScheduleChangedInDefaultScenario',
-					businessUnitId: data.BusinessUnitId,
-					datasource: data.DataSourceName,
 					referenceId: data.AgentId
 				});
 			}
@@ -209,7 +207,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	function _makeSureWeAreLoggedOn() {
 	    var ajax = new Teleopti.MyTimeWeb.Ajax();
 	    ajax.Ajax({
-	        url: 'MessageBroker/FetchUserData',
+	    	url: 'UserData/FetchUserData',
 	        dataType: "json",
 	        async: false,
 	        type: 'GET',

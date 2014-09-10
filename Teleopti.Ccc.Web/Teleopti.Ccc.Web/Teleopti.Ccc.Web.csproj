@@ -518,7 +518,7 @@
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistration.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
-    <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserDataController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />
