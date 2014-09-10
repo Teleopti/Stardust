@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SignalRClient>()
 				.As<ISignalRClient>()
 				.As<IMessageBrokerUrl>()
-				.WithParameter(new NamedParameter("serverUrl", null))
+				.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
 				.SingleInstance();
 
 			builder.RegisterType<HttpSender>()
