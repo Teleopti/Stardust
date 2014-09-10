@@ -708,7 +708,7 @@
     </Compile>
     <Compile Include="Sikuli\SikuliHelper.cs" />
     <Compile Include="Sikuli\SikuliValidationResult.cs" />
-    <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
+    <Compile Include="Sikuli\SikuliValidators.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

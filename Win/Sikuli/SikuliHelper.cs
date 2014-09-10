@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			private set { StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = value; }
 		}
 
-		public static string SikuliValidator
+		public static string CurrentValidator
 		{
 			get { return StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator; }
 			private set { StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator = value; }
@@ -26,12 +26,14 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 		public static void EnterValidator(IWin32Window owner)
 		{
+			if (!TestMode)
+				return;
 			using (var dialog = new SikuliEnterValidatorDialog())
 			{
 				dialog.ShowDialog(owner);
 				if (dialog.DialogResult == DialogResult.OK)
 				{
-					SikuliValidator = dialog.GetValidatorName;
+					CurrentValidator = dialog.GetValidatorName;
 				}
 			}
 		}
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			testView.ShowDialog(owner);
 		}
 
-		public static void AssertValidation(ISikuliValidator validator, IWin32Window owner)
+		public static void Validate(ISikuliValidator validator, IWin32Window owner)
 		{
 			if (!TestMode)
 				return;
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog(owner);
-			SikuliValidator = SikuliValidatorRegister.SelectValidator.None;
+			CurrentValidator = SikuliValidators.Register.None;
 		}
 
 	}
