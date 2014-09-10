@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client.SignalR;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			dataSourceConfigurationSetter = MockRepository.GenerateStub<IDataSourceConfigurationSetter>();
 			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new DateAndTimeModule());
+			containerBuilder.RegisterModule<GodModule>();
 			containerBuilder.RegisterModule(new InitializeModule(dataSourceConfigurationSetter));
 		}
 
