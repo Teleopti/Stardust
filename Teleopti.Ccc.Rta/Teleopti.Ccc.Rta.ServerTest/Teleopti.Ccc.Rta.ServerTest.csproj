@@ -163,7 +163,7 @@
     <Compile Include="Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
-    <Compile Include="IocTest.cs" />
+    <Compile Include="ContainerConfigurationTest.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />

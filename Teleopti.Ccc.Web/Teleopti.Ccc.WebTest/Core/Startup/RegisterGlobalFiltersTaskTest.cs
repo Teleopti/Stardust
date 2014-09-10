@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			GlobalFilters.Filters.Select(item => item.Instance.GetType())
 				.Should().Have.SameValuesAs(new[]
 				               	{
-									typeof(CheckStartupResultAttribute),
 				               		typeof(TeleoptiPrincipalAuthorizeAttribute),
 				               		typeof(AjaxHandleErrorAttribute)
 				               	});

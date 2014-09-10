@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             builder.RegisterType<UpdateGroupingReadModelConsumer>().As<ConsumerOf<PersonChangedMessage>>();
 
 			builder.RegisterModule<RepositoryModule>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();

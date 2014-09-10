@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterType<ScheduleProjectionReadOnlyUpdater>().As<IHandleEvent<ScheduledResourcesChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterType<ScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterType<PersonScheduleDayReadModelUpdater>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();

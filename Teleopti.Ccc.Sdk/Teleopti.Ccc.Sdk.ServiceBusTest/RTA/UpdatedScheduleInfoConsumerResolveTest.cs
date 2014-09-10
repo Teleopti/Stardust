@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBus>()).As<IServiceBus>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterModule<AuthenticationModule>();

@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(ToggleHandlerController),
 																		typeof(ServiceController)
 			                                                    	}));
-			filters.Add(new CheckStartupResultAttribute());
 		}
 	}
 }

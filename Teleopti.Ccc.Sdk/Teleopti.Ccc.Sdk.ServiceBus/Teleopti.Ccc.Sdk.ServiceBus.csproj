@@ -168,7 +168,7 @@
     <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
-    <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
+    <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />

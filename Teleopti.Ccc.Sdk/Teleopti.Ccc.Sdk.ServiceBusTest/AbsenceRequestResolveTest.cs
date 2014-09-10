@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
 
 			builder.RegisterModule<RepositoryModule>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterType<RaptorDomainMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
 			builder.RegisterModule<RepositoryModule>();
-			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule(new AuthenticationModule(appData));
 			builder.RegisterModule<AuthenticationContainerInstaller>();
 			builder.RegisterModule<DateAndTimeModule>();

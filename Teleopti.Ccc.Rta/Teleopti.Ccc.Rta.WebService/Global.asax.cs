@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Rta.WebService
 
 		private static IContainer buildIoc()
 		{
-			var builder = RtaContainerBuilder.CreateBuilder();
+			var builder = new ContainerConfiguration().Configure();
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
 			builder.RegisterModule(new DateAndTimeModule());
 			return builder.Build();
