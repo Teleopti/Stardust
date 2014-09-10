@@ -7,8 +7,9 @@ SET DB_ANALYTICS=%~4
 SET config=%~5
 SET AppSqlLogin=%~6
 SET AppSqlPwd=%~7
-
-SET SQL_AUTH_STRING=Data Source=%computername%;User Id=%AppSqlLogin%;Password=%AppSqlPwd%
+SET SqlInstanceName=%computername%
+IF "%computername%"=="HEBE" SET SqlInstanceName=HEBE\SQL2012
+SET SQL_AUTH_STRING=Data Source=%SqlInstanceName%;User Id=%AppSqlLogin%;Password=%AppSqlPwd%
 SET ETL_SERVICE_nhibConfPath=%TargetDir%
 
 ::Delete target Dir

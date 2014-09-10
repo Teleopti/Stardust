@@ -11,7 +11,9 @@
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
 		<ETLNightlyBuild-InstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-InstallSvc.cmd"</ETLNightlyBuild-InstallSvcCmd>
 		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd>
-		<SQLCmdConn>SQLCMD -S$(COMPUTERNAME) -E</SQLCmdConn>
+		<SqlInstanceName>$(Computername)</SqlInstanceName>
+		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2012</SqlInstanceName>
+		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
 		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
 		<CCC7DB>$(DBNamePrefix)_ccc7</CCC7DB>
 		<AnalyticsDB>$(DBNamePrefix)_analytics</AnalyticsDB>
@@ -19,9 +21,9 @@
 		<AppSqlLogin>EtlNightlyUser</AppSqlLogin>
 		<AppSqlPwd>EtlNightlyPwd2</AppSqlPwd>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>		
-		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCC7Args>
-		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCCAggArgs>
-		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiAnalyticsArgs>
+		<DBManagerTeleoptiCCC7Args>-S$(SqlInstanceName) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCC7Args>
+		<DBManagerTeleoptiCCCAggArgs>-S$(SqlInstanceName) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCCAggArgs>
+		<DBManagerTeleoptiAnalyticsArgs>-S$(SqlInstanceName) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiAnalyticsArgs>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
 		<BakDir>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\DemoDatabase</BakDir>
