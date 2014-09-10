@@ -57,7 +57,7 @@
 			this.buttonAdvEditOpenHours.BeforeTouchSize = new System.Drawing.Size(30, 23);
 			this.buttonAdvEditOpenHours.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvEditOpenHours.IsBackStageButton = false;
-			this.buttonAdvEditOpenHours.Location = new System.Drawing.Point(1034, 6);
+			this.buttonAdvEditOpenHours.Location = new System.Drawing.Point(1284, 6);
 			this.buttonAdvEditOpenHours.Name = "buttonAdvEditOpenHours";
 			this.buttonAdvEditOpenHours.Size = new System.Drawing.Size(30, 23);
 			this.buttonAdvEditOpenHours.TabIndex = 4;
@@ -73,7 +73,7 @@
 			this.textBoxOpenHours.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxOpenHours.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxOpenHours.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.textBoxOpenHours.Location = new System.Drawing.Point(894, 6);
+			this.textBoxOpenHours.Location = new System.Drawing.Point(1144, 6);
 			this.textBoxOpenHours.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxOpenHours.Name = "textBoxOpenHours";
 			this.textBoxOpenHours.ReadOnly = true;
@@ -85,7 +85,7 @@
 			// 
 			this.labelOpenHours.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelOpenHours.AutoSize = true;
-			this.labelOpenHours.Location = new System.Drawing.Point(777, 10);
+			this.labelOpenHours.Location = new System.Drawing.Point(1027, 10);
 			this.labelOpenHours.Name = "labelOpenHours";
 			this.labelOpenHours.Size = new System.Drawing.Size(110, 15);
 			this.labelOpenHours.TabIndex = 2;
@@ -126,7 +126,7 @@
 			this.buttonAdvCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(973, 689);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(1223, 689);
 			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(3, 3, 12, 12);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(87, 27);
@@ -143,7 +143,7 @@
 			this.buttonAdvOK.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.buttonAdvOK.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvOK.IsBackStageButton = false;
-			this.buttonAdvOK.Location = new System.Drawing.Point(856, 689);
+			this.buttonAdvOK.Location = new System.Drawing.Point(1106, 689);
 			this.buttonAdvOK.Margin = new System.Windows.Forms.Padding(3, 3, 12, 12);
 			this.buttonAdvOK.Name = "buttonAdvOK";
 			this.buttonAdvOK.Size = new System.Drawing.Size(87, 27);
@@ -161,7 +161,7 @@
 			this.gradientPanel1.Location = new System.Drawing.Point(1, 0);
 			this.gradientPanel1.Name = "gradientPanel1";
 			this.gradientPanel1.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
-			this.gradientPanel1.Size = new System.Drawing.Size(1072, 740);
+			this.gradientPanel1.Size = new System.Drawing.Size(1322, 740);
 			this.gradientPanel1.TabIndex = 12;
 			// 
 			// tableLayoutPanel1
@@ -180,7 +180,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(1072, 728);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(1322, 728);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -203,7 +203,7 @@
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(1072, 35);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(1322, 35);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// EditWorkloadDayTemplate
@@ -212,7 +212,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderColor = System.Drawing.Color.Blue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			this.ClientSize = new System.Drawing.Size(1074, 740);
+			this.ClientSize = new System.Drawing.Size(1324, 740);
 			this.Controls.Add(this.gradientPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.MinimumSize = new System.Drawing.Size(362, 39);
