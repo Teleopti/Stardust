@@ -31,7 +31,7 @@ FROM
 	pp.Parent,
 	pp.PersonPeriod,
 	pp.BusinessUnit,
-	ROW_NUMBER()OVER(PARTITION BY pp.PersonPeriod ORDER BY pp.StartDate DESC) as is_current
+	ROW_NUMBER()OVER(PARTITION BY pp.Parent ORDER BY pp.StartDate DESC) as is_current
 	FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND) --force SQL Server to use the clustered View
 	WHERE pp.StartDate <=  @now --filter out future periods
 ) a
