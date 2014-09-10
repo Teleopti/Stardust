@@ -13,12 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		    _teleoptiRtaService = teleoptiRtaService;
 	    }
 
-		[HttpGet]
-		public virtual JsonResult A()
-		{
-			return Json(1, JsonRequestBehavior.AllowGet);
-		}
-
 		[HttpPost]
 		public JsonResult SaveExternalUserState(AjaxUserState state)
 		{
