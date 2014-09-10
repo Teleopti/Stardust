@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -56,6 +58,16 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
+		[Test]
+		public void ShouldResolveNoKeepAliveStrategies()
+		{
+			using (var container = BuildContainer())
+			{
+				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
+					.Select(x => x.GetType())
+					.Should().Have.SameValuesAs(new[] { typeof(RecreateOnNoPingReply), typeof(RestartOnClosed) });
+			}
+		}
 
 		private IContainer BuildContainer()
 		{

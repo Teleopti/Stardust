@@ -1,96 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.Messages.General;
 using Teleopti.Interfaces.Messages.Payroll;
-using Teleopti.Messaging.Client.Http;
-using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 {
 	public class ContainerConfigurationTest
 	{
-		[Test]
-		public void ShouldResolveMessageSender()
-		{
-			using (var container = new ContainerBuilder().Build())
-			{
-				new ContainerConfiguration(container).Configure();
-				container.Resolve<IMessageSender>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveMessageBrokerCompositeClient()
-		{
-			using (var container = new ContainerBuilder().Build())
-			{
-				new ContainerConfiguration(container).Configure();
-				container.Resolve<IMessageBrokerComposite>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveSignalRSender()
-		{
-			using (var container = containerWithToggle(Toggles.Messaging_HttpSender_29205, false))
-			{
-				container.Resolve<IMessageSender>()
-					.Should().Be.SameInstanceAs(container.Resolve<SignalRSender>());
-			}
-		}
-
-		[Test]
-		public void ShouldResolveHttpSender()
-		{
-			using (var container = containerWithToggle(Toggles.Messaging_HttpSender_29205, true))
-			{
-				container.Resolve<IMessageSender>()
-					.Should().Be.SameInstanceAs(container.Resolve<HttpSender>());
-			}
-		}
-
-		[Test]
-		public void ShouldResolveNoKeepAliveStrategies()
-		{
-			using (var container = new ContainerBuilder().Build())
-			{
-				new ContainerConfiguration(container).Configure();
-				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
-					.Select(x => x.GetType())
-					.Should().Have.SameValuesAs(new[] { typeof(RecreateOnNoPingReply), typeof(RestartOnClosed) });
-			}
-		}
-
-		private static IContainer containerWithToggle(Toggles toggle, bool value)
-		{
-			var container = new ContainerBuilder().Build();
-			new ContainerConfiguration(container).Configure();
-
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			var builder = new ContainerBuilder();
-			builder.Register(c => toggleManager).As<IToggleManager>();
-			builder.Update(container);
-
-			return container;
-		}
-
 		[Test]
 		public void ShouldResolveEventsConsumer()
 		{
