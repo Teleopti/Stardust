@@ -370,5 +370,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return new Percent(namer / talj);
             return new Percent();
         }
+
+		public static Percent EstimatedServiceLevelShrinkage(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)
+		{
+			//Design: Magnus Karlsson
+
+			double namer = 0;
+			double talj = 0;
+
+			foreach (ISkillStaffPeriod period in skillStaffPeriods)
+			{
+				namer = namer + period.EstimatedServiceLevelShrinkage.Value * period.Payload.TaskData.Tasks;
+				talj = talj + period.Payload.TaskData.Tasks;
+			}
+
+			if (talj > 0)
+				return new Percent(namer / talj);
+			return new Percent();
+		}
     }
 }

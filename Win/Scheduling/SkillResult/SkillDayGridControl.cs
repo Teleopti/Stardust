@@ -5,7 +5,9 @@ using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
@@ -193,7 +195,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-                gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
+				var estimatedServiceLevelPropertyName = "EstimatedServiceLevel";
+				if (ToggleManager.IsEnabled(Toggles.Scheduler_ShowIntadayESLWithShrinkage_21874))
+					estimatedServiceLevelPropertyName = "EstimatedServiceLevelShrinkage";
+
+				gridRow = new SkillDayGridRow(_rowManager, "ReadOnlyPercentCell", estimatedServiceLevelPropertyName, UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 			}

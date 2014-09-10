@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
@@ -153,8 +154,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
+				var estimatedServiceLevelPropertyName = "EstimatedServiceLevel";
+				if (ToggleManager.IsEnabled(Toggles.Scheduler_ShowIntadayESLWithShrinkage_21874))
+					estimatedServiceLevelPropertyName = "EstimatedServiceLevelShrinkage";
 
-                gridRow = new SkillFullPeriodGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
+				gridRow = new SkillFullPeriodGridRow(_rowManager, "ReadOnlyPercentCell", estimatedServiceLevelPropertyName, UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 			}

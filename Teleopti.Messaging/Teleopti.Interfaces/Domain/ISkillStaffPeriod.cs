@@ -448,5 +448,7 @@ namespace Teleopti.Interfaces.Domain
 		/// The skillday the period belongs to
 		/// </summary>
 		ISkillDay SkillDay { get; }
+
+	    Percent EstimatedServiceLevelShrinkage { get; }
     }
 }

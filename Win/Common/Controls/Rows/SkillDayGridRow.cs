@@ -102,6 +102,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             if (DisplayMember == "EstimatedServiceLevel")
                 return SkillStaffPeriodHelper.EstimatedServiceLevel(SkillStaffPeriodList);
 
+			if (DisplayMember == "EstimatedServiceLevelShrinkage")
+				return SkillStaffPeriodHelper.EstimatedServiceLevelShrinkage(SkillStaffPeriodList);
+
             return null;
         }
 

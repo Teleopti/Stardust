@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -37,6 +38,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				_chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
 			}
 		}
+
+		public IToggleManager ToggleManager { get; set; }
 
 		public bool HasHelp
 		{

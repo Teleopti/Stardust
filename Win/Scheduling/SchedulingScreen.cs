@@ -296,18 +296,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			: this()
 		{
 			Application.DoEvents();
+			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
+			_container = lifetimeScope.BeginLifetimeScope();
+			var toggleManager = _container.Resolve<IToggleManager>();
 			loadSchedulingScreenSettings();
-			_skillDayGridControl = new SkillDayGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
-			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
-			_skillMonthGridControl = new SkillMonthGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
-			_skillFullPeriodGridControl = new SkillFullPeriodGridControl { ContextMenu = contextMenuStripResultView.ContextMenu };
+			_skillDayGridControl = new SkillDayGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
+			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
+			_skillMonthGridControl = new SkillMonthGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
+			_skillFullPeriodGridControl = new SkillFullPeriodGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
 			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 
 			setUpZomMenu();
 
-			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
-			_container = lifetimeScope.BeginLifetimeScope();
-            _skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<IToggleManager>()) { ContextMenu = contextMenuStripResultView.ContextMenu };
+
+			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", toggleManager) { ContextMenu = contextMenuStripResultView.ContextMenu };
 			_optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
 			_optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
