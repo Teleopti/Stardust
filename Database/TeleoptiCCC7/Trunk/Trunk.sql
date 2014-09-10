@@ -26,13 +26,7 @@ GO
 ALTER TABLE [dbo].[AgentBadgeTransaction] CHECK CONSTRAINT [FK_AgentBadgeTransaction_Person_Person]
 GO
 
-CREATE CLUSTERED INDEX [CIX_AgentBadgeTransaction_Person] ON [dbo].[AgentBadgeTransaction]
-(
-    [Person] ASC
-)
-GO
-
-CREATE UNIQUE NONCLUSTERED INDEX [IX_AgentBadgeTransaction] ON [dbo].[AgentBadgeTransaction]
+CREATE UNIQUE CLUSTERED INDEX [CIX_AgentBadgeTransaction] ON [dbo].[AgentBadgeTransaction]
 (
     [Person] ASC,
     [BadgeType] ASC,
