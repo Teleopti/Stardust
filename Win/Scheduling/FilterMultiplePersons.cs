@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.KeyChar == '\r')
 			{
-				if (gridListControlDefaultSearch.SelectedValue != null)
+				if (gridListControlDefaultSearch.SelectedItem != null)
 				{
 					var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
 					addPersonInResultGridFromDefaultSearch(person);

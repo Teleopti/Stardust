@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private FilterMultiplePersons _filterMultiplePersons;
 		private bool _getTheGuidsFromAdvanceFilter = false;
 
-		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IDictionary<Guid, IPerson> selectedPersons, IComponentContext componentContext,
-			IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids)
+		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IDictionary<Guid, IPerson> selectedPersons, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids, bool isAdvancedEnabled = false)
 		{
 			InitializeComponent();
 
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		   
 			SetTexts();
-			buttonAdvance.Visible = ShowAdvancedFilter;
+			buttonAdvance.Visible = isAdvancedEnabled;
 			_selectedPersons = selectedPersons.Values ;
 
 		}
@@ -71,8 +70,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			get { return _personSelectorPresenter.SelectedGroupPageKey(); }
 		}
-
-		public bool ShowAdvancedFilter { get; set; }
 
 		private void buttonAdvance_Click(object sender, EventArgs e)
 		{

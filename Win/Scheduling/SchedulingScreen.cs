@@ -3918,7 +3918,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
-		private PersonsFilterView getCachedPersonsFilterView()
+		private PersonsFilterView getCachedPersonsFilterView(bool isAdvancedEnabled)
 		{
 			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
@@ -3931,7 +3931,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 											ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory()
 											.ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage),
 											string.Empty,
-											permittedPersons);
+											permittedPersons, isAdvancedEnabled);
 			}
 			return _cachedPersonsFilterView;
 		}
@@ -3939,10 +3939,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void showFilterDialog()
 		{
 			var toggleManager = _container.Resolve<IToggleManager>();
-			var scheduleFilterView = getCachedPersonsFilterView();
+			var scheduleFilterView = getCachedPersonsFilterView(toggleManager.IsEnabled(Toggles.Scheduler_AdvanceFilter_29555));
 
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
-			scheduleFilterView.ShowAdvancedFilter = toggleManager.IsEnabled(Toggles.Scheduler_AdvanceFilter_29555);
 			
 			//TODO: Please come up with a better solution!
 			Point pointToScreen = toolStripExFilter.PointToScreen(
