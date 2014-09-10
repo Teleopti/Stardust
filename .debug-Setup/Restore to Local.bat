@@ -84,7 +84,6 @@ ECHO Could not read files from "%Tfiles%"
 Call :LocalTFiles "%DriveLetter%" "%CustomTfiles%" Tfiles
 GOTO :checkAccess
 )
-
 ::Used for check: Did we copy a new file?
 SET FINDTHIS=0 File(s) copied
 
@@ -105,20 +104,6 @@ ECHO Sorry
 echo The data storage path must now be a valid local path, separate from your source control folder^(s^)
 CALL :GETDATAPATH
 )
-
-echo "%CustomPath%" | FIND "%HgFolder%"
-if %errorlevel% equ 0 (
-COLOR E
-CLS
-ECHO Sorry
-ECHO CustomPath is : %CustomPath%
-ECHO HgPath is     : %HgFolder%
-ECHO.
-echo You should not keep database files under any Hg Repository.
-ECHO Please separate database files etc. from your source control folder^(s^)
-CALL :GETDATAPATH
-)
-COLOR A
 
 dir c: >NUL
 IF NOT EXIST "%CustomPath%" MKDIR "%CustomPath%"
@@ -413,7 +398,7 @@ if not exist "%~2" (
 ECHO %~1\Tfiles> %~2
 )
 set /p localTfiles= <%~2
-mkdir "%localTfiles%"
+if not exist "%localTfiles%" mkdir "%localTfiles%"
 (
 ENDLOCAL
 set "%~3=%localTfiles%"

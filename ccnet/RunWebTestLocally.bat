@@ -15,5 +15,5 @@ set CCNetProject=EtlAndAzure
 "%CCNetWorkingDirectory%\.nuget\nuget.exe" install .nuget\packages.config -o packages -source "http://hestia/nuget";"https://nuget.org/api/v2"
 
 ::Fix Build server config, create website
-"%MSBUILD%" "%CCNetWorkingDirectory%\ccnet\raptor2.proj" /p:Configuration=%configuration% /target:AzureDeploy
+"%MSBUILD%" "%CCNetWorkingDirectory%\ccnet\ETLAndAzure.proj" /p:Configuration=%configuration% /target:PrepareDB
 PAUSE
