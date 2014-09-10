@@ -20,7 +20,7 @@ GO
 --				2013-09-20  Removed check on min/maxdate in stage
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
---exec mart.etl_fact_schedule_preference_load '2009-02-01','2009-02-17'
+--exec mart.etl_fact_schedule_preference_load_27933 '2009-02-01','2009-02-17'
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_preference_load] 
 @start_date smalldatetime,
@@ -128,16 +128,7 @@ SELECT DISTINCT
 	interval_id					= 0, --we keep the column
 	person_id					= p.person_id, 
 	scenario_id					= ds.scenario_id, 
-	preference_type_id			= CASE 
-										--Shift Category (standard) Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.shift_category_code IS NOT NULL AND f.activity_code IS NULL THEN 1
-										--Day Off Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.day_off_name IS NOT NULL AND f.activity_code IS NULL THEN 2
-										--Extended Preference
-										WHEN f.StartTimeMinimum IS NOT NULL OR f.EndTimeMinimum IS NOT NULL OR f.StartTimeMaximum IS NOT NULL OR f.EndTimeMaximum IS NOT NULL OR f.WorkTimeMinimum IS NOT NULL OR f.WorkTimeMaximum IS NOT NULL OR f.activity_code IS NOT NULL THEN 3
-										--Absence Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.absence_code IS NOT NULL AND f.activity_code IS NULL THEN 4
-								  END,
+	preference_type_id			= f.preference_type_id,
 	shift_category_id			= isnull(sc.shift_category_id,-1), 
 	day_off_id					= isnull(ddo.day_off_id,-1),
 	preferences_requested	= 1, 
@@ -181,18 +172,18 @@ LEFT JOIN
 	mart.dim_absence ab
 ON
 	f.absence_code = ab.absence_code
-GROUP BY dsd.date_id,p.person_id,ds.scenario_id, CASE 
-										--Shift Category (standard) Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.shift_category_code IS NOT NULL AND f.activity_code IS NULL THEN 1
-										--Day Off Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.day_off_name IS NOT NULL AND f.activity_code IS NULL THEN 2
-										--Extended Preference
-										WHEN f.StartTimeMinimum IS NOT NULL OR f.EndTimeMinimum IS NOT NULL OR f.StartTimeMaximum IS NOT NULL OR f.EndTimeMaximum IS NOT NULL OR f.WorkTimeMinimum IS NOT NULL OR f.WorkTimeMaximum IS NOT NULL OR f.activity_code IS NOT NULL THEN 3
-										--Absence Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.absence_code IS NOT NULL AND f.activity_code IS NULL THEN 4
-								  END,
-								   sc.shift_category_id, ddo.day_off_id,
-	 f.preference_fulfilled, 	 f.preference_unfulfilled, p.business_unit_id, f.datasource_id, ab.absence_id
+GROUP BY
+	dsd.date_id,
+	p.person_id,
+	ds.scenario_id,
+	f.preference_type_id,
+	sc.shift_category_id,
+	ddo.day_off_id,
+	f.preference_fulfilled,
+	f.preference_unfulfilled,
+	p.business_unit_id,
+	f.datasource_id,
+	ab.absence_id
 
 if @debug=1
 begin

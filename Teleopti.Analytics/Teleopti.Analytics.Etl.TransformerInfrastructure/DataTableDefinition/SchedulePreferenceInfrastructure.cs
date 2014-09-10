@@ -16,12 +16,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("day_off_code", typeof(Guid));
             table.Columns.Add("day_off_name", typeof(String));
             table.Columns.Add("day_off_shortname", typeof(String));
-            table.Columns.Add("StartTimeMinimum", typeof(long));
-            table.Columns.Add("StartTimeMaximum", typeof(long));
-            table.Columns.Add("endTimeMinimum", typeof(long));
-            table.Columns.Add("endTimeMaximum", typeof(long));
-            table.Columns.Add("WorkTimeMinimum", typeof(long));
-            table.Columns.Add("WorkTimeMaximum", typeof(long));
+			table.Columns.Add("preference_type_id", typeof(int));
             table.Columns.Add("preference_fulfilled", typeof(int));
             table.Columns.Add("preference_unfulfilled", typeof(int));
             table.Columns.Add("business_unit_code", typeof(Guid));
