@@ -12,14 +12,10 @@ SET NOCOUNT ON
 --Only on v8, Add badge to Team Pref
 ---------------
 declare @TeamName nvarchar(50)
-declare @Bronze smallint
-declare @Silver smallint
-declare @Gold smallint
 declare @AnsweredCallsBadge smallint
 declare @AverageHandlingTimeBadge smallint
 declare @AdherenceBadge smallint
 
-declare @medals table(value smallint)
 declare @BadgeType table(value smallint)
 
 set @AverageHandlingTimeBadge=1
@@ -27,16 +23,6 @@ set @AdherenceBadge =2
 set @AnsweredCallsBadge=0
 
 set @TeamName = N'Team Preferences'
-set @gold=0
-set @Silver=1
-set @Bronze=2
-
-insert into @medals
-select @gold
-union all
-select @Silver
-union all
-select @Bronze
 
 insert into @BadgeType
 select @AverageHandlingTimeBadge
@@ -45,44 +31,31 @@ select @AdherenceBadge
 union all
 select @AnsweredCallsBadge
 
-CREATE TABLE #AgentBadge(
-	[Person] [uniqueidentifier] NOT NULL,
-	[BronzeBadge] [int] NOT NULL,
-	[SilverBadge] [int] NOT NULL,
-	[GoldBadge] [int] NOT NULL,
-	[BadgeType] [int] NOT NULL
-)
+truncate table $(TELEOPTICCC).dbo.AgentBadgeTransaction
 
-insert into #AgentBadge
-select
-	p.Id,
-	max(abs(md.value*b.value)),
-	max(abs(md.value+b.value)),
-	max(abs(md.value-b.value)),
-	b.value
-from @BadgeType b
-cross join @medals md
+insert into $(TELEOPTICCC).dbo.AgentBadgeTransaction (Id,Person,BadgeType,Amount,CalculatedDate,[Description],InsertedOn)
+select top 500
+            newid(),
+            p.Id, --Person
+            b.value, --BadgeType
+            1, --Amount, one each
+            DATEADD(D, -n.n, DATEDIFF(D, 0, GETDATE())) as 'CalculatedDate',
+            'Nightly Service Bus calculation',
+            getutcdate()
+FROM @BadgeType b
+CROSS JOIN $(TELEOPTIANALYTICS).mart.sys_numbers n
 cross join (
-	select p2.Id
-	from $(TELEOPTICCC).dbo.v_PersonPeriodTeamSiteBu p
-	inner join $(TELEOPTICCC).dbo.Team t
-	on p.Team = t.Id
-	and t.Name = @TeamName
-	inner join $(TELEOPTICCC).dbo.Person p2
-	on p.Parent=p2.id
+        select p2.Id
+        from $(TELEOPTICCC).dbo.v_PersonPeriodTeamSiteBu p
+        inner join $(TELEOPTICCC).dbo.Team t
+        on p.Team = t.Id
+        and t.Name = @TeamName
+        inner join $(TELEOPTICCC).dbo.Person p2
+        on p.Parent=p2.id
 ) p
-GROUP BY p.Id,b.value
-
-/*
-truncate table $(TELEOPTICCC).dbo.AgentBadge
-insert into $(TELEOPTICCC).dbo.AgentBadge
-select newid(),*,DATEADD(D, 0, DATEDIFF(D, 0, GETDATE()))
- from (
-	select *
-	from #AgentBadge
-) a
-*/
-drop table #AgentBadge
+WHERE n.n < 30
+GROUP by p.Id,b.value,DATEADD(D, -n.n, DATEDIFF(D, 0, GETDATE()))
+ORDER BY 1
 GO
 
 ----------------
