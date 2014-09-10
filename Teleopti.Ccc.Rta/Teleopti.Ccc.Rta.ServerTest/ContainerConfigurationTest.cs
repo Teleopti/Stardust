@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldResolveHttpSender()
 		{
 			using (var container = containerWithToggle(Toggles.Messaging_HttpSender_29205, true))
@@ -92,6 +92,17 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					.Should().Be.OfType<HttpSender>();
 			}
 		}
+
+		//[Test]
+		//public void ShouldResolveKeepAliveStrategies()
+		//{
+		//	using (var container = new ContainerConfiguration().Configure().Build())
+		//	{
+		//		container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
+		//			.Select(x => x.GetType())
+		//			.Should().Have.SameValuesAs(new[] {typeof (RecreateOnNoPingReply), typeof (RestartOnClosed)});
+		//	}
+		//}
 
 		private static IContainer containerWithToggle(Toggles toggle, bool value)
 		{

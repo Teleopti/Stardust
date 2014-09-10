@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using Autofac;
 using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -8,8 +7,6 @@ using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Client.SignalR;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Rta.Server
@@ -44,7 +41,7 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
 
-			registerMessageBroker(builder);
+			//registerMessageBroker(builder);
 
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
@@ -55,18 +52,18 @@ namespace Teleopti.Ccc.Rta.Server
 			registerAdherenceComponents(builder);
 		}
 
-		private static void registerMessageBroker(ContainerBuilder builder)
-		{
-			builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
-			builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
-			builder.RegisterType<SignalRClient>()
-				.As<ISignalRClient>()
-				.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
-				.SingleInstance();
-			builder.RegisterType<SignalRSender>()
-				.As<IMessageSender>()
-				.SingleInstance();
-		}
+		//private static void registerMessageBroker(ContainerBuilder builder)
+		//{
+		//	builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
+		//	builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
+		//	builder.RegisterType<SignalRClient>()
+		//		.As<ISignalRClient>()
+		//		.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
+		//		.SingleInstance();
+		//	builder.RegisterType<SignalRSender>()
+		//		.As<IMessageSender>()
+		//		.SingleInstance();
+		//}
 
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
