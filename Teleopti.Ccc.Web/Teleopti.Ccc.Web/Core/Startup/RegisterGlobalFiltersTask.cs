@@ -7,6 +7,7 @@ using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
 
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(Areas.SSO.Controllers.AuthenticationApiController),
 																		typeof(ApplicationAuthenticationApiController),
 																		typeof(ToggleHandlerController),
-																		typeof(ServiceController)
+																		typeof(ServiceController),
+																		typeof(MessageBrokerController)
 			                                                    	}));
 		}
 	}
