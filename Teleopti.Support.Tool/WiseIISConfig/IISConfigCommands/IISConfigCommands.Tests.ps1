@@ -293,6 +293,7 @@ function Add-CccLicenseToDemo
         $batchFile = "$dir\Add-CccLicenseToDemo.bat"
         & "$BatchFile"
     }
+	&"C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\ResetSystem.bat"
 }
 
 #Main
