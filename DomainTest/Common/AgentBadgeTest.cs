@@ -15,116 +15,46 @@ namespace Teleopti.Ccc.DomainTest.Common
 	    [Test]
 	    public void ShouldAwardSilverBadgeWhenBronzeBadgeMatchesSettingRate()
 	    {
-			var person = PersonFactory.CreatePerson("_");
 			var target = new AgentBadge
 			{
-				Person = person,
+				Person = Guid.NewGuid(),
 				BadgeType = BadgeType.Adherence,
-				BronzeBadge = 4
+				TotalAmount = 4
 			};
 
-			target.AddBadge(new AgentBadge
-			{
-				Person = person,
-				BadgeType = BadgeType.Adherence,
-				BronzeBadge = 1,
-				BronzeBadgeAdded = true,
-				LastCalculatedDate = new DateOnly(2014, 01, 01)
-			}, silverToBronzeRate, goldToSilverRate);
+		    target.TotalAmount += 1;
 
-			Assert.AreEqual(target.BronzeBadge, 0);
-			Assert.AreEqual(target.BronzeBadgeAdded, false);
+		    Assert.AreEqual(target.GetBronzeBadge(silverToBronzeRate, goldToSilverRate), 0);
+			Assert.AreEqual(target.IsBronzeBadgeAdded(silverToBronzeRate, goldToSilverRate), false);
 
-			Assert.AreEqual(target.SilverBadge, 1);
-			Assert.AreEqual(target.SilverBadgeAdded, true);
+			Assert.AreEqual(target.GetSilverBadge(silverToBronzeRate, goldToSilverRate), 1);
+			Assert.AreEqual(target.IsSilverBadgeAdded(silverToBronzeRate, goldToSilverRate), true);
 
-			Assert.AreEqual(target.GoldBadge, 0);
-			Assert.AreEqual(target.GoldBadgeAdded, false);
-
-		    Assert.AreEqual(target.LastCalculatedDate, new DateOnly(2014, 01, 01));
+			Assert.AreEqual(target.GetGoldBadge(silverToBronzeRate, goldToSilverRate), 0);
+			Assert.AreEqual(target.IsGoldBadgeAdded(silverToBronzeRate, goldToSilverRate), false);
 	    }
 
 	    [Test]
 	    public void ShouldAwardGoldBadgeWhenSilverBadgeMatchesSettingRate()
 		{
-			var person = PersonFactory.CreatePerson("_");
 			var target = new AgentBadge
 			{
-				Person = person,
-				BadgeType = BadgeType.Adherence,
-				BronzeBadge = 4,
-				SilverBadge = 1
+				Person = Guid.NewGuid(),
+				BadgeType = BadgeType.AverageHandlingTime,
+				TotalAmount = 9
 			};
 
-			target.AddBadge(new AgentBadge
-			{
-				Person = person,
-				BadgeType = BadgeType.Adherence,
-				BronzeBadge = 1,
-				BronzeBadgeAdded = true,
-				LastCalculatedDate = new DateOnly(2014, 01, 01)
-			}, silverToBronzeRate, goldToSilverRate);
+		    target.TotalAmount = 10;
 
-			Assert.AreEqual(target.BronzeBadge, 0);
-			Assert.AreEqual(target.BronzeBadgeAdded, false);
 
-			Assert.AreEqual(target.SilverBadge, 0);
-		    Assert.AreEqual(target.SilverBadgeAdded, false);
+			Assert.AreEqual(target.GetBronzeBadge(silverToBronzeRate, goldToSilverRate), 0);
+			Assert.AreEqual(target.IsBronzeBadgeAdded(silverToBronzeRate, goldToSilverRate), false);
 
-			Assert.AreEqual(target.GoldBadge, 1);
-			Assert.AreEqual(target.GoldBadgeAdded, true);
+			Assert.AreEqual(target.GetSilverBadge(silverToBronzeRate, goldToSilverRate), 0);
+			Assert.AreEqual(target.IsSilverBadgeAdded(silverToBronzeRate, goldToSilverRate), false);
 
-			Assert.AreEqual(target.LastCalculatedDate, new DateOnly(2014, 01, 01));
+			Assert.AreEqual(target.GetGoldBadge(silverToBronzeRate, goldToSilverRate), 1);
+			Assert.AreEqual(target.IsGoldBadgeAdded(silverToBronzeRate, goldToSilverRate), true);
 	    }
-
-		[Test]
-		public void ShouldThrownExceptionWhenAddDifferentTypeBadge()
-		{
-			var person = PersonFactory.CreatePerson("_");
-			var target = new AgentBadge
-			{
-				Person = person,
-				BadgeType = BadgeType.Adherence,
-				BronzeBadge = 1
-			};
-
-			var newBadge = new AgentBadge
-			{
-				Person = person,
-				BadgeType = BadgeType.AnsweredCalls,
-				BronzeBadge = 1,
-				BronzeBadgeAdded = true,
-				LastCalculatedDate = new DateOnly(2014, 01, 01)
-			};
-
-			Assert.Throws<ArgumentException>(()=> target.AddBadge(newBadge, silverToBronzeRate, goldToSilverRate));
-		}
-
-		[Test]
-		public void ShouldThrownExceptionWhenRateNotLargerThanZero()
-		{
-			var person = PersonFactory.CreatePerson("_");
-			var target = new AgentBadge
-			{
-				Person = person,
-				BadgeType = BadgeType.AnsweredCalls,
-				BronzeBadge = 1
-			};
-
-			var newBadge = new AgentBadge
-			{
-				Person = person,
-				BadgeType = BadgeType.AnsweredCalls,
-				BronzeBadge = 1,
-				BronzeBadgeAdded = true,
-				LastCalculatedDate = new DateOnly(2014, 01, 01)
-			};
-
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.AddBadge(newBadge, 0, goldToSilverRate));
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.AddBadge(newBadge, -1, goldToSilverRate));
-
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.AddBadge(newBadge, silverToBronzeRate, 0));
-			Assert.Throws<ArgumentOutOfRangeException>(() => target.AddBadge(newBadge, silverToBronzeRate, -1));
-		}
 	}
 }

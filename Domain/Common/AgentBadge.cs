@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual int GetBronzeBadge(int silverToBronzeRate, int goldToSilverRate)
 		{
 			updateBadgeAddedFlag(silverToBronzeRate, goldToSilverRate);
-			return getBronzeBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+			return getBronzeBadgeCount(_totalAmount, silverToBronzeRate);
 		}
 
 		public virtual int GetSilverBadge(int silverToBronzeRate, int goldToSilverRate)
@@ -92,11 +92,11 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private void updateBadgeAddedFlag(int silverToBronzeRate, int goldToSilverRate)
 		{
-			var previousBronzeBadge = getBronzeBadgeCount(_lastAmount, silverToBronzeRate, goldToSilverRate);
+			var previousBronzeBadge = getBronzeBadgeCount(_lastAmount, silverToBronzeRate);
 			var previousSilverBadge = getSilverBadgeCount(_lastAmount, silverToBronzeRate, goldToSilverRate);
 			var previousGoldBadge = getGoldBadgeCount(_lastAmount, silverToBronzeRate, goldToSilverRate);
 
-			var currentBronzeBadge = getBronzeBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
+			var currentBronzeBadge = getBronzeBadgeCount(_totalAmount, silverToBronzeRate);
 			var currentSilverBadge = getSilverBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
 			var currentGoldBadge = getGoldBadgeCount(_totalAmount, silverToBronzeRate, goldToSilverRate);
 
@@ -116,9 +116,9 @@ namespace Teleopti.Ccc.Domain.Common
 			return (amount / silverToBronzeRate) % goldToSilverRate;
 		}
 
-		private static int getBronzeBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
+		private static int getBronzeBadgeCount(int amount, int silverToBronzeRate)
 		{
-			return amount % (goldToSilverRate * silverToBronzeRate);
+			return amount % silverToBronzeRate;
 		}
 		#endregion
 	}
