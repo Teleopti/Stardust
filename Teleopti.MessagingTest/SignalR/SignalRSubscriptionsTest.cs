@@ -16,7 +16,7 @@ using Teleopti.MessagingTest.SignalR.TestDoubles;
 namespace Teleopti.MessagingTest.SignalR
 {
 	[TestFixture]
-	public class SignalBrokerSubscriptionsTest
+	public class SignalRSubscriptionsTest
 	{
 		private MessageBrokerCompositeClientForTest makeTarget(IHubProxyWrapper hubProxy)
 		{

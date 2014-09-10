@@ -11,7 +11,7 @@ using Teleopti.MessagingTest.SignalR.TestDoubles;
 namespace Teleopti.MessagingTest.SignalR
 {
 	[TestFixture]
-	public class SignalConnectionRestartOnClosedTest
+	public class SignalRConnectionRestartOnClosedTest
 	{
 		private IHubConnectionWrapper stubHubConnection(IHubProxyWrapper hubProxy)
 		{

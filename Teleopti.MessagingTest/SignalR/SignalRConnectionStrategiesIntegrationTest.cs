@@ -10,7 +10,7 @@ using Teleopti.MessagingTest.SignalR.TestDoubles;
 namespace Teleopti.MessagingTest.SignalR
 {
 	[TestFixture]
-	public class SignalConnectionStrategiesIntegrationTest
+	public class SignalRConnectionStrategiesIntegrationTest
 	{
 		private IHubConnectionWrapper stubHubConnection(IHubProxyWrapper hubProxy)
 		{
