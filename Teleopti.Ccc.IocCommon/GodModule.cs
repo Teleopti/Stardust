@@ -1,9 +1,7 @@
 using System.Configuration;
 using Autofac;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -19,8 +17,7 @@ namespace Teleopti.Ccc.IocCommon
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterModule<DateAndTimeModule>();
-			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
-			builder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
+			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(PathToToggle, ConfigurationManager.AppSettings["ToggleMode"]));
 			builder.RegisterModule<MessageBrokerModule>();
 		}
