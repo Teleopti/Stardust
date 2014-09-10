@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		private TeamScheduleDomainData data;
 		private IUserTimeZone userTimeZone;
 		private TimeZoneInfo timeZone;
-		private ITeamScheduleBadgeProvider badgeProvider;
 
 		[SetUp]
 		public void SetUp()
@@ -41,10 +39,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
 
-			badgeProvider = MockRepository.GenerateMock<ITeamScheduleBadgeProvider>();
 			Mapper.Reset();
 			Mapper.Initialize(
-				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone, new CreateHourText(new CurrentThreadUserCulture(), userTimeZone), badgeProvider)));
+				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
+					new CreateHourText(new CurrentThreadUserCulture(), userTimeZone))));
 		}
 		
 		[Test]
@@ -121,20 +119,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			                                                                           	});
 
 			result.AgentName.Should().Be.EqualTo(person.Name.ToString());
-		}
-
-		[Test]
-		public void ShouldMapBadges()
-		{
-			var badges = new List<AgentBadge>() {new AgentBadge()};
-			var person = new Person();
-			badgeProvider.Stub(x => x.GetBadges(person)).Return(badges);
-			var result = Mapper.Map<TeamScheduleDayDomainData, AgentScheduleViewModel>(new TeamScheduleDayDomainData()
-																						{
-																							Person = person
-																						});
-
-			result.Badges.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
