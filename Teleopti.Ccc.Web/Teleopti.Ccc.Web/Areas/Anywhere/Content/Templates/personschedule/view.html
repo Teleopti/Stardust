@@ -9,7 +9,7 @@
 						<div data-bind="foreach: Times">
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
 							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-							<!-- ko if: $parent.IsOtherTimeZone() -->
+							<!-- ko if: $parent.IsOtherTimeZone -->
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
 							<div class="label label-info absolute other-time-zone-label"data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>
 							<!-- /ko -->
@@ -27,7 +27,7 @@
 					</thead>
 
 					<tbody>
-						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }, css:{'time-zone-style': IsOtherTimeZone()}">
+						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }, css:{'time-zone-style': IsOtherTimeZone}">
 							<td class="person-name person-name-column">
 								<!-- ko if: IsOtherTimeZone -->
 								<div class="other-time-zone-name-div">
@@ -50,7 +50,7 @@
 									<!-- ko if: IsDayOff -->
 									<!-- ko with: DayOff -->
 									<!-- ko if: OverlapsTimeLine -->
-									<div class="dayoff absolute" data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }" style="top: 13px"></div>
+									<div class="dayoff absolute" data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', top: $parent.IsOtherTimeZone() ? '13px' : '-8px' }"></div>
 									<!-- /ko -->
 									<!-- /ko -->
 									<!-- /ko -->
