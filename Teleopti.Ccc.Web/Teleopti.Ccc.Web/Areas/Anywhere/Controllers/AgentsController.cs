@@ -91,6 +91,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 							});
 			return Json(agents, JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult  Team(Guid personId, DateTime date)
+		{
+			var person = _personRepository.Get(personId);
+			var team = person.MyTeam(new DateOnly(date));
+			return Json(team.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
+		}
 	}
 
 }

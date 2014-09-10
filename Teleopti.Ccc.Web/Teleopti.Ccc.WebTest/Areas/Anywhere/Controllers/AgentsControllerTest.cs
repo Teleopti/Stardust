@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -172,6 +173,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				Assert.That(result.Single().TimeZoneOffsetMinutes, Is.EqualTo(expected.TimeZoneOffsetMinutes));
 			}
 
+		}
+
+		[Test]
+		public void GetTeamId_ShouldGetTeamIdForAPerson()
+		{
+			var date = DateTime.Today;
+			var team = new Team { Description = new Description("team1") }.WithId();
+			var site = new Site("site1").WithId();
+			site.AddTeam(team);
+			var person = new Person().WithId();
+			person.Name = new Name("bill", "gates");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(date), PersonContractFactory.CreatePersonContract(" "," "," "), team));
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), null, personRepository, new Now(), null, null, null))
+			{
+				var result = target.Team(person.Id.GetValueOrDefault(), date).Data;
+				result.Should().Be(team.Id.GetValueOrDefault());
+			}
 		}
 
 		
