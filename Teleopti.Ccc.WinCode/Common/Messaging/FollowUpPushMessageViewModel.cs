@@ -76,9 +76,10 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 		public CommandModel Delete { get; private set; }
 		public CommandModel LoadDialogues { get; private set; }
 
-		private void ExecuteDelete(IPushMessageRepository repository)
+		private void ExecuteDelete(IPushMessageRepository repository, IPushMessageDialogueRepository dialogRepository)
 		{
 			Observables.ForEach(o => o.Notify(this));
+			dialogRepository.Remove(_model);
 			repository.Remove(_model);
 		}
 
@@ -123,7 +124,8 @@ namespace Teleopti.Ccc.WinCode.Common.Messaging
 			public override void OnExecute(IUnitOfWork uow, object sender, ExecutedRoutedEventArgs e)
 			{
 				IPushMessageRepository repository = _repositoryFactory.CreatePushMessageRepository(uow);
-				_commandTarget.ExecuteDelete(repository);
+				var dialogRepository = _repositoryFactory.CreatePushMessageDialogueRepository(uow);
+				_commandTarget.ExecuteDelete(repository, dialogRepository);
 				uow.PersistAll();
 			}
 		}

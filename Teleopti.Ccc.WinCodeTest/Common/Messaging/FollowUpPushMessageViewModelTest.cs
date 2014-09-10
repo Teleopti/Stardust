@@ -16,115 +16,107 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
 {
-    [TestFixture]
-    public class FollowUpPushMessageViewModelTest
-    {
-        private MockRepository _mocker;
-        private IRepositoryFactory _repositoryFactory;
-        private IPushMessage _pushMessage;
-        private string _title;
-        private string _message;
-        private FollowUpPushMessageViewModel _target;
-        private TesterForCommandModels _testerForCommandModels;
-    	private IUnitOfWorkFactory _unitOfWorkFactory;
+	[TestFixture]
+	public class FollowUpPushMessageViewModelTest
+	{
+		private IRepositoryFactory _repositoryFactory;
+		private IPushMessage _pushMessage;
+		private string _title;
+		private string _message;
+		private FollowUpPushMessageViewModel _target;
+		private TesterForCommandModels _testerForCommandModels;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
 
-    	[SetUp]
-        public void Setup()
-        {
-            _mocker = new MockRepository();
-            _repositoryFactory = _mocker.StrictMock<IRepositoryFactory>();
-			_unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            _title = "title";
-            _message = "message";
-            _pushMessage = new PushMessage {Title = _title, Message = _message};
-            _target = new FollowUpPushMessageViewModel(_pushMessage,_repositoryFactory,_unitOfWorkFactory);
-            _testerForCommandModels = new TesterForCommandModels();
-        }
+		[SetUp]
+		public void Setup()
+		{
+			_repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
+			_unitOfWorkFactory = MockRepository.GenerateStrictMock<IUnitOfWorkFactory>();
+			_title = "title";
+			_message = "message";
+			_pushMessage = new PushMessage { Title = _title, Message = _message };
+			_target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
+			_testerForCommandModels = new TesterForCommandModels();
+		}
 
-        [Test]
-        public void VerifyConstructor()
-        {
-           Assert.AreEqual(_title,_target.Title);
-           Assert.AreEqual(_message,_target.Message);
-        }     
+		[Test]
+		public void VerifyConstructor()
+		{
+			Assert.AreEqual(_title, _target.Title);
+			Assert.AreEqual(_message, _target.Message);
+		}
 
-        [Test]
-        public void VerifyDelete()
-        {
-            IPushMessageRepository repository = _mocker.StrictMock<IPushMessageRepository>();
-            IObservable<FollowUpPushMessageViewModel> observer = _mocker.StrictMock<IObservable<FollowUpPushMessageViewModel>>();
-            IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
+		[Test]
+		public void VerifyDelete()
+		{
+			var repository = MockRepository.GenerateStrictMock<IPushMessageRepository>();
+			var dialogRepository = MockRepository.GenerateStrictMock<IPushMessageDialogueRepository>();
+			var observer = MockRepository.GenerateStrictMock<IObservable<FollowUpPushMessageViewModel>>();
+			var uow = MockRepository.GenerateStrictMock<IUnitOfWork>();
 
-            _target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
-            using (_mocker.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-                Expect.Call(_repositoryFactory.CreatePushMessageRepository(uow)).Return(repository);
-                Expect.Call(() => repository.Remove(_pushMessage)); //Verifies that the message is removed
-                Expect.Call(() => observer.Notify(_target));  //Verifies that we can observe delete, used for removing from collections etc..
-                Expect.Call(uow.PersistAll()).Return(new List<IRootChangeInfo>()).Repeat.AtLeastOnce(); //make sure the changes are persisted
-                uow.Dispose();
-            }
-            using(_mocker.Playback())
-            {
-                _target.Observables.Add(observer);
+			_target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
 
-                Assert.AreEqual(UserTexts.Resources.Delete, _target.Delete.Text);
-                Assert.IsTrue(_testerForCommandModels.CanExecute(_target.Delete), "Verify that we can execute the command");
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_repositoryFactory.Stub(x => x.CreatePushMessageRepository(uow)).Return(repository);
+			_repositoryFactory.Stub(x => x.CreatePushMessageDialogueRepository(uow)).Return(dialogRepository);
+			repository.Stub(x => x.Remove(_pushMessage)); //Verifies that the message is removed
+			dialogRepository.Stub(x => x.Remove(_pushMessage)); //Verifies that the message is removed
+			observer.Stub(x => x.Notify(_target));  //Verifies that we can observe delete, used for removing from collections etc..
+			uow.Stub(x => x.PersistAll()).Return(new List<IRootChangeInfo>()).Repeat.AtLeastOnce(); //make sure the changes are persisted
+			uow.Stub(x => x.Dispose());
 
-                _testerForCommandModels.ExecuteCommandModel(_target.Delete);
-            }
-        }
+			_target.Observables.Add(observer);
 
-        [Test]
-        public void VerifyLoadDialogues()
-        {
-            IPerson person = PersonFactory.CreatePerson();
-            IPushMessageDialogueRepository repository = _mocker.StrictMock<IPushMessageDialogueRepository>();
-            IUnitOfWork uow = _mocker.StrictMock<IUnitOfWork>();
+			Assert.AreEqual(UserTexts.Resources.Delete, _target.Delete.Text);
+			Assert.IsTrue(_testerForCommandModels.CanExecute(_target.Delete), "Verify that we can execute the command");
 
-            IList<IPushMessageDialogue> retListFromRep = new List<IPushMessageDialogue> { new PushMessageDialogue(_pushMessage, person) };
-                
-            using (_mocker.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-                Expect.Call(_repositoryFactory.CreatePushMessageDialogueRepository(uow)).Return(repository);
-                Expect.Call(repository.Find(_pushMessage)).Return(retListFromRep);
-                uow.Dispose();
-            }
-            using (_mocker.Playback())
-            {
-                _target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
+			_testerForCommandModels.ExecuteCommandModel(_target.Delete);
+		}
 
-                Assert.IsTrue(_testerForCommandModels.CanExecute(_target.LoadDialogues), "Verify that we can execute the command");
+		[Test]
+		public void VerifyLoadDialogues()
+		{
+			IPerson person = PersonFactory.CreatePerson();
+			var repository = MockRepository.GenerateStrictMock<IPushMessageDialogueRepository>();
+			var uow = MockRepository.GenerateStrictMock<IUnitOfWork>();
 
-                _testerForCommandModels.ExecuteCommandModel(_target.LoadDialogues);
-                Assert.AreEqual(1,_target.Dialogues.Count);
-            }
-        }
+			IList<IPushMessageDialogue> retListFromRep = new List<IPushMessageDialogue> { new PushMessageDialogue(_pushMessage, person) };
 
-        [Test]
-        public void VerifyFilterDialogues()
-        {
-            ReplyOptionViewModel filter = new ReplyOptionViewModel("bah");
-            _target.ReplyOptions.Add(filter);
-            _target.AddFilter(filter);
-            Assert.IsTrue(filter.FilterIsActive);
-            ICollectionView view = CollectionViewSource.GetDefaultView(_target.Dialogues);
-            Assert.IsNotNull(view.Filter);
-            _target.RemoveFilter(filter);
-            view = CollectionViewSource.GetDefaultView(_target.Dialogues);
-            Assert.IsFalse(filter.FilterIsActive);
-            Assert.IsNull(view.Filter);
-        }
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_repositoryFactory.Stub(x => x.CreatePushMessageDialogueRepository(uow)).Return(repository);
+			repository.Stub(x => x.Find(_pushMessage)).Return(retListFromRep);
+			uow.Stub(x => x.Dispose());
 
-        [Test]
-        public void VerifyNotRepliedFilter()
-        {
-            //Make sure that there is a not replied spec by default and that the target is set
-            ReplyOptionViewModel notRepliedOption = _target.ReplyOptions.First(r => r.Filter.Filter is DialogueIsRepliedSpecification);
-            Assert.IsNotNull(notRepliedOption);
-            Assert.IsNotNull(notRepliedOption.FilterTarget);
-        }
-    }
+			_target = new FollowUpPushMessageViewModel(_pushMessage, _repositoryFactory, _unitOfWorkFactory);
+
+			Assert.IsTrue(_testerForCommandModels.CanExecute(_target.LoadDialogues), "Verify that we can execute the command");
+
+			_testerForCommandModels.ExecuteCommandModel(_target.LoadDialogues);
+			Assert.AreEqual(1, _target.Dialogues.Count);
+		}
+
+		[Test]
+		public void VerifyFilterDialogues()
+		{
+			var filter = new ReplyOptionViewModel("bah");
+			_target.ReplyOptions.Add(filter);
+			_target.AddFilter(filter);
+			Assert.IsTrue(filter.FilterIsActive);
+			ICollectionView view = CollectionViewSource.GetDefaultView(_target.Dialogues);
+			Assert.IsNotNull(view.Filter);
+			_target.RemoveFilter(filter);
+			view = CollectionViewSource.GetDefaultView(_target.Dialogues);
+			Assert.IsFalse(filter.FilterIsActive);
+			Assert.IsNull(view.Filter);
+		}
+
+		[Test]
+		public void VerifyNotRepliedFilter()
+		{
+			//Make sure that there is a not replied spec by default and that the target is set
+			ReplyOptionViewModel notRepliedOption = _target.ReplyOptions.First(r => r.Filter.Filter is DialogueIsRepliedSpecification);
+			Assert.IsNotNull(notRepliedOption);
+			Assert.IsNotNull(notRepliedOption.FilterTarget);
+		}
+	}
 }
