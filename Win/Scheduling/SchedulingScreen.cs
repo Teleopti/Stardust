@@ -4742,27 +4742,72 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void replyAndDenyRequestFromRequestDetailsView(EventParameters<ReplyAndDenyRequestFromRequestDetailsView> obj)
 		{
-			toolStripButtonReplyAndDeny_Click(null, null);
+			var denyCommand = new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker);
+			IList<PersonRequestViewModel> selectedRequestList =new List<PersonRequestViewModel>() { obj.Value.Request };
+			using (var dialog = new RequestReplyStatusChangeDialog(_requestPresenter, selectedRequestList, denyCommand))
+			{
+				dialog.ShowDialog();
+			}
+			recalculateResourcesForRequests(selectedRequestList);
 		}
 
 		private void replyAndApproveRequestFromRequestDetailsView(EventParameters<ReplyAndApproveRequestFromRequestDetailsView> obj)
 		{
-			toolStripButtonReplyAndApprove_Click(null, null);
+			
+			var businessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
+			var approveRequestCommand = new ApprovePersonRequestCommand(this, _schedulerState.Schedules,
+				_schedulerState.RequestedScenario, _requestPresenter,
+				_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules, _overriddenBusinessRulesHolder,
+				new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState));
+
+			IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() { obj.Value.Request };
+			using (var dialog = new RequestReplyStatusChangeDialog(_requestPresenter, selectedRequestList, approveRequestCommand))
+			{
+				dialog.ShowDialog();
+			}
+			recalculateResourcesForRequests(selectedRequestList);
+
+			if (_requestView != null)
+				_requestView.NeedUpdate = true;
+
+			reloadRequestView();
+
 		}
 
 		private void replyRequestFromRequestDetailsView(EventParameters<ReplyRequestFromRequestDetailsView> eventParameters)
 		{
-			toolStripButtonEditNote_Click(null, null);
+			IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>(){ eventParameters.Value.Request };
+			using (var dialog = new RequestReplyStatusChangeDialog(_requestPresenter, selectedRequestList))
+			{
+				dialog.ShowDialog();
+			}
 		}
 
 		private void denyRequestFromRequestDetailsView(EventParameters<DenyRequestFromRequestDetailsView> eventParameters)
 		{
-			toolStripButtonDenyRequestClick(null, null);
+			IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() { eventParameters.Value.Request };
+
+			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker), selectedRequestList);
+
 		}
 
 		private void approveRequestFromRequestDetailsView(EventParameters<ApproveRequestFromRequestDetailsView> eventParameters)
 		{
-			toolStripButtonApproveRequestClick(null, null);
+			var allNewBusinessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
+
+			var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter,
+				_handleBusinessRuleResponse,
+				_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
+				new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState));
+
+			var selectedAdapters = new List<PersonRequestViewModel>() { eventParameters.Value.Request };
+
+			changeRequestStatus(approvePersonRequestCommand, selectedAdapters);
+
+			if (_requestView != null)
+				_requestView.NeedUpdate = true;
+
+			reloadRequestView();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
