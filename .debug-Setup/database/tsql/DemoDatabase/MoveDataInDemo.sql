@@ -73,6 +73,7 @@ cross join (
 ) p
 GROUP BY p.Id,b.value
 
+/*
 truncate table $(TELEOPTICCC).dbo.AgentBadge
 insert into $(TELEOPTICCC).dbo.AgentBadge
 select newid(),*,DATEADD(D, 0, DATEDIFF(D, 0, GETDATE()))
@@ -80,6 +81,7 @@ select newid(),*,DATEADD(D, 0, DATEDIFF(D, 0, GETDATE()))
 	select *
 	from #AgentBadge
 ) a
+*/
 drop table #AgentBadge
 GO
 
