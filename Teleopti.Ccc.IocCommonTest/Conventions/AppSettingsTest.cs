@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.IocCommonTest.Conventions
 			var config = setupConfig("thestringKEY", expected);
 
 			var target = new testModule(config);
-			target.appsettings_thestringKEY
+			target.appsettingsthestringKEY
 				.Should().Be.EqualTo(expected);
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.IocCommonTest.Conventions
 			var config = setupConfig("theintkey", expected.ToString());
 
 			var target = new testModule(config);
-			target.AppSettings_TheIntKey.Should().Be.EqualTo(expected);
+			target.AppSettingsTheIntKey.Should().Be.EqualTo(expected);
 		}
 
 		[Test]
@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.IocCommonTest.Conventions
 			var appSettings = new NameValueCollection { { "thestringkey", "1" },{"theintkey", "1"} };
 			configReader.Stub(x => x.AppSettings).Return(appSettings);
 			var target = new testModule(configReader);
-			target.AppSettings_TheIntKey.Should().Be.EqualTo(1);
-			target.appsettings_thestringKEY.Should().Be.EqualTo("1");
+			target.AppSettingsTheIntKey.Should().Be.EqualTo(1);
+			target.appsettingsthestringKEY.Should().Be.EqualTo("1");
 		}
 
 		private static IConfigReader setupConfig(string key, string value)
@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.IocCommonTest.Conventions
 			}
 
 			public string Something { get; set; }
-			public string appsettings_thestringKEY { get; set; }
-			public int AppSettings_TheIntKey { get; set; }
+			public string appsettingsthestringKEY { get; set; }
+			public int AppSettingsTheIntKey { get; set; }
 		}
 
 		private class testModuleWithNoAppSettingsProperties : TeleoptiModule

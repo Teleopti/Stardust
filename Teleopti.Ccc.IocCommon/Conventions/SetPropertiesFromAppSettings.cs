@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.IocCommon.Conventions
 {
 	/// <summary>
 	/// Sets public module properties to appsettings values based on
-	/// appsettings_[appsettings key] convention.
+	/// appsettings[appsettings key] convention.
 	/// </summary>
 	public class SetPropertiesFromAppSettings : ISetModuleProperties
 	{
 		private readonly IDictionary<string, string> _appSettingsAsDictionary;
-		private const string nameConvention = "appsettings_";
+		private const string nameConvention = "appsettings";
 
 		public SetPropertiesFromAppSettings(IConfigReader configReader)
 		{
