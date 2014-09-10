@@ -11,8 +11,10 @@ Given there is a role with
 
 Scenario: Show my badge
 Given There is a agent badge settings with
-  | Field        | Value |
-  | BadgeEnabled | True  | 
+  | Field                 | Value |
+  | BadgeEnabled          | True  |
+  | Silver to bronze rate | 5     |
+  | Gold to silver rate   | 2     |
   And I have badges with
   | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
   | AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
@@ -27,8 +29,10 @@ Given There is a agent badge settings with
 
 Scenario: Show zero badge when agent has no badge
 Given There is a agent badge settings with
-  | Field        | Value |
-  | BadgeEnabled | True  |
+  | Field                 | Value |
+  | BadgeEnabled          | True  |
+  | Silver to bronze rate | 5     |
+  | Gold to silver rate   | 2     |
   And I have badges with
   | Badge type     | Bronze | Silver | Gold |
  When I am viewing week schedule
@@ -36,8 +40,10 @@ Given There is a agent badge settings with
 
 Scenario: Do not show badge when badge feature disabled
 Given There is a agent badge settings with
-  | Field        | Value |
-  | BadgeEnabled | False |
+  | Field                 | Value |
+  | BadgeEnabled          | False |
+  | Silver to bronze rate | 5     |
+  | Gold to silver rate   | 2     |
   And I have badges with
   | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
   | AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |

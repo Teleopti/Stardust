@@ -92,13 +92,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	{
 		public bool BadgeEnabled { get; set; }
 
+		public int SilverToBronzeRate { get; set; }
+		public int GoldToSilverRate { get; set; }
+
 		public IAgentBadgeThresholdSettings Settings;
 
 		public void Apply(IUnitOfWork uow)
 		{
 			Settings = new AgentBadgeThresholdSettings
 			{
-				EnableBadge = BadgeEnabled
+				EnableBadge = BadgeEnabled,
+				SilverToBronzeBadgeRate = SilverToBronzeRate,
+				GoldToSilverBadgeRate = GoldToSilverRate
 			};
 
 			var rep = new AgentBadgeSettingsRepository(uow);
@@ -114,7 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public int Gold { get; set; }
 		public DateTime LastCalculatedDate { get; set; }
 
-		public IAgentBadge AgentBadge;
+		public AgentBadgeTransaction AgentBadge;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -123,22 +128,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			{
 				throw  new ArgumentException(@"BadgeType", string.Format("\"{0}\" is not a valid badge type.", BadgeType));
 			}
-
+			var setting = new AgentBadgeSettingsRepository(uow).LoadAll().First();
+			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
+			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
+			var totalBadgeAmount = (Gold*goldToSilverBadgeRate + Silver)*silverToBronzeBadgeRate + Bronze;
+			
 			var rep = new PersonRepository(uow);
 			var people = rep.LoadAll();
 			var person = people.First(p => p.Name == user.Name);
 
-			AgentBadge = new AgentBadge
+			AgentBadge = new AgentBadgeTransaction
 			{
 				Person = person,
 				BadgeType = badgeType,
-				BronzeBadge = Bronze,
-				SilverBadge = Silver,
-				GoldBadge = Gold,
-				LastCalculatedDate = new DateOnly(LastCalculatedDate)
+				Amount = totalBadgeAmount,
+				CalculatedDate = new DateOnly(LastCalculatedDate),
+				Description = "test",
+				InsertedOn = new DateTime(2014, 8, 20)
 			};
 
-			var badgeRep = new AgentBadgeRepository(uow);
+			var badgeRep = new AgentBadgeTransactionRepository(uow);
 			badgeRep.Add(AgentBadge);
 		}
 	}
