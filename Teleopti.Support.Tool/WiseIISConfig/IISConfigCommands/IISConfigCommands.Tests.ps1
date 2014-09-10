@@ -17,7 +17,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 #Add IIS admin module
 
-Write-Host 'Put you break point here'
+#Write-Host 'Put you break point here'
 
 Load-SnapIn -ModuleName "WebAdministration"
 
@@ -80,8 +80,11 @@ function Config-Load {
                 }
                 
             }
+			Write-Host '--------config----------'
+			Write-Host 'BaseURL:: ' $global:BaseURL
             Write-Host 'version: ' $global:version
             Write-Host 'restToBaseline: '$global:resetToBaseline
+			Write-Host '------------------------'
         }
     }
 }
@@ -293,7 +296,11 @@ function Add-CccLicenseToDemo
         $batchFile = "$dir\Add-CccLicenseToDemo.bat"
         & "$BatchFile"
     }
-	&"C:\Program Files (x86)\Teleopti\SupportTools\StartStopSystem\ResetSystem.bat"
+	
+	write-host 'restart system after adding Lic ...'
+	$BatchFile = $here + "\..\..\StartStopSystem\ResetSystem.bat"
+	&$BatchFile foo
+	write-host 'restart system. Done!'
 }
 
 #Main
