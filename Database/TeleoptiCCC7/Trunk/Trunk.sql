@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[AgentBadgeTransaction](
     [Person] uniqueidentifier NOT NULL,
     [BadgeType] int NOT NULL, --AnsweredCallsBadge=0,AverageHandlingTimeBadge=1,AdherenceBadge=2
     [Amount] smallint,
-    [CalculatedDate] date NOT NULL,
+    [CalculatedDate] datetime NOT NULL,
     [Description] nvarchar(50) NOT NULL,
     [InsertedOn] datetime NOT NULL
 )
