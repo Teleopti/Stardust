@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
             builder.RegisterType<FindSharedCalendarScheduleDays>().As<IFindSharedCalendarScheduleDays>().SingleInstance();
             builder.RegisterType<CheckCalendarActiveCommand>().As<ICheckCalendarActiveCommand>().SingleInstance();
             builder.RegisterType<CheckCalendarPermissionCommand>().As<ICheckCalendarPermissionCommand>().SingleInstance();
-            builder.RegisterType<PrincipalAuthorizationFactory>().As<IPrincipalAuthorizationFactory>().SingleInstance();
+			builder.RegisterType<PrincipalAuthorizationFactory>().As<IPrincipalAuthorizationFactory>().SingleInstance();
 		}
 
 		private static void registerRequestsType(ContainerBuilder builder)
@@ -187,6 +187,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
+			//builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
+			//builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

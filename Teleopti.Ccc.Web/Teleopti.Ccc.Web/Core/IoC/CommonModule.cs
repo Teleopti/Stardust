@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
-			builder.RegisterType<TeamScheduleBadgeProvider>().As<ITeamScheduleBadgeProvider>();
 			builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
 		}
 

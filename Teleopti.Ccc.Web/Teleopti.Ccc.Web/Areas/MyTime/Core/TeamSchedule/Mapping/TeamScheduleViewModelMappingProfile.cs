@@ -14,13 +14,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 	{
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly ICreateHourText _createHourText;
-		private readonly ITeamScheduleBadgeProvider _badgeProvider;
 
-		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText, ITeamScheduleBadgeProvider badgeProvider)
+		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText)
 		{
 			_userTimeZone = userTimeZone;
 			_createHourText = createHourText;
-			_badgeProvider = badgeProvider;
 		}
 
 		private class TimeLineMappingData
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		{
 			CreateMap<TeamScheduleDomainData, TeamScheduleViewModel>()
 				.ForMember(d=>d.ShiftTradePermisssion, o => o.UseValue(false))
-				.ForMember(d=>d.AgentBadgeEnabled, o => o.UseValue(false))
 				.ForMember(d => d.AgentSchedules, o => o.MapFrom(s => s.Days))
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
 				.ForMember(d => d.TeamSelection, o => o.MapFrom(s => s.TeamOrGroupId))
@@ -99,20 +96,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 																									DisplayTimePeriod = s.DisplayTimePeriod,
 																								};
 																		}))
-				.ForMember(d => d.Badges, o => o.ResolveUsing(s =>
-				{
-					var badges = _badgeProvider.GetBadges(s.Person);
-					if (badges == null)
-						return null;
-
-					return badges.Select(x => new BadgeViewModel
-					{
-						BadgeType = x.BadgeType,
-						BronzeBadge = x.BronzeBadge,
-						SilverBadge = x.SilverBadge,
-						GoldBadge = x.GoldBadge
-					});
-				}))
 				;
 
 			CreateMap<LayerMappingData, LayerViewModel>()

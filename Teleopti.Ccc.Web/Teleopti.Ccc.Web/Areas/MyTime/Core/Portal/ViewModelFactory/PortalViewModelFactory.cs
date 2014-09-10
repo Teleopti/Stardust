@@ -80,14 +80,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			var badgeEnabled = false;
 			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
-			if (badgeToggleEnabled)
+			var badgeSettings = _badgeSettingProvider.GetBadgeSettings();
+			if (badgeToggleEnabled && badgeSettings != null)
 			{
-				var badgeSettings = _badgeSettingProvider.GetBadgeSettings();
-				if (badgeSettings != null)
-				{
-					badgeEnabled = badgeSettings.EnableBadge;
-					badges = _badgeProvider.GetBadges();
-				}
+				badgeEnabled = badgeSettings.EnableBadge;
+				badges = _badgeProvider.GetBadges();
 			}
 			
 			return new PortalViewModel
@@ -101,9 +98,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 							Badges = badges == null ? null : badges.Select(x => new BadgeViewModel
 							{
 								BadgeType = x.BadgeType,
-								BronzeBadge = x.BronzeBadge,
-								SilverBadge = x.SilverBadge,
-								GoldBadge = x.GoldBadge
+								BronzeBadge = x.GetBronzeBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
+								SilverBadge = x.GetSilverBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
+								GoldBadge = x.GetGoldBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate)
 							}),
 							IsBadgesToggleEnabled = badgeToggleEnabled,
 							IsBadgeFeatureEnabled = badgeEnabled

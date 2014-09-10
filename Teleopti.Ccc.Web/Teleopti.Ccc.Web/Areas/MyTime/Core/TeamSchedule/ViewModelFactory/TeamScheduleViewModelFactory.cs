@@ -2,7 +2,6 @@ using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -14,15 +13,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	{
 		private readonly IMappingEngine _mapper;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IToggleManager _toggleManager;
-		private readonly IBadgeSettingProvider _badgeSettingProvider;
 
-		public TeamScheduleViewModelFactory(IMappingEngine mapper, IPermissionProvider permissionProvider, IToggleManager toggleManager, IBadgeSettingProvider badgeSettingProvider)
+		public TeamScheduleViewModelFactory(IMappingEngine mapper, IPermissionProvider permissionProvider)
 		{
 			_mapper = mapper;
 			_permissionProvider = permissionProvider;
-			_toggleManager = toggleManager;
-			_badgeSettingProvider = badgeSettingProvider;
 		}
 
 		public TeamScheduleViewModel CreateViewModel(DateOnly date, Guid id)
@@ -31,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var viewmodel = _mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(domainData);
 			viewmodel.ShiftTradePermisssion =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
-			viewmodel.AgentBadgeEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913) && _badgeSettingProvider.GetBadgeSettings().EnableBadge;
 			return viewmodel;
 		}
 	}
