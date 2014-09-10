@@ -42,8 +42,12 @@ define([
 			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/' + action);
 		},
 
-		GoToTeamSchedule: function (id, personId, date, skill) {
-			window.setLocationHash('teamschedule/' + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
+		GoToTeamSchedule: function (id, date, skill) {
+			window.setLocationHash('teamschedule/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
+		},
+
+		GoToTeamScheduleWithSelectedPerson: function (id, personId, date) {
+			window.setLocationHash('teamschedule/' + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date));
 		},
 
 		GotoRealTimeAdherenceTeams: function (siteId) {
