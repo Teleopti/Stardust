@@ -8,10 +8,15 @@ COLOR A
 cls
 SET DefaultDB=%1
 SET configuration=%2
-SET /A Sikuli=%3
+SET /A Silent=%3
 SET Branch=%4
+SET SqlInstanceName=%5
 
-IF "%Sikuli%"=="" SET /A Sikuli=0
+::Instance were the Baseline will  be restored
+SET INSTANCE=%SqlInstanceName%
+IF "%INSTANCE%"=="" SET INSTANCE=%COMPUTERNAME%
+
+IF "%Silent%"=="" SET /A Silent=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
 IF "%DefaultDB%"=="" SET DefaultDB=DemoSales
 
@@ -58,9 +63,6 @@ ECHO.
 ::Clean up last log files
 CD "%ROOTDIR%"
 IF EXIST DBManager*.log DEL DBManager*.log /Q
-
-::Instance were the Baseline will  be restored
-SET INSTANCE=%COMPUTERNAME%
 
 ::Build DbManager
 ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
@@ -345,7 +347,7 @@ ECHO ------
 
 ::Build Teleopti.Support.Security.exe
 ECHO ------
-IF %Sikuli% equ 1 (
+IF %Silent% equ 1 (
 SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\LicenseFiles\Teleopti_RD.xml"
 GOTO Finish
 )
@@ -419,7 +421,7 @@ set "%~3=%localTfiles%"
 goto:eof
 
 :GETDATAPATH
-IF %Sikuli% equ 1 (
+IF %Silent% equ 1 (
 SET CustomPath=c:\temp\RestoreToLocal
 ) else (
 SET /P CustomPath=Please provide a custom path for data storage:

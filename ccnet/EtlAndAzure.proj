@@ -5,7 +5,7 @@
 
 	<PropertyGroup>
 		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
-		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<ETLDBNamePrefix>$(Computername)_$(CCNetProject)</ETLDBNamePrefix>
 		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
@@ -15,19 +15,17 @@
 		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2012</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
 		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
-		<CCC7DB>$(DBNamePrefix)_ccc7</CCC7DB>
-		<AnalyticsDB>$(DBNamePrefix)_analytics</AnalyticsDB>
-		<AggDB>$(DBNamePrefix)_agg</AggDB>
-		<AppSqlLogin>EtlNightlyUser</AppSqlLogin>
-		<AppSqlPwd>EtlNightlyPwd2</AppSqlPwd>
+		<CCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</CCC7DB>
+		<AnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</AnalyticsDB>
+		<AggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</AggDB>
+		<AppSqlLogin>TeleoptiDemoUser</AppSqlLogin>
+		<AppSqlPwd>TeleoptiDemoPwd2</AppSqlPwd>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>		
-		<DBManagerTeleoptiCCC7Args>-S$(SqlInstanceName) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCC7Args>
-		<DBManagerTeleoptiCCCAggArgs>-S$(SqlInstanceName) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCCAggArgs>
-		<DBManagerTeleoptiAnalyticsArgs>-S$(SqlInstanceName) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiAnalyticsArgs>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
 		<BakDir>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\DemoDatabase</BakDir>
 		<LogObjectId>1</LogObjectId>
+		<RestoreToLocal>"$(CCNetWorkingDirectory)\.debug-Setup\Restore to Local.bat"</RestoreToLocal>
 	
 </PropertyGroup>
 
@@ -59,7 +57,7 @@
 	c) Add extra ETL Test SP
 	d) Create one job for the ETL service
 	-->
-	<Target Name="PrepareDB" DependsOnTargets="ETLCompile;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
+	<Target Name="PrepareDB" DependsOnTargets="ETLCompile;RestoreToLocal;MoveOneLogObject">
 		<Message Text="Prepare ETL. Working..." Importance="high" />
 		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" ContinueOnError="false">
@@ -68,25 +66,9 @@
 		<Message Text="Prepare ETL. Done!" Importance="high" />
 	</Target>
   
-	<Target Name="RestoreDatabasesAndPatch">
-		<Message Text="Set DBs in single user mode, retore and update CrossDb views..." Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuildSql) -v BakDir=$(BakDir) -v TeleoptiCCC7=$(CCC7DB) -v TeleoptiCCCAgg=$(AggDB) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
-
-		<Message Text="Patching 3 x databases..." Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
-		
-		<Message Text="Applying data update via Teleopti.Support.Security.exe ..." Importance="high" />
-		<Message Text="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE" Importance="high" />
-		<Exec Command ="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE"/>
-		
+	<Target Name="RestoreToLocal">
+		<Exec Command ="$(RestoreToLocal) DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName)"/>
 		<Message Text="Databases patched and data updated" Importance="high" />
-	</Target>
-
-	<Target Name="AddLic">
-		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
-		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
