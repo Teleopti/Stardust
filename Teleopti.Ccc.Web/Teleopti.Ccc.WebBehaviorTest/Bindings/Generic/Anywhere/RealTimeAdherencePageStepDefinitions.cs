@@ -78,10 +78,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
 		}
 
-		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
-		public void WhenIClickInAgentMenu(CssClass cssClass)
+		[When(@"I wait and click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
+		public void WhenIWaitAndClickInAgentMenu(CssClass cssClass)
 		{
-			Browser.Interactions.Click(string.Format(".agent-menu a.{0}", cssClass.Name));
+			Browser.Interactions.WaitClick(string.Format(".agent-menu a.{0}", cssClass.Name));
 		}
 
 		[When(@"I click the site checkbox for '(.*)'")]

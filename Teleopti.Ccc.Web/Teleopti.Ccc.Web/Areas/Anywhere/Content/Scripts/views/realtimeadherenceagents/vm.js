@@ -6,6 +6,7 @@
 		'resources',
 		'ajax',
 		'helpers',
+		'jquery',
 		'views/realtimeadherenceagents/agent-menu'
 ],
 	function (ko,
@@ -15,6 +16,7 @@
 		resources,
 		ajax,
 		helpers,
+		$,
 		menu) {
 	return function () {
 
@@ -152,6 +154,7 @@
 				ajax.ajax({
 					url: "Agents/Team?personId=" + selectedPersonId + "&date=" + helpers.Date.ToServer(today),
 					success: function (groupId) {
+						$(".agent-menu-options").removeClass('change-schedule').addClass('change-schedule');
 						that.menu.groupId = groupId;
 						that.menu.personId = selectedPersonId;
 						that.menu.date = today;

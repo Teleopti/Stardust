@@ -298,6 +298,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAnywhereRealTimeAdherenceTeamOverview(Guid idForTeam)
 		{
+			DataMaker.Data().ApplyDelayed();
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#realtimeadherenceagents/{0}", idForTeam),
 				"Anywhere#realtimeadherenceagents",
