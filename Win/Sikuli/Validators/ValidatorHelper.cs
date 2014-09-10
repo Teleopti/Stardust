@@ -32,13 +32,26 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill);
 				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
 				if (result.HasValue)
-					return Math.Round(result.Value, 2);
+					return Math.Round(result.Value, 3);
 				return null;
 			}
 			catch
 			{
 				return null;
 			}
+		}
+
+		public static double GetDailySumOfStandardDeviationsFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
+		{
+			double result = 0d;
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill);
+				foreach (var dailySkillStaffPeriodList in skillStaffPeriodsOfFullPeriod)
+				{
+					var dailyValue = SkillStaffPeriodHelper.SkillDayGridSmoothness(dailySkillStaffPeriodList);
+					if (dailyValue.HasValue)
+						result += dailyValue.Value;
+				}
+			return result;
 		}
 
 		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)

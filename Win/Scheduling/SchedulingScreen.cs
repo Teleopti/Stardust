@@ -2,12 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -37,7 +34,6 @@ using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.Win.Sikuli;
-using Teleopti.Ccc.Win.Sikuli.Validators;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -622,7 +618,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				SikuliHelper.EnterValidator(this);
+				Sikuli.SikuliHelper.EnterValidator(this);
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -2058,20 +2054,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			TabPageAdv skillTabPage = _tabSkillData.TabPages[0];
 			var totalSkill = skillTabPage.Tag as IAggregateSkill;
 
-			switch (SikuliHelper.SikuliValidator)
+			if (SikuliHelper.TestMode)
 			{
-				case SikuliValidatorRegister.SelectValidator.Schedule:
-					SikuliHelper.AssertValidation(new SchedulerValidator(_schedulerState, totalSkill), this);
-					break;
-				case SikuliValidatorRegister.SelectValidator.Optimize:
-					SikuliHelper.AssertValidation(new OptimizerValidator(_schedulerState, totalSkill), this);
-					break;
-				case SikuliValidatorRegister.SelectValidator.DeleteAll:
-					SikuliHelper.AssertValidation(new DeleteAllValidator(_schedulerState, totalSkill), this);
-					break;
-				default:
+				ISikuliValidator currentValidator =
+					SikuliValidators.Factory.Scheduler.CreateValidator(_schedulerState, totalSkill);
+
+				if (currentValidator != null)
+					SikuliHelper.Validate(currentValidator, this);
+				else
 					SikuliHelper.ShowTaskDone(this);
-					break;
 			}
 		}
 
@@ -2310,7 +2301,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			SikuliHelper.ShowLoaded(this);
+			Sikuli.SikuliHelper.ShowLoaded(this);
 		}
 
 		private void setupRequestViewButtonStates()

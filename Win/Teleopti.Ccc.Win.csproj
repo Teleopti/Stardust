@@ -708,7 +708,7 @@
     </Compile>
     <Compile Include="Sikuli\SikuliHelper.cs" />
     <Compile Include="Sikuli\SikuliValidationResult.cs" />
-    <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
+    <Compile Include="Sikuli\SikuliValidators.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2511,6 +2511,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
+    <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
+    <Compile Include="Sikuli\Validators\OptimizeBetweenDaysValidator.cs" />
+    <Compile Include="Sikuli\Validators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\DeleteAllValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
