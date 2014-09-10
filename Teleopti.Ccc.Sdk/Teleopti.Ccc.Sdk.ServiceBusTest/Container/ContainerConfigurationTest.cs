@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
@@ -60,6 +62,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			{
 				container.Resolve<IMessageSender>()
 					.Should().Be.SameInstanceAs(container.Resolve<HttpSender>());
+			}
+		}
+
+		[Test]
+		public void ShouldResolveNoKeepAliveStrategies()
+		{
+			using (var container = new ContainerBuilder().Build())
+			{
+				new ContainerConfiguration(container).Configure();
+				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
+					.Select(x => x.GetType())
+					.Should().Have.SameValuesAs(new[] { typeof(RecreateOnNoPingReply), typeof(RestartOnClosed) });
 			}
 		}
 

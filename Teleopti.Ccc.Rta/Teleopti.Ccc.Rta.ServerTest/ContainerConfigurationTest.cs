@@ -93,16 +93,16 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			}
 		}
 
-		//[Test]
-		//public void ShouldResolveKeepAliveStrategies()
-		//{
-		//	using (var container = new ContainerConfiguration().Configure().Build())
-		//	{
-		//		container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
-		//			.Select(x => x.GetType())
-		//			.Should().Have.SameValuesAs(new[] {typeof (RecreateOnNoPingReply), typeof (RestartOnClosed)});
-		//	}
-		//}
+		[Test]
+		public void ShouldResolveKeepAliveStrategies()
+		{
+			using (var container = new ContainerConfiguration().Configure().Build())
+			{
+				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
+					.Select(x => x.GetType())
+					.Should().Have.SameValuesAs(new[] {typeof (RecreateOnNoPingReply), typeof (RestartOnClosed)});
+			}
+		}
 
 		private static IContainer containerWithToggle(Toggles toggle, bool value)
 		{

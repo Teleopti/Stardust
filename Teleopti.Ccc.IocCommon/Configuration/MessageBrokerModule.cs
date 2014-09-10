@@ -1,3 +1,4 @@
+using System;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageListener>()
 				.SingleInstance();
 
+			builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
+			builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
 			builder.RegisterType<SignalRClient>()
 				.As<ISignalRClient>()
 				.As<IMessageBrokerUrl>()
