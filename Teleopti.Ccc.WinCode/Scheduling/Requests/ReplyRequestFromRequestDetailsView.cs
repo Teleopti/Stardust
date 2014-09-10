@@ -2,5 +2,11 @@
 {
 	public class ReplyRequestFromRequestDetailsView
 	{
+		public PersonRequestViewModel Request { get; private set; }
+
+		public ReplyRequestFromRequestDetailsView(PersonRequestViewModel request)
+		{
+			Request = request;
+		}
 	}
 }

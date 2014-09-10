@@ -2,5 +2,11 @@
 {
 	public class ApproveRequestFromRequestDetailsView
 	{
+		public PersonRequestViewModel Request { get; private set; }
+
+		public ApproveRequestFromRequestDetailsView(PersonRequestViewModel request)
+		{
+			Request = request;
+		}
 	}
 }
