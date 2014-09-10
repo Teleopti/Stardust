@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 					if (dailyValue.HasValue)
 						result += dailyValue.Value;
 				}
-			return result;
+			return Math.Round(result, 3);
 		}
 
 		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
