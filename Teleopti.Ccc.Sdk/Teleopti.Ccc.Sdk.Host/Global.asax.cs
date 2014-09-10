@@ -7,12 +7,14 @@ using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
@@ -31,6 +33,7 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
@@ -70,11 +73,17 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
 			var busSender = new ServiceBusSender();
-	        var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-	        var initializeApplication =
-		        new InitializeApplication(
-			        new DataSourcesFactory(new EnversConfiguration(),
-			                               new List<IMessageSender>
+	       
+            var builder = buildIoc();
+	        var container = builder.Build();
+            AutofacHostFactory.Container = container;
+	        var messageBroker = container.Resolve<IMessageBrokerComposite>();
+
+			var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var initializeApplication =
+				new InitializeApplication(
+					new DataSourcesFactory(new EnversConfiguration(),
+										   new List<IMessageSender>
 				                               {
 					                               new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 					                               new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
@@ -84,21 +93,17 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					                               new PersonChangedMessageSender(eventPublisher),
 					                               new PersonPeriodChangedMessageSender(eventPublisher)
 				                               },
-			                               DataSourceConfigurationSetter.ForSdk()),
-					MessageBrokerContainerDontUse.CompositeClient()) { MessageBrokerDisabled = messageBrokerDisabled() };
-            string sitePath = Global.sitePath();
-            initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
-            var messageBroker = initializeApplication.MessageBroker;
+										   DataSourceConfigurationSetter.ForSdk()),
+					messageBroker) { MessageBrokerDisabled = messageBrokerDisabled() };
+			string sitePath = Global.sitePath();
+			initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
 
-            var messageBrokerEnabled = !messageBrokerDisabled();
-            var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
-            if (messageBrokerEnabled && messageBrokerReceiveDisabled)
-                if (messageBroker != null)
-                    messageBroker.Dispose();
+			var messageBrokerEnabled = !messageBrokerDisabled();
+			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
+			if (messageBrokerEnabled && messageBrokerReceiveDisabled)
+				if (messageBroker != null)
+					messageBroker.Dispose();
 
-            var container = buildIoc();
-            AutofacHostFactory.Container = container.Build();
-            
             Logger.Info("Initialized application");
         }
 
