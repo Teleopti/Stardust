@@ -9,12 +9,19 @@ namespace Teleopti.Ccc.IocCommon
 {
 	public class GodModule : Module
 	{
+		public string PathToToggle { get; set; }
+
+		public GodModule()
+		{
+			PathToToggle = ConfigurationManager.AppSettings["FeatureToggle"];
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
 			builder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
-			builder.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
+			builder.RegisterModule(new ToggleNetModule(PathToToggle, ConfigurationManager.AppSettings["ToggleMode"]));
 			builder.RegisterModule<MessageBrokerModule>();
 		}
 	}

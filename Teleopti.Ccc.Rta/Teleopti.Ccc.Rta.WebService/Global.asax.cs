@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Rta.WebService
 		{
 			var builder = new ContainerConfiguration().Configure();
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
-			builder.RegisterModule(new DateAndTimeModule());
 			return builder.Build();
 		}
 

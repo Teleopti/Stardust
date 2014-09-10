@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageListener>()
 				.SingleInstance();
 
-			builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
-			builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
+			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
+			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
 			builder.RegisterType<SignalRClient>()
 				.As<ISignalRClient>()
 				.As<IMessageBrokerUrl>()

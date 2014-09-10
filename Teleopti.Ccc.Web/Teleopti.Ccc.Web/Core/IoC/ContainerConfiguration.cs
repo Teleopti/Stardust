@@ -18,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
@@ -51,6 +52,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<BootstrapperModule>();
 
+			builder.RegisterModule(new GodModule {PathToToggle = featureTogglePath});
+
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<ResourceHandlerModule>();
 			builder.RegisterModule<MyTimeAreaModule>();
@@ -62,7 +65,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
-			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
 
 			builder.RegisterModule<AuthenticationModule>();
@@ -86,8 +88,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
-			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
-			builder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
 
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
@@ -118,7 +118,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
-			builder.RegisterModule(new ToggleNetModule(featureTogglePath, ConfigurationManager.AppSettings["ToggleMode"]));
 
 			return builder.Build();
 		}
