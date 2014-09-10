@@ -438,7 +438,6 @@
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorEnabledAjaxJsonTest.cs" />
     <Compile Include="Filters\AjaxJavaScriptRedirectAttributeTest.cs" />
     <Compile Include="Filters\ApplicationFunctionAttributeTest.cs" />
-    <Compile Include="Filters\CheckStartupExceptionAttributeTest.cs" />
     <Compile Include="Areas\MyTime\Filters\EnsureInPortalAttributeTest.cs" />
     <Compile Include="Filters\FilterTester.cs" />
     <Compile Include="RhinoMocksStubFactory.cs" />

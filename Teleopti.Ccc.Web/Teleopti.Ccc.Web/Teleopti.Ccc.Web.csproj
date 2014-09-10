@@ -814,7 +814,6 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
-    <Compile Include="Filters\CheckStartupResultAttribute.cs" />
     <Compile Include="Areas\MyTime\Core\Filters\EnsureInPortalAttribute.cs" />
     <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttribute.cs" />
     <Compile Include="Filters\UnitOfWorkActionAttribute.cs" />

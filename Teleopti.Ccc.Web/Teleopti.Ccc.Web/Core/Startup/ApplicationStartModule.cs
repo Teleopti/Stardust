@@ -97,8 +97,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			                                       		requestContextInitializer.SetupPrincipalAndCulture();
 			                                       	};
 
-			if (HasStartupError) throw ErrorAtStartup;
+			if (HasStartupError)
+				application.BeginRequest += onEveryRequest;
+		}
 
+		private void onEveryRequest(object sender, EventArgs e)
+		{
+			if (HasStartupError)
+			{
+				throw ErrorAtStartup;
+			}
 		}
 
 		public void OnStart(HttpApplication application)
