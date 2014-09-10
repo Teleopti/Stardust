@@ -127,7 +127,32 @@
 					done();
 				}, 2);
 
-			}
+			},
+
+			"should be able to preselect person": function () {
+				var vm = new viewModel();
+
+				vm.SetViewOptions({
+					personid: 1
+				});
+				var data = [
+					{
+						Date: '2014-06-16',
+						PersonId: 1,
+						Projection: [
+							{
+								Start: '2014-06-16 12:00',
+								Minutes: 60
+							}
+						]
+					}
+				];
+
+				vm.UpdateSchedules(data);
+
+				assert.equals(vm.PreSelectedPersonId(), 1);
+				assert.equals(vm.Persons()[0].Selected(), true);
+			},
 		});
 
 	};

@@ -29,6 +29,7 @@ define([
 		this.permissionMoveActivity = ko.observable();
 
 		this.Loading = ko.observable(false);
+		this.PreSelectedPersonId = ko.observable(false);
 
 		this.Persons = ko.observableArray();
 		this.SortedPersons = ko.computed(function() {
@@ -87,7 +88,7 @@ define([
 		};
 
 		this.SetViewOptions = function(options) {
-
+			self.PreSelectedPersonId(options.personid);
 			self.Date(function() {
 				var date = options.date;
 				if (date == undefined) {
@@ -114,6 +115,9 @@ define([
 				personvm.AddData(schedule, self.TimeLine);
 			}
 			self.Persons.push.apply(self.Persons, personArray);
+			if (self.PreSelectedPersonId()) {
+				self.SelectPerson(personForId(self.PreSelectedPersonId(), personArray));
+			}
 		};
 
 		this.NextDay = function () {

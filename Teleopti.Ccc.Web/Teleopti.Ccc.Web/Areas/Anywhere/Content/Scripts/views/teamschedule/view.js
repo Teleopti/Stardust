@@ -107,6 +107,8 @@ define([
 					var currentGroupId = function () {
 						if (options.id)
 							return options.id;
+						if (options.groupid)
+							return options.groupid;
 						if (data.DefaultGroupId)
 							return data.DefaultGroupId;
 						if (viewModel.GroupPages().length > 0 && viewModel.GroupPages()[0].Groups().length > 0)
