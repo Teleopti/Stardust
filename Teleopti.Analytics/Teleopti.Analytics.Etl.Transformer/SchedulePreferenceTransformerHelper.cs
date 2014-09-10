@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -53,6 +54,39 @@ namespace Teleopti.Analytics.Etl.Transformer
 			       preferenceRestriction.WorkTimeLimitation.EndTime != null;
 		}
 
+		private static bool isStartTimeSet(IRestrictionBase preferenceRestriction)
+		{
+			return isStartTimeEarlySet(preferenceRestriction) || isStartTimeLateSet(preferenceRestriction);
+		}
+
+		private static bool isEndTimeSet(IRestrictionBase preferenceRestriction)
+		{
+			return isEndTimeEarlySet(preferenceRestriction) || isEndTimeLateSet(preferenceRestriction);
+		}
+
+		private static bool isWorkTimeSet(IRestrictionBase preferenceRestriction)
+		{
+			return isWorkTimeMinSet(preferenceRestriction) || isWorkTimeMaxSet(preferenceRestriction);
+		}
+
+		public static int GetPreferenceTypeId(IPreferenceRestriction preferenceRestriction)
+		{
+			if (isStartTimeSet(preferenceRestriction) || isEndTimeSet(preferenceRestriction) ||
+			    isWorkTimeSet(preferenceRestriction) || preferenceRestriction.ActivityRestrictionCollection.Any())
+				return 3;
+
+			if (preferenceRestriction.Absence != null)
+				return 4;
+
+			if (preferenceRestriction.DayOffTemplate != null)
+				return 2;
+
+			if (preferenceRestriction.ShiftCategory != null)
+				return 1;
+
+			throw new ArgumentException("Preference type could not be resolved");
+		}
+
 		public static bool CheckIfPreferenceIsValid(IPreferenceRestriction preferenceRestriction)
 		{
 			if (preferenceRestriction == null)
@@ -100,25 +134,9 @@ namespace Teleopti.Analytics.Etl.Transformer
 				dataRow["day_off_shortname"] = preferenceRestriction.DayOffTemplate.Description.ShortName;
 			}
 
+			dataRow["preference_type_id"] = GetPreferenceTypeId(preferenceRestriction);
+
 			// ReSharper disable PossibleInvalidOperationException
-			if (isStartTimeEarlySet(preferenceRestriction))
-				dataRow["StartTimeMinimum"] = preferenceRestriction.StartTimeLimitation.StartTime.Value.TotalMinutes;
-
-			if (isStartTimeLateSet(preferenceRestriction))
-				dataRow["StartTimeMaximum"] = preferenceRestriction.StartTimeLimitation.EndTime.Value.TotalMinutes;
-
-			if (isEndTimeEarlySet(preferenceRestriction))
-				dataRow["endTimeMinimum"] = preferenceRestriction.EndTimeLimitation.StartTime.Value.TotalMinutes;
-
-			if (isEndTimeLateSet(preferenceRestriction))
-				dataRow["endTimeMaximum"] = preferenceRestriction.EndTimeLimitation.EndTime.Value.TotalMinutes;
-
-			if (isWorkTimeMinSet(preferenceRestriction))
-				dataRow["WorkTimeMinimum"] = preferenceRestriction.WorkTimeLimitation.StartTime.Value.TotalMinutes;
-
-			if (isWorkTimeMaxSet(preferenceRestriction))
-				dataRow["WorkTimeMaximum"] = preferenceRestriction.WorkTimeLimitation.EndTime.Value.TotalMinutes;
-
 			if (preferenceRestriction.ActivityRestrictionCollection.Count > 0)
 				dataRow["activity_code"] = preferenceRestriction.ActivityRestrictionCollection[0].Activity.Id;
 			// ReSharper restore PossibleInvalidOperationException
