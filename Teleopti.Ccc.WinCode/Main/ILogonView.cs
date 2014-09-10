@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Main
         void ShowStep(bool showBackButton);
 		void ClearForm(string labelText);
 		void Exit(DialogResult result);
-	    bool InitializeAndCheckStateHolder(string skdProxyName);
+	    bool InitializeAndCheckStateHolder(string skdProxyName, IMessageBrokerComposite messageBroker);
         void ShowErrorMessage(string message, string caption);
 		void ShowWarningMessage(string message, string caption);
 	    DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton);

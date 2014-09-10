@@ -13,6 +13,7 @@ using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCodeTest.Main
 {
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             _logonLogger = _mocks.DynamicMock<ILogonLogger>();
             _logOnOff = _mocks.DynamicMock<ILogOnOff>();
             _endPointSelector = _mocks.DynamicMock<IServerEndpointSelector>();
-            _target = new LogonPresenter(_view, _model, _dataSourceHandler, _initializer, _logonLogger, _logOnOff, _endPointSelector);
+            _target = new LogonPresenter(_view, _model, _dataSourceHandler, _initializer, _logonLogger, _logOnOff, _endPointSelector, MockRepository.GenerateMock<IMessageBrokerComposite>());
         }
 
         [Test]

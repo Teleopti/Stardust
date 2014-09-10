@@ -9,6 +9,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
 using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Win.Main
 {
@@ -57,12 +58,12 @@ namespace Teleopti.Ccc.Win.Main
 			Refresh();
 		}
 
-		public bool InitializeAndCheckStateHolder(string skdProxyName)
+		public bool InitializeAndCheckStateHolder(string skdProxyName, IMessageBrokerComposite messageBroker)
 		{
 			// ReSharper disable LocalizableElement
 			if (_model.GetConfigFromWebService)
 			{
-				if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName))
+				if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName, messageBroker))
 					return showError();
 			}
 			else
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Win.Main
 					                   : ConfigurationManager.AppSettings["nhibConfPath"];
 				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
 
-				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker))
+				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
 					return showError();
 			}
 

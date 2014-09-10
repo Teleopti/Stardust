@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -33,12 +34,15 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogonLogger _logonLogger;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IServerEndpointSelector _serverEndpointSelector;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IDataSourceHandler _dataSourceHandler;
 
 		public LogonPresenter(ILogonView view, LogonModel model,
 		                      IDataSourceHandler dataSourceHandler, ILoginInitializer initializer,
 		                      ILogonLogger logonLogger, ILogOnOff logOnOff,
-		                      IServerEndpointSelector serverEndpointSelector)
+		                      IServerEndpointSelector serverEndpointSelector,
+								IMessageBrokerComposite messageBroker
+			)
 		{
 			_view = view;
 			_model = model;
@@ -47,6 +51,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_logonLogger = logonLogger;
 			_logOnOff = logOnOff;
 			_serverEndpointSelector = serverEndpointSelector;
+			_messageBroker = messageBroker;
 			if (ConfigurationManager.AppSettings["GetConfigFromWebService"] != null)
 				_model.GetConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
 				                                                   CultureInfo.InvariantCulture);
@@ -170,7 +175,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (_model.DataSourceContainers == null)
 			{
 				_view.ClearForm(Resources.SearchingForDataSourcesTreeDots);
-				_view.InitializeAndCheckStateHolder(_model.SelectedSdk);
+				_view.InitializeAndCheckStateHolder(_model.SelectedSdk, _messageBroker);
 				var logonableDataSources = new List<IDataSourceContainer>();
 				foreach (var dataSourceProvider in _dataSourceHandler.DataSourceProviders())
 				{
