@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class DateAndTimeModule : Module
+	internal class DateAndTimeModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

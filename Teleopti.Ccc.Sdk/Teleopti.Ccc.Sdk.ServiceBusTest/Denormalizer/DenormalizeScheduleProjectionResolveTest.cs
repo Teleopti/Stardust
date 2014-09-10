@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Interfaces;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ScheduleProjectionReadOnlyUpdater>().As<IHandleEvent<ScheduledResourcesChangedEvent>>();
 
+			builder.RegisterModule<GodModule>();
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
@@ -43,7 +45,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<LocalServiceBusPublisherModule>();
-			builder.RegisterModule<DateAndTimeModule>();
 
 			using (var container = builder.Build())
 			{

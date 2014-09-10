@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
 using log4net.Config;
@@ -150,6 +151,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var mbCacheModule = new MbCacheModule(null);
 
 			builder.RegisterModule(mbCacheModule);
+			builder.RegisterModule<GodModule>();
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();
@@ -165,7 +167,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule<ServiceBusEventsPublisherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterModule<UpdateScheduleModule>();
-			  builder.RegisterModule<DateAndTimeModule>();
             builder.RegisterType<WebWindowsUserProvider>()
                 .As<IWindowsUserProvider>()
                 .InstancePerDependency();

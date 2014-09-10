@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Interfaces.Domain;
@@ -44,11 +45,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var builder = new ContainerBuilder();
 			builder.RegisterType<RaptorDomainMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
+			builder.RegisterModule<GodModule>();
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule(new AuthenticationModule(appData));
 			builder.RegisterModule<AuthenticationContainerInstaller>();
-			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<AuthorizationContainerInstaller>();
 
 			using (var container = builder.Build())

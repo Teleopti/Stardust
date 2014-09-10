@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
@@ -33,13 +34,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			var builder = new ContainerBuilder();
 			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<NewShiftTradeRequestCreated>>();
 
+			builder.RegisterModule<GodModule>();
 			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<AuthenticationModule>();
 					builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 
@@ -57,13 +58,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			var builder = new ContainerBuilder();
 			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<AcceptShiftTrade>>();
 
+			builder.RegisterModule<GodModule>();
 			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule<DateAndTimeModule>();
 			  builder.RegisterModule<AuthenticationModule>();
 				builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 

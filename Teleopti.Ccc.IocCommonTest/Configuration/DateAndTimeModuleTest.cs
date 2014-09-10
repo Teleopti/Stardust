@@ -2,6 +2,7 @@ using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 
@@ -10,21 +11,21 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class DateAndTimeModuleTest
 	{
-		private ContainerBuilder containerBuilder;
+		private ContainerBuilder builder;
 
 		[SetUp]
 		public void Setup()
 		{
-			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new DateAndTimeModule());
-			containerBuilder.Register(c => MockRepository.GenerateMock<IUserTimeZone>()).As<IUserTimeZone>(); //no impl of IUserTimeZone available outside web yet
+			builder = new ContainerBuilder();
+			builder.RegisterModule<GodModule>();
+			builder.Register(c => MockRepository.GenerateMock<IUserTimeZone>()).As<IUserTimeZone>(); //no impl of IUserTimeZone available outside web yet
 		}
 
 
 		[Test]
 		public void NowShouldBeRegisteredAsSingleton()
 		{
-			using(var container = containerBuilder.Build())
+			using(var container = builder.Build())
 			{
 				var obj1 = container.Resolve<INow>();
 				var obj2 = container.Resolve<INow>();
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void TimeShouldBeRegisteredAsSingleton()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				var obj1 = container.Resolve<ITime>();
 				var obj2 = container.Resolve<ITime>();
