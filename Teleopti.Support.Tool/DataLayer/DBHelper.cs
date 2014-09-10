@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using System.Linq;
+
+
 namespace  Teleopti.Support.Tool.DataLayer
 {
 
@@ -371,6 +374,21 @@ namespace  Teleopti.Support.Tool.DataLayer
         public string ConnectionString
         {
             get { return _connString; }
+        }
+
+        public string GetDataFolder()
+        {
+            var dbFolder = new List<string>();
+            using (var ds = Execute("select physical_name from sys.database_files where physical_name like '%master%'", "master")
+                )
+            {
+                dbFolder.AddRange(from DataRow row in ds.Tables[0].Rows
+                                  where !row[0].ToString().StartsWith("##", StringComparison.Ordinal)
+                                  select row[0].ToString());
+            }
+            // ReSharper disable PossibleNullReferenceException
+            return dbFolder.FirstOrDefault().Replace(@"\master.mdf", "");
+            // ReSharper restore PossibleNullReferenceException
         }
     }
 }
