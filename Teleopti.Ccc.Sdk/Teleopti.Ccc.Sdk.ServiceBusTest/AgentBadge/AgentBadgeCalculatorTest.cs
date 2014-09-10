@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private Guid _lastPersonId;
 		private List<IPerson> _allPersons;
 		private IStatisticRepository _statisticRepository;
-		private IAgentBadgeRepository _badgeRepository;
+		private IAgentBadgeTransactionRepository _badgeTransactionRepository;
 		private AgentBadgeThresholdSettings _badgeSetting;
+		private INow _now;
 
 		[SetUp]
 		public void Setup()
@@ -68,10 +69,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new List<Guid> {_lastPersonId});
 
-			_badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
-			_badgeRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
+			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
+			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
 
-			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeRepository);
+			_now = MockRepository.GenerateMock<INow>();
+
+			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, _now);
 		}
 
 		[Test]
@@ -82,8 +85,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				_badgeSetting);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
-			Assert.AreEqual(badge.BronzeBadge, 1);
-			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
+			Assert.AreEqual(badge.Person.Id, _lastPersonId);
+			Assert.AreEqual(badge.Amount, 1);
+			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
 		}
 
 		[Test]
@@ -93,8 +97,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				_badgeSetting);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
-			Assert.AreEqual(badge.BronzeBadge, 1);
-			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
+			Assert.AreEqual(badge.Person.Id, _lastPersonId);
+			Assert.AreEqual(badge.Amount, 1);
+			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
 		}
 
 		[Test]
@@ -104,8 +109,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				_badgeSetting);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
-			Assert.AreEqual(badge.BronzeBadge, 1);
-			Assert.AreEqual(badge.LastCalculatedDate, _calculateDateOnly);
+			Assert.AreEqual(badge.Person.Id, _lastPersonId);
+			Assert.AreEqual(badge.Amount, 1);
+			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
 		}
 	}
 }
