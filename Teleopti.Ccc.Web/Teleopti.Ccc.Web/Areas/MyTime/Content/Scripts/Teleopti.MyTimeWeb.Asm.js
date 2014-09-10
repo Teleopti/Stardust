@@ -233,8 +233,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		},
 		NotifyWhenScheduleChangedListener: function (notification) {
 			if (_validSchedulePeriod(notification)) {
-			    var startDate = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L');
-				var notifyText = notifyOptions.notifyText.format(startDate);
+				var changedDateRange;
+				if (notification.StartDate == notification.EndDate)
+				{
+					changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L');
+				} else {
+					changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L') + ' - ' + new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).format('L');
+				}
+				var notifyText = notifyOptions.notifyText.format(changedDateRange);
 				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, notifyText);
 			}
 		},
