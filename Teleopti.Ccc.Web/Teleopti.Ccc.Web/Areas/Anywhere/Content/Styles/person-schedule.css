@@ -218,8 +218,13 @@
 	position: absolute;
 }
 
-.person-schedule .schedule-column .edit-time-column {
-    padding-right: 50px;
+.person-schedule .schedule-column .edit-time-column.col-md-3 {
+	width: 200px;
+}
+
+.person-schedule .schedule-column .edit-time-column .start-time,
+.person-schedule .schedule-column .edit-time-column .end-time {
+	text-align: center;
 }
 
 .person-schedule .schedule-column .edit-time-column select,
