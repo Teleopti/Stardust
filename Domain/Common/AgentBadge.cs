@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private Guid _person;
 		private BadgeType _badgeType;
 		private int _totalAmount;
-		private DateOnly _lastCalculatedDate;
+		private DateTime _lastCalculatedDate;
 
 		public virtual Guid Person
 		{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-		public virtual DateOnly LastCalculatedDate
+		public virtual DateTime LastCalculatedDate
 		{
 			get { return _lastCalculatedDate; }
 			set { _lastCalculatedDate = value; }

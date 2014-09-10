@@ -22,7 +22,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Last badge calculate date
 		/// </summary>
-		DateOnly LastCalculatedDate { get; set; }
+		DateTime LastCalculatedDate { get; set; }
 
 		/// <summary>
 		/// Indicate if bronze badge added.
