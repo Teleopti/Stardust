@@ -11,7 +11,7 @@ using Toggle.Net.Specifications;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
-	public class ToggleNetModule : Module
+	internal class ToggleNetModule : Module
 	{
 		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));

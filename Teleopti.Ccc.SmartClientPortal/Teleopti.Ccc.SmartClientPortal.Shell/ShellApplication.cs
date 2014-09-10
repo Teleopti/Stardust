@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
@@ -170,6 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 								var mbCacheModule = new MbCacheModule(null);
 				builder.RegisterModule(mbCacheModule);
+				builder.RegisterModule<GodModule>();
 				builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new AuthenticationModule());
@@ -188,7 +190,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
 				builder.RegisterModule(new MainModule());
-				builder.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });
@@ -270,7 +271,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
 	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-					tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
+			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule<GodModule>();
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 	        {

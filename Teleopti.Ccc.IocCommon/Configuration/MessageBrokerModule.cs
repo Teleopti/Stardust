@@ -13,7 +13,7 @@ using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class MessageBrokerModule : Module
+	internal class MessageBrokerModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

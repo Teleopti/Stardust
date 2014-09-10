@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldUseToggleQuerierIfStartsWithHttp()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("http://tralala", string.Empty));
+			containerBuilder.RegisterModule(new GodModule {PathToToggle = "http://tralala"});
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldUseToggleQuerierIfStartsWithHttps()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
+			containerBuilder.RegisterModule(new GodModule { PathToToggle = "https://hejsan" });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldRegisterToggleFillerIfToggleQuerierIsUsed()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("https://hejsan", string.Empty));
+			containerBuilder.RegisterModule(new GodModule { PathToToggle = "https://hejsan" });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldResolveTogglesActive()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule("http://something", string.Empty));
+			containerBuilder.RegisterModule(new GodModule { PathToToggle = "http://something" });
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<ITogglesActive>()
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldSetAllTogglesToFalseIfPathIsEmpty()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule(string.Empty, string.Empty));
+			containerBuilder.RegisterModule(new GodModule { PathToToggle = "" });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleManager = container.Resolve<IToggleManager>();
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldSetAllTogglesToFalseIfPathIsNull()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new ToggleNetModule(null, string.Empty));
+			containerBuilder.RegisterModule(new GodModule { PathToToggle = null });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleManager = container.Resolve<IToggleManager>();
