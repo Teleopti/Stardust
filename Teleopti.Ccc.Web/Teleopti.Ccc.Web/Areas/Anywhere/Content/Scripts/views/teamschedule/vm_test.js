@@ -43,6 +43,51 @@
 				},2);
 			},
 
+			"should exclude tomorrows day off from timeline": function (done) {
+				var vm = new viewModel();
+
+				vm.SetViewOptions({
+					date: '20140616'
+				});
+				var data = [
+				{
+					Offset: moment('2014-06-16'),
+					PersonId: 1,
+					Projection: [
+						{
+							Start: '2014-06-16 12:00',
+							Minutes: 540
+						}
+					],
+					IsFullDayAbsence: true,
+				},
+				{
+					Offset: moment('2014-06-16'),
+					PersonId: 1,
+					Projection: [
+						{
+							Start: '2014-06-17 12:00',
+							Minutes: 540
+						}
+					],
+					IsFullDayAbsence: true,
+					DayOff: {
+						DayOffName: "DayOff",
+						Start: "2014-06-17 00:00",
+						Minutes: 1440
+					}
+				}];
+
+				vm.UpdateSchedules(data);
+
+				setTimeout(function () {
+					assert.equals(vm.TimeLine.Times().length, 10);
+					assert.equals(vm.TimeLine.StartTime(), "12:00");
+					assert.equals(vm.TimeLine.EndTime(), "21:00");
+					done();
+				},2);
+			},
+
 			"should consider nightshifts from yesterday when creating timeline" : function(done) {
 				var vm = new viewModel();
 

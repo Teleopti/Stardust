@@ -36,8 +36,9 @@ define([
 		};
 
 		this.ShiftStartPixels = ko.computed(function () {
-			if (self.Layers().length > 0)
-				return self.Layers()[0].StartPixels();
+			var layers = self.Layers();
+			if (layers.length > 0)
+				return layers[0].StartPixels();
 			return 0;
 		});
 

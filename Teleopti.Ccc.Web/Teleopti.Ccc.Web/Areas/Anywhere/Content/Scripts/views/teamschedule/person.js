@@ -51,11 +51,14 @@ define([
 			if (data.Projection && data.Projection.length > 0) {
 				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
-				self.Shifts.push(newShift);
 
-				if (newShift.Layers()[0].StartMinutes() > 0) {
-					self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
-					self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+				var newShiftLayers = newShift.Layers();
+				if (newShiftLayers[0].StartMinutes() <= 1440) {
+					self.Shifts.push(newShift);
+					if (newShiftLayers[0].StartMinutes() > 0) {
+						self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+						self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+					}
 				}
 			}
 
