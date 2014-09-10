@@ -99,6 +99,7 @@
       <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -110,6 +111,7 @@
     <Compile Include="Configuration\EventsPublisherModuleTest.cs" />
     <Compile Include="Configuration\InitializeModuleTest.cs" />
     <Compile Include="Configuration\LogModuleTest.cs" />
+    <Compile Include="Configuration\MessageBrokerModuleTest.cs" />
     <Compile Include="Configuration\RepositoryModuleTest.cs" />
     <Compile Include="Configuration\ResourceHandlerModuleTest.cs" />
     <Compile Include="Configuration\RuleSetTest.cs" />
