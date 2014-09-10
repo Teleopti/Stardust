@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Http\HttpSenderTest.cs" />
+    <Compile Include="SignalR\DisabledSignalRClientTest.cs" />
     <Compile Include="SignalR\SignalBrokerSubscriptionsTest.cs" />
     <Compile Include="SignalR\TestDoubles\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\TestDoubles\HubProxyFake.cs" />

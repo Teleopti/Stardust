@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 {
@@ -8,4 +9,5 @@ namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 		string ServerUrl { get; set; }
 		void StartBrokerService(bool useLongPolling = false);
 	}
+
 }

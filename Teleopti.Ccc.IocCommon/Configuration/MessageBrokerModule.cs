@@ -15,6 +15,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class MessageBrokerModule : Module
 	{
+		private readonly bool _messageBrokerListeningEnabled;
+
+		public MessageBrokerModule(bool messageBrokerListeningEnabled)
+		{
+			_messageBrokerListeningEnabled = messageBrokerListeningEnabled;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
@@ -25,13 +32,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageListener>()
 				.SingleInstance();
 
-			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
-			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
-			builder.RegisterType<SignalRClient>()
-				.As<ISignalRClient>()
-				.As<IMessageBrokerUrl>()
-				.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
-				.SingleInstance();
+
+			if (_messageBrokerListeningEnabled)
+			{
+				builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
+				builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
+				builder.RegisterType<SignalRClient>()
+					.As<ISignalRClient>()
+					.As<IMessageBrokerUrl>()
+					.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<DisabledSignalRClient>()
+					.As<ISignalRClient>()
+					.As<IMessageBrokerUrl>()
+					.SingleInstance();
+			}
 
 			builder.RegisterType<HttpSender>()
 				.As<HttpSender>()

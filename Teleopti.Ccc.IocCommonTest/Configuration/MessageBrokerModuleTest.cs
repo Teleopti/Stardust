@@ -69,6 +69,18 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
+		[Test]
+		public void ShouldNotUseSignalRIfListeningDisabledAndHttpSenderEnabled()
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new GodModule {MessageBrokerListeningEnabled = false});
+			using (var container = BuildContainerWithToggle(builder, Toggles.Messaging_HttpSender_29205, true))
+			{
+				container.Resolve<ISignalRClient>().Should().Be.OfType<DisabledSignalRClient>();
+				container.Resolve<IMessageSender>().Should().Not.Be.Null();
+			}
+		}
+
 		private IContainer BuildContainer()
 		{
 			return Builder().Build();
@@ -83,7 +95,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
 		{
-			var builder = Builder();
+			return BuildContainerWithToggle(Builder(), toggle, value);
+		}
+
+		private static IContainer BuildContainerWithToggle(ContainerBuilder builder, Toggles toggle, bool value)
+		{
 			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
 			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
 			builder.Register(c => toggleManager).As<IToggleManager>();

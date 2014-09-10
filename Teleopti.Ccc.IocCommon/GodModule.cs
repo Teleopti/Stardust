@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.IocCommon
 	{
 		public string PathToToggle { get; set; }
 		public string ToggleMode { get; set; }
+		public bool MessageBrokerListeningEnabled { get; set; }
 
 		public GodModule()
 		{
 			PathToToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
+			MessageBrokerListeningEnabled = true;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(PathToToggle, ToggleMode));
-			builder.RegisterModule<MessageBrokerModule>();
+			builder.RegisterModule(new MessageBrokerModule(MessageBrokerListeningEnabled));
 		}
 	}
 }
