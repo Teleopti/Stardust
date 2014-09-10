@@ -6,10 +6,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>3.3432cm</Width>
+              <Width>5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>7.94949cm</Width>
+              <Width>7.55262cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>7.2073cm</Width>
@@ -17,7 +17,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -30,7 +30,7 @@
                             <TextRun>
                               <Value>=Parameters!ResScenarioColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -43,11 +43,10 @@
                       <rd:DefaultName>textbox6</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -63,7 +62,7 @@
                             <TextRun>
                               <Value>=Parameters!scenario_id.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -75,11 +74,10 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox37</rd:DefaultName>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -89,7 +87,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -102,7 +100,7 @@
                             <TextRun>
                               <Value>=Parameters!ResSkillColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -115,11 +113,10 @@
                       <rd:DefaultName>textbox13</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -135,7 +132,7 @@
                             <TextRun>
                               <Value>=Parameters!skill_set.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -148,11 +145,10 @@
                       <rd:DefaultName>textbox15</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -162,7 +158,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -175,7 +171,7 @@
                             <TextRun>
                               <Value>=Parameters!ResWorkloadColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -188,11 +184,10 @@
                       <rd:DefaultName>textbox17</rd:DefaultName>
                       <ZIndex>5</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -208,7 +203,7 @@
                             <TextRun>
                               <Value>=Parameters!workload_set.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -221,11 +216,10 @@
                       <rd:DefaultName>textbox18</rd:DefaultName>
                       <ZIndex>4</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -235,7 +229,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -248,7 +242,7 @@
                             <TextRun>
                               <Value>=Parameters!ResDateColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -261,11 +255,10 @@
                       <rd:DefaultName>textbox9</rd:DefaultName>
                       <ZIndex>7</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -281,7 +274,7 @@
                             <TextRun>
                               <Value>=iif(Parameters!date_from.Value&lt;&gt;Parameters!date_to.Value,Parameters!date_from.Value +" - " + Parameters!date_to.Value,Parameters!date_to.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -294,11 +287,10 @@
                       <rd:DefaultName>textbox10</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -308,7 +300,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -321,7 +313,7 @@
                             <TextRun>
                               <Value>=Parameters!ResIntervalColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -334,11 +326,10 @@
                       <rd:DefaultName>textbox2</rd:DefaultName>
                       <ZIndex>9</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -354,7 +345,7 @@
                             <TextRun>
                               <Value>=Parameters!interval_from.Value +" - " + Parameters!interval_to.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -367,11 +358,10 @@
                       <rd:DefaultName>textbox5</rd:DefaultName>
                       <ZIndex>8</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -381,7 +371,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -394,7 +384,7 @@
                             <TextRun>
                               <Value>=Parameters!ResIntervalType.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -407,11 +397,10 @@
                       <rd:DefaultName>textbox47</rd:DefaultName>
                       <ZIndex>11</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -427,7 +416,7 @@
                             <TextRun>
                               <Value>=Parameters!interval_type.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -440,11 +429,10 @@
                       <rd:DefaultName>textbox48</rd:DefaultName>
                       <ZIndex>10</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -454,7 +442,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.52644cm</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -467,7 +455,7 @@
                             <TextRun>
                               <Value>=Parameters!ResTimeZoneColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -479,11 +467,10 @@
                       </Paragraphs>
                       <ZIndex>13</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -499,7 +486,7 @@
                             <TextRun>
                               <Value>=Parameters!time_zone_id.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -511,11 +498,10 @@
                       </Paragraphs>
                       <ZIndex>12</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -571,8 +557,8 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>3.52643cm</Height>
-        <Width>18.49999cm</Width>
+        <Height>4.2cm</Height>
+        <Width>19.75992cm</Width>
         <Style />
       </Tablix>
       <Chart Name="chart1">
@@ -747,6 +733,7 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8pt</FontSize>
                   <Color>DimGray</Color>
                 </Style>
@@ -829,12 +816,14 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8pt</FontSize>
                   <Color>DimGray</Color>
                 </Style>
                 <ChartAxisTitle>
                   <Caption>=Parameters!ResNumberOf.Value</Caption>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -926,6 +915,7 @@
                 <Style>None</Style>
                 <Width>0.75pt</Width>
               </Border>
+              <FontFamily>Segoe UI</FontFamily>
               <FontSize>8pt</FontSize>
               <Color>DimGray</Color>
             </Style>
@@ -946,6 +936,7 @@
           <ChartTitle Name="Default">
             <Caption>=Parameters!ResCalls.Value</Caption>
             <Style>
+              <FontFamily>Segoe UI</FontFamily>
               <FontWeight>Bold</FontWeight>
               <Color>DimGray</Color>
             </Style>
@@ -967,8 +958,8 @@
           </Style>
         </ChartNoDataMessage>
         <DataSetName>DataSet1</DataSetName>
-        <Top>4cm</Top>
-        <Height>6.9cm</Height>
+        <Top>4.56139cm</Top>
+        <Height>6.6cm</Height>
         <Width>18.75cm</Width>
         <ZIndex>1</ZIndex>
         <CustomProperties>
@@ -1099,6 +1090,7 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8pt</FontSize>
                   <Color>DimGray</Color>
                 </Style>
@@ -1181,12 +1173,14 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8pt</FontSize>
                   <Color>DimGray</Color>
                 </Style>
                 <ChartAxisTitle>
                   <Caption>=Parameters!ResSeconds.Value</Caption>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1278,6 +1272,7 @@
                 <Style>None</Style>
                 <Width>0.75pt</Width>
               </Border>
+              <FontFamily>Segoe UI</FontFamily>
               <FontSize>8pt</FontSize>
               <Color>DimGray</Color>
             </Style>
@@ -1298,6 +1293,7 @@
           <ChartTitle Name="Default">
             <Caption>=Parameters!ResATT.Value</Caption>
             <Style>
+              <FontFamily>Segoe UI</FontFamily>
               <FontWeight>Bold</FontWeight>
               <Color>DimGray</Color>
             </Style>
@@ -1319,8 +1315,8 @@
           </Style>
         </ChartNoDataMessage>
         <DataSetName>DataSet1</DataSetName>
-        <Top>11cm</Top>
-        <Height>6.9cm</Height>
+        <Top>11.3175cm</Top>
+        <Height>6.6cm</Height>
         <Width>18.75cm</Width>
         <ZIndex>2</ZIndex>
         <CustomProperties>
@@ -1379,7 +1375,7 @@
                             <TextRun>
                               <Value>=Parameters!ResPeriod.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1411,7 +1407,7 @@
                             <TextRun>
                               <Value>=Parameters!ResCalculatedCalls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1444,7 +1440,7 @@
                             <TextRun>
                               <Value>=Parameters!ResForecastedCalls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1478,7 +1474,7 @@
                             <TextRun>
                               <Value>=Parameters!ResOfferedCalls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1511,7 +1507,7 @@
                             <TextRun>
                               <Value>=Parameters!ResAnsweredCalls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1545,7 +1541,7 @@
                             <TextRun>
                               <Value>=Parameters!ResForecastedATT.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1579,7 +1575,7 @@
                             <TextRun>
                               <Value>=Parameters!ResActualATT.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1613,7 +1609,7 @@
                             <TextRun>
                               <Value>=Parameters!ResForecastedACW.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1647,7 +1643,7 @@
                             <TextRun>
                               <Value>=Parameters!ResActualACW.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1686,7 +1682,7 @@
                             <TextRun>
                               <Value>=Parameters!ResTotalsColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1725,7 +1721,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(sum(Fields!calculated_calls.Value), 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1765,7 +1761,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(sum(Fields!forecasted_calls.Value), 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1805,7 +1801,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(sum(Fields!offered_calls.Value), 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1845,7 +1841,7 @@
                             <TextRun>
                               <Value>=sum(Fields!answered_calls.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1885,7 +1881,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_forecast_talk_time_s.Value), sum(Fields!forecasted_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1925,7 +1921,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_talk_time_s.Value), sum(Fields!answered_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1965,7 +1961,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_forecast_acw_s.Value), sum(Fields!forecasted_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2005,7 +2001,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_acw_s.Value), sum(Fields!answered_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2050,7 +2046,7 @@
                             <TextRun>
                               <Value>=Code.ToPeriod(Fields!date.Value,Fields!period.Value,Fields!interval_type.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2081,7 +2077,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(Fields!calculated_calls.Value, 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2113,7 +2109,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(Fields!forecasted_calls.Value, 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2146,7 +2142,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(Fields!offered_calls.Value, 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2178,7 +2174,7 @@
                             <TextRun>
                               <Value>=Fields!answered_calls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2211,7 +2207,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(Fields!sum_forecast_talk_time_s.Value, Fields!forecasted_calls.Value))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2244,7 +2240,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(Fields!sum_talk_time_s.Value, Fields!answered_calls.Value))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2277,7 +2273,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(Fields!sum_forecast_acw_s.Value, Fields!forecasted_calls.Value))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2310,7 +2306,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(Fields!sum_acw_s.Value, Fields!answered_calls.Value))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2347,7 +2343,7 @@
                             <TextRun>
                               <Value>=Parameters!ResTotalsColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2386,7 +2382,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(sum(Fields!calculated_calls.Value), 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2426,7 +2422,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(sum(Fields!forecasted_calls.Value), 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2467,7 +2463,7 @@
                             <TextRun>
                               <Value>=code.RoundToLarger(sum(Fields!offered_calls.Value), 1)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2507,7 +2503,7 @@
                             <TextRun>
                               <Value>=sum(Fields!answered_calls.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2548,7 +2544,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_forecast_talk_time_s.Value), sum(Fields!forecasted_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2589,7 +2585,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_talk_time_s.Value), sum(Fields!answered_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2630,7 +2626,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_forecast_acw_s.Value), sum(Fields!forecasted_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2671,7 +2667,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Code.Divide(sum(Fields!sum_acw_s.Value), sum(Fields!answered_calls.Value)))</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2755,12 +2751,12 @@
         </PageBreak>
         <Top>25.25cm</Top>
         <Height>3.42895cm</Height>
-        <Width>18.75008cm</Width>
+        <Width>18.75009cm</Width>
         <ZIndex>3</ZIndex>
         <Style />
       </Tablix>
       <Line Name="line2">
-        <Top>3.75cm</Top>
+        <Top>4.385cm</Top>
         <Left>0.25cm</Left>
         <Height>0cm</Height>
         <Width>18.5cm</Width>
@@ -2890,6 +2886,7 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8pt</FontSize>
                   <Color>DimGray</Color>
                 </Style>
@@ -2972,12 +2969,14 @@
                     <Style>None</Style>
                     <Width>0.75pt</Width>
                   </Border>
+                  <FontFamily>Segoe UI</FontFamily>
                   <FontSize>8pt</FontSize>
                   <Color>DimGray</Color>
                 </Style>
                 <ChartAxisTitle>
                   <Caption>=Parameters!ResSeconds.Value</Caption>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -3069,6 +3068,7 @@
                 <Style>None</Style>
                 <Width>0.75pt</Width>
               </Border>
+              <FontFamily>Segoe UI</FontFamily>
               <FontSize>8pt</FontSize>
               <Color>DimGray</Color>
             </Style>
@@ -3089,6 +3089,7 @@
           <ChartTitle Name="Default">
             <Caption>=Parameters!ResACW.Value</Caption>
             <Style>
+              <FontFamily>Segoe UI</FontFamily>
               <FontWeight>Bold</FontWeight>
               <Color>DimGray</Color>
             </Style>
@@ -3111,7 +3112,7 @@
         </ChartNoDataMessage>
         <DataSetName>DataSet1</DataSetName>
         <Top>18.25cm</Top>
-        <Height>6.9cm</Height>
+        <Height>6.6cm</Height>
         <Width>18.75cm</Width>
         <ZIndex>5</ZIndex>
         <CustomProperties>
@@ -3128,7 +3129,7 @@
     <Height>28.67895cm</Height>
     <Style />
   </Body>
-  <Width>19cm</Width>
+  <Width>20.40679cm</Width>
   <Page>
     <PageHeader>
       <Height>1.75cm</Height>
@@ -3144,6 +3145,7 @@
                 <TextRun>
                   <Value>=Parameters!ResReportForecastvsActualWorkload.Value</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>22pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -3173,6 +3175,7 @@
                 <TextRun>
                   <Value>=Format(Globals.ExecutionTime, "g")</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -3184,7 +3187,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox40</rd:DefaultName>
-          <Left>15cm</Left>
+          <Left>16.27cm</Left>
           <Height>0.50265cm</Height>
           <Width>3.75cm</Width>
           <ZIndex>1</ZIndex>
@@ -3205,6 +3208,7 @@
                 <TextRun>
                   <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -3216,7 +3220,7 @@
             </Paragraph>
           </Paragraphs>
           <Top>0.5cm</Top>
-          <Left>15.75cm</Left>
+          <Left>17.02cm</Left>
           <Height>0.5cm</Height>
           <Width>3cm</Width>
           <ZIndex>2</ZIndex>
@@ -3258,6 +3262,7 @@
                 <TextRun>
                   <Value>Powered by Teleopti WFM©</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
                     <Color>DimGray</Color>

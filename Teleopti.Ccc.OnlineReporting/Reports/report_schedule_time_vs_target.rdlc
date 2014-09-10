@@ -1,84 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="DummyDataSource">
-      <ConnectionProperties>
-        <DataProvider>SQL</DataProvider>
-        <ConnectString />
-      </ConnectionProperties>
-      <rd:DataSourceID>b138d3ef-2336-4318-8537-57b8be9df885</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet1">
-      <Fields>
-        <Field Name="DifferenceDayOffs">
-          <DataField>DifferenceDayOffs</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="DifferenceTime">
-          <DataField>DifferenceTime</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="PeriodFrom">
-          <DataField>PeriodFrom</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="PeriodTo">
-          <DataField>PeriodTo</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="PersonName">
-          <DataField>PersonName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ScheduledDayOffs">
-          <DataField>ScheduledDayOffs</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="ScheduledTime">
-          <DataField>ScheduledTime</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-        <Field Name="TargetDayOffs">
-          <DataField>TargetDayOffs</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TargetTime">
-          <DataField>TargetTime</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DummyDataSource</DataSourceName>
-        <CommandText>/* Local Query */</CommandText>
-        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
-      </Query>
-      <rd:DataSetInfo>
-        <rd:DataSetName>Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting</rd:DataSetName>
-        <rd:TableName>ScheduledTimeVersusTargetTimeReportData</rd:TableName>
-        <rd:ObjectDataSourceType>Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduledTimeVersusTargetTimeReportData, Teleopti.Ccc.WinCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</rd:ObjectDataSourceType>
-      </rd:DataSetInfo>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="table1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.03236in</Width>
+              <Width>5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.42913in</Width>
+              <Width>11.24999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.13386in</Width>
+              <Width>10.5cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -91,7 +30,7 @@
                             <TextRun>
                               <Value>=Parameters!ScenarioColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -104,11 +43,10 @@
                       <rd:DefaultName>textbox3</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -124,7 +62,7 @@
                             <TextRun>
                               <Value>=Parameters!param_scenario.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -136,11 +74,10 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox11</rd:DefaultName>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -150,7 +87,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -163,6 +100,7 @@
                             <TextRun>
                               <Value>=Parameters!AgentColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -173,10 +111,10 @@
                       <rd:DefaultName>textbox59</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -192,7 +130,7 @@
                             <TextRun>
                               <Value>=Parameters!param_agents.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -209,7 +147,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -219,7 +156,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.20727in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -232,7 +169,7 @@
                             <TextRun>
                               <Value>=Parameters!DateColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -245,11 +182,10 @@
                       <rd:DefaultName>textbox9</rd:DefaultName>
                       <ZIndex>11</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -265,7 +201,7 @@
                             <TextRun>
                               <Value>=iif(Parameters!param_date_from.Value&lt;&gt;Parameters!param_date_to.Value,Parameters!param_date_from.Value +" - " + Parameters!param_date_to.Value,Parameters!param_date_to.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                                 <Language>ar-SA</Language>
                               </Style>
@@ -279,11 +215,10 @@
                       <rd:DefaultName>textbox10</rd:DefaultName>
                       <ZIndex>10</ZIndex>
                       <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
+                        <VerticalAlign>Top</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -316,9 +251,10 @@
         </TablixRowHierarchy>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
+        <Top>0.3175cm</Top>
         <Left>0.25cm</Left>
-        <Height>1.52646cm</Height>
-        <Width>26.91219cm</Width>
+        <Height>1.8cm</Height>
+        <Width>26.74999cm</Width>
         <Style>
           <Direction>=Parameters!Direction.Value</Direction>
           <Language>=User!Language</Language>
@@ -342,21 +278,21 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.99396in</Width>
+              <Width>5.06466cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.86626in</Width>
+              <Width>4.7403cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.86626in</Width>
+              <Width>4.7403cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.86626in</Width>
+              <Width>4.7403cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -369,7 +305,7 @@
                             <TextRun>
                               <Value>=Parameters!Period.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -405,7 +341,7 @@
                             <TextRun>
                               <Value>=Parameters!Target.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -441,7 +377,7 @@
                             <TextRun>
                               <Value>=Parameters!Scheduled.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -477,7 +413,7 @@
                             <TextRun>
                               <Value>=Parameters!Difference.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -538,33 +474,33 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.99698in</Width>
+              <Width>2.53233cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.99698in</Width>
+              <Width>2.53233cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.93313in</Width>
+              <Width>2.37015cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.93313in</Width>
+              <Width>2.37015cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.93313in</Width>
+              <Width>2.37015cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.93313in</Width>
+              <Width>2.37015cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.93313in</Width>
+              <Width>2.37015cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.93313in</Width>
+              <Width>2.37015cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -577,7 +513,7 @@
                             <TextRun>
                               <Value>=Parameters!From.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -613,7 +549,7 @@
                             <TextRun>
                               <Value>=Parameters!To.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -649,7 +585,7 @@
                             <TextRun>
                               <Value>=Parameters!Time.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -685,7 +621,7 @@
                             <TextRun>
                               <Value>=Parameters!DaysOff.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -721,7 +657,7 @@
                             <TextRun>
                               <Value>=Parameters!Time.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -757,7 +693,7 @@
                             <TextRun>
                               <Value>=Parameters!DaysOff.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -793,7 +729,7 @@
                             <TextRun>
                               <Value>=Parameters!Time.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -829,7 +765,7 @@
                             <TextRun>
                               <Value>=Parameters!DaysOff.Value</Value>
                               <Style>
-                                <FontSize>8pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
@@ -857,7 +793,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -870,6 +806,7 @@
                             <TextRun>
                               <Value>=FormatDateTime(Fields!PeriodFrom.Value,DateFormat.ShortDate)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -907,6 +844,7 @@
                             <TextRun>
                               <Value>=FormatDateTime(Fields!PeriodTo.Value,DateFormat.ShortDate)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -944,6 +882,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Fields!TargetTime.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -981,6 +920,7 @@
                             <TextRun>
                               <Value>=Fields!TargetDayOffs.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -1018,6 +958,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Fields!ScheduledTime.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -1055,6 +996,7 @@
                             <TextRun>
                               <Value>=Fields!ScheduledDayOffs.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -1092,6 +1034,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Fields!DifferenceTime.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -1129,6 +1072,7 @@
                             <TextRun>
                               <Value>=Fields!DifferenceDayOffs.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>Gray</Color>
                               </Style>
                             </TextRun>
@@ -1158,7 +1102,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1247,6 +1191,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Sum(Fields!TargetTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>Gray</Color>
                               </Style>
@@ -1287,6 +1232,7 @@
                             <TextRun>
                               <Value>=Sum(Fields!TargetDayOffs.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>Gray</Color>
                               </Style>
@@ -1327,6 +1273,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Sum(Fields!ScheduledTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>Gray</Color>
                               </Style>
@@ -1367,6 +1314,7 @@
                             <TextRun>
                               <Value>=Sum(Fields!ScheduledDayOffs.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>Gray</Color>
                               </Style>
@@ -1407,6 +1355,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Sum(Fields!DifferenceTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>Gray</Color>
                               </Style>
@@ -1447,6 +1396,7 @@
                             <TextRun>
                               <Value>=Sum(Fields!DifferenceDayOffs.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>Gray</Color>
                               </Style>
@@ -1496,7 +1446,7 @@
           <TablixMembers>
             <TablixMember>
               <TablixHeader>
-                <Size>3.00261in</Size>
+                <Size>7.62663cm</Size>
                 <CellContents>
                   <Textbox Name="Textbox14">
                     <CanGrow>true</CanGrow>
@@ -1507,7 +1457,7 @@
                           <TextRun>
                             <Value>=Parameters!Name.Value</Value>
                             <Style>
-                              <FontSize>8pt</FontSize>
+                              <FontFamily>Segoe UI</FontFamily>
                               <FontWeight>Bold</FontWeight>
                               <Color>DimGray</Color>
                             </Style>
@@ -1547,7 +1497,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>3.00261in</Size>
+                <Size>7.62663cm</Size>
                 <CellContents>
                   <Textbox Name="Group1">
                     <CanGrow>true</CanGrow>
@@ -1558,6 +1508,7 @@
                           <TextRun>
                             <Value>=Fields!PersonName.Value</Value>
                             <Style>
+                              <FontFamily>Segoe UI</FontFamily>
                               <Color>Gray</Color>
                             </Style>
                           </TextRun>
@@ -1627,13 +1578,253 @@
       </Border>
     </Style>
   </Body>
+  <Width>27.60688cm</Width>
+  <Page>
+    <PageHeader>
+      <Height>1.75cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Textbox Name="textbox4">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!ScheduledTimeVsTarget.Value</Value>
+                  <Style>
+                    <FontFamily>Segoe UI</FontFamily>
+                    <FontSize>22pt</FontSize>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Left</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>textbox4</rd:DefaultName>
+          <Left>0.25cm</Left>
+          <Height>1.50529cm</Height>
+          <Width>22.75cm</Width>
+          <Style>
+            <Border>
+              <Color>#d3e5ef</Color>
+              <Width>2pt</Width>
+            </Border>
+            <BottomBorder>
+              <Style>None</Style>
+            </BottomBorder>
+            <VerticalAlign>Bottom</VerticalAlign>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox7">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
+                  <Style>
+                    <FontFamily>Segoe UI</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>textbox7</rd:DefaultName>
+          <Left>23.25cm</Left>
+          <Height>0.5cm</Height>
+          <Width>4cm</Width>
+          <ZIndex>1</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="textbox1">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
+                  <Style>
+                    <FontFamily>Segoe UI</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>textbox1</rd:DefaultName>
+          <Top>0.5cm</Top>
+          <Left>25cm</Left>
+          <Height>0.5cm</Height>
+          <Width>2.25cm</Width>
+          <ZIndex>2</ZIndex>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Line Name="line1">
+          <Top>1.75cm</Top>
+          <Left>0.25cm</Left>
+          <Height>0cm</Height>
+          <Width>27cm</Width>
+          <ZIndex>3</ZIndex>
+          <Style>
+            <Border>
+              <Color>#d3e5ef</Color>
+              <Style>Solid</Style>
+              <Width>2pt</Width>
+            </Border>
+          </Style>
+        </Line>
+      </ReportItems>
+      <Style />
+    </PageHeader>
+    <PageFooter>
+      <Height>0.85254cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Textbox Name="textbox50">
+          <CanGrow>true</CanGrow>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>Powered by Teleopti WFM©</Value>
+                  <Style>
+                    <FontFamily>Segoe UI</FontFamily>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <Color>DimGray</Color>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <Top>0.19114cm</Top>
+          <Height>0.50265cm</Height>
+          <Width>27.25cm</Width>
+          <Style>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+      </ReportItems>
+      <Style />
+    </PageFooter>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
+    <InteractiveHeight>29.7cm</InteractiveHeight>
+    <InteractiveWidth>21cm</InteractiveWidth>
+    <LeftMargin>1cm</LeftMargin>
+    <RightMargin>1cm</RightMargin>
+    <TopMargin>1cm</TopMargin>
+    <BottomMargin>1cm</BottomMargin>
+    <ColumnSpacing>1cm</ColumnSpacing>
+    <Style />
+  </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DummyDataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:DataSourceID>b138d3ef-2336-4318-8537-57b8be9df885</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet1">
+      <Query>
+        <DataSourceName>DummyDataSource</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="DifferenceDayOffs">
+          <DataField>DifferenceDayOffs</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="DifferenceTime">
+          <DataField>DifferenceTime</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="PeriodFrom">
+          <DataField>PeriodFrom</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PeriodTo">
+          <DataField>PeriodTo</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="PersonName">
+          <DataField>PersonName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ScheduledDayOffs">
+          <DataField>ScheduledDayOffs</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ScheduledTime">
+          <DataField>ScheduledTime</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+        <Field Name="TargetDayOffs">
+          <DataField>TargetDayOffs</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TargetTime">
+          <DataField>TargetTime</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
+        </Field>
+      </Fields>
+      <rd:DataSetInfo>
+        <rd:DataSetName>Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting</rd:DataSetName>
+        <rd:TableName>ScheduledTimeVersusTargetTimeReportData</rd:TableName>
+        <rd:ObjectDataSourceType>Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting.ScheduledTimeVersusTargetTimeReportData, Teleopti.Ccc.WinCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f</rd:ObjectDataSourceType>
+      </rd:DataSetInfo>
+    </DataSet>
+  </DataSets>
   <ReportParameters>
     <ReportParameter Name="param_scenario">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1644,7 +1835,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1655,7 +1846,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1666,7 +1857,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1677,7 +1868,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1688,7 +1879,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1699,7 +1890,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1710,7 +1901,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1721,7 +1912,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1732,7 +1923,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1743,7 +1934,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1754,7 +1945,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1765,7 +1956,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
         </Values>
       </DefaultValue>
       <AllowBlank>true</AllowBlank>
@@ -1837,182 +2028,8 @@
 
         Return minus &amp; hours &amp; ":" &amp; Format(minutes, "00")
     End Function</Code>
-  <Width>27.60688cm</Width>
-  <Page>
-    <PageHeader>
-      <Height>1.75cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="textbox4">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Parameters!ScheduledTimeVsTarget.Value</Value>
-                  <Style>
-                    <FontSize>22pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Left</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox4</rd:DefaultName>
-          <Left>0.25cm</Left>
-          <Height>1.50529cm</Height>
-          <Width>22.75cm</Width>
-          <Style>
-            <Border>
-              <Color>#d3e5ef</Color>
-              <Width>2pt</Width>
-            </Border>
-            <BottomBorder>
-              <Style>None</Style>
-            </BottomBorder>
-            <VerticalAlign>Bottom</VerticalAlign>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="textbox7">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Format(Globals.ExecutionTime, "g")</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Right</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox7</rd:DefaultName>
-          <Left>23.25cm</Left>
-          <Height>0.5cm</Height>
-          <Width>4cm</Width>
-          <ZIndex>1</ZIndex>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Textbox Name="textbox1">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Right</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <rd:DefaultName>textbox1</rd:DefaultName>
-          <Top>0.5cm</Top>
-          <Left>25cm</Left>
-          <Height>0.5cm</Height>
-          <Width>2.25cm</Width>
-          <ZIndex>2</ZIndex>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-        <Line Name="line1">
-          <Top>1.75cm</Top>
-          <Left>0.25cm</Left>
-          <Height>0cm</Height>
-          <Width>27cm</Width>
-          <ZIndex>3</ZIndex>
-          <Style>
-            <Border>
-              <Color>#d3e5ef</Color>
-              <Style>Solid</Style>
-              <Width>2pt</Width>
-            </Border>
-          </Style>
-        </Line>
-      </ReportItems>
-      <Style />
-    </PageHeader>
-    <PageFooter>
-      <Height>0.69379cm</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="textbox50">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>Powered by Teleopti WFM©</Value>
-                  <Style>
-                    <FontSize>8pt</FontSize>
-                    <FontWeight>Bold</FontWeight>
-                    <Color>DimGray</Color>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style>
-                <TextAlign>Center</TextAlign>
-              </Style>
-            </Paragraph>
-          </Paragraphs>
-          <Top>0.19114cm</Top>
-          <Height>0.50265cm</Height>
-          <Width>27.25cm</Width>
-          <Style>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-      </ReportItems>
-      <Style />
-    </PageFooter>
-    <PageHeight>21cm</PageHeight>
-    <PageWidth>29.7cm</PageWidth>
-    <InteractiveHeight>29.7cm</InteractiveHeight>
-    <InteractiveWidth>21cm</InteractiveWidth>
-    <LeftMargin>1cm</LeftMargin>
-    <RightMargin>1cm</RightMargin>
-    <TopMargin>1cm</TopMargin>
-    <BottomMargin>1cm</BottomMargin>
-    <ColumnSpacing>1cm</ColumnSpacing>
-    <Style />
-  </Page>
   <Language>=User!Language</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
 </Report>

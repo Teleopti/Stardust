@@ -6,13 +6,13 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>5.19999cm</Width>
+              <Width>5.08334cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>11.24999cm</Width>
+              <Width>11.33333cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>10.5cm</Width>
+              <Width>10.58334cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -30,7 +30,7 @@
                             <TextRun>
                               <Value>=Parameters!ScenarioColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -47,7 +47,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -63,7 +62,7 @@
                             <TextRun>
                               <Value>=Parameters!param_scenario.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -79,7 +78,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -102,6 +100,7 @@
                             <TextRun>
                               <Value>=Parameters!AgentColon.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -116,7 +115,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -132,7 +130,7 @@
                             <TextRun>
                               <Value>=Parameters!param_agents.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -149,7 +147,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -172,7 +169,7 @@
                             <TextRun>
                               <Value>=Parameters!ActivityColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -189,7 +186,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -205,7 +201,7 @@
                             <TextRun>
                               <Value>=Parameters!param_activities.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -222,7 +218,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -245,7 +240,7 @@
                             <TextRun>
                               <Value>=Parameters!DateColon.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -262,7 +257,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                   </CellContents>
@@ -278,7 +272,7 @@
                             <TextRun>
                               <Value>=iif(Parameters!param_date_from.Value&lt;&gt;Parameters!param_date_to.Value,Parameters!param_date_from.Value +" - " + Parameters!param_date_to.Value,Parameters!param_date_to.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                                 <Language>ar-SA</Language>
                               </Style>
@@ -296,7 +290,6 @@
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
@@ -335,7 +328,7 @@
         <Top>0.3175cm</Top>
         <Left>0.25cm</Left>
         <Height>2.4cm</Height>
-        <Width>26.94998cm</Width>
+        <Width>27cm</Width>
         <Style>
           <Direction>=Parameters!Direction.Value</Direction>
           <Language>=User!Language</Language>
@@ -406,6 +399,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!ScheduledTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -439,6 +433,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!ScheduledTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -481,6 +476,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!ScheduledTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -518,6 +514,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(sum(Fields!ScheduledTime.Value))</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <FontSize>8pt</FontSize>
                                 <Color>DimGray</Color>
                               </Style>
@@ -576,6 +573,7 @@
                           <TextRun>
                             <Value>=Fields!ActivityName.Value</Value>
                             <Style>
+                              <FontFamily>Segoe UI</FontFamily>
                               <FontSize>8pt</FontSize>
                               <FontWeight>Bold</FontWeight>
                               <Color>DimGray</Color>
@@ -620,6 +618,7 @@
                           <TextRun>
                             <Value>=Parameters!TotalColon.Value</Value>
                             <Style>
+                              <FontFamily>Segoe UI</FontFamily>
                               <FontSize>8pt</FontSize>
                               <FontWeight>Bold</FontWeight>
                               <Color>DimGray</Color>
@@ -679,6 +678,7 @@
                           <TextRun>
                             <Value>=FormatDateTime(Fields!ScheduledDate.Value,DateFormat.ShortDate)</Value>
                             <Style>
+                              <FontFamily>Segoe UI</FontFamily>
                               <FontSize>8pt</FontSize>
                               <Color>DimGray</Color>
                             </Style>
@@ -716,6 +716,7 @@
                           <TextRun>
                             <Value>=Parameters!TotalColon.Value</Value>
                             <Style>
+                              <FontFamily>Segoe UI</FontFamily>
                               <FontSize>8pt</FontSize>
                               <FontWeight>Bold</FontWeight>
                               <Color>DimGray</Color>
@@ -749,7 +750,7 @@
         <FixedRowHeaders>true</FixedRowHeaders>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
-        <Top>10.75cm</Top>
+        <Top>11.385cm</Top>
         <Left>0.25cm</Left>
         <Height>2.75001cm</Height>
         <Width>5.75001cm</Width>
@@ -1002,6 +1003,7 @@
                 <Style>None</Style>
                 <Width>0.75pt</Width>
               </Border>
+              <FontFamily>Segoe UI</FontFamily>
               <Color>DimGray</Color>
             </Style>
             <Position>RightCenter</Position>
@@ -1035,7 +1037,7 @@
           </Style>
         </ChartNoDataMessage>
         <DataSetName>DataSet1</DataSetName>
-        <Top>2.89389cm</Top>
+        <Top>3.21139cm</Top>
         <Left>0.25cm</Left>
         <Height>7.78556cm</Height>
         <Width>23.02229cm</Width>
@@ -1051,7 +1053,7 @@
         </Style>
       </Chart>
     </ReportItems>
-    <Height>13.50001cm</Height>
+    <Height>14.13501cm</Height>
     <Style />
   </Body>
   <Width>27.5cm</Width>
@@ -1070,6 +1072,7 @@
                 <TextRun>
                   <Value>=Parameters!ResReportScheduledTimePerActivity.Value</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>22pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1108,6 +1111,7 @@
                 <TextRun>
                   <Value>=Format(Globals.ExecutionTime, "g")</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1139,6 +1143,7 @@
                 <TextRun>
                   <Value>=Globals.PageNumber &amp; " ( " &amp; Globals.TotalPages &amp; " ) "</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <Color>DimGray</Color>
                   </Style>
@@ -1180,7 +1185,7 @@
       <Style />
     </PageHeader>
     <PageFooter>
-      <Height>0.88492cm</Height>
+      <Height>1.09659cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1193,6 +1198,7 @@
                 <TextRun>
                   <Value>Powered by Teleopti WFM©</Value>
                   <Style>
+                    <FontFamily>Segoe UI</FontFamily>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
                     <Color>DimGray</Color>
