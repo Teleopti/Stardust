@@ -1,15 +1,11 @@
 using System;
-using System.Configuration;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client.Http;
@@ -81,18 +77,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder.Register(c => toggleManager).As<IToggleManager>();
 			return builder.Build();
 		}
-
-		public class GodModule : Module
-		{
-			protected override void Load(ContainerBuilder builder)
-			{
-				builder.RegisterModule<DateAndTimeModule>();
-				builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
-				builder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
-				builder.RegisterModule(new ToggleNetModule(ConfigurationManager.AppSettings["FeatureToggle"], ConfigurationManager.AppSettings["ToggleMode"]));
-				builder.RegisterModule<MessageBrokerModule>();
-			}
-		}
-
 	}
 }

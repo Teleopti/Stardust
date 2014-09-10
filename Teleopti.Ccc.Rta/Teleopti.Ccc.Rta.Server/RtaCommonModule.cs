@@ -41,29 +41,13 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
 
-			//registerMessageBroker(builder);
-
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
 			builder.RegisterType<PersonResolver>().As<IPersonResolver>();
 			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();
-			builder.RegisterModule<DateAndTimeModule>();
 
 			registerAdherenceComponents(builder);
 		}
-
-		//private static void registerMessageBroker(ContainerBuilder builder)
-		//{
-		//	builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
-		//	builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
-		//	builder.RegisterType<SignalRClient>()
-		//		.As<ISignalRClient>()
-		//		.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
-		//		.SingleInstance();
-		//	builder.RegisterType<SignalRSender>()
-		//		.As<IMessageSender>()
-		//		.SingleInstance();
-		//}
 
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
