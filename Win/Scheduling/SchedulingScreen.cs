@@ -2066,6 +2066,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 				case SikuliValidatorRegister.SelectValidator.Optimize:
 					SikuliHelper.AssertValidation(new OptimizerValidator(_schedulerState, totalSkill), this);
 					break;
+				case SikuliValidatorRegister.SelectValidator.OptimizeDaysOff:
+					SikuliHelper.AssertValidation(new OptimizeDaysOffValidator(_schedulerState, totalSkill), this);
+					break;
+				case SikuliValidatorRegister.SelectValidator.OptimizeBetweenDays:
+					SikuliHelper.AssertValidation(new OptimizeBetweenDaysValidator(_schedulerState, totalSkill), this);
+					break;
+				case SikuliValidatorRegister.SelectValidator.OptimizeWithinDays:
+					SikuliHelper.AssertValidation(new OptimizeWithinDaysValidator(_schedulerState, totalSkill), this);
+					break;
 				case SikuliValidatorRegister.SelectValidator.DeleteAll:
 					SikuliHelper.AssertValidation(new DeleteAllValidator(_schedulerState, totalSkill), this);
 					break;

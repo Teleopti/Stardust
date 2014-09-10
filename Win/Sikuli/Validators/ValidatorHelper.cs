@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, totalSkill);
 				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodsOfFullPeriod);
 				if (result.HasValue)
-					return Math.Round(result.Value, 2);
+					return Math.Round(result.Value, 3);
 				return null;
 			}
 			catch
