@@ -46,34 +46,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 		[Test]
 		public void ShouldResolveSignalRSender()
 		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Messaging_HttpSender_29205)).Return(false);
-			using (var container = new ContainerBuilder().Build())
+			using (var container = containerWithToggle(Toggles.Messaging_HttpSender_29205, false))
 			{
-				new ContainerConfiguration(container).Configure();
-				var temp = new ContainerBuilder();
-				temp.Register(c => toggleManager).As<IToggleManager>();
-				temp.Update(container);
 				container.Resolve<IMessageSender>()
 					.Should().Be.SameInstanceAs(container.Resolve<SignalRSender>());
 			}
 		}
 
-
 		[Test]
 		public void ShouldResolveHttpSender()
 		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Messaging_HttpSender_29205)).Return(true);
-			using (var container = new ContainerBuilder().Build())
+			using (var container = containerWithToggle(Toggles.Messaging_HttpSender_29205, true))
 			{
-				new ContainerConfiguration(container).Configure();
-				var temp = new ContainerBuilder();
-				temp.Register(c => toggleManager).As<IToggleManager>();
-				temp.Update(container);
 				container.Resolve<IMessageSender>()
 					.Should().Be.SameInstanceAs(container.Resolve<HttpSender>());
 			}
+		}
+
+		private static IContainer containerWithToggle(Toggles toggle, bool value)
+		{
+			var container = new ContainerBuilder().Build();
+			new ContainerConfiguration(container).Configure();
+
+			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
+			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
+			var builder = new ContainerBuilder();
+			builder.Register(c => toggleManager).As<IToggleManager>();
+			builder.Update(container);
+
+			return container;
 		}
 
 		[Test]
@@ -83,8 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				var containerConfiguration = new ContainerConfiguration(container);
-				containerConfiguration.Configure();
+				new ContainerConfiguration(container).Configure();
 				container.Resolve<ConsumerOf<IEvent>>().Should().Not.Be.Null();
 			}
 		}
@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				var containerConfiguration = new ContainerConfiguration(container);
-				containerConfiguration.Configure();
+				new ContainerConfiguration(container).Configure();
 				container.Resolve<ConsumerOf<ExportMultisiteSkillsToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -109,8 +108,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				var containerConfiguration = new ContainerConfiguration(container);
-				containerConfiguration.Configure();
+				new ContainerConfiguration(container).Configure();
 				container.Resolve<ConsumerOf<ExportMultisiteSkillToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -122,8 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				var containerConfiguration = new ContainerConfiguration(container);
-				containerConfiguration.Configure();
+				new ContainerConfiguration(container).Configure();
 				container.Resolve<ConsumerOf<ImportForecastsFileToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -135,8 +132,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				var containerConfiguration = new ContainerConfiguration(container);
-				containerConfiguration.Configure();
+				new ContainerConfiguration(container).Configure();
 				container.Resolve<ConsumerOf<ImportForecastsToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -148,8 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				var containerConfiguration = new ContainerConfiguration(container);
-				containerConfiguration.Configure();
+				new ContainerConfiguration(container).Configure();
 				container.Resolve<ConsumerOf<RunPayrollExport>>().Should().Not.Be.Null();
 			}
 		}
