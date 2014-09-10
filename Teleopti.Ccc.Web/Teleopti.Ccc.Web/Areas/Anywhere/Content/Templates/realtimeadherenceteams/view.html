@@ -3,9 +3,9 @@
 		<li><a href="#realtimeadherencesites" data-bind="text: resources.RealTimeAdherence"></a></li>
 		<li class="active" data-bind="text: siteName"></li>
 	</ul>
-	<!-- ko if: agentStatesForMultipleTeams()-->
-	<div align="right">
-		<button class="btn-xs open" data-bind="click: openSelectedTeams">Open selected teams</button>
+	<!-- ko if: agentStatesForMultipleTeams-->
+	<div class="col-xs-12">
+		<button class="btn btn-default pull-right btn-xs open" data-bind="click: openSelectedTeams">Open selected teams</button>
 	</div>
 	<br />
 	<!-- /ko -->
@@ -14,11 +14,11 @@
 		<div data-bind="if: NumberOfAgents > 0">
 			<div class="col-md-4">
 				<div class="well well-sm team drilldown">
-					<!-- ko if: $root.agentStatesForMultipleTeams()-->
+					<!-- ko if: $root.agentStatesForMultipleTeams -->
 					<input class="checkbox" type="checkbox" data-bind="checked: $root.teamsToOpen, attr:{value: Id, name : Name}" />
 					<!-- /ko -->
-					<div data-bind="click: openTeam, css: { drilldown: canOpenTeam() }">
-						<!-- ko if: !hasBeenUpdated() -->
+					<div data-bind="click: openTeam, css: { drilldown: canOpenTeam }">
+						<!-- ko ifnot: hasBeenUpdated -->
 						<div class="overlay">
 							<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
 						</div>

@@ -1,6 +1,6 @@
 <div class="container team-schedule">
 	<!-- ko if: StaffingMetricsVisible -->
-	<table class="table table-condensed well well-small" data-bind="visible: DisplayStaffingMetrics">
+	<table class="table table-condensed well well-sm" data-bind="visible: DisplayStaffingMetrics">
         <thead>
             <tr>
                 <th>
@@ -27,7 +27,7 @@
 	<!-- /ko -->
     <div class="row">
         <div class="col-xs-12 col-md-4">
-            <select id="group-picker" class="col-xs-12" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
+            <select id="group-picker" class="col-xs-12" data-bind="disable: Loading, foreach: GroupPages, select2: { value: GroupId } ">
                 <optgroup data-bind="attr: { label: Name }, foreach: Groups" label="Missing">
                     <option data-bind="text: Name, value: Id"></option>
                 </optgroup>
@@ -49,7 +49,7 @@
                     <button class="btn" data-bind="attr: { title: Resources.Next }, click: NextDay">
                         <i class="glyphicon glyphicon-chevron-right"></i>
                     </button>
-                    <button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions">
+                    <button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="disable: Loading, click: ToggleDisplayDescriptions">
                         <i class="glyphicon glyphicon-question-sign"></i>
                     </button>
                 </span>
@@ -65,7 +65,7 @@
             <!-- ko if: Loading -->
             <div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
             <!-- /ko -->
-            <!-- ko if: !Loading() -->
+            <!-- ko ifnot: Loading -->
             <div class="relative">
                 <!-- ko with: TimeLine -->
                 <div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.SortedPersons().length > 0">

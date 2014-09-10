@@ -1,15 +1,15 @@
 ﻿<div class="container realtimeadherencesites">
 
-	<!-- ko if: agentStatesForMultipleSites()-->
+	<!-- ko if: agentStatesForMultipleSites-->
 	<div class="row">
-		<div class="col-xs-12 col-md-4">
-			<select id="bu-picker" class="col-xs-12" data-bind="foreach: businessUnits, event:{change: businessUnitChanged}">
+		<div class="col-md-4">
+			<select id="bu-picker" class="col-xs-12 form-control" data-bind="foreach: businessUnits, event:{change: businessUnitChanged}">
 				<option data-bind="text: Name, value: Id"></option>
 			</select>
 		</div>
-		<!-- ko if: agentStatesForMultipleSites()-->
-		<div class="col-xs-12 col-md-4 pull-right" align="right">
-			<button class="btn-xs open" data-bind="click: openSelectedSites">Open selected sites</button>
+		<!-- ko if: agentStatesForMultipleSites-->
+		<div class="col-md-4 pull-right">
+			<button class="btn btn-xs open btn-default pull-right" data-bind="click: openSelectedSites">Open selected sites</button>
 		</div>
 		<!-- /ko -->
 	</div>
@@ -19,11 +19,11 @@
 			<div data-bind="if: NumberOfAgents > 0">
 				<div class="col-md-4">
 					<div class="well well-sm site">
-						<!-- ko if: $root.agentStatesForMultipleSites()-->
+						<!-- ko if: $root.agentStatesForMultipleSites -->
 						<input class="checkbox" type="checkbox" data-bind="checked: $root.sitesToOpen, attr:{value: Id, name : Name}" />
 						<!-- /ko -->
 						<div data-bind="click: openSite">
-							<!-- ko if: !hasBeenUpdated() -->
+							<!-- ko ifnot: hasBeenUpdated -->
 							<div class="overlay">
 								<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
 							</div>
