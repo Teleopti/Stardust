@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -9910,7 +9910,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>example for new, use max 11 characters</comment>
   </data>
   <data name="ScheduleTagColon" xml:space="preserve">
-    <value>Schematag:</value>
+    <value>Schematagg:</value>
   </data>
   <data name="ScheduleTags" xml:space="preserve">
     <value>Schemataggar</value>
@@ -11719,5 +11719,11 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="SaveToSpace" xml:space="preserve">
     <value>Spara till </value>
     <comment>Which scenario to saev the forecast</comment>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Antal timmar per vecka är felaktigt, möjlig orsak: Max timmar per vecka är mindre än min timmar per vecka. </value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Avancerat filter</value>
   </data>
 </root>

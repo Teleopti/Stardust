@@ -211,13 +211,13 @@
     <value>Chamadas Atendidas por Hora de Telefonia Agendada</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Pós Atendimento Médio (s)</value>
+    <value>Tempo Médio de Pós Atendimento (s)</value>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
     <value>Tempo Médio de Atendimento (s)</value>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Tempo Falado Médio (s)</value>
+    <value>Tempo Médio Falado (s)</value>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
     <value>Disponibilidade (%)</value>
@@ -286,7 +286,7 @@
     <value>Velocidade Média de Atendimento (s)</value>
   </data>
   <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
-    <value>Tempo Médio de Abandono (s)</value>
+    <value>Tempo Médio para Abandono (s)</value>
   </data>
   <data name="ResDatePeriodColon" xml:space="preserve">
     <value>Período de Datas:</value>
@@ -325,7 +325,7 @@
     <value>Tempo de Pós Atendimento</value>
   </data>
   <data name="ResATT" xml:space="preserve">
-    <value>Tempo Falado Médio</value>
+    <value>Tempo Médio Falado (TMF)</value>
   </data>
   <data name="ResCalculatedCalls" xml:space="preserve">
     <value>Chamadas Calculadas</value>
@@ -913,7 +913,7 @@
     <value>Tempo Médio de Atendimento (s)</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Tempo Falado Médio (s)</value>
+    <value>Tempo Médio Falado (s)</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Métricas de Fila e Agente</value>
@@ -1073,5 +1073,26 @@
   </data>
   <data name="ResUtilization" xml:space="preserve">
     <value>Utilização</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Tempo máximo excedido da conexão com o banco de dados, tente limitar as suas condições de busca</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Somente skills ativos</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Skills dos Agentes</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Somente skills ativos:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tempo no Estado por Agente</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Grupos de Estado:</value>
   </data>
 </root>

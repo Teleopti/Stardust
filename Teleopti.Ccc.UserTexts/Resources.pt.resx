@@ -244,7 +244,7 @@
     <value>Chamadas atendidas</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>Nome do usuário no Aplicativo</value>
+    <value>Login da Aplicação</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Perfis</value>
@@ -277,7 +277,7 @@
     <value>Média de chamadas</value>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
-    <value>Tempo falado médio</value>
+    <value>Tempo médio falado</value>
   </data>
   <data name="AverageTasks" xml:space="preserve">
     <value>Média de Tarefas</value>
@@ -361,7 +361,7 @@
     <value>Marcar todos</value>
   </data>
   <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
-    <value>Pressione OK para sobrepor as regras. Pressione CANCEL para corrigir os erros primeiro.</value>
+    <value>Pressione OK para substituir as Regras. Pressione Cancelar para corrigir os erros primeiro.</value>
   </data>
   <data name="ChooseCommandsFromColon" xml:space="preserve">
     <value>&amp;Escolher comandos de:</value>
@@ -412,7 +412,7 @@
     <value>Agendas do Contrato</value>
   </data>
   <data name="ContractTargetTime" xml:space="preserve">
-    <value>Tempo acordado em contrato</value>
+    <value>Tempo de contrato alvo</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copiar</value>
@@ -496,7 +496,7 @@
     <value>Folgas</value>
   </data>
   <data name="DayView" xml:space="preserve">
-    <value>Visão diária</value>
+    <value>Visão Intradiára</value>
   </data>
   <data name="DefaultColor" xml:space="preserve">
     <value>Cor Inicial</value>
@@ -535,7 +535,7 @@
     <value>Detalhe</value>
   </data>
   <data name="DetailView" xml:space="preserve">
-    <value>Visão do Detalhe</value>
+    <value>Visão Detalhada</value>
   </data>
   <data name="DeviationACWColon" xml:space="preserve">
     <value>Desvio do tempo de pós atendimento:</value>
@@ -760,10 +760,10 @@
     <value>Pós Atendimento Médio (s)</value>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>Tempo de atendimento médio (s)</value>
+    <value>Tempo médio de atendimento (s)</value>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Tempo falado médio (s)</value>
+    <value>Tempo médio falado (s)</value>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
     <value>Disponibilidade (%)</value>
@@ -1045,7 +1045,7 @@
     <value>Opções</value>
   </data>
   <data name="OriginalACW" xml:space="preserve">
-    <value>Pós Original</value>
+    <value>Pós atendimento original</value>
   </data>
   <data name="OriginalAfterCallWork" xml:space="preserve">
     <value>Pós atendimento original</value>
@@ -1468,10 +1468,10 @@
     <value>Dividir</value>
   </data>
   <data name="Standard" xml:space="preserve">
-    <value>Original</value>
+    <value>Padrão</value>
   </data>
   <data name="StandardColors" xml:space="preserve">
-    <value>Cores Originais</value>
+    <value>Cores padrão</value>
   </data>
   <data name="StartDate" xml:space="preserve">
     <value>Data Início:</value>
@@ -1693,7 +1693,7 @@
     <value>Visual</value>
   </data>
   <data name="VolumeForecast" xml:space="preserve">
-    <value>Previsão de Logo Prazo</value>
+    <value>Previsão de Longo Prazo</value>
   </data>
   <data name="Week" xml:space="preserve">
     <value>Semana</value>
@@ -1879,7 +1879,7 @@
     <value>Data de Saída</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Mensageiro da Agenda do Agente</value>
+    <value>Mensageiro da Escala do Agente</value>
   </data>
   <data name="WeekView" xml:space="preserve">
     <value>Visão Semanal</value>
@@ -1933,7 +1933,7 @@
     <value>Tabela no Gráfico</value>
   </data>
   <data name="BackToLegalState" xml:space="preserve">
-    <value>Volta ao Estado Legal</value>
+    <value>Volta para Estado Legal</value>
   </data>
   <data name="EditCommonAgentNameDescription" xml:space="preserve">
     <value>Editar descrição do formato do nome do agente comum</value>
@@ -2323,7 +2323,7 @@
     <value>Violação de uma Regra de Negócio</value>
   </data>
   <data name="ModifyShiftCategoryPreferences" xml:space="preserve">
-    <value>Preferências Originais</value>
+    <value>Preferências Padrão</value>
   </data>
   <data name="AddShiftCategory" xml:space="preserve">
     <value>Adicionar Categoria de Turno</value>
@@ -2632,7 +2632,7 @@
     <value>Solicitações de troca de turno abertas</value>
   </data>
   <data name="MatchingSkills" xml:space="preserve">
-    <value>Checando skills</value>
+    <value>Verificar mesmo skill</value>
   </data>
   <data name="BusinessRuleShiftCategoryLimitationErrorMessage" xml:space="preserve">
     <value>A semana tem Categorias de Turnos demais {0}.</value>
@@ -2728,7 +2728,7 @@
     <value>Horas por dia</value>
   </data>
   <data name="Override" xml:space="preserve">
-    <value>Sobrepor</value>
+    <value>Substituir</value>
   </data>
   <data name="PeriodHours" xml:space="preserve">
     <value>Horas do Período</value>
@@ -2896,7 +2896,7 @@
     <value>Descrição do agente</value>
   </data>
   <data name="Main" xml:space="preserve">
-    <value>Hierarquia de Negócios</value>
+    <value>Hierarquia de Negócio</value>
   </data>
   <data name="Permissions" xml:space="preserve">
     <value>Permissões</value>
@@ -3079,7 +3079,7 @@
     <value>Restaurar o Portal do Agente</value>
   </data>
   <data name="RestoreASM" xml:space="preserve">
-    <value>Restaurar o Mensageiro da Agenda do Agente</value>
+    <value>Restaurar o Mensageiro da Escala do Agente</value>
   </data>
   <data name="DuplicatePersonRotationMessage" xml:space="preserve">
     <value>Não é permitido datas duplicadas nas Rotações de Pessoas</value>
@@ -3457,7 +3457,7 @@
     <value>Portal do Agente</value>
   </data>
   <data name="OpenASM" xml:space="preserve">
-    <value>Mensageiro da Agenda do Agente</value>
+    <value>Mensageiro da Escala do Agente</value>
   </data>
   <data name="AutomaticUpdate" xml:space="preserve">
     <value>Atualização Automática</value>
@@ -3502,7 +3502,7 @@
     <value>Tempo falado real</value>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
-    <value>Tempo Médio de Resposta </value>
+    <value>Velocidade média de atendimento</value>
   </data>
   <data name="CurrentDistributedDemand" xml:space="preserve">
     <value>Demanda distribuída atual</value>
@@ -3910,7 +3910,7 @@
     <value>Dias</value>
   </data>
   <data name="HolidayTime" xml:space="preserve">
-    <value>Horário</value>
+    <value>Tempo</value>
   </data>
   <data name="Preference" xml:space="preserve">
     <value>Preferências</value>
@@ -4099,10 +4099,10 @@
     <value>terceiro</value>
   </data>
   <data name="ApointmentTime" xml:space="preserve">
-    <value>Tempo de apontamento</value>
+    <value>Horário da reunão</value>
   </data>
   <data name="AppointmentRecurrence" xml:space="preserve">
-    <value>Recorrência do Apontamento</value>
+    <value>Recorrência da Reunião</value>
   </data>
   <data name="DurationColon" xml:space="preserve">
     <value>Duração:</value>
@@ -4216,7 +4216,7 @@
     <value>Média de e-mails</value>
   </data>
   <data name="AverageHandlingTime" xml:space="preserve">
-    <value>Tempo de atendimento médio</value>
+    <value>Tempo médio de atendimento</value>
   </data>
   <data name="Thresholds" xml:space="preserve">
     <value>Limites</value>
@@ -4465,7 +4465,7 @@
     <value>Headcount real</value>
   </data>
   <data name="WorkflowControlSet" xml:space="preserve">
-    <value>Configuração do Workflow</value>
+    <value>Configuração de Workflow</value>
   </data>
   <data name="AbsenceRequests" xml:space="preserve">
     <value>Solicitações de Ausência</value>
@@ -4474,16 +4474,16 @@
     <value>Checar conta pessoal</value>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
-    <value>Selecionar a configuração do workflow para editar</value>
+    <value>Selecionar a configuração de workflow para editar</value>
   </data>
   <data name="ManageWorkflowControlSets" xml:space="preserve">
-    <value>Gerenciar Controles do Workflow</value>
+    <value>Gerenciar Configuração de Workflow</value>
   </data>
   <data name="WorkflowControlSetColon" xml:space="preserve">
-    <value>Configuração do Workflow:</value>
+    <value>Configuração de Workflow:</value>
   </data>
   <data name="NewWorkflowControlSet" xml:space="preserve">
-    <value>Nova Configuração do Workflow</value>
+    <value>Nova Configuração de Workflow</value>
   </data>
   <data name="CreatedPageOf" xml:space="preserve">
     <value>Criado {0}. Pagina {1} de {2}</value>
@@ -5345,7 +5345,7 @@ Detalhes do erro:
     <value>{0} Solicitação (ões)</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
-    <value>Agendamento de Equipe</value>
+    <value>Escala da Equipe</value>
   </data>
   <data name="ViewAllowance" xml:space="preserve">
     <value>Visualizar concessão</value>
@@ -5429,7 +5429,7 @@ Talvez seja necessário que você reinicie o MyTime para que você possa ter ace
     <value>Otimizar:</value>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
-    <value>Incluir na solucitação de concessão</value>
+    <value>Incluir na solicitação de concessão</value>
   </data>
   <data name="ViewScheduleHistory" xml:space="preserve">
     <value>Visualizar o Histórico do Agendamento</value>
@@ -5447,7 +5447,7 @@ Talvez seja necessário que você reinicie o MyTime para que você possa ter ace
     <value>Mostrar valores originais</value>
   </data>
   <data name="BudgetedLeave" xml:space="preserve">
-    <value>Licença orçamentada</value>
+    <value>Licença orçada</value>
   </data>
   <data name="Allowance" xml:space="preserve">
     <value>Concessão</value>
@@ -5497,7 +5497,7 @@ Detalhes do erro:
     <value>Alterar Data De:</value>
   </data>
   <data name="ViewCustomTeamSchedule" xml:space="preserve">
-    <value>Visualizar a Agenda Customizada da Equipe</value>
+    <value>Visualizar a Escala Customizada da Equipe</value>
   </data>
   <data name="AuditingTurnOnShort" xml:space="preserve">
     <value>Ligar?</value>
@@ -7111,7 +7111,7 @@ Período: {3}</value>
     <value>Adicionar Período de Rolagem</value>
   </data>
   <data name="DaysOffBackToLegalState" xml:space="preserve">
-    <value>Dias de folga de volta a estado legal</value>
+    <value>Dias de folga de volta para estado legal</value>
   </data>
   <data name="Rescheduling" xml:space="preserve">
     <value>Reagendamento</value>
@@ -7566,7 +7566,7 @@ Teleopti P&amp;D
     <value>+/-</value>
   </data>
   <data name="ToleranceForMatchingContractTime" xml:space="preserve">
-    <value>Tolerância para igualar tempo contratual</value>
+    <value>Tolerância por tempo de contrato correspondente</value>
   </data>
   <data name="FunctionNotAvailable" xml:space="preserve">
     <value>Função não disponível</value>
@@ -8130,13 +8130,13 @@ Teleopti P&amp;D
     <value>Visualização dos Detalhes da Solicitação</value>
   </data>
   <data name="AttritionRate" xml:space="preserve">
-    <value>Taxa de desgaste</value>
+    <value>Taxa de turn over</value>
   </data>
   <data name="BudgetedStaff" xml:space="preserve">
     <value>Staff orçado</value>
   </data>
   <data name="Contractors" xml:space="preserve">
-    <value>Empreiteiros</value>
+    <value>Terceiros</value>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
     <value>FTE h/dia</value>
@@ -8502,7 +8502,7 @@ Teleopti P&amp;D
     <value>MyTime</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
-    <value>Mensagens da Agenda do Agente</value>
+    <value>Mensageiro da Escala do Agente</value>
   </data>
   <data name="ExtendedPreferencesWeb" xml:space="preserve">
     <value>Preferências Extendidas</value>
@@ -9117,5 +9117,386 @@ Por favor, reduza a complexidade desses turnos.</value>
   </data>
   <data name="ModifyAvailabilities" xml:space="preserve">
     <value>Modificar disponibilidades</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Número de horas por semana inválido. Isso pode ter acontecido porque o máximo de horas por semana é menor do que o mínimo de horas por semana.</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Entre dias de folga</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>As limitações de categoria de turno não são consideradas quando o agendamento de equipe ou de bloco foram selecionados.</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Manter&gt;</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Utilizar Sazonalidade de Dias Dentro de um Mês.</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Skills dos Agentes</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Não há um grupo de orçamento para você.</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Tentando resolver os dias não escalados.</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Troca de turno negada porque os turnos estão em datas diferentes.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Adicionar ausência intradiária</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Ausência Intradiária</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Uma otimização utilizando o agendamento de bloco entre dias de folga que não mantenha os dias da equipe juntos não é suportada. O resultado não será o melhor.</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Os passos "Turnos por tempo de trabalho flexível", "Dias de folga para tempo de trabalho flexível" e "Limitações de categoria de turno" não são executados quando o agendamento de equipe ou de bloco estiverem selecionados.</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Equipe para se comparar</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tempo no Estado por Agente</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Aderência Detalhada</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Meu Relatório</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Agentes Ativos</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Nenhum período presente</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Tempo final inválido.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Por favor adicione uma ausência intradiária ao turno existente.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Você não pode criar um segundo turno com "adicionar atividade".</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>Nessa data você não é mais um colaborador.</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Métrica</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Disponibilidade</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Ontem</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Tempo de tarefa</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Tempo total de tarefa</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Tempo de chat</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Você não tem acesso às equipes.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Comparar equipes desde</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Tempo Disponível / Tempo Disponível Agendado</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>A escala deve ser recarregada</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Pontos de Dias de Folga:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Pontos de Senioridade:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Pontos da Categoria de Turno:</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Aderência Detalhada</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Resumo</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Agendamento Mensal</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Ranking de senioridade</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Visão Geral da Aderência em Tempo Real</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Ver a sua Conta Pessoal</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navegar</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Selecione pelo menos uma pessoa</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Somente em agentes disponíveis</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Fora de aderência</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Tempo antes da mudança de uma atividade para alertar o agente (segundos)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Pelo menos um dia não pôde ser agendado</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Permitir Notificações no Computador</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Não há uma fonte de dados disponível.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Logar como outro usuário</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Logar como:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Logar Como Outro Usuário</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Calcular Estado Legal</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>O turno atual irá terminar as {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>A próxima atividade ({0}) irá iniciar as {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Resolvendo o tempo de descanso semanal para {0} {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Agendamento de Equipe</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;Sem Agendamento de Bloco&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Sem Agendamento de Equipe&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Período de Agendamento</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Computador</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Móvel</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Mover tempo em</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Próxima Atividade</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Início da Próxima Atividade</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Tempo no Estado</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Tempo Mínimo por Semana:</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Você tem um tempo limite de trabalho semanal inválido.</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Métricas de Fila</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Tempo no Alarme</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Servidor indisponível. Por causa disso, algumas funcionalidades não puderam ser ativadas.</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Ranking de senioridade ascendente</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Ranking de senioridade descendente</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ARQUIVO</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Abrir Turnos...</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Mover Atividade</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Minhas Trocas:</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Visão Compacta</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Solicitações</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Todas as Equipes</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Medalhas do Agente</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Limiar de Chamadas Atendidas:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Limiar de Tempo Médio de Atendimento (hh:mm:ss):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Limiar de Aderência (%):</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>Uma medalha de prata equivale a quantas medalhas de bronze:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>Uma medalha de ouro equivale a quantas medalhas de prata:</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Habilidar medalhas dos agentes</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Adicionando atividades para</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Adicionando ausência de dia inteiro para</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Adicionando ausência intradiária para</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Falhou!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Movendo atividade para</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Removendo ausência para</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Por favor recarregue a página!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Por favor tente novamente!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Sucesso!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Parabéns!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Você não está logado.</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Essa semana contém muito pouco tempo de trabalho ({0}). O mínimo é: {1}.</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Excluir Skill</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Página inicial</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Por favor configure o seu endereço de e-mail para acessar os recursos da Teleopti.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de bronze! A sua aderência em {1:yyyy-MM-dd} é maior que {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de bronze! O seu tempo médio de atendimento em {1:yyyy-MM-dd} é maior que {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de bronze! Você atendeu mais de {0} chamadas em {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de ouro! A sua aderência é maior do que {0} em {1} dias diferentes.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de ouro! O seu tempo de atendimento é menor que {0} segundos em {1} dias diferentes.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de ouro! Você atendeu {0} ou mais chamadas em {1} dias diferentes</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de prata! A sua aderência é maior do que {0} em {1} dias diferentes.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de prata! O seu tempo de atendimento é menor que {0} segundos em {1} dias diferentes.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Você conseguiu uma nova medalha de prata! Você atendeu {0} ou mais chamadas em {1} dias diferentes</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Lista Filtrada</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filtrar Multiplas Pessoas</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Forneça os valores das propriedades para as categorias de turno</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Salvar a previsão em outro cenário</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Salvar para</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Resultados Filtrados</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Possíveis Registros Encontrados</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Filtro Avançado</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Resolver</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Mostrar Destinatários Duplicados</value>
   </data>
 </root>
