@@ -8,7 +8,7 @@ GO
 -- Description:	Write schedule preferences from staging table 'stg_schedule_preference'
 --				to data mart table 'fact_schedule_preference'. Used only by ETL.Intrday
 -- =============================================
---exec mart.etl_fact_schedule_preference_intraday_load '493E828B-D416-4628-AB10-990E7D268DB9','493E828B-D416-4628-AB10-990E7D268DB9'
+--exec mart.etl_fact_schedule_preference_intraday_load_27933 '493E828B-D416-4628-AB10-990E7D268DB9','493E828B-D416-4628-AB10-990E7D268DB9'
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_preference_intraday_load]
 @business_unit_code uniqueidentifier,
@@ -98,16 +98,7 @@ SELECT DISTINCT
 	interval_id					= 0, 
 	person_id					= p.person_id, 
 	scenario_id					= ds.scenario_id, 
-	preference_type_id			= CASE 
-										--Shift Category (standard) Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.shift_category_code IS NOT NULL AND f.activity_code IS NULL THEN 1
-										--Day Off Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.day_off_name IS NOT NULL AND f.activity_code IS NULL THEN 2
-										--Extended Preference
-										WHEN f.StartTimeMinimum IS NOT NULL OR f.EndTimeMinimum IS NOT NULL OR f.StartTimeMaximum IS NOT NULL OR f.EndTimeMaximum IS NOT NULL OR f.WorkTimeMinimum IS NOT NULL OR f.WorkTimeMaximum IS NOT NULL OR f.activity_code IS NOT NULL THEN 3
-										--Absence Preference
-										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.absence_code IS NOT NULL AND f.activity_code IS NULL THEN 4
-								  END,
+	preference_type_id			= f.preference_type_id,
 	shift_category_id			= isnull(sc.shift_category_id,-1), 
 	day_off_id					= isnull(ddo.day_off_id,-1),
 	preferences_requested	= 1, 
