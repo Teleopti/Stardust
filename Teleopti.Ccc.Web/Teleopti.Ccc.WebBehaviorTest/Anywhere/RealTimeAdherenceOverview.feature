@@ -719,7 +719,7 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
 @ignore
-Scenario: Should be able to add an activity in agent state overview
+Scenario: Should be able to change schedule from agent state overview
 	Given  the current time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -750,7 +750,7 @@ Scenario: Should be able to add an activity in agent state overview
 	| End time       | 2014-09-09 17:00 |
 	When I view real time adherence for team 'Red'
 	And the browser time is '2014-09-09 12:45:00'
-	And I select agent state of 'Pierre Baldi'
-	And I click person name 'Pierre Baldi'
-	And I click 'add activity' in schedule menu
-	Then I should see the add activity form
+	And I click agent state of 'Pierre Baldi'
+	And I click 'change schedule' in agent menu
+	Then I should see schedule for 'Pierre Baldi'
+	And I should see schedule menu

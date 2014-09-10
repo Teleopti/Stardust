@@ -179,6 +179,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			scheduledActivity.ForEach(sa => assertScheduledActivity(personName, sa));
 		}
 
+		[Then(@"I should see schedule menu")]
+		public void ThenIShouldSeeScheduleMenu()
+		{
+			Browser.Interactions.AssertExists(".schedule-menu");
+		}
+
 		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
 		{
 			if (layer.StartTime.Equals("00:00"))

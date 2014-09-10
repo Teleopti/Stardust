@@ -5,6 +5,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -56,6 +57,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			assertRealTimeAgentName(name);
 		}
 
+		[Then(@"I should see the menu with option of change schedule")]
+		public void ThenIShouldSeeTheMenuWithOptionOfChangeSchedule()
+		{
+			Browser.Interactions.AssertExists(".change-schedule");
+		}
+
 		[When(@"the browser time is '(.*)'")]
 		public void WhenTheBrowserTimeIs(DateTime time)
 		{
@@ -65,7 +72,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Javascript(setJsDate);
 		}
 
-		
+		[When(@"I click( the)? ([a-z-]*|[a-z]* [a-z]*) of '(.*)'")]
+		public void WhenIClickClassWithText(string the, CssClass cssClass, string text)
+		{
+			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
+		}
+
+		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
+		public void WhenIClickInAgentMenu(CssClass cssClass)
+		{
+			Browser.Interactions.Click(string.Format(".agent-menu a.{0}", cssClass.Name));
+		}
+
 		[When(@"I click the site checkbox for '(.*)'")]
 		[When(@"I click the team checkbox for '(.*)'")]
 		public void WhenIClickTheCheckboxFor(string name)
@@ -77,12 +95,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIChooseBusinessUnit(string businessUnitName)
 		{
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#bu-picker", businessUnitName);
-		}
-
-		[When(@"I select agent state of '(.*)'")]
-		public void WhenISelectAgentStateOf(string p0)
-		{
-			ScenarioContext.Current.Pending();
 		}
 
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)

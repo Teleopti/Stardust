@@ -421,6 +421,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view real time adherence for team '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForTeam(string team)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(IdForTeam(team));
 		}
