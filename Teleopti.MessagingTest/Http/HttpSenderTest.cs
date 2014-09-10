@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http

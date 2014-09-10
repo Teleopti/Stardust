@@ -9,22 +9,4 @@ namespace Teleopti.Interfaces.MessageBroker.Client
 		void Call(string methodName, params object[] args);
 		void RegisterCallbacks(Action<Notification> onNotification, Action afterConnectionCreated);
 	}
-
-	public interface IMessageBrokerUrl
-	{
-		void Configure(string url);
-		string Url { get; }
-	}
-
-	public class MutableUrl : IMessageBrokerUrl
-	{
-		private string _url;
-
-		public void Configure(string url)
-		{
-			_url = url;
-		}
-
-		public string Url { get { return _url; } }
-	}
 }
