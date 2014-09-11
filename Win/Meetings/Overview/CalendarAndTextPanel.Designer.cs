@@ -75,7 +75,7 @@
 			this.monthCalendarAdv1.BottomHeight = 25;
 			this.monthCalendarAdv1.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.monthCalendarAdv1.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.monthCalendarAdv1.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.monthCalendarAdv1.DayNamesFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
 			this.monthCalendarAdv1.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
 			this.monthCalendarAdv1.DaysHeaderInterior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
 			this.monthCalendarAdv1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -125,8 +125,8 @@
 			this.monthCalendarAdv1.TodayButton.Text = "Today";
 			this.monthCalendarAdv1.TodayButton.UseVisualStyle = true;
 			this.monthCalendarAdv1.TodayButton.Visible = false;
-			this.monthCalendarAdv1.DateSelected += new System.EventHandler(this.MonthCalendarAdv1DateSelected);
-			this.monthCalendarAdv1.DateChanged += new System.EventHandler(this.MonthCalendarAdv1DateChanged);
+			this.monthCalendarAdv1.DateSelected += new System.EventHandler(this.monthCalendarAdv1DateSelected);
+			this.monthCalendarAdv1.DateChanged += new System.EventHandler(this.monthCalendarAdv1DateChanged);
 			// 
 			// CalendarAndTextPanel
 			// 
@@ -136,6 +136,7 @@
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "CalendarAndTextPanel";
 			this.Size = new System.Drawing.Size(232, 608);
+			this.Resize += new System.EventHandler(this.calendarAndTextPanelResize);
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).EndInit();
 			this.gradientPanel1.ResumeLayout(false);
 			this.gradientPanel1.PerformLayout();
