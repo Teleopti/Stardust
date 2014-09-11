@@ -2,15 +2,19 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Media;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
+using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -215,5 +219,60 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var schedulesWithinValidPeriod = ScheduleHelper.SchedulesWithinValidSchedulePeriod(selectedSchedules);
 			swapAndReschedule.Enabled = schedulesWithinValidPeriod.Count == selectedSchedules.Count;
 		}
+
+		public static void EnableScheduleButton(
+			ToolStripDropDownItem schedulerToolStripButton, 
+			ScheduleViewBase scheduleView, 
+			SplitterManagerRestrictionView splitterManagerView, 
+			bool teamLeaderMode)
+		{
+			bool enabled = false;
+			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+			{
+				enabled = scheduleView.TheGrid.Selections.Count == 1;
+				if (splitterManagerView.ShowRestrictionView)
+				{
+					if (!isCoherentSelection(scheduleView.SelectedSchedules()))
+						enabled = false;
+				}
+				if (teamLeaderMode)
+					enabled = false;
+			}
+
+			schedulerToolStripButton.Enabled = enabled;
+			enableDisableSubItems(schedulerToolStripButton);
+		}
+	
+		private static bool isCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
+		{
+			IScheduleDay scheduleDay = null;
+			var sortedList = selectedSchedules.OrderBy(d => d.DateOnlyAsPeriod.DateOnly).ToList();
+
+			foreach (var selectedSchedule in sortedList)
+			{
+				if (scheduleDay != null)
+				{
+					if (scheduleDay.DateOnlyAsPeriod.DateOnly.Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly)) continue;
+					if (!scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1).Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly))
+					{
+						return false;
+					}
+				}
+				scheduleDay = selectedSchedule;
+			}
+			return true;
+		}
+
+		private static void enableDisableSubItems(ToolStripDropDownItem item)
+		{
+			foreach (var subItem in item.DropDownItems)
+			{
+				var control = subItem as ToolStripItem;
+				if(control != null)
+					control.Enabled = item.Enabled;
+
+			}
+		}
+
 	}
 }

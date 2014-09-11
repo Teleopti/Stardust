@@ -1776,7 +1776,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripSplitButtonSchedule, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripSplitButtonSchedule, false);
 			this.toolStripSplitButtonSchedule.ButtonClick += new System.EventHandler(this.toolStripMenuItemScheduleClick);
-			this.toolStripSplitButtonSchedule.EnabledChanged += new System.EventHandler(this.toolStripSplitButtonSchedule_EnabledChanged);
 			// 
 			// toolStripMenuItemScheduleSelected
 			// 

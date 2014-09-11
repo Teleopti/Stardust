@@ -147,7 +147,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		public void SetPermissionOnScheduleControl(ToolStripEx actions, ToolStripSplitButton schedule)
 		{
 			actions.Enabled = true;
-			schedule.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
+			schedule.Enabled = 
+				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
 		}
 
 		public void CheckPastePermissions(ToolStripMenuItem paste, ToolStripMenuItem pasteSpecial)
