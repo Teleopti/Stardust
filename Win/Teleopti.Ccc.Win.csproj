@@ -708,7 +708,8 @@
     </Compile>
     <Compile Include="Sikuli\SikuliHelper.cs" />
     <Compile Include="Sikuli\SikuliValidationResult.cs" />
-    <Compile Include="Sikuli\SikuliValidators.cs" />
+    <Compile Include="Sikuli\SikuliValidatorFactory.cs" />
+    <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2516,6 +2517,7 @@
     <Compile Include="Sikuli\Validators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\DeleteAllValidator.cs" />
+    <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
     <Compile Include="Sikuli\Validators\ValidatorHelper.cs" />
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
