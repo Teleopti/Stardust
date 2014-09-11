@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog(owner);
-			CurrentValidator = SikuliValidators.Register.None;
+			CurrentValidator = SikuliValidatorRegister.None;
 		}
 
 	}

@@ -2061,7 +2061,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (SikuliHelper.TestMode)
 			{
 				ISikuliValidator currentValidator =
-					SikuliValidators.Factory.Scheduler.CreateValidator(_schedulerState, totalSkill);
+					SikuliValidatorFactory.Scheduler.CreateValidator(_schedulerState, totalSkill);
 
 				if (currentValidator != null)
 					SikuliHelper.Validate(currentValidator, this);
