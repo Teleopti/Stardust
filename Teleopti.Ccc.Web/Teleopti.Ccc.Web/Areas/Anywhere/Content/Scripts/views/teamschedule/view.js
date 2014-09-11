@@ -73,7 +73,7 @@ define([
 			});
 
 			viewModel.Date.subscribe(function () {
-				if (viewModel.Loading())
+				if (viewModel.Loading() || !viewModel.GroupId())
 					return;
 				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});

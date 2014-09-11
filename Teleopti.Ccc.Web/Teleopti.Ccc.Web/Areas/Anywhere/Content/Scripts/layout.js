@@ -15,7 +15,8 @@ define([
 		'errorview',
 		'resources',
 		'subscriptions.trackingmessages',
-		'notifications'
+		'notifications',
+		'shared/timezone-current'
 ], function (
 		layoutTemplate,
 		menuTemplate,
@@ -32,7 +33,8 @@ define([
 		errorview,
 		resources,
 		trackingmessages,
-		notificationsViewModel) {
+		notificationsViewModel,
+		timezoneCurrent) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -222,6 +224,7 @@ define([
 				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
+				timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
 				_initTrackingNotification(responseData.PersonId);
 			}
 		});

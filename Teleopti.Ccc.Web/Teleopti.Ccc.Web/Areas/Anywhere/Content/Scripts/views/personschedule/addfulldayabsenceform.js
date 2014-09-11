@@ -34,8 +34,8 @@ define([
             	groupId = data.GroupId;
             	personId = data.PersonId;
             	personName = data.PersonName;
-                self.StartDate(data.Date);
-                self.EndDate(data.Date);
+            	self.StartDate(moment(data.Date.format('YYYY-MM-DD'),'YYYY-MM-DD'));
+                self.EndDate(self.StartDate().clone());
                 self.AbsenceTypes(data.Absences);
                 self.TimeZoneName(data.TimeZoneName);
             };

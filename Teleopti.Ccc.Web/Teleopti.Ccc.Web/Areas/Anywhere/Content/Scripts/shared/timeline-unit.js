@@ -1,10 +1,12 @@
 define([
 		'knockout',
 		'moment',
+		'shared/timezone-current',
 		'resources'
 ], function (
 	ko,
 	moment,
+	timezoneCurrent,
 	resources
 	) {
 
@@ -12,7 +14,7 @@ define([
 
 		var self = this;
 
-		var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
+		var startTime = moment.tz(data.Start, timezoneCurrent.IanaTimeZone());
 		var startTimeMinutes = startTime.diff(data.Offset, 'minutes');
 		var lengthMinutes = data.Minutes;
 		

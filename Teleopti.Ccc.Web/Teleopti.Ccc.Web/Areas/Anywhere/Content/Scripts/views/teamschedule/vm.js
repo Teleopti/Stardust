@@ -6,7 +6,9 @@ define([
 	'shared/group-page',
 	'views/teamschedule/person',
 	'resources',
-	'moment'
+	'moment',
+	'momentTimezoneData',
+	'shared/timezone-current'
 ], function (
 	ko,
 	navigation,
@@ -15,7 +17,9 @@ define([
 	groupPageViewModel,
 	personViewModel,
 	resources,
-	moment
+	moment,
+	momentTimezoneData,
+	timezoneCurrent
     ) {
 
 	return function () {
@@ -53,7 +57,7 @@ define([
 		this.Resources = resources;
 
 		this.GroupId = ko.observable();
-		this.Date = ko.observable(moment());
+		this.Date = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day'));
 
 		this.DateFormatted = ko.computed(function () {
 		    return self.Date().format(resources.DateFormatForMoment);
@@ -92,9 +96,9 @@ define([
 			self.Date(function() {
 				var date = options.date;
 				if (date == undefined) {
-					return moment().startOf('day');
+					return moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day');
 				} else {
-					return moment(date, 'YYYYMMDD');
+					return moment.tz(moment(date, 'YYYYMMDD').format('YYYY-MM-DD'), timezoneCurrent.IanaTimeZone());
 				}
 			}());
 			
@@ -110,7 +114,7 @@ define([
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.Date();
-				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
+				schedule.Date = moment.tz(schedule.Date, timezoneCurrent.IanaTimeZone());
 				var personvm = personForId(schedule.PersonId, personArray);
 				personvm.AddData(schedule, self.TimeLine);
 			}
@@ -121,11 +125,11 @@ define([
 		};
 
 		this.NextDay = function () {
-			self.Date(self.Date().add('d', 1));
+			self.Date(self.Date().clone().add('d', 1));
 		};
 
 		this.PreviousDay = function () {
-			self.Date(self.Date().add('d', -1));
+			self.Date(self.Date().clone().add('d', -1));
 		};
 
 		this.SelectPerson = function (person) {

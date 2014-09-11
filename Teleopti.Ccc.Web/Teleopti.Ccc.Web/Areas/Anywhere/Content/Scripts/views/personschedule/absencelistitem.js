@@ -5,6 +5,7 @@ define([
 		'resources',
 		'ajax',
 		'guidgenerator',
+		'shared/timezone-current',
 		'notifications'
 	], function(
 		ko,
@@ -13,6 +14,7 @@ define([
 		resources,
 		ajax,
 		guidgenerator,
+		timezoneCurrent,
 		notificationsViewModel
 	) {
 
@@ -31,29 +33,25 @@ define([
 			this.Removing = ko.observable(false);
 
 			this.ScheduleDate = ko.observable(moment(data.StartTime).startOf('day'));
-			this.ianaTimeZone = ko.observable(data.IanaTimeZoneLoggedOnUser);
 			this.ianaTimeZoneOther = ko.observable(data.IanaTimeZoneOther);
 
+			this.IsOtherTimezone = ko.computed(function () {
+				return timezoneCurrent.IanaTimeZone() !== self.ianaTimeZoneOther();
+			});
+
 			var getTimeZoneNameShort = function (timeZoneName) {
-				if (!timeZoneName) return undefined;
-				var end = timeZoneName.indexOf(')');
-				return timeZoneName.substring(1, end);
+				if (self.IsOtherTimezone() && timeZoneName) {
+					var end = timeZoneName.indexOf(')');
+					return (end < 0) ? timeZoneName : timeZoneName.substring(1, end);
+				}
+				return undefined;
 			};
 
 			this.TimeZoneNameShort = ko.observable(getTimeZoneNameShort(data.TimeZoneName));
 			
-			this.IsOtherTimezone = ko.computed(function () {
-				if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-					var userTime = moment.tz(self.ianaTimeZone());
-					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
-					return otherTime.format('HH:mm') != userTime.format('HH:mm');
-				}
-				return false;
-			});
-
 			this.StartTimeOtherTimeZone = ko.computed(function () {
-				if (self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-					var userTime = moment.tz(data.StartTime, self.ianaTimeZone());
+				if (self.ianaTimeZoneOther()) {
+					var userTime = moment.tz(data.StartTime, timezoneCurrent.IanaTimeZone());
 					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 					return otherTime.format(resources.DateTimeFormatForMoment);
 				}
@@ -61,8 +59,8 @@ define([
 			});
 
 			this.EndTimeOtherTimeZone = ko.computed(function () {
-				if (self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-					var userTime = moment.tz(data.EndTime, self.ianaTimeZone());
+				if (self.ianaTimeZoneOther()) {
+					var userTime = moment.tz(data.EndTime, timezoneCurrent.IanaTimeZone());
 					var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 					return otherTime.format(resources.DateTimeFormatForMoment);
 				}

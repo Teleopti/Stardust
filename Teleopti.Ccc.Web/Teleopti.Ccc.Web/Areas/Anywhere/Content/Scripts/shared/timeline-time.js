@@ -1,39 +1,41 @@
 define([
-        'knockout',
-        'moment',
-        'resources'
-    ], function(
-        ko,
-        moment,
-        resources
-    ) {
+	'knockout',
+	'moment',
+	'momentTimezoneData',
+	'shared/timezone-current',
+	'resources'
+], function(
+	ko,
+	moment,
+	momentTimeZoneData,
+	timezoneCurrent,
+	resources
+) {
 
-    	return function (timeline, minutes, hideLabel, ianaTimeZoneLoggedOnUser, ianaTimeZoneOther) {
+	return function(timeline, minutes, hideLabel, ianaTimeZoneOther) {
 
-    		var time = moment().startOf('day').add('minutes', minutes);
-		    if (ianaTimeZoneLoggedOnUser)
-			    time = moment.tz(ianaTimeZoneLoggedOnUser).startOf('day').add('minutes', minutes);
-	        var formattedTime = time.format(resources.TimeFormatForMoment);
+		var time = moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day').add('minutes', minutes);
+		var formattedTime = time.format(resources.TimeFormatForMoment);
 
-            this.Minutes = function() {
-	            return minutes;
-            };
+		this.Minutes = function() {
+			return minutes;
+		};
 
-		    var getTimeForOtherTimeZone = function() {
-		    	if (ianaTimeZoneLoggedOnUser && ianaTimeZoneOther) {
-				    var otherTime = time.clone().tz(ianaTimeZoneOther);
-				    return otherTime.format(resources.TimeFormatForMoment);
-		    	}
-			    return "";
-		    };
+		var getTimeForOtherTimeZone = function() {
+			if (timezoneCurrent.IanaTimeZone() && ianaTimeZoneOther) {
+				var otherTime = time.clone().tz(ianaTimeZoneOther);
+				return otherTime.format(resources.TimeFormatForMoment);
+			}
+			return "";
+		};
 
-            this.Time = hideLabel ? "" : formattedTime;
-            this.TimeOtherTimeZone = hideLabel ? "" : getTimeForOtherTimeZone();
+		this.Time = hideLabel ? "" : formattedTime;
+		this.TimeOtherTimeZone = hideLabel ? "" : getTimeForOtherTimeZone();
 
-            this.Pixel = ko.computed(function() {
-                var startMinutes = minutes - timeline.StartMinutes();
-                var pixels = startMinutes * timeline.PixelsPerMinute();
-                return Math.round(pixels);
-            }).extend({throttle: 10});
-        };
-    });
+		this.Pixel = ko.computed(function() {
+			var startMinutes = minutes - timeline.StartMinutes();
+			var pixels = startMinutes * timeline.PixelsPerMinute();
+			return Math.round(pixels);
+		}).extend({ throttle: 10 });
+	};
+});

@@ -6,7 +6,8 @@
     'errorview',
 	'guidgenerator',
 	'notifications',
-	'shared/timezone-display'
+	'shared/timezone-display',
+	'shared/timezone-current'
 ], function (
 	ko,
 	resources,
@@ -15,7 +16,8 @@
     errorview,
 	guidgenerator,
 	notificationsViewModel,
-	timezoneDisplay
+	timezoneDisplay,
+	timezoneCurrent
     ) {
 
 	return function () {
@@ -35,7 +37,6 @@
 		self.layer = ko.observable();
 		self.SelectedStartMinutes = ko.observable();
 		self.TimeZoneName = ko.observable();
-		self.ianaTimeZone = ko.observable();
 		self.ianaTimeZoneOther = ko.observable();
 		self.formHasChanged = ko.computed(function () {
 			if (!self.OldStartMinutes() || !self.StartTime()) return false;
@@ -43,16 +44,11 @@
 		});
 
 		this.IsOtherTimezone = ko.computed(function () {
-			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = self.StartTime().clone();
-				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
-				return otherTime.format('HH:mm') != userTime.format('HH:mm');
-			}
-			return false;
+			return timezoneCurrent.IanaTimeZone() !== self.ianaTimeZoneOther();
 		});
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
-			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
+			if (self.StartTime() && self.ianaTimeZoneOther()) {
 				var userTime = self.StartTime().clone();
 				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
@@ -64,10 +60,9 @@
 			self.PersonId(data.PersonId);
 			personName = data.PersonName;
 			self.GroupId(data.GroupId);
-			self.ScheduleDate(timezoneDisplay.FromDate(data.Date, data.IanaTimeZoneLoggedOnUser));
+			self.ScheduleDate(data.Date);
 			self.Activities(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
-			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
 			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
 		};
 
@@ -121,7 +116,7 @@
 
 	    self.getStartTimeFromMinutes = function(minutes) {
 	        var date = self.ScheduleDate();
-	        return moment([date.year(), date.month(), date.date(), minutes / 60, minutes % 60]);
+	        return date.clone().add('m',minutes);
 	    };
 
 
@@ -199,7 +194,7 @@
 	    this.reset = function() {
 	        var date = self.ScheduleDate();
 	        var time = self.SelectedStartMinutes();
-	        self.StartTime(moment([date.year(), date.month(), date.date(), time / 60, time % 60]));
+	        self.StartTime(date.clone().add('m',time));
 	    };
 		self.cancel = function() {
 			navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());

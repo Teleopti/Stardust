@@ -7,7 +7,8 @@ define([
 	'lazy',
 	'guidgenerator',
 	'notifications',
-	'shared/timezone-display'
+	'shared/timezone-display',
+	'shared/timezone-current'
 ], function (
 	ko,
 	navigation,
@@ -17,7 +18,8 @@ define([
 	lazy,
 	guidgenerator,
 	notificationsViewModel,
-	timezoneDisplay
+	timezoneDisplay,
+	timezoneCurrent
 	) {
 
 	return function () {
@@ -32,7 +34,6 @@ define([
 		this.WorkingShift = ko.observable();
 
 		this.TimeZoneName = ko.observable();
-		this.ianaTimeZone = ko.observable();
 		this.ianaTimeZoneOther = ko.observable();
 		
 		var groupId;
@@ -42,12 +43,12 @@ define([
 		var endTimeAsMoment;
 
 		this.IsOtherTimezone = ko.computed(function () {
-			return timezoneDisplay.IsOtherTimeZone(self.ianaTimeZone(), self.ianaTimeZoneOther(), self.StartTime(), self.Date());
+			return timezoneCurrent.IanaTimeZone() !== self.ianaTimeZoneOther();
 		});
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
-			if (self.StartTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = timezoneDisplay.FromTimeInput(self.StartTime(), self.ianaTimeZone(), self.Date);
+			if (self.StartTime() && self.ianaTimeZoneOther()) {
+				var userTime = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.Date);
 				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
@@ -55,8 +56,8 @@ define([
 		});
 
 		this.EndTimeOtherTimeZone = ko.computed(function () {
-			if (self.EndTime() && self.ianaTimeZone() && self.ianaTimeZoneOther()) {
-				var userTime = timezoneDisplay.FromTimeInput(self.EndTime(), self.ianaTimeZone(), self.Date);
+			if (self.EndTime() && self.ianaTimeZoneOther()) {
+				var userTime = timezoneDisplay.FromTimeInput(self.EndTime(), timezoneCurrent.IanaTimeZone(), self.Date);
 				var otherTime = userTime.clone().tz(self.ianaTimeZoneOther());
 				return otherTime.format('HH:mm');
 			}
@@ -91,7 +92,7 @@ define([
 		
 		var getMomentFromInput = function (input) {
 			var momentInput = moment(input, resources.TimeFormatForMoment);
-			if (!self.Date() || !self.ianaTimeZone())
+			if (!self.Date())
 				return moment().add('h', momentInput.hours()).add('m', momentInput.minutes());
 			return self.Date().clone().add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
@@ -106,8 +107,8 @@ define([
 		
 		this.PossbileStartTimeWithinShift = ko.computed(function () {
 			if (self.StartTime() && self.EndTime()) {
-				startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), self.ianaTimeZone(), self.Date);
-				endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), self.ianaTimeZone(), self.Date);
+				startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.Date);
+				endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), timezoneCurrent.IanaTimeZone(), self.Date);
 				if (startTimeWithinShift()) {
 					if (nightShiftWithEndTimeOnNextDay()) {
 						endTimeAsMoment.add('d', 1);
@@ -149,8 +150,7 @@ define([
 			groupId = data.GroupId;
 			personId = data.PersonId;
 			personName = data.PersonName;
-			self.Date(timezoneDisplay.FromDate(data.Date, data.IanaTimeZoneLoggedOnUser));
-			self.ianaTimeZone(data.IanaTimeZoneLoggedOnUser);
+			self.Date(timezoneDisplay.FromDate(data.Date, timezoneCurrent.IanaTimeZone()));
 			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
 
 			if (data.DefaultIntradayAbsenceData) {

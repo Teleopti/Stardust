@@ -1,7 +1,8 @@
-﻿define(['buster', 'views/personschedule/vm','lazy'],
-	function (buster, viewModel,lazy) {
-		return function () {
+﻿define(['buster', 'views/personschedule/vm','lazy','shared/timezone-current'],
+	function (buster, viewModel,lazy,timezoneCurrent) {
+		timezoneCurrent.SetIanaTimeZone('Europe/Berlin');
 
+		return function () {
 			buster.testCase("person schedule viewmodel", {
 				"should create viewmodel": function () {
 					var vm = new viewModel();
@@ -35,6 +36,7 @@
 						}
 					];
 
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					setTimeout(function () {
@@ -65,14 +67,14 @@
 					];
 
 					vm.AddingActivity(true);
-					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
 					vm.UpdateSchedules(data);
 
 					setTimeout(function () {
 						assert.equals(vm.TimeLine.StartTime(), "12:00");
 						assert.equals(vm.TimeLine.EndTime(), "13:00");
-						assert.equals(vm.TimeLine.StartTimeOtherTimeZone(), "11:00");
-						assert.equals(vm.TimeLine.EndTimeOtherTimeZone(), "12:00");
+						assert.equals(vm.TimeLine.StartTimeOtherTimeZone(), "13:00");
+						assert.equals(vm.TimeLine.EndTimeOtherTimeZone(), "14:00");
 						done();
 					}, 2);
 				},
@@ -111,6 +113,7 @@
 						}
 					];
 
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					setTimeout(function () {
@@ -131,6 +134,7 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
@@ -140,6 +144,7 @@
 							]
 						}
 					];
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					assert.equals(vm.SelectedLayer().StartMinutes(), vm.SelectedStartMinutes());
@@ -156,6 +161,7 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
@@ -167,17 +173,17 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Berlin' });
+					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
 
 					assert.equals(vm.MoveActivityForm.PersonId(), 1);
 					assert.equals(vm.MoveActivityForm.GroupId(), 2);
-					assert.equals(vm.MoveActivityForm.ScheduleDate().diff(moment('2013-11-18')), 0);
+					assert.equals(vm.MoveActivityForm.ScheduleDate().format('YYYY-MM-DD HH:mm'),'2013-11-18 00:00');
 					assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
 					assert.equals(vm.MoveActivityForm.ProjectionLength(), data[0].Projection[0].Minutes);
 				},
 
-				"should update starttime when DisplayedStartTime changes": function () {
+				"should update starttime when DisplayedStartTime changes": function() {
 
 					var vm = new viewModel();
 					vm.SetViewOptions({
@@ -188,21 +194,22 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
-								    Start: '2013-11-18 14:00',
-								    Minutes: 60
+									Start: '2013-11-18 14:00',
+									Minutes: 60
 								},
-                                {
-                                    Start: '2013-11-18 15:00',
-                                    Minutes: 420
-                                }
+								{
+									Start: '2013-11-18 15:00',
+									Minutes: 420
+								}
 							]
 						}
 					];
-				    vm.MovingActivity(true);
-				    vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD') });
+					vm.MovingActivity(true);
+					vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD'), IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					var momentExpected = moment('2013-11-18 15:00', 'YYYY-MM-DD HH:mm');
@@ -221,6 +228,7 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
@@ -229,7 +237,7 @@
 							]
 						}
 					];
-					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					var expected = '15:00';
@@ -249,6 +257,7 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
@@ -260,7 +269,7 @@
 						}
 					];
 
-					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					//just verifies it doesn't throw
@@ -277,6 +286,7 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
@@ -293,7 +303,7 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					var selectedLayer = vm.SelectedLayer();
@@ -335,7 +345,7 @@
 					];
 					vm.setTimelineWidth(600);
 					vm.AddingActivity(true);
-					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					assert.equals(vm.Layers().size(), 2);
@@ -368,7 +378,7 @@
 						}
 					];
 					vm.AddingActivity(true);
-					vm.UpdateData({ PersonId: 1,IanaTimeZoneLoggedOnUser: 'Europe/Istanbul',IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
 					vm.UpdateSchedules(data);
 
 					assert.equals(vm.Layers().size(), 1);
@@ -376,8 +386,8 @@
 					vm.AddActivityForm.StartTime('09:00');
 					vm.AddActivityForm.EndTime('11:00');
 
-					assert.equals(vm.AddActivityForm.StartTimeOtherTimeZone(), '08:00');
-					assert.equals(vm.AddActivityForm.EndTimeOtherTimeZone(), '10:00');
+					assert.equals(vm.AddActivityForm.StartTimeOtherTimeZone(), '10:00');
+					assert.equals(vm.AddActivityForm.EndTimeOtherTimeZone(), '12:00');
 				},
 
 				"should convert my local times to agent's timezone for display when removing absence": function () {
@@ -388,16 +398,16 @@
 						date: '20140616'
 					});
 					
-					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin', PersonAbsences: [{ StartTime: '2014-06-16 08:00', EndTime: '2014-06-16 10:00' }] });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul', PersonAbsences: [{ StartTime: '2014-06-16 08:00', EndTime: '2014-06-16 10:00' }] });
 					vm.UpdateSchedules([]);
 
 					assert.equals(vm.Absences().length, 1);
 
 					var absence = vm.Absences()[0];
-					assert.equals(absence.StartTime(), moment('2014-06-16 08:00').format());
-					assert.equals(absence.EndTime(), moment('2014-06-16 10:00').format());
-					assert.equals(absence.StartTimeOtherTimeZone(), moment('2014-06-16 07:00').format());
-					assert.equals(absence.EndTimeOtherTimeZone(), moment('2014-06-16 09:00').format());
+					assert.equals(absence.StartTime(), '2014-06-16 08:00');
+					assert.equals(absence.EndTime(), '2014-06-16 10:00');
+					assert.equals(absence.StartTimeOtherTimeZone(), '2014-06-16 09:00');
+					assert.equals(absence.EndTimeOtherTimeZone(), '2014-06-16 11:00');
 				},
 
 				"should convert my local times to agent's timezone for display when adding intraday absence": function () {
@@ -421,14 +431,14 @@
 					];
 					vm.setTimelineWidth(600);
 					vm.AddingIntradayAbsence(true);
-					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
 					vm.UpdateSchedules(data);
 
 					vm.AddIntradayAbsenceForm.StartTime('09:00');
 					vm.AddIntradayAbsenceForm.EndTime('11:00');
 
-					assert.equals(vm.AddIntradayAbsenceForm.StartTimeOtherTimeZone(), '08:00');
-					assert.equals(vm.AddIntradayAbsenceForm.EndTimeOtherTimeZone(), '10:00');
+					assert.equals(vm.AddIntradayAbsenceForm.StartTimeOtherTimeZone(), '10:00');
+					assert.equals(vm.AddIntradayAbsenceForm.EndTimeOtherTimeZone(), '12:00');
 				},
 
 
@@ -445,9 +455,15 @@
 					var data = [
 						{
 							PersonId: 1,
+							Date: '2013-11-18',
 							Projection: [
 								{
 									Start: '2013-11-18 14:00',
+									Minutes: 240,
+									ActivityId: "guid"
+								},
+								{
+									Start: '2013-11-18 18:00',
 									Minutes: 240,
 									ActivityId: "guid"
 								}
@@ -456,12 +472,12 @@
 					];
 
 					vm.MovingActivity(true);
-					vm.UpdateData({ PersonId: 1, IanaTimeZoneLoggedOnUser: 'Europe/Istanbul', IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
 					vm.UpdateSchedules(data);
 
 					vm.MoveActivityForm.DisplayedStartTime('15:00');
 
-					assert.equals(vm.MoveActivityForm.StartTimeOtherTimeZone(), '14:00');
+					assert.equals(vm.MoveActivityForm.StartTimeOtherTimeZone(), '16:00');
 				},
 
 
@@ -475,6 +491,7 @@
 					});
 					var data = [
 						{
+							Date: '2013-11-18',
 							PersonId: 1,
 							Projection: [
 								{
@@ -485,7 +502,7 @@
 						}
 					];
 					vm.MovingActivity(true);
-					vm.UpdateData({ PersonId: 1 });
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
 					var momentInput = moment('13:00', 'HH:mm');
@@ -501,16 +518,30 @@
 				"should not display duplicated teammates" : function() {
 
 					var vm = new viewModel();
+					vm.SetViewOptions({
+						date: '20131118',
+					});
+
 					vm.AddingActivity(true); //for showing the other agents in team
 
 					vm.PersonId('1');
 
 					var data = [
-						{PersonId:'2'},
-						{PersonId:'3'},
-						{PersonId:'3'},
-						{PersonId:'3'},
-						{PersonId:'2'}
+						{
+							PersonId: '2'
+						},
+						{
+							PersonId: '3'
+						},
+						{
+							PersonId: '3'
+						},
+						{
+							PersonId: '3'
+						},
+						{
+							PersonId: '2'
+						}
 					];
 
 					vm.UpdateSchedules(data);
@@ -529,6 +560,7 @@
 				    });
 				    var data = [
 						{
+								Date: '2013-11-18',
 						    PersonId: 1,
 						    Projection: [
 								{
@@ -543,7 +575,7 @@
 						}
 				    ];
 				    vm.MovingActivity(true);
-				    vm.UpdateData({ PersonId: 1 });
+				    vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 				    vm.UpdateSchedules(data);
 
 				    var momentInput = moment('23:30', 'HH:mm');
@@ -567,6 +599,7 @@
 				    });
 				    var data = [
 						{
+								Date: '2013-11-18',
 						    PersonId: 1,
 						    Projection: [
 								{
@@ -585,7 +618,7 @@
 						}
 				    ];
 				    vm.MovingActivity(true);
-				    vm.UpdateData({ PersonId: 1 });
+				    vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 				    vm.UpdateSchedules(data);
 
 				    var selectedLayer = vm.SelectedLayer();

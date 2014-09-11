@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		private IPrincipalAuthorization authorization;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 		private IPersonRepository _personRepository;
+		private IIanaTimeZoneProvider ianaTimeZoneProvider;
 
 		[SetUp]
 		public void Setup()
@@ -28,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal, _personRepository);
+			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, _personRepository, ianaTimeZoneProvider);
 		}
 
 		[TearDown]
@@ -47,16 +50,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnBasicNavigation()
 		{
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+			var principal = (ITeleoptiPrincipal)MockRepository.GenerateStrictMock(typeof (ITeleoptiPrincipal), new[] {typeof (IUnsafePerson)});
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
+			var regional = MockRepository.GenerateMock<IRegional>();
 
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)).Return(false);
 			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
 			principal.Stub(x => x.Identity).Return(identity);
 			identity.Stub(x => x.Name).Return("fake");
+			principal.Stub(x => x.Regional).Return(regional);
 			var person = PersonFactory.CreatePersonWithId();
-			principal.Stub(x => x.GetPerson(_personRepository)).Return(person);
+			((IUnsafePerson)principal).Stub(x => x.Person).Return(person);
+
+			regional.Stub(x => x.TimeZone).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			ianaTimeZoneProvider.Stub(x => x.WindowsToIana("W. Europe Standard Time")).Return("Europe/Berlin");
 
 			var result = target.NavigationContent();
 			dynamic content = result.Data;
@@ -65,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
 			((object)content.IsRealTimeAdherenceAvailable).Should().Be.EqualTo(false);
 			((object)content.PersonId).Should().Be.EqualTo(person.Id);
+			((object)content.IanaTimeZone).Should().Be.EqualTo("Europe/Berlin");
 		}
 
 		[Test]

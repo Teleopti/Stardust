@@ -17,7 +17,7 @@ define([
 		self: this,
 		FromTimeInput: fromTimeInput,
 		FromDate: function(date, timeZone) {
-			return momentTimezoneData.tz(date.format('YYYY-MM-DD'), timeZone);
+			return moment.tz(date.format('YYYY-MM-DD'), timeZone);
 		},
 		IsOtherTimeZone: function(timeZone1, timeZone2, startTime, optionalDate) {
 			if (startTime && timeZone1 && timeZone2) {

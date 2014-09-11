@@ -2,8 +2,9 @@ define([
 		'knockout',
 		'helpers',
 		'shared/timeline-time',
+		'shared/timezone-current',
 		'resources'
-	], function (ko, helpers, timeViewModel, resources) {
+], function (ko, helpers, timeViewModel, timezoneCurrent, resources) {
 
 		var minutes = helpers.Minutes;
 
@@ -54,9 +55,10 @@ define([
 				return self.WidthPixels() / self.Minutes();
 			});
 
-			this.IanaTimeZoneLoggedOnUser = ko.observable();
 			this.IanaTimeZoneOther = ko.observable();
-			this.IsOtherTimeZone = ko.observable();
+			this.IsOtherTimeZone = ko.computed(function() {
+				return self.IanaTimeZoneOther() !== timezoneCurrent.IanaTimeZone();
+			});
 
 			this.Times = ko.computed(function () {
 				var times = [];
@@ -71,7 +73,7 @@ define([
 				}
 				var isHidden = false;
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time, hideEven && isHidden, self.IanaTimeZoneLoggedOnUser(), self.IanaTimeZoneOther()));
+					times.push(new timeViewModel(self, time, hideEven && isHidden, self.IanaTimeZoneOther()));
 					time = minutes.AddHours(time, 1);
 					isHidden = !isHidden;
 				}

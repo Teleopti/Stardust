@@ -11,6 +11,7 @@ define([
 	'views/personschedule/moveactivityform',
 	'shared/group-page',
 	'shared/timezone-display',
+'shared/timezone-current',
 	'helpers',
 	'resources',
 	'select2',
@@ -28,6 +29,7 @@ define([
 	moveActivityFormViewModel,
 	groupPageViewModel,
 	timezoneDisplay,
+timezoneCurrent,
 	helpers,
 	resources,
 	select2,
@@ -147,7 +149,7 @@ define([
 		});
 
 		this.SetViewOptions = function (options) {
-			self.ScheduleDate(moment(options.date, 'YYYYMMDD'));
+			self.ScheduleDate(timezoneDisplay.FromDate(moment(options.date, 'YYYYMMDD'), timezoneCurrent.IanaTimeZone()));
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
 			self.SelectedStartMinutes(Number(options.minutes));
@@ -155,32 +157,23 @@ define([
 		};
 
 		this.IsOtherTimeZone = ko.computed(function () {
-			return timezoneDisplay.IsOtherTimeZone(self.TimeLine.IanaTimeZoneLoggedOnUser(), self.TimeLine.IanaTimeZoneOther(), '01:00', function() {
-				if (self.ScheduleDate())
-					return self.ScheduleDate();
-				return moment().startOf('day');
-			}());
+			return timezoneCurrent.IanaTimeZone() !== self.TimeLine.IanaTimeZoneOther();
 		});
-
-		var getTimeZoneNameShort = function (timeZoneName) {
-			var end = timeZoneName.indexOf(')');
-			return timeZoneName.substring(1, end);
-		};
 
 		this.TimeZoneNameShort = ko.computed(function () {
 			if (self.IsOtherTimeZone() && self.TimeZoneName()) {
-				return getTimeZoneNameShort(self.TimeZoneName());
+				var timeZoneName = self.TimeZoneName();
+				var end = timeZoneName.indexOf(')');
+				return (end < 0) ? timeZoneName : timeZoneName.substring(1, end);
 			}
 			return undefined;
 		});
 
 		this.UpdateData = function (data) {
-			data.Date = self.ScheduleDate();
+			data.Date = self.ScheduleDate().clone();
 
-			self.TimeLine.IanaTimeZoneLoggedOnUser(data.IanaTimeZoneLoggedOnUser);
 			self.TimeLine.IanaTimeZoneOther(data.IanaTimeZoneOther);
 			self.TimeZoneName(data.TimeZoneName);
-			self.TimeLine.IsOtherTimeZone(self.IsOtherTimeZone());
 
 			var person = self.SelectedPerson();
 			person.AddData(data, self.TimeLine);
@@ -188,10 +181,9 @@ define([
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.PersonId();
-				a.Date = self.ScheduleDate();
+				a.Date = self.ScheduleDate().clone();
 				a.GroupId = self.GroupId();
 				a.PersonName = self.Name();
-				a.IanaTimeZoneLoggedOnUser = data.IanaTimeZoneLoggedOnUser;
 				a.IanaTimeZoneOther = data.IanaTimeZoneOther;
 				a.TimeZoneName = data.TimeZoneName;
 				return new absenceListItemViewModel(a);
@@ -200,7 +192,6 @@ define([
 
 			data.PersonId = self.PersonId();
 			data.PersonName = self.Name();
-			data.Date = self.ScheduleDate();
 			data.GroupId = self.GroupId();
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
@@ -223,8 +214,8 @@ define([
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
-				schedule.Offset = self.ScheduleDate();
-				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
+				schedule.Offset = self.ScheduleDate().clone();
+				schedule.Date = moment.tz(schedule.Date, timezoneCurrent.IanaTimeZone());
 
 				var person = personForId(schedule.PersonId, people);
 				person.AddData(schedule, self.TimeLine);
@@ -276,7 +267,7 @@ define([
 	    this.initMoveActivityForm = function() {
 	    	self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
 	    	if (!self.MoveActivityForm.ScheduleDate()) {
-	    		self.MoveActivityForm.ScheduleDate(self.ScheduleDate());
+	    		self.MoveActivityForm.ScheduleDate(self.ScheduleDate().clone());
 		    }
 	    };
 	};

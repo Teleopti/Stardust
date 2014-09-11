@@ -1,5 +1,6 @@
-﻿define(['buster', 'views/teamschedule/vm'],
-	function (buster, viewModel) {
+﻿define(['buster', 'views/teamschedule/vm', 'shared/timezone-current'],
+	function (buster, viewModel, timezoneCurrent) {
+		timezoneCurrent.SetIanaTimeZone('Europe/Berlin');
 	return function () {
 
 		buster.testCase("team schedule viewmodel", {

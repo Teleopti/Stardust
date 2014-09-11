@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
@@ -14,12 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPersonRepository _personRepository;
+		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 
-		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPersonRepository personRepository)
+		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider)
 		{
 			_principalAuthorization = principalAuthorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_personRepository = personRepository;
+			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
 		public ViewResult Index()
@@ -30,13 +33,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]
 		public JsonResult NavigationContent()
 		{
+			var principal = _currentTeleoptiPrincipal.Current();
 			return Json(new
-			            	{
-			            		UserName = _currentTeleoptiPrincipal.Current().Identity.Name,
-								PersonId = _currentTeleoptiPrincipal.Current().GetPerson(_personRepository).Id,
-								IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
-								IsRealTimeAdherenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
-			            	}, JsonRequestBehavior.AllowGet);
+			{
+				UserName = principal.Identity.Name,
+				PersonId = ((IUnsafePerson)principal).Person.Id,
+				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
+				IsRealTimeAdherenceAvailable =
+					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
+				IanaTimeZone = _ianaTimeZoneProvider.WindowsToIana(principal.Regional.TimeZone.Id)
+			}, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet, OutputCache(NoStore = true, Duration = 0)]
