@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private IUnsavedDaysInfo _unsavedSkillDays = new UnsavedDaysInfo();
 		private readonly IDirtyForecastDayContainer _dirtyForecastDayContainer = new DirtyForecastDayContainer();
 		private bool _forceClose;
+		private Form _mainWindow;
 
 		#region Private
 
@@ -934,11 +935,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			setGridZoomLevel(TemplateTarget.Skill, _currentForecasterSettings.WorkingIntervalSkill);
 		}
 
-		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager)
+		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager, Form mainWindow)
 			: this()
 		{
 			_toggleManager = toggleManager;
 			_dateTimePeriod = dateTimePeriod;
+			_mainWindow = mainWindow;
 
 			_zoomButtons = new ZoomButtons();
 			_zoomButtons.ZoomChanged += buttonsZoomChanged;
@@ -2417,6 +2419,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (Visible)
 				return;
 			Application.Exit();
+		}
+
+		private void Forecaster_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			_mainWindow.Activate();
 		}
 	}
 

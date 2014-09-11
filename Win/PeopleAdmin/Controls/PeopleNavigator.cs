@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private readonly IEventAggregator _localEventAggregator;
         private readonly IEventAggregator _globalEventAggregator;
         private ICurrentScenario _currentScenario;
-	    private IWin32Window _mainWindow;
+	    private Form _mainWindow;
 
 	    public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
             : this()
@@ -169,9 +169,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private void openPeopleAdmin(WorksheetStateHolder stateHolder, FilteredPeopleHolder filteredPeopleHolder, IWin32Window mainWindow)
+        private void openPeopleAdmin(WorksheetStateHolder stateHolder, FilteredPeopleHolder filteredPeopleHolder, Form mainWindow)
         {
-			new PeopleWorksheet(stateHolder, filteredPeopleHolder, _globalEventAggregator, _componentContext).Show(mainWindow);   
+			new PeopleWorksheet(stateHolder, filteredPeopleHolder, _globalEventAggregator, _componentContext, mainWindow).Show();   
         }
 
         private void tsAddGroupPageClick(object sender, EventArgs e)
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             set { tsEditGroupPage.Enabled = value; }
         }
 
-	    public void SetMainOwner(IWin32Window mainWindow)
+	    public void SetMainOwner(Form mainWindow)
 	    {
 		    _mainWindow = mainWindow;
 	    }

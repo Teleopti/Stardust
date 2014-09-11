@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
 		private IScheduleNavigatorPresenter _myPresenter;
 		private readonly IEventAggregator _localEventAggregator;
-		private IWin32Window _mainWindow;
+		private Form _mainWindow;
 
 		public SchedulerNavigator()
 		{
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		protected virtual void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage,
-			bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, IWin32Window ownerWindow)
+			bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, Form ownerWindow)
 		{
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>{
 				var sc = new SchedulingScreen(_container,
@@ -211,8 +211,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 														   calculation,
 														   validation,
 														   teamLeaderMode,
-														   entityCollection);
-				sc.Show(ownerWindow);
+														   entityCollection,
+														   ownerWindow);
+				sc.Show();
 			});
 		}
 
@@ -277,7 +278,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_localEventAggregator.GetEvent<OpenMeetingsOverviewClicked>().Publish("");
 		}
 
-		public void SetMainOwner(IWin32Window mainWindow)
+		public void SetMainOwner(Form mainWindow)
 		{
 			_mainWindow = mainWindow;
 		}

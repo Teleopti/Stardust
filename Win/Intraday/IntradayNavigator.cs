@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Intraday
             get { return _intraday ?? (_intraday = new OpenPeriodIntradayMode()); }
         }
 
-        protected override void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, IWin32Window ownerWindow)
+        protected override void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, Form ownerWindow)
         {
             var intradayView = _intradayViewFactory.Create(selectedPeriod, scenario, entityCollection);
             ((Control)intradayView).Show();

@@ -1347,6 +1347,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxTeleoptiRaptorColonForecaster";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Forecaster_FormClosed);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.splitContainerWorkloadSkill.Panel1.ResumeLayout(false);
 			this.splitContainerWorkloadSkill.Panel2.ResumeLayout(false);

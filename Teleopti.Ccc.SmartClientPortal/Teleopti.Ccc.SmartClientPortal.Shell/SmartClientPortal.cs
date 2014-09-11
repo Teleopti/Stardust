@@ -582,7 +582,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				navigator.RefreshNavigator();
 			}
-			
+
 			if (uc is ForecasterNavigator)
 				((ForecasterNavigator)uc).SetMainOwner(this);
 
@@ -595,7 +595,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (uc is SchedulerNavigator || uc is PeopleNavigator)
 				((INavigationPanel)uc).SetMainOwner(this);
 
-			if(uc is ShiftsNavigationPanel)
+			if (uc is ShiftsNavigationPanel)
 				((ShiftsNavigationPanel)uc).SetMainOwner(this);
 
 			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) return;

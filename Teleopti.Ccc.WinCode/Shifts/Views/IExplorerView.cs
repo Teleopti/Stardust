@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Views
 
         void ShowDataSourceException(DataSourceException dataSourceException);
 
-        void Show(IExplorerPresenter explorerPresenter, IWin32Window mainWindow);
+        void Show(IExplorerPresenter explorerPresenter, Form mainWindow);
 
         void ForceRefreshNavigationView();
 

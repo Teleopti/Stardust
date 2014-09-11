@@ -193,6 +193,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTime _lastSaved = DateTime.Now;
         private readonly SchedulingScreenPermissionHelper _permissionHelper;
         private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
+		private Form _mainWindow;
 
 		#region Constructors
 
@@ -292,10 +293,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, IList<IEntity> allSelectedEntities)
+		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario, bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, IList<IEntity> allSelectedEntities, Form ownerWindow)
 			: this()
 		{
 			Application.DoEvents();
+			_mainWindow = ownerWindow;
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
 			var toggleManager = _container.Resolve<IToggleManager>();
@@ -5132,7 +5134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
             // bug 28705 hide it so we don't get strange paint events
             Hide();
-			Owner.Activate();
+			_mainWindow.Activate();
 			if (_schedulerState != null && _schedulerState.Schedules != null)
 			{
 				_schedulerState.Schedules.Clear();
@@ -5444,9 +5446,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
-
-
-	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
+		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
 			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 
         bool CheckForUnsavedData();
 
-		void Show(IWin32Window mainWindow);
+		void Show(Form mainWindow);
 
     }
 }

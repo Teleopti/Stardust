@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler =
 			new GracefulDataSourceExceptionHandler();
 
-		private IWin32Window _mainWindow;
+		private Form _mainWindow;
 
 		public ForecasterNavigator()
 		{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			setVisibility();
 		}
 
-		public void SetMainOwner(IWin32Window mainWindow)
+		public void SetMainOwner(Form mainWindow)
 		{
 			_mainWindow = mainWindow;
 		}
@@ -1032,8 +1032,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void startForecaster(DateOnlyPeriod selectedPeriod, IScenario scenario, ISkill skill)
 		{
 			Cursor = Cursors.WaitCursor;
-			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager);
-			forecaster.Show(_mainWindow);
+			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow);
+			forecaster.Show();
 			Cursor = Cursors.Default;
 		}
 

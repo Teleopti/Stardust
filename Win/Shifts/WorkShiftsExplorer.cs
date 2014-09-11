@@ -158,6 +158,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			_editControl = null;
 			KeyDown -= workShiftsExplorerKeyDown;
 			KeyPress -= workShiftsExplorerKeyPress;
+			_mainWindow.Activate();
 		}
 
 		private void splitContainerAdvHorizontalPanel1Resize(object sender, EventArgs e)
@@ -331,6 +332,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		}
 
 		private DateTime _lastSaveClick;
+		private Form _mainWindow;
 
 		private void toolStripButtonSaveClick(object sender, EventArgs e)
 		{
@@ -514,10 +516,11 @@ namespace Teleopti.Ccc.Win.Shifts
 			}
 		}
 
-		public void Show(IExplorerPresenter explorerPresenter, IWin32Window mainWindow)
+		public void Show(IExplorerPresenter explorerPresenter, Form mainWindow)
 		{
 			Presenter = explorerPresenter;
-			Show(mainWindow);
+			_mainWindow = mainWindow;
+			Show();
 		}
 
 		public void ForceRefreshNavigationView()

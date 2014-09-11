@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Shifts
     public partial class ShiftsNavigationPanel : Common.BaseUserControl
     {
         private readonly ShiftsModule.IShiftsExplorerFactory _shiftsExplorerFactory;
-	    private IWin32Window _mainWindow;
+	    private Form _mainWindow;
 
 	    public ShiftsNavigationPanel(ShiftsModule.IShiftsExplorerFactory shiftsExplorerFactory)
         {
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Shifts
             open();
         }
 
-	    public void SetMainOwner(IWin32Window mainWindow)
+	    public void SetMainOwner(Form mainWindow)
 	    {
 		    _mainWindow = mainWindow;
 	    }

@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             return ret;
         }
 
-        public void Show(IWin32Window mainWindow)
+        public void Show(Form mainWindow)
         {
             setDefaultSegment();
             loadAll();

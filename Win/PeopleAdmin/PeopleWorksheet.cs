@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		private readonly bool _readOnly;
 		private readonly ILifetimeScope _container;
 		private readonly IToggleManager _toggleManager;
-		
+		private Form _mainWindow;
+
 		protected PeopleWorksheet()
 		{
 			InitializeComponent();
@@ -77,10 +78,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public PeopleWorksheet(WorksheetStateHolder state, FilteredPeopleHolder filteredPeopleHolder, IEventAggregator globalEventAggregator, IComponentContext componentContext)
+		public PeopleWorksheet(WorksheetStateHolder state, FilteredPeopleHolder filteredPeopleHolder, IEventAggregator globalEventAggregator, IComponentContext componentContext, Form mainWindow)
 			: this()
 		{
 			if (filteredPeopleHolder == null) throw new ArgumentNullException("filteredPeopleHolder");
+			_mainWindow = mainWindow;
 			_filteredPeopleHolder = filteredPeopleHolder;
 			_globalEventAggregator = globalEventAggregator;
   //          _componentContext = componentContext;
@@ -1360,6 +1362,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void peopleWorksheetFormClosed(object sender, FormClosedEventArgs e)
 		{
+			_mainWindow.Activate();
 			unregisterEventsForFormKill();
 
 			disposeAllChildGrids();

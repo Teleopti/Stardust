@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Shifts
     {
         public interface IShiftsExplorerFactory
         {
-            IExplorerView Create(IWin32Window mainWindow);
+            IExplorerView Create(Form mainWindow);
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -43,19 +43,18 @@ namespace Teleopti.Ccc.Win.Shifts
             private readonly IComponentContext _container;
             private readonly IDictionary<IExplorerView, ILifetimeScope> _innerScopes;
 
-            public ShiftsExplorerFactory(IComponentContext container)
+	        public ShiftsExplorerFactory(IComponentContext container)
             {
                 _container = container;
                 _innerScopes = new Dictionary<IExplorerView, ILifetimeScope>();
             }
 
-            public IExplorerView Create(IWin32Window mainWindow)
+            public IExplorerView Create(Form mainWindow)
             {
                 try
                 {
                     var lifetimeScope = _container.Resolve<ILifetimeScope>();
                     var inner = lifetimeScope.BeginLifetimeScope();
-
                     var explorerPresenter = inner.Resolve<IExplorerPresenter>();
 					explorerPresenter.Show(mainWindow);
                     var shiftsView = inner.Resolve<IExplorerView>();
