@@ -246,7 +246,7 @@
     <comment>Agent info...</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti WFM MyTime</value>
+    <value>Classic MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="Agents" xml:space="preserve">
