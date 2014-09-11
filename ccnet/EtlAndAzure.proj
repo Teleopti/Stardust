@@ -75,6 +75,12 @@
  		<Message Text="NET STOP AnalyticsEtlService" Importance="high" />
  		<Exec Command ="NET STOP AnalyticsEtlService"/>
 
+		<!-- Un-Install ETL Service-->
+		<Message Text="un-Install ETL service. Working..." Importance="high" />
+		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		<Message Text="un-Install ETL service. Done!" Importance="high" />		
+
 	</Target>
 	
   		<!-- 
