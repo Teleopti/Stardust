@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			{
 				ActivityId = Guid.Empty,
 				StateGroupId = _stateGroupId,
-				BusinessUnit = _businessUnitId
+				BusinessUnit = _businessUnitId,
+				AlarmTypeId = Guid.NewGuid()
 			};
 			_alarmDictionary.TryAdd(new Tuple<Guid, Guid, Guid>(Guid.Empty,_stateGroupId,_businessUnitId), new List<RtaAlarmLight>{rtaAlarmForNoActivity});
 
@@ -102,7 +103,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 						{
 							StateGroupId = Guid.Empty,
 							ActivityId = _activityId,
-							BusinessUnit = _businessUnitId
+							BusinessUnit = _businessUnitId,
+							AlarmTypeId = Guid.NewGuid()
 						}
 				};
 			_alarmDictionary.AddOrUpdate(new Tuple<Guid, Guid, Guid>(_activityId,Guid.Empty,_businessUnitId), alarmForNoStateGroup, (guid, list) => alarmForNoStateGroup);
@@ -117,6 +119,47 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_databaseReader.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
 			var result = _target.GetAlarm(_activityId, Guid.NewGuid(), _businessUnitId);
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void GetAlarm_NoAlarmType_ReturnNull()
+		{
+			var databaseReader = MockRepository.GenerateStub<IDatabaseReader>();
+			var target = new AlarmMapper(
+				databaseReader,
+				null, 
+				null);
+			var activityId = Guid.NewGuid();
+			var alarms = new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(){};
+			var noAlarm = new List<RtaAlarmLight>
+			{
+				new RtaAlarmLight
+				{
+					ActivityId = activityId,
+					StateGroupId = Guid.Empty,
+					BusinessUnit = Guid.Empty,
+					AlarmTypeId = Guid.Empty
+				}
+			};
+			var alarmWithNoActivityIdToAvoidRecursion = new List<RtaAlarmLight>
+			{
+				new RtaAlarmLight
+				{
+					ActivityId = Guid.Empty,
+					StateGroupId = Guid.Empty,
+					BusinessUnit = Guid.Empty,
+					AlarmTypeId = Guid.NewGuid()
+				}
+			};
+
+			alarms.TryAdd(new Tuple<Guid, Guid, Guid>(activityId, Guid.Empty, Guid.Empty), noAlarm); 
+			alarms.TryAdd(new Tuple<Guid, Guid, Guid>(Guid.Empty, Guid.Empty, Guid.Empty), alarmWithNoActivityIdToAvoidRecursion);
+
+			databaseReader.Stub(x => x.ActivityAlarms()).Return(alarms);
+
+			var result = target.GetAlarm(activityId, Guid.Empty, Guid.Empty);
+
 			result.Should().Be.Null();
 		}
 
