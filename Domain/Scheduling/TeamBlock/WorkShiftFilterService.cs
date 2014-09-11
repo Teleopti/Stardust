@@ -96,6 +96,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
 			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(teamBlockInfo).ToList();
+			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(filteredRuleSetList,
+				teamBlockInfo.TeamInfo, dateOnly).ToList();
 			var ruleSetBag = new RuleSetBag();
 			foreach (var workShiftRuleSet in filteredRuleSetList)
 			{

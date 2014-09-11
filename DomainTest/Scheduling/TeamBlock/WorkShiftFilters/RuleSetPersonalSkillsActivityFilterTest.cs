@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +20,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IPerson _person;
 		private WorkShiftRuleSet _ruleSet1;
 		private WorkShiftRuleSet _ruleSet2;
-		private ISkill _skill;
+		private ISkill _skill1;
+		private ISkill _skill2;
+		private ITeamInfo _teamInfo;
+		private IPerson _person2;
+		private List<IPerson> _groupMemebers;
 
 		[SetUp]
 		public void Setup()
@@ -30,8 +35,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_ruleSet1 = WorkShiftRuleSetFactory.Create();
 			_ruleSet2 = WorkShiftRuleSetFactory.Create();
 			_ruleSetList = new List<IWorkShiftRuleSet> {_ruleSet1, _ruleSet2};
-			_skill = SkillFactory.CreateSkill("skill");
-			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {_skill});
+			_skill1 = SkillFactory.CreateSkill("skill");
+			_skill2 = SkillFactory.CreateSkill("skill");
+			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> {_skill1});
+			_person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _skill1, _skill2 });
+			_teamInfo = _mocks.StrictMock<ITeamInfo>();
+			_groupMemebers = new List<IPerson> {_person2, _person};
 		}
 
 		[Test]
@@ -39,8 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet1, new List<ISkill> {_skill})).Return(false);
-				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet2, new List<ISkill> { _skill })).Return(true);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet1, new List<ISkill> {_skill1})).Return(false);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet2, new List<ISkill> { _skill1 })).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -48,6 +57,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				var result = _target.Filter(_ruleSetList, _person, DateOnly.MinValue).ToList();
 				Assert.AreEqual(1, result.Count);
 				Assert.AreSame(_ruleSet2, result[0]);
+			}
+		}
+
+		[Test]
+		public void ShouldFilterForCommonForTeamMembers()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamInfo.GroupMembers).Return(_groupMemebers);
+				//model list
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet1, new List<ISkill> { _skill1, _skill2 })).Return(true);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet2, new List<ISkill> { _skill1, _skill2 })).Return(true);
+				
+				//first member
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet1, new List<ISkill> { _skill1, _skill2 })).Return(true);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet2, new List<ISkill> { _skill1, _skill2 })).Return(true);
+
+				//second member
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet1, new List<ISkill> { _skill1 })).Return(true);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet2, new List<ISkill> { _skill1 })).Return(false);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.FilterForRoleModel(_ruleSetList, _teamInfo, DateOnly.MinValue).ToList();
+				Assert.AreEqual(1, result.Count);
+				Assert.AreSame(_ruleSet1, result[0]);
 			}
 		}
 

@@ -53,8 +53,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ICommonActivityFilter _commonActivityFilter;
 	    private IRuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessibilityFilter;
 		private IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
+		private ITeamInfo _teamInfo;
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -108,9 +109,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>>{ _matrixList };
-			var teaminfo = new TeamInfo(_group, groupMatrixes);
+			_teamInfo = new TeamInfo(_group, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly));
-			_teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			_teamBlockInfo = new TeamBlockInfo(_teamInfo, blockInfo);
 		}
 
 		[Test]
@@ -167,6 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var caches = getCashes();
+			var ruleSetList = new List<IWorkShiftRuleSet>();
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.Person).Return(_person);
@@ -174,7 +176,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
+				Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(ruleSetList);
+				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(ruleSetList, _teamInfo, _dateOnly)).IgnoreArguments()
+					.Return(ruleSetList);
 
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
 				filterForRoleModel(caches, effectiveRestriction);
@@ -271,6 +275,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 				      .Return(null);
                 Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
+				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(new List<IWorkShiftRuleSet>(), _teamInfo,
+					_dateOnly)).IgnoreArguments()
+					.Return(new List<IWorkShiftRuleSet>());
 
 			}
 			using (_mocks.Playback())
@@ -311,6 +318,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
                       .Return(null);
                 Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
+				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(new List<IWorkShiftRuleSet>(), _teamInfo,
+					_dateOnly)).IgnoreArguments()
+					.Return(new List<IWorkShiftRuleSet>());
 			}
 			using (_mocks.Playback())
 			{
@@ -385,6 +395,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
                       .Return(caches);
                 Expect.Call(_ruleSetAccordingToAccessibilityFilter.FilterForRoleModel(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
+				Expect.Call(_ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(new List<IWorkShiftRuleSet>(), _teamInfo, _dateOnly)).IgnoreArguments()
+					.Return(new List<IWorkShiftRuleSet>());
 			}
 			using (_mocks.Playback())
 			{
