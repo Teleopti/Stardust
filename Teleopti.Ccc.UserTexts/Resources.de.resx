@@ -487,7 +487,7 @@
     <comment>Agent Name</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>MyTime</value>
+    <value>Classic MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="AgentPortalOptions" xml:space="preserve">
