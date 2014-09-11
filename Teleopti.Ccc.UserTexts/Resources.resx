@@ -12306,4 +12306,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Show Duplicate Recipient</value>
     <comment>To show duplicates that are found duing advance filtering</comment>
   </data>
+  <data name="ShiftTradeEmptyScheduleDenyReason" xml:space="preserve">
+    <value>Shift trade denied because there is empty schedule.</value>
+    <comment>Shift trade denied because there is empty schedule.</comment>
+  </data>
 </root>
