@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 #if (!DEBUG)
 		    //NHibernateProfiler.Initialize();
 		    SetReleaseMode();
+			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
 		    var applicationStarter = container.Resolve<ApplicationStartup>();
 		    if (applicationStarter.LogOn())
 		    {
@@ -90,7 +91,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			    {
 
 			killNotNeededSessionFactories();
-						populateFeatureToggleFlags(container);
 
 				    applicationStarter.LoadShellApplication();
 			    }
@@ -101,14 +101,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    }
 
 #endif
-			
+
 #if (DEBUG)
+			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container); 
 			var applicationStarter = container.Resolve<ApplicationStartup>();
 				if (applicationStarter.LogOn())
             {
 				
                 killNotNeededSessionFactories();
-	            populateFeatureToggleFlags(container);
+
 			
 				applicationStarter.LoadShellApplication();
             }
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				
 	    }
 
-			private static void populateFeatureToggleFlags(IContainer container)
+			private static void populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(IContainer container)
 			{
 				try
 				{
