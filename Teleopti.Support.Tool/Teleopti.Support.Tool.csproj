@@ -106,6 +106,12 @@
     <Compile Include="Controls\ConnectionString\Summary.Designer.cs">
       <DependentUpon>Summary.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\Configure7ZipDllLocation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\Configure7ZipDllLocation.Designer.cs">
+      <DependentUpon>Configure7ZipDllLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\General\SmoothLink.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -196,6 +202,9 @@
     <EmbeddedResource Include="Controls\ConnectionString\Summary.resx">
       <DependentUpon>Summary.cs</DependentUpon>
     </EmbeddedResource>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseDeployment\Pages\Configure7ZipDllLocation.resx">
+      <DependentUpon>Configure7ZipDllLocation.cs</DependentUpon>
     <EmbeddedResource Include="Controls\General\DBSelect.resx">
       <DependentUpon>DBSelect.cs</DependentUpon>
     </EmbeddedResource>
