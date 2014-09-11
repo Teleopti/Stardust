@@ -9206,7 +9206,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Aktiv</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTimeWeb</value>
+    <value>MyTime</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Abmelden</value>

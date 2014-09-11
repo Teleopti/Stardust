@@ -220,7 +220,7 @@
     <value>Información del Agente...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>MyTime</value>
+    <value>Classic MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agentes</value>
@@ -7512,7 +7512,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Activo</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTimeWeb</value>
+    <value>MyTime</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Cerrar sesión</value>

@@ -9837,7 +9837,7 @@ Period</comment>
     <comment>Active</comment>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTime Web</value>
+    <value>MyTime</value>
     <comment>Used in permissions module</comment>
   </data>
   <data name="LogOut" xml:space="preserve">

@@ -220,7 +220,7 @@
     <value>Dados do agente...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti WFM MyTime</value>
+    <value>Classic MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agentes</value>
@@ -5734,7 +5734,7 @@ As seguintes opções estão ativas:
     <value>Logout</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTimeWeb</value>
+    <value>MyTime</value>
   </data>
   <data name="Active" xml:space="preserve">
     <value>Ativo</value>
