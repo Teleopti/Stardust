@@ -12,12 +12,12 @@
 		<ETLNightlyBuild-InstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-InstallSvc.cmd"</ETLNightlyBuild-InstallSvcCmd>
 		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
-		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2012</SqlInstanceName>
+		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2014</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
 		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
-		<CCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</CCC7DB>
-		<AnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</AnalyticsDB>
-		<AggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</AggDB>
+		<ETLCCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</ETLCCC7DB>
+		<ETLAnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</ETLAnalyticsDB>
+		<ETLAggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</ETLAggDB>
 		<AppSqlLogin>TeleoptiDemoUser</AppSqlLogin>
 		<AppSqlPwd>TeleoptiDemoPwd2</AppSqlPwd>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>		
@@ -31,11 +31,11 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="AzureDeploy">
+	<Target Name="Run" DependsOnTargets="AzureDeploy;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 		
-	<Target Name="RunETL" DependsOnTargets="PrepareDB">
+	<Target Name="RunETL" DependsOnTargets="ETLCompile;RestoreToLocal;MoveOneLogObject">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->
@@ -56,13 +56,15 @@
  		<Exec Command ="NET START AnalyticsEtlService"/>
  		<Message Text="Start ETL service. Done!" Importance="high" />
 
- 		<!--
+		<CallTarget Targets="AddSchedule"/>
+		
+ 	<!--
  	This is our Test!!!
  	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
  	-->
  		<Message Text="Start ETL test. Working..." Importance="high" />
- 		<Message Text="SQLExecute: Data Source=$(SqlInstanceName);Initial Catalog=$(AnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
- 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(SqlInstanceName);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
+ 		<Message Text="SQLExecute: Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
+ 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True"/>
  		<Message Text="Start ETL test. Done!" Importance="high" />
  
  		<!-- Clean up-->
@@ -81,13 +83,13 @@
 	c) Add extra ETL Test SP
 	d) Create one job for the ETL service
 	-->
-	<Target Name="PrepareDB" DependsOnTargets="ETLCompile;RestoreToLocal;MoveOneLogObject">
-		<Message Text="Prepare ETL. Working..." Importance="high" />
-		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" ContinueOnError="false">
+	<Target Name="AddSchedule">
+		<Message Text="Add Schedule. Working..." Importance="high" />
+		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" Importance="high" />
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
-		<Message Text="Prepare ETL. Done!" Importance="high" />
+		<Message Text="Add Schedule. Done!" Importance="high" />
 	</Target>
   
 	<Target Name="RestoreToLocal">
@@ -97,16 +99,16 @@
 
 	<Target Name="MoveOneLogObject">
 		<Message Text="update dimensions ones" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(AggDB) -v logobjectid=$(LogObjectId)"/>
+		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
 
 		<Message Text="update dimensions once more" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(AggDB) -v logobjectid=$(LogObjectId)"/>
+		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
 
 		<Message Text="move one log object" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -i$(moveDataSQL) -v SourceAgg=$(AggDB) -v logobjectid=$(LogObjectId)"/>
+		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(moveDataSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
 
 		<Message Text="make log object internal" Importance="high" />
-		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
+		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
 	</Target>
 
 	<Target Name="ETLCompile">
@@ -155,8 +157,8 @@
 	<Target Name="PrepareFiles">
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)"/>
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
 		<Message Text="Prepare Files. Done!" Importance="high" />
 	</Target>
 	

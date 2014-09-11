@@ -17,8 +17,7 @@ NCover.Registration.exe //License NC3CMPLIC.lic
 CD %CCNetWorkingDirectory%
 ECHO %CCNetWorkingDirectory%
 
-::Build
-::"%MSBUILD%" "%CCNetWorkingDirectory%\CruiseControl.sln" /t:Build /p:Configuration=%configuration%
+.nuget\nuget.exe install .nuget\packages.config -o packages -source "http://hestia/nuget";"https://nuget.org/api/v2"
 
 ::Fix Build server config, create website
 "%MSBUILD%" "%CCNetWorkingDirectory%\ccnet\EtlAndAzure.proj" /p:Configuration=%configuration% /target:Run

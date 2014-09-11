@@ -7,8 +7,8 @@ SET DB_ANALYTICS=%~4
 SET config=%~5
 SET AppSqlLogin=%~6
 SET AppSqlPwd=%~7
-SET SqlInstanceName=%computername%
-IF "%computername%"=="HEBE" SET SqlInstanceName=HEBE\SQL2012
+SET SqlInstanceName=%~8
+
 SET SQL_AUTH_STRING=Data Source=%SqlInstanceName%;User Id=%AppSqlLogin%;Password=%AppSqlPwd%
 SET ETL_SERVICE_nhibConfPath=%TargetDir%
 
@@ -27,8 +27,7 @@ CALL "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "c:\nhib" "%TargetDir%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Data Source=.;Integrated Security=SSPI" "%SQL_AUTH_STRING%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
 
-COPY c:\nhib\FixMyConfig.nhib.xml "%TargetDir%"
-
 ECHO "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
 "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
 
+COPY c:\nhib\FixMyConfig.nhib.xml "%TargetDir%" /Y

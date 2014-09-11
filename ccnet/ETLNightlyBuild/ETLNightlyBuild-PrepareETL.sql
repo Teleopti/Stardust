@@ -1,3 +1,5 @@
+--:SETVAR TeleoptiAnalytics TELEOPTI729_EtlAndAzure_DemoSales_TeleoptiAnalytics
+
 USE [$(TeleoptiAnalytics)]
 SET NOCOUNT ON
 
@@ -54,6 +56,8 @@ EXEC mart.etl_data_mart_delete
 DECLARE @main_job_schedule_id INT, @minutes_of_day INT, @job_start_time_string NVARCHAR(100)
 DECLARE @run_period_start SMALLDATETIME, @run_period_end SMALLDATETIME
 DECLARE @relative_period_start INT, @relative_period_end INT
+DECLARE @delay int
+SET @delay=1 --default 1 minute
 
 SET @run_period_start = '20130201'
 SET @run_period_end = '20130228'
@@ -61,9 +65,13 @@ SET @relative_period_start = DATEDIFF(d, GETDATE(), @run_period_start)
 SET @relative_period_end = DATEDIFF(d, GETDATE(), @run_period_end)
 SET @minutes_of_day = DATEDIFF(mi, CONVERT(INT, CONVERT(FLOAT, GETDATE())), CONVERT(FLOAT, GETDATE()))
 -- Main job should start minut after this script is run
-SET @minutes_of_day = @minutes_of_day + 2
 
-SET @job_start_time_string = LEFT(CONVERT(NVARCHAR(8), DATEADD(mi, 1, GETDATE()), 108), 5)
+IF (DATEDIFF(ss, CONVERT(INT, CONVERT(FLOAT, GETDATE())), CONVERT(FLOAT, GETDATE())) % 60) > 40 --we passed the 40 seconds mark within this current minut
+	SET @delay= @delay +1 --add another minute
+
+SET @minutes_of_day = @minutes_of_day + @delay
+
+SET @job_start_time_string = LEFT(CONVERT(NVARCHAR(8), DATEADD(mi, @delay, GETDATE()), 108), 5)
 SET @job_start_time_string = 'Occurs every day at ' + @job_start_time_string + '. Using the log data source ''<All>''.'
 
 CREATE TABLE #new_schedule(id INT)
