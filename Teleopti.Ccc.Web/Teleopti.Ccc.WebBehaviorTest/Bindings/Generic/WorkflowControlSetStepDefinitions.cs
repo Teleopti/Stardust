@@ -41,6 +41,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var userWorkflowControlSet = new WorkflowControlSetForUser { Name = workflowControlSet.Name };
 			DataMaker.Person(person).Apply(userWorkflowControlSet);
 		}
-
 	}
 }

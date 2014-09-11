@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string AbsenceRequestPreferencePeriodEnd { get; set; }
 		public string StaffingCheck { get; set; }
 		public string AutoGrant { get; set; }
+		public string BusinessUnit { get; set; }
 
 		public WorkflowControlSetConfigurable()
 		{
@@ -161,6 +162,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(ShiftTradeSlidingPeriodStart, ShiftTradeSlidingPeriodEnd);
 			}
+
+			if (!string.IsNullOrEmpty(BusinessUnit))
+				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit));
 
 			var repository = new WorkflowControlSetRepository(uow);
 			repository.Add(workflowControlSet);

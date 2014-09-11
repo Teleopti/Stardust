@@ -728,14 +728,14 @@ Scenario: Should be able to change schedule from agent state overview
 	| Name                                   | Team leader |
 	| Access to team                         | Red         |
 	| Access to real time adherence overview | True        |
-	| Access to Anywhere         | true                |
+	| Access to Anywhere                     | true        |
 	And there is a workflow control set with
 	| Field                      | Value                      |
 	| Name                       | Schedule published to 0909 |
 	| Schedule published to date | 2014-09-09                 |
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
-	| Team       | Red |
+	| Team       | Red        |
 	| Start date | 2014-01-01 |
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0909'
 	And there are shift categories
@@ -753,3 +753,51 @@ Scenario: Should be able to change schedule from agent state overview
 	And I wait and click 'change schedule' in agent menu
 	Then I should see schedule for 'Pierre Baldi'
 	And I should see schedule menu
+
+@OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
+@ignore
+Scenario: Should be able to change schedule for multiple business units
+	Given I have a role with
+	| Field              | Value             |
+	| Name               | Real time analyst |
+	| Access to everyone | True              |
+	| Access to Anywhere | true              |
+	And there is a business unit with
+	| Field | Value           |
+	| Name  | Business Unit 1 |
+	And there is a site 'Paris' on business unit 'Business Unit 1'
+	And there is a team named 'Red' on site 'Paris'
+	And there is an activity in business unit 'Business Unit 1' named 'Phone'
+	And there is an activity in business unit 'Business Unit 1' named 'Lunch'
+	And there is a shift category in business unit 'Business Unit 1' named 'Day'
+	And there is a workflow control set with
+	| Field                      | Value                      |
+	| Name                       | Schedule published to 0909 |
+	| Schedule published to date | 2014-09-09                 |
+	| Business Unit              | Business Unit 1            |
+	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0909'
+	And Pierre Baldi has a person period with
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-09-09   |
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2014-09-09 08:00 |
+	| End time       | 2014-09-09 17:00 |
+	When I view schedules for 'Red' on '2014-09-09'
+	And I choose business unit 'Business Unit 1'
+	And I click person name 'Pierre Baldi'
+	And I click 'add activity' in schedule menu
+	And I input these add activity values
+	| Field      | Value |
+	| Activity   | Lunch |
+	| Start time | 01:00 |
+	| End time   | 02:00 |
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
+	| Field      | Value  |
+	| Start time | 01:00  |
+	| End time   | 02:00  |
+	| Color      | Yellow |
