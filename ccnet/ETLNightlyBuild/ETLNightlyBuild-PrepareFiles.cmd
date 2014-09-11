@@ -29,5 +29,3 @@ cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Data Source=.;Integr
 
 ECHO "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
 "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
-
-COPY c:\nhib\FixMyConfig.nhib.xml "%TargetDir%" /Y
