@@ -27,6 +27,8 @@ CALL "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "c:\nhib" "%TargetDir%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Data Source=.;Integrated Security=SSPI" "%SQL_AUTH_STRING%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
 
+COPY c:\nhib\FixMyConfig.nhib.xml "%TargetDir%"
+
 ECHO "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
 "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
 
