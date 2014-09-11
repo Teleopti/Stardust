@@ -2070,38 +2070,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void disableScheduleButtonsOnNonCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
-		{
-			IScheduleDay scheduleDay = null;
-			var sortedList = selectedSchedules.OrderBy(d => d.DateOnlyAsPeriod.DateOnly).ToList();
-
-			foreach (var selectedSchedule in sortedList)
-			{
-				if (scheduleDay != null)
-				{
-					if (scheduleDay.DateOnlyAsPeriod.DateOnly.Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly)) continue;
-					if (!scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1).Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly))
-					{
-						toolStripSplitButtonSchedule.Enabled = false;
-						break;
-					}
-				}
-
-				scheduleDay = selectedSchedule;
-			}
-		}
-
 		private void grid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
 			if (e.Reason == GridSelectionReason.Clear) return;
 			if (_scheduleView == null) return;
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
-				if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
-				{
-					toolStripSplitButtonSchedule.Enabled = _scheduleView.TheGrid.Selections.Count == 1;
-					if (_splitterManager.ShowRestrictionView) disableScheduleButtonsOnNonCoherentSelection(_scheduleView.SelectedSchedules());
-				}
+
+				SchedulerRibbonHelper.EnableScheduleButton(
+					toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode);
 
 				disableButtonsIfTeamLeaderMode();
 				if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
@@ -3148,12 +3125,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 															  toolStripMenuItemWriteProtectSchedule2, toolStripMenuItemAddStudentAvailabilityRestriction, toolStripMenuItemAddStudentAvailability,
 															  toolStripMenuItemAddPreferenceRestriction, toolStripMenuItemAddPreference, toolStripMenuItemViewReport, toolStripMenuItemScheduledTimePerActivity);
 			_permissionHelper.SetPermissionOnMenuButtons(toolStripButtonRequestView, backStageButtonOptions, toolStripButtonFilterOvertimeAvailability, ToolStripMenuItemScheduleOvertime, toolStripButtonFilterStudentAvailability);
-			setPermissionOnScheduleControl();
-		}
-
-		private void setPermissionOnScheduleControl()
-		{
-			_permissionHelper.SetPermissionOnScheduleControl(toolStripExActions, toolStripSplitButtonSchedule);
+			toolStripExActions.Enabled = true;
 			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
 		}
 
@@ -3687,7 +3659,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonShrinkage.Enabled = false;
 			toolStripButtonCalculation.Enabled = false;
 			toolStripMenuItemSwapAndReschedule.Enabled = false;
-			toolStripSplitButtonSchedule.Enabled = false;
 		}
 
 		private void enableRibbonForMainGrid(bool value)
@@ -6109,16 +6080,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
 			if (!backStage1.Visible && RightToLeftLayout) _tmpTimer.Enabled = true;
         }
-
-		private void toolStripSplitButtonSchedule_EnabledChanged(object sender, EventArgs e)
-		{
-			foreach (var item in toolStripSplitButtonSchedule.DropDownItems)
-			{
-				var control = item as ToolStripItem;
-				if (control != null)
-					control.Enabled = toolStripSplitButtonSchedule.Enabled;
-			}
-		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
