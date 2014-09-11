@@ -37,11 +37,20 @@ namespace Teleopti.Ccc.Rta.Server
 				var alarmForStateGroup = alarmForActivity.FirstOrDefault();
 			    if (Logger.IsDebugEnabled)
 			    {
-			        if (alarmForStateGroup != null)
-			            Logger.DebugFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
-			        else
-			            Logger.DebugFormat("Could not find alarm, no matching StateGroupId");
+				    if (alarmForStateGroup != null)
+				    {
+					    Logger.DebugFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
+				    }
+				    else
+				    {
+					    Logger.DebugFormat("Could not find alarm, no matching StateGroupId");
+				    }
 			    }
+				if (alarmForStateGroup != null && alarmForStateGroup.AlarmTypeId == Guid.Empty)
+				{
+					return null;
+				}
+
 			    return alarmForStateGroup;
 			}
 			return activityId != Guid.Empty
