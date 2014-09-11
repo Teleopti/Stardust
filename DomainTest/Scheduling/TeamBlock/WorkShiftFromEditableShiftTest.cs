@@ -16,20 +16,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	public class WorkShiftFromEditableShiftTest
 	{
 		private IWorkShiftFromEditableShift _target;
+		private TimeZoneInfo _timeZoneInfo;
 
 		[SetUp]
 		public void Setup()
 		{
 			_target = new WorkShiftFromEditableShift();
+			_timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 		}
 
 		[Test]
 		public void ShouldConvertProperly()
 		{
+			var expectedPeriod = new DateTimePeriod(new DateTime(1800, 1, 1, 9, 0, 0, DateTimeKind.Utc), new DateTime(1800, 1, 2, 3, 0, 0, DateTimeKind.Utc));
+
 			var equator = new ScheduleDayEquator(new EditableShiftMapper());
-			var shiftToConvert = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers(); //will create nightshift starting 2007, 1, 1
-			var workShift = _target.Convert(shiftToConvert, new DateOnly(2007, 1, 1));
-			var convertedBack = workShift.ToEditorShift(new DateOnly(2007, 1, 1).Date, TimeZoneInfo.Utc);
+			var shiftToConvert = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers(); 
+			var workShift = _target.Convert(shiftToConvert, new DateOnly(2007, 1, 1), _timeZoneInfo);
+			Assert.AreEqual(expectedPeriod, workShift.Projection.Period());
+
+			var convertedBack = workShift.ToEditorShift(new DateOnly(2007, 1, 1).Date, _timeZoneInfo);
 			Assert.AreSame(shiftToConvert.ShiftCategory, convertedBack.ShiftCategory);
 			Assert.IsTrue(equator.MainShiftEquals(shiftToConvert, convertedBack));
 		}

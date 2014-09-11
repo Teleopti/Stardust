@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public IShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, DateOnly currentDate, TimeZoneInfo agentTimeZone)
 	    {
-		    var workShift = _workShiftFromEditableShift.Convert(shift, currentDate);
+		    var workShift = _workShiftFromEditableShift.Convert(shift, currentDate, agentTimeZone);
 		    var ret = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
 			ret.SetDate(currentDate, agentTimeZone);
 
