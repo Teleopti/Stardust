@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 				var licenseVerifier = _licenseVerifierFactory.Create(this,
 																	 unitOfWorkFactory);
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
-				LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
+				if (licenseService != null)
+				{
+					LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
+				}
 			}
 			return null;
 		}
@@ -50,7 +53,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 	    public void Error(string error)
 		{
 			_logger.Error(error);
-			throw new PermissionException(error);
 		}
 	}
 }

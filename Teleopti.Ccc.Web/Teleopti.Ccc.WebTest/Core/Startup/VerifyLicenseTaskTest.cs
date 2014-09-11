@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			}
 			using (mocks.Playback())
 			{
-				Assert.Throws<PermissionException>(() => target.Execute());
+				target.Execute();
 				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
 					.Should().Be.Null();
 			}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			using(mocks.Playback())
 			{
 				target.Warning("Should be");
-				Assert.Throws<PermissionException>(() => target.Error("logged"));
+				target.Error("logged");
 			}
 		}
 	}
