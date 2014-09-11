@@ -118,6 +118,7 @@
 		public const string MyReportWeb = "0090";
 		public const string ViewPersonalAccount = "0093";
 		public const string MyReportQueueMetrics = "0095";
+		public const string ViewBadge = "0101";
 
 		// Anywhere
 		public const string Anywhere = "0080";

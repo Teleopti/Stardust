@@ -11069,7 +11069,7 @@ These options are activated:
     <comment>Others</comment>
   </data>
   <data name="MyTime" xml:space="preserve">
-    <value>Teleopti WFM MyTime</value>
+    <value>MyTime</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
     <value>Agent Schedule Messenger</value>
@@ -12306,9 +12306,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Show Duplicate Recipient</value>
     <comment>To show duplicates that are found duing advance filtering</comment>
   </data>
-  <data name="ShiftTradeEmptyScheduleDenyReason" xml:space="preserve">
-    <value>Shift trade denied because there is empty schedule.</value>
-    <comment>Shift trade denied because there is empty schedule.</comment>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>View Badge</value>
+    <comment>Permission: View Badge</comment>
   </data>
   <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
     <value>[First Name] [Last Name]</value>

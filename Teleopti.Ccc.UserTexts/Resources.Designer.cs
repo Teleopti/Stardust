@@ -26557,6 +26557,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Badge.
+        /// </summary>
+        public static string ViewBadge {
+            get {
+                return ResourceManager.GetString("ViewBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View Confidential.
         /// </summary>
         public static string ViewConfidential {
