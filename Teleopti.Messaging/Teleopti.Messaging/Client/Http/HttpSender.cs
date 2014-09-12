@@ -37,13 +37,13 @@ namespace Teleopti.Messaging.Client.Http
 		public void Send(Notification notification)
 		{
 			var content = _seralizer.SerializeObject(notification);
-			PostAsync(_httpClient, url("/MessageBroker/NotifyClients"), new StringContent(content, Encoding.UTF8, "application/json"));
+			PostAsync(_httpClient, url("MessageBroker/NotifyClients"), new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 
 		public void SendMultiple(IEnumerable<Notification> notifications)
 		{
 			var content = _seralizer.SerializeObject(notifications);
-			PostAsync(_httpClient, url("/MessageBroker/NotifyClientsMultiple"), new StringContent(content, Encoding.UTF8, "application/json"));
+			PostAsync(_httpClient, url("MessageBroker/NotifyClientsMultiple"), new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 	}
 }

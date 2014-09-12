@@ -28,7 +28,7 @@ namespace Teleopti.MessagingTest.Http
 
 		[Test]
 		public void ShouldPostToCorrectUrl(
-			[Values("http://a/", "http://a")] string url)
+			[Values("http://a/", "http://a", "http://a/b/c/")] string url)
 		{
 			var postedUrl = "";
 			var mutableUrl = new MutableUrl();
@@ -37,7 +37,7 @@ namespace Teleopti.MessagingTest.Http
 
 			target.Send(new Notification());
 
-			postedUrl.Should().Be(new Uri(new Uri(url), "/MessageBroker/NotifyClients").ToString());
+			postedUrl.Should().Be(url.TrimEnd('/') + "/MessageBroker/NotifyClients");
 		}
 
 		[Test]
