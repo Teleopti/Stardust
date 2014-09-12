@@ -2,8 +2,6 @@
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Budgeting;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
@@ -26,12 +24,6 @@ namespace Teleopti.Ccc.Win.Budgeting
 			providerWiring(builder);
 			budgetGlobalWiring(builder);
             exceptionHandlerWiring(builder);
-			//denna ska inte vara här, borde inte vara här igen
-			builder.RegisterType<MultisiteDayRepository>().As<IMultisiteDayRepository>();
-			builder.RegisterType<SkillDayRepository>().As<ISkillDayRepository>();
-			builder.RegisterType<BudgetGroupRepository>().As<IBudgetGroupRepository>();
-			builder.RegisterType<PersonalSettingDataRepository>().As<IPersonalSettingDataRepository>();
-			builder.RegisterType<BudgetDayRepository>().As<IBudgetDayRepository>(); 
 		}
 
 	    private static void exceptionHandlerWiring(ContainerBuilder builder)
