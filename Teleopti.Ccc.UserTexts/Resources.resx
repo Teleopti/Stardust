@@ -12310,4 +12310,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift trade denied because there is empty schedule.</value>
     <comment>Shift trade denied because there is empty schedule.</comment>
   </data>
+  <data name="ShiftTradeEmptyScheduleDenyReason" xml:space="preserve">
+    <value>Shift trade denied because there is empty schedule.</value>
+    <comment>Shift trade denied because there is empty schedule.</comment>
+  </data>
 </root>

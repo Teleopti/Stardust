@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
-			if(obj == null)
+			if (obj == null)
 				throw new ArgumentNullException("obj");
 
 			foreach (var shiftTradeSwapDetail in obj)

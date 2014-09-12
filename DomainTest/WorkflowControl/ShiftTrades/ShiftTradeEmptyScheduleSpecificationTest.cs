@@ -20,19 +20,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IPerson _personTo;
 		private IScheduleDay _scheduleDayFrom;
 		private IScheduleDay _scheduleDayTo;
-		private IPersonAssignment _personAssignmentFrom;
 		private IPersonAssignment _personAssignmentTo;
-		private IEditableShift _mainShift;
-		private IList<IEditableShiftLayer> _layerCollectionFrom;
-		private IList<IEditableShiftLayer> _layerCollectionTo;
-		private DateTimePeriod _periodFrom;
-		//private DateTimePeriod _periodTo;
 		private IDayOff _dayOff;
-		private IProjectionService _projectionServiceFrom;
 		private IProjectionService _projectionServiceTo;
-		private IVisualLayer _visualLayerFrom;
 		private IVisualLayer _visualLayerTo;
-		private IVisualLayerCollection _visualLayerCollectionFrom;
 		private IVisualLayerCollection _visualLayerCollectionTo;
 
 		[SetUp]
@@ -42,12 +33,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_personFrom = MockRepository.GenerateMock<IPerson>();
 			_personTo = MockRepository.GenerateMock<IPerson>();
 
-			_personAssignmentFrom = MockRepository.GenerateMock<IPersonAssignment>();
 			_personAssignmentTo = MockRepository.GenerateMock<IPersonAssignment>();
 
 			var startFrom = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var endFrom = new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc);
-			_periodFrom = new DateTimePeriod(startFrom, endFrom);
+			new DateTimePeriod(startFrom, endFrom);
 
 		}
 
@@ -74,9 +64,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		{
 			_scheduleDayFrom = MockRepository.GenerateMock<IScheduleDay>();
 			_scheduleDayTo = MockRepository.GenerateMock<IScheduleDay>();
-			_mainShift = MockRepository.GenerateMock<IEditableShift>();
-			_layerCollectionFrom = new List<IEditableShiftLayer>();
-			_layerCollectionTo = new List<IEditableShiftLayer>();
+			MockRepository.GenerateMock<IEditableShift>();
+			new List<IEditableShiftLayer>();
+			new List<IEditableShiftLayer>();
 			_shiftTradeSwapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(), new DateOnly()) { SchedulePartFrom = _scheduleDayFrom, SchedulePartTo = _scheduleDayTo };
 			_details = new List<IShiftTradeSwapDetail> { _shiftTradeSwapDetail };
 
@@ -101,22 +91,32 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		{
 			_scheduleDayFrom = MockRepository.GenerateMock<IScheduleDay>();
 			_scheduleDayTo = MockRepository.GenerateMock<IScheduleDay>();
-			_projectionServiceFrom = MockRepository.GenerateMock<IProjectionService>();
+			MockRepository.GenerateMock<IProjectionService>();
 			_projectionServiceTo = MockRepository.GenerateMock<IProjectionService>();
-			_visualLayerFrom = MockRepository.GenerateMock<IVisualLayer>();
+			MockRepository.GenerateMock<IVisualLayer>();
 			_visualLayerTo = MockRepository.GenerateMock<IVisualLayer>();
-			_visualLayerCollectionFrom = MockRepository.GenerateMock<IVisualLayerCollection>();
+			MockRepository.GenerateMock<IVisualLayerCollection>();
 			_visualLayerCollectionTo = MockRepository.GenerateMock<IVisualLayerCollection>();
 			_scheduleDayTo.Stub(x => x.ProjectionService()).Return(_projectionServiceTo);
 			_projectionServiceTo.Stub(x => x.CreateProjection()).Return(_visualLayerCollectionTo);
 			_visualLayerCollectionTo.Stub(x => x.GetEnumerator())
-				.Return(new List<IVisualLayer> {_visualLayerTo}.GetEnumerator());
+				.Return(new List<IVisualLayer> { _visualLayerTo }.GetEnumerator());
 			_visualLayerTo.Stub(x => x.Payload).Return(new Absence());
 
 			_shiftTradeSwapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(), new DateOnly()) { SchedulePartFrom = _scheduleDayFrom, SchedulePartTo = _scheduleDayTo };
 			_details = new List<IShiftTradeSwapDetail> { _shiftTradeSwapDetail };
 
 			_target.IsSatisfiedBy(_details).Should().Be.EqualTo(true);
+		}
+
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenInParameterIsNull()
+		{
+			_target.IsSatisfiedBy(null);
+		}
+	}
+}
 		}
 
 
