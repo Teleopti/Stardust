@@ -153,7 +153,7 @@
 			var calculateResult = function(andWords, andMatches, orWords, orMatches) {
 				var unNegatedAndRelationalWords = ko.utils.arrayFilter(andWords, function(word) { return !shouldNegate(word); }).length;
 				var unNegatedOrRelationalWords = ko.utils.arrayFilter(orWords, function (word) { return !shouldNegate(word); }).length;
-				return (andMatches === unNegatedAndRelationalWords
+				return (andMatches >= unNegatedAndRelationalWords
 					&& orMatches >= unNegatedOrRelationalWords);
 			}
 			return that;
