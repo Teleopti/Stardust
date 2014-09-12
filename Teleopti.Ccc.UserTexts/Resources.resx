@@ -11924,4 +11924,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
     <value>Schedule Period</value>
   </data>
+  <data name="ShiftTradeEmptyScheduleDenyReason" xml:space="preserve">
+    <value>Shift trade denied because there is empty schedule.</value>
+    <comment>Shift trade denied because there is empty schedule.</comment>
+  </data>
 </root>
