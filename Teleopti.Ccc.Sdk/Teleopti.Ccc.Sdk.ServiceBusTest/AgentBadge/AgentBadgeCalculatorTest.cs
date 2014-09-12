@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Domain;
@@ -24,10 +26,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IAgentBadgeTransactionRepository _badgeTransactionRepository;
 		private AgentBadgeThresholdSettings _badgeSetting;
 		private INow _now;
+		private IDefinedRaptorApplicationFunctionFactory appFunctionFactory;
+
+		private ApplicationRole _badgeRole;
 
 		[SetUp]
 		public void Setup()
 		{
+			var badgeFunctionCode = ApplicationFunction.GetCode(DefinedRaptorApplicationFunctionPaths.ViewBadge);
+			var badgeFunction = new ApplicationFunction(badgeFunctionCode)
+			{
+				ForeignId = DefinedRaptorApplicationFunctionForeignIds.ViewBadge
+			};
+			_badgeRole = new ApplicationRole
+			{
+				Name = "Badge"
+			};
+			_badgeRole.AddApplicationFunction(badgeFunction);
+
 			_badgeSetting = new AgentBadgeThresholdSettings
 			{
 				AdherenceThreshold = new Percent(0.6),
@@ -44,6 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			{
 				person = new Person();
 				person.SetId(Guid.NewGuid());
+				person.PermissionInformation.AddApplicationRole(_badgeRole);
 				_allPersons.Add(person);
 			}
 
@@ -74,7 +91,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			_now = MockRepository.GenerateMock<INow>();
 
-			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, _now);
+			appFunctionFactory = MockRepository.GenerateMock<IDefinedRaptorApplicationFunctionFactory>();
+			appFunctionFactory.Stub(x => x.ApplicationFunctionList).Return(new List<IApplicationFunction>
+			{
+				badgeFunction
+			});
+
+			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory, _now);
 		}
 
 		[Test]
@@ -112,6 +135,48 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
 			Assert.AreEqual(badge.Amount, 1);
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
+		}
+
+		[Test]
+		public void ShouldNotAwardCalculateAnsweredCallsBadgeForAgentsWithoutPermission()
+		{
+			foreach (var person in _allPersons)
+			{
+				person.PermissionInformation.RemoveApplicationRole(_badgeRole);
+			}
+
+			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
+				_badgeSetting);
+
+			Assert.AreEqual(result.Any(), false);
+		}
+		[Test]
+		public void ShouldNotAwardAdherenceBadgeForCorrectAgentsWithoutPermission()
+		{
+			foreach (var person in _allPersons)
+			{
+				person.PermissionInformation.RemoveApplicationRole(_badgeRole);
+			}
+
+			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
+				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
+				_badgeSetting);
+
+			Assert.AreEqual(result.Any(), false);
+		}
+
+		[Test]
+		public void ShouldNotAwardAHTBadgeForCorrectAgentsWithoutPermission()
+		{
+			foreach (var person in _allPersons)
+			{
+				person.PermissionInformation.RemoveApplicationRole(_badgeRole);
+			}
+
+			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
+				_badgeSetting);
+
+			Assert.AreEqual(result.Any(), false);
 		}
 	}
 }

@@ -6,6 +6,7 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Domain;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private INow now;
 		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
+		private IDefinedRaptorApplicationFunctionFactory appFunctionFactory;
 
 		[SetUp]
 		public void Setup()
@@ -60,10 +62,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			msgRepository = MockRepository.GenerateMock<IPushMessagePersister>();
 			now = MockRepository.GenerateMock<INow>();
-			calculator = new AgentBadgeCalculator(statisticRepository, badgeTransRepository, now);
+
+			appFunctionFactory = MockRepository.GenerateMock<IDefinedRaptorApplicationFunctionFactory>();
+
+			calculator = new AgentBadgeCalculator(statisticRepository, badgeTransRepository, appFunctionFactory, now);
 			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository,
 				msgRepository, unitOfWorkFactory, calculator, badgeRepository, now);
 		}
+
 		[Test]
 		public void ShouldSendCalculateBadgeMessageAtRightTime()
 		{
