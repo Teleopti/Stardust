@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<BootstrapperModule>();
 
-			builder.RegisterModule(new GodModule {PathToToggle = featureTogglePath});
+			builder.RegisterModule(new CommonModule {PathToToggle = featureTogglePath});
 
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ResourceHandlerModule>();
 			builder.RegisterModule<MyTimeAreaModule>();
 			builder.RegisterModule<SSOAreaModule>();

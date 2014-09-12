@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveKeepAliveStrategies()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new GodModule {MessageBrokerListeningEnabled = true});
+			builder.RegisterModule(new CommonModule {MessageBrokerListeningEnabled = true});
 			using (var container = builder.Build())
 			{
 				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldNotUseSignalRIfListeningDisabledAndHttpSenderEnabled()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new GodModule {MessageBrokerListeningEnabled = false});
+			builder.RegisterModule(new CommonModule {MessageBrokerListeningEnabled = false});
 			using (var container = BuildContainerWithToggle(builder, Toggles.Messaging_HttpSender_29205, true))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<DisabledSignalRClient>();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldStillUseSignalRIfListeningDisabledAndHttpSenderDisabled()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new GodModule { MessageBrokerListeningEnabled = false });
+			builder.RegisterModule(new CommonModule { MessageBrokerListeningEnabled = false });
 			using (var container = BuildContainerWithToggle(builder, Toggles.Messaging_HttpSender_29205, false))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<SignalRClient>();
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		private static ContainerBuilder Builder()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<GodModule>();
+			builder.RegisterModule<CommonModule>();
 			return builder;
 		}
 

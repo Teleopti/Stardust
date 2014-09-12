@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=false" });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new GodModule { PathToToggle = tempFile, ToggleMode = ToggleMode});
+				containerBuilder.RegisterModule(new CommonModule { PathToToggle = tempFile, ToggleMode = ToggleMode});
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle=true" });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new GodModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
+				containerBuilder.RegisterModule(new CommonModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new string[0]);
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new GodModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
+				containerBuilder.RegisterModule(new CommonModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] {"TestToggle=rc"});
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new GodModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
+				containerBuilder.RegisterModule(new CommonModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { "TestToggle= Rc	 " });
 				var containerBuilder = new ContainerBuilder();
-				containerBuilder.RegisterModule(new GodModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
+				containerBuilder.RegisterModule(new CommonModule { PathToToggle = tempFile, ToggleMode = ToggleMode });
 				using (var container = containerBuilder.Build())
 				{
 					var toggleChecker = container.Resolve<IToggleManager>();

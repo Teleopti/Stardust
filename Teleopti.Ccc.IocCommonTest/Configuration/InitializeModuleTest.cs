@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			dataSourceConfigurationSetter = MockRepository.GenerateStub<IDataSourceConfigurationSetter>();
 			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<GodModule>();
+			containerBuilder.RegisterModule<CommonModule>();
 			containerBuilder.RegisterModule(new InitializeModule(dataSourceConfigurationSetter));
 		}
 

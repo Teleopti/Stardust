@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void Setup()
 		{
 			builder = new ContainerBuilder();
-			builder.RegisterModule<GodModule>();
+			builder.RegisterModule<CommonModule>();
 			builder.Register(c => MockRepository.GenerateMock<IUserTimeZone>()).As<IUserTimeZone>(); //no impl of IUserTimeZone available outside web yet
 		}
 

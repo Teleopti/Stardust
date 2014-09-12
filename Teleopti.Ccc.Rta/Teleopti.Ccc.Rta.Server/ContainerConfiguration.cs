@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Rta.Server
 		 {
 			 var builder = new ContainerBuilder();
 			 var mbCacheModule = new MbCacheModule(null);
-			 builder.RegisterModule<GodModule>();
+			 builder.RegisterModule<CommonModule>();
 			 builder.RegisterModule(mbCacheModule);
 			 builder.RegisterModule(new RtaCommonModule(mbCacheModule));
 			 return builder;

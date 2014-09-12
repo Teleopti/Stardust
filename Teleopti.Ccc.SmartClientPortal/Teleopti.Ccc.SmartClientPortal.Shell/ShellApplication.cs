@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 								var mbCacheModule = new MbCacheModule(null);
 				builder.RegisterModule(mbCacheModule);
-	            builder.RegisterModule(new GodModule
+	            builder.RegisterModule(new CommonModule
 	            {
 		            MessageBrokerListeningEnabled = true,
 		            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
 	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule<GodModule>();
+			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule<CommonModule>();
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 	        {

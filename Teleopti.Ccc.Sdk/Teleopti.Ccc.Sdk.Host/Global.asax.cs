@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var mbCacheModule = new MbCacheModule(null);
 
 			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule<GodModule>();
+			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();

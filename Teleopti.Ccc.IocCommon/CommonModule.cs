@@ -7,14 +7,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon
 {
-	public class GodModule : Module
+	public class CommonModule : Module
 	{
 		public string PathToToggle { get; set; }
 		public string ToggleMode { get; set; }
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public Type RepositoryConstructorType { get; set; }
 
-		public GodModule()
+		public CommonModule()
 		{
 			PathToToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];

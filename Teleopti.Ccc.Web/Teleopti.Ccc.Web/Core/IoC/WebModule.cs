@@ -17,7 +17,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
-	public class CommonModule : Module
+	public class WebModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

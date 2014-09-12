@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			appender = new testAppender();
 			configureLog4Net();
 			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<GodModule>();
+			containerBuilder.RegisterModule<CommonModule>();
 			containerBuilder.RegisterType<DummyService>().As<IDummyService>();
 			containerBuilder.RegisterType<DummyService2>().As<IDummyService2>();
 		}

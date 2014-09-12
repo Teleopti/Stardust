@@ -151,7 +151,7 @@
     <Compile Include="Configuration\ScheduleScreenRefresherModule.cs" />
     <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
-    <Compile Include="GodModule.cs" />
+    <Compile Include="CommonModule.cs" />
     <Compile Include="Configuration\JsonSerializationModule.cs" />
     <Compile Include="Toggle\FalseToggleManager.cs" />
     <Compile Include="Toggle\ToggleNetModule.cs" />

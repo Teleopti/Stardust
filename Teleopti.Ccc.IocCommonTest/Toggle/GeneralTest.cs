@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldUseToggleQuerierIfStartsWithHttp()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new GodModule {PathToToggle = "http://tralala"});
+			containerBuilder.RegisterModule(new CommonModule {PathToToggle = "http://tralala"});
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldUseToggleQuerierIfStartsWithHttps()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new GodModule { PathToToggle = "https://hejsan" });
+			containerBuilder.RegisterModule(new CommonModule { PathToToggle = "https://hejsan" });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldRegisterToggleFillerIfToggleQuerierIsUsed()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new GodModule { PathToToggle = "https://hejsan" });
+			containerBuilder.RegisterModule(new CommonModule { PathToToggle = "https://hejsan" });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleChecker = container.Resolve<IToggleManager>();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldResolveTogglesActive()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new GodModule { PathToToggle = "http://something" });
+			containerBuilder.RegisterModule(new CommonModule { PathToToggle = "http://something" });
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<ITogglesActive>()
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldSetAllTogglesToFalseIfPathIsEmpty()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new GodModule { PathToToggle = "" });
+			containerBuilder.RegisterModule(new CommonModule { PathToToggle = "" });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleManager = container.Resolve<IToggleManager>();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldSetAllTogglesToFalseIfPathIsNull()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new GodModule { PathToToggle = null });
+			containerBuilder.RegisterModule(new CommonModule { PathToToggle = null });
 			using (var container = containerBuilder.Build())
 			{
 				var toggleManager = container.Resolve<IToggleManager>();

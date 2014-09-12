@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
-			build.RegisterModule<GodModule>();
+			build.RegisterModule<CommonModule>();
 
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();
