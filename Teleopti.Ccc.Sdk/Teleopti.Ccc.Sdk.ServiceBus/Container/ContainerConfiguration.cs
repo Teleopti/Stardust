@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<GodModule>();
 
 			build.RegisterModule<ShiftTradeModule>();
-			build.RegisterModule<RepositoryModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();
 			build.RegisterModule<AuthenticationContainerInstaller>();
 			build.RegisterModule<AuthenticationModule>();

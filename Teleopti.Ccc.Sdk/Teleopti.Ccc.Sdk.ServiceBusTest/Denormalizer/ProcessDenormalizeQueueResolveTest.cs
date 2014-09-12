@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ProcessDenormalizeQueueConsumer>().As<ConsumerOf<ProcessDenormalizeQueue>>();
 
-			builder.RegisterModule<RepositoryModule>();
+			builder.RegisterModule<GodModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();

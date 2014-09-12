@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -19,8 +20,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void Setup()
 		{
 			containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule<GodModule>();
 			containerBuilder.RegisterModule<UnitOfWorkModule>();
-			containerBuilder.RegisterModule<RepositoryModule>();
 			containerBuilder.RegisterModule<AuthenticationModule>();
 		}
 

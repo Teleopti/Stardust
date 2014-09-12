@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			appender = new testAppender();
 			configureLog4Net();
 			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new LogModule());
+			containerBuilder.RegisterModule<GodModule>();
 			containerBuilder.RegisterType<DummyService>().As<IDummyService>();
 			containerBuilder.RegisterType<DummyService2>().As<IDummyService2>();
 		}
@@ -33,10 +35,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = containerBuilder.Build())
 			{
 				var svc = container.Resolve<IDummyService>();
-				appender.Messages.Should().Be.Empty();
 				svc.DoIt();
-				appender.Messages.Should().Have.Count.EqualTo(1);
-				appender.Messages[0].RenderedMessage.Should().Be.EqualTo("logtest");
+				appender.Messages.Select(x => x.RenderedMessage).Should().Contain("logtest");
 			}
 		}
 
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				var svc2 = container.Resolve<IDummyService2>();
 				svc.DoIt();
 				svc2.DoIt();
-				appender.Messages[0].LoggerName.Should().Be.EqualTo(svc.GetType().FullName);
-				appender.Messages[1].LoggerName.Should().Be.EqualTo(svc2.GetType().FullName);
+				appender.Messages.Select(x => x.LoggerName).Should().Contain(svc.GetType().FullName);
+				appender.Messages.Select(x => x.LoggerName).Should().Contain(svc2.GetType().FullName);
 			}
 		}
 

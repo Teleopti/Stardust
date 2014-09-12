@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CanCreateShiftTradeRequestSetChecksum()
 		{
-			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			using (var ioc = builder.Build())
 			{
@@ -89,7 +88,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CanCreateShiftTradeRequestStatusChecker()
 		{
-			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			//just a dummy impl used here
 			builder.RegisterType<personRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();

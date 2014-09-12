@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -18,10 +19,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
         public void Setup()
         {
             _module = new ScheduleScreenRefresherModule();
-            _containerBuilder = new ContainerBuilder();
+			_containerBuilder = new ContainerBuilder();
+			_containerBuilder.RegisterModule<GodModule>();
 			_containerBuilder.RegisterModule(new AuthenticationModule());
             _containerBuilder.RegisterModule(new UnitOfWorkModule());
-            _containerBuilder.RegisterModule(new RepositoryModule());
             _containerBuilder.RegisterModule(_module);
             _container = _containerBuilder.Build();
         }

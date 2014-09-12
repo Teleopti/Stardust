@@ -1,7 +1,9 @@
+using System;
 using System.Configuration;
 using Autofac;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -10,11 +12,13 @@ namespace Teleopti.Ccc.IocCommon
 		public string PathToToggle { get; set; }
 		public string ToggleMode { get; set; }
 		public bool MessageBrokerListeningEnabled { get; set; }
+		public Type RepositoryConstructorType { get; set; }
 
 		public GodModule()
 		{
 			PathToToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
+			RepositoryConstructorType = typeof(ICurrentUnitOfWork);
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -24,6 +28,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(PathToToggle, ToggleMode));
 			builder.RegisterModule(new MessageBrokerModule {MessageBrokerListeningEnabled = MessageBrokerListeningEnabled});
+			builder.RegisterModule(new RepositoryModule {RepositoryConstructorType = RepositoryConstructorType});
 		}
 	}
 }

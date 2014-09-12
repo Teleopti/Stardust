@@ -172,7 +172,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 								var mbCacheModule = new MbCacheModule(null);
 				builder.RegisterModule(mbCacheModule);
-	            builder.RegisterModule(new GodModule {MessageBrokerListeningEnabled = true});
+	            builder.RegisterModule(new GodModule
+	            {
+		            MessageBrokerListeningEnabled = true,
+		            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
+	            });
 				builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new AuthenticationModule());
@@ -193,7 +197,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule(new MainModule());
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
-							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });
 							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 							//////
                 return builder.Build();

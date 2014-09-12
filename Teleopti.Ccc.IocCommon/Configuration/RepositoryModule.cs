@@ -5,28 +5,21 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class RepositoryModule : Module
+	internal class RepositoryModule : Module
 	{
-		public RepositoryModule()
-		{
-			ConstructorTypeToUse = typeof (ICurrentUnitOfWork);
-		}
-
-		//hack to get desktop app use old behavior
-		public Type ConstructorTypeToUse { get; set; }
+		public Type RepositoryConstructorType { get; set; }
 
 		protected override void Load(ContainerBuilder builder)
 		{
 			foreach (var type in typeof(PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
 			{
-				if (type.GetConstructor(new[]{ConstructorTypeToUse}) != null)
+				if (type.GetConstructor(new[] { RepositoryConstructorType }) != null)
 				{
 					builder.RegisterType(type)
-								 .UsingConstructor(ConstructorTypeToUse)
+								 .UsingConstructor(RepositoryConstructorType)
 								 .AsImplementedInterfaces()
 								 .SingleInstance();					
 				}
@@ -55,7 +48,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var parameters = constructorInfo.GetParameters();
 				if (parameters.Count() == 1)
 				{
-					if (parameters[0].ParameterType == ConstructorTypeToUse)
+					if (parameters[0].ParameterType == RepositoryConstructorType)
 						return true;
 				}
 			}
