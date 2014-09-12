@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 
@@ -13,12 +14,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(AgentBadgeCalculator));
 		private readonly IStatisticRepository _statisticRepository;
 		private readonly IAgentBadgeTransactionRepository _transactionRepository;
+		private readonly IDefinedRaptorApplicationFunctionFactory _appFunctionFactory;
 		private readonly INow _now;
 
-		public AgentBadgeCalculator(IStatisticRepository statisticRepository, IAgentBadgeTransactionRepository transactionRepository, INow now)
+		public AgentBadgeCalculator(IStatisticRepository statisticRepository,
+			IAgentBadgeTransactionRepository transactionRepository,
+			IDefinedRaptorApplicationFunctionFactory appFunctionFactory,
+			INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_transactionRepository = transactionRepository;
+			_appFunctionFactory = appFunctionFactory;
 			_now = now;
 		}
 
@@ -33,11 +39,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				return newAwardedBadges;
 			}
 
+			var viewBadgeFunc =
+				_appFunctionFactory.ApplicationFunctionList.Single(
+					x => x.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ViewBadge);
+
 			foreach (
 				var person in
 					agentsListShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
 						.Where(a => a != null))
 			{
+				var hasBadgePermission = person.PermissionInformation.ApplicationRoleCollection.Any(
+					role => role.ApplicationFunctionCollection.Contains(viewBadgeFunc));
+
+				if (!hasBadgePermission)
+				{
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat("Agent {0} (ID: {1}) has no badge permission, no badge will be awarded.",
+							person.Name, person.Id);
+					}
+					continue;
+				}
+
 				var badge = _transactionRepository.Find(person, badgeType, date);
 
 				if (badge == null)
