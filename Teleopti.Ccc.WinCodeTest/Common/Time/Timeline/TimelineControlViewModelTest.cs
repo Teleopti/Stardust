@@ -74,8 +74,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time.Timeline
 
 
             Assert.IsFalse(_target.ShowNowTime);
-            _target.ShowNowTime = true;
-            Assert.IsTrue(_target.ShowNowTime);
             //coverage:
             Assert.IsNotNull(_target.Layers);
         }
