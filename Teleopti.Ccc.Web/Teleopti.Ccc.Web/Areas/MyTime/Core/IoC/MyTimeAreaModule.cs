@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
 			builder.RegisterType<SettingsPermissionViewModelFactory>().As<ISettingsPermissionViewModelFactory>();
+			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ICalendarLinkSettingsPersisterAndProvider>().SingleInstance();
 			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();

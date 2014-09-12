@@ -349,6 +349,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleFilterViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ISettingsViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarTransformer.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CheckCalendarActiveCommand.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CheckCalendarPermissionCommand.cs" />

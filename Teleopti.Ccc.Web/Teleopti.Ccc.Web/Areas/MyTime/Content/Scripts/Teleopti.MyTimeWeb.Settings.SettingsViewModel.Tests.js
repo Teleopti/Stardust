@@ -47,7 +47,7 @@ $(document).ready(function() {
 			{ id: "3", text: "Culture C" }];
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Settings/Cultures") {
+				if (options.url == "Settings/GetSettings") {
 					options.success(
 						{
 							Cultures: cultures,
@@ -67,7 +67,7 @@ $(document).ready(function() {
 		equal(viewModel.cultures()[0].text, "Culture A");
 		equal(viewModel.selectedUiCulture(), 2);
 		equal(viewModel.selectedCulture(), 1);
-		equal(viewModel.culturesLoaded(), true);
+		equal(viewModel.settingsLoaded(), true);
 		equal(viewModel.avoidReload, false);
 	});
 	

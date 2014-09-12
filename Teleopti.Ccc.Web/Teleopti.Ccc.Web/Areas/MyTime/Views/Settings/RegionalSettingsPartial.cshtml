@@ -8,18 +8,27 @@
     <div id="settings" class="well well-sm">
         <div class="clearfix">
             <label for="CultureUi-Picker" class="col-xs-12 control-label">@Resources.Language</label>
-            <select id="CultureUi-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
-                <option data-bind="text: text, value: id"></option>
-            </select>
+		  	<select id="CultureUi-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: settingsLoaded ">
+		  		<option data-bind="text: text, value: id"></option>
+		  	</select>
         </div>
         <br />
         <div class="clearfix">
             <label for="Culture-Picker" class="col-xs-12 control-label">@Resources.DateFormat</label>
-            <select id="Culture-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
-                <option data-bind="text: text, value: id"></option>
-            </select>
+		  	<select id="Culture-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: settingsLoaded">
+		  		<option data-bind="text: text, value: id"></option>
+		  	</select>
         </div>
-        <br />
+	    <br />
+	 	<!-- ko if: isSetAgentDescriptionEnabled()-->
+	 	<div class="clearfix">
+			<label for="CommonAgentName-Picker" class="col-xs-12 control-label">Agent Description</label>
+			<select id="CommonAgentName-Picker" class="col-xs-4 culture-setting" data-bind="foreach: nameFormats, select2: { value: selectedNameFormat }, enable: settingsLoaded">
+				<option data-bind="text: text, value: id"></option>
+			</select>
+	 </div>
+	 <br />
+	 <!-- /ko -->
 
         <div class="clearfix">
             <!-- ko if: IsNotificationSupported -->

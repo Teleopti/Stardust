@@ -22,12 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
 		private readonly ICalendarLinkSettingsPersisterAndProvider _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
+		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
 
 		public SettingsController(IMappingEngine mapper,
 		                          ILoggedOnUser loggedOnUser,
 		                          IModifyPassword modifyPassword,
 		                          IPersonPersister personPersister,
 		                          ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
+										  ISettingsViewModelFactory settingsViewModelFactory,
 		                          ICalendarLinkSettingsPersisterAndProvider calendarLinkSettingsPersisterAndProvider,
 		                          ICalendarLinkViewModelFactory calendarLinkViewModelFactory)
 		{
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_modifyPassword = modifyPassword;
 			_personPersister = personPersister;
 			_settingsPermissionViewModelFactory = settingsPermissionViewModelFactory;
+			_settingsViewModelFactory = settingsViewModelFactory;
 			_calendarLinkSettingsPersisterAndProvider = calendarLinkSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
 		}
@@ -58,9 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[EnsureInPortal]
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult Cultures()
+		public JsonResult GetSettings()
 		{
-			var settings = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
+			var settings = _settingsViewModelFactory.CreateViewModel(_mapper, _loggedOnUser);
 			return Json(settings, JsonRequestBehavior.AllowGet);
 		}
 

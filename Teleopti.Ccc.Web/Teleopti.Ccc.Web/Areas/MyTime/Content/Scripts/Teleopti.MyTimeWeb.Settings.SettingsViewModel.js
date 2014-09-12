@@ -4,11 +4,13 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	var self = this;
 	
 	self.isSetAgentDescriptionEnabled = ko.observable(false);
-	self.culturesLoaded = ko.observable(false);
+	self.settingsLoaded = ko.observable(false);
 	self.avoidReload = false;
 	self.cultures = ko.observableArray();
 	self.selectedUiCulture = ko.observable();
 	self.selectedCulture = ko.observable();
+	self.nameFormats = ko.observableArray();
+	self.selectedNameFormat = ko.observable();
 
 	self.CalendarSharingActive = ko.observable(false);
 	self.CalendarUrl = ko.observable();
@@ -43,18 +45,20 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 
 	self.loadCultures = function() {
 		return ajax.Ajax({
-			url: "Settings/Cultures",
+			url: "Settings/GetSettings",
 			dataType: "json",
 			type: "GET",
 			global: false,
 			cache: false,
 			success: function(data, textStatus, jqXHR) {
 				self.cultures(data.Cultures);
+				self.nameFormats(data.NameFormats);
 				self.avoidReload = true;
 				self.selectedUiCulture(data.ChoosenUiCulture.id);
 				self.selectedCulture(data.ChoosenCulture.id);
+				self.selectedNameFormat(data.ChosenNameFormat.id);
 				self.avoidReload = false;
-				self.culturesLoaded(true);
+				self.settingsLoaded(true);
 			}
 		});
 	};
