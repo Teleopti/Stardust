@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IList<IEditableShiftLayer> _layerCollectionFrom;
 		private IList<IEditableShiftLayer> _layerCollectionTo;
 		private DateTimePeriod _periodFrom;
-		private DateTimePeriod _periodTo;
+		//private DateTimePeriod _periodTo;
 		private IDayOff _dayOff;
 		private IProjectionService _projectionServiceFrom;
 		private IProjectionService _projectionServiceTo;
