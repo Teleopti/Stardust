@@ -203,5 +203,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			}
 		}
 
+		[Test]
+		public void ShouldSkipIdenticalTimesDuringDaylightSavingTimeSwitch()
+		{
+			var startDateTime = new DateTime(2014, 10, 26, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2014, 10, 26, 0, 15, 0, DateTimeKind.Utc);
+
+			//due to daylight saving time switch datetime1 and datetime2 will both be 02:00 after conversion to "W. Europe Standard Time"
+			var datetime1 = new DateTimePeriod(startDateTime, endDateTime);
+			var datetime2 = new DateTimePeriod(startDateTime.AddHours(1), endDateTime.AddHours(1));
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_skillStaffPeriod1.Period).Return(datetime1);
+				Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(10);
+				Expect.Call(_skillStaff1.MaxSeats).Return(25);
+
+				Expect.Call(_skillStaffPeriod2.Period).Return(datetime2);
+				Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.Times(2);
+				Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(15);
+				Expect.Call(_skillStaff2.MaxSeats).Return(25);
+
+			}
+			using (_mocks.Playback())
+			{
+				var tzi = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+				var result = _target.ExtractMaxSeatsFlag(_skillStaffPeriodList, tzi, false);
+				Assert.AreEqual(1,result.Count);
+			}
+		}
 	}
 }

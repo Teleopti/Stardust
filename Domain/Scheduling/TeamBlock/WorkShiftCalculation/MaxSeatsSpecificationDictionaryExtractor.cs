@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				else
 					isMaxSeatsReachedOnGivenInterval = _isMaxSeatsReachedOnSkillStaffPeriodSpecification.IsSatisfiedByWithoutEqualCondition(calculatedUsedSeats, maxSeat);
 				var boostingFactor = _maxSeatBoostingFactorCalculator.GetBoostingFactor(calculatedUsedSeats, maxSeat);
-				maxSeatsDictionary.Add(localStartTime, new IntervalLevelMaxSeatInfo(isMaxSeatsReachedOnGivenInterval, boostingFactor));
+
+				if(!maxSeatsDictionary.ContainsKey(localStartTime))
+					maxSeatsDictionary.Add(localStartTime, new IntervalLevelMaxSeatInfo(isMaxSeatsReachedOnGivenInterval, boostingFactor));
 			}
 			return maxSeatsDictionary;
 		}
