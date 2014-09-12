@@ -55,27 +55,6 @@ CREATE TABLE #sys_datasource(
 		WHERE sd.datasource_id NOT IN (-1,1)
 			AND sd.time_zone_id IS NOT NULL
 			AND sd.inactive = 0
-			AND sd.internal = 0
-
-		UNION --note: do not not use UNION ALL, we need log_objects to be distinct!
-
-		SELECT
-			sd.datasource_id,
-			sd.datasource_name, 
-			sd.time_zone_id,
-			tz.time_zone_code,
-			1440 / si.int_value 'interval_length',
-			sd.inactive,
-			1
-		FROM mart.sys_datasource sd
-			INNER JOIN dbo.ccc_system_info si
-				ON si.[id] = 1 --hardcoded key for "CCC intervals per day"
-			INNER JOIN mart.dim_time_zone tz
-				ON sd.time_zone_id = tz.time_zone_id
-		WHERE sd.datasource_id NOT IN (-1,1)
-			AND sd.time_zone_id IS NOT NULL
-			AND sd.inactive = 0
-			AND sd.internal = 1
 
 		---------<All log Objects>-----------
 		IF @include_option_all = 1
@@ -84,8 +63,8 @@ CREATE TABLE #sys_datasource(
 			DECLARE @countActive int
 			DECLARE @countTotal int
 					
-			--Get all log objects
-			SELECT @countTotal = COUNT(*) FROM mart.sys_datasource sd WHERE datasource_id NOT IN (1,-1)
+			--Get all active log objects
+			SELECT @countTotal = COUNT(*) FROM mart.sys_datasource sd WHERE datasource_id NOT IN (1,-1) AND inactive=0
 			
 			--Count all - configured and active
 			SELECT @countActive = COUNT(*) FROM mart.sys_datasource sd WHERE datasource_id NOT IN (1,-1) AND inactive=0 AND time_zone_id IS NOT NULL
@@ -137,24 +116,6 @@ CREATE TABLE #sys_datasource(
 		WHERE sd.datasource_id NOT IN (-1,1)
 			AND sd.time_zone_id IS NULL
 			AND sd.inactive = 0
-			AND sd.internal = 0
-			
-		UNION --note: do not not use UNION ALL, we need log_objects to be distinct!
-
-		SELECT sd.datasource_id,
-			sd.datasource_name, 
-			-1 'time_zone_id',
-			NULL 'time_zone_code',
-			1440 / si.int_value 'interval_length',
-			sd.inactive
-		FROM mart.sys_datasource sd
-			INNER JOIN dbo.ccc_system_info si
-				ON si.[id] = 1 --hardcoded key for "CCC intervals per day"
-		WHERE sd.datasource_id NOT IN (-1,1)
-			AND sd.time_zone_id IS NULL
-			AND sd.inactive = 0
-			AND sd.internal = 1
-
 		ORDER BY sd.datasource_name, sd.datasource_id
 	END
 
