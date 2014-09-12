@@ -13,12 +13,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool HasAsmPermission { get; set; }
 		public bool ShowMeridian { get; set; }
 		public IEnumerable<BadgeViewModel> Badges { get; set; }
-		public bool IsBadgesToggleEnabled { get; set; }
 
 		/// <summary>
-		/// Check if administrator enabled badge feature
+		/// Indicate if badge should be shown
 		/// </summary>
-		public bool IsBadgeFeatureEnabled { get; set; }
+		public bool ShowBadge { get; set; }
 	}
 
 	public class NavigationItem
@@ -30,11 +29,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool PayAttention { get; set; }
 		public string TitleCount { get; set; }
 
-	public class TeamScheduleNavigationItem : NavigationItem
-	{
-	}
-
-
+		public class TeamScheduleNavigationItem : NavigationItem
+		{
+		}
 
 		public int UnreadMessageCount { get; set; }
 	}
@@ -66,7 +63,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	{
 		bool Extended { get; }
 	}
-
 
 	public class Option : IOption
 	{

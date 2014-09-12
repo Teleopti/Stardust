@@ -76,35 +76,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var licenseActivator = _licenseActivatorProvider.Current();
 			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
 
-			IEnumerable<IAgentBadge> badges = null;
-
-			var badgeEnabled = false;
 			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			var hasBadgePermission =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 			var badgeSettings = _badgeSettingProvider.GetBadgeSettings();
-			if (badgeToggleEnabled && badgeSettings != null)
-			{
-				badgeEnabled = badgeSettings.EnableBadge;
-				badges = _badgeProvider.GetBadges();
-			}
-			
+			var badgeFeatureEnabled = badgeSettings != null && badgeSettings.EnableBadge;
+
+			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
+			var badges = showBadge ? _badgeProvider.GetBadges() : null;
+
 			return new PortalViewModel
-						{
-							ReportNavigationItems = reportsList,
-							NavigationItems = navigationItems,
-							CustomerName = customerName,
-							ShowChangePassword = showChangePassword(),
-							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-							Badges = badges == null ? null : badges.Select(x => new BadgeViewModel
-							{
-								BadgeType = x.BadgeType,
-								BronzeBadge = x.GetBronzeBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
-								SilverBadge = x.GetSilverBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
-								GoldBadge = x.GetGoldBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate)
-							}),
-							IsBadgesToggleEnabled = badgeToggleEnabled,
-							IsBadgeFeatureEnabled = badgeEnabled
-						};
+			{
+				ReportNavigationItems = reportsList,
+				NavigationItems = navigationItems,
+				CustomerName = customerName,
+				ShowChangePassword = showChangePassword(),
+				HasAsmPermission =
+					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
+				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+				Badges = badges == null
+					? null
+					: badges.Select(x => new BadgeViewModel
+					{
+						BadgeType = x.BadgeType,
+						BronzeBadge = x.GetBronzeBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
+						SilverBadge = x.GetSilverBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
+						GoldBadge = x.GetGoldBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate)
+					}),
+				ShowBadge = showBadge
+			};
 		}
 
 		private bool showChangePassword()
