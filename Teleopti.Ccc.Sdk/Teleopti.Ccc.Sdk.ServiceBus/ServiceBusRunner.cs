@@ -80,28 +80,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var container = new ContainerBuilder().Build();
-			var containerconfiguration = new ContainerConfiguration(container);
-			containerconfiguration.Configure();
+			var requestContainer = createNewContainerNeededForEachHost();
 
-			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(container));
+			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(requestContainer));
 			_requestBus.Start();
 
-			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(container));
+			var generalContainer = createNewContainerNeededForEachHost();
+
+			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(generalContainer));
 			_generalBus.Start();
 
-			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(container));
+			var denormalizeContainer = createNewContainerNeededForEachHost();
+
+			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(denormalizeContainer));
 			_denormalizeBus.Start();
 
-			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(container));
+			var rtaContainer = createNewContainerNeededForEachHost();
+
+			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(rtaContainer));
 			_rtaBus.Start();
-			
+
+			var payrollContainer = createNewContainerNeededForEachHost();
+
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(container));
+			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(payrollContainer));
 			_payrollBus.Start();
 
 			AppDomain.MonitoringIsEnabled = true;
+		}
+
+		private static IContainer createNewContainerNeededForEachHost()
+		{
+			var container = new ContainerBuilder().Build();
+			var containerconfiguration = new ContainerConfiguration(container);
+			containerconfiguration.Configure();
+			return container;
 		}
 
 		private bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
