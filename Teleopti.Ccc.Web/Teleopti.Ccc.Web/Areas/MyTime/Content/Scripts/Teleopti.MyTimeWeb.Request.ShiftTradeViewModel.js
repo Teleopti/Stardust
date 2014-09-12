@@ -109,7 +109,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				} else if (!self.mySchedule().isDayOff && schedule.isDayOff) {
 					scheduleStartTime = self.mySchedule().scheduleStartTime();
 				} else {
-					scheduleStartTime = self.mySchedule().scheduleStartTime() < schedule.scheduleStartTime() ? self.mySchedule().scheduleStartTime() : schedule.scheduleStartTime();
+					if ((self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, h:mm') == self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (schedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') != schedule.scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+						scheduleStartTime = schedule.scheduleStartTime();
+					}
+					else if ((schedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') == schedule.scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, h:mm') != self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+						scheduleStartTime = self.mySchedule().scheduleStartTime()
+					} else {
+						scheduleStartTime = self.mySchedule().scheduleStartTime() < schedule.scheduleStartTime() ? self.mySchedule().scheduleStartTime() : schedule.scheduleStartTime();
+					}
 				}
 
 				var mappedLayers = ko.utils.arrayMap(schedule.layers, function(layer) {

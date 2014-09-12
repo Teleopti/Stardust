@@ -436,8 +436,17 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 			} else if (mySchedule.isDayOff && selectedSchedule.isDayOff) {
 				return allHours;
 			} else {
-				scheduleStartTime = mySchedule.scheduleStartTime() < selectedSchedule.scheduleStartTime() ? mySchedule.scheduleStartTime() : selectedSchedule.scheduleStartTime();
-				scheduleEndTime = selectedSchedule.scheduleEndTime() > mySchedule.scheduleEndTime() ? selectedSchedule.scheduleEndTime() : mySchedule.scheduleEndTime();
+				if ((mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') == mySchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') != selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+					scheduleStartTime = selectedSchedule.scheduleStartTime();
+					scheduleEndTime = selectedSchedule.scheduleEndTime();
+				} else if ((selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') == selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') != mySchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+					scheduleStartTime = mySchedule.scheduleStartTime();
+					scheduleEndTime = mySchedule.scheduleEndTime();
+				} else {
+
+					scheduleStartTime = mySchedule.scheduleStartTime() < selectedSchedule.scheduleStartTime() ? mySchedule.scheduleStartTime() : selectedSchedule.scheduleStartTime();
+					scheduleEndTime = selectedSchedule.scheduleEndTime() > mySchedule.scheduleEndTime() ? selectedSchedule.scheduleEndTime() : mySchedule.scheduleEndTime();
+				}
 			}
 
 			self.setTimeLineLengthInMinutes(scheduleStartTime, scheduleEndTime);
