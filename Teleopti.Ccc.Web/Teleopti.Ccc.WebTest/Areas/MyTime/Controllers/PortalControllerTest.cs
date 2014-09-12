@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				Expect.Call(viewModelFactory.CreatePortalViewModel())
 					.Return(new PortalViewModel());
-				Expect.Call(layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.AgentPortal))
+				Expect.Call(layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.MyTime))
 					.Return(new LayoutBaseViewModel());
 			}
 			using (mocks.Playback())

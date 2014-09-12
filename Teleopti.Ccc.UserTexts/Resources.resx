@@ -11069,7 +11069,7 @@ These options are activated:
     <comment>Others</comment>
   </data>
   <data name="MyTime" xml:space="preserve">
-    <value>MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
     <value>Agent Schedule Messenger</value>
