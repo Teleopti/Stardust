@@ -44,12 +44,11 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.tabPageAdvCustom = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.panel6 = new System.Windows.Forms.Panel();
-			this.panel3 = new System.Windows.Forms.Panel();
-			this.label2 = new System.Windows.Forms.Label();
 			this.gridListControlResult2 = new Syncfusion.Windows.Forms.Grid.GridListControl();
 			this.panel9 = new System.Windows.Forms.Panel();
-			this.panel7 = new System.Windows.Forms.Panel();
+			this.label2 = new System.Windows.Forms.Label();
 			this.buttonAdvParse = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.panel7 = new System.Windows.Forms.Panel();
 			this.textBoxCustomSearch = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -71,7 +70,6 @@
 			this.panel5.SuspendLayout();
 			this.tabPageAdvCustom.SuspendLayout();
 			this.panel6.SuspendLayout();
-			this.panel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridListControlResult2)).BeginInit();
 			this.panel9.SuspendLayout();
 			this.panel7.SuspendLayout();
@@ -97,6 +95,7 @@
 			this.tabControlAdv1.Controls.Add(this.tabPageAdvCustom);
 			this.tabControlAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlAdv1.FixedSingleBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.tabControlAdv1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabControlAdv1.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdv1.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdv1.Name = "tabControlAdv1";
@@ -109,12 +108,13 @@
 			// tabPageAdvDefault
 			// 
 			this.tabPageAdvDefault.Controls.Add(this.tableLayoutPanel1);
+			this.tabPageAdvDefault.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabPageAdvDefault.Image = null;
 			this.tabPageAdvDefault.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvDefault.Location = new System.Drawing.Point(0, 29);
+			this.tabPageAdvDefault.Location = new System.Drawing.Point(0, 23);
 			this.tabPageAdvDefault.Name = "tabPageAdvDefault";
 			this.tabPageAdvDefault.ShowCloseButton = true;
-			this.tabPageAdvDefault.Size = new System.Drawing.Size(528, 645);
+			this.tabPageAdvDefault.Size = new System.Drawing.Size(528, 651);
 			this.tabPageAdvDefault.TabIndex = 1;
 			this.tabPageAdvDefault.Text = "xxGeneral";
 			this.tabPageAdvDefault.ThemesEnabled = false;
@@ -134,7 +134,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(528, 645);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(528, 651);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// label4
@@ -196,9 +196,10 @@
 			// 
 			this.splitContainerAdv1.Panel2.Controls.Add(this.gridListControlResult);
 			this.splitContainerAdv1.Panel2.Controls.Add(this.panel5);
-			this.splitContainerAdv1.Size = new System.Drawing.Size(522, 587);
-			this.splitContainerAdv1.SplitterDistance = 262;
+			this.splitContainerAdv1.Size = new System.Drawing.Size(522, 593);
+			this.splitContainerAdv1.SplitterDistance = 264;
 			this.splitContainerAdv1.TabIndex = 5;
+			this.splitContainerAdv1.TabStop = false;
 			this.splitContainerAdv1.Text = "splitContainerAdv1";
 			// 
 			// gridListControlDefaultSearch
@@ -218,9 +219,8 @@
 			this.gridListControlDefaultSearch.Properties.MarkColHeader = false;
 			this.gridListControlDefaultSearch.Properties.MarkRowHeader = false;
 			this.gridListControlDefaultSearch.SelectedIndex = -1;
-			this.gridListControlDefaultSearch.Size = new System.Drawing.Size(522, 262);
-			this.gridListControlDefaultSearch.TabIndex = 0;
-			this.gridListControlDefaultSearch.TabStop = false;
+			this.gridListControlDefaultSearch.Size = new System.Drawing.Size(522, 264);
+			this.gridListControlDefaultSearch.TabIndex = 1;
 			this.gridListControlDefaultSearch.ThemesEnabled = true;
 			this.gridListControlDefaultSearch.TopIndex = 0;
 			// 
@@ -241,7 +241,7 @@
 			this.gridListControlResult.Properties.MarkColHeader = false;
 			this.gridListControlResult.Properties.MarkRowHeader = false;
 			this.gridListControlResult.SelectedIndex = -1;
-			this.gridListControlResult.Size = new System.Drawing.Size(522, 297);
+			this.gridListControlResult.Size = new System.Drawing.Size(522, 301);
 			this.gridListControlResult.TabIndex = 3;
 			this.gridListControlResult.TabStop = false;
 			this.gridListControlResult.ThemesEnabled = true;
@@ -271,44 +271,24 @@
 			this.tabPageAdvCustom.Controls.Add(this.panel6);
 			this.tabPageAdvCustom.Image = null;
 			this.tabPageAdvCustom.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvCustom.Location = new System.Drawing.Point(0, 29);
+			this.tabPageAdvCustom.Location = new System.Drawing.Point(0, 23);
 			this.tabPageAdvCustom.Name = "tabPageAdvCustom";
 			this.tabPageAdvCustom.ShowCloseButton = true;
-			this.tabPageAdvCustom.Size = new System.Drawing.Size(528, 645);
+			this.tabPageAdvCustom.Size = new System.Drawing.Size(528, 651);
 			this.tabPageAdvCustom.TabIndex = 2;
 			this.tabPageAdvCustom.Text = "xxCustom";
 			this.tabPageAdvCustom.ThemesEnabled = false;
 			// 
 			// panel6
 			// 
-			this.panel6.Controls.Add(this.panel3);
 			this.panel6.Controls.Add(this.gridListControlResult2);
 			this.panel6.Controls.Add(this.panel9);
 			this.panel6.Controls.Add(this.panel7);
 			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel6.Location = new System.Drawing.Point(0, 0);
 			this.panel6.Name = "panel6";
-			this.panel6.Size = new System.Drawing.Size(528, 645);
+			this.panel6.Size = new System.Drawing.Size(528, 651);
 			this.panel6.TabIndex = 2;
-			// 
-			// panel3
-			// 
-			this.panel3.Controls.Add(this.label2);
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel3.Location = new System.Drawing.Point(0, 59);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(528, 21);
-			this.panel3.TabIndex = 8;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(4, 3);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(104, 15);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "xxFilteredResults";
 			// 
 			// gridListControlResult2
 			// 
@@ -327,7 +307,7 @@
 			this.gridListControlResult2.Properties.MarkColHeader = false;
 			this.gridListControlResult2.Properties.MarkRowHeader = false;
 			this.gridListControlResult2.SelectedIndex = -1;
-			this.gridListControlResult2.Size = new System.Drawing.Size(528, 586);
+			this.gridListControlResult2.Size = new System.Drawing.Size(528, 592);
 			this.gridListControlResult2.TabIndex = 7;
 			this.gridListControlResult2.TabStop = false;
 			this.gridListControlResult2.ThemesEnabled = true;
@@ -335,6 +315,7 @@
 			// 
 			// panel9
 			// 
+			this.panel9.Controls.Add(this.label2);
 			this.panel9.Controls.Add(this.buttonAdvParse);
 			this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel9.Location = new System.Drawing.Point(0, 30);
@@ -342,15 +323,15 @@
 			this.panel9.Size = new System.Drawing.Size(528, 29);
 			this.panel9.TabIndex = 6;
 			// 
-			// panel7
+			// label2
 			// 
-			this.panel7.Controls.Add(this.textBoxCustomSearch);
-			this.panel7.Controls.Add(this.label3);
-			this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel7.Location = new System.Drawing.Point(0, 0);
-			this.panel7.Name = "panel7";
-			this.panel7.Size = new System.Drawing.Size(528, 30);
-			this.panel7.TabIndex = 4;
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(9, 11);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(104, 15);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "xxFilteredResults";
 			// 
 			// buttonAdvParse
 			// 
@@ -371,16 +352,27 @@
 			this.buttonAdvParse.UseVisualStyle = true;
 			this.buttonAdvParse.Click += new System.EventHandler(this.buttonAdvParse_Click);
 			// 
+			// panel7
+			// 
+			this.panel7.Controls.Add(this.textBoxCustomSearch);
+			this.panel7.Controls.Add(this.label3);
+			this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel7.Location = new System.Drawing.Point(0, 0);
+			this.panel7.Name = "panel7";
+			this.panel7.Size = new System.Drawing.Size(528, 30);
+			this.panel7.TabIndex = 4;
+			// 
 			// textBoxCustomSearch
 			// 
 			this.textBoxCustomSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxCustomSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-			this.textBoxCustomSearch.Location = new System.Drawing.Point(104, 5);
+			this.textBoxCustomSearch.Location = new System.Drawing.Point(104, 3);
 			this.textBoxCustomSearch.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.textBoxCustomSearch.Multiline = true;
 			this.textBoxCustomSearch.Name = "textBoxCustomSearch";
-			this.textBoxCustomSearch.Size = new System.Drawing.Size(420, 21);
+			this.textBoxCustomSearch.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBoxCustomSearch.Size = new System.Drawing.Size(420, 24);
 			this.textBoxCustomSearch.TabIndex = 0;
 			this.textBoxCustomSearch.TextChanged += new System.EventHandler(this.textBoxCustomSearch_TextChanged);
 			// 
@@ -388,7 +380,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(3, 8);
+			this.label3.Location = new System.Drawing.Point(9, 7);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(59, 15);
 			this.label3.TabIndex = 0;
@@ -420,7 +412,7 @@
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdd.Size = new System.Drawing.Size(95, 27);
-			this.buttonAdd.TabIndex = 2;
+			this.buttonAdd.TabIndex = 3;
 			this.buttonAdd.Text = "xxAdd";
 			this.buttonAdd.UseVisualStyle = true;
 			this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
@@ -440,7 +432,7 @@
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonCancel.Size = new System.Drawing.Size(95, 27);
-			this.buttonCancel.TabIndex = 4;
+			this.buttonCancel.TabIndex = 5;
 			this.buttonCancel.Text = "xxCancel";
 			this.buttonCancel.UseVisualStyle = true;
 			// 
@@ -459,7 +451,7 @@
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonOk.Size = new System.Drawing.Size(95, 27);
-			this.buttonOk.TabIndex = 3;
+			this.buttonOk.TabIndex = 4;
 			this.buttonOk.Text = "xxOK";
 			this.buttonOk.UseVisualStyle = true;
 			// 
@@ -472,12 +464,10 @@
 			this.ClientSize = new System.Drawing.Size(528, 715);
 			this.Controls.Add(this.panel4);
 			this.Font = new System.Drawing.Font("Segoe UI", 12F);
-			this.HelpButton = false;
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "FilterMultiplePersons";
-			this.HelpButton = true;
 			this.ShowIcon = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "xxAdvancedFilter";
@@ -499,10 +489,9 @@
 			this.panel5.PerformLayout();
 			this.tabPageAdvCustom.ResumeLayout(false);
 			this.panel6.ResumeLayout(false);
-			this.panel3.ResumeLayout(false);
-			this.panel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridListControlResult2)).EndInit();
 			this.panel9.ResumeLayout(false);
+			this.panel9.PerformLayout();
 			this.panel7.ResumeLayout(false);
 			this.panel7.PerformLayout();
 			this.panel1.ResumeLayout(false);
@@ -536,7 +525,6 @@
 		private Syncfusion.Windows.Forms.Grid.GridListControl gridListControlDefaultSearch;
 		private System.Windows.Forms.Panel panel5;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Label label2;
 		private Syncfusion.Windows.Forms.Grid.GridListControl gridListControlResult2;
 

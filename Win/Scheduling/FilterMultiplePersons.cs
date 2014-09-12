@@ -180,6 +180,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person));
 			refurbishItemsInResultGrid(gridListControlResult);
 			refurbishItemsInResultGrid(gridListControlResult2);
+			textBox1.Text = String.Empty;
 		}
 		
 		#endregion
