@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
+using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -249,6 +250,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             Application.ThreadException -= ApplicationThreadException;
             AppDomain.CurrentDomain.UnhandledException -= AppDomainUnhandledException;
             string fallBack = string.Empty;
+
+
+	        try
+	        {
+				var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
+				log.Error(ex.Message, ex);
+	        }
+	        catch (Exception)
+	        {
+		        //do nothing
+	        }
+
 
             StringSetting emailSetting = new StringSetting();
             if (StateHolderReader.IsInitialized)
