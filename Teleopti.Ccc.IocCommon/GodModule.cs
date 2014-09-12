@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.IocCommon
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterModule<DateAndTimeModule>();
+			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(PathToToggle, ToggleMode));
 			builder.RegisterModule(new MessageBrokerModule {MessageBrokerListeningEnabled = MessageBrokerListeningEnabled});

@@ -5,7 +5,7 @@ using log4net;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class LogModule : Module
+	internal class LogModule : Module
 	{
 		protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, 
 															IComponentRegistration registration)
