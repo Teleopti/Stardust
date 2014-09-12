@@ -14013,7 +14013,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MyTime.
+        ///   Looks up a localized string similar to Teleopti WFM MyTime.
         /// </summary>
         public static string MyTime {
             get {

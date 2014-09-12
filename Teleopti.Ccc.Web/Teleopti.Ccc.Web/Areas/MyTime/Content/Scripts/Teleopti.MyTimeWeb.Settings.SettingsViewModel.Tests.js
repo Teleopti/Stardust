@@ -45,6 +45,7 @@ $(document).ready(function() {
 		var cultures = [{ id: "1", text: "Culture A" },
 			{ id: "2", text: "Culture B" },
 			{ id: "3", text: "Culture C" }];
+		var nameFormats = [{ id: "0", text: "[FirstName] [LastName]" }];
 		var ajax = {
 			Ajax: function (options) {
 				if (options.url == "Settings/GetSettings") {
@@ -52,7 +53,9 @@ $(document).ready(function() {
 						{
 							Cultures: cultures,
 							ChoosenUiCulture: { id: 2 },
-							ChoosenCulture: {id: 1}
+							ChoosenCulture: { id: 1 },
+							ChosenNameFormat: { id: 0 },
+							NameFormats: nameFormats
 						}
 					);
 				}
@@ -67,6 +70,8 @@ $(document).ready(function() {
 		equal(viewModel.cultures()[0].text, "Culture A");
 		equal(viewModel.selectedUiCulture(), 2);
 		equal(viewModel.selectedCulture(), 1);
+		equal(viewModel.selectedNameFormat(), 0);
+		equal(viewModel.nameFormats().length, 1);
 		equal(viewModel.settingsLoaded(), true);
 		equal(viewModel.avoidReload, false);
 	});

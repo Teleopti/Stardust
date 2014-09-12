@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
 
@@ -15,8 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 		public SettingsViewModelFactory()
 		{
 		}
-
-
 
 		public SettingsViewModel CreateViewModel(IMappingEngine mapper, ILoggedOnUser loggedOnUser)
 		{
