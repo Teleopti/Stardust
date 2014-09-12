@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 			var control = (TimelineControl)sender;
 			if (Model == null) return;
 			Model.TimelineModel.ShowDate = true;
-			Model.TimelineModel.ShowNowPeriod = true;
+			Model.TimelineModel.ShowNowPeriod = false;
 			Model.TimelineModel.ShowHoverTime = false;
 			control.DataContext = Model.TimelineModel;
 			ScrollToUtcNow();

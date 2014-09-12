@@ -72,7 +72,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 		        {
 			        ShowHoverTime = false,
 			        ShowDate = true,
-			        ShowNowPeriod = true
+			        ShowNowPeriod = false,
+					ShowNowTime = false
 		        };
         }
 

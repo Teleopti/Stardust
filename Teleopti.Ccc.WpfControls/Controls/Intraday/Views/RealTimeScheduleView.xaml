@@ -230,7 +230,7 @@
 											 Width="2400">
 
 					<DataGridTemplateColumn.Header>
-						<timeline:TimelineControl IsHitTestVisible="False" DataContext="{Binding Path=TimelineModel}" Loaded="TimelineControl_Loaded" x:Name="henkeTimeline"/>
+						<timeline:TimelineControl IsHitTestVisible="False" DataContext="{Binding Path=TimelineModel}" Loaded="TimelineControl_Loaded" />
 						<!--<RtaTimeSchedule:RealTimeScheduleViewModel />-->
 					</DataGridTemplateColumn.Header>
 					<DataGridTemplateColumn.CellTemplate>

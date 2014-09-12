@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
 
         public bool ShowNowTime
         {
-            get { return (bool)GetValue(ShowNowTimeProperty); }
+            get { return false; }
             set { SetValue(ShowNowTimeProperty, value); }
         }
 
