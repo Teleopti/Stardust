@@ -15,12 +15,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class MessageBrokerModule : Module
 	{
-		private readonly bool _messageBrokerListeningEnabled;
-
-		public MessageBrokerModule(bool messageBrokerListeningEnabled)
-		{
-			_messageBrokerListeningEnabled = messageBrokerListeningEnabled;
-		}
+		public bool MessageBrokerListeningEnabled { get; set; }
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -32,24 +27,29 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageListener>()
 				.SingleInstance();
 
-
-			if (_messageBrokerListeningEnabled)
+			builder.Register(c =>
 			{
-				builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
-				builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
-				builder.RegisterType<SignalRClient>()
-					.As<ISignalRClient>()
-					.As<IMessageBrokerUrl>()
-					.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
-					.SingleInstance();
+				if (MessageBrokerListeningEnabled)
+					return (ISignalRClient) c.Resolve<SignalRClient>();
+				if (c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205))
+					return c.Resolve<DisabledSignalRClient>();
+				return c.Resolve<SignalRClient>();
+			})
+				.As<ISignalRClient>()
+				.As<IMessageBrokerUrl>()
+				.SingleInstance();
+
+			if (MessageBrokerListeningEnabled)
+			{
+				builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>().SingleInstance();
+				builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>().SingleInstance();
 			}
 			else
-			{
-				builder.RegisterType<DisabledSignalRClient>()
-					.As<ISignalRClient>()
-					.As<IMessageBrokerUrl>()
-					.SingleInstance();
-			}
+				builder.RegisterType<DisabledSignalRClient>().SingleInstance();
+
+			builder.RegisterType<SignalRClient>()
+				.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
+				.SingleInstance();
 
 			builder.RegisterType<HttpSender>()
 				.As<HttpSender>()

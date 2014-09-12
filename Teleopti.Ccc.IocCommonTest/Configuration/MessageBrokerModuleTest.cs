@@ -61,7 +61,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveKeepAliveStrategies()
 		{
-			using (var container = BuildContainer())
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new GodModule {MessageBrokerListeningEnabled = true});
+			using (var container = builder.Build())
 			{
 				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
 					.Select(x => x.GetType())
@@ -78,6 +80,17 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<DisabledSignalRClient>();
 				container.Resolve<IMessageSender>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldStillUseSignalRIfListeningDisabledAndHttpSenderDisabled()
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new GodModule { MessageBrokerListeningEnabled = false });
+			using (var container = BuildContainerWithToggle(builder, Toggles.Messaging_HttpSender_29205, false))
+			{
+				container.Resolve<ISignalRClient>().Should().Be.OfType<SignalRClient>();
 			}
 		}
 
