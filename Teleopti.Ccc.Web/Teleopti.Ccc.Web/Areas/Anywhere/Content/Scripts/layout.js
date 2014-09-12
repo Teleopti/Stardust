@@ -89,7 +89,7 @@ define([
 
 		menu.ActiveView(routeInfo.view);
 	}
-
+	
 	function _setupRoutes() {
 		var viewRegex = '[a-z]+';
 		var actionRegex = '[a-z]+';
@@ -98,72 +98,77 @@ define([
 		var timeRegex = '[-]*\\d*';
 
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
-			function (view, id, date, action, secondaryId) {
-				_displayView({ view: view, id: id, date: date, action: action, secondaryId: secondaryId });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view,buid, id, date, action, secondaryId) {
+				_displayView({ view: view, buid: buid, id: id, date: date, action: action, secondaryId: secondaryId });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
-			function (view, id, action, secondaryId) {
-				_displayView({ view: view, id: id, action: action, secondaryId: secondaryId });
-			});
-		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
-			function (view, personid, date, action) {
-				_displayView({ view: view, personid: personid, date: date, action: action });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view,buid, id, action, secondaryId) {
+				_displayView({ view: view, buid: buid, id: id, action: action, secondaryId: secondaryId });
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
-			function (view, groupid, personid, date, action) {
-				_displayView({ view: view, groupid: groupid, personid: personid, date: date, action: action });
+			function (view,buid, personid, date, action) {
+				_displayView({ view: view, buid: buid, personid: personid, date: date, action: action });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + timeRegex + ')$', "i"),
-			function (view, groupid, personid, date, action, minutes) {
-				_displayView({ view: view, groupid: groupid, personid: personid, date: date, action: action, minutes: minutes });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
+			function (view,buid, groupid, personid, date, action) {
+				_displayView({ view: view,buid: buid, groupid: groupid, personid: personid, date: date, action: action });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),
-			function (view, date) {
-				_displayView({ view: view, date: date });
-			});
-		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')$', "i"),
-			function (view, id, action) {
-				_displayView({ view: view, id: id, action: action });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + timeRegex + ')$', "i"),
+			function (view, buid, groupid, personid, date, action, minutes) {
+				_displayView({ view: view, buid: buid, groupid: groupid, personid: personid, date: date, action: action, minutes: minutes });
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
-			function (view, id, date) {
-				_displayView({ view: view, id: id, date: date });
+			function (view, buid, date) {
+				_displayView({ view: view, buid: buid, date: date });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
-			function (view, id, date, secondaryId) {
-				_displayView({ view: view, id: id, date: date, secondaryId: secondaryId });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')$', "i"),
+			function (view, buid, id, action) {
+				_displayView({ view: view, buid: buid, id: id, action: action });
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
-			function (view, groupid, personid, date) {
-				_displayView({ view: view, groupid: groupid, personid: personid, date: date });
+			function (view, buid, id, date) {
+				_displayView({ view: view, buid: buid, id: id, date: date });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
-			function (view, id) {
-				_displayView({ view: view, id: id });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view,buid, id, date, secondaryId) {
+				_displayView({ view: view, buid: buid, id: id, date: date, secondaryId: secondaryId });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(MultipleTeams)$', "i"),
-			function(view, multipleTeams) {
-				_displayView({ view: view, id: multipleTeams });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
+			function (view, buid, groupid, personid, date) {
+				_displayView({ view: view, buid: buid, groupid: groupid, personid: personid, date: date });
 			});
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(MultipleSites)$', "i"),
-			function(view, multipleTeams) {
-				_displayView({ view: view, id: multipleTeams });
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, buid, id) {
+				_displayView({ view: view, buid: buid, id: id });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(MultipleTeams)$', "i"),
+			function(view,buid, multipleTeams) {
+				_displayView({ view: view, buid: buid, id: multipleTeams });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(MultipleSites)$', "i"),
+			function(view,buid, multipleTeams) {
+				_displayView({ view: view, buid: buid, id: multipleTeams });
 			});
 		crossroads.addRoute('{view}', function (view) {
 			_displayView({ view: view });
+		});
+		crossroads.addRoute(
+			new RegExp('^(' + guidRegex + ')$', "i"),
+			function (buid) {
+			_displayView({ view: defaultView, buid: buid });
 		});
 		crossroads.addRoute('', function () {
 			_displayView({ view: defaultView });

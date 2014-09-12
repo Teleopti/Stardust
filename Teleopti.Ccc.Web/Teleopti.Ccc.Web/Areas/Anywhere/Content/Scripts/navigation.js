@@ -14,54 +14,54 @@ define([
 	};
 
 	return {
-		GotoPersonSchedule: function (groupid, personid, date) {
-			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date));
+		GotoPersonSchedule: function (buid, groupid, personid, date) {
+			window.setLocationHash('personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date));
 		},
 
-		GotoPersonScheduleWithoutHistory: function (groupid, personid, date) {
-			window.locationReplace('#personschedule/' + groupid + '/' + personid + '/' + toDateString(date));
+		GotoPersonScheduleWithoutHistory: function (buid, groupid, personid, date) {
+			window.locationReplace('#personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date));
 		},
 
-		GotoPersonScheduleAddFullDayAbsenceForm: function (groupid, personid, date) {
-			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addfulldayabsence');
+		GotoPersonScheduleAddFullDayAbsenceForm: function (buid, groupid, personid, date) {
+			window.setLocationHash('personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date) + '/addfulldayabsence');
 		},
 
-		GotoPersonScheduleAddActivityForm: function (groupid, personid, date) {
-			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity');
+		GotoPersonScheduleAddActivityForm: function (buid, groupid, personid, date) {
+			window.setLocationHash('personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity');
 		},
 
-		GotoPersonScheduleMoveActivityForm: function (groupid, personid, date, startTime) {
-			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/moveactivity/' + startTime);
+		GotoPersonScheduleMoveActivityForm: function (buid, groupid, personid, date, startTime) {
+			window.setLocationHash('personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date) + '/moveactivity/' + startTime);
 		},
 
-		GotoPersonScheduleAddIntradayAbsenceForm: function (groupid, personid, date) {
-			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addintradayabsence');
+		GotoPersonScheduleAddIntradayAbsenceForm: function (buid, groupid, personid, date) {
+			window.setLocationHash('personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date) + '/addintradayabsence');
 		},
 
-		GotoPersonScheduleWithAction: function (groupid, personid, date, action) {
-			window.setLocationHash('personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/' + action);
+		GotoPersonScheduleWithAction: function (buid, groupid, personid, date, action) {
+			window.setLocationHash('personschedule/' + buid + groupid + '/' + personid + '/' + toDateString(date) + '/' + action);
 		},
 
-		GoToTeamSchedule: function (id, date, skill) {
-			window.setLocationHash('teamschedule/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
+		GoToTeamSchedule: function (buid, id, date, skill) {
+			window.setLocationHash('teamschedule/' + buid + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
 		},
 
-		GoToTeamScheduleWithSelectedPerson: function (id, personId, date) {
-			window.setLocationHash('teamschedule/' + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date));
+		GoToTeamScheduleWithSelectedPerson: function (buid, id, personId, date) {
+			window.setLocationHash('teamschedule/' + buid + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date));
 		},
 
-		GotoRealTimeAdherenceTeams: function (siteId) {
-			window.setLocationHash('realtimeadherenceteams/' + siteId);
+		GotoRealTimeAdherenceTeams: function (buid, siteId) {
+			window.setLocationHash('realtimeadherenceteams/' + buid + siteId);
 		},
 
-		GotoRealTimeAdherenceTeamDetails: function (teamId) {
-			window.setLocationHash('realtimeadherenceagents/' + teamId);
+		GotoRealTimeAdherenceTeamDetails: function (buid, teamId) {
+			window.setLocationHash('realtimeadherenceagents/' + buid + teamId);
 		},
-		GotoRealTimeAdherenceMultipleTeamDetails: function () {
-			window.setLocationHash('realtimeadherenceagents/' + 'MultipleTeams');
+		GotoRealTimeAdherenceMultipleTeamDetails: function (buid) {
+			window.setLocationHash('realtimeadherenceagents/' + buid + 'MultipleTeams');
 		},
-		GotoRealTimeAdherenceMultipleSiteDetails: function() {
-			window.setLocationHash('realtimeadherenceagents/' + 'MultipleSites');
+		GotoRealTimeAdherenceMultipleSiteDetails: function(buid) {
+			window.setLocationHash('realtimeadherenceagents/' + buid + 'MultipleSites');
 		}
 	};
 });

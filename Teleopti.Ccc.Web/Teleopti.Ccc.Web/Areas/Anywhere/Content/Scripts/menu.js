@@ -35,7 +35,7 @@ define([
 			}
 			
 			var checkBusinessUnitsFeature = function () {
-				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {
+				toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
 					enabled: function () {
 						ajax.ajax({
 							url: "BusinessUnit",
