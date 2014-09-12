@@ -1475,6 +1475,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [First Name] [Last Name].
+        /// </summary>
+        public static string AgentNameFormatFirstNameLastName {
+            get {
+                return ResourceManager.GetString("AgentNameFormatFirstNameLastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Last Name] [First Name].
+        /// </summary>
+        public static string AgentNameFormatLastNameFirstName {
+            get {
+                return ResourceManager.GetString("AgentNameFormatLastNameFirstName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent Performance.
         /// </summary>
         public static string AgentPerformance {
@@ -1484,7 +1502,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti WFM MyTime.
+        ///   Looks up a localized string similar to Classic MyTime.
         /// </summary>
         public static string AgentPortal {
             get {
@@ -14013,7 +14031,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MyTime Web.
+        ///   Looks up a localized string similar to MyTime.
         /// </summary>
         public static string MyTimeWeb {
             get {

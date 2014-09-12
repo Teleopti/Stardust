@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
@@ -15,6 +16,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 		{
 		}
 
+
+
 		public SettingsViewModel CreateViewModel(IMappingEngine mapper, ILoggedOnUser loggedOnUser)
 		{
 			// as the settings view model requires values from the person, create the view model
@@ -22,8 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory
 			var settingsViewModel = mapper.Map<IPerson, SettingsViewModel>(loggedOnUser.CurrentUser());
 
 			var nameFormates = new List<NameFormatViewModel>();
-			nameFormates.Add(new NameFormatViewModel() { text = "[" + Resources.FirstName + "] [" + Resources.LastName + "]", id = 0 });
-			nameFormates.Add(new NameFormatViewModel() { text = "[" + Resources.LastName + "] [" + Resources.FirstName + "]", id = 1 });
+			nameFormates.Add(new NameFormatViewModel() { text = AgentNameFormat.FirstNameLastName.GetDisplayName(), id = (int)AgentNameFormat.FirstNameLastName });
+			nameFormates.Add(new NameFormatViewModel() { text = AgentNameFormat.LastNameFirstName.GetDisplayName(), id = (int)AgentNameFormat.LastNameFirstName });
 
 			settingsViewModel.NameFormats = nameFormates;
 			settingsViewModel.ChosenNameFormat = nameFormates.First();

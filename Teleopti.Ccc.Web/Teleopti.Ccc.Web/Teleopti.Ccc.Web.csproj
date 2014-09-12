@@ -317,6 +317,7 @@
     <Compile Include="Areas\Diagnosis\DiagnosisAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />
+    <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
@@ -349,6 +350,7 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleFilterViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\AgentNameFormatEnum.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ISettingsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarTransformer.cs" />
