@@ -2,11 +2,6 @@
 
 	<!-- ko if: agentStatesForMultipleSites-->
 	<div class="row">
-		<div class="col-md-4">
-			<select id="bu-picker" class="col-xs-12 form-control" data-bind="foreach: businessUnits, event:{change: businessUnitChanged}">
-				<option data-bind="text: Name, value: Id"></option>
-			</select>
-		</div>
 		<!-- ko if: agentStatesForMultipleSites-->
 		<div class="col-md-4 pull-right">
 			<button class="btn btn-xs open btn-default pull-right" data-bind="click: openSelectedSites">Open selected sites</button>

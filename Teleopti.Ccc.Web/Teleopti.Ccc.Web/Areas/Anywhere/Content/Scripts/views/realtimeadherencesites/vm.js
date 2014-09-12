@@ -2,7 +2,6 @@
 		'knockout',
 		'lazy',
 		'views/realtimeadherencesites/site',
-		'views/realtimeadherencesites/business_unit',
 		'resources',
 		'amplify',
 		'navigation',
@@ -14,7 +13,6 @@
 		ko,
 		lazy,
 		site,
-		businessUnit,
 		resources,
 		amplify,
 		navigation,
@@ -29,7 +27,6 @@
 			that.resources = resources;
 
 			that.sites = ko.observableArray();
-			that.businessUnits = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
 			that.agentStatesForMultipleSites = ko.observable();
 			that.monitorMultipleBusinessUnits = ko.observable();
@@ -48,14 +45,6 @@
 					var newSite = site();
 					newSite.fill(data[i]);
 					that.sites.push(newSite);
-				}
-			};
-
-			that.fillBusinessUnits = function (data) {
-				for (var i = 0; i < data.length; i++) {
-					var newBU = businessUnit();
-					newBU.fill(data[i]);
-					that.businessUnits.push(newBU);
 				}
 			};
 			

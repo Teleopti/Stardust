@@ -1,10 +1,6 @@
 ﻿define([
-        'knockout',
-        'navigation'
 ],
     function (
-        ko,
-        navigation
 		) {
     	return function () {
 
