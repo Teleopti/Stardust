@@ -39,10 +39,7 @@ BEGIN
 	FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		IF @internal = 1
-			EXEC [mart].[etl_fact_queue_load] @start_date, @end_date, @datasource_id
-		ELSE
-			EXEC [mart].[etl_fact_queue_load] @start_date, @end_date, @datasource_id
+		EXEC [mart].[etl_fact_queue_load] @start_date, @end_date, @datasource_id
 		FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	END
 	CLOSE DataSouceCursor
