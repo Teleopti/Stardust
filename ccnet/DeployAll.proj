@@ -28,6 +28,7 @@
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
+		<MainMSIProjectName>CCC-Main-MSI</MainMSIProjectName>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
@@ -37,7 +38,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-	<Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;UploadFTP;CallJenkinsForDeployment">
+	<Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;CallJenkinsForDeployment">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -77,7 +78,7 @@
 	</ItemGroup>
 
 
-	<Target Name="CallJenkinsForDeployment" Condition="'$(CCNetProject)' == 'BuildMSI-main'">
+	<Target Name="CallJenkinsForDeployment" Condition="'$(CCNetProject)' == '$(MainMSIProjectName)'">
 	<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
                 FailOnNon2xxResponse="true" />
 	</Target>
@@ -151,16 +152,6 @@
 
   <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
     <Message Text="Calling upload target"/>
-  </Target>
-  
-  <Target Name="UploadRoot" Condition="'$(CCNetProject)' == 'BuildMSI-main'">
-    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
-    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; Root &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
-  </Target>
-
-  <Target Name="UploadNew" Condition="'$(CCNetProject)' != 'BuildMSI-main'">
-    <Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
-    <Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\FTP\FTPUpload.bat&quot; $(CCNetProject) &quot;$(MSIShare)\$(CCCVersion)&quot;"/>
   </Target>
   
   <Target Name="DeletePBIMSI" Condition="'$(FullBuild)' == 'No'">
