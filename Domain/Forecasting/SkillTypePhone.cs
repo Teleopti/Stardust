@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     {
 
         private readonly ITaskTimeDistributionService _service = new TaskTimePhoneDistributionService();
-        private readonly IStaffingCalculatorService _staffingCalculatorService = new StaffingCalculatorService();
+		private IStaffingCalculatorServiceFacade _staffingCalculatorService = new StaffingCalculatorServiceFacade();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SkillTypePhone"/> class.
@@ -50,8 +50,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return false; }
         }
 
-        public override IStaffingCalculatorService StaffingCalculatorService
+		public override IStaffingCalculatorServiceFacade StaffingCalculatorService
         {
+			set { _staffingCalculatorService = value; }
             get { return _staffingCalculatorService; }
         }
     }

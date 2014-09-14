@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public abstract bool DisplayTimeSpanAsMinutes
         {get;}
 
-        public abstract IStaffingCalculatorService StaffingCalculatorService
-        { get;}
+		public abstract IStaffingCalculatorServiceFacade StaffingCalculatorService
+        { get; set; }
 
         public virtual bool IsDeleted
         {

@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
 
 			ISkillStaffPeriod skillStaffPeriod1 = new SkillStaffPeriod(
 					new DateTimePeriod(_baseDate, _baseDate).MovePeriod(TimeSpan.FromMinutes(15)).ChangeEndTime(
-						TimeSpan.FromMinutes(15)), new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+						TimeSpan.FromMinutes(15)), new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
         	skillStaffPeriod1.Payload.ManualAgents = value;
 
             using (mocks.Record())
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
             };
 			
 			ISkillStaffPeriod skillStaffPeriod1 = new SkillStaffPeriod(new DateTimePeriod(_baseDate, _baseDate).ChangeEndTime(
-						TimeSpan.FromMinutes(30)), new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+						TimeSpan.FromMinutes(30)), new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
         	skillStaffPeriod1.Payload.ManualAgents = value;
 
 

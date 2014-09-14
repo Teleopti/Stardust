@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
 			var skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.Now);
 
-            IStaffingCalculatorService svc = _mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = _mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
 
             _stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                     .Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(7);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+                Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
             return periodlist;
         }

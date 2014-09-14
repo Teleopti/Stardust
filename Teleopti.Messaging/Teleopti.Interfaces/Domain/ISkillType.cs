@@ -68,6 +68,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-11-26
         /// </remarks>
-        IStaffingCalculatorService StaffingCalculatorService { get; }
+		IStaffingCalculatorServiceFacade StaffingCalculatorService { get; set; }
     }
 }

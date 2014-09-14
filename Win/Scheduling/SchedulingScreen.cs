@@ -3312,11 +3312,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private static void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
+		private void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
 		{
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.RequestedPeriod.DateOnlyPeriod);
+			var toggleManager = _container.Resolve<IToggleManager>();
 			foreach (ISkill skill in skills)
 			{
+				if(skill.SkillType is SkillTypePhone)
+					skill.SkillType.StaffingCalculatorService = new StaffingCalculatorServiceFacade(toggleManager.IsEnabled(Toggles.Scheduler_OccupancyESL_11724));
 				stateHolder.SchedulingResultState.Skills.Add(skill);
 			}
 		}

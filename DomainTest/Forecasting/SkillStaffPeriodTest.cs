@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private SkillStaffPeriod _target;
         private DateTimePeriod _tp;
         private ITask _task;
-		private readonly IStaffingCalculatorService _staffingCalculatorService = new Domain.Calculation.StaffingCalculatorService();
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService = new StaffingCalculatorServiceFacade();
         private ServiceAgreement _sa;
         private DateTime _dt = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
         private MockRepository mocks;
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void ShouldCalculateForecastedIncomingDemandWhenNoManualAgents()
 		{
-			var svc = mocks.StrictMock<IStaffingCalculatorService>();
+			var svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
 			var level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2).TotalSeconds);
 
 			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -486,7 +486,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCalculateStaffWhenTwoSegments()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000,1,1,2000,1,2),
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void CalculateStaff_EfficiencyShouldNotAffectCalculatedOccupancy()
 		{
-			var calcService = MockRepository.GenerateStrictMock<IStaffingCalculatorService>();
+			var calcService = MockRepository.GenerateStrictMock<IStaffingCalculatorServiceFacade>();
 			var dateTimePeriod = new DateTimePeriod(2013, 11, 04, 2013, 11, 04);
 			var period = new SkillStaffPeriod(dateTimePeriod,
 			                                  _task,
@@ -541,7 +541,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCalculateStaffWhenLastSegmentIsOnlyParted()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(1.5).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCalculateStaffWhenSegmentLengthDiffer()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(5).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 4),
@@ -611,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCalculateStaffWhenTrafficIntensityIsZero()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -641,7 +641,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAndersRowsTwoIncoming()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -696,7 +696,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1)).IgnoreArguments()
                                .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -765,7 +765,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAndersRows()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -804,7 +804,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+                Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -857,7 +857,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyScheduledAgainstIncomingForecast()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
             DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc), new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
             DateTimePeriod period2 = period1.MovePeriod(TimeSpan.FromHours(1));
@@ -885,7 +885,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                                .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -964,7 +964,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily"), Test]
         public void VerifyScheduledAgainstIncomingForecast1()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
             DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
                                                         new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
@@ -993,7 +993,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1065,7 +1065,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyScheduledAgainstIncomingForecast2()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
             DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
                                                         new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
@@ -1094,7 +1094,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1118,7 +1118,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyScheduledAgainstIncomingForecast3()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(3).TotalSeconds);
             DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
                                                         new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
@@ -1164,8 +1164,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(3d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(6d);
-                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(9); 
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+                Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(9);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1254,7 +1254,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyFStaff1()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
@@ -1281,7 +1281,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1324,7 +1324,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAndersRowsWhenOverstaffed()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
@@ -1351,7 +1351,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -1408,7 +1408,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAbsoluteAndRelativeDifference()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
@@ -1435,7 +1435,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(0d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.
                     Any().Return(7);
             }
             using (mocks.Playback())
@@ -1460,7 +1460,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAbsoluteAndRelativeDifferenceIncoming()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
             ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
                                                        new Percent(2));
@@ -1487,7 +1487,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1)).IgnoreArguments().Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(6);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
             using (mocks.Playback())
             {
@@ -1724,6 +1724,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyAbsoluteDifferenceMinMaxBoosted()
         {
             List<ISkillStaffPeriod> periodlist = GetPeriodlistWith7Periods();
+	        
             using (mocks.Playback())
             {
                 calculateStaff(periodlist);
@@ -1827,7 +1828,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyIncomingAndDistributedDifference()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
             DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
                                                         new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
@@ -1856,7 +1857,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(2d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(4);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
 
             using (mocks.Playback())
@@ -2070,7 +2071,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         private List<ISkillStaffPeriod> GetPeriodlistWith7Periods()
         {
-            IStaffingCalculatorService svc = mocks.StrictMock<IStaffingCalculatorService>();
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
 
             stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
@@ -2143,7 +2144,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments()
                     .Return(4d);
                 Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(1d).Repeat.Times(7);
-                Expect.Call(svc.ServiceLevelAchieved(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1)).IgnoreArguments().Repeat.Any().Return(7);
+                Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
             return periodlist;
         }

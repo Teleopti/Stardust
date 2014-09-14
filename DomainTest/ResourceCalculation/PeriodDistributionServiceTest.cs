@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period = new DateTimePeriod(_start, _start.AddMinutes(15));
             var task = new Task(5, new TimeSpan(0, 2, 0), new TimeSpan(0, 6, 0));
             var serviceAgreement = new ServiceAgreement(new ServiceLevel(new Percent(.8),20 ),new Percent(.9),new Percent(.7)  );
-            
-            var skillStaffPeriod = new SkillStaffPeriod(period,task,serviceAgreement,new Domain.Calculation.StaffingCalculatorService());
+
+			var skillStaffPeriod = new SkillStaffPeriod(period, task, serviceAgreement, new StaffingCalculatorServiceFacade());
 
             var skill = _mocks.StrictMock<ISkill>();
             var dicSkillStaffPeriods = new SkillStaffPeriodDictionary(skill);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                      new Percent(.9), new Percent(.7));
             var period = new DateTimePeriod(_start.AddHours(2), _start.AddHours(2).AddMinutes(15));
             var skillStaffPeriod = new SkillStaffPeriod(period, task, serviceAgreement,
-																	  new Domain.Calculation.StaffingCalculatorService());
+																	  new StaffingCalculatorServiceFacade());
 
             var mocks = new MockRepository();
 

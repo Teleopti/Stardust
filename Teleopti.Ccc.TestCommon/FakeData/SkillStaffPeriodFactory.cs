@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static SkillStaffPeriod CreateSkillStaffPeriod(DateTimePeriod period, ITask task, ServiceAgreement serviceAgreement)
         {
-			var staffPeriod = new SkillStaffPeriod(period, task, serviceAgreement, new StaffingCalculatorService());
+			var staffPeriod = new SkillStaffPeriod(period, task, serviceAgreement, new StaffingCalculatorServiceFacade());
 			staffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),period.StartDateTime));
 	        return staffPeriod;
         }
 
         public static SkillStaffPeriod CreateSkillStaffPeriod(DateTimePeriod period, ITask task, ServiceAgreement serviceAgreement, ISkillDay parent)
         {
-            SkillStaffPeriodForTest staffPeriod = new SkillStaffPeriodForTest(period, task, serviceAgreement, new StaffingCalculatorService());
+			SkillStaffPeriodForTest staffPeriod = new SkillStaffPeriodForTest(period, task, serviceAgreement, new StaffingCalculatorServiceFacade());
             staffPeriod.SetParent(parent);
             return staffPeriod;
         }
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         private class SkillStaffPeriodForTest : SkillStaffPeriod
         {
-            public SkillStaffPeriodForTest(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorService staffingCalculatorService)
+            public SkillStaffPeriodForTest(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorServiceFacade staffingCalculatorService)
                 : base(period, taskData, serviceAgreementData, staffingCalculatorService)
             {
             }

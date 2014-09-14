@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     {
         private readonly SortedList<DateTime, ISkillStaffSegmentPeriod> _sortedSegmentCollection;
         private IList<ISkillStaffSegmentPeriod> _segmentInThisCollection;
-        private readonly IStaffingCalculatorService _staffingCalculatorService;
+        private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
 
         private bool _isAvailable;
         private bool _isAggregate;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    private static readonly object Locker = new object();
 	    
-        public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorService staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
+        public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorServiceFacade staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
         {
 	        AggregatedStaffingThreshold = StaffingThreshold.Ok;
 	        _sortedSegmentCollection = new SortedList<DateTime, ISkillStaffSegmentPeriod>();
@@ -365,23 +365,25 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             else
             {
-                _estimatedServiceLevel = new Percent(_staffingCalculatorService.ServiceLevelAchieved(
+                _estimatedServiceLevel = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
                     ScheduledAgentsIncoming * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
                     Payload.TaskData.Tasks,
                     Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
-                    (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100)));
+                    (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100), 
+					Payload.ForecastedIncomingDemand));
 
                 var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
                 var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
-                _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchieved(
+                _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
                     scheduledAgentsIncomingWithShrinkage * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
                     Payload.TaskData.Tasks,
                     Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
-                    (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100)));
+					(int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100),
+					Payload.ForecastedIncomingDemand));
 
             }
         }
@@ -608,7 +610,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set { _isAvailable = value; }
         }
 
-        public IStaffingCalculatorService StaffingCalculatorService
+        public IStaffingCalculatorServiceFacade StaffingCalculatorService
         {
             get { return _staffingCalculatorService; }
         }

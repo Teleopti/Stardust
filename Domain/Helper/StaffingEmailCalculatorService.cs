@@ -1,9 +1,10 @@
 using System;
 using Teleopti.Ccc.Domain.Calculation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Helper
 {
-    public class StaffingEmailCalculatorService : IStaffingCalculatorService
+	public class StaffingEmailCalculatorService : IStaffingCalculatorServiceFacade
     {
 		public double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
 		{
@@ -46,5 +47,16 @@ namespace Teleopti.Ccc.Domain.Helper
         {
             return 1; //Always 100%
         }
+
+		public double ServiceLevelAchievedOcc(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5,
+			double forecastedAgents)
+		{
+			return ServiceLevelAchieved(obj0, obj1, obj2, obj3, obj4, obj5);
+		}
+
+		public double ServiceLevelAchievedOcc(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5)
+		{
+			return ServiceLevelAchieved(obj0, obj1, obj2, obj3, obj4, obj5);
+		}
     }
 }

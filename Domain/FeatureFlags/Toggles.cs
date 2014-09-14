@@ -12,6 +12,9 @@
 		Scheduler_WeeklyRestRuleSolver_27108,
 		Scheduler_TeamBlockMoveTimeBetweenDays_22407,
 		Scheduler_TeamBlockAdhereWithMaxSeatRule_23419,
+		Scheduler_ShowIntadayESLWithShrinkage_21874,
+		Scheduler_OccupancyESL_11724,
+
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,
 		Request_ShiftTradeRequestForMoreDays_20918,
@@ -27,7 +30,7 @@
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
-        Scheduler_ShowIntadayESLWithShrinkage_21874,
+        
 		RTA_ViewAgentsForMultipleTeams_28967,
 
 		MyTimeWeb_AgentBadge_28913,

@@ -52,8 +52,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return true; }
         }
 
-        public override IStaffingCalculatorService StaffingCalculatorService
+		public override IStaffingCalculatorServiceFacade StaffingCalculatorService
         {
+			set {}
             get { return new StaffingEmailCalculatorService(); }
         }
     }
