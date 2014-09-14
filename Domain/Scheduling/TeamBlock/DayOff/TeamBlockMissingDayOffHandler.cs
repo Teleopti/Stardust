@@ -49,13 +49,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
             var alreadyAnalyzedDates = new List<DateOnly>();
             while (tempWorkingList.Count > 0)
             {
-                var resultingDateFound = true;
-                var schedulingResult = true;
+                var resultingDateFound = false;
+                var schedulingResult = false;
                 foreach (var weekPeriod in splitedWeeksFromSchedulePeriod)
                 {
-                    if (_validNumberOfDayOffInAWeekSpecification.IsSatisfied(tempWorkingList[0].Matrix, weekPeriod, averageNumberOfDayOffPerWeek)) continue  ;
-                    resultingDateFound = true;
+                    if (_validNumberOfDayOffInAWeekSpecification.IsSatisfied(tempWorkingList[0].Matrix, weekPeriod, averageNumberOfDayOffPerWeek)) 
+						continue;
+                    
                     var scheduleDayCollection = getScheduleDayDataBasedOnPeriod(tempWorkingList[0].ScheduleDayDataCollection, weekPeriod,alreadyAnalyzedDates);
+					resultingDateFound = true;
                     DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(scheduleDayCollection);
                     if (!resultingDate.HasValue)
                     {
@@ -64,10 +66,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
                     }
                     alreadyAnalyzedDates.Add(resultingDate.Value);
                     schedulingResult = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService);
-                    if (!_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList).Any()) break;
-                        
+                    if (!_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList).Any()) 
+						break;  
                 }
-                if (!resultingDateFound || !schedulingResult) break;
+                if (!resultingDateFound || !schedulingResult) 
+					break;
+
                 tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList);
             }
         }

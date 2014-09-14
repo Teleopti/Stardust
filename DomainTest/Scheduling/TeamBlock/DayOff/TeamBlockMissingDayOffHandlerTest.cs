@@ -271,6 +271,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
                 _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
             }
         }
+
+	    [Test]
+	    public void ShouldHandlAverageZeroDaysOffPerweekBug30398()
+	    {
+			IList<IMatrixData> matrixData1List = new List<IMatrixData>() { _matrixData1 };
+			var scheduleDayCollection =
+				new ReadOnlyCollection<IScheduleDayData>(_scheduleDayDataList);
+			DateOnly? today = DateOnly.Today;
+			using (_mock.Record())
+			{
+				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).IgnoreArguments().Return(_matrixDataList);
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).IgnoreArguments().Return(matrixData1List);
+				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixData1List))
+					  .IgnoreArguments()
+					  .Return(matrixData1List);
+				//spliting the period into weeks
+				Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.Times(3);
+				Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.Twice();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+
+				Expect.Call(_virtualSchedulePeriod.DaysOff()).Return(0);
+				Expect.Call(_validNumberOfDayOffInAWeekSpecification.IsSatisfied(_matrix1, _dateOnlyPeriod, 0))
+					  .IgnoreArguments()
+					  .Return(true);
+				//should break and stop the loop
+			}
+			using (_mock.Playback())
+			{
+				_target.Execute(_matrixList, _schedulingOptions, _rollbackService);
+			}
+	    }
         
     }
     
