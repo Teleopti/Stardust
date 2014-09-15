@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.WinCode.Grouping
         void SetSelectedTab(string groupPageKey);
         bool IsOnOrganizationTab { get; }
         HashSet<Guid> SelectedTeamGuids { get; }
-    }
+		void SetSelectedPersonGuids(HashSet<Guid> guidsToCheck);
+	}
 
     public class PersonSelectorPresenter : IPersonSelectorPresenter
     {
@@ -344,6 +345,28 @@ namespace Teleopti.Ccc.WinCode.Grouping
                     _personSelectorView.TabControl.SelectedIndex = tabPage.TabIndex - 1;
             }
         }
+
+		public void SetSelectedPersonGuids(HashSet<Guid> guidsToCheck)
+	    {
+			foreach (var node in _personSelectorView.AllNodes)
+			{
+				selectNodesRecursive(guidsToCheck, node);
+			}
+	    }
+
+		private void selectNodesRecursive(HashSet<Guid> guidsToCheck, TreeNodeAdv fromThisNode)
+	    {
+			var lst = fromThisNode.Tag as IList<Guid>;
+			if (lst != null && lst.Count == 1)
+			{
+				fromThisNode.Checked = guidsToCheck.Contains(lst.First());
+			}
+
+			foreach (var node in fromThisNode.Nodes)
+			{
+				selectNodesRecursive(guidsToCheck, (TreeNodeAdv)node);
+			}
+	    }
 
         private static void addGuidsRecursive(HashSet<Guid> addToThis, TreeNodeAdv fromThisNode)
         {

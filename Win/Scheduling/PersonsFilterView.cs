@@ -13,7 +13,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class PersonsFilterView : BaseDialogForm, IReportPersonsSelectionView
+	public interface IScheduleAgentFilter
+	{
+		void SetCurrentFilter(IDictionary<Guid, IPerson> filteredPersons);
+	}
+
+	public partial class PersonsFilterView : BaseDialogForm, IReportPersonsSelectionView, IScheduleAgentFilter
 	{
 		private readonly IPersonSelectorPresenter _personSelectorPresenter;
 		private PersonsFilterView(){}
@@ -53,6 +58,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			buttonAdvance.Visible = isAdvancedEnabled;
 			_selectedPersons = selectedPersons.Values ;
 
+		}
+
+		public void SetCurrentFilter(IDictionary<Guid, IPerson> filteredPersons)
+		{
+			var filteredGuids = new HashSet<Guid>(filteredPersons.Keys);
+			_personSelectorPresenter.SetSelectedPersonGuids(filteredGuids);
 		}
 
 		public HashSet<Guid> SelectedAgentGuids()

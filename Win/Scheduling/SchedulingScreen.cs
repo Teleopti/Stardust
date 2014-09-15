@@ -3902,6 +3902,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 											string.Empty,
 											permittedPersons, isAdvancedEnabled);
 			}
+			_cachedPersonsFilterView.SetCurrentFilter(SchedulerState.FilteredPersonDictionary);
 			return _cachedPersonsFilterView;
 		}
 
@@ -3909,7 +3910,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var toggleManager = _container.Resolve<IToggleManager>();
 			var scheduleFilterView = getCachedPersonsFilterView(toggleManager.IsEnabled(Toggles.Scheduler_AdvanceFilter_29555));
-
+			
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
 			
 			//TODO: Please come up with a better solution!
