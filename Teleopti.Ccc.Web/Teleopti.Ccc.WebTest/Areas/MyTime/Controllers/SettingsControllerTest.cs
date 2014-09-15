@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class SettingsControllerTest
 	{
-		private IMappingEngine mappingEngine;
 		private ILoggedOnUser loggedOnUser;
 		private IModifyPassword modifyPassword;
 
