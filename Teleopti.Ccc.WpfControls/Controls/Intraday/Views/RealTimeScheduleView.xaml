@@ -119,11 +119,7 @@
                                              SortMemberPath="CurrentStateDescription"
                                          CanUserReorder="False"
                                              Binding="{Binding Path=CurrentStateDescription,Mode=OneWay, FallbackValue=''}">
-					<DataGridTextColumn.ElementStyle>
-						<Style TargetType="{x:Type TextBlock}">
-							<Setter Property="Background" Value="{Binding Color, Converter={StaticResource colorConverter}}"/>
-						</Style>
-					</DataGridTextColumn.ElementStyle>
+					
 				</DataGridTextColumn>
 
 				<!-- Current Activity Column-->
@@ -181,7 +177,13 @@
                                              CanUserSort="True"
                                              SortMemberPath="AlarmDescription"
                                          CanUserReorder="False"
-                                             Binding="{Binding Path=AlarmDescription,Mode=OneWay, FallbackValue=''}"/>
+                                             Binding="{Binding Path=AlarmDescription,Mode=OneWay, FallbackValue=''}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Background" Value="{Binding Color, Converter={StaticResource colorConverter}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
 
 				<!--Alarm time Column-->
 				<DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
