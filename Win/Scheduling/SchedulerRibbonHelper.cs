@@ -226,23 +226,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SplitterManagerRestrictionView splitterManagerView, 
 			bool teamLeaderMode)
 		{
-			bool enabled = false;
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
-			{
-				enabled = scheduleView.TheGrid.Selections.Count == 1;
-				if (splitterManagerView.ShowRestrictionView)
-				{
-					if (!isCoherentSelection(scheduleView.SelectedSchedules()))
-						enabled = false;
-				}
-				if (teamLeaderMode)
-					enabled = false;
-			}
+			bool enabled = 
+				isEnabledScheduleButton(scheduleView, splitterManagerView, teamLeaderMode);
 
 			schedulerToolStripButton.Enabled = enabled;
-			enableDisableSubItems(schedulerToolStripButton);
+			enableSubItems(schedulerToolStripButton, enabled);
 		}
-	
+
+		private static bool isEnabledScheduleButton(
+			ScheduleViewBase scheduleView,
+			SplitterManagerRestrictionView splitterManagerView,
+			bool teamLeaderMode)
+		{
+			if (teamLeaderMode)
+				return false;
+
+			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+				return false;
+
+			if (scheduleView.TheGrid.Selections.Count != 1)
+				return false;
+
+			if (splitterManagerView.ShowRestrictionView)
+			{
+				if (!isCoherentSelection(scheduleView.SelectedSchedules()))
+					return false;
+			}
+
+			return true;
+		}
+
 		private static bool isCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
 		{
 			IScheduleDay scheduleDay = null;
@@ -263,13 +276,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return true;
 		}
 
-		private static void enableDisableSubItems(ToolStripDropDownItem item)
+		private static void enableSubItems(ToolStripDropDownItem item, bool enable)
 		{
 			foreach (var subItem in item.DropDownItems)
 			{
 				var control = subItem as ToolStripItem;
 				if(control != null)
-					control.Enabled = item.Enabled;
+					control.Enabled = enable;
 
 			}
 		}
