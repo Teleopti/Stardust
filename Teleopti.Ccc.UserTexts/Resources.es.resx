@@ -220,7 +220,7 @@
     <value>Información del Agente...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Classic MyTime</value>
+    <value>MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agentes</value>
@@ -7512,7 +7512,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Activo</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTime</value>
+    <value>MyTimeWeb</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Cerrar sesión</value>
@@ -9236,5 +9236,242 @@ Los turnos generados por está regla no estarán disponibles para planificación
   </data>
   <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
     <value>Al menos un día no ha podido ser planificado</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Limitaciones por categorás de turno</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Pasos de optimización "Turno por t. de trabajo flexible", "Días libres por t. de trabajo flexible" y "Limitaciones por categoría de turno" no serán ejecutados si Equipo o Bloque están seleccionados.</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Permitir notificaciones en el escritorio</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Fuente de datos no disponible.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Iniciar sesión con otro usuario</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Iniciar sesión con:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Iniciar sesión con otro usuario</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Calcular Estado Legal</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>El turno actual termina a la(s) {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Próxima actividad ({0}) comienza a la(s) {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Solucionando descanso semanal para {0} {1}</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;Sin bloque&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Sin equipo&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Período de Planificación</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Escritorio</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Móvil</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Mover tiempo en</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Próxima actividad</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Hora de inicio de próxima actividad</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Tiempo en el estado</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Tiempo mínimo por Semana:</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Ha violado el límite de tiempo semanal de trabajo</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Métricas de la cola</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Tiempo en Alarma</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Servidor no disponible. No todas las funciones podrán ser activadas.</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Ordenar Antigüedad, ascediente</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Ordenar Antigüedad, descediente</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Abrir Turnos...</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Mover actividad</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Mi cesta de cambios de turno</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Vista compacta</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Peticiones</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Todos los equipos</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Medalla del Agente</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Umbral de Llamadas Atendidas:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Umbral del Promedio de T. de Gestión (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Umbral de Adherencia (%):</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>Una medalla de plata corresponde al siguiente no. de medallas de bronce:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>Una medalla de oro corresponde al siguiente no. de medallas de plata:</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Habilitar medallas de agentes</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Añadir actividad para</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Añadir ausencia de día completo para </value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Añadir ausencia parcial (entredía)</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Fallido!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Mover actividad para</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Eliminar ausencia para</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Pro favor, actualice la página!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Por favor, inténte nuevamente!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Éxito!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Felicitationes!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Archivo</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Terminar sesión</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Iniciar sesión</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>No ha iniciado sesión.</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>La semana contiene t. de trabajo insuficiente ({0}). El mín. es {1}.</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Borrar skill</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Iniciar página</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Por favor, configure su corréo electrónico para acceder alos recursos de Teleopti.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>He recibido una nueva medalla de bronze! Su adherencia en {1.yyyy-MM-dd} es {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>He recibido una nueva medalla de bronze! Su t. de gestión promedio en {1.yyyy-MM-dd} está por debajo de {0} segundos.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>He recibido una nueva medalla de bronze! Ha atendido más de {0} en {1.yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>He recibido una nueva medalla de oro! Su adherencia es mejor que {0} en {1} días.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>He recibido una nueva medalla de oro! Su t. de gestión está por debajo de {0} segundos en {1} días.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Ha recibido una nueva medalla de oro! Ha atendido {0} o más llamadas cada día en {1} días.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>He recibido una nueva medalla de plata! Su adherencia es mejor que {0} en {1} días.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>He recibido una nueva medalla de plata! Su t. de gestión está por debajo de {0} segundos en {1} días.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Ha recibido una nueva medalla de plata! Ha atendido {0} o más llamadas cada día en {1} días.</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Lista filtrada</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filtrar varias personas</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Introducir valor de propiedades para categorías de turno</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Guardar previsión en otro escenario</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Guardar en</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Resultados filtrados</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Posibles concordancias</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Filtro avanzado</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Resolver</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Mostrar Recipiente duplicado</value>
   </data>
 </root>

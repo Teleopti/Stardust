@@ -238,7 +238,7 @@
     <comment>Agent info...</comment>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Classic MyTime</value>
+    <value>MyTime</value>
     <comment>MyTime</comment>
   </data>
   <data name="Agents" xml:space="preserve">
@@ -9820,7 +9820,7 @@ Teleopti R&amp;D</value>
     <value>{0} препятствует закрытию приложения. Закрыть сейчас?</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTime</value>
+    <value>MyTimeWeb</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Выход из системы</value>
@@ -10937,5 +10937,263 @@ Teleopti R&amp;D</value>
   </data>
   <data name="Ranking" xml:space="preserve">
     <value>Приоритетность</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Обзор соблюдения графика в реальном времени</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Просмотр индивидуального счета</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Переместить</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Выберите хотя бы одного сотрудника</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Только доступные операторы</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Несоблюдение графика</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Время напоминания о смене активности (секунды)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Как минимум один день не может быть запланирован</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Разрешить уведомления на рабочем столе</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Нет доступного источника данных.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Войти в систему как другой пользователь</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Войти:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Войти в систему как другой пользователь</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>Рассчитать Legal State</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>c</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>Текущая смена закончится в {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Следующая активность ({0}) начнется в {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Измнение недельного времени отдыха для {0} {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Планирование по группе</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;Нет&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Нет&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Период планирования</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Рабочий стол</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Мобильный</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>Переместить время</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Следующая активность</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Время начала следующей активности</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Время состояния</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Минимальное время в неделю:</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Лимит недельного времени нарушен.</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Метрики очереди</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Время предупреждения</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Сервер недоступен. В связи с этим часть функций не может быть запущена.</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Открыть смены...</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Переместить активность</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Состав запроса:</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Компактный вид</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Запросы</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Все группы</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Уровень оператора</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Порог отвеченных звонков:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Порог среднего времени обработки (чч:мм:сс):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Порог соблюдения графика (%):</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Включить уровни операторов</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Добавление активности для</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Добавление отсутствия на полный день для</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Добавление отсутствия на часть дня для</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Неуспешно!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Перемещение активности для</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Удаление отсутствия для </value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Обновите страницу!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Попробуйте еще раз!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Успешно!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Поздравляем!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Вы не вошли в систему.</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Неделя содержит слишком мало рабочего времени ({0}). Минимальное {1}.</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Удалить навык</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Стартовая страница</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Для доступа к системе укажите адрес своей электронной почты.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Вы достигли бронзового уровня! Cоблюдение вашего графика {1:гггг-мм-дд} выше {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Вы достигли бронзового уровня! Ваше среднее время обработки {1:гггг-мм-дд} ниже {0} секунд.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Вы достигли бронзового уровня! Количество отвеченных вами звонков {1:гггг-мм-дд} больше, чем {0}. </value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Вы достигли золотого уровня! Cоблюдение вашего графика выше {0} за {1} дня(-ей).</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Вы достигли золотого уровня! Ваше среднее время обработки ниже {0} секунд за {1} дня(-ей).</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Вы достигли золотого уровня! Количество отвеченных вами звонков {0} больше, чем за {1} дня(-ей). </value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Приоритетность по возрастанию</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Приоритетность по убыванию</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Вы достигли серебряного уровня! Cоблюдение вашего графика выше {0} за {1} дня(-ей).</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Вы достигли серебряного уровня! Ваше среднее время обработки ниже {0} секунд за {1} дня(-ей).</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Вы достигли серебряного уровня! Количество отвеченных вами звонков {0} больше, за {1} дня(-ей). </value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Отфильтрованный список</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Фильтр по нескольким сотрудникам</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Укажите значения для категорий смен</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Сохранить прогноз на другом сценарии</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Сохранить на</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Отфильтрованный результат</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Возможные совпадения</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Расширенный фильтр</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Разрешить</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Показать повторы</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>Для получения серебряного уровня небходимо набрать:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>Для получения золотого уровня небходимо набрать:</value>
   </data>
 </root>

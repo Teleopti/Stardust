@@ -1083,4 +1083,16 @@
   <data name="ResStateGroupColon" xml:space="preserve">
     <value>Grupos de Esatdos:</value>
   </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Cumplido</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Cumplimiento</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Imprescindibles</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Incumplido</value>
+  </data>
 </root>
