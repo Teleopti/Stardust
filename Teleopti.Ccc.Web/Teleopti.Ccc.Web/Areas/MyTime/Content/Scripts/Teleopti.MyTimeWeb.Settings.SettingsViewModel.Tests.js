@@ -63,7 +63,7 @@ $(document).ready(function() {
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Settings.SettingsViewModel(ajax);
 
-		viewModel.loadCultures();
+		viewModel.loadSettings();
 
 		equal(viewModel.cultures().length, 3);
 		equal(viewModel.cultures()[0].id, 1);

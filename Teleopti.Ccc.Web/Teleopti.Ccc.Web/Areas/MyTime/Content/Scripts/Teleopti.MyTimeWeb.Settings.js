@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			$('#Test-Picker').select2();
 			vm = new Teleopti.MyTimeWeb.Settings.SettingsViewModel(ajax);
 			vm.featureCheck();
-		    $.when(vm.loadCultures(), vm.getCalendarLinkStatus())
+		    $.when(vm.loadSettings(), vm.getCalendarLinkStatus())
 				.done(function () {
 					readyForInteraction();
 					completelyLoaded();

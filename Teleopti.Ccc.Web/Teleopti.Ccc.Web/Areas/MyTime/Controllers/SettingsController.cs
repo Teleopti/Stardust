@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IModifyPassword _modifyPassword;
 		private readonly IPersonPersister _personPersister;
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
-		private readonly ICalendarLinkSettingsPersisterAndProvider _calendarLinkSettingsPersisterAndProvider;
+		private readonly ISettingsPersisterAndProvider<CalendarLinkSettings> _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
+		private readonly ISettingsPersisterAndProvider<NameFormatSettings>_nameFormatSettingsPersisterAndProvider;
 
 		public SettingsController(IMappingEngine mapper,
 		                          ILoggedOnUser loggedOnUser,
@@ -30,8 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		                          IPersonPersister personPersister,
 		                          ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
 										  ISettingsViewModelFactory settingsViewModelFactory,
-		                          ICalendarLinkSettingsPersisterAndProvider calendarLinkSettingsPersisterAndProvider,
-		                          ICalendarLinkViewModelFactory calendarLinkViewModelFactory)
+										  ISettingsPersisterAndProvider<CalendarLinkSettings> calendarLinkSettingsPersisterAndProvider,
+											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
+											ICalendarLinkViewModelFactory calendarLinkViewModelFactory)
 		{
 			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_settingsPermissionViewModelFactory = settingsPermissionViewModelFactory;
 			_settingsViewModelFactory = settingsViewModelFactory;
 			_calendarLinkSettingsPersisterAndProvider = calendarLinkSettingsPersisterAndProvider;
+			_nameFormatSettingsPersisterAndProvider = nameFormatSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
 		}
 
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult GetSettings()
 		{
-			var settings = _settingsViewModelFactory.CreateViewModel(_mapper, _loggedOnUser);
+			var settings = _settingsViewModelFactory.CreateViewModel();
 			return Json(settings, JsonRequestBehavior.AllowGet);
 		}
 
@@ -113,6 +116,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var settings = _calendarLinkSettingsPersisterAndProvider.Get();
 			return Json(_calendarLinkViewModelFactory.CreateViewModel(settings, "CalendarLinkStatus"),
 			            JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPut]
+		public void UpdateNameFormat(int nameFormatId)
+		{
+			_nameFormatSettingsPersisterAndProvider.Persist(new NameFormatSettings { NameFormatId = nameFormatId });
 		}
 	}
 }

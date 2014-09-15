@@ -43,7 +43,12 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 			self.selectorChanged(newValue, "Settings/UpdateCulture");
 	});
 
-	self.loadCultures = function() {
+	self.selectedNameFormat.subscribe(function (newValue)
+	{
+		if (!self.avoidReload) self.nameFormatChanged(newValue);
+	});
+
+	self.loadSettings = function() {
 		return ajax.Ajax({
 			url: "Settings/GetSettings",
 			dataType: "json",
@@ -67,6 +72,24 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 		var data = { LCID: value };
 		ajax.Ajax({
 			url: url,
+			contentType: 'application/json; charset=utf-8',
+			type: "PUT",
+			data: JSON.stringify(data),
+			success: function (data, textStatus, jqXHR) {
+				ajax.CallWhenAllAjaxCompleted(function () {
+					location.reload();
+				});
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	};
+
+	self.nameFormatChanged = function (id) {
+		var data = { NameFormatId: id };
+		ajax.Ajax({
+			url: 'Settings/UpdateNameFormat',
 			contentType: 'application/json; charset=utf-8',
 			type: "PUT",
 			data: JSON.stringify(data),

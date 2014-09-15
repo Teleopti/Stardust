@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -84,7 +85,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
 			builder.RegisterType<SettingsPermissionViewModelFactory>().As<ISettingsPermissionViewModelFactory>();
 			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
-			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ICalendarLinkSettingsPersisterAndProvider>().SingleInstance();
+			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<CalendarLinkSettings>>().SingleInstance();
+			builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
 			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();

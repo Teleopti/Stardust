@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 {
-	public class CalendarLinkSettingsPersisterAndProvider : ICalendarLinkSettingsPersisterAndProvider
+	public class CalendarLinkSettingsPersisterAndProvider : ISettingsPersisterAndProvider<CalendarLinkSettings>
 	{
 		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
 		private const string calendarLinkKey = "CalendarLinkSettings";

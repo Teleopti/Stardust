@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 	public class SettingsViewModel
 	{
 		public IList<CultureViewModel> Cultures { get; set; }
-		public IList<NameFormatViewModel> NameFormats { get; set; }
+		public IEnumerable<NameFormatViewModel> NameFormats { get; set; }
 		public NameFormatViewModel ChosenNameFormat { get; set; }
 		public CultureViewModel ChoosenUiCulture { get; set; }
 		public CultureViewModel ChoosenCulture { get; set; }

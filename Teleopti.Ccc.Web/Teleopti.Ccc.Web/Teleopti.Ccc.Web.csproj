@@ -351,6 +351,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\AgentNameFormatEnum.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\ISettingsPersisterAndProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ISettingsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarTransformer.cs" />
@@ -429,7 +431,6 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkIdGenerator.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\ICalendarLinkSettingsPersisterAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProvider.cs" />
     <Compile Include="Areas\MyTime\Controllers\ShareCalendarController.cs" />
     <Compile Include="Areas\MyTime\Controllers\UserInfoController.cs" />
