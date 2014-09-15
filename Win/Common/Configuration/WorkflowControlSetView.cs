@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public WorkflowControlSetView(IToggleManager toggleManager):this()
 		{
 			if (DesignMode) return;
-			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
+			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory(), toggleManager);
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
 			dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.Current.Regional.UICulture;

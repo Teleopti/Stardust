@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -19,18 +21,20 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         private readonly IWorkflowControlSetView _view;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IRepositoryFactory _repositoryFactory;
-        private IList<IActivity> _activityCollection;
+	    private readonly IToggleManager _toggleManager;
+	    private IList<IActivity> _activityCollection;
         private readonly IList<IWorkflowControlSetModel> _workflowControlSetModelCollection;
         private IList<IShiftCategory> _shiftCategories;
         private IList<IAbsence> _absences;
         private IList<IDayOffTemplate> _dayOffTemplates;
 
-        public WorkflowControlSetPresenter(IWorkflowControlSetView view, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+		public WorkflowControlSetPresenter(IWorkflowControlSetView view, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager)
         {
             _view = view;
             _unitOfWorkFactory = unitOfWorkFactory;
             _repositoryFactory = repositoryFactory;
-            _workflowControlSetModelCollection = new List<IWorkflowControlSetModel>();
+			_toggleManager = toggleManager;
+			_workflowControlSetModelCollection = new List<IWorkflowControlSetModel>();
 
             var startDate = DateHelper.GetFirstDateInMonth(DateTime.Today, CultureInfo.CurrentCulture);
             var endDate = CultureInfo.CurrentCulture.Calendar.AddMonths(startDate, 3).AddDays(-1);
@@ -183,6 +187,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         public void AddWorkflowControlSet()
         {
             IWorkflowControlSet newDomainEntity = new WorkflowControlSet(Resources.NewWorkflowControlSet);
+			if (!_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			{
+				newDomainEntity.UseShiftCategoryFairness = true;
+			}
             var newModel = new WorkflowControlSetModel(newDomainEntity);
             _workflowControlSetModelCollection.Add(newModel);
             RefreshWorkflowControlSetCombo();
