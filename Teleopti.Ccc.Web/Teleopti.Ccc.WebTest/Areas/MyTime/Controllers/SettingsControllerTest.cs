@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[SetUp]
 		public void Setup()
 		{
-			mappingEngine = MockRepository.GenerateStrictMock<IMappingEngine>();
 			loggedOnUser = MockRepository.GenerateStrictMock<ILoggedOnUser>();
 			modifyPassword = MockRepository.GenerateStrictMock<IModifyPassword>();
 		}
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var settingsPermissionViewModelFactory = MockRepository.GenerateMock<ISettingsPermissionViewModelFactory>();
 			using (
-				var target = new SettingsController(mappingEngine, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), settingsPermissionViewModelFactory, null, null, null, null))
 			{
 				var res = target.Index();
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var settingsViewModelFactory = MockRepository.GenerateMock<ISettingsViewModelFactory>();
 			settingsViewModelFactory.Stub(x => x.CreateViewModel()).Return(viewModel);
 			using (
-				var target = new SettingsController(mappingEngine, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, settingsViewModelFactory, null, null, null))
 			{
 				var res = target.GetSettings();
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void PassWordShouldReturnCorrectView()
 		{
 			using (
-				var target = new SettingsController(mappingEngine, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				var res = target.Password();
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			using (
-				var target = new SettingsController(null, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				target.UpdateCulture(1034);
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			using (
-				var target = new SettingsController(null, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				target.UpdateCulture(-1);
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			using (
-				var target = new SettingsController(null, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				target.UpdateUiCulture(1034);
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = new Person();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			using (
-				var target = new SettingsController(null, loggedOnUser, null,
+				var target = new SettingsController(loggedOnUser, null,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				target.UpdateUiCulture(-1);
@@ -136,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo { IsSuccessful = true });
 			using (
-				var target = new SettingsController(null, loggedOnUser, modifyPassword,
+				var target = new SettingsController(loggedOnUser, modifyPassword,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				var result =
@@ -156,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			modifyPassword.Expect(x => x.Change(person, "old", "new"))
 						  .Return(new ChangePasswordResultInfo { IsSuccessful = false });
 			using (
-				var target = new SettingsController(null, loggedOnUser, modifyPassword,
+				var target = new SettingsController(loggedOnUser, modifyPassword,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null))
 			{
 				var context = new FakeHttpContext("/");
@@ -186,7 +185,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var calendarLinkViewModel = new CalendarLinkViewModel();
 			calendarLinkViewModelFactory.Stub(x => x.CreateViewModel(calendarLinkSettings, "CalendarLinkStatus"))
 			                            .Return(calendarLinkViewModel);
-			var target = new SettingsController(null, null, null, null, null, null, calendarLinkSettingsPersisterAndProvider, null,
+			var target = new SettingsController(null, null, null, null, null, calendarLinkSettingsPersisterAndProvider, null,
 			                                    calendarLinkViewModelFactory);
 			var result = target.CalendarLinkStatus().Data as CalendarLinkViewModel;
 			result.Should().Be.SameInstanceAs(calendarLinkViewModel);
@@ -209,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var calendarLinkViewModel = new CalendarLinkViewModel();
 			calendarLinkViewModelFactory.Stub(x => x.CreateViewModel(calendarLinkSettings, "SetCalendarLinkStatus"))
 										.Return(calendarLinkViewModel);
-			var target = new SettingsController(null, null, null, null, null, null, calendarLinkSettingsPersisterAndProvider, null,
+			var target = new SettingsController(null, null, null, null, null, calendarLinkSettingsPersisterAndProvider, null,
 												calendarLinkViewModelFactory);
 
 			var result = target.SetCalendarLinkStatus(false).Data as CalendarLinkViewModel;

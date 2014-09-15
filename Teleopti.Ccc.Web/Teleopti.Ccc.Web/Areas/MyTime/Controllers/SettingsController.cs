@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	public class SettingsController : Controller
 	{
-		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IModifyPassword _modifyPassword;
 		private readonly IPersonPersister _personPersister;
@@ -25,8 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings>_nameFormatSettingsPersisterAndProvider;
 
-		public SettingsController(IMappingEngine mapper,
-		                          ILoggedOnUser loggedOnUser,
+		public SettingsController(ILoggedOnUser loggedOnUser,
 		                          IModifyPassword modifyPassword,
 		                          IPersonPersister personPersister,
 		                          ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
 											ICalendarLinkViewModelFactory calendarLinkViewModelFactory)
 		{
-			_mapper = mapper;
 			_loggedOnUser = loggedOnUser;
 			_modifyPassword = modifyPassword;
 			_personPersister = personPersister;
