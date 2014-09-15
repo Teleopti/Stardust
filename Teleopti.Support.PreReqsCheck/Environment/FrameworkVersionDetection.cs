@@ -20,18 +20,15 @@
 // LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
 // FITNESS FOR A PARTICULAR PURPOSE.
 // ---------------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using Campari.Software;
+using Campari.Software.InteropServices;
 using Microsoft.Win32;
 
-using Campari.Software.InteropServices;
-using System.IO;
-using System.Diagnostics;
-
-namespace Campari.Software
+namespace CheckPreRequisites.Environment
 {
     #region class FrameworkVersionDetection
     /// <summary>

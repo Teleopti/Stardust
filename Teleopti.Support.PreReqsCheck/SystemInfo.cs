@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
-namespace SystemInfoApp
+namespace CheckPreRequisites
 {
    /// <summary>
    /// Provides information about the running operating system.
@@ -12,37 +10,37 @@ namespace SystemInfoApp
    {
       public static int MajorVersion
       {
-         get { return Environment.OSVersion.Version.Major; }
+         get { return System.Environment.OSVersion.Version.Major; }
       }
 
       public static int MinorVersion
       {
-         get { return Environment.OSVersion.Version.Minor; }
+         get { return System.Environment.OSVersion.Version.Minor; }
       }
 
       public static int MajorRevision
       {
-         get { return Environment.OSVersion.Version.MajorRevision; }
+         get { return System.Environment.OSVersion.Version.MajorRevision; }
       }
 
       public static int MinorRevision
       {
-         get { return Environment.OSVersion.Version.MinorRevision; }
+         get { return System.Environment.OSVersion.Version.MinorRevision; }
       }
 
       public static int Revision
       {
-         get { return Environment.OSVersion.Version.Revision; }
+         get { return System.Environment.OSVersion.Version.Revision; }
       }
 
       public static int Build
       {
-         get { return Environment.OSVersion.Version.Build; }
+         get { return System.Environment.OSVersion.Version.Build; }
       }
 
       public static string VersionString
       {
-         get { return Environment.OSVersion.Version.ToString(); }
+         get { return System.Environment.OSVersion.Version.ToString(); }
       }
 
       public static string ServicePack
@@ -77,7 +75,7 @@ namespace SystemInfoApp
 
             if (Win32Api.GetVersionEx(ref osVersionInfo))
             {
-               switch (Environment.OSVersion.Platform)
+               switch (System.Environment.OSVersion.Platform)
                {
                   case PlatformID.Win32Windows:
                      {

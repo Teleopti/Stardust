@@ -1,6 +1,7 @@
 ﻿using System;
 using System.DirectoryServices;
 using Campari.Software;
+using CheckPreRequisites.Environment;
 using Microsoft.Win32;
 
 namespace CheckPreRequisites.Checks

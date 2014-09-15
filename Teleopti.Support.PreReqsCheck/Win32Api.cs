@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
-namespace SystemInfoApp
+namespace CheckPreRequisites
 {
    /// <summary>
    /// Contains Windows API constants, structures and functions for retrieving information about the operating system.

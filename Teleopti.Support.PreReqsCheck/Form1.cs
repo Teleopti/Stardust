@@ -130,9 +130,9 @@ namespace CheckPreRequisites
 						foreach (var element in instances)
 						{
 							if (element == "MSSQLSERVER")
-								comboBoxSQLInstance.Items.Add(Environment.MachineName);
+								comboBoxSQLInstance.Items.Add(System.Environment.MachineName);
 							else
-								comboBoxSQLInstance.Items.Add(Environment.MachineName + @"\" + element);
+								comboBoxSQLInstance.Items.Add(System.Environment.MachineName + @"\" + element);
 						}
 					}
 				}
@@ -171,7 +171,7 @@ namespace CheckPreRequisites
 				buffer.Append(header.Text.Trim());
 				buffer.Append('\t');
 			}
-			buffer.Append(Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
 
 			foreach (ListViewItem item in lv.Items)
 			{
@@ -180,7 +180,7 @@ namespace CheckPreRequisites
 					buffer.Append(subItem.Text);
 					buffer.Append('\t');
 				}
-				buffer.Append(Environment.NewLine);
+				buffer.Append(System.Environment.NewLine);
 			}
 
 			Clipboard.SetText(buffer.ToString().Trim());
@@ -196,7 +196,7 @@ namespace CheckPreRequisites
 				buffer.Append('\t');
 			}
 
-			buffer.Append(Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
 
 			foreach (ListViewItem item in listView1.Items)
 			{
@@ -205,18 +205,18 @@ namespace CheckPreRequisites
 					buffer.Append(subItem.Text);
 					buffer.Append('\t');
 				}
-				buffer.Append(Environment.NewLine);
+				buffer.Append(System.Environment.NewLine);
 			}
 
-			buffer.Append(Environment.NewLine);
-			buffer.Append(Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
 
 			foreach (ColumnHeader header in listView2.Columns)
 			{
 				buffer.Append(header.Text.Trim());
 				buffer.Append('\t');
 			}
-			buffer.Append(Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
 
 			foreach (ListViewItem item in listView2.Items)
 			{
@@ -225,18 +225,18 @@ namespace CheckPreRequisites
 					buffer.Append(subItem.Text);
 					buffer.Append('\t');
 				}
-				buffer.Append(Environment.NewLine);
+				buffer.Append(System.Environment.NewLine);
 			}
 
-			buffer.Append(Environment.NewLine);
-			buffer.Append(Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
 
 			foreach (ColumnHeader header in listView3.Columns)
 			{
 				buffer.Append(header.Text.Trim());
 				buffer.Append('\t');
 			}
-			buffer.Append(Environment.NewLine);
+			buffer.Append(System.Environment.NewLine);
 
 			foreach (ListViewItem item in listView3.Items)
 			{
@@ -245,7 +245,7 @@ namespace CheckPreRequisites
 					buffer.Append(subItem.Text);
 					buffer.Append('\t');
 				}
-				buffer.Append(Environment.NewLine);
+				buffer.Append(System.Environment.NewLine);
 			}
 
 

@@ -13,9 +13,8 @@
 // LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR
 // FITNESS FOR A PARTICULAR PURPOSE.
 // ---------------------------------------------------------------------------
-using System;
 
-namespace Campari.Software
+namespace CheckPreRequisites.Environment
 {
     #region enum InternetInformationServicesComponent
     /// <summary>

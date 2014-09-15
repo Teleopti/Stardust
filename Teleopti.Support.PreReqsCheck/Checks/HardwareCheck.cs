@@ -29,20 +29,14 @@ namespace CheckPreRequisites.Checks
 
 		private void CheckOS()
 		{
-			_form1.printNewFeature("Operating System", "OS Version", "Windows Server 2003 R2 or later",
-			                       SystemInfoApp.SystemInfo.Version.ToString());
+			_form1.printNewFeature("Operating System", "OS Version", "Windows Server 2008 R2 or later",
+			                       SystemInfo.Version.ToString());
 			
-			switch (SystemInfoApp.SystemInfo.MajorVersion)
+			switch (SystemInfo.MajorVersion)
 			{
-				case 5:
-					if (SystemInfoApp.SystemInfo.MinorVersion == 2) //Win2003:Check for R2!
-						_form1.printFeatureStatus(SystemInfoApp.SystemInfo.Version ==
-						                          SystemInfoApp.WindowsVersion.WindowsServer2003R2);
-					break;
 				case 6:
-					if (SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2008R2
-					    || SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2008
-					    || SystemInfoApp.SystemInfo.Version == SystemInfoApp.WindowsVersion.WindowsServer2012)
+					if (SystemInfo.Version == WindowsVersion.WindowsServer2008R2
+					    || SystemInfo.Version == WindowsVersion.WindowsServer2012)
 						_form1.printFeatureStatus(true);
 					else
 						_form1.printFeatureStatus(false);

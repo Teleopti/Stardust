@@ -62,10 +62,7 @@ namespace CheckPreRequisites.Checks
 			var sqlEngineService = "MSSQLSERVER";
 			var sqlAgentService = "SQLSERVERAGENT";
 			var olapService = "MSSQLServerOLAPService";
-			var ssis = "MSDTSSERVER";
-			
-			if (sqlVersion > 10)
-				ssis = "MSDTSSERVER100";
+			var ssis = "MSDTSSERVER100";
 			if (sqlVersion >= 11)
 				ssis = "MSDTSSERVER110";
 
@@ -111,9 +108,9 @@ namespace CheckPreRequisites.Checks
 			return res;
 		}
 
-		private static int SQLServerMajorVersion(string connString)
+		private static double SQLServerMajorVersion(string connString)
 		{
-			string res;
+			double result;
 			const string versionCommand = "select convert(char(20), serverproperty('ProductVersion'))";
 			using (var conn = new SqlConnection(connString))
 			{
@@ -122,11 +119,13 @@ namespace CheckPreRequisites.Checks
 				using (var reader = cmd.ExecuteReader())
 				{
 					reader.Read();
-					res = reader.GetString(0).Split(new[] {'.'})[0];
+					var res = reader.GetString(0).Split(new[] {'.'});
+					result = double.Parse(res[0]);
+					result = result + (double.Parse(res[1]) / 100);
 				}
 				conn.Close();
 			}
-			return Int32.Parse(res);
+			return result;
 		}
 
 		private void ServiceCheck(string target, string serviceName)
@@ -172,7 +171,7 @@ namespace CheckPreRequisites.Checks
 		{
 			//SQL Management Studio - Used for sql management and development
 			var software = "Microsoft SQL Server Management Studio";
-			var minValue = "SQL Management Studio 2005/2008";
+			var minValue = "SQL Management Studio 2008/2012";
 			CheckSoftware(software, minValue);
 
 			if (sqlVersion >= 11)
@@ -185,7 +184,7 @@ namespace CheckPreRequisites.Checks
 			{
 				//SQL BI Studio - Used for SSIS development
 				software = "Microsoft SQL Server Development Studio";
-				minValue = "SQL BI Studio 2005/2008";
+				minValue = "SQL BI Studio 2008/2012";
 			}
 			CheckSoftware(software, minValue);
 		}
@@ -280,8 +279,8 @@ namespace CheckPreRequisites.Checks
 			var dbMajorVersion = SQLServerMajorVersion(connString);
 			var dbFullVersion = SQLServerFullVersion(connString);
 
-			_form1.printNewFeature("Database", "Full Version", "MS SQL Server 2005 or later", dbFullVersion);
-			_form1.printFeatureStatus(dbMajorVersion >= 9);
+			_form1.printNewFeature("Database", "Full Version", "MS SQL Server 2008 R2 or later", dbFullVersion);
+			_form1.printFeatureStatus(dbMajorVersion >= 10.5);
 		}
 
 		private void DBSysAdminCheck(string connString)

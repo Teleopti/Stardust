@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SystemInfoApp
+﻿namespace CheckPreRequisites
 {
    /// <summary>
    /// Enumeration for possible Windows versions.
