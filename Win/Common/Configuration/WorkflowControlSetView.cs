@@ -51,6 +51,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.Current.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
+
+			if (!toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			{
+				radioButtonAdvFairnessPoints.Hide();
+				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvFairnessPoints);
+				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
