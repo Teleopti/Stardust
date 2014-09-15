@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
-using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using MbCache.Core;
 using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
@@ -11,10 +10,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
