@@ -177,7 +177,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new DaysOffControl(),
 											new AlarmControl(),
 											new ManageAlarmSituations(),
-											new FairnessValuesControl(),
 											new DefinitionSetSettings(),
 											new WorkflowControlSetView(_toggleManager),
 											new AuditingPage(),
@@ -189,6 +188,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				allSupportedPages.Add(new BadgeThresholdSettings());
 			}
 
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			{
+				allSupportedPages.Add(new FairnessValuesControl());
+			}
+			
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
 			
