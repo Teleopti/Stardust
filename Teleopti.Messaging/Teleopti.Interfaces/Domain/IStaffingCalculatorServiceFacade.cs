@@ -5,6 +5,6 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IStaffingCalculatorServiceFacade : IStaffingCalculatorService
 	{
-		double ServiceLevelAchievedOcc(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5, double forecastedAgents);
+		double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Calculation;
+using Teleopti.Ccc.Secrets.Calculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		private readonly bool _occEsl;
 		private readonly IStaffingCalculatorService _secretService = new StaffingCalculatorService();
+		private readonly ServiceLevelAchivedOcc _serviceLevelAchivedOcc = new ServiceLevelAchivedOcc();
 
 		public StaffingCalculatorServiceFacade(){}
 
@@ -32,12 +34,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			return _secretService.AgentsUseOccupancy(obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7);
 		}
 
-		public double ServiceLevelAchievedOcc(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5, double forecastedAgents)
+		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents)
 		{
 			if (!_occEsl)
-				return _secretService.ServiceLevelAchieved(obj0, obj1, obj2, obj3, obj4, obj5);
+				return _secretService.ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)sla*100);
 
-			return 2;
+			return _serviceLevelAchivedOcc.ServiceLevelAchived(forecastedAgents, agents, sla, (int) serviceTime, calls,
+				TimeSpan.FromSeconds(aht), intervalLength);
 		}
 
 		public double ServiceLevelAchieved(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5)

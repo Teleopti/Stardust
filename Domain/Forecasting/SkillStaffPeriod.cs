@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     Payload.TaskData.Tasks,
                     Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
-                    (int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100), 
+                    Payload.ServiceAgreementData.ServiceLevel.Percent.Value, 
 					Payload.ForecastedIncomingDemand));
 
                 var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     Payload.TaskData.Tasks,
                     Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
-					(int)(Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100),
+					Payload.ServiceAgreementData.ServiceLevel.Percent.Value, 
 					Payload.ForecastedIncomingDemand));
 
             }

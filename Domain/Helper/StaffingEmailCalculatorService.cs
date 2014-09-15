@@ -48,15 +48,12 @@ namespace Teleopti.Ccc.Domain.Helper
             return 1; //Always 100%
         }
 
-		public double ServiceLevelAchievedOcc(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5,
-			double forecastedAgents)
+		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength,
+			double sla, double forecastedAgents)
 		{
-			return ServiceLevelAchieved(obj0, obj1, obj2, obj3, obj4, obj5);
+			return 0;
+			//return ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)sla*100);
 		}
 
-		public double ServiceLevelAchievedOcc(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5)
-		{
-			return ServiceLevelAchieved(obj0, obj1, obj2, obj3, obj4, obj5);
-		}
     }
 }
