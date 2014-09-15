@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container).Configure();
+				new ContainerConfiguration(container, null).Configure();
 				container.Resolve<ConsumerOf<IEvent>>().Should().Not.Be.Null();
 			}
 		}
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container).Configure();
+				new ContainerConfiguration(container, null).Configure();
 				container.Resolve<ConsumerOf<ExportMultisiteSkillsToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container).Configure();
+				new ContainerConfiguration(container, null).Configure();
 				container.Resolve<ConsumerOf<ExportMultisiteSkillToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container).Configure();
+				new ContainerConfiguration(container, null).Configure();
 				container.Resolve<ConsumerOf<ImportForecastsFileToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container).Configure();
+				new ContainerConfiguration(container, null).Configure();
 				container.Resolve<ConsumerOf<ImportForecastsToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container).Configure();
+				new ContainerConfiguration(container, null).Configure();
 				container.Resolve<ConsumerOf<RunPayrollExport>>().Should().Not.Be.Null();
 			}
 		}

@@ -170,15 +170,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             using (PerformanceOutput.ForOperation("Building Ioc container"))
             {
+
                 var builder = new ContainerBuilder();
 
 								var mbCacheModule = new MbCacheModule(null);
 				builder.RegisterModule(mbCacheModule);
-	            builder.RegisterModule(new CommonModule
-	            {
-		            MessageBrokerListeningEnabled = true,
-		            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
-	            });
+	            builder.RegisterModule(
+		            new CommonModule(new IocConfiguration(
+			            new IocArgs {MessageBrokerListeningEnabled = true},
+			            CommonModule.ToggleManagerForIoc()))
+		            {
+			            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
+		            });
 				builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new AuthenticationModule());

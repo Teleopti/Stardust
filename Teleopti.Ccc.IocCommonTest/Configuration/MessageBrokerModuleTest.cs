@@ -1,13 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Autofac.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client.Http;
@@ -61,9 +62,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveKeepAliveStrategies()
 		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule {MessageBrokerListeningEnabled = true});
-			using (var container = builder.Build())
+			var config = new IocConfiguration(new IocArgs {MessageBrokerListeningEnabled = true}, null);
+			using (var container = BuildContainer(config))
 			{
 				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
 					.Select(x => x.GetType())
@@ -74,9 +74,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldNotUseSignalRIfListeningDisabledAndHttpSenderEnabled()
 		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule {MessageBrokerListeningEnabled = false});
-			using (var container = BuildContainerWithToggle(builder, Toggles.Messaging_HttpSender_29205, true))
+			var config = new IocConfiguration(
+				new IocArgs {MessageBrokerListeningEnabled = false},
+				ToggleManager(Toggles.Messaging_HttpSender_29205, true)
+				);
+			using (var container = BuildContainer(config))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<DisabledSignalRClient>();
 				container.Resolve<IMessageSender>().Should().Not.Be.Null();
@@ -86,9 +88,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldStillUseSignalRIfListeningDisabledAndHttpSenderDisabled()
 		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule { MessageBrokerListeningEnabled = false });
-			using (var container = BuildContainerWithToggle(builder, Toggles.Messaging_HttpSender_29205, false))
+			var config = new IocConfiguration(
+				new IocArgs { MessageBrokerListeningEnabled = false },
+				ToggleManager(Toggles.Messaging_HttpSender_29205, false)
+				);
+			using (var container = BuildContainer(config))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<SignalRClient>();
 			}
@@ -96,27 +100,31 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 		private IContainer BuildContainer()
 		{
-			return Builder().Build();
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), null)));
+			return builder.Build();
 		}
 
-		private static ContainerBuilder Builder()
+		private IContainer BuildContainer(IIocConfiguration configuration)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<CommonModule>();
-			return builder;
+			builder.RegisterModule(new CommonModule(configuration));
+			return builder.Build();
 		}
 
 		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
 		{
-			return BuildContainerWithToggle(Builder(), toggle, value);
+			var builder = new ContainerBuilder();
+			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
+			builder.RegisterModule(new CommonModule(config));
+			return builder.Build();
 		}
 
-		private static IContainer BuildContainerWithToggle(ContainerBuilder builder, Toggles toggle, bool value)
+		private static IToggleManager ToggleManager(Toggles toggle, bool value)
 		{
 			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
 			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			builder.Register(c => toggleManager).As<IToggleManager>();
-			return builder.Build();
+			return toggleManager;
 		}
 	}
 }

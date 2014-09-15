@@ -1,23 +1,24 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
-using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 {
 	public class ContainerConfiguration
 	{
 		private readonly IContainer _container;
+		private readonly IToggleManager _toggleManager;
 
-		public ContainerConfiguration(IContainer container)
+		public ContainerConfiguration(IContainer container, IToggleManager toggleManager)
 		{
 			_container = container;
+			_toggleManager = toggleManager;
 		}
 
 		public void Configure()
@@ -30,10 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
-			build.RegisterModule(new CommonModule
-			{
-				SharedContainer = sharedContainer
-			});
+			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs { SharedContainer = sharedContainer }, _toggleManager)));
 
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();

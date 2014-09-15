@@ -1,6 +1,6 @@
 using System;
-using System.Configuration;
 using Autofac;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,16 +9,16 @@ namespace Teleopti.Ccc.IocCommon
 {
 	public class CommonModule : Module
 	{
-		public string PathToToggle { get; set; }
-		public string ToggleMode { get; set; }
-		public bool MessageBrokerListeningEnabled { get; set; }
+		private readonly IIocConfiguration _configuration;
 		public Type RepositoryConstructorType { get; set; }
-		public IContainer SharedContainer { get; set; }
 
-		public CommonModule()
+		public CommonModule() : this(new IocConfiguration(new IocArgs(), ToggleManagerForIoc()))
 		{
-			PathToToggle = ConfigurationManager.AppSettings["FeatureToggle"];
-			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
+		}
+
+		public CommonModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
 			RepositoryConstructorType = typeof(ICurrentUnitOfWork);
 		}
 
@@ -27,13 +27,22 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
-			builder.RegisterModule(new ToggleNetModule(PathToToggle, ToggleMode));
-			builder.RegisterModule(new MessageBrokerModule
-			{
-				MessageBrokerListeningEnabled = MessageBrokerListeningEnabled,
-				SharedContainer = SharedContainer
-			});
+			builder.RegisterModule(new ToggleNetModule(_configuration));
+			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
+		}
+
+		public static IToggleManager ToggleManagerForIoc()
+		{
+			return ToggleManagerForIoc(new IocConfiguration(new IocArgs(), null));
+		}
+
+		public static IToggleManager ToggleManagerForIoc(IocConfiguration configuration)
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new ToggleNetModule(configuration));
+			using (var container = builder.Build())
+				return container.Resolve<IToggleManager>();
 		}
 	}
 }

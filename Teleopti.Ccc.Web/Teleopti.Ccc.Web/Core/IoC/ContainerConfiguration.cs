@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<BootstrapperModule>();
 
-			builder.RegisterModule(new CommonModule {PathToToggle = featureTogglePath});
+			var args = new IocArgs {FeatureToggle = featureTogglePath};
+			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)))));
 
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ResourceHandlerModule>();

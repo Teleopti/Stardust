@@ -13,22 +13,21 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	internal class ToggleNetModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
 		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));
 
-		private readonly string _pathToToggle;
-		private readonly string _toggleMode;
-
-		
-		public ToggleNetModule(string pathToToggle, string toggleMode)
+		public ToggleNetModule(IIocConfiguration configuration)
 		{
-			_toggleMode = toggleMode;
-			_pathToToggle = pathToToggle;
+			_configuration = configuration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (string.IsNullOrEmpty(_pathToToggle))
+			var pathToToggle = _configuration.Args().FeatureToggle;
+			var toggleModeArg = _configuration.Args().ToggleMode;
+
+			if (string.IsNullOrEmpty(pathToToggle))
 			{
 				logger.Warn(missingPathToToggle);
 				builder.RegisterType<FalseToggleManager>()
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			}
 			else if (togglePathIsAnUrl())
 			{
-				builder.Register(c => new ToggleQuerier(_pathToToggle))
+				builder.Register(c => new ToggleQuerier(pathToToggle))
 					.SingleInstance()
 					.As<IToggleManager>()
 					.As<IToggleFiller>();
@@ -49,9 +48,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					const string developerMode = "ALL";
 					const string rcMode = "RC";
 
-					var toggleMode = _toggleMode==null ? 
+					var toggleMode = toggleModeArg==null ? 
 						string.Empty : 
-						_toggleMode.Trim();
+						toggleModeArg.Trim();
 
 					var defaultSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase)
 						? (IToggleSpecification) new TrueSpecification()
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 					var specMappings = new DefaultSpecificationMappings();
 					specMappings.AddMapping("rc", rcSpecification);
-					var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(_pathToToggle), specMappings));
+					var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(pathToToggle), specMappings));
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
 					return new toggleCheckerWrapper(toggleConfiguration.Create());
 				})
@@ -79,7 +78,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		private bool togglePathIsAnUrl()
 		{
-			return _pathToToggle.StartsWith("http://") || _pathToToggle.StartsWith("https://");
+			var pathToToggle = _configuration.Args().FeatureToggle;
+			return pathToToggle.StartsWith("http://") || pathToToggle.StartsWith("https://");
 		}
 
 		private class toggleCheckerWrapper : IToggleManager

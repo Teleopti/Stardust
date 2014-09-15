@@ -2,25 +2,22 @@ using System.Configuration;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
-using IContainer = Autofac.IContainer;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class MessageBrokerModule : Module
 	{
-		public bool MessageBrokerListeningEnabled { get; set; }
-		public IContainer SharedContainer { get; set; }
+		private readonly IIocConfiguration _configuration;
 
-		private T resolveSharedComponent<T>(IComponentContext c)
+		public MessageBrokerModule(IIocConfiguration configuration)
 		{
-			return SharedContainer == null ? c.Resolve<T>() : SharedContainer.Resolve<T>();
+			_configuration = configuration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -35,17 +32,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.Register(c =>
 			{
-				if (MessageBrokerListeningEnabled)
-					return (ISignalRClient)resolveSharedComponent<SignalRClient>(c);
-				if (c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205))
-					return resolveSharedComponent<DisabledSignalRClient>(c);
-				return resolveSharedComponent<SignalRClient>(c);
+				if (_configuration.Args().MessageBrokerListeningEnabled)
+					return (ISignalRClient) _configuration.Args().ResolveSharedComponent<SignalRClient>(c);
+				if (_configuration.Toggle(Toggles.Messaging_HttpSender_29205))
+					return _configuration.Args().ResolveSharedComponent<DisabledSignalRClient>(c);
+				return _configuration.Args().ResolveSharedComponent<SignalRClient>(c);
 			})
 				.As<ISignalRClient>()
 				.As<IMessageBrokerUrl>()
 				.SingleInstance();
 
-			if (MessageBrokerListeningEnabled)
+			if (_configuration.Args().MessageBrokerListeningEnabled)
 			{
 				builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>().SingleInstance();
 				builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>().SingleInstance();
@@ -65,10 +62,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<SignalRSender>()
 				.SingleInstance();
 
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205)
+			builder.Register(c => _configuration.Toggle(Toggles.Messaging_HttpSender_29205)
 				? c.Resolve<HttpSender>() : (IMessageSender)c.Resolve<SignalRSender>())
 				.As<IMessageSender>()
 				.SingleInstance();
 		}
 	}
+
 }

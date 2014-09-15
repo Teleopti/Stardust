@@ -10,6 +10,8 @@ using Autofac.Core.Lifetime;
 using Autofac.Core.Resolving;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -87,33 +89,34 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
+			var toggleManager = CommonModule.ToggleManagerForIoc();
 			var sharedContainer = new ContainerBuilder().Build();
-			new ContainerConfiguration(sharedContainer).Configure(null);
+			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
 
-			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(sharedContainer)));
+			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_requestBus.Start();
 
-			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(sharedContainer)));
+			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_generalBus.Start();
 
-			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(sharedContainer)));
+			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_denormalizeBus.Start();
 
-			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(sharedContainer)));
+			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_rtaBus.Start();
 
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(makeContainer(sharedContainer)));
+			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(makeContainer(toggleManager, sharedContainer)));
 			_payrollBus.Start();
 
 			AppDomain.MonitoringIsEnabled = true;
 		}
 
-		private static IContainer makeContainer(IContainer sharedContainer)
+		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
 		{
 			var container = new ContainerBuilder().Build();
-			new ContainerConfiguration(container).Configure(sharedContainer);
+			new ContainerConfiguration(container, toggleManager).Configure(sharedContainer);
 			return container;
 		}
 
