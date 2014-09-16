@@ -7,11 +7,13 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IWorkflowControlSet _workflowControlSet;
         private readonly CultureInfo _culture = TeleoptiPrincipal.Current.Regional.Culture;
         private List<ISkill> _skillList;
+        private IToggleManager _toggleManager;
 
         [SetUp]
         public void Setup()
@@ -57,8 +60,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _workflowControlSet = new WorkflowControlSet("My Workflow Control Set");
             _workflowControlSet.SetId(Guid.NewGuid());
             _workflowControlSetModel = new WorkflowControlSetModel(_workflowControlSet);
+            _toggleManager = _mocks.StrictMock<IToggleManager>();
+            _toggleManager.Stub(x => x.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)).Return(true);
 
-            _target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory);
+            _target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory, _toggleManager);
         }
 
         [Test]

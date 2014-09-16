@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         public void Setup()
         {
             _mocks = new MockRepository();
-            _target = new WorkflowControlSetPresenter(null, null, null);
+            _target = new WorkflowControlSetPresenter(null, null, null, null);
             _model = _mocks.StrictMock<IWorkflowControlSetModel>();
             _target.SelectedModel = _model;
         }
