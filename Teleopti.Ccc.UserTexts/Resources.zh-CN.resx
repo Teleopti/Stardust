@@ -10081,7 +10081,7 @@ Teleopti R&amp;D</value>
     <value>快速预测会在向导完成后作为一个后台工作运行。你可以通过历史查看工作进度。</value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>当换班请求是新建，拒绝，或者批准的状态时，不会显示班表</value>
+    <value>仅当换班请求的状态是待决或等待你的批准时才会显示班表</value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>新建模板名</value>

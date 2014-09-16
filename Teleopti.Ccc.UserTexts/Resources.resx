@@ -11274,7 +11274,7 @@ These options are activated:
     <comment>Information on the last step in quick forecast</comment>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Can not display schedule when the status of the shift trade request is new, denied or approved</value>
+    <value>Schedule is only shown when status of the shift trade is Pending or Waiting your approval</value>
     <comment>A message in shifttrade with an explanation of why no schedules are shown</comment>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
