@@ -6,6 +6,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
@@ -14,11 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 	{
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly ICreateHourText _createHourText;
+		private readonly IPersonNameProvider _personNameProvider;
 
-		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText)
+		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText, IPersonNameProvider personNameProvider)
 		{
 			_userTimeZone = userTimeZone;
 			_createHourText = createHourText;
+			_personNameProvider = personNameProvider;
 		}
 
 		private class TimeLineMappingData
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<TeamScheduleDayDomainData, AgentScheduleViewModel>()
-				.ForMember(d => d.AgentName, o => o.MapFrom(s => s.Person.Name.ToString()))
+				.ForMember(d => d.AgentName, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.Person)))
 				.ForMember(d => d.DayOffText, o => o.ResolveUsing(s =>
 																				{
 																					if (s.Projection == null)

@@ -231,6 +231,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
+			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;

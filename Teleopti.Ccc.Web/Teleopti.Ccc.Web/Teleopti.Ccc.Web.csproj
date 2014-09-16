@@ -421,6 +421,7 @@
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />
     <Compile Include="Core\MachineKeySessionSecurityTokenHandler.cs" />
+    <Compile Include="Core\PersonNameProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\Cookie\IBaseSessionSpecificCookieDataProviderSettings.cs" />

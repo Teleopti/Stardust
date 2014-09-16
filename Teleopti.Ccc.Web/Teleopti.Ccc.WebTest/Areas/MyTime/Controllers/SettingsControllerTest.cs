@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Web.Mvc;
 using System.Web.Routing;
-using AutoMapper;
 using MbCache.Core;
 using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;

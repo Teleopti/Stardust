@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(
 				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
-					new CreateHourText(new CurrentThreadUserCulture(), userTimeZone))));
+					new CreateHourText(new CurrentThreadUserCulture(), userTimeZone), null)));
 		}
 		
 		[Test]
@@ -110,15 +111,20 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapAgentNames()
 		{
-			var person = new Person {Name = new Name("a", "person")};
+			var personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
+			var person = new Person { Name = new Name("a", "person") };
+			string name = person.Name.FirstName + " " + person.Name.LastName;
+			personNameProvider.Stub(x => x.BuildNameFromSetting(person)).Return(name);
+			Mapper.Reset();
+			Mapper.Initialize(c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
+									new CreateHourText(new CurrentThreadUserCulture(), userTimeZone), personNameProvider)));
 
 			var result = Mapper.Map<TeamScheduleDayDomainData, AgentScheduleViewModel>(new TeamScheduleDayDomainData
 			                                                                           	{
 			                                                                           		DisplayTimePeriod = data.DisplayTimePeriod,
 			                                                                           		Person = person
 			                                                                           	});
-
-			result.AgentName.Should().Be.EqualTo(person.Name.ToString());
+			result.AgentName.Should().Be.EqualTo(name);
 		}
 
 		[Test]
