@@ -354,9 +354,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			return self.requestedDateInternal();
 		},
 		write: function(value) {
-			//remove old layer's tooltip if it still exist
-			$("[class='tooltip fade top in']").remove();
-
 			if (self.requestedDateInternal().diff(value) == 0) return;
 			self.prepareLoad();
 			self.requestedDateInternal(value);

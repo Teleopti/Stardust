@@ -107,48 +107,19 @@ ko.bindingHandlers.timepicker = {
 
 //Sets the tooltip (using bootstrapper) to the bound text
 var TooltipBinding = function() {
-
-    var getOptions = function (valueAccessor) {
-        var options = ko.utils.unwrapObservable(valueAccessor());
-        options.title = ko.utils.unwrapObservable(options.title);
-        return options;
-    };
-
-    var trackIsShowing = function($element) {
-        var tooltip = $element.data('bs.tooltip');
-        tooltip.options.showing = false;
-        $element
-            .on("hide.bs.tooltip", function () {
-                tooltip.showing = false;
-            })
-            .on("show.bs.tooltip", function () {
-                tooltip.showing = true;
-            });
-    };
-
-    var refreshIfShowing = function ($element) {
-        var tooltip = $element.data('bs.tooltip');
-        if (tooltip.showing) {
-            var preserveAnimation = tooltip.options.animation;
-            tooltip.options.animation = false;
-            $element.tooltip('hide').tooltip('show');
-            tooltip.options.animation = preserveAnimation;
-        }
-    };
-    
     this.init = function(element, valueAccessor, allBindingsAccessor) {
-        var $element = $(element);
-        $element.tooltip(getOptions(valueAccessor));
-        trackIsShowing($element);
-    };
+    	var local = ko.utils.unwrapObservable(valueAccessor()),
+            options = {};
 
-    this.update = function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-        var $element = $(element);
-        var tooltip = $element.data('bs.tooltip');
-        $.extend(tooltip.options, getOptions(valueAccessor));
-        refreshIfShowing($element);
-    };
+    	ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
+    	ko.utils.extend(options, local);
 
+    	$(element).tooltip(options);
+
+    	ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+    		$(element).tooltip("destroy");
+    	});
+    };
 };
 ko.bindingHandlers.tooltip = new TooltipBinding();
 
