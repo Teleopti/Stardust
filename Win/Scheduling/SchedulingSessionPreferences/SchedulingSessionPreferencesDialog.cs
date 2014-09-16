@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -19,33 +20,40 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 {
 	public partial class SchedulingSessionPreferencesDialog : BaseDialogForm
 	{
-
 		private readonly ISchedulingOptions _schedulingOptions;
 		private readonly IDaysOffPreferences _daysOffPreferences;
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
-		private readonly bool _backToLegal;
+		private readonly bool _backToLegalStateDialog;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IList<IGroupPageLight> _groupPages;
 		private readonly IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly string _settingValue;
 		private readonly IEnumerable<IActivity> _availableActivity;
+		private readonly IToggleManager _toggleManager;
 		private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
 		private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IEnumerable<IShiftCategory> shiftCategories,
-			bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
-			IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity)
+		public SchedulingSessionPreferencesDialog(
+			ISchedulingOptions schedulingOptions, 
+			IDaysOffPreferences daysOffPreferences, 
+			IEnumerable<IShiftCategory> shiftCategories,
+			bool backToLegalStateDialog, 
+			ISchedulerGroupPagesProvider groupPagesProvider,
+			IEnumerable<IScheduleTag> scheduleTags, 
+			string settingValue, 
+			IEnumerable<IActivity> availableActivity, 
+			IToggleManager toggleManager)
 			: this()
 		{
 			_schedulingOptions = schedulingOptions;
 			_daysOffPreferences = daysOffPreferences;
 			_shiftCategories = shiftCategories;
 			
-			_backToLegal = backToLegal;
+			_backToLegalStateDialog = backToLegalStateDialog;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = groupPagesProvider.GetGroups(true);
 			_groupPagesForTeamBlockPer = groupPagesProvider.GetGroups(true);
@@ -55,6 +63,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 			_settingValue = settingValue;
 			_availableActivity = availableActivity;
+			_toggleManager = toggleManager;
 		}
 
 		private IEnumerable<IScheduleTag> addKeepOriginalScheduleTag(IEnumerable<IScheduleTag> scheduleTags)
@@ -81,7 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					_defaultGeneralSettings = settingRepository.FindValueByKey(_settingValue + "GeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
 					_defaultAdvancedSettings = settingRepository.FindValueByKey(_settingValue + "AdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
 					_defaultExtraSettings = settingRepository.FindValueByKey(_settingValue + "ExtraSetting", new SchedulingOptionsExtraPersonalSetting());
-					if (_backToLegal)
+					if (_backToLegalStateDialog)
 						_defaultDayOffPlannerSettings = settingRepository.FindValueByKey(_settingValue + "DayOffPlannerSettings", new SchedulingOptionsDayOffPlannerPersonalSettings());
 				}
 			}
@@ -92,7 +101,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
 			_defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages,_groupPagesForTeamBlockPer, _availableActivity);
-			if (_backToLegal && _defaultDayOffPlannerSettings != null)
+			if (_backToLegalStateDialog && _defaultDayOffPlannerSettings != null)
 				_defaultDayOffPlannerSettings.MapTo(_daysOffPreferences);
 		}
 
@@ -107,7 +116,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_defaultGeneralSettings.MapFrom(_schedulingOptions);
 			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
 			_defaultExtraSettings.MapFrom(_schedulingOptions );
-			if (_backToLegal && _defaultDayOffPlannerSettings != null)
+			if (_backToLegalStateDialog && _defaultDayOffPlannerSettings != null)
 				_defaultDayOffPlannerSettings.MapFrom(_daysOffPreferences);
 
 			try
@@ -120,7 +129,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "ExtraSetting",_defaultExtraSettings );
 					uow.PersistAll();
-					if (_backToLegal && _defaultDayOffPlannerSettings != null)
+					if (_backToLegalStateDialog && _defaultDayOffPlannerSettings != null)
 					{
 						new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "DayOffPlannerSettings", _defaultDayOffPlannerSettings);
 						uow.PersistAll();
@@ -134,13 +143,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		private void Form_Load(object sender, EventArgs e)
 		{
-			if (!_backToLegal)
+			if (!_backToLegalStateDialog)
 				tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
 
 			loadPersonalSettings();
 
 			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,
-				_backToLegal, _groupPagesProvider, _scheduleTags, _availableActivity);
+				_backToLegalStateDialog, _groupPagesProvider, _scheduleTags, _availableActivity, _toggleManager);
 
 			dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
 			dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
@@ -229,5 +238,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 					tabPageDayOffPlanningOptions.ImageIndex = 0;
 			}
 		}
+
+
 	}
 }

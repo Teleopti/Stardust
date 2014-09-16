@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         public void AddWorkflowControlSet()
         {
             IWorkflowControlSet newDomainEntity = new WorkflowControlSet(Resources.NewWorkflowControlSet);
-			if (!_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
 			{
 				newDomainEntity.UseShiftCategoryFairness = true;
 			}

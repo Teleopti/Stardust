@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -24,6 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private IEnumerable<IScheduleTag> _scheduleTags;
 		private ISchedulerGroupPagesProvider _groupPagesProvider;
 		private GroupPageLight _singleAgentEntry;
+		private IToggleManager _toggleManager;
 
 		public SchedulingSessionPreferencesTabPanel()
 		{
@@ -33,16 +36,35 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "0")]
-		public void Initialize(ISchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories,
-		                       bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
-		                       IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
+		public void Initialize(ISchedulingOptions schedulingOptions, 
+							   IEnumerable<IShiftCategory> shiftCategories,
+		                       bool backToLegalStateDialog, 
+							   ISchedulerGroupPagesProvider groupPagesProvider,
+		                       IEnumerable<IScheduleTag> scheduleTags, 
+							   IEnumerable<IActivity> availableActivity, 
+							   IToggleManager toggleManager)
 		{
+			_toggleManager = toggleManager;
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;
 
-			if (backToLegal)
+			if (backToLegalStateDialog)
 			{
 				pnlBlockTeamScheduling.Visible = false;
+			}
+
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			{
+
+				if (backToLegalStateDialog)
+				{
+					tabPageExtra.Hide();
+				}
+				else
+				{
+					tableLayoutPanel2.RowStyles[2].Height = 0;
+					tableLayoutPanel2.RowStyles[1].Height = 0;
+				}
 			}
 
 			labelResourceCalculateEveryColon.Visible = true;
@@ -240,7 +262,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.UsePreferences = _localSchedulingOptions.UsePreferences;
 			_schedulingOptions.ShiftCategory = _localSchedulingOptions.ShiftCategory;
 			_schedulingOptions.RefreshRate = _localSchedulingOptions.RefreshRate;
-			_schedulingOptions.Fairness = _localSchedulingOptions.Fairness;
 			_schedulingOptions.UseShiftCategoryLimitations = _localSchedulingOptions.UseShiftCategoryLimitations;
 			_schedulingOptions.UsePreferencesMustHaveOnly = _localSchedulingOptions.UsePreferencesMustHaveOnly;
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling =
@@ -248,8 +269,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.UseTeam = _localSchedulingOptions.UseTeam;
 			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
 			_schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
+
+			_schedulingOptions.Fairness = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317) 
+				? new Percent(0) : _localSchedulingOptions.Fairness;
+
 			_schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
-		        _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
+		    _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
 			_schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
 			_schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
 			_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
@@ -288,9 +313,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				_localSchedulingOptions.ShiftCategory = null;
 
 			_localSchedulingOptions.Fairness = new Percent(trackBar1.Value/100d);
-			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.GroupPageForShiftCategoryFairness =
-				(IGroupPageLight) comboBoxGroupingFairness.SelectedItem;
+				(IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
+			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
 			 if(checkBoxUseMaxSeats.Checked && checkBoxDoNotBreakMaxSeats.Checked) 
 		    _localSchedulingOptions.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak;
@@ -337,12 +362,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 			checkBoxUseShiftCategoryRestrictions.Checked = _localSchedulingOptions.UseShiftCategoryLimitations;
 
-			if (_localSchedulingOptions.ShiftCategory != null)
-				checkBoxUseShiftCategory.Checked = true;
-			else
-				checkBoxUseShiftCategory.Checked = false;
+			checkBoxUseShiftCategory.Checked = _localSchedulingOptions.ShiftCategory != null;
 
-			trackBar1.Value = (int) (_localSchedulingOptions.Fairness.Value*100);
+			trackBar1.Value = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
+				? 0 : (int) (_localSchedulingOptions.Fairness.Value*100);
 
 			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
 		    if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)

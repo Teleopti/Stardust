@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
 
-			if (!toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			if (toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
 			{
 				radioButtonAdvFairnessPoints.Hide();
 				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvFairnessPoints);
