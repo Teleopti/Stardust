@@ -37,9 +37,10 @@ define([
 
 	var viewModel;
 
-	var loadSkills = function (date, callback) {
+	var loadSkills = function (buid, date, callback) {
 		$.ajax({
 			url: 'StaffingMetrics/AvailableSkills',
+			headers: { 'X-Business-Unit-Filter': buid},
 			cache: false,
 			dataType: 'json',
 			data: { date: date },
@@ -47,9 +48,9 @@ define([
 		});
 	};
 
-	var loadGroupPages = function (date, callback) {
+	var loadGroupPages = function (buid, date, callback) {
 		ajax.ajax({
-			url: 'GroupPage/AvailableGroupPages',
+			url: 'GroupPage/AvailableGroupPages?businessUnitId=' + buid,
 			data: { date: date },
 			success: callback
 		});
@@ -69,19 +70,19 @@ define([
 			viewModel.GroupId.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.Date.subscribe(function () {
 				if (viewModel.Loading() || !viewModel.GroupId())
 					return;
-				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.SelectedSkill.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
@@ -101,6 +102,7 @@ define([
 
 			var groupPagesDeferred = $.Deferred();
 			loadGroupPages(
+				viewModel.BusinessUnitId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
 					
@@ -124,6 +126,7 @@ define([
 			var groupScheduleDeferred = $.Deferred();
 			groupPagesDeferred.done(function () {
 				groupschedulesubscriptions.subscribeGroupSchedule(
+					viewModel.BusinessUnitId(),
 					viewModel.GroupId(),
 					helpers.Date.ToServer(viewModel.Date()),
 					function (personIdToCheck) {
@@ -148,6 +151,7 @@ define([
 				enabled: function() {
 					viewModel.StaffingMetricsVisible(true);
 					loadSkills(
+						viewModel.BusinessUnitId(),
 						helpers.Date.ToServer(viewModel.Date()),
 						function(data) {
 
@@ -171,6 +175,7 @@ define([
 						viewModel.LoadingStaffingMetrics(true);
 
 						staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
+							viewModel.BusinessUnitId(),
 							helpers.Date.ToServer(viewModel.Date()),
 							viewModel.SelectedSkill().Id,
 							function(data) {

@@ -52,6 +52,7 @@ timezoneCurrent,
 			});
 		}).extend({ throttle: 500 });
 
+		this.BusinessUnitId = ko.observable();
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
 		this.ScheduleDate = ko.observable();
@@ -150,6 +151,7 @@ timezoneCurrent,
 
 		this.SetViewOptions = function (options) {
 			self.ScheduleDate(timezoneDisplay.FromDate(moment(options.date, 'YYYYMMDD'), timezoneCurrent.IanaTimeZone()));
+			self.BusinessUnitId(options.buid);
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
 			self.SelectedStartMinutes(Number(options.minutes));

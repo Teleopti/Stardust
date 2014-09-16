@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,48 +10,38 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class GroupingReadOnlyRepository : IGroupingReadOnlyRepository
 	{
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public GroupingReadOnlyRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public GroupingReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public IEnumerable<ReadOnlyGroupPage> AvailableGroupPages()
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT DISTINCT PageName,PageId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId ORDER BY pagename")
-					.SetGuid("businessUnitId",
-					         ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
-					.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupPage)))
+					.SetGuid("businessUnitId", ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupPage)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupPage>();
-			}
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND pageid=:pageId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
-					.SetGuid("businessUnitId",
-					         ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetGuid("businessUnitId", ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
 					.SetGuid("pageId", groupPage.PageId)
 					.SetDateTime("currentDate", queryDate.Date)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupDetail)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
-			}
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT PageId, GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
 					.SetGuid("businessUnitId",
 							 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
@@ -60,14 +49,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
-			}
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND groupid=:groupId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
 					.SetGuid("businessUnitId",
 							 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
@@ -76,7 +62,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
-			}
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
@@ -84,11 +69,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //change the array to comma seperated string
             string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
-						using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-            		"exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
-            }
+	        _currentUnitOfWork.Session().CreateSQLQuery(
+		        "exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
@@ -96,11 +78,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
-						using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+			_currentUnitOfWork.Session().CreateSQLQuery(
             		"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
-            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)")]
@@ -108,11 +87,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //change the array to comma seperated string
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
-						using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-            	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-            		"exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
-            }
+
+	        _currentUnitOfWork.Session().CreateSQLQuery(
+		        "exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
         }
 	}
 

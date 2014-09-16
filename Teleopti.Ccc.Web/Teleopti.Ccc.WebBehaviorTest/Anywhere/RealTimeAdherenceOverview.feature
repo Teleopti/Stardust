@@ -757,7 +757,8 @@ Scenario: Should be able to change schedule from agent state overview
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
 @ignore
 Scenario: Should be able to change schedule for multiple business units
-	Given I have a role with
+	Given the current time is '2014-09-09 12:30:00'
+	And I have a role with
 	| Field              | Value             |
 	| Name               | Real time analyst |
 	| Access to everyone | True              |

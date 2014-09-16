@@ -2,11 +2,13 @@ define([
 		'knockout',
 		'toggleQuerier',
 		'business_unit',
-		'ajax'
+		'ajax',
+		'navigation'
 ], function(ko,
 		toggleQuerier,
 		businessUnit,
-		ajax) {
+		ajax,
+		navigation) {
 
 		return function(resources) {
 			var self = this;
@@ -30,8 +32,13 @@ define([
 				}
 			};
 
+			self.setCurrentBusinessUnit = function(data) {
+				self.CurrentBusinessUnit(data);
+			}
+
 			self.switchBusinessUnit = function(data) {
-				
+				self.setCurrentBusinessUnit(data);
+				navigation.GoToTeamScheduleOritinal(data.Id);
 			}
 			
 			var checkBusinessUnitsFeature = function () {
@@ -40,9 +47,9 @@ define([
 						ajax.ajax({
 							url: "BusinessUnit",
 							success: function (data) {
-								self.changeScheduleForMultipleBUs(true);
 								self.fillBusinessUnits(data);
-								self.CurrentBusinessUnit(data[0].Name);
+								self.setCurrentBusinessUnit(data[0]);
+								self.changeScheduleForMultipleBUs(true);
 							}
 						});
 					}

@@ -24,9 +24,10 @@ define([
 		});
 	};
 
-	var loadDailyStaffingMetrics = function (date, skillId, callback) {
+	var loadDailyStaffingMetrics = function (buid, date, skillId, callback) {
 		$.ajax({
 			url: 'StaffingMetrics/DailyStaffingMetrics',
+			headers: { 'X-Business-Unit-Filter': buid },
 			cache: false,
 			dataType: 'json',
 			data: {
@@ -55,12 +56,13 @@ define([
 			return startPromise;
 		},
 
-		subscribeDailyStaffingMetrics: function (date, skillId, callback) {
+		subscribeDailyStaffingMetrics: function (buid, date, skillId, callback) {
 			unsubscribeDailyStaffingMetrics();
 			startPromise.done(function () {
-				loadDailyStaffingMetrics(date, skillId, callback);
+				loadDailyStaffingMetrics(buid, date, skillId, callback);
 
 				dailyStaffingMetricsSubscription = messagebroker.subscribe({
+					businessUnitId: buid,
 					domainType: 'IScheduledResourcesReadModel',
 					callback: function (notification) {
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {

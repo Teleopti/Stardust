@@ -34,6 +34,7 @@ define([
 
 		this.Loading = ko.observable(false);
 		this.PreSelectedPersonId = ko.observable(false);
+		this.BusinessUnitId = ko.observable();
 
 		this.Persons = ko.observableArray();
 		this.SortedPersons = ko.computed(function() {
@@ -91,7 +92,8 @@ define([
 			return personvm;
 		};
 
-		this.SetViewOptions = function(options) {
+		this.SetViewOptions = function (options) {
+			self.BusinessUnitId(options.buid);
 			self.PreSelectedPersonId(options.personid);
 			self.Date(function() {
 				var date = options.date;

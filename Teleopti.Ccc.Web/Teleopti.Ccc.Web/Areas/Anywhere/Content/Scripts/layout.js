@@ -41,6 +41,7 @@ define([
 	
 	var menu = new menuViewModel(resources);
 	var contentPlaceHolder;
+	var defaultBu;
 
 	function _displayView(routeInfo) {
 
@@ -163,7 +164,12 @@ define([
 				_displayView({ view: view, buid: buid, id: multipleTeams });
 			});
 		crossroads.addRoute('{view}', function (view) {
-			_displayView({ view: view });
+			_displayView({ view: view, buid: defaultBu.Id });
+		});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, buid) {
+				_displayView({ view: view, buid: buid });
 		});
 		crossroads.addRoute(
 			new RegExp('^(' + guidRegex + ')$', "i"),
@@ -171,7 +177,7 @@ define([
 			_displayView({ view: defaultView, buid: buid });
 		});
 		crossroads.addRoute('', function () {
-			_displayView({ view: defaultView });
+			_displayView({ view: defaultView, buid: defaultBu.Id });
 		});
 	}
 
@@ -229,6 +235,7 @@ define([
 				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
+				menu.setCurrentBusinessUnit(defaultBu);
 				timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
 				_initTrackingNotification(responseData.PersonId);
 			}
@@ -244,15 +251,23 @@ define([
 		});
 	}
 
+	ajax.ajax({
+		url: "BusinessUnit/Current",
+		success: function (data) {
+			defaultBu = data;
 
-		_render();
+			_render();
 
-		_initSignalR();
+			_initSignalR();
 
-		_setupRoutes();
-		_initializeHasher();
+			_setupRoutes();
 
-		_initMomentLanguageWithFallback();
+			_initializeHasher();
 
-		_bindMenu();
+			_initMomentLanguageWithFallback();
+
+			_bindMenu();
+		}
+	});
+
 });
