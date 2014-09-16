@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftTradeAbsenceSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradePersonalActivitySpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeMeetingSpecification>().As<IShiftTradeSpecification>();
-			builder.RegisterType<ShiftTradeEmptyScheduleSpecification>().As<IShiftTradeSpecification>();
 
 			builder.RegisterType<ShiftTradeValidator>().As<IShiftTradeValidator>();
 			builder.RegisterType<ShiftTradeLightValidator>().As<IShiftTradeLightValidator>();

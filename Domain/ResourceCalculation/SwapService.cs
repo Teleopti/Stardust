@@ -48,8 +48,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             else
             {
-                _selectedSchedules[0].Merge(schedulePart1, false,true);
-				_selectedSchedules[1].Merge(schedulePart2, false,true);
+				if (!schedulePart2.IsScheduled() && schedulePart1.IsScheduled())
+	            {
+					_selectedSchedules[0].Merge(schedulePart1, false, true);
+					_selectedSchedules[1].DeleteMainShift(schedulePart1);
+					_selectedSchedules[1].DeleteDayOff();
+	            }
+				else if (!schedulePart1.IsScheduled() && schedulePart2.IsScheduled())
+				{
+					_selectedSchedules[1].Merge(schedulePart2, false, true);
+					_selectedSchedules[0].DeleteMainShift(schedulePart1);
+					_selectedSchedules[0].DeleteDayOff();
+				}
+				else
+				{
+					_selectedSchedules[0].Merge(schedulePart1, false, true);
+					_selectedSchedules[1].Merge(schedulePart2, false, true);
+				}
             }
             retList.AddRange(_selectedSchedules);
             return retList;
