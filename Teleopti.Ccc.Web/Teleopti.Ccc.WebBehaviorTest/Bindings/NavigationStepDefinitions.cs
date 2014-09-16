@@ -2,13 +2,17 @@ using System;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Interfaces.Domain;
+using SiteConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.SiteConfigurable;
+using TeamConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.TeamConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -176,7 +180,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date);
+			Navigation.GotoAnywhereTeamSchedule(date, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault());
 		}
 
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
@@ -184,7 +188,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName));
+			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName), DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault());
 		}
 
 		private static Guid IdForTeam(string teamName)
@@ -205,12 +209,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return siteId;
 		}
 
+		private static Guid IdForBu(string buName)
+		{
+			var buId = (from t in DataMaker.Data().UserDatasOfType<BusinessUnitConfigurable>()
+										let bu = t.BusinessUnit
+										where bu.Description.Name.Equals(buName)
+										select bu.Id.GetValueOrDefault()).First();
+			return buId;
+		}
+
 		[Given(@"I am viewing group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
 		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
 		public void WhenIViewTeamSchedulesStaffingMetricsForDate(DateTime date, string skill)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date);
+			Navigation.GotoAnywhereTeamSchedule(date, DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault());
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);
 		}
 

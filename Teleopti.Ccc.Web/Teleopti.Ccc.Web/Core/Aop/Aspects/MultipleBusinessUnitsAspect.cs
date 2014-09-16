@@ -24,8 +24,10 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 			if (queryString != null)
 				buId = queryString["BusinessUnitId"];
 			var headers = _context.Current().Request.Headers;
-			if (headers != null)
-				buId = headers["X-Business-Unit-Filter"];
+	        if (headers != null)
+	        {
+		        buId = headers["X-Business-Unit-Filter"] ?? buId;
+	        }
 			
 			if (string.IsNullOrEmpty(buId)) return;
 			var id = Guid.Parse(buId);

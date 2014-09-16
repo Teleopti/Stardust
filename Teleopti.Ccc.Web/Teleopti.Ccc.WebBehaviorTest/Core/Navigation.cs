@@ -180,9 +180,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForUrlAssert("Anywhere", new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywhereTeamSchedule(DateTime date)
+		public static void GotoAnywhereTeamSchedule(DateTime date, Guid buId)
 		{
-			GoToWaitForUrlAssert(string.Format("Anywhere#teamschedule/{0}{1}{2}",
+			GoToWaitForUrlAssert(string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
+				buId,
 				date.Year.ToString("0000"),
 				date.Month.ToString("00"),
 				date.Day.ToString("00")),
@@ -190,10 +191,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
+		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId, Guid buId)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
+				string.Format("Anywhere#teamschedule/{0}/{1}/{2}{3}{4}",
+				buId,
 				teamId,
 				date.Year.ToString("0000"),
 				date.Month.ToString("00"),

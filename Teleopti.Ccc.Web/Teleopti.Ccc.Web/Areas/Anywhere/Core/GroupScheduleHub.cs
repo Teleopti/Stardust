@@ -21,12 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
 		public virtual void SubscribeGroupSchedule(Guid groupId, DateTime dateInUserTimeZone)
 		{
-			pushSchedule(Clients.Caller, groupId, dateInUserTimeZone);
-		}
-
-		private void pushSchedule(dynamic target, Guid groupId, DateTime dateInUserTimeZone)
-		{
-			target.incomingGroupSchedule(_groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone));
+			Clients.Caller.incomingGroupSchedule(_groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone));
 		}
 	}
 }

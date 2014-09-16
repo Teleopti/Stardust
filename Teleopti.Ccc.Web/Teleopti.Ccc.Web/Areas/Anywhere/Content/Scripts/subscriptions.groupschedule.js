@@ -69,6 +69,7 @@ define([
 				groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
 
 				groupScheduleSubscription = messagebroker.subscribe({
+					businessUnitId: buId,
 					domainType: 'IPersonScheduleDayReadModel',
 					callback: function (notification) {
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
