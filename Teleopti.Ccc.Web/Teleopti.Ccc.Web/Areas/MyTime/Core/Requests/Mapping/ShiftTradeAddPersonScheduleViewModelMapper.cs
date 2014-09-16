@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -11,10 +12,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public class ShiftTradeAddPersonScheduleViewModelMapper : IShiftTradeAddPersonScheduleViewModelMapper
 	{
 		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
+		private readonly IPersonNameProvider _personNameProvider;
 
-		public ShiftTradeAddPersonScheduleViewModelMapper(IShiftTradeAddScheduleLayerViewModelMapper layerMapper)
+		public ShiftTradeAddPersonScheduleViewModelMapper(IShiftTradeAddScheduleLayerViewModelMapper layerMapper, IPersonNameProvider personNameProvider)
 		{
 			_layerMapper = layerMapper;
+			_personNameProvider = personNameProvider;
 		}
 
 		public ShiftTradeAddPersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel, bool isMySchedule=false)
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				PersonId = scheduleReadModel.PersonId,
 				StartTimeUtc = scheduleReadModel.Start.Value,
-				Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
+				Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName),
 				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule),
 				MinStart = scheduleReadModel.MinStart,
 				Total = scheduleReadModel.Total,
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{
 					PersonId = scheduleReadModel.PersonId,
 					StartTimeUtc = scheduleReadModel.Start.Value,
-					Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
+					Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName),
 					ScheduleLayers = _layerMapper.Map(dayOffProjection),
 					MinStart = scheduleReadModel.MinStart,
 					Total = scheduleReadModel.Total,
