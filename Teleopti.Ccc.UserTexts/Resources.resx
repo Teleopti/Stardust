@@ -12318,8 +12318,8 @@ Reduce the complexity to use these shifts.</value>
     <value>[Last Name] [First Name]</value>
     <comment>second agent description for settings selector in mytime</comment>
   </data>
-  </data>
   <data name="AgentDescription" xml:space="preserve">
     <value>Agent Description</value>
     <comment>Title of selector which is used for setting view in mytime web</comment>
+	</data>
 </root>
