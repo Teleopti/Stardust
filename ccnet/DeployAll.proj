@@ -38,7 +38,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-	<Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;CallJenkinsForDeployment">
+	<Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -150,7 +150,7 @@
 	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
 
-  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
+  <Target Name="Kanbox" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox">
     <Message Text="Calling upload target"/>
   </Target>
   
