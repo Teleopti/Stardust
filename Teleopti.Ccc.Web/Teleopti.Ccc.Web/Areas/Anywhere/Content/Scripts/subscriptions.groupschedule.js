@@ -61,10 +61,11 @@ define([
 			return startPromise;
 		},
 		
-		subscribeGroupSchedule: function (groupId, date, peopleCheckCallback, callback) {
+		subscribeGroupSchedule: function (buId, groupId, date, peopleCheckCallback, callback) {
 			unsubscribeGroupSchedule();
 			incomingGroupSchedule = callback;
 			startPromise.done(function () {
+				groupScheduleHub.connection.qs = { "BusinessUnitId": buId };
 				groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
 
 				groupScheduleSubscription = messagebroker.subscribe({

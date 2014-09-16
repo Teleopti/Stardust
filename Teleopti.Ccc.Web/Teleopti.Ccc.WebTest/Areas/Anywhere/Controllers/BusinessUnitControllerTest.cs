@@ -89,5 +89,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Single().Id.Should().Be(bu1.Id);
 			result.Single().Name.Should().Be(bu1.Name);
 		}
+
+		[Test]
+		public void ShouldGetCurrentLoggedOnBusinessUnit()
+		{
+			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var buRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			var currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			currentBusinessUnit.Stub(x => x.Current()).Return(bu1);
+			buRepository.Stub(x => x.Get(bu1.Id.GetValueOrDefault())).Return(bu1);
+			var target = new BusinessUnitController(buRepository, null, currentBusinessUnit);
+
+			var result = target.Current().Data as BusinessUnitViewModel;
+
+			result.Id.Should().Be(bu1.Id);
+			result.Name.Should().Be(bu1.Name);
+		}
 	}
 }

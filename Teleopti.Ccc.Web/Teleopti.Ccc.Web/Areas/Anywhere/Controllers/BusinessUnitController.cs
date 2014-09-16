@@ -49,5 +49,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					Name = b.Name
 				}, JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult Current()
+		{
+			var currentBusinessUnit = _buRepository.Get(_currentBusinessUnit.Current().Id.GetValueOrDefault());
+				
+			return Json(new BusinessUnitViewModel
+				{
+					Id = currentBusinessUnit.Id.GetValueOrDefault(),
+					Name = currentBusinessUnit.Name
+				}, JsonRequestBehavior.AllowGet);
+		}
 	}
 }

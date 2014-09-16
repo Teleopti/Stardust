@@ -19,11 +19,16 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 
         public void OnBeforeInvokation()
         {
-	        var headers = _context.Current().Request.Headers;
-	        if (headers == null) return;
-			var value = headers["X-Business-Unit-Filter"];
-	        if (string.IsNullOrEmpty(value)) return;
-            var id = Guid.Parse(value);
+	        var buId = string.Empty;
+	        var queryString = _context.Current().Request.QueryString;
+			if (queryString != null)
+				buId = queryString["BusinessUnitId"];
+			var headers = _context.Current().Request.Headers;
+			if (headers != null)
+				buId = headers["X-Business-Unit-Filter"];
+			
+			if (string.IsNullOrEmpty(buId)) return;
+			var id = Guid.Parse(buId);
             _disposable = _overrider.OverrideWith(id);
         }
 

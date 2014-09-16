@@ -40,6 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SitesController>().EnableClassInterceptors();
+			builder.RegisterType<StaffingMetricsController>().EnableClassInterceptors();
+			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
 		}
 	}
 }
