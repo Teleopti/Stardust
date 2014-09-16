@@ -901,13 +901,13 @@
 			// comboBoxAdvShiftCategory
 			// 
 			this.comboBoxAdvShiftCategory.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(201, 23);
+			this.comboBoxAdvShiftCategory.BeforeTouchSize = new System.Drawing.Size(201, 19);
 			this.comboBoxAdvShiftCategory.Dock = System.Windows.Forms.DockStyle.Left;
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(32, 33);
 			this.comboBoxAdvShiftCategory.MaxDropDownItems = 16;
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(201, 23);
+			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(201, 19);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvShiftCategory.SuppressDropDownEvent = true;
 			this.comboBoxAdvShiftCategory.TabIndex = 56;

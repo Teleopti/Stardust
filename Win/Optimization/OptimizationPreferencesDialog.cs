@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		private readonly int _resolution;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
+		private readonly IToggleManager _toggleManager;
 		private readonly IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -47,7 +49,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			IEnumerable<IActivity> availableActivity, 
 			int resolution,
 			IScheduleDictionary scheduleDictionary,
-			IEnumerable<IPerson> selectedPersons)
+			IEnumerable<IPerson> selectedPersons, 
+			IToggleManager toggleManager)
 			: this()
 		{
 			Preferences = preferences;
@@ -61,6 +64,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			_resolution = resolution;
 			_scheduleDictionary = scheduleDictionary;
 			_selectedPersons = selectedPersons;
+			_toggleManager = toggleManager;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -75,7 +79,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			loadPersonalSettings();
 			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
 			dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
+			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity, _toggleManager);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
 			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
 			Panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };

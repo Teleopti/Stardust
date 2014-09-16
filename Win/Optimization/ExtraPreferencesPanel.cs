@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -15,6 +18,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnCompareWith;
         private IEnumerable<IActivity> _availableActivity;
         private GroupPageLight _singleAgentEntry;
+		private IToggleManager _toggleManager;
 
 		public IExtraPreferences Preferences { get; private set; }
 
@@ -27,14 +31,25 @@ namespace Teleopti.Ccc.Win.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
             IExtraPreferences extraPreferences,
-			ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
+			ISchedulerGroupPagesProvider groupPagesProvider, 
+			IEnumerable<IActivity> availableActivity, 
+			IToggleManager toggleManager)
         {
             Preferences = extraPreferences;
+			_toggleManager = toggleManager;
 		    _availableActivity = availableActivity;
 			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
 			_singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.NoTeam };
 			_groupPageOnTeams.Insert(0, _singleAgentEntry);
+
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			{
+				tableLayoutPanel2.RowStyles[1].Height = 0;
+				tableLayoutPanel2.RowStyles[0].SizeType = SizeType.Percent;
+				tableLayoutPanel2.RowStyles[0].Height = 100;
+			}
+
             ExchangeData(ExchangeDataOption.DataSourceToControls);	    
         }
 
@@ -97,9 +112,11 @@ namespace Teleopti.Ccc.Win.Optimization
 			Preferences.UseTeamSameEndTime = checkBoxTeamSameEndTime.Checked;
             Preferences.UseTeamSameActivity = checkBoxTeamSameActivity.Checked;
             Preferences.TeamActivityValue = (IActivity)comboBoxTeamActivity.SelectedItem;
-			Preferences.FairnessValue = (double)trackBar1.Value / 100;
 			Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
-            getTeamBlockPerDataToSave();
+	        Preferences.FairnessValue = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
+		        ? 0d
+		        : (double) trackBar1.Value/100;
+	        getTeamBlockPerDataToSave();
         }
 
 		private void setDataToControls()

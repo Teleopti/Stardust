@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				allSupportedPages.Add(new BadgeThresholdSettings());
 			}
 
-			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			if (!_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
 			{
 				allSupportedPages.Add(new FairnessValuesControl());
 			}
