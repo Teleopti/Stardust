@@ -1288,10 +1288,6 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Win\Teleopti.Ccc.Win.csproj">
-      <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
-      <Name>Teleopti.Ccc.Win</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
