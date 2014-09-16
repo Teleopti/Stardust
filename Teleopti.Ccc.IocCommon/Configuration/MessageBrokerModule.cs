@@ -16,9 +16,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	internal class MessageBrokerModule : Module
 	{
 		public bool MessageBrokerListeningEnabled { get; set; }
+		public Func<IComponentContext, SignalRClient> SharedSignalRClient { get; set; }
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			var resolveSignalRClient = SharedSignalRClient ?? (c => c.Resolve<SignalRClient>());
+
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
 
 			builder.RegisterType<MessageBrokerCompositeClient>()
@@ -30,10 +33,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register(c =>
 			{
 				if (MessageBrokerListeningEnabled)
-					return (ISignalRClient) c.Resolve<SignalRClient>();
+					return (ISignalRClient) resolveSignalRClient(c);
 				if (c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205))
 					return c.Resolve<DisabledSignalRClient>();
-				return c.Resolve<SignalRClient>();
+				return resolveSignalRClient(c);
 			})
 				.As<ISignalRClient>()
 				.As<IMessageBrokerUrl>()

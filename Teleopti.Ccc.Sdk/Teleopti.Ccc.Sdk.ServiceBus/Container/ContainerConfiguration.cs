@@ -1,33 +1,39 @@
-﻿using System.Configuration;
+﻿using System;
 using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
-using Teleopti.Interfaces;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 {
 	public class ContainerConfiguration
 	{
-		private readonly IContainer _defaultBusContainer;
+		private readonly IContainer _container;
 
-		public ContainerConfiguration(IContainer defaultBusContainer)
+		public ContainerConfiguration(IContainer container)
 		{
-			_defaultBusContainer = defaultBusContainer;
+			_container = container;
 		}
 
 		public void Configure()
 		{
+			Configure(null);
+		}
+
+		public void Configure(Func<IComponentContext, SignalRClient> sharedSignalRClient)
+		{
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
-			build.RegisterModule<CommonModule>();
+			build.RegisterModule(new CommonModule
+			{
+				SharedSignalRClient = sharedSignalRClient
+			});
 
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();
@@ -50,7 +56,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
 
-			build.Update(_defaultBusContainer);
+			build.Update(_container);
 		}
+
 	}
 }

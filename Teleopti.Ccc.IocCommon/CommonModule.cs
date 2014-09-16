@@ -4,6 +4,7 @@ using Autofac;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.IocCommon
 		public string ToggleMode { get; set; }
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public Type RepositoryConstructorType { get; set; }
+		public Func<IComponentContext, SignalRClient> SharedSignalRClient { get; set; }
 
 		public CommonModule()
 		{
@@ -27,7 +29,11 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(PathToToggle, ToggleMode));
-			builder.RegisterModule(new MessageBrokerModule {MessageBrokerListeningEnabled = MessageBrokerListeningEnabled});
+			builder.RegisterModule(new MessageBrokerModule
+			{
+				MessageBrokerListeningEnabled = MessageBrokerListeningEnabled,
+				SharedSignalRClient = SharedSignalRClient
+			});
 			builder.RegisterModule(new RepositoryModule {RepositoryConstructorType = RepositoryConstructorType});
 		}
 	}

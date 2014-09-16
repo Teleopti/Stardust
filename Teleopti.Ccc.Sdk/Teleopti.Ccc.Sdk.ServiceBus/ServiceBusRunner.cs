@@ -1,13 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using Autofac;
+using Autofac.Core;
+using Autofac.Core.Lifetime;
+using Autofac.Core.Resolving;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -80,41 +87,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var requestContainer = createNewContainerNeededForEachHost();
+			var sharedContainer = new ContainerBuilder().Build();
+			new ContainerConfiguration(sharedContainer).Configure(null);
 
-			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(requestContainer));
+			_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(sharedContainer)));
 			_requestBus.Start();
 
-			var generalContainer = createNewContainerNeededForEachHost();
-
-			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(generalContainer));
+			_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(sharedContainer)));
 			_generalBus.Start();
 
-			var denormalizeContainer = createNewContainerNeededForEachHost();
-
-			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(denormalizeContainer));
+			_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(sharedContainer)));
 			_denormalizeBus.Start();
 
-			var rtaContainer = createNewContainerNeededForEachHost();
-
-			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(rtaContainer));
+			_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(sharedContainer)));
 			_rtaBus.Start();
-
-			var payrollContainer = createNewContainerNeededForEachHost();
 
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(payrollContainer));
+			_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new BusBootStrapper(makeContainer(sharedContainer)));
 			_payrollBus.Start();
 
 			AppDomain.MonitoringIsEnabled = true;
 		}
 
-		private static IContainer createNewContainerNeededForEachHost()
+		private static IContainer makeContainer(IContainer sharedContainer)
 		{
 			var container = new ContainerBuilder().Build();
-			var containerconfiguration = new ContainerConfiguration(container);
-			containerconfiguration.Configure();
+			new ContainerConfiguration(container).Configure(c => sharedContainer.Resolve<SignalRClient>());
 			return container;
 		}
 
