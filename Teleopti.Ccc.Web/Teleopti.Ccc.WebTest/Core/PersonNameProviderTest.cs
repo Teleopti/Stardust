@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WebTest.Core
 	class PersonNameProviderTest
 	{
 		private ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettingsPersisterAndProvider;
+
 		[SetUp]
 		public void Setup()
 		{

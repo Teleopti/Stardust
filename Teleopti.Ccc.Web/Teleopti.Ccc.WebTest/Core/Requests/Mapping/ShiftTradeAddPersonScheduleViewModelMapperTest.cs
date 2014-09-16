@@ -6,14 +6,27 @@ using Newtonsoft.Json;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
 	public class ShiftTradeAddPersonScheduleViewModelMapperTest
 	{
+		private IPersonNameProvider _personNameProvider;
+
+		[SetUp]
+		public void Setup()
+		{
+			var nameFormatSettingsPersisterAndProvider = MockRepository.GenerateMock<ISettingsPersisterAndProvider<NameFormatSettings>>();
+			nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(new NameFormatSettings() { NameFormatId = 0 });
+			_personNameProvider = new PersonNameProvider(nameFormatSettingsPersisterAndProvider);
+		}
+
 		[Test]
 		public void ShouldMapPersonScheduleFromReadModel()
 		{
@@ -37,8 +50,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var layerMapper = MockRepository.GenerateStrictMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 			// dont know why I have to ignore arguments here but...
 			layerMapper.Expect(x => x.Map(shift.Projection)).Return(layerViewModels).IgnoreArguments().Repeat.Twice();
-			
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
+
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 			var result = target.Map(readModel);
 
 			result.PersonId.Should().Be.EqualTo(readModel.PersonId);
@@ -73,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 			var result = target.Map(new[] { readModel, readModel });
 
 			result.Count.Should().Be.EqualTo(readModel.Total);
@@ -105,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 
 			var result = target.Map(readModel);
 
