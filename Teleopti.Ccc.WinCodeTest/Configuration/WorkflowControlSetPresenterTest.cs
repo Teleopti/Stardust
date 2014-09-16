@@ -876,7 +876,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.SetAllowedAbsences(null)).IgnoreArguments();
                 Expect.Call(() => _view.LoadDateOnlyVisualizer()).Repeat.Any();
                 Expect.Call(() => _view.SetAutoGrant(false));
-                Expect.Call(() => _view.SetUseShiftCategoryFairness(false));
+                Expect.Call(() => _view.SetUseShiftCategoryFairness(true));
             }
             using (_mocks.Playback())
             {
