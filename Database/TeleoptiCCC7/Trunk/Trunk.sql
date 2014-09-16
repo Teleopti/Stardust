@@ -41,3 +41,20 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+--Name: Tamas Balog
+--Date: 2014-09-16  
+--Desc: Add backup column for UseShiftCategoryFairness in WorkflowControlSet
+--and save the current UseShiftCategoryFairness data there
+----------------  
+IF NOT EXISTS(SELECT * FROM sys.columns WHERE [name] = N'UseShiftCategoryFairnessSave' AND [object_id] = OBJECT_ID(N'WorkflowControlSet'))
+	ALTER TABLE [dbo].[WorkflowControlSet]
+	ADD [UseShiftCategoryFairnessSave] bit NOT NULL
+	CONSTRAINT DF_WorkflowControlSet_UseShiftCategoryFairnessSave DEFAULT ((0))
+GO
+UPDATE [dbo].[WorkflowControlSet]
+	SET [UseShiftCategoryFairnessSave] = [UseShiftCategoryFairness] 
+GO
+UPDATE [dbo].[WorkflowControlSet]
+	SET [UseShiftCategoryFairness] = 1 
+GO
