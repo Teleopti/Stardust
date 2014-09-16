@@ -41,14 +41,20 @@ AS
 	SET ROWCOUNT @take;
 	WITH Ass AS
 	(
-		SELECT TOP (1000000) *, 
-		ROW_NUMBER() OVER (ORDER BY sd.Start) AS 'RowNumber'
-		FROM ReadModel.PersonScheduleDay sd
-		INNER JOIN @TempList t ON t.Person = sd.PersonId
-		WHERE [BelongsToDate] = @shiftTradeDate
-		AND sd.Start IS NOT NULL
-		AND DATEDIFF(MINUTE,Start, [End] ) <= 1440
-		ORDER BY sd.Start
+	  SELECT TOP (1000000)
+	         *,
+		     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
+        FROM (SELECT *,
+		             CASE DATEDIFF(MINUTE, sd.Start, sd.[End])
+					   WHEN 1440 THEN 1
+					   ELSE 0
+					 END AS DayOffFlag
+		        FROM ReadModel.PersonScheduleDay sd
+		       INNER JOIN @TempList t ON t.Person = sd.PersonId
+		       WHERE [BelongsToDate] = @shiftTradeDate
+		         AND sd.Start IS NOT NULL
+		         AND DATEDIFF(MINUTE,Start, [End] ) <= 1440) as s
+		ORDER BY DayOffFlag, Start
 	) 
 	
 	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model, (SELECT MIN(Start) FROM Ass)  As 'MinStart',(SELECT COUNT(*) FROM Ass)  As 'Total', RowNumber
