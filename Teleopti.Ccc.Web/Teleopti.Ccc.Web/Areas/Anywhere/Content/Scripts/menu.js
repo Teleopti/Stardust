@@ -1,14 +1,14 @@
 define([
 		'knockout',
-		'toggleQuerier',
 		'business_unit',
 		'ajax',
-		'navigation'
+		'navigation',
+		'lazy'
 ], function(ko,
-		toggleQuerier,
 		businessUnit,
 		ajax,
-		navigation) {
+		navigation,
+		lazy) {
 
 		return function(resources) {
 			var self = this;
@@ -18,11 +18,23 @@ define([
 			self.RealTimeAdherenceVisible = ko.observable(false);
 			self.ActiveView = ko.observable("");
 			self.UserName = ko.observable("");
+			self.CurrentBusinessUnitId = ko.observable();
 			self.IanaTimeZone = ko.observable("");
-			self.CurrentBusinessUnit = ko.observable();
 			self.changeScheduleForMultipleBUs = ko.observable(false);
 			self.businessUnits = ko.observableArray();
 
+			var businessUnitForId = function (id) {
+				if (!id)
+					return undefined;
+				var bu = lazy(self.businessUnits())
+					.filter(function (x) { return x.Id == id; })
+					.first();
+				return bu;
+			};
+
+			self.CurrentBusinessUnit = ko.computed(function () {
+				return businessUnitForId(self.CurrentBusinessUnitId());
+			});
 
 			self.fillBusinessUnits = function (data) {
 				for (var i = 0; i < data.length; i++) {
@@ -32,30 +44,8 @@ define([
 				}
 			};
 
-			self.setCurrentBusinessUnit = function(data) {
-				self.CurrentBusinessUnit(data);
-			}
-
 			self.switchBusinessUnit = function(data) {
-				self.setCurrentBusinessUnit(data);
 				navigation.GoToTeamScheduleOritinal(data.Id);
 			}
-			
-			var checkBusinessUnitsFeature = function () {
-				toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
-					enabled: function () {
-						ajax.ajax({
-							url: "BusinessUnit",
-							success: function (data) {
-								self.fillBusinessUnits(data);
-								self.setCurrentBusinessUnit(data[0]);
-								self.changeScheduleForMultipleBUs(true);
-							}
-						});
-					}
-				});
-			};
-
-			checkBusinessUnitsFeature();
 		};
 	});

@@ -16,7 +16,8 @@ define([
 		'resources',
 		'subscriptions.trackingmessages',
 		'notifications',
-		'shared/timezone-current'
+		'shared/timezone-current',
+		'toggleQuerier'
 ], function (
 		layoutTemplate,
 		menuTemplate,
@@ -34,7 +35,8 @@ define([
 		resources,
 		trackingmessages,
 		notificationsViewModel,
-		timezoneCurrent) {
+		timezoneCurrent,
+		toggleQuerier) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -87,7 +89,7 @@ define([
 
 			_fixBootstrapDropdownForMobileDevices();
 		});
-
+		menu.CurrentBusinessUnitId(routeInfo.buid);
 		menu.ActiveView(routeInfo.view);
 	}
 	
@@ -235,7 +237,6 @@ define([
 				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
-				menu.setCurrentBusinessUnit(defaultBu);
 				timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
 				_initTrackingNotification(responseData.PersonId);
 			}
@@ -251,23 +252,37 @@ define([
 		});
 	}
 
-	ajax.ajax({
-		url: "BusinessUnit/Current",
-		success: function (data) {
-			defaultBu = data;
+	var initAll = function() {
 
-			_render();
+		_render();
 
-			_initSignalR();
+		_initSignalR();
 
-			_setupRoutes();
+		_setupRoutes();
 
-			_initializeHasher();
+		_initializeHasher();
 
-			_initMomentLanguageWithFallback();
+		_initMomentLanguageWithFallback();
 
-			_bindMenu();
-		}
-	});
+		_bindMenu();
+	}
 
+	var checkBusinessUnitsFeature = function () {
+		toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
+			enabled: function () {
+				ajax.ajax({
+					url: "BusinessUnit",
+					success: function (data) {
+						menu.fillBusinessUnits(data);
+						menu.changeScheduleForMultipleBUs(true);
+
+						defaultBu = data[0];
+
+						initAll();
+					}
+				});
+			}
+		});
+	};
+	checkBusinessUnitsFeature();
 });
