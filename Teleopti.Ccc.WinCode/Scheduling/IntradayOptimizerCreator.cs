@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
+		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
-			ISkillIntervalDataAggregator skillIntervalDataAggregator)
+			ISkillIntervalDataAggregator skillIntervalDataAggregator,
+			IEffectiveRestrictionCreator effectiveRestrictionCreator)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftStateContainerList = workShiftContainerList;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
 		/// <summary>
@@ -96,10 +99,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder,
                                                    new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal);
-				IRestrictionExtractor restrictionExtractor =
-					new RestrictionExtractor(_schedulingResultStateHolder);
-				IEffectiveRestrictionCreator effectiveRestrictionCreator =
-					new EffectiveRestrictionCreator(restrictionExtractor);
+
 
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						_optimizerPreferences,
 						_rollbackService,
 						resourceOptimizationHelper,
-						effectiveRestrictionCreator,
+						_effectiveRestrictionCreator,
 						optimizerOverLimitDecider,
 						workShiftStateContainer,
 						schedulingOptionsCreator,

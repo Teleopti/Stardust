@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _schedulingResultStateHolder,
 												   _personSkillProvider, 
 												   new CurrentTeleoptiPrincipal(),
-												   new ScheduleMatrixLockableBitArrayConverterEx());
+												   new ScheduleMatrixLockableBitArrayConverterEx(),
+												   _container.Resolve<IEffectiveRestrictionCreator>());
 		}
 
 		[Test]

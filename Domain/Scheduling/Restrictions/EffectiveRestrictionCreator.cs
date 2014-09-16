@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_extractor = extractor;
 		}
 
-		public IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
+		public virtual IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
 		{
 		    
 		    _extractor.Extract(part);

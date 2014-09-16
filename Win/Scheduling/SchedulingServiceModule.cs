@@ -234,6 +234,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>();
+			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>();
+			builder.RegisterType<EffectiveRestrictionCreator30393>().As<EffectiveRestrictionCreator30393>();
+			builder.RegisterType<EffectiveRestrictionCreator>().As<EffectiveRestrictionCreator>();
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_SudentAvailabilityForFixedStaff_30393)
+				? (IEffectiveRestrictionCreator)c.Resolve<EffectiveRestrictionCreator30393>()
+				: c.Resolve<EffectiveRestrictionCreator>())
+					.As<IEffectiveRestrictionCreator>();
+			  //IEffectiveRestrictionCreator
 
         }
 

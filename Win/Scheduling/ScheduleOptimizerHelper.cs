@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				scheduleMatrixLockableBitArrayConverterEx,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
-				_container.Resolve<ISkillIntervalDataAggregator>());
+				_container.Resolve<ISkillIntervalDataAggregator>(),
+				_container.Resolve<IEffectiveRestrictionCreator>());
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create();
 			IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -139,7 +140,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                             _stateHolder,
 				                             _personSkillProvider, 
 											 new CurrentTeleoptiPrincipal(),
-											 scheduleMatrixLockableBitArrayConverterEx);
+											 scheduleMatrixLockableBitArrayConverterEx,
+											 _container.Resolve<IEffectiveRestrictionCreator>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
