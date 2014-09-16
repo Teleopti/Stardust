@@ -98,6 +98,8 @@ SyncFusion license
 Execute:
 \\a380\Hangaren\#PROGRAM\Develop\Syncfusion\BuildServer\BuildServerSetup.reg
 
+NOTE! Only the user that runs script above will be allowed to compile solution.
+
 ---------------------
 Install Hg client
 ---------------------
