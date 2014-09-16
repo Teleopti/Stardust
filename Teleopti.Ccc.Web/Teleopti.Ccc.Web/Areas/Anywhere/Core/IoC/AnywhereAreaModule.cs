@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SitesController>().EnableClassInterceptors();
 			builder.RegisterType<StaffingMetricsController>().EnableClassInterceptors();
 			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
+			builder.RegisterType<GroupPageController>().EnableClassInterceptors();
 		}
 	}
 }

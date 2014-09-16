@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Web.Filters;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
+	[Intercept(typeof(AspectInterceptor))]
 	public class GroupPageController : Controller
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
@@ -23,8 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_userTextTranslator = userTextTranslator;
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult AvailableGroupPages(DateTime date)
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		public virtual JsonResult AvailableGroupPages(DateTime date)
 		{
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
 

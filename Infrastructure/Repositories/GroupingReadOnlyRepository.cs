@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Impl;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -21,17 +22,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT DISTINCT PageName,PageId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId ORDER BY pagename")
-					.SetGuid("businessUnitId", ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetGuid("businessUnitId", getBusinessUnitId())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupPage)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupPage>();
+		}
+
+		private Guid getBusinessUnitId()
+		{
+			var filter = (FilterImpl) _currentUnitOfWork.Session().GetEnabledFilter("businessUnitFilter");
+			object businessUnitId;
+			if (!filter.Parameters.TryGetValue("businessUnitParameter", out businessUnitId))
+			{
+				businessUnitId = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+			}
+			return Guid.Parse(businessUnitId.ToString());
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate)
 		{
 			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND pageid=:pageId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
-					.SetGuid("businessUnitId", ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetGuid("businessUnitId", getBusinessUnitId())
 					.SetGuid("pageId", groupPage.PageId)
 					.SetDateTime("currentDate", queryDate.Date)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
@@ -43,8 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT PageId, GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
-					.SetGuid("businessUnitId",
-							 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetGuid("businessUnitId", getBusinessUnitId())
 					.SetDateTime("currentDate", queryDate.Date)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
@@ -55,8 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _currentUnitOfWork.Session().CreateSQLQuery(
 					"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND groupid=:groupId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
-					.SetGuid("businessUnitId",
-							 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetGuid("businessUnitId", getBusinessUnitId())
 					.SetGuid("groupId", groupId)
 					.SetDateTime("currentDate", queryDate.Date)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))

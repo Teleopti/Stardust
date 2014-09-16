@@ -50,7 +50,8 @@ define([
 
 	var loadGroupPages = function (buid, date, callback) {
 		ajax.ajax({
-			url: 'GroupPage/AvailableGroupPages?businessUnitId=' + buid,
+			url: 'GroupPage/AvailableGroupPages',
+			headers: { 'X-Business-Unit-Filter': buid},
 			data: { date: date },
 			success: callback
 		});
