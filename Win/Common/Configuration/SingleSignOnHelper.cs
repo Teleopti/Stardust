@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 {
                     currentPerson = TeleoptiPrincipal.Current.GetPerson(new PersonRepository(unitOfWork));
                 }
-                var email = currentPerson.Email;
+                var email = currentPerson.Email.Trim();
                 if (string.IsNullOrEmpty(email))
                     throw new ArgumentException(
 								Resources.PleaseConfigureYourEmailAddress);
