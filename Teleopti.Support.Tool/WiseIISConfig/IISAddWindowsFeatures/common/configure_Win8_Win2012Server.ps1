@@ -1,7 +1,10 @@
 function restartTeleoptiWFM {
 	$batchfile = "$scriptPath\..\..\..\StartStopSystem\ResetSystem.bat"
-	$restart = [diagnostics.process]::Start($batchfile)
-	$restart.WaitForExit()
+    if (Test-Path $batchfile)
+    {
+    	$restart = [diagnostics.process]::Start($batchfile)
+	    $restart.WaitForExit()
+    }
 }
 
 function IsSupportedOS {
