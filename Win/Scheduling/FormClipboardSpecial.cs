@@ -133,12 +133,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_clipboardSpecialPresenter.OnCheckBoxOvertimeCheckedChanged(checkBoxOvertime.Checked);
 		}
 
-		private void formClipboardSpecialFormClosing(object sender, FormClosingEventArgs e)
-		{
-			if (e.CloseReason == CloseReason.UserClosing)
-				_clipboardSpecialPresenter.OnFormClosing();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-		}
-
 		private void checkBoxPreferencesCheckedChanged(object sender, EventArgs e)
 		{
 			_clipboardSpecialPresenter.OnCheckBoxPreferencesCheckedChanged(checkBoxPreferences.Checked);
