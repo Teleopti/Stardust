@@ -832,7 +832,7 @@
     <comment>Average handling time</comment>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
-    <value>Durchschnitt Antwortzeit</value>
+    <value>Durchschnittliche Antwortzeit</value>
     <comment>Average speed of answer</comment>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
@@ -2671,7 +2671,7 @@ Ausnahme</value>
     <comment>Hours</comment>
   </data>
   <data name="HoursInc" xml:space="preserve">
-    <value>Stunden inkl. Shrinkage (Anpassung)</value>
+    <value>Stunden</value>
     <comment>Hours inc</comment>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
@@ -2788,7 +2788,7 @@ Ausschließlich</value>
     <comment>Interval length (h:mm):</comment>
   </data>
   <data name="IntervalStdev" xml:space="preserve">
-    <value>Abweichung vom Standard pro Intervall</value>
+    <value>Standardabweichung pro Intervall</value>
     <comment>Skill grid scheduler</comment>
   </data>
   <data name="Intraday" xml:space="preserve">
@@ -8080,7 +8080,7 @@ Teleopti R&amp;D</value>
     <value>Konflikt mit vorgeplanten Schichtkategorien, kein gültiger Block.</value>
   </data>
   <data name="ActualHeads" xml:space="preserve">
-    <value>Tatsächliche Anzahl</value>
+    <value>Tatsächliche Anzahl Köpfe</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
     <value>Wollen Sie eine neue Vorlage für die ausgewählten Tage verwenden?</value>
