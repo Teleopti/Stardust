@@ -49,11 +49,6 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
             _view.HideForm();
         }
 
-        public void OnFormClosing()
-        {
-            _model = null;
-        }
-
         public void OnCheckBoxAssignmentsCheckedChanged(bool check)
         {
             _model.MainShift = check; 

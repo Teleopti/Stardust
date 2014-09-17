@@ -99,13 +99,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         }
 
         [Test]
-        public void VerifyOnFormClosing()
-        {
-            _presenter.OnFormClosing();
-            Assert.IsTrue(_presenter.IsCanceled());
-        }
-
-        [Test]
         public void VerifyOnCheckBoxAssignmentsCheckedChanged()
         {
             _presenter.OnCheckBoxAssignmentsCheckedChanged(true);
