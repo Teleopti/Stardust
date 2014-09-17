@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>()
 				.ForMember(d=>d.To, o=>o.NullSubstitute(new ShiftTradeEditPersonScheduleViewModel()))
 				.ForMember(d=>d.From, o=>o.NullSubstitute(new ShiftTradeEditPersonScheduleViewModel()))
-				.ForMember(d => d.PersonFrom, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.PersonFrom)))
-				.ForMember(d => d.PersonTo, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.PersonTo)))
+				.ForMember(d => d.PersonFrom, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.PersonFrom.Name)))
+				.ForMember(d => d.PersonTo, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.PersonTo.Name)))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.SchedulePartFrom))
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s))))
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), _userTimeZone.TimeZone());
 					var myScheduleViewModel = new ShiftTradeEditPersonScheduleViewModel
 					{
-						Name = _personNameProvider.BuildNameFromSetting(o.Person),
+						Name = _personNameProvider.BuildNameFromSetting(o.Person.Name),
 						ScheduleLayers = createShiftTradeLayers(myScheduleDay, _userTimeZone.TimeZone(), timeLineRangeTot),
 						HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
 						DayOffText = myScheduleDay.DayOffText,
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var returnDay = new ShiftTradePersonDayData
 									{
 										PersonId = person.Id.HasValue ? person.Id.Value : Guid.Empty,
-										Name = _personNameProvider.BuildNameFromSetting(person),
+										Name = _personNameProvider.BuildNameFromSetting(person.Name),
 										PersonTimeZone = person.PermissionInformation.DefaultTimeZone(),
 										PersonCulture = person.PermissionInformation.Culture()
 									};

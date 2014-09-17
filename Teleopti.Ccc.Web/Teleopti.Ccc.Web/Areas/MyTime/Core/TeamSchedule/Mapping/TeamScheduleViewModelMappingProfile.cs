@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<TeamScheduleDayDomainData, AgentScheduleViewModel>()
-				.ForMember(d => d.AgentName, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.Person)))
+				.ForMember(d => d.AgentName, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.Person.Name)))
 				.ForMember(d => d.DayOffText, o => o.ResolveUsing(s =>
 																				{
 																					if (s.Projection == null)

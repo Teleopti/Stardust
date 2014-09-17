@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() { Name = new Name() });
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("Agent Name");
 		}
 
 		[Test]
@@ -84,6 +84,19 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var result = target.CreatePortalViewModel();
 
 			result.CustomerName.Should().Be.EqualTo("Customer Name");
+		}		
+		
+		[Test]
+		public void ShouldHaveLogonAgentName()
+		{
+			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
+				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
+				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
+
+			var result = target.CreatePortalViewModel();
+
+			result.CurrentLogonAgentName.Should().Be.EqualTo("Agent Name");
 		}
 
 		[Test]

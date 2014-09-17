@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void ShouldBuildDefalultName()
 		{
 			var target = new PersonNameProvider(_nameFormatSettingsPersisterAndProvider);
-			var person = new Person { Name = new Name("a", "person") };
-			string name = person.Name.FirstName + " " + person.Name.LastName;
+			var name =  new Name("Agent", "Name") ;
+			string expectName = name.FirstName + " " + name.LastName;
 
-			var result = target.BuildNameFromSetting(person);
+			var result = target.BuildNameFromSetting(name);
 
-			result.Should().Be.EqualTo(name);
+			result.Should().Be.EqualTo(expectName);
 		}		
 		
 		[Test]
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			_nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(new NameFormatSettings() {NameFormatId = 0});
 			var target = new PersonNameProvider(_nameFormatSettingsPersisterAndProvider);
-			var person = new Person { Name = new Name("a", "person") };
-			string firstNameLastName = person.Name.FirstName + " " + person.Name.LastName;
+			var name = new Name("Agent", "Name");
+			string firstNameLastName = name.FirstName + " " + name.LastName;
 
-			var result = target.BuildNameFromSetting(person);
+			var result = target.BuildNameFromSetting(name);
 
 			result.Should().Be.EqualTo(firstNameLastName);
 		}		
@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			_nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(new NameFormatSettings() {NameFormatId = 1});
 			var target = new PersonNameProvider(_nameFormatSettingsPersisterAndProvider);
-			var person = new Person { Name = new Name("a", "person") };
-			string lastNameFirstName = person.Name.LastName + " " + person.Name.FirstName;
+			var name = new Name("Agent", "Name");
+			string lastNameFirstName = name.LastName + " " + name.FirstName;
 
-			var result = target.BuildNameFromSetting(person);
+			var result = target.BuildNameFromSetting(name);
 
 			result.Should().Be.EqualTo(lastNameFirstName);
 		}

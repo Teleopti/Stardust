@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			var person = new Person { Name = new Name("a", "person") };
 			string name = person.Name.FirstName + " " + person.Name.LastName;
-			personNameProvider.Stub(x => x.BuildNameFromSetting(person)).Return(name);
+			personNameProvider.Stub(x => x.BuildNameFromSetting(person.Name)).Return(name);
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone,
 									new CreateHourText(new CurrentThreadUserCulture(), userTimeZone), personNameProvider)));
