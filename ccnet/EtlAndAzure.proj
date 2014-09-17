@@ -35,6 +35,8 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
+		
+		<UsingTask AssemblyFile="$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 </PropertyGroup>
 
 	<Target Name="Run" DependsOnTargets="AzureDeploy;RunETL">
