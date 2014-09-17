@@ -19,6 +19,8 @@ define([
 			self.ActiveView = ko.observable("");
 			self.UserName = ko.observable("");
 			self.CurrentBusinessUnitId = ko.observable();
+			self.CurrentDate = ko.observable();
+			self.CurrentGroupId = ko.observable();
 			self.IanaTimeZone = ko.observable("");
 			self.changeScheduleForMultipleBUs = ko.observable(false);
 			self.businessUnits = ko.observableArray();
@@ -44,8 +46,13 @@ define([
 				}
 			};
 
-			self.switchBusinessUnit = function(data) {
-				navigation.GoToTeamScheduleOritinal(data.Id);
+			self.switchBusinessUnit = function (data) {
+				if(self.CurrentGroupId() && self.CurrentDate())
+					navigation.GoToTeamSchedule(data.Id, self.CurrentGroupId(), self.CurrentDate());
+				else if (self.CurrentGroupId())
+					navigation.GoToTeamScheduleForGroup(data.Id, self.CurrentGroupId());
+				else
+					navigation.GoToTeamScheduleOriginal(data.Id);
 			}
 		};
 	});

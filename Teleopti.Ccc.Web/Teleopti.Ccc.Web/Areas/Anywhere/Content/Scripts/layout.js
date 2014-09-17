@@ -90,6 +90,8 @@ define([
 			_fixBootstrapDropdownForMobileDevices();
 		});
 		menu.CurrentBusinessUnitId(routeInfo.buid);
+		menu.CurrentGroupId(routeInfo.id);
+		menu.CurrentDate(routeInfo.date);
 		menu.ActiveView(routeInfo.view);
 	}
 	

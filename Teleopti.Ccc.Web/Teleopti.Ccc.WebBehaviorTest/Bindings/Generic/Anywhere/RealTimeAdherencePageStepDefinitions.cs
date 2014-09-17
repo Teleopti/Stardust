@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I choose business unit '(.*)'")]
 		public void WhenIChooseBusinessUnit(string businessUnitName)
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#bu-picker", businessUnitName);
+			Browser.Interactions.ClickUsingJQuery(string.Format("span:contains('{0}')", businessUnitName));
 		}
 
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)

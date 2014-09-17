@@ -46,8 +46,12 @@ define([
 			window.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
 		},
 
-		GoToTeamScheduleOritinal: function (buid) {
+		GoToTeamScheduleOriginal: function (buid) {
 			window.setLocationHash('teamschedule/' + buid);
+		},
+
+		GoToTeamScheduleForGroup: function (buid, id) {
+			window.setLocationHash('teamschedule/' + buid + '/' + id);
 		},
 
 		GoToTeamScheduleWithSelectedPerson: function (buid, id, personId, date) {

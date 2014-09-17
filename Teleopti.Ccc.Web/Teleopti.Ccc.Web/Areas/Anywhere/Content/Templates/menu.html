@@ -15,13 +15,13 @@
 			<!-- ko if: changeScheduleForMultipleBUs-->
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-					<span class="business-unit">
+					<span>
 						<small data-bind="text: CurrentBusinessUnit().Name"></small>
 					</span>
 					<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu" data-bind="foreach: businessUnits">
-					<li><a href="#" tabindex="-1" data-bind="click: $parent.switchBusinessUnit"><span data-bind="text: Name"></span></a></li>
+					<li><a href="#" tabindex="-1" data-bind="click: $parent.switchBusinessUnit"><span class="business-unit" data-bind="text: Name"></span></a></li>
 				</ul>
 			</li>
 			<!-- /ko -->
