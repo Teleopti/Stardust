@@ -437,7 +437,7 @@ WHERE
 		mart.dim_skillset ds
 	ON
 		ds.skillset_id = sas.skillset_id
-	WHERE business_unit_code = @current_business_unit_code
+	WHERE dp.business_unit_code = @current_business_unit_code
 --</ToDo>
 
 UPDATE mart.dim_person
@@ -446,6 +446,7 @@ CASE WHEN valid_to_date_id=-2
 	THEN @maxdateid-1 --seems like bridge_time_zone is missing one day from dim_date
 	ELSE valid_to_date_id
 END
+WHERE business_unit_code = @current_business_unit_code
 
 UPDATE mart.dim_person
 SET valid_to_interval_id_maxDate=
@@ -453,6 +454,7 @@ CASE WHEN valid_to_date_id=-2
 	THEN @maxInterval
 	ELSE valid_to_interval_id
 END
+WHERE business_unit_code = @current_business_unit_code
 
 --Use LEFT JOIN in case bridge_time_zone happen to be empty or missing a time zone
 UPDATE dp
@@ -472,6 +474,7 @@ LEFT OUTER JOIN mart.bridge_time_zone b2
 	b2.time_zone_id = dp.time_zone_id
 	AND dp.valid_to_date_id_maxDate = b2.date_id
 	AND dp.valid_to_interval_id_maxDate = b2.interval_id
+WHERE business_unit_code = @current_business_unit_code
 
 UPDATE dp
 SET
@@ -482,5 +485,6 @@ INNER JOIN mart.dim_date d1
 	ON dp.valid_from_date_id_local = d1.date_id
 INNER JOIN mart.dim_date d2
 	ON dp.valid_to_date_id_local = d2.date_id
+WHERE business_unit_code = @current_business_unit_code
 
 GO
