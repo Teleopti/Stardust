@@ -87,6 +87,41 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
+		public void WhenUseHourlyAvailabilityAndNotAvailableTargetShouldHaveDayOff()
+		{
+			_target = new EffectiveRestrictionCreator30393(_extractor);
+			ISchedulingOptions options = new SchedulingOptions();
+			options.UseAvailability = false;
+			options.UseStudentAvailability = true;
+			IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description());
+			options.DayOffTemplate = dayOffTemplate;
+			IEffectiveRestriction fromExtractor = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+																	  new WorkTimeLimitation(), null, null, null,
+																	  new List<IActivityRestriction>());
+			fromExtractor.NotAvailable = true;
+
+			IEffectiveRestriction expected = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
+																	  new WorkTimeLimitation(), null, dayOffTemplate, null,
+																	  new List<IActivityRestriction>());
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _extractor.Extract(_scheduleDay));
+				Expect.Call(_extractor.CombinedRestriction(options)).Return(fromExtractor);
+
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+			}
+
+			IEffectiveRestriction ret;
+			using (_mocks.Playback())
+			{
+				ret = _target.GetEffectiveRestriction(_scheduleDay, options);
+			}
+
+			Assert.AreEqual(expected.DayOffTemplate, ret.DayOffTemplate);
+		}
+
+		[Test]
 		public void VerifyEffectiveRestrictionOnGroupOfPeople()
 		{
 			var dateOnly = new DateOnly(2010, 1, 1);
