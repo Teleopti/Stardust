@@ -113,10 +113,40 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target.ReportProgress -= _target_ReportProgress;
         }
 
+		[Test]
+		public void ShouldUserCancel()
+		{
+			_target.ReportProgress += _target_ReportProgress2;
+			_optimizers = new List<IDayOffOptimizerContainer> { _container1 };
+			IPerson owner = PersonFactory.CreatePerson();
+
+			using (_mocks.Record())
+			{
+				// only one round 
+				Expect.Call(_container1.Execute())
+					.Return(true);
+
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
+					.Return(10).Repeat.AtLeastOnce();
+				Expect.Call(_container1.Owner)
+					.Return(owner).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(_optimizers);
+			}
+			_target.ReportProgress -= _target_ReportProgress2;
+		}
+
         static void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
         {
             e.Cancel = true;
         }
 
+		static void _target_ReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
+		}
     }
 }

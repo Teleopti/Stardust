@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -164,6 +165,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				OnDayScheduled(eventArgs);
 				if (eventArgs.Cancel)
 					return true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return true;
 			}
 
 			return false;
@@ -217,6 +221,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						if (eventArgs.Cancel)
 							return true;
 
+						if (_progressEvent != null && _progressEvent.UserCancel)
+							return true;
+
 						break;
 					}
 
@@ -233,6 +240,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = scheduleServiceBaseEventArgs;
 			}
 		}
 	}

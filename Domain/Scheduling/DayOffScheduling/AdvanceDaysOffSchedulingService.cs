@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         //private readonly ITeamBlockMissingDaysOffScheduler _missingDaysOffScheduler;
         private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
         private bool _cancelMe;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -46,11 +46,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             if (_cancelMe)
                 return;
 
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
 			_teamDayOffScheduler.DayScheduled += dayScheduled;
 			_teamDayOffScheduler.DayOffScheduling(allMatrixList, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
 			_teamDayOffScheduler.DayScheduled -= dayScheduled;
             if (_cancelMe)
                 return;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
 
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
 			foreach (var scheduleMatrixPro in allMatrixList)
@@ -83,10 +89,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		{
 			var eventArgs = new SchedulingServiceSuccessfulEventArgs(e.SchedulePart);
 			eventArgs.Cancel = e.Cancel;
+			eventArgs.UserCancel = e.UserCancel;
 			OnDayScheduled(eventArgs);
 			e.Cancel = eventArgs.Cancel;
 			if (eventArgs.Cancel)
 				_cancelMe = true;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
+			_progressEvent = eventArgs;
 		}
     }
 }

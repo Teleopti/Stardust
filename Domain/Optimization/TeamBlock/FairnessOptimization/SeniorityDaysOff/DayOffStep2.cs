@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly ITeamBlockDayOffDaySwapper _teamBlockDayOffDaySwapper;
         private readonly ISuitableDayOffsToGiveAway  _suitableDayOffsToGiveAway;
         private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
 
@@ -65,6 +66,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var originalBlockCount = teamBlockPoints.Count;
             while (seniorityInfoDictionary.Count > 0 && !_cancelMe)
             {
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
                 trySwapForTeamBlock(teamBlocksToWorkWith, mostSeniorTeamBlock, weekDayPoints, selectedPeriod, originalBlockCount, seniorityInfoDictionary.Count, rollbackService,scheduleDictionary,optimizationPreferences);
@@ -80,6 +84,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var swappableTeamBlocksPoints = _seniorityExtractor.ExtractSeniority(swappableTeamBlocks).ToList();
             while (swappableTeamBlocksPoints.Count > 0 && !_cancelMe)
             {
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
                 var juniorTeamBlock = _juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(swappableTeamBlocksPoints);
                 var successfullSwap = false;
                 if(!juniorTeamBlock.Equals(mostSeniorTeamBlock) )
@@ -101,6 +108,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
            var successfullSwap = false;
            while (dayCollection.Count > 0 && !_cancelMe )
             {
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
                 var mostValuableSpot = _suitableDayOffSpotDetector.DetectMostValuableSpot(dayCollection, weekDayPoints);
                 var daysToGiveAway = _suitableDayOffsToGiveAway.DetectMostValuableSpot(dayCollection, weekDayPoints);
                 var swapResult = trySwapForMostSenior(mostSeniorTeamBlock, mostJuniorTeamBlock, mostValuableSpot, rollbackService, daysToGiveAway,scheduleDictionary,optimizationPreferences);
@@ -142,6 +152,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _cancelMe = eventArgs.Cancel;
             if(_cancelMe )
                 _teamBlockDayOffDaySwapper.Cancel();
+
+	        if (_progressEvent != null && _progressEvent.UserCancel)
+	        {
+				_teamBlockDayOffDaySwapper.Cancel();
+		        return;
+	        }
+			_progressEvent = eventArgs;
         }
     }
     

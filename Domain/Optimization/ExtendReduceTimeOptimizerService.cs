@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
     	private bool _cancelMe;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
@@ -46,6 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             using (PerformanceOutput.ForOperation("Extending and reduces time for " + optimizers.Count() + " agents"))
             {
+	            _progressEvent = null;
+
                 if (_cancelMe)
                     return;
 
@@ -62,6 +65,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 handler(this, args);
                 if (args.Cancel)
                     _cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) return;
+				_progressEvent = args;
             }
         }
 
@@ -77,6 +83,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 if (_cancelMe)
                     break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
 
                 foreach (IExtendReduceTimeOptimizer unSuccessfulContainer in unSuccessfulContainers)
                 {
@@ -121,6 +130,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 lastPeriodValue = newPeriodValue;
                 if (_cancelMe)
                     break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
             }
             return retList;
         }

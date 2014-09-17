@@ -129,6 +129,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		}
 
 		[Test]
+		public void ShouldUserCancel()
+		{
+			using (_mocks.Record())
+			{
+				commonMocks();
+				firstInnerLoop(false, false, false);
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.ReportProgress += _targetReportProgress2;
+				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
+				_target.ReportProgress -= _targetReportProgress2;
+			}
+		}
+
+		[Test]
 		public void ShouldBailOutWhenNothingToWorkWith()
 		{
 			using (_mocks.Record())
@@ -198,6 +215,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		void _targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
+		}
+
+		void _targetReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
 		}
 
 		private void failOnRestriction()

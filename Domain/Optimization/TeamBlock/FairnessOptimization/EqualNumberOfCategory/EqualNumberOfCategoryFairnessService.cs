@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private bool _cancelMe;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
 		                                            IDistributionForPersons distributionForPersons,
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
 			IOptimizationPreferences optimizationPreferences)
 		{
+			_progressEvent = null;
 			_cancelMe = false;
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList).ToList();
 			if (!personListForTotalDistribution.Any())
@@ -118,6 +120,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			int successes = 0;
 			while (blocksToWorkWith.Count > 0 && !_cancelMe)
 			{
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
 				var teamBlockInfoToWorkWith =
 					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, blocksToWorkWith,
 					                                                                    scheduleDictionary);
@@ -200,6 +205,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				handler(this, args);
 				if (args.Cancel)
 					_cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) return;
+				_progressEvent = args;
 			}
 		}
 	}
