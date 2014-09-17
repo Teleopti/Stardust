@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -21,17 +22,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly Func<IPreferenceOptionsProvider> _preferenceOptionsProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly INow _now;
 
 		public PreferenceViewModelMappingProfile(IPermissionProvider permissionProvider,
 			Func<IPreferenceOptionsProvider> preferenceOptionsProvider,
-		IToggleManager toggleManager, INow now)
+			IToggleManager toggleManager, INow now, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, ILoggedOnUser loggedOnUser)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_toggleManager = toggleManager;
 			_now = now;
+			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		private class PreferenceWeekMappingData
@@ -78,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.PreferencePeriod, c => c.MapFrom(s => s.WorkflowControlSet))
 				.ForMember(d => d.ExtendedPreferencesPermission, c => c.ResolveUsing(s => _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
 				.ForMember(d => d.IsWeeklyWorkTimeEnabled, c => c.ResolveUsing(s => _toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)))
-				.ForMember(d => d.Options, c => c.ResolveUsing(s => new PreferenceOptionsViewModel(PreferenceOptions(), ActivityOptions())))
+				.ForMember(d => d.Options, c => c.ResolveUsing(s => new PreferenceOptionsViewModel(PreferenceOptions(s.SelectedDate), ActivityOptions())))
 				;
 
 			CreateMap<string, WeekDayHeader>()
@@ -169,21 +174,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 											}).ToList());
 		}
 
-		private IEnumerable<PreferenceOptionGroup> PreferenceOptions()
+		private IEnumerable<PreferenceOptionGroup> PreferenceOptions(DateOnly date)
 		{
-			var shiftCategories =
-				_preferenceOptionsProvider()
-					.RetrieveShiftCategoryOptions()
-					.MakeSureNotNull()
-					.Select(s => new PreferenceOption
-					{
-						Value = s.Id.ToString(),
-						Text = s.Description.Name,
-						Color = s.DisplayColor.ToHtml(),
-						Extended = true
-					})
-					.OrderBy(pref => pref.Text)
-					.ToArray();
+			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(date);
+			var personPeriods = _loggedOnUser.CurrentUser().PersonPeriods(period);
+			var availableShiftCategory = new List<IShiftCategory>();
+			foreach (var p in personPeriods.Where(p => p.RuleSetBag != null))
+			{
+				availableShiftCategory.AddRange(p.RuleSetBag.ShiftCategoriesInBag());
+			}
+
+			var shiftCategories = availableShiftCategory.Select(s => new PreferenceOption
+			{
+				Value = s.Id.ToString(),
+				Text = s.Description.Name,
+				Color = s.DisplayColor.ToHtml(),
+				Extended = true
+			})
+			.OrderBy(pref => pref.Text)
+			.ToArray();
 
 			var dayOffs = _preferenceOptionsProvider()
 				.RetrieveDayOffOptions()
