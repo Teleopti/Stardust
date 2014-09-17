@@ -10,9 +10,11 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -241,7 +243,53 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.Expect(r => r.ActualAgentStates.TryGetValue(guid, out actualAgentState)).Return(false);
 			target.InitializeRows();
 		}
-    }
+
+		[Test]
+		public void ShouldIndicateAlarm_WhenAlarmIdIsNotEmpty()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+			var actualAgentState = new ActualAgentState
+			{
+				PersonId = person.Id.Value,
+				AlarmId = Guid.NewGuid()
+			};
+			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>(),MockRepository.GenerateMock<IStateGroupActivityAlarmRepository>());
+			rtaStateHolder.SetFilteredPersons(new [] {person});
+			rtaStateHolder.SetActualAgentState(actualAgentState);
+			var target1 = new DayLayerViewModel(rtaStateHolder, null, null, null, null);
+			var dayLayerModel = new DayLayerModel(person, new DateTimePeriod(), null, null, null);
+			target1.Models.Add(dayLayerModel);
+
+			target1.InitializeRows();
+
+			target1.Models.Single().HasAlarm.Should().Be.True();
+
+		}
+
+		[Test]
+		public void ShouldIndicateNoAlarm_WhenAlarmIdIsEmpty()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+			var actualAgentState = new ActualAgentState
+			{
+				PersonId = person.Id.Value,
+			};
+			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>(), MockRepository.GenerateMock<IStateGroupActivityAlarmRepository>());
+			rtaStateHolder.SetFilteredPersons(new[] { person });
+			rtaStateHolder.SetActualAgentState(actualAgentState);
+			var target = new DayLayerViewModel(rtaStateHolder, null, null, null, null);
+			var dayLayerModel = new DayLayerModel(person, new DateTimePeriod(), null, null, null);
+			target.Models.Add(dayLayerModel);
+
+			target.InitializeRows();
+
+			daylayerModel.HasAlarm.Should().Be.False();
+		}
+
+
+	}
 
     public class TestDispatcher : IDispatcherWrapper
     {

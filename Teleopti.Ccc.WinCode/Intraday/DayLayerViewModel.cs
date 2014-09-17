@@ -150,6 +150,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
 			dayLayerModel.CurrentStateDescription = agentState.State;
 			dayLayerModel.AlarmStart = agentState.AlarmStart;
+			dayLayerModel.HasAlarm = agentState.AlarmId != Guid.Empty;
 
 			if (DateTime.UtcNow > dayLayerModel.AlarmStart)
 			{

@@ -220,5 +220,19 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Assert.That(propertyChangedListener.HasFired("TimeInCurrentState"));
 		}
+
+	    [Test]
+	    public void ChanginHasAlarm_ShouldNotifyPropertyChanged()
+	    {
+			var propertyChangedListener = new PropertyChangedListener();
+			propertyChangedListener.ListenTo(_target);
+
+			_target.HasAlarm = !_target.HasAlarm;
+
+			Assert.That(propertyChangedListener.HasFired("HasAlarm"));
+	    }
+
+
+		
 	}
 }

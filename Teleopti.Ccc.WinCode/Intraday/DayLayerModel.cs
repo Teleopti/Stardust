@@ -210,6 +210,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                         new UIPropertyMetadata(false));
 
 	    private bool _editLayer;
+	    private bool _hasAlarm=false;
 
 	    public int HookedEvents()
         {
@@ -263,5 +264,15 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	    {
 			get { return _elapsedTimeConverter.Convert(EnteredCurrentState,typeof(TimeSpan),null,null); }
 	    }
-	}
+
+	    public bool HasAlarm
+	    {
+		    get { return _hasAlarm; }
+		    set
+		    {
+			    _hasAlarm = value;
+				notifyPropertyChanged("HasAlarm");
+		    }
+	    } 
+    }
 }

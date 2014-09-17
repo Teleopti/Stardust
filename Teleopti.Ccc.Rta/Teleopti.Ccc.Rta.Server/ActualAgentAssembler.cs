@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Rta.Server
 				agentState.StateStart = batchId;
 				agentState.AlarmId = Guid.Empty;
 				agentState.AlarmName = "";
-				agentState.Color = 0;
 				agentState.AlarmStart = batchId;
 				agentState.StaffingEffect = 0;
 				agentState.ReceivedTime = batchId;
