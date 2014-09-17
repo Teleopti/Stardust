@@ -19,5 +19,15 @@ IIS-ISAPIFilter
 IIS-ASPNET
 IIS-ASPNET45
 
+#Legacy III6 - needed for Analyzer install
+WMICompatibility
+IIS-IIS6ManagementCompatibility
+IIS-LegacyScripts
+Metabase
+ADSICompatibility
+
+WAS-ProcessModel
+WAS-WindowsActivationService
+WAS-ConfigurationAPI
 WCF-Services45
 WCF-HTTP-Activation45
