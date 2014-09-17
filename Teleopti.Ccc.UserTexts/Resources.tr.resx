@@ -5950,7 +5950,7 @@
     <value>Günlere göre vardiyalar</value>
   </data>
   <data name="YourScheduleForDateParameters" xml:space="preserve">
-    <value>{0} için {1} kadar vardiya planınız</value>
+    <value>{0} ile {1} arasındaki varidya planınız</value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Vardiya Planı+Sınırlandırmalar</value>
@@ -6142,7 +6142,7 @@
     <value>Kural seti seçilmedi.</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneRuleSet" xml:space="preserve">
-    <value>En az bir kural seti seçmeniz gerekiyor.</value>
+    <value>En az bir kural seti seçmek zorundasınız.</value>
   </data>
   <data name="MessageForm" xml:space="preserve">
     <value>Mesajlar</value>
@@ -7174,7 +7174,7 @@
     <value>Aktif</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>MyTime</value>
+    <value>Mytimeweb</value>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Oturumdan çık</value>
@@ -7252,7 +7252,7 @@
     <value>En az bir ader alt yetenek belirleyin</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneSkill" xml:space="preserve">
-    <value>En az bir adet yetenek seçin</value>
+    <value>En az bir adet yetenek seçmek zorundasınız.</value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
     <value>Tercihler için uygun devamsızlık tipleri</value>
@@ -7925,5 +7925,263 @@
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
     <value>Hazır bulunulan zaman - Sözleşmesel vardiya zamanı</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>{0} saat çalışmanız gerek.</value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>{0} ile {1} saat arası çalışmanız gerek.</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>{0} gün tatiliniz var.</value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>{0} ile {1} gün arası tatiliniz var.</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Çalışma saatlerinizde bir değişiklik oldu.</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>{0} tarihli vardiyanızda bir değişiklik oldu.</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Tercihlerinizin sonucuna göre en az {0}, en çok {1} saat çalışacabilirsiniz.</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Tercihlerinizin sonucuna göre {0} saat çalışacaksınız.</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Tercihlerinizin sonucuna göre {0} günlük tatiliniz olacak.</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Tercihleriniz size tanınan aralığın dışına çıktı.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Şifrenizin geçerliliği yakında sona erecektir.</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Şifrenizin geçerliliği sona ermiştir.</value>
+  </data>
+  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
+    <value>Bu hizmeti kullanmak için e-posta adresinizin "Çalışanlar" modülünde tanımlı olması gerekir.</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>En az bir işyükü seçmek zorundasınız.</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>An itibariyle lisansınızda tanımlı olan maksimum ({1}) temsilciden ({0}) daha fazla lisanslı kullanıcı gözüküyor. Lütfen {2} gün içerisinde lisanslı kullanıcı sayınızı azaltın ya da yeni bir lisans başvurusu yapın.</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>Tarayıcı varsayılan ayarları</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Saate göre uygunluk</value>
+  </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Teleopti Müşteri Ağı'na şu anda erişilemiyor. Lütfen sonra tekrar deneyin.</value>
+  </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Sorun giderme bilgilendirmesi açık kalsın mı?</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} gün vardiyalanamadı.</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Saate göre uygunluk tercihlerinin yerine getirilme oranı</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>HerYerde</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Devamsızlık türü bulunamadı.</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Periyod süresini çiğne</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Günlük ortalama çalışma süresini çiğne</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Tatilleri çiğne</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>{0} işyükü penceresi artık geçersiz. Lütfen kapayın.</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Uzun süreli tahmin</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Kural setlerini yönet</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Müşteri temsilcisi sayısı (manuel olarak çiğne)</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>İsteğinizin durumunda bir değişiklik meydana geldiğinden isteğinizi güncellemeniz veya silmeniz mümkün olmayacaktır.</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Perakende</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Güncel çalışan sayısı</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>İş ünitesine aktar</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Dosyaya aktar</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Dosyaya aktarım tamamlandı</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Tarih ve senaryo seç</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Klasör seç</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Yetenek seç</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV dosyası (*.csv)|*.csv</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Kadro aktar</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>İşyükü aktar</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>İşyükü ve kadro aktar</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Müşteri hizmeti sonrası iş süresi</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Müşteri hizmeti sonrası ortalama iş süresi</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Ortalama müşteri</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Hesaplanan müşteri</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Kampanya müşteri (%)</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Aynı bitiş süresi</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Aynı vardiya kategorisi</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Aynı başlangıç süresi</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Kısıtlamalar</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Müşteri</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Müşteri sapma</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Çalışan</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Çalışanlar</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Gelen çalışan</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Gelen çalışan (daralma dahil)</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Çalışanlar (daralma dahil)</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Tahmini ortalama hizmet sonrası iş</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Tahminlenen müşteriler</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Tahminlenen müşteriler:</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Tahminlenen çalışanlar</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Tahminlenen gelen çalışanlar</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>İndeks hizmet sonrası iş</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>İndeks müşteriler</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Maksimum çalışan</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Minimum çalışan</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Müşteriler</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Asıl hizmet sonrası iş</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Asıl müşteri</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Asıl müşteri</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Vardiyalanan çalışan</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Gelen vardiyalanan çalışan</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Hizmet verilmiş müşteri</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Toplam müşteri</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Onaylanmış hizmet sonrası iş</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Onaylanmış müşteri</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Vazgeçen müşteri</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Dosya aktarımı başarısız</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Dosya aktarımı tamamlandı</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Optimizasyon Seçenekleri</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Aktivite yok</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Takım Optimizasyonu menüsündeki "Vardiya kategorisi", "Başlangıç zamanı" ya da "Bitiş zamanı" seçeneklerinden en az birini seçin.</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Vardiyalama Seçenekleri</value>
   </data>
 </root>
