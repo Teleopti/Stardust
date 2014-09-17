@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 	    private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 	    private bool _cancelMe;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
         public DayOffStep1(IConstructTeamBlock constructTeamBlock,
 	                       IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
@@ -75,6 +76,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var originalBlockCount = teamBlockPoints.Count;
             while (seniorityInfoDictionary.Count > 0 && !_cancelMe)
             {
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
                 trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary,
@@ -94,6 +98,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
             if(eventArgs.Cancel )
                 _cancelMe = true;
+
+			if (_progressEvent != null && _progressEvent.UserCancel) return;
+			_progressEvent = eventArgs;
         }
         private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints,
                                           IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock,
@@ -110,6 +117,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var swapSuccess = false;
             while (swappableTeamBlocks.Count > 0 && !swapSuccess && !_cancelMe)
             {
+	            if (_progressEvent != null && _progressEvent.UserCancel)
+		            break;
+
                 var blockToSwapWith = _teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(swappableTeamBlocks,
                                                                                                      dayOffPlacementPointsSenerioty);
                 if (seniorValue < dayOffPlacementPointsSenerioty[blockToSwapWith])

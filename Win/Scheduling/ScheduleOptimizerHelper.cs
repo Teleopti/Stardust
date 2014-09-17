@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 		private readonly IPersonSkillProvider _personSkillProvider;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, IToggleManager toggleManager)
 		{
@@ -361,6 +362,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						{
 							if (_backgroundWorker.CancellationPending)
 								break;
+
 							iterations++;
 						}
 						if (_backgroundWorker.CancellationPending)
@@ -578,6 +580,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_backgroundWorker = backgroundWorker;
 			_scheduledCount = 0;
+			_progressEvent = null;
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 			_sendEventEvery = optimizerPreferences.Advanced.RefreshScreenInterval;
@@ -638,52 +641,72 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						RunWorkShiftOptimization(
-							optimizerPreferences,
-							matrixOriginalStateContainerListForWorkShiftOptimization,
-							workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-							selectedPeriod,
-							_backgroundWorker);
-						continuedStep = true;
+
+						if (_progressEvent == null || !_progressEvent.UserCancel)
+						{
+							RunWorkShiftOptimization(
+								optimizerPreferences,
+								matrixOriginalStateContainerListForWorkShiftOptimization,
+								workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
+								selectedPeriod,
+								_backgroundWorker);
+							continuedStep = true;
+						}
 					}
 
 					if (optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
-						                                                        selectedDays, _stateHolder,
-						                                                        selectedPeriod,
-						                                                        matrixOriginalStateContainerListForMoveMax);
-						continuedStep = true;
+
+						if (_progressEvent == null || !_progressEvent.UserCancel)
+						{
+							_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
+								selectedDays, _stateHolder,
+								selectedPeriod,
+								matrixOriginalStateContainerListForMoveMax);
+							continuedStep = true;
+						}
 					}
 
 					if (optimizerPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						_extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
-						                                                             selectedDays, _schedulerStateHolder,
-						                                                             selectedPeriod,
-						                                                             matrixOriginalStateContainerListForMoveMax);
-						continuedStep = true;
+
+						if (_progressEvent == null || !_progressEvent.UserCancel)
+						{
+							_extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
+								selectedDays, _schedulerStateHolder,
+								selectedPeriod,
+								matrixOriginalStateContainerListForMoveMax);
+							continuedStep = true;
+						}
 
 					}
 
 					if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						RunIntradayOptimization(
-							optimizerPreferences,
-							matrixOriginalStateContainerListForIntradayOptimization,
-							workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-							backgroundWorker,
-							selectedPeriod);
-						continuedStep = true;
+
+						if (_progressEvent == null || !_progressEvent.UserCancel)
+						{
+							RunIntradayOptimization(
+								optimizerPreferences,
+								matrixOriginalStateContainerListForIntradayOptimization,
+								workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
+								backgroundWorker,
+								selectedPeriod);
+							continuedStep = true;
+						}
 					}
 
 					if (optimizerPreferences.General.OptimizationStepFairness)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences);
+
+						if (_progressEvent == null || !_progressEvent.UserCancel)
+						{
+							runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences);
+						}
 					}
 					
 				}
@@ -757,6 +780,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (_backgroundWorker.CancellationPending)
                     return;
 
+				if (_progressEvent != null && _progressEvent.UserCancel) return;
+
                 IList<IScheduleMatrixPro> matrixList =
                     matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
@@ -778,6 +803,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 if (_backgroundWorker.CancellationPending)
                     return;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) return;
 
                 IList<IScheduleMatrixPro> matrixList =
                     scheduleMatrixOriginalStateContainerList.Select(container => container.ScheduleMatrix).ToList();
@@ -805,9 +832,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
             IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod)
         {
-
             if (_backgroundWorker.CancellationPending)
                 return;
+
+			if (_progressEvent != null && _progressEvent.UserCancel) return;
 
             IList<IScheduleMatrixPro> matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
@@ -857,7 +885,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     rollbackMatrixChanges(matrixContainer, rollbackService);
                     continue;
                 }
-                validMatrixContainerList.Add(matrixContainer);
+                validMatrixContainerList.Add(matrixContainer);	
             }
 
             if (notFullyScheduledMatrixFound)
@@ -886,6 +914,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
             resourceOptimizerPersonOptimized(this, e);
+			if (_progressEvent != null && _progressEvent.UserCancel) return;
 
             rollbackService.ClearModificationCollection();
             foreach (IScheduleDayPro scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.EffectivePeriodDays)
@@ -895,7 +924,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
+        private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
         {
             if (_backgroundWorker.CancellationPending)
             {
@@ -903,6 +932,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 e.UserCancel = true;
             }
             _backgroundWorker.ReportProgress(1, e);
+
+	        if (_progressEvent != null && _progressEvent.UserCancel) return;
+	        _progressEvent = e;
         }
 
 	    public void RemoveShiftCategoryBackToLegalState(

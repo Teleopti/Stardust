@@ -42,5 +42,7 @@ namespace Teleopti.Interfaces.Domain
 	    {
 		    get { return _isSuccessful; }
 	    }
+
+		public bool UserCancel { get; set; }
     }
 }

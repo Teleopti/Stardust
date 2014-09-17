@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IProjectionProvider _projectionProvider;
         private BackgroundWorker _backgroundWorker;
         private IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
+	    private SchedulingServiceBaseEventArgs _progressEvent;
 
         public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
                                        ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                             IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
         {
             _backgroundWorker = backgroundWorker;
+	        _progressEvent = null;
             var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
             var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
             foreach (var dateOnly in selectedDates)
@@ -63,6 +65,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person);
                     if (checkIfCancelPressed())
                         return;
+
+					if (_progressEvent != null && _progressEvent.UserCancel)
+						return;
 
                     var locks = gridlockManager.Gridlocks(person, dateOnly);
                     if (locks != null && locks.Count != 0) continue;
@@ -188,7 +193,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 e.Cancel = true;
             }
-            _backgroundWorker.ReportProgress(1, e.SchedulePart);
+			
+            //_backgroundWorker.ReportProgress(1, e.SchedulePart);
+			_backgroundWorker.ReportProgress(1, e);
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+			
+			_progressEvent = e;
         }
 
         private IEnumerable<IPerson> orderCandidatesRandomly(IEnumerable<IPerson> persons, DateOnly dateOnly)

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
         private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
         private readonly SplitSchedulePeriodToWeekPeriod _splitSchedulePeriodToWeekPeriod;
         private readonly IValidNumberOfDayOffInAWeekSpecification _validNumberOfDayOffInAWeekSpecification;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -101,6 +102,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
             if (eventArgs.Cancel)
                 return false;
 
+	        if (_progressEvent != null && _progressEvent.UserCancel)
+		        return false;
+
             return true;
         }
 
@@ -110,6 +114,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
             if (temp != null)
             {
                 temp(this, scheduleServiceBaseEventArgs);
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = scheduleServiceBaseEventArgs;
             }
         }
     }

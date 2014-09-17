@@ -47,7 +47,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _target.Execute(new List<IExtendReduceTimeOptimizer> { _optimizer });
             }
+
+			_target.ReportProgress -= _target_ReportProgress;
         }
+
+		[Test]
+		public void ShouldUserCancel()
+		{
+			_target.ReportProgress += _target_ReportProgress1;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(30);
+				Expect.Call(_optimizer.Execute()).Return(true);
+				Expect.Call(_optimizer.Owner).Return(_person);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(20);
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(new List<IExtendReduceTimeOptimizer> { _optimizer });
+			}
+
+			_target.ReportProgress -= _target_ReportProgress1;
+		}
 
 
         [Test]
@@ -73,5 +96,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             e.Cancel = true;
         }
+
+		static void _target_ReportProgress1(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
+		}
     }
 }
