@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.IocCommon
 		public string ToggleMode { get; set; }
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public Type RepositoryConstructorType { get; set; }
-		public IContainer SharedConteiner { get; set; }
+		public IContainer SharedContainer { get; set; }
 
 		public CommonModule()
 		{
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule
 			{
 				MessageBrokerListeningEnabled = MessageBrokerListeningEnabled,
-				SharedConteiner = SharedConteiner
+				SharedContainer = SharedContainer
 			});
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 		}

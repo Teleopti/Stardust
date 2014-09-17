@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	internal class MessageBrokerModule : Module
 	{
 		public bool MessageBrokerListeningEnabled { get; set; }
-		public IContainer SharedConteiner { get; set; }
+		public IContainer SharedContainer { get; set; }
 
 		private T resolveSharedComponent<T>(IComponentContext c)
 		{
-			return SharedConteiner == null ? c.Resolve<T>() : SharedConteiner.Resolve<T>();
+			return SharedContainer == null ? c.Resolve<T>() : SharedContainer.Resolve<T>();
 		}
 
 		protected override void Load(ContainerBuilder builder)

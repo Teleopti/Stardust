@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 
 			build.RegisterModule(new CommonModule
 			{
-				SharedConteiner = sharedContainer
+				SharedContainer = sharedContainer
 			});
 
 			build.RegisterModule<ShiftTradeModule>();
