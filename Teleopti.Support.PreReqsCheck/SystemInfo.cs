@@ -191,6 +191,14 @@ namespace CheckPreRequisites
 
                                        }
                                        break;
+												case 3:
+													{
+														version = osVersionInfo.wProductType == Win32Api.VER_NT_WORKSTATION ?
+															WindowsVersion.Windows81 :
+															WindowsVersion.WindowsServer2012R2;
+
+													}
+													break;
                                  }
                               }
                               break;

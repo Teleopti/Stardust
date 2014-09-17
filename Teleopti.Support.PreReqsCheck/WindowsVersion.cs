@@ -26,5 +26,7 @@
       Windows7,
       WindowsServer2012,
       Windows8,
+		WindowsServer2012R2,
+		Windows81,
    }
 }
