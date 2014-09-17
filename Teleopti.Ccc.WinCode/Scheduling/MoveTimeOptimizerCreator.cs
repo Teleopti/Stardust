@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
+		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPersonSkillProvider personSkillProvider,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
+			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
+			IEffectiveRestrictionCreator effectiveRestrictionCreator)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_personSkillProvider = personSkillProvider;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 		}
 
 		/// <summary>
@@ -85,11 +88,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal);
 
-				IRestrictionExtractor restrictionExtractor =
-					new RestrictionExtractor(_schedulingResultStateHolder);
-
-				IEffectiveRestrictionCreator effectiveRestrictionCreator = new EffectiveRestrictionCreator(restrictionExtractor);
-
 				IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 
 				var restrictionChecker = new RestrictionChecker();
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						_rollbackService,
 						deleteAndResourceCalculateService,
 						resourceOptimizationHelper,
-						effectiveRestrictionCreator,
+						_effectiveRestrictionCreator,
 						workShiftContainer,
 						optimizerOverLimitDecider,
 						schedulingOptionsCreator,

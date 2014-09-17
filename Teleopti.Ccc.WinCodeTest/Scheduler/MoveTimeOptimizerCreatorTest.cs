@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
 		private IPersonSkillProvider _personSkillProvider;
+		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
 
 		[SetUp]
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_personSkillProvider = new PersonSkillProvider();
+			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
 												   _workShiftOriginalStateContainerList,
 												   _decisionMaker,
@@ -59,7 +61,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _schedulingResultStateHolder,
 												   _personSkillProvider, 
 												   new CurrentTeleoptiPrincipal(),
-												   new ScheduleMatrixLockableBitArrayConverterEx());
+												   new ScheduleMatrixLockableBitArrayConverterEx(),
+												   _effectiveRestrictionCreator);
 		}
 
 		[Test]

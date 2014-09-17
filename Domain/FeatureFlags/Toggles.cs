@@ -15,6 +15,7 @@
 		Scheduler_ShowIntadayESLWithShrinkage_21874,
 		Scheduler_OccupancyESL_11724,
 		Scheduler_HidePointsFairnessSystem_28317, 
+		Scheduler_SudentAvailabilityForFixedStaff_30393,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,
