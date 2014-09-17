@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			Configure(null);
 		}
 
-		public void Configure(Func<IComponentContext, SignalRClient> sharedSignalRClient)
+		public void Configure(IContainer sharedContainer)
 		{
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
 			build.RegisterModule(new CommonModule
 			{
-				SharedSignalRClient = sharedSignalRClient
+				SharedConteiner = sharedContainer
 			});
 
 			build.RegisterModule<ShiftTradeModule>();

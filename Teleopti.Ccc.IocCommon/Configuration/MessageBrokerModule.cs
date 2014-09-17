@@ -1,4 +1,3 @@
-using System;
 using System.Configuration;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -10,18 +9,22 @@ using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
+using IContainer = Autofac.IContainer;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class MessageBrokerModule : Module
 	{
 		public bool MessageBrokerListeningEnabled { get; set; }
-		public Func<IComponentContext, SignalRClient> SharedSignalRClient { get; set; }
+		public IContainer SharedConteiner { get; set; }
+
+		private T resolveSharedComponent<T>(IComponentContext c)
+		{
+			return SharedConteiner == null ? c.Resolve<T>() : SharedConteiner.Resolve<T>();
+		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var resolveSignalRClient = SharedSignalRClient ?? (c => c.Resolve<SignalRClient>());
-
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
 
 			builder.RegisterType<MessageBrokerCompositeClient>()
@@ -33,10 +36,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register(c =>
 			{
 				if (MessageBrokerListeningEnabled)
-					return (ISignalRClient) resolveSignalRClient(c);
+					return (ISignalRClient)resolveSharedComponent<SignalRClient>(c);
 				if (c.Resolve<IToggleManager>().IsEnabled(Toggles.Messaging_HttpSender_29205))
-					return c.Resolve<DisabledSignalRClient>();
-				return resolveSignalRClient(c);
+					return resolveSharedComponent<DisabledSignalRClient>(c);
+				return resolveSharedComponent<SignalRClient>(c);
 			})
 				.As<ISignalRClient>()
 				.As<IMessageBrokerUrl>()

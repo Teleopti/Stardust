@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static IContainer makeContainer(IContainer sharedContainer)
 		{
 			var container = new ContainerBuilder().Build();
-			new ContainerConfiguration(container).Configure(c => sharedContainer.Resolve<SignalRClient>());
+			new ContainerConfiguration(container).Configure(sharedContainer);
 			return container;
 		}
 
