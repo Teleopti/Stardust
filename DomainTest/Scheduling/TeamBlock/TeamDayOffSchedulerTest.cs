@@ -240,6 +240,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
+		public void ShouldUserCancelAddRestrictionDayOffForTeamMember()
+		{
+			_effectiveRestriction.DayOffTemplate = new DayOffTemplate(new Description("DayOff"));
+
+			using (_mocks.Record())
+			{
+				commonMocks();
+
+				//first foreach
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
+				getMatrixesAndRestrictionMocks();
+				addDaysOffForTeamMocks();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.DayScheduled += targetDayScheduled2;
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+				_target.DayScheduled -= targetDayScheduled2;
+			}
+		}
+
+		[Test]
 		public void ShouldCancelAddContractDayOffForTeamMember()
 		{
 			using (_mocks.Record())
@@ -266,6 +289,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
 					                         _groupPersonBuilderForOptimization);
 					_target.DayScheduled -= targetDayScheduled;
+				}
+			}
+		}
+
+		[Test]
+		public void ShouldUserCancelAddContractDayOffForTeamMember()
+		{
+			using (_mocks.Record())
+			{
+				commonMocks();
+
+				//first foreach
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
+				getMatrixesAndRestrictionMocks();
+
+				//second foreach
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
+				getMatrixesAndRestrictionMocks();
+
+				//addContractDaysOff
+				addContractDaysOffMocksBelowTarget(true, true);
+			}
+
+			using (_mocks.Playback())
+			{
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					_target.DayScheduled += targetDayScheduled2;
+					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,_groupPersonBuilderForOptimization);
+					_target.DayScheduled -= targetDayScheduled2;
 				}
 			}
 		}
@@ -368,6 +421,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			e.Cancel = true;
+		}
+
+		void targetDayScheduled2(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			e.UserCancel = true;
 		}
 	}
 }

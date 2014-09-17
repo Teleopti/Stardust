@@ -194,6 +194,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly SchedulingScreenPermissionHelper _permissionHelper;
         private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
 		private Form _mainWindow;
+		private bool _cancelButtonPressed;
 
 		#region Constructors
 
@@ -1170,6 +1171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonQuickAccessCancel_Click(object sender, EventArgs e)
 		{
 			cancelAllBackgroundWorkers();
+			//_cancelButtonPressed = true;
 			toolStripButtonQuickAccessCancel.Enabled = false;
 		}
 
@@ -1941,6 +1943,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 
 			if (rethrowBackgroundException(e))
 				return;
@@ -1967,6 +1970,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (Disposing)
 				return;
+			
 			toolStripProgressBar1.PerformStep();
 		}
 
@@ -2017,6 +2021,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 
 			if (rethrowBackgroundException(e))
 				return;
@@ -2200,6 +2205,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void backgroundWorkerLoadData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 
 			if (stateHolderExceptionOccurred(e))
 				return;
@@ -2523,6 +2529,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_undoRedo.CommitBatch();
 
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 
 			if (rethrowBackgroundException(e))
 				return;
@@ -2780,6 +2787,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_undoRedo.InUndoRedo)
 				_undoRedo.CommitBatch();
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 			if (rethrowBackgroundException(e))
 				return;
 
@@ -2865,6 +2873,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_undoRedo.InUndoRedo)
 				_undoRedo.CommitBatch();
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 			if (rethrowBackgroundException(e))
 				return;
 
@@ -2929,6 +2938,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var progress = e.UserState as ResourceOptimizerProgressEventArgs;
 			if (progress != null)
 			{
+				if (_cancelButtonPressed)
+				{
+					progress.Cancel = true;
+					progress.UserCancel = true;
+				}
+
 				if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
 				{
 					_grid.Invalidate();
@@ -2941,7 +2956,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 					refreshChart();
 					_scheduleCounter = 0;
 				}
-				if (!string.IsNullOrEmpty(progress.Message))
+
+				if (_cancelButtonPressed)
+				{
+					toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancellingThreeDots");
+				}
+
+				else if (!string.IsNullOrEmpty(progress.Message))
 				{
 					toolStripStatusLabelStatus.Text = progress.Message;
 				}
@@ -3059,6 +3080,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerOvertimeScheduling_ProgressChanged), sender, e);
 			else
 			{
+				var progress = e.UserState as SchedulingServiceBaseEventArgs;
+
+				if (progress != null && _cancelButtonPressed)
+				{
+					progress.Cancel = true;
+					progress.UserCancel = true;
+				}
+
 				if (e.ProgressPercentage <= 0)
 				{
 					schedulingProgress(Math.Abs(e.ProgressPercentage));
@@ -3077,6 +3106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_undoRedo.InUndoRedo)
 				_undoRedo.CommitBatch();
 			_backgroundWorkerRunning = false;
+			_cancelButtonPressed = false;
 			if (rethrowBackgroundException(e))
 				return;
 

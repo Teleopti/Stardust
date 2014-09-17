@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private bool _eventExecuted;
 	    private IScheduleMatrixPro _matrix;
 	    private IScheduleDayPro _scheduleDayPro;
+	    private int _timesExecuted;
 
         [SetUp]
         public void Setup()
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new MoveTimeOptimizerContainer(_moveTimeOptimizerList, _periodValueCalculatorForAllSkills);
 	        _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 	        _scheduleDayPro = _mocks.Stub<IScheduleDayPro>();
+	        _timesExecuted = 0;
         }
 
         [Test]
@@ -66,10 +68,40 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
+		[Test]
+		public void ShouldUserCancel()
+		{
+			_target.ReportProgress += _target_ReportProgress1;
+			using (_mocks.Record())
+			{
+				Expect.Call(_moveTimeOptimizer1.Execute()).Return(false).Repeat.Any();
+				Expect.Call(_moveTimeOptimizer2.Execute()).Return(false).Repeat.Any();
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1).Repeat.Any();
+				Expect.Call(_moveTimeOptimizer1.ContainerOwner).Return(_person).Repeat.Any();
+				Expect.Call(_moveTimeOptimizer1.Matrix).Return(_matrix).Repeat.Any();
+				Expect.Call(_moveTimeOptimizer2.ContainerOwner).Return(_person).Repeat.Any();
+				Expect.Call(_moveTimeOptimizer2.Matrix).Return(_matrix).Repeat.Any();
+				Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>())).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro })).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute();
+				Assert.AreEqual(1, _timesExecuted);
+				_target.ReportProgress -= _target_ReportProgress1;
+			}
+		}
+
         void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
         {
             _eventExecuted = true;
         }
+
+		void _target_ReportProgress1(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
+			_timesExecuted++;
+		}
 
 
         [Test]

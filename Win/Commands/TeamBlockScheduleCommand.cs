@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.Win.Commands
 			_scheduledCount++;
 			if (_scheduledCount >= _schedulingOptions.RefreshRate)
 			{
-				_backgroundWorker.ReportProgress(1, e.SchedulePart);
+				//_backgroundWorker.ReportProgress(1, e.SchedulePart);
+				_backgroundWorker.ReportProgress(1, e);
 				_scheduledCount = 0;
 			}
 		}

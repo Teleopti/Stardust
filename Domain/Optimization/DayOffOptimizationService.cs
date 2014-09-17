@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
     	private bool _cancelMe;
+	    private ResourceOptimizerProgressEventArgs _progressEvent;
 
         public DayOffOptimizationService(
             IPeriodValueCalculator periodValueCalculator
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void Execute(IEnumerable<IDayOffOptimizerContainer> optimizers)
         {
+			_progressEvent = null;
             using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
             {
                 executeOptimizersWhileActiveFound(optimizers);
@@ -42,6 +44,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 handler(this, args);
                 if (args.Cancel)
                     _cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) return;
+				_progressEvent = args;
             }
         }
   
@@ -61,6 +66,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 if (_cancelMe)
                     break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) 
+					break;
 
                 foreach (IDayOffOptimizerContainer unSuccessfulContainer in unSuccessfulContainers)
                 {
@@ -98,6 +106,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 lastPeriodValue = newPeriodValue;
                 if (_cancelMe)
                     break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) 
+					break;
             }
             return retList;
         }

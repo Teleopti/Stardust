@@ -190,5 +190,45 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 _target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences);
             }
         }
+
+
+		[Test]
+		public void ShouldUserCancel()
+		{
+			IList<ITeamBlockInfo> teamBlockList = new List<ITeamBlockInfo>() { _seniorTeamBlock, _juniorTeamBlock };
+			IList<ITeamBlockPoints> teamBlockPointList = new List<ITeamBlockPoints>(){_seniorTeamBlockPoint,_juniorTeamBlockPoint};
+			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock)).Return(true);
+				commonMocks(teamBlockList, teamBlockPointList);
+				//Second level
+				Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock)).IgnoreArguments().Return(teamBlockList);
+				Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList)).IgnoreArguments().Return(teamBlockPointList);
+				Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList())).IgnoreArguments().Return(_juniorTeamBlock);
+				Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo).Repeat.AtLeastOnce();
+				
+				Expect.Call(_teamInfo.Name).Return("senior team").Repeat.AtLeastOnce();
+
+				//third level
+				Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints())).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
+				Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints())).Return(_selectedPeriod.DayCollection());
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock, _rollbackService, _schedulingDictionary,_optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
+				
+				teamBlockList.Remove(_seniorTeamBlock);
+			}
+
+			using (_mock.Playback())
+			{
+				_target.BlockSwapped += targetReportProgress;
+				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences);
+				_target.BlockSwapped -= targetReportProgress;
+			}
+		}
+
+		void targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
+		}
     }
 }

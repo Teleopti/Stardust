@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IList<IIntradayOptimizer2> _optimizers;
         private bool _cancelMe;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
         public IntradayOptimizerContainer(IList<IIntradayOptimizer2> optimizers)
         {
@@ -25,6 +26,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void Execute()
         {
+			_progressEvent = null;
+
             if (_cancelMe)
                 return;
 
@@ -40,6 +43,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 handler(this, args);
                 if (args.Cancel)
                     _cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel) return;
+				_progressEvent = args;
             }
         }
 
@@ -58,6 +64,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (_cancelMe)
                     break;
 
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
                 IEnumerable<IIntradayOptimizer2> shuffledOptimizers = activeOptimizers.GetRandom(activeOptimizers.Count, true);
 
                 int executes = 0;
@@ -65,6 +74,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 {
                     if (_cancelMe)
                         break;
+
+					if (_progressEvent != null && _progressEvent.UserCancel)
+						break;
 
                     executes++;
                     bool result = optimizer.Execute();

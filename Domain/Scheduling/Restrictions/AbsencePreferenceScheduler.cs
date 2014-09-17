@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IAbsencePreferenceFullDayLayerCreator _absencePreferenceFullDayLayerCreator;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -50,6 +51,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
                     OnDayScheduled(eventArgs);
                     if (eventArgs.Cancel) return;
+
+	                if (_progressEvent != null && _progressEvent.UserCancel)
+		                return;
                 }
             }
         }
@@ -60,6 +64,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = scheduleServiceBaseEventArgs;
 			}
 		}
 	}
