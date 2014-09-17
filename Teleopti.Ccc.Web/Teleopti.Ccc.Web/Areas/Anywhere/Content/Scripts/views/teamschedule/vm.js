@@ -114,6 +114,7 @@ define([
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
+				schedule.BusinessUnitId = self.BusinessUnitId();
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.Date();
 				schedule.Date = moment.tz(schedule.Date, timezoneCurrent.IanaTimeZone());

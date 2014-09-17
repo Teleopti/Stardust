@@ -39,6 +39,7 @@ define([
 			
 			var personScheduleDeferred = $.Deferred();
 			personsubscriptions.subscribePersonSchedule(
+				viewModel.BusinessUnitId(),
 				viewModel.PersonId(),
 				helpers.Date.ToServer(viewModel.ScheduleDate()),
 				function (data) {
@@ -50,6 +51,7 @@ define([
 
 			var groupScheduleDeferred = $.Deferred();
 			groupsubscriptions.subscribeGroupSchedule(
+				viewModel.BusinessUnitId(),
 				viewModel.GroupId(),
 				helpers.Date.ToServer(viewModel.ScheduleDate()),
 				function(personId) {

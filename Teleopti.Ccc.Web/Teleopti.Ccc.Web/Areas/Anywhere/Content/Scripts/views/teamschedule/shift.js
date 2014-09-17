@@ -29,7 +29,8 @@ define([
 				return new layer(timeline, l, true);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
-			
+
+			self.ShiftMenu.BusinessUnitId = data.BusinessUnitId;
 			self.ShiftMenu.GroupId = data.GroupId;
 			self.ShiftMenu.PersonId = data.PersonId;
 			self.ShiftMenu.Date = data.Date;

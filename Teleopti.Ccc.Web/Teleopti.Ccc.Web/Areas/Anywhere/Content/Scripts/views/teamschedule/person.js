@@ -67,7 +67,8 @@ define([
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
-			
+
+			self.Menu.BusinessUnitId = data.BusinessUnitId;
 			self.Menu.GroupId = data.GroupId;
 			self.Menu.PersonId = self.Id;
 			self.Menu.Date = data.Offset;

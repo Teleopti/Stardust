@@ -59,14 +59,15 @@ define([
 			return startPromise;
 		},
 
-		subscribePersonSchedule: function (personId, date, callback) {
+		subscribePersonSchedule: function (buId, personId, date, callback) {
 			unsubscribePersonSchedule();
 			incomingPersonSchedule = callback;
 			startPromise.done(function () {
-
+				personScheduleHub.connection.qs = { "BusinessUnitId": buId };
 				personScheduleHub.server.personSchedule(personId, date);
 
 				personScheduleSubscription = messagebroker.subscribe({
+					businessUnitId: buId,
 					domainReferenceType: 'Person',
 					domainReferenceId: personId,
 					domainType: 'IPersonScheduleDayReadModel',
