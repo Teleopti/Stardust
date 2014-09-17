@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
@@ -24,10 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IBadgeProvider _badgeProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IBadgeSettingProvider _badgeSettingProvider;
+		private readonly IPersonNameProvider _personNameProvider;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider,
 			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider, IBadgeProvider badgeProvider,
-			IBadgeSettingProvider badgeSettingProvider, IToggleManager toggleManager)
+			IBadgeSettingProvider badgeSettingProvider, IToggleManager toggleManager, IPersonNameProvider personNameProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_badgeProvider = badgeProvider;
 			_toggleManager = toggleManager;
+			_personNameProvider = personNameProvider;
 			_badgeSettingProvider = badgeSettingProvider;
 		}
 
@@ -90,6 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				ReportNavigationItems = reportsList,
 				NavigationItems = navigationItems,
 				CustomerName = customerName,
+				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
 				ShowChangePassword = showChangePassword(),
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),

@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Core
 	public interface IPersonNameProvider
 	{
 		string BuildNameFromSetting(IPerson person);
+		string BuildNameFromSetting(Name name);
 		string BuildNameFromSetting(string firstName, string lastName);
 	}
 
@@ -22,6 +23,11 @@ namespace Teleopti.Ccc.Web.Core
 		public string BuildNameFromSetting(IPerson person)
 		{
 			return BuildNameFromSetting(person.Name.FirstName, person.Name.LastName);
+		}
+
+		public string BuildNameFromSetting(Name name)
+		{
+			return BuildNameFromSetting(name.FirstName, name.LastName);
 		}
 
 		public string BuildNameFromSetting(string firstName, string lastName)

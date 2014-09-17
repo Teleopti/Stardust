@@ -2,7 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
@@ -17,6 +18,19 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 	[TestFixture]
 	public class PortalViewModelFactoryStudentAvailabilityTest
 	{
+		private IPersonNameProvider _personNameProvider;
+		private ILoggedOnUser _loggedOnUser;
+
+		[SetUp]
+		public void Setup()
+		{
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() { Name = new Name() });
+
+			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
+		}
+
 		[Test]
 		public void ShouldNotHaveStudentAvailabilityNavigationItemIfNotPermission()
 		{
@@ -24,9 +38,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(false);
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var result = target.CreatePortalViewModel();
 

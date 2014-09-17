@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool HasAsmPermission { get; set; }
 		public bool ShowMeridian { get; set; }
 		public IEnumerable<BadgeViewModel> Badges { get; set; }
+		public string CurrentLogonAgentName { get; set; }
 
 		/// <summary>
 		/// Indicate if badge should be shown
