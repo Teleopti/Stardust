@@ -16,10 +16,5 @@ namespace Teleopti.Ccc.IocCommon
 			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
 		}
-
-		public T ResolveSharedComponent<T>(IComponentContext c)
-		{
-			return SharedContainer == null ? c.Resolve<T>() : SharedContainer.Resolve<T>();
-		}
 	}
 }

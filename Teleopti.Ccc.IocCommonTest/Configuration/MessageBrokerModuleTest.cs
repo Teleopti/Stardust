@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = BuildContainerWithToggle(Toggles.Messaging_HttpSender_29205, false))
 			{
 				container.Resolve<IMessageSender>()
-					.Should().Be.SameInstanceAs(container.Resolve<SignalRSender>());
+					.Should().Be.OfType<SignalRSender>();
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = BuildContainerWithToggle(Toggles.Messaging_HttpSender_29205, true))
 			{
 				container.Resolve<IMessageSender>()
-					.Should().Be.SameInstanceAs(container.Resolve<HttpSender>());
+					.Should().Be.OfType<HttpSender>();
 			}
 		}
 
@@ -95,6 +95,19 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = BuildContainer(config))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<SignalRClient>();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveSignalRClientFromSharedContainer()
+		{
+			var signalRClient = MockRepository.GenerateMock<ISignalRClient>();
+			var builder = new ContainerBuilder();
+			builder.RegisterInstance(signalRClient).As<ISignalRClient>();
+			var sharedContainer = builder.Build();
+			using (var container = BuildContainer(new IocConfiguration(new IocArgs{SharedContainer = sharedContainer}, null)))
+			{
+				container.Resolve<ISignalRClient>().Should().Be.SameInstanceAs(signalRClient);
 			}
 		}
 
