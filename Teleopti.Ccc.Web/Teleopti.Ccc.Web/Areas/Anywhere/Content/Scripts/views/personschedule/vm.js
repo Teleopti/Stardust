@@ -183,6 +183,7 @@ timezoneCurrent,
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.PersonId();
+				a.BusinessUnitId = self.BusinessUnitId();
 				a.Date = self.ScheduleDate().clone();
 				a.GroupId = self.GroupId();
 				a.PersonName = self.Name();
@@ -195,6 +196,7 @@ timezoneCurrent,
 			data.PersonId = self.PersonId();
 			data.PersonName = self.Name();
 			data.GroupId = self.GroupId();
+			data.BusinessUnitId = self.BusinessUnitId();
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);

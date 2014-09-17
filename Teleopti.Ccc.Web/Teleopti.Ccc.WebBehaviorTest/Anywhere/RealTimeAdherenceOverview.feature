@@ -768,9 +768,20 @@ Scenario: Should be able to change schedule for multiple business units
 	| Name  | Business Unit 1 |
 	And there is a site 'Paris' on business unit 'Business Unit 1'
 	And there is a team named 'Red' on site 'Paris'
-	And there is an activity in business unit 'Business Unit 1' named 'Phone'
-	And there is an activity in business unit 'Business Unit 1' named 'Lunch'
-	And there is a shift category in business unit 'Business Unit 1' named 'Day'
+	And there is an activity with
+	| Field         | Value           |
+	| Name          | Phone           |
+	| Color         | Green           |
+	| Business Unit | Business Unit 1 |
+	And there is an activity with
+	| Field         | Value           |
+	| Name          | Lunch           |
+	| Color         | Yellow          |
+	| Business Unit | Business Unit 1 |
+	And there is a shift category with
+	| Field         | Value           |
+	| Name          | Day             |
+	| Business Unit | Business Unit 1 |
 	And there is a workflow control set with
 	| Field                      | Value                      |
 	| Name                       | Schedule published to 0909 |
@@ -794,11 +805,11 @@ Scenario: Should be able to change schedule for multiple business units
 	And I input these add activity values
 	| Field      | Value |
 	| Activity   | Lunch |
-	| Start time | 01:00 |
-	| End time   | 02:00 |
+	| Start time | 12:00 |
+	| End time   | 13:00 |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value  |
-	| Start time | 01:00  |
-	| End time   | 02:00  |
+	| Start time | 12:00  |
+	| End time   | 13:00  |
 	| Color      | Yellow |

@@ -39,6 +39,7 @@ define([
 		var personId;
 		var personName;
 		var groupId;
+		var businessUnitId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
@@ -70,6 +71,7 @@ define([
 			personId = data.PersonId;
 			groupId = data.GroupId;
 			personName = data.PersonName;
+			businessUnitId = data.BusinessUnitId;
 			self.ScheduleDate(timezoneDisplay.FromDate(data.Date, timezoneCurrent.IanaTimeZone()));
 			self.ActivityTypes(data.Activities);
 			self.TimeZoneName(data.TimeZoneName);
@@ -91,7 +93,7 @@ define([
 					type: 'POST',
 					data: requestData,
 					success: function (data, textStatus, jqXHR) {
-						navigation.GoToTeamSchedule(groupId, self.ScheduleDate());
+						navigation.GoToTeamSchedule(businessUnitId, groupId, self.ScheduleDate());
 					},
 					statusCode500: function (jqXHR, textStatus, errorThrown) {
 						notificationsViewModel.UpdateNotification(trackId, 3);

@@ -25,6 +25,7 @@
 		var self = this;
 
 		var personName;
+		var businessUnitId;
 
 		self.PersonId = ko.observable();
 		self.GroupId = ko.observable();
@@ -59,6 +60,7 @@
 		this.SetData = function (data) {
 			self.PersonId(data.PersonId);
 			personName = data.PersonName;
+			businessUnitId = data.BusinessUnitId;
 			self.GroupId(data.GroupId);
 			self.ScheduleDate(data.Date);
 			self.Activities(data.Activities);
@@ -141,7 +143,7 @@
 				    type: 'POST',
 				    data: requestData,
 				    success: function(data, textStatus, jqXHR) {
-					    navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
+				    	navigation.GoToTeamSchedule(businessUnitId, self.GroupId(), self.ScheduleDate());
 				    },
 				    statusCode501: function (jqXHR, textStatus, errorThrown) {
 				    	errorview.display(resources.FunctionNotAvailable);

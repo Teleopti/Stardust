@@ -37,6 +37,7 @@ define([
 		this.ianaTimeZoneOther = ko.observable();
 		
 		var groupId;
+		var businessUnitId;
 		var personId;
 		var personName;
 		var startTimeAsMoment;
@@ -149,6 +150,7 @@ define([
 		this.SetData = function (data) {
 			groupId = data.GroupId;
 			personId = data.PersonId;
+			businessUnitId = data.BusinessUnitId;
 			personName = data.PersonName;
 			self.Date(timezoneDisplay.FromDate(data.Date, timezoneCurrent.IanaTimeZone()));
 			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
@@ -177,7 +179,7 @@ define([
 					type: 'POST',
 					data: requestData,
 					success: function(data, textStatus, jqXHR) {
-						navigation.GoToTeamSchedule(groupId, self.Date());
+						navigation.GoToTeamSchedule(businessUnitId, groupId, self.Date());
 					},
 					statusCode500: function (jqXHR, textStatus, errorThrown) {
 						notificationsViewModel.UpdateNotification(trackId, 3);

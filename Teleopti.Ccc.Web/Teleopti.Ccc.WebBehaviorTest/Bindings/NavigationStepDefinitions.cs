@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(person).Person.Id.Value;
 			var groupId = IdForTeam(group);
-			Navigation.GotoAnywherePersonSchedule(groupId, personId, date);
+			Navigation.GotoAnywherePersonSchedule(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), groupId, personId, date);
 		}
 
 		[When(@"I view person schedules add full day absence form for '(.*)' in '(.*)' on '(.*)'")]
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			var groupId = IdForTeam(group);
-			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(groupId, personId, date);
+			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), groupId, personId, date);
 		}
 
 		[When(@"I view person schedules add intraday absence form for '(.*)' in '(.*)' on '(.*)'")]
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(IdForTeam(@group), personId, date);
+			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), IdForTeam(@group), personId, date);
 		}
 
 
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywherePersonScheduleAddActivityForm(personId, IdForTeam(@group), date);
+			Navigation.GotoAnywherePersonScheduleAddActivityForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), personId, IdForTeam(@group), date);
 		}
 
 		[When(@"I view Real time adherence overview")]

@@ -30,12 +30,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			shiftCategories.ForEach(x => DataMaker.Data().Apply(x));
 		}
 
-		[Given(@"there is a shift category in business unit '(.*)' named '(.*)'")]
-		public void GivenThereIsAShiftCategoryInBusinessUnitNamed(string businessUnitName, string name)
-		{
-			var shiftCategory = new ShiftCategoryConfigurable { Name = name, BusinessUnit = businessUnitName };
-			DataMaker.Data().Apply(shiftCategory);
-		}
-
 	}
 }

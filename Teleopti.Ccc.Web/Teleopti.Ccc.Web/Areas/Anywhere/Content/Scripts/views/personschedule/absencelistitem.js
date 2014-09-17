@@ -83,7 +83,7 @@ define([
 							TrackedCommandInfo: { TrackId: trackId }
 						}),
 						success: function (responseData, textStatus, jqXHR) {
-							navigation.GoToTeamSchedule(data.GroupId, data.Date);
+							navigation.GoToTeamSchedule(data.BusinessUnitId, data.GroupId, data.Date);
 						},
 						statusCode500: function (jqXHR, textStatus, errorThrown) {
 							notificationsViewModel.UpdateNotification(trackId, 3);

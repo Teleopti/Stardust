@@ -29,10 +29,12 @@ define([
             var personId;
             var personName;
             var groupId;
+            var businessUnitId;
 	        
             this.SetData = function (data) {
             	groupId = data.GroupId;
             	personId = data.PersonId;
+            	businessUnitId = data.BusinessUnitId;
             	personName = data.PersonName;
             	self.StartDate(moment(data.Date.format('YYYY-MM-DD'),'YYYY-MM-DD'));
                 self.EndDate(self.StartDate().clone());
@@ -72,7 +74,7 @@ define([
 		                type: 'POST',
 		                data: data,
 		                success: function(data, textStatus, jqXHR) {
-			                navigation.GoToTeamSchedule(groupId, self.StartDate());
+			                navigation.GoToTeamSchedule(businessUnitId, groupId, self.StartDate());
 		                },
 		                statusCode500: function (jqXHR, textStatus, errorThrown) {
 			                notificationsViewModel.UpdateNotification(trackId, 3);

@@ -8,6 +8,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -310,7 +311,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 										let team = t.Team
 										where team.Description.Name.Equals(teamName)
 										select team.Id.GetValueOrDefault()).First();
-			Navigation.GotoAnywherePersonScheduleMoveActivityForm(personId, teamId, date, startTime);
+			Navigation.GotoAnywherePersonScheduleMoveActivityForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), personId, teamId, date, startTime);
 		}
 
 		[When(@"I move the activity")]
