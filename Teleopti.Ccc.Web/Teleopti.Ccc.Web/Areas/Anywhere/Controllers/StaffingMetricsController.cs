@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Aop.Core;
-using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				}, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult DailyStaffingMetrics(Guid skillId, DateTime date)
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		public virtual JsonResult DailyStaffingMetrics(Guid skillId, DateTime date)
 		{
 			var vm = _dailyStaffingMetricsViewModelFactory.CreateViewModel(skillId, date);
 			return Json(vm, JsonRequestBehavior.AllowGet);

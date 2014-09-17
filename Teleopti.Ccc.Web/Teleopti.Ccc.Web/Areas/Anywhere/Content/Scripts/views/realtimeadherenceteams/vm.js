@@ -18,9 +18,11 @@
 			that.resources = resources;
 			that.teams = ko.observableArray();
 			that.siteName = ko.observable();
+			that.BusinessUnitId = ko.observable();
 			that.fill = function (data) {
 				for (var i = 0; i < data.length; i++) {
 					var newTeam = team();
+					data[i].BusinessUnitId = that.BusinessUnitId();
 					newTeam.fill(data[i]);
 
 					that.teams.push(newTeam);
@@ -64,7 +66,7 @@
 						.toArray());
 				}
 				amplify.store("MultipleTeams", that.teamsToOpen());
-				navigation.GotoRealTimeAdherenceMultipleTeamDetails('MultipleTeams');
+				navigation.GotoRealTimeAdherenceMultipleTeamDetails(that.BusinessUnitId());
 			}
 			
 			return that;

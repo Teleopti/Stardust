@@ -7,7 +7,7 @@
 		var self = this;
 
 		this.changeSchedule = function () {
-			navigation.GoToTeamScheduleWithSelectedPerson(self.groupId, self.personId, self.date);
+			navigation.GoToTeamScheduleWithSelectedPerson(self.businessUnitId, self.groupId, self.personId, self.date);
 		};
 	};
 });

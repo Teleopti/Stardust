@@ -30,6 +30,8 @@
 			that.sitesToOpen = ko.observableArray();
 			that.agentStatesForMultipleSites = ko.observable();
 			that.monitorMultipleBusinessUnits = ko.observable();
+			that.BusinessUnitId = ko.observable();
+
 			var siteForId = function (id) {
 				if (!id)
 					return undefined;
@@ -43,6 +45,7 @@
 				that.sites([]);
 				for (var i = 0; i < data.length; i++) {
 					var newSite = site();
+					data[i].BusinessUnitId = that.BusinessUnitId();
 					newSite.fill(data[i]);
 					that.sites.push(newSite);
 				}
@@ -70,29 +73,28 @@
 						.toArray());
 				}
 				amplify.store("MultipleSites", that.sitesToOpen());
-				navigation.GotoRealTimeAdherenceMultipleSiteDetails('MultipleSites');
+				navigation.GotoRealTimeAdherenceMultipleSiteDetails(that.BusinessUnitId());
 			};
 
 			that.businessUnitChanged = function(data, event) {
 				that.load(event.target.options[event.target.selectedIndex].value);
 			};
 
-			that.load = function (businessUnitId) {
+			that.load = function () {
 				ajax.ajax({
-					headers: { 'X-Business-Unit-Filter': businessUnitId ? businessUnitId : '' },
+					headers: { 'X-Business-Unit-Filter': that.BusinessUnitId() },
 					url: "Sites",
-					success: function(data) {
+					success: function (data) {
 						that.fill(data);
 						checkFeature();
 						checkAgentsForMultipleTeamsFeature();
-						if (that.businessUnits().length == 0)
-							checkBusinessUnitsFeature();
+						checkBusinessUnitsFeature();
 					}
 				});
 				subscriptions.unsubscribeAdherence();
 				subscriptions.subscribeAdherence(function (notification) {
 					that.updateFromNotification(notification);
-				}, businessUnitId, function () {
+				}, that.BusinessUnitId(), function () {
 					$('.realtimeadherencesites').attr("data-subscription-done", " ");
 				});
 			};
@@ -120,18 +122,8 @@
 				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function() { that.agentStatesForMultipleSites(true); } });
 			};
 
-			var checkBusinessUnitsFeature = function() {
-				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {
-					enabled: function() {
-						ajax.ajax({
-							url: "BusinessUnit",
-							success: function (data) {
-								that.monitorMultipleBusinessUnits(true);
-								that.fillBusinessUnits(data);
-							}
-						});
-					}
-				});
+			var checkBusinessUnitsFeature = function () {
+				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {enabled: function () { that.monitorMultipleBusinessUnits(true); }});
 			};
 
 			return that;

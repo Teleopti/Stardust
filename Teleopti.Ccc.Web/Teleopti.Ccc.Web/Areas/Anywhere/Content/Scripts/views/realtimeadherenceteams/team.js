@@ -14,14 +14,14 @@
 				that.Id = data.Id;
 				that.Name = data.Name;
 				that.NumberOfAgents = data.NumberOfAgents;
-				
+				that.BusinessUnitId = data.BusinessUnitId;
 
 			};
 
 			// needs id from the vm
 			that.openTeam = function () {
 				if (that.canOpenTeam()) {
-					navigation.GotoRealTimeAdherenceTeamDetails(that.Id);
+					navigation.GotoRealTimeAdherenceTeamDetails(that.BusinessUnitId, that.Id);
 				}
 			};
 

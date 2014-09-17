@@ -295,26 +295,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			
 		}
 
-		public static void GotoAnywhereRealTimeAdherenceOverview(Guid siteId)
+		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#realtimeadherenceteams/{0}", siteId),
+				string.Format("Anywhere#realtimeadherenceteams/{0}/{1}",buId, siteId),
 				"Anywhere#realtimeadherenceteams",
 				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
 		}
 
-		public static void GotoAnywhereRealTimeAdherenceTeamOverview(Guid idForTeam)
+		public static void GotoAnywhereRealTimeAdherenceTeamOverview(Guid buId, Guid idForTeam)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#realtimeadherenceagents/{0}", idForTeam),
+				string.Format("Anywhere#realtimeadherenceagents/{0}/{1}",buId, idForTeam),
 				"Anywhere#realtimeadherenceagents",
 				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
 		}
 
-		public static void GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(Guid idForTeam)
+		public static void GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(Guid buId, Guid idForTeam)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#realtimeadherenceagents/{0}", idForTeam),
+				string.Format("Anywhere#realtimeadherenceagents/{0}/{1}", buId, idForTeam),
 				"Anywhere#realtimeadherenceagents",
 				new ApplicationStartupTimeout());
 		}

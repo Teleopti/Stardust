@@ -36,7 +36,7 @@
 		that.changeScheduleAvailable = ko.observable(false);
 		that.menu = new menu();
 		that.selectedPersonId = ko.observable();
-
+		that.BusinessUnitId = ko.observable();
 		that.filteredAgents = ko.computed(function() {
 			var filter = that.filter();
 			if (!filter) {
@@ -155,6 +155,7 @@
 					url: "Agents/Team?personId=" + selectedPersonId + "&date=" + helpers.Date.ToServer(today),
 					success: function (groupId) {
 						$(".agent-menu-options").removeClass('change-schedule').addClass('change-schedule');
+						that.menu.businessUnitId = that.BusinessUnitId();
 						that.menu.groupId = groupId;
 						that.menu.personId = selectedPersonId;
 						that.menu.date = today;

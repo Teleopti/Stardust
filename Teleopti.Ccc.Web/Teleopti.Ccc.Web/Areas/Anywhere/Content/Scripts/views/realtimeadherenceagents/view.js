@@ -30,6 +30,7 @@
 
 		display: function (options) {
 			viewModel = realTimeAdherenceViewModel();
+			viewModel.BusinessUnitId(options.buid);
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 			setInterval(function () {

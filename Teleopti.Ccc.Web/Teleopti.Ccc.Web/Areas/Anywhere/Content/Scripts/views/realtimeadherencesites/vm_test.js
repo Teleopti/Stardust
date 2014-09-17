@@ -78,6 +78,7 @@ define([
 
 			"should go to realtime adherence teams view": function() {
 				var vm = viewModel();
+				vm.BusinessUnitId("buid");
 				var site = { Id: "aguid" };
 				vm.fill([site]);
 				var window = require('window');
@@ -85,7 +86,7 @@ define([
 
 				vm.sites()[0].openSite();
 
-				assert.calledWith(window.setLocationHash, "realtimeadherenceteams/aguid");
+				assert.calledWith(window.setLocationHash, "realtimeadherenceteams/buid/aguid");
 			},
 
 			"should have resources available": function () {

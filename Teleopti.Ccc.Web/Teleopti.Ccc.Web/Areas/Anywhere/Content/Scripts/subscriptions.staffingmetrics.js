@@ -66,7 +66,7 @@ define([
 					domainType: 'IScheduledResourcesReadModel',
 					callback: function (notification) {
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-							loadDailyStaffingMetrics(date, skillId, callback);
+							loadDailyStaffingMetrics(buid,date, skillId, callback);
 						}
 					}
 				});

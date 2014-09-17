@@ -70,6 +70,15 @@ define([
 		},
 		GotoRealTimeAdherenceMultipleSiteDetails: function(buid) {
 			window.setLocationHash('realtimeadherenceagents/' + buid + '/' + 'MultipleSites');
+		},
+		GotoCurrentViewOriginal: function(view, buid) {
+			window.setLocationHash(view+'/' + buid);
+		},
+		GotoCurrentViewForGroup: function(view, buid, groupid) {
+			window.setLocationHash(view + '/' + buid + '/' + groupid);
+		},
+		GotoCurrentViewForGroupAndDate: function (view, buid, groupid, date) {
+			window.setLocationHash(view + '/' + buid + '/' + groupid + '/' + toDateString(date));
 		}
 	};
 });

@@ -44,6 +44,7 @@ define([
 	var menu = new menuViewModel(resources);
 	var contentPlaceHolder;
 	var defaultBu;
+	var currentBu;
 
 	function _displayView(routeInfo) {
 
@@ -65,10 +66,11 @@ define([
 
 			view.ready = false;
 
-			if (view != currentView) {
+			if (view != currentView || routeInfo.buid != currentBu) {
 				if (currentView && currentView.dispose)
 					currentView.dispose(routeInfo);
 				currentView = view;
+				currentBu = routeInfo.buid;
 				view.initialize(routeInfo);
 			}
 
@@ -168,7 +170,7 @@ define([
 				_displayView({ view: view, buid: buid, id: multipleTeams });
 			});
 		crossroads.addRoute('{view}', function (view) {
-			_displayView({ view: view, buid: defaultBu.Id });
+			_displayView({ view: view, buid: defaultBu });
 		});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
@@ -181,7 +183,7 @@ define([
 			_displayView({ view: defaultView, buid: buid });
 		});
 		crossroads.addRoute('', function () {
-			_displayView({ view: defaultView, buid: defaultBu.Id });
+			_displayView({ view: defaultView, buid: defaultBu });
 		});
 	}
 
@@ -278,7 +280,7 @@ define([
 						menu.fillBusinessUnits(data);
 						menu.changeScheduleForMultipleBUs(true);
 
-						defaultBu = data[0];
+						defaultBu = data[0].Id;
 
 						initAll();
 					}

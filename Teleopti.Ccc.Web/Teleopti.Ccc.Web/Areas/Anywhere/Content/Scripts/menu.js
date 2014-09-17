@@ -47,12 +47,18 @@ define([
 			};
 
 			self.switchBusinessUnit = function (data) {
-				if(self.CurrentGroupId() && self.CurrentDate())
-					navigation.GoToTeamSchedule(data.Id, self.CurrentGroupId(), self.CurrentDate());
-				else if (self.CurrentGroupId())
-					navigation.GoToTeamScheduleForGroup(data.Id, self.CurrentGroupId());
+				var view = self.ActiveView();
+				var buId = data.Id;
+				var groupId = self.CurrentGroupId();
+				var date = self.CurrentDate();
+				if (view && groupId && date)
+					navigation.GotoCurrentViewForGroupAndDate(view, buId, groupId, date);
+				else if (view && groupId)
+					navigation.GotoCurrentViewForGroup(view, buId, groupId);
+				else if (view)
+					navigation.GotoCurrentViewOriginal(view, buId);
 				else
-					navigation.GoToTeamScheduleOriginal(data.Id);
+					navigation.GoToTeamScheduleOriginal(buId);
 			}
 		};
 	});

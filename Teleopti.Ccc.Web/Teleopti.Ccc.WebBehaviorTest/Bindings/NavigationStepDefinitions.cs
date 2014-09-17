@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName), DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault());
+			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName), buIdForTeam(teamName));
 		}
 
 		private static Guid IdForTeam(string teamName)
@@ -209,12 +210,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return siteId;
 		}
 
-		private static Guid IdForBu(string buName)
+		private static Guid buIdForSite(string siteName)
 		{
-			var buId = (from t in DataMaker.Data().UserDatasOfType<BusinessUnitConfigurable>()
-										let bu = t.BusinessUnit
-										where bu.Description.Name.Equals(buName)
-										select bu.Id.GetValueOrDefault()).First();
+			var buId = (from t in DataMaker.Data().UserDatasOfType<SiteConfigurable>()
+										let site = t.Site
+										where site.Description.Name.Equals(siteName)
+										select site.BusinessUnit.Id.GetValueOrDefault()).First();
+			return buId;
+		}
+
+		private static Guid buIdForTeam(string teamName)
+		{
+			var buId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
+						let team = t.Team
+						where team.Description.Name.Equals(teamName)
+						select team.BusinessUnitExplicit.Id.GetValueOrDefault()).First();
 			return buId;
 		}
 
@@ -233,7 +243,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(team));
+			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(team), buIdForTeam(team));
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);
 		}
 
@@ -244,7 +254,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(person).Person.Id.Value;
 			var groupId = IdForTeam(group);
-			Navigation.GotoAnywherePersonSchedule(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), groupId, personId, date);
+			Navigation.GotoAnywherePersonSchedule(buIdForTeam(group), groupId, personId, date);
 		}
 
 		[When(@"I view person schedules add full day absence form for '(.*)' in '(.*)' on '(.*)'")]
@@ -254,7 +264,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			var groupId = IdForTeam(group);
-			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), groupId, personId, date);
+			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(buIdForTeam(group), groupId, personId, date);
 		}
 
 		[When(@"I view person schedules add intraday absence form for '(.*)' in '(.*)' on '(.*)'")]
@@ -263,7 +273,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), IdForTeam(@group), personId, date);
+			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(buIdForTeam(@group), IdForTeam(@group), personId, date);
 		}
 
 
@@ -273,7 +283,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywherePersonScheduleAddActivityForm(DefaultBusinessUnit.BusinessUnitFromFakeState.Id.GetValueOrDefault(), personId, IdForTeam(@group), date);
+			Navigation.GotoAnywherePersonScheduleAddActivityForm(buIdForTeam(@group), personId, IdForTeam(@group), date);
 		}
 
 		[When(@"I view Real time adherence overview")]
@@ -294,14 +304,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenITryToViewRealTimeAdherenceForTeam(string team)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(IdForTeam(team));
+			Navigation.GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(buIdForTeam(team),IdForTeam(team));
 		}
 
 		[When(@"I view Real time adherence for site '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForSite(string site)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceOverview(IdForSite(site));
+			Navigation.GotoAnywhereRealTimeAdherenceOverview(buIdForSite(site), IdForSite(site));
 		}
 
 		[When(@"I navigate to the preferences page")]
@@ -435,7 +445,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceForTeam(string team)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(IdForTeam(team));
+			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team), IdForTeam(team));
 		}
 
 		[When(@"I view real time adherence view for team '(.*)'")]
@@ -443,7 +453,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(IdForTeam(team));
+			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team),IdForTeam(team));
 		}
 
 
