@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private DateTime _alarmStart;
 		private bool _isInEditMode;
 
+		public const int NoAlarmColorValue = 16777215;
+
         public DayLayerModel(IPerson person, DateTimePeriod period, ITeam team,
                              LayerViewModelCollection layerViewModelCollection,
                              ICommonNameDescriptionSetting commonNameDescriptionSetting)
@@ -86,7 +88,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public Color Color
         {
-            get { return Color.FromArgb(_colorValue); }
+			get
+			{
+				if (HasAlarm)
+				{
+					return Color.FromArgb(_colorValue);										
+				}
+				return Color.FromArgb(NoAlarmColorValue);
+			}
         }
 
         public string AlarmDescription
@@ -271,8 +280,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		    set
 		    {
 			    _hasAlarm = value;
-				notifyPropertyChanged("HasAlarm");
+				notifyPropertyChanged("");
 		    }
-	    } 
+	    }
+
     }
 }

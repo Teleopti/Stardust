@@ -63,10 +63,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		}
 
 		[Test]
-		public void ShouldReturnColorValue()
+		public void ShouldReturnColorValue_WhenAlarmExists()
 		{
 			var eventIstriggered = false;
 			_target.PropertyChanged += (s, e) => eventIstriggered = true;
+			_target.HasAlarm = true;
 			_target.ColorValue = 255;
 			_target.ColorValue = 255;
 			Assert.That(_target.ColorValue, Is.EqualTo(255));
@@ -222,7 +223,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		}
 
 	    [Test]
-	    public void ChanginHasAlarm_ShouldNotifyPropertyChanged()
+	    public void ChangingHasAlarm_ShouldNotifyPropertyChanged()
 	    {
 			var propertyChangedListener = new PropertyChangedListener();
 			propertyChangedListener.ListenTo(_target);
@@ -231,6 +232,31 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Assert.That(propertyChangedListener.HasFired("HasAlarm"));
 	    }
+
+	    [Test]
+	    public void Color_WhenNoAlarmColorIsConnectedToTheAlarm_ShouldBeNoAlarmColor()
+	    {
+			var expected = Color.FromArgb(DayLayerModel.NoAlarmColorValue);
+
+		    _target.HasAlarm = false;
+		    _target.ColorValue = 0;
+
+			Assert.That(_target.Color, Is.EqualTo(expected));
+
+	    }
+
+		[Test]
+	    public void Color_WhenThereIsAnAlarmColorConnectedToTheAlarm_ShouldBeNoAlarmColor()
+		 {
+			 _target.ColorValue = 0;
+
+			 var expected = Color.FromArgb(0);
+
+			 _target.HasAlarm = true;
+
+			 Assert.That(_target.Color, Is.EqualTo(expected));
+
+		 }
 
 
 		

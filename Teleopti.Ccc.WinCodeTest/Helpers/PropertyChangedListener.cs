@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Helpers
 
         public bool HasFired(string property)
         {
-            return Contains(property);
+            return Contains(property) || Contains(string.Empty);
         }
 
         public bool HasOnlyFired(string property)
