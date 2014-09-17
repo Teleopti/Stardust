@@ -16,21 +16,7 @@
 		<ASCompile Condition="'$(computername)' == 'Teleopti629'">C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</ASCompile>
 		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
 		<AsDBDeploy Condition="'$(computername)' == 'Teleopti629'">C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
-		
-		<AzureDeploy>false</AzureDeploy>
-		<AzureDeploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureDeploy>
-		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
-		<AzureAnalyticsReportTest Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureAnalyticsReportTest>
-		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>
-		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
-		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
-		<AzureDbLogin>ccnet</AzureDbLogin>
-		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
-		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
-		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
-
-		
 		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\movefilesToDeploymentPipeline.msbuild"/>
@@ -129,15 +115,9 @@
 			ReplacementText="        &lt;Name&gt;#(SQL_DATABASE_NAME)&lt;/Name&gt;"/>
     </Target>
 
-	<Target Name="AzurePreDropDatabase">
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
-	</Target>
+
 	
-	<Target Name="AzurePostDropDatabase">
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
-	</Target>
+
 
 	<Target Name="BuildDBManager">
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
@@ -150,35 +130,6 @@
 		
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
 		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
-	</Target>
-	
-	<Target Name="AzureCreateDatabase" DependsOnTargets="BuildDBManager">
-		<Message Text="Create Azure database ..." Importance="high" />
-
-		<Message Text="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
-		
-		<Message Text ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
-
-		<Message Text="Create Azure database. Done!" Importance="high" />
-	</Target>
-	
-	<Target Name="AzureDeploy" Condition="'$(AzureDeploy)' == 'true'">
-		<CallTarget Targets="AzurePreDropDatabase" />
-		<CallTarget Targets="AzureCreateDatabase" />
-		<CallTarget Targets="AzureAnalyticsReportTest" />
-		<CallTarget Targets="AzurePostDropDatabase" />
-	</Target>
-
-	<Target Name="AzureAnalyticsReportTest" Condition="'$(AzureAnalyticsReportTest)' == 'true'">
-		<Message Importance="high" Text="Check all Analytics report controls and reports are working on Azure"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
-		<Message Importance="high" Text="Analytics report controls. Finished"/>
 	</Target>
 	
 	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">

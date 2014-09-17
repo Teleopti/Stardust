@@ -26,61 +26,37 @@
 		<BakDir>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\DemoDatabase</BakDir>
 		<LogObjectId>1</LogObjectId>
 		<RestoreToLocal>"$(CCNetWorkingDirectory)\.debug-Setup\Restore to Local.bat"</RestoreToLocal>
-	
+		
+		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>		
+		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
+		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
+		<AzureDbLogin>ccnet</AzureDbLogin>
+		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
+		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
+		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
+		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 </PropertyGroup>
 
-	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
-
 	<Target Name="Run" DependsOnTargets="AzureDeploy;RunETL">
-		<Message Text="All target executed!" Importance="high" />
 	</Target>
-		
 	<Target Name="RunETL" DependsOnTargets="ETLCompile;RestoreToLocal;MoveOneLogObject">
-		<Message Text="Testing ETL service ..." Importance="high" />
-
 		<!-- Un-Install ETL Service-->
-		<Message Text="un-Install ETL service. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
-		<Message Text="un-Install ETL service. Done!" Importance="high" />
-
 		<!-- Install ETL Service-->
-		<Message Text="Install ETL service. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
-		<Message Text="Install ETL service. Done!" Importance="high" />
-
-
- 		<Message Text="Start ETL service. Working..." Importance="high" />
- 		<Message Text="NET START AnalyticsEtlService" Importance="high" />
  		<Exec Command ="NET START AnalyticsEtlService"/>
- 		<Message Text="Start ETL service. Done!" Importance="high" />
-
 		<CallTarget Targets="AddSchedule"/>
-		
  	<!--
  	This is our Test!!!
  	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
  	-->
- 		<Message Text="Start ETL test. Working..." Importance="high" />
- 		<Message Text="SQLExecute: Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
  		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True"/>
- 		<Message Text="Start ETL test. Done!" Importance="high" />
- 
  		<!-- Clean up-->
  		<!--Sleep for 10 secs then STOP service-->
- 		<Message Text="PING 127.0.0.1 -n 10 > NUL" Importance="high" />
  		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
- 
- 		<Message Text="NET STOP AnalyticsEtlService" Importance="high" />
  		<Exec Command ="NET STOP AnalyticsEtlService"/>
-
 		<!-- Un-Install ETL Service-->
-		<Message Text="un-Install ETL service. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
-		<Message Text="un-Install ETL service. Done!" Importance="high" />		
-
 	</Target>
 	
   		<!-- 
@@ -90,41 +66,25 @@
 	d) Create one job for the ETL service
 	-->
 	<Target Name="AddSchedule">
-		<Message Text="Add Schedule. Working..." Importance="high" />
-		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
-		<Message Text="Add Schedule. Done!" Importance="high" />
 	</Target>
   
 	<Target Name="RestoreToLocal">
 		<Exec Command ="$(RestoreToLocal) DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName)"/>
-		<Message Text="Databases patched and data updated" Importance="high" />
 	</Target>
 
 	<Target Name="MoveOneLogObject">
-		<Message Text="update dimensions ones" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
-
-		<Message Text="update dimensions once more" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
-
-		<Message Text="move one log object" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(moveDataSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
-
-		<Message Text="make log object internal" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
 	</Target>
 
 	<Target Name="ETLCompile">
-
-		<Message Importance="high" Text="ETLCompile starting ... " />
-				
 		<CallTarget Targets="PreCompile" />
-		
 		<CallTarget Targets="PrepareFiles" />
-				
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
 				Targets="Build">
@@ -137,7 +97,6 @@
 		<Copy	SourceFiles="@(ETLServiceFiles)"
 			DestinationFiles="@(ETLServiceFiles->'$(ETLServiceBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 			
-		
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Support.Security\Teleopti.Support.Security.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
 				Targets="Build">
@@ -148,24 +107,50 @@
 				Targets="Build">
 			<!--<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>-->
 		</MSBuild>
-		
-		<Message Importance="high" Text="Compile of Db Manager starting..." />
-		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
-		<Message Importance="high" Text="ETLCompile finished!" />
 	</Target>
 
 	<Target Name="PreCompile">
-		<Message Importance="high" Text="Installing nuget packages for Teleopti.Support.Tool"/>
 		<Exec Command=".nuget\nuget.exe restore &quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\packages.config&quot; -PackagesDirectory packages -Source http://hestia/nuget;https://nuget.org/api/v2 -Verbosity detailed"
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
 	<Target Name="PrepareFiles">
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
-		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
-		<Message Text="Prepare Files. Done!" Importance="high" />
+	</Target>
+	
+	<Target Name="AzureDeploy">
+		<CallTarget Targets="AzurePreDropDatabase" />
+		<CallTarget Targets="AzureCreateDatabase" />
+		<CallTarget Targets="AzureAnalyticsReportTest" />
+		<CallTarget Targets="AzurePostDropDatabase" />
+	</Target>
+	
+	<Target Name="AzurePreDropDatabase">
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
+	</Target>
+	<Target Name="BuildDBManager">
+		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
+				Properties="Configuration=$(Configuration);Platform=AnyCPU"
+				Targets="Build">
+			<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+	</Target>
+	<Target Name="AzureCreateDatabase" DependsOnTargets="BuildDBManager">
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+	</Target>
+	<Target Name="AzureAnalyticsReportTest">
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
+	</Target>
+	<Target Name="AzurePostDropDatabase">
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
 </Project>
