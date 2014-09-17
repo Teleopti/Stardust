@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -15,14 +16,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IUserCulture _userCulture;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IPersonNameProvider _personNameProvider;
 		private const int timeLineOffset = 15;
 
-		public ShiftTradeSwapDetailViewModelMappingProfile(IShiftTradeTimeLineHoursViewModelFactory timelineViewModelFactory, IProjectionProvider projectionProvider, IUserCulture userCulture, IUserTimeZone userTimeZone)
+		public ShiftTradeSwapDetailViewModelMappingProfile(IShiftTradeTimeLineHoursViewModelFactory timelineViewModelFactory, IProjectionProvider projectionProvider, IUserCulture userCulture, IUserTimeZone userTimeZone, IPersonNameProvider personNameProvider)
 		{
 			_timelineViewModelFactory = timelineViewModelFactory;
 			_projectionProvider = projectionProvider;
 			_userCulture = userCulture;
 			_userTimeZone = userTimeZone;
+			_personNameProvider = personNameProvider;
 		}
 
 		protected override void Configure()
@@ -30,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>()
 				.ForMember(d=>d.To, o=>o.NullSubstitute(new ShiftTradeEditPersonScheduleViewModel()))
 				.ForMember(d=>d.From, o=>o.NullSubstitute(new ShiftTradeEditPersonScheduleViewModel()))
-				.ForMember(d => d.PersonFrom, o => o.MapFrom(s => s.PersonFrom.Name.ToString()))
-				.ForMember(d => d.PersonTo, o => o.MapFrom(s => s.PersonTo.Name.ToString()))
+				.ForMember(d => d.PersonFrom, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.PersonFrom)))
+				.ForMember(d => d.PersonTo, o => o.MapFrom(s => _personNameProvider.BuildNameFromSetting(s.PersonTo)))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.SchedulePartFrom))
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s))))
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), _userTimeZone.TimeZone());
 					var myScheduleViewModel = new ShiftTradeEditPersonScheduleViewModel
 					{
-						Name = o.Person.Name.ToString(),
+						Name = _personNameProvider.BuildNameFromSetting(o.Person),
 						ScheduleLayers = createShiftTradeLayers(myScheduleDay, _userTimeZone.TimeZone(), timeLineRangeTot),
 						HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
 						DayOffText = myScheduleDay.DayOffText,
@@ -174,7 +177,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var returnDay = new ShiftTradePersonDayData
 									{
 										PersonId = person.Id.HasValue ? person.Id.Value : Guid.Empty,
-										Name = person.Name.ToString(),
+										Name = _personNameProvider.BuildNameFromSetting(person),
 										PersonTimeZone = person.PermissionInformation.DefaultTimeZone(),
 										PersonCulture = person.PermissionInformation.Culture()
 									};

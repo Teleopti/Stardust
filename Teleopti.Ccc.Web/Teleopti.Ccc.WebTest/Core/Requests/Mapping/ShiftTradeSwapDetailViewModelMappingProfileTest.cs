@@ -10,10 +10,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -31,6 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPerson _person;
 		private IUserCulture _userCulture;
 		private IUserTimeZone _userTimeZone;
+		private IPersonNameProvider _personNameProvider;
 
 		[SetUp]
 		public void Setup()
@@ -51,8 +55,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_person = new Person { Name = new Name("John", "Doe") };
 			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
 
+			var nameFormatSettingsPersisterAndProvider = MockRepository.GenerateStub<ISettingsPersisterAndProvider<NameFormatSettings>>();
+			nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(new NameFormatSettings() { NameFormatId = 0 });
+			_personNameProvider = new PersonNameProvider(nameFormatSettingsPersisterAndProvider);
+
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailViewModelMappingProfile(_timeLineFactory, _projectionProvider, _userCulture, _userTimeZone)));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailViewModelMappingProfile(_timeLineFactory, _projectionProvider, _userCulture, _userTimeZone, _personNameProvider)));
 		}
 
 		[Test]
@@ -154,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Initialize(
 				c =>
 				c.AddProfile(new ShiftTradeSwapDetailViewModelMappingProfile(timeLineHoursViewModelFactory, _projectionProvider,
-																			  _userCulture, _userTimeZone)));
+																			  _userCulture, _userTimeZone, null)));
 			AddNeededMappingProfiles();
 
 			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
