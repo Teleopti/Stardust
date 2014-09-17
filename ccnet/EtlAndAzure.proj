@@ -35,7 +35,6 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
-		<AnalyticsReportsTest>"$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"</AnalyticsReportsTest>
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
@@ -149,7 +148,10 @@
 		</Exec>
 	</Target>
 	<Target Name="AzureAnalyticsReportTest">
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="$(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
+		<ItemGroup>
+			<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
+		</ItemGroup>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
 	</Target>
 	<Target Name="AzurePostDropDatabase">
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
