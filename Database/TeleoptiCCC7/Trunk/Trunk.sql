@@ -42,6 +42,7 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 SET NOCOUNT OFF
 GO
 
+/*
 --Name: Tamas Balog
 --Date: 2014-09-16  
 --Desc: Add backup column for UseShiftCategoryFairness in WorkflowControlSet
@@ -58,3 +59,4 @@ GO
 UPDATE [dbo].[WorkflowControlSet]
 	SET [UseShiftCategoryFairness] = 1 
 GO
+*/
