@@ -9,7 +9,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -18,6 +17,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private TimeZoneInfo _timeZone;
 		private IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private IToggleManager _toggleManager;
+		private IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
+		private ILoggedOnUser _loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -42,17 +44,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			_preferenceOptionsProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
+			_virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			_timeZone = TimeZoneInfo.Local;
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
 			Mapper.Reset();
 			Mapper.Initialize(c =>
-				{
-					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(_projectionProvider, _userTimeZone));
-					c.AddProfile(new PreferenceDayViewModelMappingProfile(MockRepository.GenerateMock<IExtendedPreferencePredicate>()));
-					c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => _preferenceOptionsProvider, _toggleManager, new Now()));
-					c.AddProfile(new CommonViewModelMappingProfile());
-				});
+			{
+				c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(_projectionProvider, _userTimeZone));
+				c.AddProfile(new PreferenceDayViewModelMappingProfile(MockRepository.GenerateMock<IExtendedPreferencePredicate>()));
+				c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(),
+					() => _preferenceOptionsProvider,
+					_toggleManager,
+					new Now(),
+					_virtualSchedulePeriodProvider,
+					_loggedOnUser));
+				c.AddProfile(new CommonViewModelMappingProfile());
+			});
 		}
 
 		[Test]

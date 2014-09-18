@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -24,8 +29,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	[TestFixture]
 	public class PreferenceViewModelMappingTest
 	{
+		private ShiftCategory shiftCategory;
 		private PreferenceDomainData data;
 		private IPreferenceOptionsProvider preferenceOptionProvider;
+		private IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider;
+		private ILoggedOnUser loggedOnUser;
 		private IToggleManager toggleManager;
 
 		[SetUp]
@@ -47,12 +55,47 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			preferenceOptionProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
 			toggleManager = MockRepository.GenerateMock<IToggleManager>();
 
+			virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+
+			virtualSchedulePeriodProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(new DateOnly(DateTime.Now)))
+				.IgnoreArguments()
+				.Return(new DateOnlyPeriod());
+
+			shiftCategory = new ShiftCategory("SC");
+			shiftCategory.SetId(Guid.NewGuid());
+			var ruleSetBag = MockRepository.GenerateMock<RuleSetBag>();
+			ruleSetBag.Stub(x => x.ShiftCategoriesInBag())
+				.Return(new List<IShiftCategory>
+				{
+					shiftCategory
+				});
+
+			var personPeriod = new PersonPeriod(new DateOnly(DateTime.Now),
+				new PersonContract(new Contract("Contract"),
+				new PartTimePercentage("PartimePercentage"),
+				new ContractSchedule("ContractSchedule")), new Team())
+			{
+				RuleSetBag = ruleSetBag
+			};
+
+			loggedOnUser.Stub(x => x.CurrentUser().PersonPeriods(new DateOnlyPeriod()))
+				.Return(new IPersonPeriod[]
+				{
+					personPeriod
+				});
+
 			Mapper.Reset();
 			Mapper.Initialize(c =>
-			                  	{
-									c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(), () => preferenceOptionProvider, toggleManager, new Now()));
-									c.AddProfile(new CommonViewModelMappingProfile());
-			                  	});
+			{
+				c.AddProfile(new PreferenceViewModelMappingProfile(new FakePermissionProvider(),
+					() => preferenceOptionProvider,
+					toggleManager,
+					new Now(),
+					virtualSchedulePeriodProvider,
+					loggedOnUser));
+				c.AddProfile(new CommonViewModelMappingProfile());
+			});
 		}
 
 		[Test]
@@ -336,8 +379,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapPreferenceOptions()
 		{
-			var shiftCategory = new ShiftCategory("SC");
-			shiftCategory.SetId(Guid.NewGuid());
 			var dayOff = new DayOffTemplate(new Description("DO"));
 			dayOff.SetId(Guid.NewGuid());
 			var absence = new Absence { Description = new Description("absence") };
@@ -374,7 +415,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			optionGroup.Options.First().Text.Should().Be.EqualTo(firstItemName);
 			optionGroup.Options.First().Value.Should().Be.EqualTo(firstItemNameId.ToString());
 		}
-
 	}
 
 	public static class Extensions
@@ -387,7 +427,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					select d)
 				.Single();
 		}
-
 	}
-
 }
