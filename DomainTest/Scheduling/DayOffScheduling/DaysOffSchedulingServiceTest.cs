@@ -79,6 +79,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
+		[Test]
+		public void ShouldUserCancelAfterFirstIfAsked()
+		{
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
+			args.UserCancel = true;
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _absencePreferenceScheduler.DayScheduled += null).IgnoreArguments();
+				Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions));
+				Expect.Call(() => _absencePreferenceScheduler.Raise(x => x.DayScheduled += _target.RaiseEventForTest, this, args));
+				Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute(_matrixList, _matrixList, _rollbackService, _schedulingOptions);
+			}
+		}
+
 		//[Test]
 		//public void ShouldCancelAfterScondIfAsked()
 		//{

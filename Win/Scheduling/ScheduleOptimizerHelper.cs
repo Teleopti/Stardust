@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
@@ -49,6 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IDaysOffSchedulingService _daysOffSchedulingService;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
+		private SchedulingServiceBaseEventArgs _progressEventScheduling;
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, IToggleManager toggleManager)
 		{
@@ -363,9 +363,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 							if (_backgroundWorker.CancellationPending)
 								break;
 
+							if (_progressEventScheduling != null && _progressEventScheduling.UserCancel)
+								break;
+
 							iterations++;
 						}
 						if (_backgroundWorker.CancellationPending)
+							break;
+
+						if (_progressEventScheduling != null && _progressEventScheduling.UserCancel)
 							break;
 					}
 
@@ -387,8 +393,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_scheduledCount++;
 			if (_scheduledCount >= _sendEventEvery)
 			{
-				_backgroundWorker.ReportProgress(1, e.SchedulePart);
+				_backgroundWorker.ReportProgress(1, e);
 				_scheduledCount = 0;
+
+				if (_progressEventScheduling != null && _progressEventScheduling.UserCancel)
+					return;
+
+				_progressEventScheduling = e;
 			}
 		}
 

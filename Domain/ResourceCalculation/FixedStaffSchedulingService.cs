@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -128,6 +129,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 								var eventArgs = new SchedulingServiceSuccessfulEventArgs(schedulePart);
 		                        OnDayScheduled(eventArgs);
 		                        if (eventArgs.Cancel) return result;
+
+			                    if (_progressEvent != null && _progressEvent.UserCancel)
+				                    return result;
 		                    }
 		                }
 		            }
@@ -188,6 +192,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (temp != null)
             {
                 temp(this, scheduleServiceBaseEventArgs);
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = scheduleServiceBaseEventArgs;
             }
         }
 

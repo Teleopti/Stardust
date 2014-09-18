@@ -186,9 +186,42 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			}		
 		}
 
+		[Test]
+		public void ShouldUserCancel()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons,_schedulingOptions.BlockFinderTypeForAdvanceScheduling,_schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
+				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
+				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo);
+				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos);
+				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList);
+				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo1)).Return(1);
+				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
+				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(2);
+
+				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences)).Return(true);
+				Expect.Call(() => _teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(_teamBlockInfo2, 1));
+			}
+
+			using (_mock.Playback())
+			{
+				_target.ReportProgress += reportProgress2;
+				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService, _optimizationPreferences);
+				_target.ReportProgress -= reportProgress2;
+			}
+		}
+
 		private void reportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
+		}
+
+		private void reportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
 		}
 	}
 }

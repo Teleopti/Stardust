@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
         public TeamBlockSchedulingService
 		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,  ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat, IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor)
@@ -57,6 +58,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    {
 			    if (_cancelMe)
 				    break;
+
+			    if (_progressEvent != null && _progressEvent.UserCancel)
+				    break;
+
 			    if (dateOnlySkipList.Contains(datePointer))
 				    continue;
 
@@ -96,6 +101,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
                 if (_cancelMe)
                     break;
+
+	            if (_progressEvent != null && _progressEvent.UserCancel)
+		            break;
             }
         }
 
@@ -107,6 +115,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             {
                 if (_cancelMe)
                     break;
+
+	            if (_progressEvent != null && _progressEvent.UserCancel)
+		            break;
 
                 if (!selectedPersons.Contains(matrix.Person)) continue;
                 _workShiftMinMaxCalculator.ResetCache();
@@ -172,8 +183,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
+
+				
 			}
 			_cancelMe = scheduleServiceBaseEventArgs.Cancel;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
+			_progressEvent = scheduleServiceBaseEventArgs;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
@@ -192,6 +210,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				temp(this, e);
 			}
 			_cancelMe = e.Cancel;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
+			_progressEvent = e;
 		}
     }
 }

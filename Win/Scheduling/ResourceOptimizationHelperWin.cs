@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResourceOptimizationHelperWin"/> class.
@@ -96,11 +98,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks, null);
 				if (backgroundWorker != null)
 				{
-					backgroundWorker.ReportProgress(1);
+					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty);
+					
+					backgroundWorker.ReportProgress(1, progress);
+
 					if (backgroundWorker.CancellationPending)
 					{
 						return;
 					}
+
+					if (_progressEvent != null && _progressEvent.UserCancel) return;
+					_progressEvent = progress;
 				}
 			}
 		}

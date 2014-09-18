@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IPersonWeekVoilatingWeeklyRestSpecification  _personWeekVoilatingWeeklyRestSpecification;
 		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
@@ -57,7 +58,13 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			if (temp != null)
 			{
 				temp(this, resourceOptimizerProgressEventArgs);
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = resourceOptimizerProgressEventArgs;
 			}
+
 			_cancelMe = resourceOptimizerProgressEventArgs.Cancel;
 		}
 
@@ -121,6 +128,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 										personWeek.Person.Name.LastName)));
 								if (_cancelMe)
 									return;
+
+								if (_progressEvent != null && _progressEvent.UserCancel)
+									return;
+
 								var highProbablePosition = _identifyDayOffWithHighestSpan.GetHighProbableDayOffPosition(possiblePositionsToFix);
 								success = _shiftNudgeManager.TrySolveForDayOff(personWeek, highProbablePosition,
 									teamBlockGenerator,

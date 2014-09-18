@@ -127,9 +127,44 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			}
 		}
 
+		[Test]
+		public void ShouldUserCancel()
+		{
+			_target = new TeamBlockMoveTimeBetweenDaysService(_teamBlockMoveTimeOptimizer, _constructTeamBlock, _filterForTeamBlockInSelection, _filterForNoneLockedTeamBlocks);
+			_cancel = false;
+			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _matrix1, _matrix2 };
+			IList<IPerson> selectedPersons = new List<IPerson> { _person1 };
+			IList<IScheduleMatrixPro> matrixesOnSelectedperiod = new List<IScheduleMatrixPro> { _matrix1 };
+			IList<ITeamBlockInfo> teamBlockList = new List<ITeamBlockInfo>() { _teamBlockInfo };
+			using (_mock.Record())
+			{
+				Expect.Call(_constructTeamBlock.Construct(matrixList, _selectedPeriod, selectedPersons,_optimizationPreferences.Extra.BlockTypeValue, _optimizationPreferences.Extra.TeamGroupPage)).Return(teamBlockList);
+				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockList, selectedPersons, _selectedPeriod)).Return(teamBlockList);
+				Expect.Call(_filterForNoneLockedTeamBlocks.Filter(teamBlockList)).Return(teamBlockList.ToList());
+				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers).Repeat.Twice();
+				Expect.Call(_teamInfo.MatrixesForMemberAndPeriod(_person1, _selectedPeriod)).Return(matrixesOnSelectedperiod).Repeat.Twice();
+				Expect.Call(_teamBlockMoveTimeOptimizer.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,_schedulingResultStateHolder, _resourceCalculateDelayer)).Return(true);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(0.815689);
+				Expect.Call(_teamInfo.Name).Return("hej");
+
+			}
+			using (_mock.Playback())
+			{
+				_target.ReportProgress += testUserCancel;
+				_cancel = true;
+				_target.Execute(_optimizationPreferences, matrixList, _rollbackService, _periodValueCalculator,_schedulingResultStateHolder, selectedPersons, _selectedPeriod, _resourceCalculateDelayer);
+				_target.ReportProgress -= testUserCancel;
+			}
+		}
+
 		private void testCancel(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = _cancel;
+		}
+
+		private void testUserCancel(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
 		}
 	}
 }

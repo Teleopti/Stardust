@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private bool _cancelMe;
 	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		 private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
@@ -134,6 +135,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (_cancelMe)
 					break;
 
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
 				foreach (var teamInfo in teamInfosToRemove)
 				{
 					remainingInfoList.Remove(teamInfo);
@@ -150,6 +154,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				handler(this, args);
 				if (args.Cancel)
 					_cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = args;
 			}
 		}
 
@@ -202,6 +211,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					if (_cancelMe)
 						break;
+
+					if (_progressEvent != null && _progressEvent.UserCancel)
+						break;
 				}
 			}
 
@@ -247,6 +259,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 						if (_cancelMe)
 							break;
+
+						if (_progressEvent != null && _progressEvent.UserCancel)
+							break;
 					}
 
 					if (allFailed)
@@ -254,6 +269,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				if (_cancelMe)
+					break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
 					break;
 			}
 

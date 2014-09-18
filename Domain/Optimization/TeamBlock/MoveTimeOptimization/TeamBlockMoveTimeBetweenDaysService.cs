@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public TeamBlockMoveTimeBetweenDaysService(ITeamBlockMoveTimeOptimizer teamBlockMoveTimeOptimizer,
 			IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
@@ -63,12 +64,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 				var selectedMatrixes = team.MatrixesForMemberAndPeriod(team.GroupMembers.First(), selectedPeriod).ToList();
 				if (_cancelMe)
 					break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
 				IEnumerable<IScheduleMatrixPro> shuffledMatrixes =selectedMatrixes.GetRandom(selectedMatrixes.Count, true);
 
 				foreach (var matrix in shuffledMatrixes)
 				{
 					if (_cancelMe)
 						break;
+
+					if (_progressEvent != null && _progressEvent.UserCancel)
+						break;
+
 					bool result = _teamBlockMoveTimeOptimizer.OptimizeTeam(optimizerPreferences, team, matrix, rollbackService,
 						periodValueCalculator, schedulingResultStateHolder, resourceCalculateDelayer);
 					if (!result)
@@ -78,6 +87,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 					double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 					if (_cancelMe)
 						break;
+
+					if (_progressEvent != null && _progressEvent.UserCancel)
+						break;
+
 					string who = Resources.MoveTimeOn + "("+ activeTeams.Count + ")" + team.Name;
 					string success;
 					if (!result)
@@ -103,6 +116,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 				handler(this, args);
 				if (args.Cancel)
 					_cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = args;
 			}
 		}
 		

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IDayOffScheduler _dayOffScheduler;
 		private readonly IMissingDaysOffScheduler _missingDaysOffScheduler;
 		private bool _cancelMe;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -33,10 +34,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		{
 			var eventArgs = new SchedulingServiceSuccessfulEventArgs(e.SchedulePart);
 			eventArgs.Cancel = e.Cancel;
+			eventArgs.UserCancel = e.UserCancel;
 			OnDayScheduled(eventArgs);
 			e.Cancel = eventArgs.Cancel;
 			if (eventArgs.Cancel)
 				_cancelMe = true;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
+			_progressEvent = eventArgs;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> allMatrixList, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
@@ -47,10 +54,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			if (_cancelMe)
 				return;
 
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
 			_dayOffScheduler.DayScheduled += dayScheduled;
 			_dayOffScheduler.DayOffScheduling(matrixList, allMatrixList, rollbackService, schedulingOptions);
 			_dayOffScheduler.DayScheduled -= dayScheduled;
 			if (_cancelMe)
+				return;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
 				return;
 
 			_missingDaysOffScheduler.DayScheduled += dayScheduled;
@@ -64,6 +77,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = scheduleServiceBaseEventArgs;
 			}
 		}
 

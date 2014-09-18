@@ -311,6 +311,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		}
 
 		[Test]
+		public void ShouldUserCancel()
+		{
+			var dayOffDate = new DateOnly(2014, 04, 17);
+			IDictionary<DateOnly, TimeSpan> dayOffToSpanDictionary = new Dictionary<DateOnly, TimeSpan>();
+			dayOffToSpanDictionary.Add(dayOffDate, TimeSpan.FromHours(10));
+			using (_mock.Record())
+			{
+				extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
+				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
+				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(_scheduleRange1, _personWeek1,TimeSpan.FromHours(40))).Return(false);
+
+				//analyzing failed weeks
+				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40))).Return(false);
+				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,_scheduleRange1)).Return(dayOffToSpanDictionary);
+			}
+			using (_mock.Playback())
+			{
+				_target.ResolvingWeek += targetWeekScheduledScheduled2;
+				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,_optimizationPreferences, _schedulingOptions);
+				_target.ResolvingWeek -= targetWeekScheduledScheduled2;
+			}
+		}
+
+		[Test]
 		public void ShouldExecuteIfNoDayOffFoundInPersonWeek()
 		{
 			DateOnly dayOffDate = new DateOnly(2014, 04, 17);
@@ -348,6 +372,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
 		{
 			resourceOptimizerProgressEventArgs.Cancel = true;
+		}
+
+		private void targetWeekScheduledScheduled2(object sender, ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
+		{
+			resourceOptimizerProgressEventArgs.UserCancel = true;
 		}
 
 	}
