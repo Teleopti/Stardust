@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
@@ -23,6 +21,14 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 	public class PushMessageDialoguePersisterTest
 	{
 		private ILoggedOnUser _loggedOnUser;
+		private static IPersonNameProvider _personNameProvider;
+
+		[SetUp]
+		public void Setup()
+		{
+			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(new Name())).Return("Sender Name");
+		}
 
 		[Test]
 		public void ShouldLoadDialogueFromRepositoryWithTheIdFromTheConfirmMessageViewModel()
@@ -130,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 		private static IMappingEngine SetupMapper()
 		{
 			Mapper.Initialize(c => c.AddProfile(new MessageViewModelMappingProfile(
-				() => new UserTimeZone(null)
+				() => new UserTimeZone(null), _personNameProvider
 				)));
 
 			return Mapper.Engine;

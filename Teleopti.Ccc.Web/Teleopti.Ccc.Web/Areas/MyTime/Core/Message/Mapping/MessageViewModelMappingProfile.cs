@@ -2,6 +2,7 @@
 using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Message;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
@@ -9,11 +10,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
     public class MessageViewModelMappingProfile : Profile
     {
 		private readonly Func<IUserTimeZone> _userTimeZone;
+		private readonly IPersonNameProvider _personNameProvider;
 
-	    public MessageViewModelMappingProfile(Func<IUserTimeZone> timeZone)
-		{
-			_userTimeZone = timeZone;
-		}
+	    public MessageViewModelMappingProfile(Func<IUserTimeZone> timeZone, IPersonNameProvider personNameProvider)
+	    {
+		    _userTimeZone = timeZone;
+		    _personNameProvider = personNameProvider;
+	    }
 
 	    protected override void Configure()
         {
@@ -23,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
     		CreateMap<IDialogueMessage, DialogueMessageViewModel>()
     			.ForMember(d => d.Text, o => o.MapFrom(m => m.Text))
     			.ForMember(d => d.SenderId, o => o.MapFrom(m => m.Sender.Id))
-    			.ForMember(d => d.Sender, o => o.MapFrom(m => m.Sender.Name.ToString()))
+				.ForMember(d => d.Sender, o => o.MapFrom(m => _personNameProvider.BuildNameFromSetting(m.Sender.Name)))
 				.ForMember(d => d.Created, o => o.MapFrom(m => TimeZoneInfo.ConvertTimeFromUtc(m.Created,_userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()));
 
             CreateMap<IPushMessageDialogue, MessageViewModel>()
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
                                                           		var message = m.Message(new NoFormatting());
                                                           		return message;
                                                           	}))
-                .ForMember(d => d.Sender, o => o.MapFrom(m => m.PushMessage.Sender.Name.ToString()))
+				.ForMember(d => d.Sender, o => o.MapFrom(m => _personNameProvider.BuildNameFromSetting(m.PushMessage.Sender.Name)))
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.UpdatedOn.HasValue
 																	? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value,_userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()
 																	: null))
