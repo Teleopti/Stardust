@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (IStudentAvailabilityRestriction studentAvailabilityRestriction in source.RestrictionCollection().OfType<IStudentAvailabilityRestriction>())
             {
 				Clear<IStudentAvailabilityDay>();
-				Add(new StudentAvailabilityDay(Person, date, new List<IStudentAvailabilityRestriction>{studentAvailabilityRestriction}));
+				Add(new StudentAvailabilityDay(Person, date, new List<IStudentAvailabilityRestriction>{studentAvailabilityRestriction.NoneEntityClone()}));
             }
         }
 

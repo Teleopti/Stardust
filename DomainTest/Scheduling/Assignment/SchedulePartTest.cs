@@ -718,6 +718,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			setupForMergeTests();
 
 			IStudentAvailabilityRestriction studentAvailabilityRestriction = new StudentAvailabilityRestriction();
+			studentAvailabilityRestriction.SetId(Guid.NewGuid());
 			IList<IStudentAvailabilityRestriction> list = new List<IStudentAvailabilityRestriction>();
 			list.Add(studentAvailabilityRestriction);
 			IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(source.Person, new DateOnly(source.Period.StartDateTimeLocal(timeZoneInfo)), list);
@@ -731,6 +732,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			foreach (IStudentAvailabilityDay studDay in destination.PersistableScheduleDataCollection())
 			{
 				Assert.AreEqual(destination.Period.StartDateTimeLocal(timeZoneInfo).Date, studDay.RestrictionDate.Date);
+				Assert.IsNull(studDay.RestrictionCollection.First().Id);
 			}
 		}
 
