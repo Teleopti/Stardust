@@ -285,6 +285,15 @@ define([
 						initAll();
 					}
 				});
+			},
+			disabled: function () {
+				ajax.ajax({
+					url: "BusinessUnit",
+					success: function (data) {
+						defaultBu = data[0].Id;
+						initAll();
+					}
+				});
 			}
 		});
 	};
