@@ -7,7 +7,8 @@
 		'ajax',
 		'helpers',
 		'jquery',
-		'views/realtimeadherenceagents/agent-menu'
+		'views/realtimeadherenceagents/agent-menu',
+		'lazy'
 ],
 	function (ko,
 		agentstate,
@@ -17,7 +18,8 @@
 		ajax,
 		helpers,
 		$,
-		menu) {
+		menu,
+		lazy) {
 	return function () {
 
 		var that = {};
@@ -77,7 +79,7 @@
 
 				that.siteId(data[i].SiteId);
 			}
-			that.siteURI('#realtimeadherenceteams/' + that.siteId());
+			that.siteURI('#realtimeadherenceteams/' + that.BusinessUnitId() +'/' + that.siteId());
 		};
 
 		that.fillAgentsStates = function(data) {
@@ -140,11 +142,17 @@
 			that.fillAgentsStates(data.AgentStates);
 		};
 
+		that.getSelectedAgentState = function() {
+			var selectedAgentState = that.agentStates().filter(function (obj) {
+				return obj.Selected() === true;
+			});
+			return selectedAgentState;
+		}
+
 		that.SelectAgent = function (agentStateClicked) {
-			if (agentStateClicked.Selected())
-				that.deselectAll();
-			else {
-				agentStateClicked.Selected(true);
+			deselectAllAgentsExcept(agentStateClicked);
+			agentStateClicked.Selected(!agentStateClicked.Selected());
+			if (agentStateClicked.Selected()) {
 				var selectedAgentState = that.agentStates().filter(function (obj) {
 					return obj.Selected() === true;
 				});
@@ -162,20 +170,19 @@
 					}
 				});
 			}
-		}
+		};
 
-		that.getSelectedAgentState = function() {
-			var selectedAgentState = that.agentStates().filter(function (obj) {
-				return obj.Selected() === true;
+		var deselectAllAgentsExcept = function (agentState) {
+			var selectedAgentStates = lazy(that.agentStates())
+				.filter(function (x) {
+					if (agentState && x === agentState)
+						return false;
+					return x.Selected();
+				});
+			selectedAgentStates.each(function (x) {
+				x.Selected(false);
 			});
-			return selectedAgentState;
-		}
-
-		that.deselectAll = function() {
-			that.agentStates().forEach(function (agentState) {
-				agentState.Selected(false);
-			});
-		}
+		};
 		
 		return that;
 	};

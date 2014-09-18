@@ -46,19 +46,24 @@ define([
 				}
 			};
 
-			self.switchBusinessUnit = function (data) {
+			self.switchBusinessUnit = function(data) {
 				var view = self.ActiveView();
 				var buId = data.Id;
-				var groupId = self.CurrentGroupId();
-				var date = self.CurrentDate();
-				if (view && groupId && date)
-					navigation.GotoCurrentViewForGroupAndDate(view, buId, groupId, date);
-				else if (view && groupId)
-					navigation.GotoCurrentViewForGroup(view, buId, groupId);
-				else if (view)
-					navigation.GotoCurrentViewOriginal(view, buId);
-				else
-					navigation.GoToTeamScheduleOriginal(buId);
-			}
+				if (view.indexOf("realtimeadherence") > -1)
+					navigation.GotoRealTimeAdherenceViewOriginal(buId);
+				else {
+					var date = self.CurrentDate();
+					if (date)
+						navigation.GoToTeamScheduleForDate(buId, date);
+					else navigation.GoToTeamScheduleOriginal(buId);
+				}
+			};
+
+			self.navigateSchedules = function() {
+				navigation.GoToTeamScheduleOriginal(self.CurrentBusinessUnitId());
+			};
+			self.navigateRealtimeAdherence = function () {
+				navigation.GotoRealTimeAdherenceViewOriginal(self.CurrentBusinessUnitId());
+			};
 		};
 	});

@@ -50,8 +50,8 @@ define([
 			window.setLocationHash('teamschedule/' + buid);
 		},
 
-		GoToTeamScheduleForGroup: function (buid, id) {
-			window.setLocationHash('teamschedule/' + buid + '/' + id);
+		GoToTeamScheduleForDate: function (buid, date) {
+			window.setLocationHash('teamschedule/' + buid + '/' + toDateString(date));
 		},
 
 		GoToTeamScheduleWithSelectedPerson: function (buid, id, personId, date) {
@@ -71,14 +71,8 @@ define([
 		GotoRealTimeAdherenceMultipleSiteDetails: function(buid) {
 			window.setLocationHash('realtimeadherenceagents/' + buid + '/' + 'MultipleSites');
 		},
-		GotoCurrentViewOriginal: function(view, buid) {
-			window.setLocationHash(view+'/' + buid);
-		},
-		GotoCurrentViewForGroup: function(view, buid, groupid) {
-			window.setLocationHash(view + '/' + buid + '/' + groupid);
-		},
-		GotoCurrentViewForGroupAndDate: function (view, buid, groupid, date) {
-			window.setLocationHash(view + '/' + buid + '/' + groupid + '/' + toDateString(date));
+		GotoRealTimeAdherenceViewOriginal: function (buid) {
+			window.setLocationHash('realtimeadherencesites/' + buid);
 		}
 	};
 });
