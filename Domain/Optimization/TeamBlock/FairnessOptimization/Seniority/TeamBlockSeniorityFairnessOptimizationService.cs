@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		private bool _cancelMe;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
         public TeamBlockSeniorityFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, 
 															IDetermineTeamBlockPriority determineTeamBlockPriority,
@@ -57,6 +58,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_cancelMe = false;
 	        while (!_cancelMe)
 	        {
+				if (_progressEvent != null && _progressEvent.UserCancel) break;
+
 				var unSuccessfulSwaps = new List<ITeamBlockInfo>();
 		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
 		                                                               schedulingOptions.BlockFinderTypeForAdvanceScheduling,
@@ -73,6 +76,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		        foreach (var teamBlockInfoHighSeniority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo)
 		        {
 			        if (_cancelMe) break;
+
+					if (_progressEvent != null && _progressEvent.UserCancel) break;
+
 			        var highSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoHighSeniority);
 
 			        foreach (var teamBlockInfoLowSeniority in priorityList)
@@ -136,6 +142,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 			handler(this, args);
 			if (args.Cancel) _cancelMe = true;
+
+			if (_progressEvent != null && _progressEvent.UserCancel) return;
+
+			_progressEvent = args;
 		}
     }
 }

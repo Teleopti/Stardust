@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly bool _isMaxSeatToggleEnabled;
 		private bool _cancelMe;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -83,6 +84,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				if (_cancelMe)
 					break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					break;
+
 				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, optimizationPreferences,
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
@@ -104,6 +109,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				handler(this, args);
 				if (args.Cancel)
 					_cancelMe = true;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
+					return;
+
+				_progressEvent = args;
 			}
 		}
 
@@ -134,6 +144,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				runningTeamBlockCounter++;
 				if (_cancelMe)
+					break;
+
+				if (_progressEvent != null && _progressEvent.UserCancel)
 					break;
 
 				string teamName = StringHelper.DisplayString(teamBlockInfo.TeamInfo.Name, 20);

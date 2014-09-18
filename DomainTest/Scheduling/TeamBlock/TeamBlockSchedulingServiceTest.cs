@@ -298,6 +298,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         }
 
+		[Test]
+		public void ShouldUserCancel()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
+				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+
+			}
+			var args = new SchedulingServiceSuccessfulEventArgs(null) {UserCancel = true};
+			_target.RaiseEventForTest(this, args);
+
+			using (_mock.Playback())
+			{
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
+			}
+		}
+
         private void targetOnDayScheduled(object sender, SchedulingServiceBaseEventArgs schedulingServiceBaseEventArgs)
         {
             _cancelTarget = true;

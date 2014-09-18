@@ -695,7 +695,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_schedulerState.MarkDateToBeRecalculated(date);
 				}
 				RecalculateResources();
-				statusStrip1.BackColor = SystemColors.Control;
+				statusStrip1.BackColor = Color.FromArgb(22, 165, 220);
 			}
 		}
 
@@ -1170,8 +1170,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonQuickAccessCancel_Click(object sender, EventArgs e)
 		{
-			cancelAllBackgroundWorkers();
-			//_cancelButtonPressed = true;
+			//cancelAllBackgroundWorkers();
+			_cancelButtonPressed = true;
 			toolStripButtonQuickAccessCancel.Enabled = false;
 		}
 
@@ -1970,7 +1970,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (Disposing)
 				return;
-			
+
+			var progress = e.UserState as ResourceOptimizerProgressEventArgs;
+			if (progress != null)
+			{
+				if (_cancelButtonPressed)
+				{
+					progress.Cancel = true;
+					progress.UserCancel = true;
+				}
+			}
+
 			toolStripProgressBar1.PerformStep();
 		}
 
@@ -2812,6 +2822,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				else
 				{
+					var progress = e.UserState as SchedulingServiceBaseEventArgs;
+					if (progress != null)
+					{
+						if (_cancelButtonPressed)
+						{
+							progress.Cancel = true;
+							progress.UserCancel = true;
+						}
+					}
+
 					if (e.ProgressPercentage <= 0)
 					{
 						schedulingProgress(Math.Abs(e.ProgressPercentage));

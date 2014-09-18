@@ -8,8 +8,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -30,6 +28,7 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IGroupPersonBuilderForOptimizationFactory  _groupPersonBuilderForOptimizationFactory;
 	    private readonly IToggleManager _toggleManager;
 	    private BackgroundWorker  _backgroundWorker;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 	    public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 		    ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IWeeklyRestSolverService weeklyRestSolverService,
@@ -74,6 +73,11 @@ namespace Teleopti.Ccc.Win.Commands
                 e.Cancel = false;
             }
             _backgroundWorker.ReportProgress(1, e);
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+			
+			_progressEvent = e;
         }
     }
 }

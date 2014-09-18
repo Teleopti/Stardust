@@ -186,6 +186,51 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldUserCancel()
+		{
+			var part1 = _mocks.StrictMock<IScheduleDay>();
+			var part2 = _mocks.StrictMock<IScheduleDay>();
+			var person = _mocks.StrictMock<IPerson>();
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			var range = _mocks.StrictMock<IScheduleRange>();
+			var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+
+			Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).Return(virtualSchedulePeriod).Repeat.AtLeastOnce().IgnoreArguments();
+			Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
+
+			int targetDaysOff;
+			//int dayOffsNow;
+			IList<IScheduleDay> dayOffsNow = new List<IScheduleDay>();
+			Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(virtualSchedulePeriod, out targetDaysOff,
+																				out dayOffsNow)).Return(true);
+			Expect.Call(part1.Person).Return(person).Repeat.AtLeastOnce();
+			Expect.Call(part2.Person).Return(person).Repeat.AtLeastOnce();
+			Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), _timeZoneInfo)).Repeat.AtLeastOnce();
+			Expect.Call(part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 3), _timeZoneInfo)).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).Return(true).IgnoreArguments();
+
+			Expect.Call(_schedulingResultStateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
+			Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
+			Expect.Call(range.ScheduledDay(new DateOnly())).IgnoreArguments().Return(part1).Repeat.AtLeastOnce();
+			Expect.Call(part1.IsScheduled()).Return(false).Repeat.Any();
+			Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
+
+			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(_effectiveRestriction);
+			Expect.Call(_scheduleService.FinderResults).Return(new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
+			_mocks.ReplayAll();
+
+			_schedulingOptions.UseShiftCategoryLimitations = false;
+			_schedulingOptions.UseRotations = true;
+			_schedulingOptions.UseAvailability = true;
+			_schedulingOptions.UsePreferences = true;
+
+			_schedulingService.DayScheduled += (sender, e) => { e.UserCancel = true; };
+			_schedulingService.DoTheScheduling(new List<IScheduleDay> { part2, part1 }, _schedulingOptions, true, false, _rollbackService);
+			Assert.IsNotNull(_schedulingService.FinderResults);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
 		public void ShouldReturnFalseOnCorrectNumberOfDaysOffIfDaysOffPeriodCalculatorReturnsFalse()
 		{
 			int target;

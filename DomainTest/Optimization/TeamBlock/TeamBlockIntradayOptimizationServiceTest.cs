@@ -278,6 +278,38 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
+		 Test]
+		public void ShouldUserCancel()
+		{
+			var dateOnly = new DateOnly();
+			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var person = PersonFactory.CreatePerson("Bill");
+			var persons = new List<IPerson> { person };
+			var schedulingOptions = new SchedulingOptions();
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
+			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			var optimizationPreferences = new OptimizationPreferences();
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
+			_target.ReportProgress += targetReportProgress2;
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
+				Expect.Call(_teamBlockGenerator.Generate(matrixes, selectedPeriod, persons, schedulingOptions)).Return(teamBlocks);
+			}
+			using (_mocks.Playback())
+			{
+				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+				_target.ReportProgress -= targetReportProgress2;
+			}
+		}
+
 		[Test]
 		public void ShouldReportProgressWhenNotSuccessful()
 		{
@@ -335,6 +367,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private void targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
+		}
+
+		private void targetReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
 		}
 
 	}
