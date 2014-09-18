@@ -28,6 +28,7 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2013-02-25 |
+	And I have a shift bag with category 'Late' and start times 8 to 9 and end times 4 to 5
 	And I have a preference template with 
 	| Field              | Value     |
 	| Name               | template1 |
