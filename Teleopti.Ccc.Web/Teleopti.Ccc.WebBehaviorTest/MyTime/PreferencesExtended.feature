@@ -3,8 +3,6 @@
 	As an agent
 	I want to view and submit extended preferences
 
-
-	
 Background:
 	Given there is a role with
 	| Field                          | Value                          |
@@ -45,6 +43,7 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	And I have a shift bag with category 'Late' and start times 8 to 9 and end times 4 to 5
 
 Scenario: Can see indication of an extended preference
 	Given I have the role 'Access to extended preferences'

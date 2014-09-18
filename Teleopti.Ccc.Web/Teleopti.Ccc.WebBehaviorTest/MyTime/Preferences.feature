@@ -88,6 +88,7 @@ Scenario: View standard preference list
          | Access To Extended Preferences | false |
 	And I have schedule and person period 
 	And there is a shift category named 'Night'
+	And I have a shift bag with category 'Night' and start times 8 to 9 and end times 4 to 5
 	And there is a dayoff named 'Day off'
 	And there is an absence named 'Vacation'
 	And I have a workflow control set with
@@ -113,6 +114,7 @@ Scenario: Remember selected standard preference
          | Access To Extended Preferences | false |
 	And I have schedule and person period 
 	And there is a shift category named 'Night'
+	And I have a shift bag with category 'Night' and start times 8 to 9 and end times 4 to 5
 	And I have a workflow control set with
 	| Field                   | Value      |
 	| Name                    | Open       |
@@ -132,6 +134,7 @@ Scenario: Add standard preference
 	And I have schedule and person period 
 	And the current time is '2014-05-02 08:00'
 	And there is a shift category named 'Night'
+	And I have a shift bag with category 'Night' and start times 8 to 9 and end times 4 to 5
 	And I have a workflow control set with
 	| Field                   | Value      |
 	| Name                    | Open       |
@@ -151,6 +154,7 @@ Scenario: Replace standard preference
 	And I have schedule and person period 
 	And the current time is '2014-05-02 08:00'
 	And there is a shift category named 'Night'
+	And I have a shift bag with category 'Night' and start times 8 to 9 and end times 4 to 5
 	And there is a day off named 'Day off'
 	And I have a workflow control set with
 	| Field                   | Value      |
@@ -177,6 +181,7 @@ Scenario: Set multiple preference
 	And I have schedule and person period 
 	And the current time is '2014-05-02 08:00'
 	And there is a shift category named 'Night'
+	And I have a shift bag with category 'Night' and start times 8 to 9 and end times 4 to 5
 	And there is a day off named 'Day off'
 	And I have a workflow control set with
 	| Field                   | Value      |
