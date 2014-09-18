@@ -116,7 +116,7 @@
 			this.tabPageAdvDefault.ShowCloseButton = true;
 			this.tabPageAdvDefault.Size = new System.Drawing.Size(528, 651);
 			this.tabPageAdvDefault.TabIndex = 1;
-			this.tabPageAdvDefault.Text = "xxGeneral";
+			this.tabPageAdvDefault.Text = "xxSingle";
 			this.tabPageAdvDefault.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel1
@@ -276,7 +276,7 @@
 			this.tabPageAdvCustom.ShowCloseButton = true;
 			this.tabPageAdvCustom.Size = new System.Drawing.Size(528, 651);
 			this.tabPageAdvCustom.TabIndex = 2;
-			this.tabPageAdvCustom.Text = "xxCustom";
+			this.tabPageAdvCustom.Text = "xxMultiple";
 			this.tabPageAdvCustom.ThemesEnabled = false;
 			// 
 			// panel6

@@ -12321,5 +12321,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="AgentDescription" xml:space="preserve">
     <value>Agent Description</value>
     <comment>Title of selector which is used for setting view in mytime web</comment>
-	</data>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Multiple</value>
+    <comment>Multiple items</comment>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Single</value>
+    <comment>One item</comment>
+  </data>
 </root>
