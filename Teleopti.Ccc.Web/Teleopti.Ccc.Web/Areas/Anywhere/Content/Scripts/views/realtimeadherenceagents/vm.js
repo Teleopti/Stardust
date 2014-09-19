@@ -39,6 +39,13 @@
 		that.menu = new menu();
 		that.selectedPersonId = ko.observable();
 		that.BusinessUnitId = ko.observable();
+		that.rootURI = ko.observable();
+
+		that.SetViewOptions = function (options) {
+			that.BusinessUnitId(options.buid);
+			that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
+		};
+
 		that.filteredAgents = ko.computed(function() {
 			var filter = that.filter();
 			if (!filter) {

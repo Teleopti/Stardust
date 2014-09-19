@@ -25,7 +25,7 @@
 		display: function (options) {
 			var siteId = options.id;
 			viewModel = realTimeAdherenceViewModel();
-			viewModel.BusinessUnitId(options.buid);
+			viewModel.SetViewOptions(options);
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 

@@ -100,6 +100,16 @@
 				vm.fill([{ Id: 'guid1' }]);
 
 				assert.isFalse(vm.teams()[0].hasBeenUpdated());
+			},
+
+			"should update root uri": function () {
+				var vm = viewModel();
+
+				vm.SetViewOptions({
+					buid: 'guid'
+				});
+				
+				assert.equals(vm.rootURI(), '#realtimeadherencesites/guid');
 			}
 		});		
 	};

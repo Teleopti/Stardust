@@ -401,6 +401,16 @@
 					assert.equals(vm.filteredAgents().length, 2);
 					assert.equals(vm.filteredAgents()[0].Name, "Glen");
 					assert.equals(vm.filteredAgents()[1].Name, "Kurt In");
+				},
+
+				"should update root uri": function () {
+					var vm = viewModel();
+
+					vm.SetViewOptions({
+						buid: 'guid'
+					});
+
+					assert.equals(vm.rootURI(), '#realtimeadherencesites/guid');
 				}
 			}
 		});

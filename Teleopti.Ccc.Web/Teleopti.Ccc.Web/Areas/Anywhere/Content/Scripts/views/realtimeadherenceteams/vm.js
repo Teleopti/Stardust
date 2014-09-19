@@ -19,6 +19,7 @@
 			that.teams = ko.observableArray();
 			that.siteName = ko.observable();
 			that.BusinessUnitId = ko.observable();
+			that.rootURI = ko.observable();
 			that.fill = function (data) {
 				for (var i = 0; i < data.length; i++) {
 					var newTeam = team();
@@ -31,7 +32,10 @@
 
 			that.teamsToOpen = ko.observableArray();
 			that.agentStatesForMultipleTeams = ko.observable();
-
+			that.SetViewOptions = function(options) {
+				that.BusinessUnitId(options.buid);
+				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
+			};
 			var teamForId = function (id) {
 				if (!id)
 					return undefined;
