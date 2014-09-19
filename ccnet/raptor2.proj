@@ -3,14 +3,10 @@
 <Project DefaultTargets="BuildAndTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
-		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<DBNamePrefix>$(CCNetProject)</DBNamePrefix>
-		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
-		<DoCodeAnalysis>false</DoCodeAnalysis>
-		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 	
 		<ASCompile>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</ASCompile>
 		<ASCompile Condition="'$(computername)' == 'Teleopti629'">C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</ASCompile>
@@ -78,7 +74,7 @@
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
-				Properties="Configuration=$(Configuration);Platform=Any CPU;TreatWarningsAsErrors=true;RunCodeAnalysis=$(DoCodeAnalysis);"
+				Properties="Configuration=$(Configuration);Platform=Any CPU;TreatWarningsAsErrors=true;"
 				BuildInParallel = "true"
 				Targets="Build">
 		</MSBuild>
@@ -208,7 +204,7 @@
 				Include="$(CCNetWorkingDirectory)\**\*Test.csproj"
 				Exclude="
 					$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"/>
-		<ProjectsToNCover Condition="'$(RunWebBehaviorTests)' == 'true' And '$(CCNetProject)'!='CCC-Main'"
+		<ProjectsToNCover Condition="'$(CCNetProject)'!='CCC-Main'"
 			  Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj"
 		 />
 	</ItemGroup>
@@ -220,7 +216,6 @@
 		<MakeDir Directories="$(CCNetWorkingDirectory)\CoverageResult"/>
 		
 		<Message Importance="high" Text="Running NCover..." />
-		<Message Importance="high" Text="RunWebBehaviorTests: $(RunWebBehaviorTests)." />
 		<CallTarget Targets="NCoverLoop" />
 		<Message Importance="high" Text="Running NCover finished." />
 	</Target>
