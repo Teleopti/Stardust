@@ -122,15 +122,21 @@ SELECT * FROM SplitStringInt(@absence_set)
 
 /*Speed up fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT *
+SELECT fs.*
 FROM mart.fact_schedule fs
-WHERE schedule_date_id in	(
-							select b.date_id 
-							from mart.bridge_time_zone b 
-								INNER JOIN mart.dim_date d 
-									ON b.local_date_id = d.date_id 
-							where d.date_date BETWEEN @date_from AND @date_to
-							)
+INNER JOIN mart.dim_person p
+	ON fs.person_id = p.person_id
+WHERE p.team_id IN(select right_id from #rights_teams)
+AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
+AND fs.schedule_date_id IN
+	(
+	select b.date_id 
+	from mart.bridge_time_zone b 
+		INNER JOIN mart.dim_date d 
+			ON b.local_date_id = d.date_id 
+	where d.date_date BETWEEN @date_from AND @date_to
+	AND b.time_zone_id = @time_zone_id
+	)
 
 IF @report_id =  'C5B88862-F7BE-431B-A63F-3DD5FF8ACE54'  --4
 BEGIN
@@ -164,8 +170,6 @@ BEGIN
 	WHERE d.date_date BETWEEN @date_from AND @date_to
 	AND b.time_zone_id = @time_zone_id
 	AND f.scenario_id=@scenario_id
-	AND p.team_id IN(select right_id from #rights_teams)
-	AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 	AND ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
 	GROUP BY p.person_code,p.person_name,ab.absence_id,ab.absence_name,f.shift_starttime
@@ -202,8 +206,6 @@ BEGIN
 	WHERE d.date_date BETWEEN @date_from AND @date_to
 	AND b.time_zone_id = @time_zone_id
 	AND f.scenario_id=@scenario_id
-	AND p.team_id IN(select right_id from #rights_teams)
-	AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 	AND ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
 	GROUP BY ab.absence_id,ab.absence_name,p.person_code,p.person_name,f.shift_starttime
@@ -225,8 +227,6 @@ INNER JOIN mart.dim_interval i
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 AND f.absence_id IN (SELECT id FROM #absences)--only selected absences
 AND f.absence_id<>-1 --ej activity
 ORDER BY p.person_code,d.date_date, f.starttime,absence_id
@@ -257,5 +257,4 @@ BEGIN
 	FROM #result 
 	ORDER BY absence_name,person_name,date
 END
-
 GO
