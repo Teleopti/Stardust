@@ -199,7 +199,7 @@
 	        self.StartTime(date.clone().add('m',time));
 	    };
 		self.cancel = function() {
-			navigation.GoToTeamSchedule(self.GroupId(), self.ScheduleDate());
+			navigation.GoToTeamSchedule(businessUnitId, self.GroupId(), self.ScheduleDate());
 		};
 	};
 });
