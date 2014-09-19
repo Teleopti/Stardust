@@ -213,6 +213,8 @@ AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
 AND f.absence_id IN (SELECT id FROM #absences)--only selected absences
 AND f.absence_id<>-1 --ej activity
+AND p.team_id IN(select right_id from #rights_teams)
+AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 ORDER BY p.person_code,d.date_date, f.starttime,absence_id
 
 /*set those absences counted as full day absence*/
