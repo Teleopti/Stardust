@@ -229,23 +229,38 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         return 'label-warning';
     };
-    
+
+	_setAgentName = function(message, name) {
+		if (message.indexOf(":") > 0) {
+			return message.replace(message.substr(0, message.indexOf(":")), name);
+		}
+		return message;
+	};
+
     ko.utils.extend(RequestItemViewModel.prototype, {
     	Initialize: function (data, isProcessing) {
+    		
     		var textSegs = data.Text.split("\n");
-		    var textNoBr = "";
-		    $.each(textSegs, function(index, text) {
-			    textNoBr = textNoBr + text + " ";
+    		var textNoBr = "";
+    		var messageInList = [];
+		    $.each(textSegs, function (index, text) {
+			    if (index == 0) {
+			    	textNoBr = textNoBr + _setAgentName(text, data.From) + " ";
+			    	messageInList.push(_setAgentName(text, data.From) + "\n");
+			    } else {
+			    	textNoBr = textNoBr + _setAgentName(text, data.To) + " ";
+			    	messageInList.push(_setAgentName(text, data.To) + "\n");
+			    }
 		    });
 
-        	var self = this;
+		    var self = this;
 	        self.isProcessing(isProcessing);
             self.Subject(data.Subject == null ? '' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
             self.Dates(data.Dates);
             self.UpdatedOn(data.UpdatedOn);
-            self.TextSegments(textSegs);
+            self.TextSegments(messageInList);
             self.ListText(textNoBr.length > 50 ? textNoBr.substring(0, 50) + '...' : textNoBr);
             self.DenyReason(data.DenyReason);
             self.Link(data.Link.href);

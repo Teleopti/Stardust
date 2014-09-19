@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
 		private IUserCulture _userCulture;
+		private IPersonNameProvider _personNameProvider;
 
 		[SetUp]
 		public void Setup()
@@ -42,13 +44,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Stub(x => x.GetCulture()).Return(CultureInfo.CurrentCulture);
 
+			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("LoggedOn Agent");
+
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				_userTimeZone, 
 				_linkProvider,
 				_loggedOnUser,
 				_shiftTradeRequestStatusChecker,
-				_userCulture
+				_userCulture,
+				_personNameProvider
 				)));
 		}
 
@@ -362,9 +368,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
 
+			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(sender.Name)).Return("Sender");
+
+			Mapper.Reset();
+			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
+				_userTimeZone,
+				_linkProvider,
+				_loggedOnUser,
+				_shiftTradeRequestStatusChecker,
+				_userCulture,
+				_personNameProvider
+				)));
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
-			Assert.That(result.From, Is.EqualTo(sender.Name.ToString()));
+			Assert.That(result.From, Is.EqualTo(sender.Name.FirstName));
 		}
 
 		[Test]
@@ -378,7 +396,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
-			Assert.That(result.To, Is.EqualTo(_loggedOnPerson.Name.ToString()));
+			Assert.That(result.To, Is.EqualTo(_loggedOnPerson.Name.FirstName + " " + _loggedOnPerson.Name.LastName));
 		}
 
 		[Test]

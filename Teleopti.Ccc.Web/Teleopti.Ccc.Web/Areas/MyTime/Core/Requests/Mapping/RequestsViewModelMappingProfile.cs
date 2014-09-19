@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Models.Shared;
 using Teleopti.Interfaces.Domain;
 
@@ -19,17 +20,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IUserCulture _userCulture;
+		private readonly IPersonNameProvider _personNameProvider;
 
 		public RequestsViewModelMappingProfile(IUserTimeZone userTimeZone,
 																			ILinkProvider linkProvider,
 																			ILoggedOnUser loggedOnUser,
-																			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IUserCulture userCulture)
+																			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IUserCulture userCulture, IPersonNameProvider personNameProvider)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_userCulture = userCulture;
+			_personNameProvider = personNameProvider;
 		}
 
 		protected override void Configure()
@@ -132,8 +135,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																															 end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 																											}))
 				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request, _loggedOnUser)))
-				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : s.Request.PersonFrom.Name.ToString()))
-				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : s.Request.PersonTo.Name.ToString()))
+				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : _personNameProvider.BuildNameFromSetting(s.Request.PersonFrom.Name)))
+				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty :  _personNameProvider.BuildNameFromSetting(s.Request.PersonTo.Name)))
 				.ForMember(d => d.DenyReason, o => o.ResolveUsing(s =>
 																											{
 																												Resources.ResourceManager.IgnoreCase = true;
