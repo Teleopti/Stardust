@@ -66,42 +66,15 @@ CREATE TABLE #fact_schedule(
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
-	[activity_starttime] [smalldatetime] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
-	[activity_id] [int] NULL,
-	[absence_id] [int] NULL,
-	[activity_startdate_id] [int] NULL,
-	[activity_enddate_id] [int] NULL,
-	[activity_endtime] [smalldatetime] NULL,
+	[absence_id] [int] NOT NULL,
 	[shift_startdate_id] [int] NULL,
 	[shift_starttime] [smalldatetime] NULL,
-	[shift_enddate_id] [int] NULL,
-	[shift_endtime] [smalldatetime] NULL,
 	[shift_startinterval_id] [smallint] NULL,
-	[shift_category_id] [int] NULL,
-	[shift_length_id] [int] NULL,
-	[scheduled_time_m] [int] NULL,
-	[scheduled_time_absence_m] [int] NULL,
-	[scheduled_time_activity_m] [int] NULL,
-	[scheduled_contract_time_m] [int] NULL,
-	[scheduled_contract_time_activity_m] [int] NULL,
 	[scheduled_contract_time_absence_m] [int] NULL,
-	[scheduled_work_time_m] [int] NULL,
-	[scheduled_work_time_activity_m] [int] NULL,
 	[scheduled_work_time_absence_m] [int] NULL,
-	[scheduled_over_time_m] [int] NULL,
-	[scheduled_ready_time_m] [int] NULL,
-	[scheduled_paid_time_m] [int] NULL,
-	[scheduled_paid_time_activity_m] [int] NULL,
-	[scheduled_paid_time_absence_m] [int] NULL,
-	[last_publish] [smalldatetime] NULL,
-	[business_unit_id] [int] NULL,
-	[datasource_id] [smallint] NULL,
-	[insert_date] [smalldatetime] NULL,
-	[update_date] [smalldatetime] NULL,
-	[datasource_update_date] [smalldatetime] NULL,
-	[overtime_id] [int] NOT NULL
-)
+	[scheduled_paid_time_absence_m] [int] NULL
+	)
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
 IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
@@ -122,7 +95,18 @@ SELECT * FROM SplitStringInt(@absence_set)
 
 /*Speed up fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT fs.*
+SELECT
+	fs.schedule_date_id,
+	fs.person_id,
+	fs.interval_id,
+	fs.scenario_id,
+	fs.absence_id,
+	fs.shift_startdate_id,
+	fs.shift_starttime,
+	fs.shift_startinterval_id,
+	fs.scheduled_contract_time_absence_m,
+	fs.scheduled_work_time_absence_m,
+	fs.scheduled_paid_time_absence_m
 FROM mart.fact_schedule fs
 INNER JOIN mart.dim_person p
 	ON fs.person_id = p.person_id
@@ -257,4 +241,5 @@ BEGIN
 	FROM #result 
 	ORDER BY absence_name,person_name,date
 END
+
 GO
