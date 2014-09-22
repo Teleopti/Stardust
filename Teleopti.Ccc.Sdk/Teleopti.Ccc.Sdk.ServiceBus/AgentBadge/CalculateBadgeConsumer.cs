@@ -87,28 +87,40 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				var calculateDate = new DateOnly(message.CalculationDate);
 
-				var newAwardedBadgesForAdherence = _calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
-					adherenceReportSetting.CalculationMethod, setting).ToList();
-				if (Logger.IsDebugEnabled)
+				if (setting.AdherenceBadgeTypeSelected)
 				{
-					Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+					var newAwardedBadgesForAdherence =
+						_calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
+							adherenceReportSetting.CalculationMethod, setting).ToList();
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+					}
+					sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
 				}
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
 
-				var newAwardedBadgesForAHT = _calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
-				if (Logger.IsDebugEnabled)
+				if (setting.AHTBadgeTypeSelected)
 				{
-					Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+					var newAwardedBadgesForAHT =
+						_calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+					}
+					sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
 				}
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
 
-				var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
-					calculateDate, setting).ToList();
-				if (Logger.IsDebugEnabled)
+				if (setting.AnsweredCallsBadgeTypeSelected)
 				{
-					Logger.DebugFormat("Total {0} agents will get new badge for answered calls", newAwardedBadgesForAnsweredCalls.Count());
+					var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
+						calculateDate, setting).ToList();
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat("Total {0} agents will get new badge for answered calls",
+							newAwardedBadgesForAnsweredCalls.Count());
+					}
+					sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
 				}
-				sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
 
 				uow.PersistAll();
 			}
