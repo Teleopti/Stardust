@@ -17,7 +17,7 @@
 				var mapping =  mapRelationsBetweenWords(filterWords);
 				var orRelationalCombinations = mapping.orRelationalWords;
 				var andRelationalWords = mapping.andRelationalWords;
-				
+				var alreadyMatchedAndWords = [];
 				for (var i = 0; i < items.length; i++) {
 					var item = items[i];
 					if (!item) {
@@ -38,10 +38,14 @@
 						if (currentAndWord.toUpperCase() === "OR") {
 							continue;
 						}
+						if (alreadyMatchedAndWords.indexOf(currentAndWord) !== -1)
+							continue;
 						var wordMatch = matchItem(currentAndWord, item, andNegateMatching);
 						if (wordMatch === -1) {
 							return false;
 						}
+						if (wordMatch === 1)
+							alreadyMatchedAndWords.push(currentAndWord);
 
 						andRelationalMatches += wordMatch;
 					}
