@@ -48,6 +48,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSplitter2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader1 = new System.Windows.Forms.Label();
+			this.checkAnsweredCallsBadgeType = new System.Windows.Forms.CheckBox();
+			this.checkAHTBadgeType = new System.Windows.Forms.CheckBox();
+			this.checkAdherenceBadgeType = new System.Windows.Forms.CheckBox();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -68,8 +71,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			// tableLayoutPanelBody
 			// 
-			this.tableLayoutPanelBody.ColumnCount = 2;
+			this.tableLayoutPanelBody.ColumnCount = 3;
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 320F));
+			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAnsweredCalls, 0, 3);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetThresholdForAHT, 0, 4);
@@ -85,6 +89,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter1, 0, 2);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter2, 0, 6);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
+			this.tableLayoutPanelBody.Controls.Add(this.checkAnsweredCallsBadgeType, 2, 3);
+			this.tableLayoutPanelBody.Controls.Add(this.checkAHTBadgeType, 2, 4);
+			this.tableLayoutPanelBody.Controls.Add(this.checkAdherenceBadgeType, 2, 5);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
@@ -146,6 +153,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(115, 23);
 			this.doubleTextBoxThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.doubleTextBoxThresholdForAdherence.DoubleValue = 0D;
+			this.doubleTextBoxThresholdForAdherence.Enabled = false;
 			this.doubleTextBoxThresholdForAdherence.Location = new System.Drawing.Point(323, 159);
 			this.doubleTextBoxThresholdForAdherence.MaxValue = 100D;
 			this.doubleTextBoxThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
@@ -182,6 +190,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// numericUpDownGoldenToSilverBadgeRate
 			// 
 			this.numericUpDownGoldenToSilverBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownGoldenToSilverBadgeRate.Enabled = false;
 			this.numericUpDownGoldenToSilverBadgeRate.Location = new System.Drawing.Point(323, 242);
 			this.numericUpDownGoldenToSilverBadgeRate.Minimum = new decimal(new int[] {
             2,
@@ -200,6 +209,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// numericUpDownSilverToBronzeBadgeRate
 			// 
 			this.numericUpDownSilverToBronzeBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownSilverToBronzeBadgeRate.Enabled = false;
 			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(323, 207);
 			this.numericUpDownSilverToBronzeBadgeRate.Minimum = new decimal(new int[] {
             2,
@@ -218,6 +228,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// numericUpDownThresholdForAnsweredCalls
 			// 
 			this.numericUpDownThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownThresholdForAnsweredCalls.Enabled = false;
 			this.numericUpDownThresholdForAnsweredCalls.Location = new System.Drawing.Point(323, 89);
 			this.numericUpDownThresholdForAnsweredCalls.Name = "numericUpDownThresholdForAnsweredCalls";
 			this.numericUpDownThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
@@ -229,15 +240,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.AllowNegativeValues = true;
 			this.timeSpanTextBoxThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.timeSpanTextBoxThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxThresholdForAHT.Enabled = false;
 			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(323, 124);
 			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
-			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(211, 25);
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(127, 25);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 242;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 445;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -255,7 +267,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.labelSplitter1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelSplitter1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter1, 2);
+			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter1, 3);
 			this.labelSplitter1.Location = new System.Drawing.Point(3, 78);
 			this.labelSplitter1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.labelSplitter1.Name = "labelSplitter1";
@@ -266,7 +278,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.labelSplitter2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelSplitter2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter2, 2);
+			this.tableLayoutPanelBody.SetColumnSpan(this.labelSplitter2, 3);
 			this.labelSplitter2.Location = new System.Drawing.Point(3, 196);
 			this.labelSplitter2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.labelSplitter2.Name = "labelSplitter2";
@@ -277,7 +289,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.tableLayoutPanelSubHeader1.BackColor = System.Drawing.Color.LightSteelBlue;
 			this.tableLayoutPanelSubHeader1.ColumnCount = 1;
-			this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelSubHeader1, 2);
+			this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelSubHeader1, 3);
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
 			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -303,6 +315,42 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader1.TabIndex = 1;
 			this.labelSubHeader1.Text = "xxAgentBadgeSetting";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// checkAnsweredCallsBadgeType
+			// 
+			this.checkAnsweredCallsBadgeType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkAnsweredCallsBadgeType.AutoSize = true;
+			this.checkAnsweredCallsBadgeType.Location = new System.Drawing.Point(453, 91);
+			this.checkAnsweredCallsBadgeType.Name = "checkAnsweredCallsBadgeType";
+			this.checkAnsweredCallsBadgeType.Size = new System.Drawing.Size(82, 19);
+			this.checkAnsweredCallsBadgeType.TabIndex = 21;
+			this.checkAnsweredCallsBadgeType.Text = "xxChecked";
+			this.checkAnsweredCallsBadgeType.UseVisualStyleBackColor = true;
+			this.checkAnsweredCallsBadgeType.CheckedChanged += new System.EventHandler(this.checkAnsweredCallsBadgeType_CheckedChanged);
+			// 
+			// checkAHTBadgeType
+			// 
+			this.checkAHTBadgeType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkAHTBadgeType.AutoSize = true;
+			this.checkAHTBadgeType.Location = new System.Drawing.Point(453, 126);
+			this.checkAHTBadgeType.Name = "checkAHTBadgeType";
+			this.checkAHTBadgeType.Size = new System.Drawing.Size(82, 19);
+			this.checkAHTBadgeType.TabIndex = 22;
+			this.checkAHTBadgeType.Text = "xxChecked";
+			this.checkAHTBadgeType.UseVisualStyleBackColor = true;
+			this.checkAHTBadgeType.CheckedChanged += new System.EventHandler(this.checkAHTBadgeType_CheckedChanged);
+			// 
+			// checkAdherenceBadgeType
+			// 
+			this.checkAdherenceBadgeType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkAdherenceBadgeType.AutoSize = true;
+			this.checkAdherenceBadgeType.Location = new System.Drawing.Point(453, 161);
+			this.checkAdherenceBadgeType.Name = "checkAdherenceBadgeType";
+			this.checkAdherenceBadgeType.Size = new System.Drawing.Size(82, 19);
+			this.checkAdherenceBadgeType.TabIndex = 23;
+			this.checkAdherenceBadgeType.Text = "xxChecked";
+			this.checkAdherenceBadgeType.UseVisualStyleBackColor = true;
+			this.checkAdherenceBadgeType.CheckedChanged += new System.EventHandler(this.checkAdherenceBadgeType_CheckedChanged);
 			// 
 			// gradientPanelHeader
 			// 
@@ -446,5 +494,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private System.Windows.Forms.Label labelSplitter1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
 		private System.Windows.Forms.Label labelSubHeader1;
+		private System.Windows.Forms.CheckBox checkAnsweredCallsBadgeType;
+		private System.Windows.Forms.CheckBox checkAHTBadgeType;
+		private System.Windows.Forms.CheckBox checkAdherenceBadgeType;
 	}
 }

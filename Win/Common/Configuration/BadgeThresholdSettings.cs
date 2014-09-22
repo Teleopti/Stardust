@@ -117,11 +117,46 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setControlsEnabled(bool enabled)
 		{
-			doubleTextBoxThresholdForAdherence.Enabled = enabled;
-			timeSpanTextBoxThresholdForAHT.Enabled = enabled;
-			numericUpDownThresholdForAnsweredCalls.Enabled = enabled;
-			numericUpDownSilverToBronzeBadgeRate.Enabled = enabled;
-			numericUpDownGoldenToSilverBadgeRate.Enabled = enabled;
+			checkAdherenceBadgeType.Enabled = enabled;
+			checkAHTBadgeType.Enabled = enabled;
+			checkAnsweredCallsBadgeType.Enabled = enabled;
+		}
+
+		private void checkAnsweredCallsBadgeType_CheckedChanged(object sender, EventArgs e)
+		{
+			var badgeTypeChecked = ((CheckBox) sender).Checked;
+			numericUpDownThresholdForAnsweredCalls.Enabled = badgeTypeChecked;
+			updateRateSettingsState();
+		}
+
+		private void checkAHTBadgeType_CheckedChanged(object sender, EventArgs e)
+		{
+			var badgeTypeChecked = ((CheckBox)sender).Checked;
+			timeSpanTextBoxThresholdForAHT.Enabled = badgeTypeChecked;
+			updateRateSettingsState();
+		}
+
+		private void checkAdherenceBadgeType_CheckedChanged(object sender, EventArgs e)
+		{
+			var badgeTypeChecked = ((CheckBox)sender).Checked;
+			doubleTextBoxThresholdForAdherence.Enabled = badgeTypeChecked;
+			updateRateSettingsState();
+		}
+
+		private void updateRateSettingsState()
+		{
+			var isAnyTypeSelected = doubleTextBoxThresholdForAdherence.Enabled || timeSpanTextBoxThresholdForAHT.Enabled ||
+									numericUpDownThresholdForAnsweredCalls.Enabled;
+			if (isAnyTypeSelected)
+			{
+				numericUpDownSilverToBronzeBadgeRate.Enabled = true;
+				numericUpDownGoldenToSilverBadgeRate.Enabled = true;
+			}
+			else
+			{
+				numericUpDownSilverToBronzeBadgeRate.Enabled = false;
+				numericUpDownGoldenToSilverBadgeRate.Enabled = false;
+			}
 		}
 	}
 }
