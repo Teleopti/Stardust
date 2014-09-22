@@ -482,7 +482,7 @@
 		</ReadLinesFromFile>
 		<Message Text="MajorVersion: $(CCCMajorMinor)" Importance="high"/>
 
-		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
+		<HgVersion LocalPath="$(CCNetWorkingDirectory)" Timeout="5000">
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
 		<Message Text="HG Revision: $(Revision)" Importance="high"/>
