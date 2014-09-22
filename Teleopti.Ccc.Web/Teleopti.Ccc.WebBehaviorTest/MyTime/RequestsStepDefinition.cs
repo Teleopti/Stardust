@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click on shifttrade cancel button")]
 		public void WhenIClickOnShifttradeCancelButton()
 		{
-			Browser.Interactions.ClickContaining(".btn-danger", Resources.Cancel);
+			Browser.Interactions.ClickUsingJQuery(".cancel-shift-trade");
 		}
 
 		[Then(@"I should not see any requests")]
