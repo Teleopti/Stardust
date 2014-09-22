@@ -83,13 +83,13 @@
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel4.Location = new System.Drawing.Point(0, 0);
 			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(528, 715);
+			this.panel4.Size = new System.Drawing.Size(629, 715);
 			this.panel4.TabIndex = 0;
 			// 
 			// tabControlAdv1
 			// 
 			this.tabControlAdv1.ActiveTabColor = System.Drawing.Color.Gray;
-			this.tabControlAdv1.BeforeTouchSize = new System.Drawing.Size(528, 674);
+			this.tabControlAdv1.BeforeTouchSize = new System.Drawing.Size(629, 674);
 			this.tabControlAdv1.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlAdv1.Controls.Add(this.tabPageAdvDefault);
 			this.tabControlAdv1.Controls.Add(this.tabPageAdvCustom);
@@ -99,7 +99,7 @@
 			this.tabControlAdv1.InactiveTabColor = System.Drawing.Color.White;
 			this.tabControlAdv1.Location = new System.Drawing.Point(0, 0);
 			this.tabControlAdv1.Name = "tabControlAdv1";
-			this.tabControlAdv1.Size = new System.Drawing.Size(528, 674);
+			this.tabControlAdv1.Size = new System.Drawing.Size(629, 674);
 			this.tabControlAdv1.TabIndex = 4;
 			this.tabControlAdv1.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlAdv1.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -114,7 +114,7 @@
 			this.tabPageAdvDefault.Location = new System.Drawing.Point(0, 23);
 			this.tabPageAdvDefault.Name = "tabPageAdvDefault";
 			this.tabPageAdvDefault.ShowCloseButton = true;
-			this.tabPageAdvDefault.Size = new System.Drawing.Size(528, 651);
+			this.tabPageAdvDefault.Size = new System.Drawing.Size(629, 651);
 			this.tabPageAdvDefault.TabIndex = 1;
 			this.tabPageAdvDefault.Text = "xxSingle";
 			this.tabPageAdvDefault.ThemesEnabled = false;
@@ -134,7 +134,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(528, 651);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(629, 651);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// label4
@@ -154,7 +154,7 @@
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(3, 3);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(522, 24);
+			this.panel2.Size = new System.Drawing.Size(623, 24);
 			this.panel2.TabIndex = 0;
 			// 
 			// textBox1
@@ -165,7 +165,7 @@
 			this.textBox1.Location = new System.Drawing.Point(101, 1);
 			this.textBox1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(420, 21);
+			this.textBox1.Size = new System.Drawing.Size(521, 21);
 			this.textBox1.TabIndex = 0;
 			this.textBox1.TextChanged += new System.EventHandler(this.textBox1TextChanged);
 			this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
@@ -196,7 +196,7 @@
 			// 
 			this.splitContainerAdv1.Panel2.Controls.Add(this.gridListControlResult);
 			this.splitContainerAdv1.Panel2.Controls.Add(this.panel5);
-			this.splitContainerAdv1.Size = new System.Drawing.Size(522, 593);
+			this.splitContainerAdv1.Size = new System.Drawing.Size(623, 593);
 			this.splitContainerAdv1.SplitterDistance = 264;
 			this.splitContainerAdv1.TabIndex = 5;
 			this.splitContainerAdv1.TabStop = false;
@@ -219,7 +219,7 @@
 			this.gridListControlDefaultSearch.Properties.MarkColHeader = false;
 			this.gridListControlDefaultSearch.Properties.MarkRowHeader = false;
 			this.gridListControlDefaultSearch.SelectedIndex = -1;
-			this.gridListControlDefaultSearch.Size = new System.Drawing.Size(522, 264);
+			this.gridListControlDefaultSearch.Size = new System.Drawing.Size(623, 264);
 			this.gridListControlDefaultSearch.TabIndex = 1;
 			this.gridListControlDefaultSearch.ThemesEnabled = true;
 			this.gridListControlDefaultSearch.TopIndex = 0;
@@ -241,7 +241,7 @@
 			this.gridListControlResult.Properties.MarkColHeader = false;
 			this.gridListControlResult.Properties.MarkRowHeader = false;
 			this.gridListControlResult.SelectedIndex = -1;
-			this.gridListControlResult.Size = new System.Drawing.Size(522, 301);
+			this.gridListControlResult.Size = new System.Drawing.Size(623, 301);
 			this.gridListControlResult.TabIndex = 3;
 			this.gridListControlResult.TabStop = false;
 			this.gridListControlResult.ThemesEnabled = true;
@@ -253,7 +253,7 @@
 			this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel5.Location = new System.Drawing.Point(0, 0);
 			this.panel5.Name = "panel5";
-			this.panel5.Size = new System.Drawing.Size(522, 21);
+			this.panel5.Size = new System.Drawing.Size(623, 21);
 			this.panel5.TabIndex = 6;
 			// 
 			// label5
@@ -274,7 +274,7 @@
 			this.tabPageAdvCustom.Location = new System.Drawing.Point(0, 23);
 			this.tabPageAdvCustom.Name = "tabPageAdvCustom";
 			this.tabPageAdvCustom.ShowCloseButton = true;
-			this.tabPageAdvCustom.Size = new System.Drawing.Size(528, 651);
+			this.tabPageAdvCustom.Size = new System.Drawing.Size(594, 651);
 			this.tabPageAdvCustom.TabIndex = 2;
 			this.tabPageAdvCustom.Text = "xxMultiple";
 			this.tabPageAdvCustom.ThemesEnabled = false;
@@ -287,7 +287,7 @@
 			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel6.Location = new System.Drawing.Point(0, 0);
 			this.panel6.Name = "panel6";
-			this.panel6.Size = new System.Drawing.Size(528, 651);
+			this.panel6.Size = new System.Drawing.Size(594, 651);
 			this.panel6.TabIndex = 2;
 			// 
 			// gridListControlResult2
@@ -307,7 +307,7 @@
 			this.gridListControlResult2.Properties.MarkColHeader = false;
 			this.gridListControlResult2.Properties.MarkRowHeader = false;
 			this.gridListControlResult2.SelectedIndex = -1;
-			this.gridListControlResult2.Size = new System.Drawing.Size(528, 592);
+			this.gridListControlResult2.Size = new System.Drawing.Size(594, 592);
 			this.gridListControlResult2.TabIndex = 7;
 			this.gridListControlResult2.TabStop = false;
 			this.gridListControlResult2.ThemesEnabled = true;
@@ -320,7 +320,7 @@
 			this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel9.Location = new System.Drawing.Point(0, 30);
 			this.panel9.Name = "panel9";
-			this.panel9.Size = new System.Drawing.Size(528, 29);
+			this.panel9.Size = new System.Drawing.Size(594, 29);
 			this.panel9.TabIndex = 6;
 			// 
 			// label2
@@ -342,7 +342,7 @@
 			this.buttonAdvParse.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonAdvParse.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvParse.IsBackStageButton = false;
-			this.buttonAdvParse.Location = new System.Drawing.Point(429, -1);
+			this.buttonAdvParse.Location = new System.Drawing.Point(495, -1);
 			this.buttonAdvParse.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonAdvParse.Name = "buttonAdvParse";
 			this.buttonAdvParse.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -359,7 +359,7 @@
 			this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel7.Location = new System.Drawing.Point(0, 0);
 			this.panel7.Name = "panel7";
-			this.panel7.Size = new System.Drawing.Size(528, 30);
+			this.panel7.Size = new System.Drawing.Size(594, 30);
 			this.panel7.TabIndex = 4;
 			// 
 			// textBoxCustomSearch
@@ -372,7 +372,7 @@
 			this.textBoxCustomSearch.Multiline = true;
 			this.textBoxCustomSearch.Name = "textBoxCustomSearch";
 			this.textBoxCustomSearch.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxCustomSearch.Size = new System.Drawing.Size(420, 24);
+			this.textBoxCustomSearch.Size = new System.Drawing.Size(486, 24);
 			this.textBoxCustomSearch.TabIndex = 0;
 			this.textBoxCustomSearch.TextChanged += new System.EventHandler(this.textBoxCustomSearch_TextChanged);
 			// 
@@ -395,7 +395,7 @@
 			this.panel1.Location = new System.Drawing.Point(0, 674);
 			this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(528, 41);
+			this.panel1.Size = new System.Drawing.Size(629, 41);
 			this.panel1.TabIndex = 0;
 			// 
 			// buttonAdd
@@ -407,7 +407,7 @@
 			this.buttonAdd.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonAdd.ForeColor = System.Drawing.Color.White;
 			this.buttonAdd.IsBackStageButton = false;
-			this.buttonAdd.Location = new System.Drawing.Point(223, 9);
+			this.buttonAdd.Location = new System.Drawing.Point(324, 9);
 			this.buttonAdd.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonAdd.Name = "buttonAdd";
 			this.buttonAdd.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -427,7 +427,7 @@
 			this.buttonCancel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
-			this.buttonCancel.Location = new System.Drawing.Point(429, 9);
+			this.buttonCancel.Location = new System.Drawing.Point(530, 9);
 			this.buttonCancel.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -446,7 +446,7 @@
 			this.buttonOk.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonOk.ForeColor = System.Drawing.Color.White;
 			this.buttonOk.IsBackStageButton = false;
-			this.buttonOk.Location = new System.Drawing.Point(326, 9);
+			this.buttonOk.Location = new System.Drawing.Point(427, 9);
 			this.buttonOk.Margin = new System.Windows.Forms.Padding(4, 16, 4, 5);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
@@ -461,7 +461,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderColor = System.Drawing.Color.Blue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			this.ClientSize = new System.Drawing.Size(528, 715);
+			this.ClientSize = new System.Drawing.Size(629, 715);
 			this.Controls.Add(this.panel4);
 			this.Font = new System.Drawing.Font("Segoe UI", 12F);
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
