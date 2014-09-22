@@ -3,23 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
+using SelectionMode = System.Windows.Forms.SelectionMode;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
 	public partial class FilterMultiplePersons : BaseDialogForm
 	{
-		private ArrayList _persons = new ArrayList();
+		private readonly ArrayList _persons = new ArrayList();
 		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
-		private List<String > _duplicateInputText;
-		private bool _textChangedRunning = false;
+		private readonly List<String > _duplicateInputText;
+		private bool _textChangedRunning;
 
 		public ArrayList  UserSelectedPerson 
 		{ 
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridListControlDefaultSearch.Grid.QueryCellInfo += Grid_QueryCellInfo;
 			gridListControlDefaultSearch.Grid.KeyDown += gridKeyDown;
 			gridListControlDefaultSearch.BorderStyle = BorderStyle.None;
+			gridListControlDefaultSearch.SelectionMode = SelectionMode.MultiExtended;
 		}
 
 		private void fillGridListControlDefaultSearch()
@@ -79,7 +80,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(5));
 
 				if (_persons.Count > 0)
+				{
+					gridListControlDefaultSearch.ClearSelected();
 					gridListControlDefaultSearch.SetSelected(0, true);
+				}
 
 			}
 
@@ -100,15 +104,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void gridKeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				if (gridListControlDefaultSearch.SelectedItem == null) return;
-				var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
+			if (e.KeyCode != Keys.Enter) return;
+			if (gridListControlDefaultSearch.SelectedItem == null) return;
 
-				if (person != null)
-				{
-					addPersonInResultGridFromDefaultSearch(person);
-				}
+			var selected = selectedPersons();
+				
+			foreach (var person in selected)
+			{
+				addPersonInResultGridFromDefaultSearch(person);	
 			}
 		}
 
@@ -229,11 +232,32 @@ namespace Teleopti.Ccc.Win.Scheduling
 		
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
-			if (gridListControlDefaultSearch.SelectedValue != null)
+			if (gridListControlDefaultSearch.SelectedItem == null) return;
+			var selected = selectedPersons();
+
+			foreach (var person in selected)
 			{
-				var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
-				addPersonInResultGridFromDefaultSearch(person);
+				addPersonInResultGridFromDefaultSearch(person);	
 			}
+		}
+
+		private IEnumerable<IPerson> selectedPersons()
+		{
+			var selectedPersons = new List<IPerson>();
+			var rangeList = GridHelper.GetGridSelectedRanges(gridListControlDefaultSearch.Grid, true);
+
+			foreach (GridRangeInfo gridRangeInfo in rangeList)
+			{
+				for (var row = gridRangeInfo.Top - 1; row <= gridRangeInfo.Bottom - 1; row++)
+				{
+					if(!gridRangeInfo.IsRows) continue;
+					if(!(gridListControlDefaultSearch.Items.Count >= row)) continue;
+					var item = (FilterMultiplePersonGridControlItem)gridListControlDefaultSearch.Items[row];
+					selectedPersons.Add(item.Person);
+				}	
+			}
+
+			return selectedPersons;
 		}
 
 		private void buttonAdvParse_Click(object sender, EventArgs e)
@@ -310,13 +334,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if (e.KeyChar == '\r')
+			if (e.KeyChar != '\r') return;
+			if (gridListControlDefaultSearch.SelectedItem == null) return;
+			var selected = selectedPersons();
+
+			foreach (var person in selected)
 			{
-				if (gridListControlDefaultSearch.SelectedItem != null)
-				{
-					var person = (IPerson)gridListControlDefaultSearch.SelectedValue;
-					addPersonInResultGridFromDefaultSearch(person);
-				}
+				addPersonInResultGridFromDefaultSearch(person);
 			}
 		}
 
