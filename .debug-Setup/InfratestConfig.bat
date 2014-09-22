@@ -13,11 +13,11 @@ if "%configuration%"=="" (
 set configuration=Debug
 )
 
-if "%1" == "" (
+if "%CCC7DB%" == "" (
 SET CCC7DB=Infratest_CCC7
 )
 
-if "%2" == "" (
+if "%AnalyticsDB%" == "" (
 SET AnalyticsDB=Infratest_Analytics
 )
 
