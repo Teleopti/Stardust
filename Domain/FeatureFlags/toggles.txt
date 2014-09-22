@@ -43,3 +43,4 @@ Scheduler_AdvanceFilter_29555 = RC
 Messaging_HttpSender_29205 = false
 Scheduler_OccupancyESL_11724 = RC
 Scheduler_SudentAvailabilityForFixedStaff_30393 = RC
+Settings_SetAgentDescription_23257 = RC
