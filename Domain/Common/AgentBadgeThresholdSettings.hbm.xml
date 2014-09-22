@@ -55,6 +55,18 @@
 		<property name="GoldToSilverBadgeRate"
 							type="int"
 							not-null="true" />
+
+		<property name="AnsweredCallsBadgeTypeSelected"
+							type="bool"
+							not-null="true" />
+
+		<property name="AHTBadgeTypeSelected"
+							type="bool"
+							not-null="true" />
+
+		<property name="AdherenceBadgeTypeSelected"
+							type="bool"
+							not-null="true" />
 		
 		<filter name="businessUnitFilter"
             condition=":businessUnitParameter = BusinessUnit" />

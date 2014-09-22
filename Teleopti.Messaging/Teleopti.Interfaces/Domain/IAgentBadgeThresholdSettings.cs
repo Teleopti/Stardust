@@ -10,5 +10,8 @@ namespace Teleopti.Interfaces.Domain
 		Percent AdherenceThreshold { get; set; }
 		int SilverToBronzeBadgeRate { get; set; }
 		int GoldToSilverBadgeRate { get; set; }
+		bool AnsweredCallsBadgeTypeSelected { get; set; }
+		bool AHTBadgeTypeSelected { get; set; }
+		bool AdherenceBadgeTypeSelected { get; set; }
 	}
 }
