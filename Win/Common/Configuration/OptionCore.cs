@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913))
 			{
-				allSupportedPages.Add(new BadgeThresholdSettings());
+				allSupportedPages.Add(new BadgeThresholdSettings(_toggleManager));
 			}
 
 			if (!_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))

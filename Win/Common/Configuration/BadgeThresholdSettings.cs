@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,9 +17,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private IUnitOfWork _unitOfWork;
 		private AgentBadgeSettingsRepository _repository;
+		private readonly IToggleManager _toggleManager;
 
-		public BadgeThresholdSettings()
+		public BadgeThresholdSettings(IToggleManager toggleManager)
 		{
+			_toggleManager = toggleManager;
 			InitializeComponent();
 		}
 
@@ -25,6 +29,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			setColors();
 			SetTexts();
+			if (!_toggleManager.IsEnabled(Toggles.Portal_ResetBadges_30544))
+			{
+				reset.Hide();
+			}
 		}
 
 		private void setColors()

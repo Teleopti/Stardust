@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.reset = new System.Windows.Forms.Button();
 			this.tableLayoutPanelBody.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenToSilverBadgeRate)).BeginInit();
@@ -92,10 +93,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.Controls.Add(this.checkAnsweredCallsBadgeType, 2, 3);
 			this.tableLayoutPanelBody.Controls.Add(this.checkAHTBadgeType, 2, 4);
 			this.tableLayoutPanelBody.Controls.Add(this.checkAdherenceBadgeType, 2, 5);
+			this.tableLayoutPanelBody.Controls.Add(this.reset, 0, 10);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-			this.tableLayoutPanelBody.RowCount = 10;
+			this.tableLayoutPanelBody.RowCount = 12;
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13F));
@@ -106,6 +108,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
 			this.tableLayoutPanelBody.Size = new System.Drawing.Size(609, 529);
 			this.tableLayoutPanelBody.TabIndex = 3;
 			// 
@@ -249,7 +253,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 445;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 704;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -442,6 +446,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonDeleteContract.TabIndex = 7;
 			this.buttonDeleteContract.TabStop = false;
 			// 
+			// reset
+			// 
+			this.tableLayoutPanelBody.SetColumnSpan(this.reset, 3);
+			this.reset.Location = new System.Drawing.Point(3, 274);
+			this.reset.Name = "reset";
+			this.reset.Size = new System.Drawing.Size(75, 23);
+			this.reset.TabIndex = 24;
+			this.reset.Text = "xxReset";
+			this.reset.UseVisualStyleBackColor = true;
+			// 
 			// BadgeThresholdSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -497,5 +511,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private System.Windows.Forms.CheckBox checkAnsweredCallsBadgeType;
 		private System.Windows.Forms.CheckBox checkAHTBadgeType;
 		private System.Windows.Forms.CheckBox checkAdherenceBadgeType;
+		private System.Windows.Forms.Button reset;
 	}
 }
