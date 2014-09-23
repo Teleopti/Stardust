@@ -252,5 +252,9 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="absence">The absence.</param>
         void RemoveAllowedPreferenceAbsence(IAbsence absence);
+
+	    FairnessType GetFairnessType(bool Scheduler_HidePointsFairnessSystem_28317);
+
+	    void SetFairnessType(FairnessType fairnessType);
     }
 }

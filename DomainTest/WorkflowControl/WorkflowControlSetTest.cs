@@ -329,5 +329,23 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 			}
 		}
+
+	    [Test]
+	    public void ShouldReturnCorrectFairnessTypeWhenScheduler_HidePointsFairnessSystem_28317IsTrue()
+	    {
+			_target.SetFairnessType(FairnessType.FairnessPoints);
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true));
+			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true));
+	    }
+
+		[Test]
+		public void ShouldReturnCorrectFairnessTypeWhenScheduler_HidePointsFairnessSystem_28317IsFalse()
+		{
+			_target.SetFairnessType(FairnessType.FairnessPoints);
+			Assert.AreEqual(FairnessType.FairnessPoints, _target.GetFairnessType(false));
+			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
+		}
     }
 }

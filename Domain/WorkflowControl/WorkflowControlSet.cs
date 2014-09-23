@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private MinMax<int> _shiftTradeOpenPeriodDaysForward;
         private IActivity _allowedPreferenceActivity;
         private bool _useShiftCategoryFairness;
+	    private int fairnessTypeAsInt;
 
 	    public WorkflowControlSet()
         {
@@ -55,7 +56,21 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             _name = description;
         }
 
-        public virtual string Name { 
+		public virtual FairnessType GetFairnessType(bool Scheduler_HidePointsFairnessSystem_28317)
+	    {
+			if (Scheduler_HidePointsFairnessSystem_28317 && fairnessTypeAsInt == 0)
+			{
+				return FairnessType.EqualNumberOfShiftCategory;
+			}
+			return (FairnessType)fairnessTypeAsInt;
+	    }
+
+		public virtual void SetFairnessType(FairnessType fairnessType)
+		{
+			fairnessTypeAsInt = (int) fairnessType;
+		}
+
+	    public virtual string Name { 
             get { return _name; } 
             set { _name = value; } 
         }

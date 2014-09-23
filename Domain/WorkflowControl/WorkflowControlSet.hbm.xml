@@ -79,6 +79,12 @@
               not-null="true" />
     <property name="WriteProtection"></property>
     <property name="ShiftTradeTargetTimeFlexibility"></property>
+
+    <property name="fairnessTypeAsInt"
+              access="field"
+              column="FairnessType"
+              type="int"
+              not-null="true"/>
     
     <set name="MustMatchSkills"
          table="WorkflowControlSetSkills">
