@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Win.Forecasting
 
         private static void jobHistoryView(ContainerBuilder builder)
         {
-			builder.RegisterType<JobResultRepository>().As<IJobResultRepository>();
             builder.RegisterType<JobResultProvider>().As<IJobResultProvider>();
             builder.Register(c => new PagingDetail {Take = 20});
             builder.RegisterType<JobHistoryDetailedView>()
