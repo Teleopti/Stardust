@@ -19597,6 +19597,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Badges.
+        /// </summary>
+        public static string ResetBadges {
+            get {
+                return ResourceManager.GetString("ResetBadges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will remove all badges for all agents! Do you want to continue?.
+        /// </summary>
+        public static string ResetBadgesConfirm {
+            get {
+                return ResourceManager.GetString("ResetBadgesConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset Layout.
         /// </summary>
         public static string ResetLayout {

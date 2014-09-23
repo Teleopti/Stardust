@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -170,6 +171,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				numericUpDownSilverToBronzeBadgeRate.Enabled = false;
 				numericUpDownGoldenToSilverBadgeRate.Enabled = false;
+			}
+		}
+
+		private void reset_Click(object sender, EventArgs e)
+		{
+			DialogResult result = MessageBox.Show(Resources.ResetBadgesConfirm, Resources.ResetBadges, MessageBoxButtons.OKCancel);
+			if (result == DialogResult.OK)
+			{
+				//reset all badgess
 			}
 		}
 	}

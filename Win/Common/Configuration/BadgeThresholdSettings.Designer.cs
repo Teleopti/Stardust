@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkAnsweredCallsBadgeType = new System.Windows.Forms.CheckBox();
 			this.checkAHTBadgeType = new System.Windows.Forms.CheckBox();
 			this.checkAdherenceBadgeType = new System.Windows.Forms.CheckBox();
+			this.reset = new System.Windows.Forms.Button();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.reset = new System.Windows.Forms.Button();
 			this.tableLayoutPanelBody.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldenToSilverBadgeRate)).BeginInit();
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
 			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxThresholdForAdherence.TabIndex = 4;
-			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
+			this.doubleTextBoxThresholdForAdherence.Text = "0,00";
 			// 
 			// labelOneGoldBadgeEqualsSilverBadgeCount
 			// 
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 704;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1116;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -356,6 +356,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkAdherenceBadgeType.UseVisualStyleBackColor = true;
 			this.checkAdherenceBadgeType.CheckedChanged += new System.EventHandler(this.checkAdherenceBadgeType_CheckedChanged);
 			// 
+			// reset
+			// 
+			this.tableLayoutPanelBody.SetColumnSpan(this.reset, 3);
+			this.reset.Location = new System.Drawing.Point(3, 274);
+			this.reset.Name = "reset";
+			this.reset.Size = new System.Drawing.Size(104, 23);
+			this.reset.TabIndex = 24;
+			this.reset.Text = "xxResetBadges";
+			this.reset.UseVisualStyleBackColor = true;
+			this.reset.Click += new System.EventHandler(this.reset_Click);
+			// 
 			// gradientPanelHeader
 			// 
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -445,16 +456,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonDeleteContract.Size = new System.Drawing.Size(24, 25);
 			this.buttonDeleteContract.TabIndex = 7;
 			this.buttonDeleteContract.TabStop = false;
-			// 
-			// reset
-			// 
-			this.tableLayoutPanelBody.SetColumnSpan(this.reset, 3);
-			this.reset.Location = new System.Drawing.Point(3, 274);
-			this.reset.Name = "reset";
-			this.reset.Size = new System.Drawing.Size(75, 23);
-			this.reset.TabIndex = 24;
-			this.reset.Text = "xxReset";
-			this.reset.UseVisualStyleBackColor = true;
 			// 
 			// BadgeThresholdSettings
 			// 

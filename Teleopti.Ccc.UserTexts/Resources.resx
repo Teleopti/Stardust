@@ -12330,4 +12330,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Single</value>
     <comment>One item</comment>
   </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Reset Badges</value>
+    <comment>use for admin client system setting agent badge, text on reset button</comment>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>This will remove all badges for all agents! Do you want to continue?</value>
+    <comment>use for confirm reset badges button clicking in admin client system setting agent badge</comment>
+  </data>
 </root>
