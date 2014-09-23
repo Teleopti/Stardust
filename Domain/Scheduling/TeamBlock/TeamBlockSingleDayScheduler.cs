@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
+		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
@@ -72,6 +73,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (_cancelMe)
 					return false;
 
+				if (_progressEvent != null && _progressEvent.UserCancel)
+				{
+					_progressEvent = null;
+					return false;
+				}
+					
 				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> {person}, day, teamBlockSingleDayInfo))
 					continue;
 
@@ -115,6 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				_teamScheduling.DayScheduled -= OnDayScheduled;
 			}
 
+			_progressEvent = null;
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
 		}
 
@@ -140,6 +148,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				temp(this, e);
 			}
 			_cancelMe = e.Cancel;
+
+			if (_progressEvent != null && _progressEvent.UserCancel)
+				return;
+
+			_progressEvent = e;
 		}
 
 		private bool isTeamBlockScheduledForSelectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day,
@@ -147,6 +160,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day,
 				selectedTeamMembers);
+		}
+
+		public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			OnDayScheduled(sender, e);
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	[TestFixture]
 	public class TeamBlockSingleDaySchedulerTest
 	{
-		private ITeamBlockSingleDayScheduler _target;
+		private TeamBlockSingleDayScheduler _target;
 		private ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private IWorkShiftFilterService _workShiftFilterService;
@@ -332,6 +332,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
+		[Test]
+		public void ShouldUserCancel()
+		{
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
+			args.UserCancel = true;
+			
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,_dateOnly,_selectedPersons)).Return(false);	
+			}
 
+			using (_mocks.Playback())
+			{
+				_target.RaiseEventForTest(this, args);
+				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction(), true);
+				Assert.That(result, Is.False);	
+			}	
+		}
 	}
 }
