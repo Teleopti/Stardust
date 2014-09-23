@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
 	public interface IBackToLegalShiftService
 	{
-		void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
+		IWorkShiftFinderResultHolder Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled);
 
@@ -25,28 +26,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly IBackToLegalShiftWorker _backToLegalShiftWorker;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private readonly ILegalShiftDecider _legalShiftDecider;
+		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private bool _cancelMe;
 
-		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker, IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider)
+		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker, IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider, IWorkShiftFinderResultHolder workShiftFinderResultHolder)
 		{
 			_backToLegalShiftWorker = backToLegalShiftWorker;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
 			_legalShiftDecider = legalShiftDecider;
+			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 		}
 
 		public event EventHandler<BackToLegalShiftArgs> Progress;
 
-		public void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
+		public IWorkShiftFinderResultHolder Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled)
 		{
 			_cancelMe = false;
 			//single block, single team
 			int processedBlocks = 0;
+			_workShiftFinderResultHolder.Clear();
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
 				if (_cancelMe)
-					return;
+					return _workShiftFinderResultHolder;
 
 				isSingleTeamSingleDay(selectedTeamBlock);
 
@@ -62,11 +66,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					continue;
 				}
 
-				_backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
+				var success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder, isMaxSeatToggleEnabled);
+
+				if (!success)
+				{
+					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
+					_workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult> { workShiftFinderResult }, DateTime.Now);
+				}
 				
 				OnProgress(selectedTeamBlocks.Count, processedBlocks);
 			}
+
+			return _workShiftFinderResultHolder;
 		}
 
 		protected void OnProgress(int totalBlocks, int processedBlocks )
