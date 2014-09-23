@@ -8,7 +8,7 @@ Feature: My Profile
 		be able to change language
 		be able to change my password
 
-
+@ignore
 Scenario: See my profile
 	Given I am an agent
 	When I view my regional settings
