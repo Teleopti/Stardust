@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		public void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
-        {
+		{
             _absencePreferenceScheduler.DayScheduled += dayScheduled;
             _absencePreferenceScheduler.AddPreferredAbsence(allMatrixList, schedulingOptions);
             _absencePreferenceScheduler.DayScheduled -= dayScheduled;
@@ -47,7 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                 return;
 
 			if (_progressEvent != null && _progressEvent.UserCancel)
+			{
+				_progressEvent = null;
 				return;
+			}
 
 			_teamDayOffScheduler.DayScheduled += dayScheduled;
 			_teamDayOffScheduler.DayOffScheduling(allMatrixList, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
@@ -56,8 +59,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                 return;
 
 			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
+			{
+				_progressEvent = null;
+				return;	
+			}
+				
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
 			foreach (var scheduleMatrixPro in allMatrixList)
 			{

@@ -52,7 +52,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    {
 		    _teamBlockScheduler.DayScheduled += dayScheduled;
 		    if (schedulePartModifyAndRollbackService == null)
-			    return false;
+		    {
+				_progressEvent = null;
+			    return false;    
+		    }
+
 		    var dateOnlySkipList = new List<DateOnly>();
 		    foreach (var datePointer in selectedPeriod.DayCollection())
 		    {
@@ -73,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			                                           resourceCalculateDelayer, schedulingResultStateHolder);
 		    }
 
+		    _progressEvent = null;
 		    _teamBlockScheduler.DayScheduled -= dayScheduled;
 		    return true;
 	    }

@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                             ISchedulingOptions schedulingOptions,
 		                             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
+			_progressEvent = null;
 			var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
 			var matrixDataForSelectedPersons = new List<IMatrixData>();
 			foreach (var matrixData in matrixDataList)

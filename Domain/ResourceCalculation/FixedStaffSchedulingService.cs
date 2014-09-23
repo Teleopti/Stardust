@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService)
         {
         	var result = true;
+			_progressEvent = null;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(
 				_resourceOptimizationHelper, 
 				schedulingOptions.ResourceCalculateFrequency,

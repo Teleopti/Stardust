@@ -55,7 +55,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				return;
 
 			if (_progressEvent != null && _progressEvent.UserCancel)
+			{
+				_progressEvent = null;
 				return;
+			}
 
 			_dayOffScheduler.DayScheduled += dayScheduled;
 			_dayOffScheduler.DayOffScheduling(matrixList, allMatrixList, rollbackService, schedulingOptions);
@@ -64,8 +67,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				return;
 
 			if (_progressEvent != null && _progressEvent.UserCancel)
+			{
+				_progressEvent = null;
 				return;
-
+			}
+				
 			_missingDaysOffScheduler.DayScheduled += dayScheduled;
 			_missingDaysOffScheduler.Execute(matrixList, schedulingOptions, rollbackService);
 			_missingDaysOffScheduler.DayScheduled -= dayScheduled;

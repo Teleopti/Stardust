@@ -74,6 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions)
 		{
+			_progressEvent = null;
+
 			foreach (var person in selectedPersons)
 			{
 				var personMatrix = allPersonMatrixList.FirstOrDefault(s => s.Person == person);

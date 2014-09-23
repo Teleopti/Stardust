@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ResourceCalculateAllDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
 		{
+			_progressEvent = null;
 			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
 
 			var period = new DateOnlyPeriod(_stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), _stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
@@ -74,6 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ResourceCalculateMarkedDays(BackgroundWorker backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
+			_progressEvent = null;
 			if (!_stateHolder.DaysToRecalculate.Any()) return;
 			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
 

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
         
         public void Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
+	        _progressEvent = null;
             var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
             IList<IMatrixData> workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
             foreach (var workingItem in workingList)

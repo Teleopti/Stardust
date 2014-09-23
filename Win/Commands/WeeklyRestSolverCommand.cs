@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Commands
 			if (!_toggleManager.IsEnabled(Toggles.Scheduler_WeeklyRestRuleSolver_27108))
 		        return;
 
+		    _progressEvent = null;
             _backgroundWorker = backgroundWorker;
             var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);

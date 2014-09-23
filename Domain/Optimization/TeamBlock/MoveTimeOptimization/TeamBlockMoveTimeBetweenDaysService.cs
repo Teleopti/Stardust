@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
+			_progressEvent = null;
 			var blocksToWorkWith = _constructTeamBlock.Construct(matrixList, selectedPeriod, selectedPersons,
 				optimizerPreferences.Extra.BlockTypeValue,
 				optimizerPreferences.Extra.TeamGroupPage);

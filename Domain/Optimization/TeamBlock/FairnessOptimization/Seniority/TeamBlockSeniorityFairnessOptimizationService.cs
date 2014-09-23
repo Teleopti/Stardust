@@ -56,6 +56,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	        var loop = 1;
 
 			_cancelMe = false;
+	        _progressEvent = null;
+
 	        while (!_cancelMe)
 	        {
 				if (_progressEvent != null && _progressEvent.UserCancel) break;

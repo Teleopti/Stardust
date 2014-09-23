@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                                 IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences)
         {
             _cancelMe = false;
+	        _progressEvent = null;
 
             var teamBlocksToWorkWith = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
             teamBlocksToWorkWith = stepBFilterOutUnwantedBlocks(teamBlocksToWorkWith, selectedPersons, selectedPeriod, scheduleDictionary);

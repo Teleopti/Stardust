@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
         {
+	        _progressEvent = null;
             if(matrixList == null) throw new ArgumentNullException("matrixList");
 
             foreach (var scheduleMatrixPro in matrixList)
