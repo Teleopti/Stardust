@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -15,6 +16,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled);
+
+		event EventHandler<BackToLegalShiftArgs> Progress;
 	}
 
 	public class BackToLegalShiftService : IBackToLegalShiftService
@@ -22,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly IBackToLegalShiftWorker _backToLegalShiftWorker;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private readonly ILegalShiftDecider _legalShiftDecider;
+		private bool _cancelMe;
 
 		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker, IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider)
 		{
@@ -30,13 +34,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			_legalShiftDecider = legalShiftDecider;
 		}
 
+		public event EventHandler<BackToLegalShiftArgs> Progress;
+
 		public void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled)
 		{
+			_cancelMe = false;
 			//single block, single team
+			int processedBlocks = 0;
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
+				if (_cancelMe)
+					return;
+
 				isSingleTeamSingleDay(selectedTeamBlock);
 
 				var person = selectedTeamBlock.TeamInfo.GroupMembers.First();
@@ -44,11 +55,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 				var ruleSetBag = person.Period(date).RuleSetBag;
 				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder);
+				processedBlocks++;
 				if (_legalShiftDecider.IsLegalShift(date, timeZoneInfo, ruleSetBag, roleModel))
+				{
+					OnProgress(selectedTeamBlocks.Count, processedBlocks);
 					continue;
+				}
 
 				_backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder, isMaxSeatToggleEnabled);
+				
+				OnProgress(selectedTeamBlocks.Count, processedBlocks);
+			}
+		}
+
+		protected void OnProgress(int totalBlocks, int processedBlocks )
+		{
+			var tmp = Progress;
+			if (tmp != null)
+			{
+				var args = new BackToLegalShiftArgs {TotalBlocks = totalBlocks, ProcessedBlocks = processedBlocks};
+				tmp(this, args);
+				_cancelMe = args.Cancel;
 			}
 		}
 
@@ -57,5 +85,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			if(teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount()>1)
 				throw new ArgumentException("Only single team, single block allowed");
 		}
+	}
+
+	public class BackToLegalShiftArgs : CancelEventArgs
+	{
+		public int TotalBlocks { get; set; }
+		public int ProcessedBlocks { get; set; }
 	}
 }

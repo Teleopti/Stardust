@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
 
 
@@ -134,6 +132,41 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
 					_rollBackService, _resourceCalculateDelayer, true);
 			}
+		}
+
+		[Test]
+		public void ShouldCancel()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
+				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
+
+				//the loop
+				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
+				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
+
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, new DateOnly(), _schedulingResultStateHolder))
+					.Return(_shiftProjectionCache);
+				Expect.Call(_legalShiftDecider.IsLegalShift(new DateOnly(), _person.PermissionInformation.DefaultTimeZone(),
+					_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache)).Return(true);
+			}
+			using (_mocks.Playback())
+			{
+				_target.Progress+=_target_Progress;
+				_target.Execute(new List<ITeamBlockInfo> { _teamBlock, _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
+					_rollBackService, _resourceCalculateDelayer, true);
+				_target.Progress -= _target_Progress;
+			}
+		}
+
+		private void _target_Progress(object sender, BackToLegalShiftArgs e)
+		{
+			Assert.AreEqual(2, e.TotalBlocks);
+			Assert.AreEqual(1, e.ProcessedBlocks);
+			e.Cancel = true;
 		}
 
 	}
