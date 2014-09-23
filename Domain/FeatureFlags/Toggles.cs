@@ -36,6 +36,7 @@
 		RTA_ViewAgentsForMultipleTeams_28967,
 
 		MyTimeWeb_AgentBadge_28913,
+		Portal_ResetBadges_30544,
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 
