@@ -81,6 +81,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.True);
 			}
 		}
+
+		[Test]
+		public void ShouldUserCancel()
+		{
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
+			args.UserCancel = true;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction(), true)).Return(_shift);
+				Expect.Call(() => _singleDayScheduler.DayScheduled += null).IgnoreArguments();
+				Expect.Call( _singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly,_shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,_schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction, true)).Return(true);
+				Expect.Call(() => _singleDayScheduler.Raise(x => x.DayScheduled += _target.RaiseEventForTest, this, args));
+				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions,_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective);
+				Assert.That(result, Is.False);	
+			}
+		}
+
 		
 		[Test]
 		public void ShouldNotifySubscribersWhenScheduleFailed()
@@ -106,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			if (e is SchedulingServiceFailedEventArgs)
 				_isScheduleFailed = true;
-		}
-		}
-
+		}	
+	}
 }
