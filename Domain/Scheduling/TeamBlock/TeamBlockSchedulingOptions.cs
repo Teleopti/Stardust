@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool IsBlockSchedulingWithSameShift(ISchedulingOptions schedulingOptions);
 		bool IsBlockSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions);
 		bool IsBlockSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions);
+		bool IsBlockSchedulingWithSameEndTime(ISchedulingOptions schedulingOptions);
 		bool IsTeamSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions);
 		bool IsTeamSchedulingWithSameEndTime(ISchedulingOptions schedulingOptions);
 		bool IsTeamSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions);
@@ -58,6 +59,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			return IsBlockScheduling(schedulingOptions) &&
 				   schedulingOptions.BlockSameStartTime;
+		}
+
+		public bool IsBlockSchedulingWithSameEndTime(ISchedulingOptions schedulingOptions)
+		{
+			return IsBlockScheduling(schedulingOptions) &&
+				   schedulingOptions.BlockSameEndTime;
 		}
 
 		public bool IsTeamSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions)

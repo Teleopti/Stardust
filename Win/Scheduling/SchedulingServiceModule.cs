@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -219,6 +220,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerEqualNumberOfCategoryFairnessService(builder);
 	        registerWeeklyRestSolverClasses(builder);
 	        registerMoveTimeOptimizationClasses(builder);
+	        registerBackToLegalShiftClasses(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
@@ -476,30 +478,38 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
 	    {
 		    builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
-          builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-          builder.RegisterType<DayOffToTimeSpanExtractor>().As<IDayOffToTimeSpanExtractor>();
-          builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
-          builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
-          builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
-          builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
-          builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
+		    builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
+		    builder.RegisterType<DayOffToTimeSpanExtractor>().As<IDayOffToTimeSpanExtractor>();
+		    builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
+		    builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
+		    builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
+		    builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
+		    builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
 		    builder.RegisterType<IdentifyDayOffWithHighestSpan>();
-			 builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
-			 builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
-			 builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
-			 builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
-			 builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-			 builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
-          builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
-          builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
-          builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
-            builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
-             builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
-			builder.RegisterType<PersonWeekVoilatingWeeklyRestSpecification>().As<IPersonWeekVoilatingWeeklyRestSpecification>();
-			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
+		    builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
+		    builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
+		    builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
+		    builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
+		    builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
+		    builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
+		    builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
+		    builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
+		    builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
+		    builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
+		    builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
+		    builder.RegisterType<PersonWeekVoilatingWeeklyRestSpecification>()
+			    .As<IPersonWeekVoilatingWeeklyRestSpecification>();
+		    builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
 	    }
-			
-			
+
+	    private static void registerBackToLegalShiftClasses(ContainerBuilder builder)
+	    {
+			builder.RegisterType<BackToLegalShiftWorker>().As<IBackToLegalShiftWorker>();
+			builder.RegisterType<LegalShiftDecider>().As<ILegalShiftDecider>();
+			builder.RegisterType<BackToLegalShiftService>().As<IBackToLegalShiftService>();
+			builder.RegisterType<BackToLegalShiftCommand>().As<BackToLegalShiftCommand>();
+			//BackToLegalShiftCommand
+	    }
 	    
     }
 }
