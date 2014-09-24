@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Rta.WebService
 				    stateCode, logOutStateCode, messageId);
 			    stateCode = logOutStateCode;
 		    }
-
+			timestamp = timestamp == DateTime.MinValue ? new DateTime(1900, 1, 1) : timestamp;
 		    //The DateTimeKind.Utc is not set automatically when deserialising from soap message
 		    timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
 		    if (timestamp > DateTime.UtcNow.AddMinutes(59))
