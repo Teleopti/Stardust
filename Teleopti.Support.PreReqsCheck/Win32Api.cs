@@ -66,6 +66,12 @@ namespace CheckPreRequisites
       public const ushort PROCESSOR_ARCHITECTURE_UNKNOWN = 0xFFFF;
 
       public const int SM_SERVERR2 = 89;
+		const int OS_ANYSERVER = 29;
+
+		[DllImport("shlwapi.dll", SetLastError = true, EntryPoint = "#437")]
+		static extern bool IsOS(int os);
+
+		public static bool IsWindowsServer = IsOS(OS_ANYSERVER);
 
       [StructLayout(LayoutKind.Sequential)]
       public struct OSVERSIONINFOEX

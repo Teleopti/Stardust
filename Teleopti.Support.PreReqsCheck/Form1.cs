@@ -76,6 +76,11 @@ namespace CheckPreRequisites
 
 		#region PrintStuff
 
+		public void printInfo(string info)
+		{
+			labelInfo.Text = info;
+		}
+
 		public void printNewFeature(string checkWhat, string feature, string minValue, string featureValue)
 		{
 			listView1.Items.Add(checkWhat);
@@ -84,7 +89,7 @@ namespace CheckPreRequisites
 			listView1.Items[listView1.Items.Count - 1].SubItems.Add(minValue);
 		}
 
-		public void printFeatureStatus(bool featureStatus)
+		public void printFeatureStatus(bool featureStatus, string toolTip = "")
 		{
 			if (featureStatus)
 			{
@@ -96,6 +101,7 @@ namespace CheckPreRequisites
 				listView1.Items[listView1.Items.Count - 1].SubItems.Add("not OK!");
 				listView1.Items[listView1.Items.Count - 1].ForeColor = Color.Red;
 			}
+			listView1.Items[listView1.Items.Count - 1].ToolTipText = toolTip;
 		}
 
 		public void printFeatureStatus(string status)

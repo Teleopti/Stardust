@@ -1,0 +1,25 @@
+#-----------------
+#note: The orders of the features matters!
+#-----------------
+NetFx3,Microsoft .NET Framework 3.5.1
+IIS-WebServerRole,Internet Information Services
+
+IIS-Security,Security
+IIS-BasicAuthentication,Basic Authentication
+IIS-WindowsAuthentication,Windows Authentication
+
+IIS-ApplicationDevelopment,Application Development Features
+IIS-NetFxExtensibility,.NET Extensibility
+IIS-ISAPIExtensions,ISAPI Extensions
+IIS-ISAPIFilter,ISAPI Filters
+IIS-ASPNET,ASP.NET
+	
+#Legacy III6 - needed for Analyzer install
+IIS-IIS6ManagementCompatibility,IIS 6 Management Compatibility
+IIS-Metabase,IIS Metabase and IIS 6 configuration compatibility
+IIS-WMICompatibility,IIS 6 WMI Compatibility
+IIS-LegacyScripts,IIS 6 Scripting Tools
+
+WAS-WindowsActivationService,Windows Process Activation Service
+WAS-ProcessModel,Process Model
+WAS-ConfigurationAPI,Configuration APIs
