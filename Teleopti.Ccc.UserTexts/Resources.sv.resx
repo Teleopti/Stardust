@@ -11726,4 +11726,34 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="AdvancedFilter" xml:space="preserve">
     <value>Avancerat filter</value>
   </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filtrera fram flera personer</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Filtrerat resultat</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Möjliga matchningar</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Visa medalj</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Förnamn] [Efternamn]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Efternamn] [Förnamn]</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Agentbeskrivning</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Återställ medaljer</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Detta kommer att ta bort alla medaljer för alla agenter! Vill du fortsätta?</value>
+  </data>
+  <data name="BadgeTypeChecked" xml:space="preserve">
+    <value>Använd</value>
+  </data>
 </root>

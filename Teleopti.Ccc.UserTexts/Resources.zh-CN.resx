@@ -6287,7 +6287,7 @@ Periods</comment>
     <value>公平值</value>
   </data>
   <data name="FreeSlots" xml:space="preserve">
-    <value>自由位置</value>
+    <value>自由的时间</value>
   </data>
   <data name="SchedulePeriod" xml:space="preserve">
     <value>班表周期</value>
