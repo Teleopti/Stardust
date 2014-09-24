@@ -41,23 +41,24 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         void UpdateAfterMerge(IWorkflowControlSet updatedWorkflowControlSet);
         void AddSkillToMatchList(ISkill skill);
         void RemoveSkillFromMatchList(ISkill skill);
-        bool UseShiftCategoryFairness { get; set; }
+	    FairnessType GetFairnessType(bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111);
+		void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111);
         bool IsDirty { get; set; }
     }
 
     public class WorkflowControlSetModel : IWorkflowControlSetModel
     {
-        private static IList<AbsenceRequestPeriodTypeModel> _defaultAbsenceRequestPeriodAdapters;
+	    private static IList<AbsenceRequestPeriodTypeModel> _defaultAbsenceRequestPeriodAdapters;
         private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
 
-        public WorkflowControlSetModel(IWorkflowControlSet domainEntity)
+		public WorkflowControlSetModel(IWorkflowControlSet domainEntity)
             : this(domainEntity, domainEntity.EntityClone())
         {
         }
 
         public WorkflowControlSetModel(IWorkflowControlSet originalDomainEntity, IWorkflowControlSet clonedDomainEntity)
         {
-            OriginalDomainEntity = originalDomainEntity;
+	        OriginalDomainEntity = originalDomainEntity;
             DomainEntity = clonedDomainEntity;
         }
 
@@ -347,15 +348,16 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             }
         }
 
-        public bool UseShiftCategoryFairness
+		public FairnessType GetFairnessType(bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111)
         {
-            get { return DomainEntity.UseShiftCategoryFairness; }
-            set
-            {
-                if (DomainEntity.UseShiftCategoryFairness == value) return;
-                DomainEntity.UseShiftCategoryFairness = value;
-                IsDirty = true;
-            }
+			return DomainEntity.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_11111);
+        }
+
+		public void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111)
+        {
+			if (DomainEntity.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_11111) == fairnessType) return;
+			DomainEntity.SetFairnessType(fairnessType);
+            IsDirty = true;
         }
 
         public bool IsDirty

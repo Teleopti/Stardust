@@ -26,12 +26,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly IFairnessAndMaxSeatCalculatorsManager _fairnessAndMaxSeatCalculatorsManager;
     	private readonly IShiftLengthDecider _shiftLengthDecider;
+	    private readonly bool _schedulerHidePointsFairnessSystem28317;
+	    private readonly bool _schedulerSeniority11111;
 
-    	public WorkShiftFinderService(ISchedulingResultStateHolder resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
+
+	    public WorkShiftFinderService(ISchedulingResultStateHolder resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
-            IShiftLengthDecider shiftLengthDecider)
+			IShiftLengthDecider shiftLengthDecider, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -42,6 +45,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _fairnessAndMaxSeatCalculatorsManager = fairnessAndMaxSeatCalculatorsManager;
         	_shiftLengthDecider = shiftLengthDecider;
+    		_schedulerHidePointsFairnessSystem28317 = scheduler_HidePointsFairnessSystem_28317;
+		    _schedulerSeniority11111 = scheduler_Seniority_11111;
         }
 
         private IScheduleDictionary ScheduleDictionary
@@ -114,7 +119,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
-            ISchedulingOptions schedulingOptions)
+            ISchedulingOptions schedulingOptions,
+			bool scheduler_HidePointsFairnessSystem_28317,
+			bool scheduler_Seniority_11111
+		)
         {
 			var person = currentSchedulePeriod.Person;
         	IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person,
@@ -135,12 +143,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     minValue = workShiftCalculationResultHolder.Value;
             }
 
-            bool useShiftCategoryFairness = false;
+            var fairnessType = FairnessType.EqualNumberOfShiftCategory;
             if (person.WorkflowControlSet != null)
-                useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
+				fairnessType = person.WorkflowControlSet.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_11111);
 
         	IEnumerable<IWorkShiftCalculationResultHolder> foundValues =
-        		_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues, maxValue, useShiftCategoryFairness,
+        		_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues, maxValue, fairnessType,
         		                                                             person, dateOnly, maxSeatSkillPeriods,
         		                                                             currentSchedulePeriod.AverageWorkTimePerDay,
         		                                                             schedulingOptions);
@@ -274,7 +282,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var nonBlendPeriods = _personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
                 var dataholder = _personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, virtualSchedulePeriod);
 
-				result = FindBestMainShift(dateOnly, _shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
+				result = FindBestMainShift(dateOnly, _shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions, _schedulerHidePointsFairnessSystem28317, _schedulerSeniority11111);
             }
 
             return result;

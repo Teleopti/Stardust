@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		/// Set what fairness system should be used for scheduling
 		/// </summary>
 		/// <param name="value"></param>
-    	void SetUseShiftCategoryFairness(bool value);
+    	void SetFairnessType(FairnessType value);
 
         /// <summary>
         /// Sets the student availability periods.

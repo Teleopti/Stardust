@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_mocks = new MockRepository();
 			_distributionForPersons = _mocks.StrictMock<IDistributionForPersons>();
 			_groupCreator = _mocks.StrictMock<IGroupCreator>();
-			_target = new DistributionReportService(_distributionForPersons, _groupCreator);
+			_target = new DistributionReportService(_distributionForPersons, _groupCreator, true, true);
 			_person1 = PersonFactory.CreatePerson();
 			_person2 = PersonFactory.CreatePerson();
 			_allPersons = new List<IPerson> {_person1, _person2};
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void ShouldCreateReport()
 		{
 			var wfcs = new WorkflowControlSet();
-			wfcs.UseShiftCategoryFairness = true;
+			wfcs.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			_person1.WorkflowControlSet = wfcs;
 			var category1 = new ShiftCategory("hej");
 			var distributionDic = new Dictionary<IShiftCategory, int>();

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
                                                                                _options.UserOptionMaxSeatsFeature)).Return(55);
             _mocks.ReplayAll();
-            var result = _target.RecalculateFoundValues(allValues, 3, true, _person, dateOnly,  maxSeatSkillPeriods,
+            var result = _target.RecalculateFoundValues(allValues, 3, FairnessType.EqualNumberOfShiftCategory, _person, dateOnly,  maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0].Value, Is.EqualTo(66));
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                _options.UserOptionMaxSeatsFeature)).Return(0);
 
             _mocks.ReplayAll();
-            var result = _target.RecalculateFoundValues(allValues, 3, true, _person, dateOnly,  maxSeatSkillPeriods,
+			var result = _target.RecalculateFoundValues(allValues, 3, FairnessType.EqualNumberOfShiftCategory, _person, dateOnly, maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
             Assert.That(result.Count, Is.EqualTo(2));
             Assert.That(result[0].Value, Is.EqualTo(11));
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
                                                                                _options.UserOptionMaxSeatsFeature)).Return(null);
             _mocks.ReplayAll();
-            var result = _target.RecalculateFoundValues(allValues, 3, true, _person, dateOnly, maxSeatSkillPeriods,
+			var result = _target.RecalculateFoundValues(allValues, 3, FairnessType.EqualNumberOfShiftCategory, _person, dateOnly, maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
             Assert.That(result.Count, Is.EqualTo(0));
            _mocks.VerifyAll();
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                _options.UserOptionMaxSeatsFeature)).Return(55);
               
             _mocks.ReplayAll();
-            var result = _target.RecalculateFoundValues(allValues, 3, false, _person, dateOnly,  maxSeatSkillPeriods,
+			var result = _target.RecalculateFoundValues(allValues, 3, FairnessType.FairnessPoints, _person, dateOnly, maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
             Assert.That(result.Count, Is.EqualTo(1));
             Assert.That(result[0].Value, Is.EqualTo(66));
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																			   _options.UserOptionMaxSeatsFeature)).Return(55);
 
 			_mocks.ReplayAll();
-			var result = _target.RecalculateFoundValues(allValues, 3, false, _person, dateOnly, maxSeatSkillPeriods,
+			var result = _target.RecalculateFoundValues(allValues, 3, FairnessType.EqualNumberOfShiftCategory, _person, dateOnly, maxSeatSkillPeriods,
 										   TimeSpan.FromHours(8), _options);
 			Assert.That(result.Count, Is.EqualTo(1));
 			Assert.That(result[0].Value, Is.EqualTo(56));
