@@ -59,8 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																 _effectiveRestrictionCreator, 
                                                                  _scheduleService,
 																 _daysOffSchedulingService,
-																 _resourceOptimizationHelper,
-																 new PersonSkillProvider());
+																 _resourceOptimizationHelper);
 			_mocks.VerifyAll();
 			_mocks.BackToRecordAll();
 		}
@@ -236,13 +235,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			int target;
 			//int current;
 			IList<IScheduleDay> current = new List<IScheduleDay>();
-			var person = new Person { Name = new Name("hej", "svejs") };
-			var virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), new DateOnly(2014,9,22));
+			var virtualPeriod = person.VirtualSchedulePeriod(new DateOnly(2014,9,22));
 
-			Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(virtualPeriod, out target, out current)).Return(false);
-			Expect.Call(virtualPeriod.Person).Return(person);
+			Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(virtualPeriod, out target, out current)).OutRef(target, current).Return(false);
+			//Expect.Call(virtualPeriod.Person).Return(person);
 			_mocks.ReplayAll();
-			var result = _schedulingService.HasCorrectNumberOfDaysOff(virtualPeriod, new DateOnly());
+			var result = _schedulingService.HasCorrectNumberOfDaysOff(virtualPeriod, new DateOnly(2014,9,22));
 			Assert.That(result, Is.False);
 			_mocks.VerifyAll();
 		}

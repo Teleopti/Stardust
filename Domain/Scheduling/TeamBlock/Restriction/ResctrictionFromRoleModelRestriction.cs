@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			}
 
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions) ||
-			    _teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions))
+			    _teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsBlockSchedulingWithSameEndTime(_schedulingOptions))
 			{
 				TimeSpan endTime = _shift.WorkShiftEndTime;
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);

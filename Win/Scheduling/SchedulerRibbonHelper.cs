@@ -5,8 +5,10 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -224,13 +226,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ToolStripDropDownItem schedulerToolStripButton, 
 			ScheduleViewBase scheduleView, 
 			SplitterManagerRestrictionView splitterManagerView, 
-			bool teamLeaderMode)
+			bool teamLeaderMode,
+			IToggleManager toggleManager)
 		{
 			bool enabled = 
 				isEnabledScheduleButton(scheduleView, splitterManagerView, teamLeaderMode);
 
 			schedulerToolStripButton.Enabled = enabled;
 			enableSubItems(schedulerToolStripButton, enabled);
+			if(!toggleManager.IsEnabled(Toggles.Scheduler_BackToLegalShift_29831))
+			{
+				var menuItems = schedulerToolStripButton.DropDownItems.Find("ToolStripMenuItemShiftBackToLegal", false);
+				menuItems[0].Visible = false;
+			}
 		}
 
 		private static bool isEnabledScheduleButton(

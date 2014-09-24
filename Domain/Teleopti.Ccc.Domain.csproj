@@ -580,6 +580,9 @@
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />
+    <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftService.cs" />
+    <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorker.cs" />
+    <Compile Include="Scheduling\BackToLegalShift\LegalShiftDecider.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailability.cs" />
     <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailability.cs" />

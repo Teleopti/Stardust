@@ -12337,6 +12337,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="ResetBadgesConfirm" xml:space="preserve">
     <value>This will remove all badges for all agents! Do you want to continue?</value>
     <comment>use for confirm reset badges button clicking in admin client system setting agent badge</comment>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Correct shifts not according to shift bag</value>
+    <comment>Correct shifts not according to shift bag</comment>
   </data>
   <data name="BadgeTypeChecked" xml:space="preserve">
     <value>Use</value>

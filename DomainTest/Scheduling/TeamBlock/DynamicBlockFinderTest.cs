@@ -22,9 +22,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IPerson _person;
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay;
+	    private IScheduleDayPro _scheduleDayPro;
 
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _range = _mock.StrictMock<IScheduleRange>();
             _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
+		    _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
         }
 
       
@@ -49,6 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mock.Record())
             {
 				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date)).Return(new List<IScheduleMatrixPro> { _matrixPro });
+				Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mock.Playback())
 			{
@@ -109,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         } 
 
         [Test]
-        public void ShouldReturnNullIfProvidedDateIsDayOff()
+		public void ShouldReturnNullIfProvidedDateIsDayOffAndBetweenDayOff()
         {
             using (_mock.Record())
             {
@@ -127,6 +132,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff, false));
             }
         }
+
+		[Test]
+		public void ShouldReturnNullIfProvidedDateIsDayOffAndSingleDay()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro });
+				Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SingleDay, false));
+			}
+		}
         
     }
 

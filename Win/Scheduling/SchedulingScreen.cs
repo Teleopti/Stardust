@@ -14,6 +14,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -1133,12 +1134,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemScheduleClick(object sender, EventArgs e)
 		{
-			scheduleSelected();
+			scheduleSelected(false);
 		}
 
 		private void toolStripMenuItemScheduleSelectedClick(object sender, EventArgs e)
 		{
-			scheduleSelected();
+			scheduleSelected(false);
 		}
 
 		private void toolStripButtonMainMenuSave_Click(object sender, EventArgs e)
@@ -2061,8 +2062,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			releaseUserInterface(canceled);
 			if (!_scheduleOptimizerHelper.WorkShiftFinderResultHolder.LastResultIsSuccessful)
 			{
-				if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot)
-					new SchedulingResult(_scheduleOptimizerHelper.WorkShiftFinderResultHolder, true, _schedulerState.CommonNameDescription).Show(this);
+				var workShiftFinderResultHolder = _scheduleOptimizerHelper.WorkShiftFinderResultHolder;
+				if (_optimizerOriginalPreferences.SchedulingOptions.ShowTroubleshot || workShiftFinderResultHolder.AlwaysShowTroubleshoot)
+					new SchedulingResult(workShiftFinderResultHolder, true, _schedulerState.CommonNameDescription).Show(this);
 				else
 					ViewBase.ShowInformationMessage(this, string.Format(CultureInfo.CurrentCulture, Resources.NoOfAgentDaysCouldNotBeScheduled,
 						_scheduleOptimizerHelper.WorkShiftFinderResultHolder.GetResults(false, true).Count)
@@ -2093,7 +2095,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 
 				SchedulerRibbonHelper.EnableScheduleButton(
-					toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode);
+					toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode, _container.Resolve<IToggleManager>());
 
 				disableButtonsIfTeamLeaderMode();
 				if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
@@ -2694,7 +2696,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_cutPasteHandlerFactory.For(_controlType).CutSpecial();
 		}
 
-		private void scheduleSelected()
+		private void scheduleSelected(bool backToLegalShift)
 		{
 			if (_backgroundWorkerScheduling.IsBusy) return;
 
@@ -2708,6 +2710,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				try
 				{
+					if(backToLegalShift)
+					{
+						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()){OptimizationMethod = OptimizationMethod.BackToLegalShift}, true);
+						return;
+					}
+
 					using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
 																			_schedulerState.CommonStateHolder.ActiveShiftCategories,
 																			 false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, 
@@ -2815,6 +2823,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerScheduling_ProgressChanged), sender, e);
 			else
 			{
+				if (e.UserState is BackToLegalShiftArgs)
+				{
+					var args = (BackToLegalShiftArgs) e.UserState;
+					if (_cancelButtonPressed)
+					{
+						args.Cancel = true;
+					}
+					_totalScheduled = args.ProcessedBlocks;
+					toolStripProgressBar1.Maximum = args.TotalBlocks;
+					schedulingProgress(null);
+				}
+				else
 				if (e.UserState is TeleoptiProgressChangeMessage)
 				{
 					var arg = (TeleoptiProgressChangeMessage)e.UserState;
@@ -2864,10 +2884,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
 		{
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
-			var scheduleCommand = _container.Resolve<ScheduleCommand>();
-			scheduleCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerScheduling, _schedulerState,
-			                        argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
-			                        _optimizationPreferences);
+			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalShift)
+			{
+				var command = _container.Resolve<BackToLegalShiftCommand>();
+				command.Execute(_backgroundWorkerScheduling, argument.SelectedScheduleDays, _schedulerState.SchedulingResultState);
+			}
+			else
+			{
+				var scheduleCommand = _container.Resolve<ScheduleCommand>();
+				scheduleCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerScheduling, _schedulerState,
+										argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+										_optimizationPreferences);
+			}
+			
 		}
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
@@ -6135,7 +6164,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void backStage1VisibleChanged(object sender, EventArgs e)
         {
 			if (!backStage1.Visible && RightToLeftLayout) _tmpTimer.Enabled = true;
-        }
+		}
+
+		private void toolStripMenuItemShiftBackToLegalClick(object sender, EventArgs e)
+		{
+			scheduleSelected(true);
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

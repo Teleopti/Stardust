@@ -21,6 +21,7 @@
 	internal enum OptimizationMethod
 	{
 		BackToLegalState,
-		Optimize
+		Optimize,
+		BackToLegalShift
 	}
 }

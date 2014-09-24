@@ -89,7 +89,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person,
 						roleModelShift);
 					if (restriction == null) return false;
-					restriction = restriction.Combine(shiftNudgeRestriction);
+					if (shiftNudgeRestriction != null)
+						restriction = restriction.Combine(shiftNudgeRestriction);
+
 					var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
 						schedulingOptions,
 						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
