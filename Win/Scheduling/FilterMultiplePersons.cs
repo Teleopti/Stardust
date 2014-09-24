@@ -267,6 +267,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void buttonAdvParse_Click(object sender, EventArgs e)
 		{
+			parse();
+		}
+
+		private void parse()
+		{
 			var inputText = textBoxCustomSearch.Text;
 			var currentDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 			var inputTextArray = inputText.Split(new[] { currentDelimiter.First() }, StringSplitOptions.RemoveEmptyEntries);
@@ -278,7 +283,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				string lowerSearchText = expected.ToLower(cultureInfo);
 				var personQuery = Search(lowerSearchText);
-				if (personQuery.Count == 1 )
+				if (personQuery.Count == 1)
 				{
 					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First());
 					if (_userSelectedPersonList.Contains(gridColumnPerson)) continue;
@@ -292,19 +297,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var tempPerson = new FilterMultiplePersonGridControlItem(person);
 						if (!_userSelectedPersonList.Contains(tempPerson))
 						{
-							_duplicateInputText.Add(expected );
+							_duplicateInputText.Add(expected);
 							break;
 						}
 					}
 					actualInput.Remove(expected);
 				}
-				
+
 			}
 			actualInput.AddRange(_duplicateInputText);
 			textBoxCustomSearch.Text = String.Join(currentDelimiter.First().ToString(), actualInput);
 			refurbishItemsInResultGrid(gridListControlResult);
-			refurbishItemsInResultGrid(gridListControlResult2);
-
+			refurbishItemsInResultGrid(gridListControlResult2);	
 		}
 
 		public HashSet<Guid> SelectedPersonGuids()
@@ -334,6 +338,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					.Replace("\n", currentDelimiter) 
 					.Replace("\t", currentDelimiter);
 			textBoxCustomSearch.Text = preprocessed;
+			if (textBoxCustomSearch.Text == currentDelimiter)
+				textBoxCustomSearch.Text = string.Empty;
 			_textChangedRunning = false;
 		}
 
@@ -361,6 +367,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				buttonAdd.Visible = true;
 			}
+		}
+
+		private void textBoxCustomSearchKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (e.KeyChar != '\r') return;
+			parse();
 		}
 	}
 
