@@ -725,8 +725,8 @@
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="$(SDKDocOutput)"
 			  DestinationFiles="$(MSIPath)\SdkDoc.chm"/>
-		<Copy SourceFiles="$(UnInstall)"
-			  DestinationFiles="$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(UnInstall)"
+			  DestinationFiles="@(UnInstall->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 			  
 		<Message Text="Copying files to $(DeployPath). Done"/>
 	</Target>

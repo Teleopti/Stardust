@@ -142,9 +142,6 @@ end
 
 
 --insert new and updated
---disable FK
-ALTER TABLE mart.fact_schedule NOCHECK CONSTRAINT ALL
-
 INSERT INTO mart.fact_schedule
 	(
 	shift_startdate_local_id,
@@ -186,9 +183,6 @@ INSERT INTO mart.fact_schedule
 	overtime_id
 	)
 SELECT * FROM [Stage].[v_stg_schedule_load]
-
---enable FK
-ALTER TABLE mart.fact_schedule CHECK CONSTRAINT ALL
 
 if @debug=1
 begin
