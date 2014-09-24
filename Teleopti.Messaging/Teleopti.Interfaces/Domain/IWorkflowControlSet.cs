@@ -234,7 +234,7 @@ namespace Teleopti.Interfaces.Domain
         /// <value>
         /// 	<c>true</c> if use shift category fairness; otherwise, <c>false</c>.
         /// </value>
-        bool UseShiftCategoryFairness { get; set; }
+        //bool UseShiftCategoryFairness { get; set; }
 
         /// <summary>
         /// Get absences allowed for preferences
@@ -253,7 +253,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="absence">The absence.</param>
         void RemoveAllowedPreferenceAbsence(IAbsence absence);
 
-	    FairnessType GetFairnessType(bool Scheduler_HidePointsFairnessSystem_28317);
+		FairnessType GetFairnessType(bool Scheduler_HidePointsFairnessSystem_28317, bool Scheduler_Seniority_11111);
 
 	    void SetFairnessType(FairnessType fairnessType);
     }

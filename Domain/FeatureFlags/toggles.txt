@@ -43,3 +43,4 @@ Scheduler_AdvanceFilter_29555 = RC
 Messaging_HttpSender_29205 = false
 Scheduler_OccupancyESL_11724 = false
 Scheduler_SudentAvailabilityForFixedStaff_30393 = false
+Scheduler_HidePointsFairnessSystem_28317 = true

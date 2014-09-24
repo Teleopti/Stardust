@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private TimeSpan _shiftTradeTargetTimeFlexibility;
         private MinMax<int> _shiftTradeOpenPeriodDaysForward;
         private IActivity _allowedPreferenceActivity;
-        private bool _useShiftCategoryFairness;
 	    private int fairnessTypeAsInt;
 
 	    public WorkflowControlSet()
@@ -56,16 +55,34 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             _name = description;
         }
 
-		public virtual FairnessType GetFairnessType(bool Scheduler_HidePointsFairnessSystem_28317)
+	    public virtual FairnessType GetFairnessType(bool Scheduler_HidePointsFairnessSystem_28317,
+		    bool Scheduler_Seniority_11111)
 	    {
-			if (Scheduler_HidePointsFairnessSystem_28317 && fairnessTypeAsInt == 0)
-			{
-				return FairnessType.EqualNumberOfShiftCategory;
-			}
-			return (FairnessType)fairnessTypeAsInt;
+		    if (Scheduler_HidePointsFairnessSystem_28317 && Scheduler_Seniority_11111)
+		    {
+			    if (fairnessTypeAsInt == 0)
+				    return FairnessType.EqualNumberOfShiftCategory;
+
+			    return (FairnessType) fairnessTypeAsInt;
+		    }
+		    if (Scheduler_HidePointsFairnessSystem_28317 && !Scheduler_Seniority_11111)
+		    {
+			    return FairnessType.EqualNumberOfShiftCategory;
+		    }
+		    if (!Scheduler_HidePointsFairnessSystem_28317 && Scheduler_Seniority_11111)
+		    {
+			    return (FairnessType) fairnessTypeAsInt;
+		    }
+
+
+		    if (fairnessTypeAsInt == 2)
+			    return FairnessType.EqualNumberOfShiftCategory;
+
+		    return (FairnessType) fairnessTypeAsInt;
+
 	    }
 
-		public virtual void SetFairnessType(FairnessType fairnessType)
+	    public virtual void SetFairnessType(FairnessType fairnessType)
 		{
 			fairnessTypeAsInt = (int) fairnessType;
 		}
@@ -285,12 +302,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             get { return _autoGrantShiftTradeRequest; }
             set { _autoGrantShiftTradeRequest = value; }
-        }
-
-        public virtual bool UseShiftCategoryFairness
-        {
-            get { return _useShiftCategoryFairness; }
-            set { _useShiftCategoryFairness = value; }
         }
 
         public virtual IEnumerable<IAbsence> AllowedPreferenceAbsences

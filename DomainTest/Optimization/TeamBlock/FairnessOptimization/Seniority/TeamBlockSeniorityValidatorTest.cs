@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_person = _mock.StrictMock<IPerson>();
 			_persons = new List<IPerson>{_person};
 			_workflowControlSet = _mock.StrictMock<IWorkflowControlSet>();
-			_target = new TeamBlockSeniorityValidator();
+			_target = new TeamBlockSeniorityValidator(true);
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(_persons);
 				Expect.Call(_person.WorkflowControlSet).Return(_workflowControlSet);
-				Expect.Call(_workflowControlSet.UseShiftCategoryFairness).Return(false);
+				Expect.Call(_workflowControlSet.GetFairnessType(true, true)).Return(FairnessType.Seniority);
 			}
 
 			using (_mock.Playback())
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(_persons);
 				Expect.Call(_person.WorkflowControlSet).Return(_workflowControlSet);
-				Expect.Call(_workflowControlSet.UseShiftCategoryFairness).Return(true);
+				Expect.Call(_workflowControlSet.GetFairnessType(true, true)).Return(FairnessType.EqualNumberOfShiftCategory);
 			}
 
 			using (_mock.Playback())

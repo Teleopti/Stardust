@@ -15,11 +15,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 	{
 		private readonly IDistributionForPersons _distributionForPersons;
 		private readonly IGroupCreator _groupCreator;
+		private readonly bool _schedulerHidePointsFairnessSystem28317;
+		private readonly bool _schedulerSeniority11111;
 
-		public DistributionReportService(IDistributionForPersons distributionForPersons, IGroupCreator groupCreator)
+		public DistributionReportService(IDistributionForPersons distributionForPersons, 
+										 IGroupCreator groupCreator, 
+										 bool scheduler_HidePointsFairnessSystem_28317, 
+										 bool scheduler_Seniority_11111)
 		{
 			_distributionForPersons = distributionForPersons;
 			_groupCreator = groupCreator;
+			_schedulerHidePointsFairnessSystem28317 = scheduler_HidePointsFairnessSystem_28317;
+			_schedulerSeniority11111 = scheduler_Seniority_11111;
 		}
 
 		public DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary)
@@ -55,7 +62,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			foreach (var person in personList)
 			{
 				var wfcs = person.WorkflowControlSet;
-				if (wfcs != null && wfcs.UseShiftCategoryFairness)
+				if (wfcs == null) continue;
+				if (wfcs.GetFairnessType(_schedulerHidePointsFairnessSystem28317, _schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
 					filteredList.Add(person);
 			}
 

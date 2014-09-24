@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public interface IFairnessAndMaxSeatCalculatorsManager
     {
         IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
-                                               double maxValue, bool useShiftCategoryFairness, IPerson person, DateOnly dateOnly,
+                                               double maxValue, FairnessType fairnessType, IPerson person, DateOnly dateOnly,
                                                IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions);
     }
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
-                                                    double maxValue, bool useShiftCategoryFairness, IPerson person, DateOnly dateOnly,
+                                                    double maxValue, FairnessType fairnessType, IPerson person, DateOnly dateOnly,
                                                     IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
                                                     TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions)
         {
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	            if (shiftCategoryFairnessFactors != null)
 	            {
 		            double fairnessValue;
-		            if (useShiftCategoryFairness)
+		            if (fairnessType == FairnessType.EqualNumberOfShiftCategory)
 		            {
 			            IShiftCategory shiftCategory = shiftProjection.TheMainShift.ShiftCategory;
 			            double factorForShiftCategory = shiftCategoryFairnessFactors.FairnessFactor(shiftCategory);

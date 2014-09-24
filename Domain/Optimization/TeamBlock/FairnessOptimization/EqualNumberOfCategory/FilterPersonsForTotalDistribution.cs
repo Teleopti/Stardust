@@ -12,14 +12,24 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 	public class FilterPersonsForTotalDistribution : IFilterPersonsForTotalDistribution
 	{
+		private readonly bool _schedulerHidePointsFairnessSystem28317;
+		private readonly bool _schedulerSeniority11111;
+
+		public FilterPersonsForTotalDistribution(bool Scheduler_HidePointsFairnessSystem_28317, bool Scheduler_Seniority_11111)
+		{
+			_schedulerHidePointsFairnessSystem28317 = Scheduler_HidePointsFairnessSystem_28317;
+			_schedulerSeniority11111 = Scheduler_Seniority_11111;
+		}
+
 		public IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList)
 		{
 			var personListForTotalDistribution = new HashSet<IPerson>();
 			foreach (var scheduleMatrixPro in allPersonMatrixList)
 			{
 				var person = scheduleMatrixPro.Person;
-				var wfcs = person.WorkflowControlSet;
-				if (wfcs != null && wfcs.UseShiftCategoryFairness)
+				var workflowControlSet = person.WorkflowControlSet;
+				if (workflowControlSet == null) continue;
+				if (workflowControlSet.GetFairnessType(_schedulerHidePointsFairnessSystem28317, _schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
 					personListForTotalDistribution.Add(person);
 			}
 

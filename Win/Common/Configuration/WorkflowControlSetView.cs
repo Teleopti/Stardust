@@ -972,13 +972,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.OnRadioButtonAdvFairnessEqualCheckChanged(radioButtonAdvFairnessEqual.Checked);
 		}
 
-		public void SetUseShiftCategoryFairness(bool value)
+		public void SetFairnessType(FairnessType value)
 		{
 			radioButtonAdvFairnessEqual.CheckChanged -= radioButtonAdvFairnessEqualCheckChanged;
 			radioButtonAdvFairnessPoints.CheckChanged -= radioButtonAdvFairnessPointsCheckChanged;
 
-			radioButtonAdvFairnessEqual.Checked = value;
-			radioButtonAdvFairnessPoints.Checked = !value;
+			radioButtonAdvFairnessEqual.Checked = false;
+			radioButtonAdvFairnessPoints.Checked = false;
+
+			if(value == FairnessType.EqualNumberOfShiftCategory)
+				radioButtonAdvFairnessEqual.Checked = true;
+			else if(value == FairnessType.FairnessPoints)
+				radioButtonAdvFairnessPoints.Checked = true;
 
 			radioButtonAdvFairnessEqual.CheckChanged += radioButtonAdvFairnessEqualCheckChanged;
 			radioButtonAdvFairnessPoints.CheckChanged += radioButtonAdvFairnessPointsCheckChanged;
