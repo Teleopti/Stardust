@@ -74,7 +74,7 @@ where [key] not in (
 --Move Queue stat one year forward, monday map to monday.
 ----------------
 declare @DaysToAdd int
-set @DaysToAdd = 365
+set @DaysToAdd = 364
 
 update $(TELEOPTIAGG).dbo.queue_logg
 set date_from = dateadd(day,@DaysToAdd,date_from)

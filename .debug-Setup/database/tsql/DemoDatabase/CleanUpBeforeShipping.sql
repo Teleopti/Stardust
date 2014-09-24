@@ -25,9 +25,6 @@ declare @TemplateStartDate datetime
 set @TemplateEndDate = '2013-03-03'
 set @TemplateStartDate = '2013-02-04'
 
-delete from $(TELEOPTIAGG).dbo.agent_logg where date_from > @TemplateEndDate --unwanted days after template period
-delete from $(TELEOPTIAGG).dbo.queue_logg where date_from > @TemplateEndDate --unwanted days after template period
-
 update $(TELEOPTIANALYTICS).dbo.aspnet_users set LoweredUserName=''
 update $(TELEOPTIANALYTICS).dbo.aspnet_users set UserName=''
 
@@ -94,8 +91,12 @@ GO
 
 declare @DatesEndDate datetime
 declare @DatesStartDate datetime
-set @DatesStartDate = '2013-02-04'
-set @DatesEndDate = '2015-05-20'
+set @DatesStartDate = '2009-12-24'
+set @DatesEndDate = '2015-09-24'
+
+delete from $(TELEOPTIANALYTICS).mart.dim_date
+where date_date < @DatesStartDate
+and date_id >=0
 
 delete b
 from $(TELEOPTIANALYTICS).mart.bridge_time_zone b
@@ -177,22 +178,11 @@ GO
 sp_helpfile
 GO
 
-USE $(TELEOPTIAGG)
-GO
-dbcc shrinkfile(TeleoptiCCCAgg_Data,1)
-GO
-dbcc shrinkfile(TeleoptiCCCAgg_Log,1)
-GO
-sp_helpfile
-GO
-
 --backup
 use master
 GO
-backup database $(TELEOPTIAGG) TO disk='c:\TeleoptiCCC7Agg_Demo.bak' WITH INIT, stats=5
 backup database $(TELEOPTIAPP) TO disk='c:\TeleoptiCCC7_Demo.bak' WITH INIT, stats=5
 backup database $(TELEOPTIANALYTICS) TO disk='c:\TeleoptiAnalytics_Demo.bak' WITH INIT, stats=5
-backup database $(TELEOPTIAGG) TO disk='c:\DemoSales_TeleoptiCCCAgg.bak' WITH INIT, stats=5
 backup database $(TELEOPTIAPP) TO disk='c:\DemoSales_TeleoptiCCC7.bak' WITH INIT, stats=5
 backup database $(TELEOPTIANALYTICS) TO disk='c:\DemoSales_TeleoptiAnalytics.bak' WITH INIT, stats=5
 GO
