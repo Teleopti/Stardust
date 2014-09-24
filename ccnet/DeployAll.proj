@@ -406,6 +406,9 @@
 			Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\CheckPreRequisites.exe;
 	$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\p_raptor_run_before_conversion.sql" />
 
+			<UnInstall
+			Include="$(CCNetWorkingDirectory)\WISE\Uninstall\Uninstall Teleopti CCC server.bat"/>
+			
 			<!-- Broker -->
 			<Broker
 			Include=
@@ -722,6 +725,9 @@
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="$(SDKDocOutput)"
 			  DestinationFiles="$(MSIPath)\SdkDoc.chm"/>
+		<Copy SourceFiles="$(UnInstall)"
+			  DestinationFiles="$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+			  
 		<Message Text="Copying files to $(DeployPath). Done"/>
 	</Target>
 	
