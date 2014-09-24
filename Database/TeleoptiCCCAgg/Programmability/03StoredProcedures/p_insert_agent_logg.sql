@@ -1,16 +1,12 @@
-USE [TeleoptiCCCAgg]
-GO
-/****** Object:  StoredProcedure [dbo].[p_insert_agent_logg]    Script Date: 09/08/2014 13:48:04 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[p_insert_agent_logg]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[p_insert_agent_logg]
 GO
 
 
 /*************************************/
 /* Modified by David P 020130 */
 /*************************************/
-ALTER PROCEDURE [dbo].[p_insert_agent_logg]
+CREATE PROCEDURE [dbo].[p_insert_agent_logg]
 /*
 Micke D 2004-02-27 Added 10 minutes intervals on 30 minutes logging
 Micke D 2004-08-19 Added 10 minute intervals on 60 minute logging
@@ -1518,4 +1514,6 @@ END
 
 COMMIT TRANSACTION
 SET NOCOUNT OFF
+
+GO
 

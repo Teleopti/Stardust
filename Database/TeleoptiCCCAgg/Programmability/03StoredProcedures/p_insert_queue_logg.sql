@@ -1,18 +1,12 @@
-
-
-USE [TeleoptiCCCAgg]
-GO
-/****** Object:  StoredProcedure [dbo].[p_insert_queue_logg]    Script Date: 07/22/2014 17:30:03 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[p_insert_queue_logg]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[p_insert_queue_logg]
 GO
 
 
 /*****************************************/
 /* Created by Anders F 20020605  */
 /*****************************************/
-ALTER PROCEDURE [dbo].[p_insert_queue_logg]
+CREATE PROCEDURE [dbo].[p_insert_queue_logg]
 /*
 
 				
@@ -1048,5 +1042,5 @@ RETURN
 SET NOCOUNT OFF
 
 
-
+GO
 
