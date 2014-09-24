@@ -20,14 +20,14 @@ IIS-ASPNET
 IIS-ASPNET45
 
 #Legacy III6 - needed for Analyzer install
-WMICompatibility
 IIS-IIS6ManagementCompatibility
-IIS-LegacyScripts
 Metabase
-ADSICompatibility
+WMICompatibility
+IIS-LegacyScripts
+#ADSICompatibility
 
-WAS-ProcessModel
 WAS-WindowsActivationService
+WAS-ProcessModel
 WAS-ConfigurationAPI
 WCF-Services45
 WCF-HTTP-Activation45
