@@ -1,11 +1,18 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[p_insert_queue_logg]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[p_insert_queue_logg]
+
+
+USE [TeleoptiCCCAgg]
 GO
+/****** Object:  StoredProcedure [dbo].[p_insert_queue_logg]    Script Date: 07/22/2014 17:30:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 
 /*****************************************/
 /* Created by Anders F 20020605  */
 /*****************************************/
-CREATE PROCEDURE [dbo].[p_insert_queue_logg]
+ALTER PROCEDURE [dbo].[p_insert_queue_logg]
 /*
 
 				
@@ -19,6 +26,7 @@ henrikl 2009-04-16 Various bug fixes (some not tested), debug mode for simple
 	error checking of aggregated data etc. Changes marked with: --090416
 
 magnus K 2011-01-19 remove score card
+Magnus K 2014-07-23 Added 10 minutes intervals on 15 mins logging
 */
 @log_object_id int,
 @start_date smalldatetime = '1900-01-01',
@@ -43,10 +51,10 @@ DECLARE @last_logg_date smalldatetime,
 SET NOCOUNT ON
 
 /*
-@start_date anv√µnds om man vill agga fr√ïn specifikt datum
-@end_date anv√µnds om man vill agga till ett specifikt datum
-@rel_start_date anv√µnds om man t ex vill agg bak√ït en dag hela tiden. Skickar d√ï in -1
-@rel_start_int anv√µnds om man t ex vill agg bak√ït fyra intervall hela tiden. Skickar d√ï in -4
+@start_date anvınds om man vill agga fr’n specifikt datum
+@end_date anvınds om man vill agga till ett specifikt datum
+@rel_start_date anvınds om man t ex vill agg bak’t en dag hela tiden. Skickar d’ in -1
+@rel_start_int anvınds om man t ex vill agg bak’t fyra intervall hela tiden. Skickar d’ in -4
 */
 /********************************************************/
 /* Fetch latest log date and interval                   */
@@ -74,7 +82,7 @@ WHERE [id]=1
 
 /* 
 
-H√µr blir det lite nytt  
+Hır blir det lite nytt  
 
 */
 IF ( @start_date > '1970-01-01' ) 
@@ -97,19 +105,19 @@ BEGIN
 
 		IF  (@rel_start_int + @last_logg_interval < @int_per_day - 1)
 		BEGIN
-			/* H√µr ligger intervallet fortfarande inom dagen s√ï det √µr bara att plussa */
+			/* Hır ligger intervallet fortfarande inom dagen s’ det ır bara att plussa */
 			SELECT @last_logg_interval = @last_logg_interval + @rel_start_int
 		END
 		ELSE IF  (@rel_start_int + @last_logg_interval >= @int_per_day)
 		BEGIN
-			/* H√µr har intervallet g√ïtt √∑ver till n√µsta dag vi √∑kar p√ï dagen en dag och √µndrar intervallet */
+			/* Hır har intervallet g’tt ˜ver till nısta dag vi ˜kar p’ dagen en dag och ındrar intervallet */
 			SELECT @last_logg_date = dateadd ( day,1,@last_logg_date)
 			SELECT @last_logg_interval = (@last_logg_interval + @rel_start_int) - (@int_per_day - 1)
 		END 
 	END 
 	ELSE
 	BEGIN
-		/* H√µr √µr intervallet ig√ïr */
+		/* Hır ır intervallet ig’r */
 		SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
 		SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
 	END 
@@ -126,6 +134,7 @@ SELECT @interval_per_hour = 60/@minutes_per_interval
 SELECT @CTI_minutes_per_interval = (1440/intervals_per_day)
 FROM log_object 
 WHERE log_object_id = @log_object_id
+
 
 
 SELECT @CTI_interval_per_hour = 60/@CTI_minutes_per_interval
@@ -233,7 +242,7 @@ END
 /****************************************************************************/
 BEGIN TRANSACTION
 /*
-	H√µr blir det nytt
+	Hır blir det nytt
 	
 */
 
@@ -495,106 +504,7 @@ select '@CTI_interval_per_hour*4=@interval_per_hour'
 				
 		FROM #tmp_queue_logg
 
-/*	INSERT INTO queue_logg 
-	SELECT
-		queue,
-		date_from,
-		interval,
-		round(convert(real,offd_direct_call_cnt)/4.0,0),
-		round(convert(real,overflow_in_call_cnt)/4.0,0),
-		round(convert(real,aband_call_cnt)/4.0,0),
-		round(convert(real,overflow_out_call_cnt)/4.0,0),
-		round(convert(real,answ_call_cnt)/4.0,0),
-		round(convert(real,queued_and_answ_call_dur)/4.0,0),
-		round(convert(real,queued_and_aband_call_dur)/4.0,0),
-		round(convert(real,talking_call_dur)/4.0,0),
-		round(convert(real,wrap_up_dur)/4.0,0),
-		queued_answ_longest_que_dur,
-		queued_aband_longest_que_dur,
-		avg_avail_member_cnt,
-		round(convert(real,ans_servicelevel_cnt)/4.0,0),
-		round(convert(real,wait_dur)/4.0,0),
-		round(convert(real,aband_short_call_cnt)/4.0,0),
-		round(convert(real,aband_within_sl_cnt)/4.0,0)
-				
-		FROM #tmp_queue_logg
 
-
-	INSERT INTO queue_logg 
-	SELECT
-		queue,
-		date_from,
-		interval + 1,
-		round(convert(real,offd_direct_call_cnt)/4.0,0),
-		round(convert(real,overflow_in_call_cnt)/4.0,0),
-		round(convert(real,aband_call_cnt)/4.0,0),
-		round(convert(real,overflow_out_call_cnt)/4.0,0),
-		round(convert(real,answ_call_cnt)/4.0,0),
-		round(convert(real,queued_and_answ_call_dur)/4.0,0),
-		round(convert(real,queued_and_aband_call_dur)/4.0,0),
-		round(convert(real,talking_call_dur)/4.0,0),
-		round(convert(real,wrap_up_dur)/4.0,0),
-		queued_answ_longest_que_dur,
-		queued_aband_longest_que_dur,
-		avg_avail_member_cnt,
-		round(convert(real,ans_servicelevel_cnt)/4.0,0),
-		round(convert(real,wait_dur)/4.0,0),
-		round(convert(real,aband_short_call_cnt)/4.0,0),
-		round(convert(real,aband_within_sl_cnt)/4.0,0)
-				
-		FROM #tmp_queue_logg
-
-	INSERT INTO queue_logg 
-	SELECT
-		queue,
-		date_from,
-		interval + 2,
-		ceiling(convert(real,offd_direct_call_cnt)/4.0),
-		ceiling(convert(real,overflow_in_call_cnt)/4.0),
-		ceiling(convert(real,aband_call_cnt)/4.0),
-		ceiling(convert(real,overflow_out_call_cnt)/4.0),
-		ceiling(convert(real,answ_call_cnt)/4.0),
-		ceiling(convert(real,queued_and_answ_call_dur)/4.0),
-		ceiling(convert(real,queued_and_aband_call_dur)/4.0),
-		ceiling(convert(real,talking_call_dur)/4.0),
-		ceiling(convert(real,wrap_up_dur)/4.0),
-
-		queued_answ_longest_que_dur,
-		queued_aband_longest_que_dur,
-		avg_avail_member_cnt,
-		ceiling(convert(real,ans_servicelevel_cnt)/4.0),
-		ceiling(convert(real,wait_dur)/4.0),
-		ceiling(convert(real,aband_short_call_cnt)/4.0),
-		ceiling(convert(real,aband_within_sl_cnt)/4.0)
-
-
-		FROM #tmp_queue_logg
-
-	INSERT INTO queue_logg 
-	SELECT
-		queue,
-		date_from,
-		interval + 3,
-
-		offd_direct_call_cnt/4,
-		overflow_in_call_cnt/4,
-		aband_call_cnt/4,
-		overflow_out_call_cnt/4,
-		answ_call_cnt/4,
-		queued_and_answ_call_dur/4,
-		queued_and_aband_call_dur/4,
-		talking_call_dur/4,
-		wrap_up_dur/4,
-		queued_answ_longest_que_dur,
-		queued_aband_longest_que_dur,
-		avg_avail_member_cnt,
-		ans_servicelevel_cnt/4,
-		wait_dur/4,
-		aband_short_call_cnt/4,
-		aband_within_sl_cnt/4
-				
-		FROM #tmp_queue_logg
-*/
 
 END
 
@@ -914,6 +824,7 @@ BEGIN
 select '@CTI_interval_per_hour*1.5=@interval_per_hour'
 
 
+
 CREATE TABLE #tmp_queue_logg2 (
 	queue int NOT NULL,
 	date_from smalldatetime NOT NULL,
@@ -1008,8 +919,11 @@ CREATE TABLE #tmp_queue_logg2 (
 		FROM #tmp_queue_logg
 
 
-INSERT INTO queue_logg
+--INSERT INTO queue_logg
+--select 'logg', * from #tmp_queue_logg
+--	select 'logg2',* from #tmp_queue_logg2	
 		
+		INSERT INTO queue_logg
 		SELECT 	queue,
 		date_from,
 		interval /2,
@@ -1133,5 +1047,6 @@ RETURN
 
 SET NOCOUNT OFF
 
-GO
+
+
 

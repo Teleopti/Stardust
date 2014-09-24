@@ -1,11 +1,16 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[p_insert_agent_logg]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[p_insert_agent_logg]
+USE [TeleoptiCCCAgg]
 GO
+/****** Object:  StoredProcedure [dbo].[p_insert_agent_logg]    Script Date: 09/08/2014 13:48:04 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 
 /*************************************/
 /* Modified by David P 020130 */
 /*************************************/
-CREATE PROCEDURE [dbo].[p_insert_agent_logg]
+ALTER PROCEDURE [dbo].[p_insert_agent_logg]
 /*
 Micke D 2004-02-27 Added 10 minutes intervals on 30 minutes logging
 Micke D 2004-08-19 Added 10 minute intervals on 60 minute logging
@@ -13,6 +18,7 @@ Micke D 2004-08-19 Added 15 minute intervals on 60 minute logging
 henrikl 2009-04-16 Various bug fixes (some not tested), debug mode for simple 
 	error checking of aggregated data etc. Changes marked with: --090416
 Magnus K 2011-01-19 removed scorecard
+Magnus K 2014-07-23 Added 10 minutes intervals on 15 mins logging
 */
 @log_object_id int,
 @start_date smalldatetime = '1900-01-01',
@@ -37,10 +43,10 @@ DECLARE @last_logg_date smalldatetime,
 SET NOCOUNT ON
 
 /*
-@start_date anv√µnds om man vill agga fr√ïn specifikt datum
-@end_date anv√µnds om man vill agga till ett specifikt datum
-@rel_start_date anv√µnds om man t ex vill agg bak√ït en dag hela tiden. Skickar d√ï in -1
-@rel_start_int anv√µnds om man t ex vill agg bak√ït fyra intervall hela tiden. Skickar d√ï in -4
+@start_date anvınds om man vill agga fr’n specifikt datum
+@end_date anvınds om man vill agga till ett specifikt datum
+@rel_start_date anvınds om man t ex vill agg bak’t en dag hela tiden. Skickar d’ in -1
+@rel_start_int anvınds om man t ex vill agg bak’t fyra intervall hela tiden. Skickar d’ in -4
 */
 /********************************************************/
 /* Fetch latest log date and interval                   */
@@ -67,7 +73,7 @@ WHERE [id]=1
 
 /* 
 
-H√µr blir det lite nytt  
+Hır blir det lite nytt  
 
 */
 IF ( @start_date > '1970-01-01' ) 
@@ -90,19 +96,19 @@ BEGIN
 
 		IF  (@rel_start_int + @last_logg_interval < @int_per_day - 1)
 		BEGIN
-			/* H√µr ligger intervallet fortfarande inom dagen s√ï det √µr bara att plussa */
+			/* Hır ligger intervallet fortfarande inom dagen s’ det ır bara att plussa */
 			SELECT @last_logg_interval = @last_logg_interval + @rel_start_int
 		END
 		ELSE IF  (@rel_start_int + @last_logg_interval >= @int_per_day)
 		BEGIN
-			/* H√µr har intervallet g√ïtt √∑ver till n√µsta dag vi √∑kar p√ï dagen en dag och √µndrar intervallet */
+			/* Hır har intervallet g’tt ˜ver till nısta dag vi ˜kar p’ dagen en dag och ındrar intervallet */
 			SELECT @last_logg_date = dateadd ( day,1,@last_logg_date)
 			SELECT @last_logg_interval = (@last_logg_interval + @rel_start_int) - (@int_per_day - 1)
 		END 
 	END 
 	ELSE
 	BEGIN
-		/* H√µr √µr intervallet ig√ïr */
+		/* Hır ır intervallet ig’r */
 		SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
 		SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
 	END 
@@ -216,7 +222,7 @@ BEGIN TRANSACTION
 /*   Ta bort det senaste loggintervallet i agent_Logg	*/
 /**********************************************************************/
 /*
-	H√µr blir det nytt
+	Hır blir det nytt
 	
 */
 
@@ -1199,6 +1205,214 @@ select '@CTI_interval_per_hour*3=@interval_per_hour'
 	GROUP BY queue,date_from,interval,agent_id--,agent_name
 END
 
+-------------------
+IF (@CTI_interval_per_hour*1.5 = @interval_per_hour)
+BEGIN
+
+select '@CTI_interval_per_hour*1.5=@interval_per_hour'
+	CREATE table #tmpagent_logg2 (
+	queue int NOT NULL,
+	date_from smalldatetime NOT NULL,
+	interval int NOT NULL,
+	agent_id int NOT NULL, 
+	agent_name nvarchar(50) NOT NULL,
+	avail_dur int  NULL,
+	tot_work_dur int  NULL,
+	talking_call_dur int  NULL,	
+	pause_dur int  NULL,
+	wait_dur int  NULL,
+	wrap_up_dur int  NULL,
+	answ_call_cnt int  NULL,
+	direct_out_call_cnt int  NULL,
+	direct_out_call_dur int  NULL,
+	direct_in_call_cnt int  NULL,
+	direct_in_call_dur int  NULL,
+	transfer_out_call_cnt int  NULL,
+	admin_dur int  NULL )
+	
+--	insert into #tmpagent_logg2
+--	SELECT
+--	queue,
+--	date_from,
+--	interval/2,
+--	agent_id, 
+----090416
+--	max(agent_name),--agent_name,
+--	sum(avail_dur),
+--	sum(tot_work_dur),
+--	sum(talking_call_dur),	
+--	sum(pause_dur),
+--	sum(wait_dur),
+--	sum(wrap_up_dur),
+--	sum(answ_call_cnt),
+--	sum(direct_out_call_cnt),
+--	sum(direct_out_call_dur),
+--	sum(direct_in_call_cnt),
+--	sum(direct_in_call_dur),
+--	sum(transfer_out_call_cnt),
+--	sum(admin_dur)
+
+	--FROM #tmp_alogg
+	--GROUP BY queue,date_from,interval,agent_id--,agent_name
+
+	INSERT #tmpagent_logg2 (
+	queue,
+	date_from,
+	interval,
+	agent_id, 
+	agent_name,
+	avail_dur,
+	tot_work_dur,
+	talking_call_dur,	
+	pause_dur,
+	wait_dur,
+	wrap_up_dur,
+	answ_call_cnt,
+	direct_out_call_cnt,
+	direct_out_call_dur,
+	direct_in_call_cnt,
+	direct_in_call_dur,
+	transfer_out_call_cnt,
+	admin_dur )
+	SELECT
+	queue,
+	date_from,
+	interval*3,
+	agent_id, 
+--090416
+	max(agent_name),--agent_name,
+	round(convert(real,sum(avail_dur))/3.0,0),
+	round(convert(real,sum(tot_work_dur))/3.0,0),
+	round(convert(real,sum(talking_call_dur))/3.0,0),	
+	round(convert(real,sum(pause_dur))/3.0,0),
+	round(convert(real,sum(wait_dur))/3.0,0),
+	round(convert(real,sum(wrap_up_dur))/3.0,0),
+	round(convert(real,sum(answ_call_cnt))/3.0,0),
+	round(convert(real,sum(direct_out_call_cnt))/3.0,0),
+	round(convert(real,sum(direct_out_call_dur))/3.0,0),
+	round(convert(real,sum(direct_in_call_cnt))/3.0,0),
+	round(convert(real,sum(direct_in_call_dur))/3.0,0),
+	round(convert(real,sum(transfer_out_call_cnt))/3.0,0),
+	round(convert(real,sum(admin_dur))/3.0,0)
+
+	FROM #tmp_alogg
+	GROUP BY queue,date_from,interval,agent_id--,agent_name
+
+	INSERT #tmpagent_logg2 (
+	queue,
+	date_from,
+	interval,
+	agent_id, 
+	agent_name,
+	avail_dur,
+	tot_work_dur,
+	talking_call_dur,	
+	pause_dur,
+	wait_dur,
+	wrap_up_dur,
+	answ_call_cnt,
+	direct_out_call_cnt,
+	direct_out_call_dur,
+	direct_in_call_cnt,
+	direct_in_call_dur,
+	transfer_out_call_cnt,
+	admin_dur )
+	SELECT
+	queue,
+	date_from,
+	interval*3 + 1,
+	agent_id, 
+--090416
+	max(agent_name),--agent_name,
+	ceiling(convert(real,sum(avail_dur))/3.0),
+	ceiling(convert(real,sum(tot_work_dur))/3.0),
+	ceiling(convert(real,sum(talking_call_dur))/3.0),	
+	ceiling(convert(real,sum(pause_dur))/3.0),
+	ceiling(convert(real,sum(wait_dur))/3.0),
+	ceiling(convert(real,sum(wrap_up_dur))/3.0),
+	ceiling(convert(real,sum(answ_call_cnt))/3.0),
+	ceiling(convert(real,sum(direct_out_call_cnt))/3.0),
+	ceiling(convert(real,sum(direct_out_call_dur))/3.0),
+	ceiling(convert(real,sum(direct_in_call_cnt))/3.0),
+	ceiling(convert(real,sum(direct_in_call_dur))/3.0),
+	ceiling(convert(real,sum(transfer_out_call_cnt))/3.0),
+	ceiling(convert(real,sum(admin_dur))/3.0)
+	FROM #tmp_alogg
+	GROUP BY queue,date_from,interval,agent_id--,agent_name
+	
+
+	INSERT #tmpagent_logg2 (
+	queue,
+	date_from,
+	interval,
+	agent_id, 
+	agent_name,
+	avail_dur,
+	tot_work_dur,
+	talking_call_dur,	
+	pause_dur,
+	wait_dur,
+	wrap_up_dur,
+	answ_call_cnt,
+	direct_out_call_cnt,
+	direct_out_call_dur,
+	direct_in_call_cnt,
+	direct_in_call_dur,
+	transfer_out_call_cnt,
+	admin_dur )
+	SELECT
+	queue,
+	date_from,
+	interval*3+2,
+	agent_id, 
+--090416
+	max(agent_name),--agent_name,
+	sum(avail_dur)/3,
+	sum(tot_work_dur)/3,
+	sum(talking_call_dur)/3,	
+	sum(pause_dur)/3,
+	sum(wait_dur)/3,
+	sum(wrap_up_dur)/3,
+	sum(answ_call_cnt)/3,
+	sum(direct_out_call_cnt)/3,
+	sum(direct_out_call_dur)/3,
+	sum(direct_in_call_cnt)/3,
+	sum(direct_in_call_dur)/3,
+	sum(transfer_out_call_cnt)/3,
+	sum(admin_dur)/3
+	FROM #tmp_alogg
+	GROUP BY queue,date_from,interval,agent_id--,agent_name
+	
+	--select * from #tmpagent_logg2
+	insert into agent_logg 
+		SELECT
+	queue,
+	date_from,
+	interval/2,
+	agent_id, 
+--090416
+	max(agent_name),--agent_name,
+	sum(avail_dur),
+	sum(tot_work_dur),
+	sum(talking_call_dur),	
+	sum(pause_dur),
+	sum(wait_dur),
+	sum(wrap_up_dur),
+	sum(answ_call_cnt),
+	sum(direct_out_call_cnt),
+	sum(direct_out_call_dur),
+	sum(direct_in_call_cnt),
+	sum(direct_in_call_dur),
+	sum(transfer_out_call_cnt),
+	sum(admin_dur)
+	FROM #tmpagent_logg2 t2
+	where not exists(select 1 from agent_logg	a	
+					where t2.date_from =a.date_from and t2.interval/2 =a.interval 
+					and t2.agent_id =a.agent_id and t2.queue =a.queue )
+	GROUP BY queue,date_from,interval/2,agent_id
+END
+---------------------------------------
+
 
 IF (@CTI_interval_per_hour = @interval_per_hour) 
 BEGIN
@@ -1305,4 +1519,3 @@ END
 COMMIT TRANSACTION
 SET NOCOUNT OFF
 
-GO
