@@ -22,7 +22,6 @@ define([
 			self.CurrentDate = ko.observable();
 			self.CurrentGroupId = ko.observable();
 			self.IanaTimeZone = ko.observable("");
-			self.changeScheduleForMultipleBUs = ko.observable(false);
 			self.businessUnits = ko.observableArray();
 
 			var businessUnitForId = function (id) {

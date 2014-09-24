@@ -16,8 +16,7 @@ define([
 		'resources',
 		'subscriptions.trackingmessages',
 		'notifications',
-		'shared/timezone-current',
-		'toggleQuerier'
+		'shared/timezone-current'
 ], function (
 		layoutTemplate,
 		menuTemplate,
@@ -35,8 +34,7 @@ define([
 		resources,
 		trackingmessages,
 		notificationsViewModel,
-		timezoneCurrent,
-		toggleQuerier) {
+		timezoneCurrent) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -271,31 +269,16 @@ define([
 		_bindMenu();
 	}
 
-	var checkBusinessUnitsFeature = function () {
-		toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {
-			enabled: function () {
-				ajax.ajax({
-					url: "BusinessUnit",
-					success: function (data) {
-						menu.fillBusinessUnits(data);
-						menu.changeScheduleForMultipleBUs(true);
+	var initBusinessUnitsMenu = function () {
+		ajax.ajax({
+			url: "BusinessUnit",
+			success: function (data) {
+				menu.fillBusinessUnits(data);
+				defaultBu = data[0].Id;
 
-						defaultBu = data[0].Id;
-
-						initAll();
-					}
-				});
-			},
-			disabled: function () {
-				ajax.ajax({
-					url: "BusinessUnit",
-					success: function (data) {
-						defaultBu = data[0].Id;
-						initAll();
-					}
-				});
+				initAll();
 			}
 		});
 	};
-	checkBusinessUnitsFeature();
+	initBusinessUnitsMenu();
 });
