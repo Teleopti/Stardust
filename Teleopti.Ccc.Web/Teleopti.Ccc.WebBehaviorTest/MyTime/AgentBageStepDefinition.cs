@@ -94,6 +94,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		public int SilverToBronzeRate { get; set; }
 		public int GoldToSilverRate { get; set; }
+		public bool AnsweredCallsUsed { get; set; }
+		public bool AdherenceUsed { get; set; }
+		public bool AHTUsed { get; set; }
 
 		public IAgentBadgeThresholdSettings Settings;
 
@@ -103,7 +106,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			{
 				EnableBadge = BadgeEnabled,
 				SilverToBronzeBadgeRate = SilverToBronzeRate,
-				GoldToSilverBadgeRate = GoldToSilverRate
+				GoldToSilverBadgeRate = GoldToSilverRate,
+				AdherenceBadgeTypeSelected = AdherenceUsed,
+				AHTBadgeTypeSelected = AHTUsed,
+				AnsweredCallsBadgeTypeSelected = AnsweredCallsUsed
 			};
 
 			var rep = new AgentBadgeSettingsRepository(uow);

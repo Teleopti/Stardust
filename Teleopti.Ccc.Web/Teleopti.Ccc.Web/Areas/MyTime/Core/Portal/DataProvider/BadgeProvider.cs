@@ -16,15 +16,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_badgeRepository = badgeRepository;
 		}
 
-		public IEnumerable<IAgentBadge> GetBadges()
+		public IEnumerable<IAgentBadge> GetBadges(IAgentBadgeThresholdSettings settings)
 		{
-			IEnumerable<IAgentBadge> result = null;
+			var badges = new List<IAgentBadge>();
 			var person = _loggedOnUser.CurrentUser();
-			if (person != null)
+			if (person == null) return badges;
+			if (settings.AdherenceBadgeTypeSelected)
 			{
-				result = _badgeRepository.Find(person);
+				var badge = _badgeRepository.Find(person, BadgeType.Adherence);
+				badges.Add(badge);
 			}
-			return result;
+			if (settings.AHTBadgeTypeSelected)
+			{
+				var badge = _badgeRepository.Find(person, BadgeType.AverageHandlingTime);
+				badges.Add(badge);
+			}
+			if (settings.AnsweredCallsBadgeTypeSelected)
+			{
+				var badge = _badgeRepository.Find(person, BadgeType.AnsweredCalls);
+				badges.Add(badge);
+			}
+			return badges;
 		}
 	}
 }

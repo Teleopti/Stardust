@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var badgeFeatureEnabled = badgeSettings != null && badgeSettings.EnableBadge;
 
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
-			var badges = showBadge ? _badgeProvider.GetBadges() : null;
+			var badges = showBadge ? _badgeProvider.GetBadges(badgeSettings) : null;
 
 			return new PortalViewModel
 			{

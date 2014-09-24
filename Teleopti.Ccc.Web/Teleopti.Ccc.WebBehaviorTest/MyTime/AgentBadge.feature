@@ -13,6 +13,9 @@ Scenario: Show my badge
 Given There is a agent badge settings with
   | Field                 | Value |
   | BadgeEnabled          | True  |
+  | AnsweredCallsUsed     | True  |
+  | AHTUsed               | True  |
+  | AdherenceUsed         | True  |
   | Silver to bronze rate | 5     |
   | Gold to silver rate   | 2     |
   And I have badges with
@@ -31,6 +34,7 @@ Scenario: Show zero badge when agent has no badge
 Given There is a agent badge settings with
   | Field                 | Value |
   | BadgeEnabled          | True  |
+  | AnsweredCallsUsed     | True  |
   | Silver to bronze rate | 5     |
   | Gold to silver rate   | 2     |
   And I have badges with
