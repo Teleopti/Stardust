@@ -44,4 +44,4 @@ Messaging_HttpSender_29205 = false
 Scheduler_OccupancyESL_11724 = RC
 Scheduler_SudentAvailabilityForFixedStaff_30393 = RC
 Settings_SetAgentDescription_23257 = RC
-Scheduler_BackToLegalShift_29831 = false
+Scheduler_BackToLegalShift_29831 = RC
