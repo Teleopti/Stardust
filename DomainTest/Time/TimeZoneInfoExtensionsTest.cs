@@ -16,15 +16,14 @@ namespace Teleopti.Ccc.DomainTest.Time
             _localTime = new DateTime(2008,1,1,1,1,1,DateTimeKind.Local);
         }
 
-        [Ignore]
         [Test]
         public void VerifyConvertOverDaylightSaving()
         {
             _target = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
-            DateTime theDate = new DateTime(2010,3,26);
+            var theDate = new DateTime(2014,3,28);
 
             DateTime ret = _target.SafeConvertTimeToUtc(theDate);
-            Assert.AreEqual(new DateTime(2010,3,25,21,00,0,DateTimeKind.Utc),ret);
+            Assert.AreEqual(new DateTime(2014,3,27,22,00,0,DateTimeKind.Utc),ret);
         }
 
         [Test]
