@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyConvertOverDaylightSaving()
         {
-            _target = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
-            var theDate = new DateTime(2014,3,28);
+					_target = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+	        var theDate = new DateTime(2014, 3, 28, 2, 0, 0);
 
             DateTime ret = _target.SafeConvertTimeToUtc(theDate);
-            Assert.AreEqual(new DateTime(2014,3,27,22,00,0,DateTimeKind.Utc),ret);
+	        Assert.AreEqual(new DateTime(2014, 3, 28, 1, 00, 0, DateTimeKind.Utc), ret);
         }
 
         [Test]
