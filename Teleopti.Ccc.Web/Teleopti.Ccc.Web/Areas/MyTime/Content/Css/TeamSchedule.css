@@ -1,6 +1,6 @@
 ﻿
 .body-teamschedule {
-	
+	 
 }
 .body-teamschedule-inner {
 	
@@ -37,7 +37,7 @@
 	right: 0px;
 }
 .teamschedule-timeline-spacer {
-	width: 125px;
+	width: 220px;     /* space between the left hand side and the timeline*/
 }
 .teamschedule-timeline-times 
 {
@@ -68,7 +68,7 @@
 	left: -12px;
 	position: relative;
 	font-size: xx-small;
-    color: #556b2f;
+	color: #556b2f;
 	height: 12px !important;
 	width: 26px;
 	text-align: center;
@@ -91,17 +91,7 @@
 	width: 100%;
 	position: relative;
 }
-.teamschedule-agent-with-badge 
-{
-	vertical-align: bottom;
-	padding-top: 5px;
-	padding-bottom: 8px;
-	height: 46px;
-	width: 100%;
-	border-bottom: 1px solid #dfdfdf;
-	vertical-align: bottom;
-	z-index: 99;
-}
+
 .teamschedule-agent-without-badge 
 {
 	vertical-align: bottom;
@@ -113,33 +103,33 @@
 	vertical-align: bottom;
 	z-index: 99;
 }
+
 .rgba .teamschedule-agent 
 {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
-.teamschedule-agent-name-with-badge 
-{
-	top: 25px;
-	position: absolute;
-	overflow: hidden;
-	white-space: nowrap;
-	width: 119px;
-	height: 20px;
-	margin-right: 5px;
-	padding-left: 5px;
-	background-color: #f8f8f8;
-}
+
 .teamschedule-agent-name-without-badge 
 {
-	top: 5px;
 	position: absolute;
 	overflow: hidden;
+	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 119px;
+	width: 220px;
 	height: 20px;
 	margin-right: 5px;
 	padding-left: 5px;
 	background-color: #f8f8f8;
+   
+}
+
+.rt .teamschedule-agent-name-without-badge 
+{
+	margin-right: auto;
+	padding-left: 0;
+	margin-left: 5px;
+	padding-right: 5px;
+    text-overflow: clip;
 }
 .teamschedule-agent-name-hover
 {
@@ -153,12 +143,12 @@
 .teamschedule-agent-schedule 
 {
 	position: absolute;
-	left: 125px;
+	left: 220px;	
 }
 .rtl .teamschedule-agent-schedule
 {
 	left: auto;
-	right: 125px;
+	right: 220px;
 }
 
 .teamschedule .layer 
@@ -174,8 +164,8 @@
 
 .teamschedule .dayoff 
 {
-	margin-left: 5px;
-	width: 792px;
+	margin-left: 7px;
+	left: 250px;
 	vertical-align: bottom;
 	border: 1px solid #dfdfdf;
 	text-align: center;
@@ -185,11 +175,16 @@
 .rgba .teamschedule .dayoff 
 {
 	border: 1px solid rgba(0, 0, 0, 0.15);
+	
 }
 .rtl .teamschedule .dayoff
 {
 	margin-left: auto;
 	margin-right: 5px;
+	right: 220px;
+	left: auto;
+	margin-right: 7px;
+	margin-left: auto;
 }
 
 .teamschedule-agent-schedule .tooltip-container {
@@ -207,7 +202,7 @@
 }
 
 #s2id_Team-Picker_Padding {
-    padding-top: 8px;
+	padding-top: 8px;
 }
 .team-select2-container {
 	text-align: left;
