@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -58,9 +56,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 
+			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 			virtualSchedulePeriodProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(new DateOnly(DateTime.Now)))
 				.IgnoreArguments()
-				.Return(new DateOnlyPeriod());
+				.Return(dateOnlyPeriod);
 
 			shiftCategory = new ShiftCategory("SC");
 			shiftCategory.SetId(Guid.NewGuid());
@@ -71,19 +70,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 					shiftCategory
 				});
 
-			var personPeriod = new PersonPeriod(new DateOnly(DateTime.Now),
-				new PersonContract(new Contract("Contract"),
-				new PartTimePercentage("PartimePercentage"),
-				new ContractSchedule("ContractSchedule")), new Team())
-			{
-				RuleSetBag = ruleSetBag
-			};
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
 
-			loggedOnUser.Stub(x => x.CurrentUser().PersonPeriods(new DateOnlyPeriod()))
-				.Return(new IPersonPeriod[]
+			var person = MockRepository.GenerateMock<IPerson>();
+			person.Stub(x => x.NextPeriod(personPeriod))
+				.IgnoreArguments()
+				.Return(null);
+			person.Stub(x => x.PersonPeriods(dateOnlyPeriod))
+				.IgnoreArguments()
+				.Return(new List<IPersonPeriod>
 				{
 					personPeriod
 				});
+
+			personPeriod.Stub(x => x.Period).Return(dateOnlyPeriod);
+			personPeriod.Stub(x => x.Parent).Return(person);
+			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
+			
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>

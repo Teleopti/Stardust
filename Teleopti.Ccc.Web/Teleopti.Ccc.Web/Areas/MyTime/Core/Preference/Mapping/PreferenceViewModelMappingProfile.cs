@@ -1,8 +1,8 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using AutoMapper;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -181,16 +181,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					.RetrieveShiftCategoryOptions()
 					.MakeSureNotNull();
 
+			// Get person period include current date
 			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(date);
-			var personPeriods = _loggedOnUser.CurrentUser().PersonPeriods(period);
-			var shiftCategoriesFromBag = new List<IShiftCategory>();
-			foreach (var p in personPeriods.Where(p => p.RuleSetBag != null))
-			{
-				shiftCategoriesFromBag.AddRange(p.RuleSetBag.ShiftCategoriesInBag());
-			}
+			var personPeriods = _loggedOnUser.CurrentUser().PersonPeriods(period).ToList();
+			var currentPeriod =
+				personPeriods.SingleOrDefault(p => (p.Period.StartDate <= date) && (p.Period.EndDate > date) && p.RuleSetBag != null);
+
+			var shiftCategoriesFromBag = currentPeriod != null 
+				? currentPeriod.RuleSetBag.ShiftCategoriesInBag()
+				: new List<IShiftCategory>();
 
 			var availableShiftCategory = new List<IShiftCategory>();
-
 			foreach (var shift in shiftCategoriesFromWorkflowControlSet)
 			{
 				if (shiftCategoriesFromBag.Any(x => x.Id == shift.Id))
