@@ -12338,4 +12338,8 @@ Reduce the complexity to use these shifts.</value>
     <value>This will remove all badges for all agents! Do you want to continue?</value>
     <comment>use for confirm reset badges button clicking in admin client system setting agent badge</comment>
   </data>
+  <data name="BadgeTypeChecked" xml:space="preserve">
+    <value>Checked</value>
+    <comment>Select a specified badge type or not in Admin client agent badge setting</comment>
+  </data>
 </root>

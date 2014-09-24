@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
 			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxThresholdForAdherence.TabIndex = 4;
-			this.doubleTextBoxThresholdForAdherence.Text = "0,00";
+			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
 			// 
 			// labelOneGoldBadgeEqualsSilverBadgeCount
 			// 
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1116;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1301;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -326,9 +326,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkAnsweredCallsBadgeType.AutoSize = true;
 			this.checkAnsweredCallsBadgeType.Location = new System.Drawing.Point(453, 91);
 			this.checkAnsweredCallsBadgeType.Name = "checkAnsweredCallsBadgeType";
-			this.checkAnsweredCallsBadgeType.Size = new System.Drawing.Size(82, 19);
+			this.checkAnsweredCallsBadgeType.Size = new System.Drawing.Size(141, 19);
 			this.checkAnsweredCallsBadgeType.TabIndex = 21;
-			this.checkAnsweredCallsBadgeType.Text = "xxChecked";
+			this.checkAnsweredCallsBadgeType.Text = "xxBadgeTypeChecked";
 			this.checkAnsweredCallsBadgeType.UseVisualStyleBackColor = true;
 			this.checkAnsweredCallsBadgeType.CheckedChanged += new System.EventHandler(this.checkAnsweredCallsBadgeType_CheckedChanged);
 			// 
@@ -338,9 +338,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkAHTBadgeType.AutoSize = true;
 			this.checkAHTBadgeType.Location = new System.Drawing.Point(453, 126);
 			this.checkAHTBadgeType.Name = "checkAHTBadgeType";
-			this.checkAHTBadgeType.Size = new System.Drawing.Size(82, 19);
+			this.checkAHTBadgeType.Size = new System.Drawing.Size(141, 19);
 			this.checkAHTBadgeType.TabIndex = 22;
-			this.checkAHTBadgeType.Text = "xxChecked";
+			this.checkAHTBadgeType.Text = "xxBadgeTypeChecked";
 			this.checkAHTBadgeType.UseVisualStyleBackColor = true;
 			this.checkAHTBadgeType.CheckedChanged += new System.EventHandler(this.checkAHTBadgeType_CheckedChanged);
 			// 
@@ -350,9 +350,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkAdherenceBadgeType.AutoSize = true;
 			this.checkAdherenceBadgeType.Location = new System.Drawing.Point(453, 161);
 			this.checkAdherenceBadgeType.Name = "checkAdherenceBadgeType";
-			this.checkAdherenceBadgeType.Size = new System.Drawing.Size(82, 19);
+			this.checkAdherenceBadgeType.Size = new System.Drawing.Size(141, 19);
 			this.checkAdherenceBadgeType.TabIndex = 23;
-			this.checkAdherenceBadgeType.Text = "xxChecked";
+			this.checkAdherenceBadgeType.Text = "xxBadgeTypeChecked";
 			this.checkAdherenceBadgeType.UseVisualStyleBackColor = true;
 			this.checkAdherenceBadgeType.CheckedChanged += new System.EventHandler(this.checkAdherenceBadgeType_CheckedChanged);
 			// 
