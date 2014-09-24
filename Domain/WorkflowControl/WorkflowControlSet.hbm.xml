@@ -126,8 +126,6 @@
     </component>
 
     <property name="AutoGrantShiftTradeRequest" type="bool" not-null="true"/>
-
-    <property name="UseShiftCategoryFairness" type="bool" not-null="true"/>
     
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />
