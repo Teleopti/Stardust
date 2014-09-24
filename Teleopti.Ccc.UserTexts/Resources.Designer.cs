@@ -5193,6 +5193,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find any valid shift in shift bag.
+        /// </summary>
+        public static string CouldNotFindAnyValidShiftInShiftBag {
+            get {
+                return ResourceManager.GetString("CouldNotFindAnyValidShiftInShiftBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not reach Teleopti Customer Web at the moment!.
         /// </summary>
         public static string CouldNotReachTeleoptiCustomerWebAtTheMoment {
@@ -22210,6 +22219,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftAsOvertime {
             get {
                 return ResourceManager.GetString("ShiftAsOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Correct shifts not according to shift bag.
+        /// </summary>
+        public static string ShiftBackToLegal {
+            get {
+                return ResourceManager.GetString("ShiftBackToLegal", resourceCulture);
             }
         }
         

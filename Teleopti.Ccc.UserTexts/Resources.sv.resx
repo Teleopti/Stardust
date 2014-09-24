@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -11725,5 +11725,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="AdvancedFilter" xml:space="preserve">
     <value>Avancerat filter</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>Hittade inget giltligt skift i skiftpåsen</value>
+    <comment>Could not find any valid shift in shift bag</comment>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Återställ skift som inte finns i skiftpåsen</value>
+    <comment>Correct shifts not according to shift bag</comment>
   </data>
 </root>

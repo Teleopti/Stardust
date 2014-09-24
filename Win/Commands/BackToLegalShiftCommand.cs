@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IToggleManager _toggleManager;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private BackgroundWorker _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -54,6 +56,7 @@ namespace Teleopti.Ccc.Win.Commands
 			IList<IScheduleDay> selectedSchedules, 
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
+			_backgroundWorker = backgroundWorker;
 			var optimizationPreferences = new OptimizationPreferences();
 			setupPreferences(optimizationPreferences);
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -75,8 +78,19 @@ namespace Teleopti.Ccc.Win.Commands
 																					   tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, false, true);
 			var maxSeatToggle = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
+			_backToLegalShiftService.Progress += _backToLegalShiftService_Progress;
 			_backToLegalShiftService.Execute(selectedTeamBlocks, schedulingOptions, schedulingResultStateHolder, rollbackService,
 				resourceCalculateDelayer, maxSeatToggle);
+			_backToLegalShiftService.Progress -= _backToLegalShiftService_Progress;
+		}
+
+		void _backToLegalShiftService_Progress(object sender, BackToLegalShiftArgs e)
+		{
+			_backgroundWorker.ReportProgress(1, e);
+			if (_backgroundWorker.CancellationPending)
+			{
+				e.Cancel = true;
+			}
 		}
 
 		private static void setupPreferences(OptimizationPreferences optimizationPreferences)

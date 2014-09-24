@@ -475,6 +475,7 @@
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\PeriodResourceDetailTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
+    <Compile Include="ResourceCalculation\WorkShiftFinderResultHolderTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment_MoveActivityTest.cs" />

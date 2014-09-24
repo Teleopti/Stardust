@@ -22,9 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
-    	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
-    	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-	    private readonly IPersonSkillProvider _personSkillProvider;
+	    private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
@@ -39,17 +37,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
 			IDaysOffSchedulingService daysOffSchedulingService, 
-			IResourceOptimizationHelper resourceOptimizationHelper,
-			IPersonSkillProvider personSkillProvider)
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleService = scheduleService;
-			_daysOffSchedulingService = daysOffSchedulingService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_personSkillProvider = personSkillProvider;
-			_daysOffSchedulingService.DayScheduled += schedulerDayScheduled;
+			daysOffSchedulingService.DayScheduled += schedulerDayScheduled;
 		}
 
 		void schedulerDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
@@ -161,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod schedulePeriod, DateOnly dateOnly)
 		{
 			int targetDaysOff;
-			IList<IScheduleDay> dayOffsNow = new List<IScheduleDay>();
+			IList<IScheduleDay> dayOffsNow;
 			var result = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffsNow);
 
 			if (!result)

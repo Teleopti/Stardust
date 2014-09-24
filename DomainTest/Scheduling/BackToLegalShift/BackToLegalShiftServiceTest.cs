@@ -101,10 +101,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
+				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
 					_rollBackService, _resourceCalculateDelayer, true);
-				Assert.AreEqual(_person, result.GetResults()[0].Person);
-				Assert.AreEqual(new DateOnly(), result.GetResults()[0].ScheduleDate);
+				Assert.AreEqual(_person, _workShiftFinderResultHolder.GetResults()[0].Person);
+				Assert.AreEqual(new DateOnly(), _workShiftFinderResultHolder.GetResults()[0].ScheduleDate);
 			}
 		}
 

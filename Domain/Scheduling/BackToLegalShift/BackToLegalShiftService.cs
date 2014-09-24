@@ -1,20 +1,18 @@
-﻿
-
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
 	public interface IBackToLegalShiftService
 	{
-		IWorkShiftFinderResultHolder Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
+		void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled);
 
@@ -27,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private readonly ILegalShiftDecider _legalShiftDecider;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
+		private CancelEventArgs _cancelEvent;
 		private bool _cancelMe;
 
 		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker, IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider, IWorkShiftFinderResultHolder workShiftFinderResultHolder)
@@ -39,18 +38,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 		public event EventHandler<BackToLegalShiftArgs> Progress;
 
-		public IWorkShiftFinderResultHolder Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
+		public void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled)
 		{
-			_cancelMe = false;
 			//single block, single team
 			int processedBlocks = 0;
 			_workShiftFinderResultHolder.Clear();
+			_workShiftFinderResultHolder.AlwaysShowTroubleshoot = true;
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
 				if (_cancelMe)
-					return _workShiftFinderResultHolder;
+					return;
 
 				isSingleTeamSingleDay(selectedTeamBlock);
 
@@ -58,8 +57,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				var date = selectedTeamBlock.BlockInfo.BlockPeriod.StartDate;
 				var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 				var ruleSetBag = person.Period(date).RuleSetBag;
-				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder);
 				processedBlocks++;
+				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder);
+				if(roleModel == null)
+				{
+					OnProgress(selectedTeamBlocks.Count, processedBlocks);
+					continue;
+				}
+
 				if (_legalShiftDecider.IsLegalShift(date, timeZoneInfo, ruleSetBag, roleModel))
 				{
 					OnProgress(selectedTeamBlocks.Count, processedBlocks);
@@ -72,13 +77,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				if (!success)
 				{
 					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
+					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(Resources.CouldNotFindAnyValidShiftInShiftBag, 0, 0));
 					_workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult> { workShiftFinderResult }, DateTime.Now);
 				}
 				
 				OnProgress(selectedTeamBlocks.Count, processedBlocks);
 			}
-
-			return _workShiftFinderResultHolder;
 		}
 
 		protected void OnProgress(int totalBlocks, int processedBlocks )
@@ -88,7 +92,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			{
 				var args = new BackToLegalShiftArgs {TotalBlocks = totalBlocks, ProcessedBlocks = processedBlocks};
 				tmp(this, args);
-				_cancelMe = args.Cancel;
+
+				if (_cancelEvent != null && _cancelEvent.Cancel)
+					_cancelMe = true;
+
+				_cancelEvent = args;
+
+				if (_cancelEvent != null && _cancelEvent.Cancel)
+					_cancelMe = true;
 			}
 		}
 
