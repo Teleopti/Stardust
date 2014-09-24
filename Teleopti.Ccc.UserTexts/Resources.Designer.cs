@@ -3027,7 +3027,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Checked.
+        ///   Looks up a localized string similar to Use.
         /// </summary>
         public static string BadgeTypeChecked {
             get {
