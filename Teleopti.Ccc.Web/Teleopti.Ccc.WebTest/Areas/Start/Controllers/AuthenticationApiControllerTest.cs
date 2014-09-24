@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -136,6 +137,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.LogOnFailedInvalidUserNameOrPassword);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnLicenseErrorIfAuthenticationUnsuccessfulLoggingOn()
+		{
+			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, null, null);
+			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
+			authenticationModel.Stub(x => x.AuthenticateUser()).Throw(new LicenseMissingException());
+
+			var result = target.Logon(authenticationModel, Guid.NewGuid());
+
+			target.Response.StatusCode.Should().Be(400);
+			target.Response.TrySkipIisCustomErrors.Should().Be.True();
+			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.TeleoptiLicenseException);
+			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.TeleoptiLicenseException);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

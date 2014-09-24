@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Secrets.Licensing;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
@@ -87,6 +88,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		/// <value>The enabled licence options.</value>
         public void ActivateLicense(ILicenseActivator licenseActivator)
         {
+	        if (licenseActivator == null)
+	        {
+		        throw new LicenseMissingException(string.Format("Cannot find a valid license for the given data source."));
+	        }
             EnabledLicenseSchema = licenseActivator.EnabledLicenseSchemaName;
 
             // set to false all

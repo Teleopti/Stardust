@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -97,8 +99,20 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			                                       		requestContextInitializer.SetupPrincipalAndCulture();
 			                                       	};
 
+			application.Error += errorHandler;
 			if (HasStartupError)
 				application.BeginRequest += onEveryRequest;
+		}
+
+		private void errorHandler(object sender, EventArgs e)
+		{
+			if (HttpContext.Current.Request.Path.Contains("content/error/error.htm"))
+			{
+				HttpContext.Current.ClearError();
+				return;
+			}
+			HttpContext.Current.Response.Redirect("~/content/error/error.htm?" + HttpContext.Current.Server.UrlEncode(HttpContext.Current.Server.GetLastError().Message));
+			HttpContext.Current.ClearError();
 		}
 
 		private void onEveryRequest(object sender, EventArgs e)

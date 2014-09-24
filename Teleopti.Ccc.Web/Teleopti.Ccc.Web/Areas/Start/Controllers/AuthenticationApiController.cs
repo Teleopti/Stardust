@@ -1,6 +1,7 @@
 using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
@@ -53,6 +54,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			catch (PermissionException)
 			{
 				return errorMessage(Resources.InsufficientPermissionForWeb);
+			}
+			catch (InvalidLicenseException)
+			{
+				return errorMessage(Resources.TeleoptiLicenseException);
 			}
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
