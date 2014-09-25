@@ -24,17 +24,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			if (settings.AdherenceBadgeTypeSelected)
 			{
 				var badge = _badgeRepository.Find(person, BadgeType.Adherence);
-				badges.Add(badge);
+				if (badge != null)
+					badges.Add(badge);
 			}
 			if (settings.AHTBadgeTypeSelected)
 			{
 				var badge = _badgeRepository.Find(person, BadgeType.AverageHandlingTime);
-				badges.Add(badge);
+				if (badge != null)
+					badges.Add(badge);
 			}
 			if (settings.AnsweredCallsBadgeTypeSelected)
 			{
 				var badge = _badgeRepository.Find(person, BadgeType.AnsweredCalls);
-				badges.Add(badge);
+				if (badge != null)
+					badges.Add(badge);
 			}
 			return badges;
 		}
