@@ -142,20 +142,23 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
 	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
 	        {
-				if (_selectedPerson.WorkflowControlSet == null)
+				var fairnessType = _selectedPerson.WorkflowControlSet
+				   .GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
+
+				if (_selectedPerson.WorkflowControlSet == null || fairnessType == FairnessType.FairnessPoints)
 				{
 					tableLayoutPanelRanking.Visible = false;
 					tableLayoutPanelFairness.Visible = false;
 					tableLayoutPanelNoWorkflowControlSet.Visible = true;
 				}
-				else if(_selectedPerson.WorkflowControlSet.UseShiftCategoryFairness)
+				else if(fairnessType == FairnessType.EqualNumberOfShiftCategory)
 				{
 					tableLayoutPanelNoWorkflowControlSet.Visible = false;
 					tableLayoutPanelRanking.Visible = false;
 					tableLayoutPanelFairness.Visible = true;
 					updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
 				}
-				else if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
+				else if (fairnessType == FairnessType.Seniority)
 				{
 					tableLayoutPanelNoWorkflowControlSet.Visible = false;
 					tableLayoutPanelRanking.Visible = true;

@@ -79,6 +79,12 @@
               not-null="true" />
     <property name="WriteProtection"></property>
     <property name="ShiftTradeTargetTimeFlexibility"></property>
+
+    <property name="fairnessTypeAsInt"
+              access="field"
+              column="FairnessType"
+              type="int"
+              not-null="true"/>
     
     <set name="MustMatchSkills"
          table="WorkflowControlSetSkills">
@@ -120,8 +126,6 @@
     </component>
 
     <property name="AutoGrantShiftTradeRequest" type="bool" not-null="true"/>
-
-    <property name="UseShiftCategoryFairness" type="bool" not-null="true"/>
     
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />

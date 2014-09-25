@@ -1936,7 +1936,9 @@
     <EmbeddedResource Include="Scheduling\Note.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WorkflowControl\WorkflowControlSet.hbm.xml" />
+    <EmbeddedResource Include="WorkflowControl\WorkflowControlSet.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WorkflowControl\AbsenceRequestOpenPeriod.hbm.xml" />

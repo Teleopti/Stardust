@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_target = new FilterPersonsForTotalDistribution();
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrix3 = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -32,12 +31,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		[Test]
 		public void ShouldRemovePersonsWithNullOrIncorrectWorkFlowControlSet()
 		{
+			_target = new FilterPersonsForTotalDistribution(true, true);
 			var person1 = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
-			person2.WorkflowControlSet = new WorkflowControlSet();
+			var wfcs2 = new WorkflowControlSet();
+			wfcs2.SetFairnessType(FairnessType.Seniority);
+			person2.WorkflowControlSet = wfcs2;
 			var person3 = PersonFactory.CreatePerson();
 			var wfcs = new WorkflowControlSet();
-			wfcs.UseShiftCategoryFairness = true;
+			wfcs.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			person3.WorkflowControlSet = wfcs;
 			var allMatrixes = new List<IScheduleMatrixPro> {_matrix1, _matrix2, _matrix3};
 

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_target = new FilterForEqualNumberOfCategoryFairness();
+			_target = new FilterForEqualNumberOfCategoryFairness(true, true);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
 			_person1 = PersonFactory.CreatePerson();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void ShouldFilterOutCompleteTeamBlockInfosWithCorrectWorkFlowControlSetOnAllMembers()
 		{
 			var wfcs = new WorkflowControlSet();
-			wfcs.UseShiftCategoryFairness = true;
+			wfcs.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			_person1.WorkflowControlSet = wfcs;
 			_person2.WorkflowControlSet = wfcs;
 			using (_mocks.Record())
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void ShouldNotIncludeTeamBlockWithIncorrectWorkFlowControlSetOnAMember()
 		{
 			var wfcs = new WorkflowControlSet();
-			wfcs.UseShiftCategoryFairness = true;
+			wfcs.SetFairnessType(FairnessType.Seniority);
 			_person1.WorkflowControlSet = wfcs;
 			_person2.WorkflowControlSet = new WorkflowControlSet();
 			using (_mocks.Record())
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo });
-				Assert.That(result.Count == 0);
+				Assert.That(result.Count == 1);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void ShouldNotIncludeTeamBlockWithNullWorkFlowControlSetOnAMember()
 		{
 			var wfcs = new WorkflowControlSet();
-			wfcs.UseShiftCategoryFairness = true;
+			wfcs.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			_person1.WorkflowControlSet = wfcs;
 			_person2.WorkflowControlSet = null;
 			using (_mocks.Record())
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo });
-				Assert.That(result.Count == 0);
+				Assert.That(result.Count == 1);
 			}
 		}
 

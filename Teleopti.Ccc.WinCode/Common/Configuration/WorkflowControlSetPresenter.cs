@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _view.SetAllowedShiftCategories(_selectedModel);
             _view.SetAllowedAbsences(_selectedModel);
             _view.SetShiftTradeTargetTimeFlexibility(_selectedModel.ShiftTradeTargetTimeFlexibility);
-            _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
-            _view.SetUseShiftCategoryFairness(_selectedModel.UseShiftCategoryFairness);
+	        _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
+			_view.SetFairnessType(_selectedModel.GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111)));
         }
 
         public IWorkflowControlSetModel SelectedModel
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             IWorkflowControlSet newDomainEntity = new WorkflowControlSet(Resources.NewWorkflowControlSet);
 			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
 			{
-				newDomainEntity.UseShiftCategoryFairness = true;
+				newDomainEntity.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			}
             var newModel = new WorkflowControlSetModel(newDomainEntity);
             _workflowControlSetModelCollection.Add(newModel);
@@ -537,12 +537,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         public void OnRadioButtonAdvFairnessPointsCheckChanged(bool value)
         {
-            _selectedModel.UseShiftCategoryFairness = !value;
+			if(value)
+				_selectedModel.SetFairnessType(FairnessType.FairnessPoints, _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
         }
 
         public void OnRadioButtonAdvFairnessEqualCheckChanged(bool value)
         {
-            _selectedModel.UseShiftCategoryFairness = value;
+			if(value)
+				_selectedModel.SetFairnessType(FairnessType.EqualNumberOfShiftCategory, _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
         }
 
         public void SetStudentAvailabilityPeriod(DateOnlyPeriod studentAvailabilityPeriod)
