@@ -89,7 +89,7 @@ CREATE TABLE #result(
 	date_id int,
 	date smalldatetime,
 	team_name nvarchar(100),
-	person_id int,
+	person_id uniqueidentifier,
 	person_name nvarchar(200),
 	activity_absence_name nvarchar(100),
 	is_activity bit,
@@ -138,7 +138,7 @@ INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_nam
 SELECT	d.date_id,
 		d.date_date,
 		p.team_name,
-		p.person_id,
+		p.person_code, 
 		p.person_name,
 		act.activity_name,
 		1,
@@ -170,7 +170,7 @@ AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
 AND act.activity_id IN (SELECT id FROM #activities)
 --AND act.activity_id<>-1 --ej absence_time
-GROUP BY d.date_id,	d.date_date,p.team_name,p.person_id,p.person_name,act.activity_name
+GROUP BY d.date_id,	d.date_date,p.team_name,p.person_code,p.person_name,act.activity_name
 
 
 /*Sen all schemalagd tid for absences*/
@@ -179,7 +179,7 @@ INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_nam
 SELECT	d.date_id,
 		d.date_date,
 		p.team_name,
-		p.person_id,
+		p.person_code,
 		p.person_name,
 		ab.absence_name,
 		0,
@@ -211,7 +211,7 @@ AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
 AND ab.absence_id IN (SELECT id FROM #absences)
 --AND ab.absence_id<>-1 --ej activity
-GROUP BY d.date_id,	d.date_date,p.team_name,p.person_id,p.person_name,ab.absence_name
+GROUP BY d.date_id,	d.date_date,p.team_name,p.person_code,p.person_name,ab.absence_name
 
 SELECT * FROM #result 
 ORDER BY team_name,person_name,date_id,activity_absence_name
