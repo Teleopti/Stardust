@@ -36,7 +36,6 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 					foreach (ScheduleProjection scheduleProjectionService in scheduleProjectionServiceList)
 					{
 						var significantPart = scheduleProjectionService.SchedulePart.SignificantPart();
-
 						if (!scheduleProjectionService.SchedulePartProjection.HasLayers || significantPart == SchedulePartView.ContractDayOff)
 							continue;
 
@@ -47,13 +46,12 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 								continue;
 						}
 
-						if (scheduleProjectionService.SchedulePartProjection.IsSatisfiedBy(VisualLayerCollectionSpecification.OneAbsenceLayer))
+						if (significantPart == SchedulePartView.FullDayAbsence)
 						{
 							// We got a whole day absence - add it to absence day count table
 							absenceDayCountDataTable.Rows.Add(
-								DayAbsenceDataRowFactory.CreateDayAbsenceDataRow(absenceDayCountDataTable,
-																				 scheduleProjectionService,
-																				 jobParameters.IntervalsPerDay));
+							 DayAbsenceDataRowFactory.CreateDayAbsenceDataRow(absenceDayCountDataTable,
+										  scheduleProjectionService, jobParameters.IntervalsPerDay));
 						}
 
 						DateTimePeriod? layerCollectionPeriod = scheduleProjectionService.SchedulePartProjection.Period();
