@@ -319,6 +319,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
+			this.toolStripEx4 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+			this.toolStripPanelItem4 = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
+			this.toolStripButtonFilterAgentsRequestView = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuViews.SuspendLayout();
 			this.contextMenuStripResultView.SuspendLayout();
@@ -345,6 +348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.contextMenuStripRestrictionView.SuspendLayout();
 			this.contextMenuStripRequests.SuspendLayout();
 			this.toolStripExFilterDays.SuspendLayout();
+			this.toolStripEx4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
@@ -371,7 +375,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 11;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 8;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -2581,6 +2585,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripEx2);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExHandleRequests);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripEx3);
+			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripEx4);
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel3";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.TabIndex = 7;
@@ -3273,6 +3278,51 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripComboBoxExFilterDays.ToolTipText = "xxFilterNumberOfDaysBackInTime";
 			this.toolStripComboBoxExFilterDays.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExFilterDays_SelectedIndexChanged);
 			// 
+			// toolStripEx4
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripEx4, "");
+			this.toolStripEx4.Dock = System.Windows.Forms.DockStyle.None;
+			this.toolStripEx4.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripEx4.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripEx4.Image = null;
+			this.toolStripEx4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripPanelItem4});
+			this.toolStripEx4.Location = new System.Drawing.Point(1160, 1);
+			this.toolStripEx4.Name = "toolStripEx4";
+			this.toolStripEx4.ShowLauncher = false;
+			this.toolStripEx4.Size = new System.Drawing.Size(83, 98);
+			this.toolStripEx4.TabIndex = 17;
+			this.toolStripEx4.Text = "xxFilter";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx4, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripEx4, false);
+			// 
+			// toolStripPanelItem4
+			// 
+			this.toolStripPanelItem4.CausesValidation = false;
+			this.toolStripPanelItem4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripPanelItem4.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPanelItem4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonFilterAgentsRequestView});
+			this.toolStripPanelItem4.Name = "toolStripPanelItem4";
+			this.SetShortcut(this.toolStripPanelItem4, System.Windows.Forms.Keys.None);
+			this.toolStripPanelItem4.Size = new System.Drawing.Size(74, 81);
+			this.toolStripPanelItem4.Text = "toolStripPanelItem1";
+			this.toolStripPanelItem4.Transparent = true;
+			// 
+			// toolStripButtonFilterAgentsRequestView
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonFilterAgentsRequestView, "");
+			this.toolStripButtonFilterAgentsRequestView.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
+			this.toolStripButtonFilterAgentsRequestView.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonFilterAgentsRequestView.Name = "toolStripButtonFilterAgentsRequestView";
+			this.SetShortcut(this.toolStripButtonFilterAgentsRequestView, System.Windows.Forms.Keys.None);
+			this.toolStripButtonFilterAgentsRequestView.Size = new System.Drawing.Size(70, 20);
+			this.toolStripButtonFilterAgentsRequestView.Text = "xxAgents";
+			this.toolStripButtonFilterAgentsRequestView.ToolTipText = "xxFilterAgents";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilterAgentsRequestView, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFilterAgentsRequestView, false);
+			this.toolStripButtonFilterAgentsRequestView.Click += new System.EventHandler(this.toolStripButtonFilterAgents_Click);
+			// 
 			// SchedulingScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3337,6 +3387,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.contextMenuStripRequests.ResumeLayout(false);
 			this.toolStripExFilterDays.ResumeLayout(false);
 			this.toolStripExFilterDays.PerformLayout();
+			this.toolStripEx4.ResumeLayout(false);
+			this.toolStripEx4.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -3604,6 +3656,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripMenuItem ToolStripMenuItemSwapRaw;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExRequestNavigate;
 		private ToolStripButton toolStripButtonRequestBack;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx4;
+		private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItem4;
+		private ToolStripButton toolStripButtonFilterAgentsRequestView;
         
         
     }
