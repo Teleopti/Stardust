@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public interface IFairnessAndMaxSeatCalculatorsManager
     {
         IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
-                                               double maxValue, FairnessType fairnessType, IPerson person, DateOnly dateOnly,
+                                               double maxValue, IPerson person, DateOnly dateOnly,
                                                IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions);
     }
 
@@ -36,11 +36,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
-                                                    double maxValue, FairnessType fairnessType, IPerson person, DateOnly dateOnly,
+        public virtual IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
+                                                    double maxValue, IPerson person, DateOnly dateOnly,
                                                     IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
                                                     TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions)
-        {
+		{
+			var wfcs = person.WorkflowControlSet;
+			if (wfcs == null)
+				return allValues.ToList();
+
+			var fairnessType = wfcs.GetFairnessType(false, false);
+
             double highestShiftValue = double.MinValue;
             IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
 			if (schedulingOptions.Fairness.Value > 0)
@@ -114,12 +120,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return foundValues;
         }
 
-        private IScheduleDictionary ScheduleDictionary
+        protected IScheduleDictionary ScheduleDictionary
         {
             get { return _resultStateHolder.Schedules; }
         }
 
-        private int getMaxFairnessOnShiftCategories()
+        protected int getMaxFairnessOnShiftCategories()
         {
             int result = 0;
             foreach (var shiftCategory in _resultStateHolder.ShiftCategories)

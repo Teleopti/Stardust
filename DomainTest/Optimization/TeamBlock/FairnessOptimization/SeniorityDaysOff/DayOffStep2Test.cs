@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             {
                 
                 commonMocks(teamBlockList, teamBlockPointList);
-                Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_seniorTeamBlock)).Return(true);
+                Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_seniorTeamBlock, true)).Return(true);
                 //Second level
                 Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock))
                       .IgnoreArguments()
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mock.Playback())
             {
                 
-                _target.PerformStep2(schedulingOptions,_allPersonMatrixList,_selectedPeriod,_selectedPersons,_rollbackService,_schedulingDictionary,_weekDayPoints.GetWeekDaysPoints(),_optimizationPreferences);
+                _target.PerformStep2(schedulingOptions,_allPersonMatrixList,_selectedPeriod,_selectedPersons,_rollbackService,_schedulingDictionary,_weekDayPoints.GetWeekDaysPoints(),_optimizationPreferences, true);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock)).Return(true);
+                Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock, true)).Return(true);
                 commonMocks(teamBlockList, teamBlockPointList);
                 //Second level
                 Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock)).IgnoreArguments().Return(teamBlockList);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mock.Playback())
             {
 
-                _target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences);
+                _target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences, true);
             }
         }
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			ISchedulingOptions schedulingOptions = new SchedulingOptions();
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock, true)).Return(true);
 				commonMocks(teamBlockList, teamBlockPointList);
 				//Second level
 				Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock)).IgnoreArguments().Return(teamBlockList);
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mock.Playback())
 			{
 				_target.BlockSwapped += targetReportProgress;
-				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences);
+				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences, true);
 				_target.BlockSwapped -= targetReportProgress;
 			}
 		}

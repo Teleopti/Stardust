@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(
                     () =>
                     _dayOffStep1.PerformStep1(_allPersonMatrixList, _selectedPeriod, _selectedPerson, _rollbackService,
-                                              _scheduleDictionary, _weekDayPoints, _optimizationPreferences))
+                                              _scheduleDictionary, _weekDayPoints, _optimizationPreferences, true))
                       .IgnoreArguments();
                 Expect.Call(() => _dayOffStep1.BlockSwapped += null).IgnoreArguments();
                 Expect.Call(() => _dayOffStep1.BlockSwapped -= null).IgnoreArguments();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mock.Playback())
             {
                 
-                _target.Execute(_allPersonMatrixList,_selectedPeriod,_selectedPerson,schedulingOptions,_scheduleDictionary,_rollbackService,_optimizationPreferences );
+                _target.Execute(_allPersonMatrixList,_selectedPeriod,_selectedPerson,schedulingOptions,_scheduleDictionary,_rollbackService,_optimizationPreferences, true);
             }
         }
         [Test]
@@ -78,13 +78,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(
                     () =>
                     _dayOffStep1.PerformStep1(_allPersonMatrixList, _selectedPeriod, _selectedPerson, _rollbackService,
-                                              _scheduleDictionary, _weekDayPoints, _optimizationPreferences))
+                                              _scheduleDictionary, _weekDayPoints, _optimizationPreferences, true))
                       .IgnoreArguments();
 
                 Expect.Call(
                     () =>
                     _dayOffStep2.PerformStep2(schedulingOptions,_allPersonMatrixList, _selectedPeriod, _selectedPerson, _rollbackService,
-                                              _scheduleDictionary, _weekDayPoints, _optimizationPreferences))
+                                              _scheduleDictionary, _weekDayPoints, _optimizationPreferences, true))
                       .IgnoreArguments();
                 Expect.Call(() => _dayOffStep1 .BlockSwapped  += null).IgnoreArguments();
                 Expect.Call(() => _dayOffStep1 .BlockSwapped  -= null).IgnoreArguments();
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mock.Playback())
             {
 
-                _target.Execute(_allPersonMatrixList, _selectedPeriod, _selectedPerson, schedulingOptions, _scheduleDictionary, _rollbackService, _optimizationPreferences);
+                _target.Execute(_allPersonMatrixList, _selectedPeriod, _selectedPerson, schedulingOptions, _scheduleDictionary, _rollbackService, _optimizationPreferences, true);
             }
         }
     }

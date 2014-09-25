@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_person = _mock.StrictMock<IPerson>();
 			_persons = new List<IPerson>{_person};
 			_workflowControlSet = _mock.StrictMock<IWorkflowControlSet>();
-			_target = new TeamBlockSeniorityValidator(true);
+			_target = new TeamBlockSeniorityValidator();
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateSeniority(_teamBlockInfo);
+				var result = _target.ValidateSeniority(_teamBlockInfo, true);
 				Assert.IsTrue(result);
 			}
 		}
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateSeniority(_teamBlockInfo);
+				var result = _target.ValidateSeniority(_teamBlockInfo, true);
 				Assert.IsFalse(result);
 			}
 		}

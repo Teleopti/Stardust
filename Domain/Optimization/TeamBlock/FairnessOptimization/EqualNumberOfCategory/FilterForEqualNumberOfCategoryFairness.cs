@@ -6,21 +6,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IFilterForEqualNumberOfCategoryFairness
 	{
-		IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockListRaw);
+		IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockListRaw, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111);
 	}
 
 	public class FilterForEqualNumberOfCategoryFairness : IFilterForEqualNumberOfCategoryFairness
 	{
-		private readonly bool _schedulerHidePointsFairnessSystem28317;
-		private readonly bool _schedulerSeniority11111;
 
-		public FilterForEqualNumberOfCategoryFairness(bool Scheduler_HidePointsFairnessSystem_28317, bool SchedulerSeniority11111)
-		{
-			_schedulerHidePointsFairnessSystem28317 = Scheduler_HidePointsFairnessSystem_28317;
-			_schedulerSeniority11111 = SchedulerSeniority11111;
-		}
-
-		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockListRaw)
+		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockListRaw, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
 		{
 			var teamBlockListWithCorrectWorkFlowControlSet = new List<ITeamBlockInfo>();
 			foreach (var teamBlockInfo in teamBlockListRaw)
@@ -31,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					if(matchInGroupMemberFound) continue;
 					var workflowControlSet = groupMember.WorkflowControlSet;
 					if (workflowControlSet == null) continue;
-					if (workflowControlSet.GetFairnessType(_schedulerHidePointsFairnessSystem28317, _schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
+					if (workflowControlSet.GetFairnessType(schedulerHidePointsFairnessSystem28317, schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
 					{
 						teamBlockListWithCorrectWorkFlowControlSet.Add(teamBlockInfo);
 						matchInGroupMemberFound = true;

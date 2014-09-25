@@ -43,8 +43,6 @@ namespace Teleopti.Interfaces.Domain
 	    /// <param name="nonBlendSkillPeriods">The non blend skill periods.</param>
 	    /// <param name="currentSchedulePeriod">The current schedule period.</param>
 	    /// <param name="schedulingOptions">The scheduling options.</param>
-	    /// <param name="scheduler_HidePointsFairnessSystem_28317">feaure toggle</param>
-	    /// <param name="scheduler_Seniority_11111">feature toggle</param>
 	    /// <returns></returns>
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IWorkShiftCalculationResultHolder FindBestMainShift(
@@ -55,8 +53,6 @@ namespace Teleopti.Interfaces.Domain
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
-            ISchedulingOptions schedulingOptions, 
-			bool scheduler_HidePointsFairnessSystem_28317, 
-			bool scheduler_Seniority_11111);
+            ISchedulingOptions schedulingOptions);
     }
 }

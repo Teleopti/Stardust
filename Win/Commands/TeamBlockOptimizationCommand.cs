@@ -94,7 +94,8 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
-			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, IToggleManager toggleManager)
+			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, 
+			IToggleManager toggleManager)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.Win.Commands
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 					_schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
-					optimizationPreferences);
+					optimizationPreferences, _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
@@ -180,14 +181,14 @@ namespace Teleopti.Ccc.Win.Commands
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 						_schedulerStateHolder.Schedules,
-						rollbackServiceWithoutResourceCalculation, optimizationPreferences);
+						rollbackServiceWithoutResourceCalculation, optimizationPreferences, true);
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 
 					_teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 					_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons,
 						schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(),
-						_schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences);
+						_schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences, true);
 
 					_teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 				}
