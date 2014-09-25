@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_target = new FilterForEqualNumberOfCategoryFairness(true, true);
+			_target = new FilterForEqualNumberOfCategoryFairness();
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
 			_person1 = PersonFactory.CreatePerson();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(new List<ITeamBlockInfo> {_teamBlockInfo});
+				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo }, true, true);
 				Assert.That(result[0].Equals(_teamBlockInfo));
 			}
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo });
+				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo }, true, true);
 				Assert.That(result.Count == 1);
 			}
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo });
+				var result = _target.Filter(new List<ITeamBlockInfo> { _teamBlockInfo }, true, true);
 				Assert.That(result.Count == 1);
 			}
 		}

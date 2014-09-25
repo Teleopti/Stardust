@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-				                _rollbackService, _optimizationPreferences);
+				                _rollbackService, _optimizationPreferences, true, true);
 			}
 		}
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			{
 				_target.ReportProgress += _targetReportProgress;
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-								_rollbackService, _optimizationPreferences);
+								_rollbackService, _optimizationPreferences, true, true);
 				_target.ReportProgress -= _targetReportProgress;
 			}
 		}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.ReportProgress += _targetReportProgress2;
-				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
+				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true, true);
 				_target.ReportProgress -= _targetReportProgress2;
 			}
 		}
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-								_rollbackService, _optimizationPreferences);
+								_rollbackService, _optimizationPreferences, true, true);
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-								_rollbackService, _optimizationPreferences);
+								_rollbackService, _optimizationPreferences, true, true);
 			}
 		}
 
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-								_rollbackService, _optimizationPreferences);
+								_rollbackService, _optimizationPreferences, true, true);
 			}
 		}
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-								_rollbackService, _optimizationPreferences);
+								_rollbackService, _optimizationPreferences, true, true);
 			}
 		}
 
@@ -316,12 +316,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private void commonMocks()
 		{
 
-			Expect.Call(_filterPersonsForTotalDistribution.Filter(_allMatrixes)).Return(_selectedPersons);
+			Expect.Call(_filterPersonsForTotalDistribution.Filter(_allMatrixes, true, true)).Return(_selectedPersons);
 			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, 
 																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
 																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer))
 				  .Return(_teamBlockInfos);
-			Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
+			Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(_teamBlockInfos, true, true)).Return(_teamBlockInfos);
 
 			Expect.Call(_distributionForPersons.CreateSummary(_selectedPersons, _sceduleDictionary)).IgnoreArguments()
 				  .Return(_totalDistributionSummary);

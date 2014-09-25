@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		[Test]
 		public void ShouldRemovePersonsWithNullOrIncorrectWorkFlowControlSet()
 		{
-			_target = new FilterPersonsForTotalDistribution(true, true);
+			_target = new FilterPersonsForTotalDistribution();
 			var person1 = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
 			var wfcs2 = new WorkflowControlSet();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(allMatrixes).ToList();
+				var result = _target.Filter(allMatrixes, true, true).ToList();
 				Assert.That(result[0].Equals(person3));
 			}
 		}

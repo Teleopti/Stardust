@@ -74,7 +74,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<FairnessValueCalculator>().As<IFairnessValueCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
-            builder.RegisterType<FairnessAndMaxSeatCalculatorsManager>().As<IFairnessAndMaxSeatCalculatorsManager>().InstancePerLifetimeScope();
+
+			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>()
+							.As<FairnessAndMaxSeatCalculatorsManager28317>();
+			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager>()
+						.As<FairnessAndMaxSeatCalculatorsManager>();
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
+				? (IFairnessAndMaxSeatCalculatorsManager)c.Resolve<FairnessAndMaxSeatCalculatorsManager28317>()
+				: c.Resolve<FairnessAndMaxSeatCalculatorsManager>())
+					.As<IFairnessAndMaxSeatCalculatorsManager>();
+
             builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
             builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().InstancePerLifetimeScope();
             builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
@@ -89,7 +98,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         	builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().
         		InstancePerLifetimeScope();
         	builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
-	        builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317));
             builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
             builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>().InstancePerLifetimeScope();

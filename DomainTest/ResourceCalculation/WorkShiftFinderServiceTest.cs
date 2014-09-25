@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new WorkShiftFinderService(_stateHolder, _preSchedulingStatusChecker,
                _shiftProjectionCacheFilter, _personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, _workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
-			   _shiftLengthDecider, true, true);
+			   _shiftLengthDecider);
 			_possibleStartEndCategory =new PossibleStartEndCategory();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 		}
@@ -110,7 +110,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			    Expect.Call(_person.Period(dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(bag);
 				Expect.Call(dictionary[_person]).Return(range).Repeat.AtLeastOnce();
-                Expect.Call(_person.WorkflowControlSet).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly, _timeZoneInfo, bag, false, true)).Return(caches);
 				Expect.Call(_shiftProjectionCacheFilter.FilterOnMainShiftOptimizeActivitiesSpecification(caches, new Domain.Specification.All<IEditableShift>())).
 					IgnoreArguments().Return(caches).Repeat.AtLeastOnce();
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 						results)
 					.IgnoreArguments();
 				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(7));
-				Expect.Call(_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(results, 2, FairnessType.EqualNumberOfShiftCategory, _person, dateOnly, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
+				Expect.Call(_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(results, 2, _person, dateOnly, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
 					TimeSpan.FromHours(7), _schedulingOptions)).Return(results);
                 
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
@@ -500,24 +499,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dataHolders = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriodData>();
 			var virtualShedulePeriod = _mocks.DynamicMock<IVirtualSchedulePeriod>();
 		    var nonBlendSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
-		    var wfcs = _mocks.StrictMock<IWorkflowControlSet>();
             var results = new List<IWorkShiftCalculationResultHolder>
                               {
                                   new WorkShiftCalculationResult { Value = 1 } 
                               };
 
             Expect.Call(virtualShedulePeriod.Person).Return(_person).Repeat.AtLeastOnce();
-            Expect.Call(_person.WorkflowControlSet).Return(wfcs).Repeat.AtLeastOnce();
-		    Expect.Call(wfcs.GetFairnessType(true, true)).Return(FairnessType.EqualNumberOfShiftCategory);
             Expect.Call(_calculatorManager.RunCalculators(_person, shiftList, dataHolders,
                                                             nonBlendSkillPeriods, _schedulingOptions)).Return(
                                                                 results);
             Expect.Call(virtualShedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(7));
-            Expect.Call(_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(results, 1, FairnessType.EqualNumberOfShiftCategory, _person, _scheduleDateOnly, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
+            Expect.Call(_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(results, 1, _person, _scheduleDateOnly, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
                 TimeSpan.FromHours(7), _schedulingOptions)).Return(results);
             _mocks.ReplayAll();
             IWorkShiftCalculationResultHolder retShift =
-                _target.FindBestMainShift(_scheduleDateOnly, shiftList, dataHolders, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), nonBlendSkillPeriods, virtualShedulePeriod, _schedulingOptions, true, true);
+                _target.FindBestMainShift(_scheduleDateOnly, shiftList, dataHolders, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), nonBlendSkillPeriods, virtualShedulePeriod, _schedulingOptions);
 			Assert.IsNotNull(retShift);
 			_mocks.VerifyAll();
 		}
@@ -562,7 +558,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                   new List<IWorkShiftCalculationResultHolder>());
             _mocks.ReplayAll();
             _target.FindBestMainShift(_scheduleDateOnly, caches, skillstaffPeriods, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
-                new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), virtualShedulePeriod, _schedulingOptions, true, true);
+                new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), virtualShedulePeriod, _schedulingOptions);
             _mocks.VerifyAll();
         }
 
@@ -577,12 +573,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                   new WorkShiftCalculationResult { Value = -1, ShiftProjection = null } 
                               };
             _schedulingOptions.OnlyShiftsWhenUnderstaffed = true;
-            Expect.Call(_person.WorkflowControlSet).Return(null).Repeat.AtLeastOnce();
             Expect.Call(_calculatorManager.RunCalculators(_person, caches, skillstaffPeriods,
 															  new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), _schedulingOptions)).Return(
                                                                   results);
             Expect.Call(virtualShedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(7)).Repeat.AtLeastOnce();
-            Expect.Call(_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(results, -1, FairnessType.EqualNumberOfShiftCategory, _person, _scheduleDateOnly, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
+            Expect.Call(_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(results, -1, _person, _scheduleDateOnly, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
                 TimeSpan.FromHours(7), _schedulingOptions)).Return(results).Repeat.AtLeastOnce();
 
             Expect.Call(virtualShedulePeriod.Person).Return(_person);
@@ -590,7 +585,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks.ReplayAll();
 
             _target.FindBestMainShift(_scheduleDateOnly, caches, skillstaffPeriods, new Dictionary<ISkill, ISkillStaffPeriodDictionary>(),
-                new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), virtualShedulePeriod, _schedulingOptions, true, true);
+                new Dictionary<ISkill, ISkillStaffPeriodDictionary>(), virtualShedulePeriod, _schedulingOptions);
 
             _mocks.VerifyAll();
         }
