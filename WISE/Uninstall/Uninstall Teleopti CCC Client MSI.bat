@@ -18,9 +18,17 @@ SET /A AMD64=%errorlevel%
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{%productId%} /v DisplayName /reg:32 > NUL
 SET /A x86=%errorlevel%
 
+::hide reg query error
+cls
+
+::uninstall
 if %x86% equ 0 SET /A isInstalled=1
 if %AMD64% equ 0 SET /A isInstalled=1
-if defined isInstalled MsiExec.exe /X{%productId%} /qb /L "uninstall-server.log"
+if defined isInstalled (
+	echo uninstall ...
+	MsiExec.exe /X{%productId%} /qb /L "uninstall-server.log"
+	echo uninstall. Done!
+)
 GOTO :EOF
 
 :EOF
