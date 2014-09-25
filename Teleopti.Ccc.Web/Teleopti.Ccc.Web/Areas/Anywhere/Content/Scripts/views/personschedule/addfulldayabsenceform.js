@@ -72,6 +72,7 @@ define([
                 ajax.ajax({
 		                url: 'PersonScheduleCommand/AddFullDayAbsence',
 		                type: 'POST',
+		                headers: { 'X-Business-Unit-Filter': businessUnitId },
 		                data: data,
 		                success: function(data, textStatus, jqXHR) {
 			                navigation.GoToTeamSchedule(businessUnitId, groupId, self.StartDate());

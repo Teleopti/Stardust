@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (_identity == null) return;
 
 			var identity = _identity.Current();
-			message.BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault();
+			message.BusinessUnitId = message.BusinessUnitId.Equals(Guid.Empty)
+				? identity.BusinessUnit.Id.GetValueOrDefault()
+				: message.BusinessUnitId;
 			message.Datasource = identity.DataSource.Application.Name;
 		}
 	}

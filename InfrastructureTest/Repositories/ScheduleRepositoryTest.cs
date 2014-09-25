@@ -426,6 +426,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						Expect.Call(_availabilityDayRep.Find(_searchPeriod, visiblePeople)).Return(_studentAvailabilityDays);
 						Expect.Call(_overtimeAvailabilityRepository.Find(_searchPeriod, visiblePeople))
                   .Return( _overtimeAvailbilityDays);
+	        Expect.Call(_unitOfWork.DisableFilter(QueryFilter.BusinessUnit));
         }
 
         [Test]

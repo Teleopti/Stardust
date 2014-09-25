@@ -43,6 +43,7 @@ define([
 	var contentPlaceHolder;
 	var defaultBu;
 	var currentBu;
+	var trackingPersonId;
 
 	function _displayView(routeInfo) {
 
@@ -93,6 +94,8 @@ define([
 		menu.CurrentGroupId(routeInfo.id);
 		menu.CurrentDate(routeInfo.date);
 		menu.ActiveView(routeInfo.view);
+		if (trackingPersonId)
+			trackNotification(trackingPersonId);
 	}
 	
 	function _setupRoutes() {
@@ -222,10 +225,14 @@ define([
 		}
 	}
 
-	function _initTrackingNotification(personId) {
+	function bindNotificationViewModel() {
 		ko.cleanNode($('#notification-container')[0]);
 		ko.applyBindings(notificationsViewModel, $('#notification-container')[0]);
-		trackingmessages.subscribeTrackingMessage(personId, function (notification) {
+	}
+
+	function trackNotification(personId) {
+		trackingmessages.unsubscribeTrackingMessage();
+		trackingmessages.subscribeTrackingMessage(menu.CurrentBusinessUnitId(), personId, function (notification) {
 			var data = JSON.parse(notification.BinaryData);
 			notificationsViewModel.UpdateNotification(notification.DomainId, data.Status);
 		}, function () {
@@ -240,7 +247,9 @@ define([
 				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 				menu.UserName(responseData.UserName);
 				timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
-				_initTrackingNotification(responseData.PersonId);
+				trackingPersonId = responseData.PersonId;
+				bindNotificationViewModel();
+				trackNotification(trackingPersonId);
 			}
 		});
 		ko.cleanNode($('nav')[0]);

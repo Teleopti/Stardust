@@ -78,6 +78,7 @@ define([
 					{
 						url: 'PersonScheduleCommand/RemovePersonAbsence',
 						type: 'POST',
+						headers: { 'X-Business-Unit-Filter': data.BusinessUnitId },
 						data: JSON.stringify({
 							PersonAbsenceId: data.Id,
 							TrackedCommandInfo: { TrackId: trackId }

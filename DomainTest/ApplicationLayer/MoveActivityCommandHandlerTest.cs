@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -110,6 +111,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			modifiedLayer.Period.StartDateTime.Should().Be(expectedStartInUtc);
 		}
 
+		[Test]
+		public void ShouldRaiseActivityMovedEvent()
+		{
+			var agent = new Person().WithId();
+			var activity = new Activity("_").WithId();
+			var orgStart = createDateTimeLocal(6);
+			var orgEnd = createDateTimeLocal(11);
+			var userTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+			var userTimeZone = new SpecificTimeZone(userTimeZoneInfo);
+			var assignment = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { assignment };
+			var activityRepository = new FakeWriteSideRepository<IActivity> { activity };
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
+			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, activityRepository, scenario, userTimeZone);
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new MoveActivityCommand
+			{
+				AgentId = agent.Id.Value,
+				ScheduleDate = assignment.Date,
+				ActivityId = activity.Id.Value,
+				NewStartTime = createDateTimeLocal(2),
+				OldStartTime = orgStart,
+				OldProjectionLayerLength = Convert.ToInt32((orgEnd - orgStart).TotalMinutes),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
+			};
+
+			target.Handle(command);
+			var expectedStartInLocal = new DateTime(command.NewStartTime.Ticks, DateTimeKind.Local);
+			var expectedStartInUtc = TimeZoneHelper.ConvertToUtc(expectedStartInLocal, userTimeZoneInfo);
+			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityMovedEvent>().Single();
+			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
+			@event.StartDateTime.Should().Be(expectedStartInUtc);
+			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
+			@event.InitiatorId.Should().Be(operatedPersonId);
+			@event.TrackId.Should().Be(trackId);
+			@event.BusinessUnitId.Should().Be(scenario.Current().BusinessUnit.Id.GetValueOrDefault());
+		}
 
 		private static IPersonAssignment createPersonAssignmentWithOneLayer(IActivity activity, IPerson agent, DateTime orgStart, DateTime orgEnd, IUserTimeZone userTimeZone)
 		{

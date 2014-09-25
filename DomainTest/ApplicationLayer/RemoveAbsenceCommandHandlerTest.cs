@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaisePersonAbsenceRemovedEvent()
 		{
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), MockRepository.GenerateMock<IAbsenceLayer>());
+			var scenario = new FakeCurrentScenario().Current();
+			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), scenario, MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(new Guid());
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>() { personAbsence };
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.EndDateTime.Should().Be(personAbsence.Layer.Period.EndDateTime);
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.TrackId.Should().Be(trackId);
+			@event.BusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
 		}
 	}
 }

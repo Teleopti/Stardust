@@ -177,6 +177,7 @@ define([
 			ajax.ajax({
 					url: 'PersonScheduleCommand/AddIntradayAbsence',
 					type: 'POST',
+					headers: { 'X-Business-Unit-Filter': businessUnitId },
 					data: requestData,
 					success: function(data, textStatus, jqXHR) {
 						navigation.GoToTeamSchedule(businessUnitId, groupId, self.Date());

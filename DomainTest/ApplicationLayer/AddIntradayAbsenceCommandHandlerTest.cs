@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.StartDateTime.Should().Be(command.StartTime);
 			@event.EndDateTime.Should().Be(command.EndTime);
 			@event.InitiatorId.Should().Be(operatedPersonId);
+			@event.BusinessUnitId.Should().Be(currentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		}
 
 		[Test]

@@ -771,6 +771,10 @@ Scenario: Should be able to change schedule for multiple business units
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |
+	And there is a scenario
+	| Field         | Value           |
+	| Name          | Scenario 1      |
+	| Business Unit | Business Unit 1 |
 	And there is a site 'Paris' on business unit 'Business Unit 1'
 	And there is a team named 'Red' on site 'Paris'
 	And there is an activity with
@@ -799,6 +803,7 @@ Scenario: Should be able to change schedule for multiple business units
 	 | Start Date     | 2014-09-09   |
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
+	| Scenario       | Scenario 1       |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2014-09-09 08:00 |

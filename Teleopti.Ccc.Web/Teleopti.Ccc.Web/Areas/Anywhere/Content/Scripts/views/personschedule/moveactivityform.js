@@ -141,6 +141,7 @@
 		    ajax.ajax({
 				    url: 'PersonScheduleCommand/MoveActivity',
 				    type: 'POST',
+				    headers: { 'X-Business-Unit-Filter': businessUnitId },
 				    data: requestData,
 				    success: function(data, textStatus, jqXHR) {
 				    	navigation.GoToTeamSchedule(businessUnitId, self.GroupId(), self.ScheduleDate());

@@ -292,7 +292,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					ActivityId = activity.Id.Value,
 					StartDateTime = period.StartDateTime,
 					EndDateTime = period.EndDateTime,
-					ScenarioId = Scenario.Id.Value
+					ScenarioId = Scenario.Id.Value,
+					BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				};
 				if (trackedCommandInfo != null)
 				{
@@ -390,7 +391,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					PersonId = Person.Id.Value,
 					StartDateTime = affectedPeriod.StartDateTime,
 					EndDateTime =affectedPeriod.EndDateTime,
-					ScenarioId = Scenario.Id.Value
+					ScenarioId = Scenario.Id.Value,
+					BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				};
 				if (trackedCommandInfo != null)
 				{

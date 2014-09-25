@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = startDateTimeInUtc,
 				EndDateTime = endDateTimeInUtc,
 				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				
+				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PersonId = person.Id.GetValueOrDefault(),
 				StartDateTime = startDateTimeInUtc,
 				EndDateTime = endDateTimeInUtc,
-				ScenarioId = _scenario.Id.GetValueOrDefault()
+				ScenarioId = _scenario.Id.GetValueOrDefault(),
+				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{
@@ -97,7 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
-				EndDateTime = Period.EndDateTime
+				EndDateTime = Period.EndDateTime,
+				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
 			if (trackedCommandInfo != null)
 			{

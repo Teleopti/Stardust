@@ -25,10 +25,11 @@ define([
 			return startPromise;
 		},
 
-		subscribeTrackingMessage: function(personId, callback, subscriptionDone) {
+		subscribeTrackingMessage: function(buId, personId, callback, subscriptionDone) {
 			unsubscribeTrackingMessage();
 			startPromise.done(function() {
 				trackingMessageSubscription = messagebroker.subscribe({
+					businessUnitId: buId,
 					domainType: 'TrackingMessage',
 					domainReferenceId: personId,
 					callback: callback

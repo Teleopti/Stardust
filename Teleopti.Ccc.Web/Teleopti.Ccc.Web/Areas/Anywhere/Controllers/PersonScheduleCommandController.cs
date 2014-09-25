@@ -3,14 +3,18 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
+	[Intercept(typeof(AspectInterceptor))]
 	public class PersonScheduleCommandController : Controller
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
@@ -23,9 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWorkAction]
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
 		[AddFullDayAbsencePermission]
-		public JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
+		public virtual JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
@@ -34,9 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWorkAction]
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
 		[AddIntradayAbsencePermission]
-		public JsonResult AddIntradayAbsence(AddIntradayAbsenceCommand command)
+		public virtual JsonResult AddIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
@@ -56,9 +60,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWorkAction]
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
 		[RemoveAbsencePermission]
-		public JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
+		public virtual JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
@@ -67,9 +71,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWorkAction]
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
 		[AddActivityPermission]
-		public JsonResult AddActivity(AddActivityCommand command)
+		public virtual JsonResult AddActivity(AddActivityCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
@@ -78,9 +82,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWorkAction]
+		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
 		[MoveActivityPermission]
-		public JsonResult MoveActivity(MoveActivityCommand command)
+		public virtual JsonResult MoveActivity(MoveActivityCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;

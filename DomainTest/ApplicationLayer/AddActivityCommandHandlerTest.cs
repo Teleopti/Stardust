@@ -31,8 +31,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 						mainActivity, personRepository.Single(),
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
 				};
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
-								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
+								   scenario,
 								   activityRepository, personRepository, new UtcTimeZone(), null);
 
 			var operatedPersonId = Guid.NewGuid();
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
 			@event.InitiatorId.Should().Be(operatedPersonId);
 			@event.TrackId.Should().Be(trackId);
+			@event.BusinessUnitId.Should().Be(scenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		}
 
 		[Test]
@@ -159,6 +161,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignmentRepository.Single().MainActivities().Single().Payload.Name.Should().Be("Added activity");
 			personAssignmentRepository.Single().ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
 		}
-
 	}
 }
