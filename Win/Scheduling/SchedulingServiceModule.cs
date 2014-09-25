@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().
         		InstancePerLifetimeScope();
         	builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
+	        builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317));
             builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
             builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>().InstancePerLifetimeScope();
