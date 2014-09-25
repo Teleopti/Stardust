@@ -12350,4 +12350,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Could not find any valid shifts in shift bag</value>
     <comment>Could not find any valid shifts in shift bag</comment>
   </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Failed to reset badges, please try later!</value>
+    <comment>use for message to user when reset badges failed in admin client system setting</comment>
+  </data>
 </root>

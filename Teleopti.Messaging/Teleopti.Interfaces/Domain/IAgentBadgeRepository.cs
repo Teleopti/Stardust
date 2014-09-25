@@ -27,5 +27,10 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="badgeType">Badge type.</param>
 		/// <returns></returns>
 		IAgentBadge Find(IPerson person, BadgeType badgeType);
+
+		/// <summary>
+		/// reset all badges for all agents
+		/// </summary>
+		void ResetAgentBadges();
 	}
 }

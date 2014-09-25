@@ -19633,6 +19633,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to reset badges, please try later!.
+        /// </summary>
+        public static string ResetBadgesFailed {
+            get {
+                return ResourceManager.GetString("ResetBadgesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset Layout.
         /// </summary>
         public static string ResetLayout {

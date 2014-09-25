@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private IUnitOfWork _unitOfWork;
 		private AgentBadgeSettingsRepository _repository;
 		private readonly IToggleManager _toggleManager;
+		private IAgentBadgeRepository _agentBadgeRepository;
 
 		public BadgeThresholdSettings(IToggleManager toggleManager)
 		{
@@ -111,6 +113,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_unitOfWork = value;
 			_repository = new AgentBadgeSettingsRepository(_unitOfWork);
+			_agentBadgeRepository = new AgentBadgeRepository(_unitOfWork);
 		}
 
 		public void Persist()
@@ -179,7 +182,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			DialogResult result = MessageBox.Show(Resources.ResetBadgesConfirm, Resources.ResetBadges, MessageBoxButtons.OKCancel);
 			if (result == DialogResult.OK)
 			{
-				//reset all badgess
+				try
+				{
+					_agentBadgeRepository.ResetAgentBadges();
+				}
+				catch
+				{
+					MessageBox.Show(Resources.ResetBadgesFailed, Resources.ResetBadges, MessageBoxButtons.OK);
+				}
 			}
 		}
 	}
