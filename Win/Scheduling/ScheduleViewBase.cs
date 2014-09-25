@@ -1312,6 +1312,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public int GetColumnForDate(DateTime date)
         {
+			var dayView = this as DayViewNew;
+			if (dayView != null) 
+				return (int)ColumnType.StartScheduleColumns;
+
             int retCol = -1;
 
             int col = (int)ColumnType.StartScheduleColumns;
