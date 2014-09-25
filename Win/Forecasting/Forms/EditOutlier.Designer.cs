@@ -50,7 +50,7 @@
 			// 
 			this.textBoxTemplateName.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxTemplateName.BackColor = System.Drawing.Color.White;
-			this.textBoxTemplateName.BeforeTouchSize = new System.Drawing.Size(489, 23);
+			this.textBoxTemplateName.BeforeTouchSize = new System.Drawing.Size(255, 23);
 			this.textBoxTemplateName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxTemplateName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBoxTemplateName.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -122,6 +122,7 @@
 			this.buttonAdvCancel.Text = "xxCancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
 			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
+			this.buttonAdvCancel.MouseLeave += new System.EventHandler(this.buttonAdvCancelMouseLeave);
 			// 
 			// buttonAdvOK
 			// 
@@ -139,6 +140,7 @@
 			this.buttonAdvOK.Text = "xxOk";
 			this.buttonAdvOK.UseVisualStyle = true;
 			this.buttonAdvOK.Click += new System.EventHandler(this.buttonAdvOkClick);
+			this.buttonAdvOK.MouseLeave += new System.EventHandler(this.buttonAdvOkMouseLeave);
 			// 
 			// gradientPanel1
 			// 
@@ -195,6 +197,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxOutlier";
 			this.Load += new System.EventHandler(this.editOutlierLoad);
+			this.Shown += new System.EventHandler(this.editOutlierShown);
 			((System.ComponentModel.ISupportInitialize)(this.textBoxTemplateName)).EndInit();
 			this.splitContainerAdvContent.Panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdvContent)).EndInit();

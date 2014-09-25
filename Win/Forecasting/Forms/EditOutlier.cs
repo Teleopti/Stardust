@@ -148,5 +148,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			item.Value.Dock = DockStyle.Fill;
 			splitContainerAdvContent.Panel2.Controls.Add(item.Value);
 		}
+
+		private void editOutlierShown(object sender, EventArgs e)
+		{
+			Refresh();
+		}
+
+		private void buttonAdvOkMouseLeave(object sender, EventArgs e)
+		{
+			buttonAdvOK.Refresh();
+		}
+
+		private void buttonAdvCancelMouseLeave(object sender, EventArgs e)
+		{
+			buttonAdvCancel.Refresh();
+		}
 	}
 }
