@@ -346,7 +346,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if (e.KeyChar != '\r') return;
+			if (textBox1.Text == string.Empty && _userSelectedPersonList.Count > 0)
+			{
+				buttonOk.PerformClick();
+				return;
+			}
+
 			if (gridListControlDefaultSearch.SelectedItem == null) return;
+			
+
 			var selected = selectedPersons();
 
 			foreach (var person in selected)
