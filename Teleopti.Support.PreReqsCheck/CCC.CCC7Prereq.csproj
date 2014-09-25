@@ -131,6 +131,9 @@
     <Content Include="WindowsServer2008R2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="WindowsServer2012.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="WindowsServer2012R2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
