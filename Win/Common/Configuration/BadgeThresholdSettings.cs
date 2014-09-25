@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	public partial class BadgeThresholdSettings : BaseUserControl, ISettingPage
 	{
 		private IUnitOfWork _unitOfWork;
-		private AgentBadgeSettingsRepository _repository;
+		private IAgentBadgeSettingsRepository _repository;
 		private readonly IToggleManager _toggleManager;
 		private IAgentBadgeRepository _agentBadgeRepository;
 
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public TreeFamily TreeFamily()
 		{
-			return new TreeFamily(UserTexts.Resources.SystemSettings);
+			return new TreeFamily(Resources.SystemSettings);
 		}
 
 		public string TreeNode()
 		{
-			return UserTexts.Resources.AgentBadgeSetting;
+			return Resources.AgentBadgeSetting;
 		}
 
 		public void LoadControl()
@@ -129,8 +129,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void checkBoxEnableBadge_CheckedChanged(object sender, EventArgs e)
 		{
-			var badgeEnabled = ((CheckBox) sender).Checked;
-			setControlsEnabled(badgeEnabled);
+			setControlsEnabled(((CheckBox)sender).Checked);
 		}
 
 		private void setControlsEnabled(bool enabled)
@@ -142,22 +141,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void checkAnsweredCallsBadgeType_CheckedChanged(object sender, EventArgs e)
 		{
-			var badgeTypeChecked = ((CheckBox) sender).Checked;
-			numericUpDownThresholdForAnsweredCalls.Enabled = badgeTypeChecked;
+			numericUpDownThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
 			updateRateSettingsState();
 		}
 
 		private void checkAHTBadgeType_CheckedChanged(object sender, EventArgs e)
 		{
-			var badgeTypeChecked = ((CheckBox)sender).Checked;
-			timeSpanTextBoxThresholdForAHT.Enabled = badgeTypeChecked;
+			timeSpanTextBoxThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
 			updateRateSettingsState();
 		}
 
 		private void checkAdherenceBadgeType_CheckedChanged(object sender, EventArgs e)
 		{
-			var badgeTypeChecked = ((CheckBox)sender).Checked;
-			doubleTextBoxThresholdForAdherence.Enabled = badgeTypeChecked;
+			doubleTextBoxThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
 			updateRateSettingsState();
 		}
 
@@ -165,31 +161,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var isAnyTypeSelected = doubleTextBoxThresholdForAdherence.Enabled || timeSpanTextBoxThresholdForAHT.Enabled ||
 									numericUpDownThresholdForAnsweredCalls.Enabled;
-			if (isAnyTypeSelected)
-			{
-				numericUpDownSilverToBronzeBadgeRate.Enabled = true;
-				numericUpDownGoldenToSilverBadgeRate.Enabled = true;
-			}
-			else
-			{
-				numericUpDownSilverToBronzeBadgeRate.Enabled = false;
-				numericUpDownGoldenToSilverBadgeRate.Enabled = false;
-			}
+
+			numericUpDownSilverToBronzeBadgeRate.Enabled = isAnyTypeSelected;
+			numericUpDownGoldenToSilverBadgeRate.Enabled = isAnyTypeSelected;
 		}
 
 		private void reset_Click(object sender, EventArgs e)
 		{
-			DialogResult result = MessageBox.Show(Resources.ResetBadgesConfirm, Resources.ResetBadges, MessageBoxButtons.OKCancel);
-			if (result == DialogResult.OK)
+			var result = MessageBox.Show(Resources.ResetBadgesConfirm, Resources.ResetBadges, MessageBoxButtons.OKCancel);
+			if (result != DialogResult.OK) return;
+			try
 			{
-				try
-				{
-					_agentBadgeRepository.ResetAgentBadges();
-				}
-				catch
-				{
-					MessageBox.Show(Resources.ResetBadgesFailed, Resources.ResetBadges, MessageBoxButtons.OK);
-				}
+				_agentBadgeRepository.ResetAgentBadges();
+			}
+			catch
+			{
+				MessageBox.Show(Resources.ResetBadgesFailed, Resources.ResetBadges, MessageBoxButtons.OK);
 			}
 		}
 	}
