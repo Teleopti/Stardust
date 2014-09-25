@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new StateGroupControl(),
 											new ShiftCategorySettingsControl(),
 											new AvailabilityPage(),
-											new SystemSettingControl(),
+											new SystemSettingControl(_toggleManager),
 											new RotationPage(),
 											new DaysOffControl(),
 											new AlarmControl(),
