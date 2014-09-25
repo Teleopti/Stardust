@@ -57,6 +57,7 @@ INNER JOIN mart.dim_scenario ds
 INNER JOIN mart.fact_hourly_availability f
 	ON f.date_id = dd.date_id
 	AND f.scenario_id = ds.scenario_id
+	AND f.person_id = dp.person_id
 WHERE stg.business_unit_code = @business_unit_code
 
 
