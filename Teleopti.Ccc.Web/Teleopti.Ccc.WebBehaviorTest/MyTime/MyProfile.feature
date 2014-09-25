@@ -10,7 +10,7 @@ Feature: My Profile
 
 Scenario: See my profile
 	Given I am an agent
-	And I am swedish
+	And I am american
 	When I view my regional settings
 	Then I should see my culture
 	And I should see my language
