@@ -12354,4 +12354,20 @@ Reduce the complexity to use these shifts.</value>
     <value>Failed to reset badges, please try later!</value>
     <comment>use for message to user when reset badges failed in admin client system setting</comment>
   </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} cannot be earlier than {1} </value>
+    <comment>Used to display a generic end time cannot be before start time error..</comment>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Full Day Absence Request End Time</value>
+    <comment>System Setting - the start end time applied to a full day absence request.</comment>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Full Day Absence Request Start Time</value>
+    <comment>System Setting - the start time applied to a full day absence request.</comment>
+  </data>
+  <data name="HiddenSystemSettings" xml:space="preserve">
+    <value>Hidden System Settings</value>
+    <comment>Title of the hidden system settings present on the system settings control.</comment>
+  </data>
 </root>

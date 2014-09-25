@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -15,20 +19,27 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class SystemSettingControl : BaseUserControl, ISettingPage
 	{
+		private IToggleManager _toggleManager;
 		private DefaultSegment _defaultSegmentSetting;
 		private AdherenceReportSetting _adherenceReportSetting;
 		private StringSetting _supportEmailSetting;
 		private AsmAlertTime _asmAlertTime;
+		private TimeSpanSetting _fullDayAbsenceRequestStartTimeSetting;
+		private TimeSpanSetting _fullDayAbsenceRequestEndTimeSetting;
 
-		public SystemSettingControl()
+		public SystemSettingControl(IToggleManager toggleManager)
 		{
 			InitializeComponent();
+			_toggleManager = toggleManager;
 		}
 
 		public void InitializeDialogControl()
 		{
 			setColors();
 			SetTexts();
+			hiddenSettingVisibility (false);
+			SetupTimeStampTextBoxes();
+
 		}
 
 		private void setColors()
@@ -51,6 +62,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 				_supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
 				_asmAlertTime = new GlobalSettingDataRepository(uow).FindValueByKey("AsmAlertTime", new AsmAlertTime());
+				_fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
+				_fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 			}
 			var calculatorTypeCollection = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();
 			var adherenceSetting = _adherenceReportSetting.CalculationMethod;
@@ -66,8 +79,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxSuportEmail.Text = _supportEmailSetting.StringValue;
 			initIntervalLengthComboBox(_defaultSegmentSetting.SegmentLength);
 			numericUpDownAsmSetting.Value = _asmAlertTime.SecondsBeforeChange;
+
+			tsTextBoxFullDayAbsenceRequestStart.SetInitialResolution(_fullDayAbsenceRequestStartTimeSetting.TimeSpanValue);
+			tsTextBoxFullDayAbsenceRequestEnd.SetInitialResolution(_fullDayAbsenceRequestEndTimeSetting.TimeSpanValue);
 		}
 
+		
 		private void initIntervalLengthComboBox(int defaultLength)
 		{
 			var intervalLengths = new List<IntervalLengthItem>
@@ -121,6 +138,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_supportEmailSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
 				_asmAlertTime.SecondsBeforeChange = (int)numericUpDownAsmSetting.Value;
 				_asmAlertTime = new GlobalSettingDataRepository(uow).PersistSettingValue(_asmAlertTime).GetValue(new AsmAlertTime());
+
+				_fullDayAbsenceRequestStartTimeSetting.TimeSpanValue = tsTextBoxFullDayAbsenceRequestStart.Value;
+				_fullDayAbsenceRequestEndTimeSetting.TimeSpanValue = tsTextBoxFullDayAbsenceRequestEnd.Value;
+				_fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_fullDayAbsenceRequestStartTimeSetting).GetValue(new TimeSpanSetting(new TimeSpan(0,0,0)));
+				_fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_fullDayAbsenceRequestEndTimeSetting).GetValue(new TimeSpanSetting(new TimeSpan(23,59,0)));
+				
 				uow.PersistAll();
 			}
 		}
@@ -151,6 +174,65 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void supportEmailToSetting()
 		{
 			_supportEmailSetting.StringValue = textBoxSuportEmail.Text;
+			
+		}
+
+		private void SetupTimeStampTextBoxes()
+	    {
+			
+			tsTextBoxFullDayAbsenceRequestStart.MaximumValue = new TimeSpan(23, 59, 0);
+			tsTextBoxFullDayAbsenceRequestEnd.MaximumValue = new TimeSpan(23, 59, 0);
+			tsTextBoxFullDayAbsenceRequestStart.Validating += ValidateTimeStampTextBoxes;
+			tsTextBoxFullDayAbsenceRequestEnd.Validating += ValidateTimeStampTextBoxes;
+			
+			tsTextBoxFullDayAbsenceRequestEnd.SetSize(54, 23);
+			tsTextBoxFullDayAbsenceRequestStart.SetSize(54, 23);
+			tsTextBoxFullDayAbsenceRequestEnd.AllowNegativeValues = false;
+			tsTextBoxFullDayAbsenceRequestStart.AllowNegativeValues = false;
+		}
+
+		private void ValidateTimeStampTextBoxes(object sender, CancelEventArgs e)
+		{
+			bool cancel = false;
+
+			TimeSpan fullDayAbsenceReqStart = tsTextBoxFullDayAbsenceRequestStart.Value;
+			TimeSpan fullDayAbsenceReqEnd = tsTextBoxFullDayAbsenceRequestEnd.Value;
+
+			if (fullDayAbsenceReqEnd < fullDayAbsenceReqStart)
+			{
+				string errorText = String.Format(Resources.CannotBeBeforeTime,
+													lblFullDayAbsenceReqEndTime.Text, lblFullDayAbsenceReqStartTime.Text);
+				ViewBase.ShowErrorMessage(errorText,Resources.TimeError);
+				cancel = true;
+			}
+
+
+			e.Cancel = cancel;
+		}
+
+		
+
+		private void lblHiddenSettingsHotspotClick (object sender, EventArgs e)
+		{
+			if (_toggleManager.IsEnabled (Toggles.MyTimeWeb_FullDayAbsenceConfiguration_30552))
+			{
+				if (Control.ModifierKeys == (Keys.Control | Keys.Alt))
+				{
+					hiddenSettingVisibility(!tableLayoutPanelHiddenSettings.Visible);
+				}
+			}
+		}
+	
+
+		private void hiddenSettingVisibility(bool visible)
+		{
+			
+			lblFullDayAbsenceReqEndTime.Visible = visible;
+			lblFullDayAbsenceReqStartTime.Visible = visible;
+			lblHiddenSystemSettings.Visible = visible;
+			tableLayoutPanelHiddenSettings.Visible = visible;
+			tsTextBoxFullDayAbsenceRequestEnd.Visible = visible;
+			tsTextBoxFullDayAbsenceRequestStart.Visible = visible;
 		}
 	}
 }
