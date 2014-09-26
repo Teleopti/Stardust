@@ -1267,6 +1267,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelAbsenceRequestPeriods.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelAbsenceRequestPeriods.TabIndex = 0;
 			// 
@@ -1712,7 +1713,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelShiftTrade.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelShiftTrade.TabIndex = 0;
 			// 
