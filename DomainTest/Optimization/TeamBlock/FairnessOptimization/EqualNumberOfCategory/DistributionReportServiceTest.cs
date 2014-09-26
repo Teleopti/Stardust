@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_mocks = new MockRepository();
 			_distributionForPersons = _mocks.StrictMock<IDistributionForPersons>();
 			_groupCreator = _mocks.StrictMock<IGroupCreator>();
-			_target = new DistributionReportService(_distributionForPersons, _groupCreator, true, true);
+			_target = new DistributionReportService(_distributionForPersons, _groupCreator);
 			_person1 = PersonFactory.CreatePerson();
 			_person2 = PersonFactory.CreatePerson();
 			_allPersons = new List<IPerson> {_person1, _person2};
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateReport(_person1, _groupPageForDate, _allPersons, _scheduleDictionary);
+				var result = _target.CreateReport(_person1, _groupPageForDate, _allPersons, _scheduleDictionary, true, true);
 				Assert.That(result.DistributionDictionary[category1].Agent.Equals(1));
 				Assert.That(result.DistributionDictionary[category1].Agent.Equals(result.DistributionDictionary[category1].Team));
 				Assert.That(result.DistributionDictionary[category1].Team.Equals(result.DistributionDictionary[category1].All));

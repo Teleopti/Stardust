@@ -213,7 +213,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			perPersonAndGroupListView.Items.Clear();
 			var service = _container.Resolve<IDistributionReportService>();
-			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly), state.PersonsInOrganization.ToList(), state.Schedules);
+			var pointsFairnessHidden = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317);
+			var seniorityFairness = _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111);
+			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly),
+				state.PersonsInOrganization.ToList(), state.Schedules, pointsFairnessHidden, seniorityFairness);
 			foreach (var shiftCategory in report.DistributionDictionary.Keys)
 			{
 				var item = new ListViewItem(shiftCategory.Description.Name);
