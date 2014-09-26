@@ -8,37 +8,39 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IDistributionReportService
 	{
-		DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary);
+		DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons,
+			IScheduleDictionary scheduleDictionary, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111);
 	}
 
 	public class DistributionReportService : IDistributionReportService
 	{
 		private readonly IDistributionForPersons _distributionForPersons;
 		private readonly IGroupCreator _groupCreator;
-		private readonly bool _schedulerHidePointsFairnessSystem28317;
-		private readonly bool _schedulerSeniority11111;
 
 		public DistributionReportService(IDistributionForPersons distributionForPersons, 
-										 IGroupCreator groupCreator, 
-										 bool scheduler_HidePointsFairnessSystem_28317, 
-										 bool scheduler_Seniority_11111)
+										 IGroupCreator groupCreator)
 		{
 			_distributionForPersons = distributionForPersons;
 			_groupCreator = groupCreator;
-			_schedulerHidePointsFairnessSystem28317 = scheduler_HidePointsFairnessSystem_28317;
-			_schedulerSeniority11111 = scheduler_Seniority_11111;
 		}
 
-		public DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary)
+		public DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate,
+			IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary,
+			bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
 		{
 			var report = new DistributionReportData();
-			var totalDistribution = _distributionForPersons.CreateSummary(filterOnEqualNumberOfCategorySetting(allFilteredPersons), scheduleDictionary);
+			var totalDistribution =
+				_distributionForPersons.CreateSummary(
+					filterOnEqualNumberOfCategorySetting(allFilteredPersons, schedulerHidePointsFairnessSystem28317,
+						schedulerSeniority11111), scheduleDictionary);
 			var personDistribution = _distributionForPersons.CreateSummary(new List<IPerson> {person}, scheduleDictionary);
 			var myTeam = _groupCreator.CreateGroupForPerson(person, groupPageForDate, scheduleDictionary.Keys.ToList());
-			var teamDistribution = _distributionForPersons.CreateSummary(filterOnEqualNumberOfCategorySetting(myTeam.GroupMembers), scheduleDictionary);
+			var teamDistribution =
+				_distributionForPersons.CreateSummary(filterOnEqualNumberOfCategorySetting(myTeam.GroupMembers, schedulerHidePointsFairnessSystem28317,
+						schedulerSeniority11111), scheduleDictionary);
 
 			var involvedCategories = new SortedSet<IShiftCategory>(totalDistribution.PercentDicionary.Keys,
-			                                                       new ShiftCategorySorter());
+				new ShiftCategorySorter());
 			foreach (var shiftCategory in involvedCategories)
 			{
 				var values = new DistributionReportDataValues();
@@ -52,18 +54,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 				report.DistributionDictionary.Add(shiftCategory, values);
 			}
-	
+
 			return report;
 		}
 
-		private IEnumerable<IPerson> filterOnEqualNumberOfCategorySetting(IEnumerable<IPerson> personList)
+		private IEnumerable<IPerson> filterOnEqualNumberOfCategorySetting(IEnumerable<IPerson> personList,
+			bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
 		{
 			IList<IPerson> filteredList = new List<IPerson>();
 			foreach (var person in personList)
 			{
 				var wfcs = person.WorkflowControlSet;
 				if (wfcs == null) continue;
-				if (wfcs.GetFairnessType(_schedulerHidePointsFairnessSystem28317, _schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
+				if (wfcs.GetFairnessType(schedulerHidePointsFairnessSystem28317, schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
 					filteredList.Add(person);
 			}
 
