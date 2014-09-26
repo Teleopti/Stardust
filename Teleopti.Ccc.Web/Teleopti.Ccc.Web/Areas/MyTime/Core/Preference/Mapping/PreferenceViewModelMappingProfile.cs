@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			var period = _virtualSchedulePeriodProvider.GetCurrentOrNextVirtualPeriodForDate(date);
 			var personPeriods = _loggedOnUser.CurrentUser().PersonPeriods(period).ToList();
 			var currentPeriod =
-				personPeriods.SingleOrDefault(p => (p.Period.StartDate <= date) && (p.Period.EndDate > date) && p.RuleSetBag != null);
+				personPeriods.SingleOrDefault(p => (p.Period.Contains(date) && p.RuleSetBag != null));
 
 			var shiftCategoriesFromBag = currentPeriod != null 
 				? currentPeriod.RuleSetBag.ShiftCategoriesInBag()
