@@ -34,6 +34,9 @@ AS
 	Person uniqueidentifier
 	)
 
+	CREATE TABLE #tmpOut(PersonId uniqueidentifier, TeamId uniqueidentifier, SiteId uniqueidentifier, BusinessUnitId uniqueidentifier,[Date] datetime, Start datetime, [End] datetime, 
+	Model nvarchar(max), MinStart datetime, Total int, RowNumber int)
+
 	--Init
 	INSERT INTO @TempList
 	SELECT * FROM dbo.SplitStringString(@personList)
@@ -57,8 +60,11 @@ AS
 		ORDER BY DayOffFlag, Start
 	) 
 	
+
+	
+	INSERT INTO #tmpOut
 	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model, (SELECT MIN(Start) FROM Ass)  As 'MinStart',(SELECT COUNT(*) FROM Ass)  As 'Total', RowNumber
-	INTO #tmpOut
+	--INTO #tmpOut
 	FROM Ass 
 	WHERE RowNumber > @skip
 	
