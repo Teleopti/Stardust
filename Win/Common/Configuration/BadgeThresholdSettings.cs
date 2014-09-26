@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void reset_Click(object sender, EventArgs e)
 		{
-			var result = MessageBox.Show(Resources.ResetBadgesConfirm, Resources.ResetBadges, MessageBoxButtons.OKCancel);
+			var result = ViewBase.ShowOkCancelMessage(Resources.ResetBadgesConfirm, Resources.ResetBadges);
 			if (result != DialogResult.OK) return;
 			try
 			{
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			catch
 			{
-				MessageBox.Show(Resources.ResetBadgesFailed, Resources.ResetBadges, MessageBoxButtons.OK);
+				ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
 			}
 		}
 	}
