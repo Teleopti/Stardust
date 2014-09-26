@@ -88,7 +88,7 @@ SELECT @FileName =
         RIGHT('0'+LTRIM(cast(datepart(MINUTE, @Now) as VARCHAR(2))), 2)
 
 --add folder name
-select @FileName = @FolderName + @FileName
+select @FileName = @FolderName + '\' + @FileName
 
 --number of files to use
 select @fileCount = @MaxDisc*1024/@maxfilesize 		--  Start to roll over trace files if more then this figure

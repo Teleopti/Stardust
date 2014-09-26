@@ -37,12 +37,13 @@ SET PERFMONRUNAS=%userdomain%\%username% *
 SET ManualWait=0
 SET READTRACE="%ProgramFiles%\Microsoft Corporation\RMLUtils\ReadTrace.exe"
 SET AnalyseCmd=%ROOTDIR%\AnalyseExample.bat
-SET OutPutFolder=%ROOTDIR%\Data\
-SET TraceOutput=%ROOTDIR%\Helpers\TraceOutput.sql
+SET OutPutFolder=%ROOTDIR%\Data
+SET TraceOutput=%ROOTDIR%\helpers\TraceOutput.sql
 SET sqlerror=0
 SET /A traceid=0
 SET tracefile=
-SET winPerfmon=SQL2005BaselineCounters
+SET perfmonName=SQLServerBaselineCounters
+SET perfmonConfig=%ROOTDIR%\helpers\SQLServerBaselineCounters.config
 
 ::If now input parameters
 IF "%1"=="" (GOTO Manual) ELSE (GOTO Silent)
@@ -67,13 +68,13 @@ GOTO Start
 
 :Manual
 CLS
+ECHO Run this script in elevated mode
 ECHO Run this script locally on a SQL Server.
 ECHO.
-ECHO SQL traces will potentially use a lot of I/O resources in a buzy system.
-ECHO If possible; run this batch file from disk device not used by Windows OS or SQL Server. Trace files will be placed here:
-ECHO "%OutPutFolder%"
+ECHO note: SQL traces will potentially use a lot of I/O resources in a buzy system.
+ECHO e.g put batch file on a disk device not used by Windows OS and/or SQL Server.
+ECHO Trace files will be placed here: "%OutPutFolder%"
 IF %Silent% EQU 0 PAUSE
-
 cls
 
 ECHO SQL Server instance name
@@ -143,7 +144,8 @@ ECHO ProductVersion is: %ProductVersion%, MajorVersion is: %MajorVersion%
 ECHO Create Windows Perfmon trace ...
 call :createPerfmonTrace
 if %logmanError% neq 0 (
-echo could not create Windows perfmon trace, will contiune with SQL trace only
+echo could not create Windows perfmon trace, make sure to run in Elevated mode!
+echo will contiune with SQL trace only
 call :cleanUpLogman
 )
 ECHO Create Windows Perfmon trace. Done
@@ -167,14 +169,19 @@ for /f "tokens=1,2 delims=," %%g in ('more "%TraceOutput%"') do call :GetOutput 
 ) else (
 echo unexpected error. Could not find trace path in output. will abort script. Try clean up any unwanted traces manually:
 SQLCMD -S%INSTANCE% %Conn% -Q"SELECT * FROM :: fn_trace_getinfo(default)"
+ping 127.0.0.1 -n 4 > NUL
 GOTO :quitError
 )
 
 ::just for user to see the output
-ping 127.0.0.1 -n 4 > NUL
-cls
-ECHO I will now start tracing. Set your users and/or applications in a start position.  
-if %Silent% EQU 0 PAUSE
+if %Silent% EQU 0 (
+ECHO Set your users and/or applications in a start position.
+CHOICE /C yn /M "Start tracing?"
+	IF ERRORLEVEL 2 (
+	Call :stopTrace
+	call :cleanUpLogman
+	)
+)
 
 ::Try start SQL Server trace
 echo SQL Server trace start ... 
@@ -189,7 +196,7 @@ echo SQL Server trace started succesfully
 echo.
 
 echo Windows perfmon start ... 
-logman start %WinPerfmon%
+logman start %perfmonName%
 IF %ERRORLEVEL% NEQ 0 (
 echo could not start Windows perfmon trace, will contiune with SQL trace only
 call :cleanUpLogman
@@ -210,22 +217,12 @@ PAUSE
 ECHO Trace will now run for %MaxMinutes% minutes.
 ECHO Sleeping for %MaxMinutes% minutes. Zzz ....
 ECHO.
-CSCRIPT "%ROOTDIR%\Helpers\Sleep.vbs" %MaxMinutes%
+CSCRIPT "%ROOTDIR%\helpers\Sleep.vbs" %MaxMinutes%
 ECHO.
 )
 
 call :stopTrace %traceid%
 call :cleanUpLogman
-
-::if sql 2012
-if %MajorVersion% equ 11 (
-ECHO.
-ECHO Trace files are generated on SQL 2012, I will try to "downgrade" them ...
-ping 127.0.0.1 -n 2 > NUL
-powershell set-executionpolicy unrestricted
-powerShell -file "%ROOTDIR%\helpers\ConvertTraceTo2008.ps1" "%ROOTDIR%\Data"
-)
-ECHO.
 
 ::generate example call for Analyse
 ECHO %READTRACE% -S%INSTANCE% %Conn% -I"%tracefile%.trc" > "%AnalyseCmd%"
@@ -233,10 +230,10 @@ goto :finished
 
 ::-----------functions----------------
 :cleanUpLogman
-logman stop %WinPerfmon% > NUL
+logman stop %perfmonName% > NUL
 ping 127.0.0.1 -n 1 > NUL
-logman delete %WinPerfmon% > NUL
-IF EXIST "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config" DEL "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config" /Q /F
+logman delete %perfmonName% > NUL
+IF EXIST "%perfmonConfig%" DEL "%perfmonConfig%" /Q /F
 exit /b
 
 :sqlerror
@@ -257,57 +254,52 @@ SET tracefile=%~2
 exit /b
 
 :createPerfmonTrace
-ECHO "\Memory\Available MBytes" > "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Memory\Free System Page Table Entries" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Memory\Pages Input/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Memory\Pages/sec"  >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Full Scans/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Page Splits/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Workfiles Created/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Worktables Created/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Buffer cache hit ratio" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Checkpoint pages/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Free pages" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Lazy writes/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Page life expectancy" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Page reads/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Page writes/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Stolen pages" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:General Statistics\Logins/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:General Statistics\Logouts/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:General Statistics\User Connections" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Latches\Average Latch Wait Time (ms)" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Locks(_Total)\Average Wait Time (ms)" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Locks(_Total)\Lock Requests/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Locks(_Total)\Number of Deadlocks/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Memory Manager\Target Server Memory (KB)" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:Memory Manager\Total Server Memory (KB)" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:SQL Statistics\Batch Requests/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:SQL Statistics\SQL Compilations/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\%PERFCOUNTERINSTANCE%:SQL Statistics\SQL Re-Compilations/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Paging File(_Total)\%% Usage" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Paging File(_Total)\%% Usage Peak" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\PhysicalDisk(_Total)\Avg. Disk Read Queue Length" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\PhysicalDisk(_Total)\Avg. Disk sec/Read" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\PhysicalDisk(_Total)\Avg. Disk sec/Transfer" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\PhysicalDisk(_Total)\Avg. Disk sec/Write" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\PhysicalDisk(_Total)\Avg. Disk Write Queue Length" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Process(sqlservr)\%% Privileged Time" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Process(sqlservr)\%% Processor Time" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Processor(_Total)\%% Privileged Time" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\Processor(_Total)\%% Processor Time" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\System\Context Switches/sec" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
-ECHO "\System\Processor Queue Length" >> "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config"
+ECHO "\Memory\Available MBytes" > "%perfmonConfig%"
+ECHO "\Memory\Free System Page Table Entries" >> "%perfmonConfig%"
+ECHO "\Memory\Pages Input/sec" >> "%perfmonConfig%"
+ECHO "\Memory\Pages/sec"  >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Full Scans/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Page Splits/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Workfiles Created/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Access Methods\Worktables Created/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Buffer cache hit ratio" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Checkpoint pages/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Free pages" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Lazy writes/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Page life expectancy" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Page reads/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Page writes/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Buffer Manager\Stolen pages" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:General Statistics\Logins/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:General Statistics\Logouts/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:General Statistics\User Connections" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Latches\Average Latch Wait Time (ms)" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Locks(_Total)\Average Wait Time (ms)" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Locks(_Total)\Lock Requests/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Locks(_Total)\Number of Deadlocks/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Memory Manager\Target Server Memory (KB)" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:Memory Manager\Total Server Memory (KB)" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:SQL Statistics\Batch Requests/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:SQL Statistics\SQL Compilations/sec" >> "%perfmonConfig%"
+ECHO "\%PERFCOUNTERINSTANCE%:SQL Statistics\SQL Re-Compilations/sec" >> "%perfmonConfig%"
+ECHO "\Paging File(_Total)\%% Usage" >> "%perfmonConfig%"
+ECHO "\Paging File(_Total)\%% Usage Peak" >> "%perfmonConfig%"
+ECHO "\PhysicalDisk(_Total)\Avg. Disk Read Queue Length" >> "%perfmonConfig%"
+ECHO "\PhysicalDisk(_Total)\Avg. Disk sec/Read" >> "%perfmonConfig%"
+ECHO "\PhysicalDisk(_Total)\Avg. Disk sec/Transfer" >> "%perfmonConfig%"
+ECHO "\PhysicalDisk(_Total)\Avg. Disk sec/Write" >> "%perfmonConfig%"
+ECHO "\PhysicalDisk(_Total)\Avg. Disk Write Queue Length" >> "%perfmonConfig%"
+ECHO "\Process(sqlservr)\%% Privileged Time" >> "%perfmonConfig%"
+ECHO "\Process(sqlservr)\%% Processor Time" >> "%perfmonConfig%"
+ECHO "\Processor(_Total)\%% Privileged Time" >> "%perfmonConfig%"
+ECHO "\Processor(_Total)\%% Processor Time" >> "%perfmonConfig%"
+ECHO "\System\Context Switches/sec" >> "%perfmonConfig%"
+ECHO "\System\Processor Queue Length" >> "%perfmonConfig%"
 
-ECHO.
-ECHO Note: missleading notation from Windows on the line ....
-ECHO Please type the password of your current Windows login (%userdomain%\%username%)
-
-IF %ManualWait%==0 logman create counter %WinPerfmon% -f bin -rf 0:%MaxMinutes%:00 -si 05 -v mmddhhmm -o "%ROOTDIR%\Data\%WinPerfmon%" -cf "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config" -max 20 -u %PERFMONRUNAS%
+IF %ManualWait%==0 logman create counter %perfmonName% -f bin -rf 0:%MaxMinutes%:00 -si 05 -v mmddhhmm -o "%OutPutFolder%\%perfmonName%" -cf "%perfmonConfig%" -max 20
 set /A logmanError=%errorlevel%
-IF %ManualWait%==1 logman create counter %WinPerfmon% -f bin -m stop -si 05 -v mmddhhmm -o "%ROOTDIR%\Data\%WinPerfmon%" -cf "%ROOTDIR%\Helpers\SQL2005BaselineCounters.config" -max 20 -u %PERFMONRUNAS%
+IF %ManualWait%==1 logman create counter %perfmonName% -f bin -m stop -si 05 -v mmddhhmm -o "%OutPutFolder%\%perfmonName%" -cf "%perfmonConfig%" -max 20
 set /A logmanError=%errorlevel%
-
 exit /b %logmanError%
 
 ::-----------Labels----------------
