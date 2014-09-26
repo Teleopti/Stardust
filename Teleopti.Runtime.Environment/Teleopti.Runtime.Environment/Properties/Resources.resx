@@ -125,4 +125,8 @@
     <value>Always on top</value>
     <comment>Always on top in the context menu</comment>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>Refresh</comment>
+  </data>
 </root>

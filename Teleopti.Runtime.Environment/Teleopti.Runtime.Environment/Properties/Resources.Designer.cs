@@ -77,5 +77,14 @@ namespace Teleopti.Runtime.Environment.Properties {
                 return ResourceManager.GetString("AlwaysOnTop", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
     }
 }

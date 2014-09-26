@@ -124,4 +124,8 @@
   <data name="AgentScheduleMessenger" xml:space="preserve">
     <value>Teleopti WFM座席班表信息工具栏</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>刷新</value>
+    <comment>Refresh</comment>
+  </data>
 </root>

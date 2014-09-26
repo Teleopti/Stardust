@@ -75,6 +75,9 @@ namespace Teleopti.Runtime.Environment
 					break;
 				}
 			}
+
+			e.Menu.Items.Add(EO.WebBrowser.MenuItem.CreateSeparator());
+			e.Menu.Items.Add(new EO.WebBrowser.MenuItem(Resources.Refresh, CommandIds.Reload));
 		}
 
 		private void webView1_IsLoadingChanged(object sender, EventArgs e)
@@ -137,6 +140,21 @@ namespace Teleopti.Runtime.Environment
 			WindowState = FormWindowState.Minimized;
 			Show();
 			WindowState = FormWindowState.Normal;
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if (keyData == (Keys.Control | Keys.F5))
+			{
+				webView1.Reload(true);
+				return true;
+			}
+			if (keyData == Keys.F5)
+			{
+				webView1.Reload();
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 	}
 }

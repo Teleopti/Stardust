@@ -67,6 +67,7 @@
 			this.ClientSize = new System.Drawing.Size(1020, 600);
 			this.Controls.Add(this.webControl1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.KeyPreview = true;
 			this.Name = "MainForm";
 			this.Text = "Teleopti WFM";
 			this.ResumeLayout(false);

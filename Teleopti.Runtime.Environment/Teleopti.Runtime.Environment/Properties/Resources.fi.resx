@@ -120,4 +120,8 @@
   <data name="AlwaysOnTop" xml:space="preserve">
     <value>Aina päällimmäisenä</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Päivitä</value>
+    <comment>Refresh</comment>
+  </data>
 </root>

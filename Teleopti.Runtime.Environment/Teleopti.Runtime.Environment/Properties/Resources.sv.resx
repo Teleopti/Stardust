@@ -124,4 +124,8 @@
   <data name="AgentScheduleMessenger" xml:space="preserve">
     <value>Teleopti WFM Agent Schedule Messenger</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Uppdatera</value>
+    <comment>Refresh</comment>
+  </data>
 </root>
