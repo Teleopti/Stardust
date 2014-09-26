@@ -450,5 +450,7 @@ namespace Teleopti.Interfaces.Domain
 		ISkillDay SkillDay { get; }
 
 	    Percent EstimatedServiceLevelShrinkage { get; }
+
+		bool HasIntraIntervalIssue { get; set; }
     }
 }

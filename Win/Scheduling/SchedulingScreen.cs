@@ -14,6 +14,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -1988,7 +1989,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
 			optimizationHelperWin.ResourceCalculateMarkedDays(_backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
 		}
 
@@ -3092,7 +3093,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
 				optimizationHelperWin.ResourceCalculateAllDays(null, true);
 			}
 
@@ -3264,7 +3265,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
 
-			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
 			optimizationHelperWin.ResourceCalculateAllDays(backgroundWorkerLoadData, true);
 
 			if (e.Cancel)

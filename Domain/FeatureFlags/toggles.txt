@@ -47,3 +47,4 @@ Settings_SetAgentDescription_23257 = RC
 Scheduler_HidePointsFairnessSystem_28317 = false
 Scheduler_BackToLegalShift_29831 = RC
 Portal_ResetBadges_30544 = RC
+Scheduler_IntraIntervalSolver_29845 = false

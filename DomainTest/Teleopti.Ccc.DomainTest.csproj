@@ -474,6 +474,9 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317Test.cs" />
+    <Compile Include="ResourceCalculation\IntraIntervalAnalyze\IntraIntervalFinderServiceTest.cs" />
+    <Compile Include="ResourceCalculation\IntraIntervalAnalyze\IntraIntervalFinderTest.cs" />
+    <Compile Include="ResourceCalculation\IntraIntervalAnalyze\SkillDayIntraIntervalFinderTest.cs" />
     <Compile Include="ResourceCalculation\PeriodResourceDetailTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultHolderTest.cs" />

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -63,9 +64,10 @@ namespace Teleopti.Ccc.Win.Intraday
 		private bool _userWantsToCloseIntraday;
 		private MultipleHostControl shiftEditorHost;
 		private readonly IToggleManager _toggleManager;
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 		public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
-			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IToggleManager toggleManager)
+			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			if (presenter == null) throw new ArgumentNullException("presenter");
 			if (owner == null) throw new ArgumentNullException("owner");
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_settingManager = settingManager;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
 			_toggleManager = toggleManager;
+			_intraIntervalFinderService = intraIntervalFinderService;
 			_presenter = presenter;
 			_schedulerStateHolder = schedulerStateHolder;
 			_owner = owner;
@@ -161,7 +164,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_backgroundWorkerResources.RunWorkerCompleted += backgroundWorkerResourcesRunWorkerCompleted;
 			_backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-			_optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new PersonSkillProvider());
+			_optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new PersonSkillProvider(), _intraIntervalFinderService);
 			_skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting, _toggleManager);
 			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
 			InitializeIntradayViewContent();

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -24,6 +26,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 		public ScheduleCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
 		                       IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -31,7 +34,8 @@ namespace Teleopti.Ccc.Win.Commands
 		                       IScheduleDayChangeCallback scheduleDayChangeCallback,
 		                       ITeamBlockScheduleCommand teamBlockScheduleCommand,
 								ClassicScheduleCommand classicScheduleCommand,
-								IMatrixListFactory matrixListFactory)
+								IMatrixListFactory matrixListFactory,
+								IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -41,6 +45,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;
 			_classicScheduleCommand = classicScheduleCommand;
 			_matrixListFactory = matrixListFactory;
+			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, BackgroundWorker backgroundWorker,
@@ -55,7 +60,7 @@ namespace Teleopti.Ccc.Win.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider);
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntervalFinderService);
 				optimizationHelperWin.ResourceCalculateAllDays(null, true);
 			}
 

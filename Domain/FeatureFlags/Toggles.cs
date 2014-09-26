@@ -17,6 +17,7 @@
 		Scheduler_HidePointsFairnessSystem_28317, 
 		Scheduler_SudentAvailabilityForFixedStaff_30393,
 		Scheduler_BackToLegalShift_29831,
+		Scheduler_IntraIntervalSolver_29845,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		/// <summary>
@@ -38,11 +40,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// Created date: 2008-05-27
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider)
+		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider, IIntraIntervalFinderService intraIntervalFinderService)
 			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), new CurrentTeleoptiPrincipal())
 		{
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;
+			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
 		public void ResourceCalculateAllDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
@@ -98,6 +101,29 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (var date in datesList)
 			{
 				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks, null);
+
+				IResourceCalculationDataContainerWithSingleOperation relevantProjections;
+				IDisposable context = null;
+				if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
+			    {
+			        relevantProjections = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
+			    }
+			    else
+			    {
+			        var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			        relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
+			                                                                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+			                                                                         date.AddDays(-1), date.AddDays(1)));
+			        context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
+			    }
+
+				_intraIntervalFinderService.Execute(_stateHolder.SchedulingResultState, date, relevantProjections);
+
+				if (context != null)
+				{
+					context.Dispose();
+				}
+				
 				if (backgroundWorker != null)
 				{
 					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty);

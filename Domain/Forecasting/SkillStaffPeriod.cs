@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public double RelativeBoostedDifferenceForDisplayOnly { get; set; }
 
+		public bool HasIntraIntervalIssue { get; set; }
+
         public double ScheduledAgentsIncoming
         {
             get
@@ -132,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public Percent ActualServiceLevel
+	    public Percent ActualServiceLevel
         {
             get
             {
