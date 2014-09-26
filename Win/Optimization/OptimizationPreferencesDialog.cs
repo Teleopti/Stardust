@@ -182,10 +182,15 @@ namespace Teleopti.Ccc.Win.Optimization
 					MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 
-			if (!validateOptimizationSteps())
-			{
-				MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}
+				if (!validateOptimizationSteps())
+				{
+					MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+
+				if (!validateTimeBetweenDaysAndSameShift())
+				{
+					MessageBox.Show(this, UserTexts.Resources.UnSupportedOptimizationBlockAndTimeBetweendays, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);	
+				}
 
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
 				savePersonalSettings();
@@ -210,6 +215,15 @@ namespace Teleopti.Ccc.Win.Optimization
 		{
 			if (extraPreferencesPanel1.IsTeamOrBlockChecked() && generalPreferencesPanel1.IsOptimizationStepsChecked())
 				return false;
+
+			return true;
+		}
+
+		private bool validateTimeBetweenDaysAndSameShift()
+		{
+			if (generalPreferencesPanel1.IsTimeBetweenDaysChecked() && extraPreferencesPanel1.IsSameShiftChecked())
+				return false;
+
 			return true;
 		}
 

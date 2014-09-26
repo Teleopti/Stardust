@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.Win.Optimization
             return false;
         }
 
+	    public bool IsTimeBetweenDaysChecked()
+	    {
+		    return checkBoxTimeBetweenDays.Checked;
+	    }
+
         public void ExchangeData(ExchangeDataOption direction)
         {
             if (direction == ExchangeDataOption.DataSourceToControls)

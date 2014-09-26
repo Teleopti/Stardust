@@ -153,8 +153,7 @@ namespace Teleopti.Ccc.Win.Commands
 				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
 					rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator);
 
-			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays &&
-			    !optimizationPreferences.Extra.UseBlockSameShift)
+			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
 			{
 				var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
 				optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,

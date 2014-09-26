@@ -165,6 +165,10 @@ namespace Teleopti.Ccc.Win.Optimization
             return false;
 	    }
 
+		public bool IsSameShiftChecked()
+		{
+			return BlockFinderType.SingleDay != (BlockFinderType) comboBoxBlockType.SelectedValue && checkBoxBlockSameShift.Checked;
+		}
 
 		public bool ValidateDefaultValuesForTeam()
 		{
