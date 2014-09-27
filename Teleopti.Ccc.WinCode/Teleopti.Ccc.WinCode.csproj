@@ -218,6 +218,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Autofac\BackToLegalShiftModule.cs" />
+    <Compile Include="Autofac\IntraIntervalSolverServiceModule.cs" />
     <Compile Include="Autofac\SchedulingCommonModule.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekFilter.cs" />
