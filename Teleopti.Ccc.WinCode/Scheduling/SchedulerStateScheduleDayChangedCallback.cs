@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
     public class SchedulerStateScheduleDayChangedCallback : IScheduleDayChangeCallback
     {

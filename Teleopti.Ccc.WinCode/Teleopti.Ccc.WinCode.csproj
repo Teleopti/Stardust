@@ -218,6 +218,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Autofac\SchedulingCommonModule.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekFilter.cs" />
     <Compile Include="Budgeting\BudgetNavigatorDataService.cs" />
@@ -633,6 +634,7 @@
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
+    <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingCommandBase.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingDescendingCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingAscendingCommand.cs" />
@@ -1306,6 +1308,10 @@
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>

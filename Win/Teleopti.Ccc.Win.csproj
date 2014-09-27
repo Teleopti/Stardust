@@ -1485,7 +1485,6 @@
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
-    <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\ScheduleTimeType.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\BaseCutPasteHandler.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\ICutPasteHandler.cs" />

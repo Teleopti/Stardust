@@ -38,6 +38,7 @@ using Teleopti.Ccc.Win.Meetings.Overview;
 using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Shifts;
+using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces;
@@ -196,6 +197,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
 				builder.RegisterModule(new MainModule());
+				builder.RegisterModule(new SchedulingCommonModule());
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
