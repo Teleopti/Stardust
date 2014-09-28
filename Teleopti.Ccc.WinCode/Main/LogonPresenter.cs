@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		void OkbuttonClicked();
 		void BackButtonClicked();
 		void Initialize();
-		void GetDataForCurrentStep();
+		void GetDataForCurrentStep(bool goingBack);
 		bool Start();
 		LoginStep CurrentStep { get; set; }
 	}
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				    _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
 					CurrentStep++;
 			}
-			GetDataForCurrentStep();
+			GetDataForCurrentStep(false);
 		}
 
 		private bool checkModel()
@@ -129,21 +129,22 @@ namespace Teleopti.Ccc.WinCode.Main
 			    _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
 				CurrentStep--;
 
-			GetDataForCurrentStep();
+			GetDataForCurrentStep(true);
 		}
 
-		public void GetDataForCurrentStep()
+		public void GetDataForCurrentStep(bool goingBack)
 		{
 			switch (CurrentStep)
 			{
 				case LoginStep.SelectSdk:
-					getSdks();
+					if(!goingBack) 
+						getSdks();
 					break;
 				case LoginStep.SelectDatasource:
-					getDataSources();
+					getDataSources(goingBack);
 					break;
 				case LoginStep.Login:
-					_view.ShowStep(true);
+					_view.ShowStep(_model.DataSourceContainers.Count > 1);
 					break;
 				case LoginStep.SelectBu:
 					getBusinessUnits();
@@ -163,14 +164,14 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				_model.SelectedSdk = endpoints[0];
 				CurrentStep++;
-				getDataSources();
+				getDataSources(false);
 			}
 			
 			
 			_view.ShowStep(false);
 		}
 
-		private void getDataSources()
+		private void getDataSources(bool goingBack)
 		{
 			if (_model.DataSourceContainers == null)
 			{
@@ -185,11 +186,16 @@ namespace Teleopti.Ccc.WinCode.Main
 			}
 			if (_model.DataSourceContainers.Count == 1)
 			{
+				if (goingBack)
+					CurrentStep--;
+				else
+					CurrentStep++;
+
 				_model.SelectedDataSourceContainer = _model.DataSourceContainers.Single();
-				CurrentStep++;
-				GetDataForCurrentStep();
+				GetDataForCurrentStep(goingBack);
 			}
-			_view.ShowStep(_model.Sdks.Count > 1);
+			else
+				_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 
 		private void getBusinessUnits()

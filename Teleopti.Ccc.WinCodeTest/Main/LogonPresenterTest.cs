@@ -96,12 +96,9 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         }
 
         [Test]
-        public void ShouldReloadSdkOnBackFromDataSources()
+        public void ShouldNotReloadSdkOnBackFromDataSources()
         {
 			_model.SelectedDataSourceContainer = new DataSourceContainer(null,null,null, AuthenticationTypeOption.Application);
-            Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
-            Expect.Call(_endPointSelector.GetEndpointNames()).Return(new List<string> { "local", "local2" });
-            Expect.Call(() => _view.ShowStep(false));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectDatasource;
             _target.BackButtonClicked();
@@ -129,7 +126,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             _model.SelectedSdk = "sdk1";
             _model.SelectedDataSourceContainer = dataSourceContainer;
             _model.DataSourceContainers = new List<IDataSourceContainer>{dataSourceContainer};
-            Expect.Call(() => _view.ShowStep(true));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.Login;
             _target.BackButtonClicked();

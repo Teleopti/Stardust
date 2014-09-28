@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		}
 
 		public void GetData()
-        {
+		{
 			_model.SelectedSdk = comboBoxAdvSDKList.SelectedItem.ToString();
         }
 
