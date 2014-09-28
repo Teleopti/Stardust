@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_dataSourceHandler.DataSourceProviders()).Return(new List<IDataSourceProvider> { dataSorceProvider });
             Expect.Call(dataSorceProvider.DataSourceList()).Return(new List<DataSourceContainer> {dataSourceContainer});
-            Expect.Call(() => _view.ShowStep(true));
+            Expect.Call(() => _view.ShowStep(false));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectSdk;
             _target.OkbuttonClicked();
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			Expect.Call(_dataSourceHandler.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
 			Expect.Call(availableDataSourcesProvider.UnavailableDataSources())
 				  .Return(new List<IDataSource>());
-            Expect.Call(() => _view.ShowStep(true));
+            Expect.Call(() => _view.ShowStep(false));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectDatasource;
             _target.OkbuttonClicked();
