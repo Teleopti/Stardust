@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -264,16 +265,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+        private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
         private readonly INewBusinessRuleCollection _newBusinessRules;
 
         public ApprovePersonRequestCommand(IViewBase view, IScheduleDictionary schedules, IScenario scenario, IRequestPresenterCallback callback, IHandleBusinessRuleResponse handleBusinessRuleResponse,
-            IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback)
+            IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository)
         {
             _view = view;
             _schedules = schedules;
             _newBusinessRules = newBusinessRules;
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
+            _globalSettingDataRepository = globalSettingDataRepository;
             _scenario = scenario;
             _callback = callback;
             _handleBusinessRuleResponse = handleBusinessRuleResponse;
@@ -329,7 +332,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules)
         {
-            var service =new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(),_scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback);
+            var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository);
 
             return Model.PersonRequest.Approve(service, _authorization);
         }

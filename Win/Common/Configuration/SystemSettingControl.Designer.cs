@@ -288,11 +288,11 @@
             this.tsTextBoxFullDayAbsenceRequestStart.Margin = new System.Windows.Forms.Padding(3, 6, 0, 0);
             this.tsTextBoxFullDayAbsenceRequestStart.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
             this.tsTextBoxFullDayAbsenceRequestStart.Name = "tsTextBoxFullDayAbsenceRequestStart";
-            this.tsTextBoxFullDayAbsenceRequestStart.Size = new System.Drawing.Size(271, 30);
+            this.tsTextBoxFullDayAbsenceRequestStart.Size = new System.Drawing.Size(285, 30);
             this.tsTextBoxFullDayAbsenceRequestStart.TabIndex = 66;
             this.tsTextBoxFullDayAbsenceRequestStart.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxHeight = 23;
-            this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 312;
+            this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 363;
             // 
             // tsTextBoxFullDayAbsenceRequestEnd
             // 
@@ -303,11 +303,11 @@
             this.tsTextBoxFullDayAbsenceRequestEnd.Margin = new System.Windows.Forms.Padding(3, 6, 0, 0);
             this.tsTextBoxFullDayAbsenceRequestEnd.MaximumValue = System.TimeSpan.Parse("1.00:00:00");
             this.tsTextBoxFullDayAbsenceRequestEnd.Name = "tsTextBoxFullDayAbsenceRequestEnd";
-            this.tsTextBoxFullDayAbsenceRequestEnd.Size = new System.Drawing.Size(271, 29);
+            this.tsTextBoxFullDayAbsenceRequestEnd.Size = new System.Drawing.Size(285, 29);
             this.tsTextBoxFullDayAbsenceRequestEnd.TabIndex = 67;
             this.tsTextBoxFullDayAbsenceRequestEnd.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxHeight = 23;
-            this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 312;
+            this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 363;
             // 
             // gradientPanelHeader
             // 

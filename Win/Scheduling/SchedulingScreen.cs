@@ -4675,19 +4675,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			
 			var businessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
-			var approveRequestCommand = new ApprovePersonRequestCommand(this, _schedulerState.Schedules,
-				_schedulerState.RequestedScenario, _requestPresenter,
-				_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules, _overriddenBusinessRulesHolder,
-				new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState));
 
-			IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() { obj.Value.Request };
-			using (var dialog = new RequestReplyStatusChangeDialog(_requestPresenter, selectedRequestList, approveRequestCommand))
-			{
-				dialog.ShowDialog();
-			}
-			recalculateResourcesForRequests(selectedRequestList);
+		    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    {
+		        var globalSettingRepository = new GlobalSettingDataRepository (uow);
+		        var approveRequestCommand = new ApprovePersonRequestCommand (this, _schedulerState.Schedules,
+		            _schedulerState.RequestedScenario, _requestPresenter,
+		            _handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
+		            _overriddenBusinessRulesHolder,
+		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState),
+		            globalSettingRepository);
 
-			if (_requestView != null)
+		        IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() {obj.Value.Request};
+		        using (
+		            var dialog = new RequestReplyStatusChangeDialog (_requestPresenter, selectedRequestList,
+		                approveRequestCommand))
+		        {
+		            dialog.ShowDialog();
+		        }
+		        recalculateResourcesForRequests (selectedRequestList);
+		    }
+		    if (_requestView != null)
 				_requestView.NeedUpdate = true;
 
 			reloadRequestView();
@@ -4715,16 +4723,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var allNewBusinessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 
-			var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter,
-				_handleBusinessRuleResponse,
-				_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
-				new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState));
+		    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    {
+		        var globalSettingRepository = new GlobalSettingDataRepository (uow);
+		        var approvePersonRequestCommand = new ApprovePersonRequestCommand (this, _schedulerState.Schedules,
+		            _schedulerState.RequestedScenario, _requestPresenter,
+		            _handleBusinessRuleResponse,
+		            _personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
+		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState),
+		            globalSettingRepository);
 
-			var selectedAdapters = new List<PersonRequestViewModel>() { eventParameters.Value.Request };
+		        var selectedAdapters = new List<PersonRequestViewModel>() {eventParameters.Value.Request};
 
-			changeRequestStatus(approvePersonRequestCommand, selectedAdapters);
+		        changeRequestStatus (approvePersonRequestCommand, selectedAdapters);
+		    }
 
-			if (_requestView != null)
+		    if (_requestView != null)
 				_requestView.NeedUpdate = true;
 
 			reloadRequestView();
@@ -5105,11 +5119,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var allNewBusinessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 
-			changeRequestStatus(
-				new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter, _handleBusinessRuleResponse,
-												_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
-												new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)), _requestView.SelectedAdapters());
-			if (_requestView != null)
+		    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    {
+		        var globalSettingRepository = new GlobalSettingDataRepository (uow);
+		        changeRequestStatus (
+		            new ApprovePersonRequestCommand (this, _schedulerState.Schedules, _schedulerState.RequestedScenario,
+		                _requestPresenter, _handleBusinessRuleResponse,
+		                _personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
+		                new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState),
+		                globalSettingRepository), _requestView.SelectedAdapters());
+		    }
+
+		    if (_requestView != null)
 				_requestView.NeedUpdate = true;
 
 			reloadRequestView();
@@ -5132,10 +5153,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonReplyAndApprove_Click(object sender, EventArgs e)
 		{
 			var businessRules = _schedulerState.SchedulingResultState.GetRulesToRun();
-			replyAndChangeStatus(new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario, _requestPresenter,
-																 _handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules, _overriddenBusinessRulesHolder,
-																 new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)));
-			if (_requestView != null)
+
+		    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    {
+		        var globalSettingRepository = new GlobalSettingDataRepository (uow);
+		        replyAndChangeStatus (new ApprovePersonRequestCommand (this, _schedulerState.Schedules,
+		            _schedulerState.RequestedScenario, _requestPresenter,
+		            _handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
+		            _overriddenBusinessRulesHolder,
+		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState), globalSettingRepository));
+		    }
+		    if (_requestView != null)
 				_requestView.NeedUpdate = true;
 
 			reloadRequestView();
