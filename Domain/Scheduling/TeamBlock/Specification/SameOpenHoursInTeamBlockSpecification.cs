@@ -33,8 +33,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 				_schedulingResultStateHolder);
 
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
-			var sampleDate = dates.First();
-			var sampleOpenHour = _openHourForDate.OpenHours(sampleDate, skillIntervalDataPerDateAndActivity[sampleDate]);
+			TimePeriod? sampleOpenHour = null;
+			foreach (var date in dates)
+			{
+				sampleOpenHour = _openHourForDate.OpenHours(date, skillIntervalDataPerDateAndActivity[date]);
+				if(sampleOpenHour != null)
+					break;
+			}
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			foreach (var dateOnly in dates)
 			{

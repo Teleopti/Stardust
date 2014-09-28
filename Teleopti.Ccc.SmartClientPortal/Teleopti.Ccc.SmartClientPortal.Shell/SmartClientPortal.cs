@@ -80,6 +80,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
+			webView1.LoadComplete += webView1_LoadComplete;
+		}
+
+		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
+		{
+			if (!string.IsNullOrEmpty(_portalSettings.LastModule))
+			{
+				startModule(_portalSettings.LastModule);
+			}
+			else
+			{
+				startFirstEnabledModule();
+			}
+			webView1.LoadComplete -= webView1_LoadComplete;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -606,6 +620,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				return;
 			}
 			goToPublicPage(false);
+
 		}
 		
 		void webView1LoadFailed(object sender, LoadFailedEventArgs e)
