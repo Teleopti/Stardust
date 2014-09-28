@@ -9,11 +9,9 @@ using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
-using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -61,7 +59,10 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
-			//BackToLegalShiftModule
+
+			builder.RegisterModule<WeeklyRestSolverModule>();
+			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
+			//EqualNumberOfCategoryFairnessModule
 
 
 			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>().InstancePerLifetimeScope();
@@ -298,13 +299,10 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
-			registerTeamBlockOptimizationService(builder);
 
 			builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>();
 			registerFairnessOptimizationService(builder);
 			registerDayOffFairnessOptimizationService(builder);
-			registerEqualNumberOfCategoryFairnessService(builder);
-			registerWeeklyRestSolverClasses(builder);
 			registerMoveTimeOptimizationClasses(builder);
 
 			builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
@@ -372,27 +370,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<PostSwapValidationForTeamBlock>().As<IPostSwapValidationForTeamBlock>();
 			builder.RegisterType<PersonDayOffPointsCalculator>().As<IPersonDayOffPointsCalculator>();
 			builder.RegisterType<PersonShiftCategoryPointCalculator>().As<IPersonShiftCategoryPointCalculator>();
-		}
-
-		private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
-		{
-			builder.RegisterType<EqualNumberOfCategoryFairnessService>().As<IEqualNumberOfCategoryFairnessService>();
-			builder.RegisterType<DistributionForPersons>().As<IDistributionForPersons>();
-			builder.RegisterType<FilterForEqualNumberOfCategoryFairness>().As<IFilterForEqualNumberOfCategoryFairness>();
-			builder.RegisterType<FilterForTeamBlockInSelection>().As<IFilterForTeamBlockInSelection>();
-			builder.RegisterType<FilterOnSwapableTeamBlocks>().As<IFilterOnSwapableTeamBlocks>();
-			builder.RegisterType<TeamBlockSwapper>().As<ITeamBlockSwapper>();
-			builder.RegisterType<EqualCategoryDistributionBestTeamBlockDecider>()
-				.As<IEqualCategoryDistributionBestTeamBlockDecider>();
-			builder.RegisterType<EqualCategoryDistributionWorstTeamBlockDecider>()
-				.As<IEqualCategoryDistributionWorstTeamBlockDecider>();
-			builder.RegisterType<FilterPersonsForTotalDistribution>().As<IFilterPersonsForTotalDistribution>();
-			builder.RegisterType<DistributionReportService>().As<IDistributionReportService>();
-			builder.RegisterType<EqualCategoryDistributionValue>().As<IEqualCategoryDistributionValue>();
-			builder.RegisterType<FilterForFullyScheduledBlocks>().As<IFilterForFullyScheduledBlocks>();
-			builder.RegisterType<FilterForNoneLockedTeamBlocks>().As<IFilterForNoneLockedTeamBlocks>();
-			builder.RegisterType<TeamBlockShiftCategoryLimitationValidator>().As<ITeamBlockShiftCategoryLimitationValidator>();
-			//ITeamBlockShiftCategoryLimitationValidator
 		}
 
 		private void registerFairnessOptimizationService(ContainerBuilder builder)
@@ -496,11 +473,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			//IFirstShiftInTeamBlockFinder
 		}
 
-		private void registerTeamBlockOptimizationService(ContainerBuilder builder)
-		{
-
-		}
-
 		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
@@ -564,32 +536,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>();
 			//IPersonalShiftMeetingTimeChecker
-		}
-
-		private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
-		{
-			builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
-			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-			builder.RegisterType<DayOffToTimeSpanExtractor>().As<IDayOffToTimeSpanExtractor>();
-			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
-			builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
-			builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
-			builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
-			builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
-			builder.RegisterType<IdentifyDayOffWithHighestSpan>();
-			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
-			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
-			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
-			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
-			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
-			builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
-			builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
-			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
-			builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
-			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
-			builder.RegisterType<PersonWeekVoilatingWeeklyRestSpecification>()
-				.As<IPersonWeekVoilatingWeeklyRestSpecification>();
-			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
 		}
 	}
 }
