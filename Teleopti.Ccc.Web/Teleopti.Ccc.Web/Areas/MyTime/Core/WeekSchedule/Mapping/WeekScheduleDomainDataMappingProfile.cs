@@ -92,10 +92,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 													{
 														var startTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).StartTime;
 														var endTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).EndTime;
-														if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
-															lateEnd = new TimeSpan(23, 59, 59);
-														else
-															lateEnd = endTime.Days == 1 ? endTime.Add(new TimeSpan(-1, 0, 0, 0)) : endTime;
+                                                        //if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
+                                                        //    lateEnd = new TimeSpan(23, 59, 59);
+                                                        //else
+                                                        //    lateEnd = endTime.Days == 1 ? endTime.Add(new TimeSpan(-1, 0, 0, 0)) : endTime;
+                                                        
+                                                        //for the day before current week, only if end time crosses midnihgt, 
+                                                        //then it is a valid end time to be carried over to first week day (endTime.Days == 1)
+                                                        if( x.DateOnlyAsPeriod.DateOnly == firstDayOfWeek.AddDays(-1) && endTime.Days == 1)
+                                                            lateEnd = endTime.Add(new TimeSpan(-1, 0, 0, 0));
+                                                        else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1) ) //for the days of current week
+                                                        {
+                                                            //if end time cross midnight, then max. time is of course used, otherwise use the end time as it is
+                                                            if (endTime.Days > startTime.Days)                                                             
+                                                                lateEnd = new TimeSpan(23, 59, 59);
+                                                            else
+                                                                lateEnd = endTime;
+                                                        }
+
 													}
 													if (x.OvertimeAvailablityCollection() == null)
 														return lateEnd;
@@ -103,13 +117,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 													if (overtimeAvailability == null)
 														return lateEnd;
 
-													TimeSpan lateEndOvertimeAvailability;
+													TimeSpan lateEndOvertimeAvailability = new TimeSpan(0, 0, 0);
 													var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
 													var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
-													if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
-														lateEndOvertimeAvailability = new TimeSpan(23, 59, 59);
-													else
-														lateEndOvertimeAvailability = overtimeAvailabilityEnd.Days == 1 ? overtimeAvailabilityEnd.Add(new TimeSpan(-1, 0, 0, 0)) : overtimeAvailabilityEnd;
+													
+                                                    //if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
+                                                    //    lateEndOvertimeAvailability = new TimeSpan(23, 59, 59);
+                                                    //else
+                                                    //    lateEndOvertimeAvailability = overtimeAvailabilityEnd.Days == 1 ? overtimeAvailabilityEnd.Add(new TimeSpan(-1, 0, 0, 0)) : overtimeAvailabilityEnd;
+                                                    
+                                                    
+                                                    //for the day before current week, only if end time of OT Availability crosses midnight (ie., overtimeAvailabilityEnd.Days == 1), 
+                                                    //then it is a valid end time to be carried over to the first week day 
+                                                    if (x.DateOnlyAsPeriod.DateOnly == firstDayOfWeek.AddDays(-1) && overtimeAvailabilityEnd.Days == 1)
+                                                        lateEndOvertimeAvailability = overtimeAvailabilityEnd.Add(new TimeSpan(-1, 0, 0, 0));
+                                                    else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))  //for the days of current week
+                                                    {
+                                                        //if end time of OT Availability crosses midnight, then max. time is of course used, otherwise use its end time as it is
+                                                        if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days)                                                            
+                                                            lateEndOvertimeAvailability = new TimeSpan(23, 59, 59);
+                                                        else
+                                                            lateEndOvertimeAvailability = overtimeAvailabilityEnd;
+
+                                                    }												
 
 													return lateEnd > lateEndOvertimeAvailability ? lateEnd : lateEndOvertimeAvailability;
 												});
