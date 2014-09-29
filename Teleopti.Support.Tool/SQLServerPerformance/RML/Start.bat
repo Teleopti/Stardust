@@ -30,7 +30,6 @@ SET INSTANCE=%COMPUTERNAME%
 SET MyINSTANCE=
 SET PERFCOUNTERINSTANCE=SQLServer
 SET Testname=
-SET MaxMinutes=1440
 SET MaxDisk=
 SET /A Silent=0
 SET PERFMONRUNAS=%userdomain%\%username% *
@@ -95,12 +94,22 @@ IF %WinAuth% equ 1 Call :WinAuth
 IF %WinAuth% equ 0 Call :SQLAuth
 
 ECHO.
-ECHO Max time for trace ^(minutes^)
-SET /P MaxMinutes=^(to manually stop the trace, leave blank^):
 
-::If manual stop, limit the trace to 24 hours
-IF %MaxMinutes% EQU 1440 (
-SET /A ManualWait=1
+ECHO.
+SET /A MaxMinutes=-1
+SET "UserInput="
+ECHO Max time for trace ^(minutes^)?
+SET /P UserInput=Please enter a Number or leave blank to manually stop the trace: 
+IF "%UserInput%"=="" (
+	SET /A ManualWait=1
+) ELSE (
+	SET /A ManualWait=0
+	SET /A MaxMinutes=%UserInput%
+)
+
+IF %MaxMinutes% GTR 1440 (
+ECHO I will limit the trace to 24 hours ^(1440 min^)
+SET /A MaxMinutes=1440
 )
 
 ECHO.
