@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ShiftTradeRequest _shiftTradeRequest;
         private IPerson _personTo;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+        private IGlobalSettingDataRepository _globalSettingDataRepository;
 
         [SetUp]
         public  void Setup()
@@ -56,10 +57,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
+            _globalSettingDataRepository = _mock.StrictMock<IGlobalSettingDataRepository>();
             _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioRepository,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
                                                        _currentUnitOfWorkFactory, _messageBrokerEnablerFactory,
-													   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+													   new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+                                                       _globalSettingDataRepository);
 
             _person = PersonFactory.CreatePerson("Test Peson");
             _person.SetId(Guid.NewGuid());

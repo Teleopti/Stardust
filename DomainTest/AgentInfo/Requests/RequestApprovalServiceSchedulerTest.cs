@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Time;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         private ISwapAndModifyService swapAndModifyService;
         private INewBusinessRuleCollection businessRules;
         private IScheduleDayChangeCallback scheduleDayChangeCallback;
+        private IGlobalSettingDataRepository globalSettingDataRepository;
 
         [SetUp]
         public void Setup()
@@ -33,7 +35,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             swapAndModifyService = mocks.StrictMock<ISwapAndModifyService>();
             businessRules = mocks.DynamicMock<INewBusinessRuleCollection>();
             scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
-            target = new RequestApprovalServiceScheduler(scheduleDictionary,scenario,swapAndModifyService,businessRules,scheduleDayChangeCallback);
+            globalSettingDataRepository = mocks.StrictMock<IGlobalSettingDataRepository>();
+
+            target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository);
         }
 
         [Test]
