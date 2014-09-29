@@ -15,7 +15,7 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment
 		}
 
 		public DBHelper Helper { get; set; }
-        public string SevenZipDllUrn { get; set; }
+        public SettingsInRegistry SettingsInRegistry { get; set; }
 		public List<string> SelectableDatabaseFiles { get; private set; }
 
 		public DatabaseInfo SelectedAppDatabase { get; set; }

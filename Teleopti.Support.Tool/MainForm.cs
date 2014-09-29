@@ -204,7 +204,7 @@ namespace Teleopti.Support.Tool
 		private void smoothLinkDeployDatabase_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			panelContent.Controls.Remove(_activeControl);
-			_activeControl = new DatabaseDeployMain(this, _db) { Dock = DockStyle.Fill };
+			_activeControl = new DatabaseDeployMain(this, _db, _settingsInRegistry) { Dock = DockStyle.Fill };
 			PTracks.Hide();
 			panelContent.Controls.Add(_activeControl);
 		}

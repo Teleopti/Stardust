@@ -16,7 +16,7 @@ using System.Xml.Linq;
 
 namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 {
-	public partial class ProgressPage : UserControl
+	public partial class ProgressPage : SelectionPage
 	{
 		private readonly DatabaseDeploymentModel _model;
         private double _megabytesTransferredPercentage;
@@ -196,8 +196,7 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			if (_model.GetSelections().All(s => s.DatabaseFromSourceType != DatabaseSourceType.FromArchive) ||
 				string.IsNullOrEmpty(_model.ZipFilePath)) return;
 
-            //SevenZip.SevenZipBase.SetLibraryPath(@"c:\Program Files\7-Zip\7z.dll");
-            SevenZip.SevenZipBase.SetLibraryPath(@"d:\PortableApps\7-ZipPortable\App\7-Zip64\7z.dll");
+            SevenZip.SevenZipBase.SetLibraryPath(_model.SettingsInRegistry.LocationOf7zDll);
             SevenZip.SevenZipExtractor extractor = new SevenZip.SevenZipExtractor(_model.ZipFilePath);
             extractor.Extracting += extractor_Extracting;
             extractor.ExtractArchive(_model.UnzipPath);

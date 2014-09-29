@@ -10,18 +10,16 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment
     {
 	    private readonly MainForm _mainForm;
 	    private IList<SelectionPage> _selectionPages;
-		private UserControl _activeControl;
+        private SelectionPage _activeControl;
 	    private readonly DatabaseDeploymentModel _model;
 
-        public DatabaseDeployMain(MainForm mainForm, DBHelper helper)
+        public DatabaseDeployMain(MainForm mainForm, DBHelper helper, SettingsInRegistry settingsInRegistry)
         {
 	        _mainForm = mainForm;
 	        InitializeComponent();
 
-	        _model = new DatabaseDeploymentModel {Helper = helper};
+	        _model = new DatabaseDeploymentModel {Helper = helper, SettingsInRegistry = settingsInRegistry};
 	        inititalizeSelectionPages();
-            //_activeControl = _selectionPages[0];
-            //setPage(_activeControl);
         }
 
         private void inititalizeSelectionPages()
@@ -32,15 +30,17 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment
 	        var nHibernateSessionFilePage = new NHibernateSessionFilePage(_model);
 			nHibernateSessionFilePage.Deploy += nhibsfp_Deploy;
 
-	        _selectionPages = new List<SelectionPage>
-		        {
-                    new Configure7ZipDllLocation(_model),
-			        asspp,
-			        new BackupSelectionPagePage(BackupFileType.TeleoptiCCC7, _model),
-			        new BackupSelectionPagePage(BackupFileType.TeleoptiAnalytics, _model),
-			        new BackupSelectionPagePage(BackupFileType.TeleoptiCCCAgg, _model),
-                    nHibernateSessionFilePage
-		        };
+            var configure7ZipDllLocation = new Configure7ZipDllLocation(_model);
+	        _selectionPages = new List<SelectionPage>();
+            if (!configure7ZipDllLocation.ContentIsValid())
+            {
+                _selectionPages.Add(configure7ZipDllLocation);
+            }
+            _selectionPages.Add(asspp);
+            _selectionPages.Add(new BackupSelectionPagePage(BackupFileType.TeleoptiCCC7, _model));
+            _selectionPages.Add(new BackupSelectionPagePage(BackupFileType.TeleoptiAnalytics, _model));
+            _selectionPages.Add(new BackupSelectionPagePage(BackupFileType.TeleoptiCCCAgg, _model));
+            _selectionPages.Add(nHibernateSessionFilePage);
 
 	        _activeControl = _selectionPages[0];
 
@@ -69,13 +69,21 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment
             buttonNext.Enabled = isValid && !(_activeControl is NHibernateSessionFilePage);
         }
 
-		private void setPage(UserControl selectionPage)
+        private void setPage(SelectionPage selectionPage)
         {
+            SelectionPage sp = selectionPage as SelectionPage;
+            if (sp != null)
+            {
+                buttonNext.Enabled = sp.ContentIsValid();
+            }
+            else
+            {
+                buttonNext.Enabled = !(_activeControl is NHibernateSessionFilePage);
+            }
             panelPageContainer.Controls.Clear();
             _activeControl = selectionPage;
             _activeControl.Dock = DockStyle.Fill;
             panelPageContainer.Controls.Add(_activeControl);
-			buttonNext.Enabled = !(_activeControl is NHibernateSessionFilePage);
         }
 
         private void buttonNext_Click(object sender, EventArgs e)

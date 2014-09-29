@@ -72,12 +72,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="SevenZipSharp">
+      <HintPath>..\packages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -106,11 +110,47 @@
     <Compile Include="Controls\ConnectionString\Summary.Designer.cs">
       <DependentUpon>Summary.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DatabaseDeployment\DatabaseDeployHelper.cs" />
+    <Compile Include="Controls\DatabaseDeployment\DatabaseDeployMain.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\DatabaseDeployMain.Designer.cs">
+      <DependentUpon>DatabaseDeployMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\DatabaseDeploymentModel.cs" />
+    <Compile Include="Controls\DatabaseDeployment\DeploySettings.cs" />
+    <Compile Include="Controls\DatabaseDeployment\Pages\ArchivedSetSelectionPagePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\ArchivedSetSelectionPagePage.Designer.cs">
+      <DependentUpon>ArchivedSetSelectionPagePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\BackupSelectionPagePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\BackupSelectionPagePage.Designer.cs">
+      <DependentUpon>BackupSelectionPagePage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DatabaseDeployment\Pages\Configure7ZipDllLocation.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\DatabaseDeployment\Pages\Configure7ZipDllLocation.Designer.cs">
       <DependentUpon>Configure7ZipDllLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\NHibernateSessionFilePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\NHibernateSessionFilePage.Designer.cs">
+      <DependentUpon>NHibernateSessionFilePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\ProgressPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\ProgressPage.Designer.cs">
+      <DependentUpon>ProgressPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DatabaseDeployment\Pages\SelectionPage.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\General\SmoothLink.cs">
       <SubType>Component</SubType>
@@ -202,9 +242,24 @@
     <EmbeddedResource Include="Controls\ConnectionString\Summary.resx">
       <DependentUpon>Summary.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseDeployment\DatabaseDeployMain.resx">
+      <DependentUpon>DatabaseDeployMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseDeployment\Pages\ArchivedSetSelectionPagePage.resx">
+      <DependentUpon>ArchivedSetSelectionPagePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseDeployment\Pages\BackupSelectionPagePage.resx">
+      <DependentUpon>BackupSelectionPagePage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DatabaseDeployment\Pages\Configure7ZipDllLocation.resx">
       <DependentUpon>Configure7ZipDllLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseDeployment\Pages\NHibernateSessionFilePage.resx">
+      <DependentUpon>NHibernateSessionFilePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DatabaseDeployment\Pages\ProgressPage.resx">
+      <DependentUpon>ProgressPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\General\DBSelect.resx">
       <DependentUpon>DBSelect.cs</DependentUpon>
     </EmbeddedResource>

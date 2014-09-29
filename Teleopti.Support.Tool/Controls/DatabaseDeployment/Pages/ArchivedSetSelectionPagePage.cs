@@ -32,6 +32,11 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			textBoxArchivedFileSet.Text = openFileDialogArchivedFile.FileName;
 		}
 
+        public override bool ContentIsValid()
+        {
+            return checkValidInput();
+        }
+
 		private bool checkValidInput()
 		{
 			// TODO: Behöver vi andra sätt att validera?
@@ -50,7 +55,7 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			try
 			{
 				textBoxContents.Text = "Contents:" + Environment.NewLine;
-                SevenZip.SevenZipBase.SetLibraryPath(@"d:\PortableApps\7-ZipPortable\App\7-Zip64\7z.dll");
+                SevenZip.SevenZipBase.SetLibraryPath(_model.SettingsInRegistry.LocationOf7zDll);
                 SevenZip.SevenZipExtractor extractor = new SevenZip.SevenZipExtractor(textBoxArchivedFileSet.Text);
                 extractor.ArchiveFileNames.ToList().ForEach(c => textBoxContents.Text += "    " + c + Environment.NewLine + Environment.NewLine);
 				//var zipfile = new ZipFile(textBoxArchivedFileSet.Text);
@@ -64,11 +69,11 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			Cursor = Cursors.Default;
 		}
 
-		private void onParentChanged(object sender, EventArgs eventArgs)
-		{
-			var isValid = checkValidInput();
-			triggerHasValidInput(isValid);
-		}
+        //private void onParentChanged(object sender, EventArgs eventArgs)
+        //{
+        //    var isValid = checkValidInput();
+        //    triggerHasValidInput(isValid);
+        //}
 
         private void linkLabelSkipThis_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

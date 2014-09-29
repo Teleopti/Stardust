@@ -172,7 +172,10 @@ namespace Teleopti.Support.Tool
             // BClose
             // 
             this.BClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.BClose.Location = new System.Drawing.Point(605, 441);
+            this.BClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BClose.Location = new System.Drawing.Point(607, 441);
             this.BClose.Name = "BClose";
             this.BClose.Size = new System.Drawing.Size(75, 23);
             this.BClose.TabIndex = 0;
@@ -246,7 +249,7 @@ namespace Teleopti.Support.Tool
             this.smoothLinkDeployDatabase.TabIndex = 9;
             this.smoothLinkDeployDatabase.TabStop = true;
             this.smoothLinkDeployDatabase.Text = "Deploy Teleopti CCC Database";
-            this.smoothLinkDeployDatabase.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            this.smoothLinkDeployDatabase.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             this.smoothLinkDeployDatabase.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.smoothLinkDeployDatabase_LinkClicked);
             // 
             // smoothLabelTools

@@ -82,6 +82,11 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			triggerHasValidInput(isValid);
 		}
 
+        public override bool ContentIsValid()
+        {
+            return changeIsValid();
+        }
+
 		private bool changeIsValid()
 		{
 			var selection = getDatafromControl();

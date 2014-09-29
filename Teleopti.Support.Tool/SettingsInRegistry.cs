@@ -10,9 +10,11 @@ namespace Teleopti.Support.Tool
         private const string SqlServerNameValueName = "SQLServerName";
         private const string SqlUserNameValueName = "SQLUserName";
         private const string UseWindowsAuthenticationValueName = "UseWindowsAuthentication";
+        private const string LocationOf7zDllValueName = "LocationOf7zDll";
         private string _sqlServerName;
         private string _sqlUserName;
         private bool _useWindowsAuthentication;
+        private string _locationOf7zDll;
         private readonly string _keyName;
 
         public SettingsInRegistry()
@@ -35,6 +37,7 @@ namespace Teleopti.Support.Tool
             }
 
             _sqlUserName = (string)Registry.GetValue(_keyName, SqlUserNameValueName, @"");
+            _locationOf7zDll = (string)Registry.GetValue(_keyName, LocationOf7zDllValueName, @"");
         }
 
         public string SqlServerName
@@ -67,6 +70,18 @@ namespace Teleopti.Support.Tool
             }
         }
 
+        public string LocationOf7zDll
+        {
+            get
+            {
+                return _locationOf7zDll;
+            }
+            set
+            {
+                _locationOf7zDll = value;
+            }
+        }
+
         public void SaveAll()
         {
             if (_sqlServerName == null) { _sqlServerName = string.Empty; }
@@ -76,7 +91,8 @@ namespace Teleopti.Support.Tool
 				  Registry.SetValue(_keyName, SqlServerNameValueName, _sqlServerName);
 				  Registry.SetValue(_keyName, SqlUserNameValueName, _sqlUserName);
 				  Registry.SetValue(_keyName, UseWindowsAuthenticationValueName, _useWindowsAuthentication.ToString(CultureInfo.InvariantCulture));
-	        }
+                  Registry.SetValue(_keyName, LocationOf7zDllValueName, _locationOf7zDll);
+           }
 	        catch (Exception exception)
 	        {
 		        MessageBox.Show(exception.Message);
