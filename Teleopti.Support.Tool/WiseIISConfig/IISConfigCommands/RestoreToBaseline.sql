@@ -7,7 +7,7 @@ DECLARE @ana nvarchar(500) = @computer + '_TeleoptiAnalytics'
 DECLARE @agg nvarchar(500) = @computer + '_TeleoptiCCCAgg'
 DECLARE @app nvarchar(500) = @computer + '_TeleoptiCCC7'
 
-DECLARE @dataFolderRelease nvarchar(4000) = 'D:\SQLData\CCC\MSSQL10_50.CCC\MSSQL\DATA\' + @computer
+DECLARE @dataFolderRelease nvarchar(4000) = SERVERPROPERTY('instancedefaultdatapath') + @computer
 DECLARE @backupFolder nvarchar(4000) = 'D:\SQLData\CCC\MSSQL10_50.CCC\MSSQL\Backup\QA Baselines\'
 
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @ana)
