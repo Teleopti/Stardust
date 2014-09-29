@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 	    
-	    public RequestFactory(ISwapAndModifyService swapAndModifyService, IPersonRequestCheckAuthorization personRequestCheckAuthorization, ISchedulingResultStateHolder schedulingResultStateHolder, IGlobalSettingDataRepository globalSettingDataRepository, IUserTimeZone userTimeZone)
+	    public RequestFactory(ISwapAndModifyService swapAndModifyService, IPersonRequestCheckAuthorization personRequestCheckAuthorization, ISchedulingResultStateHolder schedulingResultStateHolder, IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 	        _swapAndModifyService = swapAndModifyService;
 	        _personRequestCheckAuthorization = personRequestCheckAuthorization;
