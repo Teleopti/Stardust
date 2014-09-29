@@ -19,8 +19,8 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 	public partial class ProgressPage : SelectionPage
 	{
 		private readonly DatabaseDeploymentModel _model;
-        private double _megabytesTransferredPercentage;
-        private long _totalMegabytesToTransfer;
+        //private double _megabytesTransferredPercentage;
+        //private long _totalMegabytesToTransfer;
 
 		public ProgressPage()
 		{
