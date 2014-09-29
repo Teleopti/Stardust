@@ -429,6 +429,8 @@
     <Compile Include="Common\Controls\MetroToolStripProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Common\Controls\Rows\SkillDayGridIntervalIssues.cs" />
+    <Compile Include="Common\Controls\Rows\SkillStaffPeriodGridRowIntraIntervalIssues.cs" />
     <Compile Include="Common\GridStyleInfoExtensions.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
     <Compile Include="Common\Controls\FromToTimeDurationPicker.cs">

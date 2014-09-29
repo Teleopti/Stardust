@@ -238,13 +238,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
 				
-
-				gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell", "IntraIntervalDeviation",
-				                                               UserTexts.Resources.IntervalStdev);
+				gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "NumericReadOnlyCell", "IntraIntervalDeviation", UserTexts.Resources.IntervalStdev);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
-
-
 
 				if (_skill.SkillType.ForecastSource == ForecastSource.Email ||
 				    _skill.SkillType.ForecastSource == ForecastSource.Backoffice ||

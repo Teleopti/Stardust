@@ -12374,4 +12374,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Optimization step "Time between days" is not executed when block and same shift are selected.</value>
     <comment>Warning message when using not compatible optimizing settings</comment>
   </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Intra interval issue</value>
+    <comment>Tooltip warning on intra interval issues in result grid</comment>
+  </data>
 </root>

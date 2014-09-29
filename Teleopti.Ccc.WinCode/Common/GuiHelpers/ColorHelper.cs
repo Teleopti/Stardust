@@ -80,6 +80,11 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			get { return new BrushInfo(GradientStyle.BackwardDiagonal, Color.White, Color.FromArgb(128, 255, 0, 0)); } //Red
 		}
 
+		public static BrushInfo IntervalIssueBrush
+		{
+			get { return new BrushInfo(GradientStyle.BackwardDiagonal, Color.White, Color.FromArgb(128, 255, 0, 0)); } //Red
+		}
+
 		public static BrushInfo BudgetUnderstaffingBrush
 		{
 			get { return new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(128, 255, 0, 0)); } //Red
@@ -558,6 +563,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			get { return new BrushInfo(GradientStyle.Vertical, Color.White, WizardPanelButtonHolder()); }
 		}
 
+		
 		public static void SetTabControlSettings(TabControlAdv theTab)
 		{
 			//for some strange reason this works but only in this order....

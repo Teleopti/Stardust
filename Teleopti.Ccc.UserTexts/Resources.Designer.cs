@@ -10941,6 +10941,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Intra interval issue.
+        /// </summary>
+        public static string IntraIntervalIssue {
+            get {
+                return ResourceManager.GetString("IntraIntervalIssue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ( In UTC).
         /// </summary>
         public static string InUTC {
