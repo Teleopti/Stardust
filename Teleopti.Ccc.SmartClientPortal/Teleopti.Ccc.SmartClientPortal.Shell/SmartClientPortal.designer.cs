@@ -225,6 +225,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webControl1.Name = "webControl1";
 			this.webControl1.Size = new System.Drawing.Size(669, 637);
 			this.webControl1.TabIndex = 0;
+			this.webControl1.TabStop = false;
 			this.webControl1.Text = "webControl1";
 			this.webControl1.Visible = false;
 			this.webControl1.WebView = this.webView1;

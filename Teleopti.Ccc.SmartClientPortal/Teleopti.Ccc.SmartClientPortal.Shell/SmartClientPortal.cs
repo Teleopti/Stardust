@@ -13,7 +13,6 @@ using EO.WebBrowser;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
-using Teleopti.Ccc.Win;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
@@ -80,20 +79,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			webView1.LoadComplete += webView1_LoadComplete;
-		}
-
-		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
-		{
-			if (!string.IsNullOrEmpty(_portalSettings.LastModule))
-			{
-				startModule(_portalSettings.LastModule);
-			}
-			else
-			{
-				startFirstEnabledModule();
-			}
-			webView1.LoadComplete -= webView1_LoadComplete;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)

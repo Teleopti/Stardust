@@ -11,9 +11,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 {
 	public partial class OutlookBarWorkSpace : UserControl
 	{
+		private Control _navigatorControl;
+
 		public OutlookBarWorkSpace()
 		{
 			InitializeComponent();
+		}
+
+		public Control NavigatorControl
+		{
+			get { return _navigatorControl; }
 		}
 
 		public void SetHeader(ModulePanelItem selectedModulePanelItem)
@@ -25,6 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 		{
 			panel1.Controls.Clear();
 			panel1.Controls.Add(navigatorControl);
+			_navigatorControl = navigatorControl;
 			navigatorControl.Dock = DockStyle.Fill;
 			navigatorControl.Focus();
 		}
