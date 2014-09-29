@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			setColors();
 			SetTexts();
+			radioButtonAdvSMS.Checked = true;
 		}
 
 		public void LoadControl()
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public TreeFamily TreeFamily()
 		{
-			return new TreeFamily(Resources.SystemSettings); 
+			return new TreeFamily(Resources.SystemSettings);
 		}
 
 		public string TreeNode()
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Persist()
 		{
-			if(_smsSettingsSetting != null)
+			if (_smsSettingsSetting != null)
 			{
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
@@ -141,13 +142,35 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
-		{}
+		{ }
 
 		public ViewType ViewType
 		{
 			get { return ViewType.SmsSettings; }
 		}
 
+		private void radioButtonAdvSMS_CheckChanged(object sender, EventArgs e)
+		{
+			comboBoxOptionalColumns.Enabled = radioButtonAdvSMS.Checked;
+			textBoxEmailFrom.Enabled = !radioButtonAdvSMS.Checked;
+			textBoxSendEmailTo.Enabled = !radioButtonAdvSMS.Checked;
+			buttonAdvSend.Enabled = !radioButtonAdvSMS.Checked;
 
+			clearSmsData(!radioButtonAdvSMS.Checked);
+			clearEmailData(radioButtonAdvSMS.Checked);
+		}
+
+		private void clearEmailData(bool clear)
+		{
+			if(!clear) return;
+			textBoxEmailFrom.Text = string.Empty;
+			textBoxSendEmailTo.Text = string.Empty;
+		}
+
+		private void clearSmsData(bool clear)
+		{
+			if (!clear) return;
+			comboBoxOptionalColumns.SelectedIndex = -1;
+		}
 	}
 }

@@ -111,6 +111,7 @@
 			this.radioButtonAdvEmail.TabIndex = 19;
 			this.radioButtonAdvEmail.Text = "xxEmail";
 			this.radioButtonAdvEmail.ThemesEnabled = true;
+			this.radioButtonAdvEmail.CheckChanged += new System.EventHandler(this.radioButtonAdvSMS_CheckChanged);
 			// 
 			// radioButtonAdvSMS
 			// 
@@ -125,6 +126,7 @@
 			this.radioButtonAdvSMS.TabStop = false;
 			this.radioButtonAdvSMS.Text = "xxSMS";
 			this.radioButtonAdvSMS.ThemesEnabled = true;
+			this.radioButtonAdvSMS.CheckChanged += new System.EventHandler(this.radioButtonAdvSMS_CheckChanged);
 			// 
 			// tableLayoutPanelSubHeader1
 			// 
