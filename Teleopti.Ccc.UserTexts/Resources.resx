@@ -10955,8 +10955,8 @@ These options are activated:
     <value>Manage SMS Settings</value>
     <comment>Caption 1 in SMS settings page</comment>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Set which column to get SMS phone number from</value>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Set which column to get SMS phone number from:</value>
     <comment>First option to set</comment>
   </data>
   <data name="SmsSettings" xml:space="preserve">
@@ -12373,5 +12373,33 @@ Reduce the complexity to use these shifts.</value>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Optimization step "Time between days" is not executed when block and same shift are selected.</value>
     <comment>Warning message when using not compatible optimizing settings</comment>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Email Settings</value>
+    <comment>E-mail settings</comment>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Manage Notification Settings</value>
+    <comment>Option page title</comment>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Notification Settings</value>
+    <comment>Option page name</comment>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Notification Type</value>
+    <comment>Notification type</comment>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Send email from:</value>
+    <comment>Send e-mail from</comment>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+    <comment>SMS</comment>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Test sending to:</value>
+    <comment>Test sending to</comment>
   </data>
 </root>

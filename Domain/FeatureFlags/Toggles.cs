@@ -25,6 +25,7 @@
 		Request_SeePossibleShiftTradesFromAllTeams_28770,
 		Request_FilterPossibleShiftTradeByTime_24560,
 		Settings_SetAgentDescription_23257,
+		Settings_AlertViaEmailFromSMSLink_30444,
 
 		RTA_RtaLastStatesOverview_27789,
 		RTA_DrilldownToAllAgentsInOneTeam_25234,

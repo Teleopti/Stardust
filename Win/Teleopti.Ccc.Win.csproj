@@ -413,6 +413,12 @@
     <Compile Include="Common\Configuration\BadgeThresholdSettings.Designer.cs">
       <DependentUpon>BadgeThresholdSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Configuration\NotificationSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\NotificationSettingsControl.Designer.cs">
+      <DependentUpon>NotificationSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2539,6 +2545,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\BadgeThresholdSettings.resx">
       <DependentUpon>BadgeThresholdSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\NotificationSettingsControl.resx">
+      <DependentUpon>NotificationSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\SmsSettingsControl.resx">
