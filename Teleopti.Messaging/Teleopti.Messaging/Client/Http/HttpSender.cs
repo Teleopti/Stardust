@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Messaging.Client.Http
 {
 	public class HttpSender : IMessageSender
 	{
 		private readonly IMessageBrokerUrl _url;
-		private readonly IJsonSerializer _seralizer;
+		private readonly IJsonSerializer _serializer;
 
 		public Action<HttpClient, string, HttpContent> PostAsync =
 			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
@@ -22,7 +24,24 @@ namespace Teleopti.Messaging.Client.Http
 		public HttpSender(IMessageBrokerUrl url, IJsonSerializer seralizer)
 		{
 			_url = url;
-			_seralizer = seralizer ?? new ToStringSerializer();
+			_serializer = seralizer ?? new ToStringSerializer();
+		}
+
+		public void Send(Notification notification)
+		{
+			call("MessageBroker/NotifyClients", notification);
+		}
+
+		public void SendMultiple(IEnumerable<Notification> notifications)
+		{
+			call("MessageBroker/NotifyClientsMultiple", notifications);
+		}
+
+		private void call(string call, object thing)
+		{
+			var content = _serializer.SerializeObject(thing);
+			var u = url(call);
+			PostAsync(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 
 		private string url(string call)
@@ -31,19 +50,8 @@ namespace Teleopti.Messaging.Client.Http
 				return null;
 			if (string.IsNullOrEmpty(_url.Url))
 				return null;
-			return new Uri(new Uri(_url.Url), call).ToString();
+			return _url.Url.TrimEnd('/') + "/" + call;
 		}
 
-		public void Send(Notification notification)
-		{
-			var content = _seralizer.SerializeObject(notification);
-			PostAsync(_httpClient, url("MessageBroker/NotifyClients"), new StringContent(content, Encoding.UTF8, "application/json"));
-		}
-
-		public void SendMultiple(IEnumerable<Notification> notifications)
-		{
-			var content = _seralizer.SerializeObject(notifications);
-			PostAsync(_httpClient, url("MessageBroker/NotifyClientsMultiple"), new StringContent(content, Encoding.UTF8, "application/json"));
-		}
 	}
 }

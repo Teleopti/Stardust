@@ -28,7 +28,12 @@ namespace Teleopti.MessagingTest.Http
 
 		[Test]
 		public void ShouldPostToCorrectUrl(
-			[Values("http://a/", "http://a", "http://a/b/c/")] string url)
+			[Values(
+				"http://a/", 
+				"http://a",
+				"http://a/b/c/",
+				"http://a/b/c"
+				)] string url)
 		{
 			var postedUrl = "";
 			var mutableUrl = new MutableUrl();
