@@ -172,5 +172,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (!clear) return;
 			comboBoxOptionalColumns.SelectedIndex = -1;
 		}
+
+		private static bool IsEmail(string inputEmail)
+		{
+			if (!String.IsNullOrEmpty(inputEmail))
+			{
+				return inputEmail.Contains("@");
+			}
+			return true;
+		}
+
+		private void textBoxSendEmailTo_TextChanged(object sender, EventArgs e)
+		{
+			buttonAdvSend.Enabled = IsEmail(textBoxSendEmailTo.Text);
+		}
 	}
 }

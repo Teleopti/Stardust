@@ -360,6 +360,7 @@
 			this.textBoxSendEmailTo.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.textBoxSendEmailTo.TabIndex = 14;
 			this.textBoxSendEmailTo.WordWrap = false;
+			this.textBoxSendEmailTo.TextChanged += new System.EventHandler(this.textBoxSendEmailTo_TextChanged);
 			// 
 			// gradientPanelHeader
 			// 
