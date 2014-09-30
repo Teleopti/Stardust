@@ -14,7 +14,11 @@ SET @AgentRole = 'E7F360D3-C4B6-41FC-9B2D-9B5E015AAE64' --Id in DemoSales
 DECLARE @FunctionCode TABLE (FunctionCode nvarchar(50))
 INSERT INTO @FunctionCode
 --Add new FunctionCode's here
-SELECT 'dummyFunction'
+SELECT 'ViewBadge'
+UNION ALL
+SELECT 'QueueMetrics'
+UNION ALL
+SELECT 'ViewPersonalAccount'
 
 ;WITH ClassHierarchy_CTE (ClassID, ClassID_Join, Level)
 AS
