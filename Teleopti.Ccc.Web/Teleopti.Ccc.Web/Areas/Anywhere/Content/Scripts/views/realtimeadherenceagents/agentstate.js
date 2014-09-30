@@ -18,7 +18,6 @@
             that.HaveNewAlarm = false;
             that.NextAlarm = '';
             that.NextAlarmColor = '';
-
             that.Alarm = ko.observable();
             that.AlarmColor = ko.observable();
             that.AlarmStart = ko.observable();
@@ -36,8 +35,7 @@
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
                 that.NextActivityStartTime(data.NextActivity && data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(offset, 'minutes')) : '');
-
-                that.EnteredCurrentAlarm(data.StateStart ? moment.utc(data.StateStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
+				that.EnteredCurrentAlarm(data.StateStart);
                 that.refreshAlarmTime();
 
                 that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
@@ -54,7 +52,7 @@
             
             that.refreshAlarmTime = function() {
                 if (!that.EnteredCurrentAlarm()) return;
-                var duration = moment.duration(((new Date).getTime() - moment(that.EnteredCurrentAlarm(), resources.FixedDateTimeWithSecondsFormatForMoment).toDate()));
+                var duration = moment.duration(((new Date).getTime() - moment.utc(that.EnteredCurrentAlarm())));
                 that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
 
                 if (!that.HaveNewAlarm

@@ -72,7 +72,7 @@
 
 				assert.equals(vm.agentStates()[0].PersonId, state1.PersonId);
 				assert.equals(vm.agentStates()[0].State(), state1.State);
-				assert.equals(vm.agentStates()[0].EnteredCurrentAlarm(), moment.utc(state1.StateStart).add(-600, 'minutes').format());
+				assert.equals(vm.agentStates()[0].EnteredCurrentAlarm(), state1.StateStart);
 				assert.equals(vm.agentStates()[0].Activity(), state1.Activity);
 				assert.equals(vm.agentStates()[0].NextActivity(), state1.NextActivity);
 				assert.equals(vm.agentStates()[0].Alarm(), state1.Alarm);
@@ -80,7 +80,7 @@
 				assert.equals(vm.agentStates()[0].AlarmStart(), moment.utc(state1.AlarmStart).add(-600, 'minutes').format());
 				assert.equals(vm.agentStates()[1].PersonId, state2.PersonId);
 				assert.equals(vm.agentStates()[1].State(), state2.State);
-				assert.equals(vm.agentStates()[1].EnteredCurrentAlarm(), moment.utc(state1.StateStart).add(-600, 'minutes').format());
+				assert.equals(vm.agentStates()[1].EnteredCurrentAlarm(), state1.StateStart);
 				assert.equals(vm.agentStates()[1].Activity(), state2.Activity);
 				assert.equals(vm.agentStates()[1].NextActivity(), state2.NextActivity);
 				assert.equals(vm.agentStates()[1].Alarm(), state2.Alarm);
