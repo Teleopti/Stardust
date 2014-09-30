@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _commonNameDescriptionSetting = commonNameDescriptionSetting;
             _team = team;
             _period = period;
+			ColorValue = NoAlarmColorValue;
         }
 
 	    public ITeam Team
