@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 namespace CheckPreRequisites.Checks
@@ -14,44 +16,56 @@ namespace CheckPreRequisites.Checks
 
 		private void checkFeatures()
 		{
-			string line;
-			if (!File.Exists(getFileToRun()))
+			if (getFileToRun() == "")
 			{
 				_form1.printInfo("Can not find a file with features that match the operating system");
 				return;
 			}
-			var file = new StreamReader(getFileToRun());
-			_form1.printInfo("Checking features and enabling them. If a feature needs downloading it can take some minutes to run this.");
-			while ((line = file.ReadLine()) != null)
+
+			using (Stream stream = GetType().Assembly.GetManifestResourceStream(getFileToRun()))
 			{
-				if (!string.IsNullOrEmpty(line))
-					line = line.Trim();
-				if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
+				var file = new StreamReader(stream, Encoding.UTF8);
+				_form1.printInfo("Checking features and enabling them. If a feature needs downloading it can take some minutes to run this.");
+				string line;
+				while ((line = file.ReadLine()) != null)
 				{
-					_form1.Cursor = Cursors.WaitCursor;
-					var strings = line.Split(',');
-					_form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
-					var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
-					if (result.NotInElevatedMood)
+					if (!string.IsNullOrEmpty(line))
+						line = line.Trim();
+					if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
 					{
-						MessageBox.Show("Elevated permissions are required to run this.", "Restart application in elevated mood to complete these tasks.");
-						return;
+						_form1.Cursor = Cursors.WaitCursor;
+						var strings = line.Split(',');
+						_form1.printNewFeature("IIS", "Windows feature", "Enabled", strings[1]);
+						var result = FeatureChecker.CheckAndEnable(strings[1], strings[0]);
+						if (result.NotInElevatedMood)
+						{
+							MessageBox.Show("Elevated permissions are required to run this.", "Restart application in elevated mood to complete these tasks.");
+							return;
+						}
+
+						_form1.printFeatureStatus(result.Enabled, result.ToolTip);
+						Application.DoEvents();
+						_form1.Cursor = Cursors.Default;
 					}
 
-					_form1.printFeatureStatus(result.Enabled , result.ToolTip);
-					Application.DoEvents();
-					_form1.Cursor = Cursors.Default;
 				}
-
 			}
 			_form1.printInfo("Ready checking features");
-			
+
 		}
 
 		private string getFileToRun()
 		{
-			return SystemInfo.Version + ".txt";
+			return "CheckPreRequisites." + SystemInfo.Version + ".txt";
+
+	 //			[2]: "CheckPreRequisites.WindowsServer2008R2.txt"
+	 //[3]: "CheckPreRequisites.WindowsServer2012.txt"
+	 //[4]: "CheckPreRequisites.WindowsServer2012R2.txt"
+	 //[5]: "CheckPreRequisites.Windows7.txt"
+	 //[6]: "CheckPreRequisites.Windows81.txt"
+
 		}
+
 		// ReSharper disable InconsistentNaming
 		public void RunWebChecks()
 		{

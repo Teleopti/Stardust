@@ -404,8 +404,7 @@
 			<!-- Pre-Req -->
 			<PreReq
 			Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\CheckPreRequisites.exe;
-			$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\p_raptor_run_before_conversion.sql;
-			$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\*.txt"/>
+			$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\bin\Release\p_raptor_run_before_conversion.sql"/>
 
 			<UnInstall
 			Include="$(CCNetWorkingDirectory)\WISE\Uninstall\Uninstall Teleopti WFM server.bat"/>
