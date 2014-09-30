@@ -29,7 +29,7 @@ SELECT
 	0
 FROM $(TELEOPTICCC).dbo.ApplicationFunction af
 INNER JOIN @FunctionCode fc
-	ON fc.FunctionCode = af.FunctionCode
+	ON fc.FunctionCode = af.FunctionCode collate database_default
 UNION ALL
 SELECT
     cte.ClassID,
@@ -59,7 +59,7 @@ INSERT INTO $(TELEOPTICCC).dbo.ApplicationFunctionInRole
 select @AgentRole, af.Id, getdate()
 FROM $(TELEOPTICCC).dbo.ApplicationFunction af
 INNER JOIN @FunctionCode fc
-	ON fc.FunctionCode = af.FunctionCode
+	ON fc.FunctionCode = af.FunctionCode collate database_default
 WHERE NOT EXISTS (SELECT * FROM $(TELEOPTICCC).dbo.ApplicationFunctionInRole a 
 						WHERE a.ApplicationRole = @AgentRole
 						AND a.ApplicationFunction = af.Id)
