@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\Requests\EmptyShiftTradeRequestChecker.cs" />
+    <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />

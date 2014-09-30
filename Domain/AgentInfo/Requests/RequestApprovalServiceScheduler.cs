@@ -49,63 +49,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
             IList<IBusinessRuleResponse> ret = new List<IBusinessRuleResponse>();
 
-            var fullDayTimeSpanStart = new TimeSpan (0, 0, 0);
-            var fullDayTimeSpanEnd = new TimeSpan (23, 59, 0);
-            var absencePeriodUserTime =
-                new DateTimePeriod (
-                    DateTime.SpecifyKind (
-                        TimeZoneHelper.ConvertFromUtc (period.StartDateTime, person.PermissionInformation.DefaultTimeZone()),
-                        DateTimeKind.Utc),
-                    DateTime.SpecifyKind (
-                        TimeZoneHelper.ConvertFromUtc(period.EndDateTime, person.PermissionInformation.DefaultTimeZone()),
-                        DateTimeKind.Utc));
+			//adjust the full day absence period start/end if there are shifts that already exist within the day schedule or if
+			//there is a global setting that specifies the length of a full day absence
+			period = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(period, person, dayScheduleForAbsenceReqStart, dayScheduleForAbsenceReqEnd, _globalSettingsDataRepository);
 
-            bool isFullDayAbsenceRequest = (absencePeriodUserTime.StartDateTime.TimeOfDay == fullDayTimeSpanStart &&
-                                            absencePeriodUserTime.EndDateTime.TimeOfDay == fullDayTimeSpanEnd);
-            if (isFullDayAbsenceRequest)
-            {
-                var fullDayAbsenceRequestStartTimeSetting = _globalSettingsDataRepository.FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
-                var fullDayAbsenceRequestEndTimeSetting = _globalSettingsDataRepository.FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
-
-                var settingStartTime = fullDayAbsenceRequestStartTimeSetting.TimeSpanValue;
-                var settingEndTime = fullDayAbsenceRequestEndTimeSetting.TimeSpanValue;
-
-                var startDate =new DateTime (   absencePeriodUserTime.StartDateTime.Year, 
-                                                absencePeriodUserTime.StartDateTime.Month,
-                                                absencePeriodUserTime.StartDateTime.Day, 
-                                                settingStartTime.Hours, settingStartTime.Minutes, settingStartTime.Seconds);
-                var endDate =new DateTime (     absencePeriodUserTime.EndDateTime.Year, 
-                                                absencePeriodUserTime.EndDateTime.Month,
-                                                absencePeriodUserTime.EndDateTime.Day, 
-                                                settingEndTime.Hours, settingEndTime.Minutes, settingEndTime.Seconds);
-
-				if (dayScheduleForAbsenceReqStart.IsScheduled() && dayScheduleForAbsenceReqStart.PersonAssignment() != null)
-				{
-					var dayScheduleStartTimeForAbsenceReqStart =
-						dayScheduleForAbsenceReqStart.PersonAssignment()
-							.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
-					startDate = startDate < dayScheduleStartTimeForAbsenceReqStart ? startDate : dayScheduleStartTimeForAbsenceReqStart;
-				}
-
-				if (dayScheduleForAbsenceReqEnd.IsScheduled() && dayScheduleForAbsenceReqEnd.PersonAssignment() != null)
-				{
-					var dayScheduleEndTimeForAbsenceReqEnd = dayScheduleForAbsenceReqEnd.PersonAssignment()
-							.Period.EndDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
-					endDate = endDate > dayScheduleEndTimeForAbsenceReqEnd ? endDate : dayScheduleEndTimeForAbsenceReqEnd;
-				}
-
-                period =
-                   new DateTimePeriod (
-                        DateTime.SpecifyKind (
-                            TimeZoneHelper.ConvertToUtc ( startDate, person.PermissionInformation.DefaultTimeZone()),
-                            DateTimeKind.Utc),
-                        DateTime.SpecifyKind (
-                            TimeZoneHelper.ConvertToUtc(endDate, person.PermissionInformation.DefaultTimeZone()),
-                            DateTimeKind.Utc));
-               
-            }
-            
-            if (dayScheduleForAbsenceReqStart.FullAccess)
+	        if (dayScheduleForAbsenceReqStart.FullAccess)
             {
                 var layer = new AbsenceLayer(absence, period);
                 var personAbsence = new PersonAbsence(person, _scenario, layer);
@@ -130,8 +78,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             // Anyway, not full access is not an error that can be overridden
             return new List<IBusinessRuleResponse>();
         }
-
-        public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
+	    public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
         {
             return _swapAndModifyService.SwapShiftTradeSwapDetails(shiftTradeRequest.ShiftTradeSwapDetails,
                                                                   _scheduleDictionary,
