@@ -84,6 +84,8 @@ namespace Teleopti.Analytics.Etl.Transformer
             row["windows_username"] = person.WindowsAuthenticationInfo == null
                                           ? string.Empty
                                           : person.WindowsAuthenticationInfo.WindowsLogOnName;
+            row["valid_from_date_local"] = personPeriod.StartDate.Date;
+            row["valid_to_date_local"] = personPeriod.EndDate().Date;
             table.Rows.Add(row);
         }
 
