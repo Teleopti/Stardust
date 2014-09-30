@@ -1,0 +1,1098 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>نوسازی</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>مجموع صفحات</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>متن پیدا نشد</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>دسترسی توسط اپراتور </value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>عرض صفحه</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>طرح چاپ</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>صفحه کامل </value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>صفحه قبلی</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>شنبه</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>چاپ</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>توقف ضبط</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>تنظیمات صفحه</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>بزرگنمایی</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>از</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>اتمام زمان در اتصال به بانک اطلاعات ، شرایط جستجو را محدودتر کنید</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>انقضای تماس</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>منطقه زمانی </value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>زمان واگذاری</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value> زمان محلی اپراتور</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>پنج شنبه</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>پنج شنبه</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>اطلاعات فنی</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>معیار تیمی </value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>تیم/تاریخ</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>زمان گفتگو</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>یکشنبه</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>یکشنبه</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>وضعیت </value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>تایید شد</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>گروه های منطقه ای</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>مغایرت استاندارد</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>سرعت پاسخ</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>ترتیب بر اساس</value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>درصد همواری</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>مهارت</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>خروج از سیستم</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>تغییر تجارت</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>تغییر زمان شروع</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>تغییر زمان خاتمه</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>تغییر مقوله</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>تغییر مقوله در روز</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>تغییر مقوله و غیبت کامل در روز</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>روزهای قابل دسترس </value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>زمان قابل دسترس</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>تلاش برای اتصال به سیستم موفق نبود،لطفا بعدا سعی کنید.</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>نام کاربری :</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>رمز عبور جدید</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>رمز عبور لازم است.</value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>رمز عبور :</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>دفعه بعد مرا به خاطر بسپار</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>اتصال به سیستم</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>نام کاربری لازم است.</value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>نمایش گزارش</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>سناریو :</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>درصد نرخ واگذاری مکالمات کوتاه</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>نرخ واگذاری(%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>نرخ پاسخ(%)</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>میانگین سرعت پاسخ گویی</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>میانگین زمان به واگذاری</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>دوره زمانی :</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>بیشترین تاخیر در صف ، واگذار شده</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>بیشترین تاخیر در صف ، پاسخ داده شده</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>دوره</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>واگذاری و سرعت پاسخ گویی</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>ثانیه ها</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>زمان واگذاری</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>مجموع :</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>درصد</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>واقعی ACW</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>واقعی ATT</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>کار تماس بعدی (ACW)</value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>میانگین زمان کفتگو (ATT)</value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>تماس های محاسبه شده</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>تماس ها</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>پیش بینی شده ACW</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>پیش بینی شده ATT</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>تماس های پیش بینی شده</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>شماره ی </value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>پیش بینی حجم کار واقعی</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>اپراتورهای آماده </value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>زمان فعالیت هر اپراتور</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>اپراتورها برنامه بندی شدند</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>تفاوت نسبی(%)</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>زمان مورد پیش بینی(hh:mm)</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>تماس های پیشنهادی </value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>تماس های پیشنهادی / اپراتور آماده</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>تماس های پیشنهادی / اپراتور طبق برنامه ریزی آماده است</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>پیش بینی ساعات برنامه ریزی شده</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>سطح سرویس و اپراتورها آماده</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>زمان آمادگی برنامه ریزی شده</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>برنامه ریزی و اپراتورهای آماده </value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>مقدار صف اپراتور</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>روز هفته / مهارت</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>طبقه بندی اپراتور :</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>نوع طبقه بندی اپراتور :</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>اپراتورها:</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>معیار اپراتور</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>الصاق(%)</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>اپراتور / روز</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>تماس های پاسخ داده شده / ساعت آمادگی طبق زمان بندی </value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>اشغالی(%)</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>آمادگی(%)</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>زمان آمادگی</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>محاسبه الصاق</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>تماس های پیشنهادی / اپراتور</value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>سطح سرویس</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>محاسبه سطح سرویس :</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>متوسط زمان گفتگو</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>زمان آمادگی / مدت آمادگی زمان بندی شده (%)</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>زمان بندی اپراتور های آماده</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>تقسیم(دقیقه)</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>بعدی</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>قبلی</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>الصاق / فاصلع زمانی (%)</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>تقسیم / فاصله زمانی (دقیقه)</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>صف :</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>آمار صف</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>واگذار شده بین سطح سرویس</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>تماس های کوتاه واگذار شده</value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>زمان رسیدگی</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>صفحه جاری</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>زمان به - شروع شیفت ها :</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>تماس های منتقل شده </value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>صف</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>متوسط زمان رسیدگی</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>بیشترین تاخیر در صف ، واگذار شده</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>بیشترین تاخیر در صف ، پاسخ داده شده</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>زمان از - شروع شیفت ها :</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>راهنما</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>اتصال خودکار تماس ها</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>آمار صف اپرتور</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>آمار اپراتور</value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>زمان مدیر شبکه</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>تماس های ورودی مستقیم</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>زمان گفتگوی تماس های ورودی مستقیم</value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>تماس های خروجی مستقیم</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>زمان گفتگوی تماس های خروجی مستقیم</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>زمان بیکار</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>زمان اتصال به سیستم</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>زمان عدم آمادگی</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>زمان / فاصله زمانی</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>عدم مجوز دسترسی</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>تماس های ورودی بیش از حد</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>تماس های خروجی بیش از حد</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>زمان پیش بینی شامل کاهش(hh:mm)</value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>زمان برنامه ریزی شده(hh:mm)</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>زمان (شروع شیفت ها) :</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>هفته :</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>زمان بندی کار برای هر اپراتور</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>فهرست زمان غیبت (hh:mm) </value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>فهرست اضافه کار  (hh:mm) </value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>غیبت :</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>فعالیت :</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>ساعات پیش بینی شده  (hh:mm) </value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>فهرست ساعات  (hh:mm) </value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>ساعات پیش بینی شده - کاهش (hh:mm) </value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>تفاوت نسبی شامل کاهش (%)</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>متوسط  کارهای بعد از تماس</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>نوع اضافه کار:</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>طبقه بندی شیفت و غیبت کامل روزانه برای هر اپراتور</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>اضافه کار  (hh:mm) </value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>هفته</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>روز تعطیل</value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>برتری مبسوط</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>چهارشنبه</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>زمان فقدان قرارداد  </value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>روز هفته</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>هیچ برگه ای موجود نیست</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>زمان غیبت برای هر غیبت </value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>پاسخگو:</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>سلسله مراتب کسب و کار</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>زمان بندی قرارداد</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>یادداشت</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>قرارادها</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>نام </value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>کیف شیفت</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>صفحه گروه :</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>درصد پاره وقت </value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>جمعه</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>گروه:</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>صفحه قبل</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>نیم ساعت</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>اضافه کار زمانبندی شده برای هر پاسخگو</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>شماره صفحه نادرست</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>زمان کاری(hh:mm)</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>اضافه کار:</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>اولویت پذیرفته شده</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>ساعت</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>بعدی را پیدا کن</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>اولویت پذیرفته شده(%)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>اولویت کاسته شده</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>دسته بندی اولویت</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>نام خانوادگی</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>اولویت درخواست شده</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>پیداکردن</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>اولویت هر پاسخگو</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>پاسخگوهای زمان بندی شده در هر فاصله زمانی و تیم </value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>اولویت هر روز</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>ارتقاء</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>جمعه</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>غایب </value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>زمان رسیدگی/زمان پرداخت(%)</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>دوشنبه</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>صدور</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>مورد منطبق بیشتری پیدا نشد</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>شنبه</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>درخوست های هر پاسخگو</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>چهارشنبه</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>آوریل </value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>صفحه بعد</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>آگوست</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>رد شده</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>مشروط</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>دسامبر </value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>فوریه</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>نوع درخواست:</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>ژانویه</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>دوشنبه</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>ماه</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>جولای</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>ژوئن</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>وضعیت</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>مارس</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>نوامبر</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>روزهای درخواست شده</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>می </value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>اکتبر</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>درخواست ها</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>سپتامبر</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>رد نشده</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>تاریخ درخواست </value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>دوره درخواست</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>برگه پاسخگو</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>زمان پرداخت شده (hh:mm)</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>زمان غیبت هر پاسخگو</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>روز کامل</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>زمان کار(hh:mm)</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>تغییر جهت حالا </value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>خطا در تایید کاربر </value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>وقتی از روش تایید ویندوز در درخواست تحت وب استفاده می کنید .این روش  جهت استفاده تایید درخواست در کلاینت معتبر نیست. </value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>بخش روز</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>لطفا از اتصال برنامه کاربردی استفاده کنید</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>مطمئن شوید مجوزها بدرستی با سرویس ETL همزمانی دارد</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>کلاینت را بسته واز روش تایید ویندوز استفاده کنید و یا مدیر سیستم روش تایید وب را به فرم ها تغییر دهد </value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>راه حل ممکن</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>خطای ناشناخته</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>فعالیت</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>تبعیت</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>غیبت</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>اتصال شما بدلیل مدت زیاد عدم فعالیت منقضی شد.شما به صفحه اتصال مجدد هدایت می شوید</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>زمان آماده گی . زمان بندی قراردادی</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>زمان آمادگی .زمان آمادگی زمان بندی شده </value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>تبعیت هر پاسخگو</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>تبعیت در هر روز</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>زمان آمادگی . زمان بندی شامل زمان قبل و بعد از شروع شیفت</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>کامل</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>پاسخگوهای برنامه ریزی شده برای هر فعالیت</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>طبقه بندی شیفت</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>تماس های جواب داده شده در آستانه سطح سرویس/تماس های جواب داده شده</value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>تماس های جواب داده شده و رها شده در آستانه سطح سرویس /تماس های ارائه شده</value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>روزهای زمان بندی شده</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>فقط مهارت های فعال</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>مهارت های پاسخگو</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>بهره برداری</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>بعدی</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>فقط مهارت های فعال:</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>صفحه اول </value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>تماس های جواب داده شده در آستانه سطح سرویس/تماس های ارائه شده</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>روز</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>متن را در گزارش پیدا کنید</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>سه شنبه</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>زمان پرداخت شده(hh:mm)</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>سه شنبه</value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>زمان بندی برای هر فعالیت</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>زمان قرارداد(hh:mm)</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>اتصال به سیستم</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>تیم حقیقی </value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>هدف</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>مسیر</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>دوره قبلی</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>واقعی </value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>آمادگی (%)</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>کارایی</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>میانگین زمان گفتگو(ثانیه)</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>میانگین کار بعد از تماس (ثانیه)</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>تماس های جواب داده شده در هر ساعت مکالمه زمانبندی شده</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>میانگین زمان رسیدگی (ثانیه)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>تبعیت </value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>نوع دوره:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>فاصله زمانی در:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>غیبت(%)</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>فرم فاصله زمانی:</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>حجم کار:</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>تیم:</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>نمایش گزارش:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>مهارت:</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>سطح سرویس(%)</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>جدول زمان بندی</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>سایت :</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>فاصله</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>مجموع خیلی خوب</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>تاریخ به :</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>فاصله</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>تاریخ از:</value>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>تاریخ:</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>در سطح سرویس پاسخ داده شده</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>تاریخ:</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>بعد از سطح سرویس پاسخ داده شده</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>پاسخگو</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>نرخ رها سازی</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>تماس های پاسخ داده شده</value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>تماس های رها شده</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>شما یک مقدار نامعتبر وارد کرده اید </value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>توسعه </value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>شما مقداری وارد نکرده اید</value>
+  </data>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>خراب</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>روز تعطیل</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>داشته ها</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>انجام نشده</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>تکمیل(%)</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>منتخبین</value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>تماس های پاسخ داده شده/ساعت آماده </value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>تکمیل شده</value>
+  </data>
+</root>
