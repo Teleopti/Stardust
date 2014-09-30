@@ -1,3 +1,4 @@
+using System;
 using System.Web;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
@@ -6,7 +7,14 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 	{
 		public HttpContextBase Current()
 		{
-			return new HttpContextWrapper(HttpContext.Current);
+			try
+			{
+				return new HttpContextWrapper(HttpContext.Current);
+			}
+			catch (ArgumentNullException)
+			{
+				return null;
+			}
 		}
 	}
 }

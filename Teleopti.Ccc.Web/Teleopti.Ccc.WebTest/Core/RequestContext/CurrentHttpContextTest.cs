@@ -21,5 +21,12 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			new CurrentHttpContext().Current().Request.Url.ToString().Should().Be("http://my.url.com/");
 			HttpContext.Current = null;
 		}
+
+		[Test]
+		public void ShouldReturnNullIfNoContext()
+		{
+			HttpContext.Current = null;
+			new CurrentHttpContext().Current().Should().Be(null);
+		}
 	}
 }

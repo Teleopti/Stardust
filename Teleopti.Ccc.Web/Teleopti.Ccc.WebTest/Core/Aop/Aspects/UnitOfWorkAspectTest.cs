@@ -117,5 +117,18 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 
 			businessUnitFilterOverrider.AssertWasCalled(x => x.OverrideWith(idFromCustomHeader));
 		}
+
+		[Test]
+		public void ShouldSkipChangingBusinessUnitIdIfNoHttpContext()
+		{
+			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var currentHttpContext = new FakeCurrentHttpContext(null);
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			unitOfWorkFactoryProvider.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, null, currentHttpContext);
+			target.OnBeforeInvokation();
+		}
 	}
 }

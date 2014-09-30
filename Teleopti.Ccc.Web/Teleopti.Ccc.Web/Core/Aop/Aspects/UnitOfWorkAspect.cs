@@ -1,4 +1,5 @@
 using System;
+using System.Web;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 		public void OnBeforeInvokation()
 		{
 			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+			if (_context.Current() == null) return;
 			var buId = string.Empty;
 			var queryString = _context.Current().Request.QueryString;
 			if (queryString != null)
