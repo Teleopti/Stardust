@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dictionaryPeriod, people),
 														new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			using(UnitOfWork.DisableFilter(QueryFilter.BusinessUnit))
+			
 			using (TurnoffPermissionScope.For(retDic))
 			{
 				addPersonAbsences(retDic,
