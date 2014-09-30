@@ -6814,7 +6814,7 @@
     <value>زمان بندی باید فقط اولویت داشته باشد </value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>شیفتها-Teleopti CCC</value>
+    <value>شیفتها-Teleopti WFM</value>
   </data>
   <data name="ScheduledEmployeesIncoming" xml:space="preserve">
     <value>زمانبندی ورود کارمندان</value>
@@ -6889,7 +6889,7 @@
     <value>&lt;نام بسته مجموعه قواعد &gt;</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - سیستم نرمال</value>
+    <value>Teleopti WFM - سیستم نرمال</value>
   </data>
   <data name="FullWeekEndsOff" xml:space="preserve">
     <value>همه تعطیلات آخر هفته</value>
@@ -7096,7 +7096,7 @@
     <value>زمان پس از تماس کاری</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>وقت من Teleopti CCC</value>
+    <value>وقت من Teleopti WFM</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
     <value>نام کاربری برنامه کاربردی</value>
@@ -7402,7 +7402,7 @@
     <value>تنظیم قانون الصاق</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>ما بین روز - Teleopti CCC</value>
+    <value>ما بین روز - Teleopti WFM</value>
   </data>
   <data name="DoNotColon" xml:space="preserve">
     <value>انجام ندهید :</value>
@@ -7564,7 +7564,7 @@
     <value> زمان رسیدگی ایمیل های کمپین</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>پیش بینی ها- Teleopti CCC</value>
+    <value>پیش بینی ها- Teleopti WFM</value>
   </data>
   <data name="DaysOffBackToLegalState" xml:space="preserve">
     <value>برگشت روز تعطیل به وضعیت قانونی</value>
@@ -8041,7 +8041,7 @@
     <value>پخش </value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>خروج از Teleopti CCC</value>
+    <value>خروج از Teleopti WFM</value>
   </data>
   <data name="PerAgent" xml:space="preserve">
     <value>برای هر پاسخگو</value>
@@ -8176,7 +8176,7 @@
     <value>زمان آمادگی / زمان آمادگی زمان بندی شده</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>مجوزها - Teleopti CCC</value>
+    <value>مجوزها - Teleopti WFM</value>
   </data>
   <data name="DayOffPoints" xml:space="preserve">
     <value>نکات روز تعطیل :</value>
@@ -8293,7 +8293,7 @@
     <value>تلفن داخلی</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Tel eopti CCC:{1} -{2}       سناریو : {3}       </value>
+    <value>{0} - Teleopti WFM:{1} -{2}       سناریو : {3}       </value>
   </data>
   <data name="SkillTypeBackoffice" xml:space="preserve">
     <value>دفتر پشتیبان</value>
@@ -8386,7 +8386,7 @@
     <value>محدوده اطلاعات فصلی</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>مردم-Teleopti CCC </value>
+    <value>مردم-Teleopti WFM</value>
   </data>
   <data name="WriteProtectionColon" xml:space="preserve">
     <value>محفوظ از نوشتن</value>
@@ -8422,7 +8422,7 @@
     <value>پیغام مجموعه قاعده را انتخاب کنید</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>درخواست غیبت شما قابل واگذاری نیست .بعضی از تاریخ ها  برای درخواست شما در این لحظه باز نیستند</value>
@@ -8473,7 +8473,7 @@
     <value>مهارت های تابع</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>برنامه Teleopti CCC را باز کنید</value>
+    <value>برنامه Teleopti WFM را باز کنید</value>
   </data>
   <data name="SortOrder" xml:space="preserve">
     <value>مرتب سازی</value>
@@ -8776,7 +8776,7 @@
     <value>استانها و گروه های استانی</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>طراحی شده توسط Teleopti CCC</value>
+    <value>طراحی شده توسط Teleopti WFM</value>
   </data>
   <data name="SetWriteProtection" xml:space="preserve">
     <value>تنظیم عملکرد محافظت از نوشتن</value>
@@ -8797,10 +8797,10 @@
     <value>زمان بندی تغییر کرده است. این درخواست مجددا باید پذیرفته شود</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC  با مشکلی مواجه شده است و برنامه باید بسته شود.برای مشکلی که پیش آمده است متاسفیم .اگر مابین برنامه ای بوده اید ،ممکن است اطلاعات شما از بین برود.                                                                                   خواهشمند است در مورد  این خطا اطلاعات درستی ارائه نمایید ،  با کلیک بر روی "ارسال گزارش با ایمیل "     برنامه پیش فرض ارسال ایمیل اجرا می شود لطفا خطا را طبق مراحل زیر گزارش نمایید .                                                                1- مراحل ایجاد خطا را مرحله به مرحله ثبت  کنید.                2-اطلاعات در مورد اینکه شما روی چه اطلاعاتی کار می کردید.                                                                                 3- تهیه تصویر از خطا با Teleopto CCC در پیش زمینه :                                                                                                                                                                                               شما همپنین میتوانید پیغام خطای مورد نظر را کپی و در صفحه اصلی  ایمیل الصاق کنید.                                                                                                                                                                     با تشکر                                                                           Teleoti R&amp;D         </value>
+    <value>Teleopti WFM با مشکلی مواجه شده است و برنامه باید بسته شود.برای مشکلی که پیش آمده است متاسفیم .اگر مابین برنامه ای بوده اید ،ممکن است اطلاعات شما از بین برود.                                                                                   خواهشمند است در مورد  این خطا اطلاعات درستی ارائه نمایید ،  با کلیک بر روی "ارسال گزارش با ایمیل "     برنامه پیش فرض ارسال ایمیل اجرا می شود لطفا خطا را طبق مراحل زیر گزارش نمایید .                                                                1- مراحل ایجاد خطا را مرحله به مرحله ثبت  کنید.                2-اطلاعات در مورد اینکه شما روی چه اطلاعاتی کار می کردید.                                                                                 3- تهیه تصویر از خطا با Teleopti WFM در پیش زمینه :                                                                                                                                                                                               شما همپنین میتوانید پیغام خطای مورد نظر را کپی و در صفحه اصلی  ایمیل الصاق کنید.                                                                                                                                                                     با تشکر                                                                           Teleoti R&amp;D         </value>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
-    <value>برای ارایه خدمات بهتر ، قابل تقدیر است که اطلاعات زیر را برای ما فراهم کنید:                                                            1- مراحل ایجاد خطا را مرحله به مرحله ثبت کنید.                  2-اطلاعات در مورد اینکه شما روی چه اطلاعاتی کار می کردید.                                                                                 3- تهیه تصویر از خطا با Teleopto CCC در پیش زمینه :                                                                                                                                                  با تشکر                                                                           Teleoti R&amp;D         </value>
+    <value>برای ارایه خدمات بهتر ، قابل تقدیر است که اطلاعات زیر را برای ما فراهم کنید:                                                            1- مراحل ایجاد خطا را مرحله به مرحله ثبت کنید.                  2-اطلاعات در مورد اینکه شما روی چه اطلاعاتی کار می کردید.                                                                                 3- تهیه تصویر از خطا با Teleopto WFM در پیش زمینه :                                                                                                                                                  با تشکر                                                                           Teleoti R&amp;D         </value>
   </data>
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
     <value>این آخرین زمان انتظار است برای این جلسه .مایل هستید این جلسه را حذف کنید "{0}" ؟</value>
@@ -8902,10 +8902,10 @@
     <value>نصب خودکار</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>زمان بندی ها - Teleopti CCC</value>
+    <value>زمان بندی ها - Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: پورتال اصلی</value>
+    <value>Teleopti WFM: پورتال اصلی</value>
   </data>
   <data name="RunningBackgroundJob" xml:space="preserve">
     <value>در حال اجرای کار پیش رمینه</value>
@@ -9097,7 +9097,7 @@
     <value>ورودی  ساعات زمان بندی شده</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>پیغام زمان بندی شده پاسخگوی Teleopti CCC</value>
+    <value>پیغام زمان بندی شده پاسخگوی Teleopti WFM</value>
   </data>
   <data name="ScheduledHeads" xml:space="preserve">
     <value>عناوین زمان بندی شده</value>
@@ -9202,7 +9202,7 @@
     <value>قاعده شیفت کاری</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - اخطار سیستم</value>
+    <value>Teleopti WFM - اخطار سیستم</value>
   </data>
   <data name="WorkloadWizardWelcome" xml:space="preserve">
     <value>به سیستم نصب خودکار حجم کاری خوش آمدید</value>

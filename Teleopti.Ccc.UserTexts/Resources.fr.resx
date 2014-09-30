@@ -9453,4 +9453,109 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
     <value>Temps Ready / Temps Ready planifié</value>
   </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Cette semaine contient trop peu de temps de travail ({0}). Le minimum est {1}.</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Supprimer compétence</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Page d'accueil</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Merci de configurer votre adresse mail pour accéder aux ressources Teleopti.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge de bronze! Votre adhérence du {1:yyyy-MM-dd} est au dessus de {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge de bronze! Votre temps de traitement moyen du {1:yyyy-MM-dd} est au dessous de {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge de bronze! Vous avez répondu à plus de {0} appels le {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge d'or! Votre adhérence est au dessus de {0} sur {1} jours différents.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge d'or! Votre temps de traitement est sous {0} secondes sur {1} jours différents.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge d'or! Vous avez repondu à {0} appels et plus chaque jour sur {1} jours différents.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge d'argent! Votre adhérence est au dessus de {0} sur {1} jours différents.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge d'argent! Votre temps de traitement est sous {0} secondes sur {1} jours différents.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Vous avez obtenu un nouveau badge d'argent! Vous avez repondu à {0} appels et plus chaque jour sur {1} jours différents.</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Liste filtrée</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Filtré personnes multiples</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Entrer valeurs propriétés pour catégories d'horaires</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Enregistrer les prévisions dans un autre scénario</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Enregistrer sous</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Résultats filtrés</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Associations possibles</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Filtre avancé</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Résoudre</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Montrer destinataires doublons</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Voir badge</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Prénom][Nom]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Nom][Prénom]</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Description Agent</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Multiple</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Simple</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Remettre badges à Zéro</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Ceci supprimera tous les badges pour tous les agents! Voulez-vous continuer?</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Corriger horaires selon banques horaires</value>
+  </data>
+  <data name="BadgeTypeChecked" xml:space="preserve">
+    <value>Utiliser</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>Impossible de trouver un horaire valide dans la banque d'horaires</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Echec de la mise à zéro des badges, merci de réessayer plus tard!</value>
+  </data>
 </root>

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -3646,7 +3646,7 @@ Ersätt</value>
     <comment>Login name:</comment>
   </data>
   <data name="LogOn" xml:space="preserve">
-    <value>Logga in</value>
+    <value>Inloggning</value>
     <comment>Log on</comment>
   </data>
   <data name="PasswordColon" xml:space="preserve">
@@ -11763,5 +11763,38 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="BadgeTypeChecked" xml:space="preserve">
     <value>Använd</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Var god ange e-postadress för åtkomst till Teleopti-resurser. </value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>Lös</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Visa dubbletter</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Flera</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Enskilda</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Misslyckades med att återställa medaljer. Var god försök igen senare.</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} kan inte vara tidigare än {1}</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Sluttid för förfrågan om heldagsfrånvaro</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Starttid för förfrågan om heldagsfrånvaro</value>
+  </data>
+  <data name="HiddenSystemSettings" xml:space="preserve">
+    <value>Dolda systeminställningar</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>Optimeringssteget "Tid mellan dagar" utförs inte när blockschemaläggning och samma skift är valt. </value>
   </data>
 </root>
