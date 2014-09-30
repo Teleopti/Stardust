@@ -94,8 +94,8 @@
             }
 
             that.getDateTimeFormat = function(time) {
-                if (time.date() > moment().date()) {
-                    return time.format(resources.FixedDateTimeWithSecondsFormatForMoment);
+            	if (time.date() > moment().date()) {
+            		return time.format(resources.DateTimeFormatForMoment);
                 }
                 return time.format(resources.TimeFormatForMoment);
             }

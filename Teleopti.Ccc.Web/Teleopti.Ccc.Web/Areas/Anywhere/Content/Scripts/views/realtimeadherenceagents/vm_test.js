@@ -61,6 +61,15 @@
 
 					return r + "," + g + "," + b;
 				}
+
+				//created a stub to text it. There should be a better way to test this
+				var getDateTimeFormat = function (time) {
+					if (time.date() > moment().date()) {
+						return time.format("YYYY/MM/DD");
+					}
+					return time.format("h:mm A");
+				}
+
 				assert.equals(vm.agentStates()[0].PersonId, state1.PersonId);
 				assert.equals(vm.agentStates()[0].State(), state1.State);
 				assert.equals(vm.agentStates()[0].EnteredCurrentAlarm(), moment.utc(state1.StateStart).add(-600, 'minutes').format());
@@ -77,6 +86,7 @@
 				assert.equals(vm.agentStates()[1].Alarm(), state2.Alarm);
 				assert.equals(vm.agentStates()[1].AlarmColor(), 'rgba(' + hexToRgb(state2.AlarmColor) + ', 0.6)');
 				assert.equals(vm.agentStates()[1].AlarmStart(), moment.utc(state2.AlarmStart).add(-600, 'minutes').format());
+				assert.equals("1:00 PM", getDateTimeFormat(moment.utc(state1.NextActivityStartTime).add(1, 'hours')));
 			},
 
 			"should order by agent name": function () {
