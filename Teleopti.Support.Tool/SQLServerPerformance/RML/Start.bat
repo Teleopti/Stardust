@@ -30,9 +30,9 @@ SET INSTANCE=%COMPUTERNAME%
 SET MyINSTANCE=
 SET PERFCOUNTERINSTANCE=SQLServer
 SET Testname=
+SET MaxMinutes=
 SET MaxDisk=
 SET /A Silent=0
-SET PERFMONRUNAS=%userdomain%\%username% *
 SET ManualWait=0
 SET READTRACE="%ProgramFiles%\Microsoft Corporation\RMLUtils\ReadTrace.exe"
 SET AnalyseCmd=%ROOTDIR%\AnalyseExample.bat
@@ -43,6 +43,7 @@ SET /A traceid=0
 SET tracefile=
 SET perfmonName=SQLServerBaselineCounters
 SET perfmonConfig=%ROOTDIR%\helpers\SQLServerBaselineCounters.config
+call :cleanUpLogman
 
 ::If now input parameters
 IF "%1"=="" (GOTO Manual) ELSE (GOTO Silent)
@@ -50,19 +51,16 @@ IF "%1"=="" (GOTO Manual) ELSE (GOTO Silent)
 ::Fetch input
 :Silent
 SET /A Silent=1
-SET MaxMinutes=%1
-SET MaxDisc=%2
-SET PERFMONRUNAS=%userdomain%\%username% %3
-SET MyINSTANCE=%4
+SET /A MaxMinutes=%~1
+SET /A MaxDisc=%~2
+SET MyINSTANCE=%~3
+SET /A ManualWait=%~4
 SET Conn=-E
 
 ECHO %MaxMinutes%
 ECHO %MaxDisc%
-ECHO %PERFMONRUNAS%
 ECHO %MyINSTANCE%
 
-SET INSTANCE=%COMPUTERNAME%\%MyINSTANCE%
-SET PERFCOUNTERINSTANCE=MSSQL$%MyINSTANCE%
 GOTO Start
 
 :Manual
@@ -78,7 +76,37 @@ cls
 
 ECHO SQL Server instance name
 SET /P MyINSTANCE=^(if you are running a default instance leave blank^):
+ECHO.
 
+CHOICE /C yn /M "Do you connect using WinAuth?"
+IF ERRORLEVEL 1 SET /a WinAuth=1
+IF ERRORLEVEL 2 SET /a WinAuth=0
+IF %WinAuth% equ 1 Call :WinAuth
+IF %WinAuth% equ 0 Call :SQLAuth
+ECHO.
+
+ECHO Max time for trace ^(minutes^)
+SET /P MaxMinutes=^(to manually stop the trace, leave blank^):
+IF "%MaxMinutes%"=="" (
+SET /A ManualWait=1
+SET /A MaxMinutes=1441
+) ELSE (
+SET /A ManualWait=0
+SET /A MaxMinutes=%MaxMinutes%
+)
+
+IF %MaxMinutes% GTR 1440 (
+ECHO I will limit the trace to 24 hours ^(1440 min^)
+SET /A MaxMinutes=1440
+)
+ECHO.
+
+SET /P MaxDisc=Max disk usage for the SQL trace (Gb):
+ECHO.
+
+GOTO Start
+
+:Start
 IF "%MyINSTANCE%" == "" (
 ECHO going for the default instance) ELSE (
 SET INSTANCE=%INSTANCE%\%MyINSTANCE%
@@ -86,39 +114,6 @@ SET PERFCOUNTERINSTANCE=MSSQL$%MyINSTANCE%
 )
 ECHO.
 
-CHOICE /C yn /M "Do you connect using WinAuth?"
-IF ERRORLEVEL 1 SET /a WinAuth=1
-IF ERRORLEVEL 2 SET /a WinAuth=0
-
-IF %WinAuth% equ 1 Call :WinAuth
-IF %WinAuth% equ 0 Call :SQLAuth
-
-ECHO.
-
-ECHO.
-SET /A MaxMinutes=-1
-SET "UserInput="
-ECHO Max time for trace ^(minutes^)?
-SET /P UserInput=Please enter a Number or leave blank to manually stop the trace: 
-IF "%UserInput%"=="" (
-	SET /A ManualWait=1
-) ELSE (
-	SET /A ManualWait=0
-	SET /A MaxMinutes=%UserInput%
-)
-
-IF %MaxMinutes% GTR 1440 (
-ECHO I will limit the trace to 24 hours ^(1440 min^)
-SET /A MaxMinutes=1440
-)
-
-ECHO.
-SET /P MaxDisc=Max disk usage for the SQL trace (Gb):
-
-GOTO Start
-
-:Start
-call :cleanUpLogman
 set /A perfMaxDisc=%MaxDisc%*1024
 IF NOT EXIST "%OutPutFolder%" MKDIR "%OutPutFolder%"
 ECHO.
@@ -131,16 +126,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO noConnection
 ECHO Connect to SQL Server. Done
 ECHO.
 
-::filter trace by database Id?
-CHOICE /C yn /M "Would you like to filter your trace by database_id?"
-IF ERRORLEVEL 1 SET /a Filter=1
-IF ERRORLEVEL 2 SET /a Filter=0
-If %Filter% equ 1 (
-sqlcmd -S%INSTANCE% %Conn% -Q"set nocount on;select database_id,name from sys.databases order by database_id" -W -w 60
-ECHO.
-ECHO Please provide a comma seprated string with integers ^(Example string: 5,8,34^), 
-set /P DBIdString=representing database_id:
-)
+IF %Silent% equ 0 Call :DBfilter
 
 ::Get SQL Server version
 sqlcmd -S%INSTANCE% %Conn% -Q"SELECT cast(SERVERPROPERTY('ProductVersion') as nvarchar(20))" -W -h-1 -o ProductVersion.txt 
@@ -169,7 +155,6 @@ GOTO :quitError
 ) else (
 echo Create SQL Server trace. Done
 )
-echo.
 
 ::Get the output from the trace implementation(traceid + first tracefile)
 FINDSTR /C:"%ROOTDIR%" /I "%TraceOutput%" > NUL
@@ -223,11 +208,7 @@ ECHO The SQL and windows trace are now running, please do not close this window
 ECHO To stop the trace press the AnyKey
 PAUSE
 ) else (
-ECHO Trace will now run for %MaxMinutes% minutes.
-ECHO Sleeping for %MaxMinutes% minutes. Zzz ....
-ECHO.
 CSCRIPT "%ROOTDIR%\helpers\Sleep.vbs" %MaxMinutes%
-ECHO.
 )
 
 call :stopTrace %traceid%
@@ -312,6 +293,19 @@ set /A logmanError=%errorlevel%
 exit /b %logmanError%
 
 ::-----------Labels----------------
+:DBfilter
+::filter trace by database Id?
+CHOICE /C yn /M "Would you like to filter your trace by database_id?"
+IF ERRORLEVEL 1 SET /a Filter=1
+IF ERRORLEVEL 2 SET /a Filter=0
+If %Filter% equ 1 (
+sqlcmd -S%INSTANCE% %Conn% -Q"set nocount on;select database_id,name from sys.databases order by database_id" -W -w 60
+ECHO.
+ECHO Please provide a comma seprated string with integers ^(Example string: 5,8,34^), 
+set /P DBIdString=representing database_id:
+)
+goto :eof
+
 :WinAuth
 SET Conn=-E
 goto :eof
