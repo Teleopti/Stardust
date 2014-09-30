@@ -125,7 +125,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterType<UnitOfWorkAspect>();
-			builder.RegisterType<MultipleBusinessUnitsAspect>();
 		}
 	}
 }

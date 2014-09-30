@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
+		[UnitOfWork]
 		[AddFullDayAbsencePermission]
 		public virtual JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
+		[UnitOfWork]
 		[AddIntradayAbsencePermission]
 		public virtual JsonResult AddIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
+		[UnitOfWork]
 		[RemoveAbsencePermission]
 		public virtual JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
+		[UnitOfWork]
 		[AddActivityPermission]
 		public virtual JsonResult AddActivity(AddActivityCommand command)
 		{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpPost]
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
+		[UnitOfWork]
 		[MoveActivityPermission]
 		public virtual JsonResult MoveActivity(MoveActivityCommand command)
 		{

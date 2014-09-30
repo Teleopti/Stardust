@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_userTextTranslator = userTextTranslator;
 		}
 
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		[UnitOfWork, HttpGet]
 		public virtual JsonResult AvailableGroupPages(DateTime date)
 		{
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();

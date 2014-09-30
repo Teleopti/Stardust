@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_viewModelFactory = viewModelFactory;
 		}
 
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2)]
+		[UnitOfWork]
 		public virtual void PersonSchedule(Guid personId, DateTime date)
 		{
 			var data = _viewModelFactory.CreateViewModel(personId, date);
