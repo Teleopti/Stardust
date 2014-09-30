@@ -272,7 +272,13 @@ SET
 	update_date				= getdate(),
 	datasource_update_date	= s.datasource_update_date,
 	windows_domain			= case when (s.windows_domain is null or s.windows_domain = '') then 'Not Defined' else s.windows_domain end,
-	windows_username		= case when (s.windows_username is null or s.windows_username = '') then 'Not Defined' else s.windows_username end
+	windows_username		= case when (s.windows_username is null or s.windows_username = '') then 'Not Defined' else s.windows_username end,
+	valid_to_date_id_maxDate	= CASE WHEN d2.date_id =-2 THEN @maxdateid-1 ELSE isnull(d2.date_id,@maxdateid-1) END, 
+	valid_to_interval_id_maxDate= CASE WHEN d2.date_id =-2 THEN @maxInterval WHEN d2.date_id IS NULL THEN @maxInterval ELSE isnull(s.valid_to_interval_id,@maxInterval)  END, 
+	valid_from_date_local	= s.valid_from_date_local,
+	valid_from_date_id_local = d3.date_id,
+	valid_to_date_local		= CASE WHEN s.valid_to_date_local=@eternityDate THEN @maxdate ELSE ISNULL(d4.date_date,@maxdate) END,
+	valid_to_date_id_local = CASE WHEN d4.date_id=-2 THEN @maxdateid ELSE isnull(d4.date_id,@maxdateid)  END
 FROM
 	Stage.stg_person s	
 LEFT JOIN
@@ -291,6 +297,10 @@ LEFT JOIN
 	mart.dim_date d2
 ON
 	CONVERT(smalldatetime, CONVERT(int,(CONVERT(float,s.valid_to_interval_start)))) = d2.date_date -- Remove time part from date
+INNER JOIN mart.dim_date d3 --valid_from_date_local
+	ON s.valid_from_date_local = d3.date_date
+LEFT JOIN mart.dim_date d4 --valid_to_date_local
+	ON s.valid_to_date_local = d4.date_date
 WHERE 
 	s.person_period_code		= mart.dim_person.person_period_code
 	
@@ -387,12 +397,12 @@ SELECT
 	to_be_deleted			= 0,
 	windows_domain			= s.windows_domain,
 	windows_username		= s.windows_username,
-	valid_to_date_id_maxDate	= -1,
-	valid_to_interval_id_maxDate= -1,
-	valid_from_date_id_local	= -1,
-	valid_from_date_local	= @mindate,
-	valid_to_date_id_local		= -1,
-	valid_to_date_local	= @mindate
+	valid_to_date_id_maxDate	= CASE WHEN d2.date_id =-2 THEN @maxdateid-1 ELSE isnull(d2.date_id,@maxdateid-1) END, 
+	valid_to_interval_id_maxDate= CASE WHEN d2.date_id =-2 THEN @maxInterval WHEN d2.date_id IS NULL THEN @maxInterval ELSE isnull(s.valid_to_interval_id, @maxInterval) END, 
+	valid_from_date_id_local	= d3.date_id,
+	valid_from_date_local	= s.valid_from_date_local,
+	valid_to_date_id_local		= CASE WHEN d4.date_id=-2 THEN @maxdateid ELSE ISNULL(d4.date_id,@maxdateid)  END,
+	valid_to_date_local	= CASE WHEN s.valid_to_date_local=@eternityDate THEN @maxdate ELSE ISNULL(d4.date_date,@maxdate)END
 FROM
 	Stage.stg_person s
 LEFT JOIN
@@ -411,6 +421,10 @@ LEFT JOIN
 	mart.dim_date d2
 ON
 	CONVERT(smalldatetime, CONVERT(int,(CONVERT(float,s.valid_to_interval_start)))) = d2.date_date -- Remove time part from date
+INNER JOIN mart.dim_date d3 --valid_from_date_local
+	ON s.valid_from_date_local = d3.date_date
+LEFT JOIN mart.dim_date d4 --valid_to_date_local
+	ON s.valid_to_date_local = d4.date_date
 WHERE 
 	NOT EXISTS (SELECT person_id 
 				FROM mart.dim_person p 
@@ -440,51 +454,5 @@ WHERE
 	WHERE dp.business_unit_code = @current_business_unit_code
 --</ToDo>
 
-UPDATE mart.dim_person
-SET valid_to_date_id_maxDate=
-CASE WHEN valid_to_date_id=-2
-	THEN @maxdateid-1 --seems like bridge_time_zone is missing one day from dim_date
-	ELSE valid_to_date_id
-END
-WHERE business_unit_code = @current_business_unit_code
-
-UPDATE mart.dim_person
-SET valid_to_interval_id_maxDate=
-CASE WHEN valid_to_date_id=-2
-	THEN @maxInterval
-	ELSE valid_to_interval_id
-END
-WHERE business_unit_code = @current_business_unit_code
-
---Use LEFT JOIN in case bridge_time_zone happen to be empty or missing a time zone
-UPDATE dp
-SET
-	valid_from_date_id_local	= isnull(b1.local_date_id,-1),
-	valid_to_date_id_local		= isnull(b2.local_date_id,-2)
-FROM mart.dim_person dp
---From Date	
-LEFT OUTER JOIN mart.bridge_time_zone b1
-	ON
-	b1.time_zone_id = dp.time_zone_id
-	AND dp.valid_from_date_id = b1.date_id
-	AND dp.valid_from_interval_id = b1.interval_id
---To Date	
-LEFT OUTER JOIN mart.bridge_time_zone b2
-	ON
-	b2.time_zone_id = dp.time_zone_id
-	AND dp.valid_to_date_id_maxDate = b2.date_id
-	AND dp.valid_to_interval_id_maxDate = b2.interval_id
-WHERE business_unit_code = @current_business_unit_code
-
-UPDATE dp
-SET
-	valid_from_date_local=d1.date_date,
-	valid_to_date_local=d2.date_date
-FROM mart.dim_person dp
-INNER JOIN mart.dim_date d1
-	ON dp.valid_from_date_id_local = d1.date_id
-INNER JOIN mart.dim_date d2
-	ON dp.valid_to_date_id_local = d2.date_id
-WHERE business_unit_code = @current_business_unit_code
 
 GO
