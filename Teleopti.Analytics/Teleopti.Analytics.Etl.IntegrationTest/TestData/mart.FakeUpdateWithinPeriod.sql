@@ -1,11 +1,11 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfSkillDaysWithinPeriod]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[UpdatePercentageOfSkillDaysWithinPeriod]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdateRowsOfSkillDaysWithinPeriod]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[UpdateRowsOfSkillDaysWithinPeriod]
 GO
 
 -- =============================================
--- exec [mart].[UpdatePercentageOfSkillDaysWithinPeriod] @rows=100, @periodStart='2014-08-01', @periodEnd='2014-09-01',@reset=1
+-- exec [mart].[UpdateRowsOfSkillDaysWithinPeriod] @rows=100, @periodStart='2014-08-01', @periodEnd='2014-09-01',@reset=1
 -- =============================================
-CREATE PROCEDURE [mart].[UpdatePercentageOfSkillDaysWithinPeriod]
+CREATE PROCEDURE [mart].[UpdateRowsOfSkillDaysWithinPeriod]
 @rows int,
 @periodStart datetime = NULL,
 @periodEnd datetime  = NULL,
@@ -39,14 +39,14 @@ ON p.Id = sd.Id
 GO
 
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[UpdatePercentageOfScheduleDaysWithinPeriod]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdateRowsOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[UpdateRowsOfScheduleDaysWithinPeriod]
 GO
 
 -- =============================================
--- exec [mart].[UpdatePercentageOfScheduleDaysWithinPeriod] @rows=100, @periodStart='2000-01-01', @periodEnd='2013-06-30',@reset=1
+-- exec [mart].[UpdateRowsOfScheduleDaysWithinPeriod] @rows=100, @periodStart='2000-01-01', @periodEnd='2013-06-30',@reset=1
 -- =============================================
-CREATE PROCEDURE [mart].[UpdatePercentageOfScheduleDaysWithinPeriod]
+CREATE PROCEDURE [mart].[UpdateRowsOfScheduleDaysWithinPeriod]
 @rows int,
 @periodStart datetime = NULL,
 @periodEnd datetime  = NULL,
@@ -84,7 +84,7 @@ AND p.PersonId = s.PersonId
 GO
 
 --====================================
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdateRowsOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[resetIntradayTables]
 GO
 CREATE PROCEDURE [mart].[resetIntradayTables]
