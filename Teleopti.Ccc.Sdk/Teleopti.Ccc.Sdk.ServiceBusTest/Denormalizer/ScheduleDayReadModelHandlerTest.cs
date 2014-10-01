@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private INotificationSender _notificationSender;
 		private ScheduleDayReadModelHandler _target;
 		private IPersonRepository _personRepository;
-		private ISmsLinkChecker _smsLinkChecker;
+		private INotificationChecker _notificationChecker;
 		private INotificationSenderFactory _notificationSenderFactory;
 		private IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_mocks = new MockRepository();
 			_personRepository = _mocks.StrictMock<IPersonRepository>();
 			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
-			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
+			_notificationChecker = _mocks.StrictMock<INotificationChecker>();
 			_notificationSenderFactory = _mocks.StrictMock<INotificationSenderFactory>();
 			_notificationSender = _mocks.StrictMock<INotificationSender>();
 			_scheduleDayReadModelsCreator = _mocks.StrictMock<IScheduleDayReadModelsCreator>();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 		    _currentUnitOfWorkFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
 		    _target = new ScheduleDayReadModelHandler(_personRepository, new DoNotifySmsLink(_significantChangeChecker,
-				_smsLinkChecker, _notificationSenderFactory,_currentUnitOfWorkFactory), _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
+				_notificationChecker, _notificationSenderFactory,_currentUnitOfWorkFactory), _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 			                                                                  LicenseType.Agent, new Percent(.10), null, null));
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod.StartDate, _person, model)).Return(mess);
-			Expect.Call(_smsLinkChecker.SmsMobileNumber(_person)).Return("124578");
+			Expect.Call(_notificationChecker.SmsMobileNumber(_person)).Return("124578");
 			Expect.Call(_notificationSenderFactory.GetSender()).Return(_notificationSender);
 			Expect.Call(() => _notificationSender.SendNotification(mess, "124578"));
 			Expect.Call(() =>_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));

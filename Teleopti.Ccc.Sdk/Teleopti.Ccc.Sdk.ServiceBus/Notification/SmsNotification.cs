@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	public class DoNotifySmsLink : IDoNotifySmsLink
 	{
 		private readonly ISignificantChangeChecker _significantChangeChecker;
-		private readonly ISmsLinkChecker _smsLinkChecker;
+		private readonly INotificationChecker _notificationChecker;
 		private readonly INotificationSenderFactory _notificationSenderFactory;
 	    private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public DoNotifySmsLink(ISignificantChangeChecker significantChangeChecker,
-		                       ISmsLinkChecker smsLinkChecker,
+		                       INotificationChecker notificationChecker,
 		                       INotificationSenderFactory notificationSenderFactory,
             ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_significantChangeChecker = significantChangeChecker;
-			_smsLinkChecker = smsLinkChecker;
+			_notificationChecker = notificationChecker;
 			_notificationSenderFactory = notificationSenderFactory;
 		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				if (!string.IsNullOrEmpty(smsMessages.Subject))
 				{
 					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " on " + person.Name);
-					var number = _smsLinkChecker.SmsMobileNumber(person);
+					var number = _notificationChecker.SmsMobileNumber(person);
 					if (!string.IsNullOrEmpty(number))
 					{
 						try

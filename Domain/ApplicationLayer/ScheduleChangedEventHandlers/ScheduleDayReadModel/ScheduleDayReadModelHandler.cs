@@ -45,10 +45,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				if (!message.IsInitialLoad)
 				{
 					_notifySmsLink.NotifySmsLink(readModel, date, person);
-				}
-
-				if (!message.IsInitialLoad)
-				{
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);

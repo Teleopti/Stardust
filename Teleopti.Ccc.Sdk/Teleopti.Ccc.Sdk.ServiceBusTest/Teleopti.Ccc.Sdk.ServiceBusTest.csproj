@@ -179,7 +179,7 @@
     <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
     <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
     <Compile Include="Notification\NotificationConfigReaderTest.cs" />
-    <Compile Include="Notification\SmsLinkCheckerTest.cs" />
+    <Compile Include="Notification\NotificationCheckerTest.cs" />
     <Compile Include="Notification\NotificationSenderFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>

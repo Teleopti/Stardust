@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
 			builder.RegisterType<LoadSchedulesForRequestWithoutResourceCalculation>().As<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
-			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
+			builder.RegisterType<NotificationChecker>().As<INotificationChecker>();
 			builder.RegisterType<NotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>();
