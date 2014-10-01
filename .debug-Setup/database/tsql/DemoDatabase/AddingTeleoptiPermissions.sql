@@ -6,6 +6,65 @@
 
 SET NOCOUNT ON
 ----------------
+--Adding a agent persmissions
+----------------
+DECLARE @AgentRole uniqueidentifier
+SET @AgentRole = 'E7F360D3-C4B6-41FC-9B2D-9B5E015AAE64' --Id in DemoSales
+
+DECLARE @FunctionCode TABLE (FunctionCode nvarchar(50))
+INSERT INTO @FunctionCode
+--Add new FunctionCode's here
+SELECT 'ViewBadge'
+UNION ALL
+SELECT 'QueueMetrics'
+UNION ALL
+SELECT 'ViewPersonalAccount'
+
+;WITH ClassHierarchy_CTE (ClassID, ClassID_Join, Level)
+AS
+(
+SELECT
+	Id,
+	Parent,
+	0
+FROM $(TELEOPTICCC).dbo.ApplicationFunction af
+INNER JOIN @FunctionCode fc
+	ON fc.FunctionCode = af.FunctionCode collate database_default
+UNION ALL
+SELECT
+    cte.ClassID,
+    h.Parent,
+    Level + 1
+FROM $(TELEOPTICCC).dbo.ApplicationFunction AS h
+INNER JOIN ClassHierarchy_CTE as cte
+	ON h.Id = cte.ClassID_Join
+)
+--Insert parents needed by added function
+INSERT INTO $(TELEOPTICCC).dbo.ApplicationFunctionInRole
+SELECT
+    @AgentRole, af.Id, getdate()
+FROM ClassHierarchy_CTE a
+INNER JOIN $(TELEOPTICCC).dbo.ApplicationFunction af
+	ON a.ClassID_Join = af.Id
+WHERE a.ClassID_Join IS NOT NULL
+AND NOT EXISTS (SELECT * FROM $(TELEOPTICCC).dbo.ApplicationFunctionInRole a 
+						WHERE a.ApplicationRole = @AgentRole
+						AND a.ApplicationFunction = af.Id)
+ORDER BY
+    a.ClassID,
+    a.Level
+
+--add add the acutal function it self
+INSERT INTO $(TELEOPTICCC).dbo.ApplicationFunctionInRole
+select @AgentRole, af.Id, getdate()
+FROM $(TELEOPTICCC).dbo.ApplicationFunction af
+INNER JOIN @FunctionCode fc
+	ON fc.FunctionCode = af.FunctionCode collate database_default
+WHERE NOT EXISTS (SELECT * FROM $(TELEOPTICCC).dbo.ApplicationFunctionInRole a 
+						WHERE a.ApplicationRole = @AgentRole
+						AND a.ApplicationFunction = af.Id)
+
+----------------
 --Adding a cool user
 ----------------
 DECLARE @WinUser varchar(50)

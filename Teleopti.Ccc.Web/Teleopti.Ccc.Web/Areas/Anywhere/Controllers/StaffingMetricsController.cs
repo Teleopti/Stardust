@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_dailyStaffingMetricsViewModelFactory = dailyStaffingMetricsViewModelFactory;
 		}
 
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		[UnitOfWork, HttpGet]
 		public virtual JsonResult AvailableSkills(DateTime date)
 		{
 			var dateOnly = new DateOnly(date);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				}, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		[UnitOfWork, HttpGet]
 		public virtual JsonResult DailyStaffingMetrics(Guid skillId, DateTime date)
 		{
 			var vm = _dailyStaffingMetricsViewModelFactory.CreateViewModel(skillId, date);

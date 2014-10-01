@@ -85,6 +85,8 @@ namespace Teleopti.Analytics.Etl.Transformer
 		        : IdentityHelper.Split(person.AuthenticationInfo.Identity);
 			row["windows_domain"] = logOn.Item1;
 	        row["windows_username"] = logOn.Item2;
+            row["valid_from_date_local"] = personPeriod.StartDate.Date;
+            row["valid_to_date_local"] = personPeriod.EndDate().Date;
             table.Rows.Add(row);
         }
 

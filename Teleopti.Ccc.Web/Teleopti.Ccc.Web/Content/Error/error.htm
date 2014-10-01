@@ -319,7 +319,7 @@
 	<script type="text/javascript">
 		if (document.location.search) {
 			var h1 = document.getElementById('error-message');
-			h1.innerText = document.location.search.substring(1);
+			h1.innerText = decodeURIComponent(document.location.search.substring(1)).replace(/\+/g, ' ');
 		}
 	</script>
 </body>

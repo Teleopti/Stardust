@@ -174,6 +174,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToDiagnosisTool();
 		}
 
+		[When(@"I am viewing the health check view")]
+		public void WhenIAmViewingTheHealthCheckView()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToHealthCheckTool();
+		}
+
 		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)'")]

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_siteAdherenceAggregator = siteAdherenceAggregator;
 		}
 
-		[UnitOfWork(Order = 1), MultipleBusinessUnits(Order = 2), HttpGet]
+		[UnitOfWork, HttpGet]
 		public virtual JsonResult Index()
 		{
 			var sites = _siteRepository.LoadAll();

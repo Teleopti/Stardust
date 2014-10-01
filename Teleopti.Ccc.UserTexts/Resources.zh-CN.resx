@@ -8246,7 +8246,7 @@ Teleopti R&amp;D</value>
     <value>已登录用户</value>
   </data>
   <data name="MyProfile" xml:space="preserve">
-    <value>我的个人简介</value>
+    <value>我的个人资料</value>
   </data>
   <data name="ChangePasswordValidationError" xml:space="preserve">
     <value>密码无法更改。
