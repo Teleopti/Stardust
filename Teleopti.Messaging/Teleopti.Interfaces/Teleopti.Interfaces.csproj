@@ -119,7 +119,6 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
-    <Compile Include="Domain\NotificationType .cs" />
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
     <Compile Include="Domain\IAgentBadgeRepository.cs" />
@@ -132,6 +131,7 @@
     <Compile Include="Domain\IAuthenticationInfo.cs" />
     <Compile Include="Domain\MaxSeatsFeatureOptions.cs" />
     <Compile Include="Domain\MessageType.cs" />
+    <Compile Include="Domain\NotificationType.cs" />
     <Compile Include="Domain\PersianCultureHelper.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />

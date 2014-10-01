@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.radioButtonAdvEmail = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.radioButtonAdvSMS = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
@@ -44,10 +43,6 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.textBoxEmailFrom = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.buttonAdvSend = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.textBoxSendEmailTo = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -61,8 +56,6 @@
 			this.tableLayoutPanelSubHeader3.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxEmailFrom)).BeginInit();
-			this.tableLayoutPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.textBoxSendEmailTo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -79,11 +72,10 @@
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 0);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader3, 0, 5);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel1, 0, 6);
-			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanel2, 0, 7);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
-			this.tableLayoutPanelBody.RowCount = 11;
+			this.tableLayoutPanelBody.RowCount = 8;
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -91,10 +83,11 @@
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelBody.Size = new System.Drawing.Size(744, 461);
 			this.tableLayoutPanelBody.TabIndex = 55;
 			// 
@@ -302,66 +295,6 @@
 			this.autoLabel1.Text = "xxSendEmailFromColon";
 			this.autoLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// tableLayoutPanel2
-			// 
-			this.tableLayoutPanel2.ColumnCount = 3;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 335F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 270F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.buttonAdvSend, 2, 0);
-			this.tableLayoutPanel2.Controls.Add(this.autoLabel2, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.textBoxSendEmailTo, 1, 0);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 260);
-			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 1;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(744, 35);
-			this.tableLayoutPanel2.TabIndex = 15;
-			// 
-			// buttonAdvSend
-			// 
-			this.buttonAdvSend.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonAdvSend.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvSend.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvSend.BeforeTouchSize = new System.Drawing.Size(68, 25);
-			this.buttonAdvSend.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvSend.IsBackStageButton = false;
-			this.buttonAdvSend.Location = new System.Drawing.Point(608, 5);
-			this.buttonAdvSend.Name = "buttonAdvSend";
-			this.buttonAdvSend.Size = new System.Drawing.Size(68, 25);
-			this.buttonAdvSend.TabIndex = 13;
-			this.buttonAdvSend.Text = "xxSend";
-			this.buttonAdvSend.UseVisualStyle = true;
-			this.buttonAdvSend.UseVisualStyleBackColor = false;
-			// 
-			// autoLabel2
-			// 
-			this.autoLabel2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.autoLabel2.Location = new System.Drawing.Point(3, 10);
-			this.autoLabel2.Name = "autoLabel2";
-			this.autoLabel2.Size = new System.Drawing.Size(128, 15);
-			this.autoLabel2.TabIndex = 10;
-			this.autoLabel2.Text = "xxTestSendingToColon";
-			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBoxSendEmailTo
-			// 
-			this.textBoxSendEmailTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.textBoxSendEmailTo.BeforeTouchSize = new System.Drawing.Size(251, 23);
-			this.textBoxSendEmailTo.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.textBoxSendEmailTo.Location = new System.Drawing.Point(338, 6);
-			this.textBoxSendEmailTo.MaxLength = 50;
-			this.textBoxSendEmailTo.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.textBoxSendEmailTo.Name = "textBoxSendEmailTo";
-			this.textBoxSendEmailTo.OverflowIndicatorToolTipText = null;
-			this.textBoxSendEmailTo.Size = new System.Drawing.Size(251, 23);
-			this.textBoxSendEmailTo.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
-			this.textBoxSendEmailTo.TabIndex = 14;
-			this.textBoxSendEmailTo.WordWrap = false;
-			this.textBoxSendEmailTo.TextChanged += new System.EventHandler(this.textBoxSendEmailTo_TextChanged);
-			// 
 			// gradientPanelHeader
 			// 
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -431,9 +364,6 @@
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxEmailFrom)).EndInit();
-			this.tableLayoutPanel2.ResumeLayout(false);
-			this.tableLayoutPanel2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.textBoxSendEmailTo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -460,10 +390,6 @@
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel1;
 		private System.Windows.Forms.Label labelSubHeader3;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxEmailFrom;
-		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
-		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvSend;
-		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxSendEmailTo;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvEmail;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvSMS;
 

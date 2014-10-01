@@ -179,8 +179,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			comboBoxOptionalColumns.Enabled = radioButtonAdvSMS.Checked;
 			textBoxEmailFrom.Enabled = !radioButtonAdvSMS.Checked;
-			textBoxSendEmailTo.Enabled = !radioButtonAdvSMS.Checked;
-			buttonAdvSend.Enabled = !radioButtonAdvSMS.Checked && IsEmail(textBoxSendEmailTo.Text);
 
 			clearSmsData(!radioButtonAdvSMS.Checked);
 			clearEmailData(radioButtonAdvSMS.Checked);
@@ -190,27 +188,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if(!clear) return;
 			textBoxEmailFrom.Text = string.Empty;
-			textBoxSendEmailTo.Text = string.Empty;
 		}
 
 		private void clearSmsData(bool clear)
 		{
 			if (!clear) return;
 			comboBoxOptionalColumns.SelectedIndex = -1;
-		}
-
-		private static bool IsEmail(string inputEmail)
-		{
-			if (!String.IsNullOrEmpty(inputEmail))
-			{
-				return inputEmail.Contains("@");
-			}
-			return false;
-		}
-
-		private void textBoxSendEmailTo_TextChanged(object sender, EventArgs e)
-		{
-			buttonAdvSend.Enabled = IsEmail(textBoxSendEmailTo.Text);
 		}
 	}
 }
