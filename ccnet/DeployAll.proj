@@ -339,26 +339,6 @@
 			<!-- Azure -->
 			<Azure Include="$(CCNetWorkingDirectory)\ccnet\Azure\**\*.*"/>
 			
-			<!-- RTA -->
-			<RTA
-			Include=
-	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.aspx;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.dll;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.css;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.skin;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.gif;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.svc;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.png;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.jpg;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.rdlc;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.ascx;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.asax;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.master;"
-			Exclude=
-	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\obj\**\*.*;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\properties\**\*.*"
-	/>
-
 	<!-- SDK -->
 	<SDK
 	Include=
@@ -669,8 +649,6 @@
 			DestinationFiles="@(MyTimeStandAlone->'$(DeployPath)\MyTime\StandAlone\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(RTATools)"
 			DestinationFiles="@(RTATools->'$(DeployPath)\RTATools\Testapplication\Web\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		<Copy	SourceFiles="@(RTA)"
-			DestinationFiles="@(RTA->'$(DeployPath)\RTA\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(SDK)"
 			DestinationFiles="@(SDK->'$(DeployPath)\SDK\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(PayRollFile)"
