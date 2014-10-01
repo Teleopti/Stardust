@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenTheBrowserTimeIs(DateTime time)
 		{
 			const string setJsDateTemplate =
-				@"Date.prototype.getTime = function () {{ return new Date({0}, {1}, {2}, {3}, {4}, {5}); }};";
+				@"Date.prototype.getTime = function () {{ return new Date(Date.UTC({0}, {1}, {2}, {3}, {4}, {5})); }};";
 			var setJsDate = string.Format(setJsDateTemplate, time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
 			Browser.Interactions.Javascript(setJsDate);
 		}

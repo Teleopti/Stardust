@@ -55,7 +55,7 @@ define([
 		},
 
 		GoToTeamScheduleWithSelectedPerson: function (buid, id, personId, date) {
-			window.setLocationHash('teamschedule/' + buid + '/' + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date));
+			window.openInNewTab('teamschedule/' + buid + '/' + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date));
 		},
 
 		GotoRealTimeAdherenceTeams: function (buid, siteId) {

@@ -88,8 +88,8 @@ Scenario: Add activity default times for agent in other time zone
 	And the browser time is '2013-11-18 12:05:00'
 	Then I should see add activity times in other time zone with
 	| Field      | Value |
-	| Start time | 13:15 |
-	| End time   | 14:15 |
+	| Start time | 14:15 |
+	| End time   | 15:15 |
 
 Scenario: Add activity times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'

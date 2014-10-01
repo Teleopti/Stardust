@@ -704,6 +704,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void loadScenarioMenuItems()
 		{
+			if (flowLayoutExportToScenario.ContainerControl.Controls.Count > 0) return;
+
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IScenarioRepository scenarioRepository = new ScenarioRepository(unitOfWork);

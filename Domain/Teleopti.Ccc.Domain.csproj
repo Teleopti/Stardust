@@ -564,8 +564,11 @@
     <Compile Include="ResourceCalculation\FairnessValueCalculator.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingService.cs" />
     <Compile Include="ResourceCalculation\FurnessDataConverter.cs" />
+    <Compile Include="ResourceCalculation\IntraIntervalAnalyze\FullIntervalFinder.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\IntraIntervalFinder.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\IntraIntervalFinderService.cs" />
+    <Compile Include="ResourceCalculation\IntraIntervalAnalyze\SkillActivityCountCollector.cs" />
+    <Compile Include="ResourceCalculation\IntraIntervalAnalyze\SkillActivityCounter.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\SkillDayIntraIntervalFinder.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityAddedEvent.cs" />
