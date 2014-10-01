@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
+using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

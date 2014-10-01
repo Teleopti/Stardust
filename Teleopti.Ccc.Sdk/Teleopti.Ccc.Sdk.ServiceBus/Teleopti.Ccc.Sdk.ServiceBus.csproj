@@ -162,7 +162,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\ITeleoptiRtaService.cs">
+    <Compile Include="..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\Rta\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
     <Compile Include="AgentBadge\AgentBadgeCalculator.cs" />
