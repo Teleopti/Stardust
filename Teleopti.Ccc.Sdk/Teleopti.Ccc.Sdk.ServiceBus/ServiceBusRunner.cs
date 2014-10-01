@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public void Start()
 		{
 			hostServiceStart();
-		}
+}
 
 		private void hostServiceStart()
 		{
