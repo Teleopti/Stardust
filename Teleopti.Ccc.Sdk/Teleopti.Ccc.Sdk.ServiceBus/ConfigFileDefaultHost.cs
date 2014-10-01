@@ -1,8 +1,6 @@
 using System;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using Rhino.ServiceBus.Config;
 using Rhino.ServiceBus.Hosting;
@@ -17,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		private readonly ILog logger = LogManager.GetLogger(typeof(DefaultHost));
 		private string assemblyName;
-		private AbstractBootStrapper _bootStrapper;
+		private readonly AbstractBootStrapper _bootStrapper;
 		private IStartable startable;
 		private string bootStrapperName;
 		private BusConfigurationSection hostConfiguration;
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Start(string assembly)
 		{
-			InitializeBus(assembly);
+			initializeBus(assembly);
 
 			startable.Start();
 
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			Start(_bootStrapper.GetType().Assembly.FullName);
 		}
 
-		private void InitializeBus(string asmName)
+		private void initializeBus(string asmName)
 		{
 			string logfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log4net.config");
 
@@ -72,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			CreateBootStrapper();
 
-			log4net.GlobalContext.Properties["BusName"] = _bootStrapper.GetType().Namespace;
+			GlobalContext.Properties["BusName"] = _bootStrapper.GetType().Namespace;
 
 			InitializeContainer();
 
@@ -94,50 +92,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void CreateBootStrapper()
 		{
-			//logger.DebugFormat("Loading {0}", assemblyName);
-			//var assembly = Assembly.Load(assemblyName);
-
-			//Type bootStrapperType = null;
-
-			//if (string.IsNullOrEmpty(bootStrapperName) == false)
-			//	bootStrapperType = assembly.GetType(bootStrapperName);
-
 			var queueConnection = ConfigurationManager.ConnectionStrings["Queue"];
 			if (queueConnection!=null)
 			{
 				QueueConnectionStringContainer.ConnectionString = queueConnection.ConnectionString;
 			}
-
-			//bootStrapperType = bootStrapperType ??
-			//	GetAutoBootStrapperType(assembly);
-			//try
-			//{
-			//	_bootStrapper = (AbstractBootStrapper)Activator.CreateInstance(bootStrapperType);
-			//}
-			//catch (Exception e)
-			//{
-			//	throw new InvalidOperationException("Failed to create " + bootStrapperType + ".", e);
-			//}
 		}
-
-		//private static Type GetAutoBootStrapperType(Assembly assembly)
-		//{
-		//	var bootStrappers = assembly.GetTypes()
-		//		.Where(x => typeof(AbstractBootStrapper).IsAssignableFrom(x) && x.IsAbstract == false)
-		//		.ToArray();
-
-		//	if (bootStrappers.Length == 0)
-		//		throw new InvalidOperationException("Could not find a boot strapper for " + assembly);
-
-		//	if (bootStrappers.Length > 1)
-		//	{
-		//		throw new InvalidOperationException("Found more than one boot strapper for " + assembly +
-		//			" you need to specify which boot strapper to use: " + Environment.NewLine +
-		//			string.Join(Environment.NewLine, bootStrappers.Select(x => x.FullName).ToArray()));
-		//	}
-
-		//	return bootStrappers[0];
-		//}
 
 		public void Dispose()
 		{
@@ -149,9 +109,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void InitialDeployment(string asmName, string user)
 		{
-			InitializeBus(asmName);
+			initializeBus(asmName);
 			_bootStrapper.ExecuteDeploymentActions(user);
-
 			_bootStrapper.ExecuteEnvironmentValidationActions();
 		}
 
