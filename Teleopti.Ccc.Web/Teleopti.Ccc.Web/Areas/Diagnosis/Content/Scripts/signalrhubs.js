@@ -6,8 +6,12 @@ define(
     ) {
 
         return {
-            start: function() {
-                $.connection.hub.url = 'signalr';
+        	start: function (options) {
+        		if (options && options.url) {
+        			$.connection.hub.url = options.url;
+		        } else {
+        			$.connection.hub.url = 'signalr';
+		        }
                 return $.connection.hub.start();
             }
         };
