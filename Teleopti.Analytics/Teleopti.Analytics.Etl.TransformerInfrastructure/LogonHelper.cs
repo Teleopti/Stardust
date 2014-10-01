@@ -131,6 +131,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					Trace.WriteLine(result.Message);
 					_choosenDb = null;
 				}
+				
 			}
 		}
 
@@ -176,6 +177,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		public void LogOff()
 		{
 			_logonService.LogOff();
+		}
+
+		public DataSourceContainer ChoosenDataSource
+		{
+			get { return _choosenDb; }
 		}
 	}
 }
