@@ -11,7 +11,6 @@
 ..\TeleoptiCCC\MyTime\ClickOnce\Teleopti.Ccc.AgentPortal.exe.config.deploy,BuildArtifacts\AppMytime.config
 ..\TeleoptiCCC\MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy,BuildArtifacts\AppMytime.config
 ..\TeleoptiCCC\PMService\web.config,BuildArtifacts\PMWeb.config
-..\TeleoptiCCC\RTA\web.config,BuildArtifacts\RTAWeb.config
 ..\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,BuildArtifacts\AppRTATestApplication.config
 ..\TeleoptiCCC\SDK\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
 ..\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
