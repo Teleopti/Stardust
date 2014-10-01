@@ -1,37 +1,16 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[UpdatePercentageOfScheduleDaysWithinPeriod]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfSkillDaysWithinPeriod]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[UpdatePercentageOfSkillDaysWithinPeriod]
 GO
 
 -- =============================================
--- Author:		David
--- Create date: 2014-09-26
--- Description:	Updates parts of the Schedule in the readmodel so that ETL test will pickup new data 
+-- exec [mart].[UpdatePercentageOfSkillDaysWithinPeriod] @rows=100, @periodStart='2014-08-01', @periodEnd='2014-09-01',@reset=1
 -- =============================================
--- Date			Who	Description
--- =============================================
--- exec [mart].[UpdatePercentageOfScheduleDaysWithinPeriod] @percentage=0, @periodStart='2000-01-01', @periodEnd='2013-06-30'
-CREATE PROCEDURE [mart].[UpdatePercentageOfScheduleDaysWithinPeriod]
-@percentage int,
+CREATE PROCEDURE [mart].[UpdatePercentageOfSkillDaysWithinPeriod]
+@rows int,
 @periodStart datetime = NULL,
-@periodEnd datetime  = NULL
+@periodEnd datetime  = NULL,
+@reset bit
 AS
-
-declare @rows int
-declare @totRows int
-
---find number of schedule rows to update by percentage specified in SP call
-SELECT
-	@totRows = SUM(pa.rows)
-FROM sys.tables ta
-INNER JOIN sys.partitions pa
-ON pa.OBJECT_ID = ta.OBJECT_ID
-INNER JOIN sys.schemas sc
-ON ta.schema_id = sc.schema_id
-WHERE ta.is_ms_shipped = 0 AND pa.index_id IN (1,0)
-AND sc.name='ReadModel'
-AND ta.name='ScheduleDay'
-
-select @rows = @totRows * @percentage/100
 
 declare @LastUpdated	smalldatetime = '1999-12-31'
 declare @EtlLastRun		smalldatetime = '2000-01-01'
@@ -39,8 +18,83 @@ declare @minStartPeriod	smalldatetime = '2001-01-02'
 declare @maxStartPeriod	smalldatetime = '2020-12-31'
 
 --====================
---reset
+--set now() for period specified in SP call
 --====================
+--update selected rows
+update sd
+set UpdatedOn = GETUTCDATE()
+FROM dbo.SkillDay sd
+INNER JOIN 
+(
+select top (@rows)
+	sd.Id
+	from dbo.SkillDay sd
+	inner join dbo.Scenario s
+		on s.Id = sd.Scenario
+	WHERE sd.SkillDayDate BETWEEN IsNull(@periodStart,@minStartPeriod) AND IsNull(@periodEnd,@maxStartPeriod)
+	AND s.DefaultScenario = 1
+	order by NEWID()
+) p
+ON p.Id = sd.Id
+GO
+
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[UpdatePercentageOfScheduleDaysWithinPeriod]
+GO
+
+-- =============================================
+-- exec [mart].[UpdatePercentageOfScheduleDaysWithinPeriod] @rows=100, @periodStart='2000-01-01', @periodEnd='2013-06-30',@reset=1
+-- =============================================
+CREATE PROCEDURE [mart].[UpdatePercentageOfScheduleDaysWithinPeriod]
+@rows int,
+@periodStart datetime = NULL,
+@periodEnd datetime  = NULL,
+@reset bit
+AS
+
+--reset?
+if @reset = 1
+	exec [mart].[resetIntradayTables]
+
+declare @LastUpdated	smalldatetime = '1999-12-31'
+declare @EtlLastRun		smalldatetime = '2000-01-01'
+declare @minStartPeriod	smalldatetime = '2001-01-02'
+declare @maxStartPeriod	smalldatetime = '2020-12-31'
+
+--====================
+--set now() for period specified in SP call
+--====================
+--update selected rows
+SET NOCOUNT OFF
+update s
+set InsertedOn = GETUTCDATE()
+FROM [ReadModel].[ScheduleDay] s
+INNER JOIN 
+(
+select top (@rows)
+	personId,
+	BelongsToDate
+	from [ReadModel].[ScheduleDay]
+	WHERE BelongsToDate BETWEEN IsNull(@periodStart,@minStartPeriod) AND IsNull(@periodEnd,@maxStartPeriod)
+	order by NEWID()
+) p
+ON p.BelongsToDate = s.BelongsToDate
+AND p.PersonId = s.PersonId
+GO
+
+--====================================
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[UpdatePercentageOfScheduleDaysWithinPeriod]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[resetIntradayTables]
+GO
+CREATE PROCEDURE [mart].[resetIntradayTables]
+AS
+SET NOCOUNT ON
+declare @LastUpdated	smalldatetime = '1999-12-31'
+declare @EtlLastRun		smalldatetime = '2000-01-01'
+declare @minStartPeriod	smalldatetime = '2001-01-02'
+declare @maxStartPeriod	smalldatetime = '2020-12-31'
+
 --update all tables we check via ETL
 update ReadModel.ScheduleDay
 set InsertedOn = @LastUpdated
@@ -69,27 +123,3 @@ set UpdatedOn = @LastUpdated
 --Etl Mother
 update mart.LastUpdatedPerStep
 set [Date] = @EtlLastRun
-
---====================
---set now() for period specified in SP call
---====================
---update selected rows
-update s
-set InsertedOn = GETUTCDATE()
-FROM [ReadModel].[ScheduleDay] s
-INNER JOIN 
-(
-select top (@rows)
-	personId,
-	BelongsToDate
-	from [ReadModel].[ScheduleDay]
-	WHERE BelongsToDate < IsNull(@periodEnd,@maxStartPeriod)
-	AND BelongsToDate > IsNull(@periodStart,@minStartPeriod)
-	order by NEWID()
-) p
-ON p.BelongsToDate = s.BelongsToDate
-AND p.PersonId = s.PersonId
-
---finally
-EXEC sp_executesql @statement=N'DBCC DROPCLEANBUFFERS'
-GO
