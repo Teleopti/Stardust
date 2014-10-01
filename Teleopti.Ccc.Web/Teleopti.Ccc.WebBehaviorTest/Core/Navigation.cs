@@ -175,6 +175,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForUrlAssert("Diagnosis", new ApplicationStartupTimeout());
 		}
 
+		public static void GoToHealthCheckTool()
+		{
+			GoToWaitForUrlAssert("Diagnosis/Application/HealthCheck", new ApplicationStartupTimeout());
+		}
+
 		public static void GotoAnywhere()
 		{
 			GoToWaitForUrlAssert("Anywhere", new ApplicationStartupTimeout());

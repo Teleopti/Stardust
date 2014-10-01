@@ -930,6 +930,7 @@
     <Content Include="Areas\Diagnosis\Content\Scripts\view.js" />
     <Content Include="Areas\Diagnosis\Content\Scripts\healthvm.js" />
     <Content Include="Areas\Diagnosis\Content\Scripts\vm.js" />
+    <Content Include="Areas\Diagnosis\Content\Scripts\healthvm_test.js" />
     <Content Include="Areas\Diagnosis\Content\Scripts\vm_test.js" />
     <Content Include="Areas\Diagnosis\Views\Application\healthcheck.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileWeekView.css" />

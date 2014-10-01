@@ -143,6 +143,11 @@
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
     <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
+    <Compile Include="Diagnosis\HealthCheck.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HealthCheck.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -730,6 +735,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Diagnosis\HealthCheck.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\AgentBadge.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
