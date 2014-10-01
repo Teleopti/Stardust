@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 		}
 
 		[Test]
-		public void ShouldReturnTrueIfFound()
+		public void ShouldReturnAnyIfFound()
 		{
 			using (_mocks.Record())
 			{
@@ -38,12 +39,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 			using (_mocks.Playback())
 			{
 				var result = _target.FindForInterval(_interval, _resourceCalculationDataContainer, _skill);
-				Assert.IsTrue(result);
+				Assert.IsTrue(result.Any());
 			}
 		}
 
 		[Test]
-		public void ShouldFalseIfNotFound()
+		public void ShouldNoneIfNotFound()
 		{
 			using (_mocks.Record())
 			{
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 			using (_mocks.Playback())
 			{
 				var result = _target.FindForInterval(_interval, _resourceCalculationDataContainer, _skill);
-				Assert.IsFalse(result);
+				Assert.IsFalse(result.Any());
 			}
 		}
 	}
