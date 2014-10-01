@@ -2088,21 +2088,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+		private GridRangeInfo _lastGridSelection;
 		private void grid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
-			if (e.Reason == GridSelectionReason.Clear) return;
+			if (e.Range == _lastGridSelection)
+				return;
+
+			if (e.Reason == GridSelectionReason.SelectRange) return;	
 			if (_scheduleView == null) return;
+
 			using (PerformanceOutput.ForOperation("Changing selection in view"))
 			{
-
-				SchedulerRibbonHelper.EnableScheduleButton(
-					toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode, _container.Resolve<IToggleManager>());
-
-				disableButtonsIfTeamLeaderMode();
 				if (_scheduleView != null && (e.Reason == GridSelectionReason.SetCurrentCell || e.Reason == GridSelectionReason.MouseUp) || e.Reason == GridSelectionReason.ArrowKey)
 				{
+					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
+						_teamLeaderMode, _container.Resolve<IToggleManager>());
+
+					disableButtonsIfTeamLeaderMode();
 					_scheduleView.Presenter.UpdateFromEditor();
-					updateShiftEditor();
+					if(_showEditor)
+						updateShiftEditor();
 					var currentCell = _scheduleView.ViewGrid.CurrentCell;
 					var selectedCols = _scheduleView.ViewGrid.Model.Selections.Ranges.ActiveRange.Width;
 					if (!(_scheduleView is AgentRestrictionsDetailView) && currentCell.RowIndex == 0 && selectedCols == 1 && currentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
@@ -2127,6 +2132,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (selectedSchedules.Count > 0)
 						_dateNavigateControl.SetSelectedDateNoInvoke(selectedSchedules[0].DateOnlyAsPeriod.DateOnly);
+
+					_lastGridSelection = e.Range;
 				}
 			}
 		}
@@ -5009,7 +5016,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void grid_Click(object sender, EventArgs e)
 		{
-			updateShiftEditor();
+			//updateShiftEditor();
 		}
 
 		private void undoRedo_Changed(object sender, EventArgs e)
