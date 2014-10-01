@@ -53,7 +53,10 @@ SELECT	p.person_code,
 		sum(f.available_time_m),
 		sum(f.scheduled_days),
 		sum(f.scheduled_time_m), 
-		sum(f.scheduled_time_m)/convert(decimal(18,3),sum(f.available_time_m))
+		CASE WHEN sum(f.available_time_m)=0 THEN 0 
+		ELSE
+			sum(f.scheduled_time_m)/convert(decimal(18,3),sum(f.available_time_m))
+		END AS 'Utilization'
 FROM mart.fact_hourly_availability f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
