@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using log4net;
 using log4net.Config;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -12,63 +11,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	[Serializable]
 	public class ServiceBusRunner
 	{
-		private readonly Action<Exception> _unhandledExceptionHandler;
-		private readonly Action<Exception> _startupExceptionHandler;
 		private readonly Action<int> _requestExtraTimeHandler;
-		private static readonly ILog log = LogManager.GetLogger(typeof(ServiceBusRunner));
-		
-		[NonSerialized] 
+
+		[NonSerialized]
 		private ConfigFileDefaultHost _requestBus;
-		[NonSerialized] 
+		[NonSerialized]
 		private ConfigFileDefaultHost _generalBus;
-		[NonSerialized] 
+		[NonSerialized]
 		private ConfigFileDefaultHost _denormalizeBus;
 		[NonSerialized]
 		private ConfigFileDefaultHost _payrollBus;
-		[NonSerialized] 
+		[NonSerialized]
 		private ConfigFileDefaultHost _rtaBus;
-	
-		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
+
+		public ServiceBusRunner(Action<int> requestExtraTimeHandler)
 		{
-			_unhandledExceptionHandler = unhandledExceptionHandler;
-			_startupExceptionHandler = startupExceptionHandler;
 			_requestExtraTimeHandler = requestExtraTimeHandler;
-			
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.EventLog.WriteEntry(System.String,System.Diagnostics.EventLogEntryType)")]
-		void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			var exception = e.ExceptionObject as Exception ?? new InvalidOperationException();
-
-			log.Error("An unhandled exception occurred.", exception);
-			if (_unhandledExceptionHandler!=null)
-			{
-				_unhandledExceptionHandler.Invoke(exception);
-			}
 		}
 
 		public void Start()
 		{
-			try
-			{
-				HostServiceStart();
-			}
-			catch (InvalidOperationException exception)
-			{
-				log.Error("An exception was encountered upon starting the Teleopti Service Bus.",exception);
-				if (_startupExceptionHandler!=null)
-				{
-					_startupExceptionHandler.Invoke(exception);
-				}
-				throw;
-			}
+			HostServiceStart();
 		}
-		
+
 		private void HostServiceStart()
 		{
-			if (_requestExtraTimeHandler!=null)
+			if (_requestExtraTimeHandler != null)
 			{
 				_requestExtraTimeHandler.Invoke(60000);
 			}
@@ -92,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_rtaBus = new ConfigFileDefaultHost();
 			_rtaBus.UseFileBasedBusConfiguration("RtaQueue.config");
 			_rtaBus.Start<RtaBusBootStrapper>();
-			
+
 			PayrollDllCopy.CopyPayrollDll();
 
 			_payrollBus = new ConfigFileDefaultHost();
@@ -105,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			return true;
 		}
-		
+
 		public void Stop()
 		{
 			HostServiceStop();
@@ -163,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 				}
 			}
-			
+
 		}
 	}
 }
