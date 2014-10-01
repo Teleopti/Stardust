@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelSubHeader3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
-		private void loadOptionalColumns()
+		private void loadNotificationSettings()
 		{
 			if (Disposing) return;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -65,8 +66,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			comboBoxOptionalColumns.DisplayMember = "Name";
 			comboBoxOptionalColumns.DataSource = _optionalColumnList;
 
-
-			comboBoxOptionalColumns.SelectedIndex = getIndex(_optionalColumnList, _smsSettingsSetting.OptionalColumnId);
+			if (_smsSettingsSetting.NotificationSelection == NotificationType.Sms)
+			{
+				radioButtonAdvSMS.Checked = true;
+				comboBoxOptionalColumns.SelectedIndex = getIndex(_optionalColumnList, _smsSettingsSetting.OptionalColumnId);
+			}
+			else
+			{
+				radioButtonAdvEmail.Checked = true;
+				comboBoxOptionalColumns.SelectedIndex = -1;
+				textBoxEmailFrom.Text = _smsSettingsSetting.EmailFrom;
+			}
+			radioButtonCheckChanged();
 		}
 
 		private static int getIndex(List<IOptionalColumn> optionalColumnList, Guid id)
@@ -82,19 +93,29 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			setColors();
 			SetTexts();
-			radioButtonAdvSMS.Checked = true;
 		}
 
 		public void LoadControl()
 		{
-			loadOptionalColumns();
+			loadNotificationSettings();
 		}
 
 		public void SaveChanges()
 		{
 			if (_smsSettingsSetting != null && comboBoxOptionalColumns.SelectedValue != null)
 			{
+				_smsSettingsSetting.NotificationSelection = NotificationType.Sms;
 				_smsSettingsSetting.OptionalColumnId = ((OptionalColumn)comboBoxOptionalColumns.SelectedValue).Id.Value;
+				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					new GlobalSettingDataRepository(uow).PersistSettingValue(_smsSettingsSetting);
+					uow.PersistAll();
+				}
+			}
+			else if (_smsSettingsSetting != null && !textBoxEmailFrom.Text.IsEmpty())
+			{
+				_smsSettingsSetting.NotificationSelection = NotificationType.Email;
+				_smsSettingsSetting.EmailFrom = textBoxEmailFrom.Text;
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					new GlobalSettingDataRepository(uow).PersistSettingValue(_smsSettingsSetting);
@@ -121,7 +142,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void OnShow()
 		{
 			_optionalColumnList = null;
-			loadOptionalColumns();
+			loadNotificationSettings();
 		}
 
 		public void SetUnitOfWork(IUnitOfWork value)
@@ -151,10 +172,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void radioButtonAdvSMS_CheckChanged(object sender, EventArgs e)
 		{
+			radioButtonCheckChanged();
+		}
+
+		private void radioButtonCheckChanged()
+		{
 			comboBoxOptionalColumns.Enabled = radioButtonAdvSMS.Checked;
 			textBoxEmailFrom.Enabled = !radioButtonAdvSMS.Checked;
 			textBoxSendEmailTo.Enabled = !radioButtonAdvSMS.Checked;
-			buttonAdvSend.Enabled = !radioButtonAdvSMS.Checked;
+			buttonAdvSend.Enabled = !radioButtonAdvSMS.Checked && IsEmail(textBoxSendEmailTo.Text);
 
 			clearSmsData(!radioButtonAdvSMS.Checked);
 			clearEmailData(radioButtonAdvSMS.Checked);
@@ -179,7 +205,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				return inputEmail.Contains("@");
 			}
-			return true;
+			return false;
 		}
 
 		private void textBoxSendEmailTo_TextChanged(object sender, EventArgs e)
