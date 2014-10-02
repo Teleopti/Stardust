@@ -91,9 +91,17 @@
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
+      <Project>{172807bd-ac1d-4e6d-9013-2d30dcf5b961}</Project>
+      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
       <Project>{7193c0d2-2b91-4e92-9c47-620095255edc}</Project>
       <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
+      <Project>{b9465b16-1563-4f16-bcd6-353551b0aa20}</Project>
+      <Name>Teleopti.Analytics.Etl.Transformer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.ApplicationConfig\Teleopti.Ccc.ApplicationConfig.csproj">
       <Project>{abe4f614-595c-4a28-ad45-62b86ffd5109}</Project>
@@ -107,6 +115,9 @@
       <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
