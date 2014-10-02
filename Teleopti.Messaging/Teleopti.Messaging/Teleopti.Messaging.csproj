@@ -165,7 +165,6 @@
     <Compile Include="Client\SignalR\Wrappers\HubConnectionWrapper.cs" />
     <Compile Include="Client\SignalR\Wrappers\IHubConnectionWrapper.cs" />
     <Compile Include="Client\SignalR\IHandleHubConnection.cs" />
-    <Compile Include="Client\NotificationFactory.cs" />
     <Compile Include="Client\Composite\MessageBrokerCompositeClient.cs" />
     <Compile Include="Client\SignalR\SignalRClient.cs" />
     <Compile Include="Client\SignalR\TaskHelper.cs" />

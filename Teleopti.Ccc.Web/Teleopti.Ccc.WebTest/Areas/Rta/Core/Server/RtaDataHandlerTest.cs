@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
+//using System.Data.SqlTypes;
 using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +10,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Exceptions;
+//using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Ccc.Rta.ServerTest
 {
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_timestamp = DateTime.Now;
 			_platformTypeId = Guid.Empty;
 			_sourceId = "1";
-			_batchId = SqlDateTime.MinValue.Value;
+			//_batchId = SqlDateTime.MinValue.Value;
 			_isSnapshot = false;
 
 			_personId = Guid.NewGuid();

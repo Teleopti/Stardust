@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target = new Subscription
 			{
 				DataSource = Guid.NewGuid().ToString(),
-				DomainType = typeof(SiteAdherenceMessage).Name
+				DomainType = "SiteAdherenceMessage"
 			};
 
 			target.Route().Should().Not.Contain(target.DataSource);
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target = new Subscription
 			{
 				DataSource = Guid.NewGuid().ToString(),
-				DomainType = typeof(TeamAdherenceMessage).Name
+				DomainType = "TeamAdherenceMessage"
 			};
 
 			target.Route().Should().Not.Contain(target.DataSource);
@@ -174,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target = new Subscription
 			{
 				DataSource = Guid.NewGuid().ToString(),
-				DomainType = typeof(AgentsAdherenceMessage).Name
+				DomainType = "AgentsAdherenceMessage"
 			};
 
 			target.Route().Should().Not.Contain(target.DataSource);

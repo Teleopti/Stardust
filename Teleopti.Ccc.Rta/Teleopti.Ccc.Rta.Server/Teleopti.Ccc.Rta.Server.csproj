@@ -140,46 +140,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActualAgentAssembler.cs" />
-    <Compile Include="Adherence\AdherenceAggregator.cs" />
-    <Compile Include="Adherence\AdherenceAggregatorInitializor.cs" />
-    <Compile Include="Adherence\AgentAdherenceAggregator.cs" />
-    <Compile Include="Adherence\AgentsAdherenceMessage.cs" />
-    <Compile Include="Adherence\IOrganizationForPerson.cs" />
-    <Compile Include="Adherence\IPersonOrganizationProvider.cs" />
-    <Compile Include="Adherence\OrganizationForPerson.cs" />
-    <Compile Include="Adherence\PersonOrganizationProvider.cs" />
-    <Compile Include="Adherence\RtaAggregationData.cs" />
-    <Compile Include="Adherence\RtaAggregationStateProvider.cs" />
-    <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
-    <Compile Include="Adherence\RtaAggregationState.cs" />
-    <Compile Include="Adherence\SiteAdherenceMessage.cs" />
-    <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
-    <Compile Include="Adherence\TeamAdherenceMessage.cs" />
-    <Compile Include="AlarmMapper.cs" />
-    <Compile Include="Resolvers\PersonWithBusinessUnit.cs" />
-    <Compile Include="ContainerConfiguration.cs" />
-    <Compile Include="CurrentAndNextLayerExtractor.cs" />
-    <Compile Include="DatabaseReader.cs" />
-    <Compile Include="DatabaseConnectionStringHandler.cs" />
-    <Compile Include="DatabaseWriter.cs" />
-    <Compile Include="IActualAgentAssembler.cs" />
-    <Compile Include="IAlarmMapper.cs" />
-    <Compile Include="ICurrentAndNextLayerExtractor.cs" />
-    <Compile Include="IDatabaseReader.cs" />
-    <Compile Include="IDatabaseWriter.cs" />
-    <Compile Include="IActualAgentStateHasBeenSent.cs" />
-    <Compile Include="IRtaDataHandlerCache.cs" />
-    <Compile Include="Resolvers\IDataSourceResolver.cs" />
-    <Compile Include="Resolvers\IPersonResolver.cs" />
-    <Compile Include="Resolvers\PersonResolver.cs" />
-    <Compile Include="Resolvers\DataSourceResolver.cs" />
-    <Compile Include="RtaCommonModule.cs" />
-    <Compile Include="RtaAlarmLight.cs" />
-    <Compile Include="RtaDataHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RtaStateGroupLight.cs" />
-    <Compile Include="ScheduleLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />

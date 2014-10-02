@@ -180,6 +180,23 @@
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaControllerTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ActualAgentAssemblerTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializorTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\NotificationExtension.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\OrganizationForPersonTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\SendMessageTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\ThreadingIssuesTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\AlarmMapperTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ContainerConfigurationTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractorTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\InvalidateRtaDataHandlerCacheTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolverTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolverTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaDataHandlerTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ScheduleLayerTest.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
@@ -461,6 +478,10 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Interfaces\Teleopti.Ccc.Rta.Interfaces.csproj">
+      <Project>{DD380C37-8FC1-4209-BC63-9B88B483264D}</Project>
+      <Name>Teleopti.Ccc.Rta.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
       <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
