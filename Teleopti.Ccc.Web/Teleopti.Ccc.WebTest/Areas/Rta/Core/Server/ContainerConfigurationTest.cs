@@ -9,7 +9,7 @@ using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Adherence;
 
-namespace Teleopti.Ccc.Rta.ServerTest
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
 	public class ContainerConfigurationTest
 	{

@@ -5,7 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 
-namespace Teleopti.Ccc.Rta.ServerTest.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Adherence
 {
 	public class OrganizationForPersonTest
 	{

@@ -1,5 +1,4 @@
 ﻿using System;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -8,6 +7,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.ViewModelFactory
 {

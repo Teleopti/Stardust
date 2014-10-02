@@ -5,15 +5,13 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Rta;
 
-namespace Teleopti.Ccc.Rta.ServerTest.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Adherence
 {
 	public class AgentsAdherenceTest
 	{

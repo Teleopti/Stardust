@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,6 +8,7 @@ using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			authenticationModule.Stub(x => x.Realm).Return("testrealm");
 
 			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule);
-			new MvcContrib.TestHelper.TestControllerBuilder().InitializeController(_target);
+			new TestControllerBuilder().InitializeController(_target);
 		}
 
 		[TearDown]

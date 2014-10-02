@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Specialized;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects

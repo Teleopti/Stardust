@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Server;
 
-namespace Teleopti.Ccc.Rta.ServerTest
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
 	[TestFixture]
 	public static class InvalidateRtaDataHandlerCacheTest

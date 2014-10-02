@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.SessionState;
 
-namespace MvcContrib.TestHelper.Fakes
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
     public class FakeHttpSessionState : HttpSessionStateBase
     {

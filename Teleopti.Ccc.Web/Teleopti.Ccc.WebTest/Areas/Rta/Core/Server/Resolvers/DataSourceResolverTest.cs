@@ -1,12 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Resolvers;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-namespace Teleopti.Ccc.Rta.ServerTest.Resolvers
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Resolvers
 {
     [TestFixture]
     public class DataSourceResolverTest

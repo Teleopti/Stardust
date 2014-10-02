@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-namespace Teleopti.Ccc.Rta.ServerTest.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Adherence
 {
 	/// If this/these tests "randomly" fails, it _is_ a bug.
 	/// To recreate, set a higher "numberOfIterations" to a higher value

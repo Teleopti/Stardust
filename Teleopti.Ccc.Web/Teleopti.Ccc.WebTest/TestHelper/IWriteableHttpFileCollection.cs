@@ -1,6 +1,6 @@
 using System.Web;
 
-namespace MvcContrib.TestHelper
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	/// <summary>
 	/// Defines an extended <see cref="HttpFileCollectionBase"/> which allows modifications to assist with testing.

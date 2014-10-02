@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Rta.Server;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Rta.ServerTest
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
 	[TestFixture]
 	public class ScheduleLayerTest

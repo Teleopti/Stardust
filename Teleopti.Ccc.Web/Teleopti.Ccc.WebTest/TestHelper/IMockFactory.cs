@@ -1,4 +1,4 @@
-﻿namespace MvcContrib.TestHelper.MockFactories
+﻿namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	public interface IMockFactory 
 	{

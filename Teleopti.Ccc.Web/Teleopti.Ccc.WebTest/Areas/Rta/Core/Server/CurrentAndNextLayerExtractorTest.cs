@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Rta.Server;
 
-namespace Teleopti.Ccc.Rta.ServerTest
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
     [TestFixture]
     public class CurrentAndNextLayerExtractorTest

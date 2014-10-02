@@ -1,18 +1,18 @@
-﻿using System;
+﻿//using System.Data.SqlTypes;
+using System;
 using System.Collections.Generic;
-//using System.Data.SqlTypes;
-using System.Runtime.Remoting.Messaging;
-using Teleopti.Ccc.Rta.Server.Resolvers;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Resolvers;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+
 //using Teleopti.Messaging.Exceptions;
 
-namespace Teleopti.Ccc.Rta.ServerTest
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
 	[TestFixture]
 	[Category("LongRunning")]

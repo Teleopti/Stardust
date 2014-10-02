@@ -7,11 +7,11 @@ using SharpTestsEx;
 using System.Web;
 using System.Web.Routing;
 using DotNetOpenAuth.OpenId.Provider;
-using MvcContrib.TestHelper.Fakes;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 {

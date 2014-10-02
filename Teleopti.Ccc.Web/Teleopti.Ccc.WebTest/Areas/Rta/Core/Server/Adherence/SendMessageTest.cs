@@ -8,7 +8,7 @@ using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Rta.ServerTest.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Adherence
 {
 	public class SendMessageTest
 	{
