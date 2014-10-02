@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Web;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 {

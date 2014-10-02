@@ -54,10 +54,6 @@ define([
 			window.setLocationHash('teamschedule/' + buid + '/' + toDateString(date));
 		},
 
-		GoToTeamScheduleWithSelectedPerson: function (buid, id, personId, date) {
-			window.openInNewTab('teamschedule/' + buid + '/' + id + ((personId) ? '/' + personId : '') + '/' + toDateString(date));
-		},
-
 		GotoRealTimeAdherenceTeams: function (buid, siteId) {
 			window.setLocationHash('realtimeadherenceteams/' + buid + '/' + siteId);
 		},

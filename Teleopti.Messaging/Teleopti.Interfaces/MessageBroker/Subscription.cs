@@ -11,15 +11,19 @@ namespace Teleopti.Interfaces.MessageBroker
 	[Serializable]
 	public class Subscription
 	{
+		// DO NOT USE THIS, PLEASE MAKE SURE THE SUBSCRIPTION DOES NOT CONTAIN THE DATASOURCE INSTEAD!
 		private static readonly StringCollection TypesWithDatasourceException = new StringCollection
 		{
 			typeof (IActualAgentState).Name,
 			"SiteAdherenceMessage",
 			"TeamAdherenceMessage",
-			"AgentsAdherenceMessage",
-			"TrackingMessage"
+			"AgentsAdherenceMessage"
 		};
-		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
+		// DO NOT USE THIS, PLEASE MAKE SURE THE SUBSCRIPTION DOES NOT CONTAIN THE BUSINESSUNIT INSTEAD!
+		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection
+		{
+			typeof(IStatisticTask).Name
+		};
 
 		/// <summary>
 		/// Separator used for message broker subscriptions

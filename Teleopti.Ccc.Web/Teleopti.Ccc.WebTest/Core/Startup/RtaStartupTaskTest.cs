@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Rta.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup

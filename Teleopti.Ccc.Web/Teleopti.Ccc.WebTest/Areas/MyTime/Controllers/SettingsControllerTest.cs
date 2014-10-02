@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using MbCache.Core;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -13,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers

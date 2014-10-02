@@ -100,13 +100,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
                     owner.MultiplicatorDefinitionSet) {Text = Resources.CutSpecial};
                 cutSpecial.ShowDialog();
 
-                if (!cutSpecial.Cancel())
-                {
-                    setCutMode(options);
-                    deleteInMainGrid(options);
-                }
+	            if (!cutSpecial.Cancel())
+	            {
+		            deleteInMainGrid(options);
+		            options.MainShift = options.MainShiftSpecial;
+		            options.MainShiftSpecial = false;
+					setCutMode(options);
+	            }
 
-                cutSpecial.Close();
+	            cutSpecial.Close();
             });
         }
 
@@ -155,6 +157,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         {
             var localDeleteOption = new DeleteOption();
             localDeleteOption.MainShift = deleteOptions.MainShift;
+	        localDeleteOption.MainShiftSpecial = deleteOptions.MainShiftSpecial;
             localDeleteOption.DayOff = deleteOptions.DayOff;
             localDeleteOption.PersonalShift = deleteOptions.PersonalShifts;
             localDeleteOption.Overtime = deleteOptions.Overtime;

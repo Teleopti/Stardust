@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.IsTrue(_deleteOption.MainShift);
             Assert.IsFalse(_deleteOption.Default);
 
+			_deleteOption.Default = true;
+			_deleteOption.MainShiftSpecial = true;
+			Assert.IsTrue(_deleteOption.MainShiftSpecial);
+			Assert.IsFalse(_deleteOption.Default);
+
             _deleteOption.Default = true;
             _deleteOption.PersonalShift = true;
             Assert.IsTrue(_deleteOption.PersonalShift);

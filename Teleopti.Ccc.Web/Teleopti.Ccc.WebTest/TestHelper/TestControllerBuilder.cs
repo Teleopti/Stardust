@@ -3,9 +3,8 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcContrib.TestHelper.MockFactories;
 
-namespace MvcContrib.TestHelper
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	/// <summary>
 	/// This is primary class used to create controllers.

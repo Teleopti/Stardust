@@ -64,7 +64,7 @@
 
 				//created a stub to text it. There should be a better way to test this
 				var getDateTimeFormat = function (time) {
-					if (time.date() > moment().date()) {
+					if (time.format("YYYYMMDD") > moment().format("YYYYMMDD")) {
 						return time.format("YYYY/MM/DD");
 					}
 					return time.format("h:mm A");
@@ -435,6 +435,18 @@
 
 					assert.equals(vm.filteredAgents().length, 0);
 				},
+
+				"should generate change schedule url for an agent" : function() {
+					var agent1 = { PersonId: "personId", TeamId: "teamId" };
+					var vm = viewModel();
+					vm.SetViewOptions({
+						buid: 'buId'
+					});
+
+					vm.fillAgents([agent1]);
+					var expectedUrl = window.location.origin + window.location.pathname + "#teamschedule/" + vm.BusinessUnitId() + "/" + agent1.TeamId + "/" + agent1.PersonId + "/" + moment((new Date).getTime()).format("YYYYMMDD");
+					assert.equals(vm.urlForChangingSchedule(agent1), expectedUrl);
+				}
 			}
 		});
 	};

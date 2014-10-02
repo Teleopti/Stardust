@@ -1,6 +1,6 @@
 using System.Web.Mvc;
-using MvcContrib.TestHelper;
 using Rhino.Mocks;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest
 {

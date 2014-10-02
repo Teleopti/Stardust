@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Web;
 
-namespace MvcContrib.TestHelper.Fakes
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
     public class FakeHttpResponse : HttpResponseBase
     {

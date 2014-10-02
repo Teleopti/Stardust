@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Web;
 using System.Web.SessionState;
 
-namespace MvcContrib.TestHelper
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	internal class MockSession : HttpSessionStateBase
 	{

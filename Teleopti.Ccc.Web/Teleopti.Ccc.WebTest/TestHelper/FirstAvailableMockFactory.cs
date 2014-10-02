@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace MvcContrib.TestHelper.MockFactories
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	/// <summary>
 	/// A mock factory that uses the first available mocking framework

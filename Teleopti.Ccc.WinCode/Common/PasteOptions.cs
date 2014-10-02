@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WinCode.Common
         
 
         private bool _mainShift;
+	    private bool _mainShiftSpecial;
         private PasteAction _absences = PasteAction.Ignore;
         private IPasteBehavior _pasteBehavior = new NormalPasteBehavior();
         private bool _dayOff;
@@ -70,6 +71,12 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _mainShift; }
             set { _mainShift = value; }
         }
+
+		public bool MainShiftSpecial
+		{
+			get { return _mainShiftSpecial; }
+			set { _mainShiftSpecial = value; }
+		}
 
         /// <summary>
         /// Absences

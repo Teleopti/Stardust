@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Teleopti.Ccc.Rta.WebService.TeleoptiRtaService, Teleopti.Ccc.Rta.WebService" Factory="Autofac.Integration.Wcf.AutofacServiceHostFactory, Autofac.Integration.Wcf"  %>

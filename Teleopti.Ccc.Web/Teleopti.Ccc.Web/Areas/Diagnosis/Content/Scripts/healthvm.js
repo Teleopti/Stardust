@@ -12,6 +12,7 @@ define([
 		self.configuredUrls = ko.observableArray();
 		self.services = ko.observableArray();
 		self.busResults = ko.observable();
+		self.checkBusEnabled = ko.observable(true);
 
 		var subscribe = function (options) {
 			var deferred = $.Deferred();
@@ -42,6 +43,8 @@ define([
 
 		var checkBusFunc;
 		self.checkBus = function () {
+			self.checkBusEnabled(false);
+			self.busResults(undefined);
 			checkBusFunc();
 		};
 
@@ -50,11 +53,15 @@ define([
 				self.hub = options.messageBroker;
 				startPromise = options.signalR.start({url: '../../signalr'});
 				checkBusFunc = options.checkBus;
-				subscribe({ domainType: 'Teleopti.Interfaces.Domain.ITeleoptiDiagnosticsInformation' });
+				subscribe({
+					domainType: 'ITeleoptiDiagnosticsInformation', businessUnitId: Teleopti.BusinessUnitId, datasource: Teleopti.DataSource
+				});
 			}
 			if (self.hub && self.hub.client) {
 				self.hub.client.onEventMessage = function(notification, route) {
-					self.busResults(notification);
+					self.busResults(JSON.parse(atob(notification.BinaryData)));
+
+					self.checkBusEnabled(true);
 				}
 			}
 		}

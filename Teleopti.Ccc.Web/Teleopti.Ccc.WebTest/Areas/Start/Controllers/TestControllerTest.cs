@@ -1,5 +1,4 @@
 ﻿using System;
-using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -16,6 +15,7 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers

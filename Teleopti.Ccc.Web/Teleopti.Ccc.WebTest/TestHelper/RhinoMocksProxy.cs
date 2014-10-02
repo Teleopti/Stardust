@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace MvcContrib.TestHelper.MockFactories
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	/// <summary>
 	/// Proxy for a mock created by Rhino Mocks. 

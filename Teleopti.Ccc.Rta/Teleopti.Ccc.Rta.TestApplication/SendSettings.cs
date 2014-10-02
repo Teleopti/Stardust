@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using log4net;
-using Teleopti.Ccc.Rta.LogClient;
 
 namespace Teleopti.Ccc.Rta.TestApplication
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
-using MvcContrib.TestHelper.MockFactories;
 using Rhino.Mocks;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest
 {

@@ -8,7 +8,6 @@
 ..\..\..\sitesroot\3\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\sitesroot\4\Teleopti.Ccc.AgentPortal.exe.config.deploy,BuildArtifacts\AppMytime.config
 ..\..\..\sitesroot\5\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
-..\..\..\sitesroot\6\web.config,BuildArtifacts\RTAWeb.config
 ..\..\..\sitesroot\7\web.config,BuildArtifacts\BrokerWeb.config
 ..\..\..\sitesroot\8\web.config,BuildArtifacts\BrokerBackplaneWeb.config
 ..\..\..\sitesroot\9\web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config

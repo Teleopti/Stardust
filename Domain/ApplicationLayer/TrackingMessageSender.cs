@@ -4,6 +4,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
@@ -18,15 +19,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public void SendTrackingMessage(Guid initiatorId, Guid businessUnitId, TrackingMessage message)
+		public void SendTrackingMessage(IRaptorDomainMessageInfo originatingEvent, TrackingMessage message)
 		{
 			_sender.Send(new Notification
 			{
+				DataSource = originatingEvent.Datasource,
+				BusinessUnitId = originatingEvent.BusinessUnitId.ToString(),
+				ModuleId = originatingEvent.InitiatorId.ToString(),
 				BinaryData = _jsonSerializer.SerializeObject(message),
-				BusinessUnitId = businessUnitId.ToString(),
 				DomainId = message.TrackId.ToString(),
 				DomainType = "TrackingMessage",
-				DomainReferenceId = initiatorId.ToString()
+				DomainReferenceId = originatingEvent.InitiatorId.ToString()
 			});
 		}
 	}

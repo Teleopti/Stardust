@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Security.Principal;
 using System.Web;
-using System.Web.Caching;
 using System.Web.SessionState;
-using Rhino.Mocks;
 
-namespace MvcContrib.TestHelper.Fakes
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
     public class FakeHttpContext : HttpContextBase
     {

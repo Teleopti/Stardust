@@ -399,7 +399,51 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\Rta\Controllers\ServiceController.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializor.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AgentAdherenceAggregator.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceMessage.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\IOrganizationForPerson.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\IPersonOrganizationProvider.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\OrganizationForPerson.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\PersonOrganizationProvider.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\RtaAggregationData.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\RtaAggregationState.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\RtaAggregationStateProvider.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceAggregator.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceMessage.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceAggregator.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
+    <Compile Include="Areas\Rta\Core\Server\AlarmMapper.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ContainerConfiguration.cs" />
+    <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractor.cs" />
+    <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionFactory.cs" />
+    <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionStringHandler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\DatabaseReader.cs" />
+    <Compile Include="Areas\Rta\Core\Server\DatabaseWriter.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IActualAgentAssembler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IActualAgentStateHasBeenSent.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IAlarmMapper.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ICurrentAndNextLayerExtractor.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IDatabaseConnectionFactory.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IDatabaseConnectionStringHandler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IDatabaseReader.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IDatabaseWriter.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IRtaDataHandler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IRtaDataHandlerCache.cs" />
+    <Compile Include="Areas\Rta\Core\Server\NotificationFactory.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\IDataSourceResolver.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\IPersonResolver.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonWithBusinessUnit.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaAlarmLight.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaCommonModule.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaStateGroupLight.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ScheduleLayer.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
@@ -857,7 +901,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agentstate.js" />
@@ -1370,14 +1413,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Interfaces\Teleopti.Ccc.Rta.Interfaces.csproj">
-      <Project>{DD380C37-8FC1-4209-BC63-9B88B483264D}</Project>
-      <Name>Teleopti.Ccc.Rta.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
-      <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
-      <Name>Teleopti.Ccc.Rta.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>

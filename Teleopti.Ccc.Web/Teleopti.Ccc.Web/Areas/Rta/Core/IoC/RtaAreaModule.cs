@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.IoC
 {

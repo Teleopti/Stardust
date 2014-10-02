@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
-namespace MvcContrib.TestHelper.MockFactories
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	/// <summary>
 	/// Creates mock objects using Rhino Mocks dynamically. 

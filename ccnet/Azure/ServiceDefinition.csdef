@@ -9,7 +9,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="Web" physicalDirectory="../Azure/Temp/AzureContent/Web" />
         <VirtualApplication name="MyTime" physicalDirectory="../Azure/Temp/AzureContent/MyTime" />
         <VirtualApplication name="Client" physicalDirectory="../Azure/Temp/AzureContent/Client" />
-        <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
+        <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/Web" />
 		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
 		<VirtualApplication name="Broker.backplane" physicalDirectory="../Azure/Temp/AzureContent/BrokerBackplane" />
 		<VirtualApplication name="AuthenticationBridge" physicalDirectory="../Azure/Temp/AzureContent/AuthenticationBridge" />

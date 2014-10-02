@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MvcContrib.TestHelper
+namespace Teleopti.Ccc.WebTest.TestHelper
 {
 	/// <summary>
 	/// An implementation of HttpFileCollectionBase to assit with testing.

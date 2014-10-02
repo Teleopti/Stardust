@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Teleopti.Ccc.Rta.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup

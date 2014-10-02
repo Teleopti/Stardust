@@ -6,11 +6,9 @@
 ..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\web.config,BuildArtifacts\AnalyticsWeb.config
 ..\..\..\Teleopti.Ccc.ApplicationConfig\App.config,BuildArtifacts\CccAppConfig.config
 ..\..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\app.config,BuildArtifacts\AppRTATestApplication.config
-..\..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\web.config,BuildArtifacts\RTAWeb.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\web.config,BuildArtifacts\SDKWeb.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config,BuildArtifacts\ServiceBusHost.config
 ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\app.config,BuildArtifacts\AppRaptor.config
-..\..\..\Teleopti.Ccc.Startpage\web.config,BuildArtifacts\RTAWeb.config
 ..\..\..\Teleopti.Ccc.Web.Broker.Backplane\Web.config,BuildArtifacts\BrokerBackplaneWeb.config
 ..\..\..\Teleopti.Ccc.Web.Broker\web.config,BuildArtifacts\BrokerWeb.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
