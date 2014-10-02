@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		{
 			createReadModel(@event);
 			if (_trackingMessageSender != null && @event.TrackId != Guid.Empty)
-				_trackingMessageSender.SendTrackingMessage(@event.InitiatorId, @event.BusinessUnitId, new TrackingMessage
+				_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
 				{
 					TrackId = @event.TrackId,
 					Status = TrackingMessageStatus.Success

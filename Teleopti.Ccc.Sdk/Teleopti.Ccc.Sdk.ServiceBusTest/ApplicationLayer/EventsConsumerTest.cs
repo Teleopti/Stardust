@@ -12,6 +12,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 {
@@ -100,7 +101,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			};
 			publisher.Stub(x => x.Publish(@event)).Throw(new Exception());
 
-
 			try
 			{
 				target.Consume(@event);
@@ -110,15 +110,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 				
 			}
 
-			var args =
-				trackingMessageSender.GetArgumentsForCallsMadeOn(
-					x => x.SendTrackingMessage(initiatorId, businessUnitId, new TrackingMessage()), x => x.IgnoreArguments());
-			var firstCall = args.Single();
-			firstCall.First().Should().Be(initiatorId);
-			firstCall.ElementAt(1).Should().Be(businessUnitId);
-			(firstCall.ElementAt(2) as TrackingMessage).TrackId.Should().Be(trackId);
-			(firstCall.ElementAt(2) as TrackingMessage).Status.Should().Be(TrackingMessageStatus.Failed);
-
+			trackingMessageSender.AssertWasCalled(x => x.SendTrackingMessage(
+				Arg<IRaptorDomainMessageInfo>.Matches(e =>
+					e.InitiatorId == initiatorId &&
+					e.BusinessUnitId == businessUnitId
+					),
+				Arg<TrackingMessage>.Matches(m =>
+					m.TrackId == trackId &&
+					m.Status == TrackingMessageStatus.Failed
+					))
+				);
 		}
 
 	}

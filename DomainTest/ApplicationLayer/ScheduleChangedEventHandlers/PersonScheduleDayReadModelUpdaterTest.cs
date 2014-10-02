@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -151,20 +152,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var initiatorId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
-			target.Handle(new ProjectionChangedEvent
+			var @event = new ProjectionChangedEvent
 			{
 				InitiatorId = initiatorId,
 				BusinessUnitId = businessUnitId,
 				TrackId = trackId
-			});
+			};
+			target.Handle(@event);
 
-			var arguments =
-				eventTracker.GetArgumentsForCallsMadeOn(x => x.SendTrackingMessage(initiatorId, businessUnitId, null), a => a.IgnoreArguments());
+			eventTracker.AssertWasCalled(x => x.SendTrackingMessage(
+				Arg<IRaptorDomainMessageInfo>.Matches(e => e.InitiatorId == initiatorId && e.BusinessUnitId == businessUnitId), 
+				Arg<TrackingMessage>.Matches(m => m.TrackId == trackId)));
 
-			var firstCall = arguments.Single();
-			firstCall.First().Should().Be.EqualTo(initiatorId);
-			firstCall.ElementAt(1).Should().Be.EqualTo(businessUnitId);
-			(firstCall.ElementAt(2) as TrackingMessage).TrackId.Should().Be.EqualTo(trackId);
 		}
 
 

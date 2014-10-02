@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -22,20 +23,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var target = new TrackingMessageSender(messageBrokerSender, new NewtonsoftJsonSerializer());
 
-			var businessUnitId = Guid.NewGuid();
-			var initiatorId = Guid.NewGuid();
-			target.SendTrackingMessage(initiatorId, businessUnitId, new TrackingMessage
+			var @event = new ActivityAddedEvent
+			{
+				Datasource = "datasource",
+				BusinessUnitId = Guid.NewGuid(), 
+				InitiatorId = Guid.NewGuid()
+			};
+			target.SendTrackingMessage(@event, new TrackingMessage
 			{
 				TrackId = Guid.NewGuid()
 			});
 
-			var arguments=messageBrokerSender.GetArgumentsForCallsMadeOn(x => x.Send(null), a => a.IgnoreArguments());
-
-			var firstCall = arguments.Single();
-			var notification = (Notification)firstCall.Single();
-			notification.BusinessUnitId.Should().Be(businessUnitId.ToString());
-			notification.DomainType.Should().Be(typeof(TrackingMessage).Name);
-			notification.DomainReferenceId.Should().Be(initiatorId.ToString());
+			messageBrokerSender.AssertWasCalled(x => x.Send(
+				Arg<Notification>.Matches(e =>
+					e.DataSource == "datasource" &&
+					e.BusinessUnitId == @event.BusinessUnitId.ToString() &&
+					e.ModuleId == @event.InitiatorId.ToString() &&
+					e.DomainType == typeof (TrackingMessage).Name &&
+					e.DomainReferenceId == @event.InitiatorId.ToString()
+					)
+				));
 		}
 	}
 }

@@ -1,10 +1,10 @@
-using System;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Interfaces.Domain
 {
 	public interface ITrackingMessageSender
 	{
-		void SendTrackingMessage(Guid initiatorId, Guid businessUnitId, TrackingMessage message);
+		void SendTrackingMessage(IRaptorDomainMessageInfo originatingEvent, TrackingMessage message);
 	}
 }
