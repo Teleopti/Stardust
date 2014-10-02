@@ -1,5 +1,5 @@
 @ECHO off
-
+SET "ERRORLEVEL="
 ::get CCnet working folder
 SET CCNetWorkDir=%~1
 IF "%CCNetWorkDir%"=="" (
@@ -17,7 +17,6 @@ SET ERRORMSG I can't find .exe for: "%smartassemblyCmd%"
 GOTO :Failed
 )
 ECHO I have found: "%smartassemblyCmd%"
-PAUSE
 
 ::Set variables
 SET SMARTASSEMBLYPROJ=%CCNetWorkDir%\ccnet\Obfuscate
@@ -27,29 +26,17 @@ SET OUTPUTFOLDER=%WORKDIR%\AssemblyOutput
 ::remove previous build
 IF EXIST "%WORKDIR%" RMDIR "%WORKDIR%" /S /Q
 MKDIR "%OUTPUTFOLDER%"
-
-"%smartassemblyCmd%" /build "%SMARTASSEMBLYPROJ%\Obfuscated.{sa}proj"
-IF %ERRORLEVEL% NEQ 0 (
-SET ERRORLEV=1
-SET ERRORMSG=Failed to obfuscate: Obfuscated.{sa}proj
-GOTO :Failed
-)
-ECHO ----------
-ECHO.
-
+ECHO "%smartassemblyCmd%" /build "%SMARTASSEMBLYPROJ%\Infrastructure.{sa}proj"
 "%smartassemblyCmd%" /build "%SMARTASSEMBLYPROJ%\Infrastructure.{sa}proj"
 IF %ERRORLEVEL% NEQ 0 (
 SET ERRORLEV=3
-SET ERRORMSG=Failed to obfuscate: Infrastructure.{sa}proj
+SET ERRORMSG=Failed to obfuscate Infrastructure
 GOTO :Failed
 )
 ECHO ----------
 ECHO.
 
 ::Copy the obfuscated dll+pdbs to all locations where it exists
-FOR /R "%CCNetWorkDir%" %%I IN (*Teleopti.Ccc.Obfuscated.dll*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Obfuscated.dll" "%%I" /Y /V
-FOR /R "%CCNetWorkDir%" %%I IN (*Teleopti.Ccc.Obfuscated.pdb*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Obfuscated.pdb" "%%I" /Y /V
-
 FOR /R "%CCNetWorkDir%"  %%I IN (*Teleopti.Ccc.Infrastructure.dll*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Infrastructure.dll" "%%I" /Y /V
 FOR /R "%CCNetWorkDir%"  %%I IN (*Teleopti.Ccc.Infrastructure.pdb*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Infrastructure.pdb" "%%I" /Y /V
 
@@ -63,4 +50,4 @@ SET ERRORLEVEL=%ERRORMSG%
 GOTO :eof
 
 :eof
-EXIT %ERRORLEVEL%
+EXIT /B %ERRORLEVEL%
