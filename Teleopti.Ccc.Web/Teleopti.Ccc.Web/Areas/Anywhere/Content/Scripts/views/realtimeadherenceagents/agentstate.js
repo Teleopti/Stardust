@@ -92,7 +92,7 @@
             }
 
             that.getDateTimeFormat = function(time) {
-            	if (time.date() > moment().date()) {
+            	if (time.format("YYYYMMDD") > moment().format("YYYYMMDD")) {
             		return time.format(resources.DateTimeFormatForMoment);
                 }
                 return time.format(resources.TimeFormatForMoment);

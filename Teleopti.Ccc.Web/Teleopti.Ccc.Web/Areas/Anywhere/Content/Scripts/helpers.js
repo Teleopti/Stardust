@@ -75,10 +75,13 @@ define(
                     if (date.substring(0, 1) == "D")
                         return moment(date.substring(1));
                     return moment(date);
-                }
+                },
             },
-                    timeFormatForUrl: function(time) {
-                        return moment(time, "HH:mm").format("HHmm").toString();
-                    }
+            timeFormatForUrl: function(time) {
+		        return moment(time, "HH:mm").format("HHmm").toString();
+            },
+            dateFormatForUrl: function (date) {
+            	return date.format("YYYYMMDD");
+	        }
         };
     });

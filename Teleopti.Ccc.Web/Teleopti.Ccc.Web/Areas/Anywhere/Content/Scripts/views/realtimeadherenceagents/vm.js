@@ -7,7 +7,6 @@
 		'ajax',
 		'helpers',
 		'jquery',
-		'views/realtimeadherenceagents/agent-menu',
 		'lazy'
 ],
 	function (ko,
@@ -18,7 +17,6 @@
 		ajax,
 		helpers,
 		$,
-		menu,
 		lazy) {
 	return function () {
 
@@ -36,8 +34,6 @@
 		that.filter = ko.observable();
 		that.groupId = ko.observable();
 		that.changeScheduleAvailable = ko.observable(false);
-		that.menu = new menu();
-		that.selectedPersonId = ko.observable();
 		that.BusinessUnitId = ko.observable();
 		that.rootURI = ko.observable();
 
@@ -149,6 +145,11 @@
 			that.fillAgentsStates(data.AgentStates);
 		};
 
+		that.urlForChangingSchedule = function (data) {
+			var agent = that.getAgent(data.PersonId);
+			return window.location.origin + window.location.pathname + "#teamschedule/" + that.BusinessUnitId() + "/" + agent.TeamId + "/" + agent.PersonId + "/" + helpers.dateFormatForUrl(moment((new Date).getTime()));
+		}
+
 		that.getSelectedAgentState = function() {
 			var selectedAgentState = that.agentStates().filter(function (obj) {
 				return obj.Selected() === true;
@@ -159,24 +160,6 @@
 		that.SelectAgent = function (agentStateClicked) {
 			deselectAllAgentsExcept(agentStateClicked);
 			agentStateClicked.Selected(!agentStateClicked.Selected());
-			if (agentStateClicked.Selected()) {
-				var selectedAgentState = that.agentStates().filter(function (obj) {
-					return obj.Selected() === true;
-				});
-				that.selectedPersonId(selectedAgentState[0].PersonId);
-				var selectedPersonId = that.selectedPersonId();
-				var today = moment((new Date).getTime());
-				ajax.ajax({
-					url: "Agents/Team?personId=" + selectedPersonId + "&date=" + helpers.Date.ToServer(today),
-					success: function (groupId) {
-						$(".agent-menu-options").removeClass('change-schedule').addClass('change-schedule');
-						that.menu.businessUnitId = that.BusinessUnitId();
-						that.menu.groupId = groupId;
-						that.menu.personId = selectedPersonId;
-						that.menu.date = today;
-					}
-				});
-			}
 		};
 
 		var deselectAllAgentsExcept = function (agentState) {
