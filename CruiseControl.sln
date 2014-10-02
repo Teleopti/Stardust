@@ -107,10 +107,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.LogClient"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.LogClientTest", "Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\Teleopti.Ccc.Rta.LogClientTest.csproj", "{F6631461-ECF1-4524-8476-3CFF69C4DCBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.Server", "Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj", "{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.ServerTest", "Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\Teleopti.Ccc.Rta.ServerTest.csproj", "{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.TestApplication", "Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\Teleopti.Ccc.Rta.TestApplication.csproj", "{6D0682EF-D547-43C2-98A4-40F0EC153256}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Common", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj", "{43BE4B89-AF3F-439E-9C44-58AE0672E410}"
@@ -765,30 +761,6 @@ Global
 		{F6631461-ECF1-4524-8476-3CFF69C4DCBE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F6631461-ECF1-4524-8476-3CFF69C4DCBE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F6631461-ECF1-4524-8476-3CFF69C4DCBE}.Release|x86.ActiveCfg = Release|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Release|.NET.ActiveCfg = Release|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}.Release|x86.ActiveCfg = Release|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Release|.NET.ActiveCfg = Release|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D34943D8-E66E-45E0-9D3C-24E6CE72AC11}.Release|x86.ActiveCfg = Release|Any CPU
 		{6D0682EF-D547-43C2-98A4-40F0EC153256}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{6D0682EF-D547-43C2-98A4-40F0EC153256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D0682EF-D547-43C2-98A4-40F0EC153256}.Debug|Any CPU.Build.0 = Debug|Any CPU

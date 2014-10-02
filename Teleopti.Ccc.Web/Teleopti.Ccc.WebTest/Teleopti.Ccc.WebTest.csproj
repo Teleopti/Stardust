@@ -483,10 +483,6 @@
       <Project>{DD380C37-8FC1-4209-BC63-9B88B483264D}</Project>
       <Name>Teleopti.Ccc.Rta.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
-      <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
-      <Name>Teleopti.Ccc.Rta.Server</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
