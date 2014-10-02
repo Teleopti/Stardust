@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
@@ -68,12 +69,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				Logger.Info("No SMSLink license found.");
 		}
 
-		private void notifyByEmail(IPerson person, INotificationMessage smsMessages)
-		{
-			var sender = _notificationChecker.EmailSender;
-			_emailSender.Send(person.Email, smsMessages, sender);
-		}
-
 		private void notifyBySms(IPerson person, INotificationMessage smsMessages)
 		{
 			var number = _notificationChecker.SmsMobileNumber(person);
@@ -111,6 +106,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			else
 			{
 				Logger.Info("Did not find a Mobile Number on " + person.Name);
+			}
+		}
+
+		private void notifyByEmail(IPerson person, INotificationMessage smsMessages)
+		{
+			if (person.Email.IsNullOrEmpty())
+			{
+				Logger.Info("Did not find an email address on " + person.Name);
+			}
+			else
+			{
+				var sender = _notificationChecker.EmailSender;
+				Logger.Info("Ready to send email to " + person.Email + "from " + sender);
+				_emailSender.Send(person.Email, smsMessages, sender);
 			}
 		}
 	}

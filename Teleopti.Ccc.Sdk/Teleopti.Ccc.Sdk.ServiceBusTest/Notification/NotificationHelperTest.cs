@@ -123,5 +123,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
 			_emailSender.AssertWasCalled(x => x.Send(person.Email, message, "sender"));
 		}
+
+		[Test]
+		public void ShouldNotNotifyByEmailWhenEmailAddressIsMissing()
+		{
+			setValidLicense();
+			var date = new DateOnly();
+			var person = PersonFactory.CreatePerson();
+			person.Email = "";
+			var readModel = new ScheduleDayReadModel();
+			var message = new NotificationMessage { Subject = "This is the message subject" };
+
+			_significantChangeChecker.Stub(x => x.SignificantChangeNotificationMessage(date, person, readModel)).Return(message);
+			_notificationChecker.Stub(x => x.NotificationType).Return(NotificationType.Email);
+
+			_target.Notify(readModel, date, person);
+
+			_emailSender.AssertWasNotCalled(x => x.Send(Arg<string>.Is.Anything, Arg<NotificationMessage>.Is.Anything, Arg<string>.Is.Anything));
+		}
 	}
 }
