@@ -179,17 +179,5 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			target.Route().Should().Not.Contain(target.DataSource);
 		}
 
-		[Test]
-		public void ShouldExcludeDatasourceForTrackingMessage()
-		{
-			target = new Subscription
-			{
-				DataSource = Guid.NewGuid().ToString(),
-				DomainType = typeof(TrackingMessage).Name
-			};
-
-			target.Route().Should().Not.Contain(target.DataSource);
-		}
-
 	}
 }
