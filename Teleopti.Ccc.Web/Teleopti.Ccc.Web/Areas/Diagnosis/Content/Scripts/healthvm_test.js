@@ -1,5 +1,6 @@
 ﻿define(['buster','healthvm'], function (buster,viewmodel) {
-	return function() {
+	return function () {
+		Teleopti = {};
 		buster.testCase("Health check viewmodel", {
 			"supplied bus check function should be called when starting bus check": function() {
 
@@ -32,12 +33,12 @@
 						}
 					},
 					messageBroker: {server: {addSubscription: function(s) {
-						result = s.DomainType;
+						result = s;
 						return {done: function (){}}
 					}}}
 				});
 
-				assert.equals('Teleopti.Interfaces.Domain.ITeleoptiDiagnosticsInformation', result);
+				assert.equals('ITeleoptiDiagnosticsInformation', result.DomainType);
 			}
 		});
 	};

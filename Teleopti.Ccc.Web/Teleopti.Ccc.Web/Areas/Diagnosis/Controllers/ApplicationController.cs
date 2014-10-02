@@ -4,12 +4,11 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Autofac.Extras.DynamicProxy2;
 using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Web.Core.Aop.Aspects;
-using Teleopti.Ccc.Web.Core.Aop.Core;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Web.Areas.Diagnosis.Controllers
@@ -17,10 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.Diagnosis.Controllers
     public class ApplicationController : Controller
     {
 	    private readonly IServiceBusEventPublisher _publisher;
+	    private readonly IEtlJobStatusRepository _etlJobStatusRepository;
 
-	    public ApplicationController(IServiceBusEventPublisher publisher)
+	    public ApplicationController(IServiceBusEventPublisher publisher, IEtlJobStatusRepository etlJobStatusRepository)
 	    {
 		    _publisher = publisher;
+		    _etlJobStatusRepository = etlJobStatusRepository;
 	    }
 
 	    public ViewResult Index()
@@ -39,6 +40,13 @@ namespace Teleopti.Ccc.Web.Areas.Diagnosis.Controllers
 		    var diagnosticsMessage = new DiagnosticsMessage();
 		    _publisher.Publish(diagnosticsMessage);
 		    return Json(new {diagnosticsMessage.InitiatorId},JsonRequestBehavior.AllowGet);
+	    }
+
+	    [HttpGet, UnitOfWorkAction]
+	    public ActionResult LoadEtlJobHistory(DateOnly? date, bool showOnlyErrors)
+	    {
+		    var etlJobStatusModels = _etlJobStatusRepository.Load(date.GetValueOrDefault(DateOnly.Today), showOnlyErrors);
+		    return Json(etlJobStatusModels, JsonRequestBehavior.AllowGet);
 	    }
 
 	    [HttpGet]

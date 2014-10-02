@@ -49,10 +49,21 @@
 				<ul class="list-group services" data-bind="foreach: services">
 					<li class="list-group-item" data-bind="text: DisplayName, css: { 'list-group-item-success': Status == 4,'list-group-item-danger': Status == 1 }"></li>
 				</ul>
-				<h3>Configured URL:s</h3>
-				<ul class="list-group" data-bind="foreach: configuredUrls">
-					<li class="list-group-item configured-url" data-bind="text: Url + (Message ? ' (' + Message + ')' : ''), css: { 'list-group-item-success': Reachable == 'True', 'list-group-item-danger': Reachable == 'False' }"></li>
+				<h3>ETL history</h3>
+				<ul class="list-group etl-history" data-bind="foreach: etlJobHistory">
+					<li class="list-group-item" data-bind="css: { 'list-group-item-danger': exception_msg }">
+						<h4 class="list-group-item-heading" data-bind="text: job_start_time"></h4>
+						<h4 class="list-group-item-heading" data-bind="text: schedule_name + ' > ' + job_name + ' > ' + jobstep_name + ' [BU: ' + business_unit_name + ']'"></h4>
+						<p class="list-group-item-text" data-bind="text: 'Affected rows: ' + jobstep_affected_rows + ', Duration: ' + jobstep_duration_s"></p>
+						<!-- ko if: exception_msg -->
+						<p class="list-group-item-text"><b data-bind="text: exception_msg"></b></p>
+						<p class="list-group-item-text" data-bind="text: exception_trace"></p>
+						<p class="list-group-item-text"><b data-bind="text: inner_exception_msg"></b></p>
+						<p class="list-group-item-text" data-bind="text: inner_exception_trace"></p>
+						<!-- /ko -->
+					</li>
 				</ul>
+				<button class="btn btn-default" data-bind="click: loadAllEtlJobHistory">Load all ETL job history from current week</button>
 				<h3>Check bus</h3>
 				<button data-bind="click: checkBus, enable: checkBusEnabled" class="btn btn-primary">Start check</button>
 				<!-- ko with: busResults -->
@@ -68,6 +79,10 @@
 					<li class="list-group-item">Physical memory available: <span data-bind="text: (AvailablePhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
 				</ul>
 				<!-- /ko -->
+				<h3>Configured URL:s</h3>
+				<ul class="list-group" data-bind="foreach: configuredUrls">
+					<li class="list-group-item configured-url" data-bind="text: Url + (Message ? ' (' + Message + ')' : ''), css: { 'list-group-item-success': Reachable == 'True', 'list-group-item-danger': Reachable == 'False' }"></li>
+				</ul>
 			</div>
 		</div>
 	</div>

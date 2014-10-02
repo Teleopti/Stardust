@@ -7,10 +7,12 @@ define([
 	return function () {
 		var self = this;
 		var startPromise;
+		var loadEtlHistory;
 
 		self.hub = undefined;
 		self.configuredUrls = ko.observableArray();
 		self.services = ko.observableArray();
+		self.etlJobHistory = ko.observableArray();
 		self.busResults = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
 
@@ -56,6 +58,7 @@ define([
 				subscribe({
 					domainType: 'ITeleoptiDiagnosticsInformation', businessUnitId: Teleopti.BusinessUnitId, datasource: Teleopti.DataSource
 				});
+				loadEtlHistory = options.loadEtlHistory;
 			}
 			if (self.hub && self.hub.client) {
 				self.hub.client.onEventMessage = function(notification, route) {
@@ -63,6 +66,15 @@ define([
 
 					self.checkBusEnabled(true);
 				}
+			}
+			if (loadEtlHistory) {
+				loadEtlHistory(true);
+			}
+		}
+
+		self.loadAllEtlJobHistory = function () {
+			if (loadEtlHistory) {
+				loadEtlHistory(false);
 			}
 		}
 	};

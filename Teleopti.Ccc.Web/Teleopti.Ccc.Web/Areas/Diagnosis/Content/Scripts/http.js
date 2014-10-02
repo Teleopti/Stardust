@@ -5,8 +5,8 @@ define([
     $
 	) {
 		return {
-			get: function(url) {
-				return $.get(url);
+			get: function(url, data) {
+				return $.get(url, data);
 			}
 		}
 });
