@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
     public class DatabaseWriter : IDatabaseWriter
     {

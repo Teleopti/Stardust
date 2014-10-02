@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using log4net;
 using MbCache.Core;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
     public class ActualAgentAssembler : IActualAgentAssembler
 	{

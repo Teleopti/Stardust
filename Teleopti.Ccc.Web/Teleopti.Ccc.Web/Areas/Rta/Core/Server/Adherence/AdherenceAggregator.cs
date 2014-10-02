@@ -1,8 +1,7 @@
-﻿using System.Runtime.Remoting.Messaging;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class AdherenceAggregator : IActualAgentStateHasBeenSent
 	{

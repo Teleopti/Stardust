@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
     public interface IActualAgentAssembler : IRtaDataHandlerCache
     {

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.Messages.Rta;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class AgentAdherenceAggregator
 	{

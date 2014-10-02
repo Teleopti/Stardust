@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using MbCache.Core;
 using log4net;
+using MbCache.Core;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
     public class AlarmMapper : IAlarmMapper
 	{

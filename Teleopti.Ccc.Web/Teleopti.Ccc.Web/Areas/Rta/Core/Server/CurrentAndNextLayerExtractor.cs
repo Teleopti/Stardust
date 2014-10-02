@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
     public class CurrentAndNextLayerExtractor : ICurrentAndNextLayerExtractor
     {

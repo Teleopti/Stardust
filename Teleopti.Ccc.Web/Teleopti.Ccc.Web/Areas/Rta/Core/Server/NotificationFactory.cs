@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Messaging.Client
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class NotificationFactory
 	{

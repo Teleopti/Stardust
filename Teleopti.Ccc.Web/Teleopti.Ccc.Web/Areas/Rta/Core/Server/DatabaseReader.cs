@@ -6,12 +6,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Ccc.Rta.Server.Resolvers;
-using Teleopti.Interfaces.Domain;
 using log4net;
+using Teleopti.Ccc.Rta.Interfaces;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class DatabaseReader : IDatabaseReader
 	{

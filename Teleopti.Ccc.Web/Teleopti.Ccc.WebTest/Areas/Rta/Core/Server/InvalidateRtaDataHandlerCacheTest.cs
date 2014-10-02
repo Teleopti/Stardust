@@ -2,7 +2,7 @@
 using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {

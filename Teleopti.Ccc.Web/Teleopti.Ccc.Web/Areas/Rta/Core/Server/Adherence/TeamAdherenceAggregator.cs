@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class TeamAdherenceAggregator
 	{

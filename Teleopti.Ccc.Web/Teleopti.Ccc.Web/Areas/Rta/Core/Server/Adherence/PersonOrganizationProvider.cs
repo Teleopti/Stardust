@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Rta;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class PersonOrganizationProvider : IPersonOrganizationProvider
 	{

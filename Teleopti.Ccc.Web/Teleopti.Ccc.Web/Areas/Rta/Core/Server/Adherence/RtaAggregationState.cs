@@ -5,7 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class RtaAggregationState
 	{

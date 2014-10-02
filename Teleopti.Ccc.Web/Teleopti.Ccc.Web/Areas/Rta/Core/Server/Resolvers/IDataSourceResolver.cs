@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Rta.Server.Resolvers
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 {
 	public interface IDataSourceResolver
 	{

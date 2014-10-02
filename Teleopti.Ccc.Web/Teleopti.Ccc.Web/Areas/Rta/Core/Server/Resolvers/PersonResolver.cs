@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Teleopti.Ccc.Rta.Server.Resolvers
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 {
 	public class PersonResolver : IPersonResolver
 	{

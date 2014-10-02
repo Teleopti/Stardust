@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class DatabaseConnectionStringHandler : IDatabaseConnectionStringHandler
 	{

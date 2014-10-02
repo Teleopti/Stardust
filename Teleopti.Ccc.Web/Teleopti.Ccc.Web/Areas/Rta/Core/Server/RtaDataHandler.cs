@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Rta.Server.Resolvers;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class RtaDataHandler : IRtaDataHandler
 	{

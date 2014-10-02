@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public interface IAdherenceAggregatorInitializor
 	{

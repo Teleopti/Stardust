@@ -4,12 +4,11 @@ using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Ccc.Rta.Server.Adherence;
-using Teleopti.Ccc.Rta.Server.Resolvers;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
-using Module = Autofac.Module;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class RtaCommonModule : Module
 	{

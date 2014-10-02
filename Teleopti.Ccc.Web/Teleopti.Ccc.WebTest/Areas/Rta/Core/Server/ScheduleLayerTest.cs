@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using NUnit.Framework;
-using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server

@@ -5,8 +5,8 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Rta.Server;
-using Teleopti.Ccc.Rta.Server.Resolvers;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Resolvers
 {
