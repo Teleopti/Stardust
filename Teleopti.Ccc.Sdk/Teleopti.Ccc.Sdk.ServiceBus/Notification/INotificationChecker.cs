@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	{
 		string SmsMobileNumber(IPerson person);
 		NotificationType NotificationType { get; }
+		string EmailSender { get; }
 	}
 }

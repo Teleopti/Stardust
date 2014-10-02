@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,18 +16,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		private readonly INotificationChecker _notificationChecker;
 		private readonly INotificationSenderFactory _notificationSenderFactory;
 	    private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IEmailSender _emailSender;
 
-	    private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
-		public NotificationHelper(ISignificantChangeChecker significantChangeChecker,
-		                       INotificationChecker notificationChecker,
-		                       INotificationSenderFactory notificationSenderFactory,
-            ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public NotificationHelper(ISignificantChangeChecker significantChangeChecker, INotificationChecker notificationChecker, INotificationSenderFactory notificationSenderFactory, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IEmailSender emailSender)
 		{
 			_significantChangeChecker = significantChangeChecker;
 			_notificationChecker = notificationChecker;
 			_notificationSenderFactory = notificationSenderFactory;
 		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_emailSender = emailSender;
 		}
 
 		public void Notify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
@@ -49,46 +49,69 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				if (!string.IsNullOrEmpty(smsMessages.Subject))
 				{
 					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " on " + person.Name);
-					var number = _notificationChecker.SmsMobileNumber(person);
-					if (!string.IsNullOrEmpty(number))
+
+					if (_notificationChecker.NotificationType == NotificationType.Sms)
 					{
-						try
-						{
-							var smsSender = _notificationSenderFactory.GetSender();
-							if (smsSender != null)
-							{
-								smsSender.SendNotification(smsMessages, number);
-							}
-							else
-							{
-								Logger.Warn("No SMS sender was found. Review the configuration and try to restart the service bus.");
-							}
-						}
-						catch (TypeLoadException exception)
-						{
-							Logger.Error("Could not load type for notification.", exception);
-						}
-						catch (FileNotFoundException exception)
-						{
-							Logger.Error("Could not load type for notification.", exception);
-						}
-						catch (FileLoadException exception)
-						{
-							Logger.Error("Could not load type for notification.", exception);
-						}
-						catch (BadImageFormatException exception)
-						{
-							Logger.Error("Could not load type for notification.", exception);
-						}
+						notifyBySms(person, smsMessages);
+					}
+					else if (_notificationChecker.NotificationType == NotificationType.Email)
+					{
+						notifyByEmail(person, smsMessages);
 					}
 					else
 					{
-						Logger.Info("Did not find a Mobile Number on " + person.Name);
+						Logger.Info("Unknown notification type.");
 					}
 				}
 			}
 			else
 				Logger.Info("No SMSLink license found.");
+		}
+
+		private void notifyByEmail(IPerson person, INotificationMessage smsMessages)
+		{
+			var sender = _notificationChecker.EmailSender;
+			_emailSender.Send(person.Email, smsMessages, sender);
+		}
+
+		private void notifyBySms(IPerson person, INotificationMessage smsMessages)
+		{
+			var number = _notificationChecker.SmsMobileNumber(person);
+			if (!string.IsNullOrEmpty(number))
+			{
+				try
+				{
+					var smsSender = _notificationSenderFactory.GetSender();
+					if (smsSender != null)
+					{
+						smsSender.SendNotification(smsMessages, number);
+					}
+					else
+					{
+						Logger.Warn("No SMS sender was found. Review the configuration and try to restart the service bus.");
+					}
+				}
+				catch (TypeLoadException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+				catch (FileNotFoundException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+				catch (FileLoadException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+				catch (BadImageFormatException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+			}
+			else
+			{
+				Logger.Info("Did not find a Mobile Number on " + person.Name);
+			}
 		}
 	}
 }

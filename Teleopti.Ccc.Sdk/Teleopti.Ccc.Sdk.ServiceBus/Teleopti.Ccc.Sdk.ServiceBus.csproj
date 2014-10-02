@@ -170,6 +170,7 @@
     <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
+    <Compile Include="Notification\IEmailSender.cs" />
     <Compile Include="Notification\INotificationChecker.cs" />
     <Compile Include="Notification\NotificationHelper.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
