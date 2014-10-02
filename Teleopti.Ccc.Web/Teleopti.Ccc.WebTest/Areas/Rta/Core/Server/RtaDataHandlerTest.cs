@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		private DateTime _timestamp;
 		private Guid _platformTypeId;
 		private string _sourceId;
-		private DateTime _batchId;
+		private readonly DateTime _batchId = new DateTime();
 		private bool _isSnapshot;
 
 		private Guid _personId;
