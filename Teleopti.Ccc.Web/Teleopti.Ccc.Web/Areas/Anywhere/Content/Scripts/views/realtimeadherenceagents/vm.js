@@ -7,7 +7,8 @@
 		'ajax',
 		'helpers',
 		'jquery',
-		'lazy'
+		'lazy',
+		'navigation'
 ],
 	function (ko,
 		agentstate,
@@ -17,7 +18,8 @@
 		ajax,
 		helpers,
 		$,
-		lazy) {
+		lazy,
+		navigation) {
 	return function () {
 
 		var that = {};
@@ -146,8 +148,8 @@
 		};
 
 		that.urlForChangingSchedule = function (data) {
-			var agent = that.getAgent(data.PersonId);
-			return window.location.origin + window.location.pathname + "#teamschedule/" + that.BusinessUnitId() + "/" + agent.TeamId + "/" + agent.PersonId + "/" + helpers.dateFormatForUrl(moment((new Date).getTime()));
+			var a = that.getAgent(data.PersonId);
+			return navigation.UrlForChangingSchedule(that.BusinessUnitId(), a.TeamId, a.PersonId, moment((new Date).getTime()));
 		}
 
 		that.getSelectedAgentState = function() {

@@ -164,6 +164,19 @@
 				var selectedAgentState = vm.getSelectedAgentState();
 				assert.equals(selectedAgentState[0], agentStateClicked);
 			},
+
+			"should generate change schedule url for an agent" : function() {
+				var agent1 = { PersonId: "personId", TeamId: "teamId" };
+				var vm = viewModel();
+				vm.SetViewOptions({
+					buid: 'buId'
+				});
+
+				vm.fillAgents([agent1]);
+				var expectedUrl = window.location.origin + window.location.pathname + "#teamschedule/" + vm.BusinessUnitId() + "/" + agent1.TeamId + "/" + agent1.PersonId + "/" + moment((new Date).getTime()).format("YYYYMMDD");
+				assert.equals(vm.urlForChangingSchedule(agent1), expectedUrl);
+			},
+
 			"filtering:": {
 				"should only display matching agents": function() {
 					var agent1 = { PersonId: "guid1", Name: "Kurt", TimeZoneOffsetMinutes: 0 },
@@ -434,18 +447,6 @@
 					vm.filter("In call");
 
 					assert.equals(vm.filteredAgents().length, 0);
-				},
-
-				"should generate change schedule url for an agent" : function() {
-					var agent1 = { PersonId: "personId", TeamId: "teamId" };
-					var vm = viewModel();
-					vm.SetViewOptions({
-						buid: 'buId'
-					});
-
-					vm.fillAgents([agent1]);
-					var expectedUrl = window.location.origin + window.location.pathname + "#teamschedule/" + vm.BusinessUnitId() + "/" + agent1.TeamId + "/" + agent1.PersonId + "/" + moment((new Date).getTime()).format("YYYYMMDD");
-					assert.equals(vm.urlForChangingSchedule(agent1), expectedUrl);
 				}
 			}
 		});

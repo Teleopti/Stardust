@@ -147,20 +147,20 @@
                                     <!-- ko with: $parent.ShiftMenu -->
                                     <div class="btn-group">
 										<!-- ko if: $root.permissionAddFullDayAbsence -->
-                                        <a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+										<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
 	                                    <!-- /ko-->
 										<!-- ko if: $root.permissionAddIntradayAbsence -->
-                                        <a href="#" class="btn btn-sm add-intraday-absence" data-bind="click: $data.AddIntradayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
+										<a class="btn btn-sm add-intraday-absence" data-bind="attr: { href: $data.urlForAddIntradayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
 										<!-- /ko-->
 										<!-- ko if: $root.permissionAddActivity -->
-	                                    <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+										<a  class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
 										<!-- /ko-->
 										<!-- ko if: $root.permissionRemoveAbsence -->
-	                                    <a href="#" class="btn btn-sm remove-absence" data-bind="click: $data.RemoveAbsence"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
+										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
 										<!-- /ko-->
 										<!-- ko if: $root.permissionMoveActivity -->
 	                                    <!-- ko if: $root.moveActivityVisible -->
-										<a href="#" class="btn btn-sm move-activity" data-bind="click: $data.moveActivity.bind($parent)"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
+										<a class="btn btn-sm move-activity "data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
 										<!-- /ko-->
 										<!-- /ko-->
                                     </div>
@@ -180,10 +180,10 @@
                                     <!-- ko with: Menu -->
 	                                <div class="btn-group">
 										<!-- ko if: $root.permissionAddFullDayAbsence -->
-		                                <a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+										<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
 										<!-- /ko -->
 										<!-- ko if: $root.permissionAddActivity -->
-		                                <a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+										<a class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
 										<!-- /ko -->
 	                                </div>
                                     <!-- /ko -->

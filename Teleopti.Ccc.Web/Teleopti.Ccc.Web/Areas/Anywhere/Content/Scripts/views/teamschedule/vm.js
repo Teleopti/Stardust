@@ -262,7 +262,7 @@ define([
 			self.DiffHours(data.AbsoluteDifferenceHours);
 			self.DiffPercentage(data.RelativeDifference);
 		};
-
+		
 		this.moveActivityVisible = ko.observable(false);
 	};
 });

@@ -10,6 +10,7 @@ define('resources', {
 define('window', {
 	setLocationHash: function () { },
 	locationReplace: function () { },
+	baseLocation: function () { return window.location.origin + window.location.pathname; }
 });
 
 var testCases = [

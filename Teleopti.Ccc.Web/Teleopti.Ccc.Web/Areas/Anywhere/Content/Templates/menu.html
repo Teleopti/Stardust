@@ -1,13 +1,13 @@
 <nav class="navbar navbar-inverse navbar-static-top menu">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#" data-bind="click: navigateSchedules">Teleopti</a>
+			<a class="navbar-brand" data-bind="attr: { href: urlForHome()}">Teleopti</a>
 		</div>
 		<div>
 			<ul class="nav navbar-nav">
-					<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a href="#" data-bind="click: navigateSchedules">Schedules</a></li>
+					<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForHome()}">Schedules</a></li>
 				<!-- ko if: RealTimeAdherenceVisible -->
-					<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a href="#" data-bind="click: navigateRealtimeAdherence"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
+					<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
 				<!-- /ko -->
 			</ul>
 		</div>
@@ -20,7 +20,7 @@
 					<b class="caret"></b>
 				</a>
 				<ul class="dropdown-menu" data-bind="foreach: businessUnits">
-					<li><a href="#" tabindex="-1" data-bind="click: $parent.switchBusinessUnit"><span class="business-unit" data-bind="text: Name"></span></a></li>
+					<li><a tabindex="-1" data-bind="attr: { href: $root.urlForChangingBusinessUnitId($data)}"><span class="business-unit" data-bind="text: Name"></span></a></li>
 				</ul>
 			</li>
 			<li class="dropdown">

@@ -14,44 +14,8 @@ define([
 	};
 
 	return {
-		GotoPersonSchedule: function (buid, groupid, personid, date) {
-			window.setLocationHash('personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date));
-		},
-
-		GotoPersonScheduleWithoutHistory: function (buid, groupid, personid, date) {
-			window.locationReplace('#personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date));
-		},
-
-		GotoPersonScheduleAddFullDayAbsenceForm: function (buid, groupid, personid, date) {
-			window.setLocationHash('personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/addfulldayabsence');
-		},
-
-		GotoPersonScheduleAddActivityForm: function (buid, groupid, personid, date) {
-			window.setLocationHash('personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity');
-		},
-
-		GotoPersonScheduleMoveActivityForm: function (buid, groupid, personid, date, startTime) {
-			window.setLocationHash('personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/moveactivity/' + startTime);
-		},
-
-		GotoPersonScheduleAddIntradayAbsenceForm: function (buid, groupid, personid, date) {
-			window.setLocationHash('personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/addintradayabsence');
-		},
-
-		GotoPersonScheduleWithAction: function (buid, groupid, personid, date, action) {
-			window.setLocationHash('personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/' + action);
-		},
-
 		GoToTeamSchedule: function (buid, id, date, skill) {
 			window.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
-		},
-
-		GoToTeamScheduleOriginal: function (buid) {
-			window.setLocationHash('teamschedule/' + buid);
-		},
-
-		GoToTeamScheduleForDate: function (buid, date) {
-			window.setLocationHash('teamschedule/' + buid + '/' + toDateString(date));
 		},
 
 		GotoRealTimeAdherenceTeams: function (buid, siteId) {
@@ -67,8 +31,33 @@ define([
 		GotoRealTimeAdherenceMultipleSiteDetails: function(buid) {
 			window.setLocationHash('realtimeadherenceagents/' + buid + '/' + 'MultipleSites');
 		},
-		GotoRealTimeAdherenceViewOriginal: function (buid) {
-			window.setLocationHash('realtimeadherencesites/' + buid);
+
+		UrlForHome: function(buid) {
+			return window.baseLocation() + "#teamschedule/" + buid;
+		},
+		UrlForChangingSchedule : function(buid,teamId,personId,date) {
+			return window.baseLocation() + "#teamschedule/" + buid + "/" + teamId + "/" + personId + "/" + toDateString(date);
+		},
+		UrlForRealTimeAdherence: function (buid) {
+			return window.baseLocation() + "#realtimeadherencesites/" + buid ;
+		},
+		UrlForTeamScheduleForDate: function (buid, date) {
+			return window.baseLocation() + '#teamschedule/' + buid + '/' + toDateString(date);
+		},
+		UrlForPersonScheduleAddFullDayAbsence:function(buid,teamId,personId,date) {
+			return  window.baseLocation() + '#personschedule/' + buid + '/' + teamId + '/' + personId + '/' + toDateString(date) + '/addfulldayabsence';
+		},
+		UrlForPersonScheduleAddIntradayAbsence:function(buid,teamId,personId,date) {
+			return  window.baseLocation() + '#personschedule/' + buid + '/' + teamId + '/' + personId + '/' + toDateString(date) + '/addintradayabsence';
+		},
+		UrlForPersonScheduleAddActivity: function (buid, groupid, personid, date) {
+			return window.baseLocation() + '#personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity';
+		},
+		UrlForPersonSchedule: function (buid, groupid, personid, date) {
+			return window.baseLocation() + '#personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date);
+		},
+		UrlForPersonScheduleMoveActivity: function (buid, groupid, personid, date, startTime) {
+			return window.baseLocation() + '#personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/moveactivity/' + startTime;
 		}
 	};
 });

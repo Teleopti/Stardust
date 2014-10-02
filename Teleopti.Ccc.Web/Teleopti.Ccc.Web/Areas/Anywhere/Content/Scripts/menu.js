@@ -45,24 +45,26 @@ define([
 				}
 			};
 
-			self.switchBusinessUnit = function(data) {
+			self.urlForHome = function() {
+				return navigation.UrlForHome(self.CurrentBusinessUnitId());
+			};
+
+			self.urlForRealTimeAdherence = function() {
+				return navigation.UrlForRealTimeAdherence(self.CurrentBusinessUnitId());
+			};
+
+			self.urlForChangingBusinessUnitId = function(data) {
 				var view = self.ActiveView();
 				var buId = data.Id;
 				if (view.indexOf("realtimeadherence") > -1)
-					navigation.GotoRealTimeAdherenceViewOriginal(buId);
+					return navigation.UrlForRealTimeAdherence(buId);
 				else {
 					var date = self.CurrentDate();
 					if (date)
-						navigation.GoToTeamScheduleForDate(buId, date);
-					else navigation.GoToTeamScheduleOriginal(buId);
+						return navigation.UrlForTeamScheduleForDate(buId, date);
+					else return navigation.UrlForHome(buId);
 				}
 			};
-
-			self.navigateSchedules = function() {
-				navigation.GoToTeamScheduleOriginal(self.CurrentBusinessUnitId());
-			};
-			self.navigateRealtimeAdherence = function () {
-				navigation.GotoRealTimeAdherenceViewOriginal(self.CurrentBusinessUnitId());
-			};
 		};
-	});
+});
+
