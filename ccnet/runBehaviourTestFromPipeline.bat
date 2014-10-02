@@ -82,7 +82,7 @@ ECHO $(SQL_SERVER_NAME)^|%SQL_SERVER_NAME%>>"%MySettings%"
 
 ::Prepare the file(s) to be SerachedAndReplaced
 mkdir Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
-ECHO ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config>Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
+ECHO ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll.config,BuildArtifacts\Teleopti.Ccc.WebBehaviorTest.config>Teleopti.Support.Tool\bin\%configuration%\ConfigFiles\BuildServerConfigFiles.txt
 
 Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe -MOTest
 
