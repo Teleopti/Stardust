@@ -142,30 +142,40 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
 	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
 	        {
+
+				if (_selectedPerson.WorkflowControlSet == null)
+				{
+					tableLayoutPanelNoWorkflowControlSet.Visible = true;
+					tableLayoutPanelRanking.Visible = false;
+					tableLayoutPanelFairness.Visible = false;
+					return;
+				}
+
 				var fairnessType = _selectedPerson.WorkflowControlSet
 				   .GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
 
-				if (_selectedPerson.WorkflowControlSet == null || fairnessType == FairnessType.FairnessPoints)
-				{
-					tableLayoutPanelRanking.Visible = false;
-					tableLayoutPanelFairness.Visible = false;
-					tableLayoutPanelNoWorkflowControlSet.Visible = true;
-				}
-				else if(fairnessType == FairnessType.EqualNumberOfShiftCategory)
-				{
-					tableLayoutPanelNoWorkflowControlSet.Visible = false;
-					tableLayoutPanelRanking.Visible = false;
-					tableLayoutPanelFairness.Visible = true;
-					updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
-				}
-				else if (fairnessType == FairnessType.Seniority)
-				{
-					tableLayoutPanelNoWorkflowControlSet.Visible = false;
-					tableLayoutPanelRanking.Visible = true;
-					tableLayoutPanelFairness.Visible = false;
-					updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.SchedulingResultState.ShiftCategories,
+				tableLayoutPanelNoWorkflowControlSet.Visible = false;
+
+		        switch (fairnessType)
+		        {
+					case FairnessType.FairnessPoints :
+						tableLayoutPanelRanking.Visible = false;
+						tableLayoutPanelFairness.Visible = false;
+				        break;
+					case FairnessType.EqualNumberOfShiftCategory:
+						tableLayoutPanelRanking.Visible = false;
+						tableLayoutPanelFairness.Visible = true;
+						updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
+				        break;
+					case FairnessType.Seniority :
+						tableLayoutPanelRanking.Visible = true;
+						tableLayoutPanelFairness.Visible = false;
+						updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.SchedulingResultState.ShiftCategories,
 					                  _stateHolder.FilteredPersonDictionary.Values.ToList());
-				}
+				        break;
+
+
+		        }
 	        }
         }
 
