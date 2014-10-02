@@ -152,6 +152,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (options.MainShift)
                 clonePart.DeleteMainShift(clonePart);
+			if (options.MainShiftSpecial)
+				clonePart.DeleteMainShiftSpecial(clonePart);
             if (options.PersonalShift)
                 clonePart.DeletePersonalStuff();
             if (options.DayOff)

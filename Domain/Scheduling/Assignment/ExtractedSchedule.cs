@@ -522,6 +522,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				
 		}
 
+		public void DeleteMainShiftSpecial(IScheduleDay source)
+	    {
+			var highAss = PersonAssignment();
+
+			if (highAss != null)
+			{
+				highAss.ClearMainActivities();
+			}    
+	    }
+
 	    public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
         {
             var periodOffsetCalculator = new PeriodOffsetCalculator();

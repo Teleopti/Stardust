@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     public class DeleteOption
     {
         private bool _mainShift;
+		private bool _mainShiftSpecial;
         private bool _absence;
         private bool _dayOff;
         private bool _personalShift;
@@ -31,6 +32,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
 
         }
+
+		public bool MainShiftSpecial
+		{
+			get { return _mainShiftSpecial; }
+			set
+			{
+				if (value)
+					Default = false;
+
+				_mainShiftSpecial = value;
+			}
+
+		}
 
         /// <summary>
         /// Absence

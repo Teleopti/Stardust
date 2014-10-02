@@ -3394,8 +3394,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (!cutSpecial.Cancel())
 				{
-					setCutMode(options);
 					deleteInMainGrid(options);
+					options.MainShift = options.MainShiftSpecial;
+					options.MainShiftSpecial = false;
+					setCutMode(options);
 				}
 			}
 
@@ -5347,6 +5349,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var localDeleteOption = new DeleteOption();
 				localDeleteOption.MainShift = deleteOptions.MainShift;
+				localDeleteOption.MainShiftSpecial = deleteOptions.MainShiftSpecial;
 				localDeleteOption.DayOff = deleteOptions.DayOff;
 				localDeleteOption.PersonalShift = deleteOptions.PersonalShifts;
 				localDeleteOption.Overtime = deleteOptions.Overtime;

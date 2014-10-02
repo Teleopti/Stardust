@@ -113,6 +113,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
             _presenter.OnCheckBoxAssignmentsCheckedChanged(false);
             Assert.IsFalse(_model.MainShift);
+
+			_presenter = new ClipboardSpecialPresenterTestClass(_view, _model, true, true);
+			_presenter.OnCheckBoxAssignmentsCheckedChanged(true);
+			Assert.IsTrue(_model.MainShiftSpecial);
+			
+			_presenter.OnCheckBoxAssignmentsCheckedChanged(false);
+			Assert.IsFalse(_model.MainShiftSpecial);
         }
 
         [Test]
