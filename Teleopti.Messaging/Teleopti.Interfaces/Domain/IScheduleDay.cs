@@ -329,6 +329,13 @@ namespace Teleopti.Interfaces.Domain
 				/// </summary>
 				/// <param name="source"></param>
 				void DeleteMainShift(IScheduleDay source);
+
+				/// <summary>
+				/// Delete main shift
+				/// </summary>
+				/// <param name="source"></param>
+				void DeleteMainShiftSpecial(IScheduleDay source);
+
 				/// <summary>
 				/// Delete personal shift
 				/// </summary>

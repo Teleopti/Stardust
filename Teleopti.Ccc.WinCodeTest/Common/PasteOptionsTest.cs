@@ -37,6 +37,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(true, _options.MainShift);
         }
 
+		[Test]
+		public void CheckMainShiftSpecialGetSet()
+		{
+			_options.MainShiftSpecial = true;
+			Assert.AreEqual(true, _options.MainShiftSpecial);
+		}
+
         [Test]
         public void CheckAbsenceGetSet()
         {

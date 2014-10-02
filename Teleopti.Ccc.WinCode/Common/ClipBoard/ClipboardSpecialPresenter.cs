@@ -51,7 +51,14 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 
         public void OnCheckBoxAssignmentsCheckedChanged(bool check)
         {
-            _model.MainShift = check; 
+	        if (!_deleteMode)
+	        {
+		        _model.MainShift = check;
+	        }
+	        else
+	        {
+		        _model.MainShiftSpecial = check;
+	        }
         }
 
         public void OnCheckBoxAbsencesCheckedChanged(bool check)
