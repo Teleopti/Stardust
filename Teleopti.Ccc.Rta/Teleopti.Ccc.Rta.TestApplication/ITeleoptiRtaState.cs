@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Rta.Interfaces
+namespace Teleopti.Ccc.Rta.TestApplication
 {
 	public interface ITeleoptiRtaState
 	{

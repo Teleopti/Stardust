@@ -3,7 +3,6 @@ using Autofac;
 using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;

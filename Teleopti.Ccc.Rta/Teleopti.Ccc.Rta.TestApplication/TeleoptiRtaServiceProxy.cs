@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Ccc.Rta.LogClientProxy.TeleoptiRtaService;
+using Teleopti.Ccc.Rta.TestApplication.TeleoptiRtaService;
 
-namespace Teleopti.Ccc.Rta.LogClientProxy
+namespace Teleopti.Ccc.Rta.TestApplication
 {
     public class TeleoptiRtaServiceProxy : TeleoptiRtaService.TeleoptiRtaService, IRtaDataHandlerClient
     {

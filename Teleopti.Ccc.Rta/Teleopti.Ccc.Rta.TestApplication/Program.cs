@@ -8,7 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using log4net;
 using log4net.Config;
-using Teleopti.Ccc.Rta.LogClient;
 
 namespace Teleopti.Ccc.Rta.TestApplication
 {

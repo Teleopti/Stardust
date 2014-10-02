@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using Teleopti.Ccc.Rta.Interfaces;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {

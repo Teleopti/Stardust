@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Remoting;
 using System.Security;
 using log4net;
-using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Ccc.Rta.LogClientProxy;
-using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Rta.LogClient
+namespace Teleopti.Ccc.Rta.TestApplication
 {
     public class ClientHandler
     {

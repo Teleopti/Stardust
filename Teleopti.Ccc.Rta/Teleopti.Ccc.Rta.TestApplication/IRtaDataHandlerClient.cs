@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Teleopti.Ccc.Rta.Interfaces
+namespace Teleopti.Ccc.Rta.TestApplication
 {
     public interface IRtaDataHandlerClient : IRtaDataHandler
     {
