@@ -10,8 +10,8 @@ namespace Teleopti.Interfaces.Domain
 		public int MillisecondsDifference { get; set; }
 		public ICollection<ServiceProcessDetail> Services { get; set; }
 		public string MachineName { get; set; }
-		public ulong TotalPhysicalMemory { get; set; }
-		public ulong AvailablePhysicalMemory { get; set; }
+		public long TotalPhysicalMemory { get; set; }
+		public long AvailablePhysicalMemory { get; set; }
 		public long BusMemoryConsumption { get; set; }
 		public string OSVersion { get; set; }
 		public string OSPlatform { get; set; }
