@@ -3,9 +3,9 @@
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public class DoNotNotifySmsLink : IDoNotifySmsLink
+	public class DoNotNotifySmsLink : INotify
 	{
-		public void NotifySmsLink(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
+		public void Notify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
 		}
 	}

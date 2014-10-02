@@ -3,9 +3,14 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
@@ -86,6 +91,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 				container.Resolve<ConsumerOf<RunPayrollExport>>().Should().Not.Be.Null();
 			}
 		}
+
+		[Test]
+		public void ShouldResolveSmsLink()
+		{
+			var builder = new ContainerBuilder();
+			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444)).Return(false);
+			using (var container = builder.Build())
+			{
+				new ContainerConfiguration(container, toggleManager).Configure();
+				container.Resolve<INotify>().Should().Be.OfType<DoNotifySmsLink>();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveNotificationHelper()
+		{
+			var builder = new ContainerBuilder();
+			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444)).Return(true);
+			using (var container = builder.Build())
+			{
+				new ContainerConfiguration(container, toggleManager).Configure();
+				container.Resolve<INotify>().Should().Be.OfType<NotificationHelper>();
+			}
+		}
+
 
 		private static void fakeInternalBusRegistrations(ContainerBuilder builder)
 		{

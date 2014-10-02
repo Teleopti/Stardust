@@ -9,8 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
-	public class DoNotifySmsLink : INotify
+	public class NotificationHelper : INotify
 	{
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly INotificationChecker _notificationChecker;
@@ -19,8 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
-		public DoNotifySmsLink(ISignificantChangeChecker significantChangeChecker,
+		public NotificationHelper(ISignificantChangeChecker significantChangeChecker,
 		                       INotificationChecker notificationChecker,
 		                       INotificationSenderFactory notificationSenderFactory,
             ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
