@@ -8,6 +8,7 @@ CREATE PROCEDURE [mart].[main_convert_fact_schedule_ccc8_run]
 @start_date_id int,
 @end_date_id int,
 @is_delayed_job int = 1
+WITH EXECUTE AS OWNER
 AS
 
 --TRUNCATE TABLE [mart].[fact_schedule]
@@ -77,7 +78,8 @@ SELECT
 FROM mart.sys_configuration
 WHERE [key]='IntervalLengthMinutes'
 
-INSERT [mart].[fact_schedule] WITH(TABLOCK)
+TRUNCATE TABLE [mart].[fact_schedule_convert]
+INSERT [mart].[fact_schedule_convert] WITH(TABLOCK)
 SELECT
 shift_startdate_local_id		= btz.local_date_id,
 schedule_date_id				= f.schedule_date_id,
@@ -130,13 +132,16 @@ INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
 WHERE f.schedule_date_id between @start_date_id and @end_date_id
-AND NOT EXISTS(SELECT * FROM mart.fact_schedule new
-				WHERE new.schedule_date_id=f.schedule_date_id
-				AND new.person_id=f.person_id
-				AND new.interval_id=f.interval_id
-				AND new.activity_starttime=f.activity_starttime
-				AND new.scenario_id=f.scenario_id)
 OPTION (MAXDOP 1);
+
+DELETE new
+FROM  mart.fact_schedule new
+INNER JOIN mart.fact_schedule_convert conv
+	ON new.shift_startdate_local_id = conv.shift_startdate_local_id
+	AND new.schedule_date_id = conv.schedule_date_id
+
+INSERT INTO mart.fact_schedule
+SELECT * FROM mart.fact_schedule_convert
 
 --check tempdb after
 IF  (SELECT [dbo].[IsAzureDB] ()) <> 1 AND @is_delayed_job=0
