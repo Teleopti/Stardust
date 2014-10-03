@@ -28,8 +28,20 @@
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
 	<div class="container ">
-		<span>Is working..</span>
-		<span data-bind="text: isWorking"></span>	
+		
+		
+	
+		<table class="table">
+			<tr>
+				<td>Ashley Andeen</td>
+				<td>
+					<button class="btn btn-default">Answer</button>					
+				</td>
+				<td>
+					<button class="btn btn-danger">Hang up</button>
+				</td>
+			</tr>
+		</table>
 	</div>
 
 </body>
