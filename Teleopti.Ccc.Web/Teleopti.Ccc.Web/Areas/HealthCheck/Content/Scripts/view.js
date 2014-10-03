@@ -15,7 +15,7 @@ define([
     ko.applyBindings(vm);
 
 	var loadEtlHistory = function(showOnlyErrors) {
-		http.get('loadetljobhistory', { date: new Date().toISOString(), showOnlyErrors: showOnlyErrors }).done(function(data) {
+		http.get('HealthCheck/Application/LoadEtlJobHistory', { date: new Date().toISOString(), showOnlyErrors: showOnlyErrors }).done(function (data) {
 			vm.etlJobHistory(data);
 		});
 	};
@@ -24,12 +24,12 @@ define([
     	signalR: sigR,
     	messageBroker: $.connection.MessageBrokerHub,
 		checkBus: function() {
-			http.get('checkbus').done(function (data) { console.log(data.InitiatorId); });
+			http.get('HealthCheck/Application/CheckBus').done(function (data) { console.log(data.InitiatorId); });
 		},
 		loadEtlHistory: loadEtlHistory
     });
 
-	http.get('serverdetails').done(function(data) {
+	http.get('HealthCheck/Application/ServerDetails').done(function(data) {
 		vm.configuredUrls(data.UrlsReachable.UrlResults);
 		vm.services(data.RunningServices.Services);
 	});

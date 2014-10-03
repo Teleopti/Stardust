@@ -171,14 +171,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIAmViewingTheDiagnosisView()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToDiagnosisTool();
+			Navigation.GoToMessageBrokerTool();
 		}
 
 		[When(@"I am viewing the health check view")]
 		public void WhenIAmViewingTheHealthCheckView()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToHealthCheckTool();
+			Navigation.GoToHealthCheck();
 		}
 
 		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
