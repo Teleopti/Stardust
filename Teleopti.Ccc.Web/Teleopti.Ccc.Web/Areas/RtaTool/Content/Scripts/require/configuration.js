@@ -5,6 +5,7 @@
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/Scripts/bootstrap.min',
+		buster: '../../../../Content/busterjs/buster-test',
 
 		noext: '../../../../Content/require/noext',
 
@@ -17,6 +18,10 @@
 	// dependencies that requires loading order
 	shim: {
 		'bootstrap': ['jquery'],
-		'signalr': ['jquery']
+		'signalr': ['jquery'],
+		'buster': {
+			exports: 'buster'
+		}
 	}
+
 };
