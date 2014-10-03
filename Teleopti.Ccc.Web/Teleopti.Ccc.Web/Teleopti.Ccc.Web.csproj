@@ -398,6 +398,8 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\RtaTool\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\RtaTool\RtaToolAreaRegistration.cs" />
     <Compile Include="Areas\Rta\Controllers\ServiceController.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
@@ -1042,6 +1044,14 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\vm_test.js" />
     <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
+    <Content Include="Areas\RtaTool\Content\Scripts\main.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\require\configuration.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\Tests.html" />
+    <Content Include="Areas\RtaTool\Content\Scripts\tests.main.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\view.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\vm.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\vm_test.js" />
+    <Content Include="Areas\RtaTool\Views\Application\Index.aspx" />
     <Content Include="Areas\SSO\Content\Css\login.css" />
     <Content Include="Areas\SSO\Content\Css\Site.css" />
     <Content Include="Areas\SSO\Content\Images\ajax-loader-small.gif" />
