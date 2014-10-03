@@ -35,10 +35,10 @@
 			<tr>
 				<td>Ashley Andeen</td>
 				<td>
-					<button class="btn btn-default">Answer</button>					
+					<button class="btn btn-default" data-bind="click: answer">Answer</button>					
 				</td>
 				<td>
-					<button class="btn btn-danger">Hang up</button>
+					<button class="btn btn-danger" data-bind="click: hangUp">Hang up</button>
 				</td>
 			</tr>
 		</table>

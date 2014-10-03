@@ -18,7 +18,6 @@
 	// dependencies that requires loading order
 	shim: {
 		'bootstrap': ['jquery'],
-		'signalr': ['jquery'],
 		'buster': {
 			exports: 'buster'
 		}

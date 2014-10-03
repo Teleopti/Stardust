@@ -8,8 +8,8 @@ define([
 	) {
 
 
-	console.log('hej');
     var vm = new viewmodel();
+
     ko.applyBindings(vm);
 	
 

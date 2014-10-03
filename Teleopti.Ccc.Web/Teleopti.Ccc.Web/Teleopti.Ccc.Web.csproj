@@ -1053,6 +1053,7 @@
     <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
     <Content Include="Areas\RtaTool\Content\Scripts\main.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\require\configuration.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\rta.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\Tests.html" />
     <Content Include="Areas\RtaTool\Content\Scripts\tests.main.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\view.js" />
