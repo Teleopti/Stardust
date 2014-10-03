@@ -143,7 +143,7 @@
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
     <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
-    <Compile Include="Diagnosis\HealthCheck.feature.cs">
+    <Compile Include="HealthCheck\HealthCheck.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HealthCheck.feature</DependentUpon>
@@ -181,8 +181,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Diagnosis\DiagnosisView.feature.cs">
-      <DependentUpon>DiagnosisView.feature</DependentUpon>
+    <Compile Include="MessageBrokerTool\MessageBrokerTool.feature.cs">
+      <DependentUpon>MessageBrokerTool.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -736,7 +736,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
     </None>
-    <None Include="Diagnosis\HealthCheck.feature">
+    <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
     </None>
@@ -760,9 +760,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleOnMobile.feature.cs</LastGenOutput>
     </None>
-    <None Include="Diagnosis\DiagnosisView.feature">
+    <None Include="MessageBrokerTool\MessageBrokerTool.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>DiagnosisView.feature.cs</LastGenOutput>
+      <LastGenOutput>MessageBrokerTool.feature.cs</LastGenOutput>
     </None>
     <None Include="SessionAnywhere.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

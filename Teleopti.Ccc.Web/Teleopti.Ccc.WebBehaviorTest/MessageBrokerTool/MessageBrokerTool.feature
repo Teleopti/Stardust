@@ -1,4 +1,4 @@
-﻿Feature: Diagnosis view
+﻿Feature: Message Broker Tool view
 	In order to evaluate performance of broker
 	As a developer
 	I want to test, measure and view timings of messages
