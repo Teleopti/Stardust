@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 					if (!_personalShiftMeetingTimeChecker.CheckTimeMeeting(movedShift, meetings))
 						continue;
 
-					if (!_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(movedShift, personalAssignment))
+					if (personalAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(movedShift, personalAssignment))
 						continue;
 
 					workShiftsWithinPeriod.Add(shiftProjectionCache);
