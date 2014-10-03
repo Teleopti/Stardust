@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				DataRow dr = dt.NewRow();
 				dr[0] = result.PersonDateKey;
 				dr[1] = _commonNameDescription.BuildCommonNameDescription(result.Person);
-				dr[2] = result.ScheduleDate.Date;
+				dr[2] = result.ScheduleDate.Date.ToShortDateString();
 				dr[3] = string.Empty;
 				if (result.FilterResults.Count>0)
 					dr[3] = result.FilterResults[result.FilterResults.Count - 1].Message;

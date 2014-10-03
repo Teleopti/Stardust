@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			int processedBlocks = 0;
 			_workShiftFinderResultHolder.Clear();
 			_workShiftFinderResultHolder.AlwaysShowTroubleshoot = true;
+			var workShiftFinderResultList = new List<IWorkShiftFinderResult>();
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
 				if (_cancelMe)
@@ -78,11 +79,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				{
 					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
 					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(Resources.CouldNotFindAnyValidShiftInShiftBag, 0, 0));
-					_workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult> { workShiftFinderResult }, DateTime.Now);
+					workShiftFinderResultList.Add(workShiftFinderResult);
 				}
 				
 				OnProgress(selectedTeamBlocks.Count, processedBlocks);
 			}
+			_workShiftFinderResultHolder.AddResults(workShiftFinderResultList, DateTime.Now);
 		}
 
 		protected void OnProgress(int totalBlocks, int processedBlocks )
