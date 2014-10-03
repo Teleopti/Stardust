@@ -4,6 +4,7 @@ using System.Configuration;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
+using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Rta

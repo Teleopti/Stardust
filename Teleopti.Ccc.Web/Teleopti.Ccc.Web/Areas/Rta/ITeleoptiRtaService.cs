@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 
-namespace Teleopti.Ccc.Web.Areas.Rta
+namespace Teleopti.Ccc.Rta.WebService
 {
     [ServiceContract]
     public interface ITeleoptiRtaService
