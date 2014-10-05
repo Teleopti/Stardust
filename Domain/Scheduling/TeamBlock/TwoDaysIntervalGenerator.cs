@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     IList<ISkillIntervalData> sourceList = dayIntervalData[dateOnly];
                     foreach (var skillIntervalData in sourceList)
                     {
-                        dic.Add(skillIntervalData.Period.StartDateTime, skillIntervalData);
+						if (!dic.ContainsKey(skillIntervalData.Period.StartDateTime))
+							dic.Add(skillIntervalData.Period.StartDateTime, skillIntervalData);
                     }
                     if (sourceList.Count == 0) continue;
                     if (dayIntervalData.ContainsKey(dateOnly.AddDays(1)))
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         sourceList = dayIntervalData[dateOnly.AddDays(1)];
                         foreach (var skillIntervalData in sourceList)
                         {
-							dic.Add(skillIntervalData.Period.StartDateTime, skillIntervalData);
+							if (!dic.ContainsKey(skillIntervalData.Period.StartDateTime))
+								dic.Add(skillIntervalData.Period.StartDateTime, skillIntervalData);
                         }
                     }
                 }

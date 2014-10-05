@@ -180,5 +180,42 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(1, result[today.AddDays(3)].Count);
 			Assert.AreEqual(6, result[today.AddDays(3)][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
         }
+
+		[Test]
+		public void ShouldHandleChangeToWinterTimeWhenOneHourRepeat()
+		{
+			var today = new DateOnly(2011, 04, 29);
+			var skillIntervalData0 =
+							new SkillIntervalData(
+								new DateTimePeriod(new DateTime(2011, 04, 29, 10, 0, 0, DateTimeKind.Utc),
+												   new DateTime(2011, 04, 29, 11, 0, 0, DateTimeKind.Utc)), 3, 3, 0, null, null);
+			var skillIntervalData1 =
+				new SkillIntervalData(
+					new DateTimePeriod(new DateTime(2011, 04, 29, 10, 0, 0, DateTimeKind.Utc),
+									   new DateTime(2011, 04, 29, 11, 0, 0, DateTimeKind.Utc)), 4, 4, 0, null, null);
+			var skillIntervalData2 =
+				new SkillIntervalData(
+					new DateTimePeriod(new DateTime(2011, 04, 30, 10, 0, 0, DateTimeKind.Utc),
+									   new DateTime(2011, 04, 30, 11, 0, 0, DateTimeKind.Utc)), 5, 5, 0, null, null);
+			var skillIntervalData3 =
+				new SkillIntervalData(
+					new DateTimePeriod(new DateTime(2011, 04, 30, 10, 0, 0, DateTimeKind.Utc),
+									   new DateTime(2011, 04, 30, 11, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
+
+
+			IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+			list.Add(today, new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1 });
+			list.Add(today.AddDays(1), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3 });
+			list.Add(today.AddDays(2), new List<ISkillIntervalData>());
+
+			var result = _target.GenerateTwoDaysInterval(list);
+
+			Assert.AreEqual(result.Count, 2);
+			Assert.AreEqual(2, result[today].Count);
+			Assert.AreEqual(3, result[today][skillIntervalData0.Period.StartDateTime].ForecastedDemand);
+
+			Assert.AreEqual(1, result[today.AddDays(1)].Count);
+			Assert.AreEqual(5, result[today.AddDays(1)][skillIntervalData2.Period.StartDateTime].ForecastedDemand);
+		}
     }
 }
