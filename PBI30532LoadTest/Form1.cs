@@ -144,7 +144,7 @@ namespace PBI30532LoadTest
 					"Data Source=.;Integrated Security=SSPI;Initial Catalog=main_Telia_TeleoptiCCC7;Current Language=us_english")
 					.Tables[0];
 			var dates = new List<DateTime>();
-			var date = new DateTime(2014, 8, 4, 0, 0, 0, DateTimeKind.Utc);
+			var date = new DateTime(2013, 11, 4, 0, 0, 0, DateTimeKind.Utc);
 			for (int i = 0; i < 7; i++)
 			{
 				dates.Add(date.AddDays(i));
