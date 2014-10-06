@@ -45,9 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return true;
 			var selectedBlockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
-			DateOnly firstSelectedDayInBlock = selectedBlockDays.First();
 
-			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, firstSelectedDayInBlock, selectedTeamMembers.First(), schedulingOptions);
+			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
 			if (roleModelShift == null)
 			{
 				OnDayScheduledFailed();
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 						_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, selectedPersons);
 						schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
-						roleModelShift = _roleModelSelector.Select(teamBlockInfo, firstSelectedDayInBlock, selectedTeamMembers.First(), schedulingOptions);
+						roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
 						success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays, roleModelShift);
 						
 					}
