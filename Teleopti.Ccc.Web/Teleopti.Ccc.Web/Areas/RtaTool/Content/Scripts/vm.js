@@ -1,4 +1,4 @@
-define([
+﻿define([
 	'knockout',
 	'moment',
 	'rta'
@@ -9,13 +9,10 @@ define([
 ) {
 
 	return function (rtaServerCall) {
-
+		var self = this;
 		rtaServerCall = rtaServerCall || rta.ServerCall;
 
-		var self = this;
-
-
-		self.AuthenticationKey = '!#�atAbgT%'; 
+		self.AuthenticationKey = '!#¤atAbgT%';
 
 		self.answer = function() {
 			rtaServerCall(makeAgentState('InCall'));
@@ -27,6 +24,7 @@ define([
 
 		var makeAgentState = function(stateCode) {
 			return {
+				AuthenticationKey: self.AuthenticationKey,
 				UserCode: '0085',
 				StateCode: stateCode,
 				StateDescription: stateCode,
