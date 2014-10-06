@@ -5,10 +5,11 @@ GO
 -- =============================================
 -- Author:		RobinK
 -- Create date: 2011-09-26
--- Description:	Lads the read model for allowance for a budget group
+-- Description:	Loads the read model for allowance for a budget group
 -- ChangeLog:	Date		Who				Description	
 --				2013-05-23	ErikS			Added distinct to disregard duplicate rows in ReadModel
 --				2013-05-24	DeeFlex & ErikS	Improved last change
+--				2014-10-06	Ola				Removed temptable to reduce writes, reads and cpu usage (bug #30425 )
 -- =============================================
 
 CREATE PROCEDURE [ReadModel].[LoadBudgetAllowanceReadModel]
@@ -21,46 +22,27 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	CREATE TABLE #temppersonbudgetgroup
-	(
-		personid uniqueidentifier not null,
-		budgetgroupid uniqueidentifier null,
-		startdate smalldatetime not null,
-		enddate smalldatetime null
-	);
-
-	--Get the BudgetGroup of interest. Create a fictive EndDate for each PersonPeriod
-	INSERT INTO #temppersonbudgetgroup
-	SELECT
-		personid		= p.id,
-		budgetgroupid	= pp.budgetgroup,
-		startdate		= pp.startdate,
-		enddate			= pp.enddate
-	FROM person p
-	INNER JOIN dbo.PersonPeriodWithEndDate pp
-		ON pp.parent=p.id
-	WHERE p.isdeleted=0
-
-	--Return calculated result to client
 	SELECT
 		sp.PayloadId,
 		sp.BelongsToDate,
 		SUM(sp.ContractTime) as TotalContractTime,
 		Count(*) as HeadCounts
 	FROM ReadModel.ScheduleProjectionReadOnly sp
-	INNER JOIN #temppersonbudgetgroup t	
-		ON t.PersonId = sp.PersonId
-		AND t.budgetgroupid=@BudgetGroupId
+	INNER JOIN  dbo.PersonPeriodWithEndDate t	
+		ON t.parent = sp.PersonId
+		AND t.budgetgroup=@BudgetGroupId
 		AND sp.BelongsToDate BETWEEN t.startdate AND t.enddate
-		AND EXISTS (
+			AND EXISTS (
 			SELECT DISTINCT Absence
 			FROM dbo.budgetabsencecollection bac
 			INNER JOIN dbo.customshrinkage cs
 				ON cs.Id = bac.CustomShrinkage AND cs.Parent=@BudgetGroupId
 				AND bac.Absence=sp.PayloadId
 				)
+	INNER JOIN Person p ON p.Id = t.Parent AND p.IsDeleted = 0
 	WHERE sp.ScenarioId=@ScenarioId
 	AND sp.BelongsToDate BETWEEN @DateFrom AND @DateTo
+
 	GROUP BY sp.BelongsToDate,sp.PayloadId
 
 END
