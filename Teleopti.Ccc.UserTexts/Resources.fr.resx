@@ -3745,7 +3745,7 @@
     <value>Le type d'emploi n'est pas personnel fixe</value>
   </data>
   <data name="TheEmploymentTypeIsNotHourlyStaff" xml:space="preserve">
-    <value>Le type d'emplois n'est pas personnel horaire</value>
+    <value>Le type d'emploi n'est pas personnel horaire</value>
   </data>
   <data name="ThereIsAlreadyADayOff" xml:space="preserve">
     <value>Il y a déjà un jour libre</value>
@@ -4078,7 +4078,7 @@
     <value>Répondu</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accepter:</value>
+    <value>Accepter</value>
   </data>
   <data name="MessageColon" xml:space="preserve">
     <value>Message:</value>
@@ -4090,7 +4090,7 @@
     <value>Statut:</value>
   </data>
   <data name="YouDoNotHavePermissionsToViewTeamSchedules" xml:space="preserve">
-    <value>Vous n'avez pas les droits de regarder les horaires d'équipes</value>
+    <value>Vous n'avez pas les droits de regarder les plannings d'équipes</value>
   </data>
   <data name="FileImport" xml:space="preserve">
     <value>Importation fichier</value>
@@ -5134,10 +5134,10 @@
     <value>Utiliser écart type</value>
   </data>
   <data name="UseTweakedValues" xml:space="preserve">
-    <value>Utiliser valeurs 'tweaked'</value>
+    <value>Utiliser valeurs ajustées</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Catégorie d'horaire et absence journée entière par jour</value>
+    <value>Catégorie d'horaires et absence journée entière par jour</value>
   </data>
   <data name="AuditingTurnOnShort" xml:space="preserve">
     <value>Mettre en route?</value>
@@ -7494,7 +7494,7 @@ Ces options sont activés:
     <value>Protection d'écriture (jours)</value>
   </data>
   <data name="RecentWorkShiftRuleSets" xml:space="preserve">
-    <value>Règles d'horaires récents</value>
+    <value>Règles d'horaires récentes</value>
   </data>
   <data name="NotRemovable" xml:space="preserve">
     <value>Non supprimable</value>
@@ -8156,7 +8156,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Nouvelle demande d'échange d'horaires {0}, approuvez ou refusez dans votre liste de demandes.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>Une demande d'échange d'horaire {0} a été acceptée par une autre personne.</value>
+    <value>Une demande d'échange d'horaires {0} a été acceptée par une autre personne.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>Une demande d'échange d'horaires {0} a été approuvée.</value>
@@ -8165,7 +8165,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Une demande d'échange d'horaires {0} a été refusée.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>Une demande d'échange d'horaire {0} doit être réacceptée suite à un changement de planning.</value>
+    <value>Une demande d'échange d'horaires {0} doit être réacceptée suite à un changement de planning.</value>
   </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
     <value>Ressource externe utilisée</value>
@@ -8690,7 +8690,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Les prévisions rapides vont être démarrées comme tâche d'arrière-plan lorsque cet assistant sera fini, visualisez l'historique des tâches pour le statut.</value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Ne peut pas afficher le planning lorsque le statut de la demande d'échange est nouvelle ou approuvée.</value>
+    <value>Ne peut pas afficher le planning lorsque la demande d'échange est nouvelle ou approuvée.</value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Nouveau nom de modèle</value>
@@ -8791,7 +8791,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Même horaire</value>
   </data>
   <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
-    <value>Merci de sélectionner au moins une des options "Même catégorie horaire", "Même horaire de début" ou "Même Horaire" dans l'optimization par bloc.</value>
+    <value>Merci de sélectionner au moins une des options "Même catégorie horaire", "Même horaire de début" ou "Même Horaire" dans l'optimisation par bloc.</value>
   </data>
   <data name="ConfirmRemoval" xml:space="preserve">
     <value>Confirmer suppression</value>
@@ -9052,7 +9052,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Révoquer</value>
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
-    <value>Pour souscrire à votre planning depuis une app calendrier, utilisez l'URL ci-dessous. Póur des instructions sur comment réaliser ceci avec les apps calendrier les plus communes, voir:</value>
+    <value>Pour souscrire à votre planning depuis une app calendrier, utilisez l'URL ci-dessous. Pour des instructions sur comment réaliser ceci avec les apps calendrier les plus communes, voir:</value>
   </data>
   <data name="SendAgain" xml:space="preserve">
     <value>Ré-envoyer</value>
@@ -9136,7 +9136,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Le bloc par équipe n'est pas en statut légal.</value>
   </data>
   <data name="SelectAtleastOneBlockOption" xml:space="preserve">
-    <value>Merci de sélectionner au moins une des options "Catégorie d'Horaire", "Heure de début" ou "Même Horaire" dans la planification par blocs.</value>
+    <value>Merci de sélectionner au moins une des options "Catégorie d'Horaires", "Heure de début" ou "Même Horaire" dans la planification par blocs.</value>
   </data>
   <data name="KeepTag" xml:space="preserve">
     <value>&lt;Garder&gt;</value>
