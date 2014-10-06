@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.AddScalar("inner_exception_trace", NHibernateUtil.String)
 					.SetDateTime("start_date", DateHelper.GetFirstDateInWeek(date.Date,CultureInfo.CurrentCulture))
 					.SetDateTime("end_date", DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture))
-					.SetBoolean("show_only_errors", false)
+					.SetBoolean("show_only_errors", showOnlyErrors)
 					.SetGuid("business_unit_id", new Guid("00000000-0000-0000-0000-000000000002"))
 					.SetResultTransformer(new AliasToBeanResultTransformer(typeof(EtlJobStatusModel)))
 					.List<EtlJobStatusModel>();
