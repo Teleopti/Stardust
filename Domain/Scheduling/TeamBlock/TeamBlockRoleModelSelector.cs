@@ -43,14 +43,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly firstSelectedDayInBlock, IPerson person, ISchedulingOptions schedulingOptions)
+		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions)
 		{
 			if (teamBlockInfo == null)
 				return null;
 			if (schedulingOptions == null)
 				return null;
 
-			var datePointer = firstSelectedDayInBlock;
 			var restriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo, schedulingOptions);
 			if (restriction == null)
 				return null;
