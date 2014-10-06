@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Microsoft.VisualBasic.Devices;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Filters;
@@ -13,6 +14,7 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 {
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
     public class ApplicationController : Controller
     {
 	    private readonly IServiceBusEventPublisher _publisher;

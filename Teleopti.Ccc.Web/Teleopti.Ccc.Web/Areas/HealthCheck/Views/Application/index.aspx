@@ -1,15 +1,7 @@
 ﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
-<%@ Import Namespace="Teleopti.Ccc.Domain.Security" %>
-<%@ Import Namespace="Teleopti.Ccc.Domain.Security.AuthorizationData" %>
 <%@ Import Namespace="Teleopti.Ccc.Domain.Security.Principal" %>
-<%@ Import Namespace="Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider" %>
 <%
-	// why not simply put in the controller instead? persmission attribute?
 	var currentTeleoptiPrincipal = new CurrentTeleoptiPrincipal();
-	if (!new PermissionProvider(new PrincipalAuthorization(currentTeleoptiPrincipal)).HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
-   {
-	   throw new PermissionException("Not permitted!");
-   }
 	var identity = (ITeleoptiIdentity) currentTeleoptiPrincipal.Current().Identity; %>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -23,8 +15,8 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		
-    <link rel="stylesheet" href="../../Content/bootstrap/Content/bootstrap.css" />
-    <link rel="stylesheet" href="../../Content/bootstrap/Content/bootstrap-theme.css" />	
+    <link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap.css") %>" />
+    <link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap-theme.css") %>" />	
 	
 	  <%--<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>--%>
 	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
@@ -35,7 +27,7 @@
 		}
 	</script>
 	<script src="Areas/HealthCheck/Content/Scripts/require/configuration.js"></script>
-    <script data-main="../../Areas/HealthCheck/Content/Scripts/main" type="text/javascript" src="<%= Url.Content("~/Content/require/require.js") %>"></script>
+    <script data-main="Areas/HealthCheck/Content/Scripts/main" type="text/javascript" src="<%= Url.Content("~/Content/require/require.js") %>"></script>
 </head>
 
 <body >

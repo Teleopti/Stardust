@@ -8,7 +8,7 @@
 		signalr: '../../../../Content/signalr/jquery.signalR-1.2.0.min',
 		buster: '../../../../Content/busterjs/buster-test',
 
-		noext: '../../../../../Content/require/noext',
+		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
 
 		templates: '../../templates',
