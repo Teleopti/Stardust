@@ -823,3 +823,55 @@ Scenario: Should be able to change schedule for multiple business units
 	| Start time | 12:00  |
 	| End time   | 13:00  |
 	| Color      | Yellow |
+
+@OnlyRunIfEnabled('RTA_SeeHistoricalAdherenceForOneAgent_30783')
+@ignore
+Scenario: Should be able to see historical adherence from agent state overview
+	Given there is an activity named 'Phone'
+	And there is an activity named 'Lunch'
+	And there is a site named 'Paris'
+	And there is a team named 'Red' on site 'Paris'
+	And I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team                         | Red         |
+	 | Access to real time adherence overview | True        |
+	And there is a datasouce with id 6
+	And I am located in 'London'
+	And there is an external logon named 'Pierre Baldi' with datasource 6
+	And Pierre Baldi has a person period with
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-10-06   |
+	 | External Logon | Pierre Baldi |
+	And Pierre Baldi has a shift with
+	| Field                    | Value            |
+	| Start time               | 2014-10-06 08:00 |
+	| End time                 | 2014-10-06 10:00 |
+	| Activity                 | Phone            |
+	And there is an alarm with 
+	| Field           | Value        |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Alarm Color     | Red          |
+	| Name            | Not adhering |
+	| Staffing effect | -1           |
+	And there is an alarm with 
+	| Field           | Value    |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Name            | Adhering |
+	| Alarm Color     | Green    |
+	| Staffing effect | 0        |
+	And the current time is '2014-10-06 08:00:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
+	And the current time is '2014-10-06 09:00:00'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	When I view real time adherence view for team 'Red'
+	And the browser time is '2014-10-06 10:00:00'
+	And I click agent state of 'Pierre Baldi'
+	And I wait and click 'historical adherence' in agent menu
+	Then I should see historical adherence for 'Pierre Baldi'
+	| Field     | Value      |
+	| Date      | 2014-10-06 |
+	| Adherence | 50%        |
