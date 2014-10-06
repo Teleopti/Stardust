@@ -1,0 +1,1104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TechnicalInformation" xml:space="preserve">
+    <value>Information technique</value>
+  </data>
+  <data name="InvalidValueErrorMessage" xml:space="preserve">
+    <value>Vous avez entré une valeur non valable dans:</value>
+  </data>
+  <data name="MissingValueErrorMessage" xml:space="preserve">
+    <value>Vous n'avez rien entré dans:</value>
+  </data>
+  <data name="ResAgentName" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
+    <value>Appels décrochés après niveau de service</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
+    <value>Décrochés en niveau de service</value>
+  </data>
+  <data name="ResDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="ResDateColon" xml:space="preserve">
+    <value>Date:</value>
+  </data>
+  <data name="ResDateFromColon" xml:space="preserve">
+    <value>Date à partir de:</value>
+  </data>
+  <data name="ResDateToColon" xml:space="preserve">
+    <value>Date jusque:</value>
+  </data>
+  <data name="ResGrandTotal" xml:space="preserve">
+    <value>Grand Total</value>
+  </data>
+  <data name="ResInterval" xml:space="preserve">
+    <value>Intervalle</value>
+  </data>
+  <data name="ResIntervalColon" xml:space="preserve">
+    <value>Intervalle:</value>
+  </data>
+  <data name="ResScheduledTime" xml:space="preserve">
+    <value>Temps planifié</value>
+  </data>
+  <data name="ResServiceLevelPercent" xml:space="preserve">
+    <value>Niveau de Service (%)</value>
+  </data>
+  <data name="ResSiteNameColon" xml:space="preserve">
+    <value>Site:</value>
+  </data>
+  <data name="ResSkillColon" xml:space="preserve">
+    <value>Compétence:</value>
+  </data>
+  <data name="ResTeamNameColon" xml:space="preserve">
+    <value>Equipe:</value>
+  </data>
+  <data name="ResWorkloadColon" xml:space="preserve">
+    <value>Volume:</value>
+  </data>
+  <data name="ResShowReport" xml:space="preserve">
+    <value>Montrer rapport</value>
+  </data>
+  <data name="ResIntervalFromColon" xml:space="preserve">
+    <value>Intervalle à partir de:</value>
+  </data>
+  <data name="ResIntervalToColon" xml:space="preserve">
+    <value>Intervalle jusque:</value>
+  </data>
+  <data name="ResIntervalType" xml:space="preserve">
+    <value>Type période:</value>
+  </data>
+  <data name="KpiAbsenteeism" xml:space="preserve">
+    <value>Absentéisme (%)</value>
+  </data>
+  <data name="KpiAdherence" xml:space="preserve">
+    <value>Adhérence (%)</value>
+  </data>
+  <data name="KpiAverageAfterCallWork" xml:space="preserve">
+    <value>Moyenne Travail Post-Appel (s)</value>
+  </data>
+  <data name="KpiAverageHandleTime" xml:space="preserve">
+    <value>Durée moyenne de traitement (s)</value>
+  </data>
+  <data name="KpiAverageTalkTime" xml:space="preserve">
+    <value>Durée moyenne de communication (s)</value>
+  </data>
+  <data name="KpiReadiness" xml:space="preserve">
+    <value>Taux de Prêt (%)</value>
+  </data>
+  <data name="ResActual" xml:space="preserve">
+    <value>Réel</value>
+  </data>
+  <data name="ResKpi" xml:space="preserve">
+    <value>ICP</value>
+  </data>
+  <data name="ResPreviousPeriod" xml:space="preserve">
+    <value>Période précédente</value>
+  </data>
+  <data name="ResTarget" xml:space="preserve">
+    <value>Objectif</value>
+  </data>
+  <data name="ResTeamActual" xml:space="preserve">
+    <value>Réel équipe</value>
+  </data>
+  <data name="ResTrend" xml:space="preserve">
+    <value>Tendance</value>
+  </data>
+  <data name="LogInButton" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="LogInName" xml:space="preserve">
+    <value>Identifiant:</value>
+  </data>
+  <data name="LogInNewPasswordLabelText" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="LogInPassRequired" xml:space="preserve">
+    <value>Mot de passe requis. </value>
+  </data>
+  <data name="LogInPassword" xml:space="preserve">
+    <value>Mot de passe:</value>
+  </data>
+  <data name="LogInTitle" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="LogInUserRequired" xml:space="preserve">
+    <value>Identifiant requis. </value>
+  </data>
+  <data name="ShowReportTooltip" xml:space="preserve">
+    <value>Montrer rapport</value>
+  </data>
+  <data name="ResScenarioColon" xml:space="preserve">
+    <value>Scénario:</value>
+  </data>
+  <data name="ResDatePeriodColon" xml:space="preserve">
+    <value>Date période:</value>
+  </data>
+  <data name="ResPeriod" xml:space="preserve">
+    <value>Période</value>
+  </data>
+  <data name="ResSeconds" xml:space="preserve">
+    <value>Secondes</value>
+  </data>
+  <data name="ResTotalsColon" xml:space="preserve">
+    <value>Totaux:</value>
+  </data>
+  <data name="ResPercent" xml:space="preserve">
+    <value>Pourcentage (%):</value>
+  </data>
+  <data name="ResActualACW" xml:space="preserve">
+    <value>TPA Réel</value>
+  </data>
+  <data name="ResActualATT" xml:space="preserve">
+    <value>DMC Réelle</value>
+  </data>
+  <data name="ResACW" xml:space="preserve">
+    <value>Travail Post-Appel (TPA)</value>
+  </data>
+  <data name="ResATT" xml:space="preserve">
+    <value>Durée Moyenne de Communication (DMC)</value>
+  </data>
+  <data name="ResCalculatedCalls" xml:space="preserve">
+    <value>Appels calculés</value>
+  </data>
+  <data name="ResCalls" xml:space="preserve">
+    <value>Appels</value>
+  </data>
+  <data name="ResAgentsReady" xml:space="preserve">
+    <value>Agents en prêt</value>
+  </data>
+  <data name="ResAgentsScheduled" xml:space="preserve">
+    <value>Agents planifiés</value>
+  </data>
+  <data name="ResAgentsColon" xml:space="preserve">
+    <value>Agents:</value>
+  </data>
+  <data name="ResAdherencePercent" xml:space="preserve">
+    <value>Adhérence (%)</value>
+  </data>
+  <data name="ResAgentDate" xml:space="preserve">
+    <value>Agent / Date</value>
+  </data>
+  <data name="ResReadinessPercent" xml:space="preserve">
+    <value>Taux de prêt (%)</value>
+  </data>
+  <data name="ResReadyTime" xml:space="preserve">
+    <value>Temps prêt</value>
+  </data>
+  <data name="ResAdherenceCalculationColon" xml:space="preserve">
+    <value>Calcul d'adhérence: </value>
+  </data>
+  <data name="ResServiceLevel" xml:space="preserve">
+    <value>Niveau de Service</value>
+  </data>
+  <data name="ResServiceLevelCalcColon" xml:space="preserve">
+    <value>Calcul de niveau de service:</value>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>Agent - Adhérence Planning</value>
+  </data>
+  <data name="ResSortByColon" xml:space="preserve">
+    <value>Trier par:</value>
+  </data>
+  <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Temps prêt / Temps prêt planifié (%)</value>
+  </data>
+  <data name="ResScheduledAgentsReady" xml:space="preserve">
+    <value>Agents prêts planifié</value>
+  </data>
+  <data name="ResDeviationMinute" xml:space="preserve">
+    <value>Déviation (m)</value>
+  </data>
+  <data name="ResNext" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="ResPrevious" xml:space="preserve">
+    <value>Précédent</value>
+  </data>
+  <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Adhérence / Intervalle (%)</value>
+  </data>
+  <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
+    <value>Déviation / Intervalle (m)</value>
+  </data>
+  <data name="ResQueueColon" xml:space="preserve">
+    <value>File:</value>
+  </data>
+  <data name="ResScheduledAbsenceTime" xml:space="preserve">
+    <value>Temps absence planifié (hh:mm)</value>
+  </data>
+  <data name="ResScheduledOverTime" xml:space="preserve">
+    <value>Heures supplémentaires planifiées  (hh:mm)</value>
+  </data>
+  <data name="ResAbsenceColon" xml:space="preserve">
+    <value>Absence:</value>
+  </data>
+  <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
+    <value>Catégorie de quarts par Jour</value>
+  </data>
+  <data name="ResShiftCategoryColon" xml:space="preserve">
+    <value>Catégorie de quarts:</value>
+  </data>
+  <data name="ResDayOffColon" xml:space="preserve">
+    <value>Jour jibre:</value>
+  </data>
+  <data name="ResSelections" xml:space="preserve">
+    <value>Sélections</value>
+  </data>
+  <data name="ResReportTeamMetrics" xml:space="preserve">
+    <value>Métriques équipe</value>
+  </data>
+  <data name="ResTeamDate" xml:space="preserve">
+    <value>Equipe / Date</value>
+  </data>
+  <data name="ResDayOfWeekFriday" xml:space="preserve">
+    <value>Vendredi</value>
+  </data>
+  <data name="ResDayOfWeekMonday" xml:space="preserve">
+    <value>Lundi</value>
+  </data>
+  <data name="ResDayOfWeekSaturday" xml:space="preserve">
+    <value>Samedi</value>
+  </data>
+  <data name="ResDayOfWeekSunday" xml:space="preserve">
+    <value>Dimanche</value>
+  </data>
+  <data name="ResDayOfWeekThursday" xml:space="preserve">
+    <value>Jeudi</value>
+  </data>
+  <data name="ResDayOfWeekTuesday" xml:space="preserve">
+    <value>Mardi</value>
+  </data>
+  <data name="ResDayOfWeekWednesday" xml:space="preserve">
+    <value>Mercredi</value>
+  </data>
+  <data name="ResMonthApril" xml:space="preserve">
+    <value>Avril</value>
+  </data>
+  <data name="ResMonthAugust" xml:space="preserve">
+    <value>Août</value>
+  </data>
+  <data name="ResMonthDecember" xml:space="preserve">
+    <value>Decembre</value>
+  </data>
+  <data name="ResMonthFebruary" xml:space="preserve">
+    <value>Fevrier</value>
+  </data>
+  <data name="ResMonthJanuary" xml:space="preserve">
+    <value>Janvier</value>
+  </data>
+  <data name="ResMonthJuly" xml:space="preserve">
+    <value>Juillet</value>
+  </data>
+  <data name="ResMonthJune" xml:space="preserve">
+    <value>Juin</value>
+  </data>
+  <data name="ResMonthMarch" xml:space="preserve">
+    <value>Mars</value>
+  </data>
+  <data name="ResMonthMay" xml:space="preserve">
+    <value>Mai</value>
+  </data>
+  <data name="ResMonthNovember" xml:space="preserve">
+    <value>Novembre</value>
+  </data>
+  <data name="ResMonthOctober" xml:space="preserve">
+    <value>Octobre</value>
+  </data>
+  <data name="ResMonthSeptember" xml:space="preserve">
+    <value>Septembre</value>
+  </data>
+  <data name="ResReportAgentScorecard" xml:space="preserve">
+    <value>Feuille de score agent</value>
+  </data>
+  <data name="ResAbsencePaidTimeH" xml:space="preserve">
+    <value>Temps payé (hh:mm)</value>
+  </data>
+  <data name="ResAbsenceWorkTimeH" xml:space="preserve">
+    <value>Temps travaillé (hh:mm)</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
+    <value>Temps d'absence par agent</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Erreur inconnue</value>
+  </data>
+  <data name="ResAbsence" xml:space="preserve">
+    <value>Absence</value>
+  </data>
+  <data name="ResActivity" xml:space="preserve">
+    <value>Activité</value>
+  </data>
+  <data name="ResAdherence" xml:space="preserve">
+    <value>Adhérence</value>
+  </data>
+  <data name="ResDay" xml:space="preserve">
+    <value>Jour</value>
+  </data>
+  <data name="ResDayOff" xml:space="preserve">
+    <value>Jour libre</value>
+  </data>
+  <data name="ResFirstName" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="ResFriday" xml:space="preserve">
+    <value>Vendredi</value>
+  </data>
+  <data name="ResHalfHour" xml:space="preserve">
+    <value>Demi-Heure</value>
+  </data>
+  <data name="ResHour" xml:space="preserve">
+    <value>Heure</value>
+  </data>
+  <data name="ResLastName" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="ResMonday" xml:space="preserve">
+    <value>Lundi</value>
+  </data>
+  <data name="ResMonth" xml:space="preserve">
+    <value>Mois</value>
+  </data>
+  <data name="ResNotDefined" xml:space="preserve">
+    <value>Non défini</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>Samedi</value>
+  </data>
+  <data name="ResShiftCategory" xml:space="preserve">
+    <value>Catégorie de quarts</value>
+  </data>
+  <data name="ResShiftStartTime" xml:space="preserve">
+    <value>Heure de début de quart</value>
+  </data>
+  <data name="ResSunday" xml:space="preserve">
+    <value>Dimanche</value>
+  </data>
+  <data name="ResThursday" xml:space="preserve">
+    <value>Jeudi</value>
+  </data>
+  <data name="ResTuesday" xml:space="preserve">
+    <value>Mardi</value>
+  </data>
+  <data name="ResWednesday" xml:space="preserve">
+    <value>Mercredi</value>
+  </data>
+  <data name="ResWeek" xml:space="preserve">
+    <value>Semaine</value>
+  </data>
+  <data name="ResWeekday" xml:space="preserve">
+    <value>Jour de la semaine</value>
+  </data>
+  <data name="ResAgentColon" xml:space="preserve">
+    <value>Agent:</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>Pas de feuille de score valable</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>Temps d'absence par absence</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Hiérarchie d'entreprise</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Contrats</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Profil semaine</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Commentaire</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Pourcentages temps partiel</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Banque de quarts</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>Page de groupe:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>Groupe:</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Compétence:</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Heures supplémentaires planifiées par agent</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>Heures supplémentaires:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>Type d'heures supplémentaires:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>Moyenne travail post-appel (s)</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>Durée moyenne de traitement(s)</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>Durée moyenne de communication (s)</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>Métriques file agent</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Temps d'activité par agent</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>Heures supplémentaires (hh:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>Heure de fin de quarts</value>
+  </data>
+  <data name="ResForecastedACW" xml:space="preserve">
+    <value>TPA prévu</value>
+  </data>
+  <data name="ResForecastedATT" xml:space="preserve">
+    <value>DMC prévue</value>
+  </data>
+  <data name="ResForecastedCalls" xml:space="preserve">
+    <value>Appels prévus</value>
+  </data>
+  <data name="ResNumberOf" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
+    <value>Prévisions contre volume réel</value>
+  </data>
+  <data name="ResRelativeDifferencePercent" xml:space="preserve">
+    <value>Différence relative (%)</value>
+  </data>
+  <data name="ResForecastedTimeH" xml:space="preserve">
+    <value>Temps prévu (hh:mm)</value>
+  </data>
+  <data name="ResOfferedCalls" xml:space="preserve">
+    <value>Appels acceptés</value>
+  </data>
+  <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
+    <value>Appels acceptés / Agents en prêt</value>
+  </data>
+  <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
+    <value>Appels acceptés / Agents planifiés en prêt</value>
+  </data>
+  <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
+    <value>Prévisions contre heures planifiées</value>
+  </data>
+  <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
+    <value>Niveau de service et agents en prêt</value>
+  </data>
+  <data name="ResScheduledReadyTime" xml:space="preserve">
+    <value>Temps prêt planifié</value>
+  </data>
+  <data name="ResScheduledvsReady" xml:space="preserve">
+    <value>Agents planifiés contre prêt</value>
+  </data>
+  <data name="ResSmoothnessPercent" xml:space="preserve">
+    <value>Lissé (%)</value>
+  </data>
+  <data name="ResWeekdayAndSkill" xml:space="preserve">
+    <value>Jour de le semaine / Compétence</value>
+  </data>
+  <data name="ResAgentCategoryColon" xml:space="preserve">
+    <value>Catégorie agent:</value>
+  </data>
+  <data name="ResAgentCategoryTypeColon" xml:space="preserve">
+    <value>Type catégorie agent:</value>
+  </data>
+  <data name="ResReportAgentScheduleResult" xml:space="preserve">
+    <value>Métriques agent</value>
+  </data>
+  <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
+    <value>Appels décrochés / Heure prête planifiée</value>
+  </data>
+  <data name="ResReportQueueStatistics" xml:space="preserve">
+    <value>Statistiques file</value>
+  </data>
+  <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
+    <value>Abandonnés en niveau de service</value>
+  </data>
+  <data name="ResAbandonedShortCalls" xml:space="preserve">
+    <value>Appels courts abandonnés </value>
+  </data>
+  <data name="ResHandleTime" xml:space="preserve">
+    <value>Durée de traitement</value>
+  </data>
+  <data name="ResSpeedOfAnswer" xml:space="preserve">
+    <value>Vitesse de réponse</value>
+  </data>
+  <data name="ResTalkTime" xml:space="preserve">
+    <value>Durée de communication</value>
+  </data>
+  <data name="ResTransferredCalls" xml:space="preserve">
+    <value>Appels transférés </value>
+  </data>
+  <data name="ResQueue" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="ResTimeZoneColon" xml:space="preserve">
+    <value>Fuseau horaire:</value>
+  </data>
+  <data name="ResHelp" xml:space="preserve">
+    <value>Aide</value>
+  </data>
+  <data name="ResAcdLoginName" xml:space="preserve">
+    <value>Identifiant ACD</value>
+  </data>
+  <data name="ResReportAgentStatistics" xml:space="preserve">
+    <value>Statistiques agent</value>
+  </data>
+  <data name="ResIdleTime" xml:space="preserve">
+    <value>Temps inactif</value>
+  </data>
+  <data name="ResLoggedInTime" xml:space="preserve">
+    <value>Temps connecté</value>
+  </data>
+  <data name="ResNotReadyTime" xml:space="preserve">
+    <value>Temps non prêt</value>
+  </data>
+  <data name="ResDateInterval" xml:space="preserve">
+    <value>Date / Intervalle </value>
+  </data>
+  <data name="ResScheduledTimeH" xml:space="preserve">
+    <value>Temps planifié (hh:mm)</value>
+  </data>
+  <data name="ResStandardDeviation" xml:space="preserve">
+    <value>Ecart type</value>
+  </data>
+  <data name="ResWeekColon" xml:space="preserve">
+    <value>Semaine:</value>
+  </data>
+  <data name="ResActivityColon" xml:space="preserve">
+    <value>Activité: </value>
+  </data>
+  <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
+    <value>Temps planifié par activité </value>
+  </data>
+  <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
+    <value>Appels décrochés / Heure prête</value>
+  </data>
+  <data name="ResContractAbsenceTimeH" xml:space="preserve">
+    <value>Temps d'absence contrat (hh:mm)</value>
+  </data>
+  <data name="ResContractTimeH" xml:space="preserve">
+    <value>Temps contrat  (hh:mm)</value>
+  </data>
+  <data name="ResPaidTimeH" xml:space="preserve">
+    <value>Temps payé  (hh:mm)</value>
+  </data>
+  <data name="ResWorkTimeH" xml:space="preserve">
+    <value>Temps travaillé (hh:mm)</value>
+  </data>
+  <data name="ResPreferencesAccepted" xml:space="preserve">
+    <value>Préférences acceptées</value>
+  </data>
+  <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
+    <value>Préférences acceptées (%)</value>
+  </data>
+  <data name="ResPreferencesDeclined" xml:space="preserve">
+    <value>Préférences refusées</value>
+  </data>
+  <data name="ResPreferencesRequested" xml:space="preserve">
+    <value>Préférences rmises</value>
+  </data>
+  <data name="ResPreferenceCategory" xml:space="preserve">
+    <value>Catégorie Préférence</value>
+  </data>
+  <data name="ResReportPreferencesPerDay" xml:space="preserve">
+    <value>Préférences par jour</value>
+  </data>
+  <data name="ResReportPreferencesPerAgent" xml:space="preserve">
+    <value>Préférences par agent</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
+    <value>Agents planifiés par Intervalle et equipe</value>
+  </data>
+  <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
+    <value>Durée traitement / Temps payé (%)</value>
+  </data>
+  <data name="ResAbsenceDayCount" xml:space="preserve">
+    <value>Journée entière</value>
+  </data>
+  <data name="ResAbsencePartDayCount" xml:space="preserve">
+    <value>Partie de la journée</value>
+  </data>
+  <data name="PossibleSolution" xml:space="preserve">
+    <value>Solution possible </value>
+  </data>
+  <data name="ResAll" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
+    <value>Appels décrochés dans le seuil de niveau de service  / Appels décrochés </value>
+  </data>
+  <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>Appels décrochés et abandonnés dans le seuil de Niveau de service / Appels acceptés</value>
+  </data>
+  <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
+    <value>Appels décrochés  dans le seuil de niveau de service / Appels acceptés</value>
+  </data>
+  <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
+    <value>Temps prêt contre temps de planification contrat</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
+    <value>Temps prêt contre temps prêt planifié</value>
+  </data>
+  <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
+    <value>Temps prêt contre temps planifié (incluant période avant et après début de quart)</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Catégorie de quarts et absence journée entière par jour </value>
+  </data>
+  <data name="ResAbandonedCalls" xml:space="preserve">
+    <value>Appels abandonnés</value>
+  </data>
+  <data name="ResAbandonRate" xml:space="preserve">
+    <value>Taux d'abandon</value>
+  </data>
+  <data name="ResAnsweredCalls" xml:space="preserve">
+    <value>Appels décrochés</value>
+  </data>
+  <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
+    <value>Appels décrochés par heure de téléphone planifiée</value>
+  </data>
+  <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
+    <value>Taux d'abandon excl appels courts (%)</value>
+  </data>
+  <data name="ResAbandonRatePercent" xml:space="preserve">
+    <value>Taux d'abandon (%)</value>
+  </data>
+  <data name="ResAnswerRatePercent" xml:space="preserve">
+    <value>Taux décrochés (%)</value>
+  </data>
+  <data name="ResOccupancyPercent" xml:space="preserve">
+    <value>Taux d'activité (%)</value>
+  </data>
+  <data name="ResOfferedCallsPerAgent" xml:space="preserve">
+    <value>Appels acceptés / Agent</value>
+  </data>
+  <data name="LogInError" xml:space="preserve">
+    <value>Votre tentative de connexion n'a pas réussi. Essayez à nouveau svp.</value>
+  </data>
+  <data name="LogInRemember" xml:space="preserve">
+    <value>Se souvenir la prochaine fois</value>
+  </data>
+  <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
+    <value>Temps d'abandon moyen (s)</value>
+  </data>
+  <data name="ResTimeToAbandon" xml:space="preserve">
+    <value>Temps d'abandon</value>
+  </data>
+  <data name="ResTimeToAbandonSec" xml:space="preserve">
+    <value>Durée d'abandon (s)</value>
+  </data>
+  <data name="ResReportAgentQueueStatistics" xml:space="preserve">
+    <value>Statistiques file agent </value>
+  </data>
+  <data name="ResAdminTime" xml:space="preserve">
+    <value>Temps admin</value>
+  </data>
+  <data name="ResDirectIncomingCalls" xml:space="preserve">
+    <value>Appels entrants directs</value>
+  </data>
+  <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
+    <value>Durée de communication Appels entrants directs </value>
+  </data>
+  <data name="ResDirectOutboundCalls" xml:space="preserve">
+    <value>Appels sortants directs</value>
+  </data>
+  <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
+    <value>Durée de communication appels sortants directs</value>
+  </data>
+  <data name="ResPermissionDenied" xml:space="preserve">
+    <value>Permission refusée</value>
+  </data>
+  <data name="ResOverflowInCalls" xml:space="preserve">
+    <value>Débordement appels entrants</value>
+  </data>
+  <data name="ResOverflowOutCalls" xml:space="preserve">
+    <value>Débordement appels sortants</value>
+  </data>
+  <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
+    <value>Temps planifié par agent</value>
+  </data>
+  <data name="ResScheduledHoursH" xml:space="preserve">
+    <value>Heures planifiées (hh:mm)</value>
+  </data>
+  <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
+    <value>Différence relative incl. Réduction (%)</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
+    <value>Catégorie de quarts et absence journée entière par agent</value>
+  </data>
+  <data name="ResReportImprove" xml:space="preserve">
+    <value>AMELIORE</value>
+  </data>
+  <data name="AuthenticationFailedForUser" xml:space="preserve">
+    <value>Authentication échouée pour utilisateur</value>
+  </data>
+  <data name="AuthenticationMixedFailure" xml:space="preserve">
+    <value>Quand vous utilisez l'authentification Windows sur l'application web, l'authentification application n'est pas valable du côté client.</value>
+  </data>
+  <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
+    <value>Utilisez le code d'accès application svp.</value>
+  </data>
+  <data name="PossibleSolution1" xml:space="preserve">
+    <value>Vérifiez que les permissions sont synchronisées correctement avec le service ETL.</value>
+  </data>
+  <data name="PossibleSolution2" xml:space="preserve">
+    <value>Soit fermez le client et logguez in à nouveau en utilisant l'authentification Windows ou bien un administrateur de système peut modifier l'authentification web vers Forms. </value>
+  </data>
+  <data name="ResExtendedPreference" xml:space="preserve">
+    <value>Préférence étendue</value>
+  </data>
+  <data name="CommonCollapse" xml:space="preserve">
+    <value>Réduire</value>
+  </data>
+  <data name="CommonExpand" xml:space="preserve">
+    <value>Développer</value>
+  </data>
+  <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
+    <value>Temps de réponse moyen (s)</value>
+  </data>
+  <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
+    <value>Retard le plus long dans la file, abandonné (s)</value>
+  </data>
+  <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
+    <value>Délai le plus long dans la file, décroché (s)</value>
+  </data>
+  <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
+    <value>Abandon et temps de réponse</value>
+  </data>
+  <data name="ResLongestTimeToAbandon" xml:space="preserve">
+    <value>Délai le plus long dans la file, abandonné</value>
+  </data>
+  <data name="ResLongestTimeToAnswer" xml:space="preserve">
+    <value>Délai le plus long dans la file, répondu</value>
+  </data>
+  <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
+    <value>Temps prévu incl. réduction (hh:mm)</value>
+  </data>
+  <data name="ResForecastedHoursH" xml:space="preserve">
+    <value>Heures prévues  (hh:mm)</value>
+  </data>
+  <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
+    <value>Heures prévues (réduction) (hh:mm)</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Absence</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Echange de quarts</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Texte</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Demandes par agent</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Approuvé</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Refusé</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Type de demande:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Statut:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>Jours demandés</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Demandes</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Date d'envoi</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Période demandée</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Rediriger</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Session Expirée</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Votre session à expiré à cause d'une période d'incativité étendue. Vous allez bientôt être redirigé vers la page de log on.</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Adhérence par agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Adhérence par jour</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Agents planifiés par activité</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totaux</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (quarts débutant):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date de (quarts débutant):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date à (quarts débutant):</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>La connection à la base de données a expiré, essayé de limiter vos conditions de recherche.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Exaucées</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Exaucées (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Non exaucées</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Disponibilité par agent</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Jours disponibles</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Temps disponible</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Jours planifiés</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utilisation</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Page courante</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Trouver</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Trouver suivant</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Trouver texte dans le rapport</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Première page</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Numéro de page invalide</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Dernière page</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Page suivante</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Pas d'autres correspondances trouvées</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Paramètres de page</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Largeur de page</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Page précédente</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Imprimer disposition</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Imprimer</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Rafraîchir</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Stopper le rendu</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Texte non-trouvé</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total pages</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Page entière</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Seulement compétences actives</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Compétences agent</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Compétences actives seulement:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Temps en statut par agent</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Groupes de statuts:</value>
+  </data>
+</root>
