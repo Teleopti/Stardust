@@ -7,6 +7,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -57,7 +58,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var dateList = new JobMultipleDate(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture)
+			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture, new EtlToggleManager())
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -82,7 +83,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//run nightly
 			jobParameters = null;
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
+			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -120,7 +121,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var dateList = new JobMultipleDate(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -145,7 +146,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//run nightly
 			jobParameters = null;
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
+			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
