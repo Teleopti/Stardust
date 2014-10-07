@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using Teleopti.Ccc.Sdk.Common.Contracts;
-using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	public interface INotificationSenderFactory
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-		INotificationSender GetSender();
-	}
-
 	public class NotificationSenderFactory : INotificationSenderFactory
 	{
 		private readonly INotificationConfigReader _notificationConfigReader;

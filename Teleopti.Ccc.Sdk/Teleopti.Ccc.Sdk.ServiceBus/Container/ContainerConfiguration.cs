@@ -4,6 +4,7 @@ using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
@@ -53,10 +54,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<EventHandlersModule>();
 			
 			if (_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
-				build.RegisterType<NotificationHelper>().As<INotify>();
+				build.RegisterType<NotificationLicenseCheck>().As<INotify>();
 			else
 				build.RegisterType<DoNotifySmsLink>().As<INotify>();
 
+			build.RegisterType<EmailNotifier>().As<IEmailNotifier>();
+			build.RegisterType<EmailConfiguration>().As<IEmailConfiguration>();
+			build.RegisterModule<EmailModule>();
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
 

@@ -172,9 +172,12 @@
     <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
-    <Compile Include="Notification\IEmailSender.cs" />
+    <Compile Include="Notification\EmailConfiguration.cs" />
+    <Compile Include="Notification\EmailNotifier.cs" />
+    <Compile Include="Notification\IEmailNotifier.cs" />
     <Compile Include="Notification\INotificationChecker.cs" />
-    <Compile Include="Notification\NotificationHelper.cs" />
+    <Compile Include="Notification\INotificationSenderFactory.cs" />
+    <Compile Include="Notification\NotificationLicenseCheck.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />

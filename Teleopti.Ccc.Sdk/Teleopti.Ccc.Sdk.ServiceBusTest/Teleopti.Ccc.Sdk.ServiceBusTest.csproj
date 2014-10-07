@@ -163,7 +163,8 @@
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
-    <Compile Include="Notification\NotificationHelperTest.cs" />
+    <Compile Include="Notification\EmailNotifierTest.cs" />
+    <Compile Include="Notification\NotificationLicenseCheckTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />

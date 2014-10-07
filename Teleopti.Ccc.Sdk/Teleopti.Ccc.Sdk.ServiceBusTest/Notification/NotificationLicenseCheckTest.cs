@@ -16,14 +16,14 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
 	[TestFixture]
-	public class NotificationHelperTest
+	public class NotificationLicenseCheckTest
 	{
-		private NotificationHelper _target;
+		private NotificationLicenseCheck _target;
 		private ISignificantChangeChecker _significantChangeChecker;
 		private INotificationChecker _notificationChecker;
 		private INotificationSenderFactory _notificationSenderFactory;
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private IEmailSender _emailSender;
+		private IEmailNotifier _emailNotifier;
 
 		[SetUp]
 		public void Setup()
@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_notificationChecker = MockRepository.GenerateMock<INotificationChecker>();
 			_notificationSenderFactory = MockRepository.GenerateMock<INotificationSenderFactory>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			_emailSender = MockRepository.GenerateMock<IEmailSender>();
+			_emailNotifier = MockRepository.GenerateMock<IEmailNotifier>();
 
 			_currentUnitOfWorkFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
 
-			_target = new NotificationHelper(_significantChangeChecker, _notificationChecker, _notificationSenderFactory, _currentUnitOfWorkFactory, _emailSender);
+			_target = new NotificationLicenseCheck(_significantChangeChecker, _notificationChecker, _notificationSenderFactory, _currentUnitOfWorkFactory, _emailNotifier);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 																			  LicenseType.Agent, new Percent(.10), null, null));
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
 			_target.Notify(readModel, date, person);
 
-			_emailSender.AssertWasCalled(x => x.Send(person.Email, message, "sender"));
+			_emailNotifier.AssertWasCalled(x => x.Notify(person.Email, "sender", message));
 		}
 
 		[Test]
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 
 			_target.Notify(readModel, date, person);
 
-			_emailSender.AssertWasNotCalled(x => x.Send(Arg<string>.Is.Anything, Arg<NotificationMessage>.Is.Anything, Arg<string>.Is.Anything));
+			_emailNotifier.AssertWasNotCalled(x => x.Notify(Arg<string>.Is.Anything, Arg<string>.Is.Anything, Arg<NotificationMessage>.Is.Anything));
 		}
 	}
 }

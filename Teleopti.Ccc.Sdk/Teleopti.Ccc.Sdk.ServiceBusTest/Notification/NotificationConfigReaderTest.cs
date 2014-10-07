@@ -137,6 +137,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		{
 			Assert.That(_target.SkipSearch, Is.False);
 		}
+
+		[Test]
+		public void ShouldHaveASmtpHost()
+		{
+			Assert.That(_target.SmtpHost, Is.EqualTo("smtp.domain.com"));
+		}
+
+		[Test]
+		public void ShouldHaveASmtpPort()
+		{
+			Assert.That(_target.SmtpPort, Is.EqualTo(81));
+		}
+
+		[Test]
+		public void ShouldHaveASmtpPortSsl()
+		{
+			Assert.That(_target.SmtpPortSsl, Is.EqualTo(82));
+		}
+
+		[Test]
+		public void ShouldHaveASmtpIsSslRequired()
+		{
+			Assert.That(_target.SmtpIsSslRequired, Is.EqualTo(false));
+		}
+
+		[Test]
+		public void ShouldHaveASmtpUser()
+		{
+			Assert.That(_target.SmtpUser, Is.EqualTo("user@domain.com"));
+		}
+
+		[Test]
+		public void ShouldHaveASmtpPassword()
+		{
+			Assert.That(_target.SmtpPassword, Is.EqualTo("secret"));
+		}
 	}
 
 	

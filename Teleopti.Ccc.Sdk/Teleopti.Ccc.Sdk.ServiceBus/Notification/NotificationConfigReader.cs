@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
@@ -205,7 +206,82 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			}
 		}
 
-	    public virtual INotificationClient CreateClient()
+		public string SmtpHost
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				return _configXml.GetElementsByTagName("SmtpHost").Count > 0 
+					? _configXml.GetElementsByTagName("SmtpHost")[0].InnerText 
+					: "";
+			}
+		}
+		public int SmtpPort
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return -1;
+				if (_configXml.GetElementsByTagName("SmtpPort").Count > 0)
+				{
+					int port;
+					if (int.TryParse(_configXml.GetElementsByTagName("SmtpPort")[0].InnerText, out port))
+						return port;
+				}
+				return -1;
+			}
+		}
+		public int SmtpPortSsl
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return -1;
+				if (_configXml.GetElementsByTagName("SmtpPortSsl").Count > 0)
+				{
+					int port;
+					if (int.TryParse(_configXml.GetElementsByTagName("SmtpPortSsl")[0].InnerText, out port))
+						return port;
+				}
+				return -1;
+			}
+		}
+		public bool SmtpIsSslRequired
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return true;
+				if (_configXml.GetElementsByTagName("SmtpIsSslRequired").Count > 0)
+					return Convert.ToBoolean(_configXml.GetElementsByTagName("SmtpIsSslRequired")[0].InnerText);
+				return false;
+			}
+		}
+		public string SmtpUser
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				return _configXml.GetElementsByTagName("SmtpUser").Count > 0
+					? _configXml.GetElementsByTagName("SmtpUser")[0].InnerText
+					: "";
+			}
+		}
+		public string SmtpPassword
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				return _configXml.GetElementsByTagName("SmtpPassword").Count > 0
+					? _configXml.GetElementsByTagName("SmtpPassword")[0].InnerText
+					: "";
+			}
+		}
+
+		public virtual INotificationClient CreateClient()
 	    {
 	        return new NotificationWebClient(Url);
 	    }

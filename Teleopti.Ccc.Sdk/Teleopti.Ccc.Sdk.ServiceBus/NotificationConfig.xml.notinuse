@@ -24,5 +24,11 @@
 		<unicode>{5}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
+	<SmtpHost>smtp.domain.com</SmtpHost>
+	<SmtpPort>81</SmtpPort>
+	<SmtpPortSsl>82</SmtpPortSsl>
+	<SmtpIsSslRequired>false</SmtpIsSslRequired>
+	<SmtpUser>user@domain.com</SmtpUser>
+	<SmtpPassword>secret</SmtpPassword>
 </Config>
 

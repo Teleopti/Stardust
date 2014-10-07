@@ -11,28 +11,28 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	public class NotificationHelper : INotify
+	public class NotificationLicenseCheck : INotify
 	{
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly INotificationChecker _notificationChecker;
 		private readonly INotificationSenderFactory _notificationSenderFactory;
-	    private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly IEmailSender _emailSender;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IEmailNotifier _emailNotifier;
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
-		public NotificationHelper(ISignificantChangeChecker significantChangeChecker, INotificationChecker notificationChecker, INotificationSenderFactory notificationSenderFactory, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IEmailSender emailSender)
+		public NotificationLicenseCheck(ISignificantChangeChecker significantChangeChecker, INotificationChecker notificationChecker, INotificationSenderFactory notificationSenderFactory, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IEmailNotifier emailNotifier)
 		{
 			_significantChangeChecker = significantChangeChecker;
 			_notificationChecker = notificationChecker;
 			_notificationSenderFactory = notificationSenderFactory;
-		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
-			_emailSender = emailSender;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_emailNotifier = emailNotifier;
 		}
 
 		public void Notify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
-            var dataSource = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name;
+			var dataSource = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name;
 			if (!DefinedLicenseDataFactory.HasLicense(dataSource))
 			{
 				if (Logger.IsInfoEnabled)
@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			}
 
 			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-		    if (
-				DefinedLicenseDataFactory.GetLicenseActivator(dataSource).EnabledLicenseOptionPaths.Contains(
-					DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
+			if (
+			DefinedLicenseDataFactory.GetLicenseActivator(dataSource).EnabledLicenseOptionPaths.Contains(
+				DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 			{
 				Logger.Info("Found SMSLink license.");
 				var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
-				if (!string.IsNullOrEmpty(smsMessages.Subject))
+				if (hasVisibleSignificantChange(smsMessages))
 				{
 					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " on " + person.Name);
 
@@ -67,6 +67,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			}
 			else
 				Logger.Info("No SMSLink license found.");
+		}
+
+		private static bool hasVisibleSignificantChange(INotificationMessage smsMessages)
+		{
+			return !string.IsNullOrEmpty(smsMessages.Subject);
 		}
 
 		private void notifyBySms(IPerson person, INotificationMessage smsMessages)
@@ -113,14 +118,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		{
 			if (person.Email.IsNullOrEmpty())
 			{
-				Logger.Info("Did not find an email address on " + person.Name);
+				Logger.Info("Did not find an email recipient address on " + person.Name);
 			}
 			else
 			{
 				var sender = _notificationChecker.EmailSender;
-				Logger.Info("Ready to send email to " + person.Email + "from " + sender);
-				_emailSender.Send(person.Email, smsMessages, sender);
+				Logger.Info("Preparing to send email to " + person.Email + "from " + sender);
+				_emailNotifier.Notify(person.Email, sender, smsMessages);
 			}
+		}
+
+		public struct NotificationRecipient
+		{
+			public string Email;
+			public string MobileNumber;
+			public string EmailSender;
 		}
 	}
 }
