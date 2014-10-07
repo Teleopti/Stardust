@@ -11,12 +11,10 @@ Description:	Implements all cross database views based on sys_crossDatabaseView_
 This procedure is used in order handle customers with custom names on the teleopti databases.
 
 sys_crossDatabaseView_load
-SELECT * FROM sys_crossDatabaseView
+SELECT * FROM mart.sys_crossDatabaseView
 */
 
 -- =============================================
-
-
 CREATE PROCEDURE mart.sys_crossDatabaseView_load
 			@debug bit = 0
 AS
@@ -35,13 +33,29 @@ SET @view			= ''
 SET @definition		= ''
 SET @target			= ''
 
+DECLARE @crossDatabaseView TABLE (view_name varchar(100) not null, view_definition varchar(4000) not null,target_id int)
+INSERT INTO @crossDatabaseView
+SELECT 'v_log_object','SELECT * FROM [$$$target$$$].dbo.log_object',4
+UNION ALL
+SELECT 'v_agent_logg','SELECT * FROM [$$$target$$$].dbo.agent_logg WITH (NOLOCK)',4
+UNION ALL
+SELECT 'v_agent_info','SELECT * FROM [$$$target$$$].dbo.agent_info',4
+UNION ALL
+SELECT 'v_queues','SELECT * FROM [$$$target$$$].dbo.queues',4
+UNION ALL
+SELECT 'v_queue_logg','SELECT * FROM [$$$target$$$].dbo.queue_logg  WITH (NOLOCK)',4
+UNION ALL
+SELECT 'v_ccc_system_info','SELECT * FROM [$$$target$$$].dbo.ccc_system_info',4
+UNION ALL
+SELECT 'v_log_object_detail','SELECT * FROM [$$$target$$$].dbo.log_object_detail',4
+
 --create cursor 
 DECLARE ViewCursor CURSOR FOR
 	SELECT
 		ct.target_customName as target,
 		cv.view_name,
 		cv.[View_Definition]
-	FROM mart.sys_crossDatabaseView cv
+	FROM @crossDatabaseView cv
 	INNER JOIN mart.sys_crossDatabaseView_target ct
 		ON cv.target_id = ct.target_id
 	WHERE ct.confirmed = 1
@@ -83,3 +97,14 @@ CLOSE ViewCursor
 DEALLOCATE ViewCursor
 
 RETURN(0)
+GO
+
+--drop obsolete table and SP, move  to trunk when ready
+--IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_crossdatabaseview]') AND type in (N'U'))
+--DROP TABLE [mart].[sys_crossdatabaseview]
+--GO
+
+--IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_crossDatabaseView_Stubs]') AND type in (N'P', N'PC'))
+--DROP PROCEDURE [mart].[sys_crossDatabaseView_Stubs]
+--GO
+
