@@ -41,7 +41,10 @@
 				<h1>Health Check</h1>
 				<h3>Services</h3>
 				<ul class="list-group services" data-bind="foreach: services">
-					<li class="list-group-item" data-bind="text: DisplayName, css: { 'list-group-item-success': Status == 4,'list-group-item-danger': Status == 1 }"></li>
+					<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4,'list-group-item-danger': Status == 1 }">
+						<span data-bind="text: DisplayName"></span>
+						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
+					</li>
 				</ul>
 				<h3>ETL log objects</h3>
 				<ul class="list-group etl-log-objects" data-bind="foreach: logObjects">
@@ -73,7 +76,10 @@
 				<ul class="list-group">
 					<li class="list-group-item">Delay (ms): <span data-bind="text: MillisecondsDifference"></span></li>
 					<!-- ko foreach: Services -->
-					<li class="list-group-item" data-bind="text: Name, css: { 'list-group-item-success': Status == 4, 'list-group-item-danger': Status == 1 }"></li>
+					<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4, 'list-group-item-danger': Status == 1 }">
+						<span data-bind="text: Name"></span>
+						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
+					</li>
 					<!-- /ko -->
 					<li class="list-group-item">Physical memory installed: <span data-bind="text: (TotalPhysicalMemory/(1024.0*1024*1024)).toFixed(2)"></span> GB</li>
 					<li class="list-group-item">Physical memory consumed by bus: <span data-bind="text: (BusMemoryConsumption / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
@@ -82,7 +88,10 @@
 				<!-- /ko -->
 				<h3>Configured URL:s</h3>
 				<ul class="list-group" data-bind="foreach: configuredUrls">
-					<li class="list-group-item configured-url" data-bind="text: Url + (Message ? ' (' + Message + ')' : ''), css: { 'list-group-item-success': Reachable == 'True', 'list-group-item-danger': Reachable == 'False' }"></li>
+					<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">
+						<span data-bind="text: Url + (Message ? ' (' + Message + ')' : '')"></span>
+						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Reachable"></i>
+					</li>
 				</ul>
 			</div>
 		</div>
