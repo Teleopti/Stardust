@@ -192,8 +192,12 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 				return;
 	        GroupBoxSchedule.IsEnabled = false;
 	        GroupBoxForecast.IsEnabled = false;
-			  _currentJob.StepList.First().JobParameters.EtlToggleManager.IsEnabled()
-		}
+	        if (_currentJob.StepList.First().JobParameters.EtlToggleManager.IsEnabled("PBI30787OnlyLatestQueueAgentStatistics"))
+	        {
+		        GroupBoxAgentStats.IsEnabled = false;
+		        GroupBoxQueueStats.IsEnabled = false;
+	        }
+        }
 
     	private TimeZoneInfo DefaultTimeZone
     	{

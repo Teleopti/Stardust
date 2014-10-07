@@ -781,7 +781,25 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			return new LastChangedReadModel();
 	    }
 
-	    public DateTime GetMaxDateInDimDate()
+		public int FillIntradayFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone,
+			IBusinessUnit businessUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int FillIntradayFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone,
+			IBusinessUnit businessUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int FillIntradayFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone,
+			IBusinessUnit businessUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);
         }

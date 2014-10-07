@@ -77,10 +77,24 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactScheduleDayCountJobStep(jobParameters,true));
 			Add(new FactSchedulePreferenceJobStep(jobParameters, true));
 			Add(new FactAvailabilityJobStep(jobParameters, true));
-			Add(new FactQueueJobStep(jobParameters));                   // BU independent
-			Add(new FactAgentJobStep(jobParameters));                   // BU independent
+			
+			var agentQueueIntradayEnabled = jobParameters.EtlToggleManager.IsEnabled("PBI30787OnlyLatestQueueAgentStatistics");
+			if(agentQueueIntradayEnabled)
+				Add(new IntradayFactQueueJobStep(jobParameters)); 
+			else 
+				Add(new FactQueueJobStep(jobParameters));                   // BU independent
+			if (agentQueueIntradayEnabled)
+				Add(new IntradayFactAgentJobStep(jobParameters));                   // BU independent
+			else 
+				Add(new FactAgentJobStep(jobParameters));                   // BU independent
+			
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
-			Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
+			
+			if (agentQueueIntradayEnabled)
+				Add(new IntradayFactAgentQueueJobStep(jobParameters));              // BU independent
+			else 
+				Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
+			
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactAgentStateJobStep(jobParameters));
 			Add(new FactForecastWorkloadJobStep(jobParameters, true));

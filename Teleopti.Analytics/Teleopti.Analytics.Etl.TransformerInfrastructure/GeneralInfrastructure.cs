@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		private const string CultureKey = "Culture";
 		private const string IntervalLengthMinutesKey = "IntervalLengthMinutes";
 		private const string TimeZoneCodeKey = "TimeZoneCode";
-		
+
 		private readonly string _dataMartConnectionString;
 		readonly ILog _logger = LogManager.GetLogger(typeof(GeneralInfrastructure));
 
@@ -41,11 +41,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				{
 					IDataSourceEtl dataSourceEtl =
 						new DataSourceEtl(Convert.ToInt32(row["datasource_id"], CultureInfo.InvariantCulture),
-									   row["datasource_name"].ToString(),
-									   Convert.ToInt32(row["time_zone_id"], CultureInfo.InvariantCulture),
-									   row["time_zone_code"].ToString(),
-									   Convert.ToInt32(row["interval_length"], CultureInfo.InvariantCulture),
-									   (bool)row["inactive"]);
+										row["datasource_name"].ToString(),
+										Convert.ToInt32(row["time_zone_id"], CultureInfo.InvariantCulture),
+										row["time_zone_code"].ToString(),
+										Convert.ToInt32(row["interval_length"], CultureInfo.InvariantCulture),
+										(bool)row["inactive"]);
 					dataSourceList.Add(dataSourceEtl);
 				}
 			}
@@ -149,6 +149,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					case TimeZoneCodeKey:
 						timeZone = value;
 						break;
+					case "PBI30787OnlyLatestQueueAgentStatistics":
+						etlToggleManager.AddToggle(key, bool.Parse(value));
+						break;
 					default:
 						_logger.InfoFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
 						break;
@@ -160,7 +163,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)
 		{
-			var parameterList = new List<SqlParameter> {new SqlParameter("key", CultureKey), new SqlParameter("value", configuration.CultureId)};
+			var parameterList = new List<SqlParameter> { new SqlParameter("key", CultureKey), new SqlParameter("value", configuration.CultureId) };
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_configuration_save", parameterList, _dataMartConnectionString);
 
 			parameterList = new List<SqlParameter> { new SqlParameter("key", IntervalLengthMinutesKey), new SqlParameter("value", configuration.IntervalLength) };
@@ -194,10 +197,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		private DataSet getDatasources(bool getValidDatasources, bool includeOptionAll)
 		{
 			var parameterList = new List<SqlParameter>
-                                    {
-                                        new SqlParameter("get_valid_datasource", getValidDatasources),
-                                        new SqlParameter("include_option_all", includeOptionAll)
-                                    };
+												{
+													 new SqlParameter("get_valid_datasource", getValidDatasources),
+													 new SqlParameter("include_option_all", includeOptionAll)
+												};
 
 			return HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_get_datasources", parameterList,
 												  _dataMartConnectionString);
