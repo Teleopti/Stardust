@@ -43,6 +43,13 @@
 				<ul class="list-group services" data-bind="foreach: services">
 					<li class="list-group-item" data-bind="text: DisplayName, css: { 'list-group-item-success': Status == 4,'list-group-item-danger': Status == 1 }"></li>
 				</ul>
+				<h3>ETL log objects</h3>
+				<ul class="list-group etl-log-objects" data-bind="foreach: logObjects">
+					<li class="list-group-item">
+						<h4 class="list-group-item-heading" data-bind="text: log_object_id + ' - ' + log_object_name + ' > ' + detail_desc"></h4>
+						<p class="list-group-item-text" data-bind="text: 'Procedure name: ' + proc_name + ', Last Update: ' + new Date(parseInt(last_update.substr(6))).toISOString()"></p>
+					</li>
+				</ul>
 				<h3>ETL history</h3>
 				<ul class="list-group etl-history" data-bind="foreach: etlJobHistory">
 					<li class="list-group-item" data-bind="css: { 'list-group-item-danger': exception_msg }">

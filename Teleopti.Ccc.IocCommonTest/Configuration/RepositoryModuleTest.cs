@@ -63,6 +63,24 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
+		public void ShouldResolveEtlLogObjectRepository()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IEtlLogObjectRepository>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveEtlJobStatusRepository()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IEtlJobStatusRepository>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
 		public void RepositoriesWithIncorrectCtorAreNotWired()
 		{
 			/*

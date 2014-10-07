@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -18,5 +19,4 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(model,Is.Not.Null);
 		}
 	}
-
 }

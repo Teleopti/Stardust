@@ -19,11 +19,13 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
     {
 	    private readonly IServiceBusEventPublisher _publisher;
 	    private readonly IEtlJobStatusRepository _etlJobStatusRepository;
+		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
 
-	    public ApplicationController(IServiceBusEventPublisher publisher, IEtlJobStatusRepository etlJobStatusRepository)
+		public ApplicationController(IServiceBusEventPublisher publisher, IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository)
 	    {
 		    _publisher = publisher;
 		    _etlJobStatusRepository = etlJobStatusRepository;
+		    _etlLogObjectRepository = etlLogObjectRepository;
 	    }
 
 	    public ViewResult Index()
@@ -45,6 +47,13 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		    var etlJobStatusModels = _etlJobStatusRepository.Load(date.GetValueOrDefault(DateOnly.Today), showOnlyErrors);
 		    return Json(etlJobStatusModels, JsonRequestBehavior.AllowGet);
 	    }
+
+		[HttpGet, UnitOfWorkAction]
+		public ActionResult LoadEtlLogObject()
+		{
+			var etlLogObjectModels = _etlLogObjectRepository.Load();
+			return Json(etlLogObjectModels, JsonRequestBehavior.AllowGet);
+		}
 
 	    [HttpGet]
 	    public ActionResult ServerDetails()

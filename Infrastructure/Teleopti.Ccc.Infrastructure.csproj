@@ -168,8 +168,11 @@
     <Compile Include="Repositories\BusinessUnitFilterOverrider.cs" />
     <Compile Include="Repositories\EtlJobStatusModel.cs" />
     <Compile Include="Repositories\EtlJobStatusRepository.cs" />
+    <Compile Include="Repositories\EtlLogObjectRepository.cs" />
     <Compile Include="Repositories\IEtlJobStatusRepository.cs" />
+    <Compile Include="Repositories\IEtlLogObjectRepository.cs" />
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
+    <Compile Include="Repositories\LogObjectDetail.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />

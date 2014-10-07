@@ -33,5 +33,9 @@ define([
 		vm.configuredUrls(data.UrlsReachable.UrlResults);
 		vm.services(data.RunningServices.Services);
 	});
+
+	http.get('HealthCheck/Application/LoadEtlLogObject').done(function (data) {
+		vm.logObjects(data);
+	});
 });
 

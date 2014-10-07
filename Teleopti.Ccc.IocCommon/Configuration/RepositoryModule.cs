@@ -34,6 +34,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EtlJobStatusRepository>()
 				.As<IEtlJobStatusRepository>()
 				.SingleInstance();
+			builder.RegisterType<EtlLogObjectRepository>()
+				.As<IEtlLogObjectRepository>()
+				.SingleInstance();
 
 			builder.Register(c => StatisticRepositoryFactory.Create())
 				.As<IStatisticRepository>();

@@ -15,3 +15,5 @@ Scenario: Should see running services
 	When I am viewing the health check view
 	Then I should see the 'services' ''
 	And I should see the 'configured-url' ''
+	And I should see the 'etl-log-objects' ''
+	And I should see the 'etl-history' ''

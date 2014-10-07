@@ -14,6 +14,7 @@ define([
 		self.services = ko.observableArray();
 		self.etlJobHistory = ko.observableArray();
 		self.busResults = ko.observable();
+		self.logObjects = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
 
 		var subscribe = function (options) {
