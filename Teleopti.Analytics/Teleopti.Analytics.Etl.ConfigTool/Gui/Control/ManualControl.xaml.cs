@@ -192,6 +192,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 				return;
 	        GroupBoxSchedule.IsEnabled = false;
 	        GroupBoxForecast.IsEnabled = false;
+			  _currentJob.StepList.First().JobParameters.EtlToggleManager.IsEnabled()
 		}
 
     	private TimeZoneInfo DefaultTimeZone

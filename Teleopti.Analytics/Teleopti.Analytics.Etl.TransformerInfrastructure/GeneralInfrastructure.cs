@@ -126,9 +126,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		public IBaseConfiguration LoadBaseConfiguration()
 		{
 			var dataSet = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_configuration_get", null, _dataMartConnectionString);
-
+			var etlToggleManager = new EtlToggleManager();
 			if (dataSet == null || dataSet.Tables.Count != 1)
-				return new BaseConfiguration(null, null, null);
+				return new BaseConfiguration(null, null, null, etlToggleManager);
 
 			int? culture = null;
 			int? intervalLength = null;
@@ -155,7 +155,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 
-			return new BaseConfiguration(culture, intervalLength, timeZone);
+			return new BaseConfiguration(culture, intervalLength, timeZone, etlToggleManager);
 		}
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)

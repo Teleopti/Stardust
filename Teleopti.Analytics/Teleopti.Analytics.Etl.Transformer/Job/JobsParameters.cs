@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
 {
     public class JobParameters : IJobParameters
     {
-        public JobParameters(IJobMultipleDate jobCategoryDates, int dataSource, string timeZone, int intervalLengthMinutes, string cubeConnectionString, string pmInstall, CultureInfo currentCulture)
+        public JobParameters(IJobMultipleDate jobCategoryDates, int dataSource, string timeZone, int intervalLengthMinutes, string cubeConnectionString, string pmInstall, CultureInfo currentCulture, IEtlToggleManager toggleManager)
         {
             DataSource = dataSource;
         	CurrentCulture = currentCulture;
@@ -18,6 +19,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
             JobCategoryDates = jobCategoryDates ?? new JobMultipleDate(DefaultTimeZone);
             setOlapServerAndDatabase(cubeConnectionString);
             IsPmInstalled = checkPmInstall(pmInstall);
+	        EtlToggleManager = toggleManager;
         }
 
         public int DataSource { get; set; }
@@ -42,6 +44,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
         public bool IsPmInstalled { get; private set; }
 
 		public CultureInfo CurrentCulture { get; private set; }
+
+		public IEtlToggleManager EtlToggleManager { get; private set; }
 
     	private void setOlapServerAndDatabase(string cubeConnectionsString)
         {

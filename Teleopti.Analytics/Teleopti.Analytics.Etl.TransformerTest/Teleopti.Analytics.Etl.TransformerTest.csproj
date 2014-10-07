@@ -93,7 +93,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseConfigurationTest.cs" />
     <Compile Include="ConfigurationHandlerTest.cs" />
     <Compile Include="FakeData\StateGroupFactory.cs" />
     <Compile Include="StateGroupTransformerTest.cs" />

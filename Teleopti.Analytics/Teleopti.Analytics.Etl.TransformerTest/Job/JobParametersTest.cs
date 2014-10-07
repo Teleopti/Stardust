@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
+using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 			_olapDatabase= "SSASDatabase";
 			string cubeConnectionString = string.Concat("Data Source=", _olapServer, ";", "Initial Catalog=",
 														_olapDatabase);
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, cubeConnectionString, "true", CultureInfo.CurrentCulture);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, cubeConnectionString, "true", CultureInfo.CurrentCulture, new EtlToggleManager());
 		}
 
 		#endregion
@@ -77,13 +78,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 		{
 			Assert.IsTrue(_target.IsPmInstalled);
 
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture, new EtlToggleManager());
 			Assert.IsFalse(_target.IsPmInstalled);
 
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture, new EtlToggleManager());
 			Assert.IsTrue(_target.IsPmInstalled);
 
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, new EtlToggleManager());
 			Assert.IsFalse(_target.IsPmInstalled);
 		}
 	}

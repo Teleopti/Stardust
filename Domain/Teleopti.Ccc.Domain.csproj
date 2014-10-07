@@ -128,6 +128,8 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
+    <Compile Include="Analytics\EtlToggle.cs" />
+    <Compile Include="Analytics\EtlToggleManager.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />

@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
@@ -27,7 +28,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 															 "W. Europe Standard Time",
 															 minutesPerInterval,
 															 "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false",
-															 CultureInfo.CurrentCulture);
+															 CultureInfo.CurrentCulture, new EtlToggleManager());
 
 			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 			

@@ -7,6 +7,7 @@ using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
@@ -106,7 +107,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 								JobCategoryType.Forecast);
 
 			var jobParameters = new JobParameters(jobMultipleDate, 1, _timeZone.Id, 15,
-												  "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false", CultureInfo.CurrentCulture);
+												  "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false", CultureInfo.CurrentCulture, new EtlToggleManager());
 			IList<IJobStep> jobStepList = new List<IJobStep>();
 			jobStepList.Add(new StageScheduleJobStep(jobParameters));
 			jobStepList.Add(new StageForecastWorkloadJobStep(jobParameters));

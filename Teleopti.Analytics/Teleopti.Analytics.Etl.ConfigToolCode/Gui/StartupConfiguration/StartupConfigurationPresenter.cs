@@ -107,7 +107,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 
 		public void Save(int cultureId, int intervalLengthMinutes, string timeZoneId)
 		{
-			ConfigurationToSave = new BaseConfiguration(cultureId, intervalLengthMinutes, timeZoneId);
+			ConfigurationToSave = new BaseConfiguration(cultureId, intervalLengthMinutes, timeZoneId, null);
 			_model.SaveConfiguration(ConfigurationToSave);
 		}
 	}

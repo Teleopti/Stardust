@@ -24,7 +24,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsValidWhenAllSettingsAreValid()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 15, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 15, "UTC", new EtlToggleManager());
 
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 
@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsInvalidWhenCultureSettingIsInvalid()
 		{
-			var baseConfiguration = new BaseConfiguration(-1, 15, "UTC");
+			var baseConfiguration = new BaseConfiguration(-1, 15, "UTC", new EtlToggleManager());
 
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 
@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsInvalidWhenIntervalLengthSettingIsInvalid()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 5, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 5, "UTC", new EtlToggleManager());
 			
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 
@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsValidWhenIntervalLength10IsUsed()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 10, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 10, "UTC", new EtlToggleManager());
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 			_target.BaseConfiguration.IntervalLength.Should().Be.EqualTo(10);
 			_target.IsConfigurationValid.Should().Be.True();
@@ -63,7 +63,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsValidWhenIntervalLength15IsUsed()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 15, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 15, "UTC", new EtlToggleManager());
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 			_target.BaseConfiguration.IntervalLength.Should().Be.EqualTo(15);
 			_target.IsConfigurationValid.Should().Be.True();
@@ -72,7 +72,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsValidWhenIntervalLength30IsUsed()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 30, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 30, "UTC", new EtlToggleManager());
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 			_target.BaseConfiguration.IntervalLength.Should().Be.EqualTo(30);
 			_target.IsConfigurationValid.Should().Be.True();
@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsValidWhenIntervalLength60IsUsed()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 60, "UTC");
+			var baseConfiguration = new BaseConfiguration(1053, 60, "UTC", new EtlToggleManager());
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 			_target.BaseConfiguration.IntervalLength.Should().Be.EqualTo(60);
 			_target.IsConfigurationValid.Should().Be.True();
@@ -90,7 +90,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldReportConfigurationIsInvalidWhenTimeZoneSettingIsInvalid()
 		{
-			var baseConfiguration = new BaseConfiguration(1053, 15, "invalid time zone");
+			var baseConfiguration = new BaseConfiguration(1053, 15, "invalid time zone", new EtlToggleManager());
 
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(baseConfiguration);
 
@@ -100,7 +100,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldLoadAndCacheBaseConfiguration()
 		{
-			var loadedBaseConfiguration = new BaseConfiguration(1033, 15, "UTC");
+			var loadedBaseConfiguration = new BaseConfiguration(1033, 15, "UTC", new EtlToggleManager());
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(loadedBaseConfiguration).Repeat.Once();
 
 			var baseConfiguration = _target.BaseConfiguration;
@@ -129,12 +129,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldChangeBaseConfigurationAfterSavingNewConfiguration()
 		{
-			var originalConfig = new BaseConfiguration(null, null, null);
+			var originalConfig = new BaseConfiguration(null, null, null, new EtlToggleManager());
 			_generalFunctions.Stub(x => x.LoadBaseConfiguration()).Return(originalConfig);
 			var config = _target.BaseConfiguration;
 			config.Should().Be.SameInstanceAs(originalConfig);
 
-			var newConfig = new BaseConfiguration(1033, 30, "UTC");
+			var newConfig = new BaseConfiguration(1033, 30, "UTC", new EtlToggleManager());
 			_target.SaveBaseConfiguration(newConfig);
 
 			_target.BaseConfiguration.Should().Be.SameInstanceAs(newConfig);

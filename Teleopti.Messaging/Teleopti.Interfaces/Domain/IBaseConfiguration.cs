@@ -19,5 +19,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Time zone to be used when converting user input to UTC
 		/// </summary>
 		string TimeZoneCode { get; }
+
+		IEtlToggleManager EtlToggleManager { get; }
 	}
 }

@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -62,7 +63,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
 
             _jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
-            var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
+				var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new EtlToggleManager());
 
 			var jobHelper = new JobHelper(_repository, null, null, null);
             jobParameters.Helper = jobHelper;

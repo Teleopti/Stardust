@@ -119,7 +119,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldLoadBaseConfigurationsCorrectly()
 		{
-			_generalInfrastructure.Expect(x => x.LoadBaseConfiguration()).Return(new BaseConfiguration(1053, 15, "UTC"));
+			_generalInfrastructure.Expect(x => x.LoadBaseConfiguration()).Return(new BaseConfiguration(1053, 15, "UTC", new EtlToggleManager()));
 
 			var baseConfiguration = _target.LoadBaseConfiguration();
 
@@ -132,7 +132,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_generalInfrastructure = MockRepository.GenerateMock<IGeneralInfrastructure>();
 			_target = new GeneralFunctions(_generalInfrastructure, "sdfsd");
 
-			IBaseConfiguration config = new BaseConfiguration(1053, 60, "UTC");
+			IBaseConfiguration config = new BaseConfiguration(1053, 60, "UTC", new EtlToggleManager());
 			_target.SaveBaseConfiguration(config);
 
 			_generalInfrastructure.AssertWasCalled(x => x.SaveBaseConfiguration(config));

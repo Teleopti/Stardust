@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 													_baseConfiguration.IntervalLength.Value,
                                                     ConfigurationManager.AppSettings["cube"],
                                                     ConfigurationManager.AppSettings["pmInstallation"],
-													CultureInfo.CurrentCulture));
+													CultureInfo.CurrentCulture, _baseConfiguration.EtlToggleManager));
             comboBoxJob.DataSource = jobCollection;
             comboBoxJob.DisplayMember = "Name";
             comboBoxJob.ValueMember = "Name";
