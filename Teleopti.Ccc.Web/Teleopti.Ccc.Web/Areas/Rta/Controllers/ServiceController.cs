@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Rta.WebService;
@@ -19,17 +20,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			var timestamp = DateTime.Parse(state.Timestamp);
 
-		    return Json(_teleoptiRtaService.SaveExternalUserState(state.AuthenticationKey, 
-				state.UserCode, 
+			var result = _teleoptiRtaService.SaveExternalUserState(state.AuthenticationKey,
+				state.UserCode,
 				state.StateCode,
-			    state.StateDescription, 
-				state.IsLoggedOn, 
-				state.SecondsInState, 
-				timestamp, 
+				state.StateDescription,
+				state.IsLoggedOn,
+				state.SecondsInState,
+				timestamp,
 				state.PlatformTypeId,
-			    state.SourceId, 
+				state.SourceId,
 				state.BatchId,
-				state.IsSnapshot));
+				state.IsSnapshot);
+
+			// apparently 1 = state accepted, 0 = something was missing, anything else == error
+			if (result == 1 || result == 0)
+				return Json(result);
+			throw new HttpException("Result from TeleoptiRtaService was " + result);
 	    }
     }
 }
