@@ -233,26 +233,29 @@ Try
             }
      }
     
-    #Sign ClickOnce
-    # $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
-    # $dir = $directory[0]+$directory[1]
-    # CD $dir
-    # Set-Location $ClickOnceSignPath
-    # $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
+    #Sign ClickOnce, create bat files for later execution in Scheduled task
+    $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
+    CD e:
+    Set-Location $ClickOnceSignPath
+    $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
 
-    # $ClientPath="$directory\..\..\sitesroot\5"
-    # $MyTimePath="$directory\..\..\sitesroot\4"
-    # $pwd ="`"`""
-
-    # $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $ClientPath","-p $pwd")
-    # Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
-    # Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
-    # &"$ClickOnceSignPath\SignAdminClient.bat"
+    $ClientPath="$directory\..\..\sitesroot\5"
+    $MyTimePath="$directory\..\..\sitesroot\4"
+    $pwd ="`"`""
+	
+    $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $ClientPath","-p $pwd")
+    Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
+	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "E:"
+	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "CD $ClickOnceSignPath"
+    Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
+    #&"$ClickOnceSignPath\SignAdminClient.bat"
     
-    # $cmdArgs = @("-s","-a Teleopti.Ccc.AgentPortal.application","-m Teleopti.Ccc.AgentPortal.exe.manifest","-u https://$DataSourceName.teleopticloud.com/MyTime/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $MyTimePath","-p $pwd")
-    # Remove-Item "$ClickOnceSignPath\SignMyTime.bat"
-    # Add-Content "$ClickOnceSignPath\SignMyTime.bat" "$ClickOnceTool $cmdArgs"
-    # &"$ClickOnceSignPath\SignMyTime.bat"
+    $cmdArgs = @("-s","-a Teleopti.Ccc.AgentPortal.application","-m Teleopti.Ccc.AgentPortal.exe.manifest","-u https://$DataSourceName.teleopticloud.com/MyTime/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $MyTimePath","-p $pwd")
+    Remove-Item "$ClickOnceSignPath\SignMyTime.bat"
+	Add-Content "$ClickOnceSignPath\SignMyTime.bat" "E:"
+	Add-Content "$ClickOnceSignPath\SignMyTime.bat" "CD $ClickOnceSignPath"
+    Add-Content "$ClickOnceSignPath\SignMyTime.bat" "$ClickOnceTool $cmdArgs"
+    #&"$ClickOnceSignPath\SignMyTime.bat"
  
 }
 Catch [Exception]
