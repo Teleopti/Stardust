@@ -1744,8 +1744,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			//Prepare sql parameters
 			var parameterList = new List<SqlParameter>
 			{
-				new SqlParameter("start_date", startDate.Date),
-				new SqlParameter("end_date", endDate.Date),
+				new SqlParameter("start_date", startDate.Date), //remove once we got all three _intraday SPs in place
+				new SqlParameter("end_date", endDate.Date), //remove once we got all three _intraday SPs in place
 				new SqlParameter("datasource_id", dataSourceId)
 			};
 			return parameterList;
@@ -1755,7 +1755,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
 
-			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_queue_load", parameters,
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_queue_load_intraday", parameters,
 				_dataMartConnectionString);
 		}
 

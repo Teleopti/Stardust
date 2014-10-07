@@ -2,9 +2,11 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_fact_queue_load_intraday]
 GO
 
---exec [mart].[etl_fact_queue_load_intraday] @datasource_id=-2
+--exec [mart].[etl_fact_queue_load_intraday] @start_date='1956-01-01',@end_date='1912-01-01', @datasource_id=-2
 
-CREATE PROCEDURE [mart].[etl_fact_queue_load_intraday] 
+CREATE PROCEDURE [mart].[etl_fact_queue_load_intraday]
+@start_date smalldatetime,
+@end_date smalldatetime,
 @datasource_id int
 	
 AS
@@ -35,7 +37,7 @@ BEGIN
 	FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-			EXEC [mart].[etl_fact_queue_load_intraday] @datasource_id
+			EXEC [mart].[etl_fact_queue_load_intraday] @start_date, @end_date, @datasource_id
 			FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	END
 	CLOSE DataSouceCursor
@@ -44,7 +46,6 @@ END
 
 ELSE  --Single datasource_id
 	BEGIN
-
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
 	DECLARE @UtcNow as smalldatetime
@@ -142,8 +143,6 @@ ELSE  --Single datasource_id
 		RETURN 0
 	END
 
-	select @source_date_id_utc,@target_date_id_utc
-	select @source_interval_id_utc,@target_interval_id_utc
 	--If Dates and Intervals are the same in Agg <-> Mart do nothing
 	IF (@source_date_id_utc-@target_date_id_utc=0
 		AND
@@ -155,11 +154,11 @@ ELSE  --Single datasource_id
 
 	--TODO!!
 	--If Agg is way ahead of Mart limit fetch to 10 days.
-	IF (@source_date_id_utc-@target_date_id_utc > 10)
-	BEGIN
-		SELECT 'Agg is way ahead of Mart limit fetch to 10 days. Not implemented yet. Run ETL.Nighty to catch up'
-		RETURN 0
-	END
+--	IF (@source_date_id_utc-@target_date_id_utc > 10)
+--	BEGIN
+--		SELECT 'Agg is way ahead of Mart limit fetch to 10 days. Not implemented yet. Run ETL.Nighty to catch up'
+--		RETURN 0
+--	END
 
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @source_date_local = date_date)
@@ -189,12 +188,10 @@ ELSE  --Single datasource_id
 	WHERE date_id < @target_date_id_utc
 	and interval_id < @target_interval_id_utc
 
-	SET NOCOUNT OFF
-
 	-------------
 	-- Delete rows last known date_id and interval_id
 	-------------
---	select @datasource_id,@target_date_id_utc,@target_interval_id_utc
+	SET NOCOUNT OFF
 	delete f
 	from mart.fact_queue f
 	inner join mart.dim_queue q
@@ -300,6 +297,7 @@ ELSE  --Single datasource_id
 
 	--Exec
 	EXEC sp_executesql @sqlstring
+	SET NOCOUNT ON
 
 	drop table #bridge_time_zone
 
