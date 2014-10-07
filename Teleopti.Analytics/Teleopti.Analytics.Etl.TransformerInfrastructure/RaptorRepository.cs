@@ -1738,11 +1738,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_schedule_forecast_skill", _dataMartConnectionString);
 		}
 
-		public int FillIntradayFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+		private static List<SqlParameter> parameterList(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone)
 		{
 			//Convert time back to local time before sp call
-			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+			var startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
+			var endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
 			var parameterList = new List<SqlParameter>
@@ -1751,48 +1751,31 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				new SqlParameter("end_date", endDate.Date),
 				new SqlParameter("datasource_id", dataSourceId)
 			};
+			return parameterList;
+		}
 
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_queue_load", parameterList,
-											  _dataMartConnectionString);
+		public int FillIntradayFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+		{
+			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
+
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_queue_load", parameters,
+				_dataMartConnectionString);
 		}
 
 		public int FillIntradayFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
-			//Convert time back to local time before sp call
-			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
 
-			//Prepare sql parameters
-			var parameterList = new List<SqlParameter>
-			{
-				new SqlParameter("start_date", startDate.Date),
-				new SqlParameter("end_date", endDate.Date),
-				new SqlParameter("datasource_id", dataSourceId)
-			};
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_load", parameterList,
-											  _dataMartConnectionString);
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_load", parameters,
+				_dataMartConnectionString);
 		}
 
 		public int FillIntradayFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
-			//Convert time back to local time before sp call
-			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
 
-			//Prepare sql parameters
-			var parameterList = new List<SqlParameter>
-			{
-				new SqlParameter("start_date", startDate.Date),
-				new SqlParameter("end_date", endDate.Date),
-				new SqlParameter("datasource_id", dataSourceId)
-			};
-
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_queue_load", parameterList,
-											  _dataMartConnectionString);
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_queue_load", parameters,
+				_dataMartConnectionString);
 		}
 	}
 }

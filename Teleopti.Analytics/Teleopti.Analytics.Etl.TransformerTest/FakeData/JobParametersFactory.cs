@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
