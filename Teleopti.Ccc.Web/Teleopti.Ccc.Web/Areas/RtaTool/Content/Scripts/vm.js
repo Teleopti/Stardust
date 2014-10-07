@@ -30,7 +30,7 @@
 				StateDescription: stateCode,
 				IsLoggedOn: true,
 				SecondsInState: 0,
-				TimeStamp: moment(),
+				TimeStamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				PlatformTypeId: '00000000-0000-0000-0000-000000000000',
 				SourceId: 1,
 				BatchId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
