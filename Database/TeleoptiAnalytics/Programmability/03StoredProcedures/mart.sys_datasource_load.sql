@@ -60,4 +60,9 @@ FROM
 	mart.sys_datasource ds
 WHERE  ds.datasource_database_id = 2
 AND NOT EXISTS (SELECT * FROM mart.dim_queue_excluded exl WHERE exl.datasource_id	= ds.datasource_id)
+
+--If Toggle enable
+IF EXISTS (SELECT 1 FROM mart.sys_configuration WHERE [Key]='PBI30787OnlyLatestQueueAgentStatistics' AND UPPER(value)='TRUE')
+	EXEC [mart].[sys_datasource_detail_load]
+
 GO

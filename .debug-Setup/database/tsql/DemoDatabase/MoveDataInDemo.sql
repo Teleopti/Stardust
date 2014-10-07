@@ -127,6 +127,18 @@ END
 GO
 
 ----------------
+--fake last load of each log object
+----------------
+truncate table $(TELEOPTIAGG).[dbo].[log_object_detail]
+
+insert into $(TELEOPTIAGG).[dbo].[log_object_detail]
+select lo.acd_type_id,1,'Queue data','load_queue',57,dateadd(dd,-10,getdate())
+from $(TELEOPTIAGG).[dbo].[log_object] lo
+union all
+select lo.acd_type_id,2,'Agent data','load_queue',32,dateadd(dd,-5,getdate())
+from $(TELEOPTIAGG).[dbo].[log_object] lo
+
+----------------
 --load all agent,queue,agent_queue from Agg int Mart
 ----------------
 declare @start_date smalldatetime
