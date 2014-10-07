@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -42,5 +43,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 				DateTime.MinValue,
 				false));
 		}
+
+		[Test]
+		public void ShouldNotThrowOnResultZero_WhichIThinkMeansItWentOkButStateWasNotWritten()
+		{
+			var rtaWebService = MockRepository.GenerateMock<ITeleoptiRtaService>();
+			rtaWebService.Stub(
+				x => x.SaveExternalUserState(null, null, null, null, true, 0, DateTime.Now, null, null, DateTime.Now, false))
+				.IgnoreArguments()
+				.Return(0);
+			var target = new ServiceController(rtaWebService);
+
+			Assert.DoesNotThrow(() => target.SaveExternalUserState(new AjaxUserState()));
+		}
+
+		[Test]
+		public void ShouldNotThrowOnResultOne_WhichIThinkMeansStateWasWritten()
+		{
+			var rtaWebService = MockRepository.GenerateMock<ITeleoptiRtaService>();
+			rtaWebService.Stub(
+				x => x.SaveExternalUserState(null, null, null, null, true, 0, DateTime.Now, null, null, DateTime.Now, false))
+				.IgnoreArguments()
+				.Return(1);
+			var target = new ServiceController(rtaWebService);
+
+			Assert.DoesNotThrow(() => target.SaveExternalUserState(new AjaxUserState()));
+
+		}
+
+		[Test]
+		public void ShouldThrowOnErrorResult()
+		{
+			var rtaWebService = MockRepository.GenerateMock<ITeleoptiRtaService>();
+			rtaWebService.Stub(
+				x => x.SaveExternalUserState(null, null, null, null, true, 0, DateTime.Now, null, null, DateTime.Now, false))
+				.IgnoreArguments()
+				.Return(-300);
+			var target = new ServiceController(rtaWebService);
+
+			Assert.Throws<HttpException>(() => target.SaveExternalUserState(new AjaxUserState()));
+		}
+		
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -25,15 +26,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private readonly ILegalShiftDecider _legalShiftDecider;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
+		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private CancelEventArgs _cancelEvent;
 		private bool _cancelMe;
 
-		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker, IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider, IWorkShiftFinderResultHolder workShiftFinderResultHolder)
+		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker,
+			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider,
+			IWorkShiftFinderResultHolder workShiftFinderResultHolder, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
 		{
 			_backToLegalShiftWorker = backToLegalShiftWorker;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
 			_legalShiftDecider = legalShiftDecider;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
+			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 		}
 
 		public event EventHandler<BackToLegalShiftArgs> Progress;
@@ -72,7 +77,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					continue;
 				}
 
-				var success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
+				int targetDaysOff;
+				IList<IScheduleDay> daysOffNow;
+				var success = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(person.VirtualSchedulePeriod(date),
+					out targetDaysOff, out daysOffNow);
+
+				if (!success)
+				{
+					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
+					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(string.Format(CultureInfo.InvariantCulture, Resources.WrongNumberOfDayOffsInSchedulePeriod, targetDaysOff, daysOffNow.Count), 0, 0));
+					workShiftFinderResultList.Add(workShiftFinderResult);
+					continue;
+				}
+
+				success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder, isMaxSeatToggleEnabled);
 
 				if (!success)

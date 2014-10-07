@@ -1679,9 +1679,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			List<SqlParameter> parameterList = new List<SqlParameter>();
 			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
 
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "stage.etl_stg_agent_state_load", parameterList,
-											  _dataMartConnectionString);
-
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_state_load", parameterList,
 											  _dataMartConnectionString);
 		}
