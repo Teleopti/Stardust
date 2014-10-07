@@ -33,7 +33,7 @@
 				TimeStamp: moment(),
 				PlatformTypeId: '00000000-0000-0000-0000-000000000000',
 				SourceId: 1,
-				BatchId: moment(),
+				BatchId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				IsSnapshot: false
 			}
 		}

@@ -1,7 +1,7 @@
 ﻿define(['buster','vm','moment'], function (buster,viewmodel,moment) {
 	return function () {
 
-		buster.testCase("Diagnosis viewmodel", {
+		buster.testCase("Rta Tool viewmodel", {
 			"should create viewmodel": function() {
 
 				var vm = new viewmodel();
