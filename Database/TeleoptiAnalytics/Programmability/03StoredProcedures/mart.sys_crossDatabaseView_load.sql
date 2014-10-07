@@ -35,19 +35,7 @@ SET @target			= ''
 
 DECLARE @crossDatabaseView TABLE (view_name varchar(100) not null, view_definition varchar(4000) not null,target_id int)
 INSERT INTO @crossDatabaseView
-SELECT 'v_log_object','SELECT * FROM [$$$target$$$].dbo.log_object',4
-UNION ALL
-SELECT 'v_agent_logg','SELECT * FROM [$$$target$$$].dbo.agent_logg WITH (NOLOCK)',4
-UNION ALL
-SELECT 'v_agent_info','SELECT * FROM [$$$target$$$].dbo.agent_info',4
-UNION ALL
-SELECT 'v_queues','SELECT * FROM [$$$target$$$].dbo.queues',4
-UNION ALL
-SELECT 'v_queue_logg','SELECT * FROM [$$$target$$$].dbo.queue_logg  WITH (NOLOCK)',4
-UNION ALL
-SELECT 'v_ccc_system_info','SELECT * FROM [$$$target$$$].dbo.ccc_system_info',4
-UNION ALL
-SELECT 'v_log_object_detail','SELECT * FROM [$$$target$$$].dbo.log_object_detail',4
+SELECT * FROM [mart].[sys_crossDatabaseView_definition]()
 
 --create cursor 
 DECLARE ViewCursor CURSOR FOR
