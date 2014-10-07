@@ -189,6 +189,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.CodeTest",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.IntegrationTest", "Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\Teleopti.Analytics.Etl.IntegrationTest.csproj", "{1CD76BD0-DBBB-42E8-9BD6-D5FE4F0AA2C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ServiceConsoleHost", "Teleopti.Analytics.Etl.ServiceConsoleHost\Teleopti.Analytics.Etl.ServiceConsoleHost.csproj", "{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.AuthenticationBridge", "Teleopti.Ccc.Web.AuthenticationBridge\Teleopti.Ccc.Web.AuthenticationBridge.csproj", "{2034A371-8FC3-4B50-847E-9835E68EB3AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.WindowsIdentityProvider", "Teleopti.Ccc.Web.WindowsIdentityProvider\Teleopti.Ccc.Web.WindowsIdentityProvider.csproj", "{5AD4F231-FFB6-44F1-B5B1-4EA5A7EECA32}"
@@ -1195,6 +1197,18 @@ Global
 		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|x86.ActiveCfg = Release|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Release|.NET.ActiveCfg = Release|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}.Release|x86.ActiveCfg = Release|Any CPU
 		{5AD4F231-FFB6-44F1-B5B1-4EA5A7EECA32}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{5AD4F231-FFB6-44F1-B5B1-4EA5A7EECA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5AD4F231-FFB6-44F1-B5B1-4EA5A7EECA32}.Debug|Any CPU.Build.0 = Debug|Any CPU

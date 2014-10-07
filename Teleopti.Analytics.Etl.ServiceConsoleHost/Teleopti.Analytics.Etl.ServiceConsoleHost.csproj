@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D9261EB-9353-425A-B68F-1C3ADC392A77}</ProjectGuid>
+    <ProjectGuid>{172F5DD9-CB56-4680-A8AE-1A1AB0D9D4D4}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Teleopti.Analytics.Etl.ServiceConsoleHost</RootNamespace>
