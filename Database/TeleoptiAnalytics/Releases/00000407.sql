@@ -25,7 +25,7 @@ GO
 CREATE TABLE [mart].[sys_datasource_detail_type](
 	[detail_id] int NOT NULL,
 	[detail_desc] varchar(50) NOT NULL,
-	CONSTRAINT [PK_log_object_detail_type] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_sys_datasource_detail_type] PRIMARY KEY CLUSTERED 
 (
 	[detail_id] ASC
 )
@@ -44,7 +44,7 @@ CREATE TABLE [mart].[sys_datasource_detail](
 	[target_date_local] smalldatetime NOT NULL,
 	[target_interval_local] smallint NOT NULL,
 	[intervals_back] smallint NOT NULL
-	CONSTRAINT [PK_log_object_detail] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_sys_datasource_detail] PRIMARY KEY CLUSTERED 
 (
 	[datasource_id] ASC,
 	[detail_id] ASC
