@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private IBlockInfo _blockInfo;
 		private IShiftProjectionCache _shiftProjectionCache;
 		private IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
+		private IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
 		[SetUp]
 		public void Setup()
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_firstShiftInTeamBlockFinder = _mocks.StrictMock<IFirstShiftInTeamBlockFinder>();
 			_legalShiftDecider = _mocks.StrictMock<ILegalShiftDecider>();
 			_workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
-			_target = new BackToLegalShiftService(_backToLegalShiftWorker, _firstShiftInTeamBlockFinder, _legalShiftDecider, _workShiftFinderResultHolder);
+			_dayOffsInPeriodCalculator = _mocks.StrictMock<IDayOffsInPeriodCalculator>();
+			_target = new BackToLegalShiftService(_backToLegalShiftWorker, _firstShiftInTeamBlockFinder, _legalShiftDecider, _workShiftFinderResultHolder, _dayOffsInPeriodCalculator);
 			_teamBlock = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
@@ -69,6 +71,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(new DateOnly(), _person.PermissionInformation.DefaultTimeZone(),
 					_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache)).Return(false);
+				int x;
+				IList<IScheduleDay> y;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(new DateOnly()),
+					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
 					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder, true)).Return(true);
 			}
@@ -96,8 +102,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(new DateOnly(), _person.PermissionInformation.DefaultTimeZone(),
 					_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache)).Return(false);
+				int x;
+				IList<IScheduleDay> y;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(new DateOnly()),
+					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
 					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder, true)).Return(false);
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
+					_rollBackService, _resourceCalculateDelayer, true);
+				Assert.AreEqual(_person, _workShiftFinderResultHolder.GetResults()[0].Person);
+				Assert.AreEqual(new DateOnly(), _workShiftFinderResultHolder.GetResults()[0].ScheduleDate);
+			}
+		}
+
+		[Test]
+		public void ShouldReportBackFailedRescheduleIfTooFewDaysOff()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
+				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
+
+				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
+				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
+
+				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, new DateOnly(), _schedulingResultStateHolder))
+					.Return(_shiftProjectionCache);
+				Expect.Call(_legalShiftDecider.IsLegalShift(new DateOnly(), _person.PermissionInformation.DefaultTimeZone(),
+					_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache)).Return(false);
+				int x;
+				IList<IScheduleDay> y;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(new DateOnly()),
+					out x, out y)).Return(false).OutRef(1, new List<IScheduleDay>());
 			}
 			using (_mocks.Playback())
 			{
