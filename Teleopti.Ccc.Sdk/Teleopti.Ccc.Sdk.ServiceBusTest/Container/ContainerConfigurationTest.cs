@@ -95,28 +95,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 		}
 
 		[Test]
-		public void ShouldResolveSmsLink()
+		public void ShouldResolveNotificationValidationCheck()
 		{
 			var builder = new ContainerBuilder();
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444)).Return(false);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, toggleManager).Configure();
-				container.Resolve<INotify>().Should().Be.OfType<DoNotifySmsLink>();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveNotificationHelper()
-		{
-			var builder = new ContainerBuilder();
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444)).Return(true);
-			using (var container = builder.Build())
-			{
-				new ContainerConfiguration(container, toggleManager).Configure();
-				container.Resolve<INotify>().Should().Be.OfType<NotificationLicenseCheck>();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
+				container.Resolve<INotificationValidationCheck>().Should().Be.OfType<NotificationValidationCheck>();
 			}
 		}
 

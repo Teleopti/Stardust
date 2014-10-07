@@ -52,15 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<LocalServiceBusPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();
-			
-			if (_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
-				build.RegisterType<NotificationLicenseCheck>().As<INotify>();
-			else
-				build.RegisterType<DoNotifySmsLink>().As<INotify>();
-
-			build.RegisterType<EmailNotifier>().As<IEmailNotifier>();
-			build.RegisterType<EmailConfiguration>().As<IEmailConfiguration>();
-			build.RegisterModule<EmailModule>();
+			build.RegisterModule<NotificationModule>();
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
 

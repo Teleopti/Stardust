@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
@@ -11,26 +13,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldSendEmailNotification()
 		{
-			var emailSender = MockRepository.GenerateMock<IEmailSender>();
+			var emailSender = MockRepository.GenerateMock<INotificationSender>();
 			var notificationMessage = new NotificationMessage {Subject = "My Subject"};
 			notificationMessage.Messages.Add("your schedule changed for tomorrow");
 			notificationMessage.Messages.Add("your schedule changed for the day after tomorrow");
-			string expectedMessage = notificationMessage.Messages[0] + "\r\n" + notificationMessage.Messages[1];
-			var emailMessage = new EmailMessage
+			var notificationPersonData = new NotificationHeader
 			{
-				Sender = "from@domain.com",
-				Recipient = "to@domain.com",
-				Subject = notificationMessage.Subject,
-				Message = expectedMessage,
+				EmailReceiver = "to@domain.com",
+				EmailSender = "from@domain.com"
 			};
 
 			var target = new EmailNotifier(emailSender);
 
-			target.Notify(emailMessage.Recipient, emailMessage.Sender, notificationMessage);
+			target.Notify(notificationMessage, notificationPersonData);
 
 			emailSender.AssertWasCalled(
 				x =>
-					x.Send(
+					x.SendNotification(
 						Arg<IEmailMessage>.Matches(
 							a =>
 								a.Sender == emailMessage.Sender &&

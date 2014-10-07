@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
     {
         private MockRepository _mocks;
         private INotificationConfigReader _notificationConfigReader;
-        private NotificationSenderFactory _target;
+        private CustomNotificationSenderFactory _target;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _notificationConfigReader = _mocks.StrictMock<INotificationConfigReader>();
-            _target = new NotificationSenderFactory(_notificationConfigReader);
+            _target = new CustomNotificationSenderFactory(_notificationConfigReader);
         }
 
         [Test]

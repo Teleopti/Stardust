@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterType<DoNotNotifySmsLink>().As<INotify>().SingleInstance();
+			builder.RegisterType<DoNotUseSmsLink>().As<INotificationValidationCheck>().SingleInstance();
 
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();

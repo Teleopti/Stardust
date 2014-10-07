@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Infrastructure.Util
+﻿namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
 	public interface IEmailConfiguration
 	{

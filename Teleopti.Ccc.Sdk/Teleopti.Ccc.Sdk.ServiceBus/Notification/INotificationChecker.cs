@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	public interface INotificationChecker
 	{
 		string SmsMobileNumber(IPerson person);
-		NotificationType NotificationType { get; }
+		NotificationType NotificationType();
 		string EmailSender { get; }
 	}
 }

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Xml;
 using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
 
@@ -20,10 +19,17 @@ namespace Teleopti.Ccc.Sdk.Notification
 		private INotificationConfigReader _notificationConfigReader;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SendNotification(INotificationMessage message, string receiver)
+		public void SendNotification(INotificationMessage message, NotificationHeader receiverInfo)
 		{
 			if (!_notificationConfigReader.HasLoadedConfig)
 				return;
+
+			if (string.IsNullOrEmpty(receiverInfo.MobileNumber))
+			{
+				Logger.Info("Did not find a Mobile Number on " + receiverInfo.PersonName);
+				return;
+			}
+
 			//TODO check if empty concat and split into several if too long
 			// we handle this here because here we know it is a sms
 			//var smsMessage = message.Subject;
@@ -34,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 		    
             foreach(var msg in messagesToSendList)
             {
-                sendSmsNotifications(msg, receiver, containUnicode);
+							sendSmsNotifications(msg, receiverInfo.MobileNumber, containUnicode);
             }
 
         }

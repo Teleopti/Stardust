@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,15 +12,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	{
 		private readonly ICurrentUnitOfWork _unitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly IToggleManager _toggleManager;
 		private SmsSettings _setting;
 
-		public NotificationChecker(ICurrentUnitOfWork unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+		public NotificationChecker(ICurrentUnitOfWork unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
+			_toggleManager = toggleManager;
 		}
 
-		private SmsSettings NotificationSetting()
+		private SmsSettings notificationSetting()
 		{
 			if (_setting != null)
 				return _setting;
@@ -28,19 +31,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				.FindValueByKey("SmsSettings", new SmsSettings());
 		}
 
-		public NotificationType NotificationType
+		public NotificationType NotificationType()
 		{
-			get
-			{
-				return NotificationSetting().NotificationSelection;
-			}
+			return notificationSetting().NotificationSelection;
 		}
 
 		public string EmailSender
 		{
 			get
 			{
-				return NotificationSetting().EmailFrom;
+				return notificationSetting().EmailFrom;
 			}
 		}
 
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	    {
 	        // get wich optional column to use
 
-			if (NotificationSetting().OptionalColumnId.Equals(Guid.Empty)) // no column set
+			if (notificationSetting().OptionalColumnId.Equals(Guid.Empty)) // no column set
 	            return "";
 	        // get a value if one
 	        foreach (
 	            var optionalColumnValue in
 	                person.OptionalColumnValueCollection.Where(
-						optionalColumnValue => optionalColumnValue.Parent.Id.Equals(NotificationSetting().OptionalColumnId)))
+						optionalColumnValue => optionalColumnValue.Parent.Id.Equals(notificationSetting().OptionalColumnId)))
 	        {
 	            return optionalColumnValue.Description;
 	        }

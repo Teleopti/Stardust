@@ -447,11 +447,6 @@
     <Compile Include="UnitOfWork\TransactionCallback.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
-    <Compile Include="Util\EmailMessage.cs" />
-    <Compile Include="Util\EmailSender.cs" />
-    <Compile Include="Util\IEmailConfiguration.cs" />
-    <Compile Include="Util\IEmailMessage.cs" />
-    <Compile Include="Util\IEmailSender.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\QueueMetricsForDayResult.cs" />
     <Compile Include="WebReports\DailyMetricsForDayResult.cs" />
