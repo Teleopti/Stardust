@@ -54,7 +54,7 @@ define([
 		self.initialize = function(options) {
 			if (options) {
 				self.hub = options.messageBroker;
-				startPromise = options.signalR.start({url: '../../signalr'});
+				startPromise = options.signalR.start();
 				checkBusFunc = options.checkBus;
 				subscribe({
 					domainType: 'ITeleoptiDiagnosticsInformation', businessUnitId: Teleopti.BusinessUnitId, datasource: Teleopti.DataSource
