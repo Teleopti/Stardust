@@ -2,179 +2,194 @@
 <NDepend AppName="CCC" Platform="DotNet">
   <OutputDir KeepHistoric="False" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\CCC-Main\WorkingDirectory\NDependOut</OutputDir>
   <Assemblies>
-	<Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Ccc.Domain</Name>
-	<Name>Teleopti.Support.Code</Name>
+    <Name>Teleopti.Ccc.DomainTest</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
+    <Name>Teleopti.Ccc.InfrastructureTest</Name>
     <Name>Teleopti.Ccc.DatabaseConverter</Name>
+    <Name>Teleopti.Ccc.DatabaseConverterTest</Name>
     <Name>Teleopti.Ccc.Win</Name>
     <Name>Teleopti.Ccc.WinCode</Name>
+    <Name>Teleopti.Ccc.WinCodeTest</Name>
+    <Name>Teleopti.Ccc.UserTexts</Name>
     <Name>Teleopti.Common.UI.SmartPartControls</Name>
     <Name>Teleopti.Ccc.SmartClientPortal.Shell</Name>
     <Name>Teleopti.Ccc.AgentPortal</Name>
     <Name>Teleopti.Ccc.WpfControls</Name>
     <Name>Teleopti.Messaging</Name>
+    <Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Analytics.Etl.Common</Name>
+    <Name>Teleopti.Analytics.Etl.CommonTest</Name>
     <Name>Teleopti.Analytics.Etl.ConfigTool</Name>
     <Name>Teleopti.Analytics.Etl.Transformer</Name>
     <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
+    <Name>Teleopti.Analytics.Etl.TransformerTest</Name>
+    <Name>Teleopti.Analytics.Etl.Interfaces</Name>
     <Name>Teleopti.Ccc.SmartParts</Name>
     <Name>Teleopti.Ccc.Sdk.WcfHost</Name>
     <Name>Teleopti.Ccc.Sdk.WcfSdkService</Name>
     <Name>DBManager</Name>
     <Name>CccAppConfig</Name>
+    <Name>Teleopti.Ccc.ApplicationConfigTest</Name>
     <Name>Teleopti.Ccc.DBConverter</Name>
     <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>
     <Name>Teleopti.Ccc.AgentPortalCode</Name>
     <Name>Teleopti.Analytics.Etl.PerformanceManagerProxy</Name>
     <Name>Teleopti.Ccc.PayrollFormatter</Name>
+    <Name>Teleopti.Ccc.PayrollFormatterTest</Name>
     <Name>Teleopti.Ccc.Payroll</Name>
+    <Name>Teleopti.Ccc.PayrollTest</Name>
     <Name>AnalysisServicesManager</Name>
     <Name>Teleopti.Analytics.Etl.ServiceHost</Name>
-    <Name>Teleopti.Ccc.Rta.LogClientProxy</Name>
-    <Name>Teleopti.Ccc.Rta.LogClient</Name>
-    <Name>Teleopti.Ccc.Rta.Server</Name>
     <Name>Teleopti.Ccc.Rta.TestApplication</Name>
-    <Name>Teleopti.Ccc.Rta.WebService</Name>
     <Name>Teleopti.Ccc.Sdk.Common</Name>
     <Name>Teleopti.Ccc.Sdk.Logic</Name>
+    <Name>Teleopti.Ccc.Sdk.LogicTest</Name>
+    <Name>Teleopti.Ccc.AgentPortalCodeTest</Name>
     <Name>Teleopti.Analytics.Etl.ConfigToolCode</Name>
     <Name>Teleopti.Support.Tool</Name>
+    <Name>Teleopti.Ccc.Sdk.ServiceBusTest</Name>
     <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>
     <Name>Teleopti.Ccc.Sdk.ServiceBus.Host</Name>
     <Name>Teleopti.Ccc.IocCommon</Name>
+    <Name>Teleopti.Ccc.IocCommonTest</Name>
     <Name>Teleopti.Ccc.OnlineReporting</Name>
     <Name>Teleopti.Support.Security</Name>
     <Name>Teleopti.Ccc.SyncfusionGridBinding</Name>
+    <Name>Teleopti.Ccc.TestCommon</Name>
     <Name>Teleopti.Analytics.Etl.ServiceLogic</Name>
     <Name>Teleopti.Ccc.Sdk.Client</Name>
     <Name>ClickOnceSign</Name>
     <Name>Teleopti.Ccc.Web</Name>
     <Name>Teleopti.Ccc.WebTest</Name>
-	<Name>Teleopti.Ccc.WebBehaviorTest</Name>
+    <Name>Teleopti.Ccc.WebBehaviorTest</Name>
     <Name>Teleopti.Support.LicTool</Name>
     <Name>Teleopti.Ccc.Web.Broker</Name>
+    <Name>Teleopti.Analytics.Etl.ConfigToolCodeTest</Name>
     <Name>Teleopti.Analytics.PM.PMServiceHost</Name>
     <Name>Teleopti.Analytics.Portal</Name>
     <Name>Teleopti.Analytics.Parameters</Name>
     <Name>Teleopti.Analytics.Portal.AnalyzerProxy</Name>
+    <Name>Teleopti.Analytics.ReportTexts</Name>
     <Name>Teleopti.Ccc.DBManager.Library</Name>
     <Name>Teleopti.Ccc.Sdk.Notification</Name>
+    <Name>Teleopti.Ccc.Startpage</Name>
     <Name>Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost</Name>
     <Name>Teleopti.Ccc.Web.Broker.Backplane</Name>
-	<Name>Teleopti.Ccc.DomainTest</Name>
-	<Name>Teleopti.Ccc.InfrastructureTest</Name>
-	<Name>Teleopti.Ccc.DatabaseConverterTest</Name>
-	<Name>Teleopti.Ccc.WinCodeTest</Name>
-	<Name>Teleopti.Analytics.Etl.CommonTest</Name>
-	<Name>Teleopti.Analytics.Etl.TransformerTest</Name>
-	<Name>Teleopti.Ccc.PayrollFormatterTest</Name>
-	<Name>Teleopti.Ccc.PayrollTest</Name>
-	<Name>Teleopti.Ccc.Rta.LogClientTest</Name>
-	<Name>Teleopti.Ccc.Rta.ServerTest</Name>
-	<Name>Teleopti.Ccc.Sdk.LogicTest</Name>
-	<Name>Teleopti.Ccc.AgentPortalCodeTest</Name>
-	<Name>Teleopti.Ccc.Sdk.ServiceBusTest</Name>
-	<Name>Teleopti.Ccc.TestCommon</Name>
-	<Name>Teleopti.Ccc.DayOffPlanningTest</Name>
-	<Name>Teleopti.Ccc.IocCommonTest</Name>
-	<Name>Teleopti.Ccc.UserTexts</Name>
-	<Name>Teleopti.Analytics.Etl.Interfaces</Name>
-	<Name>Teleopti.Ccc.Rta.Interfaces</Name>
-	<Name>Teleopti.Analytics.ReportTexts</Name>
-	<Name>Teleopti.Analytics.Etl.IntegrationTest</Name>
+    <Name>Teleopti.Support.Code</Name>
+    <Name>Teleopti.MessagingTest</Name>
+    <Name>Teleopti.Support.CodeTest</Name>
+    <Name>Teleopti.Analytics.Etl.IntegrationTest</Name>
+    <Name>Teleopti.Ccc.Web.AuthenticationBridge</Name>
+    <Name>Teleopti.Ccc.Web.WindowsIdentityProvider</Name>
+    <Name>Teleopti.Ccc.Web.WindowsIdentityProviderTest</Name>
   </Assemblies>
   <FrameworkAssemblies>
-	<Name>System.Web.Optimization</Name>
-    <Name>nunit.framework</Name>
-    <Name>SharpTestsEx</Name>
     <Name>mscorlib</Name>
+    <Name>Teleopti.Ccc.Secrets</Name>
+    <Name>Teleopti.Ccc.Domain.Calculation</Name>
     <Name>System</Name>
     <Name>System.IdentityModel</Name>
     <Name>log4net</Name>
     <Name>System.Drawing</Name>
-    <Name>Iesi.Collections</Name>
-    <Name>System.Xml</Name>
     <Name>System.Core</Name>
+    <Name>System.Xml</Name>
     <Name>System.Data</Name>
+    <Name>Rhino.Mocks</Name>
+    <Name>nunit.framework</Name>
+    <Name>SharpTestsEx</Name>
     <Name>NHibernate</Name>
     <Name>NHibernate.Envers</Name>
     <Name>System.Transactions</Name>
     <Name>Autofac</Name>
+    <Name>System.Runtime.Caching</Name>
     <Name>System.Xml.Linq</Name>
     <Name>System.Configuration</Name>
     <Name>Newtonsoft.Json</Name>
-    <Name>System.Security</Name>
+    <Name>System.Web</Name>
     <Name>Domain</Name>
     <Name>Infrastructure</Name>
-    <Name>Syncfusion.Tools.Windows</Name>
+    <Name>Syncfusion.Shared.Base</Name>
     <Name>Microsoft.Practices.Composite.Presentation</Name>
     <Name>System.Windows.Forms</Name>
+    <Name>Syncfusion.Tools.Windows</Name>
     <Name>Syncfusion.Grid.Windows</Name>
-    <Name>Syncfusion.Shared.Base</Name>
     <Name>Syncfusion.Schedule.Base</Name>
+    <Name>Syncfusion.Chart.Windows</Name>
     <Name>Syncfusion.Chart.Base</Name>
     <Name>Microsoft.Practices.Composite</Name>
-    <Name>Syncfusion.Chart.Windows</Name>
+    <Name>PresentationCore</Name>
     <Name>WindowsFormsIntegration</Name>
     <Name>Syncfusion.Schedule.Windows</Name>
     <Name>Syncfusion.Pdf.Base</Name>
     <Name>Syncfusion.Grid.Grouping.Windows</Name>
     <Name>PresentationFramework</Name>
-    <Name>PresentationCore</Name>
+    <Name>WindowsBase</Name>
     <Name>System.Runtime.Serialization.Formatters.Soap</Name>
     <Name>System.ServiceModel</Name>
     <Name>System.Deployment</Name>
     <Name>Microsoft.ReportViewer.WinForms</Name>
     <Name>Syncfusion.Grouping.Base</Name>
-    <Name>System.Web</Name>
     <Name>MbCache</Name>
-    <Name>WindowsBase</Name>
+    <Name>Rhino.ServiceBus</Name>
+    <Name>Rhino.ServiceBus.SqlQueues</Name>
+    <Name>Rhino.ServiceBus.Autofac</Name>
     <Name>Microsoft.Practices.CompositeUI.WPF</Name>
     <Name>Microsoft.Practices.CompositeUI</Name>
+    <Name>EO.WebBrowser</Name>
     <Name>Microsoft.Practices.ObjectBuilder</Name>
     <Name>Microsoft.Practices.CompositeUI.WinForms</Name>
     <Name>System.Xaml</Name>
     <Name>Syncfusion.Shared.Wpf</Name>
-    <Name>WPFToolkit</Name>
+    <Name>System.Net.Http</Name>
     <Name>Microsoft.AspNet.SignalR.Client</Name>
     <Name>Ricciolo.Controls.TreeListView</Name>
     <Name>Microsoft.AnalysisServices.AdomdClient</Name>
     <Name>Autofac.Integration.Wcf</Name>
-    <Name>Rhino.Mocks</Name>
-    <Name>Rhino.ServiceBus</Name>
-    <Name>Rhino.ServiceBus.SqlQueues</Name>
-    <Name>Rhino.ServiceBus.Autofac</Name>
     <Name>System.Runtime.Serialization</Name>
     <Name>Microsoft.AnalysisServices</Name>
     <Name>System.Configuration.Install</Name>
     <Name>System.ServiceProcess</Name>
     <Name>System.Web.Services</Name>
     <Name>Common.Logging</Name>
+    <Name>SevenZipSharp</Name>
+    <Name>System.Management</Name>
+    <Name>Microsoft.VisualBasic</Name>
+    <Name>Toggle.Net</Name>
     <Name>MbCache.ProxyImpl.LinFu</Name>
     <Name>System.Data.DataSetExtensions</Name>
     <Name>System.Web.Mvc</Name>
     <Name>AutoMapper</Name>
-    <Name>Microsoft.AspNet.SignalR.Core</Name>
     <Name>System.ComponentModel.DataAnnotations</Name>
-    <Name>Castle.Core</Name>
-    <Name>DotNetOpenAuth.OpenId</Name>
-    <Name>DotNetOpenAuth.Core</Name>
     <Name>DotNetOpenAuth.OpenId.Provider</Name>
-    <Name>DDay.iCal</Name>
+    <Name>Microsoft.IdentityModel</Name>
+    <Name>Microsoft.AspNet.SignalR.Core</Name>
+    <Name>Castle.Core</Name>
+    <Name>System.Web.Optimization</Name>
+    <Name>DotNetOpenAuth.Core</Name>
+    <Name>DotNetOpenAuth.OpenId</Name>
     <Name>Microsoft.CSharp</Name>
     <Name>Autofac.Extras.DynamicProxy2</Name>
+    <Name>DDay.iCal</Name>
+    <Name>System.ServiceModel.Activation</Name>
+    <Name>DotNetOpenAuth.OpenId.Provider.UI</Name>
+    <Name>Microsoft.Web.Infrastructure</Name>
+    <Name>NodaTime</Name>
     <Name>Contrib.SignalR.SignalRMessageBus</Name>
     <Name>Microsoft.AspNet.SignalR.SystemWeb</Name>
-    <Name>Microsoft.Web.Infrastructure</Name>
     <Name>Autofac.Integration.Mvc</Name>
+    <Name>Autofac.Integration.SignalR</Name>
     <Name>Autofac.Configuration</Name>
+    <Name>Coypu</Name>
+    <Name>TechTalk.SpecFlow</Name>
+    <Name>WebDriver</Name>
+    <Name>IISExpress.Automation</Name>
     <Name>Microsoft.ReportViewer.WebForms</Name>
     <Name>System.Web.Extensions</Name>
     <Name>AjaxControlToolkit</Name>
     <Name>System.Web.ApplicationServices</Name>
     <Name>Contrib.SignalR.SignalRMessageBus.Backend</Name>
-	<Name>EntityFramework</Name>
+    <Name>MvcContrib.TestHelper</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
