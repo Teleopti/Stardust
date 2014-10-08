@@ -166,6 +166,11 @@ namespace Teleopti.Ccc.Win.Grouping
 					// Get the destination node 
 					var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
 
+	                if (!IsPersonNode(sourceNode))
+	                {
+						if(sourceNode.HasNode(destinationNode) || sourceNode == destinationNode) return;   
+	                }
+
 					//Clone the nodes to avoid the override issue
 					var selectedNodesCollection = (SelectedNodesCollection)sourceNode.TreeView.SelectedNodes.Clone();
 
@@ -917,7 +922,12 @@ namespace Teleopti.Ccc.Win.Grouping
 				{
 					for (var i = 0; i < _cutSourceNode.Count; i++)
 					{
-						performNodeMoveInGroupPage(_cutSourceNode[i], _rightMouseDownNodeCached[0]);   
+	                    if (!isPersonNode(_cutSourceNode[i]))
+	                    {
+							if(_cutSourceNode[i].HasNode(_rightMouseDownNodeCached[0]) || _cutSourceNode[i] == _rightMouseDownNodeCached[0])
+   								continue;
+	                    }
+						performNodeMoveInGroupPage(_cutSourceNode[i], _rightMouseDownNodeCached[0]);
 					}
 					_rightMouseDownNodeCached[0].Expand();
 					_cutSourceNode = null;
