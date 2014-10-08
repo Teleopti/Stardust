@@ -7,7 +7,20 @@ DECLARE @ana nvarchar(500) = @computer + '_TeleoptiAnalytics'
 DECLARE @agg nvarchar(500) = @computer + '_TeleoptiCCCAgg'
 DECLARE @app nvarchar(500) = @computer + '_TeleoptiCCC7'
 
-DECLARE @dataFolderRelease nvarchar(4000) = CAST(SERVERPROPERTY('instancedefaultdatapath') AS nvarchar(500)) + @computer
+DECLARE @dataFolderRelease nvarchar(4000) 
+DECLARE @rc				int
+
+-- Read reg values to get default datapath
+EXEC @rc = master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE',N'Software\Microsoft\MSSQLServer\MSSQLServer',N'DefaultData',  @dataFolderRelease output, 'no_output' 
+	
+-- Check if value is NULL. In that case no changes has been done to default setup. Read from SQLDataRoot instead
+IF ( @dataFolderRelease is null) 
+BEGIN
+	EXEC	@rc = master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE',N'Software\Microsoft\MSSQLServer\Setup',N'SQLDataRoot', @dataFolderRelease output, 'no_output'
+	SELECT	 @dataFolderRelease =  @dataFolderRelease + N'\Data'
+END
+
+SET @dataFolderRelease = @dataFolderRelease + '\' + @computer
 DECLARE @backupFolder nvarchar(4000) = 'D:\SQLData\CCC\MSSQL10_50.CCC\MSSQL\Backup\QA Baselines\'
 
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @ana)
@@ -70,4 +83,3 @@ STATS = 10')
 exec('ALTER DATABASE ' + @app + ' SET  MULTI_USER')
 exec('ALTER DATABASE ' + @app +  ' SET RECOVERY SIMPLE WITH NO_WAIT')
 END
-
