@@ -4561,11 +4561,11 @@ Periods</comment>
     <comment>Agent info</comment>
   </data>
   <data name="Pin" xml:space="preserve">
-    <value>Observieren</value>
+    <value>Auswählen</value>
     <comment>used in rta</comment>
   </data>
   <data name="PinnedUpWindow" xml:space="preserve">
-    <value>Observieren Fenster</value>
+    <value>Auswahl Fenster</value>
     <comment>used in intraday </comment>
   </data>
   <data name="PlaceHolder" xml:space="preserve">
@@ -10913,9 +10913,318 @@ Diese Optionen sind aktiviert:
     <value>Zusammenfassung</value>
   </data>
   <data name="Ranking" xml:space="preserve">
-    <value>Rang</value>
+    <value>Seniorität</value>
   </data>
   <data name="RealTimeAdherenceOverview" xml:space="preserve">
     <value>Real Time Adherence Überblick</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Eingabe ist ungültig.Möglicherweise sind die eingegebenen Stunden kleiner als die minimale Zeit pro Woche.</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>zwischen freien Tagen</value>
+  </data>
+  <data name="SwapRaw" xml:space="preserve">
+    <value>Rohtausch</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>Anzahl der Mitarbeiter lt. Budget-Gruppe</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Anzahl der Mitarbeiter</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Die Schichtkategorie-Begrenzung wird nicht geprüft, wenn Team- oder Blockplanung ausgewählt wurde.</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Optionen</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Optionen Überstundenplanung</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Die Optimierungsoptionen "Soll-Toleranz lt. Vertrag nutzen", "Toleranz freier Tage lt. Vertrag nutzen" und "Schichtkategorie-Begrenzung" werden nicht berücksichtigt, wenn Team- oder Blockplanung ausgewählt wurden.</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Ansicht Monatsplan</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Ansicht Personalkonten</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>navigieren</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Wählen Sie mindestens eine Person aus</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Nur Mitarbeiter mit einer Überstunden-Verfügbarkeit</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Planabweichung</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Vorlaufzeit für Benachrichtigung zur Aktivitätsänderung (Sekunden)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Mindestens ein Tag konnte nicht geplant werden</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>Keine Datenquelle vorhanden.</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Anmelden als anderer Nutzer</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Anmeldung mit:</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Anmelden als anderer Nutzer</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>Aktuelle Schicht endet um {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Nächste Aktivität ({0}) startet um {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>Team-Planung</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;Kein Block&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;Kein Team&gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>Planungsperiode</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>Desktop</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>Mobil</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>Nächste Aktivität</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>Startzeit nächste Aktivität</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>Zeit im Status</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>Minimum Zeit pro Woche</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>Sie haben eine Begrenzung der wöchentlichen Arbeitszeit gebrochen.</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>Team Kennzahlen</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>Zeit in Alarm</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>Server nicht erreichbar. Deswegen sind nicht alle Funktionen verfügbar.</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>Seniorität aufsteigend</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>Seniorität absteigend</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>DATEI</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Öffne Schichten...</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>Aktivität verschieben</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>Meine Tauschauswahl</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>Kompaktansicht</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>Anfragen</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>Alle Teams</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>Agent Badge</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Schwellenwert beantwortete Anrufe:</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>Schwellenwert durchschnittliche Bearbeitungszeit (AHT; in HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>Schwellenwert Planeinhaltung (%);</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>Anzahl der Bronzesterne, die einem Silberstern entsprechen:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>Anzahl der Silbersterne, die einem Goldstern entsprechen:</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>Agent Badge anzeigen</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>Füge eine Aktivität ein für </value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>Füge eine Ganztagsabwesenheit ein für</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>Füge eine Abwesenheit ein für</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>Abgebrochen!</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>Verschiebe eine Aktivität für</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>Entferne eine Abwesenheit für</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>Bitte aktualisieren Sie die Seite!</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>Bitte versuchen Sie es erneut!</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>Erfolgreich!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>Glückwunsch!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>Datei</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Abmelden</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>Sie sind nicht angemeldet.</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>Die Woche enthält zu wenig Arbeitszeit ({0}). Minimum ist {1}.</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>Lösche Skill</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Startseite</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Bitte geben Sie ihre Email-Adresse ein, um auf das Teleopti-Angebot zuzugreifen.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Sie haben einen neuen BRONZEstern! Ihre Planeinhaltung in {1.yyyy-MM-dd} ist über {0}.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Sie haben einen neuen BRONZEstern! Ihre durchschnittliche Bearbeitungszeit in {1.yyyy-MM-dd} ist unter {0} Sekunden.</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Sie haben einen neuen BRONZEstern! Sie haben mehr als {0} Anrufe beantwortet in {1.yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Sie haben einen neuen GOLDstern! Ihre Planeinhaltung ist über {0} an {1} verschiedenen Tagen.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Sie haben einen neuen GOLDstern! Ihre durchschnittliche Bearbeitungszeit ist unter {0} an {1} verschiedenen Tagen.</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Sie haben einen neuen GOLDstern! Sie haben jeweils mehr als {0} Anrufe an {1} verschiedenen Tagen beantwortet.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Sie haben einen neuen SILBERstern! Ihre Planeinhaltung ist über {0} an {1} verschiedenen Tagen.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Sie haben einen neuen SILBERstern! Ihre durchschnittliche Bearbeitungszeit ist unter {0} an {1} verschiedenen Tagen.</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Sie haben einen neuen SILBERstern! Sie haben jeweils mehr als {0} Anrufe an {1} verschiedenen Tagen beantwortet.</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>Gefilterte Liste</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>Mehrere Personen filtern</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>Forecast in ein anderes Szeanrio speichern</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>Speichern als</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>Filterergebnis</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>Mögliche Übereinstimmungen</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>Erweiterter Filter</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>aufheben</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>Duplikate anzeigen</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Badge anzeigen</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Vorname] [Nachname]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Nachname] [Vorname]</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Badges zurücksetzen</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Es werden alle Badges aller Mitarbeiter gelöscht! Wollen Sie fortfahren? </value>
+  </data>
+  <data name="BadgeTypeChecked" xml:space="preserve">
+    <value>benutze</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>Keine gültigen Schichten in der Schichtsammlung</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Zurücksetzen der Badges abgebrochen! Bitte versuchen Sie es erneut.</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} kann nicht früher als {1} beginnen</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Ende der Ganztagsabwesenheit</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Beginn der Ganztagsabwesenheit</value>
+  </data>
+  <data name="HiddenSystemSettings" xml:space="preserve">
+    <value>Verborgene Systemeinstellungen</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>Option "Zeit zwischen den Tagen" wird nicht ausgeführt, wenn bei der Blockplanung "Gleiche Schichten" ausgewählt wurde, </value>
   </data>
 </root>

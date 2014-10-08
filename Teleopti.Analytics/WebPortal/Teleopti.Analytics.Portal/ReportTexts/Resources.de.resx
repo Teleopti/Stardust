@@ -1098,4 +1098,7 @@
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
     <value>Zeit im Status pro Agent</value>
   </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Statusgruppen</value>
+  </data>
 </root>
