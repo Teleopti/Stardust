@@ -164,6 +164,7 @@
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\NotificationValidationCheckTest.cs" />
+    <Compile Include="Notification\NotifierTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		private readonly INotifier _notifier;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(NotificationValidationCheck));
 
 		public NotificationValidationCheck(ISignificantChangeChecker significantChangeChecker, INotificationChecker notificationChecker, INotifier notifier, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{

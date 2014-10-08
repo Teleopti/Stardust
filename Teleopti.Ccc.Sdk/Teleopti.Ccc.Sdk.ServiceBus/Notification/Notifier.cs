@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
 	public class Notifier : INotifier
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(Notifier));
 		private readonly INotificationSenderFactory _notificationSenderFactory;
 
 		public Notifier(INotificationSenderFactory notificationSenderFactory)
