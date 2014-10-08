@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 			{
 				Logger.Info("Found SMSLink license.");
-				var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
-				if (hasVisibleSignificantChange(smsMessages))
+				var changeNotificationMessage = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
+				if (hasVisibleSignificantChange(changeNotificationMessage))
 				{
-					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " on " + person.Name);
+					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " for " + person.Name);
 
-					_notifier.Notify(smsMessages,
+					_notifier.Notify(changeNotificationMessage,
 						new NotificationHeader
 						{
 							EmailSender = _notificationChecker.EmailSender,
@@ -54,6 +54,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 							EmailReceiver = person.Email,
 							PersonName = person.Name.ToString()
 						});
+				}
+				else
+				{
+					Logger.Info("No significant change found on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " for " + person.Name);
 				}
 			}
 			else

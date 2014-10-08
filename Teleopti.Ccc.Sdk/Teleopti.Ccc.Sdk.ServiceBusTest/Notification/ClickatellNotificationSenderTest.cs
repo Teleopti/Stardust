@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Notification;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
@@ -18,9 +19,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		private INotificationConfigReader _notificationConfigReader;
 		private ClickatellNotificationSender _target;
 		private readonly INotificationMessage smsMessage = new NotificationMessage { Subject = "Schedule has changed" };
-	    private INotificationClient _notificationClient;
+		private INotificationClient _notificationClient;
 
-	    private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
+		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
 	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
@@ -59,9 +60,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			smsMessage.Messages.Add("On a day");
 			_notificationConfigReader.Stub(x => x.HasLoadedConfig).Return(false);
 
-			_target.SendNotification(smsMessage, "");
+			_target.SendNotification(smsMessage, new NotificationHeader());
 
-            _notificationConfigReader.AssertWasCalled(x => x.HasLoadedConfig);
+			_notificationConfigReader.AssertWasCalled(x => x.HasLoadedConfig);
 		}
 
 		[Test]
@@ -71,27 +72,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(xml);
 
-			_notificationConfigReader = new TestNotificationConfigReader(doc,_notificationClient);
+			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
-			_target.SendNotification(smsMessage, "46709218108");
+			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
 
-		    _notificationClient.AssertWasCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
+			_notificationClient.AssertWasCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
 		}
 
-	   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
-        public void ShouldSplitMessageIfGreaterThanMaxSmsLength()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
+		public void ShouldSplitMessageIfGreaterThanMaxSmsLength()
 		{
-		    INotificationMessage msg = new NotificationMessage();
-		    msg.Subject = "Your Working Hours have changed";
-            msg.Messages.Add("Monday 2012-01-01 08:00-17:00");
-            msg.Messages.Add("Tuesday 2012-01-02 08:00-16:00");
-            msg.Messages.Add("Wedneday 2012-01-03 08:00-16:00");
-            msg.Messages.Add("Thrusday 2012-01-04 08:00-16:00");
-            msg.Messages.Add("Friday 2012-01-05 08:00-16:00");
-            msg.Messages.Add("Monday 2012-01-08 Not Working");
-            
-            IList<string> messages = _target.GetSmsMessagesToSend(msg, false);
-            Assert.That(messages.Count, Is.EqualTo(2));
+			INotificationMessage msg = new NotificationMessage();
+			msg.Subject = "Your Working Hours have changed";
+			msg.Messages.Add("Monday 2012-01-01 08:00-17:00");
+			msg.Messages.Add("Tuesday 2012-01-02 08:00-16:00");
+			msg.Messages.Add("Wedneday 2012-01-03 08:00-16:00");
+			msg.Messages.Add("Thrusday 2012-01-04 08:00-16:00");
+			msg.Messages.Add("Friday 2012-01-05 08:00-16:00");
+			msg.Messages.Add("Monday 2012-01-08 Not Working");
+
+			IList<string> messages = _target.GetSmsMessagesToSend(msg, false);
+			Assert.That(messages.Count, Is.EqualTo(2));
 		}
 
 		[Test]
@@ -134,9 +135,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(incorrectXml);
 
-            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
-			_target.SendNotification(smsMessage, "46709218108");
+			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
 		}
 
 		[Test]
@@ -168,11 +169,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(xmlWithNoCheck);
 
-            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
-			_target.SendNotification(smsMessage, "46709218108");
+			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
 		}
-	
+
 		[Test, ExpectedException(typeof(SendNotificationException))]
 		public void ShouldSearchForSuccess()
 		{
@@ -203,26 +204,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var doc = new XmlDocument();
 			doc.LoadXml(xmlWithSuccessCheck);
 
-            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 
-		    using (var writer = new StreamWriter(new MemoryStream()))
-		    {
-                writer.Write("detgickintebra");
-                writer.Flush();
-                writer.BaseStream.Position = 0;
-		        _notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
-                    .IgnoreArguments()
-		            .Return(writer.BaseStream);
+			using (var writer = new StreamWriter(new MemoryStream()))
+			{
+				writer.Write("detgickintebra");
+				writer.Flush();
+				writer.BaseStream.Position = 0;
+				_notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
+								.IgnoreArguments()
+						.Return(writer.BaseStream);
 
-		        _target.SetConfigReader(_notificationConfigReader);
-		        _target.SendNotification(smsMessage, "46709218108");
-		    }
+				_target.SetConfigReader(_notificationConfigReader);
+				_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+			}
 		}
 
-        [Test, ExpectedException(typeof(SendNotificationException))]
-        public void ShouldSearchForFailure()
-        {
-            const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
+		[Test, ExpectedException(typeof(SendNotificationException))]
+		public void ShouldSearchForFailure()
+		{
+			const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
 	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
@@ -245,40 +246,41 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";
-            smsMessage.Messages.Add("test1");
-            var doc = new XmlDocument();
-            doc.LoadXml(xmlWithSuccessCheck);
+			smsMessage.Messages.Add("test1");
+			var doc = new XmlDocument();
+			doc.LoadXml(xmlWithSuccessCheck);
 
-            _notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 
-            using (var writer = new StreamWriter(new MemoryStream()))
-            {
-                writer.Write("fault");
-                writer.Flush();
-                writer.BaseStream.Position = 0;
-                _notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
-                    .IgnoreArguments()
-                    .Return(writer.BaseStream);
+			using (var writer = new StreamWriter(new MemoryStream()))
+			{
+				writer.Write("fault");
+				writer.Flush();
+				writer.BaseStream.Position = 0;
+				_notificationClient.Stub(x => x.MakeRequest(_notificationConfigReader.Data))
+						.IgnoreArguments()
+						.Return(writer.BaseStream);
 
-                _target.SetConfigReader(_notificationConfigReader);
-                _target.SendNotification(smsMessage, "46709218108");
-            }
-        }
+				_target.SetConfigReader(_notificationConfigReader);
+				_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+			}
+		}
 
-	    private class TestNotificationConfigReader : NotificationConfigReader
-	    {
-	        private readonly INotificationClient _client;
+		private class TestNotificationConfigReader : NotificationConfigReader
+		{
+			private readonly INotificationClient _client;
 
-	        public TestNotificationConfigReader(XmlDocument document, INotificationClient client) : base(document)
-	        {
-	            _client = client;
-	        }
+			public TestNotificationConfigReader(XmlDocument document, INotificationClient client)
+				: base(document)
+			{
+				_client = client;
+			}
 
-	        public override INotificationClient CreateClient()
-	        {
-	            return _client;
-	        }
-	    }
+			public override INotificationClient CreateClient()
+			{
+				return _client;
+			}
+		}
 	}
 }
 
