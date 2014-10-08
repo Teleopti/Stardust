@@ -1,4 +1,4 @@
-﻿define(['buster', 'views/realtimeadherenceagents/vm'], function (buster, viewModel) {
+﻿define(['buster', 'views/realtimeadherenceagents/vm','window'], function (buster, viewModel, window) {
 	return function () {
 
 		buster.testCase("real time adherence agents viewmodel", {
@@ -173,7 +173,7 @@
 				});
 
 				vm.fillAgents([agent1]);
-				var expectedUrl = window.location.origin + window.location.pathname + "#teamschedule/" + vm.BusinessUnitId() + "/" + agent1.TeamId + "/" + agent1.PersonId + "/" + moment((new Date).getTime()).format("YYYYMMDD");
+				var expectedUrl = window.baseLocation() + "#teamschedule/" + vm.BusinessUnitId() + "/" + agent1.TeamId + "/" + agent1.PersonId + "/" + moment((new Date).getTime()).format("YYYYMMDD");
 				assert.equals(vm.urlForChangingSchedule(agent1), expectedUrl);
 			},
 

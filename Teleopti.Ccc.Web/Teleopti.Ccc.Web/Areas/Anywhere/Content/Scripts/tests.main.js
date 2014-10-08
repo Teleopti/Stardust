@@ -10,7 +10,12 @@ define('resources', {
 define('window', {
 	setLocationHash: function () { },
 	locationReplace: function () { },
-	baseLocation: function () { return window.location.origin + window.location.pathname; }
+	baseLocation: function () {
+		if (!window.location.origin) {
+			window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+		}
+		return window.location.origin + window.location.pathname;
+	}
 });
 
 var testCases = [
@@ -21,7 +26,8 @@ var testCases = [
 	'views/realtimeadherenceteams/vm_test',
 	'views/realtimeadherenceagents/vm_test',
 	'views/realtimeadherenceteams/team_test',
-	'helpers_test'
+	'helpers_test',
+	'navigation_test'
 ];
 
 var parseQueryString = function (queryString) {
