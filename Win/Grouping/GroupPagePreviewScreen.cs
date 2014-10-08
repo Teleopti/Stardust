@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Win.Grouping
 					// Get the destination node 
 					var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
 
-	                if (!IsPersonNode(sourceNode))
+	                if (!isPersonNode(sourceNode))
 	                {
 						if(sourceNode.HasNode(destinationNode) || sourceNode == destinationNode) return;   
 	                }
