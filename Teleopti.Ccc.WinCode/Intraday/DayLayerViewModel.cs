@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -143,6 +142,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 		private void updateAgentState(DayLayerModel dayLayerModel, IActualAgentState agentState)
 		{
+
 			ModelEditable.EditItem(dayLayerModel);
 			dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
 			dayLayerModel.EnteredCurrentState = agentState.StateStart;
@@ -151,13 +151,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			dayLayerModel.CurrentStateDescription = agentState.State;
 			dayLayerModel.AlarmStart = agentState.AlarmStart;
 			dayLayerModel.HasAlarm = agentState.AlarmId != Guid.Empty;
-
-			if (DateTime.UtcNow > dayLayerModel.AlarmStart)
-			{
-				dayLayerModel.StaffingEffect = agentState.StaffingEffect;
-				dayLayerModel.ColorValue = agentState.Color;
-				dayLayerModel.AlarmDescription = agentState.AlarmName;
-			}
+			dayLayerModel.StaffingEffect = agentState.StaffingEffect;
+			dayLayerModel.ColorValue = agentState.Color;
+			dayLayerModel.AlarmDescription = agentState.AlarmName;
+			
 			ModelEditable.CommitEdit();
 		}
 
