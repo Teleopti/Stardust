@@ -22,6 +22,12 @@
 			rtaServerCall(makeAgentState('Ready'));
 		};
 
+		self.specifiedState = ko.observable('');
+
+		self.sendState = function() {
+			rtaServerCall(makeAgentState(self.specifiedState()));
+		}
+
 		var makeAgentState = function(stateCode) {
 			return {
 				AuthenticationKey: self.AuthenticationKey,

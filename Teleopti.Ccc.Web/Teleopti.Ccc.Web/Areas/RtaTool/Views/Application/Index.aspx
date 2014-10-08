@@ -40,6 +40,13 @@
 				<td>
 					<button class="btn btn-danger" data-bind="click: hangUp">Hang up</button>
 				</td>
+				
+				<td>
+					<input data-bind="value: specifiedState"/>
+				</td>
+				<td>
+					<button class="btn btn-default" data-bind="click: sendState">Send</button>
+				</td>
 			</tr>
 		</table>
 	</div>
