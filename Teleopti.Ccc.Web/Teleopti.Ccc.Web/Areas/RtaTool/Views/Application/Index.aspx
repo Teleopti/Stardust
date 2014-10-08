@@ -42,9 +42,10 @@
 				</td>
 				
 				<td>
-					<input data-bind="value: specifiedState"/>
+					
 				</td>
 				<td>
+					<input data-bind="value: specifiedState"/>
 					<button class="btn btn-default" data-bind="click: sendState">Send</button>
 				</td>
 			</tr>
