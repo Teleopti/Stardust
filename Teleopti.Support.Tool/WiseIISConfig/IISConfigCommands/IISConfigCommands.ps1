@@ -288,6 +288,13 @@ function Install-TeleoptiCCCServer
 	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
 }
 
+function Post-Install-Config-TeleoptiCCCServer
+{
+    param (
+    [string]$ToggleMode,
+    )
+
+}
 
 
 function Add-UserToLocalGroup{

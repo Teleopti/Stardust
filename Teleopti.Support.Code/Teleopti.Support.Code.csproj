@@ -66,6 +66,7 @@
     <Compile Include="Tool\SearchReplace.cs" />
     <Compile Include="Tool\SettingsFileManager.cs" />
     <Compile Include="Tool\SettingsReader.cs" />
+    <Compile Include="Tool\SetToggleModeCommand.cs" />
     <Compile Include="Tool\SsoConfigurationBackupHandler.cs" />
     <Compile Include="Tool\SsoConfigurationRestoreHandler.cs" />
     <Compile Include="Tool\SsoFilePathReader.cs" />
