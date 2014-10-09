@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public ScheduleDayReadModelHandler(IPersonRepository personRepository,
-		                                   INotificationValidationCheck notificationValidationCheck,
-		                                   IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-		                                   IScheduleDayReadModelRepository scheduleDayReadModelRepository)
+																			 INotificationValidationCheck notificationValidationCheck,
+																			 IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
+																			 IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
 			_personRepository = personRepository;
 			_notificationValidationCheck = notificationValidationCheck;
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
-				if (!message.IsDefaultScenario) return;
+			if (!message.IsDefaultScenario) return;
 
-				var person = _personRepository.Get(message.PersonId);
+			var person = _personRepository.Get(message.PersonId);
 
 			foreach (var denormalizedScheduleDay in message.ScheduleDays)
 			{
