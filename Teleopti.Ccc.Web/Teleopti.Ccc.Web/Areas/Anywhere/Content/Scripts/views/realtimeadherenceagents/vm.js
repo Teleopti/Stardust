@@ -38,6 +38,8 @@
 		that.changeScheduleAvailable = ko.observable(false);
 		that.BusinessUnitId = ko.observable();
 		that.rootURI = ko.observable();
+		that.agentAdherenceEnabled = ko.observable(false);
+		that.AgentAdherence = ko.observable();
 
 		that.SetViewOptions = function (options) {
 			that.BusinessUnitId(options.buid);

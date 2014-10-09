@@ -119,6 +119,15 @@
 					viewModel.changeScheduleAvailable(true);
 				}
 			});
+
+			toggleQuerier('RTA_SeeHistoricalAdherenceForOneAgent_30783', {
+				enabled: function() {
+					viewModel.agentAdherenceEnabled(true);
+					
+				}
+			});
+
+			viewModel.AgentAdherence(55 + '%');
 		}
 	};
 });
