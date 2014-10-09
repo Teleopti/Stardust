@@ -163,8 +163,17 @@ Initiate builds
 - Force a build of project "AnyGivenProject"
 #Fail!
 NCover cause an exception until registered.
-We have already tried to register as part of MSBuild. Works, but it will fail when/if folder structures are changed.
-CD "C:\Program Files (x86)\CruiseControl.NET\server\<Release-7.4.388>\WorkingDirectory\ccnet\NCover64"
+::cd to source dir
+CD "C:\Program Files (x86)\CruiseControl.NET\server\CCC-7.5.390\WorkingDirectory"
+hg revert --all
+hg purge --all
+hg update
+
+::pre-reqs
+.nuget\nuget.exe install .nuget\packages.config -o packages -source "http://hestia/nuget";"https://nuget.org/api/v2"
+
+::register
+CD "C:\Program Files (x86)\CruiseControl.NET\server\CCC-7.5.390\WorkingDirectory\packages\Teleopti.NCover64.1.0.0\content"
 NCover.Registration.exe //License NC3CMPLIC.lic
 
 ------------------
