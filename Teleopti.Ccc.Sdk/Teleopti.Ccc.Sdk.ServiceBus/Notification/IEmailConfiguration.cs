@@ -4,8 +4,7 @@
 	{
 		string SmtpHost { get; }
 		int SmtpPort { get; }
-		int SmtpPortSsl { get; }
-		bool SmtpIsSslRequired { get; }
+		bool SmtpUseSsl { get; }
 		string SmtpUser { get; }
 		string SmtpPassword { get; }
 	}

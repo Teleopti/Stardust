@@ -253,8 +253,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			{
 				if (!HasLoadedConfig)
 					return true;
-				if (_configXml.GetElementsByTagName("SmtpIsSslRequired").Count > 0)
-					return Convert.ToBoolean(_configXml.GetElementsByTagName("SmtpIsSslRequired")[0].InnerText);
+				if (_configXml.GetElementsByTagName("SmtpUseSsl").Count > 0)
+					return Convert.ToBoolean(_configXml.GetElementsByTagName("SmtpUseSsl")[0].InnerText);
 				return false;
 			}
 		}

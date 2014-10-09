@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Mail;
 using log4net;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
@@ -15,34 +17,130 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			_emailConfiguration = emailConfiguration;
 		}
 
-		public void SendNotification(INotificationMessage message, NotificationHeader receiverInfo)
+		public void SendNotification(INotificationMessage message, NotificationHeader notificationHeader)
 		{
-			if (string.IsNullOrEmpty(receiverInfo.EmailReceiver))
-			{
-				Logger.Info("Did not find an email address for " + receiverInfo.PersonName);
+			if (!validateArguments(notificationHeader))
 				return;
+
+			using (var client = new SmtpClient(_emailConfiguration.SmtpHost, _emailConfiguration.SmtpPort))
+			{
+				client.Credentials = new NetworkCredential(_emailConfiguration.SmtpUser, _emailConfiguration.SmtpPassword);
+				client.EnableSsl = _emailConfiguration.SmtpUseSsl;
+
+				var from = new MailAddress(notificationHeader.EmailSender);
+				var to = new MailAddress(notificationHeader.EmailReceiver);
+
+				using (var mailMessage = new MailMessage(from, to))
+				{
+					mailMessage.Subject = message.Subject;
+					mailMessage.SubjectEncoding = System.Text.Encoding.UTF8;
+					mailMessage.Body = getBodyMessage(message);
+					mailMessage.BodyEncoding = System.Text.Encoding.UTF8;
+
+					try
+					{
+						client.Send(mailMessage);
+					}
+					catch (SmtpException exception)
+					{
+						Logger.Error(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
+					}
+					catch (Exception exception)
+					{
+						Logger.Error(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
+					}
+					
+				}
 			}
-			throw new NotImplementedException();
+		}
+
+		private string getBodyMessage(INotificationMessage notificationMessage)
+		{
+			string returnMessage = string.Empty;
+
+			foreach (var message in notificationMessage.Messages)
+			{
+				returnMessage += message + Environment.NewLine;
+			}
+
+			if (!string.IsNullOrEmpty(returnMessage))
+				returnMessage = returnMessage.Substring(0, returnMessage.Length - 2);
+
+			return returnMessage;
+		}
+
+		private bool hasSmtpHost()
+		{
+			if (string.IsNullOrEmpty(_emailConfiguration.SmtpHost))
+			{
+				Logger.Info("E-mail not sent due to missing SMTP Host.");
+				return false;
+			}
+			return true;
+		}
+
+		private bool hasSmtpPort()
+		{
+			if (_emailConfiguration.SmtpPort == 0)
+			{
+				Logger.Info("E-mail not sent due to missing SMTP Port.");
+				return false;
+			}
+			return true;
+		}
+
+		private bool hasSmtpCredentials()
+		{
+			if (string.IsNullOrEmpty(_emailConfiguration.SmtpUser) || string.IsNullOrEmpty(_emailConfiguration.SmtpPassword))
+			{
+				Logger.Info("E-mail not sent due to missing SMTP user and/or password.");
+				return false;
+			}
+			return true;
+		}
+
+		private bool hasEmailSender(NotificationHeader notificationHeader)
+		{
+			if (string.IsNullOrEmpty(notificationHeader.EmailSender))
+			{
+				Logger.Info("E-mail not sent due to missing sender.");
+				return false;
+			}
+			return true;
+		}
+
+		private bool hasEmailReceiver(NotificationHeader notificationHeader)
+		{
+			if (string.IsNullOrEmpty(notificationHeader.EmailReceiver))
+			{
+				Logger.Info("E-mail not sent due to missing receiver.");
+				return false;
+			}
+			return true;
+		}
+
+		private bool validateArguments(NotificationHeader notificationHeader)
+		{
+			if (!hasSmtpHost())
+				return false;
+
+			if (!hasSmtpPort())
+				return false;
+
+			if (!hasSmtpCredentials())
+				return false;
+
+			if (!hasEmailSender(notificationHeader))
+				return false;
+
+			if (!hasEmailReceiver(notificationHeader))
+				return false;
+
+			return true;
 		}
 
 		public void SetConfigReader(INotificationConfigReader notificationConfigReader)
 		{
-			//_emailConfiguration = new EmailConfiguration(notificationConfigReader);
 		}
-
-		//private string getMessage(INotificationMessage smsMessages)
-		//{
-		//	string returnMessage = string.Empty;
-
-		//	foreach (var message in smsMessages.Messages)
-		//	{
-		//		returnMessage += message + "\r\n";
-		//	}
-
-		//	if (!returnMessage.IsNullOrEmpty())
-		//		returnMessage = returnMessage.Substring(0, returnMessage.Length - 2);
-
-		//	return returnMessage;
-		//}
 	}
 }

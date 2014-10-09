@@ -26,8 +26,7 @@
 	</data>
 	<SmtpHost>smtp.domain.com</SmtpHost>
 	<SmtpPort>81</SmtpPort>
-	<SmtpPortSsl>82</SmtpPortSsl>
-	<SmtpIsSslRequired>false</SmtpIsSslRequired>
+	<SmtpUseSsl>false</SmtpUseSsl>
 	<SmtpUser>user@domain.com</SmtpUser>
 	<SmtpPassword>secret</SmtpPassword>
 </Config>

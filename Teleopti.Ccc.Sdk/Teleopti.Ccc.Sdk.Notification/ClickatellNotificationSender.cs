@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Sdk.Notification
 		private INotificationConfigReader _notificationConfigReader;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SendNotification(INotificationMessage message, NotificationHeader receiverInfo)
+		public void SendNotification(INotificationMessage message, NotificationHeader notificationHeader)
 		{
 			if (!_notificationConfigReader.HasLoadedConfig)
 				return;
 
-			if (string.IsNullOrEmpty(receiverInfo.MobileNumber))
+			if (string.IsNullOrEmpty(notificationHeader.MobileNumber))
 			{
-				Logger.Info("Did not find a Mobile Number on " + receiverInfo.PersonName);
+				Logger.Info("Did not find a Mobile Number on " + notificationHeader.PersonName);
 				return;
 			}
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 
 			foreach (var msg in messagesToSendList)
 			{
-				sendSmsNotifications(msg, receiverInfo.MobileNumber, containUnicode);
+				sendSmsNotifications(msg, notificationHeader.MobileNumber, containUnicode);
 			}
 
 		}
