@@ -293,11 +293,17 @@ function Post-Install-Config-TeleoptiCCCServer
     param (
     [string]$ToggleMode
     )
-    $supportToolExe = "C:\Program Files (x86)\Teleopti\SupportTools\Teleopti.Support.Tool.exe"
-	$temp = "-TC" + $ToggleMode
-	[array]$ArgArray +=$temp
-	Start-Process -FilePath $supportToolExe -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
-
+	IF([string]::IsNullOrEmpty($ToggleMode))
+	{            
+		# Do nothing if ToggleMode was not set         
+	}
+	else
+	{            
+		$supportToolExe = "C:\Program Files (x86)\Teleopti\SupportTools\Teleopti.Support.Tool.exe"
+		$temp = "-TC" + $ToggleMode
+		[array]$ArgArray +=$temp
+		Start-Process -FilePath $supportToolExe -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+	}
 }
 
 
