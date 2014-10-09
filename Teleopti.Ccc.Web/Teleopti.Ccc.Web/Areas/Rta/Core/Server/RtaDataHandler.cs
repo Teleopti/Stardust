@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class RtaDataHandler : IRtaDataHandler
 	{
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IRtaDataHandler));
-		private readonly IActualAgentStateHasBeenSent _actualAgentStateHasBeenSent;
+		private readonly IEnumerable<IActualAgentStateHasBeenSent> _actualAgentStateHasBeenSent;
 
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IPersonResolver personResolver,
 			IActualAgentAssembler agentAssembler,
 			IDatabaseWriter databaseWriter,
-			IActualAgentStateHasBeenSent actualAgentStateHasBeenSent)
+			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent)
 		{
 			_messageClient = messageClient;
 			_messageSender = messageSender;
@@ -136,7 +137,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_messageSender.Send(notification);
 			if (_actualAgentStateHasBeenSent != null)
 			{
-				_actualAgentStateHasBeenSent.Invoke(agentState);
+				foreach (var actualAgentStateHasBeenSent in _actualAgentStateHasBeenSent)
+				{
+					actualAgentStateHasBeenSent.Invoke(agentState);
+				}
 			}
 		}
 	}

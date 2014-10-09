@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
 			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
+
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
 			_cacheBuilder

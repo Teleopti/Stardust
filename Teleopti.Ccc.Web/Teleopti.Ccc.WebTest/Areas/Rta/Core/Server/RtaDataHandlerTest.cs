@@ -241,7 +241,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			                             			}
 			                             	};
 			var agentState = new ActualAgentState { SendOverMessageBroker = true };
-			var afterSend = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
+			var afterSend1 = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
+			var afterSend2 = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
 
 			var messageSender = MockRepository.GenerateStub<IMessageSender>();
 			_dataSourceResolver.Stub(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
@@ -254,13 +255,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandler(_messageClient, messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), afterSend);
+			_target = new RtaDataHandler(_messageClient, messageSender, _dataSourceResolver, _personResolver, _agentAssembler, MockRepository.GenerateMock<IDatabaseWriter>(), new List<IActualAgentStateHasBeenSent>() { afterSend1, afterSend2} );
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
 
 			_mocks.VerifyAll();
 
-			afterSend.AssertWasCalled(s => s.Invoke(agentState));
+			afterSend1.AssertWasCalled(s => s.Invoke(agentState));
+			afterSend2.AssertWasCalled(s => s.Invoke(agentState));
 		}
 
 		[Test]
