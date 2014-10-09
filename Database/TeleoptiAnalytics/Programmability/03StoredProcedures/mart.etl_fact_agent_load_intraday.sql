@@ -8,7 +8,7 @@ GO
 -- Create date: 2014-10-09
 -- Description:	Loads fact_agent from agent_logg in the intraday job.
 -- =============================================
---EXEC [mart].[etl_fact_agent_load_intraday] '2009-01-01','2009-03-01',-2
+--EXEC [mart].[etl_fact_agent_load_intraday] '2009-01-01','2009-03-01',6
 CREATE PROCEDURE [mart].[etl_fact_agent_load_intraday] 
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -269,7 +269,7 @@ BEGIN  --Single datasource_id
 		+ ' INNER JOIN
 			mart.dim_acd_login a
 			ON a.datasource_id = ' + cast(@datasource_id as varchar(3)) + '
-			AND a.acd_login_id = stg.agent_id
+			AND a.acd_login_agg_id = stg.agent_id
 	INNER JOIN
 		mart.dim_date		d
 	ON
