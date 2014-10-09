@@ -1,13 +1,16 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
+using Common.Logging;
 using Teleopti.Ccc.Sdk.Common.Contracts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
+
 	public class CustomNotificationSenderFactory : INotificationSenderFactory
 	{
 		private readonly INotificationConfigReader _notificationConfigReader;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(CustomNotificationSenderFactory));
 
 		public CustomNotificationSenderFactory(INotificationConfigReader notificationConfigReader)
 		{
@@ -19,45 +22,38 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			INotificationSender sender = null;
 			if (_notificationConfigReader.HasLoadedConfig)
 			{
-				var assembly = Assembly.Load(_notificationConfigReader.Assembly);
-				var type = assembly.GetType(_notificationConfigReader.ClassName);
-				if (type == null)
+				try
 				{
-                    throw new TypeLoadException(string.Format("The type {0} can't be found in assembly {1}.", _notificationConfigReader.ClassName, _notificationConfigReader.Assembly));
+					var assembly = Assembly.Load(_notificationConfigReader.Assembly);
+					var type = assembly.GetType(_notificationConfigReader.ClassName);
+					if (type == null)
+					{
+						throw new TypeLoadException(string.Format("The type {0} can't be found in assembly {1}.", _notificationConfigReader.ClassName, _notificationConfigReader.Assembly));
+					}
+					sender = (INotificationSender)Activator.CreateInstance(type);
 				}
-			    sender = (INotificationSender)Activator.CreateInstance(type);
+				catch (TypeLoadException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+				catch (FileNotFoundException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+				catch (FileLoadException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
+				catch (BadImageFormatException exception)
+				{
+					Logger.Error("Could not load type for notification.", exception);
+				}
 			}
-			
-            if (sender != null)
-			{
-			    sender.SetConfigReader(_notificationConfigReader);
-			}
+
+			if (sender != null)
+				sender.SetConfigReader(_notificationConfigReader);
 
 			return sender;
-		}
-	}
-	public class MultipleNotificationSenderFactory : INotificationSenderFactory
-	{
-		private readonly INotificationChecker _notificationChecker;
-		private readonly INotificationConfigReader _notificationConfigReader;
-		private readonly INotificationSender _defaultNotificationSender;
-
-		public MultipleNotificationSenderFactory(INotificationChecker notificationChecker, INotificationConfigReader notificationConfigReader, INotificationSender defaultNotificationSender)
-		{
-			_notificationChecker = notificationChecker;
-			_notificationConfigReader = notificationConfigReader;
-			_defaultNotificationSender = defaultNotificationSender;
-		}
-
-		public INotificationSender GetSender()
-		{
-			if (_notificationChecker.NotificationType() == NotificationType.Sms)
-			{
-				var innerFactory = new CustomNotificationSenderFactory(_notificationConfigReader);
-				return innerFactory.GetSender();
-			}
-			
-			return _defaultNotificationSender;
 		}
 	}
 }

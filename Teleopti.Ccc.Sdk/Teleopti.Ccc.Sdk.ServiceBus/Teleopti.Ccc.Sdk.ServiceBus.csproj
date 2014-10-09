@@ -178,6 +178,7 @@
     <Compile Include="Notification\INotificationChecker.cs" />
     <Compile Include="Notification\INotificationSenderFactory.cs" />
     <Compile Include="Notification\INotifier.cs" />
+    <Compile Include="Notification\MultipleNotificationSenderFactory.cs" />
     <Compile Include="Notification\NotificationValidationCheck.cs" />
     <Compile Include="Notification\Notifier.cs" />
     <Compile Include="NotificationModule.cs" />
