@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	    }
 
 		[HttpPost]
-		public JsonResult SaveExternalUserState(AjaxUserState state)
+		public JsonResult SaveExternalUserState(AgentStateInputModel state)
 		{
 			var timestamp = DateTime.Parse(state.Timestamp);
 

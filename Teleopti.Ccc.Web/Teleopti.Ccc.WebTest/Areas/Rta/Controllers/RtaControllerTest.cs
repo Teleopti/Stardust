@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 		[Test]
 		public void ShouldCallRtaWebService()
 		{
-			var externalState = new AjaxUserState
+			var externalState = new AgentStateInputModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				UserCode = "2001",
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 				.Return(0);
 			var target = new ServiceController(rtaWebService);
 
-			Assert.DoesNotThrow(() => target.SaveExternalUserState(new AjaxUserState()));
+			Assert.DoesNotThrow(() => target.SaveExternalUserState(new AgentStateInputModel()));
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 				.Return(1);
 			var target = new ServiceController(rtaWebService);
 
-			Assert.DoesNotThrow(() => target.SaveExternalUserState(new AjaxUserState()));
+			Assert.DoesNotThrow(() => target.SaveExternalUserState(new AgentStateInputModel()));
 
 		}
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Controllers
 				.Return(-300);
 			var target = new ServiceController(rtaWebService);
 
-			Assert.Throws<HttpException>(() => target.SaveExternalUserState(new AjaxUserState()));
+			Assert.Throws<HttpException>(() => target.SaveExternalUserState(new AgentStateInputModel()));
 		}
 		
 	}

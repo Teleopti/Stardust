@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public class AjaxUserState
+	public class AgentStateInputModel
 	{
-		public AjaxUserState()
+		public AgentStateInputModel()
 		{
 			Timestamp = DateTime.Now.ToString();
 		}
