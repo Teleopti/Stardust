@@ -45,13 +45,28 @@ GO
 --Date: 2014-09-22  
 --Desc: Add new column for agent badges threshold settings table: badgeType settings
 ----------------  
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ADD [AnsweredCallsBadgeTypeSelected] [bit] NOT NULL
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ADD [AnsweredCallsBadgeTypeSelected] [bit] NULL
+GO
+UPDATE [dbo].[AgentBadgeThresholdSettings]
+SET [AnsweredCallsBadgeTypeSelected] = 0
+GO
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ALTER COLUMN [AnsweredCallsBadgeTypeSelected] [bit] NOT NULL
 GO
 
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ADD [AHTBadgeTypeSelected] [bit] NOT NULL
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ADD [AHTBadgeTypeSelected] [bit] NULL
+GO
+UPDATE [dbo].[AgentBadgeThresholdSettings]
+SET [AHTBadgeTypeSelected] = 0
+GO
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ALTER COLUMN [AHTBadgeTypeSelected] [bit] NOT NULL
 GO
 
-ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ADD [AdherenceBadgeTypeSelected] [bit] NOT NULL
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ADD [AdherenceBadgeTypeSelected] [bit] NULL
+GO
+UPDATE [dbo].[AgentBadgeThresholdSettings]
+SET [AdherenceBadgeTypeSelected] = 0
+GO
+ALTER TABLE [dbo].[AgentBadgeThresholdSettings] ALTER COLUMN [AdherenceBadgeTypeSelected] [bit] NOT NULL
 GO
 
 GO
