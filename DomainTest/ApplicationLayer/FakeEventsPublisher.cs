@@ -5,13 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	public class FakeEventsPublisher : IEventsPublisher
+	public class FakeEventsPublisher : IEventPublisher
 	{
 		public IList<IEvent> PublishedEvents = new List<IEvent>();
 
-		public void Publish(IEnumerable<IEvent> events)
+		public void Publish(IEvent @event)
 		{
-			events.ForEach(PublishedEvents.Add);
+			PublishedEvents.Add(@event);
 		}
 	}
 }
