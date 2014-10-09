@@ -59,7 +59,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;NCoverReporting;CopyNDependStatisticsToDatabase">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;NCoverReporting;CopyNDependStatisticsToDatabase;KillStuff">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -274,4 +274,11 @@
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\GetRevision.bat&quot; &quot;$(RevisionOutput)&quot;"/>
 		<Exec Command="&quot;$(NDependTransferDataPath)&quot; &quot;$(NDependOutput)&quot; &quot;$(NDependOutput)&quot; &quot;$(NCoverOutput)&quot;"/>
 	</Target>
+
+	<Target Name="KillStuff" Condition="'$(computername)' == 'EREBUS'">
+		<exec command="taskkill /IM iisexpress.exe /F /FI %22memusage gt 2%22" Timeout="10" ContinueOnError="true" />
+		<exec command="taskkill /IM chromedriver.exe /F /FI %22memusage gt 2%22" Timeout="10" ContinueOnError="true" />
+		<exec command="taskkill /IM chrome.exe /F /FI %22memusage gt 2%22" Timeout="10" ContinueOnError="true" />		
+	</Target>
+	
 </Project>
