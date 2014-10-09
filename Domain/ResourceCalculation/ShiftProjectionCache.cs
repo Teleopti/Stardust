@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private TimeZoneInfo _localTimeZoneInfo;
         private DayOfWeek _dayOfWeek;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+	    private int? _cashedHashCode;
 
         protected ShiftProjectionCache()
         { }
@@ -168,15 +169,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public override int GetHashCode()
 		{
-			var hash = 0;
-			var visualLayerCollection = MainShiftProjection;
+			if (_cashedHashCode.HasValue)
+				return _cashedHashCode.Value;
 
+			var visualLayerCollection = MainShiftProjection;
+			_cashedHashCode = 0;
 			foreach (var layer in visualLayerCollection)
 			{
-				hash = hash ^ layer.Period.GetHashCode() ^ layer.Payload.GetHashCode();
+				_cashedHashCode = _cashedHashCode.Value ^ layer.Period.GetHashCode() ^ layer.Payload.GetHashCode();
 			}
 
-			return hash;
+			return _cashedHashCode.Value;
 		}
     }
 }
