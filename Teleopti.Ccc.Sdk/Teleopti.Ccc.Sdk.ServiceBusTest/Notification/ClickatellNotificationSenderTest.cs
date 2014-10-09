@@ -79,6 +79,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_notificationClient.AssertWasCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
 		}
 
+		[Test]
+		public void ShouldNotSendIfNoMobileNumber()
+		{
+			smsMessage.Messages.Add("test1");
+			var doc = new XmlDocument();
+			doc.LoadXml(xml);
+
+			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+			_target.SetConfigReader(_notificationConfigReader);
+			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "" });
+
+			_notificationClient.AssertWasNotCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
 		public void ShouldSplitMessageIfGreaterThanMaxSmsLength()
 		{
