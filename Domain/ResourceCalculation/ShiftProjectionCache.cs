@@ -165,5 +165,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    {
 		    get { return _schedulingDate; }
 	    }
+
+		public override int GetHashCode()
+		{
+			var hash = 0;
+			var visualLayerCollection = MainShiftProjection;
+
+			foreach (var layer in visualLayerCollection)
+			{
+				hash = hash ^ layer.Period.GetHashCode() ^ layer.Payload.GetHashCode();
+			}
+
+			return hash;
+		}
     }
 }

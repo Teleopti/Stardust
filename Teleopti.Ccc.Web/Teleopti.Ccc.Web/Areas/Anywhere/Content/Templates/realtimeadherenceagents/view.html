@@ -44,6 +44,16 @@
 								<a class="btn btn-sm change-schedule" data-bind="attr: { href: $root.urlForChangingSchedule($data)}"><i class="glyphicon glyphicon-pencil"></i> <span data-bind="    text: $root.Resources.ModifySchedule"></span></a>
 								<!-- /ko -->
 							</div>
+							<!-- ko if: $root.agentAdherenceEnabled -->
+							<div class="text-info " style="float: right; margin-right: 5px; line-height: 31px; position: relative"> 
+								<span >Adherence Today:</span>
+								<span data-bind="text: $root.AgentAdherence"></span>
+								<div style="position: absolute; color: gray; font-size: xx-small; right: 0px; bottom: -11px">
+									<span>5</span>
+									<span>min old</span>
+								</div>
+							</div>
+							<!-- /ko -->
 						</div>
 					</td>
 				</tr>

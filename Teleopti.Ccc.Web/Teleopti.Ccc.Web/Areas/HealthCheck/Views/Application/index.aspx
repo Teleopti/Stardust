@@ -49,8 +49,9 @@
 				<h3>ETL log objects</h3>
 				<ul class="list-group etl-log-objects" data-bind="foreach: logObjects">
 					<li class="list-group-item">
+						<h4 class="list-group-item-heading" data-bind="text: new Date(parseInt(last_update.substr(6))).toISOString() + ' (last updated interval)'"></h4>
 						<h4 class="list-group-item-heading" data-bind="text: log_object_id + ' - ' + log_object_desc + ' > ' + detail_desc"></h4>
-						<p class="list-group-item-text" data-bind="text: 'Procedure name: ' + proc_name + ', Last Update: ' + new Date(parseInt(last_update.substr(6))).toISOString()"></p>
+						<p class="list-group-item-text" data-bind="text: 'Procedure name: ' + proc_name"></p>
 					</li>
 				</ul>
 				<h3>ETL history</h3>

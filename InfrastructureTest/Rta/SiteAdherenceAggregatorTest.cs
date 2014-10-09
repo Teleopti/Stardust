@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
+	[TestFixture]
 	public class SiteAdherenceAggregatorTest
 	{
 		[Test]

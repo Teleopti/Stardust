@@ -828,7 +828,6 @@ Scenario: Should be able to change schedule for multiple business units
 @ignore
 Scenario: Should be able to see historical adherence from agent state overview
 	Given there is an activity named 'Phone'
-	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with
@@ -837,7 +836,6 @@ Scenario: Should be able to see historical adherence from agent state overview
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
 	And there is a datasouce with id 6
-	And I am located in 'London'
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |

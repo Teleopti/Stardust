@@ -279,8 +279,110 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Assert.AreEqual(new TimeSpan(1, 8, 0, 0), result);
 		}
+
+		[Test]
+		public void ShouldReturnSameHashForIdenticalProjections()
+		{
+
+			var start0 = new TimeSpan(8, 0, 0);
+			var end0 = new TimeSpan(9, 0, 0);
+
+			var start1 = new TimeSpan(8, 0, 0);
+			var end1 = new TimeSpan(10, 0, 0);
+
+			var start2 = new TimeSpan(9, 0, 0);
+			var end2 = new TimeSpan(10, 5, 0);
+
+			var period0 = new DateTimePeriod(WorkShift.BaseDate.Add(start0), WorkShift.BaseDate.Add(end0));
+			var period1 = new DateTimePeriod(WorkShift.BaseDate.Add(start1), WorkShift.BaseDate.Add(end1));
+			var period2 = new DateTimePeriod(WorkShift.BaseDate.Add(start2), WorkShift.BaseDate.Add(end2));
+			
+			var activity1 = new Activity("activity1");
+			var activity2 = new Activity("activity2");
+
+			var workShift1 = new WorkShift(category);
+			var workShift2 = new WorkShift(category);
+
+			workShift1.LayerCollection.Add(new WorkShiftActivityLayer(activity1, period1));
+			workShift1.LayerCollection.Add(new WorkShiftActivityLayer(activity2, period2));
+
+			workShift2.LayerCollection.Add(new WorkShiftActivityLayer(activity1, period0));
+			workShift2.LayerCollection.Add(new WorkShiftActivityLayer(activity2, period2));
+
+			var shiftProjectionCache1 = new ShiftProjectionCache(workShift1, _personalShiftMeetingTimeChecker);
+			var shiftProjectionCache2 = new ShiftProjectionCache(workShift2, _personalShiftMeetingTimeChecker);
+
+			shiftProjectionCache1.SetDate(schedulingDate, timeZoneInfo);
+			shiftProjectionCache2.SetDate(schedulingDate, timeZoneInfo);
+
+			var hash1 = shiftProjectionCache1.GetHashCode();
+			var hash2 = shiftProjectionCache2.GetHashCode();
+
+			Assert.AreEqual(hash1, hash2);
+		}
+
+		[Test]
+		public void ShouldReturnDifferentHashWhenNotSameActivity()
+		{
+			var start1 = new TimeSpan(8, 0, 0);
+			var end1 = new TimeSpan(10, 0, 0);
+			var period1 = new DateTimePeriod(WorkShift.BaseDate.Add(start1), WorkShift.BaseDate.Add(end1));
+			
+			var activity1 = new Activity("activity1");
+			var activity2 = new Activity("activity2");
+
+			activity1.SetId(Guid.NewGuid());
+			activity2.SetId(Guid.NewGuid());
+			
+			var workShift1 = new WorkShift(category);
+			var workShift2 = new WorkShift(category);
+
+			workShift1.LayerCollection.Add(new WorkShiftActivityLayer(activity1, period1));
+			workShift2.LayerCollection.Add(new WorkShiftActivityLayer(activity2, period1));
+			
+			var shiftProjectionCache1 = new ShiftProjectionCache(workShift1, _personalShiftMeetingTimeChecker);
+			var shiftProjectionCache2 = new ShiftProjectionCache(workShift2, _personalShiftMeetingTimeChecker);
+
+			shiftProjectionCache1.SetDate(schedulingDate, timeZoneInfo);
+			shiftProjectionCache2.SetDate(schedulingDate, timeZoneInfo);
+
+			var hash1 = shiftProjectionCache1.GetHashCode();
+			var hash2 = shiftProjectionCache2.GetHashCode();
+
+			Assert.AreNotEqual(hash1, hash2);
+		}
+
+		[Test]
+		public void ShouldReturnDifferentHashWhenNotSamePeriod()
+		{
+			var start1 = new TimeSpan(8, 0, 0);
+			var end1 = new TimeSpan(10, 0, 0);
+
+			var start2 = new TimeSpan(10, 0, 0);
+			var end2 = new TimeSpan(10, 5, 0);
+
+			var period1 = new DateTimePeriod(WorkShift.BaseDate.Add(start1), WorkShift.BaseDate.Add(end1));
+			var period2 = new DateTimePeriod(WorkShift.BaseDate.Add(start2), WorkShift.BaseDate.Add(end2));
+
+			var activity1 = new Activity("activity1");
+			activity1.SetId(Guid.NewGuid());
+		
+			var workShift1 = new WorkShift(category);
+			var workShift2 = new WorkShift(category);
+
+			workShift1.LayerCollection.Add(new WorkShiftActivityLayer(activity1, period1));
+			workShift2.LayerCollection.Add(new WorkShiftActivityLayer(activity1, period2));
+		
+			var shiftProjectionCache1 = new ShiftProjectionCache(workShift1, _personalShiftMeetingTimeChecker);
+			var shiftProjectionCache2 = new ShiftProjectionCache(workShift2, _personalShiftMeetingTimeChecker);
+
+			shiftProjectionCache1.SetDate(schedulingDate, timeZoneInfo);
+			shiftProjectionCache2.SetDate(schedulingDate, timeZoneInfo);
+
+			var hash1 = shiftProjectionCache1.GetHashCode();
+			var hash2 = shiftProjectionCache2.GetHashCode();
+
+			Assert.AreNotEqual(hash1, hash2);
+		}
 	}
-
-
-
 }
