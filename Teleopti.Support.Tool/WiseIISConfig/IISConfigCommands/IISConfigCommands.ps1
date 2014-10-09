@@ -288,6 +288,17 @@ function Install-TeleoptiCCCServer
 	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
 }
 
+function Post-Install-Config-TeleoptiCCCServer
+{
+    param (
+    [string]$ToggleMode
+    )
+    $supportToolExe = "C:\Program Files (x86)\Teleopti\SupportTools\Teleopti.Support.Tool.exe"
+	$temp = "-TC" + $ToggleMode
+	[array]$ArgArray +=$temp
+	Start-Process -FilePath $supportToolExe -ArgumentList $ArgArray -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
+
+}
 
 
 function Add-UserToLocalGroup{

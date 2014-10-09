@@ -34,7 +34,9 @@ namespace Teleopti.Support.Code.Tool
 		-? or ? or -HELP or HELP, Shows this help
 		-MO  (Mode )is where to put the config files values: Develop or Deploy (Develop is default)
 		-BC Backup config settings for SSO, combine with -MO ( before patching if there is custom settings)
-		-RC Restore the config settings for SSO from the backup, combine with -MO (use after patching if there is custom settings)";
+		-RC Restore the config settings for SSO from the backup, combine with -MO (use after patching if there is custom settings)
+        -TC Set ToggleMode to ALL, RC or CUSTOMER.
+            Example: Teleopti.Support.Tool.exe -TC""ALL""";
 			}
 		}
 
@@ -70,7 +72,14 @@ namespace Teleopti.Support.Code.Tool
 					case "-RC":
 						Command = restoreCommand;
 						break;
-
+                    case "-TC":
+                        Mode = null;
+                        if (string.IsNullOrEmpty(switchValue))
+                        {
+                            switchValue = "CUSTOMER";
+                        }
+                        Command = new SetToggleModeCommand(switchValue);
+                        break;
 				}
 			}
 		}

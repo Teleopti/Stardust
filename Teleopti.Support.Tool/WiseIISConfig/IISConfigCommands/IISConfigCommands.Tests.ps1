@@ -45,6 +45,8 @@ $global:resetToBaseline="False"
 $global:insertedLicense=0
 $global:SubSite = 'TeleoptiWFM'
 $global:PhysicalSubPath = 'TeleoptiCCC'
+$global:ToggleMode = ''
+
 
 function Config-Load {
 	Describe "Shold load config from Hebe "{
@@ -66,6 +68,7 @@ function Config-Load {
                     $global:Server =  $testServer.DBServerInstance
                     $global:Db = $testServer.DB
                     $global:resetToBaseline = $testServer.resetToBaseline
+                    $global:ToggleMode = $testServer.ToggleMode
                     
 					if ($testServer.BaseURL)
 					{
@@ -77,6 +80,7 @@ function Config-Load {
 						$global:SubSite = 'TeleoptiCCC'
 						$global:displayName = 'Teleopti CCC Server, version 7'
 					}
+					
                 }
                 
             }
@@ -212,7 +216,7 @@ function Test-InstallationSQLLogin {
 			[array]$ArgArray = @($MsiFile, $global:batName, "dummmyUser","dummmyPwd")
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
-			
+			Post-Install-Config-TeleoptiCCCServer -ToggleMode $ToggleMode
 		}
         It "should add license if not restore to Baseline"{
             if($global:resetToBaseline -eq "False")
