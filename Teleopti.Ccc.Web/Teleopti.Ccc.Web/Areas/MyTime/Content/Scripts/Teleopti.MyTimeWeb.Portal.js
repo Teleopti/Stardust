@@ -122,6 +122,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			}
 
 		});
+		//hide sub-menu first, check its visibility according to partial content later.
+		$('#subNavbarToggler').css({ "visibility": "hidden" });
 	}
 
 	function pareseUrlDate(str) {
@@ -324,6 +326,17 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _completelyLoaded() {
 		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
+		_subMenuVisibilityCheck();
+	}
+	function _subMenuVisibilityCheck() {
+		var subnavbar = $('.subnavbar');
+		if (subnavbar.length == 0) {
+			$('#subNavbarToggler').css({ "visibility": "hidden" });
+		}
+		else if (subnavbar.length > 0) {
+			$('#subNavbarToggler').css({ "visibility": "visible" });
+		}
+		
 	}
 
 	return {

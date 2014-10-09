@@ -89,7 +89,9 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 		SetMessageNotificationOnTab: function (messageCount) {
 			_setMessageNotificationOnTab(messageCount);
 		},
-		MessagePartialInit: function () {
+		MessagePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+			readyForInteractionCallback();
+			completelyLoadedCallback();
 			Teleopti.MyTimeWeb.AsmMessageList.Init();
 		},
 		ListenForMessages: function (callbackForMessages) {
