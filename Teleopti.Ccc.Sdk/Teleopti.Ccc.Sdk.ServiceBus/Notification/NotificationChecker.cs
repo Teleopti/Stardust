@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -12,14 +11,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	{
 		private readonly ICurrentUnitOfWork _unitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IToggleManager _toggleManager;
 		private SmsSettings _setting;
 
-		public NotificationChecker(ICurrentUnitOfWork unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager)
+		public NotificationChecker(ICurrentUnitOfWork unitOfWorkFactory, IRepositoryFactory repositoryFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
-			_toggleManager = toggleManager;
 		}
 
 		private SmsSettings notificationSetting()
