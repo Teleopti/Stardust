@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			containerBuilder = new ContainerBuilder();
 			applicationData = MockRepository.GenerateMock<IApplicationData>();
-			containerBuilder.RegisterModule(new AuthenticationModule(applicationData));
+			containerBuilder.RegisterModule(new CommonModule(){ApplicationData = applicationData}); 
 		}
 
 		[Test]

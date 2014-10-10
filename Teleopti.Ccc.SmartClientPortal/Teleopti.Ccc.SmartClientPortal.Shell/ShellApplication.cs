@@ -184,7 +184,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		            });
 				builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 				builder.RegisterModule(new EncryptionModule());
-                builder.RegisterModule(new AuthenticationModule());
                 builder.RegisterModule(new EventAggregatorModule());
                 builder.RegisterModule(new StartupModule());
                 builder.RegisterModule(new NavigationModule());

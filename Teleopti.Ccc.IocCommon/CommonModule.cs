@@ -3,6 +3,7 @@ using Autofac;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.IocCommon
 	{
 		private readonly IIocConfiguration _configuration;
 		public Type RepositoryConstructorType { get; set; }
+		public IApplicationData ApplicationData { get; set; }
 
 		public CommonModule() : this(new IocConfiguration(new IocArgs(), ToggleManagerForIoc()))
 		{
@@ -31,6 +33,8 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
+			builder.RegisterModule<LocalServiceBusEventsPublisherModule>();
+			builder.RegisterModule(new AuthenticationModule{ApplicationData = ApplicationData });
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

@@ -22,6 +22,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.WebReports;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var container = new ContainerConfiguration().Configure(string.Empty);
 
 			var containerAdder = new ContainerBuilder();
-			containerAdder.RegisterModule(new AuthenticationModule(applicationData));
+			containerAdder.RegisterModule(new CommonModule() { ApplicationData = applicationData });
             HttpContextBase httpContextBase = new FakeHttpContext("");
             containerAdder.Register(c => httpContextBase);
             var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();

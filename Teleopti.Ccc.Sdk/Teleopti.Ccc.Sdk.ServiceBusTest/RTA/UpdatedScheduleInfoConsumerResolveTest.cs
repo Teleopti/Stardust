@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<PayrollContainerInstaller>();
-			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<LocalServiceBusPublisherModule>();
 
 			builder.RegisterModule<EventHandlersModule>();

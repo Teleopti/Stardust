@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterModule<AuthenticationModule>();
-			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterModule<LocalInMemoryEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
@@ -42,7 +39,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
 			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterModule<ServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
@@ -55,7 +51,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
 			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterModule<ServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IServiceBusEventPublisher>().Should().Not.Be.Null();

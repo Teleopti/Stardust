@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-    public class AuthenticationModule : Module
+    internal  class AuthenticationModule : Module
     {
         private readonly IApplicationData _applicationData;
 
@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
         {
         }
 
-        public AuthenticationModule(IApplicationData applicationData) : this()
+	    public IApplicationData ApplicationData { get; set; }
+        /*public AuthenticationModule(IApplicationData applicationData) : this()
         {
             _applicationData = applicationData;
-        }
+        }*/
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -91,8 +92,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<ExternalFunctionsProvider>().As<IExternalFunctionsProvider>().InstancePerDependency();
 			builder.RegisterType<RoleToClaimSetTransformer>().As<IRoleToClaimSetTransformer>().InstancePerDependency();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
-            if (_applicationData!=null)
-                builder.Register(c => _applicationData)
+            if (ApplicationData!=null)
+				builder.Register(c => ApplicationData)
                 .As<IApplicationData>();
             else
             builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)

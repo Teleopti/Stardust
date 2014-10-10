@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();
 			build.RegisterModule<AuthenticationContainerInstaller>();
-			build.RegisterModule<AuthenticationModule>();
 			build.RegisterModule<SerializationContainerInstaller>();
 			build.RegisterModule<ServiceBusCommonModule>();
 			build.RegisterModule<PayrollContainerInstaller>();
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<ImportForecastContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 			build.RegisterModule<CommandDispatcherModule>();
-			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			build.RegisterModule<LocalServiceBusPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();

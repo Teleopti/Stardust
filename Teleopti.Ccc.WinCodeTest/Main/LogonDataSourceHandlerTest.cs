@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
          public void ShouldResolve()
          {
              var containerBuilder = new ContainerBuilder();
-             containerBuilder.RegisterModule(new AuthenticationModule());
+             containerBuilder.RegisterModule(new CommonModule());
              containerBuilder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();
              containerBuilder.RegisterType<EnvironmentWindowsUserProvider>()
                    .As<IWindowsUserProvider>()

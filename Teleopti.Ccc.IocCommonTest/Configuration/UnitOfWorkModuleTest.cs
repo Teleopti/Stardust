@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
-			builder.RegisterModule<AuthenticationModule>();
 			using (var container = builder.Build())
 			{
 				container.Resolve<ILicenseActivatorProvider>().Should().Be.OfType<LicenseActivatorProvider>();

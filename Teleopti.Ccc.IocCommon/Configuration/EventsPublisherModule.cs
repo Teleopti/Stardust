@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class LocalServiceBusEventsPublisherModule : Module
+	internal class LocalServiceBusEventsPublisherModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

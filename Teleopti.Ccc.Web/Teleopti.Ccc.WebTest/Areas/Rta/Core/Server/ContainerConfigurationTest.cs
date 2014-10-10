@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var config = new IocConfiguration(new IocArgs(), null);
 
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new AuthenticationModule());
-			builder.RegisterModule(new LocalServiceBusEventsPublisherModule());
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
@@ -99,8 +97,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new AuthenticationModule());
-			builder.RegisterModule(new LocalServiceBusEventsPublisherModule());
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
@@ -112,8 +108,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new AuthenticationModule());
-			builder.RegisterModule(new LocalServiceBusEventsPublisherModule());
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));

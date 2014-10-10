@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 
-			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 
 			registerAopComponents(builder);
