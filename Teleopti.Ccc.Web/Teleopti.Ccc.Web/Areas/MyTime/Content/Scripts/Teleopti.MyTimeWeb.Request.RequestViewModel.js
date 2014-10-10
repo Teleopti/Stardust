@@ -65,7 +65,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsTimeInputEnabled = ko.computed(function () {
 		return !self.IsFullDay() && self.IsEditable();
 	});
-
+	self.IsTimeInputVisible = ko.computed(function () {
+        return !self.IsFullDay();
+    });
 
 
 	self.readAbsenceAccount = function(data) {

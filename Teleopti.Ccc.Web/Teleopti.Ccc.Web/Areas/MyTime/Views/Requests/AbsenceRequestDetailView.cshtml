@@ -60,19 +60,19 @@
 				<input class="request-edit-datefrom input-sm form-control" data-bind="value: DateFrom().format(DateFormat())"  readonly="readonly" type="text" />
 				<![endif]-->
 	        <span class="input-group-btn">
-		        <button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
-			        <i class="glyphicon glyphicon-calendar"></i>
-		        </button>
+                <button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
 	        </span>
         </span>
     </div>
     <div class="col-xs-4 bootstrap-timepicker">
         <div class="request-edit-timefrom input-group">
-            <input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, visible: IsTimeInputVisible" />
 	        <span class="input-group-btn">
-		        <button class="btn btn-sm" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
-			        <i class="glyphicon glyphicon-time"></i>
-		        </button>
+                <button class="btn btn-sm" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+                    <i class="glyphicon glyphicon-time"></i>
+                </button>
 			</span>
         </div>
     </div>
@@ -95,11 +95,11 @@
     </div>
     <div class="col-xs-4 bootstrap-timepicker">
         <div class="request-edit-timeto input-group">
-            <input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
+            <input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, visible: IsTimeInputVisible" />
             <span class="input-group-btn">
-				<button class="btn btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
-					<i class="glyphicon glyphicon-time"></i>
-				</button>
+                <button class="btn btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+                    <i class="glyphicon glyphicon-time"></i>
+                </button>
 			</span>
         </div>
     </div>
