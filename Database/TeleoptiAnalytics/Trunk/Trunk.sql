@@ -253,6 +253,6 @@ BEGIN
 	)
 	ALTER TABLE [mart].[sys_crossdatabaseview_custom]  WITH NOCHECK ADD  CONSTRAINT [FK_sys_crossdatabaseview_custom_sys_crossdatabaseview_target] FOREIGN KEY([target_id])
 	REFERENCES [mart].[sys_crossdatabaseview_target] ([target_id])
-	ALTER TABLE [mart].[sys_crossdatabaseview_custom] CHECK CONSTRAINT [FK_sys_crossdatabaseview_sys_crossdatabaseview_target]
+	ALTER TABLE [mart].[sys_crossdatabaseview_custom] CHECK CONSTRAINT [FK_sys_crossdatabaseview_custom_sys_crossdatabaseview_target]
 END
 GO
