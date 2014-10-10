@@ -45,12 +45,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										 {
 											 if (s.Request.RequestType == RequestType.ShiftTradeRequest)
 											 {
-												 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
+												 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod (_userTimeZone.TimeZone());
 												 return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate
-													        ? dateOnlyPeriod.StartDate.ToShortDateString(_userCulture.GetCulture())
-													        : dateOnlyPeriod.ToShortDateString(_userCulture.GetCulture());
+													 ? dateOnlyPeriod.StartDate.ToShortDateString (_userCulture.GetCulture())
+													 : dateOnlyPeriod.ToShortDateString (_userCulture.GetCulture());
 											 }
-											 return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
+											 else
+											 {
+												 if (IsRequestFullDay (s))
+												 {
+													 return s.Request.Period.ToShortDateOnlyString (_userTimeZone.TimeZone());
+												 } 
+												 
+												 return s.Request.Period.ToShortDateTimeString (_userTimeZone.TimeZone());
+											 }
 										 }))
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 					{
@@ -122,18 +130,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
 				.ForMember(d => d.PayloadId, o => o.ResolveUsing(s => resolvePayloadId(s)))
-				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s =>
-																											{
-																												var start =
-																													TimeZoneInfo.ConvertTimeFromUtc(
-																																						s.Request.Period.StartDateTime, _userTimeZone.TimeZone());
-																												var end =
-																													TimeZoneInfo.ConvertTimeFromUtc(
-																																						s.Request.Period.EndDateTime, _userTimeZone.TimeZone());
-																												var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
-																												return start.TimeOfDay == TimeSpan.Zero &&
-																															 end.TimeOfDay == allDayEndDateTime.TimeOfDay;
-																											}))
+				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s => IsRequestFullDay(s)))
 				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request, _loggedOnUser)))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : _personNameProvider.BuildNameFromSetting(s.Request.PersonFrom.Name)))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty :  _personNameProvider.BuildNameFromSetting(s.Request.PersonTo.Name)))
@@ -164,6 +161,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																				return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
 																			}))
 				;
+		}
+
+		private Boolean IsRequestFullDay (IPersonRequest personRequest)
+		{
+			var start =
+				TimeZoneInfo.ConvertTimeFromUtc (
+					personRequest.Request.Period.StartDateTime, _userTimeZone.TimeZone());
+			var end =
+				TimeZoneInfo.ConvertTimeFromUtc (
+					personRequest.Request.Period.EndDateTime, _userTimeZone.TimeZone());
+			var allDayEndDateTime = start.AddDays (1).AddMinutes (-1);
+			return start.TimeOfDay == TimeSpan.Zero &&
+				   end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 		}
 
 		private string resolvePayloadId(IPersonRequest personRequest)

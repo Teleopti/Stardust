@@ -21,6 +21,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				return string.Format("{0} {1} - {2} {3}", startDateTime.ToShortDateString(), startDateTime.ToShortTimeString(), endDateTime.ToShortDateString(), endDateTime.ToShortTimeString());
 			return string.Format("{0} {1} - {2}", startDateTime.ToShortDateString(), startDateTime.ToShortTimeString(), endDateTime.ToShortTimeString());
 		}
+        public static string ToShortDateOnlyString(this DateTimePeriod period, TimeZoneInfo timeZone)
+        {
+            var startDateTime = period.StartDateTimeLocal(timeZone);
+            var endDateTime = period.EndDateTimeLocal(timeZone);
+
+            if (startDateTime.Date != endDateTime.Date)
+                return string.Format("{0} - {1} ", startDateTime.ToShortDateString(), endDateTime.ToShortDateString());
+            return string.Format("{0}", startDateTime.ToShortDateString());
+        }
 
 		public static IEnumerable<DateTime> DateRange(this DateTime instance, int days)
 		{
