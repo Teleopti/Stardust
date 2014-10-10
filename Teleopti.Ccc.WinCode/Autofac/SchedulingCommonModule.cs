@@ -535,7 +535,17 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>();
-			//IPersonalShiftMeetingTimeChecker
+			
+
+			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<DisallowedShiftProjectionCashesFilter>();
+			builder.RegisterType<DisallowedShiftProjectionCashesFilter29846Off>().As<DisallowedShiftProjectionCashesFilter29846Off>();
+
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846)
+			   ? (IDisallowedShiftProjectionCashesFilter)c.Resolve<DisallowedShiftProjectionCashesFilter>()
+			   : c.Resolve<DisallowedShiftProjectionCashesFilter29846Off>())
+				   .As<IDisallowedShiftProjectionCashesFilter>();
+
+			//IDisallowedShiftProjectionCashesFilter
 		}
 	}
 }

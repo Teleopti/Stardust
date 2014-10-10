@@ -12378,4 +12378,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Intra interval issue</value>
     <comment>Tooltip warning on intra interval issues in result grid</comment>
   </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filter on intra intervals</value>
+    <comment>Scheduling error message</comment>
+  </data>
 </root>
