@@ -12,9 +12,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 	public class MultiplicatorsetForPasteSpecialFilter : IMultiplicatorsetForPasteSpecialFilter
 	{
-		private readonly IEnumerable<IScheduleDay> _selectedScheduleDays;
-		private IEnumerable<Guid> _availableMultiplicatorDefinitionSets;
-
 
 		public IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets, IEnumerable<IScheduleDay> scheduleDays)
 		{

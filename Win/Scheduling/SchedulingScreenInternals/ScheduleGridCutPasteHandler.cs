@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -277,7 +279,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
             guardAction(owner =>
             {
-                var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions,owner.MultiplicatorDefinitionSet) {Text = Resources.PasteSpecial};
+	            IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets =
+		            new MultiplicatorsetForPasteSpecialFilter()
+						.FilterAvailableMultiplicatorSet(owner.MultiplicatorDefinitionSet, _scheduleView().SelectedSchedules());
+
+                var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, multiplicatorDefinitionSets) {Text = Resources.PasteSpecial};
                 pasteSpecial.ShowDialog();
 
                 if (_scheduleView() != null)
