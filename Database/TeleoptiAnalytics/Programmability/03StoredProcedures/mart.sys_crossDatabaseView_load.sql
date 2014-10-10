@@ -37,15 +37,35 @@ SET @target			= ''
 
 --create cursor 
 DECLARE ViewCursor CURSOR FOR
+SELECT
+a.target,
+a.view_name,
+a.view_definition
+FROM (
 	SELECT
 		ct.target_customName as target,
 		cv.view_name,
-		cv.[View_Definition]
+		cv.[View_Definition],
+		0 as 'IsCustom'
 	FROM mart.sys_crossDatabaseView cv
 	INNER JOIN mart.sys_crossDatabaseView_target ct
 		ON cv.target_id = ct.target_id
 	WHERE ct.confirmed = 1
-	
+
+	UNION ALL
+
+	SELECT
+		ct.target_customName as target,
+		cv.view_name,
+		cv.[View_Definition],
+		1 as 'IsCustom'
+	FROM mart.sys_crossdatabaseview_custom cv
+	INNER JOIN mart.sys_crossDatabaseView_target ct
+		ON cv.target_id = ct.target_id
+	WHERE ct.confirmed = 1
+	) a
+ORDER BY a.IsCustom --make sure custom views come _after_ standard. In that case custom will replace standard (given the same name)
+
 OPEN ViewCursor 
 FETCH NEXT FROM ViewCursor INTO @target,@view,@definition
  
