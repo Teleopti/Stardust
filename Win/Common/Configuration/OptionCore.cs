@@ -195,9 +195,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
-			
-			if (DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name).EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
-				allSupportedPages.Add(new SmsSettingsControl());
+
+
+			if (DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name)
+				.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
+			{
+				if (!_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
+					allSupportedPages.Add(new SmsSettingsControl());
+				else
+					allSupportedPages.Add(new NotificationSettingsControl());
+			}
 
 			return allSupportedPages;
 		}

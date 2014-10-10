@@ -163,6 +163,9 @@
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
+    <Compile Include="Notification\MultipleNotificationSenderFactoryTest.cs" />
+    <Compile Include="Notification\NotificationValidationCheckTest.cs" />
+    <Compile Include="Notification\NotifierTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
@@ -179,8 +182,8 @@
     <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
     <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
     <Compile Include="Notification\NotificationConfigReaderTest.cs" />
-    <Compile Include="Notification\SmsLinkCheckerTest.cs" />
-    <Compile Include="Notification\NotificationSenderFactoryTest.cs" />
+    <Compile Include="Notification\NotificationCheckerTest.cs" />
+    <Compile Include="Notification\CustomNotificationSenderFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

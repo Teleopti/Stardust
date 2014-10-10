@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,16 +14,17 @@ using Is = NUnit.Framework.Is;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), TestFixture]
-	public class SmsLinkCheckerTest
+	[TestFixture]
+	public class NotificationCheckerTest
 	{
 		private MockRepository _mocks;
 		private ICurrentUnitOfWork _unitOfWorkFactory;
 		private IRepositoryFactory _repositoryFactory;
-		private SmsLinkChecker _target;
+		private NotificationChecker _target;
 		private IPerson _person;
 		private ISettingDataRepository _rep;
 		private IUnitOfWork _uow;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -30,14 +32,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_mocks = new MockRepository();
 			_unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWork>();
 			_repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
-			_target = new SmsLinkChecker(_unitOfWorkFactory, _repositoryFactory);
+			_toggleManager = _mocks.StrictMock<IToggleManager>();
+			_target = new NotificationChecker(_unitOfWorkFactory, _repositoryFactory);
 			_uow = _mocks.StrictMock<IUnitOfWork>();
 			_rep = _mocks.StrictMock<ISettingDataRepository>();
 			_person = _mocks.StrictMock<IPerson>();
 		}
 
 		[Test]
-		public void ShouldReturnEmptyIfNoColumnDefined()
+		public void ShouldReturnEmptyIfNoColumnDefinedForSms()
 		{
 			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
 			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
@@ -50,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
-		public void ShouldReturnEmptyIfNoOptionalValues()
+		public void ShouldReturnEmptyIfNoOptionalValuesForSms()
 		{
 			var settings = new SmsSettings{OptionalColumnId = Guid.NewGuid()};
 			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
-		public void ShouldReturnEmptyIfNoOptionalValueMatches()
+		public void ShouldReturnEmptyIfNoOptionalValueMatchesForSms()
 		{
 			var parent = _mocks.StrictMock<IEntity>();
 			var val = _mocks.StrictMock<IOptionalColumnValue>();
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
-		public void ShouldReturnValueWhenColumnMatches()
+		public void ShouldReturnValueWhenColumnMatchesForSms()
 		{
 			var parent = _mocks.StrictMock<IEntity>();
 			var val = _mocks.StrictMock<IOptionalColumnValue>();
@@ -108,6 +111,60 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_mocks.VerifyAll();
 		}
 
-	}
+		[Test]
+		public void ShouldHaveSmsAsDefaultNotificationType()
+		{
+			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
+			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
+			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(new SmsSettings()).IgnoreArguments();
+			Expect.Call(_uow.Dispose).Repeat.Never();
+			_mocks.ReplayAll();
+			Assert.That(_target.NotificationType(), Is.EqualTo(NotificationType.Sms));
+			_mocks.VerifyAll();
+		}
 
+		[Test]
+		public void ShouldHaveEmailNotificationType()
+		{
+			var emailSetting = new SmsSettings { NotificationSelection = NotificationType.Email };
+			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
+			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
+			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(emailSetting).IgnoreArguments();
+			Expect.Call(_uow.Dispose).Repeat.Never();
+			_mocks.ReplayAll();
+			var type = _target.NotificationType();
+			Assert.That(type, Is.EqualTo(emailSetting.NotificationSelection));
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldGetEmailSender()
+		{
+			var emailSetting = new SmsSettings {NotificationSelection = NotificationType.Email, EmailFrom = "ashley@andeen.com"};
+			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
+			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
+			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(emailSetting).IgnoreArguments();
+			Expect.Call(_uow.Dispose).Repeat.Never();
+			_mocks.ReplayAll();
+			var sender = _target.EmailSender;
+			Assert.That(sender, Is.EqualTo(emailSetting.EmailFrom));
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldCallRepositoryOnlyOnce()
+		{
+			var emailSetting = new SmsSettings { NotificationSelection = NotificationType.Email, EmailFrom = "ashley@andeen.com" };
+			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow).Repeat.Once();
+			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep).Repeat.Once();
+			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(emailSetting).IgnoreArguments().Repeat.Once();
+			Expect.Call(_uow.Dispose).Repeat.Never();
+			_mocks.ReplayAll();
+			var type = _target.NotificationType();
+			var sender = _target.EmailSender;
+			Assert.That(type, Is.EqualTo(emailSetting.NotificationSelection));
+			Assert.That(sender, Is.EqualTo(emailSetting.EmailFrom));
+			_mocks.VerifyAll();
+		}
+	}
 }

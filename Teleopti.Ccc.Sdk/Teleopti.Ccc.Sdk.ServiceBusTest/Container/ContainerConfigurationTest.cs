@@ -3,9 +3,16 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
@@ -22,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, null).Configure();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
 				container.Resolve<ConsumerOf<IEvent>>().Should().Not.Be.Null();
 			}
 		}
@@ -34,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, null).Configure();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
 				container.Resolve<ConsumerOf<ExportMultisiteSkillsToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -46,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, null).Configure();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
 				container.Resolve<ConsumerOf<ExportMultisiteSkillToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -58,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, null).Configure();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
 				container.Resolve<ConsumerOf<ImportForecastsFileToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -70,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, null).Configure();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
 				container.Resolve<ConsumerOf<ImportForecastsToSkill>>().Should().Not.Be.Null();
 			}
 		}
@@ -82,8 +89,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 			fakeInternalBusRegistrations(builder);
 			using (var container = builder.Build())
 			{
-				new ContainerConfiguration(container, null).Configure();
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
 				container.Resolve<ConsumerOf<RunPayrollExport>>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveNotificationValidationCheck()
+		{
+			var builder = new ContainerBuilder();
+			using (var container = builder.Build())
+			{
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
+				container.Resolve<INotificationValidationCheck>().Should().Be.OfType<NotificationValidationCheck>();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveEmailConfiguration()
+		{
+			var builder = new ContainerBuilder();
+			using (var container = builder.Build())
+			{
+				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
+				container.Resolve<IEmailConfiguration>().Should().Be.OfType<EmailConfiguration>();
 			}
 		}
 

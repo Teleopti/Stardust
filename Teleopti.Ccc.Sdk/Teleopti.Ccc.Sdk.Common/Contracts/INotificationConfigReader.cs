@@ -19,6 +19,12 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		string ErrorCode { get; }
 		string SuccessCode { get; }
 		bool SkipSearch { get; }
-	    INotificationClient CreateClient();
+		string SmtpHost { get; }
+		int SmtpPort { get; }
+		int SmtpPortSsl { get; }
+		bool SmtpIsSslRequired { get; }
+		string SmtpUser { get; }
+		string SmtpPassword { get; }
+		INotificationClient CreateClient();
 	}
 }

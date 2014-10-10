@@ -2,7 +2,9 @@
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<LocalServiceBusPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();
-			build.RegisterType<DoNotifySmsLink>().As<IDoNotifySmsLink>();
+			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
 

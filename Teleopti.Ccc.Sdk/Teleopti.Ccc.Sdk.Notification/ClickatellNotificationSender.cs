@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Xml;
 using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
 
@@ -13,17 +12,24 @@ namespace Teleopti.Ccc.Sdk.Notification
 {
 	// this class is a dll where all the Notification Senders could be 
 	// Then more could be added without changes in the Service Bus
-    [IsNotDeadCode("This is instantiated via reflection when to send a SMS."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
+	[IsNotDeadCode("This is instantiated via reflection when to send a SMS."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class ClickatellNotificationSender : INotificationSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
 		private INotificationConfigReader _notificationConfigReader;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SendNotification(INotificationMessage message, string receiver)
+		public void SendNotification(INotificationMessage message, NotificationHeader notificationHeader)
 		{
 			if (!_notificationConfigReader.HasLoadedConfig)
 				return;
+
+			if (string.IsNullOrEmpty(notificationHeader.MobileNumber))
+			{
+				Logger.Info("Did not find a Mobile Number on " + notificationHeader.PersonName);
+				return;
+			}
+
 			//TODO check if empty concat and split into several if too long
 			// we handle this here because here we know it is a sms
 			//var smsMessage = message.Subject;
@@ -31,32 +37,32 @@ namespace Teleopti.Ccc.Sdk.Notification
 			// list for messages receiver send
 			var containUnicode = message.Subject.Any(t => char.GetUnicodeCategory(t) == UnicodeCategory.OtherLetter);
 			IList<string> messagesToSendList = GetSmsMessagesToSend(message, containUnicode);
-		    
-            foreach(var msg in messagesToSendList)
-            {
-                sendSmsNotifications(msg, receiver, containUnicode);
-            }
 
-        }
+			foreach (var msg in messagesToSendList)
+			{
+				sendSmsNotifications(msg, notificationHeader.MobileNumber, containUnicode);
+			}
 
-        public IList<string> GetSmsMessagesToSend(INotificationMessage message, bool containUnicode)
-        {
+		}
+
+		public IList<string> GetSmsMessagesToSend(INotificationMessage message, bool containUnicode)
+		{
 			IList<string> messagesToSendList = new List<string>();
 			var temp = message.Subject + " ";
-			
-			var maxSmsLength = 160;
-	        if (containUnicode)
-		        maxSmsLength = 70;
 
-	        for (var i = 0; i < message.Messages.Count; )
+			var maxSmsLength = 160;
+			if (containUnicode)
+				maxSmsLength = 70;
+
+			for (var i = 0; i < message.Messages.Count; )
 			{
-                if (temp.Length + message.Messages[i].Length < maxSmsLength)
+				if (temp.Length + message.Messages[i].Length < maxSmsLength)
 				{
 					temp = temp + message.Messages[i] + ",";
 					i++;
 					if (i == message.Messages.Count)
 					{
-                        string replace = temp.Substring(0, temp.Length - 1);
+						string replace = temp.Substring(0, temp.Length - 1);
 						messagesToSendList.Add(replace + ".");
 					}
 				}
@@ -64,12 +70,12 @@ namespace Teleopti.Ccc.Sdk.Notification
 				{
 					var replace = temp.Substring(0, temp.Length - 1);
 					messagesToSendList.Add(replace + ".");
-                    temp = message.Subject + " ";
+					temp = message.Subject + " ";
 				}
 			}
 
-            return messagesToSendList;
-        }
+			return messagesToSendList;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
 		private void sendSmsNotifications(string smsMessage, string mobileNumber, bool containUnicode)
@@ -82,15 +88,15 @@ namespace Teleopti.Ccc.Sdk.Notification
 
 				if (containUnicode)
 					smsMessage = smsMessage.Aggregate(@"",
-					                                  (current, c) =>
-					                                  current +
-					                                  string.Format("{0:x4}",
-					                                                Convert.ToUInt32(((int) c).ToString(CultureInfo.InvariantCulture))))
-					                       .ToUpper();
-				
+																						(current, c) =>
+																						current +
+																						string.Format("{0:x4}",
+																													Convert.ToUInt32(((int)c).ToString(CultureInfo.InvariantCulture))))
+																 .ToUpper();
+
 				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
-				                            _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
-				                            smsMessage, containUnicode ? 1 : 0);
+																		_notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
+																		smsMessage, containUnicode ? 1 : 0);
 
 				Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
 				try
@@ -102,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 						var s = reader.ReadToEnd();
 						data.Close();
 						reader.Close();
-						if(_notificationConfigReader.SkipSearch) return;
+						if (_notificationConfigReader.SkipSearch) return;
 						if (_notificationConfigReader.FindSuccessOrError.Equals("Error"))
 						{
 							if (s.Contains(_notificationConfigReader.ErrorCode))
@@ -123,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 				}
 				catch (Exception exception)
 				{
-                    Logger.Error("Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
+					Logger.Error("Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
 					throw new SendNotificationException(
 						"Error occurred trying receiver access: " + _notificationConfigReader.Url + msgData, exception);
 				}

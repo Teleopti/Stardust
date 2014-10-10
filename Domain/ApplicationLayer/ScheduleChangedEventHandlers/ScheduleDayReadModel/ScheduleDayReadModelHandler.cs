@@ -7,18 +7,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	public class ScheduleDayReadModelHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleDay>
 	{
 		private readonly IPersonRepository _personRepository;
-		private readonly IDoNotifySmsLink _notifySmsLink;
+		private readonly INotificationValidationCheck _notificationValidationCheck;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public ScheduleDayReadModelHandler(IPersonRepository personRepository,
-		                                   IDoNotifySmsLink notifySmsLink,
-		                                   IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-		                                   IScheduleDayReadModelRepository scheduleDayReadModelRepository)
+																			 INotificationValidationCheck notificationValidationCheck,
+																			 IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
+																			 IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
 			_personRepository = personRepository;
-			_notifySmsLink = notifySmsLink;
+			_notificationValidationCheck = notificationValidationCheck;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
-				if (!message.IsDefaultScenario) return;
+			if (!message.IsDefaultScenario) return;
 
-				var person = _personRepository.Get(message.PersonId);
+			var person = _personRepository.Get(message.PersonId);
 
 			foreach (var denormalizedScheduleDay in message.ScheduleDays)
 			{
@@ -44,11 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 				if (!message.IsInitialLoad)
 				{
-					_notifySmsLink.NotifySmsLink(readModel, date, person);
-				}
-
-				if (!message.IsInitialLoad)
-				{
+					_notificationValidationCheck.InitiateNotify(readModel, date, person);
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);
