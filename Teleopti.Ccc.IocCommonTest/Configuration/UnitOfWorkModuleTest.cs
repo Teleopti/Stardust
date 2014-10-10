@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveLicenseActivatorProvider()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<UnitOfWorkModule>();
+			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<AuthenticationModule>();
 			using (var container = builder.Build())
 			{

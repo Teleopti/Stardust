@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule<AuthenticationModule>();
             builder.RegisterModule<PersonAccountModule>();
             builder.RegisterModule<AssemblerModule>();
-            builder.RegisterModule<UnitOfWorkModule>();
             builder.RegisterModule<RequestFactoryModule>();
             builder.RegisterModule<QueryHandlerModule>();
             builder.RegisterModule<ShiftTradeModule>();

@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
 

@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
 
-			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 
 			builder.RegisterModule<AuthenticationModule>();

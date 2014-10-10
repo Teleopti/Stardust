@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 			builder.RegisterModule<AuthenticationModule>();
-			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<LocalServiceBusPublisherModule>();
 
 			using (var container = builder.Build())
