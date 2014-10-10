@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	public class PersonInAdherenceEvent : IEvent
 	{

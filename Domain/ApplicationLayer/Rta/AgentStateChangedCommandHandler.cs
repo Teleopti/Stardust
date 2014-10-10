@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class AgentStateChangedCommandHandler //: IActualAgentStateHasBeenSent
 	{
