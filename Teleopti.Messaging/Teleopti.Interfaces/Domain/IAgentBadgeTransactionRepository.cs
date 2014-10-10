@@ -27,5 +27,10 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="calculateDate">The calculated date</param>
 		/// <returns></returns>
 		IAgentBadgeTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate);
+
+		/// <summary>
+ 		/// reset all badges for all agents
+ 		/// </summary>
+ 		void ResetAgentBadges();
 	}
 }

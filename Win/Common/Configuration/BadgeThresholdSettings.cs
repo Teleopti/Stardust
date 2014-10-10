@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private IUnitOfWork _unitOfWork;
 		private IAgentBadgeSettingsRepository _repository;
 		private readonly IToggleManager _toggleManager;
-		private IAgentBadgeRepository _agentBadgeRepository;
+		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
 
 		public BadgeThresholdSettings(IToggleManager toggleManager)
 		{
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_unitOfWork = value;
 			_repository = new AgentBadgeSettingsRepository(_unitOfWork);
-			_agentBadgeRepository = new AgentBadgeRepository(_unitOfWork);
+			_agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(_unitOfWork);
 		}
 
 		public void Persist()
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (result != DialogResult.OK) return;
 			try
 			{
-				_agentBadgeRepository.ResetAgentBadges();
+				_agentBadgeTransactionRepository.ResetAgentBadges();
 			}
 			catch
 			{

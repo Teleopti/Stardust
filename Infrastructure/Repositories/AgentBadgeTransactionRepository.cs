@@ -54,5 +54,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.UniqueResult<IAgentBadgeTransaction>();
 			return result;
 		}
+
+		public void ResetAgentBadges()
+		{
+			using (var tx = Session.BeginTransaction())
+			{
+				Session.CreateSQLQuery("truncate table dbo.AgentBadgeTransaction").ExecuteUpdate();
+				tx.Commit();
+			}
+		}
 	}
 }
