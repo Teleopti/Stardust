@@ -31,8 +31,8 @@
             this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
             this.lblFullDayAbsenceReqEndTime = new System.Windows.Forms.Label();
             this.lblFullDayAbsenceReqStartTime = new System.Windows.Forms.Label();
-            this.tableLayoutPanelHiddenSettings = new System.Windows.Forms.TableLayoutPanel();
-            this.lblHiddenSystemSettings = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+            this.tableLayoutPanelFullDayAbsenceSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.lblFullDayAbsenceSettings = new Syncfusion.Windows.Forms.Tools.AutoLabel();
             this.textBoxSuportEmail = new System.Windows.Forms.TextBox();
             this.comboBoxAdvIntervalLength = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.comboBoxAdvAdherencReportCalculation = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -46,11 +46,10 @@
             this.tsTextBoxFullDayAbsenceRequestStart = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
             this.tsTextBoxFullDayAbsenceRequestEnd = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
-            this.lblHiddenSettingsHotspot = new System.Windows.Forms.Label();
             this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
             this.labelHeader = new System.Windows.Forms.Label();
             this.tableLayoutPanelBody.SuspendLayout();
-            this.tableLayoutPanelHiddenSettings.SuspendLayout();
+            this.tableLayoutPanelFullDayAbsenceSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvIntervalLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAdherencReportCalculation)).BeginInit();
             this.tableLayoutPanelSubHeader1.SuspendLayout();
@@ -68,7 +67,7 @@
             this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.93258F));
             this.tableLayoutPanelBody.Controls.Add(this.lblFullDayAbsenceReqEndTime, 0, 7);
             this.tableLayoutPanelBody.Controls.Add(this.lblFullDayAbsenceReqStartTime, 0, 6);
-            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelHiddenSettings, 0, 5);
+            this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelFullDayAbsenceSettings, 0, 5);
             this.tableLayoutPanelBody.Controls.Add(this.textBoxSuportEmail, 1, 3);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvIntervalLength, 1, 1);
             this.tableLayoutPanelBody.Controls.Add(this.comboBoxAdvAdherencReportCalculation, 1, 2);
@@ -117,35 +116,35 @@
             this.lblFullDayAbsenceReqStartTime.TabIndex = 68;
             this.lblFullDayAbsenceReqStartTime.Text = "xxFullDayAbsenceReqStartTime";
             // 
-            // tableLayoutPanelHiddenSettings
+            // tableLayoutPanelFullDayAbsenceSettings
             // 
-            this.tableLayoutPanelHiddenSettings.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.tableLayoutPanelHiddenSettings.ColumnCount = 1;
-            this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelHiddenSettings, 2);
-            this.tableLayoutPanelHiddenSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelHiddenSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanelHiddenSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tableLayoutPanelHiddenSettings.Controls.Add(this.lblHiddenSystemSettings, 0, 0);
-            this.tableLayoutPanelHiddenSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelHiddenSettings.Location = new System.Drawing.Point(3, 183);
-            this.tableLayoutPanelHiddenSettings.Name = "tableLayoutPanelHiddenSettings";
-            this.tableLayoutPanelHiddenSettings.RowCount = 1;
-            this.tableLayoutPanelHiddenSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelHiddenSettings.Size = new System.Drawing.Size(528, 29);
-            this.tableLayoutPanelHiddenSettings.TabIndex = 65;
+            this.tableLayoutPanelFullDayAbsenceSettings.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.tableLayoutPanelFullDayAbsenceSettings.ColumnCount = 1;
+            this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelFullDayAbsenceSettings, 2);
+            this.tableLayoutPanelFullDayAbsenceSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelFullDayAbsenceSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tableLayoutPanelFullDayAbsenceSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tableLayoutPanelFullDayAbsenceSettings.Controls.Add(this.lblFullDayAbsenceSettings, 0, 0);
+            this.tableLayoutPanelFullDayAbsenceSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelFullDayAbsenceSettings.Location = new System.Drawing.Point(3, 183);
+            this.tableLayoutPanelFullDayAbsenceSettings.Name = "tableLayoutPanelFullDayAbsenceSettings";
+            this.tableLayoutPanelFullDayAbsenceSettings.RowCount = 1;
+            this.tableLayoutPanelFullDayAbsenceSettings.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelFullDayAbsenceSettings.Size = new System.Drawing.Size(528, 29);
+            this.tableLayoutPanelFullDayAbsenceSettings.TabIndex = 65;
             // 
-            // lblHiddenSystemSettings
+            // lblFullDayAbsenceSettings
             // 
-            this.lblHiddenSystemSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblHiddenSystemSettings.BackColor = System.Drawing.Color.Transparent;
-            this.lblHiddenSystemSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHiddenSystemSettings.ForeColor = System.Drawing.Color.White;
-            this.lblHiddenSystemSettings.Location = new System.Drawing.Point(3, 6);
-            this.lblHiddenSystemSettings.Name = "lblHiddenSystemSettings";
-            this.lblHiddenSystemSettings.Size = new System.Drawing.Size(161, 17);
-            this.lblHiddenSystemSettings.TabIndex = 61;
-            this.lblHiddenSystemSettings.Text = "xxHiddenSystemSettings";
-            this.lblHiddenSystemSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFullDayAbsenceSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblFullDayAbsenceSettings.BackColor = System.Drawing.Color.Transparent;
+            this.lblFullDayAbsenceSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFullDayAbsenceSettings.ForeColor = System.Drawing.Color.White;
+            this.lblFullDayAbsenceSettings.Location = new System.Drawing.Point(3, 6);
+            this.lblFullDayAbsenceSettings.Name = "lblFullDayAbsenceSettings";
+            this.lblFullDayAbsenceSettings.Size = new System.Drawing.Size(170, 17);
+            this.lblFullDayAbsenceSettings.TabIndex = 61;
+            this.lblFullDayAbsenceSettings.Text = "xxFullDayAbsenceSettings";
+            this.lblFullDayAbsenceSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textBoxSuportEmail
             // 
@@ -292,7 +291,7 @@
             this.tsTextBoxFullDayAbsenceRequestStart.TabIndex = 66;
             this.tsTextBoxFullDayAbsenceRequestStart.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxHeight = 23;
-            this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 363;
+            this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 423;
             // 
             // tsTextBoxFullDayAbsenceRequestEnd
             // 
@@ -307,7 +306,7 @@
             this.tsTextBoxFullDayAbsenceRequestEnd.TabIndex = 67;
             this.tsTextBoxFullDayAbsenceRequestEnd.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
             this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxHeight = 23;
-            this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 363;
+            this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 423;
             // 
             // gradientPanelHeader
             // 
@@ -315,7 +314,6 @@
             this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
             this.gradientPanelHeader.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.gradientPanelHeader.Controls.Add(this.lblHiddenSettingsHotspot);
             this.gradientPanelHeader.Controls.Add(this.tableLayoutPanelHeader);
             this.gradientPanelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.gradientPanelHeader.Location = new System.Drawing.Point(0, 0);
@@ -323,17 +321,6 @@
             this.gradientPanelHeader.Padding = new System.Windows.Forms.Padding(12);
             this.gradientPanelHeader.Size = new System.Drawing.Size(534, 62);
             this.gradientPanelHeader.TabIndex = 2;
-            // 
-            // lblHiddenSettingsHotspot
-            // 
-            this.lblHiddenSettingsHotspot.AutoSize = true;
-            this.lblHiddenSettingsHotspot.BackColor = System.Drawing.Color.Transparent;
-            this.lblHiddenSettingsHotspot.Location = new System.Drawing.Point(3, 47);
-            this.lblHiddenSettingsHotspot.Name = "lblHiddenSettingsHotspot";
-            this.lblHiddenSettingsHotspot.Size = new System.Drawing.Size(16, 15);
-            this.lblHiddenSettingsHotspot.TabIndex = 1;
-            this.lblHiddenSettingsHotspot.Text = "   ";
-            this.lblHiddenSettingsHotspot.Click += new System.EventHandler(this.lblHiddenSettingsHotspotClick);
             // 
             // tableLayoutPanelHeader
             // 
@@ -377,8 +364,8 @@
             this.Size = new System.Drawing.Size(534, 427);
             this.tableLayoutPanelBody.ResumeLayout(false);
             this.tableLayoutPanelBody.PerformLayout();
-            this.tableLayoutPanelHiddenSettings.ResumeLayout(false);
-            this.tableLayoutPanelHiddenSettings.PerformLayout();
+            this.tableLayoutPanelFullDayAbsenceSettings.ResumeLayout(false);
+            this.tableLayoutPanelFullDayAbsenceSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvIntervalLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAdherencReportCalculation)).EndInit();
             this.tableLayoutPanelSubHeader1.ResumeLayout(false);
@@ -386,7 +373,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAsmSetting)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
             this.gradientPanelHeader.ResumeLayout(false);
-            this.gradientPanelHeader.PerformLayout();
             this.tableLayoutPanelHeader.ResumeLayout(false);
             this.tableLayoutPanelHeader.PerformLayout();
             this.ResumeLayout(false);
@@ -409,13 +395,12 @@
 		private System.Windows.Forms.Label labelHeader;
 		private System.Windows.Forms.Label labelActivityAlertSeconds;
         private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownAsmSetting;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHiddenSettings;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel lblHiddenSystemSettings;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFullDayAbsenceSettings;
+        private Syncfusion.Windows.Forms.Tools.AutoLabel lblFullDayAbsenceSettings;
         private System.Windows.Forms.Label lblFullDayAbsenceReqEndTime;
         private System.Windows.Forms.Label lblFullDayAbsenceReqStartTime;
         private Controls.TimeSpanTextBox tsTextBoxFullDayAbsenceRequestStart;
         private Controls.TimeSpanTextBox tsTextBoxFullDayAbsenceRequestEnd;
-        private System.Windows.Forms.Label lblHiddenSettingsHotspot;
 
     }
 }

@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			setColors();
 			SetTexts();
-			hiddenSettingVisibility (false);
+            
+            fullDayAbsenceSettingVisibility(_toggleManager.IsEnabled(Toggles.MyTimeWeb_FullDayAbsenceConfiguration_30552));
 			SetupTimeStampTextBoxes();
 
 		}
@@ -218,19 +219,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				if (Control.ModifierKeys == (Keys.Control | Keys.Alt))
 				{
-					hiddenSettingVisibility(!tableLayoutPanelHiddenSettings.Visible);
+                    fullDayAbsenceSettingVisibility(!tableLayoutPanelFullDayAbsenceSettings.Visible);
 				}
 			}
 		}
 	
 
-		private void hiddenSettingVisibility(bool visible)
+		private void fullDayAbsenceSettingVisibility(bool visible)
 		{
 			
 			lblFullDayAbsenceReqEndTime.Visible = visible;
 			lblFullDayAbsenceReqStartTime.Visible = visible;
-			lblHiddenSystemSettings.Visible = visible;
-			tableLayoutPanelHiddenSettings.Visible = visible;
+			lblFullDayAbsenceSettings.Visible = visible;
+			tableLayoutPanelFullDayAbsenceSettings.Visible = visible;
 			tsTextBoxFullDayAbsenceRequestEnd.Visible = visible;
 			tsTextBoxFullDayAbsenceRequestStart.Visible = visible;
 		}

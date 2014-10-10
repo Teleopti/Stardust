@@ -12366,9 +12366,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Full Day Absence Request Start Time</value>
     <comment>System Setting - the start time applied to a full day absence request.</comment>
   </data>
-  <data name="HiddenSystemSettings" xml:space="preserve">
-    <value>Hidden System Settings</value>
-    <comment>Title of the hidden system settings present on the system settings control.</comment>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Full Day Absence Settings</value>
+    <comment>Title of the full day absence settings present on the system settings control.</comment>
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Optimization step "Time between days" is not executed when block and same shift are selected.</value>
