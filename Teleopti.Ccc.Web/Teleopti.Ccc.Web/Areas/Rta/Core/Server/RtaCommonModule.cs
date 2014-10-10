@@ -2,6 +2,7 @@
 using Autofac;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -13,10 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class RtaCommonModule : Module
 	{
+		private readonly IIocConfiguration _config;
 		private readonly CacheBuilder _cacheBuilder;
 
 		public RtaCommonModule(MbCacheModule mbCacheModule, IIocConfiguration config)
 		{
+			_config = config;
 			_cacheBuilder = mbCacheModule.Builder;
 		}
 
@@ -52,6 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
 			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
+			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
+				builder.RegisterType<AgentStateChangedCommandHandler>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 

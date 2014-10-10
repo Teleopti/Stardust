@@ -52,7 +52,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		{
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
-			builder.RegisterModule(new CommonModule());
+			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new UnitOfWorkModule());
+			builder.RegisterModule(new AuthenticationModule());
+			builder.RegisterModule(new LocalServiceBusEventsPublisherModule());
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
@@ -69,14 +72,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldResolveAgentStateChangedCommandHandler()
+		{
+			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))
+			{
+				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
+					.Select(o => o.GetType())
+					.Should().Contain(typeof (AgentStateChangedCommandHandler));
+			}
+		}
+
+		[Test]
+		public void ShouldNotResolveAgentStateChangedCommandHandler()
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, false))
 			{
 				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
 					.Select(o => o.GetType())
-					.Should().Contain(typeof (AgentStateChangedCommandHandler));
+					.Should().Not.Contain(typeof(AgentStateChangedCommandHandler));
 			}
 		}
 
@@ -85,6 +99,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new UnitOfWorkModule());
+			builder.RegisterModule(new AuthenticationModule());
+			builder.RegisterModule(new LocalServiceBusEventsPublisherModule());
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
@@ -96,6 +113,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new UnitOfWorkModule());
+			builder.RegisterModule(new AuthenticationModule());
+			builder.RegisterModule(new LocalServiceBusEventsPublisherModule());
 			var mbCacheModule = new MbCacheModule(null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
