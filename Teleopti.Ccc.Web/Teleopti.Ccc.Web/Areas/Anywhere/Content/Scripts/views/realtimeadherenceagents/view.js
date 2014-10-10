@@ -127,7 +127,7 @@
 				}
 			});
 
-			viewModel.AgentAdherence(55 + '%');
+			viewModel.AgentAdherence(98 + '%');
 		}
 	};
 });
