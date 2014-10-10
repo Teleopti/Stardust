@@ -132,7 +132,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
-		public DateTime ReceivedTime { get; set; }
+		public DateTime Timestamp { get; set; }
 
 		/// <summary>
 		/// 

@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		            ParameterName = "@ReceivedTime",
 		            SqlDbType = SqlDbType.DateTime,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.ReceivedTime
+		            Value = actualAgentState.Timestamp
 	            });
 	            if (actualAgentState.BatchId != null)
 	            {

@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var notification = new Notification
 				{
 					StartDate =
-						Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
-					EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
+						Subscription.DateToString(actualAgentState.Timestamp.Add(actualAgentState.TimeInState.Negate())),
+					EndDate = Subscription.DateToString(actualAgentState.Timestamp),
 					DomainId = Subscription.IdToString(actualAgentState.PersonId),
 					DomainType = type.Name,
 					DomainQualifiedType = type.AssemblyQualifiedName,

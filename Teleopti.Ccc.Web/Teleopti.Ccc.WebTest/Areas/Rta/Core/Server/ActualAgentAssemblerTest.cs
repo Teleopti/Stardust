@@ -560,7 +560,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				{
 					PersonId = _guid,
 					BatchId = _batchId,
-					ReceivedTime = _dateTime,
+					Timestamp = _dateTime,
 					StateId = _guid,
 					Scheduled = "Scheduled",
 					State = "State",

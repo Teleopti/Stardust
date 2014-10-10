@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 					// if we have recieved an RTA event that is more recent than what we get from DB
 	                IActualAgentState outState;
 	                if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outState))
-		                _rtaStateHolder.SetActualAgentState(outState.ReceivedTime > actualAgentState.ReceivedTime
+		                _rtaStateHolder.SetActualAgentState(outState.Timestamp > actualAgentState.Timestamp
 			                                                    ? outState
 			                                                    : actualAgentState);
 	                else
