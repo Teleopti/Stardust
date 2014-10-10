@@ -48,7 +48,7 @@ BEGIN
 END
 ELSE
 BEGIN  --Single datasource_id
-	BEGIN
+	
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
 	DECLARE @UtcNow as smalldatetime
@@ -279,15 +279,24 @@ BEGIN  --Single datasource_id
 	ON
 		d.date_id		= bridge.local_date_id		AND
 		stg.interval	= bridge.local_interval_id
-	WHERE date_from >= '''+ CAST(@source_date_local as nvarchar(20))+'''
-	AND interval >= '''+ CAST(@source_interval_local as nvarchar(20))+'''
+	WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
+	AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
+	) OR (date_from > '''+ CAST(@target_date_local as nvarchar(20))+'''
+	)
 	GROUP BY a.acd_login_id,d.date_id,stg.interval,a.datasource_id'
 
 	--Exec
 	--select @sqlstring
 	EXEC sp_executesql @sqlstring
 
-END
+	--finally
+	--update with last logged interval
+	UPDATE [mart].[sys_datasource_detail]
+	SET
+		target_date_local		= @source_date_local,
+		target_interval_local	= @source_interval_local
+	WHERE datasource_id = @datasource_id
+	AND detail_id = @detail_id
 
 END
 
