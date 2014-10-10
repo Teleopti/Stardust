@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                 return;
 	        _actualAgentStates.AddOrUpdate((Guid) person.Id, actualAgentState, (key, oldState) =>
 		        {
-			        if (oldState.Timestamp > actualAgentState.Timestamp)
+			        if (oldState.ReceivedTime > actualAgentState.ReceivedTime)
 				        return oldState;
 
 			        return actualAgentState;

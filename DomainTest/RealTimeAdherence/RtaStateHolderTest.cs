@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(0, _target.ActualAgentStates.Count);
 
             var time = DateTime.UtcNow;
-            var state = new ActualAgentState { PersonId = id, Timestamp = time.AddSeconds(15)};
-            var state2 = new ActualAgentState { PersonId = id, Timestamp = time};
+            var state = new ActualAgentState { PersonId = id, ReceivedTime = time.AddSeconds(15)};
+            var state2 = new ActualAgentState { PersonId = id, ReceivedTime = time};
 
             _target.SetActualAgentState(state);
             Assert.That(_target.ActualAgentStates.Count, Is.EqualTo(1));

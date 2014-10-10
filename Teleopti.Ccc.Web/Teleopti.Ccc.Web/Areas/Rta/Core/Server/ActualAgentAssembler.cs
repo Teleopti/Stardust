@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				agentState.AlarmName = "";
 				agentState.AlarmStart = batchId;
 				agentState.StaffingEffect = 0;
-				agentState.Timestamp = batchId;
+				agentState.ReceivedTime = batchId;
 				agentState.BatchId = batchId;
 				agentState.OriginalDataSourceId = sourceId;
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					agentState.Color = foundAlarm.DisplayColor;
 					agentState.AlarmStart = batchId.AddTicks(foundAlarm.ThresholdTime);
 					agentState.StaffingEffect = foundAlarm.StaffingEffect;
-					agentState.Timestamp = batchId;
+					agentState.ReceivedTime = batchId;
 					agentState.BatchId = batchId;
 					agentState.OriginalDataSourceId = sourceId;
 				}
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					StateCode = stateCode,
 					AlarmStart = timestamp,
 					PlatformTypeId = platformTypeId,
-					Timestamp = timestamp,
+					ReceivedTime = timestamp,
 					OriginalDataSourceId = originalSourceId,
 					BusinessUnit = businessUnitId
 				};

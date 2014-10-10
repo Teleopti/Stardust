@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				@event = new PersonInAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
-					Timestamp = agentState.Timestamp
+					Timestamp = agentState.ReceivedTime
 				};
 			else
 				@event = new PersonOutOfAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
-					Timestamp = agentState.Timestamp
+					Timestamp = agentState.ReceivedTime
 				};
 
 			Type current;
