@@ -32,7 +32,7 @@
 		RTA_DrilldownToAllAgentsInOneTeam_25234,
 		RTA_MonitorMultipleBusinessUnits_28348,
 		RTA_ChangeScheduleInAgentStateView_29934,
-		RTA_SeeHistoricalAdherenceForOneAgent_30783,
+		RTA_SeePercentageAdherenceForOneAgent_30783,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,

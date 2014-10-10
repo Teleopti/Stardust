@@ -12,7 +12,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			containerBuilder.RegisterType<TClass>().AsSelf();
 			return containerBuilder.Register<TInterface>(c => c.Resolve<TClass>())
-				.OnActivating(e => e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(e.Instance)));
+				.OnActivating(e =>
+				{
+					e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(e.Instance));
+				});
 		}
 
 		public static IRegistrationBuilder<TClass, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterConcreteMbCacheComponent<TClass>(this ContainerBuilder containerBuilder)

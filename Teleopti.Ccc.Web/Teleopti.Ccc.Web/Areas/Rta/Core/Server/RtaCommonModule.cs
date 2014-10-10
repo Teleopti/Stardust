@@ -3,6 +3,7 @@ using Autofac;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		private readonly CacheBuilder _cacheBuilder;
 
-		public RtaCommonModule(MbCacheModule mbCacheModule)
+		public RtaCommonModule(MbCacheModule mbCacheModule, IIocConfiguration config)
 		{
 			_cacheBuilder = mbCacheModule.Builder;
 		}

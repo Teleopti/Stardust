@@ -120,7 +120,7 @@
 				}
 			});
 
-			toggleQuerier('RTA_SeeHistoricalAdherenceForOneAgent_30783', {
+			toggleQuerier('RTA_SeePercentageAdherenceForOneAgent_30783', {
 				enabled: function() {
 					viewModel.agentAdherenceEnabled(true);
 					

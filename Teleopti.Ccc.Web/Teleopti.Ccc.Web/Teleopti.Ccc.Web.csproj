@@ -420,7 +420,6 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\Server\AlarmMapper.cs" />
-    <Compile Include="Areas\Rta\Core\Server\ContainerConfiguration.cs" />
     <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractor.cs" />
     <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionFactory.cs" />
     <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionStringHandler.cs" />

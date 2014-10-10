@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<BootstrapperModule>();
 
 			var args = new IocArgs {FeatureToggle = featureTogglePath};
-			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)))));
+			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)));
+			builder.RegisterModule(new CommonModule(configuration));
 
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ResourceHandlerModule>();
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
 			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
 
-			builder.RegisterModule(new RtaAreaModule(mbCacheModule));
+			builder.RegisterModule(new RtaAreaModule(mbCacheModule, configuration));
 
 			builder.RegisterModule<ShiftTradeModule>();
 
