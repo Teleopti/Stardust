@@ -10,7 +10,7 @@
 		<DBServer>$(Computername)</DBServer>
 		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
-		<RunWebBehaviorTests>true</RunWebBehaviorTests>
+		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
 	
 		<ASCompile>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</ASCompile>
