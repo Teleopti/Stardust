@@ -132,20 +132,19 @@ BEGIN
 			WHEN 1 THEN '	dbo.agent_logg stg'
 			ELSE NULL --Fail fast
 		END
-		+ ' 
-	INNER JOIN 
-		mart.dim_date d 
-	ON 
+		+ ' INNER JOIN
+			mart.dim_acd_login a
+			ON a.datasource_id = ' + cast(@datasource_id as varchar(3)) + '
+			AND a.acd_login_agg_id = stg.agent_id
+	INNER JOIN
+		mart.dim_date		d
+	ON
 		stg.date_from	= d.date_date
 	INNER JOIN 
 		mart.bridge_time_zone bridge 
-	ON 
-		d.date_id	= bridge.local_date_id	
-		AND	stg.interval= bridge.local_interval_id
-	LEFT JOIN 
-		mart.dim_acd_login a 
-	ON 
-		a.acd_login_agg_id = stg.agent_id
+	ON
+		d.date_id		= bridge.local_date_id		AND
+		stg.interval	= bridge.local_interval_id
 	WHERE bridge.time_zone_id = '+CAST(@time_zone_id as nvarchar(10))+'
 	AND date_from between '''+ CAST(@start_date as nvarchar(20))+''' and '''+ CAST(@end_date as nvarchar(20))+'''
 	AND a.datasource_id = ' + CAST(@datasource_id as nvarchar(10)) +'
