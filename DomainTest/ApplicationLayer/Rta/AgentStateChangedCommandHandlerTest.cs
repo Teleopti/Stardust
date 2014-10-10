@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Hql.Ast.ANTLR.Tree;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -130,17 +128,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			event2.PersonId.Should().Be(state2.PersonId);
 		}
 
+		[Test]
+		public void ShouldPublishTheTimeWhenPersonInAdherence()
+		{
+			var publisher = new FakeEventsPublisher();
+			var target = new AgentStateChangedCommandHandler(publisher);
 
+			var state = new ActualAgentState
+			{
+				PersonId = Guid.NewGuid(),
+				StaffingEffect = 0,
+				Timestamp = DateTime.Now
+			};
+
+			target.Invoke(state);
+
+			var @event = publisher.PublishedEvents.Single() as PersonInAdherenceEvent;
+			@event.Timestamp.Should().Be(state.Timestamp);
+		}
+
+		[Test]
+		public void ShouldPublishTheTimeWhenPersonOutOfAdherence()
+		{
+			var publisher = new FakeEventsPublisher();
+			var target = new AgentStateChangedCommandHandler(publisher);
+
+			var state = new ActualAgentState
+			{
+				PersonId = Guid.NewGuid(),
+				StaffingEffect = 1,
+				Timestamp = DateTime.Now
+			};
+
+			target.Invoke(state);
+
+			var @event = publisher.PublishedEvents.Single() as PersonOutOfAdherenceEvent;
+			@event.Timestamp.Should().Be(state.Timestamp);
+		}
 	}
+
 
 	public class PersonOutOfAdherenceEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
+		public DateTime Timestamp { get; set; }
+
 	}
 
 	public class PersonInAdherenceEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
+		public DateTime Timestamp { get; set; }
 	}
 
 	public class AgentStateChangedCommandHandler //: IActualAgentStateHasBeenSent
@@ -157,9 +195,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			IEvent @event;
 			if (agentState.StaffingEffect.Equals(0))
-				@event = new PersonInAdherenceEvent { PersonId = agentState.PersonId };
+				@event = new PersonInAdherenceEvent
+				{
+					PersonId = agentState.PersonId,
+					Timestamp = agentState.Timestamp
+				};
 			else
-				@event = new PersonOutOfAdherenceEvent { PersonId = agentState.PersonId };
+				@event = new PersonOutOfAdherenceEvent
+				{
+					PersonId = agentState.PersonId,
+					Timestamp = agentState.Timestamp
+				};
 
 			Type current;
 			_sentEvents.TryGetValue(agentState.PersonId, out current);
