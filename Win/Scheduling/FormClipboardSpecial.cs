@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
 
-		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
+		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
         {
             InitializeComponent();
   
@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			enableComboBoxOvertime();
         }
 
-		private void fillComboOvertime(IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet)
+		private void fillComboOvertime(IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
 		{
 			comboBoxAdvOvertime.DisplayMember = "Name";
 
-			var definitionSets = from set in MultiplicatorDefinitionSet
+			var definitionSets = from set in multiplicatorDefinitionSet
 								 where set.MultiplicatorType == MultiplicatorType.Overtime
 								 select set;
 
