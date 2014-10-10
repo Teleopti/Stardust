@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_fact_queue_load_intraday]
 GO
 
---exec [mart].[etl_fact_queue_load_intraday] @start_date='1956-01-01',@end_date='1912-01-01', @datasource_id=-2
+--exec mart.etl_fact_queue_load_intraday @start_date='2014-10-09 00:00:00',@end_date='2014-10-15 00:00:00',@datasource_id=6
 
 CREATE PROCEDURE [mart].[etl_fact_queue_load_intraday]
 @start_date smalldatetime,
@@ -282,8 +282,10 @@ ELSE  --Single datasource_id
 			mart.dim_queue		q
 			ON q.datasource_id = ' + cast(@datasource_id as varchar(3)) + '
 			AND q.queue_agg_id= agg.queue
-		WHERE date_from >= '''+ CAST(@source_date_local as nvarchar(20))+'''
-		AND interval >= '''+ CAST(@source_interval_local as nvarchar(20))+'''
+		WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
+		AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
+		) OR (date_from >'''+ CAST(@target_date_local as nvarchar(20))+'''
+		)
 		) stg
 	INNER JOIN
 		mart.dim_date		d
