@@ -73,15 +73,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			    stateCode = logOutStateCode;
 		    }
 
-		    //The DateTimeKind.Utc is not set automatically when deserialising from soap message
-		    timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
-		    if (timestamp > DateTime.UtcNow.AddMinutes(59))
-		    {
-			    Log.ErrorFormat(
-				    "The supplied time stamp cannot be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
-				    DateTime.UtcNow, timestamp, messageId);
-			    return -430;
-		    }
+			//The DateTimeKind.Utc is not set automatically when deserialising from soap message
+			timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
+			if (Math.Abs(timestamp.Subtract(DateTime.UtcNow).TotalMinutes) < 30)
+			{
+				Log.ErrorFormat(
+					"The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
+					DateTime.UtcNow, timestamp, messageId);
+				return -400;
+			}
 
 		    const int stateCodeMaxLength = 25;
 		    stateCode = stateCode.Trim();
