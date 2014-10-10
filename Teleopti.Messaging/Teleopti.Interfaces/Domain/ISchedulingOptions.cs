@@ -380,5 +380,9 @@ namespace Teleopti.Interfaces.Domain
         /// Used if the TeamBlock option is checked or not
         /// </summary>
 		  bool UseBlock { get; set; }
+
+	    void AddNotAllowedShiftProjectionCache(IShiftProjectionCache shiftProjectionCache);
+		IList<IShiftProjectionCache> NotAllowedShiftProjectionCaches { get; }
+	    void ClearNotAllowedShiftProjectionCaches();
     }
 }

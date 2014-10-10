@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class SchedulingOptions : ISchedulingOptions
     {
 		private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
+		private readonly IList<IShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<IShiftProjectionCache>(); 
+
 		private bool _usePreferencesMustHaveOnly;
 		private bool _considerShortBreaks = true;
         private bool _useRotations;
@@ -58,6 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IActivity CommonActivity { get; set; }
         public bool TeamSameActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
+	    
 
         
         public BlockFinderType BlockFinderTypeForAdvanceScheduling
@@ -86,6 +89,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     		}
     		set { _mainShiftOptimizeActivitySpecification = value; }
     	}
+
+	    public void AddNotAllowedShiftProjectionCache(IShiftProjectionCache shiftProjectionCache)
+	    {
+		    _notAllowedShiftProjectionCaches.Add(shiftProjectionCache);
+	    }
+
+	    public IList<IShiftProjectionCache> NotAllowedShiftProjectionCaches
+	    {
+			get { return _notAllowedShiftProjectionCaches; }
+	    }
+
+	    public void ClearNotAllowedShiftProjectionCaches()
+	    {
+		    _notAllowedShiftProjectionCaches.Clear();
+	    }
 
     	public SchedulingOptions()
 		{

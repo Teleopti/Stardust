@@ -300,6 +300,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var activity1 = new Activity("activity1");
 			var activity2 = new Activity("activity2");
 
+			activity1.SetId(Guid.NewGuid());
+			activity2.SetId(Guid.NewGuid());
+
 			var workShift1 = new WorkShift(category);
 			var workShift2 = new WorkShift(category);
 

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -11,11 +12,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     public class SchedulingOptionsTest
     {
         private ISchedulingOptions _target;
+	    private MockRepository _mock;
+	    private IShiftProjectionCache _shiftProjectionCache;
 
         [SetUp]
         public void Setup()
         {
             _target = new SchedulingOptions();
+			_mock = new MockRepository();
+	        _shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
         }
 
         [Test]
@@ -66,6 +71,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
             
+			_target.AddNotAllowedShiftProjectionCache(_shiftProjectionCache);
+			Assert.AreEqual(_shiftProjectionCache, _target.NotAllowedShiftProjectionCaches[0]);
+			_target.ClearNotAllowedShiftProjectionCaches();
+			Assert.IsEmpty(_target.NotAllowedShiftProjectionCaches);
         }
 
         [Test]
