@@ -22,13 +22,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			if (!validateArguments(notificationHeader))
 				return;
 
-			using (var client = new SmtpClient(_emailConfiguration.SmtpHost, _emailConfiguration.SmtpPort))
+			using (var client = new SmtpClient())
 			{
-				client.Credentials = new NetworkCredential(_emailConfiguration.SmtpUser, _emailConfiguration.SmtpPassword);
+				client.Host = _emailConfiguration.SmtpHost;
+				client.Port = _emailConfiguration.SmtpPort;
 				client.EnableSsl = _emailConfiguration.SmtpUseSsl;
+				client.DeliveryMethod = SmtpDeliveryMethod.Network;
+				client.UseDefaultCredentials = false;
+				client.Credentials = new NetworkCredential(_emailConfiguration.SmtpUser, _emailConfiguration.SmtpPassword);
+				client.Timeout = 10000;
 
-				var from = new MailAddress(notificationHeader.EmailSender);
-				var to = new MailAddress(notificationHeader.EmailReceiver);
+				var from = new MailAddress(_emailConfiguration.SmtpUser);
+				var to = new MailAddress(notificationHeader.EmailReceiver, notificationHeader.PersonName);
 
 				using (var mailMessage = new MailMessage(from, to))
 				{
@@ -49,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 					{
 						Logger.Error(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
 					}
-					
+
 				}
 			}
 		}
