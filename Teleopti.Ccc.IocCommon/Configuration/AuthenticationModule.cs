@@ -15,19 +15,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
     internal  class AuthenticationModule : Module
     {
-        private readonly IApplicationData _applicationData;
-
-        public AuthenticationModule()
-        {
-        }
-
 	    public IApplicationData ApplicationData { get; set; }
-        /*public AuthenticationModule(IApplicationData applicationData) : this()
-        {
-            _applicationData = applicationData;
-        }*/
 
-        protected override void Load(ContainerBuilder builder)
+	    public AuthenticationModule()
+	    {
+	    }
+
+	    protected override void Load(ContainerBuilder builder)
         {
 			builder.RegisterType<WindowsAppDomainPrincipalContext>()
 				.As<ICurrentPrincipalContext>()
