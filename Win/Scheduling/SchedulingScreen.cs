@@ -1910,7 +1910,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			clipboardSpecialOptions.ShowOvertimeAvailability = false;
 			clipboardSpecialOptions.ShowShiftAsOvertime = true;
 
-			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.PasteSpecial };
+			var selectedDays = _scheduleView.SelectedSchedules();
+			var multiplicatorSet = new MultiplicatorsetForPasteSpecialFilter().FilterAvailableMultiplicatorSet(MultiplicatorDefinitionSet, selectedDays);
+
+			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, multiplicatorSet) { Text = Resources.PasteSpecial };
 			pasteSpecial.ShowDialog();
 
 			if (_scheduleView != null)

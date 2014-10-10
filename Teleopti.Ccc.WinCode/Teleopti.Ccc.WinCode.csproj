@@ -622,6 +622,7 @@
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
     <Compile Include="Scheduling\ISchedulingScreenPersister.cs" />
+    <Compile Include="Scheduling\MultiplicatorsetForPasteSpecialFilter.cs" />
     <Compile Include="Scheduling\PasteAsOvertime.cs" />
     <Compile Include="Scheduling\Restriction\HourlyAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
