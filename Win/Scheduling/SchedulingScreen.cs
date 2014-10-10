@@ -5857,6 +5857,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemViewHistory_Click(object sender, EventArgs e)
 		{
+			if (!_scenario.DefaultScenario) return;
 			IScheduleDay selected;
 			if (!tryGetFirstSelectedSchedule(out selected)) return;
 			
