@@ -145,6 +145,8 @@
     <Compile Include="ApplicationLayer\Events\ITrackableEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonOutOfAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodDetail.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodRemovedEvent.cs" />
@@ -168,6 +170,7 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentStateChangedCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />

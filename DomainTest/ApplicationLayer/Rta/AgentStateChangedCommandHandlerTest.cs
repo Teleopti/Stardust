@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -11,96 +9,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	[TestFixture]
 	public class AgentStateChangedCommandHandlerTest
 	{
-		[Test]
-		public void ShouldPublishPersonInAdherenceEventWhenNoStaffingEffect()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-			var state = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = 0
-			};
-
-			target.Invoke(state);
-
-			var @event = publisher.PublishedEvents.Single() as PersonInAdherenceEvent;
-			@event.PersonId.Should().Be(state.PersonId);
-		}
-
-		[Test]
-		public void ShouldPublishPersonOutOfAdherenceEventOnPositiveStaffingEffect()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-			var state = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = 1
-			};
-
-			target.Invoke(state);
-
-			var @event = publisher.PublishedEvents.Single() as PersonOutOfAdherenceEvent;
-			@event.PersonId.Should().Be(state.PersonId);
-		}
-
-		[Test]
-		public void ShouldPublishPersonOutOfAdherenceEventOnNegativeStaffingEffect()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-			var state = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = -1
-			};
-
-			target.Invoke(state);
-
-			var @event = publisher.PublishedEvents.Single() as PersonOutOfAdherenceEvent;
-			@event.PersonId.Should().Be(state.PersonId);
-		}
-
-		[Test]
-		public void ShouldNotPublishEventIfStillInAdherence()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-			var state = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = 0
-			};
-
-			target.Invoke(state);
-			target.Invoke(state);
-
-			publisher.PublishedEvents.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldNotPublishEventIfStillOutOfAdherence()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-			var state1 = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = 1
-			};
-			var state2 = new ActualAgentState
-			{
-				PersonId = state1.PersonId,
-				StaffingEffect = -1
-			};
-
-			target.Invoke(state1);
-			target.Invoke(state2);
-
-			publisher.PublishedEvents.Should().Have.Count.EqualTo(1);
-		}
-
 		[Test]
 		public void ShouldPublishEventsForEachPerson()
 		{
@@ -128,92 +36,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			event2.PersonId.Should().Be(state2.PersonId);
 		}
 
-		[Test]
-		public void ShouldPublishTheTimeWhenPersonInAdherence()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-
-			var state = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = 0,
-				Timestamp = DateTime.Now
-			};
-
-			target.Invoke(state);
-
-			var @event = publisher.PublishedEvents.Single() as PersonInAdherenceEvent;
-			@event.Timestamp.Should().Be(state.Timestamp);
-		}
-
-		[Test]
-		public void ShouldPublishTheTimeWhenPersonOutOfAdherence()
-		{
-			var publisher = new FakeEventsPublisher();
-			var target = new AgentStateChangedCommandHandler(publisher);
-
-			var state = new ActualAgentState
-			{
-				PersonId = Guid.NewGuid(),
-				StaffingEffect = 1,
-				Timestamp = DateTime.Now
-			};
-
-			target.Invoke(state);
-
-			var @event = publisher.PublishedEvents.Single() as PersonOutOfAdherenceEvent;
-			@event.Timestamp.Should().Be(state.Timestamp);
-		}
 	}
-
-
-	public class PersonOutOfAdherenceEvent : IEvent
-	{
-		public Guid PersonId { get; set; }
-		public DateTime Timestamp { get; set; }
-
-	}
-
-	public class PersonInAdherenceEvent : IEvent
-	{
-		public Guid PersonId { get; set; }
-		public DateTime Timestamp { get; set; }
-	}
-
-	public class AgentStateChangedCommandHandler //: IActualAgentStateHasBeenSent
-	{
-		private readonly IEventPublisher _eventPublisher;
-		private readonly IDictionary<Guid, Type> _sentEvents = new Dictionary<Guid, Type>();
-
-		public AgentStateChangedCommandHandler(IEventPublisher eventPublisher)
-		{
-			_eventPublisher = eventPublisher;
-		}
-
-		public void Invoke(IActualAgentState agentState)
-		{
-			IEvent @event;
-			if (agentState.StaffingEffect.Equals(0))
-				@event = new PersonInAdherenceEvent
-				{
-					PersonId = agentState.PersonId,
-					Timestamp = agentState.Timestamp
-				};
-			else
-				@event = new PersonOutOfAdherenceEvent
-				{
-					PersonId = agentState.PersonId,
-					Timestamp = agentState.Timestamp
-				};
-
-			Type current;
-			_sentEvents.TryGetValue(agentState.PersonId, out current);
-			if (current == null || current != @event.GetType())
-				_eventPublisher.Publish(@event);
-			_sentEvents[agentState.PersonId] = @event.GetType();
-		}
-
-	}
-
 }
