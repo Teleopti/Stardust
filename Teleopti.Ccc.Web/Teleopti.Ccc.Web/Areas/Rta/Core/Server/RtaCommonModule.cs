@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;

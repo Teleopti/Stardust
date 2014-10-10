@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IActualAgentStateHasBeenSent
 	{

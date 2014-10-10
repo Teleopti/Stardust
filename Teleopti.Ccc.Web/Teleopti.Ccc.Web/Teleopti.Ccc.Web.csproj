@@ -427,7 +427,6 @@
     <Compile Include="Areas\Rta\Core\Server\DatabaseReader.cs" />
     <Compile Include="Areas\Rta\Core\Server\DatabaseWriter.cs" />
     <Compile Include="Areas\Rta\Core\Server\IActualAgentAssembler.cs" />
-    <Compile Include="Areas\Rta\Core\Server\IActualAgentStateHasBeenSent.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAlarmMapper.cs" />
     <Compile Include="Areas\Rta\Core\Server\ICurrentAndNextLayerExtractor.cs" />
     <Compile Include="Areas\Rta\Core\Server\IDatabaseConnectionFactory.cs" />

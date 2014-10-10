@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public class AgentStateChangedCommandHandler //: IActualAgentStateHasBeenSent
+	public class AgentStateChangedCommandHandler : IActualAgentStateHasBeenSent
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IDictionary<Guid, Type> _sentEvents = new Dictionary<Guid, Type>();
