@@ -320,6 +320,8 @@
     <Compile Include="Areas\HealthCheck\HealthCheckAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAgentBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
