@@ -121,6 +121,7 @@
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\FairnessType.cs" />
+    <Compile Include="Domain\IAgentBadgeInfo.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
     <Compile Include="Domain\IAgentBadgeRepository.cs" />
     <Compile Include="Domain\IAgentBadgeThresholdSettings.cs" />

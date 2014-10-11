@@ -1,8 +1,7 @@
+using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -68,6 +67,30 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadge>();
+			return result;
+		}
+
+		public ICollection<IAgentBadgeInfo> GetAgentToplistOfBadges()
+		{
+			const string query = @"select Person, SUM(TotalAmount) from AgentBadge group by Person order by SUM(TotalAmount) desc";
+			
+			var result = Session.CreateSQLQuery(query)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeInfo)))
+					.SetReadOnly(true)
+					.List<IAgentBadgeInfo>();
+			return result;
+		}
+
+		public ICollection<IAgentBadgeInfo> GetAgentToplistOfBadges(BadgeType badgeType)
+		{
+			const string query = @"select Person, SUM(TotalAmount) from AgentBadge where BadgeType=:badgeType "
+				+ "group by Person order by SUM(TotalAmount) desc";
+
+			var result = Session.CreateSQLQuery(query)
+					.SetInt16("badgeType", (Int16)badgeType)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeInfo)))
+					.SetReadOnly(true)
+					.List<IAgentBadgeInfo>();
 			return result;
 		}
 	}
