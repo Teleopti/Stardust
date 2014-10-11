@@ -2,7 +2,7 @@
 .ui-tooltip-custom 
 {
 	border-color: rgb(200, 200, 200);
-	background-color: rgb(255,255,255);
+	background-color: rgb(255, 255, 255);
 }
 
 .ui-tooltip-custom .ui-tooltip-content
@@ -35,6 +35,13 @@
 	padding-right: 5px;
 	padding-bottom: 5px;
 }
+
+.ui-tooltip-shadow {
+	-webkit-box-shadow: 5px 12px 12px #c7c4c4;
+	-moz-box-shadow: 5px 12px 12px #c7c4c4;
+    box-shadow: 5px 12px 12px #c7c4c4;
+}
+
 .ui-tooltip-custom .ui-tooltip-title 
 {
 	text-align: left;
