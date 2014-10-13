@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 		[SetUp]
 		public void Setup()
 		{
+			var configuration = new IocConfiguration(new IocArgs(), null);
 			_containerBuilder = new ContainerBuilder();
-			_containerBuilder.RegisterModule<CommonModule>();
-			_containerBuilder.RegisterModule<SchedulingCommonModule>();
-			
+			_containerBuilder.RegisterModule(new CommonModule(configuration));
+			_containerBuilder.RegisterModule(new SchedulingCommonModule(configuration));
 		}
 
 		[Test]

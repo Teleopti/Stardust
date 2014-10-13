@@ -173,16 +173,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
                 var builder = new ContainerBuilder();
 
-								var mbCacheModule = new MbCacheModule(null);
-				builder.RegisterModule(mbCacheModule);
-	            builder.RegisterModule(
-		            new CommonModule(new IocConfiguration(
+				var configuration = new IocConfiguration(
 			            new IocArgs {MessageBrokerListeningEnabled = true},
-			            CommonModule.ToggleManagerForIoc()))
+			            CommonModule.ToggleManagerForIoc());
+
+	            builder.RegisterModule(
+					new CommonModule(configuration)
 		            {
 			            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
 		            });
-				builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
+				builder.RegisterModule(new RuleSetModule(configuration, true));
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new EventAggregatorModule());
                 builder.RegisterModule(new StartupModule());
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
 				builder.RegisterModule(new MainModule());
-				builder.RegisterModule(new SchedulingCommonModule());
+				builder.RegisterModule(new SchedulingCommonModule(configuration));
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();

@@ -1,6 +1,5 @@
 using System;
 using Autofac;
-using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -11,14 +10,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	public class RuleSetModule : Module
 	{
 		private readonly bool _perLifetimeScope;
-		private readonly CacheBuilder _cacheBuilder;
+		private readonly IIocConfiguration _configuration;
 
-		public RuleSetModule(MbCacheModule mbCacheModule, bool perLifetimeScope) 
+		public RuleSetModule(IIocConfiguration configuration, bool perLifetimeScope) 
 		{
 			_perLifetimeScope = perLifetimeScope;
-			if (mbCacheModule == null)
-				throw new ArgumentException("MbCacheModule required", "mbCacheModule");
-			_cacheBuilder = mbCacheModule.Builder;
+			if (configuration == null)
+				throw new ArgumentException("MbCacheModule required", "configuration");
+			_configuration = configuration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterMbCacheComponent<WorkShiftWorkTime, IWorkShiftWorkTime>()
 					.SingleInstance();
 			}
-			_cacheBuilder
+			_configuration.Args().CacheBuilder
 				.For<RuleSetProjectionService>("RSPS")
 					.CacheMethod(m => m.ProjectionCollection(null,null))
 					.PerInstance()

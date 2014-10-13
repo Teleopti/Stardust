@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -15,12 +14,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class RtaCommonModule : Module
 	{
 		private readonly IIocConfiguration _config;
-		private readonly CacheBuilder _cacheBuilder;
 
-		public RtaCommonModule(MbCacheModule mbCacheModule, IIocConfiguration config)
+		public RtaCommonModule(IIocConfiguration config)
 		{
 			_config = config;
-			_cacheBuilder = mbCacheModule.Builder;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -28,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
 			//mark activityalarms and stategroups to be cached
-			_cacheBuilder
+			_config.Args().CacheBuilder
 				.For<DatabaseReader>()
 				.CacheMethod(x => x.ActivityAlarms())
 				.CacheMethod(x => x.StateGroups())
@@ -60,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
-			_cacheBuilder
+			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
 				.CacheMethod(svc => svc.LoadAll())
 				.As<IPersonOrganizationProvider>();

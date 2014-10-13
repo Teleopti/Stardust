@@ -1,5 +1,6 @@
 using System;
 using Autofac;
+using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.IocCommon
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule(new MbCacheModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<LocalServiceBusEventsPublisherModule>();
-			builder.RegisterModule(new AuthenticationModule{ApplicationData = ApplicationData });
+			builder.RegisterModule(new AuthenticationModule {ApplicationData = ApplicationData});
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

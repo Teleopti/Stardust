@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
@@ -52,11 +51,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		{
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
-
 			builder.RegisterModule(new CommonModule(config));
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
+			builder.RegisterModule(new RtaCommonModule(config));
 
 			var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
 			reader.Stub(x => x.LoadAll()).Return(new PersonOrganizationData[] { });
@@ -97,9 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
+			builder.RegisterModule(new RtaCommonModule(config));
 			return builder.Build();
 		}
 
@@ -108,9 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
+			builder.RegisterModule(new RtaCommonModule(config));
 			return builder.Build();
 		}
 

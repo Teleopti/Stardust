@@ -5,10 +5,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class AuthenticationCachedModule : Module
 	{
-		private readonly MbCacheModule _mbCacheModule;
+		private readonly IIocConfiguration _configuration;
 
-		public AuthenticationCachedModule(MbCacheModule mbCacheModule) {
-			_mbCacheModule = mbCacheModule;
+		public AuthenticationCachedModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRetrievePersonNameForPerson>()
 				.SingleInstance();
 
-			_mbCacheModule.Builder
+			_configuration.Args().CacheBuilder
 				.For<TeleoptiPrincipalInternalsFactory>()
 				.CacheMethod(m => m.MakeOrganisationMembership(null))
 				.CacheMethod(m => m.MakeRegionalFromPerson(null))
