@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			//The DateTimeKind.Utc is not set automatically when deserialising from soap message
 			timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
-			if (Math.Abs(timestamp.Subtract(DateTime.UtcNow).TotalMinutes) < 30)
+			if (Math.Abs(timestamp.Subtract(DateTime.UtcNow).TotalMinutes) > 30)
 			{
 				Log.ErrorFormat(
 					"The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
