@@ -35,9 +35,16 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void CreateDatabaseByScriptFile(string scriptFile, DatabaseType type, string name)
 		{
-			var script = ReadScriptFile(scriptFile);
-			script = ReplaceScriptTags(script, type, name);
-			ExecuteScript(script);
+			try
+			{
+				var script = ReadScriptFile(scriptFile);
+				script = ReplaceScriptTags(script, type, name);
+				ExecuteScript(script);
+			}
+			catch (SqlException exception)
+			{
+				throw new NotExecutableScriptException(scriptFile, "scriptFile", exception);
+			}
 		}
 
 		private static string ReadScriptFile(string scriptFile)
