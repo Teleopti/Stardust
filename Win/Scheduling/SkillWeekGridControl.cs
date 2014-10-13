@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private AbstractDetailView _owner;
         private const int rowHeaderWidth = 200;
-        private const string settingName = "SchedulerSkillDayGridAndChart";
+        private const string settingName = "SchedulerSkillWeekGridAndChart";
 		private RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         private IList<IGridRow> _gridRows;
         private GridRow _currentSelectedGridRow;
