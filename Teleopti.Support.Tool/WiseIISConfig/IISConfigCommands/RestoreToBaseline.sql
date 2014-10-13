@@ -25,7 +25,7 @@ BEGIN
 END
 
 SET @dataFolderRelease = @dataFolderRelease + '\' + @computer
-DECLARE @backupFolder nvarchar(4000) = 'D:\SQLData\CCC\MSSQL10_50.CCC\MSSQL\Backup\QA Baselines\'
+DECLARE @backupFolder nvarchar(4000) = '\\ARES\QABaselines\'
 
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @ana)
 exec ('ALTER DATABASE ' + @ana + ' SET  SINGLE_USER WITH ROLLBACK IMMEDIATE')
