@@ -18,3 +18,23 @@ BEGIN
 	ALTER TABLE [mart].[sys_crossdatabaseview_custom] CHECK CONSTRAINT [FK_sys_crossdatabaseview_custom_sys_crossdatabaseview_target]
 END
 GO
+
+----------------  
+--Name: Karin Jeppsson
+--Date: 2014-10-13
+--Desc: Bug #30845 Fix of primary key in fact_schedule_convert
+----------------
+TRUNCATE TABLE [mart].[fact_schedule_convert]
+GO
+ALTER TABLE [mart].[fact_schedule_convert] DROP CONSTRAINT [PK_fact_schedule_convert]
+GO
+ALTER TABLE [mart].[fact_schedule_convert] ADD  CONSTRAINT [PK_fact_schedule_convert] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_local_id] ASC,
+	[scenario_id] ASC,
+	[person_id] ASC,
+	[schedule_date_id] ASC,
+	[interval_id] ASC,
+	[activity_starttime] ASC
+)
+GO
