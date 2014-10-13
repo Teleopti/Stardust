@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			registerAsmTypes(builder);
 			registerMessageBrokerTypes(builder);
 			registerMyReportTypes(builder);
+			registerBadgeLeaderBoardReportTypes(builder);
 		}
 
 		private static void registerMessageBrokerTypes(ContainerBuilder builder)
@@ -211,6 +213,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<MyReportViewModelFactory>().As<IMyReportViewModelFactory>();
             builder.RegisterType<QueueMetricsForDayQuery>().As<IQueueMetricsForDayQuery>();
             builder.RegisterType<QueueMetricsMapper>().As<IQueueMetricsMapper>();
+		}
+
+		private static void registerBadgeLeaderBoardReportTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<BadgeLeaderBoardReportViewModelFactory>().As<IBadgeLeaderBoardReportViewModelFactory>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)
