@@ -51,11 +51,12 @@
 								continue;
 							}
 								<li>
-									@if (reportNavSection.IsMyReport)
+									@if (reportNavSection.IsWebReport)
 		 {
 										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
 								}
-									@if (!reportNavSection.IsMyReport)
+									
+									@if (!reportNavSection.IsWebReport)
 		 {
 										<a href="@reportNavSection.Url" target="_blank">@reportNavSection.Title</a>
 								}

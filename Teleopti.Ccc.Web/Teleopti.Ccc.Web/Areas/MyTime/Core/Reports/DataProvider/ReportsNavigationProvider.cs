@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Action = "Index",
 					Controller = "MyReport",
 					Title = Resources.MyReport,
-					IsMyReport = true
+					IsWebReport = true
 				});
 			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
 			{
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Action = "Index",
 					Controller = "BadgeLeaderBoardReport",
 					Title = Resources.BadgeLeaderBoardReport,
-					IsLeaderBoard = true
+					IsWebReport = true
 				});
 			}
 			var otherReports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);

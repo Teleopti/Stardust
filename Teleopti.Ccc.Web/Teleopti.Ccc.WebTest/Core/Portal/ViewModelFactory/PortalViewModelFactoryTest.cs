@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			_reportsNavProvider.Stub(x => x.GetNavigationItems())
-				.Return(new[] {new ReportNavigationItem {Action = "Index", Controller = "MyReport", IsMyReport = true}});
+				.Return(new[] {new ReportNavigationItem {Action = "Index", Controller = "MyReport", IsWebReport = true}});
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),

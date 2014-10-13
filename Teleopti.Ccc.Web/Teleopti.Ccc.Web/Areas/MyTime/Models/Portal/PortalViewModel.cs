@@ -40,9 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class ReportNavigationItem : NavigationItem
 	{
 		public string Url { get; set; }
-		public bool IsMyReport { get; set; }
+		public bool IsWebReport { get; set; }
 		public bool IsDivider { get; set; }
-		public bool IsLeaderBoard { get; set; }
 	}
 	public class PreferenceOption : Option, IPreferenceOption
 	{

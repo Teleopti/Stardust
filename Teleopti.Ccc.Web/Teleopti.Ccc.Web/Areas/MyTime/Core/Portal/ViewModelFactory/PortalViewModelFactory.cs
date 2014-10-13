@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
 			var reportsList = new List<ReportNavigationItem>();
-			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsMyReport))
+			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsWebReport))
 			{
 				navigationItems.Add(reportsItems.First());
 			}

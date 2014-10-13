@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			var result = _target.GetNavigationItems();
 
 			result.Count.Should().Be(4);
-			result.First().IsMyReport.Should().Be(true);
+			result.First().IsWebReport.Should().Be(true);
 			result[1].IsDivider.Should().Be(true);
 			_principalAuthorization.VerifyAllExpectations();
 		}
