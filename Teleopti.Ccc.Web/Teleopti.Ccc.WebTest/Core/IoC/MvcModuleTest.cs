@@ -68,12 +68,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[SetUp]
 		public void Setup()
 		{
-			var applicationData = MockRepository.GenerateMock<IApplicationData>();
-
 			var container = new ContainerConfiguration().Configure(string.Empty);
 
 			var containerAdder = new ContainerBuilder();
-			containerAdder.RegisterModule(new CommonModule() { ApplicationData = applicationData });
+			containerAdder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
             HttpContextBase httpContextBase = new FakeHttpContext("");
             containerAdder.Register(c => httpContextBase);
             var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
