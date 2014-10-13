@@ -10128,16 +10128,16 @@
     <value>اعرض الممثلون النشطاء </value>
   </data>
   <data name="SkillTypeChat" xml:space="preserve">
-    <value>دردشة</value>
+    <value>شات</value>
   </data>
   <data name="AbandonedChats" xml:space="preserve">
-    <value>عمليات دردشة مفقودة</value>
+    <value>عمليات شات مفقودة</value>
   </data>
   <data name="AnsweredChats" xml:space="preserve">
-    <value>دردشة تم الرد عليها</value>
+    <value>شات تم الرد عليه</value>
   </data>
   <data name="AverageChats" xml:space="preserve">
-    <value>متوسط عدد الدردشات</value>
+    <value>متوسط عدد الشات</value>
   </data>
   <data name="RequestStatusDtoAutodenied" xml:space="preserve">
     <value>مرفوض</value>
@@ -10149,10 +10149,10 @@
     <value>اضف مسموحية وقت إضافى </value>
   </data>
   <data name="CalculatedChats" xml:space="preserve">
-    <value>الدردشات التى تم حسابها</value>
+    <value>الشات التى تم حسابها</value>
   </data>
   <data name="CampaignChatsPercentSign" xml:space="preserve">
-    <value>النسبة المئوية لحملة الدردشات</value>
+    <value>النسبة المئوية لحملة الشات</value>
   </data>
   <data name="OvertimeAvailability" xml:space="preserve">
     <value>مسموحية الوقت الاضافي </value>
@@ -10161,34 +10161,34 @@
     <value>تم حفظ مسموحية الوقت الإضافي سلفا</value>
   </data>
   <data name="Chat" xml:space="preserve">
-    <value>دردشة</value>
+    <value>شات</value>
   </data>
   <data name="DeviationChatsColon" xml:space="preserve">
-    <value>انحراف الدردشة:</value>
+    <value>انحراف الشات </value>
   </data>
   <data name="ForecastedChats" xml:space="preserve">
-    <value>العدد المتوقع للدردشة</value>
+    <value>العدد المتوقع للشات</value>
   </data>
   <data name="IndexChats" xml:space="preserve">
-    <value>فهرس الدردشة </value>
+    <value>فهرس الشات </value>
   </data>
   <data name="OfferedChats" xml:space="preserve">
-    <value>الدردشات المعروضة</value>
+    <value>الشات المعروضة</value>
   </data>
   <data name="OriginalOfferedChats" xml:space="preserve">
-    <value>الدردشات المعروضة الاصلية</value>
+    <value>الشات المعروضة الاصلية</value>
   </data>
   <data name="TotalChats" xml:space="preserve">
-    <value>إجمالى عدد الدردشات</value>
+    <value>إجمالى عدد الشات</value>
   </data>
   <data name="ValidatedChats" xml:space="preserve">
-    <value>الدردشات التى تم التحقق منها</value>
+    <value>الشات الذى تم التحقق منه</value>
   </data>
   <data name="CampaignChatTimePercentSign" xml:space="preserve">
     <value>النسبة المئوية لوقت الدردشة %</value>
   </data>
   <data name="Chats" xml:space="preserve">
-    <value>الدردشات</value>
+    <value>شات</value>
   </data>
   <data name="TotalChatTime" xml:space="preserve">
     <value>إجمالى وقت الدردشة</value>
@@ -10426,5 +10426,334 @@
   </data>
   <data name="Yesterday" xml:space="preserve">
     <value>أمس</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>وقت المهمة</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>إجمالى وقت المهمة</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>وقت الشات</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>لا تستطيع الدخول لأى من الفرق </value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>عدد الساعات للأسبوع غير صحيح</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>بين أيام الاجازات</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>حدود فئات الوردية لم يتم فحصه حيث أن فريق العمل قد تم اختياره</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>خطوات تحسين الاداء " ورديات للعمل المرن"، " أيام أجازات للعمل المرن " و "حدود فئات الوردية" لم يتم تنيفذها وفريق العمل قد تم اختياره</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>قارن فريق العمل مع </value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>وقت الاستعداد\ المجدول</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>الجدول يجب أن يتم تحميله</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>نقاط أيام الأجازات:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>نقاط الاقدمية</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>نقاط فئات الوردية</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>تفاصيل الالتزام</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>الملخص</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>الجدول الشهري</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>فئات الاقدمية</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>عرض عام لالتزام الوقت الحقيقي</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>اعرض الحساب الشخصي</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>تصفح</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>اختر على الاقل شخص واحد</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>للممثلين المتاحين فقط</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>خارج عن الالتزام</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>توقيت ما قبل النشاط</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>على الاقل هناك يوم لما يتم اختياره</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>السماح بتنبيهات الديسكتوب</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>لا توجد قاعدة بيانات متاحة</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>سجل الدخول كمستخدم آخر</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>سجل الدخول</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>سجل الدخول كمستخدم آخر</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>احسب الوضع القانونى</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>س</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>الوردية الحالية ستنتهى فى {0}</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>المهارة التالية {0} ستبدأ فى {1}</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>حل البقية الاسبوعية ل {0} {1}</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>جدول فريق العمل </value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>&lt;لا بلوك&gt;</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt; لا فريق عمل &gt;</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>فترة الجدول</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>سطح المكتب</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>المحمول</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>تحريك الوقت</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>المهارة التالية</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>المهارة التالية بداية الوقت</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>وقت التنبيه</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>أقل وقت لكل أسبوع</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>لديك وقت أسبوعى محدود محطم</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>قياسات الطابور</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>توقيت المنبه</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>الخادم غير متاح ولذلك، بعض الوظائف لا يمكن تفعيلها </value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>الترتيب التصاعدي للأقدمية</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>الترتيب التنازلى للأقدمية</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ملف </value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>فتح وردية</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>تحريك النشاط</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>عربة تجارتى</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>رؤية مضغوطة</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>طلبات</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>جميع فرق العمل</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>بادج الممثل</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>مدى المكالمات المجابة </value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>مدى متوسط وقت التعامل </value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>مدى الالتزام {%}</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>الشارة الفضية تعادل البرونزية فى الحساب:</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>الشارة الذهبية تعادل الفضية فى الحساب</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>تفعيل شارة الممثل</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>إضافة نشاط ل </value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>إضافة غياب يوم كامل ل </value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>إضافة غياب داخل اليوم ل </value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>فشل !</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>تحريك الانشطة ل</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>حذف الغياب ل </value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>فضلا قم بتحديث الصفحة</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>فضلا حاول مرة أخرى </value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>نجاح!</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>تهانينا!</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>ملف</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>لم تقم بتسجيل الدخول </value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>هذا الاسبوع يضم وقتا قليلا للغاية للعمل {0}. على الاقل {1}</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>احذف المهارة </value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>بداية الصفحة</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>فضلا قم بإعداد عنوانك البريدي</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>حصلت على شارة بروزنية جديدة التزامك فى الفترة {1: سسسس-شش-ي ي} اكتر من {0}</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>حصلت على شارة بروزنية جديدة متوسط توقيت ادائك  فى الفترة {1: سسسس-شش-ي ي} اكتر من {0} ثانية</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>حصلت على شارة بروزنية جديدة لقد اجبت عن مكالمات اكتر من {0} مكالمات  فى {1: سسسس-شش-ي ي} </value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>لقد حصلت على شارة ذهبية التزامك اعلى من {0} فى {1} فى ايام مختلفة</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>لقد حصلت على شارة ذهبية معدل ادائك أقل من {0} ثوان فى {1} فى ايام مختلفة</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>حصلت على شارة ذهبية جديدة! لقد أجبت على {0}أو عدد أكبر من المكالمات فى يوم {1} مختلف عن أيام</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>حصلت على شارة فضية! جديدة  التزامك أعلى من {0}فى {1} مختلف عن أيام</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>حصلت على شارة فضية جديدة! توقيت أداءك أقل من {0} ثانية فى {1} مختلف عن أيام</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>حصلت على شارة فضية جديدة! لقد أجبت على {0}أو عدد أكبر من المكالمات فى يوم {1} مختلف عن أيام</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>قائمة التنقيح </value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>تنقيح عددا من الاشخاص</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>ادخل قيم لفئات الوردية</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>احفظ التوقعات فى سيناريو مختلف</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>احفظ</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>نتائج التنقيح</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>الاحتمالات الممكنة</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>تنقيح متقدم</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>حل</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>اعرض متلقى مكرر</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>اعرض الشارة</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[ الاسم الاول]
+[الاسم الاخير]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[ الاسم الاول]
+[الاسم الاخير]</value>
+  </data>
+  <data name="ShiftTradeEmptyScheduleDenyReason" xml:space="preserve">
+    <value>تم رفض مبادلة الوردية لأن الجدول خالى</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>وصف الممثل</value>
   </data>
 </root>
