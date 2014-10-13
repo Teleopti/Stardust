@@ -1,5 +1,9 @@
+/*
+	2014-10-13 Henry Greijer		Added @baseline parameter
+*/
 CREATE PROCEDURE [dbo].[RestoreToBaseline]
-	@computer nvarchar(500) 
+	@computer nvarchar(500),
+	@baseline  nvarchar(500)
 AS
 BEGIN
 --RestoreToBaseline 'DUMMY'
@@ -29,7 +33,7 @@ exec ('ALTER DATABASE ' + @ana + ' SET  SINGLE_USER WITH ROLLBACK IMMEDIATE')
 PRINT 'Restoring ' + @ana
 
 exec ( 'RESTORE DATABASE ['+ @computer + '_TeleoptiAnalytics]
-FROM  DISK = N''' + @backupFolder + 'DemoregBaseline_TeleoptiAnalytics.BAK''
+FROM  DISK = N''' + @backupFolder + @baseline + '_TeleoptiAnalytics.BAK''
 WITH  FILE = 1,
 MOVE N''TeleoptiAnalytics_Primary'' TO N''' + @dataFolderRelease + '_TeleoptiAnalytics_Primary.mdf''
 ,
@@ -53,7 +57,7 @@ IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @agg)
 PRINT 'Restoring '  + @agg
 
 exec ( 'RESTORE DATABASE [' + @agg + ']
-FROM  DISK = N''' + @backupFolder + 'DemoregBaseline_TeleoptiCCCAgg.BAK''
+FROM  DISK = N''' + @backupFolder + @baseline + '_TeleoptiCCCAgg.BAK''
 WITH  FILE = 1,
 MOVE N''TeleoptiCCCAgg_Data'' TO N''' + @dataFolderRelease + '_TeleoptiCCCAgg.mdf'',
 MOVE N''TeleoptiCCCAgg_Log'' TO N''' + @dataFolderRelease + '_TeleoptiCCCAgg.ldf'',
@@ -72,7 +76,7 @@ IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @app)
 PRINT 'Restoring ' + @app
 
 exec( 'RESTORE DATABASE [' + @app + ']
-FROM DISK = N''' + @backupFolder + 'DemoregBaseline_TeleoptiCCC7.BAK''
+FROM DISK = N''' + @backupFolder + @baseline + '_TeleoptiCCC7.BAK''
 WITH  FILE = 1,
 MOVE N''TeleoptiCCC7_Data'' TO N''' + @dataFolderRelease + '_TeleoptiCCC7.mdf'',
 MOVE N''TeleoptiCCC7_Log'' TO N''' + @dataFolderRelease + '_TeleoptiCCC7.ldf'',
@@ -83,3 +87,4 @@ STATS = 10')
 exec('ALTER DATABASE ' + @app + ' SET  MULTI_USER')
 exec('ALTER DATABASE ' + @app +  ' SET RECOVERY SIMPLE WITH NO_WAIT')
 END
+
