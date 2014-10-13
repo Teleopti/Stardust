@@ -483,7 +483,7 @@ Teleopti.MyTimeWeb.Preference.formatTimeSpan = function (totalMinutes) {
 	var hours = Math.floor(totalMinutes / 60);
 	var roundedMinutes = Math.round(minutes);
 
-	return hours + ":" + rightPadNumber(roundedMinutes, "00");
+	return hours + ":" + Teleopti.MyTimeWeb.Preference.rightPadNumber(roundedMinutes, "00");
 };
 
 Teleopti.MyTimeWeb.Preference.rightPadNumber = function (number, padding) {
