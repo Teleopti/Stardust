@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 				CleanupHistory(uow);
 				uow.PersistAll();
 			}
-			checkThatDbIsEmtpy();
 
 			DataSource.Application.Close();
 			if (DataSource.Statistic != null)
@@ -102,54 +101,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 				app.Layout = new SimpleLayout();
 				BasicConfigurator.Configure(app);
 			}
-		}
-
-		private static void checkThatDbIsEmtpy()
-		{
-			const string assertMess =
-				 @"After running last test in suite, there's still data in db.
-Every test that's marked as 'SkipRollBack()' have to clean up db rows.
-This hasn't been done somewhere. Unfortunatly you will have to search yourself 
-in what infrastructuretest this has happened - it is unknown for me.";
-
-			createTemporaryStateHolder();
-
-			using (IUnitOfWork uowTemp = DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				using (uowTemp.DisableFilter(QueryFilter.BusinessUnit))
-				{
-					ISession s = uowTemp.FetchSession();
-					s.CreateSQLQuery(@"delete from PersonWriteProtectionInfo").ExecuteUpdate();
-					IList<IAggregateRoot> leftInDb = s.CreateCriteria(typeof(IAggregateRoot))
-											  .List<IAggregateRoot>();
-					if (leftInDb.Count > 0)
-					{
-						string mess = string.Concat(assertMess, "\n\nThe problem is with following roots...");
-						leftInDb.ForEach(root => mess = string.Concat(mess, "\n", root.GetType(), " : ", root.Id));
-						Assert.Fail(mess);
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Creates a local temporary state holder.
-		/// </summary>
-		/// <remarks>
-		/// we need to rectreated a local temporary mocked stateholder to make the ApplicationData object available in the stateholder when creting
-		/// Unit of work in DB empt check. It is because we are in the verified state of the old mock object, so its properies are not available
-		/// but we want to read its ApplicationScopeData property
-		/// </remarks>
-		private static void createTemporaryStateHolder()
-		{
-			var mocks = new MockRepository();
-			var stateMock = mocks.StrictMock<IState>();
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(Guid.NewGuid());
-			StateHolderProxyHelper.ClearAndSetStateHolder(mocks,
-																  loggedOnPerson,
-																  BusinessUnitFactory.BusinessUnitUsedInTest,
-																  ApplicationData,
-																  stateMock);
 		}
 
 		private static void deleteEverythingInDb()
