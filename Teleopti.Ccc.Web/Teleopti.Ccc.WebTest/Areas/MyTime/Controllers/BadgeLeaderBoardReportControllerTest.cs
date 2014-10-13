@@ -1,15 +1,11 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
