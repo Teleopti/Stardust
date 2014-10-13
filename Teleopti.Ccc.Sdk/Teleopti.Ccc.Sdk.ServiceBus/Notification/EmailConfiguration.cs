@@ -13,8 +13,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 		public string SmtpHost { get { return _configReader.SmtpHost; } }
 		public int SmtpPort { get { return _configReader.SmtpPort; } }
-		public bool SmtpUseSsl { get { return _configReader.SmtpIsSslRequired; } }
+		public bool SmtpUseSsl { get { return _configReader.SmtpUseSsl; } }
 		public string SmtpUser { get { return _configReader.SmtpUser; } }
 		public string SmtpPassword { get { return _configReader.SmtpPassword; } }
+		public bool SmtpUseRelay { get { return _configReader.SmtpUseRelay; } }
 	}
 }

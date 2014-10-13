@@ -181,19 +181,38 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			textBoxEmailFrom.Enabled = !radioButtonAdvSMS.Checked;
 
 			clearSmsData(!radioButtonAdvSMS.Checked);
-			clearEmailData(radioButtonAdvSMS.Checked);
+			setDefaultEmailData(radioButtonAdvSMS.Checked);
 		}
 
-		private void clearEmailData(bool clear)
+		private void setDefaultEmailData(bool clear)
 		{
 			if(!clear) return;
-			textBoxEmailFrom.Text = string.Empty;
+				textBoxEmailFrom.Text = _smsSettingsSetting.EmailFrom;
 		}
 
 		private void clearSmsData(bool clear)
 		{
 			if (!clear) return;
-			comboBoxOptionalColumns.SelectedIndex = -1;
+				comboBoxOptionalColumns.SelectedIndex = -1;
+		}
+
+		private void textBoxEmailFrom_Leave(object sender, EventArgs e)
+		{
+			if (!IsValidEmail(textBoxEmailFrom.Text))
+				textBoxEmailFrom.Text = _smsSettingsSetting.EmailFrom;
+		}
+
+		bool IsValidEmail(string email)
+		{
+			try
+			{
+				var addr = new System.Net.Mail.MailAddress(email);
+				return addr.Address == email;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 	}
 }

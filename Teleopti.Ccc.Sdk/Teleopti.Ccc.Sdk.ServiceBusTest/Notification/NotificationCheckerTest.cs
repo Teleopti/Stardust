@@ -138,6 +138,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
+		public void ShouldHaveDefaultEmailFromAddress()
+		{
+			Expect.Call(_unitOfWorkFactory.Current()).Return(_uow);
+			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
+			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(new SmsSettings()).IgnoreArguments();
+			Expect.Call(_uow.Dispose).Repeat.Never();
+			_mocks.ReplayAll();
+			Assert.That(_target.EmailSender, Is.EqualTo("no-reply@teleopti.com"));
+			_mocks.VerifyAll();
+		}
+
+		[Test]
 		public void ShouldGetEmailSender()
 		{
 			var emailSetting = new SmsSettings {NotificationSelection = NotificationType.Email, EmailFrom = "ashley@andeen.com"};

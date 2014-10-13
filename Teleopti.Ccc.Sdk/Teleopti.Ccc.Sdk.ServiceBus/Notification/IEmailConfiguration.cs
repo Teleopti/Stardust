@@ -7,5 +7,6 @@
 		bool SmtpUseSsl { get; }
 		string SmtpUser { get; }
 		string SmtpPassword { get; }
+		bool SmtpUseRelay { get; }
 	}
 }

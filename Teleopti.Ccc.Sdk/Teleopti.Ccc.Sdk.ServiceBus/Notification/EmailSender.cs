@@ -29,10 +29,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				client.EnableSsl = _emailConfiguration.SmtpUseSsl;
 				client.DeliveryMethod = SmtpDeliveryMethod.Network;
 				client.UseDefaultCredentials = false;
-				client.Credentials = new NetworkCredential(_emailConfiguration.SmtpUser, _emailConfiguration.SmtpPassword);
+				if (!_emailConfiguration.SmtpUseRelay)
+					client.Credentials = new NetworkCredential(_emailConfiguration.SmtpUser, _emailConfiguration.SmtpPassword);
 				client.Timeout = 10000;
 
-				var from = new MailAddress(_emailConfiguration.SmtpUser);
+				var from = new MailAddress(notificationHeader.EmailSender);
 				var to = new MailAddress(notificationHeader.EmailReceiver, notificationHeader.PersonName);
 
 				using (var mailMessage = new MailMessage(from, to))
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 					try
 					{
+						Logger.Debug(string.Format("Sending E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver));
 						client.Send(mailMessage);
 					}
 					catch (SmtpException exception)
@@ -96,6 +98,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 		private bool hasSmtpCredentials()
 		{
+			if (_emailConfiguration.SmtpUseRelay)
+				return true;
 			if (string.IsNullOrEmpty(_emailConfiguration.SmtpUser) || string.IsNullOrEmpty(_emailConfiguration.SmtpPassword))
 			{
 				Logger.Info("E-mail not sent due to missing SMTP user and/or password.");

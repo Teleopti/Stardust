@@ -284,6 +284,7 @@
 			this.textBoxEmailFrom.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.textBoxEmailFrom.TabIndex = 10;
 			this.textBoxEmailFrom.WordWrap = false;
+			this.textBoxEmailFrom.Leave += new System.EventHandler(this.textBoxEmailFrom_Leave);
 			// 
 			// autoLabel1
 			// 

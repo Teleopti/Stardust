@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 		public SmsSettings()
 		{
 			NotificationSelection = NotificationType.Sms;
+			EmailFrom = "no-reply@teleopti.com";
 		}
 
 		public NotificationType NotificationSelection { get; set; }

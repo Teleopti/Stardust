@@ -157,9 +157,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
-		public void ShouldHaveASmtpIsSslRequired()
+		public void ShouldHaveASmtpUseSsl()
 		{
-			Assert.That(_target.SmtpIsSslRequired, Is.EqualTo(false));
+			Assert.That(_target.SmtpUseSsl, Is.EqualTo(false));
 		}
 
 		[Test]
@@ -173,7 +173,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		{
 			Assert.That(_target.SmtpPassword, Is.EqualTo("secret"));
 		}
-	}
 
-	
+		[Test]
+		public void ShouldHaveASmtpUseRelayValue()
+		{
+			Assert.That(_target.SmtpUseRelay, Is.EqualTo(false));
+		}
+	}
 }

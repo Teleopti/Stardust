@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return -1;
 			}
 		}
-		public bool SmtpIsSslRequired
+		public bool SmtpUseSsl
 		{
 			get
 			{
@@ -278,6 +278,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return _configXml.GetElementsByTagName("SmtpPassword").Count > 0
 					? _configXml.GetElementsByTagName("SmtpPassword")[0].InnerText
 					: "";
+			}
+		}
+
+		public bool SmtpUseRelay
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return true;
+				if (_configXml.GetElementsByTagName("SmtpUseRelay").Count > 0)
+					return Convert.ToBoolean(_configXml.GetElementsByTagName("SmtpUseRelay")[0].InnerText);
+				return false;
 			}
 		}
 
