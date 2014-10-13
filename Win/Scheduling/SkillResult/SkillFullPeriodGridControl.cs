@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
     {
         
         private const int rowHeaderWidth = 200;
-        private const string settingName = "SchedulerSkillDayGridAndChart";
+        private const string settingName = "SchedulerSkillFullGridAndChart";
 		private RowManagerScheduler<SkillFullPeriodGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         
 		private readonly SkillFullPeriodGridControlPresenter _presenter;

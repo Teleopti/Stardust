@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 	public class SkillWeekGridControl : SkillResultGridControlBase, ISkillWeekGridControl
     {
         private const int rowHeaderWidth = 200;
-        private const string settingName = "SchedulerSkillDayGridAndChart";
+        private const string settingName = "SchedulerSkillWeekGridAndChart";
 		private RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
 		private readonly SkillWeekGridControlPresenter _presenter;
 
