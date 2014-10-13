@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 				.SetReadOnly(true)
 				.List<IAgentBadge>();
+
 			return result;
 		}
 
