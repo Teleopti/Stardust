@@ -50,17 +50,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		[Test]
 		public void ShouldCachePersonOrganizationProvider()
 		{
-			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(), null);
-			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new RtaModule(config));
-
-			var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
-			reader.Stub(x => x.LoadAll()).Return(new PersonOrganizationData[] { });
-			builder.RegisterInstance(reader).As<IPersonOrganizationReader>();
-
-			using (var container = builder.Build())
+			using (var container = BuildContainer())
 			{
+				var builder = new ContainerBuilder();
+				var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
+				reader.Stub(x => x.LoadAll()).Return(new PersonOrganizationData[] { });
+				builder.RegisterInstance(reader).As<IPersonOrganizationReader>();
+				builder.Update(container);
+
 				var orgReader1 = container.Resolve<IPersonOrganizationProvider>();
 				var orgReader2 = container.Resolve<IPersonOrganizationProvider>();
 				orgReader1.LoadAll().Should().Be.SameInstanceAs(orgReader2.LoadAll());
