@@ -11,11 +11,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
-	public class RtaCommonModule : Module
+	public class RtaModule : Module
 	{
 		private readonly IIocConfiguration _config;
 
-		public RtaCommonModule(IIocConfiguration config)
+		public RtaModule(IIocConfiguration config)
 		{
 			_config = config;
 		}

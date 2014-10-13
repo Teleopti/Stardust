@@ -15,7 +15,7 @@ using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
-	public class ContainerConfigurationTest
+	public class RtaModuleTest
 	{
 		[Test]
 		public void ShouldResolveRtaDataHandler()
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new RtaCommonModule(config));
+			builder.RegisterModule(new RtaModule(config));
 
 			var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
 			reader.Stub(x => x.LoadAll()).Return(new PersonOrganizationData[] { });
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new RtaCommonModule(config));
+			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
 			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
-			builder.RegisterModule(new RtaCommonModule(config));
+			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
 

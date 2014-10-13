@@ -189,7 +189,7 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\AlarmMapperTest.cs" />
-    <Compile Include="Areas\Rta\Core\Server\ContainerConfigurationTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaModuleTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolverTest.cs" />
