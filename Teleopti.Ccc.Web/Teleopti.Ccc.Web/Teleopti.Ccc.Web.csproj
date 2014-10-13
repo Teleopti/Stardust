@@ -321,8 +321,11 @@
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\HealthCheck\HealthCheckAreaRegistration.cs" />
+    <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />
+    <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\BadgeLeaderBoardReportViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAgentBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
@@ -386,6 +389,7 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\BadgeLeaderBoardReport\BadgeLeaderBoardReportViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DailyMetricsViewModel.cs" />
@@ -1395,6 +1399,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileWeekPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\MyReport\DailyQueueMetricsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Availability\NoPersonPeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\BadgeLeaderBoardReport\BadgeLeaderBoardReportPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1494,6 +1499,7 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
   </ItemGroup>

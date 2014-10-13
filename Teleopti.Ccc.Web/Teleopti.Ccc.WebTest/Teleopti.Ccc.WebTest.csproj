@@ -170,6 +170,7 @@
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\FakeClientBuilder.cs" />
     <Compile Include="Areas\Forecasting\RoutingTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProviderTest.cs" />
