@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Globalization;
+﻿using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -51,10 +48,17 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
-				_logger.Write("Applying Release " + scriptFile.number + "...");
-				var sql = File.ReadAllText(scriptFile.file.FullName);
-				new SqlBatchExecutor(_sqlConnection, _logger)
-					.ExecuteBatchSql(sql);
+				try
+				{
+					_logger.Write("Applying Release " + scriptFile.number + "...");
+					var sql = File.ReadAllText(scriptFile.file.FullName);
+					new SqlBatchExecutor(_sqlConnection, _logger)
+						.ExecuteBatchSql(sql);
+				}
+				catch (SqlException exception)
+				{
+					throw new NotExecutableScriptException(scriptFile.file.FullName, "scriptFile", exception);
+				}
 			}
 		}
 
