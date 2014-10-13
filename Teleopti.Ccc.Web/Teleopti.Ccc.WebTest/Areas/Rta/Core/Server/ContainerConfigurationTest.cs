@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
@@ -102,6 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
 			builder.RegisterModule(new RtaCommonModule(config));
 			return builder.Build();
 		}

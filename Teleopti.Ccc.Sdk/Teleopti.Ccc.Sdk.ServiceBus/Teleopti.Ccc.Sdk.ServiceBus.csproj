@@ -184,7 +184,7 @@
     <Compile Include="GetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
     <Compile Include="Notification\ISignificantChangeChecker.cs" />
-    <Compile Include="LocalServiceBusPublisherModule.cs" />
+    <Compile Include="LocalServiceBusEventsPublisherModule.cs" />
     <Compile Include="Notification\NotificationWebClient.cs" />
     <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />

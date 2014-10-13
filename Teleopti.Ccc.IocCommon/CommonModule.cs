@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			builder.RegisterModule(new AuthenticationModule {ApplicationData = ApplicationData});
 		}
 

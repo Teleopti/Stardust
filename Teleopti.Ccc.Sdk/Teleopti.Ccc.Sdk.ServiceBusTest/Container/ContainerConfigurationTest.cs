@@ -3,6 +3,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
@@ -15,6 +19,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 {
 	public class ContainerConfigurationTest
 	{
+		[Test]
+		public void ShouldResolveServiceBusLocalEventPublisher()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule<CommonModule>();
+			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
+			var container = containerBuilder.Build();
+			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
+		}
+
 		[Test]
 		public void ShouldResolveEventsConsumer()
 		{

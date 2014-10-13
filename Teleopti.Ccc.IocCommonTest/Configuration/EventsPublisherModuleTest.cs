@@ -13,16 +13,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class EventsPublisherModuleTest
 	{
 		[Test]
-		public void ShouldResolveServiceBusLocalEventPublisher()
-		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<CommonModule>();
-			var container = containerBuilder.Build();
-			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
-		}
-
-		[Test]
 		public void ShouldResolveLocalInMemoryEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();

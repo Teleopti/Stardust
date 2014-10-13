@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<ImportForecastContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 			build.RegisterModule<CommandDispatcherModule>();
-			build.RegisterModule<LocalServiceBusPublisherModule>();
+			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();
 			build.RegisterType<DoNotifySmsLink>().As<IDoNotifySmsLink>();
