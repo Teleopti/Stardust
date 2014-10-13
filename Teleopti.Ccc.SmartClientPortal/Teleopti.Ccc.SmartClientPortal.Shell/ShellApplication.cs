@@ -182,7 +182,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		            {
 			            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
 		            });
-				builder.RegisterModule(new RuleSetModule(configuration, true));
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new EventAggregatorModule());
                 builder.RegisterModule(new StartupModule());
