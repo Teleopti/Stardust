@@ -40,6 +40,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Title = Resources.MyReport,
 					IsMyReport = true
 				});
+			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
+			{
+				reportsList.Add(new ReportNavigationItem
+				{
+					Action = "Index",
+					Controller = "BadgeLeaderBoardReport",
+					Title = Resources.BadgeLeaderBoardReport,
+					IsLeaderBoard = true
+				});
+			}
 			var otherReports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);
 			if (otherReports.Any()&& reportsList.Any())
 				reportsList.Add(new ReportNavigationItem

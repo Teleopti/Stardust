@@ -102,5 +102,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			result[1].IsDivider.Should().Be(true);
 			_principalAuthorization.VerifyAllExpectations();
 		}
+		
+		[Test]
+		public void ShouldReturnBadgeLeaderBoardReportsWhenOnlyHasLeaderBoardReportPermission()
+		{
+			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard)).Return(true);
+			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>());
+			var result = _target.GetNavigationItems();
+
+			result.First().Controller.Should().Be("BadgeLeaderBoardReport");
+			result.Count.Should().Be(1);
+			_principalAuthorization.VerifyAllExpectations();
+		}
 	}
 }

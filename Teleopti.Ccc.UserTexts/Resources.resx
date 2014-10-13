@@ -12414,4 +12414,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Filter on intra intervals</value>
     <comment>Scheduling error message</comment>
   </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Badge Leader Board</value>
+    <comment>BadgeLeaderBoardReport</comment>
+  </data>
 </root>
