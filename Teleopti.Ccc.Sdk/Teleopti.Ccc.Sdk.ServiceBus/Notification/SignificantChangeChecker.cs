@@ -30,13 +30,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			var wfc = person.WorkflowControlSet;
 			if (wfc == null)
 			{
-				Logger.Info("No SMS will be sent, no WorkflowControlSet on person " + person.Name);
+				Logger.Info("No notification will be sent, no WorkflowControlSet on person " + person.Name);
 				return ret;
 			}
 
 			if (!wfc.SchedulePublishedToDate.HasValue)
 			{
-				Logger.Info("No SMS will be sent, the schedule has no Published To on the WorkflowControlSet");
+				Logger.Info("No notification will be sent, the schedule has no Published To on the WorkflowControlSet");
 				return ret;
 			}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 			if (publishedToDate.Value < DateOnly.Today)
 			{
-				Logger.Info("No SMS will be sent, the schedule is only Published to " + publishedToDate.Value);
+				Logger.Info("No notification will be sent, the schedule is only Published to " + publishedToDate.Value);
 				return ret;
 			}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			var period = new DateOnlyPeriod(DateOnly.Today, endDate);
 			if (!period.Contains(date))
 			{
-				Logger.Info("No SMS will be sent, the schedule is changed on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " and it is not in the period " + period.DateString);
+				Logger.Info("No notification will be sent, the schedule is changed on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " and it is not in the period " + period.DateString);
 				return ret;
 			}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 
 			if (ret.Messages.Count == 0)
 			{
-				Logger.Info("No SMS will be sent,  did not find a significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " for " + person.Name);
+				Logger.Info("No notification will be sent,  did not find a significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " for " + person.Name);
 				return ret;
 			}
 
