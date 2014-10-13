@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	public class AdherencePercentageReadModelUpdaterTest
 	{
 		[Test]
-		public void ShouldPersistOnFirstEvent()
+		public void ShouldPersist()
 		{
 			var persister = new FakeAdherencePercentageReadModelRepository();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -67,6 +67,101 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.PersistedModel.MinutesOutOfAdherence.Should().Be(20);
 		}
 
+		[Test]
+		public void ShouldUpdateMinutesInAdherenceWhenPersonInAdherence()
+		{
+			var persister = new FakeAdherencePercentageReadModelRepository();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			});
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 9, 0, 0)
+			});
+
+			persister.PersistedModel.MinutesInAdherence.Should().Be(60);
+		}
+
+		[Test]
+		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonOutOfAdherence()
+		{
+			var persister = new FakeAdherencePercentageReadModelRepository();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			});
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 9, 10, 0)
+			});
+
+			persister.PersistedModel.MinutesOutOfAdherence.Should().Be(70);
+		}
+
+		[Test]
+		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonInAndOutOfAdherence()
+		{
+			var persister = new FakeAdherencePercentageReadModelRepository();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			});
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 15, 0)
+			});
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 30, 0)
+			});
+
+			persister.PersistedModel.MinutesOutOfAdherence.Should().Be(15);
+		}
+
+		[Test]
+		public void ShouldUpdateMinutesInAdherenceWhenPersonOutAndInAdherence()
+		{
+			var persister = new FakeAdherencePercentageReadModelRepository();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			});
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 20, 0)
+			});
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = new DateTime(2014, 10, 13, 8, 40, 0)
+			});
+
+			persister.PersistedModel.MinutesInAdherence.Should().Be(20);
+		}
+
+
 	}
 
 	public interface IAdherencePercentageReadModelPersister
@@ -101,6 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public int MinutesInAdherence { get; set; }
 		public int MinutesOutOfAdherence { get; set; }
 		public DateTime LastTimestamp { get; set; }
+		public bool IsLastTimeInAdherence { get; set; }
 	}
 
 	public class AdherencePercentageReadModelUpdater :
@@ -116,34 +212,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public void Handle(PersonInAdherenceEvent @event)
 		{
-			var model = getModel(@event.PersonId, @event.Timestamp);
-			model.MinutesOutOfAdherence += Convert.ToInt32((@event.Timestamp - model.LastTimestamp).TotalMinutes);
-			_persister.Persist(model);
+			handleEvent(@event.PersonId, @event.Timestamp, true);
 		}
 
 		public void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			var model = getModel(@event.PersonId, @event.Timestamp);
-			model.MinutesInAdherence += Convert.ToInt32((@event.Timestamp - model.LastTimestamp).TotalMinutes);
+			handleEvent(@event.PersonId, @event.Timestamp, false);
+		}
+
+		private void handleEvent(Guid personId, DateTime timestamp, bool isInAdherence)
+		{
+			var model = getModel(personId, timestamp, isInAdherence);
+			incrementMinutes(model, timestamp);
+			model.IsLastTimeInAdherence = isInAdherence;
 			_persister.Persist(model);
 		}
 
-		private AdherencePercentageReadModel getModel(Guid personId, DateTime timestamp)
+		private static void incrementMinutes(AdherencePercentageReadModel model, DateTime timestamp)
+		{
+			if (model.IsLastTimeInAdherence)
+				model.MinutesInAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
+			else
+				model.MinutesOutOfAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
+			model.LastTimestamp = timestamp;
+		}
+
+		private AdherencePercentageReadModel getModel(Guid personId, DateTime timestamp, bool currentlyInAdherence)
 		{
 			var model = _persister.Get(new DateOnly(timestamp), personId);
 			if (model == null)
-				model = makeModel(personId, timestamp);
+				model = makeModel(personId, timestamp, currentlyInAdherence);
 			return model;
 		}
 
-		private static AdherencePercentageReadModel makeModel(Guid personId, DateTime timestamp)
+		private static AdherencePercentageReadModel makeModel(Guid personId, DateTime timestamp, bool currentlyInAdherence)
 		{
 			return new AdherencePercentageReadModel
 			{
 				Date = new DateOnly(timestamp),
 				PersonId = personId,
 				MinutesInAdherence = 0,
-				LastTimestamp = timestamp
+				LastTimestamp = timestamp,
+				IsLastTimeInAdherence = currentlyInAdherence
 			};
 		}
 
