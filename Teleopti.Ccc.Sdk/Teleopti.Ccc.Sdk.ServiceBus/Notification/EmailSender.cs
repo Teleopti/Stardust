@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 					mailMessage.SubjectEncoding = System.Text.Encoding.UTF8;
 					mailMessage.Body = getBodyMessage(message);
 					mailMessage.BodyEncoding = System.Text.Encoding.UTF8;
+					mailMessage.ReplyToList.Add(from);
 
 					try
 					{
