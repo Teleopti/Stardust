@@ -49,3 +49,4 @@ Scheduler_BackToLegalShift_29831 = RC
 Portal_ResetBadges_30544 = RC
 Scheduler_IntraIntervalSolver_29845 = false
 MyTimeWeb_FullDayAbsenceConfiguration_30552 = RC
+Settings_AlertViaEmailFromSMSLink_30444 = RC
