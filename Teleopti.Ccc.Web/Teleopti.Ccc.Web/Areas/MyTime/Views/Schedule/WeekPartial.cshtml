@@ -137,15 +137,15 @@
 					<label class="weekview-day-month pull-left badge day-header-text" data-bind="text: headerDayDescription"></label>
 					<label class="weekview-day-dayofmonth pull-right badge day-header-text" data-bind="text: headerDayNumber"></label>
 				</div>
-				<div data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
+				<div data-bind="css: { 'show-request': requestPermission }, attr: { 'class': classForDaySummary },
                 style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm"
-				     class="weekview-day-summary">
+					 class="weekview-day-summary">
 
 					<strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
 					<span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
 					<span data-bind="text: summary"></span>
 				</div>
-				<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': textRequestPermission }">
+				<div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
 					<div class="weekview-day-symbol-request pull-right" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
 						<i class="glyphicon glyphicon-comment"></i>
 					</div>
@@ -154,14 +154,14 @@
 						</div>
 					</div>
 					<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
-						<i class="glyphicon glyphicon-time ir floatright" />
+						<i class="glyphicon glyphicon-time floatright" />
 					</div>
 					<!-- ko if: hasNote -->
 					<div class="pull-right" data-bind="tooltip: { title: noteMessage, html: true }">
 						<i class="glyphicon glyphicon-exclamation-sign"></i>
 					</div>
 					<!-- /ko -->
-					<div id="add-request-cell" data-bind="css:{'add-request-space show-request': textRequestPermission}">
+					<div id="add-request-cell" data-bind="css:{'add-request-space show-request': requestPermission}">
 					</div>
 				</div>
 				<div class="weekview-day-schedule relative">

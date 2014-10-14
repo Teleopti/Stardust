@@ -314,12 +314,16 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\HelloWorldController.cs" />
+    <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\HealthCheck\HealthCheckAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAgentBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
@@ -442,7 +446,7 @@
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonWithBusinessUnit.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaAlarmLight.cs" />
-    <Compile Include="Areas\Rta\Core\Server\RtaCommonModule.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaStateGroupLight.cs" />
     <Compile Include="Areas\Rta\Core\Server\ScheduleLayer.cs" />
@@ -964,6 +968,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
+    <Content Include="Areas\Forecasting\Views\HelloWorld\Index.aspx" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\main.js" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\require\signalrrr.js" />

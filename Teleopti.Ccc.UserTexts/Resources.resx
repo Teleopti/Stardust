@@ -12310,6 +12310,10 @@ Reduce the complexity to use these shifts.</value>
     <value>View Badge</value>
     <comment>Permission: View Badge</comment>
   </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>View Badge Leaderboard</value>
+    <comment>Permission: View Badge Leaderboard</comment>
+  </data>
   <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
     <value>[First Name] [Last Name]</value>
     <comment>Agent description for settings selector in mytime</comment>

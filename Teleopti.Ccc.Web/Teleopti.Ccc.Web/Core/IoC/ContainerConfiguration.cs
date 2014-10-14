@@ -52,7 +52,11 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<BootstrapperModule>();
 
-			var args = new IocArgs {FeatureToggle = featureTogglePath};
+			var args = new IocArgs
+			{
+				FeatureToggle = featureTogglePath,
+				CacheLockObjectGenerator = new FixedNumberOfLockObjects(100)
+			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)));
 			builder.RegisterModule(new CommonModule(configuration));
 
@@ -64,20 +68,16 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
 
-			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 
-			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 
 			registerAopComponents(builder);
 
-			var mbCacheModule = new MbCacheModule(new FixedNumberOfLockObjects(100));
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RuleSetModule(mbCacheModule, false));
-			builder.RegisterModule(new AuthenticationCachedModule(mbCacheModule));
+			builder.RegisterModule(new RuleSetModule(configuration, false));
+			builder.RegisterModule(new AuthenticationCachedModule(configuration));
 
-			builder.RegisterModule(new RtaAreaModule(mbCacheModule, configuration));
+			builder.RegisterModule(new RtaAreaModule(configuration));
 
 			builder.RegisterModule<ShiftTradeModule>();
 

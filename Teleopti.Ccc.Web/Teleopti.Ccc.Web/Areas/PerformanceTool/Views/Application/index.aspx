@@ -112,9 +112,10 @@
 				<p class="total-time-to-send-commands"><span class="label label-info" data-bind="text: TotalTimeToSendCommands"></span>Total time to send commands</p>
 				<p class="scenarios-per-second"><span class="label label-info" data-bind="text: ScenariosPerSecond"></span>Scenarios per second</p>
 			</div>
+			
 			<div class="col-md-6" data-bind="if: RunDone">
 				<h2></h2>
-				<div class="alert alert-success result-success">Finished!</div>
+				<div  data-bind="css: { 'result-success': RunDone, 'alert-success' : RunDone, 'alert' : RunDone }">Finished!</div>
 			</div>
 			<div class="col-md-6">
 				<h2>Hey!!  :-)</h2>

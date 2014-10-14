@@ -11731,7 +11731,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Could not find any valid shift in shift bag</comment>
   </data>
   <data name="ShiftBackToLegal" xml:space="preserve">
-    <value>Återställ skift som inte finns i skiftpåsen</value>
+    <value>Korrigera skift som inte finns i skiftpåsen</value>
     <comment>Correct shifts not according to shift bag</comment>
   </data>
   <data name="FilterMultiplePerson" xml:space="preserve">
@@ -11796,5 +11796,17 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Optimeringssteget "Tid mellan dagar" utförs inte när blockschemaläggning och samma skift är valt. </value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Visa medaljtavla</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Inställningar för heldagsfrånvaro</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Problem inom intervallet</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filtrera på aktiviteter inom intervall</value>
   </data>
 </root>

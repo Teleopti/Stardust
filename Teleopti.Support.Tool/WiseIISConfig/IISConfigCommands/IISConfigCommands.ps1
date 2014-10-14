@@ -293,7 +293,7 @@ function Post-Install-Config-TeleoptiCCCServer
     param (
     [string]$ToggleMode
     )
-	IF([string]::IsNullOrEmpty($ToggleMode))
+	if([string]::IsNullOrEmpty($ToggleMode))
 	{            
 		# Do nothing if ToggleMode was not set         
 	}
@@ -414,8 +414,11 @@ function start-AppPool{
 
 function restoreToBaseline
 {
-    param($computerName,
-            $spContent)
+    param(
+		$computerName,
+		$baseline,
+        $spContent
+	)
 $stringDrop = "IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RestoreToBaseline]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RestoreToBaseline]"
 $con = New-Object System.Data.SqlClient.SqlConnection
@@ -433,7 +436,7 @@ $cmd.ExecuteNonQuery()
 $cmd.CommandText = $spContent
 $cmd.ExecuteNonQuery()
 #and run it
-$cmd.CommandText = "RestoreToBaseline '$computerName'" 
+$cmd.CommandText = "RestoreToBaseline '$computerName', '$baseline'" 
 $cmd.ExecuteNonQuery()
 
 

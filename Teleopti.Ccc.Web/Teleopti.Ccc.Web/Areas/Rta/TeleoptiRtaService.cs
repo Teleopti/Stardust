@@ -6,6 +6,7 @@ using System.ServiceModel.Activation;
 using log4net;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta
 {
@@ -14,16 +15,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta
     public class TeleoptiRtaService : ITeleoptiRtaService, IDisposable
     {
         private IRtaDataHandler _rtaDataHandler;
-        private readonly string _authenticationKey;
+	    private readonly INow _now;
+	    private readonly string _authenticationKey;
         private const string logOutStateCode = "LOGGED-OFF";
         private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
 
-	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler)
+	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler, INow now)
         {
 		    _rtaDataHandler = rtaDataHandler;
+		    _now = now;
 
 
-            Log.Info("The real time adherence service is now started");
+		    Log.Info("The real time adherence service is now started");
             var authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
             if (string.IsNullOrEmpty(authenticationKey)) 
 				authenticationKey = "!#¤atAbgT%";
@@ -75,11 +78,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			//The DateTimeKind.Utc is not set automatically when deserialising from soap message
 			timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
-			if (Math.Abs(timestamp.Subtract(DateTime.UtcNow).TotalMinutes) < 30)
+			if (Math.Abs(timestamp.Subtract(_now.UtcDateTime()).TotalMinutes) > 30)
 			{
 				Log.ErrorFormat(
 					"The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
-					DateTime.UtcNow, timestamp, messageId);
+					_now.UtcDateTime(), timestamp, messageId);
 				return -400;
 			}
 

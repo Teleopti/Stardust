@@ -29,6 +29,7 @@ Scenario: Add text request from week schedule view
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
+	And I click on the Text Request Tab
 	And I input text request values for date '2013-10-03'
 	And I click send request button
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'

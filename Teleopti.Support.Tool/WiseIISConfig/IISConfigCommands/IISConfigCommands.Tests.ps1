@@ -46,6 +46,8 @@ $global:insertedLicense=0
 $global:SubSite = 'TeleoptiWFM'
 $global:PhysicalSubPath = 'TeleoptiCCC'
 $global:ToggleMode = ''
+$global:Baseline = ''
+
 
 
 function Config-Load {
@@ -69,6 +71,14 @@ function Config-Load {
                     $global:Db = $testServer.DB
                     $global:resetToBaseline = $testServer.resetToBaseline
                     $global:ToggleMode = $testServer.ToggleMode
+					if([string]::IsNullOrEmpty($testServer.Baseline))
+					{
+						$global:Baseline = 'DemoregBaseline'
+					}
+					else
+					{
+						$global:Baseline = $testServer.Baseline
+					}
                     
 					if ($testServer.BaseURL)
 					{
@@ -197,7 +207,7 @@ function Test-InstallationSQLLogin {
                 {
                     $spFile="$here\RestoreToBaseline.sql"
                     $spContent = [IO.File]::ReadAllText($spFile)
-                    restoreToBaseline -computerName $computerName -spContent $spContent
+                    restoreToBaseline -computerName $computerName -baseline $global:Baseline -spContent $spContent
                     #add Lic
                     Add-CccLicenseToDemo
                 }

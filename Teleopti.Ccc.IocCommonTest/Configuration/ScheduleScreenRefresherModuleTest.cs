@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             _module = new ScheduleScreenRefresherModule();
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule<CommonModule>();
-			_containerBuilder.RegisterModule(new AuthenticationModule());
-            _containerBuilder.RegisterModule(new UnitOfWorkModule());
             _containerBuilder.RegisterModule(_module);
             _container = _containerBuilder.Build();
         }

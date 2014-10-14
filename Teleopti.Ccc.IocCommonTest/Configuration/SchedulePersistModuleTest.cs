@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterModule<UnitOfWorkModule>();
-			containerBuilder.RegisterModule<AuthenticationModule>();
 		}
 
 		[Test]

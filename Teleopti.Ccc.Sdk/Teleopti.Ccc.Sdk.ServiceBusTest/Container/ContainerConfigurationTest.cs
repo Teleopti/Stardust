@@ -23,6 +23,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 	public class ContainerConfigurationTest
 	{
 		[Test]
+		public void ShouldResolveServiceBusLocalEventPublisher()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule<CommonModule>();
+			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
+			var container = containerBuilder.Build();
+			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
+		}
+
+		[Test]
 		public void ShouldResolveEventsConsumer()
 		{
 			var builder = new ContainerBuilder();

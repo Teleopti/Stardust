@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class UnitOfWorkModule : Module
+	internal class UnitOfWorkModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

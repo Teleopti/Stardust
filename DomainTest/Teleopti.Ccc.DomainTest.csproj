@@ -150,6 +150,7 @@
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateChangedCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakeEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateChangedInAdherenceCommandHandlerTest.cs" />

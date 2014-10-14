@@ -80,7 +80,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
-		DateTime Timestamp { get; set; }
+		DateTime ReceivedTime { get; set; }
 
 		/// <summary>
 		/// 

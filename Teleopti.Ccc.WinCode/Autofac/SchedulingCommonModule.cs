@@ -34,6 +34,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -49,16 +50,21 @@ namespace Teleopti.Ccc.WinCode.Autofac
 {
 	public class SchedulingCommonModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public SchedulingCommonModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
 
 			//fattar inte fråga Roger
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
+			builder.RegisterModule(new CommonModule(_configuration));
+			builder.RegisterModule(new RuleSetModule(_configuration, true));
 
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();

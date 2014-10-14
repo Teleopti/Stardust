@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<ShiftTradeModule>();
-			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>();
 		}
 
@@ -78,7 +77,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CanCreateShiftTradeRequestSetChecksum()
 		{
-			builder.RegisterModule<UnitOfWorkModule>();
 			using (var ioc = builder.Build())
 			{
 				ioc.Resolve<IShiftTradeRequestSetChecksum>().Should().Not.Be.Null();
@@ -88,7 +86,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CanCreateShiftTradeRequestStatusChecker()
 		{
-			builder.RegisterModule<UnitOfWorkModule>();
 			//just a dummy impl used here
 			builder.RegisterType<personRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
 			using (var ioc = builder.Build())

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly IRuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessabilityFilter;
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
+		private readonly IDisallowedShiftProjectionCashesFilter _disallowedShiftProjectionCashesFilter;
 
 		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
@@ -50,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ICommonActivityFilter commonActivityFilter, 
 			IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
 			IShiftProjectionCacheManager shiftProjectionCacheManager,
-			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter)
+			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,
+			IDisallowedShiftProjectionCashesFilter disallowedShiftProjectionCashesFilter)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -70,6 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        _ruleSetAccordingToAccessabilityFilter = ruleSetAccordingToAccessabilityFilter;
 		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_ruleSetPersonalSkillsActivityFilter = ruleSetPersonalSkillsActivityFilter;
+			_disallowedShiftProjectionCashesFilter = disallowedShiftProjectionCashesFilter;
 		}
 
 		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
@@ -226,7 +229,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																 finderResult);
 			shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
 			shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
-			
+			shiftList = _disallowedShiftProjectionCashesFilter.Filter(schedulingOptions.NotAllowedShiftProjectionCaches, shiftList, finderResult);
 			
 			return shiftList;
 		}
@@ -240,7 +243,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					shiftList = _personalShiftsShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
 				}
 			}
-			
+
 			return shiftList;
 		}
 

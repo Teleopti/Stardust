@@ -78,13 +78,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				PersonId = Guid.NewGuid(),
 				StaffingEffect = 1,
-				Timestamp = DateTime.Now
+				ReceivedTime = DateTime.Now
 			};
 
 			target.Invoke(state);
 
 			var @event = publisher.PublishedEvents.Single() as PersonOutOfAdherenceEvent;
-			@event.Timestamp.Should().Be(state.Timestamp);
+			@event.Timestamp.Should().Be(state.ReceivedTime);
 		}
 	}
 }

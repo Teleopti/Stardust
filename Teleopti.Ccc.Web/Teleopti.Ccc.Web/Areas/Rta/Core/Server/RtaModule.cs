@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
-using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -11,13 +11,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
-	public class RtaCommonModule : Module
+	public class RtaModule : Module
 	{
-		private readonly CacheBuilder _cacheBuilder;
+		private readonly IIocConfiguration _config;
 
-		public RtaCommonModule(MbCacheModule mbCacheModule, IIocConfiguration config)
+		public RtaModule(IIocConfiguration config)
 		{
-			_cacheBuilder = mbCacheModule.Builder;
+			_config = config;
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
 			//mark activityalarms and stategroups to be cached
-			_cacheBuilder
+			_config.Args().CacheBuilder
 				.For<DatabaseReader>()
 				.CacheMethod(x => x.ActivityAlarms())
 				.CacheMethod(x => x.StateGroups())
@@ -52,10 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
 			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
+			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
+				builder.RegisterType<AgentStateChangedCommandHandler>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
-			_cacheBuilder
+			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
 				.CacheMethod(svc => svc.LoadAll())
 				.As<IPersonOrganizationProvider>();

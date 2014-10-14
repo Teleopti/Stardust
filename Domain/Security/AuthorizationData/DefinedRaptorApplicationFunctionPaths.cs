@@ -115,6 +115,7 @@
 		public const string ViewPersonalAccount = "Raptor/MyTimeWeb/ViewPersonalAccount";
 		public const string MyReportQueueMetrics = "Raptor/MyTimeWeb/MyReportWeb/QueueMetrics";
 		public const string ViewBadge = "Raptor/MyTimeWeb/ViewBadge";
+		public const string ViewBadgeLeaderboard = "Raptor/MyTimeWeb/ViewBadgeLeaderboard";
 
 		// Anywhere
 		public const string MyTeamSchedules = "Raptor/Anywhere/Schedules";

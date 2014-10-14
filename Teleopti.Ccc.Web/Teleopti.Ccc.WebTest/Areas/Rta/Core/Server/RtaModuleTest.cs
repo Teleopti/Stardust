@@ -15,7 +15,7 @@ using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
-	public class ContainerConfigurationTest
+	public class RtaModuleTest
 	{
 		[Test]
 		public void ShouldResolveRtaDataHandler()
@@ -50,33 +50,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		[Test]
 		public void ShouldCachePersonOrganizationProvider()
 		{
-			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(), null);
-			builder.RegisterModule(new CommonModule());
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
-
-			var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
-			reader.Stub(x => x.LoadAll()).Return(new PersonOrganizationData[] { });
-			builder.RegisterInstance(reader).As<IPersonOrganizationReader>();
-
-			using (var container = builder.Build())
+			using (var container = BuildContainer())
 			{
+				var builder = new ContainerBuilder();
+				var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
+				reader.Stub(x => x.LoadAll()).Return(new PersonOrganizationData[] { });
+				builder.RegisterInstance(reader).As<IPersonOrganizationReader>();
+				builder.Update(container);
+
 				var orgReader1 = container.Resolve<IPersonOrganizationProvider>();
 				var orgReader2 = container.Resolve<IPersonOrganizationProvider>();
 				orgReader1.LoadAll().Should().Be.SameInstanceAs(orgReader2.LoadAll());
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldResolveAgentStateChangedCommandHandler()
+		{
+			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))
+			{
+				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
+					.Select(o => o.GetType())
+					.Should().Contain(typeof (AgentStateChangedCommandHandler));
+			}
+		}
+
+		[Test]
+		public void ShouldNotResolveAgentStateChangedCommandHandler()
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, false))
 			{
 				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
 					.Select(o => o.GetType())
-					.Should().Contain(typeof (AgentStateChangedCommandHandler));
+					.Should().Not.Contain(typeof(AgentStateChangedCommandHandler));
 			}
 		}
 
@@ -85,9 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
+			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
 
@@ -96,9 +100,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
-			var mbCacheModule = new MbCacheModule(null);
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RtaCommonModule(mbCacheModule, config));
+			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
+			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
 

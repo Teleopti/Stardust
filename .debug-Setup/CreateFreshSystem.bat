@@ -48,8 +48,10 @@ GOTO :error
 
 GOTO UserInput
 
-
 :UserInput
+cls
+echo Leave blank to go with default instance ^(%INSTANCE%^)
+SET /P INSTANCE=Give Named instance: %computername%\^[YourIntance^]: 
 
 ::Customer?
 :PickDb

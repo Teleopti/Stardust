@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetInt32("color", actualAgentState.Color)
                     .SetDateTime("alarmStart", actualAgentState.AlarmStart)
                     .SetDouble("staffingEffect", actualAgentState.StaffingEffect)
-					.SetDateTime("receivedTime", actualAgentState.Timestamp)
+					.SetDateTime("receivedTime", actualAgentState.ReceivedTime)
 					.SetParameter("batchId", actualAgentState.BatchId)
 					.SetString("originalDataSourceId", actualAgentState.OriginalDataSourceId)
                     .SetTimeout(300)

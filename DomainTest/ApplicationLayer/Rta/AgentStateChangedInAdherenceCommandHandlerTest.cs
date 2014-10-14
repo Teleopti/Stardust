@@ -55,13 +55,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				PersonId = Guid.NewGuid(),
 				StaffingEffect = 0,
-				Timestamp = DateTime.Now
+				ReceivedTime = DateTime.Now
 			};
 
 			target.Invoke(state);
 
 			var @event = publisher.PublishedEvents.Single() as PersonInAdherenceEvent;
-			@event.Timestamp.Should().Be(state.Timestamp);
+			@event.Timestamp.Should().Be(state.ReceivedTime);
 		}
 
 	}

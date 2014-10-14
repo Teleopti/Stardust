@@ -1,25 +1,20 @@
 ﻿using Autofac;
-using MbCache.Configuration;
 using MbCache.Core;
-using MbCache.ProxyImpl.LinFu;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class MbCacheModule : Module
+	internal class MbCacheModule : Module
 	{
-		public MbCacheModule(ILockObjectGenerator lockObjectGenerator)
-		{
-			Builder = new CacheBuilder(new LinFuProxyFactory())
-							.SetCache(new InMemoryCache(20))
-							.SetCacheKey(new TeleoptiCacheKey())
-							.SetLockObjectGenerator(lockObjectGenerator);
-		}
+		private readonly IIocConfiguration _configuration;
 
-		public CacheBuilder Builder { get; private set; }
+		public MbCacheModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register(c => Builder.BuildFactory())
+			builder.Register(c => _configuration.Args().CacheBuilder.BuildFactory())
 				.As<IMbCacheFactory>()
 				.SingleInstance();
 		}

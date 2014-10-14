@@ -153,16 +153,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         private static ContainerBuilder buildIoc()
         {
             var builder = new ContainerBuilder();
-			var mbCacheModule = new MbCacheModule(null);
 
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule<CommonModule>();
-			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
+	        var configuration = new IocConfiguration(new IocArgs(), CommonModule.ToggleManagerForIoc());
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterModule(new RuleSetModule(configuration, true));
 			builder.RegisterModule<EncryptionModule>();
-			builder.RegisterModule<AuthenticationModule>();
             builder.RegisterModule<PersonAccountModule>();
             builder.RegisterModule<AssemblerModule>();
-            builder.RegisterModule<UnitOfWorkModule>();
             builder.RegisterModule<RequestFactoryModule>();
             builder.RegisterModule<QueryHandlerModule>();
             builder.RegisterModule<ShiftTradeModule>();
