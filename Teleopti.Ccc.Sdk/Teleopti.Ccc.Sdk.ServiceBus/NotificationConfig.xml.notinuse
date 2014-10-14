@@ -6,7 +6,7 @@
 	<user>username</user>
 	<password>pwd</password>
 	<api_id>3388822</api_id>
-	<from>from</from>
+	<from>SmsSenderName</from>
 	<!--use these to config what to look for in the answer from the web service used to send sms
 	if no check at all set SkipSearch to true-->
 	<FindSuccessOrError>Error</FindSuccessOrError>
@@ -25,10 +25,10 @@
 		</sendMsg></clickAPI>]]>
 	</data>
 	<SmtpHost>smtp.domain.com</SmtpHost>
-	<SmtpPort>81</SmtpPort>
+	<SmtpPort>25</SmtpPort>
 	<SmtpUseSsl>false</SmtpUseSsl>
 	<SmtpUseRelay>false</SmtpUseRelay>
 	<SmtpUser>user@domain.com</SmtpUser>
-	<SmtpPassword>secret</SmtpPassword>
+	<SmtpPassword>pwd</SmtpPassword>
 </Config>
 
