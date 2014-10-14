@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldHaveAFromProperty()
 		{
-			Assert.That(_target.From, Is.EqualTo("from"));
+			Assert.That(_target.From, Is.EqualTo("SmsSenderName"));
 		}
 
 		[Test]
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldHaveASmtpPort()
 		{
-			Assert.That(_target.SmtpPort, Is.EqualTo(81));
+			Assert.That(_target.SmtpPort, Is.EqualTo(25));
 		}
 
 		[Test]
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldHaveASmtpPassword()
 		{
-			Assert.That(_target.SmtpPassword, Is.EqualTo("secret"));
+			Assert.That(_target.SmtpPassword, Is.EqualTo("pwd"));
 		}
 
 		[Test]
