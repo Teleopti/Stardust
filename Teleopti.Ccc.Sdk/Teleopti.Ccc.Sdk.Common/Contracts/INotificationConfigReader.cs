@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		bool SkipSearch { get; }
 		string SmtpHost { get; }
 		int SmtpPort { get; }
-		int SmtpPortSsl { get; }
 		bool SmtpUseSsl { get; }
 		string SmtpUser { get; }
 		string SmtpPassword { get; }

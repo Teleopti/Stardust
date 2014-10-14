@@ -232,21 +232,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return -1;
 			}
 		}
-		public int SmtpPortSsl
-		{
-			get
-			{
-				if (!HasLoadedConfig)
-					return -1;
-				if (_configXml.GetElementsByTagName("SmtpPortSsl").Count > 0)
-				{
-					int port;
-					if (int.TryParse(_configXml.GetElementsByTagName("SmtpPortSsl")[0].InnerText, out port))
-						return port;
-				}
-				return -1;
-			}
-		}
 		public bool SmtpUseSsl
 		{
 			get

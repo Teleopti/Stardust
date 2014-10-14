@@ -151,12 +151,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		}
 
 		[Test]
-		public void ShouldHaveASmtpPortSsl()
-		{
-			Assert.That(_target.SmtpPortSsl, Is.EqualTo(82));
-		}
-
-		[Test]
 		public void ShouldHaveASmtpUseSsl()
 		{
 			Assert.That(_target.SmtpUseSsl, Is.EqualTo(false));
