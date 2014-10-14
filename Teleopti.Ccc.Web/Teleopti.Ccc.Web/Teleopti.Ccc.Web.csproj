@@ -314,6 +314,8 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\HelloWorldController.cs" />
+    <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
@@ -966,6 +968,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
+    <Content Include="Areas\Forecasting\Views\HelloWorld\Index.aspx" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\main.js" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\require\signalrrr.js" />
