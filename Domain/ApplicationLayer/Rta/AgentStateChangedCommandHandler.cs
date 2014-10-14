@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public void Invoke(IActualAgentState agentState)
 		{
+			if (agentState.ScheduledId.Equals(Guid.Empty)) return;
 			IEvent @event;
 			if (agentState.StaffingEffect.Equals(0))
 				@event = new PersonInAdherenceEvent

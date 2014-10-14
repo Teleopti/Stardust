@@ -19,12 +19,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var state1 = new ActualAgentState
 			{
 				PersonId = Guid.NewGuid(),
-				StaffingEffect = 0
+				StaffingEffect = 0,
+				ScheduledId = Guid.NewGuid()
 			};
 			var state2 = new ActualAgentState
 			{
 				PersonId = Guid.NewGuid(),
-				StaffingEffect = 1
+				StaffingEffect = 1,
+				ScheduledId = Guid.NewGuid()
 			};
 
 			target.Invoke(state1);
@@ -36,6 +38,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			event1.PersonId.Should().Be(state1.PersonId);
 			var event2 = publisher.PublishedEvents.ElementAt(1) as PersonOutOfAdherenceEvent;
 			event2.PersonId.Should().Be(state2.PersonId);
+		}
+
+		[Test]
+		public void ShouldNotPublishEventsForPersonWithNoScheduledActivity()
+		{
+			var publisher = new FakeEventsPublisher();
+			var target = new AgentStateChangedCommandHandler(publisher);
+			var state = new ActualAgentState
+			{
+				PersonId = Guid.NewGuid(),
+				StaffingEffect = 0,
+				ScheduledId = Guid.Empty
+			};
+			
+			target.Invoke(state);
+			
+			publisher.PublishedEvents.Should().Have.Count.EqualTo(0);
 		}
 
 	}

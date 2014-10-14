@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var state = new ActualAgentState
 			{
 				PersonId = Guid.NewGuid(),
-				StaffingEffect = 1
+				StaffingEffect = 1,
+				ScheduledId = Guid.NewGuid()
 			};
 
 			target.Invoke(state);
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var state = new ActualAgentState
 			{
 				PersonId = Guid.NewGuid(),
-				StaffingEffect = -1
+				StaffingEffect = -1,
+				ScheduledId = Guid.NewGuid()
 			};
 
 			target.Invoke(state);
@@ -54,12 +56,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var state1 = new ActualAgentState
 			{
 				PersonId = Guid.NewGuid(),
-				StaffingEffect = 1
+				StaffingEffect = 1,
+				ScheduledId = Guid.NewGuid()
 			};
 			var state2 = new ActualAgentState
 			{
 				PersonId = state1.PersonId,
-				StaffingEffect = -1
+				StaffingEffect = -1,
+				ScheduledId = Guid.NewGuid()
 			};
 
 			target.Invoke(state1);
@@ -78,7 +82,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				PersonId = Guid.NewGuid(),
 				StaffingEffect = 1,
-				ReceivedTime = DateTime.Now
+				ReceivedTime = DateTime.Now,
+				ScheduledId = Guid.NewGuid()
 			};
 
 			target.Invoke(state);
