@@ -170,7 +170,6 @@
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
-    <Compile Include="Repositories\AgentBadgeSettingsRepositoryTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />

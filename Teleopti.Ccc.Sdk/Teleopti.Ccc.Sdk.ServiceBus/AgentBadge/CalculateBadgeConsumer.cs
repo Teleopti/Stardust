@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var setting = _settingsRepository.LoadAll().FirstOrDefault();
+				var setting = _settingsRepository.GetSettings();
 				if (setting == null)
 				{
 					//error happens

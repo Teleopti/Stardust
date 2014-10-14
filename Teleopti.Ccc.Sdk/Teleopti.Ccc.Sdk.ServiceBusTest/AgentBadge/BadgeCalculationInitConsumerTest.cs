@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var timezoneList = new List<TimeZoneInfo>{TimeZoneInfo.Local};
 
 			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
-			badgeSettingRep.Stub(x =>  x.LoadAll()).Return(new List<IAgentBadgeThresholdSettings>{new AgentBadgeThresholdSettings(){EnableBadge = true}});
+			badgeSettingRep.Stub(x => x.GetSettings()).Return( new AgentBadgeThresholdSettings() { EnableBadge = true });
 			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);
 
 			target.Consume(message);

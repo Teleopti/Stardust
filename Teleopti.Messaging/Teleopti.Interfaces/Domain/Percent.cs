@@ -10,6 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2007-11-01
     /// </remarks>
+	 [Serializable]
     public struct Percent
     {
         private readonly double _value;

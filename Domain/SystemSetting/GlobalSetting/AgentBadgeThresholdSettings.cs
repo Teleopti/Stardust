@@ -1,20 +1,20 @@
-using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+﻿using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Common
+namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 {
-	public class AgentBadgeThresholdSettings : VersionedAggregateRootWithBusinessUnit, IAgentBadgeThresholdSettings
+	[Serializable]
+	public class AgentBadgeThresholdSettings : SettingValue, IAgentBadgeThresholdSettings
 	{
-		private bool _enableBadge;
-		private int _answeredCallsThreshold;
+		private bool _enableBadge = false;
+		private int _answeredCallsThreshold = 100;
 		private bool _answeredCallsBadgeTypeSelected;
-		private TimeSpan _aHTThreshold;
+		private TimeSpan _aHTThreshold = new TimeSpan(0, 5, 0);
 		private bool _aHTBadgeTypeSelected;
-		private Percent _adherenceThreshold;
+		private Percent _adherenceThreshold = new Percent(0.75);
 		private bool _adherenceBadgeTypeSelected;
-		private int _silverToBronzeBadgeRate;
-		private int _goldToSilverBadgeRate;
+		private int _silverToBronzeBadgeRate = 2;
+		private int _goldToSilverBadgeRate = 5;
 
 		public virtual bool EnableBadge
 		{
@@ -68,6 +68,22 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _adherenceBadgeTypeSelected; }
 			set { _adherenceBadgeTypeSelected = value; }
+		}
+
+		public bool Equals(IEntity other)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Guid? Id { get; private set; }
+		public void SetId(Guid? newId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ClearId()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

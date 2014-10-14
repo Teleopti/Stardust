@@ -269,7 +269,6 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
-    <Compile Include="Common\AgentBadgeThresholdSettings.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\AgentBadgeTransaction.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
@@ -1312,6 +1311,7 @@
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\AgentBadgeThresholdSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AsmAlertTime.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NameFormatSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CalendarLinkSettings.cs" />
@@ -2065,7 +2065,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Common\AgentBadgeThresholdSettings.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

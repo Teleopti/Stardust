@@ -5,8 +5,8 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			};
 
 			var rep = new AgentBadgeSettingsRepository(uow);
-			rep.Add(Settings);
+			rep.PersistSettingValue(Settings);
 		}
 	}
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			{
 				throw  new ArgumentException(@"BadgeType", string.Format("\"{0}\" is not a valid badge type.", BadgeType));
 			}
-			var setting = new AgentBadgeSettingsRepository(uow).LoadAll().First();
+			var setting = new AgentBadgeSettingsRepository(uow).GetSettings();
 			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 			var totalBadgeAmount = (Gold*goldToSilverBadgeRate + Silver)*silverToBronzeBadgeRate + Bronze;

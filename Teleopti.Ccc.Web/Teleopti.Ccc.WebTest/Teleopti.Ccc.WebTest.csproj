@@ -205,6 +205,7 @@
     <Compile Include="Core\MessageBroker\MessageBrokerControllerTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\PersonNameProviderTest.cs" />
+    <Compile Include="Core\Portal\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			List<TimeZoneInfo> timeZoneList;
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var setting = _settingsRepository.LoadAll().FirstOrDefault();
+				var setting = _settingsRepository.GetSettings();
 				if (setting == null || !setting.EnableBadge)
 				{
 					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);

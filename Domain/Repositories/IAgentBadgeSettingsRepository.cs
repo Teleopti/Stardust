@@ -1,8 +1,10 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IAgentBadgeSettingsRepository : IRepository<IAgentBadgeThresholdSettings>
+	public interface IAgentBadgeSettingsRepository : ISettingDataRepository
 	{
+		IAgentBadgeThresholdSettings GetSettings();
 	}
 }

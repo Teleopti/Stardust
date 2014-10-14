@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -63,17 +61,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			var settings = _repository.LoadAll().FirstOrDefault();
-
-			settings = settings ?? new AgentBadgeThresholdSettings
-			{
-				EnableBadge = false,
-				AdherenceThreshold = new Percent(0.75),
-				AnsweredCallsThreshold = 100,
-				AHTThreshold = new TimeSpan(0, 5, 0),
-				SilverToBronzeBadgeRate = 5,
-				GoldToSilverBadgeRate = 2
-			};
+			var settings = _repository.GetSettings();
 
 			checkBoxEnableBadge.Checked = settings.EnableBadge;
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value * 100;
@@ -91,7 +79,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
-			var settings = _repository.LoadAll().FirstOrDefault() ?? new AgentBadgeThresholdSettings();
+			var settings = _repository.GetSettings();
 			settings.EnableBadge = checkBoxEnableBadge.Checked;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
 			settings.AdherenceBadgeTypeSelected = checkAdherenceBadgeType.Checked;
@@ -102,7 +90,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;
 			settings.SilverToBronzeBadgeRate = (int)numericUpDownSilverToBronzeBadgeRate.Value;
 
-			_repository.Add(settings);
+			_repository.PersistSettingValue(settings);
 		}
 
 		public void OnShow()

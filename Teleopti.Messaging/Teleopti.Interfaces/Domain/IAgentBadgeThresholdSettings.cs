@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IAgentBadgeThresholdSettings : IAggregateRoot
+	public interface IAgentBadgeThresholdSettings : ISettingValue
 	{
 		bool EnableBadge { get; set; }
 		int AnsweredCallsThreshold { get; set; }

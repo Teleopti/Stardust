@@ -41,3 +41,12 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+----------------  
+--Name: Mingdi
+--Date: 2014-10-14
+--Desc: move AgentBadgeThresholdSettings to Global setting
+----------------  
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AgentBadgeThresholdSettings]') AND type in (N'U'))
+   DROP Table [dbo].[AgentBadgeThresholdSettings]
+GO

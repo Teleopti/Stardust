@@ -1,11 +1,16 @@
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class AgentBadgeSettingsRepository : Repository<IAgentBadgeThresholdSettings>, IAgentBadgeSettingsRepository
+	public class AgentBadgeSettingsRepository : SettingDataRepository, IAgentBadgeSettingsRepository
 	{
+		public const string Key = "AgentBadgeThresholdSettings";
+		private AgentBadgeThresholdSettings _settings;
+
 		public AgentBadgeSettingsRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
 		}
@@ -16,6 +21,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public AgentBadgeSettingsRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
+		}
+
+		public override ISettingData FindByKey(string key)
+		{
+			return Session.CreateCriteria(typeof(AgentBadgeThresholdSettings))
+				.Add(Restrictions.Eq("Key", key))
+				.SetCacheable(true)
+				.UniqueResult<ISettingData>();
+		}
+
+		public T FindValueByKey<T>(string key, T defaultValue) where T : class, ISettingValue
+		{
+			ISettingData data = FindByKey(key)
+			                    ?? new GlobalSettingDataRepository(UnitOfWork).FindByKey(key)
+			                    ?? (ISettingData) new AgentBadgeThresholdSettings();
+			return data.GetValue(defaultValue);
+		}
+
+		public IAgentBadgeThresholdSettings GetSettings()
+		{
+			if (_settings == null)
+			{
+				IRepositoryFactory repositoryFactory = new RepositoryFactory();
+				_settings = repositoryFactory.CreateGlobalSettingDataRepository(UnitOfWork)
+					.FindValueByKey(Key, new AgentBadgeThresholdSettings());
+			}
+
+			return _settings;
 		}
 	}
 }
