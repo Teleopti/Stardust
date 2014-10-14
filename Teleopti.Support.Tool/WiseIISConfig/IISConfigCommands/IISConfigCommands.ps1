@@ -436,7 +436,7 @@ $cmd.ExecuteNonQuery()
 $cmd.CommandText = $spContent
 $cmd.ExecuteNonQuery()
 #and run it
-$cmd.CommandText = "RestoreToBaseline '$computerName' '$baseline'" 
+$cmd.CommandText = "RestoreToBaseline '$computerName', '$baseline'" 
 $cmd.ExecuteNonQuery()
 
 

@@ -24,8 +24,9 @@ BEGIN
 	SELECT	 @dataFolderRelease =  @dataFolderRelease + N'\Data'
 END
 
-SET @dataFolderRelease = @dataFolderRelease + '\' + @computer
-DECLARE @backupFolder nvarchar(4000) = '\\ARES\QABaselines\'
+SET @dataFolderRelease = @dataFolderRelease + N'\' + @computer
+DECLARE @backupFolder nvarchar(4000) = N'\\ARES\QABaselines\'
+PRINT N'Baseline folder: ' + @backupFolder
 
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @ana)
 exec ('ALTER DATABASE ' + @ana + ' SET  SINGLE_USER WITH ROLLBACK IMMEDIATE')
@@ -87,4 +88,3 @@ STATS = 10')
 exec('ALTER DATABASE ' + @app + ' SET  MULTI_USER')
 exec('ALTER DATABASE ' + @app +  ' SET RECOVERY SIMPLE WITH NO_WAIT')
 END
-
