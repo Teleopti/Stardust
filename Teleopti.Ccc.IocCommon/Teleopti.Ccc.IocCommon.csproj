@@ -134,6 +134,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ForecasterModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />
     <Compile Include="IocArgs.cs" />

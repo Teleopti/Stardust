@@ -344,6 +344,14 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="Forecasting\Angel\HistoricalData\HistoricalDataProvider.cs" />
+    <Compile Include="Forecasting\Angel\HistoricalData\IHistoricalDataProvider.cs" />
+    <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
+    <Compile Include="Forecasting\Angel\LegacyWrappers\ILoadStatistics.cs" />
+    <Compile Include="Forecasting\Angel\LegacyWrappers\IStatisticHelperFactory.cs" />
+    <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatistics.cs" />
+    <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactory.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
