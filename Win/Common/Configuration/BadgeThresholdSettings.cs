@@ -63,30 +63,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var settings = _repository.GetSettings();
 
-			checkBoxEnableBadge.Checked = settings.EnableBadge;
+			checkBoxEnableBadge.Checked = settings.BadgeEnabled;
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value * 100;
-			checkAdherenceBadgeType.Checked = settings.AdherenceBadgeTypeSelected;
+			checkAdherenceBadgeType.Checked = settings.AdherenceBadgeEnabled;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
-			checkAHTBadgeType.Checked = settings.AHTBadgeTypeSelected;
+			checkAHTBadgeType.Checked = settings.AHTBadgeEnabled;
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
-			checkAnsweredCallsBadgeType.Checked = settings.AnsweredCallsBadgeTypeSelected;
+			checkAnsweredCallsBadgeType.Checked = settings.AnsweredCallsBadgeEnabled;
 			numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
 			numericUpDownGoldenToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
-			setControlsEnabled(settings.EnableBadge);
+			setControlsEnabled(settings.BadgeEnabled);
 			timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
 		}
 
 		public void SaveChanges()
 		{
 			var settings = _repository.GetSettings();
-			settings.EnableBadge = checkBoxEnableBadge.Checked;
+			settings.BadgeEnabled = checkBoxEnableBadge.Checked;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
-			settings.AdherenceBadgeTypeSelected = checkAdherenceBadgeType.Checked;
+			settings.AdherenceBadgeEnabled = checkAdherenceBadgeType.Checked;
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
-			settings.AHTBadgeTypeSelected = checkAHTBadgeType.Checked;
+			settings.AHTBadgeEnabled = checkAHTBadgeType.Checked;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
-			settings.AnsweredCallsBadgeTypeSelected = checkAnsweredCallsBadgeType.Checked;
+			settings.AnsweredCallsBadgeEnabled = checkAnsweredCallsBadgeType.Checked;
 			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;
 			settings.SilverToBronzeBadgeRate = (int)numericUpDownSilverToBronzeBadgeRate.Value;
 

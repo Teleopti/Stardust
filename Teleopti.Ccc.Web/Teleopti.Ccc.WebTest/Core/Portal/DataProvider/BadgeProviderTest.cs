@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 
 			var result = target.GetBadgeSettings();
 
-			result.EnableBadge.Should().Be(false);
+			result.BadgeEnabled.Should().Be(false);
 			result.AnsweredCallsThreshold.Should().Be(100);
 			result.AHTThreshold.Minutes.Should().Be(5);
 			result.AdherenceThreshold.ValueAsPercent().Should().Be(75);

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var timezoneList = new List<TimeZoneInfo>{TimeZoneInfo.Local};
 
 			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
-			badgeSettingRep.Stub(x => x.GetSettings()).Return( new AgentBadgeThresholdSettings() { EnableBadge = true });
+			badgeSettingRep.Stub(x => x.GetSettings()).Return(new AgentBadgeThresholdSettings() { BadgeEnabled = true });
 			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);
 
 			target.Consume(message);

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using log4net;
+using Rhino.ServiceBus;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,7 +12,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
-using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				var calculateDate = new DateOnly(message.CalculationDate);
 
-				if (setting.AdherenceBadgeTypeSelected)
+				if (setting.AdherenceBadgeEnabled)
 				{
 					var newAwardedBadgesForAdherence =
 						_calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
 				}
 
-				if (setting.AHTBadgeTypeSelected)
+				if (setting.AHTBadgeEnabled)
 				{
 					var newAwardedBadgesForAHT =
 						_calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
 				}
 
-				if (setting.AnsweredCallsBadgeTypeSelected)
+				if (setting.AnsweredCallsBadgeEnabled)
 				{
 					var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
 						calculateDate, setting).ToList();

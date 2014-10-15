@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var hasBadgePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 			var badgeSettings = _badgeSettingProvider.GetBadgeSettings();
-			var badgeFeatureEnabled = badgeSettings != null && badgeSettings.EnableBadge;
+			var badgeFeatureEnabled = badgeSettings != null && badgeSettings.BadgeEnabled;
 
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
 			var badges = showBadge ? _badgeProvider.GetBadges(badgeSettings) : null;

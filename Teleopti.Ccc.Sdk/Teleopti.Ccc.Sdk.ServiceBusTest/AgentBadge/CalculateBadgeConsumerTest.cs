@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			badgeSettingsRepository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
 			badgeSettingsRepository.Stub(x => x.GetSettings())
-				.Return(new AgentBadgeThresholdSettings {EnableBadge = true});
+				.Return(new AgentBadgeThresholdSettings { BadgeEnabled = true });
 
 			statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();

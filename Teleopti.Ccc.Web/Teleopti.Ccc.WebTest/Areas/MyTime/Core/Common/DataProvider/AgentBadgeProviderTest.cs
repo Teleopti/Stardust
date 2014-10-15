@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			};
 			var setting = new AgentBadgeThresholdSettings()
 			{
-				EnableBadge = true,
+				BadgeEnabled = true,
 				GoldToSilverBadgeRate = 2,
 				SilverToBronzeBadgeRate = 5
 			};

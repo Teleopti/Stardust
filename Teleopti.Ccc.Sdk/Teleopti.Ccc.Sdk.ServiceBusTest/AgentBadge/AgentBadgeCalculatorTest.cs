@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using Rhino.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AdherenceThreshold = new Percent(0.6),
 				AHTThreshold = new TimeSpan(0, 5, 0),
 				AnsweredCallsThreshold = 10,
-				EnableBadge = true,
+				BadgeEnabled = true,
 				GoldToSilverBadgeRate = 2,
 				SilverToBronzeBadgeRate = 5
 			};

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.GetSettings();
-				if (setting == null || !setting.EnableBadge)
+				if (setting == null || !setting.BadgeEnabled)
 				{
 					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
 					if (Logger.IsDebugEnabled)

@@ -4,14 +4,16 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IAgentBadgeThresholdSettings : ISettingValue
 	{
-		bool EnableBadge { get; set; }
+		bool BadgeEnabled { get; set; }
+		bool AnsweredCallsBadgeEnabled { get; set; }
+		bool AHTBadgeEnabled { get; set; }
+		bool AdherenceBadgeEnabled { get; set; }
+
 		int AnsweredCallsThreshold { get; set; }
 		TimeSpan AHTThreshold { get; set; }
 		Percent AdherenceThreshold { get; set; }
+		
 		int SilverToBronzeBadgeRate { get; set; }
 		int GoldToSilverBadgeRate { get; set; }
-		bool AnsweredCallsBadgeTypeSelected { get; set; }
-		bool AHTBadgeTypeSelected { get; set; }
-		bool AdherenceBadgeTypeSelected { get; set; }
 	}
 }

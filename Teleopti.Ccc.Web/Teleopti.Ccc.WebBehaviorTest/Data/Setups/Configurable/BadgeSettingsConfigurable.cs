@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var rep = new AgentBadgeSettingsRepository(uow);
 			Settings = rep.GetSettings();
 
-			Settings.EnableBadge = BadgeEnabled;
+			Settings.BadgeEnabled = BadgeEnabled;
 			Settings.SilverToBronzeBadgeRate = SilverToBronzeRate;
 			Settings.GoldToSilverBadgeRate = GoldToSilverRate;
-			Settings.AdherenceBadgeTypeSelected = AdherenceUsed;
-			Settings.AHTBadgeTypeSelected = AHTUsed;
-			Settings.AnsweredCallsBadgeTypeSelected = AnsweredCallsUsed;
+			Settings.AdherenceBadgeEnabled = AdherenceUsed;
+			Settings.AHTBadgeEnabled = AHTUsed;
+			Settings.AnsweredCallsBadgeEnabled = AnsweredCallsUsed;
 
 			rep.PersistSettingValue(Settings);
 		}

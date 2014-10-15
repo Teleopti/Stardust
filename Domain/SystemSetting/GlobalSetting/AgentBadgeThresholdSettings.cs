@@ -6,21 +6,14 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 	[Serializable]
 	public class AgentBadgeThresholdSettings : SettingValue, IAgentBadgeThresholdSettings
 	{
-		private bool _enableBadge;
 		private int _answeredCallsThreshold = 100;
-		private bool _answeredCallsBadgeTypeSelected;
-		private TimeSpan _aHTThreshold = new TimeSpan(0, 5, 0);
-		private bool _aHTBadgeTypeSelected;
+		private TimeSpan _ahtThreshold = new TimeSpan(0, 5, 0);
 		private Percent _adherenceThreshold = new Percent(0.75);
-		private bool _adherenceBadgeTypeSelected;
+
 		private int _silverToBronzeBadgeRate = 2;
 		private int _goldToSilverBadgeRate = 5;
 
-		public virtual bool EnableBadge
-		{
-			get { return _enableBadge; }
-			set { _enableBadge = value; }
-		}
+		public virtual bool BadgeEnabled { get; set; }
 
 		public virtual int AnsweredCallsThreshold
 		{
@@ -30,8 +23,8 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 
 		public virtual TimeSpan AHTThreshold
 		{
-			get { return _aHTThreshold; }
-			set { _aHTThreshold = value; }
+			get { return _ahtThreshold; }
+			set { _ahtThreshold = value; }
 		}
 
 		public virtual Percent AdherenceThreshold
@@ -52,23 +45,11 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 			set { _goldToSilverBadgeRate = value; }
 		}
 
-		public virtual bool AnsweredCallsBadgeTypeSelected
-		{
-			get { return _answeredCallsBadgeTypeSelected; }
-			set { _answeredCallsBadgeTypeSelected = value; }
-		}
+		public virtual bool AnsweredCallsBadgeEnabled { get; set; }
 
-		public virtual bool AHTBadgeTypeSelected
-		{
-			get { return _aHTBadgeTypeSelected; }
-			set { _aHTBadgeTypeSelected = value; }
-		}
+		public virtual bool AHTBadgeEnabled { get; set; }
 
-		public virtual bool AdherenceBadgeTypeSelected
-		{
-			get { return _adherenceBadgeTypeSelected; }
-			set { _adherenceBadgeTypeSelected = value; }
-		}
+		public virtual bool AdherenceBadgeEnabled { get; set; }
 
 		public bool Equals(IEntity other)
 		{

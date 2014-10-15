@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
@@ -21,19 +19,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			var badges = new List<IAgentBadge>();
 			var person = _loggedOnUser.CurrentUser();
 			if (person == null) return badges;
-			if (settings.AdherenceBadgeTypeSelected)
+			if (settings.AdherenceBadgeEnabled)
 			{
 				var badge = _badgeRepository.Find(person, BadgeType.Adherence);
 				if (badge != null)
 					badges.Add(badge);
 			}
-			if (settings.AHTBadgeTypeSelected)
+			if (settings.AHTBadgeEnabled)
 			{
 				var badge = _badgeRepository.Find(person, BadgeType.AverageHandlingTime);
 				if (badge != null)
 					badges.Add(badge);
 			}
-			if (settings.AnsweredCallsBadgeTypeSelected)
+			if (settings.AnsweredCallsBadgeEnabled)
 			{
 				var badge = _badgeRepository.Find(person, BadgeType.AnsweredCalls);
 				if (badge != null)
