@@ -10993,7 +10993,7 @@ Teleopti R&amp;D</value>
     <value>Измнение недельного времени отдыха для {0} {1}</value>
   </data>
   <data name="TeamScheduling" xml:space="preserve">
-    <value>Планирование по группе</value>
+    <value>Расписание группы</value>
   </data>
   <data name="BlockFinderTypeSingleDay" xml:space="preserve">
     <value>&lt;Нет&gt;</value>
