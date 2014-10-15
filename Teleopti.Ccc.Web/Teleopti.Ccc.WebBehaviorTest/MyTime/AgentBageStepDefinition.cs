@@ -1,17 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -83,76 +78,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenThereShouldDisplayNoBadgeInformation()
 		{
 			Browser.Interactions.AssertNotExists(".user-name-link", "#BadgePanel");
-		}
-
-	}
-
-	public class BadgeSettingsConfigurable : IDataSetup
-	{
-		public bool BadgeEnabled { get; set; }
-
-		public int SilverToBronzeRate { get; set; }
-		public int GoldToSilverRate { get; set; }
-		public bool AnsweredCallsUsed { get; set; }
-		public bool AdherenceUsed { get; set; }
-		public bool AHTUsed { get; set; }
-
-		public IAgentBadgeThresholdSettings Settings;
-
-		public void Apply(IUnitOfWork uow)
-		{
-			var rep = new AgentBadgeSettingsRepository(uow);
-			Settings = rep.GetSettings();
-
-			Settings.EnableBadge = BadgeEnabled;
-			Settings.SilverToBronzeBadgeRate = SilverToBronzeRate;
-			Settings.GoldToSilverBadgeRate = GoldToSilverRate;
-			Settings.AdherenceBadgeTypeSelected = AdherenceUsed;
-			Settings.AHTBadgeTypeSelected = AHTUsed;
-			Settings.AnsweredCallsBadgeTypeSelected = AnsweredCallsUsed;
-
-			rep.PersistSettingValue(Settings);
-		}
-	}
-
-	public class BadgeConfigurable : IUserSetup
-	{
-		public string BadgeType { get; set; }
-		public int Bronze { get; set; }
-		public int Silver { get; set; }
-		public int Gold { get; set; }
-		public DateTime LastCalculatedDate { get; set; }
-
-		public AgentBadgeTransaction AgentBadge;
-
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
-		{
-			BadgeType badgeType;
-			if (!Enum.TryParse(BadgeType, true, out badgeType))
-			{
-				throw  new ArgumentException(@"BadgeType", string.Format("\"{0}\" is not a valid badge type.", BadgeType));
-			}
-			var setting = new AgentBadgeSettingsRepository(uow).GetSettings();
-			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
-			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
-			var totalBadgeAmount = (Gold*goldToSilverBadgeRate + Silver)*silverToBronzeBadgeRate + Bronze;
-			
-			var rep = new PersonRepository(uow);
-			var people = rep.LoadAll();
-			var person = people.First(p => p.Name == user.Name);
-
-			AgentBadge = new AgentBadgeTransaction
-			{
-				Person = person,
-				BadgeType = badgeType,
-				Amount = totalBadgeAmount,
-				CalculatedDate = new DateOnly(LastCalculatedDate),
-				Description = "test",
-				InsertedOn = new DateTime(2014, 8, 20)
-			};
-
-			var badgeRep = new AgentBadgeTransactionRepository(uow);
-			badgeRep.Add(AgentBadge);
 		}
 	}
 }
