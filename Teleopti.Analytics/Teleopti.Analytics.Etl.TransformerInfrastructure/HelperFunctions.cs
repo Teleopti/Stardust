@@ -28,6 +28,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 			int rowsAffected = db.ExecuteNonQuery();
+			if (rowsAffected < 0) //when SET NOCOUNT ON is used inside SP
+			{
+				rowsAffected = 0;
+			}
 			Trace.WriteLine("Rows affected by command '" + commandText + "': " + rowsAffected);
 			return rowsAffected;
         }
