@@ -105,7 +105,7 @@ BEGIN
 	DELETE FROM mart.fact_schedule					WHERE shift_startdate_id >= @Date_Id
 	DELETE FROM mart.fact_schedule					WHERE shift_enddate_id >= @Date_Id
 	DELETE FROM mart.fact_queue						WHERE date_id >= @Date_Id
-	DELETE FROM mart.fact_queue						WHERE local_date_id >= @Date_Id
+	DELETE FROM mart.fact_queue						WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_forecast_workload			WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_forecast_skill	WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_agent						WHERE date_id >= @Date_Id

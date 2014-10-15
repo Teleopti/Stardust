@@ -1,4 +1,3 @@
-
 ----------------  
 --Name: Karin & David
 --Date: 2014-10-15
@@ -17,6 +16,7 @@ ALTER TABLE [mart].[fact_queue] DROP CONSTRAINT [DF_fact_queue_statistics_update
 GO
 
 EXEC dbo.sp_rename @objname = N'[mart].[fact_queue]', @newname = N'fact_queue_old', @objtype = N'OBJECT'
+GO
 EXEC sp_rename N'[mart].[fact_queue_old].[PK_fact_queue]', N'PK_fact_queue_old', N'INDEX'
 GO
 
