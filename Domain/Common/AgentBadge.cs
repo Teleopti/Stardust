@@ -108,16 +108,28 @@ namespace Teleopti.Ccc.Domain.Common
 		#region Calculate badge count
 		private static int getGoldBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
 		{
+			if (silverToBronzeRate == 0 || goldToSilverRate == 0)
+			{
+				return 0;
+			}
 			return amount / (silverToBronzeRate * goldToSilverRate);
 		}
 
 		private static int getSilverBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
 		{
+			if (silverToBronzeRate == 0 || goldToSilverRate == 0)
+			{
+				return 0;
+			}
 			return (amount / silverToBronzeRate) % goldToSilverRate;
 		}
 
 		private static int getBronzeBadgeCount(int amount, int silverToBronzeRate)
 		{
+			if (silverToBronzeRate == 0)
+			{
+				return amount;
+			}
 			return amount % silverToBronzeRate;
 		}
 		#endregion
