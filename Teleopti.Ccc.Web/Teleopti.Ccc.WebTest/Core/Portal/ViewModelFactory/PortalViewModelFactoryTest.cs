@@ -165,6 +165,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
 		}
 
+		[Test]
+		public void ShouldNotShowBadgeIfNoPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge)).Return(false);
+
+			var target = CreateTarget(permissionProvider);
+
+			Assert.That(target.CreatePortalViewModel().ShowBadge, Is.False);
+		}
+
 		[Test, SetCulture("en-US")]
 		public void ShouldShowMeridianWhenUsCulture()
 		{
