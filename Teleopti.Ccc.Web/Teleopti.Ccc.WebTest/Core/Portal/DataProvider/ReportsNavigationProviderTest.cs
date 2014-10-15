@@ -4,9 +4,11 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		private IReportsNavigationProvider _target;
 		private IReportsProvider _reportsProvider;
 		private ISessionSpecificDataProvider _sessionProvider;
+		private IToggleManager _toggleManagger;
 
 		[SetUp]
 		public void Setup()
@@ -27,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
 			_sessionProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
-			_target = new ReportsNavigationProvider(_principalAuthorization,_reportsProvider,_sessionProvider);
+			_toggleManagger = MockRepository.GenerateMock<IToggleManager>();
+			_target = new ReportsNavigationProvider(_principalAuthorization, _reportsProvider, _sessionProvider, _toggleManagger);
 			_sessionProvider.Stub(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), "", Guid.NewGuid()));
 		}
 
@@ -106,6 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnBadgeLeaderBoardReportsWhenOnlyHasLeaderBoardReportPermission()
 		{
+			_toggleManagger.Stub(x => x.IsEnabled(Toggles.Badge_Leaderboard_30584)).Return(true);
 			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard)).Return(true);
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>());
 			var result = _target.GetNavigationItems();
