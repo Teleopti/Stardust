@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
-			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.label1 = new System.Windows.Forms.Label();
 			this.buttonDeleteContract = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanelBody.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
@@ -67,7 +65,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
-			this.tableLayoutPanel5.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanelBody
@@ -253,7 +250,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1301;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1517;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -410,37 +407,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxAgentBadgeSetting";
 			// 
-			// tableLayoutPanel5
-			// 
-			this.tableLayoutPanel5.BackColor = System.Drawing.Color.LightSteelBlue;
-			this.tableLayoutPanel5.ColumnCount = 3;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel5.Controls.Add(this.label1, 0, 0);
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 1;
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(200, 100);
-			this.tableLayoutPanel5.TabIndex = 0;
-			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-			this.label1.ForeColor = System.Drawing.Color.GhostWhite;
-			this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.label1.Location = new System.Drawing.Point(3, 0);
-			this.label1.Name = "label1";
-			this.label1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.label1.Size = new System.Drawing.Size(167, 100);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "xxChooseContractToChange";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// buttonDeleteContract
 			// 
 			this.buttonDeleteContract.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -479,8 +445,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.PerformLayout();
-			this.tableLayoutPanel5.ResumeLayout(false);
-			this.tableLayoutPanel5.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -492,8 +456,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private System.Windows.Forms.Label labelHeader;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBody;
 		private System.Windows.Forms.Label labelSetThresholdForAnsweredCalls;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-		private System.Windows.Forms.Label label1;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteContract;
 		private System.Windows.Forms.Label labelSetThresholdForAHT;
 		private System.Windows.Forms.Label labelSetThresholdForAdherence;
