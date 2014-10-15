@@ -43,37 +43,4 @@ inner join mart.sys_datasource_detail_type t
 inner join mart.dim_date d
 	on DATEDIFF(DD, 0, lod.date_value) = d.date_date
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = lod.detail_id)
-
-/* UTC stylish
-insert into [mart].[sys_datasource_detail]
-select
-	datasource_id		= ds.datasource_id,
-	detail_id			= 2,
-	source_date_id_utc	= -1,
-	source_interval_id_utc= -1,
-	target_date_id_utc	= max(f.date_id),
-	target_interval_id_utc=0
-from mart.fact_queue f
-inner join mart.dim_queue q
-	on q.queue_id = f.queue_id
-inner join mart.sys_datasource ds
-	on q.datasource_id = ds.datasource_id
-WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = 2)
-GROUP BY ds.datasource_id
-
-insert into [mart].[sys_datasource_detail]
-select
-	datasource_id		= ds.datasource_id,
-	detail_id			= 1,
-	source_date_id_utc	= -1,
-	source_interval_id_utc= -1,
-	target_date_id_utc	= max(f.date_id),
-	target_interval_id_utc=0
-from mart.fact_agent f
-inner join mart.dim_acd_login a
-	on a.acd_login_id = f.acd_login_id
-inner join mart.sys_datasource ds
-	on a.datasource_id = ds.datasource_id
-WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = 1)
-GROUP BY ds.datasource_id
-*/
+GO

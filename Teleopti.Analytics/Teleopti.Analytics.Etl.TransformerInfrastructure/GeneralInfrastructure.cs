@@ -63,6 +63,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_load", null,
 											_dataMartConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_detail_load", null,
+											_dataMartConnectionString);
+
 		}
 
 		public IList<ITimeZoneDim> GetTimeZonesFromMart()

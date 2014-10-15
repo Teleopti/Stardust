@@ -65,4 +65,7 @@ REFERENCES [mart].[dim_queue] ([queue_id])
 ALTER TABLE [mart].[fact_queue] CHECK CONSTRAINT [FK_fact_queue_dim_queue]
 GO
 
-
+--Enable toggle
+update mart.sys_configuration
+set value='True'
+where [key]='PBI30787OnlyLatestQueueAgentStatistics'

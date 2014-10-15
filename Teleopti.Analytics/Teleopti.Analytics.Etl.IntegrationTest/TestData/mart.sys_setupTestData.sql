@@ -124,7 +124,8 @@ INSERT INTO [dbo].[log_object]
 
 
 exec mart.sys_datasource_load
-exec [mart].[sys_datasource_set_raptor_time_zone]
+exec mart.sys_datasource_detail_load
+exec mart.sys_datasource_set_raptor_time_zone
 
 declare @time_zone_id int
 select @time_zone_id = time_zone_id
