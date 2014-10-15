@@ -15,17 +15,22 @@ GO
 --				2011-01-28 Performance DJ
 -- Description:	Loads fact_queue. Obs! Interval = dim_interval_id.
 -- =============================================
---exec [mart].[etl_fact_queue_load] '2009-01-01' ,'2009-03-01',2
+--exec [mart].[etl_fact_queue_load] '2014-10-01' ,'2014-10-01',-2
 
 CREATE PROCEDURE [mart].[etl_fact_queue_load] 
 @start_date smalldatetime,
 @end_date smalldatetime,
-@datasource_id int
-	
+@datasource_id int,
+@is_delayed_job bit = 0
+
 AS
 DECLARE @internal bit
 DECLARE @sqlstring nvarchar(4000)
 SET @sqlstring = ''
+
+--Execute one delayed jobs, if any
+if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETL
+	EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_queue_load'
 
 --------------------------------------------------------------------------
 --If we get All = -2 loop existing log objects and call this SP in a cursor for each log object

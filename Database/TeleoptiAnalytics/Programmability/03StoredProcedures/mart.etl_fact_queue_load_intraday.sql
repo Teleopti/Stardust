@@ -2,19 +2,24 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_fact_queue_load_intraday]
 GO
 
---exec mart.etl_fact_queue_load_intraday @start_date='2014-10-09 00:00:00',@end_date='2014-10-15 00:00:00',@datasource_id=6
+--exec mart.etl_fact_queue_load_intraday @start_date='2014-10-09 00:00:00',@end_date='2014-10-15 00:00:00',@datasource_id=-2
 
 CREATE PROCEDURE [mart].[etl_fact_queue_load_intraday]
 @start_date smalldatetime,
 @end_date smalldatetime,
-@datasource_id int
-	
+@datasource_id int,
+@is_delayed_job bit = 0
+
 AS
 SET NOCOUNT ON
 DECLARE @sqlstring nvarchar(4000)
 SET @sqlstring = ''
 DECLARE @detail_id int
 SET @detail_id = 2 --Queue data
+
+--Execute one delayed jobs, if any
+if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETL
+	EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_queue_load'
 
 --------------------------------------------------------------------------
 --If we get All = -2 loop existing log objects and call this SP in a cursor for each log object
