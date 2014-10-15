@@ -12346,9 +12346,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Correct shifts not according to shift bag</value>
     <comment>Correct shifts not according to shift bag</comment>
   </data>
-  <data name="BadgeTypeChecked" xml:space="preserve">
+  <data name="BadgeTypeEnabled" xml:space="preserve">
     <value>Use</value>
-    <comment>Select a specified badge type or not in Admin client agent badge setting</comment>
+    <comment>Enable a specified badge type in Admin client agent badge setting</comment>
   </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>Could not find any valid shifts in shift bag</value>

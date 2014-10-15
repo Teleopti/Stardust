@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSplitter2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader1 = new System.Windows.Forms.Label();
-			this.checkAnsweredCallsBadgeType = new System.Windows.Forms.CheckBox();
-			this.checkAHTBadgeType = new System.Windows.Forms.CheckBox();
-			this.checkAdherenceBadgeType = new System.Windows.Forms.CheckBox();
+			this.checkBoxAnsweredCallsBadgeEnabled = new System.Windows.Forms.CheckBox();
+			this.checkBoxAHTBadgeEnabled = new System.Windows.Forms.CheckBox();
+			this.checkBoxAdherenceBadgeEnabled = new System.Windows.Forms.CheckBox();
 			this.reset = new System.Windows.Forms.Button();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter1, 0, 2);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter2, 0, 6);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
-			this.tableLayoutPanelBody.Controls.Add(this.checkAnsweredCallsBadgeType, 2, 3);
-			this.tableLayoutPanelBody.Controls.Add(this.checkAHTBadgeType, 2, 4);
-			this.tableLayoutPanelBody.Controls.Add(this.checkAdherenceBadgeType, 2, 5);
+			this.tableLayoutPanelBody.Controls.Add(this.checkBoxAnsweredCallsBadgeEnabled, 2, 3);
+			this.tableLayoutPanelBody.Controls.Add(this.checkBoxAHTBadgeEnabled, 2, 4);
+			this.tableLayoutPanelBody.Controls.Add(this.checkBoxAdherenceBadgeEnabled, 2, 5);
 			this.tableLayoutPanelBody.Controls.Add(this.reset, 0, 10);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 62);
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1517;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 1769;
 			// 
 			// checkBoxEnableBadge
 			// 
@@ -317,41 +317,41 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader1.Text = "xxAgentBadgeSetting";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// checkAnsweredCallsBadgeType
+			// checkBoxAnsweredCallsBadgeEnabled
 			// 
-			this.checkAnsweredCallsBadgeType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkAnsweredCallsBadgeType.AutoSize = true;
-			this.checkAnsweredCallsBadgeType.Location = new System.Drawing.Point(453, 91);
-			this.checkAnsweredCallsBadgeType.Name = "checkAnsweredCallsBadgeType";
-			this.checkAnsweredCallsBadgeType.Size = new System.Drawing.Size(141, 19);
-			this.checkAnsweredCallsBadgeType.TabIndex = 21;
-			this.checkAnsweredCallsBadgeType.Text = "xxBadgeTypeChecked";
-			this.checkAnsweredCallsBadgeType.UseVisualStyleBackColor = true;
-			this.checkAnsweredCallsBadgeType.CheckedChanged += new System.EventHandler(this.checkAnsweredCallsBadgeType_CheckedChanged);
+			this.checkBoxAnsweredCallsBadgeEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAnsweredCallsBadgeEnabled.AutoSize = true;
+			this.checkBoxAnsweredCallsBadgeEnabled.Location = new System.Drawing.Point(453, 91);
+			this.checkBoxAnsweredCallsBadgeEnabled.Name = "checkBoxAnsweredCallsBadgeEnabled";
+			this.checkBoxAnsweredCallsBadgeEnabled.Size = new System.Drawing.Size(137, 19);
+			this.checkBoxAnsweredCallsBadgeEnabled.TabIndex = 21;
+			this.checkBoxAnsweredCallsBadgeEnabled.Text = "xxBadgeTypeEnabled";
+			this.checkBoxAnsweredCallsBadgeEnabled.UseVisualStyleBackColor = true;
+			this.checkBoxAnsweredCallsBadgeEnabled.CheckedChanged += new System.EventHandler(this.checkBoxAnsweredCallsBadgeEnabled_CheckedChanged);
 			// 
-			// checkAHTBadgeType
+			// checkBoxAHTBadgeEnabled
 			// 
-			this.checkAHTBadgeType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkAHTBadgeType.AutoSize = true;
-			this.checkAHTBadgeType.Location = new System.Drawing.Point(453, 126);
-			this.checkAHTBadgeType.Name = "checkAHTBadgeType";
-			this.checkAHTBadgeType.Size = new System.Drawing.Size(141, 19);
-			this.checkAHTBadgeType.TabIndex = 22;
-			this.checkAHTBadgeType.Text = "xxBadgeTypeChecked";
-			this.checkAHTBadgeType.UseVisualStyleBackColor = true;
-			this.checkAHTBadgeType.CheckedChanged += new System.EventHandler(this.checkAHTBadgeType_CheckedChanged);
+			this.checkBoxAHTBadgeEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAHTBadgeEnabled.AutoSize = true;
+			this.checkBoxAHTBadgeEnabled.Location = new System.Drawing.Point(453, 126);
+			this.checkBoxAHTBadgeEnabled.Name = "checkBoxAHTBadgeEnabled";
+			this.checkBoxAHTBadgeEnabled.Size = new System.Drawing.Size(137, 19);
+			this.checkBoxAHTBadgeEnabled.TabIndex = 22;
+			this.checkBoxAHTBadgeEnabled.Text = "xxBadgeTypeEnabled";
+			this.checkBoxAHTBadgeEnabled.UseVisualStyleBackColor = true;
+			this.checkBoxAHTBadgeEnabled.CheckedChanged += new System.EventHandler(this.checkBoxAHTBadgeEnabled_CheckedChanged);
 			// 
-			// checkAdherenceBadgeType
+			// checkBoxAdherenceBadgeEnabled
 			// 
-			this.checkAdherenceBadgeType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkAdherenceBadgeType.AutoSize = true;
-			this.checkAdherenceBadgeType.Location = new System.Drawing.Point(453, 161);
-			this.checkAdherenceBadgeType.Name = "checkAdherenceBadgeType";
-			this.checkAdherenceBadgeType.Size = new System.Drawing.Size(141, 19);
-			this.checkAdherenceBadgeType.TabIndex = 23;
-			this.checkAdherenceBadgeType.Text = "xxBadgeTypeChecked";
-			this.checkAdherenceBadgeType.UseVisualStyleBackColor = true;
-			this.checkAdherenceBadgeType.CheckedChanged += new System.EventHandler(this.checkAdherenceBadgeType_CheckedChanged);
+			this.checkBoxAdherenceBadgeEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdherenceBadgeEnabled.AutoSize = true;
+			this.checkBoxAdherenceBadgeEnabled.Location = new System.Drawing.Point(453, 161);
+			this.checkBoxAdherenceBadgeEnabled.Name = "checkBoxAdherenceBadgeEnabled";
+			this.checkBoxAdherenceBadgeEnabled.Size = new System.Drawing.Size(137, 19);
+			this.checkBoxAdherenceBadgeEnabled.TabIndex = 23;
+			this.checkBoxAdherenceBadgeEnabled.Text = "xxBadgeTypeEnabled";
+			this.checkBoxAdherenceBadgeEnabled.UseVisualStyleBackColor = true;
+			this.checkBoxAdherenceBadgeEnabled.CheckedChanged += new System.EventHandler(this.checkBoxAdherenceBadgeEnabled_CheckedChanged);
 			// 
 			// reset
 			// 
@@ -471,9 +471,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private System.Windows.Forms.Label labelSplitter1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
 		private System.Windows.Forms.Label labelSubHeader1;
-		private System.Windows.Forms.CheckBox checkAnsweredCallsBadgeType;
-		private System.Windows.Forms.CheckBox checkAHTBadgeType;
-		private System.Windows.Forms.CheckBox checkAdherenceBadgeType;
+		private System.Windows.Forms.CheckBox checkBoxAnsweredCallsBadgeEnabled;
+		private System.Windows.Forms.CheckBox checkBoxAHTBadgeEnabled;
+		private System.Windows.Forms.CheckBox checkBoxAdherenceBadgeEnabled;
 		private System.Windows.Forms.Button reset;
 	}
 }

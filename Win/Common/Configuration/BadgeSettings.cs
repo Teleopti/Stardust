@@ -65,11 +65,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			checkBoxEnableBadge.Checked = settings.BadgeEnabled;
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value * 100;
-			checkAdherenceBadgeType.Checked = settings.AdherenceBadgeEnabled;
+			checkBoxAdherenceBadgeEnabled.Checked = settings.AdherenceBadgeEnabled;
 			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
-			checkAHTBadgeType.Checked = settings.AHTBadgeEnabled;
+			checkBoxAHTBadgeEnabled.Checked = settings.AHTBadgeEnabled;
 			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
-			checkAnsweredCallsBadgeType.Checked = settings.AnsweredCallsBadgeEnabled;
+			checkBoxAnsweredCallsBadgeEnabled.Checked = settings.AnsweredCallsBadgeEnabled;
 			numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
 			numericUpDownGoldenToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
@@ -82,11 +82,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var settings = _repository.GetSettings();
 			settings.BadgeEnabled = checkBoxEnableBadge.Checked;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
-			settings.AdherenceBadgeEnabled = checkAdherenceBadgeType.Checked;
+			settings.AdherenceBadgeEnabled = checkBoxAdherenceBadgeEnabled.Checked;
 			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
-			settings.AHTBadgeEnabled = checkAHTBadgeType.Checked;
+			settings.AHTBadgeEnabled = checkBoxAHTBadgeEnabled.Checked;
 			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
-			settings.AnsweredCallsBadgeEnabled = checkAnsweredCallsBadgeType.Checked;
+			settings.AnsweredCallsBadgeEnabled = checkBoxAnsweredCallsBadgeEnabled.Checked;
 			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;
 			settings.SilverToBronzeBadgeRate = (int)numericUpDownSilverToBronzeBadgeRate.Value;
 
@@ -122,24 +122,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setControlsEnabled(bool enabled)
 		{
-			checkAdherenceBadgeType.Enabled = enabled;
-			checkAHTBadgeType.Enabled = enabled;
-			checkAnsweredCallsBadgeType.Enabled = enabled;
+			checkBoxAdherenceBadgeEnabled.Enabled = enabled;
+			checkBoxAHTBadgeEnabled.Enabled = enabled;
+			checkBoxAnsweredCallsBadgeEnabled.Enabled = enabled;
 		}
 
-		private void checkAnsweredCallsBadgeType_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxAnsweredCallsBadgeEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			numericUpDownThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
 			updateRateSettingsState();
 		}
 
-		private void checkAHTBadgeType_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxAHTBadgeEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			timeSpanTextBoxThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
 			updateRateSettingsState();
 		}
 
-		private void checkAdherenceBadgeType_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxAdherenceBadgeEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			doubleTextBoxThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
 			updateRateSettingsState();
@@ -147,11 +147,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void updateRateSettingsState()
 		{
-			var isAnyTypeSelected = doubleTextBoxThresholdForAdherence.Enabled || timeSpanTextBoxThresholdForAHT.Enabled ||
-									numericUpDownThresholdForAnsweredCalls.Enabled;
+			var isAnyTypeEnabled
+				= checkBoxAHTBadgeEnabled.Checked
+				|| checkBoxAdherenceBadgeEnabled.Checked
+				|| checkBoxAnsweredCallsBadgeEnabled.Checked;
 
-			numericUpDownSilverToBronzeBadgeRate.Enabled = isAnyTypeSelected;
-			numericUpDownGoldenToSilverBadgeRate.Enabled = isAnyTypeSelected;
+			numericUpDownSilverToBronzeBadgeRate.Enabled = isAnyTypeEnabled;
+			numericUpDownGoldenToSilverBadgeRate.Enabled = isAnyTypeEnabled;
 		}
 
 		private void reset_Click(object sender, EventArgs e)
