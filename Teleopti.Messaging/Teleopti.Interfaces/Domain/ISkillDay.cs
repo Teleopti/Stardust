@@ -228,16 +228,6 @@ namespace Teleopti.Interfaces.Domain
         void RecalculateStaff();
 
         /// <summary>
-        /// Combined task period collection.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-01-14
-        /// </remarks>
-        IList<ITemplateTaskPeriod> SkillTaskPeriodCollection();
-
-        /// <summary>
         /// Splits the skill data periods.
         /// Only skill data periods owned by this skill day will be splitted!
         /// </summary>
