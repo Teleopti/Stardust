@@ -24,7 +24,7 @@
 			dataType: 'json',
 			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {
-				$.each(data, function (index, item) {
+				$.each(data.Agents, function (index, item) {
 					var badgeViewModel = new BadgeViewModel(item);
 					vm.agentBadges.push(badgeViewModel);
 				});
