@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 if (validatedVolumeDays == null || workloadDaysToValidate == null)
                     return new List<IValidatedVolumeDay>(0);
 
-                var daysResult = rep.MatchDays(workload, workloadDaysToValidate.OfType<ITaskOwner>(), validatedVolumeDays, false);
+                var daysResult = rep.MatchDays(workload, workloadDaysToValidate.OfType<ITaskOwner>(), validatedVolumeDays);
                 if (daysResult == null) return new List<IValidatedVolumeDay>(0);
 
                 return daysResult.OfType<IValidatedVolumeDay>().ToList();

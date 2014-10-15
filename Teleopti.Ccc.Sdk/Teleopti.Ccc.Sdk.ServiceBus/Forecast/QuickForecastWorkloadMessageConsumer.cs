@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					if (validatedVolumeDays != null && stat != null)
 					{
 						_feedback.ReportProgress(message.IncreaseWith, "Found " + validatedVolumeDays.Count() + " validated days.");
-						var daysResult = rep.MatchDays(workload, stat, validatedVolumeDays, false);
+						var daysResult = rep.MatchDays(workload, stat, validatedVolumeDays);
 
 						if (daysResult != null)
 							validated = daysResult.OfType<IValidatedVolumeDay>().ToList();

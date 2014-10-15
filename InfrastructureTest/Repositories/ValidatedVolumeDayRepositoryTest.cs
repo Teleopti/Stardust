@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IValidatedVolumeDayRepository repository = new ValidatedVolumeDayRepository(UnitOfWork);
             ICollection<IValidatedVolumeDay> existingValidatedVolumeDays = repository.FindRange(period, validatedVolumeDay1.Workload);
             Assert.AreEqual(2, existingValidatedVolumeDays.Count);
-            ICollection<ITaskOwner> validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays,false);
+            var validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays);
             Assert.AreEqual(3, validatedVolumeDays.Count);
             Assert.AreEqual(taskOwnerDay1, ((ValidatedVolumeDay)validatedVolumeDays.ElementAt(0)).TaskOwner);
             Assert.AreEqual(taskOwnerDay2, ((ValidatedVolumeDay)validatedVolumeDays.ElementAt(1)).TaskOwner);
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             
             //Cancel the matchdays operation (before, but anyway)
             repository.CancelMatchDays();
-            ICollection<ITaskOwner> validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays, false);
+            var validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays);
 
             Assert.AreEqual(null, validatedVolumeDays);
         }

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             return _validatedVolumeDayRepository.MatchDays(workload,
                 workloadDays.OfType<ITaskOwner>().ToList(),
-                validatedVolumeDays, false);
+                validatedVolumeDays);
         }
 
         /// <summary>

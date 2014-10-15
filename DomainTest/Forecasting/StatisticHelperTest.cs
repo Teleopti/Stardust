@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Return(emptyStatisticTaskList).Repeat.Once();
             Expect.Call(_validatedVolumeDayRep.FindRange(_period, _workload)).
                 Return(emptyValidatedVolumeDayList).Repeat.Once();
-            Expect.Call(_validatedVolumeDayRep.MatchDays(_workload, null, emptyValidatedVolumeDayList, true)).IgnoreArguments().
+            Expect.Call(_validatedVolumeDayRep.MatchDays(_workload, null, emptyValidatedVolumeDayList)).IgnoreArguments().
                 Return(validatedVolumeDayList).Repeat.Once();
 
             mocks.ReplayAll();
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Return(emptyStatisticTaskList).Repeat.Once();
             Expect.Call(_validatedVolumeDayRep.FindRange(_period, _workload)).
                 Return(validatedVolumeDayList).Repeat.Once();
-            Expect.Call(_validatedVolumeDayRep.MatchDays(_workload, null, null, false)).IgnoreArguments().
+            Expect.Call(_validatedVolumeDayRep.MatchDays(_workload, null, null)).IgnoreArguments().
                 Return(new List<ITaskOwner> { existingValidatedVolumeDay }).Repeat.Once();
 
             mocks.ReplayAll();

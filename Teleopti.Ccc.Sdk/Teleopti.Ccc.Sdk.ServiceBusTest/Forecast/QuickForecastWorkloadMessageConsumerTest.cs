@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
 			validatedRep.Stub(x=> x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
-			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>(), false)).Return(new List<ITaskOwner>()).IgnoreArguments();
+			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>())).Return(new List<ITaskOwner>()).IgnoreArguments();
 
 			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>())).Return(teskOwners);
 			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
 			validatedRep.Stub(x => x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
-			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>(), false)).Return(new List<ITaskOwner>()).IgnoreArguments();
+			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>())).Return(new List<ITaskOwner>()).IgnoreArguments();
 
 			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>())).Return(teskOwners);
 			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);

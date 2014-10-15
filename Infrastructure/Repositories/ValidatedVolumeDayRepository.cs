@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Created by: robink
         /// Created date: 2008-03-28
         /// </remarks>
-        public IList<ITaskOwner> MatchDays(IWorkload workload, IEnumerable<ITaskOwner> taskOwnerList, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays, bool addToRepository)
+        public IList<ITaskOwner> MatchDays(IWorkload workload, IEnumerable<ITaskOwner> taskOwnerList, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays)
         {
             IList<ITaskOwner> daysToReturn = new List<ITaskOwner>();
             foreach (ITaskOwner taskOwner in taskOwnerList)
@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 if (existingValidatedVolumeDay == null)
                 {
                     existingValidatedVolumeDay = new ValidatedVolumeDay(workload, taskOwner.CurrentDate);
-                    if (addToRepository) Add(existingValidatedVolumeDay);
                 }
                 existingValidatedVolumeDay.TaskOwner = taskOwner;
                 daysToReturn.Add(existingValidatedVolumeDay);
