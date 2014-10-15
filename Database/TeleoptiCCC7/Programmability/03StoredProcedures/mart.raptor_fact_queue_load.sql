@@ -111,9 +111,7 @@ INSERT INTO mart.fact_queue
 	(
 	date_id, 
 	interval_id, 
-	queue_id, 
-	local_date_id,
-	local_interval_id, 
+	queue_id,
 	offered_calls, 
 	answered_calls, 
 	answered_calls_within_SL, 
@@ -130,16 +128,12 @@ INSERT INTO mart.fact_queue
 	longest_delay_in_queue_answered_s,
 	longest_delay_in_queue_abandoned_s,
 	datasource_id, 
-	insert_date, 
-	update_date, 
-	datasource_update_date
+	insert_date
 	)
 SELECT
 	date_id						= d.date_id,--bridge.date_id, 
 	interval_id					= stg.interval_id,--bridge.interval_id, 
 	queue_id					= q.queue_id, 
-	local_date_id				= d.date_id,
-	local_interval_id			= stg.interval_id, 
 	offered_calls				= ISNULL(offd_direct_call_cnt,0), 
 	answered_calls				= ISNULL(answ_call_cnt,0), 
 	answered_calls_within_SL	= ISNULL(ans_servicelevel_cnt,0), 
@@ -156,10 +150,7 @@ SELECT
 	longest_delay_in_queue_answered_s = ISNULL(queued_answ_longest_que_dur,0),
 	longest_delay_in_queue_abandoned_s = ISNULL(queued_aband_longest_que_dur,0),
 	datasource_id				= q.datasource_id, 
-	insert_date					= getdate(), 
-	update_date					= getdate(), 
-	datasource_update_date		= '1900-01-01'
-
+	insert_date					= getdate()
 FROM
 	(SELECT * FROM #stg_queue WHERE datetime_utc between @min_date and @max_date) stg
 JOIN
