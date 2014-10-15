@@ -2,3 +2,28 @@
 @{
 	Layout = null;
 }
+
+<div class="container BadgeLeaderBoardReport">
+	<div><strong>Badge Leader Board</strong></div>
+	<table style="width: 100%; border: red, 1px, solid !important">
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Gold</td>
+				<td>Silver</td>
+				<td>Bronze</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<!-- ko foreach:agentBadges() -->
+			<tr class="shift-trade-my-schedule-row">
+				<td class="shift-trade-agent-name" data-bind="text:name"></td>
+				<td class="shift-trade-my-schedule" data-bind="text: gold"></td>
+				<td class="shift-trade-my-schedule" data-bind="text: silver"></td>
+				<td class="shift-trade-my-schedule" data-bind="text: bronze"></td>
+			</tr>
+			<!-- /ko -->
+		</tbody>
+	</table>
+</div>

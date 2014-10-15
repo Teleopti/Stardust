@@ -1010,6 +1010,7 @@
     <Content Include="Areas\MyTime\Content\Images\answeredCallsSilverBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\badge.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeLeaderBoardReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyQueueMetrics.js" />
