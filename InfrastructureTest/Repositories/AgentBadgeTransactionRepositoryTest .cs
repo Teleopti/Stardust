@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -47,6 +48,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    protected override Repository<IAgentBadgeTransaction> TestRepository(IUnitOfWork unitOfWork)
 	    {
 			return new Infrastructure.Repositories.AgentBadgeTransactionRepository(unitOfWork);
+	    }
+
+	    [Test]
+	    public void ShouldResetBadges()
+	    {
+			 var agentBadgeTransaction = CreateAggregateWithCorrectBusinessUnit();
+			 PersistAndRemoveFromUnitOfWork(agentBadgeTransaction);
+
+		    var target = (Infrastructure.Repositories.AgentBadgeTransactionRepository)TestRepository(UnitOfWork);
+			 target.ResetAgentBadges();
+
+		    var result = target.Find(person);
+		    result.Should().Be.Empty();
 	    }
     }
 }
