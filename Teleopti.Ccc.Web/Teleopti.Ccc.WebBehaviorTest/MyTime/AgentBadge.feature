@@ -10,7 +10,7 @@ Given there is a role with
   And I have the role 'Full access to mytime'
 
 Scenario: Show my badge
-Given There is a agent badge settings with
+Given There is an agent badge settings with
   | Field                 | Value |
   | BadgeEnabled          | True  |
   | AnsweredCallsUsed     | True  |
@@ -31,7 +31,7 @@ Given There is a agent badge settings with
   And I should see I have 3 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
 Scenario: Show zero badge when agent has no badge
-Given There is a agent badge settings with
+Given There is an agent badge settings with
   | Field                 | Value |
   | BadgeEnabled          | True  |
   | AnsweredCallsUsed     | True  |
@@ -43,7 +43,7 @@ Given There is a agent badge settings with
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge
 
 Scenario: Do not show badge when badge feature disabled
-Given There is a agent badge settings with
+Given There is an agent badge settings with
   | Field                 | Value |
   | BadgeEnabled          | False |
   | Silver to bronze rate | 5     |

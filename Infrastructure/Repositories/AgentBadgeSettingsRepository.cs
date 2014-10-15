@@ -41,14 +41,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IAgentBadgeThresholdSettings GetSettings()
 		{
-			if (_settings == null)
-			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
-				_settings = repositoryFactory.CreateGlobalSettingDataRepository(UnitOfWork)
+				var settings = repositoryFactory.CreateGlobalSettingDataRepository(UnitOfWork)
 					.FindValueByKey(Key, new AgentBadgeThresholdSettings());
-			}
 
-			return _settings;
+			return settings;
 		}
 	}
 }

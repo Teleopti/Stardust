@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 	[Serializable]
 	public class AgentBadgeThresholdSettings : SettingValue, IAgentBadgeThresholdSettings
 	{
-		private bool _enableBadge = false;
+		private bool _enableBadge;
 		private int _answeredCallsThreshold = 100;
 		private bool _answeredCallsBadgeTypeSelected;
 		private TimeSpan _aHTThreshold = new TimeSpan(0, 5, 0);

@@ -5,7 +5,6 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class AgentBageStepDefinition
 	{
-		[Given(@"There is a agent badge settings with")]
+		[Given(@"There is an agent badge settings with")]
 		public void GivenThereIsAAgentBadgeSettingsWith(Table table)
 		{
 			var badgeSetting = table.CreateInstance<BadgeSettingsConfigurable>();
@@ -102,17 +101,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Settings = new AgentBadgeThresholdSettings
-			{
-				EnableBadge = BadgeEnabled,
-				SilverToBronzeBadgeRate = SilverToBronzeRate,
-				GoldToSilverBadgeRate = GoldToSilverRate,
-				AdherenceBadgeTypeSelected = AdherenceUsed,
-				AHTBadgeTypeSelected = AHTUsed,
-				AnsweredCallsBadgeTypeSelected = AnsweredCallsUsed
-			};
-
 			var rep = new AgentBadgeSettingsRepository(uow);
+			Settings = rep.GetSettings();
+
+			Settings.EnableBadge = BadgeEnabled;
+			Settings.SilverToBronzeBadgeRate = SilverToBronzeRate;
+			Settings.GoldToSilverBadgeRate = GoldToSilverRate;
+			Settings.AdherenceBadgeTypeSelected = AdherenceUsed;
+			Settings.AHTBadgeTypeSelected = AHTUsed;
+			Settings.AnsweredCallsBadgeTypeSelected = AnsweredCallsUsed;
+
 			rep.PersistSettingValue(Settings);
 		}
 	}
