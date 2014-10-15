@@ -12418,4 +12418,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Badge Leader Board</value>
     <comment>BadgeLeaderBoardReport</comment>
   </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Please enable at least one badge type.</value>
+    <comment>Message in badge setting of admin client</comment>
+  </data>
 </root>

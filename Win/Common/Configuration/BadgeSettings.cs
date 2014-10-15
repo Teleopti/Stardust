@@ -79,6 +79,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
+			if (checkBoxEnableBadge.Checked
+				&& !checkBoxAHTBadgeEnabled.Checked
+				&& !checkBoxAdherenceBadgeEnabled.Checked
+			    && !checkBoxAnsweredCallsBadgeEnabled.Checked)
+			{
+				ViewBase.ShowErrorMessage(Resources.NeedEnableAtLeastOneBadgeType, Resources.AgentBadgeSetting);
+				return;
+			}
+
 			var settings = _repository.GetSettings();
 			settings.BadgeEnabled = checkBoxEnableBadge.Checked;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);

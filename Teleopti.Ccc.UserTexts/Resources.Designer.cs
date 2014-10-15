@@ -14238,6 +14238,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enable at least one badge type..
+        /// </summary>
+        public static string NeedEnableAtLeastOneBadgeType {
+            get {
+                return ResourceManager.GetString("NeedEnableAtLeastOneBadgeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Negative effect:.
         /// </summary>
         public static string NegativeEffectColon {
