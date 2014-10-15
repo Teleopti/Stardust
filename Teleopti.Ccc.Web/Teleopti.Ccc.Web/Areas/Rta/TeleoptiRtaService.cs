@@ -7,6 +7,7 @@ using log4net;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Rta
 {
@@ -17,17 +18,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta
         private IRtaDataHandler _rtaDataHandler;
 	    private readonly INow _now;
 	    private readonly string _authenticationKey;
-        private const string logOutStateCode = "LOGGED-OFF";
+        public static string LogOutStateCode = "LOGGED-OFF";
         private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
 
-	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler, INow now)
+	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler, INow now, IConfigReader configReader)
         {
 		    _rtaDataHandler = rtaDataHandler;
 		    _now = now;
 
 
 		    Log.Info("The real time adherence service is now started");
-            var authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+            var authenticationKey = configReader.AppSettings["AuthenticationKey"];
             if (string.IsNullOrEmpty(authenticationKey)) 
 				authenticationKey = "!#¤atAbgT%";
             _authenticationKey = authenticationKey;
@@ -72,8 +73,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			    //If the user isn't logged on we'll substitute the stateCode to reflect this
 			    Log.InfoFormat(
 				    "This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})",
-				    stateCode, logOutStateCode, messageId);
-			    stateCode = logOutStateCode;
+				    stateCode, LogOutStateCode, messageId);
+			    stateCode = LogOutStateCode;
 		    }
 
 			//The DateTimeKind.Utc is not set automatically when deserialising from soap message

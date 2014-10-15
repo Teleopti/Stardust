@@ -136,6 +136,7 @@
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -198,6 +199,7 @@
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolverTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandlerTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\ScheduleLayerTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\TeleoptiRtaServiceTest.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />

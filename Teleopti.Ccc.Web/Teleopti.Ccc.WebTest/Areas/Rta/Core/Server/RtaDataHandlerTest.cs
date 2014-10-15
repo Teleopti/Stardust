@@ -332,5 +332,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			_mocks.VerifyAll();
 		}
 	}
-
 }
