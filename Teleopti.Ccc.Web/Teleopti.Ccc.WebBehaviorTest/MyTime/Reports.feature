@@ -28,12 +28,11 @@ Scenario: Show MyReport menu
 	Then MyReport tab should be visible 
 
 #there are more than 3 normal reports by default when setup
-#position 1 is MyReport, position 2 is divider by default
-@Ignore
+#position 1 is MyReport, position 2 is Badge Leader Board, position 3 is divider by default
 Scenario: Open standard report 
 	When I am viewing an application page
 	And I click reports menu
-	And I click the report at position '3' in the list
+	And I click the report at position '4' in the list
 	Then The report should not be opened in the same window
 	
 Scenario: Open MyReport
