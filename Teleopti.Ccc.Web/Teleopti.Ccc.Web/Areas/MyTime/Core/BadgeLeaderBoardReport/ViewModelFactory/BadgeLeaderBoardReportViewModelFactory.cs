@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Interfaces.Domain;
@@ -16,11 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 
 		public BadgeLeaderBoardReportViewModel CreateBadgeLeaderBoardReportViewModel(DateOnly date)
 		{
-			var personList = _agentBadgeProvider.GetPermittedAgents(date, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard);
+			var personList = (_agentBadgeProvider.GetPermittedAgents(date, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard));
+
+			var sortedList = personList.OrderByDescending(x => x.Gold).ThenByDescending(x => x.Silver).ThenByDescending(x => x.Bronze).ToList();
 
 			return new BadgeLeaderBoardReportViewModel
 			{
-				Agents = personList
+				Agents = sortedList
 			};
 		}
 	}
