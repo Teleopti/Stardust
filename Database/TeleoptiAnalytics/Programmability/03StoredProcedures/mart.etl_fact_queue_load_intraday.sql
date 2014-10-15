@@ -48,6 +48,8 @@ ELSE  --Single datasource_id
 	BEGIN
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
+	CREATE TABLE #agg_queue_ids (queue_agg_id int, mart_queue_id int)
+
 	DECLARE @UtcNow as smalldatetime
 	DECLARE @time_zone_id smallint
 	DECLARE @internal bit
@@ -163,6 +165,13 @@ ELSE  --Single datasource_id
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @source_date_local = date_date)
 
+	INSERT INTO #agg_queue_ids
+	SELECT
+		queue_agg_id,
+		queue_id
+	FROM mart.dim_queue
+	WHERE datasource_id = @datasource_id
+
 	--prepare dates and intervals for this time_zone
 	--note: Get date and intervals grouped so that we do not get duplicates at DST clock shifts
 	INSERT #bridge_time_zone(date_id,time_zone_id,local_date_id,local_interval_id)
@@ -194,21 +203,16 @@ ELSE  --Single datasource_id
 	SET NOCOUNT OFF
 	delete f
 	from mart.fact_queue f
-	inner join mart.dim_queue q
-		on q.queue_id = f.queue_id
-	inner join mart.sys_datasource ds
-		on ds.datasource_id = q.datasource_id
-		AND ds.datasource_id = @datasource_id
 	where
-	--kind of "today"
-		(
-		f.date_id=@target_date_id_utc
+		exists (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+		and f.date_id=@target_date_id_utc
 		and f.interval_id >= @target_interval_id_utc
-		)
-	OR --future dates
-		(
-		f.date_id>@target_date_id_utc
-		)
+
+	delete f
+	from mart.fact_queue f
+	where
+		EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+		AND f.date_id>@target_date_id_utc
 
 	-------------
 	-- Insert rows
@@ -219,8 +223,6 @@ ELSE  --Single datasource_id
 		date_id, 
 		interval_id, 
 		queue_id, 
-		local_date_id,
-		local_interval_id, 
 		offered_calls, 
 		answered_calls, 
 		answered_calls_within_SL, 
@@ -237,16 +239,12 @@ ELSE  --Single datasource_id
 		longest_delay_in_queue_answered_s,
 		longest_delay_in_queue_abandoned_s,
 		datasource_id, 
-		insert_date, 
-		update_date, 
-		datasource_update_date
+		insert_date
 		)
 		SELECT
 		date_id						= bridge.date_id, 
 		interval_id					= bridge.interval_id, 
-		queue_id					= stg.queue_id, 
-		local_date_id				= d.date_id,
-		local_interval_id			= stg.interval, 
+		queue_id					= q.mart_queue_id, 
 		offered_calls				= ISNULL(stg.offd_direct_call_cnt,0), 
 		answered_calls				= ISNULL(stg.answ_call_cnt,0), 
 		answered_calls_within_SL	= ISNULL(stg.ans_servicelevel_cnt,0), 
@@ -262,15 +260,11 @@ ELSE  --Single datasource_id
 		time_to_abandon_s			= ISNULL(stg.queued_and_aband_call_dur,0), 
 		longest_delay_in_queue_answered_s = ISNULL(stg.queued_answ_longest_que_dur,0),
 		longest_delay_in_queue_abandoned_s = ISNULL(stg.queued_aband_longest_que_dur,0),
-		datasource_id				= stg.datasource_id, 
-		insert_date					= getdate(), 
-		update_date					= getdate(), 
-		datasource_update_date		= '''+ CAST(@UtcNow as nvarchar(20))+'''
-	FROM
+		datasource_id				= ' + cast(@datasource_id as varchar(3)) + ', 
+		insert_date					= getdate()
+		FROM
 		(
 		SELECT
-			q.datasource_id,
-			q.queue_id,
 			agg.*
 			FROM '+ 
 		CASE @internal
@@ -278,19 +272,21 @@ ELSE  --Single datasource_id
 			WHEN 1 THEN '	dbo.queue_logg agg'
 			ELSE NULL --Fail fast
 		END
-		+ ' INNER JOIN
-			mart.dim_queue		q
-			ON q.datasource_id = ' + cast(@datasource_id as varchar(3)) + '
-			AND q.queue_agg_id= agg.queue
+		+ '
 		WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
 		AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
 		) OR (date_from >'''+ CAST(@target_date_local as nvarchar(20))+'''
 		)
+		AND EXISTS (SELECT 1 FROM #agg_queue_ids tmp WHERE agg.queue=tmp.queue_agg_id)
 		) stg
 	INNER JOIN
 		mart.dim_date		d
 	ON
 		stg.date_from	= d.date_date
+	INNER JOIN
+		#agg_queue_ids q
+		ON
+			q.queue_agg_id = stg.queue
 	INNER JOIN
 	 #bridge_time_zone bridge
 	ON
