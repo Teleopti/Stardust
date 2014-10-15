@@ -29,6 +29,7 @@ Scenario: Show MyReport menu
 
 #there are more than 3 normal reports by default when setup
 #position 1 is MyReport, position 2 is divider by default
+@Ignore
 Scenario: Open standard report 
 	When I am viewing an application page
 	And I click reports menu
