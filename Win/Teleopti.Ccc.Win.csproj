@@ -406,11 +406,11 @@
     </Compile>
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\Columns\ActivityUpdatedReadOnlyTextColumn.cs" />
-    <Compile Include="Common\Configuration\BadgeThresholdSettings.cs">
+    <Compile Include="Common\Configuration\BadgeSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Common\Configuration\BadgeThresholdSettings.Designer.cs">
-      <DependentUpon>BadgeThresholdSettings.cs</DependentUpon>
+    <Compile Include="Common\Configuration\BadgeSettings.Designer.cs">
+      <DependentUpon>BadgeSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Configuration\NotificationSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -2543,8 +2543,8 @@
     <EmbeddedResource Include="Common\Configuration\AuditingPage.resx">
       <DependentUpon>AuditingPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\Configuration\BadgeThresholdSettings.resx">
-      <DependentUpon>BadgeThresholdSettings.cs</DependentUpon>
+    <EmbeddedResource Include="Common\Configuration\BadgeSettings.resx">
+      <DependentUpon>BadgeSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\NotificationSettingsControl.resx">

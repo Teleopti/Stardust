@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 {
 	public interface IBadgeProvider
 	{
-		IEnumerable<IAgentBadge> GetBadges(IAgentBadgeThresholdSettings settings);
+		IEnumerable<IAgentBadge> GetBadges(IAgentBadgeSettings settings);
 	}
 }

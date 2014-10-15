@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			IAgentBadgeThresholdSettings setting)
+			IAgentBadgeSettings setting)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, IAgentBadgeThresholdSettings setting)
+			DateOnly date, IAgentBadgeSettings setting)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, IAgentBadgeThresholdSettings setting)
+			DateOnly date, IAgentBadgeSettings setting)
 		{
 			if (Logger.IsDebugEnabled)
 			{

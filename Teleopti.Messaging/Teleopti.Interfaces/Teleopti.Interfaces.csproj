@@ -123,7 +123,7 @@
     <Compile Include="Domain\IAgentBadgeInfo.cs" />
     <Compile Include="Domain\IAgentBadge.cs" />
     <Compile Include="Domain\IAgentBadgeRepository.cs" />
-    <Compile Include="Domain\IAgentBadgeThresholdSettings.cs" />
+    <Compile Include="Domain\IAgentBadgeSettings.cs" />
     <Compile Include="Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeTransactionRepository.cs" />
     <Compile Include="Domain\IEtlToggleManager.cs" />

@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					Person = (Guid) person.Id
 				}
 			};
-			var setting = new AgentBadgeThresholdSettings()
+			var setting = new AgentBadgeSettings()
 			{
 				BadgeEnabled = true,
 				GoldToSilverBadgeRate = 2,

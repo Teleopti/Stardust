@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_repository = repository;
 		}
 
-		public IAgentBadgeThresholdSettings GetBadgeSettings()
+		public IAgentBadgeSettings GetBadgeSettings()
 		{
 			return _repository.GetSettings();
 		}

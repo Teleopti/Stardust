@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private List<IPerson> _allPersons;
 		private IStatisticRepository _statisticRepository;
 		private IAgentBadgeTransactionRepository _badgeTransactionRepository;
-		private AgentBadgeThresholdSettings _badgeSetting;
+		private AgentBadgeSettings _badgeSetting;
 		private INow _now;
 		private IDefinedRaptorApplicationFunctionFactory appFunctionFactory;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			_badgeRole.AddApplicationFunction(badgeFunction);
 
-			_badgeSetting = new AgentBadgeThresholdSettings
+			_badgeSetting = new AgentBadgeSettings
 			{
 				AdherenceThreshold = new Percent(0.6),
 				AHTThreshold = new TimeSpan(0, 5, 0),

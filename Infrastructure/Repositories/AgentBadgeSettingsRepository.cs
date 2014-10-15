@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class AgentBadgeSettingsRepository : SettingDataRepository, IAgentBadgeSettingsRepository
 	{
-		public const string Key = "AgentBadgeThresholdSettings";
+		public const string Key = "AgentBadgeSettings";
 
 		public AgentBadgeSettingsRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public override ISettingData FindByKey(string key)
 		{
-			return Session.CreateCriteria(typeof(AgentBadgeThresholdSettings))
+			return Session.CreateCriteria(typeof(AgentBadgeSettings))
 				.Add(Restrictions.Eq("Key", key))
 				.SetCacheable(true)
 				.UniqueResult<ISettingData>();
@@ -34,15 +34,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			ISettingData data = FindByKey(key)
 			                    ?? new GlobalSettingDataRepository(UnitOfWork).FindByKey(key)
-			                    ?? (ISettingData) new AgentBadgeThresholdSettings();
+			                    ?? (ISettingData) new AgentBadgeSettings();
 			return data.GetValue(defaultValue);
 		}
 
-		public IAgentBadgeThresholdSettings GetSettings()
+		public IAgentBadgeSettings GetSettings()
 		{
-				IRepositoryFactory repositoryFactory = new RepositoryFactory();
-				var settings = repositoryFactory.CreateGlobalSettingDataRepository(UnitOfWork)
-					.FindValueByKey(Key, new AgentBadgeThresholdSettings());
+			IRepositoryFactory repositoryFactory = new RepositoryFactory();
+			var settings = repositoryFactory.CreateGlobalSettingDataRepository(UnitOfWork)
+				.FindValueByKey(Key, new AgentBadgeSettings());
 
 			return settings;
 		}

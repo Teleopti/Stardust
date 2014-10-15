@@ -1319,7 +1319,7 @@
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
-    <Compile Include="SystemSetting\GlobalSetting\AgentBadgeThresholdSettings.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\AgentBadgeSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AsmAlertTime.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NameFormatSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CalendarLinkSettings.cs" />

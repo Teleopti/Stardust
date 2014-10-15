@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAgentBadgeSettingsRepository : ISettingDataRepository
 	{
-		IAgentBadgeThresholdSettings GetSettings();
+		IAgentBadgeSettings GetSettings();
 	}
 }

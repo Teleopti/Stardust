@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 {
 	[Serializable]
-	public class AgentBadgeThresholdSettings : SettingValue, IAgentBadgeThresholdSettings
+	public class AgentBadgeSettings : SettingValue, IAgentBadgeSettings
 	{
 		private int _answeredCallsThreshold = 100;
 		private TimeSpan _ahtThreshold = new TimeSpan(0, 5, 0);

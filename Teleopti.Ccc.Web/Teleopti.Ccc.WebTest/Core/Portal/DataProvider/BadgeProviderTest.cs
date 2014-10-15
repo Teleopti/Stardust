@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldGetAgentBadgeSettingsByDefaultValue()
 		{
 			var repository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
-			repository.Stub(x => x.GetSettings()).IgnoreArguments().Return(new AgentBadgeThresholdSettings());
+			repository.Stub(x => x.GetSettings()).IgnoreArguments().Return(new AgentBadgeSettings());
 
 			var target = new BadgeSettingProvider(repository);
 

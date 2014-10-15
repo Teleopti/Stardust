@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,
-			IAgentBadgeThresholdSettings setting, DateOnly calculateDate, BadgeType badgeType)
+			IAgentBadgeSettings setting, DateOnly calculateDate, BadgeType badgeType)
 		{
 			var agentBadgeTransactions = newAwardedBadges as IList<IAgentBadgeTransaction> ?? newAwardedBadges.ToList();
 

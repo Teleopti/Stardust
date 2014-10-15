@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AdherenceUsed { get; set; }
 		public bool AHTUsed { get; set; }
 
-		public IAgentBadgeThresholdSettings Settings;
+		public IAgentBadgeSettings Settings;
 
 		public void Apply(IUnitOfWork uow)
 		{

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_badgeRepository = badgeRepository;
 		}
 
-		public IEnumerable<IAgentBadge> GetBadges(IAgentBadgeThresholdSettings settings)
+		public IEnumerable<IAgentBadge> GetBadges(IAgentBadgeSettings settings)
 		{
 			var badges = new List<IAgentBadge>();
 			var person = _loggedOnUser.CurrentUser();
