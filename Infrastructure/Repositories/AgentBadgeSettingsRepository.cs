@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class AgentBadgeSettingsRepository : SettingDataRepository, IAgentBadgeSettingsRepository
 	{
 		public const string Key = "AgentBadgeThresholdSettings";
-		private AgentBadgeThresholdSettings _settings;
 
 		public AgentBadgeSettingsRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
