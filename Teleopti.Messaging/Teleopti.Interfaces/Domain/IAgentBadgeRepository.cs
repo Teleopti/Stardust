@@ -29,15 +29,15 @@ namespace Teleopti.Interfaces.Domain
 		IAgentBadge Find(IPerson person, BadgeType badgeType);
 
 		/// <summary>
-		/// Get agents with most badges sorted by badge count desc
+		/// Get all agent badges 
 		/// </summary>
 		/// <returns></returns>
-		ICollection<IAgentBadgeInfo> GetAgentToplistOfBadges();
+		ICollection<IAgentBadge> GetAllAgentBadges();
 
 		/// <summary>
-		/// Get agents with most badges by specific badge type sorted by badge count desc
+		/// Get all agent badges by specific badge type
 		/// </summary>
 		/// <returns></returns>
-		ICollection<IAgentBadgeInfo> GetAgentToplistOfBadges(BadgeType badgeType);
+		ICollection<IAgentBadge> GetAllAgentBadges(BadgeType badgeType);
 	}
 }

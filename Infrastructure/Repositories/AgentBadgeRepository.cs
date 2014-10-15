@@ -71,27 +71,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-		public ICollection<IAgentBadgeInfo> GetAgentToplistOfBadges()
+		public ICollection<IAgentBadge> GetAllAgentBadges()
 		{
-			const string query = @"select Person, SUM(TotalAmount) from AgentBadge group by Person order by SUM(TotalAmount) desc";
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate from AgentBadge";
 			
 			var result = Session.CreateSQLQuery(query)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeInfo)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
-					.List<IAgentBadgeInfo>();
+					.List<IAgentBadge>();
 			return result;
 		}
 
-		public ICollection<IAgentBadgeInfo> GetAgentToplistOfBadges(BadgeType badgeType)
+		public ICollection<IAgentBadge> GetAllAgentBadges(BadgeType badgeType)
 		{
-			const string query = @"select Person, SUM(TotalAmount) from AgentBadge where BadgeType=:badgeType "
-				+ "group by Person order by SUM(TotalAmount) desc";
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate from AgentBadge where BadgeType=:badgeType";
 
 			var result = Session.CreateSQLQuery(query)
 					.SetInt16("badgeType", (Int16)badgeType)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeInfo)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
-					.List<IAgentBadgeInfo>();
+					.List<IAgentBadge>();
 			return result;
 		}
 	}

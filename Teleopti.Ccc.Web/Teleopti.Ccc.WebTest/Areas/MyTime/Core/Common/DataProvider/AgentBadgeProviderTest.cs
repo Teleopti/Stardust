@@ -15,41 +15,96 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 	[TestFixture]
 	public class AgentBadgeProviderTest
 	{
+		private IAgentBadgeRepository agentBadgeRepository;
+		private IPersonRepository personRepository;
+		private IBadgeSettingProvider settingProvider;
+		private AgentBadgeProvider target;
+		private IPermissionProvider permissionProvider;
+
+		[SetUp]
+		public void SetUp()
+		{
+			 agentBadgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
+			 personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			 settingProvider = MockRepository.GenerateMock<IBadgeSettingProvider>();
+			 permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			 target = new AgentBadgeProvider(agentBadgeRepository, permissionProvider, personRepository, settingProvider);
+		}
+
+
+
 		[Test]
 		public void ShouldQueryAllAgents()
 		{
-			var agentBadgerepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.FindPeople(new Guid[] {Guid.NewGuid()}))
 				.IgnoreArguments()
 				.Return(new IPerson[] {new Person()});
-
-			var target = new AgentBadgeProvider(agentBadgerepository, MockRepository.GenerateMock<IPermissionProvider>(), personRepository);
-
 			target.GetPermittedAgents(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard);
 
-			agentBadgerepository.AssertWasCalled(x => x.GetAgentToplistOfBadges());
+			agentBadgeRepository.AssertWasCalled(x => x.GetAllAgentBadges());
 		}
 
 		[Test]
 		public void ShouldFilterPermittedAgentsWhenQueryingAll()
 		{
-			var agentBadgeRepo = MockRepository.GenerateMock<IAgentBadgeRepository>();
-			var personRepo = MockRepository.GenerateMock<IPersonRepository>();
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var agents = new IAgentBadgeInfo[] {new AgentBadgeInfo(), new AgentBadgeInfo()};
-			var persons = new IPerson[] { new Person(), new Person() };
-
-			agentBadgeRepo.Stub(x => x.GetAgentToplistOfBadges()).Return(agents);
-			personRepo.Stub(x => x.FindPeople(agents.Select(item => item.PersonId).ToList())).IgnoreArguments().Return(persons);
+			
+			var agents = new IAgentBadge[] {new AgentBadge(), new AgentBadge()};
+			var persons = new IPerson[] { new Person(), new Person() };	
+			agentBadgeRepository.Stub(x => x.GetAllAgentBadges()).Return(agents);
+			personRepository.Stub(x => x.FindPeople(agents.Select(item => item.Person).ToList())).IgnoreArguments().Return(persons);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, DateOnly.Today, persons.ElementAt(0))).Return(false);
 			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, DateOnly.Today, persons.ElementAt(1))).Return(true);
-
-			var target = new AgentBadgeProvider(agentBadgeRepo, permissionProvider, personRepo);
-
+			
 			var result = target.GetPermittedAgents(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard);
 
-			result.Single().Should().Be(persons.ElementAt(1));
+			result.Single().AgentName.Should().Be(persons.ElementAt(1).Name.ToString());
 		}
+
+		[Test]
+		public void ShouldReturnCorrectTotalBadgeNumber()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			var persons= new IPerson[]{person};
+			var agents = new IAgentBadge[]
+			{
+				new AgentBadge
+				{
+					BadgeType = BadgeType.Adherence,
+					TotalAmount = 16,
+					Person = (Guid) person.Id
+				}, 
+
+				new AgentBadge
+				{
+					BadgeType = BadgeType.AnsweredCalls,
+					TotalAmount = 25,
+					Person = (Guid) person.Id
+				},
+
+				new AgentBadge
+				{
+					BadgeType = BadgeType.AverageHandlingTime,
+					TotalAmount = 32,
+					Person = (Guid) person.Id
+				}
+			};
+			var setting = new AgentBadgeThresholdSettings()
+			{
+				EnableBadge = true,
+				GoldToSilverBadgeRate = 2,
+				SilverToBronzeBadgeRate = 5
+			};
+			agentBadgeRepository.Stub(x=>x.GetAllAgentBadges()).Return(agents);
+			personRepository.Stub(x => x.FindPeople(agents.Select(item => item.Person).ToList())).IgnoreArguments().Return(persons);
+			permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, DateOnly.Today, persons.ElementAt(0))).Return(true);
+			settingProvider.Stub(x => x.GetBadgeSettings()).Return(setting);
+			var result = target.GetPermittedAgents(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard).ToArray();
+			result.Single().Gold.Should().Be(6);
+			result.Single().Sivler.Should().Be(2);
+			result.Single().Bronze.Should().Be(3);
+
+		}
+
 	}
 }
