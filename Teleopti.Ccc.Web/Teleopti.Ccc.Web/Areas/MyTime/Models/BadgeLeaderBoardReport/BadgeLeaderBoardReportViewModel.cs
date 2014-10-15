@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport
 		public string AgentName { get; set; }
 
 		public int Gold { get; set; }
-		public int Sivler { get; set; }
+		public int Silver { get; set; }
 		public int Bronze { get;set;}
 	}
 

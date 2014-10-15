@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			settingProvider.Stub(x => x.GetBadgeSettings()).Return(setting);
 			var result = target.GetPermittedAgents(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard).ToArray();
 			result.Single().Gold.Should().Be(6);
-			result.Single().Sivler.Should().Be(2);
+			result.Single().Silver.Should().Be(2);
 			result.Single().Bronze.Should().Be(3);
 
 		}

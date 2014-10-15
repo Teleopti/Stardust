@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				foreach (var agent in permittedAgentBadgeList.Where(agent => p.Id == agent.Person))
 				{
 					agentOverviewItem.Gold += agent.GetGoldBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
-					agentOverviewItem.Sivler += agent.GetSilverBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+					agentOverviewItem.Silver += agent.GetSilverBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 					agentOverviewItem.Bronze += agent.GetBronzeBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 				}
 				agentBadgeList.Add(agentOverviewItem);
