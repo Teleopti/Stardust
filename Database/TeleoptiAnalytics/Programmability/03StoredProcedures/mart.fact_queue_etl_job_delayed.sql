@@ -6,6 +6,16 @@ GO
 CREATE PROCEDURE [mart].[fact_queue_etl_job_delayed]
 
 AS
+DECLARE @stored_procedure nvarchar(300)
+SET @stored_procedure=N'mart.etl_fact_queue_load'
+
+--data convert already happened
+IF EXISTS (select date_id FROM mart.fact_queue)
+RETURN
+
+--already added to delayed job
+IF EXISTS (select 1 FROM mart.etl_job_delayed WHERE stored_procedured = @stored_procedure)
+RETURN
 
 --chunk up the insert by 6months/run
 DECLARE @start_date datetime
@@ -42,14 +52,8 @@ BEGIN
 END
 
 INSERT mart.etl_job_delayed( stored_procedured, parameter_string, insert_date)
-SELECT  'mart.etl_fact_queue_load', parameter_string, getdate()
+SELECT  @stored_procedure, parameter_string, getdate()
 FROM #data
 ORDER BY id desc
 
-GO
-
---truncate table mart.fact_queue
---run once upon deploy
-IF (select count(*) FROM mart.fact_queue)=0
-	EXEC [mart].[fact_queue_etl_job_delayed]
 GO
