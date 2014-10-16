@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta
             _authenticationKey = authenticationKey;
         }
 
+	    public int SaveExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ExternalUserState state)
+	    {
+			return SaveExternalUserState(authenticationKey, state.UserCode, state.StateCode, state.StateDescription,
+				state.IsLoggedOn, state.SecondsInState, state.Timestamp, platformTypeId, sourceId, state.BatchId, state.IsSnapshot);
+		}
+
 	    public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode,
 	                                     string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp,
 	                                     string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
@@ -119,8 +125,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
     		}
     	}
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		    MessageId = "3")]
 	    public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId,
 	                                          ICollection<ExternalUserState> externalUserStateBatch)
     	{

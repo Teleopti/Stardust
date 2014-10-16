@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
 			var now = MockRepository.GenerateStub<INow>();
 			now.Expect(n => n.UtcDateTime()).Return(christmas);
-			var state = new externalUserStateForTest() { TimeStamp = christmas.AddHours(1) };
+			var state = new externalUserStateForTest() { Timestamp = christmas.AddHours(1) };
 			var target = new rtaServiceFactoryForTest() { Now = now}.CreateRtaServiceBasedOnAValidState(state);
 
 			var result = state.SaveExternalUserStateTo(target);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
 			var now = MockRepository.GenerateStub<INow>();
 			now.Expect(n => n.UtcDateTime()).Return(christmas);
-			var state = new externalUserStateForTest() { TimeStamp = christmas.Subtract(TimeSpan.FromHours(1)) };
+			var state = new externalUserStateForTest() { Timestamp = christmas.Subtract(TimeSpan.FromHours(1)) };
 			var target = new rtaServiceFactoryForTest() { Now = now }.CreateRtaServiceBasedOnAValidState(state);
 
 			var result = state.SaveExternalUserStateTo(target);
@@ -133,16 +133,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		[Test]
 		public void ShouldProcessExternalUserStatesInBatch()
 		{
-			var externalStates = new Collection<ExternalUserState>();
-
 			var state1 = new externalUserStateForTest();
 			var state2 = new externalUserStateForTest();
-			externalStates.Add(state1.ToExternalUserState());
-			externalStates.Add(state2.ToExternalUserState());
-			var state = new externalUserStateForTest();
 			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state1);
 
-			var result = target.SaveBatchExternalUserState(state.AuthenticationKey, state.PlatformTypeId, state.SourceId, externalStates);
+			var result = target.SaveBatchExternalUserState(state1.AuthenticationKey, state1.PlatformTypeId, state1.SourceId, new[] { state1, state2 });
 
 			result.Should().Be.EqualTo(1);
 		}
@@ -152,12 +147,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		{
 			const int tooManyStates = 200;
 			var externalStates = new Collection<ExternalUserState>();
-
 			for (var i = 0; i < tooManyStates; i++)
-			{
-				var stateInBatch = new externalUserStateForTest();
-				externalStates.Add(stateInBatch.ToExternalUserState());
-			}
+				externalStates.Add(new externalUserStateForTest());
+
 			var state = new externalUserStateForTest();
 			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state);
 
@@ -201,43 +193,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			public bool IsAlive { get; set; }
 		}
 
-		private class externalUserStateForTest
+		private class externalUserStateForTest : ExternalUserState
 		{
 			public string AuthenticationKey = "secret auth key";
-			public string UserCode = "8808";
-			public string StateCode = "AUX2";
-			public string StateDescription { get; set; }
-			public bool IsLoggedOn = true;
-			public int SecondsInState { get; set; }
-			public DateTime TimeStamp { get; set; }
 			public string PlatformTypeId = Guid.Empty.ToString();
 			public string SourceId = "sourceId";
-			public DateTime BatchId { get; set; }
-			public bool IsSnapshot { get; set; }
 
+			public externalUserStateForTest()
+			{
+				UserCode = "8808";
+				StateCode = "AUX2";
+				IsLoggedOn = true;
+			}
 
 			public int SaveExternalUserStateTo(TeleoptiRtaService service)
 			{
-				return service.SaveExternalUserState(AuthenticationKey, UserCode, StateCode, StateDescription,
-					IsLoggedOn, SecondsInState, TimeStamp, PlatformTypeId, SourceId, BatchId, IsSnapshot);
+				return service.SaveExternalUserState(AuthenticationKey, PlatformTypeId, SourceId, this);
 			}
 
-
-			public ExternalUserState ToExternalUserState()
-			{
-				return new ExternalUserState()
-				       {
-						   UserCode = UserCode,
-						   StateCode = StateCode,
-						   StateDescription = StateDescription,
-						   IsLoggedOn = IsLoggedOn,
-						   SecondsInState = SecondsInState,
-						   Timestamp = TimeStamp,
-						   BatchId = BatchId,
-						   IsSnapshot = IsSnapshot
-						   //Extensiondata
-					   };
-			}
 		}
 
 		private class rtaServiceFactoryForTest
@@ -258,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				if (Now == null)
 				{
 					Now = MockRepository.GenerateStub<INow>();
-					Now.Expect(n => n.UtcDateTime()).Return(userState.TimeStamp).Repeat.Any();
+					Now.Expect(n => n.UtcDateTime()).Return(userState.Timestamp).Repeat.Any();
 				}
 				if (RtaDataHandler == null)
 				{
