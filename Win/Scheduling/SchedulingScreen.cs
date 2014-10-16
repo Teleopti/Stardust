@@ -13,11 +13,13 @@ using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
@@ -2452,7 +2454,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						IList<ITeam> meetingPersonsTeams = getDistinctTeamList(meeting);
 						bool editPermission = _permissionHelper.HasFunctionPermissionForTeams(meetingPersonsTeams, DefinedRaptorApplicationFunctionPaths.ModifyMeetings) && _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
 						bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission, _container.Resolve<IToggleManager>());
+						_schedulerMeetingHelper.MeetingComposerStart(meeting, _scheduleView, editPermission, viewSchedulesPermission, _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>());
 					}
 				}
 			}
@@ -4985,13 +4987,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			bool editPermission = _permissionHelper.IsPermittedToEditMeeting(_scheduleView, _temporarySelectedEntitiesFromTreeView, _scenario);
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-            _schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission, viewSchedulesPermission, _container.Resolve<IToggleManager>());
+			_schedulerMeetingHelper.MeetingComposerStart(e.Value.BelongsToMeeting, _scheduleView, editPermission, viewSchedulesPermission, _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>());
 		}
 
 		private void wpfShiftEditor1_CreateMeeting(object sender, CustomEventArgs<IPersonMeeting> e)
 		{
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-            _schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission, _container.Resolve<IToggleManager>());
+			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission, _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>());
 		}
 
 		private void notesEditor_NotesChanged(object sender, System.Windows.RoutedEventArgs e)
@@ -5756,7 +5758,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			bool viewSchedulesPermission = _permissionHelper.IsPermittedToViewSchedules(_temporarySelectedEntitiesFromTreeView);
-            _schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission, _container.Resolve<IToggleManager>());
+			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission, _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>());
 
 		}
 

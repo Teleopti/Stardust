@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -44,7 +46,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
-			IEffectiveRestrictionCreator effectiveRestrictionCreator)
+			IEffectiveRestrictionCreator effectiveRestrictionCreator,
+			IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftStateContainerList = workShiftContainerList;
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
 		/// <summary>
@@ -98,7 +102,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new DeleteSchedulePartService(_schedulingResultStateHolder);
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal);
+                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
 
 
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];

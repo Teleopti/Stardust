@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    /// <summary>
         /// start meeting composer with supplied meeting, or null if new meeting should be created
         /// </summary>
-        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager)
+        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
         {
             if(scheduleViewBase == null) return;
 
@@ -190,7 +191,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
 
-            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), toggleManager))
+            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), toggleManager, intraIntervalFinderService))
             {
 				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;

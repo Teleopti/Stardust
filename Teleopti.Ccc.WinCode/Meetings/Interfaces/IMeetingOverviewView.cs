@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Common;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
         TimeZoneInfo UserTimeZone { get; set; }
         bool ConfirmDeletion(IMeeting theMeeting);
         void ReloadMeetings();
-        void EditMeeting(IMeetingViewModel meetingViewModel, IToggleManager toggleManager);
+        void EditMeeting(IMeetingViewModel meetingViewModel, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService);
         bool EditEnabled { get; set; }
         bool DeleteEnabled { get; set; }
         bool CopyEnabled { get; set; }

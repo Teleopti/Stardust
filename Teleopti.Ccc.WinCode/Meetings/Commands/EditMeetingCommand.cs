@@ -1,6 +1,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -19,16 +20,18 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICanModifyMeeting _canModifyMeeting;
         private readonly IToggleManager _toggleManager;
-        private readonly ISettingDataRepository _settingDataRepository;
+	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+	    private readonly ISettingDataRepository _settingDataRepository;
 
         public EditMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
-            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager)
+            IUnitOfWorkFactory unitOfWorkFactory, ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
         {
             _meetingOverviewView = meetingOverviewView;
             _settingDataRepository = settingDataRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _canModifyMeeting = canModifyMeeting;
             _toggleManager = toggleManager;
+	        _intraIntervalFinderService = intraIntervalFinderService;
         }
 
         public void Execute()
@@ -49,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                 
                 meetingViewModel = new MeetingViewModel(theMeeting, commonNameDescription);
             }
-            _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager);
+            _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService);
         }
 
         public bool CanExecute()

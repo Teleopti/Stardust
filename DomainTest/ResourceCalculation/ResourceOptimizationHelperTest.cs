@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private IPersonSkillProvider _personSkillProvider;
 		private IPeriodDistributionService _periodDistributionService;
+		private IIntraIntervalFinderService _intraIntervalFinderService;
 
 		[SetUp]
 		public void Setup()
@@ -29,10 +31,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
 			_periodDistributionService = _mocks.DynamicMock<IPeriodDistributionService>();
+			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
 			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
 														 _personSkillProvider, _periodDistributionService,
-														 new CurrentTeleoptiPrincipal());
+														 new CurrentTeleoptiPrincipal(),
+														 _intraIntervalFinderService);
 		}
 
 		private void expectsForVerifyCalculateDay(ISkill skill1, ISkillStaffPeriodHolder skillStaffPeriodHolder,
@@ -96,6 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), null, skillStaffPeriodDictionary)).IgnoreArguments();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
 				Expect.Call(()=> _periodDistributionService.CalculateDay(null, skillStaffPeriodDictionary)).IgnoreArguments();
+				Expect.Call(() => _intraIntervalFinderService.Execute(_stateHolder, new DateOnly(), null)).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())

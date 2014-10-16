@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IPersonSkillProvider personSkillProvider,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
-			IEffectiveRestrictionCreator effectiveRestrictionCreator)
+			IEffectiveRestrictionCreator effectiveRestrictionCreator,
+			IIntraIntervalFinderService intraIntervalFinderService )
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -48,6 +51,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
 		/// <summary>
@@ -86,7 +90,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new NonBlendSkillCalculator();
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal);
+					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
 
 				IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 

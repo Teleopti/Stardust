@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 		private ISettingDataRepository _settingDataRepository;
 		private ICanModifyMeeting _canModifyMeeting;
 	    private IToggleManager _toggleManager;
+		private IIntraIntervalFinderService _intraIntervalFinderService;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
 			_canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
             _toggleManager = _mocks.StrictMock<IToggleManager>();
-            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _toggleManager);
+			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
+            _target = new EditMeetingCommand(_view, _settingDataRepository, _unitOfWorkFactory, _canModifyMeeting, _toggleManager, _intraIntervalFinderService);
 
 		}
 
@@ -77,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
 				Expect.Call(meeting.EntityClone()).Return(meeting);
 				Expect.Call(meeting.MeetingRecurrenceOption).Return(null);
 				Expect.Call(meeting.Snapshot);
-				Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager)).IgnoreArguments();
+				Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{

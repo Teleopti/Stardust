@@ -6,8 +6,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -384,6 +382,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var hash1 = shiftProjectionCache1.GetHashCode();
 			var hash2 = shiftProjectionCache2.GetHashCode();
+
+			Assert.AreNotEqual(hash1, hash2);
+		}
+
+		[Test]
+		public void ShouldClearCashedHashWhenSettingDate()
+		{
+			var start1 = new TimeSpan(8, 0, 0);
+			var end1 = new TimeSpan(10, 0, 0);
+			var period1 = new DateTimePeriod(WorkShift.BaseDate.Add(start1), WorkShift.BaseDate.Add(end1));
+
+			var activity1 = new Activity("activity1");
+			activity1.SetId(Guid.NewGuid());
+
+			var workShift1 = new WorkShift(category);
+			workShift1.LayerCollection.Add(new WorkShiftActivityLayer(activity1, period1));
+
+			var shiftProjectionCache1 = new ShiftProjectionCache(workShift1, _personalShiftMeetingTimeChecker);
+			shiftProjectionCache1.SetDate(schedulingDate, timeZoneInfo);
+			var hash1 = shiftProjectionCache1.GetHashCode();
+
+			shiftProjectionCache1.SetDate(schedulingDate.AddDays(1), timeZoneInfo);
+			var hash2 = shiftProjectionCache1.GetHashCode();
 
 			Assert.AreNotEqual(hash1, hash2);
 		}

@@ -49,6 +49,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public bool HasIntraIntervalIssue { get; set; }
 
+	    private double xValue;
+
+	    public double IntraIntervalIssueValue
+	    {
+		    get
+		    {
+			    return xValue;
+		    }
+		    set
+		    {
+
+			    xValue = value;
+		    }
+	    }
+
         public double ScheduledAgentsIncoming
         {
             get

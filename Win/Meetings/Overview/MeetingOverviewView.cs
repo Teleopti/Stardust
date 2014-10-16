@@ -11,6 +11,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -416,11 +417,11 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public void EditMeeting(IMeetingViewModel meetingViewModel, IToggleManager toggleManager)
+		public void EditMeeting(IMeetingViewModel meetingViewModel, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															  _eventAggregator, toggleManager);
+															  _eventAggregator, toggleManager, intraIntervalFinderService);
 			meetingComposerView.ShowDialog(this);
 		}
 
