@@ -12,4 +12,12 @@
 			throw new System.NotImplementedException();
 		}
 	}
+
+	public class IntraIntervalOptimizationServiceToggle29846Off : IIntraIntervalOptimizationService
+	{
+		public void Execute()
+		{
+			
+		}
+	}
 }

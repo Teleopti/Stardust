@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 				if (list.IsEmpty())
 				{
 					skillStaffPeriod.HasIntraIntervalIssue = false;
-					skillStaffPeriod.IntraIntervalIssueValue = 1.0;
+					skillStaffPeriod.IntraIntervalValue = 1.0;
 					continue;
 				}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 				}
 
 				skillStaffPeriod.HasIntraIntervalIssue = min / max < 0.5;
-				skillStaffPeriod.IntraIntervalIssueValue = min / max;
+				skillStaffPeriod.IntraIntervalValue = min / max;
 			}
 		}
 	}
