@@ -41,15 +41,27 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		});
 	};
 	self.UpdatedMessage = ko.observable();
+	self.PrefixAgentNameToMessage = function () {
+
+		var existingMsg = self.Message();
+		var newMsg = self.UpdatedMessage();
+		var lineCount = existingMsg.split('\n').length;
+		var personFromName = self.personFrom();
+		var personToName = self.personTo();
+
+		// should we prefix the first msg with the from agent name? 
+		if ( existingMsg != '' && existingMsg[0] != '[' && lineCount === 1) {
+			self.Message('[' + personFromName + '] ' + existingMsg);
+		}
+
+		if (newMsg != undefined && newMsg != '') {
+			self.Message(self.Message() + '\n[' + personToName + '] ' + newMsg);
+		}
+	}
+
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
-		if (self.UpdatedMessage() != undefined) {
-			if (self.Message().search(self.personFrom()) != 0) {
-				self.Message(self.personFrom() + ": " + self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
-			} else {
-				self.Message(self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
-			}
-		}
+		self.PrefixAgentNameToMessage();
 
 		self.ajax.Ajax({
 			url: "Requests/ApproveShiftTrade/",
@@ -70,14 +82,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 	self.Deny = function () {
 		self.CanApproveAndDeny(false);
-
-		if (self.UpdatedMessage() != undefined) {
-			if (self.Message().search(self.personFrom()) != 0) {
-				self.Message(self.personFrom() + ": " + self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
-			} else {
-				self.Message(self.Message() + "\n" + self.personTo() + ": " + self.UpdatedMessage());
-			}
-		}
+		self.PrefixAgentNameToMessage();
 
 		self.ajax.Ajax({
 			url: "Requests/DenyShiftTrade/",

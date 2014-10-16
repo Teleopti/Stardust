@@ -230,26 +230,35 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         return 'label-warning';
     };
 
-	_setAgentName = function(message, name) {
-		if (message.indexOf(":") > 0) {
-			return message.replace(message.substr(0, message.indexOf(":")), name);
-		}
-		return message;
-	};
+	//_setAgentName = function(message, name) {
+	//	if (message.indexOf(":") > 0) {
+	//		return message.replace(message.substr(0, message.indexOf(":")), name);
+	//	}
+	//	return message;
+	//};
+
+    _setAgentName = function (message, name) {
+		// replace agent name (as a work-around is inside [] so they can be found inside the message SLOB)
+	    var idx = message.indexOf("]");
+    	if ( idx > 0) {
+    		return message.replace(message.substr(1, idx-1), name);
+    	}
+    	return message;
+    };
 
     ko.utils.extend(RequestItemViewModel.prototype, {
     	Initialize: function (data, isProcessing) {
-    		
+
     		var textSegs = data.Text.split("\n");
     		var textNoBr = "";
     		var messageInList = [];
-		    $.each(textSegs, function (index, text) {
-			    if (index == 0) {
-			    	textNoBr = textNoBr + _setAgentName(text, data.From) + " ";
-			    	messageInList.push(_setAgentName(text, data.From) + "\n");
-			    } else {
-			    	textNoBr = textNoBr + _setAgentName(text, data.To) + " ";
-			    	messageInList.push(_setAgentName(text, data.To) + "\n");
+
+    		//remove line breaks for summary display...
+    		$.each(textSegs, function (index, text) {
+			    if (text != undefined && text != '') {
+				    var updatedText = index === 0 ? _setAgentName(text, data.From) : _setAgentName(text, data.To);
+				    textNoBr = textNoBr + updatedText + " ";
+				    messageInList.push(updatedText + "\n");
 			    }
 		    });
 
