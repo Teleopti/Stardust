@@ -43,8 +43,8 @@ CREATE TABLE [mart].[fact_queue](
 	[insert_date] [smalldatetime] NOT NULL CONSTRAINT [DF_fact_queue_statistics_insert_date]  DEFAULT (getdate())
 CONSTRAINT [PK_fact_queue] PRIMARY KEY CLUSTERED 
 (
-	[date_id] ASC,
 	[queue_id] ASC,
+	[date_id] ASC,
 	[interval_id] ASC
 )
 )
