@@ -204,6 +204,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertFirstContains(cell, Resources.NoAvailableShifts);
 		}
 
+		[Then(@"I should see my shift for '(.*)'")]
+		public void ThenIShouldSeeMyShiftFor(string date)
+		{
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertAnyContains(cell, "09:00 - 17:00");
+		}
+
 		[Then(@"I should see the preference feedback")]
 		public void ThenIShouldSeeThePreferenceFeedback()
 		{

@@ -95,6 +95,19 @@ Scenario: Feedback for a day with availability and preference
 	And I should see the end time boundry 16 to 18
 	And I should see the contract time boundry 6 to 9
 
+Scenario: Feedback for a day with a schedule, preference and availability
+	Given I am an agent
+	And I have a shift bag
+	And I have an assigned shift with
+	| Field      | Value      |
+	| Date | 2014-05-02 |
+	And I have existing shift category preference with
+	| Field      | Value      |
+	| Date | 2014-05-02 |
+	And I have a availabilty with earliest start time at 9
+	When I view preferences for date '2014-05-02'
+	Then I should see my shift for '2014-05-02'
+
 Scenario: Feedback from conflicting preferences and availability
 	Given I am an agent
 	And I have a shift bag
