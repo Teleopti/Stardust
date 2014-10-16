@@ -65,3 +65,25 @@ ALTER TABLE [mart].[fact_queue] CHECK CONSTRAINT [FK_fact_queue_dim_queue]
 GO
 
 
+
+----------------  
+--Name: Asad mirza
+--Date: 2014-010-16
+--Desc: Add new table for adherence percentage
+---------------- 
+
+CREATE TABLE [ReadModel].[AdherencePercentage](
+	[PersonId] [uniqueidentifier] NOT NULL,
+	[BelongsToDate] [smalldatetime] NOT NULL,
+	[LastTimestamp] [datetime] NULL,
+	[MinutesInAdherence] [int] NULL,
+	[MinutesOutOfAdherence] [int] NULL,
+	[IsLastTimeInAdherence] [bit] NULL,
+ CONSTRAINT [PK_AdherencePercentage] PRIMARY KEY CLUSTERED 
+(
+	[PersonId] ASC,
+	[BelongsToDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO

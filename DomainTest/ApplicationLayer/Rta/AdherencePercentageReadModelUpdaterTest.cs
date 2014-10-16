@@ -1,8 +1,8 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -164,11 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 	}
 
-	public interface IAdherencePercentageReadModelPersister
-	{
-		void Persist(AdherencePercentageReadModel model);
-		AdherencePercentageReadModel Get(DateOnly date, Guid personId);
-	}
+	
 
 	public class FakeAdherencePercentageReadModelRepository : IAdherencePercentageReadModelPersister
 	{
@@ -181,81 +177,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			if (PersistedModel == null)
 				return null;
-			if (PersistedModel.Date == date && PersistedModel.PersonId.Equals(personId))
+			if (PersistedModel.BelongsToDate == date && PersistedModel.PersonId.Equals(personId))
 				return PersistedModel;
 			return null;
 		}
 
 		public AdherencePercentageReadModel PersistedModel { get; private set; }
-	}
-
-	public class AdherencePercentageReadModel
-	{
-		public Guid PersonId { get; set; }
-		public DateOnly Date { get; set; }
-		public int MinutesInAdherence { get; set; }
-		public int MinutesOutOfAdherence { get; set; }
-		public DateTime LastTimestamp { get; set; }
-		public bool IsLastTimeInAdherence { get; set; }
-	}
-
-	public class AdherencePercentageReadModelUpdater :
-		IHandleEvent<PersonInAdherenceEvent>,
-		IHandleEvent<PersonOutOfAdherenceEvent>
-	{
-		private readonly IAdherencePercentageReadModelPersister _persister;
-
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister)
-		{
-			_persister = persister;
-		}
-
-		public void Handle(PersonInAdherenceEvent @event)
-		{
-			handleEvent(@event.PersonId, @event.Timestamp, true);
-		}
-
-		public void Handle(PersonOutOfAdherenceEvent @event)
-		{
-			handleEvent(@event.PersonId, @event.Timestamp, false);
-		}
-
-		private void handleEvent(Guid personId, DateTime timestamp, bool isInAdherence)
-		{
-			var model = getModel(personId, timestamp, isInAdherence);
-			incrementMinutes(model, timestamp);
-			model.IsLastTimeInAdherence = isInAdherence;
-			_persister.Persist(model);
-		}
-
-		private static void incrementMinutes(AdherencePercentageReadModel model, DateTime timestamp)
-		{
-			if (model.IsLastTimeInAdherence)
-				model.MinutesInAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
-			else
-				model.MinutesOutOfAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
-			model.LastTimestamp = timestamp;
-		}
-
-		private AdherencePercentageReadModel getModel(Guid personId, DateTime timestamp, bool currentlyInAdherence)
-		{
-			var model = _persister.Get(new DateOnly(timestamp), personId);
-			if (model == null)
-				model = makeModel(personId, timestamp, currentlyInAdherence);
-			return model;
-		}
-
-		private static AdherencePercentageReadModel makeModel(Guid personId, DateTime timestamp, bool currentlyInAdherence)
-		{
-			return new AdherencePercentageReadModel
-			{
-				Date = new DateOnly(timestamp),
-				PersonId = personId,
-				MinutesInAdherence = 0,
-				LastTimestamp = timestamp,
-				IsLastTimeInAdherence = currentlyInAdherence
-			};
-		}
-
 	}
 }

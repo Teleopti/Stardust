@@ -161,6 +161,7 @@
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
+    <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
     <Compile Include="Repositories\AgentBadgeRepository.cs" />
     <Compile Include="Repositories\AgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\AgentBadgeTransactionRepository.cs" />
