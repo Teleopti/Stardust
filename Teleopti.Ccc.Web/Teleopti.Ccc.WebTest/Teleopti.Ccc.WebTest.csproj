@@ -196,6 +196,8 @@
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaControllerTest.cs" />
+    <Compile Include="Areas\Rta\Core\ExternalUserStateForTest.cs" />
+    <Compile Include="Areas\Rta\Core\FakeConfigReader.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssemblerTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializorTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceTest.cs" />
@@ -215,7 +217,8 @@
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolverTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandlerTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\ScheduleLayerTest.cs" />
-    <Compile Include="Areas\Rta\Core\Server\TeleoptiRtaServiceTest.cs" />
+    <Compile Include="Areas\Rta\Core\TeleoptiRtaServiceForTest.cs" />
+    <Compile Include="Areas\Rta\Core\TeleoptiRtaServiceTest.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
