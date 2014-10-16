@@ -29,7 +29,7 @@ CREATE TABLE [mart].[fact_queue](
 	[answered_calls_within_SL] [decimal](19, 0) NULL,
 	[abandoned_calls] [decimal](19, 0) NULL,
 	[abandoned_calls_within_SL] [decimal](19, 0) NULL,
-	[abandoned_short_calls] [decimal](18, 0) NULL,
+	[abandoned_short_calls] [decimal](19, 0) NULL,
 	[overflow_out_calls] [decimal](19, 0) NULL,
 	[overflow_in_calls] [decimal](19, 0) NULL,
 	[talk_time_s] [decimal](19, 0) NULL,
@@ -43,8 +43,8 @@ CREATE TABLE [mart].[fact_queue](
 	[insert_date] [smalldatetime] NOT NULL CONSTRAINT [DF_fact_queue_statistics_insert_date]  DEFAULT (getdate())
 CONSTRAINT [PK_fact_queue] PRIMARY KEY CLUSTERED 
 (
-	[queue_id] ASC,
 	[date_id] ASC,
+	[queue_id] ASC,
 	[interval_id] ASC
 )
 )
