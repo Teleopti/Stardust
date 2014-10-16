@@ -71,6 +71,7 @@ ELSE  --Single datasource_id
 	declare @target_interval_id_utc smallint
 	declare @target_date_local smalldatetime
 	declare @target_interval_local smallint
+	declare @intervals_back smallint
 	
 	--init
 	SELECT @UtcNow=CAST(getutcdate() as smalldatetime)
@@ -84,10 +85,17 @@ ELSE  --Single datasource_id
 
 	SELECT
 		@target_date_local=target_date_local,
-		@target_interval_local=target_interval_local
+		@target_interval_local=target_interval_local,
+		@intervals_back=intervals_back
 	FROM [mart].[sys_datasource_detail] ds WITH (TABLOCKX) --Block any other process from even reading this data. Wait until ETL is done processing!
 	WHERE datasource_id = @datasource_id
 	AND detail_id = @detail_id
+
+	--if any "go back number of intervals"
+	SELECT
+		@target_date_local		= date_from,
+		@target_interval_local	= interval_id
+	FROM [mart].[SubtractInterval](@target_date_local,@target_interval_local,@intervals_back)
 
 	if (select @internal) = 0
 		select
