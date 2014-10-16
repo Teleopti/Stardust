@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter);
 	}
 
-	public class SkillStaffPeriodEvaluator
+	public class SkillStaffPeriodEvaluator : ISkillStaffPeriodEvaluator
 	{
 		public bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter)
 		{
