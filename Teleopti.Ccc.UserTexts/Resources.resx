@@ -12422,4 +12422,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Please enable at least one badge type.</value>
     <comment>Message in badge setting of admin client</comment>
   </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Rank</value>
+    <comment>Rank in the badge leader board in MyTimeWeb</comment>
+  </data>
 </root>
