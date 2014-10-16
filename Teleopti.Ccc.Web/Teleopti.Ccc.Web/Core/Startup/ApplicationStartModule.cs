@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Wcf;
+using Autofac.Integration.WebApi;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.IdentityModel.Protocols.WSFederation;
@@ -134,6 +135,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				if (!_testMode)
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+					System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver=new AutofacWebApiDependencyResolver(container);
 
 					GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container.BeginLifetimeScope()); 
 					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));

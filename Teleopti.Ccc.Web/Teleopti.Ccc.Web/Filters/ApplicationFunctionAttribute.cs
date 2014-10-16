@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Models.Shared;
@@ -56,16 +59,10 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (_applicationFunctionPaths != null && _applicationFunctionPaths.Length>0)
 			{
-				var havePermission = false;
-				foreach (var applicationFunctionPath in _applicationFunctionPaths)
-				{
-					if (PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath))
-					{
-						havePermission = true;
-						break;
-					}
-				}
-				
+				var havePermission =
+					_applicationFunctionPaths.Any(
+						applicationFunctionPath => PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath));
+
 				if (!havePermission)
 				{
 					var isAjaxRequest = filterContext.HttpContext.Request.IsAjaxRequest();

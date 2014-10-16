@@ -89,6 +89,9 @@
       <HintPath>..\..\packages\Autofac.Wcf.3.0.0\lib\net40\Autofac.Integration.Wcf.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Integration.WebApi">
+      <HintPath>..\..\packages\Autofac.WebApi.3.0.2\lib\net40\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
@@ -328,6 +331,8 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\HelloWorldController.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
@@ -672,6 +677,7 @@
     <Compile Include="Core\Startup\RegisterAreas.cs" />
     <Compile Include="Core\Startup\RtaStartupTask.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />
+    <Compile Include="Filters\ApplicationFunctionApiAttribute.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -728,6 +734,7 @@
     <Compile Include="Filters\IAuthenticationModule.cs" />
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
+    <Compile Include="Filters\UnitOfWorkApiActionAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />

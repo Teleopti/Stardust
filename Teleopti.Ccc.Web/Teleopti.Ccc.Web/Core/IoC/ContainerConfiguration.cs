@@ -1,14 +1,13 @@
 ﻿using System.Configuration;
 using System.Reflection;
-using System.Web;
+using System.Web.Http;
 using Autofac;
 using Autofac.Configuration;
 using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
+using Autofac.Integration.WebApi;
 using MbCache.Configuration;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,7 +19,6 @@ using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
@@ -32,7 +30,6 @@ using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -43,11 +40,12 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var builder = new ContainerBuilder();
 
 			builder.RegisterControllers(Assembly.GetExecutingAssembly());
+			builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 			builder.RegisterHubs(Assembly.GetExecutingAssembly()).EnableClassInterceptors();
 
 			builder.RegisterModule(new AutofacWebTypesModule());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
-
+			builder.RegisterWebApiFilterProvider(GlobalConfiguration.Configuration);
 			builder.RegisterFilterProvider();
 
 			builder.RegisterModule<BootstrapperModule>();
