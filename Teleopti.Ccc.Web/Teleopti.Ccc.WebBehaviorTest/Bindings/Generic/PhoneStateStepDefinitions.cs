@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.URL, "Rta/Service/SaveExternalUserState");
 
-			var data = JsonConvert.SerializeObject(new AgentStateInputModel
+			var data = JsonConvert.SerializeObject(new ExternalUserStateWebModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				UserCode = personName,

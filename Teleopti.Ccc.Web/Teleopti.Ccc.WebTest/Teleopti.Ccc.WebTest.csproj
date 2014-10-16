@@ -195,7 +195,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Rta\Controllers\RtaControllerTest.cs" />
     <Compile Include="Areas\Rta\Core\ExternalUserStateForTest.cs" />
     <Compile Include="Areas\Rta\Core\FakeConfigReader.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssemblerTest.cs" />

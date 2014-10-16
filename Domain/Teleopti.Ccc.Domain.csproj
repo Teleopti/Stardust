@@ -173,7 +173,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateChangedCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentStateInputModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IActualAgentStateHasBeenSent.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherencePercentageReadModelPersister.cs" />

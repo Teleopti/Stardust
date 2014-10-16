@@ -143,13 +143,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		public void ShouldThrowIfTooManyExternalUserStatesInBatch()
 		{
 			const int tooManyStates = 200;
-			var externalStates = new Collection<ExternalUserState>();
+			var externalStates = new Collection<ExternalUserStateForTest>();
 			for (var i = 0; i < tooManyStates; i++)
 				externalStates.Add(new ExternalUserStateForTest());
 			var state = new ExternalUserStateForTest();
 			var target = new TeleoptiRtaServiceForTest(state);
 
-			Assert.Throws(typeof(FaultException), () => target.SaveBatchExternalUserState(state.AuthenticationKey, state.PlatformTypeId, state.SourceId, externalStates));
+			Assert.Throws(typeof(FaultException), () => target.SaveBatchExternalUserState(externalStates));
 		}
 
 		[Test]

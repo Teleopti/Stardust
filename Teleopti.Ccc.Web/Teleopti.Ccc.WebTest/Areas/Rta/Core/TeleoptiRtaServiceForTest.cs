@@ -67,15 +67,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 				});
 		}
 
-		public int SaveExternalUserState(ExternalUserStateForTest state)
-		{
-			return SaveExternalUserState(state.AuthenticationKey, state.PlatformTypeId, state.SourceId, state);
-		}
-
-		public int SaveBatchExternalUserState(IEnumerable<ExternalUserStateForTest> states)
-		{
-			var state1 = states.First();
-			return SaveBatchExternalUserState(state1.AuthenticationKey, state1.PlatformTypeId, state1.SourceId, new Collection<ExternalUserState>(new List<ExternalUserState>(states)));
-		}
 	}
 }

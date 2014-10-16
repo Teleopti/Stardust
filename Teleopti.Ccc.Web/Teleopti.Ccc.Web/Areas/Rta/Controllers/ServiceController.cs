@@ -8,29 +8,31 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
     public class ServiceController : Controller
     {
-	    private readonly ITeleoptiRtaService _teleoptiRtaService;
+		private readonly TeleoptiRtaService _teleoptiRtaService;
 
-	    public ServiceController(ITeleoptiRtaService teleoptiRtaService)
+	    public ServiceController(TeleoptiRtaService teleoptiRtaService)
 	    {
 		    _teleoptiRtaService = teleoptiRtaService;
 	    }
 
 		[HttpPost]
-		public JsonResult SaveExternalUserState(AgentStateInputModel state)
+		public JsonResult SaveExternalUserState(ExternalUserStateWebModel state)
 		{
-			var timestamp = DateTime.Parse(state.Timestamp);
-
-			var result = _teleoptiRtaService.SaveExternalUserState(state.AuthenticationKey,
-				state.UserCode,
-				state.StateCode,
-				state.StateDescription,
-				state.IsLoggedOn,
-				state.SecondsInState,
-				timestamp,
-				state.PlatformTypeId,
-				state.SourceId,
-				state.BatchId,
-				state.IsSnapshot);
+			var result = _teleoptiRtaService.SaveExternalUserState(
+				new ExternalUserStateInputModel
+				{
+					AuthenticationKey = state.AuthenticationKey,
+					PlatformTypeId = state.PlatformTypeId,
+					SourceId = state.SourceId,
+					UserCode = state.UserCode,
+					StateCode = state.StateCode,
+					StateDescription = state.StateDescription,
+					IsLoggedOn = state.IsLoggedOn,
+					SecondsInState = state.SecondsInState,
+					Timestamp = DateTime.Parse(state.Timestamp),
+					BatchId = DateTime.Parse(state.BatchId),
+					IsSnapshot = state.IsSnapshot,
+				});
 
 			// apparently 1 = state accepted, 0 = something was missing, anything else == error
 			if (result == 1 || result == 0)

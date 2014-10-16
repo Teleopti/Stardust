@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
@@ -31,6 +34,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			_authenticationKey = configReader.AppSettings["AuthenticationKey"];
 			if (string.IsNullOrEmpty(_authenticationKey))
 				_authenticationKey = DefaultAuthenticationKey;
+		}
+
+		public int SaveExternalUserState(ExternalUserStateInputModel state)
+		{
+			return SaveExternalUserState(state.AuthenticationKey, state.UserCode, state.StateCode, state.StateDescription,
+				state.IsLoggedOn, state.SecondsInState, state.Timestamp, state.PlatformTypeId, state.SourceId, state.BatchId, state.IsSnapshot);
+		}
+
+		public int SaveBatchExternalUserState(IEnumerable<ExternalUserStateInputModel> states)
+		{
+			var state1 = states.First();
+			return SaveBatchExternalUserState(state1.AuthenticationKey, state1.PlatformTypeId, state1.SourceId, new Collection<ExternalUserState>(new List<ExternalUserState>(states)));
 		}
 
 		public int SaveExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ExternalUserState state)

@@ -431,6 +431,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\RtaTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\RtaTool\RtaToolAreaRegistration.cs" />
+    <Compile Include="Areas\Rta\Controllers\ExternalUserStateWebModel.cs" />
     <Compile Include="Areas\Rta\Controllers\ServiceController.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
@@ -475,6 +476,7 @@
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaStateGroupLight.cs" />
     <Compile Include="Areas\Rta\Core\Server\ScheduleLayer.cs" />
+    <Compile Include="Areas\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
