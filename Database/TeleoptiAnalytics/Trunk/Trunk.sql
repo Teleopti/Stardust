@@ -47,7 +47,7 @@ CONSTRAINT [PK_fact_queue] PRIMARY KEY CLUSTERED
 	[date_id] ASC,
 	[interval_id] ASC
 )
-) ON [MART]
+)
 GO
 
 ALTER TABLE [mart].[fact_queue]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_queue_dim_date_UTC] FOREIGN KEY([date_id])
