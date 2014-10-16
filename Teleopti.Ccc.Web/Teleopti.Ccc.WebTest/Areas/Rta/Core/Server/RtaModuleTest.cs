@@ -4,6 +4,8 @@ using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -55,18 +57,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		{
 			using (var container = BuildContainer())
 			{
-				container.Resolve<AdherencePercentageReadModelUpdater>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveAdherencePercentageReadModelPersister()
-		{
-			using (var container = BuildContainer())
-			{
-				container.Resolve<IEnumerable<IAdherencePercentageReadModelPersister>>()
-					.Single().GetType().Should().Be<AdherencePercentageReadModelPersister>();
+				container.Resolve<IEnumerable<IHandleEvent<PersonOutOfAdherenceEvent>>>()
+					.Select(x => x.GetType())
+					.Should().Contain(typeof (AdherencePercentageReadModelUpdater));
 			}
 		}
 
@@ -114,6 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new EventHandlersModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
