@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public interface IPersonOrganizationProvider
 	{
-		IDictionary<Guid, PersonOrganizationData> LoadAll();
+		IDictionary<Guid, PersonOrganizationData> PersonOrganizationData();
 	}
 }

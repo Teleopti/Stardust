@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	        _now = now;
 		}
 
-		public IList<ScheduleLayer> GetReadModel(Guid personId)
+		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
         {
 	        var utcDate = _now.UtcDateTime().Date;
 	        var query = string.Format(CultureInfo.InvariantCulture,
@@ -64,13 +64,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			return layers.OrderBy(l => l.EndDateTime).ToList();
 		}
 
-		public IActualAgentState LoadOldState(Guid personToLoad)
+		public IActualAgentState GetCurrentActualAgentState(Guid personId)
 		{
-			LoggingSvc.DebugFormat("Getting old state for person: {0}", personToLoad);
+			LoggingSvc.DebugFormat("Getting old state for person: {0}", personId);
 
 			var query =
 			string.Format(
-				"SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
+				"SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(
@@ -105,16 +105,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
 								StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
 							};
-						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personToLoad, agentState);
+						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personId, agentState);
 						return agentState;
 					}
 				}
 			}
-			LoggingSvc.DebugFormat("Found no state for person: {0}", personToLoad);
+			LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
 			return null;
 		}
 
-		public IList<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
 			var missingUsers = new List<IActualAgentState>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 																				 .ToDictionary(k => k.Key, v => v.ToList()));
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> LoadAllExternalLogOns()
+		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> ExternalLogOns()
 		{
 			var dictionary = new ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			return dictionary;
 		}
 
-		public ConcurrentDictionary<string, int> LoadDatasources()
+		public ConcurrentDictionary<string, int> Datasources()
 		{
 			var dictionary = new ConcurrentDictionary<string, int>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))

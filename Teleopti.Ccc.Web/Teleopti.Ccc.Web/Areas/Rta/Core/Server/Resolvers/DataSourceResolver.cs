@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 
 		public bool TryResolveId(string sourceId, out int dataSourceId)
 		{
-			var dictionary = _databaseReader.LoadDatasources();
+			var dictionary = _databaseReader.Datasources();
 			return dictionary.TryGetValue(sourceId, out dataSourceId);
 		}
 	}

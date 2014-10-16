@@ -2,7 +2,7 @@
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-namespace Teleopti.Ccc.TestCommon.FakeData
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Adherence
 {
 	public class MessageSenderExposingNotifications : IMessageSender
 	{

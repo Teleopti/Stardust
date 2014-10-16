@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				LoggingSvc.Info("Did not find any missing agent states, all were included in batch");
 				return new Collection<IActualAgentState>();
 			}
-			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count);
+			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count());
 
 			var updatedAgents = new List<IActualAgentState>();
 			var notLoggedOutAgents = missingAgentStates
@@ -106,14 +106,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var originalSourceId = string.Empty;
 
 			LoggingSvc.DebugFormat("Getting readmodel for person: {0}", personId);
-			var readModelLayers = DatabaseReader.GetReadModel(personId);
+			var readModelLayers = DatabaseReader.GetCurrentSchedule(personId);
 			if (readModelLayers.Any())
 				LoggingSvc.DebugFormat("Found {0} layers", readModelLayers.Count);
 			else
 				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
 
 			var scheduleLayers = _currentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
-			var previousState = DatabaseReader.LoadOldState(personId);
+			var previousState = DatabaseReader.GetCurrentActualAgentState(personId);
 
 			if (previousState == null)
 				return buildAgentState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
@@ -156,14 +156,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 											   TimeSpan timeInState, DateTime? batchId, string originalSourceId)
 		{
 			LoggingSvc.DebugFormat("Getting readmodel for person: {0}", personId);
-			var readModelLayers = DatabaseReader.GetReadModel(personId);
+			var readModelLayers = DatabaseReader.GetCurrentSchedule(personId);
 			if (readModelLayers.Any())
 				LoggingSvc.DebugFormat("Found {0} layers", readModelLayers.Count);
 			else
 				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
 
 			var scheduleLayers = _currentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
-			var previousState = DatabaseReader.LoadOldState(personId);
+			var previousState = DatabaseReader.GetCurrentActualAgentState(personId);
 			return buildAgentState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState,
 								   businessUnitId, batchId, originalSourceId);
 		}
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public void InvalidateReadModelCache(Guid personId)
 		{
 			LoggingSvc.DebugFormat("Clearing ReadModel cache for Person: {0}", personId);
-			_mbCacheFactory.Invalidate(DatabaseReader, x => x.GetReadModel(personId), true);
+			_mbCacheFactory.Invalidate(DatabaseReader, x => x.GetCurrentSchedule(personId), true);
 		}
 	}
 }

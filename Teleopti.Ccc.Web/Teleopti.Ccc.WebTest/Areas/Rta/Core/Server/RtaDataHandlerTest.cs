@@ -11,8 +11,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-//using Teleopti.Messaging.Exceptions;
-
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
 	[TestFixture]

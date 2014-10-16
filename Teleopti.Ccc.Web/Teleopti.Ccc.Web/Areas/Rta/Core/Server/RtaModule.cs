@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				.For<DatabaseReader>()
 				.CacheMethod(x => x.ActivityAlarms())
 				.CacheMethod(x => x.StateGroups())
-				.CacheMethod(x => x.GetReadModel(Guid.NewGuid()))
-				.CacheMethod(x => x.LoadDatasources())
-				.CacheMethod(x => x.LoadAllExternalLogOns())
+				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
+				.CacheMethod(x => x.Datasources())
+				.CacheMethod(x => x.ExternalLogOns())
 				.As<IDatabaseReader>();
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 
-			builder.Register<ILoadActualAgentState>(c => c.Resolve<DatabaseReader>());
+			builder.Register<IGetCurrentActualAgentState>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
-				.CacheMethod(svc => svc.LoadAll())
+				.CacheMethod(svc => svc.PersonOrganizationData())
 				.As<IPersonOrganizationProvider>();
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 				

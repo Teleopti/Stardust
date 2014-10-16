@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Adherence
 			var organizationForPerson = new OrganizationForPerson(new PersonOrganizationProvider(personOrganizationReader));
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			personOrganizationReader.Stub(x => x.LoadAll()).Return(Enumerable.Empty<PersonOrganizationData>());
+			personOrganizationReader.Stub(x => x.PersonOrganizationData()).Return(Enumerable.Empty<PersonOrganizationData>());
 
 			target.Invoke(agentState);
 

@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 	{
 		private readonly IActualAgentStateHasBeenSent _aggregator;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
-		private readonly ILoadActualAgentState _databaseReader;
+		private readonly IGetCurrentActualAgentState _databaseReader;
 
-		public AdherenceAggregatorInitializor(IActualAgentStateHasBeenSent aggregator, IPersonOrganizationProvider personOrganizationProvider, ILoadActualAgentState databaseReader)
+		public AdherenceAggregatorInitializor(IActualAgentStateHasBeenSent aggregator, IPersonOrganizationProvider personOrganizationProvider, IGetCurrentActualAgentState databaseReader)
 		{
 			_aggregator = aggregator;
 			_personOrganizationProvider = personOrganizationProvider;
@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 
 		public void Initialize()
 		{
-			var states = from personOrganizationData in _personOrganizationProvider.LoadAll().Values
-				let state = _databaseReader.LoadOldState(personOrganizationData.PersonId)
+			var states = from personOrganizationData in _personOrganizationProvider.PersonOrganizationData().Values
+				let state = _databaseReader.GetCurrentActualAgentState(personOrganizationData.PersonId)
 				where state != null
 				select state;
 			foreach (var actualAgentState in states)

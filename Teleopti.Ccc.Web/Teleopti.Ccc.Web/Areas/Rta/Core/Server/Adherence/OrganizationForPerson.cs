@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		public PersonOrganizationData GetOrganization(Guid personId)
 		{
 			PersonOrganizationData ret;
-			return _personOrganizationProvider.LoadAll().TryGetValue(personId, out ret) ? 
+			return _personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out ret) ? 
 				ret : 
 				null;
 		}

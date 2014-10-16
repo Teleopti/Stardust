@@ -85,9 +85,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 					new ScheduleLayer {PayloadId = _guid, StartDateTime = _dateTime, Name = "Hepp"}
 				);
 
-			_dataReader.Expect(d => d.GetReadModel(_guid)).Return(new List<ScheduleLayer>{readModelLayers.Item1,readModelLayers.Item2});
+			_dataReader.Expect(d => d.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>{readModelLayers.Item1,readModelLayers.Item2});
 			_currentAndNextLayerExtractor.Expect(d => d.CurrentLayerAndNext(_dateTime, null)).IgnoreArguments().Return(readModelLayers);
-			_dataReader.Expect(d => d.LoadOldState(_guid)).Return(oldState);
+			_dataReader.Expect(d => d.GetCurrentActualAgentState(_guid)).Return(oldState);
 			_alarmMapper.Expect(a => a.GetStateGroup("", _guid, _guid))
 			            .Return(new RtaStateGroupLight {StateGroupName = "Stategroup", StateGroupId = stateGroupId});
 			_alarmMapper.Expect(a => a.GetAlarm(_guid, stateGroupId, _guid)).Return(null);
@@ -120,10 +120,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 										StateGroupId = _stateGroupId
 									};
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 		    _currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 		                                 .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 
@@ -157,10 +157,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				};
 					
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>{currentLayer, nextLayer});
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>{currentLayer, nextLayer});
 		    _currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 		                                 .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup(_stateCode, _platformTypeId, _businessUnitId)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 
@@ -217,10 +217,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 									};
 			var resetEvent = new AutoResetEvent(false);
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 		    _currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 		                                 .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(_rtaAlarmLight);
 
@@ -255,10 +255,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 									};
 			var resetEvent = new AutoResetEvent(false);
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 		    _currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 		                                 .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 
@@ -296,10 +296,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				};
 			var resetEvent = new AutoResetEvent(false);
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 			            .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stategroup);
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stategroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 			
@@ -316,10 +316,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		{
 			var resetEvent = new AutoResetEvent(false);
 			
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 			_currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 			            .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(null);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(null);
 			_alarmMapper.Expect(a => a.GetStateGroup("", Guid.Empty, _businessUnitId)).Return(null);
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, Guid.Empty, _businessUnitId)).Return(null);
 			
@@ -350,10 +350,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				};
 			var resetEvent = new AutoResetEvent(false);
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 			_currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 						.Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, null)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(agentState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(agentState);
 
 			var result = _target.GetAgentStateForScheduleUpdate(_guid, _businessUnitId, _dateTime);
 			Assert.IsNull(result);
@@ -383,10 +383,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				};
 			var resetEvent = new AutoResetEvent(false);
 
-			_dataReader.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(s => s.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 			_currentAndNextLayerExtractor.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 			            .Return(new Tuple<ScheduleLayer, ScheduleLayer>(currentLayer, nextLayer)).IgnoreArguments();
-			_dataReader.Expect(s => s.LoadOldState(_guid)).Return(agentState);
+			_dataReader.Expect(s => s.GetCurrentActualAgentState(_guid)).Return(agentState);
 			_alarmMapper.Expect(a => a.GetStateGroup("", Guid.Empty, _businessUnitId));
 			_alarmMapper.Expect(a => a.GetAlarm(_payloadId, Guid.Empty, _businessUnitId)).Return(null);
 
@@ -544,9 +544,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var activityAlarm = new RtaAlarmLight {ActivityId = Guid.Empty, StateGroupId = _stateGroupId, StateGroupName = "Logged out"};
 			var scheduleLayer = new ScheduleLayer { PayloadId = Guid.NewGuid() };
 
-			_dataReader.Expect(d => d.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataReader.Expect(d => d.GetCurrentSchedule(_guid)).Return(new List<ScheduleLayer>());
 			_currentAndNextLayerExtractor.Expect(d => d.CurrentLayerAndNext(_dateTime, null)).IgnoreArguments().Return(new Tuple<ScheduleLayer, ScheduleLayer>(scheduleLayer, scheduleLayer));
-			_dataReader.Expect(d => d.LoadOldState(_guid)).Return(initializeAgentStateWithDefaults());
+			_dataReader.Expect(d => d.GetCurrentActualAgentState(_guid)).Return(initializeAgentStateWithDefaults());
 			_alarmMapper.Expect(a => a.GetStateGroup("stateCode", _guid, _guid)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(scheduleLayer.PayloadId, _stateGroupId, _guid)).Return(activityAlarm);
 

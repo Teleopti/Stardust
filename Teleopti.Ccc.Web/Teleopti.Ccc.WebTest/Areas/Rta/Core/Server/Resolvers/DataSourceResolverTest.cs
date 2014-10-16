@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Resolvers
 		    var target = new DataSourceResolver(databaseReader);
 
 		    var dictionary = new Dictionary<string, int> {{"1234", 4}};
-		    databaseReader.Stub(d => d.LoadDatasources()).Return(new ConcurrentDictionary<string, int>(dictionary));
+		    databaseReader.Stub(d => d.Datasources()).Return(new ConcurrentDictionary<string, int>(dictionary));
 			
 			
 			var result = target.TryResolveId("1234", out datasource);

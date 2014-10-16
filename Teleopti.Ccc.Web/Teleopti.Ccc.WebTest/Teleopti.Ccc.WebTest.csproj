@@ -186,12 +186,14 @@
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssemblerTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializorTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\MessageSenderExposingNotifications.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\NotificationExtension.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\OrganizationForPersonTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\SendMessageTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\ThreadingIssuesTest.cs" />
+    <Compile Include="Areas\Rta\Core\PersonInAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\AlarmMapperTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaModuleTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractorTest.cs" />

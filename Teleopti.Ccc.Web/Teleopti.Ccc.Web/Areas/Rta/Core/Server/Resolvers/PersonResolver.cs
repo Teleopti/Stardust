@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 				lookupKey = string.Empty;
 			}
 			
-			var dictionary = _databaseReader.LoadAllExternalLogOns();
+			var dictionary = _databaseReader.ExternalLogOns();
 			return dictionary.TryGetValue(lookupKey, out personId);
 		}
 	}

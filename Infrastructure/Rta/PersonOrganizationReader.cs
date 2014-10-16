@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_applicationConnectionString = applicationConnectionString;
 		}
 
-		public IEnumerable<PersonOrganizationData> LoadAll()
+		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
 			var ret = new List<PersonOrganizationData>();
 			//inject ICurrentUnitOfWork and handle transaction from outside later

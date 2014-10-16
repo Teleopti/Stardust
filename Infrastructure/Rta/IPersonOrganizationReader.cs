@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public interface IPersonOrganizationReader
 	{
-		IEnumerable<PersonOrganizationData> LoadAll();
+		IEnumerable<PersonOrganizationData> PersonOrganizationData();
 	}
 }

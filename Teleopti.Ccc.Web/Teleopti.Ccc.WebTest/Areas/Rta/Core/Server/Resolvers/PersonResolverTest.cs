@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server.Resolvers
 					{"4|1234", new[] {personWithBusinessUnits}}
 				};
 
-			databaseReader.Stub(d => d.LoadAllExternalLogOns())
+			databaseReader.Stub(d => d.ExternalLogOns())
 			              .Return(new ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>(dictionary));
 
 			IEnumerable<PersonWithBusinessUnit> resolvedList;

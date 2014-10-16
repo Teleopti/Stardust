@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			_personOrganizationReader = personOrganizationReader;
 		}
 
-		public IDictionary<Guid, PersonOrganizationData> LoadAll()
+		public IDictionary<Guid, PersonOrganizationData> PersonOrganizationData()
 		{
-			return _personOrganizationReader.LoadAll().ToDictionary(data => data.PersonId);
+			return _personOrganizationReader.PersonOrganizationData().ToDictionary(data => data.PersonId);
 		}
 	}
 }
