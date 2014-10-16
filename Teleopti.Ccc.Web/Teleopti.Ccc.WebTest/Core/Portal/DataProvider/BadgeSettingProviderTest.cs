@@ -8,7 +8,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 {
 	[TestFixture]
-	class BadgeProviderTest
+	class BadgeSettingProviderTest
 	{
 		[Test]
 		public void ShouldGetAgentBadgeSettingsByDefaultValue()
