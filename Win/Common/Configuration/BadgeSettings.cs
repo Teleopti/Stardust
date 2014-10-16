@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -15,10 +15,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class BadgeThresholdSettings : BaseUserControl, ISettingPage
 	{
-		private IUnitOfWork _unitOfWork;
-		private IAgentBadgeSettingsRepository _repository;
 		private readonly IToggleManager _toggleManager;
-		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
 
 		public BadgeThresholdSettings(IToggleManager toggleManager)
 		{
@@ -61,20 +58,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			var settings = _repository.GetSettings();
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var settingRepository = new AgentBadgeSettingsRepository(uow);
+				var settings = settingRepository.GetSettings();
 
-			checkBoxEnableBadge.Checked = settings.BadgeEnabled;
-			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value * 100;
-			checkBoxAdherenceBadgeEnabled.Checked = settings.AdherenceBadgeEnabled;
-			timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
-			checkBoxAHTBadgeEnabled.Checked = settings.AHTBadgeEnabled;
-			numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
-			checkBoxAnsweredCallsBadgeEnabled.Checked = settings.AnsweredCallsBadgeEnabled;
-			numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
-			numericUpDownGoldenToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
+				checkBoxEnableBadge.Checked = settings.BadgeEnabled;
+				doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value*100;
+				checkBoxAdherenceBadgeEnabled.Checked = settings.AdherenceBadgeEnabled;
+				timeSpanTextBoxThresholdForAHT.SetInitialResolution(settings.AHTThreshold);
+				checkBoxAHTBadgeEnabled.Checked = settings.AHTBadgeEnabled;
+				numericUpDownThresholdForAnsweredCalls.Value = settings.AnsweredCallsThreshold;
+				checkBoxAnsweredCallsBadgeEnabled.Checked = settings.AnsweredCallsBadgeEnabled;
+				numericUpDownSilverToBronzeBadgeRate.Value = settings.SilverToBronzeBadgeRate;
+				numericUpDownGoldenToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
-			setControlsEnabled(settings.BadgeEnabled);
-			timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
+				setControlsEnabled(settings.BadgeEnabled);
+				timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
+			}
 		}
 
 		public void SaveChanges()
@@ -88,18 +89,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				return;
 			}
 
-			var settings = _repository.GetSettings();
-			settings.BadgeEnabled = checkBoxEnableBadge.Checked;
-			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
-			settings.AdherenceBadgeEnabled = checkBoxAdherenceBadgeEnabled.Checked;
-			settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
-			settings.AHTBadgeEnabled = checkBoxAHTBadgeEnabled.Checked;
-			settings.AnsweredCallsThreshold = (int)numericUpDownThresholdForAnsweredCalls.Value;
-			settings.AnsweredCallsBadgeEnabled = checkBoxAnsweredCallsBadgeEnabled.Checked;
-			settings.GoldToSilverBadgeRate = (int)numericUpDownGoldenToSilverBadgeRate.Value;
-			settings.SilverToBronzeBadgeRate = (int)numericUpDownSilverToBronzeBadgeRate.Value;
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var settingRepository = new AgentBadgeSettingsRepository(uow);
+				var settings = settingRepository.GetSettings();
+				settings.BadgeEnabled = checkBoxEnableBadge.Checked;
+				settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue/100);
+				settings.AdherenceBadgeEnabled = checkBoxAdherenceBadgeEnabled.Checked;
+				settings.AHTThreshold = timeSpanTextBoxThresholdForAHT.Value;
+				settings.AHTBadgeEnabled = checkBoxAHTBadgeEnabled.Checked;
+				settings.AnsweredCallsThreshold = (int) numericUpDownThresholdForAnsweredCalls.Value;
+				settings.AnsweredCallsBadgeEnabled = checkBoxAnsweredCallsBadgeEnabled.Checked;
+				settings.GoldToSilverBadgeRate = (int) numericUpDownGoldenToSilverBadgeRate.Value;
+				settings.SilverToBronzeBadgeRate = (int) numericUpDownSilverToBronzeBadgeRate.Value;
 
-			_repository.PersistSettingValue(settings);
+				settingRepository.PersistSettingValue(settings);
+			}
 		}
 
 		public void OnShow()
@@ -108,9 +113,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
-			_unitOfWork = value;
-			_repository = new AgentBadgeSettingsRepository(_unitOfWork);
-			_agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(_unitOfWork);
 		}
 
 		public void Persist()
@@ -167,15 +169,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void reset_Click(object sender, EventArgs e)
 		{
-			var result = ViewBase.ShowOkCancelMessage(Resources.ResetBadgesConfirm, Resources.ResetBadges);
-			if (result != DialogResult.OK) return;
-			try
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_agentBadgeTransactionRepository.ResetAgentBadges();
-			}
-			catch
-			{
-				ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
+				var result = ViewBase.ShowOkCancelMessage(Resources.ResetBadgesConfirm, Resources.ResetBadges);
+				if (result != DialogResult.OK) return;
+				try
+				{
+					var agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(uow);
+					agentBadgeTransactionRepository.ResetAgentBadges();
+				}
+				catch
+				{
+					ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
+				}
 			}
 		}
 	}
