@@ -2,6 +2,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -52,6 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
 			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
+			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
+			builder.RegisterType<AdherencePercentageReadModelUpdater>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
 				builder.RegisterType<AgentStateChangedCommandHandler>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 

@@ -6,12 +6,15 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
@@ -44,6 +47,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			{
 				container.Resolve<AdherenceAggregatorInitializor>()
 					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveAdherencePercentageReadModelUpdater()
+		{
+			using (var container = BuildContainer())
+			{
+				container.Resolve<AdherencePercentageReadModelUpdater>()
+					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveAdherencePercentageReadModelPersister()
+		{
+			using (var container = BuildContainer())
+			{
+				container.Resolve<IEnumerable<IAdherencePercentageReadModelPersister>>()
+					.Single().GetType().Should().Be<AdherencePercentageReadModelPersister>();
 			}
 		}
 
