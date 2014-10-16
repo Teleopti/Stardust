@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting
 			target.RegisterArea(areaRegistrationContext);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
-			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Forecasting/SomeController/SomeAction");
+			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/api/Forecasting/SomeController/SomeId");
 			var routeData = routes.GetRouteData(httpContext);
 
 			routeData.Values["controller"].Should().Be("SomeController");
-			routeData.Values["action"].Should().Be("SomeAction");
+			routeData.Values["id"].Should().Be("SomeId");
 		}
 	}
 }

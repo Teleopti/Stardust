@@ -1,12 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
-	public class HelloWorldController : Controller
+	public class HelloWorldController : ApiController
 	{
-		public ViewResult Index()
+		public string Get()
 		{
-			return View();
+			return "Hello world!";
 		}
 	}
 }
