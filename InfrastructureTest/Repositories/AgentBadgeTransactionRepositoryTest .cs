@@ -50,17 +50,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new Infrastructure.Repositories.AgentBadgeTransactionRepository(unitOfWork);
 	    }
 
-		 //[Test]
-		 //public void ShouldResetBadges()
-		 //{
-		 //	var agentBadgeTransaction = CreateAggregateWithCorrectBusinessUnit();
-		 //	PersistAndRemoveFromUnitOfWork(agentBadgeTransaction);
+	    [Test]
+	    public void ShouldResetBadges()
+	    {
+		    var target = (Infrastructure.Repositories.AgentBadgeTransactionRepository)TestRepository(UnitOfWork);
+			 target.ResetAgentBadges();
 
-		 //	var target = (Infrastructure.Repositories.AgentBadgeTransactionRepository)TestRepository(UnitOfWork);
-		 //	target.ResetAgentBadges();
-
-		 //	var result = target.Find(person);
-		 //	result.Should().Be.Empty();
-		 //}
+		    var result = target.Find(person);
+		    result.Should().Be.Empty();
+	    }
     }
 }
