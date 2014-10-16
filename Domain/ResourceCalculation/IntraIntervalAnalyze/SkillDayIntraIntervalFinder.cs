@@ -28,7 +28,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 			{
 				var list = _intraIntervalFinder.FindForInterval(skillStaffPeriod.Period, resourceCalculationDataContainer, skill);
 
-				if(list.IsEmpty()) continue;
+				if (list.IsEmpty())
+				{
+					skillStaffPeriod.HasIntraIntervalIssue = false;
+					skillStaffPeriod.IntraIntervalIssueValue = 1.0;
+					continue;
+				}
 
 				var result = _countCollector.Collect(list, skillStaffPeriod.Period);
 				var fullInterval = _fullIntervalFinder.FindForInterval(skillStaffPeriod.Period, resourceCalculationDataContainer, skill, list);
@@ -42,7 +47,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 					if ((i + fullInterval) > max) max = i + fullInterval;
 				}
 
-				skillStaffPeriod.HasIntraIntervalIssue = min / max < 0.5;		
+				skillStaffPeriod.HasIntraIntervalIssue = min / max < 0.5;
+				skillStaffPeriod.IntraIntervalIssueValue = min / max;
 			}
 		}
 	}

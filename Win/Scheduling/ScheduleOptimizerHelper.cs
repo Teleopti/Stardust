@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumbe
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -98,7 +99,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),
-				_container.Resolve<IEffectiveRestrictionCreator>());
+				_container.Resolve<IEffectiveRestrictionCreator>(),
+				_container.Resolve<IIntraIntervalFinderService>());
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create();
 			IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -142,7 +144,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                             _personSkillProvider, 
 											 new CurrentTeleoptiPrincipal(),
 											 scheduleMatrixLockableBitArrayConverterEx,
-											 _container.Resolve<IEffectiveRestrictionCreator>());
+											 _container.Resolve<IEffectiveRestrictionCreator>(),
+											 _container.Resolve<IIntraIntervalFinderService>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

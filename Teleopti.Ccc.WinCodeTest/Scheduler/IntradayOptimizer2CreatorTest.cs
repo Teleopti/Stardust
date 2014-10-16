@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.Security;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private IIntraIntervalFinderService _intraIntervalFinderService;
 
 		[SetUp]
 		public void Setup()
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
 			_scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
+			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 			                                        _workShiftContainerList,
@@ -74,7 +77,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 													_skillStaffPeriodToSkillIntervalDataMapper,
 												   _skillIntervalDataDivider,
 												   _skillIntervalDataAggregator,
-												   _effectiveRestrictionCreator);
+												   _effectiveRestrictionCreator,
+												   _intraIntervalFinderService);
 		}
 
 		[Test]

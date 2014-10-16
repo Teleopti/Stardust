@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider, IIntraIntervalFinderService intraIntervalFinderService)
-			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), new CurrentTeleoptiPrincipal())
+			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), new CurrentTeleoptiPrincipal(), intraIntervalFinderService)
 		{
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;
@@ -102,28 +102,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks, null);
 
-				IResourceCalculationDataContainerWithSingleOperation relevantProjections;
-				IDisposable context = null;
-				if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
-			    {
-			        relevantProjections = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
-			    }
-			    else
-			    {
-			        var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			        relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
-			                                                                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-			                                                                         date.AddDays(-1), date.AddDays(1)));
-			        context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
-			    }
-
-				_intraIntervalFinderService.Execute(_stateHolder.SchedulingResultState, date, relevantProjections);
-
-				if (context != null)
-				{
-					context.Dispose();
-				}
-				
 				if (backgroundWorker != null)
 				{
 					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty);

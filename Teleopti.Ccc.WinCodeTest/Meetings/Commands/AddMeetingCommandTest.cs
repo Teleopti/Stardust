@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         private ICanModifyMeeting _canModifyMeeting;
         private IPersonRepository _personRepository;
         private IToggleManager _toggleManager;
+	    private IIntraIntervalFinderService _intraIntervalFinderService;
 
         [SetUp]
         public void Setup()
@@ -44,8 +46,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             _model = _mocks.StrictMock<IMeetingOverviewViewModel>();
             _canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
             _toggleManager = _mocks.StrictMock<IToggleManager>();
+	        _intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
             _target = new AddMeetingCommand(_view, _settingDataRepository, _activityRepository, _personRepository,
-                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _toggleManager);
+                _currentUnitOfWorkFactory, _model, _canModifyMeeting, _toggleManager, _intraIntervalFinderService);
         
         }
 
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
                                                                   new CommonNameDescriptionSetting()).IgnoreArguments();
             Expect.Call(_view.SelectedPeriod()).Return(new DateTimePeriod(2011,3,25,2011,3,25)).Repeat.Twice();
             Expect.Call(_canModifyMeeting.CanExecute).Return(true);
-            Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager)).IgnoreArguments();
+            Expect.Call(() => _view.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService)).IgnoreArguments();
             _mocks.ReplayAll();
             _target.Execute();
             _mocks.VerifyAll();

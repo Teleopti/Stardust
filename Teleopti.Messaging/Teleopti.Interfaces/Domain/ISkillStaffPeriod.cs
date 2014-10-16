@@ -452,5 +452,6 @@ namespace Teleopti.Interfaces.Domain
 	    Percent EstimatedServiceLevelShrinkage { get; }
 
 		bool HasIntraIntervalIssue { get; set; }
+		double IntraIntervalIssueValue { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -24,13 +25,14 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IMeetingOverviewViewModel _model;
         private readonly ICanModifyMeeting _canModifyMeeting;
         private readonly IToggleManager _toggleManager;
-        private readonly ISettingDataRepository _settingDataRepository;
+	    private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+	    private readonly ISettingDataRepository _settingDataRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IPersonRepository _personRepository;
 
         public AddMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
             IActivityRepository activityRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
-            ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager)
+            ICanModifyMeeting canModifyMeeting, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
         {
             _meetingOverviewView = meetingOverviewView;
             _activityRepository = activityRepository;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             _model = model;
             _canModifyMeeting = canModifyMeeting;
             _toggleManager = toggleManager;
+	        _intraIntervalFinderService = intraIntervalFinderService;
         }
 
         public void Execute()
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                 }
 
                 if (meetingViewModel != null)
-                    _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager);
+                    _meetingOverviewView.EditMeeting(meetingViewModel, _toggleManager, _intraIntervalFinderService);
             }
         }
 
