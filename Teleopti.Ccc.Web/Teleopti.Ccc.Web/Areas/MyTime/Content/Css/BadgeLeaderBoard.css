@@ -1,0 +1,20 @@
+﻿.leader-board-header {
+	vertical-align: middle; 
+	text-align: center;
+	font-size: xx-large; 
+	color: #ffffff
+}
+
+.badge-leader-board-report .agent-badge {
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf; 
+	height: 39px
+}
+
+.agent-badge-header {
+	font-size: large;
+}
+
+.agent-badge-num {
+	text-align: center
+}

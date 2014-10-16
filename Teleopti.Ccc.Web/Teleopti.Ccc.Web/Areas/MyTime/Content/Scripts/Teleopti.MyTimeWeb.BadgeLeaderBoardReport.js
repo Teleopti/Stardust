@@ -8,13 +8,14 @@
 		loadDataMethod(date);
 	}
 
-	function BadgeViewModel(data) {
+	function BadgeViewModel(index, data) {
 		var self = this;
 
 		self.name = data.AgentName;
 		self.gold = data.Gold;
 		self.silver = data.Silver;
 		self.bronze = data.Bronze;
+		self.rank = ++index;
 	}
 
 	function loadData(date) {
@@ -25,7 +26,7 @@
 			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {
 				$.each(data.Agents, function (index, item) {
-					var badgeViewModel = new BadgeViewModel(item);
+					var badgeViewModel = new BadgeViewModel(index, item);
 					vm.agentBadges.push(badgeViewModel);
 				});
 			}

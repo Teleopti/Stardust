@@ -4,26 +4,32 @@
 }
 
 <div class="container BadgeLeaderBoardReport">
-	<div><strong>Badge Leader Board</strong></div>
-	<table style="width: 100%; border: red, 1px, solid !important">
-		<thead>
-			<tr>
-				<td>Name</td>
-				<td>Gold</td>
-				<td>Silver</td>
-				<td>Bronze</td>
-			</tr>
-		</thead>
+	<div class="navbar navbar-teleopti">
+		<div class="leader-board-header">@Resources.BadgeLeaderBoardReport</div>
+	</div>
+	<div class="relative well">
+		<table style="width: 100%;">
+			<thead>
+				<tr>
+					<td class="agent-badge-header">@Resources.Rank</td>
+					<td class="agent-badge-header">@Resources.AgentName</td>
+					<td class="agent-badge-num"><img src="~/Areas/MyTime/Content/Images/gold.png" /></td>
+					<td class="agent-badge-num"><img src="~/Areas/MyTime/Content/Images/silver.png" /></td>
+					<td class="agent-badge-num"><img src="~/Areas/MyTime/Content/Images/bronze.png" /></td>
+				</tr>
+			</thead>
 
-		<tbody>
-			<!-- ko foreach:agentBadges() -->
-			<tr class="shift-trade-my-schedule-row">
-				<td class="shift-trade-agent-name" data-bind="text:name"></td>
-				<td class="shift-trade-my-schedule" data-bind="text: gold"></td>
-				<td class="shift-trade-my-schedule" data-bind="text: silver"></td>
-				<td class="shift-trade-my-schedule" data-bind="text: bronze"></td>
-			</tr>
-			<!-- /ko -->
-		</tbody>
-	</table>
+			<tbody class="badge-leader-board-report">
+				<!-- ko foreach:agentBadges() -->
+				<tr class="agent-badge">
+					<td data-bind="text:rank"></td>
+					<td data-bind="text:name"></td>
+					<td class="agent-badge-num" data-bind="text: gold"></td>
+					<td class="agent-badge-num" data-bind="text: silver"></td>
+					<td class="agent-badge-num" data-bind="text: bronze"></td>
+				</tr>
+				<!-- /ko -->
+			</tbody>
+		</table>
+	</div>
 </div>

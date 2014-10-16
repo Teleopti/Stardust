@@ -994,6 +994,7 @@
     <Content Include="Areas\HealthCheck\Content\Scripts\Tests.html" />
     <Content Include="Areas\HealthCheck\Content\Scripts\tests.main.js" />
     <Content Include="Areas\HealthCheck\Views\Application\index.aspx" />
+    <Content Include="Areas\MyTime\Content\Css\BadgeLeaderBoard.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileWeekView.css" />
     <Content Include="Areas\MyTime\Content\Css\Rtl4Bootstrap.css" />
     <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
@@ -1009,6 +1010,9 @@
     <Content Include="Areas\MyTime\Content\Images\answeredCallsGoldBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\answeredCallsSilverBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\badge.png" />
+    <Content Include="Areas\MyTime\Content\Images\bronze.png" />
+    <Content Include="Areas\MyTime\Content\Images\gold.png" />
+    <Content Include="Areas\MyTime\Content\Images\silver.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeLeaderBoardReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.js" />
