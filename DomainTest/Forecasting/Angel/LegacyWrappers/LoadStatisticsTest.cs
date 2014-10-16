@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.LegacyWrappers
 			var statFactory = new StatisticHelperFactoryForTest(statHelper => statHelper.Stub(x => x.LoadStatisticData(period, wl)).Return(expected));
 
 			ILoadStatistics target = new LoadStatistics(statFactory);
+
 			target.LoadWorkloadDay(wl, period)
 				.Should().Be.SameInstanceAs(expected);
 		}
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.LegacyWrappers
 		{
 			var statFactory = new StatisticHelperFactoryForTest();
 			ILoadStatistics target = new LoadStatistics(statFactory);
-			
+
 			target.LoadWorkloadDay(null, new DateOnlyPeriod());
 			var orgHelper = statFactory.StatisticHelper;
 			target.LoadWorkloadDay(null, new DateOnlyPeriod());

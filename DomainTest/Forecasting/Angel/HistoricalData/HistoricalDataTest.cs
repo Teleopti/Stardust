@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.HistoricalData
 			var orgData = new List<IWorkloadDayBase> {workloadDay};
 			var loadStatistics = MockRepository.GenerateStub<ILoadStatistics>();
 			loadStatistics.Stub(x => x.LoadWorkloadDay(wl, period)).Return(orgData);
-
 			IHistoricalDataProvider target = new HistoricalDataProvider(loadStatistics);
+
 			var res = target.Calculate(wl, period).Single();
 
 			res.Workload.Should().Be.SameInstanceAs(wl);

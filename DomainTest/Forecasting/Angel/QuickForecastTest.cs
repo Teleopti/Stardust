@@ -31,12 +31,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var period = new DateOnlyPeriod();
 			var workload = new Workload(SkillFactory.CreateSkill("d")); // or should the api use skill?
-			
 			var historicalDataSvc = MockRepository.GenerateStub<IHistoricalDataProvider>();
-			
-
 			var target = new QuickForecaster(historicalDataSvc);
+
 			target.Execute(workload, period);
+
 			historicalDataSvc.AssertWasCalled(x => x.Calculate(workload, period));
 		}
 	}
