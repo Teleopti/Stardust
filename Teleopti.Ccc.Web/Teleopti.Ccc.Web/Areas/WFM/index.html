@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+	<script src="../../Content/jquery/jquery-1.10.2.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$.get('../../api/Forecasting/HelloWorld').done(function(result) {
+				document.getElementById('target').innerText = result;
+			});
+		})
+	</script>
+</head>
+<body>
+	<h1 id="target"></h1>
+</body>
+</html>
