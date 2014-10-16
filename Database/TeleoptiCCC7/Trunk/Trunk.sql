@@ -84,6 +84,6 @@ CREATE TABLE [ReadModel].[AdherencePercentage](
 	[PersonId] ASC,
 	[BelongsToDate] ASC
 )
-) ON [PRIMARY]
+)
 
 GO
