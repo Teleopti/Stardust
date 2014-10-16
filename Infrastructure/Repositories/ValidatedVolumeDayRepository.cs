@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// <param name="workload">The workload.</param>
         /// <param name="taskOwnerList">The task owner list (Containing all actual days).</param>
         /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
-        /// <param name="addToRepository">if set to <c>true</c> [add to repository].</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: robink
