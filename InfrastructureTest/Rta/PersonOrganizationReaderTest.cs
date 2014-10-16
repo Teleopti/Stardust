@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var personId = person.Id.Value;
 
 			var target = new PersonOrganizationReader(new Now(), Session.Connection.ConnectionString);
-			var resItem = target.LoadAll().Single(x => x.PersonId == personId);
+			var resItem = target.PersonOrganizationData().Single(x => x.PersonId == personId);
 			resItem.TeamId.Should().Be.EqualTo(teamId);
 			resItem.PersonId.Should().Be.EqualTo(personId);
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var personId = person.Id.Value;
 	
 			var target = new PersonOrganizationReader(new Now(), Session.Connection.ConnectionString);
-			var resItem = target.LoadAll().Single(x => x.PersonId == personId);
+			var resItem = target.PersonOrganizationData().Single(x => x.PersonId == personId);
 			resItem.SiteId.Should().Be.EqualTo(siteId);
 			resItem.PersonId.Should().Be.EqualTo(personId);
 
