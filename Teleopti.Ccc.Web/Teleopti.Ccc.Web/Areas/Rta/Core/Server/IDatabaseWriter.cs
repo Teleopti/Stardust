@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
     public interface IDatabaseWriter
     {
         RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId, Guid businessUnit);
-        void AddOrUpdate(IActualAgentState actualAgentState);
+        void PersistActualAgentState(IActualAgentState actualAgentState);
     }
 }

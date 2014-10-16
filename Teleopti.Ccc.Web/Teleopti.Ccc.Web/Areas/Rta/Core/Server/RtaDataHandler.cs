@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (agentState == null)
 				return;
 
-				_databaseWriter.AddOrUpdate(agentState);
+				_databaseWriter.PersistActualAgentState(agentState);
 			sendRtaState(agentState);
 		}
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				}
 					LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode,
 						agentState);
-					_databaseWriter.AddOrUpdate(agentState);
+					_databaseWriter.PersistActualAgentState(agentState);
 				if (agentState.SendOverMessageBroker)
 					sendRtaState(agentState);
 			}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents.Where(agent => agent != null))
 			{
-				_databaseWriter.AddOrUpdate(agent);
+				_databaseWriter.PersistActualAgentState(agent);
 				sendRtaState(agent);
 			}
 		}

@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
@@ -24,20 +25,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		[Test]
 		public void ShouldProcessValidState()
 		{
-			var state = new externalUserStateForTest();
-			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state);
+			var state = new ExternalUserStateForTest();
+			var target = new TeleoptiRtaServiceForTest(state);
 
-			var result = state.SaveExternalUserStateTo(target); 
-			
+			var result = state.SaveExternalUserStateTo(target);
+
 			result.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldThrowIfAuthenticationKeyIsIncorrect()
 		{
-
-			var state = new externalUserStateForTest(){AuthenticationKey = "something" };
-			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state);
+			var state = new ExternalUserStateForTest { AuthenticationKey = "something" };
+			var target = new TeleoptiRtaServiceForTest(state);
 
 			state.AuthenticationKey += " else";
 
@@ -50,12 +50,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
 			var now = MockRepository.GenerateStub<INow>();
 			now.Expect(n => n.UtcDateTime()).Return(christmas);
-			var state = new externalUserStateForTest() { Timestamp = christmas.AddHours(1) };
-			var target = new rtaServiceFactoryForTest() { Now = now}.CreateRtaServiceBasedOnAValidState(state);
+			var state = new ExternalUserStateForTest() { Timestamp = christmas.AddHours(1) };
+			var target = new TeleoptiRtaServiceForTest(state, now);
 
 			var result = state.SaveExternalUserStateTo(target);
-			
-			result.Should().Not.Be.EqualTo(1);	
+
+			result.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]
@@ -64,70 +64,71 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
 			var now = MockRepository.GenerateStub<INow>();
 			now.Expect(n => n.UtcDateTime()).Return(christmas);
-			var state = new externalUserStateForTest() { Timestamp = christmas.Subtract(TimeSpan.FromHours(1)) };
-			var target = new rtaServiceFactoryForTest() { Now = now }.CreateRtaServiceBasedOnAValidState(state);
+			var state = new ExternalUserStateForTest { Timestamp = christmas.Subtract(TimeSpan.FromHours(1)) };
+			var target = new TeleoptiRtaServiceForTest(state, now);
 
 			var result = state.SaveExternalUserStateTo(target);
-			
-			result.Should().Not.Be.EqualTo(1);	
+
+			result.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotProcessIfNoSourceId()
 		{
-			var state = new externalUserStateForTest();
-			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state);
-			
+			var state = new ExternalUserStateForTest();
+			var target = new TeleoptiRtaServiceForTest(state);
 			state.SourceId = string.Empty;
+
 			var result = state.SaveExternalUserStateTo(target);
-			
+
 			result.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldCallRTaDataHandlerWithSuppliedStateCode()
+		public void ShouldCallRtaDataHandlerWithSuppliedStateCode()
 		{
-			var state = new externalUserStateForTest();
-			var dataHandler = new fakeDataHandler();
-			var target = new rtaServiceFactoryForTest(){RtaDataHandler = dataHandler}.CreateRtaServiceBasedOnAValidState(state);
+			var state = new ExternalUserStateForTest();
+			var database = new FakeRtaDatabase();
+			database.AddTestData(state.SourceId, state.UserCode, Guid.NewGuid(), Guid.NewGuid());
+			var target = new TeleoptiRtaServiceForTest(database, state);
 
 			state.SaveExternalUserStateTo(target);
 
-			dataHandler.StateCodeParameter.Should().Be.EqualTo(state.StateCode);
+			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode);
 		}
 
 		[Test]
 		public void ShouldNotProcessStateIfNoPlatformId()
 		{
-			var state = new externalUserStateForTest();
-			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state);
-			
+			var state = new ExternalUserStateForTest();
+			var target = new TeleoptiRtaServiceForTest(state);
 			state.PlatformTypeId = string.Empty;
+
 			var result = state.SaveExternalUserStateTo(target);
-			
+
 			result.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldCutStateCodeIfToLong()
 		{
-			var state = new externalUserStateForTest();
+			var state = new ExternalUserStateForTest();
 			var dataHandler = new fakeDataHandler();
-			var target = new rtaServiceFactoryForTest(){RtaDataHandler = dataHandler}.CreateRtaServiceBasedOnAValidState(state);
-			
+			var target = new TeleoptiRtaServiceForTest() { RtaDataHandler = dataHandler }.CreateRtaServiceBasedOnAValidState(state);
+
 			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
 			state.SaveExternalUserStateTo(target);
 
-			Assert.That(dataHandler.StateCodeParameter.Length,Is.LessThanOrEqualTo(25));
+			Assert.That(dataHandler.StateCodeParameter.Length, Is.LessThanOrEqualTo(25));
 
 		}
 
 		[Test]
 		public void ShouldSetStateCodeToLoggedOutIfNotLoggedIn()
 		{
-			var state = new externalUserStateForTest();
+			var state = new ExternalUserStateForTest();
 			var dataHandler = new fakeDataHandler();
-			var target = new rtaServiceFactoryForTest() { RtaDataHandler = dataHandler }.CreateRtaServiceBasedOnAValidState(state);
+			var target = new TeleoptiRtaServiceForTest() { RtaDataHandler = dataHandler }.CreateRtaServiceBasedOnAValidState(state);
 
 			state.IsLoggedOn = false;
 			state.SaveExternalUserStateTo(target);
@@ -138,9 +139,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		[Test]
 		public void ShouldProcessExternalUserStatesInBatch()
 		{
-			var state1 = new externalUserStateForTest();
-			var state2 = new externalUserStateForTest();
-			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state1);
+			var state1 = new ExternalUserStateForTest();
+			var state2 = new ExternalUserStateForTest();
+			var target = new TeleoptiRtaServiceForTest(state1);
 
 			var result = target.SaveBatchExternalUserState(state1.AuthenticationKey, state1.PlatformTypeId, state1.SourceId, new[] { state1, state2 });
 
@@ -153,10 +154,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			const int tooManyStates = 200;
 			var externalStates = new Collection<ExternalUserState>();
 			for (var i = 0; i < tooManyStates; i++)
-				externalStates.Add(new externalUserStateForTest());
-
-			var state = new externalUserStateForTest();
-			var target = new rtaServiceFactoryForTest().CreateRtaServiceBasedOnAValidState(state);
+				externalStates.Add(new ExternalUserStateForTest());
+			var state = new ExternalUserStateForTest();
+			var target = new TeleoptiRtaServiceForTest(state);
 
 			Assert.Throws(typeof(FaultException), () => target.SaveBatchExternalUserState(state.AuthenticationKey, state.PlatformTypeId, state.SourceId, externalStates));
 		}
@@ -169,9 +169,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var businessUnitId = Guid.NewGuid();
 			var timeStamp = new DateTime();
 			dataHandler.Expect(d => d.ProcessScheduleUpdate(personId, businessUnitId, timeStamp)).Repeat.Once();
-			var target = new rtaServiceFactoryForTest() {RtaDataHandler = dataHandler}.CreateRtaService();
+			var target = new TeleoptiRtaServiceForTest() { RtaDataHandler = dataHandler }.CreateRtaService();
 
-			target.GetUpdatedScheduleChange(personId,businessUnitId,timeStamp);
+			target.GetUpdatedScheduleChange(personId, businessUnitId, timeStamp);
 
 			dataHandler.VerifyAllExpectations();
 		}
@@ -198,13 +198,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			public bool IsAlive { get; set; }
 		}
 
-		private class externalUserStateForTest : ExternalUserState
+		private class ExternalUserStateForTest : ExternalUserState
 		{
-			public string AuthenticationKey = "secret auth key";
+			public string AuthenticationKey = TeleoptiRtaService.DefaultAuthenticationKey;
 			public string PlatformTypeId = Guid.Empty.ToString();
 			public string SourceId = "sourceId";
 
-			public externalUserStateForTest()
+			public ExternalUserStateForTest()
 			{
 				UserCode = "8808";
 				StateCode = "AUX2";
@@ -218,13 +218,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 
 		}
 
-		private class rtaServiceFactoryForTest
+		private class TeleoptiRtaServiceForTest : TeleoptiRtaService
 		{
 			public INow Now { get; set; }
 			public IConfigReader ConfigReader { get; set; }
 			public IRtaDataHandler RtaDataHandler { get; set; }
 
-			public TeleoptiRtaService CreateRtaServiceBasedOnAValidState(externalUserStateForTest state)
+			public TeleoptiRtaServiceForTest()
+				: base(null, null, new FakeConfigReader())
+			{
+
+			}
+
+			public TeleoptiRtaServiceForTest(FakeRtaDatabase database, ExternalUserStateForTest state)
+				: base(MakeRtaDataHandler(database), new ThisIsNow(state.Timestamp), new FakeConfigReader())
+			{
+			}
+
+			public TeleoptiRtaServiceForTest(ExternalUserStateForTest state)
+				: base(MakeRtaDataHandlerForState(state), new ThisIsNow(state.Timestamp), new FakeConfigReader())
+			{
+			}
+
+			public TeleoptiRtaServiceForTest(ExternalUserStateForTest state, INow now)
+				: base(MakeRtaDataHandlerForState(state), now, new FakeConfigReader())
+			{
+			}
+
+			public TeleoptiRtaService CreateRtaServiceBasedOnAValidState(ExternalUserStateForTest state)
 			{
 				if (ConfigReader == null)
 				{
@@ -240,44 +261,63 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 				}
 				if (RtaDataHandler == null)
 				{
-					var database = new FakeDatabaseReader();
-					database.AddTestData(state.SourceId, state.UserCode, Guid.NewGuid(), Guid.NewGuid());
-					var cacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
-					var messageSender = MockRepository.GenerateMock<IMessageSender>();
-					var publisher = new FakeEventsPublisher();
-					RtaDataHandler = new RtaDataHandler(
-						new FakeSignalRClient(),
-						MockRepository.GenerateMock<IMessageSender>(),
-						new DataSourceResolver(database),
-						new PersonResolver(database),
-						new ActualAgentAssembler(
-							database,
-							new CurrentAndNextLayerExtractor(),
-							MockRepository.GenerateMock<IMbCacheFactory>(),
-							new AlarmMapper(database, database, cacheFactory)
-							),
-						database,
-						new IActualAgentStateHasBeenSent[]
-						{
-							new AdherenceAggregator(
-								messageSender,
-								new OrganizationForPerson(new PersonOrganizationProvider(database))
-								),
-							new AgentStateChangedCommandHandler(publisher)
-						});
+					RtaDataHandler = MakeRtaDataHandlerForState(state);
 				}
-
 
 				return new TeleoptiRtaService(RtaDataHandler, Now, ConfigReader);
 			}
 
+			private static IRtaDataHandler MakeRtaDataHandlerForState(ExternalUserStateForTest state)
+			{
+				var database = new FakeRtaDatabase();
+				database.AddTestData(state.SourceId, state.UserCode, Guid.NewGuid(), Guid.NewGuid());
+				return MakeRtaDataHandler(database);
+			}
+
+			private static IRtaDataHandler MakeRtaDataHandler(FakeRtaDatabase database)
+			{
+				var cacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
+				var messageSender = MockRepository.GenerateMock<IMessageSender>();
+				var publisher = new FakeEventsPublisher();
+				return new RtaDataHandler(
+					new FakeSignalRClient(),
+					MockRepository.GenerateMock<IMessageSender>(),
+					new DataSourceResolver(database),
+					new PersonResolver(database),
+					new ActualAgentAssembler(
+						database,
+						new CurrentAndNextLayerExtractor(),
+						MockRepository.GenerateMock<IMbCacheFactory>(),
+						new AlarmMapper(database, database, cacheFactory)
+						),
+					database,
+					new IActualAgentStateHasBeenSent[]
+					{
+						new AdherenceAggregator(
+							messageSender,
+							new OrganizationForPerson(new PersonOrganizationProvider(database))
+							),
+						new AgentStateChangedCommandHandler(publisher)
+					});
+			}
+
 			public TeleoptiRtaService CreateRtaService()
 			{
-				return CreateRtaServiceBasedOnAValidState(new externalUserStateForTest());
+				return CreateRtaServiceBasedOnAValidState(new ExternalUserStateForTest());
 			}
 
 		}
 		#endregion
 
+	}
+
+	public class FakeConfigReader : IConfigReader
+	{
+		public FakeConfigReader()
+		{
+			AppSettings = new NameValueCollection();
+		}
+
+		public NameValueCollection AppSettings { get; set; }
 	}
 }

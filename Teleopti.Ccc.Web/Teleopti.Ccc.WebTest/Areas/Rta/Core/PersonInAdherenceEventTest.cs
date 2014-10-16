@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		[Test,Ignore]
 		public void ShouldPublishPersonInAdherenceEvent() // (...WhenNoStaffingEffect)
 		{
-			var database = new FakeDatabaseReader();
+			var database = new FakeRtaDatabase();
 			var personId = Guid.NewGuid();
 			database.AddTestData("sourceId", "usercode", personId, Guid.NewGuid());
 
@@ -77,11 +77,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		}
 	}
 
-	public class FakeDatabaseReader : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader
+	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader
 	{
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
 
+		public IActualAgentState PersistedActualAgentState { get; set; }
+		 
 		public void AddTestData(string sourceId, string userCode, Guid personId, Guid businessUnitId)
 		{
 			const int datasourceId = 0;
@@ -131,8 +133,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			return null;
 		}
 
-		public void AddOrUpdate(IActualAgentState actualAgentState)
+		public void PersistActualAgentState(IActualAgentState actualAgentState)
 		{
+			PersistedActualAgentState = actualAgentState;
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()

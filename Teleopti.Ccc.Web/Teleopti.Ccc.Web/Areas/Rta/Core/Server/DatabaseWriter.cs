@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
                 };
         }
 
-        public void AddOrUpdate(IActualAgentState actualAgentState)
+        public void PersistActualAgentState(IActualAgentState actualAgentState)
         {
             using (
                 var connection =
