@@ -76,8 +76,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		    var result = target.Find(person);
 		    result.Should().Be.Empty();
-
-		    SkipRollback();
 	    }
     }
 }
