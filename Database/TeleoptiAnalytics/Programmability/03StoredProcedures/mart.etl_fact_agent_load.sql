@@ -142,7 +142,7 @@ BEGIN
 	ON 
 		d.date_id	= bridge.local_date_id	
 		AND	stg.interval= bridge.local_interval_id
-	LEFT JOIN 
+	INNER JOIN 
 		mart.dim_acd_login a 
 	ON 
 		a.acd_login_agg_id = stg.agent_id
