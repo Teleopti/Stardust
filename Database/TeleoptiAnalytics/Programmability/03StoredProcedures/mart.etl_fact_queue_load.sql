@@ -53,6 +53,8 @@ BEGIN
 
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
+	CREATE TABLE #agg_queue_ids (queue_agg_id int, mart_queue_id int)
+
 	DECLARE @UtcNow as smalldatetime
 	DECLARE @start_date_id	INT
 	DECLARE @end_date_id	INT
@@ -75,6 +77,12 @@ BEGIN
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @start_date = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 
+	INSERT INTO #agg_queue_ids
+	SELECT
+		queue_agg_id,
+		queue_id
+	FROM mart.dim_queue
+	WHERE datasource_id = @datasource_id
 
 	--prepare dates and intervals for this time_zone
 	--note: Get date and intervals grouped so that we do not get duplicates at DST clock shifts
@@ -166,7 +174,9 @@ BEGIN
 			WHEN 1 THEN '	dbo.queue_logg agg'
 			ELSE NULL --Fail fast
 		END
-		+ ' WHERE date_from between '''+ CAST(@start_date as nvarchar(20))+''' and '''+ CAST(@end_date as nvarchar(20))+''') stg
+		+ ' WHERE date_from between '''+ CAST(@start_date as nvarchar(20))+''' and '''+ CAST(@end_date as nvarchar(20))+'''
+			AND EXISTS (SELECT 1 FROM #agg_queue_ids tmp WHERE agg.queue=tmp.queue_agg_id)
+		) stg
 	INNER JOIN
 		mart.dim_date		d
 	ON
@@ -176,11 +186,10 @@ BEGIN
 	ON
 		d.date_id		= bridge.local_date_id		AND
 		stg.interval	= bridge.local_interval_id	
-	JOIN
-		mart.dim_queue		q
-	ON
-		q.queue_agg_id= stg.queue
-		AND q.datasource_id = ' + CAST(@datasource_id as nvarchar(10))
+	INNER JOIN
+		#agg_queue_ids q
+		ON
+			q.queue_agg_id = stg.queue'
 
 	--Exec
 	EXEC sp_executesql @sqlstring
