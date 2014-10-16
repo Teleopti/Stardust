@@ -4557,7 +4557,8 @@
     <value>その他</value>
   </data>
   <data name="MyTime" xml:space="preserve">
-    <value>MyTime</value>
+    <!--<value>MyTime</value>-->
+  <value>Teleopti WFM MyTime</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
     <value>エージェントスケジュールメッセンジャー (ASM)</value>
