@@ -2,14 +2,19 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ServiceModel;
+using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 {
@@ -219,23 +224,47 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			public IConfigReader ConfigReader { get; set; }
 			public IRtaDataHandler RtaDataHandler { get; set; }
 
-			public TeleoptiRtaService CreateRtaServiceBasedOnAValidState(externalUserStateForTest userState)
+			public TeleoptiRtaService CreateRtaServiceBasedOnAValidState(externalUserStateForTest state)
 			{
 				if (ConfigReader == null)
 				{
 					ConfigReader = MockRepository.GenerateStub<IConfigReader>();
 					var appSettings = new NameValueCollection();
-					appSettings.Add("AuthenticationKey", userState.AuthenticationKey);
+					appSettings.Add("AuthenticationKey", state.AuthenticationKey);
 					ConfigReader.Expect(c => c.AppSettings).Return(appSettings).Repeat.Any();
 				}
 				if (Now == null)
 				{
 					Now = MockRepository.GenerateStub<INow>();
-					Now.Expect(n => n.UtcDateTime()).Return(userState.Timestamp).Repeat.Any();
+					Now.Expect(n => n.UtcDateTime()).Return(state.Timestamp).Repeat.Any();
 				}
 				if (RtaDataHandler == null)
 				{
-					RtaDataHandler = new fakeDataHandler();
+					var database = new FakeDatabaseReader();
+					database.AddTestData(state.SourceId, state.UserCode, Guid.NewGuid(), Guid.NewGuid());
+					var cacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
+					var messageSender = MockRepository.GenerateMock<IMessageSender>();
+					var publisher = new FakeEventsPublisher();
+					RtaDataHandler = new RtaDataHandler(
+						new FakeSignalRClient(),
+						MockRepository.GenerateMock<IMessageSender>(),
+						new DataSourceResolver(database),
+						new PersonResolver(database),
+						new ActualAgentAssembler(
+							database,
+							new CurrentAndNextLayerExtractor(),
+							MockRepository.GenerateMock<IMbCacheFactory>(),
+							new AlarmMapper(database, database, cacheFactory)
+							),
+						database,
+						new IActualAgentStateHasBeenSent[]
+						{
+							new AdherenceAggregator(
+								messageSender,
+								new OrganizationForPerson(new PersonOrganizationProvider(database))
+								),
+							new AgentStateChangedCommandHandler(publisher)
+						});
 				}
 
 
