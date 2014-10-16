@@ -495,6 +495,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 
 		private static void registerIntraIntervalOptimizationService(ContainerBuilder builder)
 		{
+			builder.RegisterType<SkillStaffPeriodEvaluator>().As<ISkillStaffPeriodEvaluator>();
 			builder.RegisterType<IntraIntervalOptimizationService>().As<IntraIntervalOptimizationService>();
 			builder.RegisterType<IntraIntervalOptimizationServiceToggle29846Off>().As<IntraIntervalOptimizationServiceToggle29846Off>();
 

@@ -357,6 +357,7 @@
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluator.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />

@@ -339,6 +339,7 @@
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationServiceTest.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluatorTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLockerTest.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
