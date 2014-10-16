@@ -16,10 +16,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			StateCode = "AUX2";
 			IsLoggedOn = true;
 		}
-
-		public int SaveExternalUserStateTo(TeleoptiRtaService service)
-		{
-			return service.SaveExternalUserState(AuthenticationKey, PlatformTypeId, SourceId, this);
-		}
 	}
 }

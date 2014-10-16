@@ -4,6 +4,7 @@ using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var state = new ExternalUserStateForTest();
 			var target = new TeleoptiRtaServiceForTest(state);
 
-			var result = state.SaveExternalUserStateTo(target);
+			var result = target.SaveExternalUserState(state);
 
 			result.Should().Be.EqualTo(1);
 		}
@@ -32,19 +33,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 
 			state.AuthenticationKey += " else";
 
-			Assert.Throws(typeof(FaultException), () => state.SaveExternalUserStateTo(target));
+			Assert.Throws(typeof(FaultException), () => target.SaveExternalUserState(state));
 		}
 
 		[Test]
 		public void ShouldNotProcessStatesThatsToOld()
 		{
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
-			var now = MockRepository.GenerateStub<INow>();
-			now.Expect(n => n.UtcDateTime()).Return(christmas);
 			var state = new ExternalUserStateForTest() { Timestamp = christmas.AddHours(1) };
-			var target = new TeleoptiRtaServiceForTest(state, now);
+			var target = new TeleoptiRtaServiceForTest(state, new ThisIsNow(christmas));
 
-			var result = state.SaveExternalUserStateTo(target);
+			var result = target.SaveExternalUserState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var state = new ExternalUserStateForTest { Timestamp = christmas.Subtract(TimeSpan.FromHours(1)) };
 			var target = new TeleoptiRtaServiceForTest(state, now);
 
-			var result = state.SaveExternalUserStateTo(target);
+			var result = target.SaveExternalUserState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var target = new TeleoptiRtaServiceForTest(state);
 			state.SourceId = string.Empty;
 
-			var result = state.SaveExternalUserStateTo(target);
+			var result = target.SaveExternalUserState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			database.AddTestData(state.SourceId, state.UserCode, Guid.NewGuid(), Guid.NewGuid());
 			var target = new TeleoptiRtaServiceForTest(database, state);
 
-			state.SaveExternalUserStateTo(target);
+			target.SaveExternalUserState(state);
 
 			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode);
 		}
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var target = new TeleoptiRtaServiceForTest(state);
 			state.PlatformTypeId = string.Empty;
 
-			var result = state.SaveExternalUserStateTo(target);
+			var result = target.SaveExternalUserState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var target = new TeleoptiRtaServiceForTest(database, state);
 
 			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
-			state.SaveExternalUserStateTo(target);
+			target.SaveExternalUserState(state);
 
 			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode.Substring(0, 25));
 		}
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var target = new TeleoptiRtaServiceForTest(database, state);
 
 			state.IsLoggedOn = false;
-			state.SaveExternalUserStateTo(target);
+			target.SaveExternalUserState(state);
 
 			database.PersistedActualAgentState.StateCode.Should().Be(TeleoptiRtaService.LogOutStateCode);
 		}
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var state2 = new ExternalUserStateForTest();
 			var target = new TeleoptiRtaServiceForTest(state1);
 
-			var result = target.SaveBatchExternalUserState(state1.AuthenticationKey, state1.PlatformTypeId, state1.SourceId, new[] { state1, state2 });
+			var result = target.SaveBatchExternalUserState(new[] { state1, state2 });
 
 			result.Should().Be.EqualTo(1);
 		}
