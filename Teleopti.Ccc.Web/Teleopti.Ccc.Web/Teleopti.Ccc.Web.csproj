@@ -334,8 +334,14 @@
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
+    <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />
+    <Compile Include="Areas\Mart\Core\IQueueStatRepository.cs" />
+    <Compile Include="Areas\Mart\Core\LogObject.cs" />
+    <Compile Include="Areas\Mart\Models\FactQueueModel.cs" />
+    <Compile Include="Areas\Mart\Core\QueueStatHandler.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\IoC\MartAreaModule.cs" />
+    <Compile Include="Areas\Mart\Models\QueueStatsModel.cs" />
     <Compile Include="Areas\Mart\MartAreaRegistration.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
@@ -1528,7 +1534,6 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Mart\Models\" />
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />

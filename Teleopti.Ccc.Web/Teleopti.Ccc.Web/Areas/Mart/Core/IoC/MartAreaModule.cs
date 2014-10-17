@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 		{
 			
 			builder.RegisterType<QueueStatHandler>().As<IQueueStatHandler>().SingleInstance();
+			builder.RegisterType<QueueStatRepository>().As<IQueueStatRepository>().SingleInstance();
 
 			// så här är cashen registrerad i RTA vi för göra ngt liknande för våra grejer
 			//_configuration.Args().CacheBuilder
