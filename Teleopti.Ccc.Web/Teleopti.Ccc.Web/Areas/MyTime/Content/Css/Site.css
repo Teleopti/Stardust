@@ -765,7 +765,7 @@ End personal drop down menu
 }
 
 /* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 992px) {
+@media (min-width: 768px) and (max-width: 991px) {
     body {
     }
     .navbar {
@@ -777,6 +777,12 @@ End personal drop down menu
 
 	.navbar-collapse.subnavbar {
 		padding: 0;
+	}
+	.navbar-collapse.collapse {
+		display: none !important;
+	}
+	.navbar-collapse.collapse.in {
+		display: block !important;
 	}
 }
 
