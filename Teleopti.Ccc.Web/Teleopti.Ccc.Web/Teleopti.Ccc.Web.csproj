@@ -334,6 +334,9 @@
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
+    <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
+    <Compile Include="Areas\Mart\Core\IoC\MartAreaModule.cs" />
+    <Compile Include="Areas\Mart\MartAreaRegistration.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
@@ -1424,6 +1427,7 @@
     <Content Include="Areas\MyTime\Views\MyReport\DailyQueueMetricsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Availability\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\BadgeLeaderBoardReport\BadgeLeaderBoardReportPartial.cshtml" />
+    <Content Include="Areas\Mart\Views\Web.config" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1523,6 +1527,8 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Mart\Models\" />
+    <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />

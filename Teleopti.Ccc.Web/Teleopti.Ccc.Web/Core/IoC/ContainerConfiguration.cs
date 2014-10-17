@@ -20,6 +20,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.IoC;
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new AuthenticationCachedModule(configuration));
 
 			builder.RegisterModule(new RtaAreaModule(configuration));
+			builder.RegisterModule(new MartAreaModule(configuration));
 
 			builder.RegisterModule<ShiftTradeModule>();
 
