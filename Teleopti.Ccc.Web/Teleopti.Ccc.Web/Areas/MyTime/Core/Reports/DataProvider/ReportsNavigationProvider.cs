@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
@@ -19,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		private readonly IReportsProvider _reportsProvider;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IToggleManager _toggleManager;
+		private readonly IBadgeSettingProvider _settingProvider;
 
-		public ReportsNavigationProvider(IPrincipalAuthorization principalAuthorization, IReportsProvider reportsProvider, ISessionSpecificDataProvider sessionSpecificDataProvider, IToggleManager toggleManager)
+		public ReportsNavigationProvider(IPrincipalAuthorization principalAuthorization, IReportsProvider reportsProvider, ISessionSpecificDataProvider sessionSpecificDataProvider, IToggleManager toggleManager, IBadgeSettingProvider settingProvider)
 		{
 			_principalAuthorization = principalAuthorization;
 			_reportsProvider = reportsProvider;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_toggleManager = toggleManager;
+			_settingProvider = settingProvider;
 		}
 
 		public IList<ReportNavigationItem> GetNavigationItems()
@@ -44,7 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Title = Resources.MyReport,
 					IsWebReport = true
 				});
-			if (_toggleManager.IsEnabled(Toggles.Badge_Leaderboard_30584) && _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
+			var setting = _settingProvider.GetBadgeSettings();
+			if (_toggleManager.IsEnabled(Toggles.Badge_Leaderboard_30584) && _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard) &&(setting.BadgeEnabled))
 			{
 				reportsList.Add(new ReportNavigationItem
 				{
