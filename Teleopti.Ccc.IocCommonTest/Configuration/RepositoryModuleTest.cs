@@ -81,18 +81,14 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void RepositoriesWithIncorrectCtorAreNotWired()
 		{
-			/*
-			 * RK
-			 * If this test fails because IValidatedVolumeDayRepository accepts an iunitofworkfactory,
-			 * please change to another rep.
-			 * There is no reason why I test IValidatedVolumeDayRepository below, just want a rep
-			 * where "new uow handling" not yet supported
-			 */
+			var typeThatNoRepoAcceptAsArgument = GetType();
+			var testContainerBuild = new ContainerBuilder();
+			testContainerBuild.RegisterModule(new CommonModule { RepositoryConstructorType = typeThatNoRepoAcceptAsArgument });
 
-			using (var container = containerBuilder.Build())
+			using (var container = testContainerBuild.Build())
 			{
-				Assert.IsFalse(container.IsRegistered(typeof(IValidatedVolumeDayRepository)));
-				Assert.IsTrue(container.IsRegistered(typeof(IPersonRepository)));
+				container.IsRegistered(typeof(IPersonRepository))
+					.Should().Be.False();
 			}
 		}
 	}
