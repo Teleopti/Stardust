@@ -15,7 +15,7 @@ GO
 --				2011-01-28 Performance DJ
 -- Description:	Loads fact_queue. Obs! Interval = dim_interval_id.
 -- =============================================
---exec [mart].[etl_fact_queue_load] '2009-01-01' ,'2009-03-01',2
+--exec [mart].[etl_fact_queue_load] '2013-01-01' ,'2013-03-01',-2
 
 CREATE PROCEDURE [mart].[etl_fact_queue_load] 
 @start_date smalldatetime,
@@ -144,7 +144,7 @@ BEGIN
 	SELECT
 		date_id						= bridge.date_id, 
 		interval_id					= bridge.interval_id, 
-		queue_id					= q.queue_id, 
+		queue_id					= q.mart_queue_id, 
 		local_date_id				= d.date_id,
 		local_interval_id			= stg.interval, 
 		offered_calls				= ISNULL(offd_direct_call_cnt,0), 
@@ -162,7 +162,7 @@ BEGIN
 		time_to_abandon_s			= ISNULL(queued_and_aband_call_dur,0), 
 		longest_delay_in_queue_answered_s = ISNULL(queued_answ_longest_que_dur,0),
 		longest_delay_in_queue_abandoned_s = ISNULL(queued_aband_longest_que_dur,0),
-		datasource_id				= q.datasource_id, 
+		datasource_id				= ' + cast(@datasource_id as varchar(3)) + ', 
 		insert_date					= getdate(), 
 		update_date					= getdate(), 
 		datasource_update_date		= '''+ CAST(@UtcNow as nvarchar(20))+'''
