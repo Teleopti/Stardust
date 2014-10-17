@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class ExternalUserStateWebModel
 	{
