@@ -141,11 +141,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _model.InitializeDayOfWeeks();
         }
 
-        public void CancelGetDaysToValidate()
-        {
-            _model.CancelGetDaysToValidate();
-        }
-
         public void Initialize(IScenario scenario, DateOnlyPeriod period, IList<ISkillDay> skillDays)
         {
             _model.Initialize(scenario, period, skillDays);

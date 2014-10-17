@@ -136,15 +136,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
         }
 
-        public void CancelGetDaysToValidate()
-        {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(uow);
-                rep.CancelMatchDays();
-            }
-        }
-
         public void SaveWorkflow(IWorkload workload, IList<ITaskOwner> workloadDays, IList<IValidatedVolumeDay> validatedVolumeDays)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         DateOnly FindLatestValidateDay(IWorkload workload);
         IList<IWorkloadDayBase> LoadStatisticData(DateOnlyPeriod period, IWorkload workload);
         IList<IValidatedVolumeDay> FindRange(DateOnlyPeriod dateTimePeriod, IWorkload workload, IList<IWorkloadDayBase> workloadDaysToValidate);
-        void CancelGetDaysToValidate();
         void SaveWorkflow(IWorkload workload, IList<ITaskOwner> workloadDays, IList<IValidatedVolumeDay> validatedVolumeDays);
         void AddOutlier(IOutlier outlier);
         void RemoveOutlier(IOutlier outlier);

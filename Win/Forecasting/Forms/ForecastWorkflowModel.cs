@@ -228,11 +228,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _dataService.SaveWorkflow(_workload, _workloadDays, _validatedVolumeDays);
         }
 
-        public void CancelGetDaysToValidate()
-        {
-            _dataService.CancelGetDaysToValidate();
-        }
-
         public void InitializeCompareHistoricPeriod(DateOnlyPeriod period)
         {
             _compareHistoricPeriod = period;

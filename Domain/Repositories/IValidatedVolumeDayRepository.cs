@@ -50,14 +50,5 @@ namespace Teleopti.Ccc.Domain.Repositories
                                     IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays);
 
         IValidatedVolumeDay FindLatestUpdated(ISkill skill);
-
-        /// <summary>
-        /// Cancels the match days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 10/1/2008
-        /// </remarks>
-        void CancelMatchDays();
     }
 }

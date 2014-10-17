@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
@@ -186,40 +185,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             DateOnly latestValidated = validatedVolumeDayRepository.FindLastValidatedDay(validatedVolumeDay.Workload);
 
             Assert.AreEqual(latestValidated, new DateOnly(DateTime.Today.AddMonths(-1)));
-        }
-
-        [Test]
-        public void CanCancelMatchDaysOperation()
-        {
-            IValidatedVolumeDay validatedVolumeDay1 = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(validatedVolumeDay1);
-            IValidatedVolumeDay validatedVolumeDay2 = new ValidatedVolumeDay(
-                validatedVolumeDay1.Workload,
-                validatedVolumeDay1.VolumeDayDate.AddDays(1));
-            PersistAndRemoveFromUnitOfWork(validatedVolumeDay2);
-
-            DateOnlyPeriod period = new DateOnlyPeriod(validatedVolumeDay1.VolumeDayDate, validatedVolumeDay1.VolumeDayDate.AddDays(3));
-
-            ITaskOwner taskOwnerDay1 = Mocks.StrictMock<ITaskOwner>();
-            ITaskOwner taskOwnerDay2 = Mocks.StrictMock<ITaskOwner>();
-            ITaskOwner taskOwnerDay3 = Mocks.StrictMock<ITaskOwner>();
-
-            Expect.Call(taskOwnerDay1.CurrentDate).Return(validatedVolumeDay1.VolumeDayDate).Repeat.AtLeastOnce();
-            Expect.Call(taskOwnerDay2.CurrentDate).Return(validatedVolumeDay2.VolumeDayDate).Repeat.AtLeastOnce();
-            Expect.Call(taskOwnerDay3.CurrentDate).Return(validatedVolumeDay2.VolumeDayDate.AddDays(1)).Repeat.AtLeastOnce();
-            IList<ITaskOwner> taskOwnerList = new List<ITaskOwner> { taskOwnerDay1, taskOwnerDay2, taskOwnerDay3 };
-
-            Mocks.ReplayAll();
-
-            IValidatedVolumeDayRepository repository = new ValidatedVolumeDayRepository(UnitOfWork);
-            ICollection<IValidatedVolumeDay> existingValidatedVolumeDays = repository.FindRange(period, validatedVolumeDay1.Workload);
-            Assert.AreEqual(2, existingValidatedVolumeDays.Count);
-            
-            //Cancel the matchdays operation (before, but anyway)
-            repository.CancelMatchDays();
-            var validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays);
-
-            Assert.AreEqual(null, validatedVolumeDays);
         }
 
         [Test]

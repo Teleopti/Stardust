@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class ValidatedVolumeDayRepository : Repository<IValidatedVolumeDay>, IValidatedVolumeDayRepository
     {
-        private bool isOperationCanceled;
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatedVolumeDayRepository"/> class.
         /// </summary>
@@ -68,13 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IList<ITaskOwner> daysToReturn = new List<ITaskOwner>();
             foreach (ITaskOwner taskOwner in taskOwnerList)
             {
-                //If this operation is canceled we will return null and it will be handeled by the caller of the cancel              
-                if(isOperationCanceled)
-                {
-                    isOperationCanceled = false;
-                    return null;
-                }
-
                 DateTime taskOwnerDate = taskOwner.CurrentDate;
                 IValidatedVolumeDay existingValidatedVolumeDay = existingValidatedVolumeDays.FirstOrDefault(e => e.VolumeDayDate == taskOwnerDate);
                 if (existingValidatedVolumeDay == null)
@@ -124,19 +116,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .UniqueResult<IValidatedVolumeDay>();
 
             return validatedVolumeDay;
-        }
-
-        /// <summary>
-        /// Cancels the match days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 10/1/2008
-        /// </remarks>
-        public void CancelMatchDays()
-        {
-            //Session.CancelQuery();
-            isOperationCanceled = true;
         }
     }
 }

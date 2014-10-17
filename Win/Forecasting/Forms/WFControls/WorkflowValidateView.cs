@@ -212,7 +212,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		{
 			if (!backgroundWorkerValidationPeriod.CancellationPending)
 			{
-				_owner.Presenter.CancelGetDaysToValidate();
 				if (backgroundWorkerValidationPeriod.IsBusy) backgroundWorkerValidationPeriod.CancelAsync();
 				if (backgroundWorkerStatistics.IsBusy) backgroundWorkerStatistics.CancelAsync();
 				buttonAdvCancelLoad.Text = UserTexts.Resources.CancellingThreeDots;
