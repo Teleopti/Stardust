@@ -71,6 +71,18 @@
 				expect(actualState.StateCode).toEqual('AUX1');
 				expect(actualState.StateDescription).toEqual('AUX1');
 			},
+
+			"should set IsLoggedOn to false on the state if set to false on the viewmodel": function () {
+				var actualState = {};
+				var vm = new viewmodel(function (state) {
+					actualState = state;
+				});
+				vm.isLoggedOn(false);
+
+				vm.sendState();
+
+				expect(actualState.IsLoggedOn).toEqual(false);
+			}
 	});
 	};
 });

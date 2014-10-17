@@ -28,13 +28,15 @@
 			rtaServerCall(makeAgentState(self.specifiedState()));
 		}
 
+		self.isLoggedOn = ko.observable(true);
+
 		var makeAgentState = function(stateCode) {
 			return {
 				AuthenticationKey: self.AuthenticationKey,
 				UserCode: '0085',
 				StateCode: stateCode,
 				StateDescription: stateCode,
-				IsLoggedOn: true,
+				IsLoggedOn: self.isLoggedOn(),
 				SecondsInState: 0,
 				TimeStamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				PlatformTypeId: '00000000-0000-0000-0000-000000000000',

@@ -48,6 +48,10 @@
 					<input data-bind="value: specifiedState"/>
 					<button class="btn btn-default" data-bind="click: sendState">Send</button>
 				</td>
+				<td></td>
+				<td>
+					<p>Logged in: <input type="checkbox" data-bind="checked: isLoggedOn" /></p>
+				</td>
 			</tr>
 		</table>
 	</div>
