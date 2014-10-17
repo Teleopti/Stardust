@@ -1,6 +1,7 @@
 using System;
 using MbCache.Core;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.Rta;
@@ -14,8 +15,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 {
 	public class TeleoptiRtaServiceForTest : TeleoptiRtaService
 	{
-		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, ExternalUserStateForTest state)
+		public TeleoptiRtaServiceForTest(ExternalUserStateForTest state, FakeRtaDatabase database)
 			: base(MakeRtaDataHandler(database), new ThisIsNow(state.Timestamp), new FakeConfigReader())
+		{
+		}
+		public TeleoptiRtaServiceForTest(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
+			: base(MakeRtaDataHandler(database, eventPublisher), new ThisIsNow(state.Timestamp), new FakeConfigReader())
 		{
 		}
 
@@ -34,6 +39,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		{
 		}
 
+
+
 		private static IRtaDataHandler MakeRtaDataHandlerForState(ExternalUserStateForTest state)
 		{
 			var database = new FakeRtaDatabase();
@@ -43,9 +50,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 
 		private static IRtaDataHandler MakeRtaDataHandler(FakeRtaDatabase database)
 		{
+			return MakeRtaDataHandler(database, new FakeEventsPublisher());
+		}
+
+		private static IRtaDataHandler MakeRtaDataHandler(FakeRtaDatabase database, IEventPublisher eventPublisher)
+		{
 			var cacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
 			var messageSender = MockRepository.GenerateMock<IMessageSender>();
-			var publisher = new FakeEventsPublisher();
 			return new RtaDataHandler(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -64,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 						messageSender,
 						new OrganizationForPerson(new PersonOrganizationProvider(database))
 						),
-					new AgentStateChangedCommandHandler(publisher)
+					new AgentStateChangedCommandHandler(eventPublisher)
 				});
 		}
 

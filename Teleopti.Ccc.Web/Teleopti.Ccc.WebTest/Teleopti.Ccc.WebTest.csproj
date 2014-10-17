@@ -197,6 +197,9 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Rta\Core\ExternalUserStateForTest.cs" />
     <Compile Include="Areas\Rta\Core\FakeConfigReader.cs" />
+    <Compile Include="Areas\Rta\Core\FakeEventsPublisher.cs" />
+    <Compile Include="Areas\Rta\Core\FakeRtaDatabase.cs" />
+    <Compile Include="Areas\Rta\Core\FakeSignalRClient.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssemblerTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializorTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceTest.cs" />
