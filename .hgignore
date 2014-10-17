@@ -36,6 +36,9 @@ _ReSharper*/
 TeleOpti.Messaging.Bin/
 *.jtconfig
 *.sln
+*/node_modules/*
+*/bower_components/*
+*/.idea/*
 
 # VS 2012 on old branches
 Backup/
