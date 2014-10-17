@@ -72,17 +72,28 @@
 				expect(actualState.StateDescription).toEqual('AUX1');
 			},
 
-			"should set IsLoggedOn to false on the state if set to false on the viewmodel": function () {
+			"should send logon when logging on": function () {
 				var actualState = {};
 				var vm = new viewmodel(function (state) {
 					actualState = state;
 				});
-				vm.isLoggedOn(false);
 
-				vm.sendState();
+				vm.logOn();
 
-				expect(actualState.IsLoggedOn).toEqual(false);
-			}
+				expect(actualState.IsLoggedOn).toEqual(true);
+				expect(actualState.StateCode).toEqual('Ready');
+			},
+
+			"should send logoff when logging off": function () {
+			var actualState = {};
+			var vm = new viewmodel(function (state) {
+				actualState = state;
+			});
+
+			vm.logOff();
+
+			expect(actualState.IsLoggedOn).toEqual(false);
+		}
 	});
 	};
 });

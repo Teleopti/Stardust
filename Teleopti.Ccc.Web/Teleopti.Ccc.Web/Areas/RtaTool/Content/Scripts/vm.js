@@ -15,28 +15,35 @@
 		self.AuthenticationKey = '!#¤atAbgT%';
 
 		self.answer = function() {
-			rtaServerCall(makeAgentState('InCall'));
+			rtaServerCall(makeAgentState('InCall',true));
 		};
 
 		self.hangUp = function () {
-			rtaServerCall(makeAgentState('Ready'));
+			rtaServerCall(makeAgentState('Ready',true));
 		};
 
 		self.specifiedState = ko.observable('');
 
 		self.sendState = function() {
-			rtaServerCall(makeAgentState(self.specifiedState()));
+			rtaServerCall(makeAgentState(self.specifiedState(),true));
 		}
 
-		self.isLoggedOn = ko.observable(true);
+		self.logOn = function() {
+			makeAgentState('Ready', true);
+			rtaServerCall(makeAgentState('Ready',true));
+		}
 
-		var makeAgentState = function(stateCode) {
+		self.logOff = function() {
+			rtaServerCall(makeAgentState('',false));
+		}
+
+		var makeAgentState = function(stateCode, isLoggedOn) {
 			return {
 				AuthenticationKey: self.AuthenticationKey,
 				UserCode: '0085',
 				StateCode: stateCode,
 				StateDescription: stateCode,
-				IsLoggedOn: self.isLoggedOn(),
+				IsLoggedOn: isLoggedOn,
 				SecondsInState: 0,
 				TimeStamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				PlatformTypeId: '00000000-0000-0000-0000-000000000000',

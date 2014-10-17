@@ -50,7 +50,10 @@
 				</td>
 				<td></td>
 				<td>
-					<p>Logged in: <input type="checkbox" data-bind="checked: isLoggedOn" /></p>
+					<button class="btn btn-default" data-bind="click: logOn">Log On</button>					
+				</td>
+				<td>
+					<button class="btn btn-danger" data-bind="click: logOff">Log Off</button>
 				</td>
 			</tr>
 		</table>
