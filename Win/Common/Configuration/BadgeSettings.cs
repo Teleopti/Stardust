@@ -187,8 +187,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					var agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(uow);
 					agentBadgeTransactionRepository.ResetAgentBadges();
 				}
-				catch
+				catch (Exception ex)
 				{
+					ViewBase.ShowWarningMessage("unit work: " + uow, Resources.ResetBadges);
+					ViewBase.ShowWarningMessage(ex.Message, Resources.ResetBadges);
 					ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
 				}
 			}
