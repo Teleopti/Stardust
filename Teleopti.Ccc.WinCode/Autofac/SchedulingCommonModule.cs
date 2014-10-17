@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
 
@@ -306,7 +307,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
-			registerIntraIntervalOptimizationService(builder);
 
 			builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>();
 			registerFairnessOptimizationService(builder);
@@ -491,21 +491,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
 			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>();
-		}
-
-		private static void registerIntraIntervalOptimizationService(ContainerBuilder builder)
-		{
-			builder.RegisterType<IntraIntervalOptimizer>().As<IIntraIntervalOptimizer>();
-			builder.RegisterType<ScheduleDayIntraIntervalIssueExtractor>().As<IScheduleDayIntraIntervalIssueExtractor>();
-			builder.RegisterType<SkillDayIntraIntervalIssueExtractor>().As<ISkillDayIntraIntervalIssueExtractor>();
-			builder.RegisterType<SkillStaffPeriodEvaluator>().As<ISkillStaffPeriodEvaluator>();
-			builder.RegisterType<IntraIntervalOptimizationService>().As<IntraIntervalOptimizationService>();
-			builder.RegisterType<IntraIntervalOptimizationServiceToggle29846Off>().As<IntraIntervalOptimizationServiceToggle29846Off>();
-
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846)
-			   ? (IIntraIntervalOptimizationService)c.Resolve<IntraIntervalOptimizationService>()
-			   : c.Resolve<IntraIntervalOptimizationServiceToggle29846Off>())
-				   .As<IIntraIntervalOptimizationService>();	
 		}
 
 		private static void registerWorkShiftSelector(ContainerBuilder builder)

@@ -220,6 +220,7 @@
   <ItemGroup>
     <Compile Include="Autofac\BackToLegalShiftModule.cs" />
     <Compile Include="Autofac\EqualNumberOfCategoryFairnessModule.cs" />
+    <Compile Include="Autofac\IntraIntervalOptimizationServiceModule.cs" />
     <Compile Include="Autofac\IntraIntervalSolverServiceModule.cs" />
     <Compile Include="Autofac\SchedulingCommonModule.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModule.cs" />
