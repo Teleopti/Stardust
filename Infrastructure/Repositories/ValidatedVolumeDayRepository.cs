@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public ValidatedVolumeDayRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds the range.
         /// </summary>

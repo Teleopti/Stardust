@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	public class ForecasterModuleTest
 	{
-		[Test, Ignore("Will fix when ValidatedVolumeDayRepositor.MatchDays is moved out of the repo.")]
+		[Test]
 		public void ShouldResolveQuickForecast()
 		{
 			var containerBuilder = new ContainerBuilder();
