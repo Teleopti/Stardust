@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 
 			//target.Invoke(state);
 
-			target.SaveExternalUserState("!#�atAbgT%", "usercode", "statecode", "", true, 0, DateTime.UtcNow, Guid.NewGuid().ToString(), "sourceId", DateTime.UtcNow, false);
+			target.SaveExternalUserState("!#¤atAbgT%", "usercode", "statecode", "", true, 0, DateTime.UtcNow, Guid.NewGuid().ToString(), "sourceId", DateTime.UtcNow, false);
 
 			var @event = publisher.PublishedEvents.Single() as PersonInAdherenceEvent;
 			@event.PersonId.Should().Be(personId);

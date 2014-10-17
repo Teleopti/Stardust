@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			var data = JsonConvert.SerializeObject(new AgentStateInputModel
 			{
-				AuthenticationKey = "!#�atAbgT%",
+				AuthenticationKey = "!#¤atAbgT%",
 				UserCode = personName,
 				StateCode = stateCode,
 				IsLoggedOn = true,
