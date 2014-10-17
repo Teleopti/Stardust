@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 
 		public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder,
@@ -23,7 +25,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			IPersonSkillProvider personSkillProvider,
 			IPeriodDistributionService periodDistributionService,
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
+			IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
@@ -31,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 			_periodDistributionService = periodDistributionService;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
 		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
@@ -67,7 +71,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			        context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
 			    }
 
+				
 				ResourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, considerShortBreaks);
+
+				_intraIntervalFinderService.Execute(_stateHolder, localDate, relevantProjections);
+				
 
                 if (context != null)
                 {
