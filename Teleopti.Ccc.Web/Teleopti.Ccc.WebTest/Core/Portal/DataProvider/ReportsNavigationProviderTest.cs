@@ -8,9 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		private IReportsProvider _reportsProvider;
 		private ISessionSpecificDataProvider _sessionProvider;
 		private IToggleManager _toggleManagger;
-		private IBadgeSettingProvider _settingProvider;
 
 		[SetUp]
 		public void Setup()
@@ -34,8 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
 			_sessionProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
 			_toggleManagger = MockRepository.GenerateMock<IToggleManager>();
-			_settingProvider = MockRepository.GenerateMock<IBadgeSettingProvider>();
-			_target = new ReportsNavigationProvider(_principalAuthorization, _reportsProvider, _sessionProvider, _toggleManagger, _settingProvider);
+			_target = new ReportsNavigationProvider(_principalAuthorization, _reportsProvider, _sessionProvider, _toggleManagger);
 			_sessionProvider.Stub(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), "", Guid.NewGuid()));
 		}
 
@@ -115,10 +111,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnBadgeLeaderBoardReportsWhenOnlyHasLeaderBoardReportPermission()
 		{
 			_toggleManagger.Stub(x => x.IsEnabled(Toggles.Badge_Leaderboard_30584)).Return(true);
-			_settingProvider.Stub(x => x.GetBadgeSettings()).Return(new AgentBadgeSettings
-			{
-				BadgeEnabled = true
-			});
 			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard)).Return(true);
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>());
 			var result = _target.GetNavigationItems();
