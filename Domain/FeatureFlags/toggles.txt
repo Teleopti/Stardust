@@ -50,3 +50,4 @@ Portal_ResetBadges_30544 = RC
 Scheduler_IntraIntervalSolver_29845 = false
 MyTimeWeb_FullDayAbsenceConfiguration_30552 = true
 Settings_AlertViaEmailFromSMSLink_30444 = RC
+Badge_Leaderboard_30584 = RC
