@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Web.Http;
-using System.Net;
-using System.Net.Http;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Interfaces.Domain;
 
