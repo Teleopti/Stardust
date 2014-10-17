@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
@@ -45,6 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<GroupPageController>().EnableClassInterceptors();
+
+			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().As<IIntraIntervalFinderService>();	
 		}
 	}
 }
