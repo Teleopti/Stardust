@@ -3,6 +3,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Web;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -42,18 +45,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				Timestamp = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
 				PlatformTypeId = Guid.Empty.ToString(),
 				SourceId = datasource.ToString(CultureInfo.InvariantCulture),
+				BatchId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
 				IsSnapshot = false
 			});
 
-			var request = (HttpWebRequest) WebRequest.Create(uri);
-			request.Method = "POST";
-			request.ContentType = "application/json";
-			using (var writer = new StreamWriter(request.GetRequestStream()))
+			using (var handler = new HttpClientHandler())
 			{
-				writer.Write(data);
+				handler.AllowAutoRedirect = false;
+				using (var client = new HttpClient(handler))
+				{
+					var post = client.PostAsync(uri, new StringContent(data, Encoding.UTF8, "application/json"));
+					var result = post.Result;
+					if (result.StatusCode != HttpStatusCode.OK)
+						throw new Exception("Posting rta state returned http code " + result.StatusCode);
+				}
 			}
-			// dont forget to close!
-			request.GetResponse().Close();
 		}
 
 		[Given(@"there is a datasouce with id (.*)")]
