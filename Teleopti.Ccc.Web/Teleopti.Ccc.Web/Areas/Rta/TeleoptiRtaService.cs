@@ -129,12 +129,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		private void verifyAuthenticationKey(string authenticationKey, Guid messageId)
 		{
-			if (authenticationKey != _authenticationKey)
-			{
-				Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey = {0}. (MessageId = {1})", authenticationKey, messageId);
-				throw new FaultException(
-					"You supplied an invalid authentication key. Please verify the key and try again.");
-			}
+			if (authenticationKey == _authenticationKey)
+				return;
+
+			// for test ShouldAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKey
+			if (authenticationKey.Remove(2, 1) == _authenticationKey.Remove(2, 2))
+				return;
+
+			Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey = {0}. (MessageId = {1})",
+				authenticationKey, messageId);
+			throw new FaultException(
+				"You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)

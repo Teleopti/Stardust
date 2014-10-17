@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using MbCache.Core;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
@@ -20,6 +16,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 	{
 		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, ExternalUserStateForTest state)
 			: base(MakeRtaDataHandler(database), new ThisIsNow(state.Timestamp), new FakeConfigReader())
+		{
+		}
+
+		public TeleoptiRtaServiceForTest()
+			: this(new ExternalUserStateForTest())
 		{
 		}
 

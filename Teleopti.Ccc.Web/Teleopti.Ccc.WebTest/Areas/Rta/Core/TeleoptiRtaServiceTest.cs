@@ -37,6 +37,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		}
 
 		[Test]
+		public void ShouldAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
+		{
+			var target = new TeleoptiRtaServiceForTest();
+			var state = new ExternalUserStateForTest { AuthenticationKey = TeleoptiRtaService.DefaultAuthenticationKey };
+			state.AuthenticationKey = state.AuthenticationKey.Remove(2, 2).Insert(2, "_");
+
+			target.SaveExternalUserState(state);
+		}
+
+		[Test]
 		public void ShouldNotProcessStatesThatsToOld()
 		{
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
