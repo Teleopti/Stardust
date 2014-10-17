@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterModule<BackToLegalShiftModule>();
 
 			//fattar inte fråga Roger
-			builder.RegisterModule(new CommonModule(_configuration));
 			builder.RegisterModule(new RuleSetModule(_configuration, true));
 
 			builder.RegisterModule<WeeklyRestSolverModule>();
