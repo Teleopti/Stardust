@@ -136,32 +136,41 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkBoxAdherenceBadgeEnabled.Enabled = enabled;
 			checkBoxAHTBadgeEnabled.Enabled = enabled;
 			checkBoxAnsweredCallsBadgeEnabled.Enabled = enabled;
+
+			updateSettingsState();
 		}
 
 		private void checkBoxAnsweredCallsBadgeEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			numericUpDownThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
-			updateRateSettingsState();
+			updateSettingsState();
 		}
 
 		private void checkBoxAHTBadgeEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			timeSpanTextBoxThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
-			updateRateSettingsState();
+			updateSettingsState();
 		}
 
 		private void checkBoxAdherenceBadgeEnabled_CheckedChanged(object sender, EventArgs e)
 		{
 			doubleTextBoxThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
-			updateRateSettingsState();
+			updateSettingsState();
 		}
 
-		private void updateRateSettingsState()
+		private void updateSettingsState()
 		{
+			numericUpDownThresholdForAnsweredCalls.Enabled = checkBoxAnsweredCallsBadgeEnabled.Enabled &&
+															 checkBoxAnsweredCallsBadgeEnabled.Checked;
+			timeSpanTextBoxThresholdForAHT.Enabled = checkBoxAHTBadgeEnabled.Enabled && checkBoxAHTBadgeEnabled.Checked;
+
+			doubleTextBoxThresholdForAdherence.Enabled = checkBoxAdherenceBadgeEnabled.Enabled &&
+														 checkBoxAdherenceBadgeEnabled.Checked;
+
 			var isAnyTypeEnabled
-				= checkBoxAHTBadgeEnabled.Checked
+				= (checkBoxEnableBadge.Checked) && (checkBoxAHTBadgeEnabled.Checked
 				|| checkBoxAdherenceBadgeEnabled.Checked
-				|| checkBoxAnsweredCallsBadgeEnabled.Checked;
+				|| checkBoxAnsweredCallsBadgeEnabled.Checked);
 
 			numericUpDownSilverToBronzeBadgeRate.Enabled = isAnyTypeEnabled;
 			numericUpDownGoldenToSilverBadgeRate.Enabled = isAnyTypeEnabled;
