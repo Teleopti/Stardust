@@ -400,11 +400,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void gridListControlDefaultSearch_KeyUp(object sender, KeyEventArgs e)
-		{
-			
-		}
-
 		private void gridListControlDefaultSearch_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Down)

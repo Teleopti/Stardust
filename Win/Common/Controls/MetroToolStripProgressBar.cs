@@ -8,10 +8,10 @@ namespace Teleopti.Ccc.Win.Common.Controls
 	public class MetroToolStripProgressBar : ToolStripControlHost
 	{
 		private int _value;
+		private int _maximum = 100;
 
 		public MetroToolStripProgressBar() : base(new Label())
 		{
-			Maximum = 100;
 			_value = 0;
 			Step = 1;
 			BackColor = Color.FromArgb(22, 165, 220);
@@ -23,7 +23,15 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			}
 		}
 
-		public int Maximum { get; set; }
+		public int Maximum
+		{
+			get { return _maximum; }
+			set
+			{
+				if(value > 0)
+					_maximum = value;
+			}
+		}
 
 		public int Step { get; set; }
 
