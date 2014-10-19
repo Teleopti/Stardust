@@ -190,6 +190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			refurbishItemsInResultGrid(gridListControlResult);
 			refurbishItemsInResultGrid(gridListControlResult2);
 			textBox1.Text = String.Empty;
+			textBox1.Select();
 		}
 		
 		#endregion
@@ -345,6 +346,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
 		{
+
 			if (e.KeyChar != '\r') return;
 			if (textBox1.Text == string.Empty && _userSelectedPersonList.Count > 0)
 			{
@@ -381,6 +383,51 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.KeyChar != '\r') return;
 			parse();
+		}
+
+		private void textBox1_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Down)
+			{
+				gridListControlDefaultSearch.Select();
+				if (gridListControlDefaultSearch.SelectedIndex != -1 &&
+				    gridListControlDefaultSearch.SelectedIndex < gridListControlDefaultSearch.Items.Count - 1)
+				{
+					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex, false);
+					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex + 1, true);
+					e.Handled = true;
+				}
+			}
+		}
+
+		private void gridListControlDefaultSearch_KeyUp(object sender, KeyEventArgs e)
+		{
+			
+		}
+
+		private void gridListControlDefaultSearch_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Down)
+			{
+				if (gridListControlDefaultSearch.SelectedIndex != -1 &&
+					gridListControlDefaultSearch.SelectedIndex < gridListControlDefaultSearch.Items.Count - 1)
+				{
+					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex, false);
+					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex + 1, true);
+					e.Handled = true;
+					return;
+				}
+			}
+
+			if (e.KeyCode == Keys.Up)
+			{
+				if (gridListControlDefaultSearch.SelectedIndex > 0)
+				{
+					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex, false);
+					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex - 1, true);
+					e.Handled = true;
+				}
+			}
 		}
 	}
 

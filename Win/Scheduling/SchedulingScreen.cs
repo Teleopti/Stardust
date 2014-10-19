@@ -2272,6 +2272,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
 
 			toolStripStatusLabelScheduleTag.Visible = true;
+			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
+			                                          _schedulerState.FilteredPersonDictionary.Count;
+			toolStripStatusLabelNumberOfAgents.Visible = true;
 			
 
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
@@ -5412,9 +5415,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
 		{
 			showFilterDialog();
-			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
-			schedulerSplitters1.RefreshTabInfoPanels();
-			updateShiftEditor();
+			reloadFilteredPeople();
 		}
 
 		private void refreshEntitiesUsingMessageBroker()
@@ -6080,6 +6081,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
 			updateShiftEditor();
+			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
+													  _schedulerState.FilteredPersonDictionary.Count;
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)

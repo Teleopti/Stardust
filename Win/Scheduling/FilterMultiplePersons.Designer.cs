@@ -169,6 +169,7 @@
 			this.textBox1.TabIndex = 0;
 			this.textBox1.TextChanged += new System.EventHandler(this.textBox1TextChanged);
 			this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
+			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
 			// 
 			// label1
 			// 
@@ -223,6 +224,7 @@
 			this.gridListControlDefaultSearch.TabIndex = 1;
 			this.gridListControlDefaultSearch.ThemesEnabled = true;
 			this.gridListControlDefaultSearch.TopIndex = 0;
+			this.gridListControlDefaultSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridListControlDefaultSearch_KeyDown);
 			// 
 			// gridListControlResult
 			// 
