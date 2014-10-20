@@ -2,10 +2,6 @@
 using Autofac;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.WebService;
-using Teleopti.Ccc.Web.Areas.Mart.Controllers;
-using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 {
@@ -20,20 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			
 			builder.RegisterType<QueueStatHandler>().As<IQueueStatHandler>().SingleInstance();
 			builder.RegisterType<QueueStatRepository>().As<IQueueStatRepository>().SingleInstance();
+			builder.RegisterType<DatabaseConnectionHandler>().As<IDatabaseConnectionHandler>().SingleInstance();
 
-			// så här är cashen registrerad i RTA vi för göra ngt liknande för våra grejer
-			//_configuration.Args().CacheBuilder
-			//	.For<DatabaseReader>()
-			//	.CacheMethod(x => x.ActivityAlarms())
-			//	.CacheMethod(x => x.StateGroups())
-			//	.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
-			//	.CacheMethod(x => x.Datasources())
-			//	.CacheMethod(x => x.ExternalLogOns())
-			//	.As<IDatabaseReader>();
-			//builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
+			_configuration.Args().CacheBuilder
+				.For<QueueStatRepository>()
+				.CacheMethod(x => x.GetLogObject("",""))
+				.CacheMethod(x => x.GetQueueId("","",0,""))
+				.CacheMethod(x => x.GetDateId(new DateTime(), ""))
+				.CacheMethod(x => x.GetIntervalLength(""))
+				.As<IQueueStatRepository>();
+			builder.RegisterMbCacheComponent<QueueStatRepository, IQueueStatRepository>();
 		}
 	}
 }

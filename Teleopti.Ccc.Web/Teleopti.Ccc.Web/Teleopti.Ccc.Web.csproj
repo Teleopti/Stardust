@@ -336,9 +336,11 @@
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
+    <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\LogObject.cs" />
+    <Compile Include="Areas\Mart\Core\QueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Models\FactQueueModel.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandler.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />

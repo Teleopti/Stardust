@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Http;
-using Microsoft.Ajax.Utilities;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Interfaces.Domain;
@@ -70,28 +64,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 	{
 		public DateTime DateTimeInUtc;
 
-		public LogObject GetLogObject(string logobjectName)
+		public LogObject GetLogObject(string logobjectName, string nhibDataSourceName)
 		{
 			if (string.IsNullOrEmpty(logobjectName))
 				return null;
 
-			return new LogObject {Id = 2,TimeZoneCode = "W. Europe Standard Time"};
+			return new LogObject { Id = 2, TimeZoneCode = "W. Europe Standard Time" };
 		}
 
-		public int GetQueueId(string queueName, string queueId)
+		public int GetQueueId(string queueName, string queueId, int logObjectId, string nhibDataSourceName)
 		{
 			return 10;
 		}
 
-		public int GetDateId(DateTime dateTime)
+		public int GetDateId(DateTime dateTime, string nhibDataSourceName)
 		{
 			DateTimeInUtc = dateTime;
 			return 1515;
 		}
 
-		public int GetIntervalLength()
+		public int GetIntervalLength(string nhibDataSourceName)
 		{
 			return 15;
 		}
+
+	
 	}
 }

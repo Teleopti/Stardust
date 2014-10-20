@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Models
 		public string LogObjectName { get; set; }
 		public string QueueId { get; set; }
 		public string QueueName { get; set; }
+		public string NhibName { get; set; }
 	}
 }
