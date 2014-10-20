@@ -5,9 +5,11 @@
 		</div>
 		<div>
 			<ul class="nav navbar-nav">
-					<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForHome()}">Schedules</a></li>
+				<!-- ko if: TeamScheduleVisible -->
+				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForTeamScheduleToday()}">Schedules</a></li>
+				<!-- /ko -->
 				<!-- ko if: RealTimeAdherenceVisible -->
-					<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
+				<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
 				<!-- /ko -->
 			</ul>
 		</div>

@@ -240,22 +240,10 @@ define([
 	}
 
 	function _bindMenu() {
-		ajax.ajax({
-			url: "Anywhere/Application/NavigationContent",
-			success: function (responseData, textStatus, jqXHR) {
-				menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
-				menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
-				menu.UserName(responseData.UserName);
-				timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
-				trackingPersonId = responseData.PersonId;
-				bindNotificationViewModel();
-				trackNotification(trackingPersonId);
-			}
-		});
 		ko.cleanNode($('nav')[0]);
 		ko.applyBindings(menu, $('nav')[0]);
 	}
-
+	
 	function _initSignalR() {
 		var promise = subscriptions.start();
 		promise.fail(function () {
@@ -278,16 +266,45 @@ define([
 		_bindMenu();
 	}
 
-	var initBusinessUnitsMenu = function () {
+	var navigationDataLoadDeferred = $.Deferred();
+	var loadNavigationContent = function (callback) {
+		ajax.ajax({
+			url: "Anywhere/Application/NavigationContent",
+			success: callback
+		});
+	}
+
+	var businessUnitsDataLoadDeffered = $.Deferred();
+	var initBusinessUnitsMenu = function (callback) {
 		ajax.ajax({
 			url: "BusinessUnit",
-			success: function (data) {
-				menu.fillBusinessUnits(data);
-				defaultBu = data[0].Id;
-
-				initAll();
-			}
+			success: callback
 		});
 	};
-	initBusinessUnitsMenu();
+
+	initBusinessUnitsMenu(function(data) {
+		menu.fillBusinessUnits(data);
+		defaultBu = data[0].Id;
+		businessUnitsDataLoadDeffered.resolve();
+	});
+
+	loadNavigationContent(function(responseData) {
+		menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
+		menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
+		menu.TeamScheduleVisible(responseData.IsTeamScheduleAvailable === true);
+		if (!responseData.IsTeamScheduleAvailable && responseData.IsRealTimeAdherenceAvailable) {
+			defaultView = 'realtimeadherencesites';
+		}
+		menu.UserName(responseData.UserName);
+		timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
+		trackingPersonId = responseData.PersonId;
+		
+		navigationDataLoadDeferred.resolve();
+	});
+
+	$.when(businessUnitsDataLoadDeffered, navigationDataLoadDeferred).done(function() {
+		initAll();
+		bindNotificationViewModel();
+		trackNotification(trackingPersonId);
+	});
 });

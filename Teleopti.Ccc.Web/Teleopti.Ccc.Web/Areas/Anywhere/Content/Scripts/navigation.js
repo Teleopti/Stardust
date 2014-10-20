@@ -32,7 +32,14 @@ define([
 			window.setLocationHash('realtimeadherenceagents/' + buid + '/' + 'MultipleSites');
 		},
 
-		UrlForHome: function(buid) {
+		UrlForHome: function (buid, realTimeAdherenceAvailable, teamScheduleAvailable) {
+			if(teamScheduleAvailable)
+				return window.baseLocation() + "#teamschedule/" + buid;
+			else if(realTimeAdherenceAvailable)
+				return window.baseLocation() + "#realtimeadherencesites/" + buid;
+			return window.baseLocation() + "#teamschedule/" + buid;
+		},
+		UrlForTeamScheduleToday: function(buid) {
 			return window.baseLocation() + "#teamschedule/" + buid;
 		},
 		UrlForChangingSchedule : function(buid,teamId,personId,date) {
