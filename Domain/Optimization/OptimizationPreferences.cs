@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -36,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool OptimizationStepDaysOffForFlexibleWorkTime { get; set; }
 		public bool OptimizationStepShiftsWithinDay { get; set; }
 		public bool OptimizationStepFairness { get; set; }
+		public bool OptimizationStepIntraInterval { get; set; }
 
 		public bool UsePreferences { get; set; }
 		public bool UseMustHaves { get; set; }

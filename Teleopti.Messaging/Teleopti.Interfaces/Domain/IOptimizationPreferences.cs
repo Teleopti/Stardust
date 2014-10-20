@@ -93,6 +93,11 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		bool OptimizationStepFairness { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indication wether to ruen the intra interval optimization step
+		/// </summary>
+		bool OptimizationStepIntraInterval { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether  to use time between days optimization step.
         /// </summary>

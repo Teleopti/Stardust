@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		private void formLoad(object sender, EventArgs e)
 		{
 			loadPersonalSettings();
-			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
+			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator, _toggleManager);
 			dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity, _toggleManager);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);

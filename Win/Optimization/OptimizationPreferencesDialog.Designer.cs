@@ -68,7 +68,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(498, 573);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(498, 591);
 			this.tableLayoutPanel1.TabIndex = 4;
 			// 
 			// tableLayoutPanel2
@@ -79,7 +79,7 @@
 			this.tableLayoutPanel2.Controls.Add(this.buttonOK, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonCancel, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 527);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 545);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
@@ -129,7 +129,7 @@
 			// tabControlTopLevel
 			// 
 			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
-			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(492, 521);
+			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(492, 539);
 			this.tabControlTopLevel.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlTopLevel.Controls.Add(this.tabPageGeneral);
 			this.tabControlTopLevel.Controls.Add(this.tabPageDaysOff);
@@ -141,7 +141,7 @@
 			this.tabControlTopLevel.ItemSize = new System.Drawing.Size(111, 22);
 			this.tabControlTopLevel.Location = new System.Drawing.Point(3, 3);
 			this.tabControlTopLevel.Name = "tabControlTopLevel";
-			this.tabControlTopLevel.Size = new System.Drawing.Size(492, 521);
+			this.tabControlTopLevel.Size = new System.Drawing.Size(492, 539);
 			this.tabControlTopLevel.TabIndex = 6;
 			this.tabControlTopLevel.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlTopLevel.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -157,7 +157,7 @@
 			this.tabPageGeneral.Name = "tabPageGeneral";
 			this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(10);
 			this.tabPageGeneral.ShowCloseButton = true;
-			this.tabPageGeneral.Size = new System.Drawing.Size(492, 500);
+			this.tabPageGeneral.Size = new System.Drawing.Size(492, 518);
 			this.tabPageGeneral.TabIndex = 1;
 			this.tabPageGeneral.Text = "xxGeneral";
 			this.tabPageGeneral.ThemesEnabled = false;
@@ -169,7 +169,7 @@
 			this.generalPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.generalPreferencesPanel1.Location = new System.Drawing.Point(10, 10);
 			this.generalPreferencesPanel1.Name = "generalPreferencesPanel1";
-			this.generalPreferencesPanel1.Size = new System.Drawing.Size(470, 478);
+			this.generalPreferencesPanel1.Size = new System.Drawing.Size(470, 496);
 			this.generalPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageDaysOff
@@ -182,7 +182,7 @@
 			this.tabPageDaysOff.Name = "tabPageDaysOff";
 			this.tabPageDaysOff.Padding = new System.Windows.Forms.Padding(10);
 			this.tabPageDaysOff.ShowCloseButton = true;
-			this.tabPageDaysOff.Size = new System.Drawing.Size(492, 500);
+			this.tabPageDaysOff.Size = new System.Drawing.Size(492, 520);
 			this.tabPageDaysOff.TabIndex = 1;
 			this.tabPageDaysOff.Text = "xxDaysOff";
 			this.tabPageDaysOff.ThemesEnabled = false;
@@ -194,7 +194,7 @@
 			this.dayOffPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dayOffPreferencesPanel1.Location = new System.Drawing.Point(10, 10);
 			this.dayOffPreferencesPanel1.Name = "dayOffPreferencesPanel1";
-			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(470, 478);
+			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(470, 498);
 			this.dayOffPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageExtra
@@ -207,7 +207,7 @@
 			this.tabPageExtra.Name = "tabPageExtra";
 			this.tabPageExtra.Padding = new System.Windows.Forms.Padding(10);
 			this.tabPageExtra.ShowCloseButton = true;
-			this.tabPageExtra.Size = new System.Drawing.Size(492, 500);
+			this.tabPageExtra.Size = new System.Drawing.Size(492, 520);
 			this.tabPageExtra.TabIndex = 2;
 			this.tabPageExtra.Text = "xxExtra";
 			this.tabPageExtra.ThemesEnabled = false;
@@ -220,7 +220,7 @@
 			this.extraPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.extraPreferencesPanel1.Location = new System.Drawing.Point(10, 10);
 			this.extraPreferencesPanel1.Name = "extraPreferencesPanel1";
-			this.extraPreferencesPanel1.Size = new System.Drawing.Size(470, 478);
+			this.extraPreferencesPanel1.Size = new System.Drawing.Size(470, 498);
 			this.extraPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageShifts
@@ -233,7 +233,7 @@
 			this.tabPageShifts.Name = "tabPageShifts";
 			this.tabPageShifts.Padding = new System.Windows.Forms.Padding(10);
 			this.tabPageShifts.ShowCloseButton = true;
-			this.tabPageShifts.Size = new System.Drawing.Size(492, 500);
+			this.tabPageShifts.Size = new System.Drawing.Size(492, 520);
 			this.tabPageShifts.TabIndex = 4;
 			this.tabPageShifts.Text = "xxShifts";
 			this.tabPageShifts.ThemesEnabled = false;
@@ -245,7 +245,7 @@
 			this.shiftsPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.shiftsPreferencesPanel1.Location = new System.Drawing.Point(10, 10);
 			this.shiftsPreferencesPanel1.Name = "shiftsPreferencesPanel1";
-			this.shiftsPreferencesPanel1.Size = new System.Drawing.Size(470, 478);
+			this.shiftsPreferencesPanel1.Size = new System.Drawing.Size(470, 498);
 			this.shiftsPreferencesPanel1.TabIndex = 0;
 			// 
 			// tabPageAdvanced
@@ -257,7 +257,7 @@
 			this.tabPageAdvanced.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvanced.Name = "tabPageAdvanced";
 			this.tabPageAdvanced.ShowCloseButton = true;
-			this.tabPageAdvanced.Size = new System.Drawing.Size(492, 500);
+			this.tabPageAdvanced.Size = new System.Drawing.Size(492, 520);
 			this.tabPageAdvanced.TabIndex = 3;
 			this.tabPageAdvanced.Text = "xxAdvanced";
 			this.tabPageAdvanced.ThemesEnabled = false;
@@ -271,7 +271,7 @@
 			this.advancedPreferencesPanel1.Location = new System.Drawing.Point(0, 0);
 			this.advancedPreferencesPanel1.Name = "advancedPreferencesPanel1";
 			this.advancedPreferencesPanel1.Padding = new System.Windows.Forms.Padding(10);
-			this.advancedPreferencesPanel1.Size = new System.Drawing.Size(490, 498);
+			this.advancedPreferencesPanel1.Size = new System.Drawing.Size(490, 518);
 			this.advancedPreferencesPanel1.TabIndex = 0;
 			// 
 			// OptimizationPreferencesDialog
@@ -283,7 +283,7 @@
 			this.BorderColor = System.Drawing.Color.Blue;
 			this.CancelButton = this.buttonCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ClientSize = new System.Drawing.Size(498, 573);
+			this.ClientSize = new System.Drawing.Size(498, 591);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

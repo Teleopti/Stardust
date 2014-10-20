@@ -54,6 +54,7 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+			this.checkBoxAdvIntraIntervalOptimization = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxFairness = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxShiftsWithinDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxDaysOffFromFlexibleWorkTime = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -80,6 +81,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownAvailabilities)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownStudentAvailabilities)).BeginInit();
 			this.tableLayoutPanel6.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIntraIntervalOptimization)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxFairness)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxShiftsWithinDay)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxDaysOffFromFlexibleWorkTime)).BeginInit();
@@ -170,11 +172,11 @@
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 4;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 251F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 222F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(461, 535);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(461, 545);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// tableLayoutPanel8
@@ -201,7 +203,7 @@
 			this.tableLayoutPanel8.Controls.Add(this.label4, 2, 4);
 			this.tableLayoutPanel8.Controls.Add(this.label5, 2, 5);
 			this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 253);
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 290);
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
 			this.tableLayoutPanel8.RowCount = 8;
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -212,7 +214,7 @@
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(455, 214);
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(455, 216);
 			this.tableLayoutPanel8.TabIndex = 23;
 			// 
 			// numericUpDownPreferences
@@ -497,6 +499,7 @@
 			// 
 			this.tableLayoutPanel6.ColumnCount = 1;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel6.Controls.Add(this.checkBoxAdvIntraIntervalOptimization, 0, 7);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxFairness, 0, 6);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxShiftsWithinDay, 0, 5);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxDaysOffFromFlexibleWorkTime, 0, 4);
@@ -505,9 +508,10 @@
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxDaysOff, 0, 1);
 			this.tableLayoutPanel6.Controls.Add(this.labelOptimizationSteps, 0, 0);
 			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 33);
+			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 39);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-			this.tableLayoutPanel6.RowCount = 8;
+			this.tableLayoutPanel6.RowCount = 9;
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -516,8 +520,23 @@
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(455, 214);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(455, 245);
 			this.tableLayoutPanel6.TabIndex = 22;
+			// 
+			// checkBoxAdvIntraIntervalOptimization
+			// 
+			this.checkBoxAdvIntraIntervalOptimization.BeforeTouchSize = new System.Drawing.Size(442, 24);
+			this.checkBoxAdvIntraIntervalOptimization.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.checkBoxAdvIntraIntervalOptimization.DrawFocusRectangle = false;
+			this.checkBoxAdvIntraIntervalOptimization.Location = new System.Drawing.Point(10, 213);
+			this.checkBoxAdvIntraIntervalOptimization.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBoxAdvIntraIntervalOptimization.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvIntraIntervalOptimization.Name = "checkBoxAdvIntraIntervalOptimization";
+			this.checkBoxAdvIntraIntervalOptimization.Size = new System.Drawing.Size(442, 24);
+			this.checkBoxAdvIntraIntervalOptimization.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAdvIntraIntervalOptimization.TabIndex = 13;
+			this.checkBoxAdvIntraIntervalOptimization.Text = "xxIntraIntervalOptimization";
+			this.checkBoxAdvIntraIntervalOptimization.ThemesEnabled = false;
 			// 
 			// checkBoxFairness
 			// 
@@ -634,7 +653,7 @@
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(455, 24);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(455, 30);
 			this.tableLayoutPanel5.TabIndex = 21;
 			// 
 			// comboBoxAdvTag
@@ -643,7 +662,7 @@
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.White;
 			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(189, 23);
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvTag.Location = new System.Drawing.Point(263, 3);
+			this.comboBoxAdvTag.Location = new System.Drawing.Point(263, 4);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
 			this.comboBoxAdvTag.Size = new System.Drawing.Size(189, 23);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
@@ -653,7 +672,7 @@
 			// 
 			this.labelTagChangesWith.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelTagChangesWith.AutoSize = true;
-			this.labelTagChangesWith.Location = new System.Drawing.Point(3, 4);
+			this.labelTagChangesWith.Location = new System.Drawing.Point(3, 7);
 			this.labelTagChangesWith.Name = "labelTagChangesWith";
 			this.labelTagChangesWith.Size = new System.Drawing.Size(140, 15);
 			this.labelTagChangesWith.TabIndex = 0;
@@ -684,7 +703,7 @@
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "GeneralPreferencesPanel";
-			this.Size = new System.Drawing.Size(461, 535);
+			this.Size = new System.Drawing.Size(461, 545);
 			this.tableLayoutPanelTagWith.ResumeLayout(false);
 			this.tableLayoutPanelTagWith.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
@@ -703,6 +722,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownStudentAvailabilities)).EndInit();
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.tableLayoutPanel6.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIntraIntervalOptimization)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxFairness)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxShiftsWithinDay)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxDaysOffFromFlexibleWorkTime)).EndInit();
@@ -754,5 +774,6 @@
         private System.Windows.Forms.Label label5;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvTag;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxFairness;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvIntraIntervalOptimization;
     }
 }

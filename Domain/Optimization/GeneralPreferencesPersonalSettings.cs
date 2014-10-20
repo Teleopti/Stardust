@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _optimizationStepShiftsForFlexibleWorkTime;
 		private bool _optimizationStepDaysOffForFlexibleWorkTime;
 		private bool _optimizationStepFairness;
+		private bool _optimizationStepIntraInterval;
 
 		private bool _usePreferences;
 		private bool _useMustHaves;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.OptimizationStepShiftsForFlexibleWorkTime = _optimizationStepShiftsForFlexibleWorkTime;
 			target.OptimizationStepDaysOffForFlexibleWorkTime = _optimizationStepDaysOffForFlexibleWorkTime;
 			target.OptimizationStepFairness = _optimizationStepFairness;
+			target.OptimizationStepIntraInterval = _optimizationStepIntraInterval;
 
 			target.UsePreferences = _usePreferences;
 			target.UseMustHaves = _useMustHaves;
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationStepShiftsForFlexibleWorkTime = source.OptimizationStepShiftsForFlexibleWorkTime;
 			_optimizationStepDaysOffForFlexibleWorkTime = source.OptimizationStepDaysOffForFlexibleWorkTime;
 			_optimizationStepFairness = source.OptimizationStepFairness;
+			_optimizationStepIntraInterval = source.OptimizationStepIntraInterval;
 
 			_usePreferences = source.UsePreferences;
 			_useMustHaves = source.UseMustHaves;
@@ -112,6 +115,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizationStepDaysOff = true;
 			_optimizationStepTimeBetweenDays = true;
 			_optimizationStepShiftsWithinDay = true;
+			_optimizationStepIntraInterval = false;
 
 			_usePreferences = true;
 			_useMustHaves = true;

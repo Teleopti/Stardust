@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(1d, _generalPreferencesTarget.RotationsValue);
 			Assert.AreEqual(1d, _generalPreferencesTarget.AvailabilitiesValue);
 			Assert.AreEqual(1d, _generalPreferencesTarget.StudentAvailabilitiesValue);
+
+			Assert.AreEqual(false, _generalPreferencesTarget.OptimizationStepIntraInterval);
 		}
 
 		[Test]
@@ -78,6 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_generalPreferencesSource.AvailabilitiesValue = 103d;
 			_generalPreferencesSource.StudentAvailabilitiesValue = 104d;
 
+			_generalPreferencesSource.OptimizationStepIntraInterval = true;
+
 			_target.MapFrom(_generalPreferencesSource);
 			_target.MapTo(_generalPreferencesTarget, _scheduleTags);
 
@@ -98,6 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(_generalPreferencesSource.RotationsValue, _generalPreferencesTarget.RotationsValue);
 			Assert.AreEqual(_generalPreferencesSource.AvailabilitiesValue, _generalPreferencesTarget.AvailabilitiesValue);
 			Assert.AreEqual(_generalPreferencesSource.StudentAvailabilitiesValue, _generalPreferencesTarget.StudentAvailabilitiesValue);
+
+			Assert.AreEqual(_generalPreferencesSource.OptimizationStepIntraInterval, _generalPreferencesTarget.OptimizationStepIntraInterval);
 		}
 
 		[Test]
