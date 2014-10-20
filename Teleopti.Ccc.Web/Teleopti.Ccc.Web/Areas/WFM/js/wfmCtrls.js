@@ -7,3 +7,9 @@ wfmCtrls.controller('MainCtrl',
 
     }
 );
+
+wfmCtrls.controller('ForecastingCtrl',
+    function ($scope) {
+
+    }
+);

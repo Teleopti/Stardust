@@ -7,5 +7,8 @@ angular.module('wfm', [
     $routeProvider.when('/', {
         templateUrl: 'html/main.html',
         controller: 'MainCtrl'
+    }).when('/forecasting', {
+        templateUrl: 'html/forecasting.html',
+        controller: 'ForecastingCtrl'
     }).otherwise({redirectTo: '/'});
 }]);

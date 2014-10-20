@@ -1,0 +1,50 @@
+/* FIXME with sass or less variables
+    $mainColor: #5677fc
+*/
+
+.material-depth-1 {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
+}
+
+.material-depth-2 {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container{
+    padding: 0;
+}
+
+.material-header {
+    background-color: #5677fc;
+    position: absolute;
+    min-height: 130px;
+    width: 100%;
+    top: 0;
+    z-index: -1;
+}
+
+.material-block {
+    height: 100%;
+    min-height: 400px;
+    background-color: white;
+}
+
+.material-block-header {
+    min-height: 60px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 10px;
+}
+
+.material-title {
+    color: rgba(0,0,0,0.54);
+}
+
+.navbar {
+    background-image: none;
+    background-color: #5677fc;
+    border :none;
+
+}
+.navbar a{
+    color: white !important;
+}

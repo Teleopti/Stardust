@@ -1221,7 +1221,10 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Areas\WFM\css\material.css" />
+    <Content Include="Areas\WFM\html\forecasting.html" />
     <Content Include="Areas\WFM\html\main.html" />
+    <Content Include="Areas\WFM\html\nav.html" />
     <Content Include="Areas\WFM\index.html" />
     <Content Include="Areas\WFM\index2.html" />
     <Content Include="Areas\WFM\js\app.js" />
