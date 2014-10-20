@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var personId = Guid.NewGuid();
 			database.AddTestData(state.SourceId, "usercode", personId, Guid.NewGuid());
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(state, database, publisher);
+			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database, publisher);
 
 			//var state = new ActualAgentState
 			//{

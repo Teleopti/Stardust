@@ -5,10 +5,13 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
+using MbCache.Core;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta
 {
@@ -16,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class TeleoptiRtaService : ITeleoptiRtaService, IDisposable
 	{
-		private IRtaDataHandler _rtaDataHandler;
+		private RtaDataHandler _rtaDataHandler;
 		private readonly INow _now;
 		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
@@ -24,9 +27,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public static string DefaultAuthenticationKey = "!#¤atAbgT%";
 
-		public TeleoptiRtaService(IRtaDataHandler rtaDataHandler, INow now, IConfigReader configReader)
+		public TeleoptiRtaService(
+			ISignalRClient signalRClient,
+			IMessageSender messageSender,
+			IDatabaseReader databaseReader,
+			IDatabaseWriter databaseWriter,
+			IMbCacheFactory cacheFactory,
+			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
+			INow now,
+			IConfigReader configReader)
 		{
-			_rtaDataHandler = rtaDataHandler;
+			_rtaDataHandler = new RtaDataHandler(
+				signalRClient,
+				messageSender,
+				databaseReader,
+				databaseWriter,
+				cacheFactory,
+				actualAgentStateHasBeenSent);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");

@@ -10,9 +10,9 @@ using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
-	public class RtaDataHandler : IRtaDataHandler
+	public class RtaDataHandler
 	{
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IRtaDataHandler));
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (RtaDataHandler));
 		private readonly IEnumerable<IActualAgentStateHasBeenSent> _actualAgentStateHasBeenSent;
 
 		private readonly IActualAgentAssembler _agentAssembler;

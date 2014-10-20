@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			builder.Register<IGetCurrentActualAgentState>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
-			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 
 			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();
 
