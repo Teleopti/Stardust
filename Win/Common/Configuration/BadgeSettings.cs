@@ -191,6 +191,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				{
 					ViewBase.ShowWarningMessage("unit work: " + uow, Resources.ResetBadges);
 					ViewBase.ShowWarningMessage(ex.Message, Resources.ResetBadges);
+					ViewBase.ShowWarningMessage(ex.StackTrace, Resources.ResetBadges);
 					ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
 				}
 			}
