@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
-			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
 
-			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
-			builder.RegisterType<PersonResolver>().As<IPersonResolver>();
 			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();
 
 			registerAdherenceComponents(builder);

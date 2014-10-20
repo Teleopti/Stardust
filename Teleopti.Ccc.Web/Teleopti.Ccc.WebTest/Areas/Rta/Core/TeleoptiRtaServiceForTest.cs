@@ -60,12 +60,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			return new RtaDataHandler(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
-				new PersonResolver(database),
 				new ActualAgentAssembler(
 					database,
-					new CurrentAndNextLayerExtractor(),
-					MockRepository.GenerateMock<IMbCacheFactory>(),
-					new AlarmMapper(database, database, cacheFactory)
+					database,
+					cacheFactory
 					),
 				database,
 				database,

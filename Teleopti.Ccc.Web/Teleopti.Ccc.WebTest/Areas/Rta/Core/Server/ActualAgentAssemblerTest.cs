@@ -26,8 +26,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 		private DateTime _dateTime, _batchId;
 		private ScheduleLayer currentLayer, nextLayer;
 		private string _stateCode, _sourceId;
-	    private ICurrentAndNextLayerExtractor _currentAndNextLayerExtractor;
-	    private const string loggedOutStateCode = "CCC Logged out";
+		private ICurrentAndNextLayerExtractor _currentAndNextLayerExtractor;
+		private const string loggedOutStateCode = "CCC Logged out";
+
+		private class actualAgentAssemblerForTest : ActualAgentAssembler
+		{
+			public actualAgentAssemblerForTest(IDatabaseReader databaseReader, ICurrentAndNextLayerExtractor extractor, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper) : base(databaseReader, null, mbCacheFactory)
+			{
+				CurrentAndNextLayerExtractor = extractor;
+				AlarmMapper = alarmMapper;
+			}
+		}
 
 		[SetUp]
 		public void Setup()
@@ -36,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			_cacheFactory = MockRepository.GenerateStrictMock<IMbCacheFactory>();
 			_alarmMapper = MockRepository.GenerateStrictMock<IAlarmMapper>();
             _currentAndNextLayerExtractor = MockRepository.GenerateStrictMock<ICurrentAndNextLayerExtractor>();
-			_target = new ActualAgentAssembler(_dataReader, _currentAndNextLayerExtractor, _cacheFactory, _alarmMapper);
+			_target = new actualAgentAssemblerForTest(_dataReader, _currentAndNextLayerExtractor, _cacheFactory, _alarmMapper);
 
 			_stateCode = "AUX2";
 			_platformTypeId = Guid.NewGuid();

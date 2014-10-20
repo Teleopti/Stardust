@@ -19,12 +19,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly ISignalRClient _messageClient;
 		private readonly IMessageSender _messageSender;
 		private readonly DataSourceResolver _dataSourceResolver;
-		private readonly IPersonResolver _personResolver;
+		private readonly PersonResolver _personResolver;
 
 		public RtaDataHandler(
 			ISignalRClient messageClient,
 			IMessageSender messageSender,
-			IPersonResolver personResolver,
 			IActualAgentAssembler agentAssembler,
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_messageClient = messageClient;
 			_messageSender = messageSender;
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
-			_personResolver = personResolver;
+			_personResolver = new PersonResolver(databaseReader);
 			_agentAssembler = agentAssembler;
 			_databaseWriter = databaseWriter;
 			_actualAgentStateHasBeenSent = actualAgentStateHasBeenSent;

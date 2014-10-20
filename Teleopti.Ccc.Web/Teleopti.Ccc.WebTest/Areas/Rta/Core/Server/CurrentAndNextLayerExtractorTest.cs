@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
     [TestFixture]
     public class CurrentAndNextLayerExtractorTest
     {
-        private ICurrentAndNextLayerExtractor _target;
+        private CurrentAndNextLayerExtractor _target;
         private readonly DateTime _dateTime = DateTime.UtcNow;
 
         [SetUp]

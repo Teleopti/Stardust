@@ -9,30 +9,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 	[TestFixture]
 	public static class InvalidateRtaDataHandlerCacheTest
 	{
-		 [Test]
-		 public static void ShouldInvalidate()
-		 {
-			 var mbCacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
-			 var dataHandler = MockRepository.GenerateMock<IDatabaseReader>();
-			 var alarmMapper = MockRepository.GenerateMock<IAlarmMapper>();
-             var currentAndNextLayerExtractor = MockRepository.GenerateMock<ICurrentAndNextLayerExtractor>();
-			 var personId = Guid.NewGuid();
-			 var timeStamp = DateTime.Now;
-			 var target = new actualAgentAssemblerForTest(dataHandler, mbCacheFactory, alarmMapper, currentAndNextLayerExtractor);
+		[Test]
+		public static void ShouldInvalidate()
+		{
+			var mbCacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
+			var dataHandler = MockRepository.GenerateMock<IDatabaseReader>();
+			var alarmMapper = MockRepository.GenerateMock<IAlarmMapper>();
+			var currentAndNextLayerExtractor = MockRepository.GenerateMock<ICurrentAndNextLayerExtractor>();
+			var personId = Guid.NewGuid();
+			var timeStamp = DateTime.Now;
+			var target = new actualAgentAssemblerForTest(dataHandler, mbCacheFactory, alarmMapper, currentAndNextLayerExtractor);
 
-			 target.InvalidateReadModelCache(personId);
+			target.InvalidateReadModelCache(personId);
 
-			 mbCacheFactory.AssertWasCalled(
-				 x =>
-				 x.Invalidate(target.ExposeDatabaseReader,
-				              y => y.ActivityAlarms(), true),
-				 o => o.IgnoreArguments());
-		 }
+			mbCacheFactory.AssertWasCalled(
+				x =>
+				x.Invalidate(target.ExposeDatabaseReader,
+							 y => y.ActivityAlarms(), true),
+				o => o.IgnoreArguments());
+		}
 
 		private class actualAgentAssemblerForTest : ActualAgentAssembler
 		{
-			public actualAgentAssemblerForTest(IDatabaseReader databaseReader, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper, ICurrentAndNextLayerExtractor currentAndNextLayerExtractor) : base(databaseReader, currentAndNextLayerExtractor, mbCacheFactory, alarmMapper)
+			public actualAgentAssemblerForTest(IDatabaseReader databaseReader, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper, ICurrentAndNextLayerExtractor extractor)
+				: base(databaseReader, null, mbCacheFactory)
 			{
+				CurrentAndNextLayerExtractor = extractor;
+				AlarmMapper = alarmMapper;
 			}
 
 			public IDatabaseReader ExposeDatabaseReader

@@ -10,24 +10,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
     public class ActualAgentAssembler : IActualAgentAssembler
 	{
-		private readonly IDatabaseReader _databaseReader;
-        private readonly ICurrentAndNextLayerExtractor _currentAndNextLayerExtractor;
         private readonly IMbCacheFactory _mbCacheFactory;
-		private readonly IAlarmMapper _alarmMapper;
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IActualAgentAssembler));
 		private const string notInBatchStatecode = "CCC Logged out";
 
-		public ActualAgentAssembler(IDatabaseReader databaseReader, ICurrentAndNextLayerExtractor currentAndNextLayerExtractor, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper)
-		{
-			_databaseReader = databaseReader;
-		    _currentAndNextLayerExtractor = currentAndNextLayerExtractor;
-		    _mbCacheFactory = mbCacheFactory;
-			_alarmMapper = alarmMapper;
-		}
+		protected ICurrentAndNextLayerExtractor CurrentAndNextLayerExtractor;
+		protected IAlarmMapper AlarmMapper;
+		protected IDatabaseReader DatabaseReader;
 
-		protected IDatabaseReader DatabaseReader
+		public ActualAgentAssembler(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory)
 		{
-			get { return _databaseReader; }
+			DatabaseReader = databaseReader;
+		    CurrentAndNextLayerExtractor = new CurrentAndNextLayerExtractor();
+		    _mbCacheFactory = mbCacheFactory;
+			AlarmMapper = new AlarmMapper(databaseReader, databaseWriter, mbCacheFactory);
 		}
 
 		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId)
@@ -43,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			var updatedAgents = new List<IActualAgentState>();
 			var notLoggedOutAgents = missingAgentStates
-				.Where(a => !_alarmMapper.IsAgentLoggedOut(a.PersonId,
+				.Where(a => !AlarmMapper.IsAgentLoggedOut(a.PersonId,
 														   a.StateCode,
 														   a.PlatformTypeId,
 														   a.BusinessUnit)).ToList();
@@ -62,14 +58,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				agentState.BatchId = batchId;
 				agentState.OriginalDataSourceId = sourceId;
 
-				var stateGroup = _alarmMapper.GetStateGroup(notInBatchStatecode, Guid.Empty, agentState.BusinessUnit);
+				var stateGroup = AlarmMapper.GetStateGroup(notInBatchStatecode, Guid.Empty, agentState.BusinessUnit);
 				if (stateGroup != null)
 				{
 					agentState.State = stateGroup.StateGroupName;
-					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, stateGroup.StateGroupId, agentState.BusinessUnit);
+					foundAlarm = AlarmMapper.GetAlarm(agentState.ScheduledId, stateGroup.StateGroupId, agentState.BusinessUnit);
 				}
 				else
-					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, Guid.Empty, agentState.BusinessUnit);
+					foundAlarm = AlarmMapper.GetAlarm(agentState.ScheduledId, Guid.Empty, agentState.BusinessUnit);
 
 				if (foundAlarm != null)
 				{
@@ -112,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			else
 				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
 
-			var scheduleLayers = _currentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
+			var scheduleLayers = CurrentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = DatabaseReader.GetCurrentActualAgentState(personId);
 
 			if (previousState == null)
@@ -162,7 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			else
 				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
 
-			var scheduleLayers = _currentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
+			var scheduleLayers = CurrentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = DatabaseReader.GetCurrentActualAgentState(personId);
 			return buildAgentState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState,
 								   businessUnitId, batchId, originalSourceId);
@@ -194,15 +190,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
-			var state = _alarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
+			var state = AlarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
 				newState.StateId = state.StateGroupId;
 				newState.State = state.StateGroupName;
-				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
+				foundAlarm = AlarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
 			}
 			else
-				foundAlarm = _alarmMapper.GetAlarm(activityId, Guid.Empty, businessUnitId);
+				foundAlarm = AlarmMapper.GetAlarm(activityId, Guid.Empty, businessUnitId);
 
 			if (foundAlarm != null)
 			{

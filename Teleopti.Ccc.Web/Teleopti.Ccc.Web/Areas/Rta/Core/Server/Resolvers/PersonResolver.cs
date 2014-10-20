@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 {
-	public class PersonResolver : IPersonResolver
+	public class PersonResolver
 	{
 		private readonly IDatabaseReader _databaseReader;
 		
