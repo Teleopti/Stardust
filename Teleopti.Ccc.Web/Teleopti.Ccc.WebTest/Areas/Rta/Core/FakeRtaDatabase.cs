@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		IFakeDataBuilder AddFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder AddSource(string sourceId);
 		IFakeDataBuilder AddUser(string userCode, Guid personId, Guid businessUnitId);
+		IFakeDataBuilder AddSchedule(DateTime start, DateTime end);
 		FakeRtaDatabase Done();
 	}
 
@@ -21,7 +22,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 	{
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
-
+		private readonly List<ScheduleLayer> _schedule = new List<ScheduleLayer>();
+		 
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
 		public IFakeDataBuilder AddFromState(ExternalUserStateForTest state)
@@ -41,6 +43,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		{
 			var lookupKey = string.Format("{0}|{1}", _datasources.Last().Value, userCode).ToUpper(); //putting this logic here is just WRONG
 			_externalLogOns.Add(new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(lookupKey, new[] { new PersonWithBusinessUnit { PersonId = personId, BusinessUnitId = businessUnitId } }));
+			return this;
+		}
+
+		public IFakeDataBuilder AddSchedule(DateTime start, DateTime end)
+		{
+			_schedule.Add(new ScheduleLayer {PayloadId = Guid.NewGuid(), StartDateTime = start, EndDateTime = end});
 			return this;
 		}
 
@@ -66,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
-			return new List<ScheduleLayer>();
+			return _schedule;
 		}
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
