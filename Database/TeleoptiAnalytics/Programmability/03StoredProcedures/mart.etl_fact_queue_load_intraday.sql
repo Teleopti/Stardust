@@ -70,6 +70,7 @@ ELSE  --Single datasource_id
 	declare @target_date_id_utc int
 	declare @target_interval_id_utc smallint
 	declare @target_date_local smalldatetime
+	declare @target_date_local_id int
 	declare @target_interval_local smallint
 	declare @intervals_back smallint
 	
@@ -135,18 +136,12 @@ ELSE  --Single datasource_id
 	SELECT
 		@target_date_id_utc = b.date_id,
 		@target_interval_id_utc = b.interval_id
-	FROM mart.sys_datasource_detail dsd
-	inner join mart.sys_datasource ds
-		on dsd.datasource_id = ds.datasource_id
-	inner join mart.dim_date d
-		on dsd.target_date_local = d.date_date
-	inner join mart.bridge_time_zone b
-		on b.time_zone_id = ds.time_zone_id
-		and d.date_id = b.local_date_id
-		and dsd.target_interval_local = b.local_interval_id
-	WHERE dsd.detail_id		= @detail_id
-	AND dsd.datasource_id	= @datasource_id
-
+	FROM  mart.dim_date d
+	INNER JOIN mart.bridge_time_zone b
+		ON d.date_id = b.local_date_id
+		AND b.time_zone_id=@time_zone_id
+		AND b.local_interval_id=@target_interval_local
+	WHERE d.date_date=@target_date_local
 
 	--If Mart is ahead of Agg, bail out
 	IF (@target_date_id_utc-@source_date_id_utc>0
