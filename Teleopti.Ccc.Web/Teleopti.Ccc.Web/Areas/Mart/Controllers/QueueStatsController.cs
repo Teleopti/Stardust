@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Mvc;
+﻿using System.Web.Http;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -24,24 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 		
 		public void Post([FromBody]QueueStatsModel value)
 		{
-			if (!ModelState.IsValid)
-			{
-				var mess = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "The Queue statistics are not valid");
-				throw new HttpResponseException(mess);
-			}
-			try
-			{
-				var result = _queueStatHandler.Handle(value);
-			}
-			catch (QueueStatException ex)
-			{
-				var mess = Request.CreateErrorResponse(ex.StatusCode, ex.Message);
-				throw new HttpResponseException(mess);
-			}
-			
+				_queueStatHandler.Handle(value);
 		}
-
 	}
-
-
 }

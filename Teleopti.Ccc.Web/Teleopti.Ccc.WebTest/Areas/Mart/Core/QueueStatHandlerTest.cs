@@ -7,11 +7,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 {
 	[TestFixture]
-	public class QueueStatsTest
+	public class QueueStatHandlerTest
 	{
 
-		[Test, ExpectedException(typeof(QueueStatException))]
-		public void ShouldThrowIfLogobjectNameIsEmpty()
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void ShouldThrowIfLogObjectNameIsEmpty()
 		{
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
@@ -23,13 +23,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		{
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
-			var facts = target.Handle(new QueueStatsModel { LogObjectName = "SomeAcdSomewhere", QueueName = "kön", DateAndTimeString = "2014-12-12 15:00" });
-			Assert.That(facts[0].QueueId, Is.EqualTo(10));
+			target.Handle(new QueueStatsModel { LogObjectName = "SomeAcdSomewhere", QueueName = "kön", DateAndTimeString = "2014-12-12 15:00" });
+			Assert.That(fakeRepos.QueueId, Is.EqualTo(10));
 		}
 
 		[Test]
 		public void ShouldGetDateIdFromDatabase()
 		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
 			var queueStatsModel = new QueueStatsModel
@@ -38,9 +39,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				DateAndTimeString = "2014-12-12 15:00"
 			};
-			var facts = target.Handle(queueStatsModel);
-			Assert.That(facts[0].DateId, Is.EqualTo(1515));
-			var  timeZone =TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			target.Handle(queueStatsModel);
+			Assert.That(fakeRepos.DateId, Is.EqualTo(1515));
 			Assert.That(fakeRepos.DateTimeInUtc, Is.EqualTo(TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueStatsModel.DateAndTimeString), timeZone)));
 		}
 
@@ -55,12 +55,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				DateAndTimeString = "2014-12-12 15:00"
 			};
-			var facts = target.Handle(queueStatsModel);
-			Assert.That(facts[0].IntervalId, Is.EqualTo(56));
+			target.Handle(queueStatsModel);
+			Assert.That(fakeRepos.IntervalId, Is.EqualTo(56));
 		}
 	}
-
-	class FakeQueueStatRepository : IQueueStatRepository
+class FakeQueueStatRepository : IQueueStatRepository
 	{
 		public DateTime DateTimeInUtc;
 
@@ -90,4 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 
 	
 	}
+
+
+	
 }
