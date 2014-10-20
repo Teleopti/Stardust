@@ -474,7 +474,6 @@
     <Compile Include="Areas\Rta\Core\Server\IRtaDataHandlerCache.cs" />
     <Compile Include="Areas\Rta\Core\Server\NotificationFactory.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Resolvers\IDataSourceResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\IPersonResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonWithBusinessUnit.cs" />

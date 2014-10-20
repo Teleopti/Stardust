@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 	[TestFixture]
 	public class PersonInAdherenceEventTest
 	{
-		[Test, Ignore]
+		[Test]
 		public void ShouldPublishPersonInAdherenceEvent() // (...WhenNoStaffingEffect)
 		{
 			var state = new ExternalUserStateForTest

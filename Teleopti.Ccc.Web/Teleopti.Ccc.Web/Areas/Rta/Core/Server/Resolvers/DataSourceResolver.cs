@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 {
-	public class DataSourceResolver : IDataSourceResolver
+	public class DataSourceResolver
 	{
 		private readonly IDatabaseReader _databaseReader;
 

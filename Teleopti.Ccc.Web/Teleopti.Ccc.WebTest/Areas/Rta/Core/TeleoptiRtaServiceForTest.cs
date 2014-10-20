@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			return new RtaDataHandler(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
-				new DataSourceResolver(database),
 				new PersonResolver(database),
 				new ActualAgentAssembler(
 					database,
@@ -68,6 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 					MockRepository.GenerateMock<IMbCacheFactory>(),
 					new AlarmMapper(database, database, cacheFactory)
 					),
+				database,
 				database,
 				new IActualAgentStateHasBeenSent[]
 				{
