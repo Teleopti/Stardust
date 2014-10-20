@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
@@ -8,20 +9,44 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 {
-	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader
+	public interface IFakeDataBuilder
+	{
+		IFakeDataBuilder AddFromState(ExternalUserStateForTest state);
+		IFakeDataBuilder AddSource(string sourceId);
+		IFakeDataBuilder AddUser(string userCode, Guid personId, Guid businessUnitId);
+		FakeRtaDatabase Done();
+	}
+
+	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
 	{
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
 
 		public IActualAgentState PersistedActualAgentState { get; set; }
-		 
-		public void AddTestData(string sourceId, string userCode, Guid personId, Guid businessUnitId)
-		{
-			const int datasourceId = 0;
-			_datasources.Add(new KeyValuePair<string, int>(sourceId, datasourceId));
-			var lookupKey = string.Format("{0}|{1}", datasourceId, userCode).ToUpper(); //putting this logic here is just WRONG
-			_externalLogOns.Add(new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(lookupKey, new[] { new PersonWithBusinessUnit { PersonId = personId, BusinessUnitId = businessUnitId } }));
 
+		public IFakeDataBuilder AddFromState(ExternalUserStateForTest state)
+		{
+			AddSource(state.SourceId);
+			AddUser(state.UserCode, Guid.NewGuid(), Guid.NewGuid());
+			return this;
+		}
+
+		public IFakeDataBuilder AddSource(string sourceId)
+		{
+			_datasources.Add(new KeyValuePair<string, int>(sourceId, 0));
+			return this;
+		}
+
+		public IFakeDataBuilder AddUser(string userCode, Guid personId, Guid businessUnitId)
+		{
+			var lookupKey = string.Format("{0}|{1}", _datasources.Last().Value, userCode).ToUpper(); //putting this logic here is just WRONG
+			_externalLogOns.Add(new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(lookupKey, new[] { new PersonWithBusinessUnit { PersonId = personId, BusinessUnitId = businessUnitId } }));
+			return this;
+		}
+
+		public FakeRtaDatabase Done()
+		{
+			return this;
 		}
 
 		public IActualAgentState GetCurrentActualAgentState(Guid personId)
@@ -74,4 +99,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			yield break;
 		}
 	}
+
 }

@@ -17,9 +17,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 				UserCode = "usercode",
 				StateCode = "statecode"
 			};
-			var database = new FakeRtaDatabase();
 			var personId = Guid.NewGuid();
-			database.AddTestData(state.SourceId, "usercode", personId, Guid.NewGuid());
+			var database = new FakeRtaDatabase()
+				.AddSource(state.SourceId)
+				.AddUser("usercode", personId, Guid.NewGuid())
+				.Done();
 			var publisher = new FakeEventsPublisher();
 			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database, publisher);
 
