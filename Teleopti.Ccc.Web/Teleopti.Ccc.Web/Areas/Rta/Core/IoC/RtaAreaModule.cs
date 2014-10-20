@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.IoC
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterModule(new RtaModule(_configuration));
-			builder.RegisterType<TeleoptiRtaService>().AsSelf().As<ITeleoptiRtaService>().SingleInstance();
 		}
 	}
 }

@@ -8,10 +8,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
@@ -20,11 +22,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 	public class RtaModuleTest
 	{
 		[Test]
-		public void ShouldResolveRtaDataHandler()
+		public void ShouldResolveTeleoptiRtaService()
 		{
 			using (var container = BuildContainer())
 			{
-				container.Resolve<IRtaDataHandler>()
+				container.Resolve<TeleoptiRtaService>()
 					.Should().Not.Be.Null();
 			}
 		}
@@ -104,6 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
 			builder.RegisterModule(new EventHandlersModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
@@ -125,8 +128,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
 			return toggleManager;
 		}
-
-
 
 	}
 }
