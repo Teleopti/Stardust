@@ -1,5 +1,6 @@
 /* FIXME with sass or less variables
     $mainColor: #5677fc
+    $mainColorLight: #738ffe
 */
 
 .material-depth-1 {
@@ -27,12 +28,18 @@
     height: 100%;
     min-height: 400px;
     background-color: white;
+    border-radius: 2px;
 }
 
 .material-block-header {
     min-height: 60px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     padding: 10px;
+}
+
+.material-block-content {
+    padding: 10px;
+    vertical-align: middle;
 }
 
 .material-title {
@@ -47,4 +54,15 @@
 }
 .navbar a{
     color: white !important;
+}
+
+.material-btn {
+    width: 300px;
+    border-radius: 2px;
+    background-color: #5677fc;
+    border:none;
+}
+
+.material-btn:hover{
+    background-color: #3b50ce;
 }
