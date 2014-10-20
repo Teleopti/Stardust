@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -59,14 +58,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var messageSender = MockRepository.GenerateMock<IMessageSender>();
 			return new RtaDataHandler(
 				new FakeSignalRClient(),
-				MockRepository.GenerateMock<IMessageSender>(),
-				new ActualAgentAssembler(
-					database,
-					database,
-					cacheFactory
-					),
+				messageSender,
 				database,
 				database,
+				cacheFactory,
 				new IActualAgentStateHasBeenSent[]
 				{
 					new AdherenceAggregator(

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
@@ -24,16 +25,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public RtaDataHandler(
 			ISignalRClient messageClient,
 			IMessageSender messageSender,
-			IActualAgentAssembler agentAssembler,
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
+			IMbCacheFactory mbCacheFactory,
 			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent)
 		{
 			_messageClient = messageClient;
 			_messageSender = messageSender;
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_personResolver = new PersonResolver(databaseReader);
-			_agentAssembler = agentAssembler;
+			_agentAssembler = new ActualAgentAssembler(databaseReader, databaseWriter, mbCacheFactory);
 			_databaseWriter = databaseWriter;
 			_actualAgentStateHasBeenSent = actualAgentStateHasBeenSent;
 		}
