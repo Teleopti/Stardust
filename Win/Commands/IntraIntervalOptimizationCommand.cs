@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Commands
 		void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, BackgroundWorker backgroundWorker);
 	}
 
-	public class IntraIntervalOptimizationCommand
+	public class IntraIntervalOptimizationCommand : IIntraIntervalOptimizationCommand
 	{
 		private readonly IIntraIntervalOptimizationService _intervalOptimizationService;
 		private BackgroundWorker _backgroundWorker;
