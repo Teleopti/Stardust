@@ -1,7 +1,7 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
+/// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
@@ -58,11 +58,43 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
     });
 
 	this.SelectedTemplateId = ko.computed({
-	    read: self.SelectedTemplateIdInternal,
-	    write: function(value) {
-	        self.SelectedTemplateIdInternal(value);
-	        self.UpdateModelFromTemplate();
-	    }
+		read: self.SelectedTemplateIdInternal,
+		write: function (value) {
+			if (value == undefined || value.length == 0) {
+				self.SelectedTemplateIdInternal(value);
+				self.UpdateModelFromTemplate();
+			} else {
+				var newTemplate = self.GetTemplateById(value);
+				var periodData = $('#Preference-body').data('mytime-periodselection');
+
+				var parameters = {
+					date: moment(periodData.Date).format("YYYY-MM-DD"),
+					preferenceId: newTemplate.PreferenceId
+				};
+
+				ajax.Ajax({
+					url: "Preference/ValidatePreference",
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					type: 'GET',
+					data: parameters,
+					statusCode400: function(jqXHR, textStatus, errorThrown) {
+						var errorMessage = $.parseJSON(jqXHR.responseText);
+						var message = errorMessage.Errors.join('</br>');
+						self.ValidationError(message);
+					},
+					success: function(data, textStatus, jqXHR) {
+						var result = $.parseJSON(jqXHR.responseText);
+						if (result.isValid) {
+							self.SelectedTemplateIdInternal(value);
+							self.UpdateModelFromTemplate();
+						} else {
+							self.ValidationError(result.message);
+						}
+					}
+				});
+			}
+		}
 	});
 
     this.ShowError = ko.computed(function() {
@@ -198,17 +230,18 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		self.IsTimeInputVisible(isShiftCategorySelectedAsStandardPreferenceMethod());
 		_initPreferenceString();
 	};
-    
+
+	this.GetTemplateById = function (id) {
+		var selectedItemArray = $.grep(self.AvailableTemplates(), function (item, index) {
+			return id === item.Value;
+		});
+
+		return selectedItemArray.length > 0 ? selectedItemArray[0] : undefined;
+	}
+	
 	this.SelectedTemplate = ko.computed({
 	    read: function() {
-	        var selectedItemArray = $.grep(self.AvailableTemplates(), function (item, index) {
-	            return self.SelectedTemplateId() === item.Value;
-	        });
-
-	        if (selectedItemArray.length > 0)
-	            return selectedItemArray[0];
-	        
-	        return undefined;
+			return self.GetTemplateById(self.SelectedTemplateId());
 	    },
 	    write: function (value) {
 	        if (value !== undefined && value.Value !== undefined) {

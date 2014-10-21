@@ -12426,4 +12426,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Rank</value>
     <comment>Rank in the badge leader board in MyTimeWeb</comment>
   </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>The preference cannot be added because the selected item is not available anymore.</value>
+    <comment>Error message in preference of MyTimeWeb</comment>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Cannot get preference setting.</value>
+    <comment>Error message in preference of MyTimeWeb</comment>
+  </data>
 </root>

@@ -1,7 +1,9 @@
+using Autofac.Extras.DynamicProxy2;
 using System;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Autofac.Extras.DynamicProxy2;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -130,6 +132,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			_preferenceTemplatePersister.Delete(id);
 			return Json("");
+		}
+
+		[UnitOfWork]
+		[HttpGet]
+		[ActionName("ValidatePreference")]
+		public virtual JsonResult CheckPreferenceValidation(DateOnly date, Guid preferenceId)
+		{
+			const JsonRequestBehavior requestOption = JsonRequestBehavior.AllowGet;
+
+			var preferenceModel = _viewModelFactory.CreateViewModel(date);
+			if (preferenceModel == null || preferenceModel.Options == null)
+			{
+				return Json(new
+				{
+					isValid = false,
+					message = Resources.CannotGetPreferenceSetting
+				}, requestOption);
+			}
+
+			var preferenceExisted =
+				preferenceModel.Options.PreferenceOptions.Any(x => x.Options.Any(y => new Guid(y.Value) == preferenceId));
+
+			return Json(new
+			{
+				isValid = preferenceExisted,
+				message = preferenceExisted ? string.Empty : Resources.CannotAddPreferenceSelectedItemNotAvailable
+			}, requestOption);
 		}
 	}
 }

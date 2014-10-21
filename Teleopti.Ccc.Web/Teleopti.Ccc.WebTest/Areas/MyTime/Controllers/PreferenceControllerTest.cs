@@ -1,14 +1,16 @@
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
-using NUnit.Framework;
-using Rhino.Mocks;
-using SharpTestsEx;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.TestHelper;
@@ -19,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class PreferenceControllerTest
 	{
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnPreferencePartialView()
 		{
@@ -223,6 +224,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			preferenceTemplatePersister.AssertWasCalled(x => x.Delete(id));
 
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldCheckPreferenceValidation()
+		{
+			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
+			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
+			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
+
+			var shiftCategoryId = Guid.NewGuid();
+			var preferenceOptions = new[]
+			{
+				new PreferenceOption{Value = shiftCategoryId.ToString()}
+			};
+			var preferenceOptionsGroup = new PreferenceOptionGroup("ShiftCategory", preferenceOptions);
+
+			var activityOptions = new[]
+			{
+				new PreferenceOption{Value = Guid.NewGuid().ToString()}
+			};
+			var activityOptionsGroup = new PreferenceOptionGroup("Activity", activityOptions);
+
+			var preferenceViewModel = new PreferenceViewModel
+			{
+				Options = new PreferenceOptionsViewModel(new[] {preferenceOptionsGroup}, activityOptionsGroup)
+			};
+
+			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(preferenceViewModel);
+
+			var result = target.CheckPreferenceValidation(DateOnly.Today, shiftCategoryId);
+			dynamic data = result.Data;
+			Assert.AreEqual(data.isValid, true);
+			Assert.AreEqual(data.message, string.Empty);
+
+			result = target.CheckPreferenceValidation(DateOnly.Today, Guid.NewGuid());
+			data = result.Data;
+			Assert.AreEqual(data.isValid, false);
+			Assert.AreEqual(data.message, Resources.CannotAddPreferenceSelectedItemNotAvailable);
 		}
 	}
 }

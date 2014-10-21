@@ -3873,6 +3873,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The preference cannot be added because the selected item is not available anymore..
+        /// </summary>
+        public static string CannotAddPreferenceSelectedItemNotAvailable {
+            get {
+                return ResourceManager.GetString("CannotAddPreferenceSelectedItemNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The preference cannot be added because the selected item &apos;{0}&apos; not is available anymore..
         /// </summary>
         public static string CannotAddPreferenceSelectedItemNotAvailableParameter0 {
@@ -3995,6 +4004,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CanNotFindTheServiceEndPoint {
             get {
                 return ResourceManager.GetString("CanNotFindTheServiceEndPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot get preference setting..
+        /// </summary>
+        public static string CannotGetPreferenceSetting {
+            get {
+                return ResourceManager.GetString("CannotGetPreferenceSetting", resourceCulture);
             }
         }
         
