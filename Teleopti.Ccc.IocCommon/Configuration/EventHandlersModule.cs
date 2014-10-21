@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class EventHandlersModule : Module
+	internal class EventHandlersModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

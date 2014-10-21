@@ -24,9 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterModule<LocalServiceBusEventsPublisherModule>();
-
-			builder.RegisterModule<EventHandlersModule>();
-
+			
 			using (var container = builder.Build())
 			{
 				container.Resolve<IHandleEvent<ScheduleProjectionReadOnlyChanged>>().Should().Not.Be.Null();

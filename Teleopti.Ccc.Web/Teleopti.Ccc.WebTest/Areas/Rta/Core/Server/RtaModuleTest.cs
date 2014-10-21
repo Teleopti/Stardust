@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldResolveAgentStateChangedCommandHandler()
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))
@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core.Server
 			var config = new IocConfiguration(new IocArgs(), null);
 			builder.RegisterModule(new CommonModule(config));
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
-			builder.RegisterModule(new EventHandlersModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}

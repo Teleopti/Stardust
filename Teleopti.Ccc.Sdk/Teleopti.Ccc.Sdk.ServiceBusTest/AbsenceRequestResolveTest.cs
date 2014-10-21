@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule<EventHandlersModule>();
 					builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 
 			using (var container = builder.Build())

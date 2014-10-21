@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new AuthenticationModule {ApplicationData = ApplicationData});
 			builder.RegisterModule<ForecasterModule>();
+			builder.RegisterModule<EventHandlersModule>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

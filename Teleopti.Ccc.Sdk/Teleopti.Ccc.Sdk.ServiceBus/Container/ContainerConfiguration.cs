@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<CommandDispatcherModule>();
 			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
-			build.RegisterModule<EventHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
