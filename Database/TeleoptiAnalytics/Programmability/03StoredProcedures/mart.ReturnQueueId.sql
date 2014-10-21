@@ -23,13 +23,16 @@ AND datasource_id = @datasource_id
 
 IF @retid is null
 BEGIN
-INSERT mart.dim_queue(queue_name, queue_original_id, datasource_id)
-VALUES (@queue_name, @queue_original_id, @datasource_id)
+	DECLARE @log_object_name nvarchar(100)
+	SELECT @log_object_name = log_object_name FROM mart.sys_datasource WHERE datasource_id = @datasource_id
 
-SELECT @retid = @@IDENTITY
+	INSERT mart.dim_queue(queue_name, queue_description, queue_original_id, datasource_id, log_object_name)
+	VALUES (@queue_name, @queue_name, @queue_original_id, @datasource_id, @log_object_name)
+
+	SELECT @retid = @@IDENTITY
 END
 
-select @retid as id
+SELECT @retid as id
 GO
 
 

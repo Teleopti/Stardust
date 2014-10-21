@@ -184,7 +184,8 @@
     <Compile Include="Areas\Anywhere\Hubs\FakeClientBuilder.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
     <Compile Include="Areas\Forecasting\RoutingTest.cs" />
-    <Compile Include="Areas\Mart\Core\QueueStatsTest.cs" />
+    <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
+    <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterControllerTest.cs" />

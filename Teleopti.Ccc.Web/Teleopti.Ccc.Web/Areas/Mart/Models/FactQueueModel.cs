@@ -6,27 +6,20 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Models
 		public int IntervalId { get; set; }
 		public int LogObjectId { get; set; }
 		public int QueueId { get; set; }
-
-		//date_id 
-		//interval_id 
-		// //queue_id
-		//offered_calls      
-		//answered_calls          
-		//answered_calls_within_SL  
-		//abandoned_calls             
-		//abandoned_calls_within_SL  
-		//abandoned_short_calls       
-		//overflow_out_calls          
-		//overflow_in_calls               
-		//talk_time_s                    
-		//after_call_work_s             
-		//handle_time_s                  
-		//speed_of_answer_s            
-		//time_to_abandon_s             
-		//longest_delay_in_queue_answered_s   
-		//longest_delay_in_queue_abandoned_s  
-		// //datasource_id 
-		//insert_date
-
+		public int OfferedCalls { get; set; }
+		public int AnsweredCalls { get; set; }
+		public int AnsweredCallsWithinServiceLevel { get; set; }
+		public int AbandonedCalls { get; set; }
+		public int AbandonedCallsWithinServiceLevel { get; set; }
+		public int AbandonedShortCalls { get; set; }
+		public int OverflowOutCalls { get; set; }
+		public int OverflowInCalls { get; set; }
+		public int TalkTime { get; set; }
+		public int AfterCallWork { get; set; }
+		public int HandleTime { get; set; }
+		public int SpeedOfAnswer { get; set; }
+		public int TimeToAbandon { get; set; }
+		public int LongestDelayInQueueAnswered { get; set; }
+		public int LongestDelayInQueueAbandoned { get; set; }
 	}
 }
