@@ -8,19 +8,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class QuickForecaster : IQuickForecaster
 	{
-		private readonly IHistoricalDataProvider _historicalDataProvider;
+		private readonly IHistoricalData _historicalData;
 		private readonly ILoadSkillDaysInDefaultScenario _loadSkillDaysInDefaultScenario;
 
-		public QuickForecaster(IHistoricalDataProvider historicalDataProvider, ILoadSkillDaysInDefaultScenario loadSkillDaysInDefaultScenario)
+		public QuickForecaster(IHistoricalData historicalData, ILoadSkillDaysInDefaultScenario loadSkillDaysInDefaultScenario)
 		{
-			_historicalDataProvider = historicalDataProvider;
+			_historicalData = historicalData;
 			_loadSkillDaysInDefaultScenario = loadSkillDaysInDefaultScenario;
 		}
 
 		public void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
 		{
 			//get historical stuff
-			var taskOwnerPeriod = _historicalDataProvider.Fetch(workload, historicalPeriod);
+			var taskOwnerPeriod = _historicalData.Fetch(workload, historicalPeriod);
 
 			//get future workloaddays
 			var futureSkillDays = _loadSkillDaysInDefaultScenario.FindRange(futurePeriod, workload.Skill);

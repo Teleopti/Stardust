@@ -352,8 +352,8 @@
     <Compile Include="Forecasting\Angel\HistoricalData\DailyStatisticsAggregator.cs" />
     <Compile Include="Forecasting\Angel\FutureData\ILoadSkillDaysInDefaultScenario.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
-    <Compile Include="Forecasting\Angel\HistoricalData\HistoricalDataProvider.cs" />
-    <Compile Include="Forecasting\Angel\HistoricalData\IHistoricalDataProvider.cs" />
+    <Compile Include="Forecasting\Angel\HistoricalData\HistoricalData.cs" />
+    <Compile Include="Forecasting\Angel\HistoricalData\IHistoricalData.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\IDailyStatisticsAggregator.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\ILoadStatistics.cs" />

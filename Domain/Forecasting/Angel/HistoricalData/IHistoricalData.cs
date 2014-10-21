@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 {
-	public interface IHistoricalDataProvider
+	public interface IHistoricalData
 	{
 		TaskOwnerPeriod Fetch(IWorkload workload, DateOnlyPeriod period);
 	}

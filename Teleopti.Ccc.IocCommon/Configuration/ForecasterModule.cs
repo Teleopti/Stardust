@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<QuickForecaster>()
 				.SingleInstance()
 				.As<IQuickForecaster>();
-			builder.RegisterType<HistoricalDataProvider>()
+			builder.RegisterType<HistoricalData>()
 				.SingleInstance()
-				.As<IHistoricalDataProvider>();
+				.As<IHistoricalData>();
 			builder.RegisterType<LoadStatistics>()
 				.SingleInstance()
 				.As<ILoadStatistics>();

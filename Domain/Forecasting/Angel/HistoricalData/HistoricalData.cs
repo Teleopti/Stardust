@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 {
-	public class HistoricalDataProvider : IHistoricalDataProvider
+	public class HistoricalData : IHistoricalData
 	{
 		private readonly IDailyStatisticsAggregator _dailyStatisticsAggregator;
 		private readonly IValidatedVolumeDayRepository _validatedVolumeDayRepository;
 
-		public HistoricalDataProvider(IDailyStatisticsAggregator dailyStatisticsAggregator, IValidatedVolumeDayRepository validatedVolumeDayRepository)
+		public HistoricalData(IDailyStatisticsAggregator dailyStatisticsAggregator, IValidatedVolumeDayRepository validatedVolumeDayRepository)
 		{
 			_dailyStatisticsAggregator = dailyStatisticsAggregator;
 			_validatedVolumeDayRepository = validatedVolumeDayRepository;
