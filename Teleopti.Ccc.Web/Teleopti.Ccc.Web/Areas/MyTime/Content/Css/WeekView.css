@@ -6,6 +6,7 @@
 	opacity: 0.6;
 }
 .body-weekview-inner {
+	background-color: #f9f9f9;
 	border: 1px solid #dfdfdf;
 	white-space: nowrap;
 	font-size: 0;
