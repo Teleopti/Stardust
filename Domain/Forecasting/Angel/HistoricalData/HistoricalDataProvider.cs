@@ -19,9 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 		public IEnumerable<DailyStatistic> Fetch(IWorkload workload, DateOnlyPeriod period)
 		{
 			var statistics = _dailyStatisticsAggregator.LoadDailyStatistics(workload, period);
-			var validatedDays = _validatedVolumeDayRepository == null ? 
-				Enumerable.Empty<IValidatedVolumeDay>() : 
-				_validatedVolumeDayRepository.FindRange(period, workload);
+			var validatedDays = _validatedVolumeDayRepository.FindRange(period, workload) ?? Enumerable.Empty<IValidatedVolumeDay>();
 
 			var ret = new List<DailyStatistic>();
 			foreach (var day in period.DayCollection())
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 				var validated = validatedDays.FirstOrDefault(v => v.VolumeDayDate == day);
 				if (validated != null)
 				{
-					ret.Add(new DailyStatistic(day, (int) validated.ValidatedTasks));
+					ret.Add(new DailyStatistic(day, (int)validated.ValidatedTasks));
 				}
 				else
 				{

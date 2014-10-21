@@ -260,6 +260,7 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
+    <Compile Include="Forecasting\Angel\BothStatisticsAndValidatedTest.cs" />
     <Compile Include="Forecasting\Angel\DailyStatisticsAggregatorTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryForTest.cs" />

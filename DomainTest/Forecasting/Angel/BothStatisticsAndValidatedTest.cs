@@ -12,10 +12,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
-	public class OnlyStatisticsTest
+	public class BothStatisticsAndValidatedTest
 	{
 		[Test]
-		public void SingleSimpleWorkloadDay()
+		public void BothStatAndValidatedTest()
 		{
 			const int expectedNumberOfTasks = 123;
 
@@ -24,24 +24,37 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var historicalPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
 			var futurePeriod = new DateOnlyPeriod(historicalPeriod.StartDate.AddDays(7), historicalPeriod.EndDate.AddDays(7));
 
-			var historicalDailyStatistic = new DailyStatistic(historicalPeriod.StartDate, expectedNumberOfTasks);
+			var historicalDailyStatistic = new DailyStatistic(historicalPeriod.StartDate, expectedNumberOfTasks + 1);
+
+			var validatedVolumeDayRepository = MockRepository.GenerateStub<IValidatedVolumeDayRepository>();
+			var historialWorkloadDay = new WorkloadDay();
+			historialWorkloadDay.Create(historicalPeriod.StartDate, workload, new TimePeriod[] { });
+			validatedVolumeDayRepository.Stub(x => x.FindRange(historicalPeriod, workload)).Return(new[]
+			{
+				new ValidatedVolumeDay(workload, historicalPeriod.StartDate)
+				{
+					TaskOwner = historialWorkloadDay,
+					ValidatedTasks = expectedNumberOfTasks
+				}
+			});
+
 
 			var dailyStatistics = MockRepository.GenerateStub<IDailyStatisticsAggregator>();
 			dailyStatistics.Stub(x => x.LoadDailyStatistics(workload, historicalPeriod)).Return(new[] { historicalDailyStatistic });
-	
+
 			var futureWorkloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, futurePeriod.StartDate);
-			
+
 			var futureSkillDay = new SkillDay(
-				futurePeriod.StartDate, 
-				skill, 
-				new Scenario("sdfdsf"), 
-				new []{futureWorkloadDay},
+				futurePeriod.StartDate,
+				skill,
+				new Scenario("sdfdsf"),
+				new[] { futureWorkloadDay },
 				Enumerable.Empty<ISkillDataPeriod>());
 
 			var loadSkillDays = MockRepository.GenerateMock<ILoadSkillDaysInDefaultScenario>();
 			loadSkillDays.Stub(x => x.FindRange(futurePeriod, skill)).Return(new[] { futureSkillDay });
 
-			var target = new QuickForecaster(new HistoricalDataProvider(dailyStatistics, MockRepository.GenerateStub<IValidatedVolumeDayRepository>()), loadSkillDays);
+			var target = new QuickForecaster(new HistoricalDataProvider(dailyStatistics, validatedVolumeDayRepository), loadSkillDays);
 			target.Execute(workload, historicalPeriod, futurePeriod);
 
 			futureSkillDay.Tasks.Should().Be.EqualTo(expectedNumberOfTasks);
