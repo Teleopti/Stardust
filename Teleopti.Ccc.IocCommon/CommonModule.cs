@@ -1,6 +1,8 @@
 using System;
 using Autofac;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new AuthenticationModule {ApplicationData = ApplicationData});
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()
