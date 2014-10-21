@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 						{
 							Action = "Index",
 							Controller = "Preference",
-							Title = Resources.Preference,
+							Title = Resources.Preferences,
 						};
 		}
 
