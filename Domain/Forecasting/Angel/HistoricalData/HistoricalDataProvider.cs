@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -16,29 +17,29 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 			_validatedVolumeDayRepository = validatedVolumeDayRepository;
 		}
 
-		public IEnumerable<DailyStatistic> Fetch(IWorkload workload, DateOnlyPeriod period)
+		public TaskOwnerPeriod Fetch(IWorkload workload, DateOnlyPeriod period)
 		{
 			var statistics = _dailyStatisticsAggregator.LoadDailyStatistics(workload, period);
 			var validatedDays = _validatedVolumeDayRepository.FindRange(period, workload) ?? Enumerable.Empty<IValidatedVolumeDay>();
 
-			var ret = new List<DailyStatistic>();
+			var dailyStatistics = new List<DailyStatistic>();
 			foreach (var day in period.DayCollection())
 			{
 				var validated = validatedDays.FirstOrDefault(v => v.VolumeDayDate == day);
 				if (validated != null)
 				{
-					ret.Add(new DailyStatistic(day, (int)validated.ValidatedTasks));
+					dailyStatistics.Add(new DailyStatistic(day, (int)validated.ValidatedTasks));
 				}
 				else
 				{
 					var foundDailyStatistics = statistics.FirstOrDefault(s => s.Date == day);
 					if (foundDailyStatistics.Date > DateOnly.MinValue)
 					{
-						ret.Add(foundDailyStatistics);
+						dailyStatistics.Add(foundDailyStatistics);
 					}
 				}
 			}
-			return ret;
+			return new TaskOwnerPeriod(DateOnly.MinValue, dailyStatistics.Convert(workload), TaskOwnerPeriodType.Other);
 		}
 	}
 }

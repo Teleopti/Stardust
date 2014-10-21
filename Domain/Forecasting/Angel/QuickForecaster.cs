@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData;
-using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -20,8 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
 		{
 			//get historical stuff
-			var dailyStatistics = _historicalDataProvider.Fetch(workload, historicalPeriod);
-			var daysFromThePasthWithStatistics = new TaskOwnerPeriod(DateOnly.MinValue, dailyStatistics.Convert(workload), TaskOwnerPeriodType.Other);
+			var taskOwnerPeriod = _historicalDataProvider.Fetch(workload, historicalPeriod);
 
 			//get future workloaddays
 			var futureSkillDays = _loadSkillDaysInDefaultScenario.FindRange(futurePeriod, workload.Skill);
@@ -29,12 +27,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var futureWorkloadDays = getFutureWorkloadDaysFromSkillDays(futureSkillDays);
 
 			//change future skillday
-			var totalVolume = new TotalVolume(); 
-			VolumeYear volumeMonthYear = new MonthOfYear(daysFromThePasthWithStatistics, new MonthOfYearCreator());
-			VolumeYear volumeWeekYear = new WeekOfMonth(daysFromThePasthWithStatistics, new WeekOfMonthCreator());
-			VolumeYear volumeDayYear = new DayOfWeeks(daysFromThePasthWithStatistics, new DaysOfWeekCreator());
+			var totalVolume = new TotalVolume();
+			VolumeYear volumeMonthYear = new MonthOfYear(taskOwnerPeriod, new MonthOfYearCreator());
+			VolumeYear volumeWeekYear = new WeekOfMonth(taskOwnerPeriod, new WeekOfMonthCreator());
+			VolumeYear volumeDayYear = new DayOfWeeks(taskOwnerPeriod, new DaysOfWeekCreator());
 			var indexes = new List<IVolumeYear> {volumeMonthYear, volumeWeekYear, volumeDayYear};
-			totalVolume.Create(daysFromThePasthWithStatistics, futureWorkloadDays, indexes, new IOutlier[] {}, 0, 0, false, workload);
+			totalVolume.Create(taskOwnerPeriod, futureWorkloadDays, indexes, new IOutlier[] { }, 0, 0, false, workload);
 		}
 
 		private IList<ITaskOwner> getFutureWorkloadDaysFromSkillDays(IEnumerable<ISkillDay> skilldays)
