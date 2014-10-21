@@ -82,6 +82,7 @@ Scenario: Create preference template
 	| template1     |
 	| test template |
 
+@ignore
 Scenario: Display preference template name
 	Given I am viewing preferences for date '2013-03-07'
 	When I select day '2013-03-07'
