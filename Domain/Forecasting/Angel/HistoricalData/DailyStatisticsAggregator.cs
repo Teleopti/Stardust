@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Angel
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 {
 	public class DailyStatisticsAggregator : IDailyStatisticsAggregator
 	{
