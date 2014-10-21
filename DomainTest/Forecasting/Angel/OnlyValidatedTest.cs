@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData;
@@ -26,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var historicalPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
 			var futurePeriod = new DateOnlyPeriod(historicalPeriod.StartDate.AddDays(7), historicalPeriod.EndDate.AddDays(7));
-			var currentScenario = new FakeCurrentScenario();
 			
 			var loadStatistics = MockRepository.GenerateStub<IDailyStatisticsAggregator>();
 			loadStatistics.Stub(x => x.LoadDailyStatistics(workload, historicalPeriod)).Return(Enumerable.Empty<DailyStatistic>());
@@ -52,16 +52,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futureSkillDay = new SkillDay(
 				futurePeriod.StartDate,
 				skill,
-				currentScenario.Current(),
+				new Scenario("sdf"), 
 				new[] { futureWorkloadDay },
 				Enumerable.Empty<ISkillDataPeriod>());
 
-			//should not be like this, include "GetAllSkillDays" move to some service later
-			var skillDayRepository = MockRepository.GenerateStub<ISkillDayRepository>();
-			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill, currentScenario.Current())).Return(new[] { futureSkillDay });
-			//skillDayRepository.Stub(x => x.GetAllSkillDays(period, new ISkillDay[] { }, skill, scenario, skillDayRepository.AddRange)).Return(new []{skillDay});
+			var loadSkillDays = MockRepository.GenerateMock<ILoadSkillDaysInDefaultScenario>();
+			loadSkillDays.Stub(x => x.FindRange(futurePeriod, skill)).Return(new[] { futureSkillDay });
 
-			var target = new QuickForecaster(new HistoricalDataProvider(loadStatistics, validatedVolumeDayRepository), skillDayRepository, currentScenario);
+			var target = new QuickForecaster(new HistoricalDataProvider(loadStatistics, validatedVolumeDayRepository), loadSkillDays);
 			target.Execute(workload, historicalPeriod, futurePeriod);
 
 			futureSkillDay.Tasks.Should().Be.EqualTo(expectedNumberOfTasks);

@@ -359,6 +359,7 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\IStatisticHelperFactory.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatistics.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactory.cs" />
+    <Compile Include="Forecasting\Angel\LoadSkillDaysInDefaultScenario.cs" />
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
