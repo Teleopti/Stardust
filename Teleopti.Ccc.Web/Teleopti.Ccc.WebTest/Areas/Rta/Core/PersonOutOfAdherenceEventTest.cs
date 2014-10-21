@@ -62,5 +62,86 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			@event.PersonId.Should().Be(personId);
 		}
 
+		[Test]
+		public void ShouldNotPublishPersonOutOfAdherenceEventWhenNoSchedule()
+		{
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(state)
+				.WithUser("usercode", personId)
+				.WithAlarm("statecode", activityId, -1)
+				.Done();
+			var publisher = new FakeEventsPublisher();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
+
+			target.SaveExternalUserState(state);
+
+			publisher.PublishedEvents.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotPublishEventIfStillOutOfAdherence()
+		{
+			var state1 = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode1",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var state2 = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode2",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var activityId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(state1)
+				.WithUser("usercode")
+				.WithSchedule(activityId, state1.Timestamp.AddHours(-1), state1.Timestamp.AddHours(1))
+				.WithAlarm("statecode1", activityId, -1)
+				.WithAlarm("statecode2", activityId, 1)
+				.Done();
+			var publisher = new FakeEventsPublisher();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state1.Timestamp), publisher);
+
+			target.SaveExternalUserState(state1);
+			target.SaveExternalUserState(state2);
+
+			publisher.PublishedEvents.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldPublishTheTimeWhenPersonOutOfAdherence()
+		{
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(state)
+				.WithUser("usercode", personId)
+				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithAlarm("statecode", activityId, -1)
+				.Done();
+			var publisher = new FakeEventsPublisher();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
+
+			target.SaveExternalUserState(state);
+
+			var @event = publisher.PublishedEvents.Single() as PersonOutOfAdherenceEvent;
+			@event.Timestamp.Should().Be(state.Timestamp);
+		}
 	}
 }

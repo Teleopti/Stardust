@@ -155,7 +155,6 @@
     <Compile Include="ApplicationLayer\Rta\AgentStateChangedCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakeEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateChangedInAdherenceCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentStateChangedOutOfAdherenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterTest.cs" />

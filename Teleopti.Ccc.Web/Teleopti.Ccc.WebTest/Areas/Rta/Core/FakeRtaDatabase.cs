@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder WithSource(string sourceId);
+		IFakeDataBuilder WithUser(string userCode);
 		IFakeDataBuilder WithUser(string userCode, Guid personId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
 		IFakeDataBuilder WithSchedule(Guid activityId, DateTime start, DateTime end);
@@ -58,6 +59,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		{
 			_datasources.Add(new KeyValuePair<string, int>(sourceId, 0));
 			return this;
+		}
+
+		public IFakeDataBuilder WithUser(string userCode)
+		{
+			return WithUser(userCode, Guid.NewGuid(), _businessUnitId);
 		}
 
 		public IFakeDataBuilder WithUser(string userCode, Guid personId)
