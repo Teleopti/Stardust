@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 			_validatedVolumeDayRepository = validatedVolumeDayRepository;
 		}
 
-		public IEnumerable<DailyStatistic> Calculate(IWorkload workload, DateOnlyPeriod period)
+		public IEnumerable<DailyStatistic> Fetch(IWorkload workload, DateOnlyPeriod period)
 		{
 			var statistics = _dailyStatisticsAggregator.LoadDailyStatistics(workload, period);
 			var validatedDays = _validatedVolumeDayRepository == null ? 
