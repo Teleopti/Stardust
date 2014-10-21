@@ -10,15 +10,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
     public class SkillDayCalculator : ISkillDayCalculator
     {
-        private readonly IList<ISkillDay> _skillDays;
+        private readonly IEnumerable<ISkillDay> _skillDays;
         private readonly ISkill _skill;
         private bool _isCalculatedWithinDay;
         private DateOnlyPeriod _visiblePeriod;
         private readonly Dictionary<IWorkload, SortedList<DateOnly, IWorkloadDay>> _workloadDaysCache;
         private readonly IDictionary<DateTime, ISkillStaffPeriod> _skillStaffPeriods = new Dictionary<DateTime, ISkillStaffPeriod>(new DateTimeAsLongEqualityComparer());
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public SkillDayCalculator(ISkill skill, IList<ISkillDay> skillDays, DateOnlyPeriod visiblePeriod)
+        public SkillDayCalculator(ISkill skill, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod visiblePeriod)
         {
             _skillDays = skillDays;
             _skill = skill;
@@ -242,9 +241,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual void DistributeStaff()
         {
             ResetSkillStaffPeriods();
-            for (int i = _skillDays.Count-1; i >= 0; i--)
+	        var skillDayList = _skillDays.ToList();
+					for (int i = skillDayList.Count - 1; i >= 0; i--)
             {
-                _skillDays[i].RecalculateStaff();
+							skillDayList[i].RecalculateStaff();
             }
         }
 

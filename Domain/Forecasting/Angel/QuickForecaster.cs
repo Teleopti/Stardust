@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 			var futureWorkloadDays = _futureData.Fetch(workload, futurePeriod);
 
-			//change future skillday
+			//apply stuff -> move out to service(s)
 			var totalVolume = new TotalVolume();
 			VolumeYear volumeMonthYear = new MonthOfYear(taskOwnerPeriod, new MonthOfYearCreator());
 			VolumeYear volumeWeekYear = new WeekOfMonth(taskOwnerPeriod, new WeekOfMonthCreator());

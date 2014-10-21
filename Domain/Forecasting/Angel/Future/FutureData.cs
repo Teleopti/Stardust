@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 		public IEnumerable<ITaskOwner> Fetch(IWorkload workload, DateOnlyPeriod futurePeriod)
 		{
 			var futureSkillDays = _loadSkillDaysInDefaultScenario.FindRange(futurePeriod, workload.Skill);
-			new SkillDayCalculator(workload.Skill, futureSkillDays.ToList(), futurePeriod);
+			new SkillDayCalculator(workload.Skill, futureSkillDays, futurePeriod);
 			var futureWorkloadDays = getFutureWorkloadDaysFromSkillDays(futureSkillDays);
 			return futureWorkloadDays;
 		}
