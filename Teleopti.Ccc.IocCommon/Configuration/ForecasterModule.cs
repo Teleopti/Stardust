@@ -12,19 +12,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<QuickForecaster>()
 				.SingleInstance()
 				.As<IQuickForecaster>();
-
 			builder.RegisterType<HistoricalDataProvider>()
 				.SingleInstance()
 				.As<IHistoricalDataProvider>();
-
 			builder.RegisterType<LoadStatistics>()
 				.SingleInstance()
 				.As<ILoadStatistics>();
-
 			builder.RegisterType<StatisticHelperFactory>()
 				.SingleInstance()
 				.As<IStatisticHelperFactory>();
-
+			builder.RegisterType<LoadSkillDaysInDefaultScenario>()
+				.SingleInstance()
+				.As<ILoadSkillDaysInDefaultScenario>();
+			builder.RegisterType<DailyStatisticsAggregator>()
+				.SingleInstance()
+				.As<IDailyStatisticsAggregator>();
 		}
 	}
 }

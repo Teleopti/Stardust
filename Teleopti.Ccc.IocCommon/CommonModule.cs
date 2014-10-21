@@ -1,6 +1,5 @@
 using System;
 using Autofac;
-using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
