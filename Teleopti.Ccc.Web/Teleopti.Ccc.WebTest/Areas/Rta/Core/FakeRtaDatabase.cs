@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		IFakeDataBuilder WithUser(string userCode);
 		IFakeDataBuilder WithUser(string userCode, Guid personId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
-		IFakeDataBuilder WithSchedule(Guid activityId, DateTime start, DateTime end);
+		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
 		FakeRtaDatabase Done();
 	}
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
 		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
-		private readonly List<ScheduleLayer> _schedule = new List<ScheduleLayer>();
+		private readonly IDictionary<Guid, ScheduleLayer> _schedule = new Dictionary<Guid, ScheduleLayer>();
 
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			return this;
 		}
 
-		public IFakeDataBuilder WithSchedule(Guid activityId, DateTime start, DateTime end)
+		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end)
 		{
-			_schedule.Add(new ScheduleLayer { PayloadId = activityId, StartDateTime = start, EndDateTime = end });
+			_schedule.Add(personId, new ScheduleLayer { PayloadId = activityId, StartDateTime = start, EndDateTime = end });
 			return this;
 		}
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
-			return _schedule;
+			return _schedule.ContainsKey(personId) ? new List<ScheduleLayer> {_schedule[personId]} : new List<ScheduleLayer>();
 		}
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)

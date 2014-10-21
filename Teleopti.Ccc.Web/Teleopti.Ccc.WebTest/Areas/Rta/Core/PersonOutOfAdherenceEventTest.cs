@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, 1)
 				.Done();
 			var publisher = new FakeEventsPublisher();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, -1)
 				.Done();
 			var publisher = new FakeEventsPublisher();
@@ -102,10 +102,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
 			};
 			var activityId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state1)
-				.WithUser("usercode")
-				.WithSchedule(activityId, state1.Timestamp.AddHours(-1), state1.Timestamp.AddHours(1))
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, state1.Timestamp.AddHours(-1), state1.Timestamp.AddHours(1))
 				.WithAlarm("statecode1", activityId, -1)
 				.WithAlarm("statecode2", activityId, 1)
 				.Done();
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, -1)
 				.Done();
 			var publisher = new FakeEventsPublisher();

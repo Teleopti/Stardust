@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, 0)
 				.Done();
 			var publisher = new FakeEventsPublisher();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.Done();
 			var publisher = new FakeEventsPublisher();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state1)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state1.Timestamp.AddHours(-1), state1.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state1.Timestamp.AddHours(-1), state1.Timestamp.AddHours(1))
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 0)
 				.Done();
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, 0)
 				.Done();
 			var publisher = new FakeEventsPublisher();

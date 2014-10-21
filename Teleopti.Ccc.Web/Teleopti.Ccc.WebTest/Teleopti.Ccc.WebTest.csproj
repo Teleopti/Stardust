@@ -199,6 +199,7 @@
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Rta\Core\AuthenticationKeyTest.cs" />
+    <Compile Include="Areas\Rta\Core\EventsTest.cs" />
     <Compile Include="Areas\Rta\Core\ExternalUserStateForTest.cs" />
     <Compile Include="Areas\Rta\Core\FakeConfigReader.cs" />
     <Compile Include="Areas\Rta\Core\FakeEventsPublisher.cs" />
