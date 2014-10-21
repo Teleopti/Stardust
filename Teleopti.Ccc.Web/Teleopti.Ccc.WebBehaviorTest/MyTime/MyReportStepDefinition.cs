@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		    queues.QueueId = 5;
             DataMaker.Analytics().Setup(queues);
 			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, theDay.DateId, theDay.DateId, 0, 22, intervalId, scenarioId));
-			DataMaker.Data().Analytics().Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, theDay.DateId, intervalId - 8, 600, 900, 300, 55,0, 0, 7, 210, 60));
+			DataMaker.Data().Analytics().Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, 600, 900, 300, 55,0, 0, 7, 210, 60));
             DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, queues.QueueId, acdLoginId, 210, 60, 7, 0));
 			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				.Setup(new FactSchedule(personId, theDay.DateId, theDay.DateId, 0, 22, intervalId, scenarioId));
 			DataMaker.Data()
 				.Analytics()
-				.Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, theDay.DateId, intervalId - 8, 600, 900, 300, 55, 0, 0, 7,
+				.Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, 600, 900, 300, 55, 0, 0, 7,
 					210, 60));
 			DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, 5, acdLoginId, 210, 60, 7, 0));
 			DataMaker.Data()
