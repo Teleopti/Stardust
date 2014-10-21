@@ -133,6 +133,13 @@ span[data-cal-date] {
 	padding-top: 40px;
 }
 
+.cal-weekday-header {
+	border-left: 1px solid #dfdfdf !important;
+	border-right: 1px solid #dfdfdf !important;
+	border-top: 1px solid  #dfdfdf !important;
+	border-bottom: 1px solid #dfdfdf !important;
+}
+
 .shift {
 	height: 100px;
 	padding-top: 20px;
