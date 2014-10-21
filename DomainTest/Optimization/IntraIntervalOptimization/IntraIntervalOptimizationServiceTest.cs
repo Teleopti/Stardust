@@ -71,6 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
+				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {_dateOnly})).Return(_skillDays);
@@ -80,6 +82,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_intraIntervalOptimizer.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issuesBefore)).Return(_issuesAfter);
 				Expect.Call(_skillStaffPeriodAfter.NoneEntityClone()).Return(_skillStaffPeriodAfter);
+				Expect.Call(() => _intraIntervalOptimizer.Reset());
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
 			}
 
 			using (_mock.Playback())
@@ -97,8 +101,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Record())
 			{
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
+				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
+				Expect.Call(() => _intraIntervalOptimizer.Reset());
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
 			}
 
 			using (_mock.Playback())
@@ -112,10 +120,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
+				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(new List<ISkillStaffPeriod>());
+				Expect.Call(() => _intraIntervalOptimizer.Reset());
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
 			}
 
 			using (_mock.Playback())
@@ -129,6 +141,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
+				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
@@ -137,6 +151,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore, _skill)).Return(_scheduleDays);
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_intraIntervalOptimizer.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issuesBefore)).Return(new List<ISkillStaffPeriod>());
+				Expect.Call(() => _intraIntervalOptimizer.Reset());
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
 			}
 
 			using (_mock.Playback())
@@ -144,6 +160,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				_target.Execute(_schedulingOptions, _dateOnlyPeriod, _scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros, _rollbackService, _resourceCalculateDelayer);
 				Assert.IsEmpty(_issuesBefore);
 			}
+		}
+
+		[Test]
+		public void ShouldUserCancel()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(true);
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
+				Expect.Call(() => _intraIntervalOptimizer.Reset());
+				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
+			}
+
+			using (_mock.Playback())
+			{
+				_target.Execute(_schedulingOptions, _dateOnlyPeriod, _scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros, _rollbackService, _resourceCalculateDelayer);
+			}	
 		}
 	}
 }

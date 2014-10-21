@@ -155,5 +155,41 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Assert.IsNotEmpty(result);
 			}		
 		}
+
+		[Test]
+		public void ShouldUserCancel()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
+				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
+				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesAfter);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_issusesBefore, _issuesAfter)).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				_target.ReportProgress += _target_ReportProgress;
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore);
+				Assert.IsTrue(_target.IsCanceled);
+				Assert.IsNotEmpty(result);
+				_target.ReportProgress -= _target_ReportProgress;
+				_target.Reset();
+				Assert.IsFalse(_target.IsCanceled);
+			}			
+		}
+
+		void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.UserCancel = true;
+		}
 	}
 }
