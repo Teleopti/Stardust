@@ -1223,7 +1223,9 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Areas\WFM\css\form.css" />
     <Content Include="Areas\WFM\css\material.css" />
+    <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
     <Content Include="Areas\WFM\html\main.html" />
     <Content Include="Areas\WFM\html\nav.html" />

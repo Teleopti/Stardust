@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>WFM</title>
     <script src="node_modules/angular/angular.js"></script>
-    <script src="node_modules/angular-route/angular-route.js"></script>
+
+    <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/form.css">
     <link rel="stylesheet" href="css/material.css">
@@ -14,7 +15,7 @@
 <body>
     <div ng-include="'html/nav.html'" class="navbar navbar-default navbar-static-top " role="navigation"></div>
     <div class="material-header material-depth-1"></div>
-    <div class="container material-depth-2 material-block " ng-view>
+    <div class="container material-depth-2 material-block " ui-view>
 
     </div>
 </body>
