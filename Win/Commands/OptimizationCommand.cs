@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -29,15 +28,16 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 	    private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
-		private readonly IToggleManager _toggleManager;
-		private readonly IIntraIntervalFinderService _inttraiIntraIntervalFinderService;
+		private readonly IIntraIntervalFinderService _intraIntraIntervalFinderService;
 
 		public OptimizationCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
-		                           IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
-		                           IResourceOptimizationHelper resourceOptimizationHelper,
-		                           IScheduleDayChangeCallback scheduleDayChangeCallback,
-								   ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
-		                           IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, IToggleManager toggleManager, IIntraIntervalFinderService inttraiIntraIntervalFinderService)
+									IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
+									IResourceOptimizationHelper resourceOptimizationHelper,
+									IScheduleDayChangeCallback scheduleDayChangeCallback,
+									ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
+									IMatrixListFactory matrixListFactory, 
+									IWeeklyRestSolverCommand weeklyRestSolverCommand, 
+									IIntraIntervalFinderService intraIntraIntervalFinderService)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -47,8 +47,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
 			_matrixListFactory = matrixListFactory;
 	        _weeklyRestSolverCommand = weeklyRestSolverCommand;
-		    _toggleManager = toggleManager;
-			_inttraiIntraIntervalFinderService = inttraiIntraIntervalFinderService;
+			_intraIntraIntervalFinderService = intraIntraIntervalFinderService;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, BackgroundWorker backgroundWorker,
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Win.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _inttraiIntraIntervalFinderService);
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntraIntervalFinderService);
 				optimizationHelperWin.ResourceCalculateAllDays(null, true);
 			}
 			var selectedSchedules = selectedScheduleDays;
@@ -97,7 +96,7 @@ namespace Teleopti.Ccc.Win.Commands
 																	 optimizerOriginalPreferences.SchedulingOptions,
 																	 daysOffPreferences);
 
-					var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _inttraiIntraIntervalFinderService);
+					var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntraIntervalFinderService);
 					optimizationHelperWin.ResourceCalculateMarkedDays(null, optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
 

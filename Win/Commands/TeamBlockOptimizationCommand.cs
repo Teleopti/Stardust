@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
 		private readonly IToggleManager _toggleManager;
+		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 
 		public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -95,7 +96,8 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, 
-			IToggleManager toggleManager)
+			IToggleManager toggleManager,
+			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -126,6 +128,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
 			_toggleManager = toggleManager;
+			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 		}
 
 		public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -191,6 +194,11 @@ namespace Teleopti.Ccc.Win.Commands
 
 					_teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 				}
+			}
+
+			if (optimizationPreferences.General.OptimizationStepIntraInterval)
+			{
+				_intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedSchedules, _schedulerStateHolder.SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);	
 			}
 
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
