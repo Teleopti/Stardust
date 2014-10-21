@@ -18,7 +18,6 @@ Scenario: Enter Application
 	When I view MobileReports
 	Then I should see ReportSettings
 
-@ignore
 Scenario: Default report settings
 	Given I have the role 'Access to mobile reports'
 	When I view ReportSettings
@@ -57,7 +56,7 @@ Scenario: Select date in date-picker
 	Then the date-picker should close
 	And I should see the selected date
 
-@ignore
+@Chrome
 Scenario: Select skill in skill-picker
 	Given I have the role 'Access to mobile reports'
 	And I have analytics data for today
@@ -68,7 +67,7 @@ Scenario: Select skill in skill-picker
 	And I close the skill-picker
 	Then I should see the selected skill
 
-@ignore
+@Chrome
 Scenario: Select all skills item in skill-picker
 	Given I have the role 'Access to mobile reports'
 	When I view ReportSettings
