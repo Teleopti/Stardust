@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
 			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
-
-			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(new PreferenceViewModel());
+			
+			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(new PreferenceViewModel()).IgnoreArguments();
 
 			var result = target.Index(DateOnly.Today);
 			var model = result.Model as PreferenceViewModel;

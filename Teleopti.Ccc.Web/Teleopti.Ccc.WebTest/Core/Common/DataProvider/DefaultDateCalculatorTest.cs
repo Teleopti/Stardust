@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 										{
 											PreferencePeriod = new DateOnlyPeriod(defaultDateStart, DateOnly.Today.AddDays(60))
 										};
-			var personPeriods = new List<IPersonPeriod> { PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today) };
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod (DateOnly.Today);
+			personPeriod.SetParent (new Person());
+			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
 			var target = new DefaultDateCalculator(new Now());
 
@@ -28,6 +30,31 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			result.Should().Be.EqualTo(defaultDateStart);
 		}
+
+		[Test]
+		public void ShouldCalculateDefaultDateToWcsPreferencePeriodStartDateWhereActivePersonPeriodExists()
+		{
+			var defaultDateStart = DateOnly.Today;
+			var person = new Person();
+			var workflowControlSet = new WorkflowControlSet
+			{
+				PreferencePeriod = new DateOnlyPeriod(defaultDateStart, DateOnly.Today.AddDays (5))
+			};
+			//have an active person period that starts before the start of the preference period
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-20));
+			personPeriod.SetParent(person);
+			var personPeriods = new List<IPersonPeriod>
+			{
+				personPeriod
+			};
+
+			var target = new DefaultDateCalculator(new Now());
+
+			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
+
+			result.Should().Be.EqualTo(workflowControlSet.PreferencePeriod.StartDate);
+		}
+
 
 		[Test]
 		public void ShouldCalculateDefaultDateToTodayWhenNoWorkflowControlSet()
@@ -47,7 +74,9 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 										{
 											StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today.AddDays(30))
 										};
-			var personPeriods = new List<IPersonPeriod> { PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-20)) };
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod (DateOnly.Today.AddDays (-20));
+			personPeriod.SetParent(new Person());
+			var personPeriods = new List<IPersonPeriod> { personPeriod };
 			var target = new DefaultDateCalculator(new Now());
 
 			var result = target.Calculate(workflowControlSet, w => w.StudentAvailabilityPeriod, personPeriods);
