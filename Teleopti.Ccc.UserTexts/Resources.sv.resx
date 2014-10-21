@@ -11809,4 +11809,43 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="FilterOnIntraIntervals" xml:space="preserve">
     <value>Filtrera på aktiviteter inom intervall</value>
   </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>Använd</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>E-postinställningar</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Hantera notifieringsinställningar</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Notifieringsinställningar</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Typ av notifiering</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Skicka e-post från:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Testskicka till:</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Medaljtavla</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Var god aktivera minst en typ av medalj. </value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Ranking</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>Önskemålet kan inte läggas till eftersom det valda objektet inte längre är tillgängligt.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Aktiviteter inom intervallet</value>
+  </data>
 </root>
