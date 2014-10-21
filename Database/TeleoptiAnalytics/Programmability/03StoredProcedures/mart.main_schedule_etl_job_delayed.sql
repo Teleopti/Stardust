@@ -6,6 +6,7 @@ GO
 CREATE PROCEDURE [mart].[main_schedule_etl_job_delayed]
 @months_back int = 18
 AS
+SET NOCOUNT ON
 DECLARE @stored_procedure nvarchar(300)
 SET @stored_procedure=N'mart.main_convert_fact_schedule_ccc8_run'
 
@@ -46,7 +47,7 @@ BEGIN
 
 	SET @start_date_id=@start_date_id+31
 END
-
+SET NOCOUNT OFF
 INSERT mart.etl_job_delayed( stored_procedured, parameter_string, insert_date)
 SELECT  @stored_procedure, parameter_string, getdate()
 FROM #data

@@ -24,6 +24,7 @@ CREATE PROCEDURE [mart].[etl_fact_queue_load]
 @is_delayed_job bit = 0
 
 AS
+SET NOCOUNT ON
 DECLARE @internal bit
 DECLARE @sqlstring nvarchar(4000)
 SET @sqlstring = ''
@@ -66,6 +67,10 @@ BEGIN
 	DECLARE @max_date smalldatetime
 	DECLARE @min_date smalldatetime
 	DECLARE @time_zone_id smallint
+	DECLARE @from_date_id_utc int
+	DECLARE @from_interval_id_utc smallint
+	DECLARE @to_date_id_utc int
+	DECLARE @to_interval_id_utc smallint
 
 	--init
 	SELECT @UtcNow=CAST(getutcdate() as smalldatetime)
@@ -109,15 +114,44 @@ BEGIN
 	AND temp.date_id=bt.date_id
 	AND temp.local_date_id=bt.local_date_id
 	
-	-------------
+	--------------
 	-- Delete rows
-	-------------
-	--DELETE FROM mart.fact_queue  WHERE local_date_id between @start_date_id AND @end_date_id and datasource_id = @datasource_id 
+	--------------
+	SELECT TOP 1
+		@from_date_id_utc = date_id,
+		@from_interval_id_utc = interval_id
+	FROM #bridge_time_zone
+	WHERE local_date_id = @start_date_id
+	ORDER BY date_id ASC,interval_id ASC
+
+	SELECT TOP 1
+		@to_date_id_utc = date_id,
+		@to_interval_id_utc = interval_id
+	FROM #bridge_time_zone
+	WHERE local_date_id = @end_date_id
+	ORDER BY date_id DESC,interval_id DESC
+	
+	SET NOCOUNT OFF
+
+	--middle dates
 	DELETE  f
-	FROM mart.fact_queue f 
-	INNER JOIN #bridge_time_zone b 
-		ON b.date_id=f.date_id AND b.interval_id=f.interval_id
-	WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+    FROM mart.fact_queue f 
+    WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+    AND date_id between @from_date_id_utc+1 AND @to_date_id_utc-1
+
+    --first date_id 
+    DELETE  f
+    FROM mart.fact_queue f 
+    WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+    AND date_id = @from_date_id_utc
+    AND interval_id >= @from_interval_id_utc
+
+    --last date_id
+    DELETE  f
+    FROM mart.fact_queue f 
+    WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+    AND date_id = @to_date_id_utc
+    AND interval_id <= @to_interval_id_utc
 
 	-------------
 	-- Insert rows
@@ -193,6 +227,7 @@ BEGIN
 
 	--Exec
 	EXEC sp_executesql @sqlstring
+	SET NOCOUNT ON
 
 	drop table #bridge_time_zone
 

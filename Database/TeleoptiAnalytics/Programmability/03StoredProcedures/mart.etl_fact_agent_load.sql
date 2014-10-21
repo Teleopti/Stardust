@@ -15,16 +15,21 @@ GO
 -- 2011-01-29
 -- 2011-07-20 Dual Agg DJ
 -- =============================================
---EXEC [mart].[etl_fact_agent_load] '2009-01-01','2009-03-01',1
+--EXEC [mart].[etl_fact_agent_load] '2014-01-04','2014-01-14',-2
 CREATE PROCEDURE [mart].[etl_fact_agent_load] 
 @start_date smalldatetime,
 @end_date smalldatetime,
-@datasource_id int
-	
+@datasource_id int,
+@is_delayed_job bit = 0	
 AS
+SET NOCOUNT ON
 DECLARE @internal bit
 DECLARE @sqlstring nvarchar(4000)
 SET @sqlstring = ''
+
+--Execute one delayed jobs, if any
+if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETL
+	EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_agent_load'
 
 --------------------------------------------------------------------------
 --If we get All = -2 loop existing log objects and call this SP in a cursor for each log object
@@ -48,6 +53,10 @@ ELSE
 BEGIN
 	--is this an internal or external datasource?
 	SELECT @internal = internal FROM mart.sys_datasource WHERE datasource_id = @datasource_id
+	
+	--declare
+	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
+	CREATE TABLE #agg_acdlogin_ids (acd_login_agg_id int, mart_acd_login_id int)
 
 	--Create system mindate
 	DECLARE @UtcNow as smalldatetime
@@ -60,6 +69,11 @@ BEGIN
 	DECLARE @min_date smalldatetime
 
 	DECLARE @time_zone_id smallint
+	DECLARE @from_date_id_utc int
+	DECLARE @from_interval_id_utc smallint
+	DECLARE @to_date_id_utc int
+	DECLARE @to_interval_id_utc smallint
+
 	SELECT 
 		@time_zone_id = ds.time_zone_id
 	FROM
@@ -73,12 +87,71 @@ BEGIN
 	SET @start_date_id	=	(SELECT date_id FROM mart.dim_date WHERE @start_date = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM mart.dim_date WHERE @end_date = date_date)
 
+	/*Optimize query against agg*/
+	INSERT INTO #agg_acdlogin_ids
+	SELECT
+		acd_login_agg_id,
+		acd_login_id
+	FROM mart.dim_acd_login
+	WHERE datasource_id = @datasource_id
 
+	--prepare dates and intervals for this time_zone
+	--note: Get date and intervals grouped so that we do not get duplicates at DST clock shifts
+	INSERT #bridge_time_zone(date_id,time_zone_id,local_date_id,local_interval_id)
+	SELECT	min(date_id),	time_zone_id, 	local_date_id,	local_interval_id
+	FROM mart.bridge_time_zone 
+	WHERE time_zone_id	= @time_zone_id	
+	AND local_date_id BETWEEN @start_date_id AND @end_date_id
+	GROUP BY time_zone_id, local_date_id,local_interval_id
+
+	UPDATE temp
+	SET interval_id= bt.interval_id
+	FROM 
+	(SELECT date_id,local_date_id,local_interval_id,interval_id= MIN(interval_id)
+	FROM mart.bridge_time_zone
+	WHERE time_zone_id=@time_zone_id
+	GROUP BY date_id,local_date_id,local_interval_id)bt
+	INNER JOIN #bridge_time_zone temp
+		ON temp.local_interval_id=bt.local_interval_id
+		AND temp.date_id=bt.date_id
+		AND temp.local_date_id=bt.local_date_id
 	--------------
 	-- Delete rows
 	--------------
-	DELETE FROM mart.fact_agent  WHERE local_date_id between @start_date_id AND @end_date_id and datasource_id = @datasource_id
+	SELECT TOP 1
+		@from_date_id_utc = date_id,
+		@from_interval_id_utc = interval_id
+	FROM #bridge_time_zone
+	WHERE local_date_id = @start_date_id
+	ORDER BY date_id ASC,interval_id ASC
 
+	SELECT TOP 1
+		@to_date_id_utc = date_id,
+		@to_interval_id_utc = interval_id
+	FROM #bridge_time_zone
+	WHERE local_date_id = @end_date_id
+	ORDER BY date_id DESC,interval_id DESC
+	
+	SET NOCOUNT OFF
+
+	DELETE  f
+    FROM mart.fact_agent f 
+    WHERE EXISTS (select 1 from #agg_acdlogin_ids q where q.mart_acd_login_id = f.acd_login_id)
+    AND date_id between @from_date_id_utc+1 AND @to_date_id_utc-1
+
+    --first date_id 
+    DELETE  f
+    FROM mart.fact_agent f 
+    WHERE EXISTS (select 1 from #agg_acdlogin_ids q where q.mart_acd_login_id = f.acd_login_id)
+    AND date_id = @from_date_id_utc
+    AND interval_id >= @from_interval_id_utc
+
+    --last date_id
+    DELETE  f
+    FROM mart.fact_agent f 
+    WHERE EXISTS (select 1 from #agg_acdlogin_ids q where q.mart_acd_login_id = f.acd_login_id)
+    AND date_id = @to_date_id_utc
+    AND interval_id <= @to_interval_id_utc
 	--------------
 	-- Insert rows
 	--------------
@@ -91,8 +164,6 @@ BEGIN
 		date_id, 
 		interval_id, 
 		acd_login_id, 
-		local_date_id, 
-		local_interval_id, 
 		ready_time_s,
 		logged_in_time_s,
 		not_ready_time_s,
@@ -103,16 +174,12 @@ BEGIN
 		direct_incoming_calls_talk_time_s,
 		admin_time_s,
 		datasource_id, 
-		insert_date, 
-		update_date, 
-		datasource_update_date
+		insert_date
 		)
 	SELECT
 		date_id						= MIN(bridge.date_id), 
 		interval_id					= MIN(bridge.interval_id), 
-		acd_login_id				= a.acd_login_id, 
-		local_date_id				= d.date_id,
-		local_interval_id			= stg.interval, 
+		acd_login_id				= a.mart_acd_login_id, 
 		ready_time_s				= MAX(avail_dur),
 		logged_in_time_s			= MAX(tot_work_dur),
 		not_ready_time_s			= MAX(pause_dur),
@@ -122,10 +189,8 @@ BEGIN
 		direct_incoming_calls		= SUM(direct_in_call_cnt),
 		direct_incoming_calls_talk_time_s = SUM(direct_in_call_dur),
 		admin_time_s				= MAX(admin_dur),
-		datasource_id				= a.datasource_id, 
-		insert_date					= getdate(), 
-		update_date					= getdate(), 
-		datasource_update_date		= '''+ CAST(@UtcNow as nvarchar(20))+'''
+		datasource_id				= ' + cast(@datasource_id as varchar(3)) + ', 
+		insert_date					= getdate()
 	FROM '+ 
 		CASE @internal
 			WHEN 0 THEN '	mart.v_agent_logg stg'
@@ -133,26 +198,26 @@ BEGIN
 			ELSE NULL --Fail fast
 		END
 		+ ' INNER JOIN
-			mart.dim_acd_login a
-			ON a.datasource_id = ' + cast(@datasource_id as varchar(3)) + '
-			AND a.acd_login_agg_id = stg.agent_id
+			#agg_acdlogin_ids a
+			ON a.acd_login_agg_id = stg.agent_id
 	INNER JOIN
 		mart.dim_date		d
 	ON
 		stg.date_from	= d.date_date
 	INNER JOIN 
-		mart.bridge_time_zone bridge 
+		#bridge_time_zone bridge 
 	ON
 		d.date_id		= bridge.local_date_id		AND
 		stg.interval	= bridge.local_interval_id
 	WHERE bridge.time_zone_id = '+CAST(@time_zone_id as nvarchar(10))+'
 	AND date_from between '''+ CAST(@start_date as nvarchar(20))+''' and '''+ CAST(@end_date as nvarchar(20))+'''
-	AND a.datasource_id = ' + CAST(@datasource_id as nvarchar(10)) +'
-	GROUP BY a.acd_login_id,d.date_id,stg.interval,a.datasource_id'
+	GROUP BY a.mart_acd_login_id,d.date_id,stg.interval'
 
 	--Exec
 	EXEC sp_executesql @sqlstring
+	SET NOCOUNT ON
 
+	DROP TABLE #bridge_time_zone
 END
 
 GO

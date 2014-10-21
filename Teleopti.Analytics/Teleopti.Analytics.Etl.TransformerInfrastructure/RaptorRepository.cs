@@ -1763,7 +1763,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
 
-			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_load", parameters,
+			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_load_intraday", parameters,
 				_dataMartConnectionString);
 		}
 

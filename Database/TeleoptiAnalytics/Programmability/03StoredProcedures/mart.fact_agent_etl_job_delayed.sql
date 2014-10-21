@@ -1,17 +1,17 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[fact_queue_etl_job_delayed]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[fact_queue_etl_job_delayed]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[fact_agent_etl_job_delayed]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[fact_agent_etl_job_delayed]
 GO
 
---[mart].[fact_queue_etl_job_delayed]
-CREATE PROCEDURE [mart].[fact_queue_etl_job_delayed]
+--exec [mart].[fact_agent_etl_job_delayed]
+CREATE PROCEDURE [mart].[fact_agent_etl_job_delayed]
 
 AS
 SET NOCOUNT ON
 DECLARE @stored_procedure nvarchar(300)
-SET @stored_procedure=N'mart.etl_fact_queue_load'
+SET @stored_procedure=N'mart.etl_fact_agent_load'
 
 --data convert already happened
-IF EXISTS (select date_id FROM mart.fact_queue)
+IF EXISTS (select date_id FROM mart.fact_agent)
 RETURN
 
 --already added to delayed job
@@ -29,7 +29,7 @@ FROM mart.dim_date
 WHERE date_id in (
 	SELECT
 	min(date_id)-1
-	FROM mart.fact_queue_old --previous data
+	FROM mart.fact_agent_old --previous data
 )
 
 SELECT @max_date_agg = date_date --add an extra day
@@ -38,7 +38,7 @@ WHERE date_date in
 (
 	SELECT max(date_value)
 	FROM mart.v_log_object_detail
-	WHERE detail_id=2
+	WHERE detail_id=1
 )
 
 CREATE TABLE #data(	id int IDENTITY(1,1) NOT NULL,
@@ -51,6 +51,7 @@ BEGIN
 
 	SET @start_date= dateadd(DAY,@chunkDays+1,@start_date)
 END
+
 SET NOCOUNT OFF
 INSERT mart.etl_job_delayed( stored_procedured, parameter_string, insert_date)
 SELECT  @stored_procedure, parameter_string, getdate()
