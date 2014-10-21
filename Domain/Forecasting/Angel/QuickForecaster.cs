@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData;
+using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var defaultScenario = _currentScenario.Current();
 
 			//load historical stuff
-			var daysFromThePasthWithStatistics = new TaskOwnerPeriod(DateOnly.MinValue, _historicalDataProvider.Calculate(workload, historicalPeriod), TaskOwnerPeriodType.Other);
+			var newStuff = _historicalDataProvider.Calculate(workload, historicalPeriod);
+			var daysFromThePasthWithStatistics = new TaskOwnerPeriod(DateOnly.MinValue, newStuff.Convert(workload), TaskOwnerPeriodType.Other);
 
 			//load future stuff
 			var futureSkillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, defaultScenario);
@@ -40,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		    var indexes = new List<IVolumeYear> {volumeMonthYear, volumeWeekYear, volumeDayYear};
 			totalVolume.Create(daysFromThePasthWithStatistics, futureWorkloadDays, indexes, new IOutlier[] {}, 0, 0, false,
 				workload);
-
 		}
 
 		private IList<ITaskOwner> getFutureWorkloadDaysFromSkillDays(IEnumerable<ISkillDay> skilldays)

@@ -28,16 +28,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod(historicalPeriod.StartDate.AddDays(7), historicalPeriod.EndDate.AddDays(7));
 			var currentScenario = new FakeCurrentScenario();
 			
-			var loadStatistics = MockRepository.GenerateStub<ILoadStatistics>();
-			loadStatistics.Stub(x => x.LoadWorkloadDay(workload, historicalPeriod)).Return(Enumerable.Empty<IWorkloadDayBase>());
+			var loadStatistics = MockRepository.GenerateStub<IDailyStatisticsAggregator>();
+			loadStatistics.Stub(x => x.LoadDailyStatistics(workload, historicalPeriod)).Return(Enumerable.Empty<DailyStatistic>());
 
 			var validatedVolumeDayRepository = MockRepository.GenerateStub<IValidatedVolumeDayRepository>();
+			var workloadDay = new WorkloadDay();
+			workloadDay.Create(historicalPeriod.StartDate,workload,new TimePeriod[]{});
+			workloadDay.MakeOpen24Hours();
 			validatedVolumeDayRepository.Stub(x => x.FindRange(historicalPeriod, workload)).Return(new[]
 			{
 				new ValidatedVolumeDay(workload, historicalPeriod.StartDate)
 				{
-					TaskOwner = new WorkloadDay(),
-					Tasks = expectedNumberOfTasks
+					TaskOwner = workloadDay,
+					ValidatedTasks = expectedNumberOfTasks
 				}
 			});
 			

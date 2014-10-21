@@ -44,14 +44,6 @@ namespace Teleopti.Ccc.DomainTest
             mocks = new MockRepository();
             stateMock = mocks.StrictMock<IState>();
 
-            //entityinfo
-            IDictionary<string, string> ret = new Dictionary<string, string>();
-            ret.Add("dialect", "NHibernate.Dialect.MsSql2005Dialect");
-            Configuration cfg = new Configuration();
-            cfg.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
-            cfg.SetProperties(ret);
-            cfg.AddAssembly("Teleopti.Ccc.Domain");
-
             applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);

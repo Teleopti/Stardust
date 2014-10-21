@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class DailyStatisticsAggregator
+	public class DailyStatisticsAggregator : IDailyStatisticsAggregator
 	{
 		private readonly IStatisticRepository _statisticRepository;
 
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_statisticRepository = statisticRepository;
 		}
 
-		public IEnumerable<DailyStatistic> LoadDailyStatistics(Workload workload, DateOnlyPeriod dateRange)
+		public IEnumerable<DailyStatistic> LoadDailyStatistics(IWorkload workload, DateOnlyPeriod dateRange)
 		{
 			var statisticTasks = _statisticRepository.LoadSpecificDates(workload.QueueSourceCollection,
 				dateRange.ToDateTimePeriod(TimeZoneInfo.Utc));

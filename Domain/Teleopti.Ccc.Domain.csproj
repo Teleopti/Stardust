@@ -350,8 +350,10 @@
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
     <Compile Include="Forecasting\Angel\DailyStatistic.cs" />
     <Compile Include="Forecasting\Angel\DailyStatisticsAggregator.cs" />
+    <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\HistoricalDataProvider.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\IHistoricalDataProvider.cs" />
+    <Compile Include="Forecasting\Angel\IDailyStatisticsAggregator.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\ILoadStatistics.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\IStatisticHelperFactory.cs" />

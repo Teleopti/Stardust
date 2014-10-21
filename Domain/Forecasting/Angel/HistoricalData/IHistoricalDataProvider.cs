@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
 {
 	public interface IHistoricalDataProvider
 	{
-		IEnumerable<IValidatedVolumeDay> Calculate(IWorkload workload, DateOnlyPeriod period);
+		IEnumerable<DailyStatistic> Calculate(IWorkload workload, DateOnlyPeriod period);
 	}
 }

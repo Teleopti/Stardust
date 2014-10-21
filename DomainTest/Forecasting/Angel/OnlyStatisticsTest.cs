@@ -27,13 +27,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var historicalPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
 			var futurePeriod = new DateOnlyPeriod(historicalPeriod.StartDate.AddDays(7), historicalPeriod.EndDate.AddDays(7));
 			var currentScenario = new FakeCurrentScenario();
-		
-			var historicalWorkloadDay = new WorkloadDay();
-			historicalWorkloadDay.Create(historicalPeriod.StartDate, workload, new List<TimePeriod>());
-			historicalWorkloadDay.TotalStatisticCalculatedTasks = expectedNumberOfTasks;
 
-			var loadStatistics = MockRepository.GenerateStub<ILoadStatistics>();
-			loadStatistics.Stub(x => x.LoadWorkloadDay(workload, historicalPeriod)).Return(new[]{historicalWorkloadDay});
+			var historicalDailyStatistic = new DailyStatistic(historicalPeriod.StartDate, expectedNumberOfTasks);
+
+			var dailyStatistics = MockRepository.GenerateStub<IDailyStatisticsAggregator>();
+			dailyStatistics.Stub(x => x.LoadDailyStatistics(workload, historicalPeriod)).Return(new[] { historicalDailyStatistic });
 	
 			IWorkloadDay futureWorkloadDay = new WorkloadDay();
 			var template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, DayOfWeek.Saturday);
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill, currentScenario.Current())).Return(new[] { futureSkillDay });
 			//skillDayRepository.Stub(x => x.GetAllSkillDays(period, new ISkillDay[] { }, skill, scenario, skillDayRepository.AddRange)).Return(new []{skillDay});
 
-			var target = new QuickForecaster(new HistoricalDataProvider(loadStatistics, null), skillDayRepository, currentScenario);
+			var target = new QuickForecaster(new HistoricalDataProvider(dailyStatistics, null), skillDayRepository, currentScenario);
 			target.Execute(workload, historicalPeriod, futurePeriod);
 
 			futureSkillDay.Tasks.Should().Be.EqualTo(expectedNumberOfTasks);
