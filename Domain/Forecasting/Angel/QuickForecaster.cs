@@ -9,23 +9,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 	public class QuickForecaster : IQuickForecaster
 	{
 		private readonly IHistoricalData _historicalData;
-		private readonly ILoadSkillDaysInDefaultScenario _loadSkillDaysInDefaultScenario;
+		private readonly IFutureData _futureData;
 
-		public QuickForecaster(IHistoricalData historicalData, ILoadSkillDaysInDefaultScenario loadSkillDaysInDefaultScenario)
+		public QuickForecaster(IHistoricalData historicalData, IFutureData futureData)
 		{
 			_historicalData = historicalData;
-			_loadSkillDaysInDefaultScenario = loadSkillDaysInDefaultScenario;
+			_futureData = futureData;
 		}
 
 		public void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
 		{
-			//get historical stuff
 			var taskOwnerPeriod = _historicalData.Fetch(workload, historicalPeriod);
 
-			//get future workloaddays
-			var futureSkillDays = _loadSkillDaysInDefaultScenario.FindRange(futurePeriod, workload.Skill);
-			new SkillDayCalculator(workload.Skill, futureSkillDays.ToList(), futurePeriod);
-			var futureWorkloadDays = getFutureWorkloadDaysFromSkillDays(futureSkillDays);
+			var futureWorkloadDays = _futureData.Fetch(workload, futurePeriod);
 
 			//change future skillday
 			var totalVolume = new TotalVolume();
@@ -34,11 +30,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			VolumeYear volumeDayYear = new DayOfWeeks(taskOwnerPeriod, new DaysOfWeekCreator());
 			var indexes = new List<IVolumeYear> {volumeMonthYear, volumeWeekYear, volumeDayYear};
 			totalVolume.Create(taskOwnerPeriod, futureWorkloadDays, indexes, new IOutlier[] { }, 0, 0, false, workload);
-		}
-
-		private IList<ITaskOwner> getFutureWorkloadDaysFromSkillDays(IEnumerable<ISkillDay> skilldays)
-		{
-			return skilldays.Select(s => s.WorkloadDayCollection.First()).OfType<ITaskOwner>().ToList();
 		}
 	}
 }

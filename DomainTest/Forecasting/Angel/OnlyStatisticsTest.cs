@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var loadSkillDays = MockRepository.GenerateMock<ILoadSkillDaysInDefaultScenario>();
 			loadSkillDays.Stub(x => x.FindRange(futurePeriod, skill)).Return(new[] { futureSkillDay });
 
-			var target = new QuickForecaster(new Domain.Forecasting.Angel.Historical.HistoricalData(dailyStatistics, MockRepository.GenerateStub<IValidatedVolumeDayRepository>()), loadSkillDays);
+			var target = new QuickForecaster(new HistoricalData(dailyStatistics, MockRepository.GenerateStub<IValidatedVolumeDayRepository>()), new FutureData(loadSkillDays));
 			target.Execute(workload, historicalPeriod, futurePeriod);
 
 			futureSkillDay.Tasks.Should().Be.EqualTo(expectedNumberOfTasks);

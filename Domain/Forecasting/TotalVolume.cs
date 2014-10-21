@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// Created by: peterwe
 		/// Created date: 2008-04-01
 		/// </remarks>
-		void Create(ITaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
+		void Create(ITaskOwnerPeriod historicalDepth, IEnumerable<ITaskOwner> workloadDays, 
 		                            IList<IVolumeYear> volumes, IList<IOutlier> outliers, 
 		                            double startDayTrendFactor, double dayTrendFactor, bool useTrend, IWorkload workload);
 	}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-04-01
         /// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7")]
-		public void Create(ITaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
+		public void Create(ITaskOwnerPeriod historicalDepth, IEnumerable<ITaskOwner> workloadDays, 
             IList<IVolumeYear> volumes, IList<IOutlier> outliers, 
             double startDayTrendFactor, double dayTrendFactor, bool useTrend, IWorkload workload)
         {

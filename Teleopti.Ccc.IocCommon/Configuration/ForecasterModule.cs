@@ -28,6 +28,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DailyStatisticsAggregator>()
 				.SingleInstance()
 				.As<IDailyStatisticsAggregator>();
+			builder.RegisterType<FutureData>()
+				.SingleInstance()
+				.As<IFutureData>();
 		}
 	}
 }
