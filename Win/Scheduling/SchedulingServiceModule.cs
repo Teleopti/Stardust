@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockOptimizationCommand>().As<ITeamBlockOptimizationCommand>();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
 			builder.RegisterType<BackToLegalShiftCommand>().As<BackToLegalShiftCommand>();
+		    builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>();
 	    }
 	}
 }

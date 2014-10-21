@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
+		private bool _cancelMe;
 
 
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer, ITeamBlockScheduler teamBlockScheduler, IShiftProjectionCacheManager shiftProjectionCacheManager, ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor, ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator)
@@ -41,11 +42,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		public void Reset()
 		{
 			_progressEvent = null;
+			_cancelMe = false;
 		}
 
 		public bool IsCanceled
 		{
-			get { return _progressEvent != null && _progressEvent.UserCancel; }
+			get { return _cancelMe || (_progressEvent != null && _progressEvent.UserCancel); }
 		}
 
 		public IList<ISkillStaffPeriod> Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IList<ISkillStaffPeriod> intervalIssuesBefore)
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			rollbackService.ClearModificationCollection();
 			while (notBetter)
 			{
-				if (_progressEvent != null && _progressEvent.UserCancel) break;
+				if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 				
 				intervalIssuesAfter.Clear();
 				var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
@@ -107,6 +109,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			if (handler == null) return;
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 			handler(this, args);
+
+			if (args.Cancel)
+				_cancelMe = true;
 				
 			if (_progressEvent != null && _progressEvent.UserCancel) return;
 

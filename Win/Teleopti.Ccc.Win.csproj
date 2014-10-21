@@ -379,6 +379,7 @@
     <Compile Include="Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
+    <Compile Include="Commands\IntraIntervalOptimizationCommand.cs" />
     <Compile Include="Commands\MatrixListFactory.cs" />
     <Compile Include="Commands\OptimizationCommand.cs" />
     <Compile Include="Commands\ScheduleCommand.cs" />

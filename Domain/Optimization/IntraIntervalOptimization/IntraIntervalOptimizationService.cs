@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+		private bool _cancelMe;
 
 		public IntraIntervalOptimizationService(ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor, IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor, IIntraIntervalOptimizer intraIntervalOptimizer)
 		{
@@ -97,6 +98,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		public void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 				
+		}
+
+		public void OnReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			var handler = ReportProgress;
+			if (handler == null) return;
+			handler(this, e);
 		}
 	}
 }
