@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
             IList<TimePeriod> openHours = new List<TimePeriod>
-                                              {
+            {
                                                   new TimePeriod(workload.Skill.MidnightBreakOffset,
                                                                  workload.Skill.MidnightBreakOffset.Add(
                                                                      TimeSpan.FromDays(1)))
@@ -206,5 +206,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             return workloadDays;
         }
+
+	    public static IWorkloadDay CreateWorkloadDayFromWorkloadTemplate(IWorkload workload, DateOnly date)
+	    {
+		    IWorkloadDay futureWorkloadDay = new WorkloadDay();
+		    var template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, date.DayOfWeek);
+		    futureWorkloadDay.CreateFromTemplate(date, workload, template);
+		    return futureWorkloadDay;
+	    }
     }
 }

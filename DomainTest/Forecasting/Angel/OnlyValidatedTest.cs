@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -8,9 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData;
-using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -32,22 +28,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			loadStatistics.Stub(x => x.LoadDailyStatistics(workload, historicalPeriod)).Return(Enumerable.Empty<DailyStatistic>());
 
 			var validatedVolumeDayRepository = MockRepository.GenerateStub<IValidatedVolumeDayRepository>();
-			var workloadDay = new WorkloadDay();
-			workloadDay.Create(historicalPeriod.StartDate,workload,new TimePeriod[]{});
-			workloadDay.MakeOpen24Hours();
+			var historialWorkloadDay = new WorkloadDay();
+			historialWorkloadDay.Create(historicalPeriod.StartDate,workload,new TimePeriod[]{});
 			validatedVolumeDayRepository.Stub(x => x.FindRange(historicalPeriod, workload)).Return(new[]
 			{
 				new ValidatedVolumeDay(workload, historicalPeriod.StartDate)
 				{
-					TaskOwner = workloadDay,
+					TaskOwner = historialWorkloadDay,
 					ValidatedTasks = expectedNumberOfTasks
 				}
 			});
 			
-			IWorkloadDay futureWorkloadDay = new WorkloadDay();
-			var template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, DayOfWeek.Saturday);
-			template.MakeOpen24Hours();
-			futureWorkloadDay.CreateFromTemplate(futurePeriod.StartDate, workload, template);
+			var futureWorkloadDay = WorkloadDayFactory.CreateWorkloadDayFromWorkloadTemplate(workload, futurePeriod.StartDate);
 
 			var futureSkillDay = new SkillDay(
 				futurePeriod.StartDate,
