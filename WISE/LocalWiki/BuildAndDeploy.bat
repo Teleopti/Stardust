@@ -5,6 +5,7 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 SET Dependencies=\\a380\T-Files\RnD\MSI_Dependencies\localWiki
 SET DeploymentRoot=\\A380\T-Files\Product\Teleopti CCC\v8\LocalWiki
 SET Deployment=%DeploymentRoot%\Latest
+SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 
 SET WorkingFolder=C:\temp\localWiki
 SET WebURL=http://wiki.teleopti.com/TeleoptiWFM
@@ -49,6 +50,9 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 ::add read me.txt to the folder
 echo copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
 copy "%ROOTDIR%\Readme.txt" "%Deployment%\"
+
+::Build
+"%MSBUILD%" /nologo /p:Configuration=Release "%ROOTDIR%\ReplaceString.sln"
 
 ::starting
 echo Start time: %date% %time% > "%Deployment%\export.log"
