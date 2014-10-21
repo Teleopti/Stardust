@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Web.Areas.Mart.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core
 {
@@ -110,6 +112,43 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			}
 
 			return -1;
+		}
+
+		public void Save(IList<FactQueueModel> factQueueModel, string nhibDataSourceName)
+		{
+			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
+			{
+				connection.Open();
+				foreach (var queueModel in factQueueModel)
+				{
+					using (var command = connection.CreateCommand())
+					{
+						command.CommandType = CommandType.StoredProcedure;
+						command.CommandText = "mart.fact_queue_save";
+						command.Parameters.Add(new SqlParameter("@datasource_id", queueModel.LogObjectId));
+						command.Parameters.Add(new SqlParameter("@date_id", queueModel.DateId));
+						command.Parameters.Add(new SqlParameter("@interval_id", queueModel.IntervalId));
+						command.Parameters.Add(new SqlParameter("@queue_id", queueModel.QueueId));
+						command.Parameters.Add(new SqlParameter("@offered_calls", queueModel.OfferedCalls));
+						command.Parameters.Add(new SqlParameter("@answered_calls", queueModel.AnsweredCalls));
+						command.Parameters.Add(new SqlParameter("@answered_calls_within_SL", queueModel.AnsweredCallsWithinServiceLevel));
+						command.Parameters.Add(new SqlParameter("@abandoned_calls", queueModel.AbandonedCalls));
+						command.Parameters.Add(new SqlParameter("@abandoned_calls_within_SL", queueModel.AbandonedCallsWithinServiceLevel));
+						command.Parameters.Add(new SqlParameter("@abandoned_short_calls", queueModel.AbandonedShortCalls));
+						command.Parameters.Add(new SqlParameter("@overflow_out_calls", queueModel.OverflowOutCalls));
+						command.Parameters.Add(new SqlParameter("@overflow_in_calls", queueModel.OverflowInCalls));
+						command.Parameters.Add(new SqlParameter("@talk_time_s", queueModel.TalkTime));
+						command.Parameters.Add(new SqlParameter("@after_call_work_s", queueModel.AfterCallWork));
+						command.Parameters.Add(new SqlParameter("@handle_time_s", queueModel.HandleTime));
+						command.Parameters.Add(new SqlParameter("@speed_of_answer_s", queueModel.SpeedOfAnswer));
+						command.Parameters.Add(new SqlParameter("@time_to_abandon_s", queueModel.TimeToAbandon));
+						command.Parameters.Add(new SqlParameter("@longest_delay_in_queue_answered_s", queueModel.LongestDelayInQueueAnswered));
+						command.Parameters.Add(new SqlParameter("@longest_delay_in_queue_abandoned_s", queueModel.LongestDelayInQueueAbandoned));
+
+						command.ExecuteNonQuery();
+					}
+				}
+			}
 		}
 	}
 }

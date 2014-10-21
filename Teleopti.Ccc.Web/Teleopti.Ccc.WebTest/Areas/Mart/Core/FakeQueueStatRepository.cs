@@ -7,37 +7,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 {
 	public class FakeQueueStatRepository : IQueueStatRepository
 	{
-		public DateTime DateTimeInUtc;
-		public int QueueId;
-		public int DateId;
-		public int IntervalId;
+		public FactQueueModel SavedQueueModel { get; set; }
+		public DateTime DateTimeInUtc { get; set; }
 
-		public LogObject GetLogObject(string logobjectName)
+		public LogObject GetLogObject(string logobjectName, string nhibDataSourceName)
 		{
-			return new LogObject {Id = 2,TimeZoneCode = "W. Europe Standard Time"};
+			return new LogObject { Id = 2, TimeZoneCode = "W. Europe Standard Time" };
 		}
 
-		public int GetQueueId(string queueName, string queueId)
+		public int GetQueueId(string queueName, string queueId, int logObjectId, string nhibDataSourceName)
 		{
 			return 10;
 		}
 
-		public int GetDateId(DateTime dateTime)
+		public int GetDateId(DateTime dateTime, string nhibDataSourceName)
 		{
 			DateTimeInUtc = dateTime;
 			return 1515;
 		}
 
-		public int GetIntervalLength()
+		public int GetIntervalLength(string nhibDataSourceName)
 		{
 			return 15;
 		}
 
-		public void Save(IList<FactQueueModel> factQueueModel)
+		public void Save(IList<FactQueueModel> factQueueModel, string nhibDataSourceName)
 		{
-			QueueId = factQueueModel[0].QueueId;
-			DateId = factQueueModel[0].DateId;
-			IntervalId = factQueueModel[0].IntervalId;
+			SavedQueueModel = factQueueModel[0];
 		}
 	}
 }
