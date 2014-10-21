@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 {
 	public class HistoricalData : IHistoricalData
 	{

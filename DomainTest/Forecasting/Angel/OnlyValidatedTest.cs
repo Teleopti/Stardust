@@ -5,8 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Forecasting.Angel.FutureData;
-using Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var loadSkillDays = MockRepository.GenerateMock<ILoadSkillDaysInDefaultScenario>();
 			loadSkillDays.Stub(x => x.FindRange(futurePeriod, skill)).Return(new[] { futureSkillDay });
 
-			var target = new QuickForecaster(new Domain.Forecasting.Angel.HistoricalData.HistoricalData(loadStatistics, validatedVolumeDayRepository), loadSkillDays);
+			var target = new QuickForecaster(new Domain.Forecasting.Angel.Historical.HistoricalData(loadStatistics, validatedVolumeDayRepository), loadSkillDays);
 			target.Execute(workload, historicalPeriod, futurePeriod);
 
 			futureSkillDay.Tasks.Should().Be.EqualTo(expectedNumberOfTasks);

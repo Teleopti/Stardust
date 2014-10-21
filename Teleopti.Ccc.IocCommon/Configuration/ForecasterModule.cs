@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Forecasting.Angel.FutureData;
-using Teleopti.Ccc.Domain.Forecasting.Angel.HistoricalData;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 
 namespace Teleopti.Ccc.IocCommon.Configuration

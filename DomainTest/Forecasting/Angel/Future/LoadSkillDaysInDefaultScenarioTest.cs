@@ -2,13 +2,13 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting.Angel.FutureData;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.FutureData
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Future
 {
 	public class LoadSkillDaysInDefaultScenarioTest
 	{
