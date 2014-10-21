@@ -11,10 +11,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 {
 	public interface IFakeDataBuilder
 	{
-		IFakeDataBuilder AddFromState(ExternalUserStateForTest state);
-		IFakeDataBuilder AddSource(string sourceId);
-		IFakeDataBuilder AddUser(string userCode, Guid personId, Guid businessUnitId);
-		IFakeDataBuilder AddSchedule(DateTime start, DateTime end);
+		IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state);
+		IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state);
+		IFakeDataBuilder WithSource(string sourceId);
+		IFakeDataBuilder WithUser(string userCode, Guid personId);
+		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
+		IFakeDataBuilder WithSchedule(Guid activityId, DateTime start, DateTime end);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
 		FakeRtaDatabase Done();
 	}
 
@@ -22,33 +25,91 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 	{
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
+		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
+		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
 		private readonly List<ScheduleLayer> _schedule = new List<ScheduleLayer>();
-		 
+
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
-		public IFakeDataBuilder AddFromState(ExternalUserStateForTest state)
+		private readonly Guid _businessUnitId;
+		private string _platformTypeId;
+
+		public FakeRtaDatabase()
 		{
-			AddSource(state.SourceId);
-			AddUser(state.UserCode, Guid.NewGuid(), Guid.NewGuid());
+			_businessUnitId = Guid.NewGuid();
+			_platformTypeId = Guid.Empty.ToString();
+		}
+
+		public IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state)
+		{
+			WithSource(state.SourceId);
+			_platformTypeId = state.PlatformTypeId;
 			return this;
 		}
 
-		public IFakeDataBuilder AddSource(string sourceId)
+		public IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state)
+		{
+			WithDefaultsFromState(state);
+			WithUser(state.UserCode, Guid.NewGuid());
+			return this;
+		}
+
+		public IFakeDataBuilder WithSource(string sourceId)
 		{
 			_datasources.Add(new KeyValuePair<string, int>(sourceId, 0));
 			return this;
 		}
 
-		public IFakeDataBuilder AddUser(string userCode, Guid personId, Guid businessUnitId)
+		public IFakeDataBuilder WithUser(string userCode, Guid personId)
+		{
+			return WithUser(userCode, personId, _businessUnitId);
+		}
+
+		public IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId)
 		{
 			var lookupKey = string.Format("{0}|{1}", _datasources.Last().Value, userCode).ToUpper(); //putting this logic here is just WRONG
 			_externalLogOns.Add(new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(lookupKey, new[] { new PersonWithBusinessUnit { PersonId = personId, BusinessUnitId = businessUnitId } }));
 			return this;
 		}
 
-		public IFakeDataBuilder AddSchedule(DateTime start, DateTime end)
+		public IFakeDataBuilder WithSchedule(Guid activityId, DateTime start, DateTime end)
 		{
-			_schedule.Add(new ScheduleLayer {PayloadId = Guid.NewGuid(), StartDateTime = start, EndDateTime = end});
+			_schedule.Add(new ScheduleLayer { PayloadId = activityId, StartDateTime = start, EndDateTime = end });
+			return this;
+		}
+
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect)
+		{
+			//putting all this logic here is just WRONG
+			var stateGroupId = Guid.NewGuid();
+			var stateId = Guid.NewGuid();
+			var platformTypeIdGuid = new Guid(_platformTypeId);
+			var states = new List<RtaStateGroupLight>
+			{
+				new RtaStateGroupLight
+				{
+					StateGroupId = stateGroupId,
+					StateGroupName = "",
+					BusinessUnitId = _businessUnitId,
+					StateName = stateCode,
+					PlatformTypeId = platformTypeIdGuid,
+					StateCode = stateCode,
+					StateId = stateId
+				}
+			};
+			_stateGroups.Add(new KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states));
+			var alarms = new List<RtaAlarmLight>
+			{
+				new RtaAlarmLight
+				{
+					StateGroupId = stateGroupId,
+					ActivityId = activityId,
+					BusinessUnit = _businessUnitId,
+					AlarmTypeId = Guid.NewGuid(),
+					StaffingEffect = staffingEffect
+				}
+			};
+			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroupId, _businessUnitId), alarms));
 			return this;
 		}
 
@@ -64,12 +125,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 
 		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()
 		{
-			return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
+			return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(_stateGroups);
 		}
 
 		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> ActivityAlarms()
 		{
-			return new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>();
+			return new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(_activityAlarms);
 		}
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
@@ -106,6 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Core
 		{
 			yield break;
 		}
+
 	}
 
 }

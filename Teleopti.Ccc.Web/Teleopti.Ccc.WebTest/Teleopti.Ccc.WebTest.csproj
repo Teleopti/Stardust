@@ -205,6 +205,7 @@
     <Compile Include="Areas\Rta\Core\FakeRtaDatabase.cs" />
     <Compile Include="Areas\Rta\Core\FakeSignalRClient.cs" />
     <Compile Include="Areas\Rta\Core\PersistStateTest.cs" />
+    <Compile Include="Areas\Rta\Core\PersonOutOfAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\Core\ReturnCodeTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssemblerTest.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializorTest.cs" />

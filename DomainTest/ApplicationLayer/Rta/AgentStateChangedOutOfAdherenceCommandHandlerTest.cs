@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			@event.PersonId.Should().Be(state.PersonId);
 		}
 
-
 		[Test]
 		public void ShouldNotPublishEventIfStillOutOfAdherence()
 		{
