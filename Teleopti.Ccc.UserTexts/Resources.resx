@@ -12415,7 +12415,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="BadgeLeaderBoardReport" xml:space="preserve">
-    <value>Badge Leader Board</value>
+    <value>Leaderboard</value>
     <comment>BadgeLeaderBoardReport</comment>
   </data>
   <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">

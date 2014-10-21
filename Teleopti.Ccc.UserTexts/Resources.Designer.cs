@@ -3027,7 +3027,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge Leader Board.
+        ///   Looks up a localized string similar to Leaderboard.
         /// </summary>
         public static string BadgeLeaderBoardReport {
             get {
