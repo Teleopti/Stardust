@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -16,13 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly IBadgeSettingProvider _agentBadgeSettingsProvider;
+		private readonly IPersonNameProvider _personNameProvider;
 
-		public AgentBadgeProvider(IAgentBadgeRepository repository, IPermissionProvider permissionProvider, IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider)
+		public AgentBadgeProvider(IAgentBadgeRepository repository, IPermissionProvider permissionProvider, IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider, IPersonNameProvider personNameProvider)
 		{
 			_repository = repository;
 			_permissionProvider = permissionProvider;
 			_personRepository = personRepository;
 			_agentBadgeSettingsProvider = agentBadgeSettingsProvider;
+			_personNameProvider = personNameProvider;
 		}
 
 		public IEnumerable<AgentBadgeOverview> GetPermittedAgents(DateOnly date, string functionPath)
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			foreach(var p in permittedPersonList)
 			{
 				var agentOverviewItem = new AgentBadgeOverview();
-				agentOverviewItem.AgentName = p.Name.ToString();
+				agentOverviewItem.AgentName = _personNameProvider.BuildNameFromSetting(p.Name);
 				foreach (var agent in permittedAgentBadgeList.Where(agent => p.Id == agent.Person))
 				{
 					agentOverviewItem.Gold += agent.GetGoldBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
