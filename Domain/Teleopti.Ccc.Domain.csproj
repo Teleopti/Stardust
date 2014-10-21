@@ -350,7 +350,7 @@
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\DailyStatistic.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\DailyStatisticsAggregator.cs" />
-    <Compile Include="Forecasting\Angel\ILoadSkillDaysInDefaultScenario.cs" />
+    <Compile Include="Forecasting\Angel\FutureData\ILoadSkillDaysInDefaultScenario.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\HistoricalDataProvider.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\IHistoricalDataProvider.cs" />
@@ -360,7 +360,7 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\IStatisticHelperFactory.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatistics.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactory.cs" />
-    <Compile Include="Forecasting\Angel\LoadSkillDaysInDefaultScenario.cs" />
+    <Compile Include="Forecasting\Angel\FutureData\LoadSkillDaysInDefaultScenario.cs" />
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
