@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecaster
 	{
-		void Execute(IWorkload workload, DateOnlyPeriod period);
+		void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod);
 	}
 }
