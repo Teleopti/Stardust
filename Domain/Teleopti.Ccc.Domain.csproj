@@ -348,6 +348,8 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="Forecasting\Angel\DailyStatistic.cs" />
+    <Compile Include="Forecasting\Angel\DailyStatisticsAggregator.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\HistoricalDataProvider.cs" />
     <Compile Include="Forecasting\Angel\HistoricalData\IHistoricalDataProvider.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />

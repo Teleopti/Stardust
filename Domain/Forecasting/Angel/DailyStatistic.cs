@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.Forecasting
+namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public struct DailyStatistic
 	{
