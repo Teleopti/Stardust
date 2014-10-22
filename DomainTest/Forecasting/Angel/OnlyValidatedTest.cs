@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
@@ -11,11 +10,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	public class OnlyValidatedTest : QuickForecastTest
 	{
 		private const int expectedNumberOfTasks = 35;
-
-		protected override IEnumerable<DailyStatistic> DailyStatistics()
-		{
-			return Enumerable.Empty<DailyStatistic>();
-		}
 
 		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
 		{

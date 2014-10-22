@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -46,8 +44,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			}
 		}
 
-		protected abstract IEnumerable<DailyStatistic> DailyStatistics();
-		protected abstract IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays();
+		protected virtual IEnumerable<DailyStatistic> DailyStatistics()
+		{
+			return Enumerable.Empty<DailyStatistic>();
+		}
+
+		protected virtual IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
+		{
+			return Enumerable.Empty<IValidatedVolumeDay>();
+		}
 
 		protected virtual ICollection<ISkillDay> CurrentSkillDays()
 		{

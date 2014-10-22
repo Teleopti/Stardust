@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -13,11 +11,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	public class SkillDayAlreadyExistTest : QuickForecastTest
 	{
 		private const int newExpectedNumberOfTasks = 48;
-
-		protected override IEnumerable<DailyStatistic> DailyStatistics()
-		{
-			return Enumerable.Empty<DailyStatistic>();
-		}
 
 		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
 		{

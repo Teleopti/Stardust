@@ -16,11 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			return new[] {new DailyStatistic(HistoricalPeriod.StartDate, expectedNumberOfTasks,0,0)};
 		}
 
-		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
-		{
-			return Enumerable.Empty<IValidatedVolumeDay>();
-		}
-
 		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
 		{
 			Convert.ToInt32(modifiedSkillDays.Single().Tasks)
