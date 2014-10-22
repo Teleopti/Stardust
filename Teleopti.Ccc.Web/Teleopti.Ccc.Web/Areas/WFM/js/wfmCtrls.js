@@ -9,17 +9,26 @@ wfmCtrls.controller('MainCtrl',
 );
 
 wfmCtrls.controller('ForecastingCtrl', ['$scope', '$state',
-    function ($scope, $state) {
-       $scope.startPeriod = function (period){
-           $state.go('forecasting.run', {period: period}); //there's probably a better way to do that
-        }
-    }]
+        function ($scope, $state) {
+            var today = new Date();
+            $scope.period = { startDate: today.toLocaleDateString(), endDate: today.toLocaleDateString() }; //use moment to get first day of next month
+
+            $scope.startPeriod = function (period) {
+                $state.go('forecasting.run', {period: period}); //there's probably a better way to do that
+            }
+        }]
 );
 
-wfmCtrls.controller('ForecastingRunCtrl',[ '$scope','$stateParams',
-    function ($scope, $stateParams) {
-        $scope.period = $stateParams.period;
-       $scope.states =['done'];
+wfmCtrls.controller('ForecastingRunCtrl', [ '$scope', '$stateParams','$http',
+        function ($scope, $stateParams, $http) {
 
-    }]
+            $scope.period = $stateParams.period;
+            $http.post('http://localhost:52558/api/Forecasting/forecast', {ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate}).
+                success(function(data, status, headers, config) {
+                    $scope.result = 'DONE (success)';
+                }).
+                error(function(data, status, headers, config) {
+                    $scope.result = 'DONE (failure)';
+                });
+        }]
 );
