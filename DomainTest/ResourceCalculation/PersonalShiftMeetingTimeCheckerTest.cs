@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -207,6 +211,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var result2 = _target.CheckTimePersonAssignment(_mainShift, _personAssignment);
 			Assert.IsFalse(result2);
+		}
+
+		[Test]
+		public void ShouldCheckMeetingsOnVisualLayerProjection()
+		{
+			var mock = new MockRepository();
+			var mainShift = mock.StrictMock<IEditableShift>();
+			var meeting = mock.StrictMock<IPersonMeeting>();
+			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
+			var projectionService = mock.StrictMock<IProjectionService>();
+			var period = new DateTimePeriod(2014, 1, 1, 2014, 1, 2);
+			var meetingPeriod = new DateTimePeriod(2014, 1, 1, 10, 2014, 1, 1, 11);
+			var activity = new Activity("activity"){AllowOverwrite = false};
+			var visualLayer = new VisualLayer(activity, period, activity, _person);
+			var visualLayers = new List<IVisualLayer> {visualLayer};
+			var visualLayerCollection = mock.StrictMock<IVisualLayerCollection>();
+	
+			using (mock.Record())
+			{
+				Expect.Call(mainShift.ProjectionService()).Return(projectionService);
+				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
+				Expect.Call(visualLayerCollection.WorkTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(visualLayerCollection.Period()).Return(period).Repeat.AtLeastOnce();
+				Expect.Call(mainShift.MakeCopy()).Return(mainShift);
+				Expect.Call(meeting.Period).Return(meetingPeriod).Repeat.AtLeastOnce();
+				Expect.Call(visualLayerCollection.GetEnumerator()).Return(visualLayers.GetEnumerator());
+			}
+
+			using (mock.Playback())
+			{
+				_target.CheckTimeMeeting(mainShift, meetings);
+			}
 		}
 	}
 }
