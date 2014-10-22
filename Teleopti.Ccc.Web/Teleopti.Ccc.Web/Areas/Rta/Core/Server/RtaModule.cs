@@ -50,7 +50,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
-			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
+			builder.RegisterType<AdherenceAggregator>()
+				.As<IAdherenceAggregator>()
+				.As<IActualAgentStateHasBeenSent>()
+				.SingleInstance()
+				;
 			//if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
 			//	builder.RegisterType<AgentStateChangedCommandHandler>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 
@@ -61,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				.CacheMethod(svc => svc.PersonOrganizationData())
 				.As<IPersonOrganizationProvider>();
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
-				
+
 			//messy for now
 			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
 				.SingleInstance().As<IPersonOrganizationReader>();

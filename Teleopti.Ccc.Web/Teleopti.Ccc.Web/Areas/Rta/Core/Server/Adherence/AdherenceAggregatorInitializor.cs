@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 
 	public class AdherenceAggregatorInitializor : IAdherenceAggregatorInitializor
 	{
-		private readonly IActualAgentStateHasBeenSent _aggregator;
+		private readonly IAdherenceAggregator _aggregator;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IGetCurrentActualAgentState _databaseReader;
 
-		public AdherenceAggregatorInitializor(IActualAgentStateHasBeenSent aggregator, IPersonOrganizationProvider personOrganizationProvider, IGetCurrentActualAgentState databaseReader)
+		public AdherenceAggregatorInitializor(IAdherenceAggregator aggregator, IPersonOrganizationProvider personOrganizationProvider, IGetCurrentActualAgentState databaseReader)
 		{
 			_aggregator = aggregator;
 			_personOrganizationProvider = personOrganizationProvider;

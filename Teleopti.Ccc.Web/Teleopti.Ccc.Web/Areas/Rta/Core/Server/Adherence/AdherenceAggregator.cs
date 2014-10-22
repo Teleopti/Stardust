@@ -4,7 +4,11 @@ using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
-	public class AdherenceAggregator : IActualAgentStateHasBeenSent
+	public interface IAdherenceAggregator : IActualAgentStateHasBeenSent
+	{
+	}
+
+	public class AdherenceAggregator : IAdherenceAggregator
 	{
 		private readonly IMessageSender _signalRClient;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
