@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futureData =
 				new FutureData(new FetchAndFillSkillDays(skillDayRepository, currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			var target = new QuickForecaster(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData);
+			var target = new QuickForecaster(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
 			target.Execute(Workload, HistoricalPeriod, FuturePeriod);
 
 			Assert(skillDays);

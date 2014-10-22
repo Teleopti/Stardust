@@ -34,6 +34,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<QuickForecastForAllSkills>()
 				.SingleInstance()
 				.As<IQuickForecastForAllSkills>();
+			builder.RegisterType<ForecastVolumeApplier>()
+				.SingleInstance()
+				.As<IForecastVolumeApplier>();
 		}
 	}
 }
