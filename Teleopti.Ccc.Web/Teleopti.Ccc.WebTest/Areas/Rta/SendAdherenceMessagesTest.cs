@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			sender.LastNotification.DomainId.Should().Be(teamId.ToString());
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotSendMessageIfAdherenceHasNotChanged()
 		{
 			var state = new ExternalUserStateForTest

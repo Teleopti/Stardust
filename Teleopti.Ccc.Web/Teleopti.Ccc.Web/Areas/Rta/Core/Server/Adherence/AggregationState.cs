@@ -11,25 +11,33 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 	{
 		private readonly ConcurrentDictionary<Guid, rtaAggregationData> _aggregationDatas = new ConcurrentDictionary<Guid, rtaAggregationData>();
 
-		public void Update(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
+		public bool Update(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
 		{
-			_aggregationDatas.AddOrUpdate(personOrganizationData.PersonId, guid => new rtaAggregationData
+			var adherenceChanged = false;
+			_aggregationDatas.AddOrUpdate(personOrganizationData.PersonId, guid =>
 			{
-				ActualAgentState = actualAgentState,
-				OrganizationData = personOrganizationData
-			}, (guid, data) =>
+				adherenceChanged = true;
+				return new rtaAggregationData
+				{
+					ActualAgentState = actualAgentState,
+					OrganizationData = personOrganizationData
+				};
+			}
+			, (guid, data) =>
 			{
+				adherenceChanged = !data.ActualAgentState.StaffingEffect.Equals(actualAgentState.StaffingEffect);
 				data.ActualAgentState = actualAgentState;
 				data.OrganizationData = personOrganizationData;
 				return data;
 			});
+			return adherenceChanged;
 		}
 
 		public int GetOutOfAdherenceForTeam(Guid teamId)
 		{
 			return _aggregationDatas
-				.Where(k => k.Value.OrganizationData.TeamId == teamId)
-				.Count(x => Math.Abs(x.Value.ActualAgentState.StaffingEffect) > 0.01);
+					.Where(k => k.Value.OrganizationData.TeamId == teamId)
+					.Count(x => Math.Abs(x.Value.ActualAgentState.StaffingEffect) > 0.01);
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)

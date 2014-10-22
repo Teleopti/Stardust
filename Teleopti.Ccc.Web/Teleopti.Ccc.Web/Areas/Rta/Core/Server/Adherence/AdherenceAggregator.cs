@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			if (personOrganizationData == null)
 				return;
 
-			_aggregationState.Update(personOrganizationData, actualAgentState);
+			var adherenceChanged = _aggregationState.Update(personOrganizationData, actualAgentState);
+			if (!adherenceChanged)
+				return;
 
 			var siteAdherence = _siteAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
 			if (siteAdherence != null)
