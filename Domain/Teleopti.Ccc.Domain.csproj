@@ -353,6 +353,7 @@
     <Compile Include="Forecasting\Angel\Historical\DailyStatistic.cs" />
     <Compile Include="Forecasting\Angel\Historical\DailyStatisticsAggregator.cs" />
     <Compile Include="Forecasting\Angel\Future\IFetchAndFillSkillDays.cs" />
+    <Compile Include="Forecasting\Angel\IQuickForecastForAllSkills.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalData.cs" />
     <Compile Include="Forecasting\Angel\Historical\IHistoricalData.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactory.cs" />
     <Compile Include="Forecasting\Angel\Future\FetchAndFillSkillDays.cs" />
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecastForAllSkills.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizer.cs" />

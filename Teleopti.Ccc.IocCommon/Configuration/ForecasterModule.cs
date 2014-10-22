@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FutureData>()
 				.SingleInstance()
 				.As<IFutureData>();
+			builder.RegisterType<QuickForecastForAllSkills>()
+				.SingleInstance()
+				.As<IQuickForecastForAllSkills>();
 		}
 	}
 }

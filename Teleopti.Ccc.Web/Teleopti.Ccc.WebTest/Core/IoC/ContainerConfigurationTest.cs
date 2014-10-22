@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -111,6 +112,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			using (var container = builder.Configure(string.Empty))
 			{
 				container.Resolve<ServiceController>()
+					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveForecastController()
+		{
+			using (var container = builder.Configure(string.Empty))
+			{
+				container.Resolve<ForecastController>()
 					.Should().Not.Be.Null();
 			}
 		}
