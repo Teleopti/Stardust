@@ -215,7 +215,7 @@
     <Compile Include="Areas\Rta\NotificationExtension.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\OrganizationForPersonTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\SendMessageTest.cs" />
-    <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\TeamAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\AlarmMapperTest.cs" />
