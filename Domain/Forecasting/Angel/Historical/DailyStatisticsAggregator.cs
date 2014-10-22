@@ -20,11 +20,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 			var statisticTasks = _statisticRepository.LoadSpecificDates(workload.QueueSourceCollection,
 				dateRange.ToDateTimePeriod(TimeZoneInfo.Utc));
 
-			var tempSum = statisticTasks.Sum(x => x.StatAnsweredTasks);
-			var tempDate = statisticTasks.First().Interval.Date;
-
-			var ret = new DailyStatistic(new DateOnly(tempDate), (int)tempSum);
-			return new[] { ret };
+			var result = from t in statisticTasks
+						 group t by t.Interval.Date into g
+						select new DailyStatistic(new DateOnly(g.Key),(int)g.Sum(k => k.StatAnsweredTasks));
+			return result;
 		}
 	}
 }

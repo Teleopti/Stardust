@@ -34,5 +34,28 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Historical
 			result.Single().Date.Should().Be.EqualTo(dateRange.StartDate);
 			result.Single().CalculatedTasks.Should().Be.EqualTo(13);
 		}
+
+		[Test]
+		public void ShouldAggregateStatisticTasksForTwoDays()
+		{
+			var workload = new Workload(SkillFactory.CreateSkill("Direct sales"));
+			var dateRange = new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2);
+
+			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
+			statisticRepository.Stub(
+				x => x.LoadSpecificDates(workload.QueueSourceCollection, new DateTimePeriod(2001, 1, 1, 2001, 1, 3)))
+				.Return(new List<IStatisticTask>
+				{
+					new StatisticTask {Interval = new DateTime(2001, 1, 1, 11, 15, 0, DateTimeKind.Utc), StatAnsweredTasks = 6},
+					new StatisticTask {Interval = new DateTime(2001, 1, 2, 11, 15, 0, DateTimeKind.Utc), StatAnsweredTasks = 7},
+				});
+			var target = new DailyStatisticsAggregator(statisticRepository);
+			var result = target.LoadDailyStatistics(workload, dateRange);
+
+			result.First().Date.Should().Be.EqualTo(dateRange.StartDate);
+			result.First().CalculatedTasks.Should().Be.EqualTo(6);
+			result.Last().Date.Should().Be.EqualTo(dateRange.EndDate);
+			result.Last().CalculatedTasks.Should().Be.EqualTo(7);
+		}
 	}
 }
