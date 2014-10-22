@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 

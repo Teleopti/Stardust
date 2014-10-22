@@ -198,6 +198,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
     <Compile Include="Areas\Rta\EventsTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForTest.cs" />

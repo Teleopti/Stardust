@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
 	{
+		private readonly List<IActualAgentState> _actualAgentStates = new List<IActualAgentState>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
 		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
 		private readonly IDictionary<Guid, ScheduleLayer> _schedule = new Dictionary<Guid, ScheduleLayer>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
-
+		 
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
 		private readonly Guid _businessUnitId;
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IActualAgentState GetCurrentActualAgentState(Guid personId)
 		{
-			return null;
+			return _actualAgentStates.FirstOrDefault(x => x.PersonId == personId);
 		}
 
 		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()
@@ -195,6 +196,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public void PersistActualAgentState(IActualAgentState actualAgentState)
 		{
+			_actualAgentStates.Add(actualAgentState);
 			PersistedActualAgentState = actualAgentState;
 		}
 
