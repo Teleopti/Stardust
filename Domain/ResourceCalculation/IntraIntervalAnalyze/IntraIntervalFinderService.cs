@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 				if(skillDay.Skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 					continue;
 
-				_skillDayIntraIntervalFinder.SetIntraIntervalIssues(skillDay, resourceCalculationDataContainer);
+				_skillDayIntraIntervalFinder.SetIntraIntervalIssues(skillDay, resourceCalculationDataContainer, 0.8);
 			}
 		}
 	}

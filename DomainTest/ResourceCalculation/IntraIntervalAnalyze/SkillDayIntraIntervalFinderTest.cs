@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Playback())
 			{
-				_target.SetIntraIntervalIssues(_skillDay,_resourceCalculationDataContainer);
+				_target.SetIntraIntervalIssues(_skillDay,_resourceCalculationDataContainer, 0.5);
 				Assert.IsTrue(_skillStaffPeriod1.HasIntraIntervalIssue);
 				Assert.IsFalse(_skillStaffPeriod2.HasIntraIntervalIssue);
 			}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Playback())
 			{
-				_target.SetIntraIntervalIssues(_skillDay, _resourceCalculationDataContainer);
+				_target.SetIntraIntervalIssues(_skillDay, _resourceCalculationDataContainer, 0.5);
 				Assert.IsFalse(_skillStaffPeriod1.HasIntraIntervalIssue);
 				Assert.IsFalse(_skillStaffPeriod2.HasIntraIntervalIssue);
 			}	

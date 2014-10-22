@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 {
 	public interface ISkillDayIntraIntervalFinder
 	{
-		void SetIntraIntervalIssues(ISkillDay skillDay, IResourceCalculationDataContainer resourceCalculationDataContainer	);
+		void SetIntraIntervalIssues(ISkillDay skillDay, IResourceCalculationDataContainer resourceCalculationDataContainer,	double limit);
 	}
 
 	public class SkillDayIntraIntervalFinder : ISkillDayIntraIntervalFinder
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 			_fullIntervalFinder = fullIntervalFinder;
 		}
 
-		public void SetIntraIntervalIssues(ISkillDay skillDay, IResourceCalculationDataContainer resourceCalculationDataContainer)
+		public void SetIntraIntervalIssues(ISkillDay skillDay, IResourceCalculationDataContainer resourceCalculationDataContainer, double limit)
 		{
 			var skill = skillDay.Skill;
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 					if ((i + fullInterval) > max) max = i + fullInterval;
 				}
 
-				skillStaffPeriod.HasIntraIntervalIssue = min / max < 0.8;
+				skillStaffPeriod.HasIntraIntervalIssue = min / max < limit;
 				skillStaffPeriod.IntraIntervalValue = min / max;
 			}
 		}
