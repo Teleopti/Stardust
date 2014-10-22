@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 	{
 		private readonly int _calculatedTasks;
 		private readonly DateOnly _date;
-		private double _averageTaskTimeSeconds;
-		private double _averageAfterTaskTimeSeconds;
+		private readonly double _averageTaskTimeSeconds;
+		private readonly double _averageAfterTaskTimeSeconds;
 
 		public DailyStatistic(DateOnly date, int calculatedTasks, double averageTaskTimeSeconds, double averageAfterTaskTimeSeconds)
 		{
