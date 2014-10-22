@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		[Test]
 		public void ShouldCallAggregateOnInnerBasedOnCurrentDatabaseState()
 		{
-			var aggregator = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
+			var aggregator = MockRepository.GenerateMock<IAdherenceAggregator>();
 			var person1 = new PersonOrganizationData {PersonId =  Guid.NewGuid()};
 			var person2 = new PersonOrganizationData {PersonId =  Guid.NewGuid()};
 			var state1 = new ActualAgentState();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		[Test]
 		public void ShouldNotCallAggregateOnInnerIfStateIsNull()
 		{
-			var aggregator = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
+			var aggregator = MockRepository.GenerateMock<IAdherenceAggregator>();
 			var loadActualAgentState = MockRepository.GenerateMock<IGetCurrentActualAgentState>();
 			var personOrganizationData = new PersonOrganizationData {PersonId = Guid.NewGuid()};
 			var target = new AdherenceAggregatorInitializor(aggregator,
