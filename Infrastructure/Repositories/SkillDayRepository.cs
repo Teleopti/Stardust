@@ -6,6 +6,7 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// Created by: robink
 	/// Created date: 2008-01-08
 	/// </remarks>
-	public class SkillDayRepository : Repository<ISkillDay>, ISkillDayRepository
+	public class SkillDayRepository : Repository<ISkillDay>, ISkillDayRepository, IFillWithEmptySkillDays
 	{
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
@@ -224,8 +225,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			_workloadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);
 
-			skillDays = skillDays.OrderBy(wd => wd.CurrentDate).ToList();
-			return skillDays;
+			var ret = skillDays.OrderBy(wd => wd.CurrentDate).ToList();
+			return ret;
 		}
 
 		private static ICriterion skillCriterion(ISkill skill)

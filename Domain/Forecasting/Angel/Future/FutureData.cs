@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 {
 	public class FutureData : IFutureData
 	{
-		private readonly ILoadSkillDaysInDefaultScenario _loadSkillDaysInDefaultScenario;
+		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 
-		public FutureData(ILoadSkillDaysInDefaultScenario loadSkillDaysInDefaultScenario)
+		public FutureData(IFetchAndFillSkillDays fetchAndFillSkillDays)
 		{
-			_loadSkillDaysInDefaultScenario = loadSkillDaysInDefaultScenario;
+			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 		}
 
 		public IEnumerable<ITaskOwner> Fetch(IWorkload workload, DateOnlyPeriod futurePeriod)
 		{
-			var futureSkillDays = _loadSkillDaysInDefaultScenario.FindRange(futurePeriod, workload.Skill);
+			var futureSkillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill);
 			new SkillDayCalculator(workload.Skill, futureSkillDays, futurePeriod);
 			var futureWorkloadDays = getFutureWorkloadDaysFromSkillDays(futureSkillDays);
 			return futureWorkloadDays;

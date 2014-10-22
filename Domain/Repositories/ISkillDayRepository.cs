@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// Created by: peterwe
     /// Created date: 2008-02-25
     /// </remarks>
-    public interface ISkillDayRepository : IRepository<ISkillDay>
+	public interface ISkillDayRepository : IRepository<ISkillDay>
     {
         /// <summary>
         /// Finds the range.

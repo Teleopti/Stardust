@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StatisticHelperFactory>()
 				.SingleInstance()
 				.As<IStatisticHelperFactory>();
-			builder.RegisterType<LoadSkillDaysInDefaultScenario>()
+			builder.RegisterType<FetchAndFillSkillDays>()
 				.SingleInstance()
-				.As<ILoadSkillDaysInDefaultScenario>();
+				.As<IFetchAndFillSkillDays>();
 			builder.RegisterType<DailyStatisticsAggregator>()
 				.SingleInstance()
 				.As<IDailyStatisticsAggregator>();

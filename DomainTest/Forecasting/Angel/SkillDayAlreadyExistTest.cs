@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			};
 		}
 
-		protected override IEnumerable<ISkillDay> CurrentSkillDays()
+		protected override ICollection<ISkillDay> CurrentSkillDays()
 		{
 			const int currentNumberOfTasks = newExpectedNumberOfTasks*2;
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var skillDay = new SkillDay(
 				FuturePeriod.StartDate,
 				Workload.Skill,
-				new Scenario("sdfdsf"),
+				DefaultScenario,
 				new[] {futureWorkloadDay},
 				Enumerable.Empty<ISkillDataPeriod>());
 			new SkillDayCalculator(skillDay.Skill, new[] {skillDay}, FuturePeriod);
