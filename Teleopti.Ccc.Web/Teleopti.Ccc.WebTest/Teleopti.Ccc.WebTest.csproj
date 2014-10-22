@@ -210,7 +210,6 @@
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\ReturnCodeTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\ActualAgentAssemblerTest.cs" />
-    <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\AdherenceAggregatorInitializorTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\AgentsAdherenceTest.cs" />
     <Compile Include="Areas\Rta\FakeMessageSender.cs" />
     <Compile Include="Areas\Rta\NotificationExtension.cs" />
