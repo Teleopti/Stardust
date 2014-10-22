@@ -16,13 +16,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var historialWorkloadDay = new WorkloadDay();
 			historialWorkloadDay.Create(HistoricalPeriod.StartDate, Workload, new TimePeriod[] { });
-			return new[]
+			yield return new ValidatedVolumeDay(Workload, HistoricalPeriod.StartDate)
 			{
-				new ValidatedVolumeDay(Workload, HistoricalPeriod.StartDate)
-				{
-					TaskOwner = historialWorkloadDay,
-					ValidatedTasks = newExpectedNumberOfTasks
-				}
+				TaskOwner = historialWorkloadDay,
+				ValidatedTasks = newExpectedNumberOfTasks
 			};
 		}
 

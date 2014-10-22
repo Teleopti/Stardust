@@ -14,15 +14,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
 		{
 			var historialWorkloadDay = new WorkloadDay();
-			historialWorkloadDay.Create(HistoricalPeriod.StartDate, Workload, new TimePeriod[] { });
-			return new[]
-			{
+			historialWorkloadDay.Create(HistoricalPeriod.StartDate, Workload, new TimePeriod[] {});
+			yield return
 				new ValidatedVolumeDay(Workload, HistoricalPeriod.StartDate)
 				{
 					TaskOwner = historialWorkloadDay,
 					ValidatedTasks = expectedNumberOfTasks
-				}
-			};
+				};
 		}
 
 		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)

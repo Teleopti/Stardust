@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
@@ -11,9 +11,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	{
 		private const int expectedNumberOfTasks = 17;
 
-		protected override IEnumerable<DailyStatistic> DailyStatistics()
+		protected override IEnumerable<StatisticTask> DailyStatistics()
 		{
-			return new[] {new DailyStatistic(HistoricalPeriod.StartDate, expectedNumberOfTasks,0,0)};
+			var dateTimeOnStartPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
+			yield return new StatisticTask {Interval = dateTimeOnStartPeriod, StatOfferedTasks = expectedNumberOfTasks};
 		}
 
 		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)

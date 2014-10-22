@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
@@ -12,22 +11,21 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	{
 		private const int expectedNumberOfTasks = 123;
 
-		protected override IEnumerable<DailyStatistic> DailyStatistics()
+		protected override IEnumerable<StatisticTask> DailyStatistics()
 		{
-			return new[] {new DailyStatistic(HistoricalPeriod.StartDate, expectedNumberOfTasks + 1,0,0)};
+			const int nonExpectedNumberOfTasks = expectedNumberOfTasks + 1;
+			var dateTimeOnStartPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
+			yield return new StatisticTask {Interval = dateTimeOnStartPeriod, StatOfferedTasks = nonExpectedNumberOfTasks};
 		}
 
 		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
 		{
 			var historialWorkloadDay = new WorkloadDay();
 			historialWorkloadDay.Create(HistoricalPeriod.StartDate, Workload, new TimePeriod[] { });
-			return new[]
+			yield return new ValidatedVolumeDay(Workload, HistoricalPeriod.StartDate)
 			{
-				new ValidatedVolumeDay(Workload, HistoricalPeriod.StartDate)
-				{
-					TaskOwner = historialWorkloadDay,
-					ValidatedTasks = expectedNumberOfTasks
-				}
+				TaskOwner = historialWorkloadDay,
+				ValidatedTasks = expectedNumberOfTasks
 			};
 		}
 

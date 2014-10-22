@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
@@ -44,9 +46,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			}
 		}
 
-		protected virtual IEnumerable<DailyStatistic> DailyStatistics()
+		protected virtual IEnumerable<StatisticTask> DailyStatistics()
 		{
-			return Enumerable.Empty<DailyStatistic>();
+			return Enumerable.Empty<StatisticTask>();
 		}
 
 		protected virtual IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
@@ -58,6 +60,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			return new List<ISkillDay>();
 		}
+
+		protected TimeZoneInfo SkillTimeZoneInfo()
+		{
+			return Workload.Skill.TimeZone;
+		}
+
 		protected abstract void Assert(IEnumerable<ISkillDay> modifiedSkillDays);
 
 		[Test]
@@ -66,8 +74,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var validatedVolumeDayRepository = MockRepository.GenerateStub<IValidatedVolumeDayRepository>();
 			validatedVolumeDayRepository.Stub(x => x.FindRange(HistoricalPeriod, Workload)).Return(ValidatedVolumeDays().ToList());
 
-			var dailyStatistics = MockRepository.GenerateStub<IDailyStatisticsAggregator>();
-			dailyStatistics.Stub(x => x.LoadDailyStatistics(Workload, HistoricalPeriod)).Return(DailyStatistics());
+			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
+			statisticRepository.Stub(
+				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(DailyStatistics().ToArray());
+			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var skillDays = CurrentSkillDays();
 			var skillDayRepository = MockRepository.GenerateStub<ISkillDayRepository>();
