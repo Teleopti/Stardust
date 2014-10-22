@@ -266,6 +266,7 @@
     <Compile Include="Forecasting\Angel\OnlyStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\OnlyValidatedTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastTest.cs" />
+    <Compile Include="Forecasting\Angel\SkillDayAlreadyExistTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreatorTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelperTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthTest.cs" />
