@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using NHibernate.Hql.Ast;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -13,26 +11,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 	public class SkillStaffPeriodEvaluatorTest
 	{
 		private SkillStaffPeriodEvaluator _target;
-		private MockRepository _mock;
-		private IList<ISkillStaffPeriod> _listBefore;
-		private IList<ISkillStaffPeriod> _listAfter;
-		private ISkillStaffPeriod _skillStaffPeriod1;
-		private ISkillStaffPeriod _skillStaffPeriod2;
-		private ISkillStaffPeriod _skillStaffPeriod3;
-		private ISkillStaffPeriod _skillStaffPeriod4;
 		private DateTimePeriod _period1;
 		private DateTimePeriod _period2;
 			
 		[SetUp]
 		public void SetUp()
 		{
-			_mock = new MockRepository();
-			_skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
-			_skillStaffPeriod2 = _mock.StrictMock<ISkillStaffPeriod>();
-			_skillStaffPeriod3 = _mock.StrictMock<ISkillStaffPeriod>();
-			_skillStaffPeriod4 = _mock.StrictMock<ISkillStaffPeriod>();
-			_listBefore = new List<ISkillStaffPeriod>{_skillStaffPeriod1, _skillStaffPeriod2};
-			_listAfter = new List<ISkillStaffPeriod>{_skillStaffPeriod3, _skillStaffPeriod4};
 			_target = new SkillStaffPeriodEvaluator();
 			_period1 = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 10);
 			_period2 = new DateTimePeriod(2014, 1, 1, 15, 2014, 1, 1, 16);
@@ -41,122 +25,98 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		[Test]
 		public void ShouldReturnTrueWhenPeriodIsBetter()
 		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod1.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.Period).Return(_period2).Repeat.AtLeastOnce();
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
+			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 
-				Expect.Call(_skillStaffPeriod3.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.Period).Return(_period2).Repeat.AtLeastOnce();
+			skillStaffPeriod1.HasIntraIntervalIssue = true;
+			skillStaffPeriod2.HasIntraIntervalIssue = true;
+			skillStaffPeriod3.HasIntraIntervalIssue = true;
+			skillStaffPeriod4.HasIntraIntervalIssue = true;
 
-				Expect.Call(_skillStaffPeriod1.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
+			skillStaffPeriod1.IntraIntervalValue = 0.5;
+			skillStaffPeriod2.IntraIntervalValue = 0.5;
+			skillStaffPeriod3.IntraIntervalValue = 0.9;
+			skillStaffPeriod4.IntraIntervalValue = 0.5;
 
-				Expect.Call(_skillStaffPeriod3.IntraIntervalValue).Return(0.9).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-			}
+			var listBefore = new List<ISkillStaffPeriod>{skillStaffPeriod1, skillStaffPeriod2};
+			var listAfter = new List<ISkillStaffPeriod>{skillStaffPeriod3, skillStaffPeriod4};
 
-			using (_mock.Playback())
-			{
-				var result = _target.ResultIsBetter(_listBefore, _listAfter);
-				Assert.IsTrue(result);
-			}
+			var result = _target.ResultIsBetter(listBefore, listAfter);
+			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void ShouldReturnFalseWhenPeriodIsWorse()
 		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod1.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.Period).Return(_period2).Repeat.AtLeastOnce();
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
+			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 
-				Expect.Call(_skillStaffPeriod3.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.Period).Return(_period2).Repeat.AtLeastOnce();
+			skillStaffPeriod1.HasIntraIntervalIssue = true;
+			skillStaffPeriod2.HasIntraIntervalIssue = true;
+			skillStaffPeriod3.HasIntraIntervalIssue = true;
+			skillStaffPeriod4.HasIntraIntervalIssue = true;
 
-				Expect.Call(_skillStaffPeriod1.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.IntraIntervalValue).Return(0.9).Repeat.AtLeastOnce();
+			skillStaffPeriod1.IntraIntervalValue = 0.5;
+			skillStaffPeriod2.IntraIntervalValue = 0.9;
+			skillStaffPeriod3.IntraIntervalValue = 0.9;
+			skillStaffPeriod4.IntraIntervalValue = 0.5;
 
-				Expect.Call(_skillStaffPeriod3.IntraIntervalValue).Return(0.9).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-			}
+			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 };
+			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
 
-			using (_mock.Playback())
-			{
-				var result = _target.ResultIsBetter(_listBefore, _listAfter);
-				Assert.IsFalse(result);
-			}
+			var result = _target.ResultIsBetter(listBefore, listAfter);
+			Assert.IsFalse(result);
 		}
 
 		[Test]
 		public void ShouldReturnFalseWhenPeriodIsEven()
 		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod1.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.Period).Return(_period2).Repeat.AtLeastOnce();
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
+			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 
-				Expect.Call(_skillStaffPeriod3.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.Period).Return(_period2).Repeat.AtLeastOnce();
+			skillStaffPeriod1.HasIntraIntervalIssue = true;
+			skillStaffPeriod2.HasIntraIntervalIssue = true;
+			skillStaffPeriod3.HasIntraIntervalIssue = true;
+			skillStaffPeriod4.HasIntraIntervalIssue = true;
 
-				Expect.Call(_skillStaffPeriod1.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
+			skillStaffPeriod1.IntraIntervalValue = 0.5;
+			skillStaffPeriod2.IntraIntervalValue = 0.9;
+			skillStaffPeriod3.IntraIntervalValue = 0.5;
+			skillStaffPeriod4.IntraIntervalValue = 0.9;
 
-				Expect.Call(_skillStaffPeriod3.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-			}
+			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 };
+			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
 
-			using (_mock.Playback())
-			{
-				var result = _target.ResultIsBetter(_listBefore, _listAfter);
-				Assert.IsFalse(result);
-			}
+			var result = _target.ResultIsBetter(listBefore, listAfter);
+			Assert.IsFalse(result);
 		}
 
 		[Test]
 		public void ShouldReturnFalseWhenMoreNewPeriods()
 		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod1.Period).Return(_period1).Repeat.AtLeastOnce();
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 
-				Expect.Call(_skillStaffPeriod3.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod4.Period).Return(_period2).Repeat.AtLeastOnce();
+			skillStaffPeriod1.HasIntraIntervalIssue = true;
+			skillStaffPeriod3.HasIntraIntervalIssue = true;
+			skillStaffPeriod4.HasIntraIntervalIssue = true;
 
-				Expect.Call(_skillStaffPeriod1.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod3.IntraIntervalValue).Return(0.9).Repeat.AtLeastOnce();
-			}
+			skillStaffPeriod1.IntraIntervalValue = 0.5;
+			skillStaffPeriod3.IntraIntervalValue = 0.9;
+			skillStaffPeriod4.IntraIntervalValue = 0.9;
 
-			using (_mock.Playback())
-			{
-				_listBefore.RemoveAt(1);
-				var result = _target.ResultIsBetter(_listBefore, _listAfter);
-				Assert.IsFalse(result);
-			}
-		}
+			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
+			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
 
-		[Test]
-		public void ShouldReturnTrueWhenLessBetterPeriods()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod1.Period).Return(_period1).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriod2.Period).Return(_period2).Repeat.AtLeastOnce();
-
-				Expect.Call(_skillStaffPeriod3.Period).Return(_period1).Repeat.AtLeastOnce();
-				
-				Expect.Call(_skillStaffPeriod1.IntraIntervalValue).Return(0.5).Repeat.AtLeastOnce();
-			
-				Expect.Call(_skillStaffPeriod3.IntraIntervalValue).Return(0.9).Repeat.AtLeastOnce();
-
-			}
-
-			using (_mock.Playback())
-			{
-				_listAfter.RemoveAt(1);
-				var result = _target.ResultIsBetter(_listBefore, _listAfter);
-				Assert.IsTrue(result);
-			}
+			var result = _target.ResultIsBetter(listBefore, listAfter);
+			Assert.IsFalse(result);
 		}
 
 		[Test]
@@ -173,8 +133,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			var listBefore = new List<ISkillStaffPeriod> {skillStaffPeriod1, skillStaffPeriod2};
 			var listAfter = new List<ISkillStaffPeriod> {skillStaffPeriod2 };
 			Assert.IsTrue(_target.ResultIsBetter(listBefore, listAfter));
-		}
-
-		
+		}	
 	}
 }

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 			{
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { new DateOnly() })).Return(new List<ISkillDay> { _skillDay });
 				Expect.Call(_skillDay.Skill).Return(_normalSkill);
-				Expect.Call(() =>_skillDayIntraIntervalFinder.SetIntraIntervalIssues(_skillDay, _resourceCalculationDataContainer, 0.5));
+				Expect.Call(() =>_skillDayIntraIntervalFinder.SetIntraIntervalIssues(_skillDay, _resourceCalculationDataContainer, 0.8));
 			}
 
 			using (_mock.Record())
