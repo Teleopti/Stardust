@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	{
 		private const int expectedNumberOfTasks = 123;
 
-		protected override IEnumerable<StatisticTask> DailyStatistics()
+		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			const int nonExpectedNumberOfTasks = expectedNumberOfTasks + 1;
 			var dateTimeOnStartPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);

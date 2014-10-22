@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			}
 		}
 
-		protected virtual IEnumerable<StatisticTask> DailyStatistics()
+		protected virtual IEnumerable<StatisticTask> StatisticTasks()
 		{
 			return Enumerable.Empty<StatisticTask>();
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
-				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(DailyStatistics().ToArray());
+				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var skillDays = CurrentSkillDays();

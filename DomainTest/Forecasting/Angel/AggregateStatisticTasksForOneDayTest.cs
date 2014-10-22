@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
 	public class AggregateStatisticTasksForOneDayTest : QuickForecastTest
 	{
-		protected override IEnumerable<StatisticTask> DailyStatistics()
+		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			var startDateOnHistoricalPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
 			return new[]
