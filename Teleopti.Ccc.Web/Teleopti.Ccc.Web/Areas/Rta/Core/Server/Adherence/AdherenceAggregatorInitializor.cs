@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 				where state != null
 				select state;
 			foreach (var actualAgentState in states)
-				_aggregator.Invoke(actualAgentState);
+				_aggregator.Initialize(actualAgentState);
 		}
 	}
 }

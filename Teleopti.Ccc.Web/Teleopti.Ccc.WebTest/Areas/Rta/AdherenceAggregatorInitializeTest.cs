@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotSendMessagesWhenInitializing()
 		{
 			var state = new ExternalUserStateForTest
