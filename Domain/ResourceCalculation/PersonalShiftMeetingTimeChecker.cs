@@ -29,9 +29,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (!personMeeting.Period.Intersect(period))
 					return false;
 
-				foreach (var mainShiftLayer in mainShift.LayerCollection)
+				foreach (var visibleLayer in mainShiftProjection)
 				{
-					if (!mainShiftLayer.Payload.AllowOverwrite && mainShiftLayer.Period.Intersect(personMeeting.Period))
+					var activity = visibleLayer.Payload as IActivity;
+					if (activity != null && !activity.AllowOverwrite && visibleLayer.Period.Intersect(personMeeting.Period))
 						return false;
 				}
 
