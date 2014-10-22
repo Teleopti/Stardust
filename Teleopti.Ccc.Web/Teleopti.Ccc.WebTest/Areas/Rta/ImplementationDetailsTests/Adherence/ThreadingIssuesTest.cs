@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 
 			public void Send(Notification notification)
 			{
-				var outOfAdherenceValue = notification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence;
+				var outOfAdherenceValue = notification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence;
 				if (outOfAdherenceValue > _outofAdherence)
 					throw new Exception("Too high outofadherence");
 				if (Math.Abs(outOfAdherenceValue - _outofAdherence) < 0.1)

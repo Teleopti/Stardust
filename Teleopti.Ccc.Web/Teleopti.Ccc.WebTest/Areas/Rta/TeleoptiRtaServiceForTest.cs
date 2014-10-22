@@ -52,6 +52,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
+		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
+			: base(
+				new FakeSignalRClient(),
+				MockRepository.GenerateMock<IMessageSender>(),
+				database,
+				database,
+				MockRepository.GenerateMock<IMbCacheFactory>(),
+				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), messageSender),
+				now,
+				new FakeConfigReader())
+		{
+		}
+
 		public static TeleoptiRtaService Make()
 		{
 			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase());

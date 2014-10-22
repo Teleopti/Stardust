@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			var agentState = new ActualAgentState();
 			var teamId = Guid.NewGuid();
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			var oldState = new ActualAgentState { StaffingEffect = 1 };
 			var newState = new ActualAgentState { StaffingEffect = 1 };
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		{
 			var agentState = new ActualAgentState{BusinessUnit = Guid.NewGuid()};
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		{
 			var agentState = new ActualAgentState();
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		{
 			var agentState = new ActualAgentState { BusinessUnit = Guid.NewGuid() };
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		{
 			var agentState = new ActualAgentState();
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 		{
 			var agentState = new ActualAgentState{PersonId = Guid.NewGuid()};
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var personOrganizationReader = MockRepository.GenerateStub<IPersonOrganizationReader>();
 			var organizationForPerson = new OrganizationForPerson(new PersonOrganizationProvider(personOrganizationReader));
 			var target = new AdherenceAggregator(broker, organizationForPerson);

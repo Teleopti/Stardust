@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
 			var outOfAdherence = new ActualAgentState { StaffingEffect = 1 };
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
 				.Return(new PersonOrganizationData { TeamId = teamId });
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
 
-			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			broker.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
 			var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
 				.Return(new PersonOrganizationData { TeamId = teamId });
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
 
-			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			broker.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var team = Guid.NewGuid();
 			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData{TeamId = team, PersonId = outOfAdherence1.PersonId});
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);
 
-			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
+			broker.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = outOfAdherence1.PersonId });
 			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = outOfAdherence2.PersonId });
@@ -82,14 +82,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);
 
-			broker.LastTeamNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			broker.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldSetSiteIdAsDomainReferenceId()
 		{
 			var siteId = Guid.NewGuid();
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			organizationForPerson.Expect(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
 				.Return(new PersonOrganizationData { SiteId = siteId });

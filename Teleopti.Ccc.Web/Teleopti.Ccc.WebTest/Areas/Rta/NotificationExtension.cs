@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	public static class NotificationExtension
 	{
-		public static T GetOriginal<T>(this Notification notification)
+		public static T DeserializeBindaryData<T>(this Notification notification)
 		{
 			return JsonConvert.DeserializeObject<T>(notification.BinaryData);
 		}

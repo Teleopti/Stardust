@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithUser(string userCode);
 		IFakeDataBuilder WithUser(string userCode, Guid personId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
+		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
 		FakeRtaDatabase Done();
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
 		private readonly IDictionary<Guid, ScheduleLayer> _schedule = new Dictionary<Guid, ScheduleLayer>();
+		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
 
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
@@ -63,18 +65,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IFakeDataBuilder WithUser(string userCode)
 		{
-			return WithUser(userCode, Guid.NewGuid(), _businessUnitId);
+			return WithUser(userCode, Guid.NewGuid(), null, null, null);
 		}
 
 		public IFakeDataBuilder WithUser(string userCode, Guid personId)
 		{
-			return WithUser(userCode, personId, _businessUnitId);
+			return WithUser(userCode, personId, null, null, null);
 		}
 
 		public IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId)
 		{
+			WithUser(userCode, personId, businessUnitId, null, null);
+			return this;
+		}
+
+		public IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		{
+			if (!businessUnitId.HasValue) businessUnitId = _businessUnitId;
+			if (!teamId.HasValue) teamId = Guid.NewGuid();
+			if (!siteId.HasValue) siteId = Guid.NewGuid();
+
 			var lookupKey = string.Format("{0}|{1}", _datasources.Last().Value, userCode).ToUpper(); //putting this logic here is just WRONG
-			_externalLogOns.Add(new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(lookupKey, new[] { new PersonWithBusinessUnit { PersonId = personId, BusinessUnitId = businessUnitId } }));
+			_externalLogOns.Add(
+				new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(
+					lookupKey, new[]
+					{
+						new PersonWithBusinessUnit
+						{
+							PersonId = personId,
+							BusinessUnitId = businessUnitId.Value
+						}
+					}));
+
+			_personOrganizationData.Add(new PersonOrganizationData
+			{
+				PersonId = personId,
+				TeamId = teamId.Value,
+				SiteId = siteId.Value,
+			});
+
 			return this;
 		}
 
@@ -141,7 +170,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
-			return _schedule.ContainsKey(personId) ? new List<ScheduleLayer> {_schedule[personId]} : new List<ScheduleLayer>();
+			return _schedule.ContainsKey(personId) ? new List<ScheduleLayer> { _schedule[personId] } : new List<ScheduleLayer>();
 		}
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
@@ -171,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
-			yield break;
+			return _personOrganizationData;
 		}
 
 	}

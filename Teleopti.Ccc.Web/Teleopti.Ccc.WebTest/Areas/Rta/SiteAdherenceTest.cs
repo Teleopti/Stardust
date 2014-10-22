@@ -1,89 +1,151 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	public class SiteAdherenceTest
 	{
-		//[Test]
-		//public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()
-		//{
-		//	var siteId = Guid.NewGuid();
-		//	var inAdherence = new ActualAgentState { StaffingEffect = 0 };
-		//	var outOfAdherence = new ActualAgentState { StaffingEffect = 1 };
+		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()
+		{
+			var inAdherence = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ready",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var outOfAdherence = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedoff",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var sender = new FakeMessageSender();
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(inAdherence)
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, inAdherence.Timestamp.AddHours(-1), inAdherence.Timestamp.AddHours(1))
+				.WithAlarm("ready", phone, 0)
+				.WithAlarm("loggedoff", phone, 1)
+				.Done();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
+			
+			target.SaveExternalUserState(inAdherence);
+			target.SaveExternalUserState(outOfAdherence);
 
-		//	var broker = new MessageSenderExposingNotifications();
-		//	var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
-		//	organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
-		//		.Return(new PersonOrganizationData { SiteId = siteId });
-		//	var target = new AdherenceAggregator(broker, organizationForPerson);
+			sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
 
-		//	target.Invoke(inAdherence);
-		//	target.Invoke(outOfAdherence);
+		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnNegativeStaffingEffect()
+		{
+			var inAdherence = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ready",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var outOfAdherence = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedoff",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var sender = new FakeMessageSender();
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(inAdherence)
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, inAdherence.Timestamp.AddHours(-1), inAdherence.Timestamp.AddHours(1))
+				.WithAlarm("ready", phone, 0)
+				.WithAlarm("loggedoff", phone, -1)
+				.Done();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
 
-		//	broker.LastSiteNotification.GetOriginal<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
-		//}
+			target.SaveExternalUserState(inAdherence);
+			target.SaveExternalUserState(outOfAdherence);
 
-		//[Test]
-		//public void ShouldMapOutOfAdherenceBasedOnNegativeStaffingEffect()
-		//{
-		//	var siteId = Guid.NewGuid();
-		//	var inAdherence = new ActualAgentState { StaffingEffect = 0 };
-		//	var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
-		//	var broker = new MessageSenderExposingNotifications();
-		//	var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
-		//	organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
-		//		.Return(new PersonOrganizationData {SiteId = siteId});
+			sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
 
-		//	var target = new AdherenceAggregator(broker, organizationForPerson);
+		[Test]
+		public void ShouldAggregateAdherenceFor2PersonsOnASite()
+		{
+			var outOfAdherence1 = new ExternalUserStateForTest
+			{
+				UserCode = "one",
+				StateCode = "loggedoff",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var outOfAdherence2 = new ExternalUserStateForTest
+			{
+				UserCode = "two",
+				StateCode = "loggedoff",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var sender = new FakeMessageSender();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(outOfAdherence1)
+				.WithUser("one", personId1, null, null, siteId)
+				.WithUser("two", personId2, null, null, siteId)
+				.WithSchedule(personId1, phone, outOfAdherence1.Timestamp.AddHours(-1), outOfAdherence1.Timestamp.AddHours(1))
+				.WithSchedule(personId2, phone, outOfAdherence2.Timestamp.AddHours(-1), outOfAdherence2.Timestamp.AddHours(1))
+				.WithAlarm("ready", phone, 0)
+				.WithAlarm("loggedoff", phone, -1)
+				.Done();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
 
-		//	target.Invoke(inAdherence);
-		//	target.Invoke(outOfAdherence);
+			target.SaveExternalUserState(outOfAdherence1);
+			target.SaveExternalUserState(outOfAdherence2);
 
-		//	broker.LastSiteNotification.GetOriginal<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
-		//}
+			sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(2);
+		}
 
-		//[Test]
-		//public void ShouldAggregateAdherenceFor2PersonsOnASite()
-		//{
-		//	var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
-		//	var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
-		//	var broker = new MessageSenderExposingNotifications();
-		//	var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
-		//	var site = Guid.NewGuid();
-		//	organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData { SiteId = site, PersonId = outOfAdherence1.PersonId });
-		//	organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { SiteId = site, PersonId = outOfAdherence2.PersonId });
-		//	var target = new AdherenceAggregator(broker, organizationForPerson);
+		[Test]
+		public void ShouldAggregateAdherenceFor2PersonsDifferentSites()
+		{
+			var outOfAdherence1 = new ExternalUserStateForTest
+			{
+				UserCode = "one",
+				StateCode = "loggedoff",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var outOfAdherence2 = new ExternalUserStateForTest
+			{
+				UserCode = "two",
+				StateCode = "loggedoff",
+				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+			};
+			var sender = new FakeMessageSender();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(outOfAdherence1)
+				.WithUser("one", personId1, null, null, Guid.NewGuid())
+				.WithUser("two", personId2, null, null, Guid.NewGuid())
+				.WithSchedule(personId1, phone, outOfAdherence1.Timestamp.AddHours(-1), outOfAdherence1.Timestamp.AddHours(1))
+				.WithSchedule(personId2, phone, outOfAdherence2.Timestamp.AddHours(-1), outOfAdherence2.Timestamp.AddHours(1))
+				.WithAlarm("ready", phone, 0)
+				.WithAlarm("loggedoff", phone, -1)
+				.Done();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
 
-		//	target.Invoke(outOfAdherence1);
-		//	target.Invoke(outOfAdherence2);
+			target.SaveExternalUserState(outOfAdherence1);
+			target.SaveExternalUserState(outOfAdherence2);
 
-		//	broker.LastSiteNotification.GetOriginal<SiteAdherenceMessage>().OutOfAdherence.Should().Be(2);
-		//}
-
-		//[Test]
-		//public void ShouldAggregateAdherenceFor2PersonsInOneSite()
-		//{
-		//	var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
-		//	var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
-
-		//	var broker = new MessageSenderExposingNotifications();
-		//	var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
-		//	var siteId = Guid.NewGuid();
-		//	organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData { SiteId = siteId, PersonId = outOfAdherence1.PersonId });
-		//	organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { SiteId = siteId, PersonId = outOfAdherence2.PersonId });
-		//	var target = new AdherenceAggregator(broker, organizationForPerson);
-
-		//	target.Invoke(outOfAdherence1);
-		//	target.Invoke(outOfAdherence2);
-
-		//	broker.LastSiteNotification.GetOriginal<SiteAdherenceMessage>().OutOfAdherence.Should().Be(2);
-		//} 
+			sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
 	}
 }

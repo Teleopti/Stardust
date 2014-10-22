@@ -2,11 +2,11 @@
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
-	public class MessageSenderExposingNotifications : IMessageSender
+	public class FakeMessageSender : IMessageSender
 	{
-		public MessageSenderExposingNotifications()
+		public FakeMessageSender()
 		{
 			AllNotifications = new List<Notification>();
 		}

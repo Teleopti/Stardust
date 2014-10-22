@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 				} } 
 			};
 
-			var broker = new MessageSenderExposingNotifications();
+			var broker = new FakeMessageSender();
 			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
 				.Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = personId});
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 
 			target.Invoke(actualAgentState);
 
-			broker.LastAgentsNotification.GetOriginal<AgentsAdherenceMessage>().AgentStates.Single().Should().Be(expected.AgentStates.Single());
+			broker.LastAgentsNotification.DeserializeBindaryData<AgentsAdherenceMessage>().AgentStates.Single().Should().Be(expected.AgentStates.Single());
 		}
 	}
 }
