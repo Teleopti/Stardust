@@ -18,6 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				if (worse) return false;
 			}
 
+			if(listAfter.Count<listBefore.Count)
+				return true;
+
 			foreach (var skillStaffPeriodAfter in listAfter)
 			{
 				var better = isBetter(skillStaffPeriodAfter, listBefore);

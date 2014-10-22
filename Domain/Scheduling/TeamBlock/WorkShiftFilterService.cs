@@ -172,6 +172,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					matrixList, true);
 			}
 
+			shiftList = _disallowedShiftProjectionCashesFilter.Filter(schedulingOptions.NotAllowedShiftProjectionCaches, shiftList, finderResult);
+
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;
@@ -229,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																 finderResult);
 			shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
 			shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
-			shiftList = _disallowedShiftProjectionCashesFilter.Filter(schedulingOptions.NotAllowedShiftProjectionCaches, shiftList, finderResult);
+			
 			
 			return shiftList;
 		}

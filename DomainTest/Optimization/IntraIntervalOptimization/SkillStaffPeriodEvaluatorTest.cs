@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using NHibernate.Hql.Ast;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
@@ -155,5 +158,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Assert.IsTrue(result);
 			}
 		}
+
+		[Test]
+		public void ShouldReturnBetterIfNumberOfIssuesIsLessAndAnyExistingIssueIsNotWorse()
+		{
+			var period1 = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 9);
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period1, new Task(), new ServiceAgreement());
+			skillStaffPeriod1.HasIntraIntervalIssue = true;
+			skillStaffPeriod1.IntraIntervalValue = 0.773;
+			var period2 = new DateTimePeriod(2014, 1, 1, 20, 2014, 1, 1, 21);
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period2, new Task(), new ServiceAgreement());
+			skillStaffPeriod2.HasIntraIntervalIssue = true;
+			skillStaffPeriod2.IntraIntervalValue = 0.727;
+			var listBefore = new List<ISkillStaffPeriod> {skillStaffPeriod1, skillStaffPeriod2};
+			var listAfter = new List<ISkillStaffPeriod> {skillStaffPeriod2 };
+			Assert.IsTrue(_target.ResultIsBetter(listBefore, listAfter));
+		}
+
+		
 	}
 }

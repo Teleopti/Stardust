@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
@@ -237,8 +238,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
-				
-				gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "NumericReadOnlyCell", "IntraIntervalDeviation", UserTexts.Resources.IntervalStdev);
+				if (_toggleManager.IsEnabled(Toggles.Scheduler_IntraIntervalSolver_29845))
+				{
+					gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "PercentReadOnlyCell", "IntraIntervalValue", UserTexts.Resources.IntervalStdev);
+				}
+				else
+				{
+					gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "NumericReadOnlyCell", "IntraIntervalDeviation", Resources.IntervalStdev);
+					
+				}
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
