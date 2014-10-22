@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 		protected override IEnumerable<DailyStatistic> DailyStatistics()
 		{
-			return new[] {new DailyStatistic(HistoricalPeriod.StartDate, expectedNumberOfTasks)};
+			return new[] {new DailyStatistic(HistoricalPeriod.StartDate, expectedNumberOfTasks,0,0)};
 		}
 
 		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()

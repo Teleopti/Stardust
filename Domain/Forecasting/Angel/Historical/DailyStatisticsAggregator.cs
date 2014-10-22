@@ -23,14 +23,33 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 			var calculator = new QueueStatisticsCalculator(workload.QueueAdjustments);
 			var result = from t in statisticTasks
 				group t by
-					TimeZoneHelper.ConvertFromUtc(t.Interval, workload.Skill.TimeZone).Subtract(workload.Skill.MidnightBreakOffset).Date
+					TimeZoneHelper.ConvertFromUtc(t.Interval, workload.Skill.TimeZone)
+						.Subtract(workload.Skill.MidnightBreakOffset)
+						.Date
 				into g
-				select new DailyStatistic(new DateOnly(g.Key), (int) g.Sum(k =>
-				{
-					calculator.Calculate(k);
-					return k.StatCalculatedTasks;
-				}));
+				select aggregateDailyNumbers(g, calculator);
 			return result;
+		}
+
+		private DailyStatistic aggregateDailyNumbers(IGrouping<DateTime, IStatisticTask> grouping, QueueStatisticsCalculator calculator)
+		{
+			double sumCalculatedTasks=0, sumAnsweredTasks = 0, totalTimeAnsweredTasks=0, totalAfterTimeAnsweredTasks=0;
+			int amountItems=0;
+
+			foreach (var statisticTask in grouping)
+			{
+				amountItems++;
+				calculator.Calculate(statisticTask);
+				sumAnsweredTasks += statisticTask.StatAnsweredTasks;
+				sumCalculatedTasks += statisticTask.StatCalculatedTasks;
+				var answeredTasksWithLowestPossibleOne = Math.Max(statisticTask.StatAnsweredTasks,1);
+				totalTimeAnsweredTasks += answeredTasksWithLowestPossibleOne*statisticTask.StatAverageTaskTimeSeconds;
+				totalAfterTimeAnsweredTasks += answeredTasksWithLowestPossibleOne*statisticTask.StatAverageAfterTaskTimeSeconds;
+			}
+
+			return new DailyStatistic(new DateOnly(grouping.Key), (int) sumCalculatedTasks,
+				sumAnsweredTasks > 0 ? totalTimeAnsweredTasks/sumAnsweredTasks : totalTimeAnsweredTasks/amountItems,
+				sumAnsweredTasks > 0 ? totalAfterTimeAnsweredTasks/sumAnsweredTasks : totalAfterTimeAnsweredTasks/amountItems);
 		}
 	}
 }
