@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -57,10 +58,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void ResetAgentBadges()
 		{
-			using (var tx = Session.BeginTransaction())
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				Session.CreateSQLQuery("truncate table dbo.AgentBadgeTransaction").ExecuteUpdate();
-				tx.Commit();
+				var session = ((NHibernateUnitOfWork) uow).Session;
+				using (var tx = session.BeginTransaction())
+				{
+					session.CreateSQLQuery("truncate table dbo.AgentBadgeTransaction").ExecuteUpdate();
+					tx.Commit();
+				}
 			}
 		}
 	}
