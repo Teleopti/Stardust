@@ -31,10 +31,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 			return result;
 		}
 
-		private DailyStatistic aggregateDailyNumbers(IGrouping<DateTime, IStatisticTask> grouping, QueueStatisticsCalculator calculator)
+		private static DailyStatistic aggregateDailyNumbers(IGrouping<DateTime, IStatisticTask> grouping, QueueStatisticsCalculator calculator)
 		{
-			double sumCalculatedTasks=0, sumAnsweredTasks = 0, totalTimeAnsweredTasks=0, totalAfterTimeAnsweredTasks=0;
-			int amountItems=0;
+			double sumCalculatedTasks=0;
+			double sumAnsweredTasks = 0;
+			double totalTimeAnsweredTasks=0;
+			double totalAfterTimeAnsweredTasks=0;
+			var amountItems=0;
 
 			foreach (var statisticTask in grouping)
 			{
