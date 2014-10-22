@@ -332,8 +332,10 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
     <Compile Include="Areas\Forecasting\Controllers\HelloWorldController.cs" />
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\QuickForecastInputModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\ForecastingAreaRegistration.cs" />
     <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />

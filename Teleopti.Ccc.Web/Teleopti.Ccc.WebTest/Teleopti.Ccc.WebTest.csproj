@@ -182,6 +182,7 @@
     <Compile Include="Areas\Anywhere\Controllers\TeamsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\FakeClientBuilder.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
     <Compile Include="Areas\Forecasting\RoutingTest.cs" />
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
