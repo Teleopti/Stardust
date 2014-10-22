@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.Messages.Rta;
@@ -11,20 +12,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class AgentAdherenceAggregator
 	{
-		private readonly RtaAggregationStateProvider _stateProvider;
+		private readonly AggregationState _aggregationState;
 
-		public AgentAdherenceAggregator(RtaAggregationStateProvider stateProvider)
+		public AgentAdherenceAggregator(AggregationState aggregationState)
 		{
-			_stateProvider = stateProvider;
+			_aggregationState = aggregationState;
 		}
 
-		public Notification CreateNotification(IActualAgentState actualAgentState)
+		public Notification CreateNotification(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
 		{
-			var aggregationState = _stateProvider.GetState();
-			var organizationData = aggregationState.Update(actualAgentState.PersonId, actualAgentState);
-			var actualAgentStateForTeam = aggregationState.GetActualAgentStateForTeam(organizationData.TeamId);
+			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(personOrganizationData.TeamId);
 			var agentStates = actualAgentStateForTeam.Select(mapFrom);
-			return createAgentsNotification(agentStates, actualAgentState.BusinessUnit, organizationData.TeamId);
+			return createAgentsNotification(agentStates, actualAgentState.BusinessUnit, personOrganizationData.TeamId);
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)

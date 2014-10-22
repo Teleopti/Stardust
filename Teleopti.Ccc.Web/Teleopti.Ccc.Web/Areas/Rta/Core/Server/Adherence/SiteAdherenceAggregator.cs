@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -8,19 +8,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
 	public class SiteAdherenceAggregator
 	{
-		private readonly RtaAggregationStateProvider _stateProvider;
+		private readonly AggregationState _aggregationState;
 
-		public SiteAdherenceAggregator(RtaAggregationStateProvider stateProvider)
+		public SiteAdherenceAggregator(AggregationState aggregationState)
 		{
-			_stateProvider = stateProvider;
+			_aggregationState = aggregationState;
 		}
 
-		public Notification CreateNotification(IActualAgentState actualAgentState)
+		public Notification CreateNotification(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
 		{
-			var aggregationState = _stateProvider.GetState();
-			var personOrganizationData = aggregationState.Update(actualAgentState.PersonId, actualAgentState);
-			var numberOfOutOfAdherence = aggregationState.GetActualAgentStateForSite(personOrganizationData.SiteId).Count(x => Math.Abs(x.StaffingEffect) > 0.01);
-
+			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForSite(personOrganizationData.SiteId);
 			return createSiteNotification(numberOfOutOfAdherence, actualAgentState.BusinessUnit, personOrganizationData.SiteId);
 		}
 

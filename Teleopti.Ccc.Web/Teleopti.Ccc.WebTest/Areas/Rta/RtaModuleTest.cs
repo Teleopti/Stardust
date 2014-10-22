@@ -73,9 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				builder.RegisterInstance(reader).As<IPersonOrganizationReader>();
 				builder.Update(container);
 
-				var orgReader1 = container.Resolve<IPersonOrganizationProvider>();
-				var orgReader2 = container.Resolve<IPersonOrganizationProvider>();
-				orgReader1.PersonOrganizationData().Should().Be.SameInstanceAs(orgReader2.PersonOrganizationData());
+				var resolved = container.Resolve<IPersonOrganizationProvider>();
+				resolved.PersonOrganizationData().Should().Be.SameInstanceAs(resolved.PersonOrganizationData());
 			}
 		}
 

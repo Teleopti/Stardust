@@ -453,9 +453,7 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\IPersonOrganizationProvider.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\OrganizationForPerson.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\PersonOrganizationProvider.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Adherence\RtaAggregationData.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Adherence\RtaAggregationState.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Adherence\RtaAggregationStateProvider.cs" />
+    <Compile Include="Areas\Rta\Core\Server\Adherence\AggregationState.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceAggregator.cs" />

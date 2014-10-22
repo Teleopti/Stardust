@@ -10,38 +10,43 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 
 	public class AdherenceAggregator : IAdherenceAggregator
 	{
-		private readonly IMessageSender _signalRClient;
+		private readonly IMessageSender _messageSender;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
 		private readonly IOrganizationForPerson _organizationForPerson;
+		private readonly AggregationState _aggregationState;
 
-		public AdherenceAggregator(IMessageSender signalRClient, IOrganizationForPerson organizationForPerson)
+		public AdherenceAggregator(IMessageSender messageSender, IOrganizationForPerson organizationForPerson)
 		{
-			_signalRClient = signalRClient;
+			_messageSender = messageSender;
 			_organizationForPerson = organizationForPerson;
-			var stateProvider = new RtaAggregationStateProvider(organizationForPerson);
-			_teamAdherenceAggregator = new TeamAdherenceAggregator(stateProvider);
-			_siteAdherenceAggregator = new SiteAdherenceAggregator(stateProvider);
-			_agentAdherenceAggregator = new AgentAdherenceAggregator(stateProvider);
+			_aggregationState = new AggregationState();
+			_teamAdherenceAggregator = new TeamAdherenceAggregator(_aggregationState);
+			_siteAdherenceAggregator = new SiteAdherenceAggregator(_aggregationState);
+			_agentAdherenceAggregator = new AgentAdherenceAggregator(_aggregationState);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)
 		{
-			if (_organizationForPerson.GetOrganization(actualAgentState.PersonId) == null)
+			var personOrganizationData = _organizationForPerson.GetOrganization(actualAgentState.PersonId);
+
+			if (personOrganizationData == null)
 				return;
 
-			var siteAdherence = _siteAdherenceAggregator.CreateNotification(actualAgentState);
+			_aggregationState.Update(personOrganizationData, actualAgentState);
+
+			var siteAdherence = _siteAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
 			if (siteAdherence != null)
-				_signalRClient.Send(siteAdherence);
+				_messageSender.Send(siteAdherence);
 
-			var teamAdherence = _teamAdherenceAggregator.CreateNotification(actualAgentState);
+			var teamAdherence = _teamAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
 			if (teamAdherence != null)
-				_signalRClient.Send(teamAdherence);
+				_messageSender.Send(teamAdherence);
 
-			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(actualAgentState);
+			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
 			if (agentsAdherence != null)
-				_signalRClient.Send(agentsAdherence);
+				_messageSender.Send(agentsAdherence);
 		}
 	}
 }
