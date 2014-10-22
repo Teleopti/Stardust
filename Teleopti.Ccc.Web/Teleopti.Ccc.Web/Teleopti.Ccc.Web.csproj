@@ -1225,7 +1225,9 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Areas\WFM\css\animation.css" />
     <Content Include="Areas\WFM\css\form.css" />
+    <Content Include="Areas\WFM\css\material-spinner.css" />
     <Content Include="Areas\WFM\css\material.css" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
@@ -1235,6 +1237,8 @@
     <Content Include="Areas\WFM\index2.html" />
     <Content Include="Areas\WFM\js\app.js" />
     <Content Include="Areas\WFM\js\wfmCtrls.js" />
+    <Content Include="Areas\WFM\tests\conf.js" />
+    <Content Include="Areas\WFM\tests\forecasting-spec.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
@@ -1449,6 +1453,7 @@
     <Content Include="Areas\MyTime\Views\BadgeLeaderBoardReport\BadgeLeaderBoardReportPartial.cshtml" />
     <Content Include="Areas\Mart\Views\Web.config" />
     <Content Include="Areas\WFM\package.json" />
+    <Content Include="Areas\WFM\README.md" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1552,7 +1557,6 @@
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
-    <Folder Include="Areas\WFM\tests\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
