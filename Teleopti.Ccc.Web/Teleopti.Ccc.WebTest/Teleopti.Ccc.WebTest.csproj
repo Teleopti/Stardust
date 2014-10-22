@@ -213,7 +213,7 @@
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\AgentsAdherenceTest.cs" />
     <Compile Include="Areas\Rta\FakeMessageSender.cs" />
     <Compile Include="Areas\Rta\NotificationExtension.cs" />
-    <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\OrganizationForPersonTest.cs" />
+    <Compile Include="Areas\Rta\ImplementationDetailsTests\OrganizationForPersonTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\SendMessageTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\ThreadingIssuesTest.cs" />
