@@ -3104,7 +3104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (lastCalculationState)
 			{
 				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
-				optimizationHelperWin.ResourceCalculateAllDays(null, true);
+				optimizationHelperWin.ResourceCalculateAllDays(_backgroundWorkerOvertimeScheduling, true);
 			}
 
 			_totalScheduled = 0;
