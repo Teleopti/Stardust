@@ -3,7 +3,7 @@
 ::hard coded for each environment
 ::=====================
 SET INSTALLDIR=C:\Program Files (x86)\Teleopti\
-SET DBServerInstance=tcp:PONTUS\WFM2012
+SET DBServerInstance=tcp:PONTUS\WFM2014
 SET AppServer=%COMPUTERNAME%
 SET DB_ANALYTICS=%COMPUTERNAME%_TeleoptiAnalytics
 SET DB_CCC7=%COMPUTERNAME%_TeleoptiCCC7
@@ -30,7 +30,7 @@ SET DB_ENDUSER_PWD=TeleoptiDemoPwd2
 ::Pm Stuff
 SET PM_INSTALL=True
 SET AS_DATABASE=%COMPUTERNAME%_TeleoptiAnalytics
-SET AS_SERVER_NAME=ARES\CCC
+SET AS_SERVER_NAME=tcp:PONTUS\WFM2014
 SET PM_ANONYMOUS_DOMAINUSER=TOPTINET\TfsIntegration
 SET PM_ANONYMOUS_PWD=m8kemew0rk
 SET PM_AUTH_MODE=Anonymous
