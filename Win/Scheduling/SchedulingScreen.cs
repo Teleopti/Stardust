@@ -2075,13 +2075,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
-			TabPageAdv skillTabPage = _tabSkillData.TabPages[0];
-			var totalSkill = skillTabPage.Tag as IAggregateSkill;
-
 			if (SikuliHelper.TestMode)
 			{
-				ISikuliValidator currentValidator =
-					SikuliValidatorFactory.Scheduler.CreateValidator(_schedulerState, totalSkill);
+				var skillTabPage = _tabSkillData.TabPages[0];
+				var totalSkill = skillTabPage.Tag as IAggregateSkill;
+				var currentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(_schedulerState, totalSkill);
 
 				if (currentValidator != null)
 					SikuliHelper.Validate(currentValidator, this);
