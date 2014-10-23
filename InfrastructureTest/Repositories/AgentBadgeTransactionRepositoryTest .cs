@@ -1,6 +1,6 @@
-using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     ///</summary>
     [TestFixture]
     [Category("LongRunning")]
-	public class AgentBadgeTransactionRepository : RepositoryTest<IAgentBadgeTransaction>
+	public class AgentBadgeTransactionRepositoryTest : RepositoryTest<IAgentBadgeTransaction>
     {
 	    private IPerson person;
 
