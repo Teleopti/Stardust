@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Commands
 			if (lastCalculationState)
 			{
 				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntraIntervalFinderService);
-				optimizationHelperWin.ResourceCalculateAllDays(null, true);
+				optimizationHelperWin.ResourceCalculateAllDays(backgroundWorker, true);
 			}
 			var selectedSchedules = selectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);

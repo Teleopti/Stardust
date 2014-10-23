@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
-		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		/// <summary>
@@ -35,6 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// </summary>
 		/// <param name="stateHolder">The state holder.</param>
 		/// <param name="personSkillProvider"></param>
+		/// <param name="intraIntervalFinderService"></param>
 		/// <remarks>
 		/// Created by: henrika
 		/// Created date: 2008-05-27
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;
-			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
 		public void ResourceCalculateAllDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)

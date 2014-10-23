@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Commands
 			if (lastCalculationState)
 			{
 				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntervalFinderService);
-				optimizationHelperWin.ResourceCalculateAllDays(null, true);
+				optimizationHelperWin.ResourceCalculateAllDays(backgroundWorker, true);
 			}
 
 			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
