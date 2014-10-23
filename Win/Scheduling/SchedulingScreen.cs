@@ -4247,6 +4247,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					scenarios.RemoveAt(i);
 			}
 
+			officeDropDownButtonMainMenuExportTo.DropDownItems.Clear();
+			officeDropDownButtonMainMenuExportTo.DropDownText = Resources.ExportToScenario;
+
             if (RightToLeftLayout) flowLayoutExportToScenario.ReverseRows = true;
 
 			foreach (var scenario in scenarios)
@@ -4265,12 +4268,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 				button.Font.ChangeToBold();
 				button.Click += menuItemClick;
 				flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
+
+				var scenarioMenuItem = new ToolStripMenuItem(scenario.Description.Name) {TextAlign = ContentAlignment.MiddleLeft};
+				scenarioMenuItem.Click += menuItemClick;
+				scenarioMenuItem.Tag = scenario;
+				officeDropDownButtonMainMenuExportTo.DropDownItems.Insert(0, scenarioMenuItem);
 			}
 		}
 
 		void menuItemClick(object sender, EventArgs e)
 		{
-			var scenario = (IScenario)((ButtonAdv)sender).Tag;
+			var buttonAdv = sender as ButtonAdv;
+			var toolStripMenuItem = sender as ToolStripMenuItem;
+			IScenario scenario = null;
+
+			if (buttonAdv != null) scenario = (IScenario)(buttonAdv).Tag;
+			if (toolStripMenuItem != null) scenario = (IScenario)(toolStripMenuItem).Tag;
+
+			if (scenario == null) return;
 
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
