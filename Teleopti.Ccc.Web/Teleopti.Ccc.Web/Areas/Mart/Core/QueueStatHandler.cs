@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			var dateTimeUtc = TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueData.DateAndTimeString),
 				TimeZoneInfo.FindSystemTimeZoneById(logobject.TimeZoneCode));
 			var dateId = _queueStatRepository.GetDateId(dateTimeUtc, queueData.NhibName);
+			if (dateId == -1)
+				throw new ArgumentException();
 			var intervalId = getIntervalInDay(dateTimeUtc, queueData.NhibName);
 
 			var factQueueModels = new List<FactQueueModel>

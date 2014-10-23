@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 {
 	public class FakeQueueStatRepository : IQueueStatRepository
 	{
+		private int _dateId = 1515;
 		public FactQueueModel SavedQueueModel { get; set; }
 		public DateTime DateTimeInUtc { get; set; }
 
@@ -22,8 +23,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 
 		public int GetDateId(DateTime dateTime, string nhibDataSourceName)
 		{
-			DateTimeInUtc = dateTime;
-			return 1515;
+			if (_dateId != -1)
+				DateTimeInUtc = dateTime;
+			return _dateId;
 		}
 
 		public int GetIntervalLength(string nhibDataSourceName)
@@ -34,6 +36,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		public void Save(IList<FactQueueModel> factQueueModel, string nhibDataSourceName)
 		{
 			SavedQueueModel = factQueueModel[0];
+		}
+
+		public void SetInvalidDateId()
+		{
+			_dateId = -1;
 		}
 	}
 }

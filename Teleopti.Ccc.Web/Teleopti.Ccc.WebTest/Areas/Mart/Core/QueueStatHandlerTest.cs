@@ -27,6 +27,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 			Assert.That(fakeRepos.SavedQueueModel.QueueId, Is.EqualTo(10));
 		}
 
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void ShouldThrowWhenDateIdNotFoundInDatabase()
+		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var fakeRepos = new FakeQueueStatRepository();
+			var target = new QueueStatHandler(fakeRepos);
+			fakeRepos.SetInvalidDateId();
+			var queueStatsModel = new QueueStatsModel
+			{
+				LogObjectName = "SomeAcdSomewhere",
+				QueueName = "kön",
+				DateAndTimeString = "2014-12-12 15:00"
+			};
+			target.Handle(queueStatsModel);
+		}
+
 		[Test]
 		public void ShouldGetDateIdFromDatabase()
 		{
