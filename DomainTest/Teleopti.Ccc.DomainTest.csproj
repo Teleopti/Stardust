@@ -259,6 +259,7 @@
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\AggregateAverageHandlingTimesForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest.cs" />
+    <Compile Include="Forecasting\Angel\AggregateStatistcTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\AggregateStatisticTasksForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\BothStatisticsAndValidatedTasksTest.cs" />
     <Compile Include="Forecasting\Angel\AggregatedValidatedTaskTimeTest.cs" />
