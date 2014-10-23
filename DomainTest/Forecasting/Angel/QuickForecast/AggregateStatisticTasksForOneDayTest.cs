@@ -5,7 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecaster
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
 	public class AggregateStatisticTasksForOneDayTest : QuickForecastTest
 	{

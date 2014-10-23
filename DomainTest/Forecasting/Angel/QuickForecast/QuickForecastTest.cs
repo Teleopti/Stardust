@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecaster
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
 	public abstract class QuickForecastTest
 	{
@@ -45,12 +46,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecaster
 			var futureData =
 				new FutureData(new FetchAndFillSkillDays(skillDayRepository, currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			var target = new Domain.Forecasting.Angel.QuickForecaster(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
+			var target = new QuickForecaster(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
 			target.Execute(Workload, HistoricalPeriod, FuturePeriod);
 
 			Assert(skillDays);
 		}
-
 
 		protected IScenario DefaultScenario { get; private set; }
 
