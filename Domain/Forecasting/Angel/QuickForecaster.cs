@@ -20,11 +20,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
 		{
 			var taskOwnerPeriod = _historicalData.Fetch(workload, historicalPeriod);
-
 			var futureWorkloadDays = _futureData.Fetch(workload, futurePeriod);
-
 			_volumeApplier.Apply(workload, taskOwnerPeriod, futureWorkloadDays);
 		}
-
 	}
 }
