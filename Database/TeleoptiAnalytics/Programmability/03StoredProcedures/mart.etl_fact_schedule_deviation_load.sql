@@ -27,6 +27,7 @@ GO
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-02-04 00:00:00',@end_date='2013-02-06 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-02-17 00:00:00',@end_date='2014-02-23 00:00:00',@business_unit_code='9D812B66-A7BD-4FFF-A2D8-A2D90001CAF1',@isIntraday=1
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-03-04 00:00:00',@end_date='2014-03-05 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=1
+--exec mart.etl_fact_schedule_deviation_load @start_date='2014-10-21 00:00:00',@end_date='2014-10-22 00:00:00',@business_unit_code='1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B',@isIntraday=1
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -34,7 +35,7 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @isIntraday bit = 0,
 @is_delayed_job bit = 0
 AS
-
+SET NOCOUNT ON
 
 --Execute one delayed jobs, if any
 if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_delayed_job=1
@@ -301,6 +302,7 @@ BEGIN
 		ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 		AND ch.person_id			= b.person_id
 		AND b.acd_login_id			= fa.acd_login_id
+		AND EXISTS (SELECT 1 FROM #stg_schedule_changed tmp WHERE tmp.person_id = b.person_id)
 	WHERE b.business_unit_id = @business_unit_id
 END
 
@@ -504,7 +506,7 @@ SET 	deviation_contract_s = ABS(
 )
 
 /* DELETE mart.fact_schedule_deviation */
-
+SET NOCOUNT OFF
 if @isIntraday = 0 --NIGHTLY
 BEGIN
 	DELETE FROM mart.fact_schedule_deviation
