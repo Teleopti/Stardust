@@ -63,7 +63,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var session = ((NHibernateUnitOfWork) uow).Session;
 				using (var tx = session.BeginTransaction())
 				{
-					session.CreateSQLQuery("truncate table dbo.AgentBadgeTransaction").ExecuteUpdate();
+					//session.CreateSQLQuery("truncate table dbo.AgentBadgeTransaction").ExecuteUpdate();
+					//tx.Commit();
+					var deleteAll = string.Format("DELETE FROM dbo.AgentBadgeTransaction");
+					session.CreateSQLQuery(deleteAll).ExecuteUpdate();
 					tx.Commit();
 				}
 			}
