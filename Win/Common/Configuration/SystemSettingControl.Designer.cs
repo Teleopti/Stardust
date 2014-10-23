@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-
-namespace Teleopti.Ccc.Win.Common.Configuration
+﻿namespace Teleopti.Ccc.Win.Common.Configuration
 {
     partial class SystemSettingControl
     {
@@ -120,7 +118,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // tableLayoutPanelFullDayAbsenceSettings
             // 
-				this.tableLayoutPanelFullDayAbsenceSettings.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+            this.tableLayoutPanelFullDayAbsenceSettings.BackColor = System.Drawing.Color.LightSteelBlue;
             this.tableLayoutPanelFullDayAbsenceSettings.ColumnCount = 1;
             this.tableLayoutPanelBody.SetColumnSpan(this.tableLayoutPanelFullDayAbsenceSettings, 2);
             this.tableLayoutPanelFullDayAbsenceSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -138,9 +136,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // lblFullDayAbsenceSettings
             // 
             this.lblFullDayAbsenceSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
-				this.lblFullDayAbsenceSettings.BackColor = System.Drawing.Color.Transparent;
+            this.lblFullDayAbsenceSettings.BackColor = System.Drawing.Color.Transparent;
             this.lblFullDayAbsenceSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-				this.lblFullDayAbsenceSettings.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+            this.lblFullDayAbsenceSettings.ForeColor = System.Drawing.Color.White;
             this.lblFullDayAbsenceSettings.Location = new System.Drawing.Point(3, 6);
             this.lblFullDayAbsenceSettings.Name = "lblFullDayAbsenceSettings";
             this.lblFullDayAbsenceSettings.Size = new System.Drawing.Size(170, 17);
@@ -208,7 +206,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.autoLabelSubHeader1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.autoLabelSubHeader1.BackColor = System.Drawing.Color.Transparent;
             this.autoLabelSubHeader1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.autoLabelSubHeader1.ForeColor = System.Drawing.Color.Yellow;
+            this.autoLabelSubHeader1.ForeColor = System.Drawing.Color.White;
             this.autoLabelSubHeader1.Location = new System.Drawing.Point(3, 8);
             this.autoLabelSubHeader1.Name = "autoLabelSubHeader1";
             this.autoLabelSubHeader1.Size = new System.Drawing.Size(116, 17);
