@@ -15,29 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Historical
 	public class DailyStatisticsAggregatorTest
 	{
 		[Test]
-		public void ShouldAggregateAverageHandlingTimesForOneDayWithNoAnsweredCalls()
-		{
-			var workload = new Workload(SkillFactory.CreateSkill("Direct sales"));
-			var dateRange = new DateOnlyPeriod(2001, 1, 1, 2001, 1, 1);
-
-			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
-			statisticRepository.Stub(
-				x => x.LoadSpecificDates(workload.QueueSourceCollection, new DateTimePeriod(2001, 1, 1, 2001, 1, 2)))
-				.Return(new List<IStatisticTask>
-				{
-					new StatisticTask {Interval = new DateTime(2001, 1, 1, 11, 15, 0, DateTimeKind.Utc), StatAnsweredTasks = 0, StatAverageTaskTimeSeconds = 30, StatAverageAfterTaskTimeSeconds = 60},
-					new StatisticTask {Interval = new DateTime(2001, 1, 1, 11, 30, 0, DateTimeKind.Utc), StatAnsweredTasks = 0, StatAverageTaskTimeSeconds = 60, StatAverageAfterTaskTimeSeconds = 120},
-				});
-			var target = new DailyStatisticsAggregator(statisticRepository);
-			var result = target.LoadDailyStatistics(workload, dateRange);
-
-			var onlyDayInResult = result.Single();
-			onlyDayInResult.Date.Should().Be.EqualTo(dateRange.StartDate);
-			onlyDayInResult.AverageTaskTimeSeconds.Should().Be.EqualTo(45);
-			onlyDayInResult.AverageAfterTaskTimeSeconds.Should().Be.EqualTo(90);
-		}
-
-		[Test]
 		public void ShouldAggregateStatisticTasksForTwoDays()
 		{
 			var workload = new Workload(SkillFactory.CreateSkill("Direct sales"));
