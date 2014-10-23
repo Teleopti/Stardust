@@ -259,7 +259,8 @@
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\AggregateAverageHandlingTimesForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\AggregateStatisticTasksForOneDayTest.cs" />
-    <Compile Include="Forecasting\Angel\BothStatisticsAndValidatedTest.cs" />
+    <Compile Include="Forecasting\Angel\BothStatisticsAndValidatedTasksTest.cs" />
+    <Compile Include="Forecasting\Angel\AggregatedValidatedTaskTimeTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\DailyStatisticsAggregatorTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryForTest.cs" />

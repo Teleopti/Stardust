@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 				var validated = validatedDays.FirstOrDefault(v => v.VolumeDayDate == day);
 				if (validated != null)
 				{
-					dailyStatistics.Add(new DailyStatistic(day, (int)validated.ValidatedTasks, 0 , 0));
+					dailyStatistics.Add(new DailyStatistic(day, (int) validated.ValidatedTasks,
+						validated.ValidatedAverageTaskTime.TotalSeconds, validated.ValidatedAverageAfterTaskTime.TotalSeconds));
 				}
 				else
 				{
