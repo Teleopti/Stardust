@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Win.Grouping
         {
             if (groupPageOptions == null) throw new ArgumentNullException("groupPageOptions");
             IGroupPage groupPage = null;
+			var cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
@@ -65,14 +68,14 @@ namespace Teleopti.Ccc.Win.Grouping
                                                        : optionalColumnGroup.Description;
                                 IRootPersonGroup rootGroup = new RootPersonGroup(groupName);
 
-	                            var trimmedDescription = optionalColumnGroup.Description.Trim();
+	                            var trimmedDescription = optionalColumnGroup.Description.Trim().ToLower(cultureInfo);
 
 								foreach (var person in groupPageOptions.Persons)
 								{
 									var val = person.GetColumnValue(column);
 									if (val == null) continue;
 
-									if(val.Description.Trim().Equals(trimmedDescription))
+									if(val.Description.Trim().ToLower(cultureInfo).Equals(trimmedDescription))
 										rootGroup.AddPerson(person);
 								}
                                 
