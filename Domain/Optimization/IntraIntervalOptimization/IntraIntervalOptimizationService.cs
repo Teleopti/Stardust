@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
@@ -18,6 +16,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private readonly IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
+		private string _progressSkill;
+		private string _progressDate;
+		private string _progressPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public IntraIntervalOptimizationService(ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor, IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor, IIntraIntervalOptimizer intraIntervalOptimizer)
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		public void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var personHashSet = new HashSet<IPerson>();
+			var cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
 			_intraIntervalOptimizer.ReportProgress += OnReportProgress;
 
 			foreach (var selectedSchedule in selectedSchedules)
@@ -37,18 +39,16 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				personHashSet.Add(selectedSchedule.Person);
 			}
 
-			var clonedSchedulingOptions = (SchedulingOptions)schedulingOptions.Clone();
-			clonedSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			clonedSchedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight{Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam};
-
 			foreach (var skill in schedulingResultStateHolder.Skills)
 			{
+				_progressSkill = skill.Name;
 				if (_intraIntervalOptimizer.IsCanceled) break;
 
 				if(skill.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill)) continue;
 				
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
+					_progressDate = dateOnly.ToShortDateString(cultureInfo);
 					if (_intraIntervalOptimizer.IsCanceled) break;
 
 					var skillDays = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 						if (!personHashSet.Contains(person)) continue;
 
+						_progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore);
 
@@ -87,7 +88,11 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			var handler = ReportProgress;
 			if (handler == null) return;
-			handler(this, e);
+			var progressMessage = string.Concat(_progressSkill, " ", _progressDate, " ", _progressPerson, " ", e.Message);
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, progressMessage);
+			handler(this, args);
+			e.Cancel = args.Cancel;
+			e.UserCancel = args.UserCancel;
 		}
 	}
 
