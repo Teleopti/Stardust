@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
@@ -7,16 +8,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers
 {
 	public static class DailyStatisticsToTaskOwnerConverterExtension
 	{
-		public static IEnumerable<ITaskOwner> Convert(this IEnumerable<DailyStatistic> source,IWorkload workload)
+		public static IEnumerable<ITaskOwner> Convert(this IEnumerable<DailyStatistic> source, IWorkload workload)
 		{
-			return source.Select(s =>
+			return source.Select(statistic =>
 			{
 				var workloadDay = new WorkloadDay();
 				workloadDay.Create(DateOnly.Today,workload,new List<TimePeriod>());
 
-				return new ValidatedVolumeDay(workload,s.Date)
+				return new ValidatedVolumeDay(workload, statistic.Date)
 				{
-					ValidatedTasks = s.CalculatedTasks,
+					ValidatedTasks = statistic.CalculatedTasks,
+					ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(statistic.AverageAfterTaskTimeSeconds),
+					ValidatedAverageTaskTime = TimeSpan.FromSeconds(statistic.AverageTaskTimeSeconds),
 					TaskOwner = workloadDay
 				};
 			});
