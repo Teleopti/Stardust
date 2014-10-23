@@ -60,6 +60,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.SelectedTemplateId = ko.computed({
 		read: self.SelectedTemplateIdInternal,
 		write: function (value) {
+			self.ValidationError('');
 			if (value == undefined || value.length == 0) {
 				self.SelectedTemplateIdInternal(value);
 				self.UpdateModelFromTemplate();
@@ -89,6 +90,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 							self.SelectedTemplateIdInternal(value);
 							self.UpdateModelFromTemplate();
 						} else {
+							self.Reset();
 							self.ValidationError(result.message);
 						}
 					}
