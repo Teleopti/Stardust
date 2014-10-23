@@ -53,6 +53,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			autoLabelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+
+			tableLayoutPanelFullDayAbsenceSettings.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			lblFullDayAbsenceSettings.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
 		public void LoadControl()
