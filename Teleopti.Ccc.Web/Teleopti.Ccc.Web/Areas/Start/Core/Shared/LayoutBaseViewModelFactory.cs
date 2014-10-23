@@ -1,3 +1,4 @@
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.LayoutBase;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Shared
 			       	{
 						CultureSpecific = _cultureSpecificViewModelFactory.CreateCutureSpecificViewModel(),
 						Footer = "",
-						Title = "Start"
+						Title = Resources.OpenTeleoptiCCC
 					};
 		}
 	}
