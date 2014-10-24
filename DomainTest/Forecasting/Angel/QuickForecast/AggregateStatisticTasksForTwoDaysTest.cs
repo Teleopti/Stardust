@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	[Ignore("Fails because statistics will be put as an average on each skillday (they both contain 6.5 below)")]
 	public class AggregateStatisticTasksForTwoDaysTest : QuickForecastTest
 	{
 		protected override DateOnlyPeriod HistoricalPeriod

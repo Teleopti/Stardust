@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -10,7 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	[Ignore("Midnight break does work but assert fails on average thingy... Same as other test.")]
 	public class AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest : QuickForecastTest
 	{
 		private readonly IWorkload _workload;
@@ -29,15 +27,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 
 		protected override DateOnlyPeriod HistoricalPeriod
 		{
-			get { return new DateOnlyPeriod(2000, 12, 31, 2001, 1, 1); }
+			get { return new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2); }
 		}
 
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			return new[]
 			{
-				new StatisticTask {Interval = new DateTime(2000, 12, 31, 23, 15, 0, DateTimeKind.Utc), StatOfferedTasks = 6},
-				new StatisticTask {Interval = new DateTime(2001, 1, 1, 11, 15, 0, DateTimeKind.Utc), StatOfferedTasks = 7}
+				new StatisticTask {Interval = new DateTime(2000, 1, 1, 23, 15, 0, DateTimeKind.Utc), StatOfferedTasks = 6},
+				new StatisticTask {Interval = new DateTime(2000, 1, 2, 11, 15, 0, DateTimeKind.Utc), StatOfferedTasks = 7}
 			};
 		}
 

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers
 			return source.Select(statistic =>
 			{
 				var workloadDay = new WorkloadDay();
-				workloadDay.Create(DateOnly.Today,workload,new List<TimePeriod>());
+				workloadDay.Create(statistic.Date, workload, new List<TimePeriod>());
 
 				return new ValidatedVolumeDay(workload, statistic.Date)
 				{
