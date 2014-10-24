@@ -108,6 +108,10 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.1.2\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
+    <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.2.0.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.TeleoptiKey.1.2.1\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
+    </Reference>
     <Reference Include="DDay.iCal">
       <HintPath>..\..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
     </Reference>
@@ -159,9 +163,18 @@
     <Reference Include="Microsoft.AspNet.SignalR.Client">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Client.2.1.2\lib\net40\Microsoft.AspNet.SignalR.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.2.1.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.TeleoptiKey.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Owin.TeleoptiKey.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.TeleoptiKey.1.2.0\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel">
       <HintPath>..\..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
