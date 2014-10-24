@@ -15,7 +15,7 @@ SET NOCOUNT ON
 DECLARE @sqlstring nvarchar(4000)
 SET @sqlstring = ''
 DECLARE @detail_id int
-SET @detail_id = 2 --Queue data
+SET @detail_id = 1 --Queue data
 
 --Execute one delayed jobs, if any
 if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETL
