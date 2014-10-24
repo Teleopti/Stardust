@@ -49,5 +49,5 @@ Scheduler_BackToLegalShift_29831 = true
 Portal_ResetBadges_30544 = RC
 Scheduler_IntraIntervalSolver_29845 = false
 MyTimeWeb_FullDayAbsenceConfiguration_30552 = true
-Settings_AlertViaEmailFromSMSLink_30444 = RC
+Settings_AlertViaEmailFromSMSLink_30444 = true
 Badge_Leaderboard_30584 = RC
