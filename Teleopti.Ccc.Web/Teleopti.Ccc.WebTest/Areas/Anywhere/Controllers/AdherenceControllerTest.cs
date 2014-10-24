@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(thisIsNow);
 			var readModelRepo = MockRepository.GenerateStub<IAdherencePercentageReadModelPersister>();
 
-			readModelRepo.Stub(r => r.Get(new DateOnly(now.UtcDateTime()), new Guid())).Return(new AdherencePercentageReadModel()
+			readModelRepo.Stub(r => r.Get(new DateOnly(now.UtcDateTime()), personId)).Return(new AdherencePercentageReadModel()
 			                                                         {
 																		 MinutesInAdherence = expectedMinutesInAdherence,
 				                                                         MinutesOutOfAdherence = expectedminutesOutOfAdherence,
