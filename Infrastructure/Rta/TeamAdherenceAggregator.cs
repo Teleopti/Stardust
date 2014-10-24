@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class TeamAdherenceAggregator : ITeamAdherenceAggregator
 	{
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IRtaRepository _statisticRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public TeamAdherenceAggregator(IStatisticRepository statisticRepository, ITeamRepository teamRepository, IPersonRepository personRepository, INow now)
+		public TeamAdherenceAggregator(IRtaRepository statisticRepository, ITeamRepository teamRepository, IPersonRepository personRepository, INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_teamRepository = teamRepository;

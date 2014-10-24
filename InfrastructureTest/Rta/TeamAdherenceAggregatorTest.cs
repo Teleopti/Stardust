@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var inAdherence2 = new ActualAgentState {StaffingEffect = 0};
 			var outOfAdherence = new ActualAgentState {StaffingEffect = 1};
 
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
 			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
 				.Return(new List<IActualAgentState> {inAdherence1, inAdherence2, outOfAdherence});
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var inAdherence2 = new ActualAgentState {StaffingEffect = 0};
 			var outOfAdherence = new ActualAgentState {StaffingEffect = -1};
 
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
 			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
 				.Return(new List<IActualAgentState> {inAdherence1, inAdherence2, outOfAdherence});
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();

@@ -169,6 +169,7 @@
     <Compile Include="Repositories\IEtlLogObjectRepository.cs" />
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
+    <Compile Include="Rta\RtaRepository.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />

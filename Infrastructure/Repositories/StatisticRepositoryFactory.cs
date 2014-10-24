@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -34,5 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             
             return new StatisticRepository();
         }
+
     }
 }

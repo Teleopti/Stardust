@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -11,8 +9,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -133,74 +129,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			return personRepository;
 		}
 
-		private static IStatisticRepository createStatisticRepositoryWithAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
+		private static IRtaRepository createStatisticRepositoryWithAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
 		{
 			return fakeStatisticRepo.WithAddAgentStates(actualAgentStates);
 		}
 
-		private class fakeStatisticRepo : IStatisticRepository
+		private class fakeStatisticRepo : IRtaRepository
 		{
 			private IEnumerable<IActualAgentState> _actualAgentStates;
 
-			public static IStatisticRepository WithAddAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
+			public static IRtaRepository WithAddAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
 			{
 				return new fakeStatisticRepo(){_actualAgentStates = actualAgentStates};
-			}
-
-			public ICollection<IStatisticTask> LoadSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period)
-			{
-				throw new NotImplementedException();
-			}
-
-			public ICollection<MatrixReportInfo> LoadReports()
-			{
-				throw new NotImplementedException();
-			}
-
-			public ICollection<IQueueSource> LoadQueues()
-			{
-				throw new NotImplementedException();
-			}
-
-			public ICollection<IActiveAgentCount> LoadActiveAgentCount(ISkill skill, DateTimePeriod period)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void PersistFactQueues(DataTable queueDataTable)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void DeleteStgQueues()
-			{
-				throw new NotImplementedException();
-			}
-
-			public void LoadFactQueues()
-			{
-				throw new NotImplementedException();
-			}
-
-			public void LoadDimQueues()
-			{
-				throw new NotImplementedException();
-			}
-
-			public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId,
-				int adherenceId)
-			{
-				throw new NotImplementedException();
-			}
-
-			public IList LoadAgentStat(Guid scenarioCode, DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
-			{
-				throw new NotImplementedException();
-			}
-
-			public IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
-			{
-				throw new NotImplementedException();
 			}
 
 			public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
@@ -226,21 +166,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				throw new NotImplementedException();
 			}
 
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold)
-			{
-				throw new NotImplementedException();
-			}
-
-			public IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-				string timezoneCode, DateTime date, Percent adherenceThreshold)
-			{
-				throw new NotImplementedException();
-			}
-
-			public IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold)
-			{
-				throw new NotImplementedException();
-			}
 		}
 
 		private static IPerson createPersonInTeam(ITeam team)

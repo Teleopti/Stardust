@@ -621,6 +621,7 @@
     <Compile Include="ResourceCalculation\WorkShiftCalculatorWrap.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
+    <Compile Include="Rta\IRtaRepository.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />

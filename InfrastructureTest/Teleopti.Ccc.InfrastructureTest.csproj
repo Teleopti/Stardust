@@ -174,6 +174,7 @@
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
+    <Compile Include="Rta\RtaRepositoryTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
     <Compile Include="Licensing\LicenseActivatorProviderTest.cs" />
@@ -369,7 +370,6 @@
     <Compile Include="Repositories\MeetingRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRequestRepositoryTest.cs" />
     <Compile Include="Repositories\OutlierRepositoryTest.cs" />
-    <Compile Include="Repositories\StatisticRepositoryEmptyTest.cs" />
     <Compile Include="Repositories\MultisiteSkillRepositoryTest.cs" />
     <Compile Include="Repositories\MultisiteDayRepositoryTest.cs" />
     <Compile Include="Repositories\KpiRepositoryTest.cs" />

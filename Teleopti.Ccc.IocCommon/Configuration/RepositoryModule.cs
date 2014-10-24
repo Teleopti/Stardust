@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.Register(c => StatisticRepositoryFactory.Create())
 				.As<IStatisticRepository>();
+			builder.RegisterType<RtaRepository>()
+				.As<IRtaRepository>();
 
 
 			builder.RegisterType<DefaultScenarioFromRepository>()
