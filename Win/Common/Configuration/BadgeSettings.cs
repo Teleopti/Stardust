@@ -184,7 +184,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			catch (Exception ex)
 			{
-				ViewBase.ShowWarningMessage(ex.Message, Resources.ResetBadges);
 				ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
 			}
 		}
