@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _requestViewAdapters = new List<PersonRequestViewModel>();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-            DateTime startDateTime = DateTime.UtcNow.Date.AddDays(7);
+		    DateTime startDateTime = DateTime.SpecifyKind(DateTime.Today.AddDays(7), DateTimeKind.Utc);
             DateTime endDateTime = startDateTime.AddHours(2);
             _dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
             _scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
