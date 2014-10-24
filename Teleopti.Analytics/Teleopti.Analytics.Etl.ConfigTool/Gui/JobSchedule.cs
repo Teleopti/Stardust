@@ -237,8 +237,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
                     initiateAgentStatisticsDatePeriod();
                     break;
 				case "Intraday":
-					initiateQueueStatisticsDatePeriod();
-					initiateAgentStatisticsDatePeriod();
+//					Do nothing, all date periods are remove from Intraday job
 					break;
                 case "Nightly":
 					initiateScheduleDatePeriod();
