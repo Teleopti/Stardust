@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Web.Core
 	{
 		public override byte[] Decode(byte[] encoded)
 		{
-			return MachineKey.Decode(Encoding.UTF8.GetString(encoded), MachineKeyProtection.All);
+			return MachineKey.Unprotect(encoded);
 		}
 
 		public override byte[] Encode(byte[] value)
 		{
-			return Encoding.UTF8.GetBytes(MachineKey.Encode(value, MachineKeyProtection.All));
+			return MachineKey.Protect(value);
 		}
 	}
 }
