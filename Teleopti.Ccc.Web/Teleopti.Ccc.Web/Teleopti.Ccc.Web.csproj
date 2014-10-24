@@ -462,13 +462,9 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\Server\AlarmMapper.cs" />
     <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractor.cs" />
-    <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionFactory.cs" />
-    <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionStringHandler.cs" />
-    <Compile Include="Areas\Rta\Core\Server\DatabaseWriter.cs" />
     <Compile Include="Areas\Rta\Core\Server\IActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAlarmMapper.cs" />
     <Compile Include="Areas\Rta\Core\Server\ICurrentAndNextLayerExtractor.cs" />
-    <Compile Include="Areas\Rta\Core\Server\IDatabaseWriter.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\IRtaDataHandler.cs" />
     <Compile Include="Areas\Rta\Core\Server\IRtaDataHandlerCache.cs" />

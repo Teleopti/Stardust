@@ -169,7 +169,10 @@
     <Compile Include="Repositories\IEtlLogObjectRepository.cs" />
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
+    <Compile Include="Rta\DatabaseConnectionFactory.cs" />
+    <Compile Include="Rta\DatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\DatabaseReader.cs" />
+    <Compile Include="Rta\DatabaseWriter.cs" />
     <Compile Include="Rta\IDatabaseConnectionFactory.cs" />
     <Compile Include="Rta\IDatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\RtaRepository.cs" />

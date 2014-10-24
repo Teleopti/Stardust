@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -11,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-    [TestFixture]
+	[TestFixture]
     [Category("LongRunning")]
     public class RtaRepositoryTest : DatabaseTest
     {

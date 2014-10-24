@@ -16,28 +16,29 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
-	    private readonly INow _now;
-	    private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
+		private readonly INow _now;
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
-		public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
-													IDatabaseConnectionStringHandler databaseConnectionStringHandler,
-		    INow now)
+		public DatabaseReader(
+			IDatabaseConnectionFactory databaseConnectionFactory,
+			IDatabaseConnectionStringHandler databaseConnectionStringHandler,
+			INow now)
 		{
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
-	        _now = now;
+			_now = now;
 		}
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
-        {
-	        var utcDate = _now.UtcDateTime().Date;
-	        var query = string.Format(CultureInfo.InvariantCulture,
+		{
+			var utcDate = _now.UtcDateTime().Date;
+			var query = string.Format(CultureInfo.InvariantCulture,
 										@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 											FROM ReadModel.ScheduleProjectionReadOnly rta
 											WHERE PersonId='{0}'
 											AND BelongsToDate BETWEEN '{1}' AND '{2}'", personId,
 						utcDate.AddDays(-1),
-		        utcDate.AddDays(1));
+				utcDate.AddDays(1));
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				{
 					while (reader.Read())
 					{
-						
+
 						var agentState = new ActualAgentState
 							{
 								PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
