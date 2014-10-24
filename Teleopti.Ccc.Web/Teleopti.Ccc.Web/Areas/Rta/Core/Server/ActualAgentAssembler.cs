@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using log4net;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server

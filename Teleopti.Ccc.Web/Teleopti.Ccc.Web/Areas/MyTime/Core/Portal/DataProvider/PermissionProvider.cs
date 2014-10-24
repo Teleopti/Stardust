@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Security.Principal;
+﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
@@ -30,6 +32,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
 			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, authorizeOrganisationDetail);
+		}
+
+		public bool IsPersonSchedulePublished(DateOnly date,
+			IPerson person)
+		{
+			var dayAndPeriod = new DateOnlyAsDateTimePeriod(date,
+				person.PermissionInformation.DefaultTimeZone());
+			var schedulePublishedSpecification = new SchedulePublishedSpecification(person.WorkflowControlSet,
+				ScheduleVisibleReasons.Published);
+			var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dayAndPeriod.DateOnly);
+			return schedIsPublished;
 		}
 	}
 }

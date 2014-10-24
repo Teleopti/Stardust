@@ -122,15 +122,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode);
 
-
-        IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons);
-
-        IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids);
-
-        IActualAgentState LoadOneActualAgentState(Guid value);
-
-        void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
-
 		IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold);
 		IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold);
 		IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold);

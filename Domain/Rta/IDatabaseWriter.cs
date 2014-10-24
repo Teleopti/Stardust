@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.Rta
 {
     public interface IDatabaseWriter
     {

@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
 	public abstract class QuickForecastTest
 	{
@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			Assert(skillDays);
 		}
-
 
 		protected IScenario DefaultScenario { get; private set; }
 

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {

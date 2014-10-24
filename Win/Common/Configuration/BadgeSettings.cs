@@ -182,11 +182,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				_agentBadgeTransactionRepository.ResetAgentBadges();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				ViewBase.ShowWarningMessage("unit work: " + _unitOfWork, Resources.ResetBadges);
-				ViewBase.ShowWarningMessage(ex.Message, Resources.ResetBadges);
-				ViewBase.ShowWarningMessage(ex.StackTrace, Resources.ResetBadges);
 				ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
 			}
 		}

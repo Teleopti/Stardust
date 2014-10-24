@@ -8,5 +8,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person);
 		bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team);
 		bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
+
+		bool IsPersonSchedulePublished(DateOnly date,
+			IPerson person);
 	}
 }

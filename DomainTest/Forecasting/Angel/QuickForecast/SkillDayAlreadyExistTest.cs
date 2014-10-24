@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
 	public class SkillDayAlreadyExistTest : QuickForecastTest
 	{

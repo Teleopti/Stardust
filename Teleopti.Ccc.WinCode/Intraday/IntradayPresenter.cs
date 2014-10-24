@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             if (!_realTimeAdherenceEnabled) return; //If RTA isn't enabled, we don't need the rest of the stuff...
 
-            var statisticRepository = _repositoryFactory.CreateStatisticRepository();
+            var statisticRepository = _repositoryFactory.CreateRtaRepository();
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
             {
                 var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);

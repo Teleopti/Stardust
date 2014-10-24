@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Autofac;
 using EO.WebBrowser;
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool canAccessInternet = true;
+		private bool _webViewLoaded = true;
 
 		protected SmartClientShellForm()
 		{
@@ -79,6 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
+			webView1.LoadComplete += webView1_LoadComplete;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -137,6 +140,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
+			
+			
+		}
+
+		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
+		{
+			_webViewLoaded = true;
 		}
 
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -224,6 +234,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void SmartClientShellForm_Load(object sender, EventArgs e)
 		{
+			Enabled = false;
+			Cursor = Cursors.WaitCursor;
+
+			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+			{
+				_webViewLoaded = false;
+				if (!canAccessInternet)
+				{
+					goToLocalPage();
+				}
+				else
+				{
+					goToPublicPage(false);
+				}
+			}
+
+
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
@@ -263,6 +290,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		}
 
 		private long maxMem = 0;
+		
 
 		private void updateMem(object sender, EventArgs e)
 		{
@@ -591,21 +619,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				return;
 			}
 
+			webControl1.Visible = true;
+
 			if (uc is SchedulerNavigator || uc is PeopleNavigator)
 				((INavigationPanel)uc).SetMainOwner(this);
 
 			if (uc is ShiftsNavigationPanel)
 				((ShiftsNavigationPanel)uc).SetMainOwner(this);
 
-			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) return;
 			
-			if (!canAccessInternet)
-			{
-				goToLocalPage();
-				return;
-			}
-			goToPublicPage(false);
-
 		}
 		
 		void webView1LoadFailed(object sender, LoadFailedEventArgs e)
@@ -666,6 +688,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void smartClientShellFormShown(object sender, EventArgs e)
 		{
+			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+			{
+				while (!_webViewLoaded)
+				{
+					Application.DoEvents();
+				}
+			}
+
+			Enabled = true;
+			Cursor = Cursors.Default;
+
 			if (!string.IsNullOrEmpty(_portalSettings.LastModule))
 			{
 				startModule(_portalSettings.LastModule);
@@ -674,6 +707,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				startFirstEnabledModule();
 			}
+
+			
 		}
 
 		private void webView1_Command(object sender, CommandEventArgs e)

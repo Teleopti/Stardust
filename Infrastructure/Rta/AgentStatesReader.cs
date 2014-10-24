@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Rta;
 
@@ -11,12 +12,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStatesReader : IAgentStateReader
 	{
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IRtaRepository _statisticRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public AgentStatesReader(IStatisticRepository statisticRepository, ITeamRepository teamRepository, IPersonRepository personRepository, INow now)
+		public AgentStatesReader(IRtaRepository statisticRepository, ITeamRepository teamRepository, IPersonRepository personRepository, INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_teamRepository = teamRepository;

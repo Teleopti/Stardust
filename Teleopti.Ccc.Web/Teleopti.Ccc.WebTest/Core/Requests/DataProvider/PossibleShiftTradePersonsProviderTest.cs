@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
 				                                     personInMyTeamGuids)).Return(true);
+			permissionProvider.Expect(perm => perm.IsPersonSchedulePublished(data.ShiftTradeDate, personInMyTeam)).Return(true);
 			personRepository.Expect(rep => rep.FindPeople(new[] { personInMyTeamGuids.PersonId }))
 							.Return(new Collection<IPerson>(new List<IPerson> { personInMyTeam }));
 			shiftTradeValidator.Expect(
@@ -115,6 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
 				                                     personInMyTeamGuids)).Return(true);
+			permissionProvider.Expect(perm => perm.IsPersonSchedulePublished(data.ShiftTradeDate, personInMyTeam)).Return(true);
 			personRepository.Expect(rep => rep.FindPeople(new[] { personInMyTeamGuids.PersonId }))
 							.Return(new Collection<IPerson>(new List<IPerson> { personInMyTeam }));
 			shiftTradeValidator.Expect(
@@ -145,6 +147,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
 													 validAgentGuids)).Return(true);
+			permissionProvider.Expect(perm => perm.IsPersonSchedulePublished(data.ShiftTradeDate, validAgent)).Return(true);
+
 			permissionProvider.Expect(
 				perm =>
 				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,

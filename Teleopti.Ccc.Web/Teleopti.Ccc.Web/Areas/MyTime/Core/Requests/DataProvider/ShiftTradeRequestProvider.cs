@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -31,7 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			return _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value);
+			if (_permissionProvider.IsPersonSchedulePublished(date, person))
+				return _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value);
+			return null;
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging)

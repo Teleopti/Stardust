@@ -5,7 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
 	public class AggregatedValidatedTaskTimeTest : QuickForecastTest
 	{

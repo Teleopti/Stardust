@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
 			Log4NetConfiguration.SetConnectionString(connectionString);
 			////////////////////////////////////
+			// ^^ how much later are we talking?
 			using (PerformanceOutput.ForOperation("Configuring statistic db"))
 			{
 				var statCfg = new Configuration()

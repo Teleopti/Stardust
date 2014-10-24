@@ -5,17 +5,25 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class AggregateStatisticTasksForOneDayTest : QuickForecastTest
+	public class AggregateStatisticTasksWithQueueAdjustmentTest : QuickForecastTest
 	{
+		protected override IWorkload Workload
+		{
+			get
+			{
+				base.Workload.QueueAdjustments = new QueueAdjustment { OfferedTasks = new Percent(0.5) };
+				return base.Workload;
+			}
+		}
+
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			var startDateOnHistoricalPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
 			return new[]
 			{
 				new StatisticTask {Interval = startDateOnHistoricalPeriod, StatOfferedTasks = 6},
-				new StatisticTask {Interval = startDateOnHistoricalPeriod.AddMinutes(15), StatOfferedTasks = 7}
 			};
 		}
 
@@ -23,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var skillDay = modifiedSkillDays.Single();
 			Convert.ToInt32(skillDay.Tasks)
-				.Should().Be.EqualTo(13);
+				.Should().Be.EqualTo(3);
 		}
 	}
 }

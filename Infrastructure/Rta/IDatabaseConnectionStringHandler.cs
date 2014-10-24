@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public interface IDatabaseConnectionStringHandler
 	{

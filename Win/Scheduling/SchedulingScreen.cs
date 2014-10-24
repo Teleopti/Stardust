@@ -3000,6 +3000,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_cancelButtonPressed)
 				{
+					_backgroundWorkerOptimization.CancelAsync();
 					progress.Cancel = true;
 					progress.UserCancel = true;
 				}

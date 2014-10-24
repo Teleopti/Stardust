@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -122,43 +121,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             target.LoadFactQueues();
         }
-
-
-		[Test]
-		public void VerifyLoadActualAgentState()
-		{
-			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
-			person.SetId(Guid.NewGuid());
-			var result = target.LoadActualAgentState(new List<IPerson> {person});
-			Assert.IsNotNull(result);
-		}
-
-		[Test]
-		public void VerifyLoadOneActualAgentState()
-		{
-			VerifyAddOrUpdateActualAgentState();
-			Assert.IsNotNull(target.LoadOneActualAgentState(Guid.Empty));
-		}
-
-		[Test]
-		public void VerifyAddOrUpdateActualAgentState()
-		{
-			var agentState = new ActualAgentState
-				{
-					ReceivedTime = new DateTime(1900, 1, 1),
-					OriginalDataSourceId = ""
-				};
-			target.AddOrUpdateActualAgentState(agentState);
-		}
-
-	    [Test]
-	    public void ShouldLoadLastAgentState()
-	    {
-			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
-			person.SetId(Guid.NewGuid());
-			var result = target.LoadLastAgentState(new List<Guid> { person.Id.GetValueOrDefault() });
-			Assert.IsNotNull(result);
-	    }
 
         protected override void SetupForRepositoryTest()
         {

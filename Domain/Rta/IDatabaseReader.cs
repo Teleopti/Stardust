@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.Rta
 {
-	public interface IDatabaseReader : IGetCurrentActualAgentState
+	public interface IDatabaseReader : IReadActualAgentStates
 	{
 		ConcurrentDictionary<string, int> Datasources();
 		ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> ExternalLogOns();
@@ -17,8 +16,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
 	}
 
-	public interface IGetCurrentActualAgentState
+	public interface IReadActualAgentStates
 	{
 		IActualAgentState GetCurrentActualAgentState(Guid personId);
+		IEnumerable<IActualAgentState> GetActualAgentStates();
 	}
 }

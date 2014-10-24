@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    IPersonRequest request = new PersonRequest(_person);
 		    IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
 		                                                        new DateTimePeriod(
-			                                                        new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
-			                                                        new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc)));
+			                                                        new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+			                                                        new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc)));
 
 		    request.Request = absenceRequest;
 		    request.Pending();
@@ -139,10 +139,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             DateTimePeriod period = new DateTimePeriod(2008, 07, 15, 2008, 07, 20);
             IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person,period);
 
-            Assert.AreEqual(2, foundRequests.Count);
+            Assert.AreEqual(1, foundRequests.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
             Assert.IsTrue(foundRequests.Contains(requestAccepted));
-            Assert.IsTrue(foundRequests.Contains(requestAbsence));
         }
 
 		[Test]
@@ -167,13 +166,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindOtherRequestUpdatedAfter()
 		{
-			// ReSharper disable PossibleInvalidOperationException
 			var requestAbsence = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(requestAbsence);
 			var foundRequest = new PersonRequestRepository(UnitOfWork).FindPersonRequestUpdatedAfter(DateTime.UtcNow.AddHours(-1));
 			foundRequest.Count.Should().Be.EqualTo(1);
-			foundRequest.First().Id.Value.Should().Be.EqualTo(requestAbsence.Id.Value);
-			// ReSharper restore PossibleInvalidOperationException
+			foundRequest.First().Id.GetValueOrDefault().Should().Be.EqualTo(requestAbsence.Id.Value);
 		}
 
 		[Test]
@@ -844,5 +841,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
 								.Should().Be.Empty();
 			}
+
+		[Test]
+		public void ShouldFindRequestsForPersonAndPeriodInGivenPeriodOnly()
+		{
+			var requestAccepted = CreateShiftTradeRequest("Trade with me");
+			var requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+
+			PersistAndRemoveFromUnitOfWork(requestAccepted);
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
+
+			var period = new DateTimePeriod(2008, 07, 15, 2008, 07, 20);
+			var foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(foundRequests.Contains(requestAccepted));
+		}
     }
 }

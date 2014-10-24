@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {

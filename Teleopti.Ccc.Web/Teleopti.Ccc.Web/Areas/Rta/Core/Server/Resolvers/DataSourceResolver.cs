@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Rta;
+
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 {
 	public class DataSourceResolver

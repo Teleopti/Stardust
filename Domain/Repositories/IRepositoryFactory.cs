@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -83,6 +84,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </summary>
         /// <returns></returns>
         IStatisticRepository CreateStatisticRepository();
+
+		IRtaRepository CreateRtaRepository();
 
         /// <summary>
         /// Creates the business unit repository.

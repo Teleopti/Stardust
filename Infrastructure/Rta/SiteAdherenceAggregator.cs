@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class SiteAdherenceAggregator : ISiteAdherenceAggregator
 	{
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IRtaRepository _statisticRepository;
 		private readonly ISiteRepository _siteRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public SiteAdherenceAggregator(IStatisticRepository statisticRepository, ISiteRepository siteRepository, IPersonRepository personRepository, INow now)
+		public SiteAdherenceAggregator(IRtaRepository statisticRepository, ISiteRepository siteRepository, IPersonRepository personRepository, INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_siteRepository = siteRepository;

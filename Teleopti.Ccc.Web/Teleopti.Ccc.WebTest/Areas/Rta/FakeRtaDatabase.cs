@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
@@ -157,6 +158,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IActualAgentState GetCurrentActualAgentState(Guid personId)
 		{
 			return _actualAgentStates.FirstOrDefault(x => x.PersonId == personId);
+		}
+
+		public IEnumerable<IActualAgentState> GetActualAgentStates()
+		{
+			return _actualAgentStates;
 		}
 
 		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()

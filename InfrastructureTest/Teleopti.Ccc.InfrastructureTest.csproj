@@ -92,8 +92,10 @@
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.0.2\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -170,8 +172,12 @@
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
+    <Compile Include="Rta\ActualAgentStateForTest.cs" />
+    <Compile Include="Rta\DatabaseReaderTest.cs" />
+    <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
+    <Compile Include="Rta\RtaRepositoryTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
     <Compile Include="Licensing\LicenseActivatorProviderTest.cs" />
@@ -367,7 +373,6 @@
     <Compile Include="Repositories\MeetingRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRequestRepositoryTest.cs" />
     <Compile Include="Repositories\OutlierRepositoryTest.cs" />
-    <Compile Include="Repositories\StatisticRepositoryEmptyTest.cs" />
     <Compile Include="Repositories\MultisiteSkillRepositoryTest.cs" />
     <Compile Include="Repositories\MultisiteDayRepositoryTest.cs" />
     <Compile Include="Repositories\KpiRepositoryTest.cs" />
@@ -503,10 +508,8 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="App.Config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Defaults.xml">

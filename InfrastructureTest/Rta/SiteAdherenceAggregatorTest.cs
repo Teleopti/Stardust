@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var inAdherence2 = new ActualAgentState {StaffingEffect = 0};
 			var outOfAdherence = new ActualAgentState {StaffingEffect = 1};
 
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
 			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
 				.Return(new List<IActualAgentState> {inAdherence1, inAdherence2, outOfAdherence});
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var inAdherence2 = new ActualAgentState {StaffingEffect = 0};
 			var outOfAdherence = new ActualAgentState {StaffingEffect = -1};
 
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
 			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
 				.Return(new List<IActualAgentState> {inAdherence1, inAdherence2, outOfAdherence});
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();

@@ -55,7 +55,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			get { return _cancelMe || (_progressEvent != null && _progressEvent.UserCancel); }
 		}
 
-		public IList<ISkillStaffPeriod> Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IList<ISkillStaffPeriod> intervalIssuesBefore)
+		public IList<ISkillStaffPeriod> Optimize(ISchedulingOptions schedulingOptions,
+			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros,
+			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IList<ISkillStaffPeriod> intervalIssuesBefore)
 		{
 			IList<ISkillStaffPeriod> intervalIssuesAfter = new List<ISkillStaffPeriod>();
 			var notBetter = true;
@@ -67,20 +70,23 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			while (notBetter)
 			{
 				if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
-				
+
 				intervalIssuesAfter.Clear();
 				var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
 				var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 
-				var shiftProjectionCache = _shiftProjectionCacheManager.ShiftProjectionCacheFromShift(daySchedule.GetEditorShift(), dateOnly, timeZoneInfo);
+				var shiftProjectionCache = _shiftProjectionCacheManager.ShiftProjectionCacheFromShift(daySchedule.GetEditorShift(),
+					dateOnly, timeZoneInfo);
 				schedulingOptions.AddNotAllowedShiftProjectionCache(shiftProjectionCache);
 
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
-				var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
+				var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
+					schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
 
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> {daySchedule},
 					rollbackService, true);
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlock, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlock, dateOnly, schedulingOptions, rollbackService,
+					resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
 
 				if (!success)
 				{
@@ -88,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
 				}
 
-				var skillDays = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
+				var skillDays = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
 				intervalIssuesAfter = _skillDayIntraIntervalIssueExtractor.Extract(skillDays, skill);
 
 				if (intervalIssuesAfter.Count == 0 || !success)
@@ -98,14 +104,15 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 				notBetter = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore, intervalIssuesAfter);
 
-				if((progressCounter % 10) == 0)
-					OnReportProgress(UserTexts.Resources.IntraIntervalOptimization + " " + person.Name.FirstName + " " + person.Name.LastName + dateOnly.Date.ToShortDateString() + " (" + progressCounter + ")");
+				if ((progressCounter%10) == 0)
+					OnReportProgress(string.Concat("(", progressCounter, "/", intervalIssuesAfter.Count, ")"));
 
 				progressCounter++;
 			}
 
 			return intervalIssuesAfter;
 		}
+
 
 		public void OnReportProgress(string message)
 		{
@@ -114,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 			handler(this, args);
 
-			if (args.Cancel)
+			if (args.Cancel || args.UserCancel)
 				_cancelMe = true;
 				
 			if (_progressEvent != null && _progressEvent.UserCancel) return;

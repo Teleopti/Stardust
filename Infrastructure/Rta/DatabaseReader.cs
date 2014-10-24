@@ -7,37 +7,38 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class DatabaseReader : IDatabaseReader
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
-	    private readonly INow _now;
-	    private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
+		private readonly INow _now;
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
-		public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
-													IDatabaseConnectionStringHandler databaseConnectionStringHandler,
-		    INow now)
+		public DatabaseReader(
+			IDatabaseConnectionFactory databaseConnectionFactory,
+			IDatabaseConnectionStringHandler databaseConnectionStringHandler,
+			INow now)
 		{
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
-	        _now = now;
+			_now = now;
 		}
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
-        {
-	        var utcDate = _now.UtcDateTime().Date;
-	        var query = string.Format(CultureInfo.InvariantCulture,
+		{
+			var utcDate = _now.UtcDateTime().Date;
+			var query = string.Format(CultureInfo.InvariantCulture,
 										@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 											FROM ReadModel.ScheduleProjectionReadOnly rta
 											WHERE PersonId='{0}'
 											AND BelongsToDate BETWEEN '{1}' AND '{2}'", personId,
 						utcDate.AddDays(-1),
-		        utcDate.AddDays(1));
+				utcDate.AddDays(1));
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
@@ -68,13 +69,29 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			LoggingSvc.DebugFormat("Getting old state for person: {0}", personId);
 
-			var query =
-			string.Format(
-				"SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
+			var agentState = queryActualAgentStates(personId).FirstOrDefault();
+
+			if (agentState == null)
+				LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
+			else
+				LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personId, agentState);
+
+			return agentState;
+		}
+
+		public IEnumerable<IActualAgentState> GetActualAgentStates()
+		{
+			return queryActualAgentStates(null);
+		}
+
+		private IEnumerable<IActualAgentState> queryActualAgentStates(Guid? personId)
+		{
+			var query = "SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState";
+			if (personId.HasValue)
+				query = string.Format("SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
 			using (
 				var connection =
-					_databaseConnectionFactory.CreateConnection(
-						_databaseConnectionStringHandler.DataStoreConnectionString()))
+					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -84,34 +101,29 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				{
 					while (reader.Read())
 					{
-						
-						var agentState = new ActualAgentState
-							{
-								PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-								StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
-								StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-								ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
-								AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
-								ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
-								StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
-								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
-								BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
-												? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-												: (DateTime?)null,
-								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-															 ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-															 : "",
-								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
-								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-								StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
-							};
-						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personId, agentState);
-						return agentState;
+						yield return new ActualAgentState
+						{
+							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
+							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
+							StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
+							ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
+							AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
+							ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
+							StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
+							NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
+							BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
+								? reader.GetDateTime(reader.GetOrdinal("BatchId"))
+								: (DateTime?) null,
+							OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
+								? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
+								: "",
+							AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
+							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
+						};
 					}
 				}
 			}
-			LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
-			return null;
 		}
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
