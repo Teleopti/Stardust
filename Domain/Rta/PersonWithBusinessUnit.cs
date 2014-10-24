@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
+namespace Teleopti.Ccc.Domain.Rta
 {
 	public struct PersonWithBusinessUnit
 	{

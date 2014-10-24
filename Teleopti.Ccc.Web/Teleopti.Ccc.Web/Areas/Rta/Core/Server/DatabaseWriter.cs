@@ -2,6 +2,8 @@
 using System.Data;
 using System.Data.SqlClient;
 using log4net;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server

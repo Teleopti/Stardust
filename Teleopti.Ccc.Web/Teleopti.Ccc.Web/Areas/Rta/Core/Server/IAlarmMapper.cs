@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {

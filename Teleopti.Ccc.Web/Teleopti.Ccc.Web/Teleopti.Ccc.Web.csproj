@@ -464,14 +464,10 @@
     <Compile Include="Areas\Rta\Core\Server\CurrentAndNextLayerExtractor.cs" />
     <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionFactory.cs" />
     <Compile Include="Areas\Rta\Core\Server\DatabaseConnectionStringHandler.cs" />
-    <Compile Include="Areas\Rta\Core\Server\DatabaseReader.cs" />
     <Compile Include="Areas\Rta\Core\Server\DatabaseWriter.cs" />
     <Compile Include="Areas\Rta\Core\Server\IActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAlarmMapper.cs" />
     <Compile Include="Areas\Rta\Core\Server\ICurrentAndNextLayerExtractor.cs" />
-    <Compile Include="Areas\Rta\Core\Server\IDatabaseConnectionFactory.cs" />
-    <Compile Include="Areas\Rta\Core\Server\IDatabaseConnectionStringHandler.cs" />
-    <Compile Include="Areas\Rta\Core\Server\IDatabaseReader.cs" />
     <Compile Include="Areas\Rta\Core\Server\IDatabaseWriter.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\IRtaDataHandler.cs" />
@@ -479,12 +475,8 @@
     <Compile Include="Areas\Rta\Core\Server\NotificationFactory.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonWithBusinessUnit.cs" />
-    <Compile Include="Areas\Rta\Core\Server\RtaAlarmLight.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
-    <Compile Include="Areas\Rta\Core\Server\RtaStateGroupLight.cs" />
-    <Compile Include="Areas\Rta\Core\Server\ScheduleLayer.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />

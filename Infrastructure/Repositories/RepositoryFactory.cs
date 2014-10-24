@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using NHibernate.Properties;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -148,7 +150,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return StatisticRepositoryFactory.Create();
         }
 
-        /// <summary>
+	    public IRtaRepository CreateRtaRepository()
+	    {
+		    return new RtaRepository();
+	    }
+
+	    /// <summary>
         /// Creates the business unit repository.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
