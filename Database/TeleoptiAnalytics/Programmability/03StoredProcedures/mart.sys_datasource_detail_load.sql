@@ -15,7 +15,7 @@ insert into [mart].[sys_datasource_detail]
 select
 	datasource_id		= ds.datasource_id,
 	detail_id			= t.detail_id,
-	target_date_local	= DATEDIFF(DD, -1, getdate()), --yesterday
+	target_date_local	= DATEADD(DD,-1,(DATEDIFF(DD, 0, getdate()))), --yesterday
 	target_interval_local=0, --start from midnight
 	intervals_back=0 --Delete only current interval and fetch everything matchning that one and new/later intervals from Agg
 from mart.v_log_object_detail lod
@@ -31,7 +31,7 @@ insert into [mart].[sys_datasource_detail]
 select
 	datasource_id		= ds.datasource_id,
 	detail_id			= t.detail_id,
-	target_date_local	= DATEDIFF(DD, -1, getdate()), --yesterday
+	target_date_local	= DATEADD(DD,-1,(DATEDIFF(DD, 0, getdate()))), --yesterday
 	target_interval_local=0, --start from midnight
 	intervals_back=0 --Delete only current interval and fetch everything matchning that one and new/later intervals from Agg
 from dbo.log_object_detail lod
