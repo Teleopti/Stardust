@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
-			var state = new ActualAgentState {PersonId = Guid.NewGuid(), ReceivedTime = DateTime.UtcNow, OriginalDataSourceId = "0"};
+			var state = new ActualAgentStateForTest { PersonId = Guid.NewGuid() };
 			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler()).PersistActualAgentState(state);
 			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
 
@@ -23,18 +23,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Should().Not.Be.Null();
 		}
 
-	}
-
-	public class FakeDatabaseConnectionStringHandler : IDatabaseConnectionStringHandler
-	{
-		public string AppConnectionString()
+		[Test]
+		public void ShouldGetCurrentActualAgentStates()
 		{
-			return ConnectionStringHelper.ConnectionStringUsedInTests;
+			var writer = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			writer.PersistActualAgentState(new ActualAgentStateForTest { PersonId = personId1 });
+			writer.PersistActualAgentState(new ActualAgentStateForTest { PersonId = personId2 });
+			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+
+			var result = target.GetActualAgentStates();
+
+			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
+			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
 		}
 
-		public string DataStoreConnectionString()
-		{
-			return ConnectionStringHelper.ConnectionStringUsedInTestsMatrix;
-		}
 	}
 }

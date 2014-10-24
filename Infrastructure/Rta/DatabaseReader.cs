@@ -117,7 +117,42 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<IActualAgentState> GetActualAgentStates()
 		{
-			throw new NotImplementedException();
+			using (
+				var connection =
+					_databaseConnectionFactory.CreateConnection(
+						_databaseConnectionStringHandler.DataStoreConnectionString()))
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.Text;
+				command.CommandText = "SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState";
+				connection.Open();
+				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
+				{
+					while (reader.Read())
+					{
+						yield return new ActualAgentState
+						{
+							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
+							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
+							StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
+							ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
+							AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
+							ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
+							StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
+							NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
+							BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
+											? reader.GetDateTime(reader.GetOrdinal("BatchId"))
+											: (DateTime?)null,
+							OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
+														 ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
+														 : "",
+							AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
+							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
+						};
+					}
+				}
+			}
 		}
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
