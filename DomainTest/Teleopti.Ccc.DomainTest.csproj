@@ -261,6 +261,7 @@
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatistcTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForOneDayTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForSkillLocalDayTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\BothStatisticsAndValidatedTasksTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregatedValidatedTaskTimeTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\DailyStatisticsAggregatorTest.cs" />

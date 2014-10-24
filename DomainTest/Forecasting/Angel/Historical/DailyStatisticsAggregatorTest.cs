@@ -41,30 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Historical
 		}
 
 		[Test]
-		public void ShouldAggregateStatisticTasksForSkillLocalDay()
-		{
-			var workload = new Workload(SkillFactory.CreateSkill("Direct sales"));
-			var localTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			workload.Skill.TimeZone = localTimeZone;
-			var dateRange = new DateOnlyPeriod(2001, 1, 1, 2001, 1, 1);
-
-			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
-			statisticRepository.Stub(
-				x => x.LoadSpecificDates(workload.QueueSourceCollection, dateRange.ToDateTimePeriod(localTimeZone)))
-				.Return(new List<IStatisticTask>
-				{
-					new StatisticTask {Interval = new DateTime(2000, 12, 31, 23, 15, 0, DateTimeKind.Utc), StatOfferedTasks = 6},
-					new StatisticTask {Interval = new DateTime(2001, 1, 1, 11, 15, 0, DateTimeKind.Utc), StatOfferedTasks = 7},
-				});
-			var target = new DailyStatisticsAggregator(statisticRepository);
-			var result = target.LoadDailyStatistics(workload, dateRange);
-
-			var onlyDayInResult = result.Single();
-			onlyDayInResult.Date.Should().Be.EqualTo(dateRange.StartDate);
-			onlyDayInResult.CalculatedTasks.Should().Be.EqualTo(13);
-		}
-
-		[Test]
 		public void ShouldAggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreak()
 		{
 			var workload = new Workload(SkillFactory.CreateSkill("Direct sales"));
