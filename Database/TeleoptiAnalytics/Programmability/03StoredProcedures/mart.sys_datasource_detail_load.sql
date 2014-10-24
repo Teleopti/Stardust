@@ -24,6 +24,7 @@ inner join mart.sys_datasource ds
 inner join mart.sys_datasource_detail_type t
 	on t.detail_id = lod.detail_id
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = lod.detail_id)
+AND ds.inactive=0
 
 --When a mix of external and internal Aggs tables (very rare ...)
 insert into [mart].[sys_datasource_detail]
@@ -39,4 +40,5 @@ inner join mart.sys_datasource ds
 inner join mart.sys_datasource_detail_type t
 	on t.detail_id = lod.detail_id
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = lod.detail_id)
+AND ds.inactive=0
 GO
