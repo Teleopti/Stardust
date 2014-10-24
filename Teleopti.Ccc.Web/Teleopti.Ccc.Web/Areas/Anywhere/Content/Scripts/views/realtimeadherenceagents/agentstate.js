@@ -27,6 +27,8 @@
             that.TextColor = ko.observable();
             that.Selected = ko.observable(false);
 
+            that.HistoricalAdherence = ko.observable(0);
+
 	        that.fill = function (data, name, offset, teamName) {
                 that.PersonId = data.PersonId;
                 that.Name = name;

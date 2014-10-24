@@ -20,11 +20,13 @@
 		$,
 		lazy,
 		navigation) {
-	return function () {
+	return function (historicalAdherenceServercall) {
 
 		var that = {};
 		that.Resources = resources;
 		that.permissionAddActivity = ko.observable();
+
+		that.fetchHistoricalAdherence = historicalAdherenceServercall || function () { return 1; }
 
 		that.agents = []; 
 		that.agentStates = ko.observableArray();
@@ -163,7 +165,9 @@
 
 		that.SelectAgent = function (agentStateClicked) {
 			deselectAllAgentsExcept(agentStateClicked);
+			agentStateClicked.HistoricalAdherence(that.fetchHistoricalAdherence());
 			agentStateClicked.Selected(!agentStateClicked.Selected());
+			
 		};
 
 		var deselectAllAgentsExcept = function (agentState) {

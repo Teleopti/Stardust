@@ -447,6 +447,86 @@
 					vm.filter("In call");
 
 					assert.equals(vm.filteredAgents().length, 0);
+				},
+
+				"should fetch the historical adherence when selected" : function() {
+
+					var agentData = {PersonId: "guid1", Name: "Ashley", TimeZoneOffsetInMinutes: 0},
+						agentStateData = { PersonId: "guid1", State: "In Adherence" };
+
+					var historicalAdherenceServerCall = function() {
+						return 12;
+					};
+
+					var vm = viewModel(historicalAdherenceServerCall);
+
+					vm.fillAgents([agentData]);
+					vm.fillAgentsStates([agentStateData]);
+
+					//emulate click on agentstateviewmodel
+					var agentStateClicked = vm.getAgentState("guid1");
+					vm.SelectAgent(agentStateClicked);
+
+					var selectedAgentStates = vm.getSelectedAgentState();
+
+					assert.equals(selectedAgentStates[0].HistoricalAdherence(), 12);
+
+				},
+
+				"should set histoicalAdherenceServerCall": function () {
+					var vm = viewModel();
+
+					assert(vm.fetchHistoricalAdherence());
+				},
+
+				"should only fetch historical adherence for the agentstate that is selected": function () {
+
+					var agentData1 = { PersonId: "guid1", Name: "Ashley", TimeZoneOffsetInMinutes: 0 },
+						agentdata2 = { PersonId: "guid2", Name: "Roger", TimeZoneOffsetInMinutes: 0 },
+						agentStateData1 = { PersonId: "guid1", State: "In Adherence" },
+						agentStateData2 = { PersonId: "guid2", State: "In Adherence" };
+
+					var historicalAdherenceServerCall = function () {
+						return 12;
+					};
+
+					var vm = viewModel(historicalAdherenceServerCall);
+
+					vm.fillAgents([agentData1,agentdata2]);
+					vm.fillAgentsStates([agentStateData1,agentStateData2]);
+
+					var historicalAdherenceForSecondAgentBeforeSelectingFirstAgent = vm.agentStates()[1].HistoricalAdherence();
+
+					var agentStateClicked = vm.getAgentState("guid1");
+					vm.SelectAgent(agentStateClicked);
+			
+					assert.equals(vm.agentStates()[1].HistoricalAdherence(), historicalAdherenceForSecondAgentBeforeSelectingFirstAgent);
+
+				},
+
+				"should keep the historical adherence when new state is pushed" : function() {
+					
+					//todo: adherence should probably be updated in the future
+
+					var agentData = { PersonId: "guid1", Name: "Ashley", TimeZoneOffsetInMinutes: 0 },
+						agentStateData = { PersonId: "guid1", State: "In Adherence" };
+
+					var historicalAdherenceServerCall = function () {
+						return 21;
+					};
+
+					var vm = viewModel(historicalAdherenceServerCall);
+
+					vm.fillAgents([agentData]);
+					vm.fillAgentsStates([agentStateData]);
+
+					var agentStateClicked = vm.getAgentState("guid1");
+					vm.SelectAgent(agentStateClicked);
+
+					vm.fillAgents([agentData]);
+					vm.fillAgentsStates([agentStateData]);
+
+					assert.equals(vm.agentStates()[0].HistoricalAdherence(), 21);
 				}
 			}
 		});
