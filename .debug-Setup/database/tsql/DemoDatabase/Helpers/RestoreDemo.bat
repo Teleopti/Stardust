@@ -96,6 +96,10 @@ ECHO patching databases ...
 "%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
 ECHO patching databases. Done!
 ECHO.
+ECHO Set RC as Toggle for Demo ...
+"%INSTALLDIR%\SupportTools\Teleopti.Support.Tool.exe" -TC"RC"
+ECHO Set RC as Toggle for Demo. Done!
+ECHO.
 ECHO fix data for Demo ...
 SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\AddingTeleoptiPermissions.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" > "%ROOTDIR%\..\fixDatainDB.log"
 SQLCMD -S%INSTANCE% %SA% -dmaster -i"%ROOTDIR%\..\MoveDataInDemo.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" >> "%ROOTDIR%\..\fixDatainDB.log"
