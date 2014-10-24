@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				.As<IDatabaseReader>();
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 
-			builder.Register<IGetCurrentActualAgentState>(c => c.Resolve<DatabaseReader>());
+			builder.Register<IReadActualAgentStates>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 
 			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();

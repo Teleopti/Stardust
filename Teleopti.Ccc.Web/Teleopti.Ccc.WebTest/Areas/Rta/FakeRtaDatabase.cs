@@ -159,6 +159,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return _actualAgentStates.FirstOrDefault(x => x.PersonId == personId);
 		}
 
+		public IEnumerable<IActualAgentState> GetActualAgentStates()
+		{
+			return _actualAgentStates;
+		}
+
 		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()
 		{
 			return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(_stateGroups);

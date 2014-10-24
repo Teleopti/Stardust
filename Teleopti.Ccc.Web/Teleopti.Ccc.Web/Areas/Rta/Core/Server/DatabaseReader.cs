@@ -114,6 +114,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			return null;
 		}
 
+		public IEnumerable<IActualAgentState> GetActualAgentStates()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
 			var missingUsers = new List<IActualAgentState>();
