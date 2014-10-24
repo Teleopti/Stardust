@@ -12407,7 +12407,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Test sending to</comment>
   </data>
   <data name="IntraIntervalIssue" xml:space="preserve">
-    <value>Intra interval issue</value>
+    <value>Intra interval balance issue</value>
     <comment>Tooltip warning on intra interval issues in result grid</comment>
   </data>
   <data name="FilterOnIntraIntervals" xml:space="preserve">
@@ -12431,11 +12431,14 @@ Reduce the complexity to use these shifts.</value>
     <comment>Error message in preference of MyTimeWeb</comment>
   </data>
   <data name="IntraIntervalOptimization" xml:space="preserve">
-    <value>Intra interval activities</value>
+    <value>Intra interval balance</value>
     <comment>Optimization step in optimization preferences</comment>
   </data>
   <data name="CannotGetPreferenceSetting" xml:space="preserve">
     <value>Cannot get preference setting.</value>
     <comment>Error message in preference of MyTimeWeb</comment>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Lowest intra interval balance</value>
   </data>
 </root>

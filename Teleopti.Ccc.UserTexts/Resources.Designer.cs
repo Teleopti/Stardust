@@ -10986,7 +10986,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Intra interval issue.
+        ///   Looks up a localized string similar to Intra interval balance issue.
         /// </summary>
         public static string IntraIntervalIssue {
             get {
@@ -10995,7 +10995,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Intra interval activities.
+        ///   Looks up a localized string similar to Intra interval balance.
         /// </summary>
         public static string IntraIntervalOptimization {
             get {
@@ -12226,6 +12226,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Low {
             get {
                 return ResourceManager.GetString("Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lowest intra interval balance.
+        /// </summary>
+        public static string LowestIntraIntervalBalance {
+            get {
+                return ResourceManager.GetString("LowestIntraIntervalBalance", resourceCulture);
             }
         }
         
