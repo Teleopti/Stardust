@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		}
 
 		[Test]
-		public void ShouldReturnTrueIfScheduleIsPublishedWithUnpublishedSchedulePermission()
+		public void ShouldReturnTrueIfScheduleIsPublished()
 		{
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 
@@ -114,30 +114,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 
 			var target = new PermissionProvider(principalAuthorization);
 
-			var result = target.IsPermittedToSeeSchedule(new DateOnly(2000, 1, 2), person, true);
+			var result = target.IsPersonSchedulePublished(new DateOnly(2000, 1, 2), person);
 
 			result.Should().Be(true);
 		}
 
 		[Test]
-		public void ShouldReturnTrueIfScheduleIsPublishedWithoutUnpublishedSchedulePermission()
-		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-
-			var person = new Person();
-			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
-			workflowControlSet.SchedulePublishedToDate = new DateTime(2100, 1, 1);
-			person.WorkflowControlSet = workflowControlSet;
-
-			var target = new PermissionProvider(principalAuthorization);
-
-			var result = target.IsPermittedToSeeSchedule(new DateOnly(2000, 1, 2), person, false);
-
-			result.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldReturnTrueIfScheduleNotPublishedWithUnpublishedSchedulePermission()
+		public void ShouldReturnFalseIfScheduleNotPublished()
 		{
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 
@@ -148,24 +131,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 
 			var target = new PermissionProvider(principalAuthorization);
 
-			var result = target.IsPermittedToSeeSchedule(new DateOnly(2001, 1, 2), person, true);
-
-			result.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldReturnFalseIfScheduleNotPublishedWithoutUnpublishedSchedulePermission()
-		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-
-			var person = new Person();
-			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
-			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 1);
-			person.WorkflowControlSet = workflowControlSet;
-
-			var target = new PermissionProvider(principalAuthorization);
-
-			var result = target.IsPermittedToSeeSchedule(new DateOnly(2001, 1, 2), person, false);
+			var result = target.IsPersonSchedulePublished(new DateOnly(2001, 1, 2), person);
 
 			result.Should().Be(false);
 		}

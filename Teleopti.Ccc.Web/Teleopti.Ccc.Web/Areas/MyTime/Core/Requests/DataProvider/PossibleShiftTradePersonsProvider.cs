@@ -50,9 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			var personList = _personRepository.FindPeople(personGuidList);
 
-			var includeUnpublished =
-				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-
 			return new DatePersons
 				{
 					Date = shiftTradeArguments.ShiftTradeDate,
@@ -60,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						personList.Where(
 							person =>
 							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person))
-												.Value && _permissionProvider.IsPermittedToSeeSchedule(shiftTradeArguments.ShiftTradeDate, person, includeUnpublished))
+												.Value && _permissionProvider.IsPersonSchedulePublished(shiftTradeArguments.ShiftTradeDate, person))
 				};
 		}
 
@@ -81,9 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var personGuidList = personForShiftTradeList.Select(item => item.PersonId).ToList();
 
 			var personList = _personRepository.FindPeople(personGuidList);
-
-			var includeUnpublished =
-				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			
 			return new DatePersons
 			{
@@ -92,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					personList.Where(
 						person =>
 						_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person))
-											.Value && _permissionProvider.IsPermittedToSeeSchedule(shiftTradeArguments.ShiftTradeDate, person, includeUnpublished))
+											.Value && _permissionProvider.IsPersonSchedulePublished(shiftTradeArguments.ShiftTradeDate, person))
 			};
 		}
 	}

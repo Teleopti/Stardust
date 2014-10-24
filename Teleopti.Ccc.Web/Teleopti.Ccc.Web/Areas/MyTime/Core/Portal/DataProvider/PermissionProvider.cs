@@ -34,20 +34,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, authorizeOrganisationDetail);
 		}
 
-		public bool IsPermittedToSeeSchedule(DateOnly date,
-			IPerson person, bool includeUnpublished)
+		public bool IsPersonSchedulePublished(DateOnly date,
+			IPerson person)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(date,
 				person.PermissionInformation.DefaultTimeZone());
 			var schedulePublishedSpecification = new SchedulePublishedSpecification(person.WorkflowControlSet,
 				ScheduleVisibleReasons.Published);
 			var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dayAndPeriod.DateOnly);
-			if (schedIsPublished || includeUnpublished)
-			{
-				// allow to see schedule
-				return true;
-			}
-			return false;
+			return schedIsPublished;
 		}
 	}
 }

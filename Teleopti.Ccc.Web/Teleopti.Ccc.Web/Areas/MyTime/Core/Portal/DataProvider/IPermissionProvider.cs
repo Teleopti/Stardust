@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team);
 		bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
 
-		bool IsPermittedToSeeSchedule(DateOnly date,
-			IPerson person, bool includeUnpublished);
+		bool IsPersonSchedulePublished(DateOnly date,
+			IPerson person);
 	}
 }
