@@ -259,12 +259,13 @@
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateAverageHandlingTimesForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForTwoDaysTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForSkillLocalDayTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\BothStatisticsAndValidatedTasksTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregatedValidatedTaskTimeTest.cs" />
-    <Compile Include="Forecasting\Angel\Historical\DailyStatisticsAggregatorTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryForTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryTest.cs" />
