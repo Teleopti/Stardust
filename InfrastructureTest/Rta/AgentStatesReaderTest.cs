@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var person1 = createPersonInTeam(team);
 			var person2 = createPersonInTeam(team);
 
-			var agentState1 = new ActualAgentState() { PersonId = person1.Id.GetValueOrDefault() };
-			var agentState2 = new ActualAgentState() { PersonId = person2.Id.GetValueOrDefault() };
+			var agentState1 = new ActualAgentState { PersonId = person1.Id.GetValueOrDefault() };
+			var agentState2 = new ActualAgentState { PersonId = person2.Id.GetValueOrDefault() };
 
 			var teamRepository = createTeamRepositoryForTeam(team);
 			var personRepository = createPersonRepositoryWithPeopleInTeam(team, teamPeriod, new[] {person1,person2});
@@ -56,16 +56,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			person.Name = new Name("Ashley", "Andeen");
 
-			var agentState1 = new ActualAgentState()
+			var utcDateTime = now.UtcDateTime();
+			var agentState1 = new ActualAgentState
 			                  {
 				                  PersonId = person.Id.GetValueOrDefault(),
 				                  State = "Ready",
-								  StateStart = now.UtcDateTime(),
+								  StateStart = utcDateTime,
 				                  Scheduled = "Phone",
 				                  ScheduledNext = "Lunch",
-								  NextStart = now.UtcDateTime(),
+								  NextStart = utcDateTime,
 				                  AlarmName = "Out of adherence",
-								  AlarmStart = now.UtcDateTime(),
+								  AlarmStart = utcDateTime,
 								  Color = Color.Red.ToArgb()
 			                  };
 
@@ -141,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			public static IRtaRepository WithAddAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
 			{
-				return new fakeStatisticRepo(){_actualAgentStates = actualAgentStates};
+				return new fakeStatisticRepo{_actualAgentStates = actualAgentStates};
 			}
 
 			public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
