@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
                 }
 				if (_toggleManager.IsEnabled(Toggles.Scheduler_IntraIntervalSolver_29845))
 				{
-					gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "PercentReadOnlyCell", "IntraIntervalValue", UserTexts.Resources.IntervalStdev);
+					gridRow = new SkillStaffPeriodGridRowIntraIntervalIssues(_rowManager, "PercentReadOnlyCell", "IntraIntervalValue", Resources.IntraIntervalOptimization);
 				}
 				else
 				{

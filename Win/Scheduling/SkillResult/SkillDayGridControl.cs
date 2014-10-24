@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
@@ -187,11 +188,18 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillDayGridIntervalIssues(_rowManager, "NumericReadOnlyCell", "DailySmoothness", UserTexts.Resources.StandardDeviation);
+				gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "DailySmoothness", UserTexts.Resources.StandardDeviation);
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "HighestDeviationInPeriod", UserTexts.Resources.HighestStdev);
+				if (ToggleManager.IsEnabled(Toggles.Scheduler_IntraIntervalSolver_29845))
+				{
+					gridRow = new SkillDayGridIntervalIssues(_rowManager, "ReadOnlyPercentCell", "HighestDeviationInPeriod", Resources.LowestIntraIntervalBalance);
+				}
+				else
+				{
+					gridRow = new SkillDayGridRow(_rowManager, "NumericReadOnlyCell", "HighestDeviationInPeriod", Resources.HighestStdev);
+				}
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 

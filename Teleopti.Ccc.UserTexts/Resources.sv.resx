@@ -11804,7 +11804,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Inställningar för heldagsfrånvaro</value>
   </data>
   <data name="IntraIntervalIssue" xml:space="preserve">
-    <value>Problem inom intervallet</value>
+    <value>Problem med balans inom intervallet</value>
   </data>
   <data name="FilterOnIntraIntervals" xml:space="preserve">
     <value>Filtrera på aktiviteter inom intervall</value>
@@ -11846,6 +11846,9 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Önskemålet kan inte läggas till eftersom det valda objektet inte längre är tillgängligt.</value>
   </data>
   <data name="IntraIntervalOptimization" xml:space="preserve">
-    <value>Aktiviteter inom intervallet</value>
+    <value>Balans inom intervall</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Lägst inom intervallbalans</value>
   </data>
 </root>
