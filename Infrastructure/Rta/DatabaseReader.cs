@@ -69,62 +69,33 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			LoggingSvc.DebugFormat("Getting old state for person: {0}", personId);
 
-			var query =
-			string.Format(
-				"SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
-			using (
-				var connection =
-					_databaseConnectionFactory.CreateConnection(
-						_databaseConnectionStringHandler.DataStoreConnectionString()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.Text;
-				command.CommandText = query;
-				connection.Open();
-				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
-				{
-					while (reader.Read())
-					{
+			var agentState = queryActualAgentStates(personId).FirstOrDefault();
 
-						var agentState = new ActualAgentState
-							{
-								PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-								StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
-								StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-								ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
-								AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
-								ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
-								StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
-								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
-								BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
-												? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-												: (DateTime?)null,
-								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-															 ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-															 : "",
-								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
-								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-								StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
-							};
-						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personId, agentState);
-						return agentState;
-					}
-				}
-			}
-			LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
-			return null;
+			if (agentState == null)
+				LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
+			else
+				LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personId, agentState);
+
+			return agentState;
 		}
 
 		public IEnumerable<IActualAgentState> GetActualAgentStates()
 		{
+			return queryActualAgentStates(null);
+		}
+
+		private IEnumerable<IActualAgentState> queryActualAgentStates(Guid? personId)
+		{
+			var query = "SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState";
+			if (personId.HasValue)
+				query = string.Format("SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
 			using (
 				var connection =
-					_databaseConnectionFactory.CreateConnection(
-						_databaseConnectionStringHandler.DataStoreConnectionString()))
+					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-				command.CommandText = "SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState";
+				command.CommandText = query;
 				connection.Open();
 				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
 				{
@@ -141,11 +112,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
 							NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
 							BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
-											? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-											: (DateTime?)null,
+								? reader.GetDateTime(reader.GetOrdinal("BatchId"))
+								: (DateTime?) null,
 							OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-														 ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-														 : "",
+								? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
+								: "",
 							AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
 							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
 							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))

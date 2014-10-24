@@ -24,6 +24,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		public void ShouldGetNullCurrentActualAgentStateIfNotFound()
+		{
+			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+
+			var result = target.GetCurrentActualAgentState(Guid.NewGuid());
+
+			result.Should().Be.Null();
+		}
+
+
+		[Test]
 		public void ShouldGetCurrentActualAgentStates()
 		{
 			var writer = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
