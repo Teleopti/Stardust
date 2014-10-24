@@ -127,6 +127,7 @@
     <Compile Include="Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeTransactionRepository.cs" />
     <Compile Include="Domain\IEtlToggleManager.cs" />
+    <Compile Include="Domain\IQueueStatsModel.cs" />
     <Compile Include="Domain\IStaffingCalculatorServiceFacade.cs" />
     <Compile Include="Domain\ITeleoptiDiagnosticsInformation.cs" />
     <Compile Include="Domain\ITime.cs" />

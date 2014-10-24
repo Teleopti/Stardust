@@ -1,14 +1,15 @@
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Mart.Models
+namespace Teleopti.Analytics.Stats.TestApplication
 {
 	public class QueueStatsModel : IQueueStatsModel
 	{
-		public string DateAndTimeString { get; set; }
+		public string NhibName { get; set; }
 		public string LogObjectName { get; set; }
+
+		public string DateAndTimeString { get; set; }
 		public string QueueId { get; set; }
 		public string QueueName { get; set; }
-		public string NhibName { get; set; }
 		public int OfferedCalls { get; set; }
 		public int AnsweredCalls { get; set; }
 		public int AnsweredCallsWithinServiceLevel { get; set; }
