@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Web.Routing;
 using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
+using Owin;
 
 namespace Teleopti.Ccc.Web.Broker
 {
 	public static class SignalRConfiguration
 	{
-		public static Action<HubConfiguration> MapHubs = c => RouteTable.Routes.MapHubs(c);
-
 		public static IActionScheduler ActionScheduler; 
 
-		public static void Configure(HubConfiguration hubConfiguration)
+		public static void Configure(Func<IAppBuilder> mapSignalR)
 		{
 			var settingsFromParser = TimeoutSettings.Load();
 
@@ -27,12 +25,12 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
-			MapHubs(hubConfiguration);
-
 			if (settingsFromParser.ScaleOutBackplaneUrl != null)
 			{
 				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
 			}
+
+			mapSignalR();
 
 			if (settingsFromParser.ThrottleMessages)
 			{

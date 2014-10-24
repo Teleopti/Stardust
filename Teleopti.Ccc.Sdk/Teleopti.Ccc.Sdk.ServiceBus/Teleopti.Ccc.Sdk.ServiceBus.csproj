@@ -121,10 +121,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.Autofac, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
-    </Reference>
     <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.10, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.10\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
@@ -166,6 +162,7 @@
     <Compile Include="AgentBadge\CalculateBadgeConsumer.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
+    <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="Notification\EmailConfiguration.cs" />
     <Compile Include="Notification\EmailSender.cs" />
     <Compile Include="Notification\IEmailConfiguration.cs" />
@@ -287,6 +284,7 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

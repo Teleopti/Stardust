@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Rhino.ServiceBus;
-using Rhino.ServiceBus.Autofac;
 using Rhino.ServiceBus.MessageModules;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 

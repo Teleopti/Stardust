@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldConfigure()
 		{
-			SignalRConfiguration.MapHubs = c => { };
-			SignalRConfiguration.Configure(new HubConfiguration());
+			SignalRConfiguration.Configure(()=> null);
 		}
 	}
 }

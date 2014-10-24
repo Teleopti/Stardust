@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using System.Web;
 using System.Collections.Generic;
 using Autofac;
 using NUnit.Framework;
+using Owin;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[Test]
 		public void ShouldOnlyRunOncePerModuleType()
 		{
-			var httpApplication =  MockRepository.GenerateMock<HttpApplication>();
+			var httpApplication =  MockRepository.GenerateMock<IAppBuilder>();
 			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
-			var target = new ApplicationStartModule();
-			var target2 = new ApplicationStartModule();
+			var target = new Web.Core.Startup.Startup();
+			var target2 = new Web.Core.Startup.Startup();
 			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
 
-			target.Init(httpApplication);
-			target2.Init(httpApplication);
+			target.Configuration(httpApplication);
+			target2.Configuration(httpApplication);
 
 			bootstrapper.AssertWasCalled(x => x.Run(null), o => o.IgnoreArguments().Repeat.Times(1));
 		}
@@ -47,14 +47,14 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[Test]
 		public void ShouldRecordException()
 		{
-			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
+			var httpApplication = MockRepository.GenerateMock<IAppBuilder>();
 			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
-			var target = new ApplicationStartModule();
+			var target = new Web.Core.Startup.Startup();
 			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
 			var ex = new Exception();
 			bootstrapper.Stub(x => x.Run(null)).IgnoreArguments().Throw(ex);
 
-			target.Init(httpApplication);
+			target.Configuration(httpApplication);
 
 			ApplicationStartModule.ErrorAtStartup.Should().Be.SameInstanceAs(ex);
 		}
@@ -62,15 +62,15 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[Test]
 		public void ShouldRecordTasksReturned()
 		{
-			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
+			var httpApplication = MockRepository.GenerateMock<IAppBuilder>();
 			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
 			var tasks = new[] {new Task(() => { })};
 			bootstrapper.Stub(x => x.Run(null)).IgnoreArguments().Return(tasks);
 
-			var target = new ApplicationStartModule();
+			var target = new Web.Core.Startup.Startup();
 			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
 
-			target.Init(httpApplication);
+			target.Configuration(httpApplication);
 
 			ApplicationStartModule.TasksFromStartup.Should().Have.SameValuesAs(tasks);
 		}

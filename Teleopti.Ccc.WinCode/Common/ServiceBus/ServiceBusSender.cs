@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common.ServiceBus;
+using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Interfaces.Messages;
 using log4net;
 

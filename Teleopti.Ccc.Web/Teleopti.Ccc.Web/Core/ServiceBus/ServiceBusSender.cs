@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Web.Core.ServiceBus

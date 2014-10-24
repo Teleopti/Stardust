@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		public void ShouldNotifyClients()
 		{
 			var hubContext = MockRepository.GenerateStub<IHubContext>();
-			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext>();
+			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<dynamic>>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
 			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
 			clientsContext.Stub(x => x.Group(null)).IgnoreArguments().Return(client);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		{
 			var notification = new Notification();
 			var hubContext = MockRepository.GenerateStub<IHubContext>();
-			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext>();
+			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<object>>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
 
 			var expects = (
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		{
 			var notifications = new[] { new Notification() { DataSource = "one" }, new Notification() { DataSource = "two" } };
 			var hubContext = MockRepository.GenerateStub<IHubContext>();
-			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext>();
+			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<dynamic>>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
 
 			var expects = (
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 				);
 		}
 
-		private IOnEventMessageClient stubClient(string r, IHubConnectionContext clientsContext)
+		private IOnEventMessageClient stubClient(string r, IHubConnectionContext<dynamic> clientsContext)
 		{
 			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
 			clientsContext.Stub(x => x.Group(MessageBrokerServer.RouteToGroupName(r))).Return(client);

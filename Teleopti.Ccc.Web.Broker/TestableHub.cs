@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			get
 			{
-				return _clients ?? (_clients = new HubClientContext(base.Clients));
+				return _clients ?? (_clients = new HubCallerConnectionContext(base.Clients));
 			}
 			set
 			{
@@ -27,17 +27,17 @@ namespace Teleopti.Ccc.Web.Broker
 		// ... Rest of hub code
 	}
 
-	public interface IHubClientContext : IHubConnectionContext
+	public interface IHubClientContext
 	{
 		dynamic Others { get; set; }
 		dynamic Caller { get; set; }
-		new dynamic Group(string groupName, params string[] excludeConnectionIds);
+		dynamic Group(string groupName, params string[] excludeConnectionIds);
 	}
 
-	public class HubClientContext : HubConnectionContext, IHubClientContext
+	public class HubCallerConnectionContext : HubConnectionContext, IHubClientContext
 	{
-		private readonly HubConnectionContext _context;
-		public HubClientContext(HubConnectionContext context)
+		private readonly IHubCallerConnectionContext<dynamic> _context;
+		public HubCallerConnectionContext(IHubCallerConnectionContext<dynamic> context)
 		{
 			All = context.All;
 			Caller = context.Caller;
@@ -58,4 +58,25 @@ namespace Teleopti.Ccc.Web.Broker
 		//// Override other methods, as needed
 	}
 
+	public class CustomHubConnectionContext : HubConnectionContext, IHubClientContext
+	{
+		private readonly IHubConnectionContext<dynamic> _context;
+		public CustomHubConnectionContext(IHubConnectionContext<dynamic> context)
+		{
+			All = context.All;
+			_context = context;
+		}
+
+		public new dynamic Client(string connectionId)
+		{
+			return _context.Client(connectionId);
+		}
+
+		public new dynamic Group(string groupName, params string[] excludeConnectionIds)
+		{
+			return _context.Group(groupName, excludeConnectionIds);
+		}
+
+		//// Override other methods, as needed
+	}
 }
