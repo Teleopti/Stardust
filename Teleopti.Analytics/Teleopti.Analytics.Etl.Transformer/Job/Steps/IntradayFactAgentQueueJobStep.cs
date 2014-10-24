@@ -21,11 +21,14 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			int affectedRows = 0;
 
-			int chunkTimeSpan;
-			if (!int.TryParse(ConfigurationManager.AppSettings["chunkTimeSpan"], out chunkTimeSpan))
-			{
-				chunkTimeSpan = 2;
-			}
+            int chunkTimeSpan;
+            //Agg data is never needed in Memory. Hardcode bigger chunks!
+            chunkTimeSpan = 10;
+
+            //if (!int.TryParse(ConfigurationManager.AppSettings["chunkTimeSpan"], out chunkTimeSpan))
+            //{
+            //    chunkTimeSpan = 2;
+            //}
 
 			for (DateTime startDateTime = JobCategoryDatePeriod.StartDateUtc;
 				 startDateTime.AddDays(chunkTimeSpan) < JobCategoryDatePeriod.EndDateUtc.AddDays(1).AddMilliseconds(-1).AddDays(chunkTimeSpan);
