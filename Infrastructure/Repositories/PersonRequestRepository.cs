@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime))
 				;
 
-			return Session.CreateCriteria<IPersonRequest>()
+			return Session.CreateCriteria<IPersonRequest>("req")
 					.Add(Restrictions.Eq("Person", person))
 					.SetFetchMode("requests", FetchMode.Join)
-					.Add(Subqueries.Exists(requestForPeriod))
+					.Add(Subqueries.PropertyIn("Id",requestForPeriod))
 					.List<IPersonRequest>();
 		}
 
