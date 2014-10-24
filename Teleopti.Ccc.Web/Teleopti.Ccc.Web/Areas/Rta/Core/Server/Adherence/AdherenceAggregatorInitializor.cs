@@ -11,13 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 	public class AdherenceAggregatorInitializor : IAdherenceAggregatorInitializor
 	{
 		private readonly IAdherenceAggregator _aggregator;
-		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IReadActualAgentStates _databaseReader;
 
-		public AdherenceAggregatorInitializor(IAdherenceAggregator aggregator, IPersonOrganizationProvider personOrganizationProvider, IReadActualAgentStates databaseReader)
+		public AdherenceAggregatorInitializor(IAdherenceAggregator aggregator, IReadActualAgentStates databaseReader)
 		{
 			_aggregator = aggregator;
-			_personOrganizationProvider = personOrganizationProvider;
 			_databaseReader = databaseReader;
 		}
 

@@ -140,7 +140,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			new AdherenceAggregatorInitializor(
 				_adherenceAggregator,
-				new PersonOrganizationProvider(_database),
 				_database
 				).Initialize();
 		}
