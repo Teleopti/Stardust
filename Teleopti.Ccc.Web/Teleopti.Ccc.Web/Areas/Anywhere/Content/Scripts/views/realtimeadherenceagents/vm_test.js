@@ -449,13 +449,14 @@
 					assert.equals(vm.filteredAgents().length, 0);
 				},
 
-				"should fetch the historical adherence when selected" : function() {
+				"should fetch the historical adherence for correct person when selected" : function() {
 
 					var agentData = {PersonId: "guid1", Name: "Ashley", TimeZoneOffsetInMinutes: 0},
 						agentStateData = { PersonId: "guid1", State: "In Adherence" };
 
-					var historicalAdherenceServerCall = function() {
-						return 12;
+					var historicalAdherenceServerCall = function(personId) {
+						if (personId == 'guid1') return 12;
+						return "historical adherence was fetched for the wrong personId: "+personId;
 					};
 
 					var vm = viewModel(historicalAdherenceServerCall);
@@ -463,7 +464,6 @@
 					vm.fillAgents([agentData]);
 					vm.fillAgentsStates([agentStateData]);
 
-					//emulate click on agentstateviewmodel
 					var agentStateClicked = vm.getAgentState("guid1");
 					vm.SelectAgent(agentStateClicked);
 
@@ -506,8 +506,6 @@
 
 				"should keep the historical adherence when new state is pushed" : function() {
 					
-					//todo: adherence should probably be updated in the future
-
 					var agentData = { PersonId: "guid1", Name: "Ashley", TimeZoneOffsetInMinutes: 0 },
 						agentStateData = { PersonId: "guid1", State: "In Adherence" };
 

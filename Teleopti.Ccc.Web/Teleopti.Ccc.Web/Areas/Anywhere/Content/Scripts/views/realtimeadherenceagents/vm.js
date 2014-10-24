@@ -165,7 +165,7 @@
 
 		that.SelectAgent = function (agentStateClicked) {
 			deselectAllAgentsExcept(agentStateClicked);
-			agentStateClicked.HistoricalAdherence(that.fetchHistoricalAdherence());
+			agentStateClicked.HistoricalAdherence(that.fetchHistoricalAdherence(agentStateClicked.PersonId));
 			agentStateClicked.Selected(!agentStateClicked.Selected());
 			
 		};
