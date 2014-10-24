@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 
 			DateOnly date = DateOnly.Today;
 			var scheduleReadModel = new PersonScheduleDayReadModel();
@@ -46,8 +47,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			scheduleDayReadModelFinder.Stub(x => x.ForPerson(date, person.Id.Value)).Return(scheduleReadModel);
+			permissionProvider.Stub(x => x.IsPersonSchedulePublished(date, person)).Return(true);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleDayReadModelFinder, permissionProvider);
 
 			target.RetrieveMySchedule(date).Should().Be.SameInstanceAs(scheduleReadModel);
 		}
