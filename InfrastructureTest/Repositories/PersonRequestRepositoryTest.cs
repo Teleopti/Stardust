@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    IPersonRequest request = new PersonRequest(_person);
 		    IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
 		                                                        new DateTimePeriod(
-			                                                        new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
-			                                                        new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc)));
+			                                                        new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+			                                                        new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc)));
 
 		    request.Request = absenceRequest;
 		    request.Pending();
@@ -928,5 +928,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
 								.Should().Be.Empty();
 			}
+
+		[Test]
+		[Ignore("Bug #31074")]
+		public void ShouldFindRequestsForPersonAndPeriodInGivenPeriodOnly()
+		{
+			var requestAccepted = CreateShiftTradeRequest("Trade with me");
+			var requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+
+			PersistAndRemoveFromUnitOfWork(requestAccepted);
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
+
+			var period = new DateTimePeriod(2008, 07, 15, 2008, 07, 20);
+			var foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(foundRequests.Contains(requestAccepted));
+		}
     }
 }
