@@ -263,6 +263,7 @@ Scenario: View unpublished schedule when permitted
 	When I view schedules for 'Team green' on '2013-08-10'
 	Then I should see 'Pierre Baldi' with schedule
 	
+	@ignore
 Scenario: Push team schedule changes
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
