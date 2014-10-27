@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
     {
 	    private readonly IAdherencePercentageReadModelPersister _adherencePercentageReadModelPersister;
 	    private readonly INow _now;
+	    private readonly IHistoricalAdherence _historicalAdherence = new HistoricalAdherence();
 
 	    public AdherenceController(IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, INow now)
 	    {
@@ -22,11 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	    {
 
 		    var readModel = _adherencePercentageReadModelPersister.Get(new DateOnly(_now.UtcDateTime()), personId);
+		    
 		    var ret = new AdherenceInfo()
 		              {
 						  MinutesInAdherence = readModel.MinutesInAdherence,
 						  MinutesOutOfAdherence = readModel.MinutesOutOfAdherence,
-						  LastTimestamp = readModel.LastTimestamp
+						  LastTimestamp = readModel.LastTimestamp,
+						  AdherencePercent = _historicalAdherence.ForDay(readModel).ValueAsPercent()
 		              };
 			return Json(ret, JsonRequestBehavior.AllowGet);
         }
@@ -38,5 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public int MinutesInAdherence { get; set; }
 		public int MinutesOutOfAdherence { get; set; }
 		public DateTime LastTimestamp { get; set; }
+		public double AdherencePercent { get; set; }
 	}
 }
