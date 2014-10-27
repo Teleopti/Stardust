@@ -534,9 +534,6 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SignalRConfiguration.cs">
       <Link>Core\MessageBroker\SignalRConfiguration.cs</Link>
     </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\TestableHub.cs">
-      <Link>Core\MessageBroker\TestableHub.cs</Link>
-    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\TimeoutSettings.cs">
       <Link>Core\MessageBroker\TimeoutSettings.cs</Link>
     </Compile>

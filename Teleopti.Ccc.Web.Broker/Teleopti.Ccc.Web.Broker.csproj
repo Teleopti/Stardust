@@ -174,7 +174,6 @@
     <Compile Include="Startup.cs" />
     <Compile Include="SubscriptionFiller.cs" />
     <Compile Include="SubscriptionPassThrough.cs" />
-    <Compile Include="TestableHub.cs" />
     <Compile Include="TimeoutSettings.cs" />
   </ItemGroup>
   <ItemGroup />

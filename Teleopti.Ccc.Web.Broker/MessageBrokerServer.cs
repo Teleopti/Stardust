@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Broker
 			_actionScheduler = actionScheduler;
 		}
 
-		public void NotifyClients(IHubClientContext clients, string connectionId, Notification notification)
+		public void NotifyClients(IHubCallerConnectionContext<dynamic> clients, string connectionId, Notification notification)
 		{
 			var routes = notification.Routes();
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
-		public void NotifyClientsMultiple(IHubClientContext clients, string connectionId, IEnumerable<Notification> notifications)
+		public void NotifyClientsMultiple(IHubCallerConnectionContext<dynamic> clients, string connectionId, IEnumerable<Notification> notifications)
 		{
 			foreach (var notification in notifications)
 			{
