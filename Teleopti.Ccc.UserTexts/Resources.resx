@@ -12339,7 +12339,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>use for admin client system setting agent badge, text on reset button</comment>
   </data>
   <data name="ResetBadgesConfirm" xml:space="preserve">
-    <value>This will remove all badges for all agents! Do you want to continue?</value>
+    <value>This will remove all badges for all agents! If you click OK, the badges will be removed and cannot be recovered. Do you want to continue?</value>
     <comment>use for confirm reset badges button clicking in admin client system setting agent badge</comment>
   </data>
   <data name="ShiftBackToLegal" xml:space="preserve">
