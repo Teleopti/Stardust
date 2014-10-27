@@ -24,7 +24,7 @@ wfmCtrls.controller('ForecastingRunCtrl', [ '$scope', '$stateParams','$http',
 
             $scope.period = $stateParams.period;
             //api/Forecasting/forecast/QuickForecast
-            $http.post('http://localhost:52558/api/Forecasting/forecast/QuickForecast', JSON.stringify({ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate})).
+            $http.post('../../api/Forecasting/forecast', JSON.stringify({ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate})).
                 success(function(data, status, headers, config) {
                     $scope.result = 'DONE (success)';
                 }).
