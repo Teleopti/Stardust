@@ -760,7 +760,6 @@ Scenario: Should be able to change schedule from agent state overview
 	Then I should see schedule for 'Pierre Baldi'
 	And I should see schedule menu
 
-	@ignore
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
 Scenario: Should be able to change schedule for multiple business units
 	Given the current time is '2014-09-09 12:30:00'
