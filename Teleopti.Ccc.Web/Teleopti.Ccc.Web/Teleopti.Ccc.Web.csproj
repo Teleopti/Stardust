@@ -307,9 +307,6 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerServer.cs">
       <Link>Core\MessageBroker\MessageBrokerServer.cs</Link>
     </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionFiller.cs">
-      <Link>Core\MessageBroker\SubscriptionFiller.cs</Link>
-    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
@@ -496,6 +493,7 @@
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />
     <Compile Include="Core\MachineKeySessionSecurityTokenHandler.cs" />
+    <Compile Include="Core\MessageBroker\SubscriptionFiller.cs" />
     <Compile Include="Core\PersonNameProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />

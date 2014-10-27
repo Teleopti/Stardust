@@ -1,8 +1,9 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Web.Core.MessageBroker
 {
 	public class SubscriptionFiller : IBeforeSubscribe
 	{
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.Broker
 			_currentDataSource = currentDataSource;
 			_currentBusinessUnitId = currentBusinessUnitId;
 		}
-		
+
 		public void Invoke(Subscription subscription)
 		{
 			if (String.IsNullOrEmpty(subscription.DataSource))
