@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_quickForecastForAllSkills = quickForecastForAllSkills;
 		}
 
-		[HttpPost]
+		[HttpPost, UnitOfWorkApiAction]
 		public void QuickForecast([FromBody]QuickForecastInputModel model)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));

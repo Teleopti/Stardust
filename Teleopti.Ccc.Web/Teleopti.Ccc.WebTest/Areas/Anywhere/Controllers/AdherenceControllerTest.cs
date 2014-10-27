@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Web.Mvc;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -14,6 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	[TestFixture]
 	public class AdherenceControllerTest
 	{
+
 		[Test]
 		public void ShouldGetAdherenceForAgentToday()
 		{
@@ -24,13 +23,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var personId = Guid.NewGuid();
 			var now = new ThisIsNow(thisIsNow);
 			var readModelRepo = MockRepository.GenerateStub<IAdherencePercentageReadModelPersister>();
-
+			
 			readModelRepo.Stub(r => r.Get(new DateOnly(now.UtcDateTime()), personId)).Return(new AdherencePercentageReadModel()
-			                                                         {
+																	 {
 																		 MinutesInAdherence = expectedMinutesInAdherence,
-				                                                         MinutesOutOfAdherence = expectedminutesOutOfAdherence,
+																		 MinutesOutOfAdherence = expectedminutesOutOfAdherence,
 																		 LastTimestamp = expectedLastTimeStamp
-			                                                         });
+																	 });
 
 			var target = new AdherenceController(readModelRepo,now);
 			dynamic result = target.ForToday(personId).Data;
@@ -39,5 +38,78 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			((object) result.MinutesOutOfAdherence).Should().Be.EqualTo(expectedminutesOutOfAdherence);
 			((object) result.LastTimestamp).Should().Be.EqualTo(expectedLastTimeStamp);
 		}
+
+
+		//note: more rules will be added for calculating historical adherence
+		[Test]
+		public void HistoricalAdherence_ShouldBeFiftyPercent_WhenInAdherenceAndOutOfAdherenceAreSame()
+		{
+			var data = new AdherencePercentageReadModel()
+			{
+				MinutesInAdherence = 74,
+				MinutesOutOfAdherence = 74
+			};
+			
+			var repo = new FakePersisterForTest(data);
+
+			var target = new AdherenceController(repo, new Now());
+			dynamic result = target.ForToday(Guid.Empty).Data;
+			((object)result.AdherencePercent).Should().Be.EqualTo(50d);
+		}
+
+		[Test]
+		public void HistoricalAdherence_ShouldBeHundredPercent_WhenOnlyInAdherence()
+		{
+			var data = new AdherencePercentageReadModel()
+			{
+				MinutesInAdherence = 12,
+				MinutesOutOfAdherence = 0
+			};
+
+			var repo = new FakePersisterForTest(data);
+
+			var target = new AdherenceController(repo, new Now());
+			dynamic result = target.ForToday(Guid.Empty).Data;
+			((object)result.AdherencePercent).Should().Be.EqualTo(100d);
+		}
+
+		[Test]
+		public void HistoricalAdherence_ShouldBeZeroPercent_WhenOnlyOutOfAdherence()
+		{
+			var data = new AdherencePercentageReadModel()
+			{
+				MinutesInAdherence = 0,
+				MinutesOutOfAdherence = 54
+			};
+
+			var repo = new FakePersisterForTest(data);
+
+			var target = new AdherenceController(repo, new Now());
+			dynamic result = target.ForToday(Guid.Empty).Data;
+			((object)result.AdherencePercent).Should().Be.EqualTo(0d);
+		}
+
+
+		public class FakePersisterForTest : IAdherencePercentageReadModelPersister
+		{
+			private readonly AdherencePercentageReadModel _model;
+
+			public FakePersisterForTest(AdherencePercentageReadModel model)
+			{
+				_model = model;
+			}
+
+			public void Persist(AdherencePercentageReadModel model)
+			{
+				//throw new NotImplementedException();
+			}
+
+			public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
+			{
+				return _model;
+			}
+		}
+
+
 	}
 }

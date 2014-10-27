@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
 using Teleopti.Interfaces.MessageBroker;
@@ -6,7 +7,7 @@ using Teleopti.Interfaces.MessageBroker;
 namespace Teleopti.Ccc.Web.Broker
 {
 	[HubName("MessageBrokerHub")]
-	public class MessageBrokerHub : TestableHub
+	public class MessageBrokerHub : Hub
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 

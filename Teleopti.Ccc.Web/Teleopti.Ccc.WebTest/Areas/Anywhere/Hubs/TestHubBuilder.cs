@@ -3,22 +3,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Rhino.Mocks;
-using Teleopti.Ccc.Web.Broker;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	public class TestHubBuilder
 	{
-		public void SetupHub(TestableHub hub)
+		public void SetupHub(Hub hub)
 		{
 			hub.Context = new HubCallerContext(null, "connection");
 			hub.Groups = MockRepository.GenerateMock<IGroupManager>();
 			hub.Groups.Stub(x => x.Add(null, null)).IgnoreArguments().Return(DoneTask());
 			hub.Groups.Stub(x => x.Remove(null, null)).IgnoreArguments().Return(DoneTask());
-			hub.Clients = MockRepository.GenerateMock<IHubClientContext>();
+			hub.Clients = MockRepository.GenerateMock<IHubCallerConnectionContext<dynamic>>();
 		}
 
-		public void SetupHub(TestableHub hub, dynamic client)
+		public void SetupHub(Hub hub, dynamic client)
 		{
 			SetupHub(hub);
 			hub.Clients.Stub(x => x.Caller).Return(client);

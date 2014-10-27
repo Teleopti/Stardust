@@ -4,8 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Broker;
+using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker
