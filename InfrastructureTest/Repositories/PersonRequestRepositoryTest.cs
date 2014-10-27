@@ -925,21 +925,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
 								.Should().Be.Empty();
 			}
-
-		[Test]
-		public void ShouldFindRequestsForPersonAndPeriodInGivenPeriodOnly()
-		{
-			var requestAccepted = CreateShiftTradeRequest("Trade with me");
-			var requestAbsence = CreateAggregateWithCorrectBusinessUnit();
-
-			PersistAndRemoveFromUnitOfWork(requestAccepted);
-			PersistAndRemoveFromUnitOfWork(requestAbsence);
-
-			var period = new DateTimePeriod(2008, 07, 15, 2008, 07, 20);
-			var foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
-
-			Assert.AreEqual(1, foundRequests.Count);
-			Assert.IsTrue(foundRequests.Contains(requestAccepted));
-		}
     }
 }
