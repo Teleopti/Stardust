@@ -19768,7 +19768,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This will remove all badges for all agents! Do you want to continue?.
+        ///   Looks up a localized string similar to This will remove all badges for all agents! If you click OK, the badges will be removed and cannot be recovered. Do you want to continue?.
         /// </summary>
         public static string ResetBadgesConfirm {
             get {
