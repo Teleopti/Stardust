@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
 				.Execute(Today.Date).First()
-				.IntervalId.Should().Be.EqualTo(9);
+				.IntervalId.Should().Be.EqualTo(5);
 		}
 	}
 }
