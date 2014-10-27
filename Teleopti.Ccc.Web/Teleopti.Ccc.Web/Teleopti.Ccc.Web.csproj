@@ -934,6 +934,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agentstate.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\getadherence.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
