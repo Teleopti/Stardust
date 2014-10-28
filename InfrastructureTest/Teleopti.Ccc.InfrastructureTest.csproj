@@ -173,6 +173,7 @@
     <Compile Include="Foundation\AvailableApplicationIdentityDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
+    <Compile Include="LiteUnitOfWork\LiteUnitOfWorkFactoryLab.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersisterTest.cs" />
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
