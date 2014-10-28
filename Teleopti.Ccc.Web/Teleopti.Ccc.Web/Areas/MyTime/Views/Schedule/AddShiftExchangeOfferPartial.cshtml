@@ -1,0 +1,64 @@
+﻿@using Teleopti.Ccc.UserTexts
+
+<table class="table-condensed">
+	<tr>
+		<td>
+			<table class="table-condensed">
+				<tr class="form-inline">
+					<td colspan="3">
+						<label>I want to trade for <b data-bind="text: DateToFormatted"></b> that matches</label>
+					</td>
+				</tr>
+				<tr class="form-inline">
+					<td>
+						<div class="bootstrap-timepicker">
+							<div class="input-group" title="@Resources.StartTime">
+								<input type="text" class="shift-exchange-offer-start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-time"></i>
+								</span>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="bootstrap-timepicker">
+							<div class="input-group" title="@Resources.EndTime">
+								<input type="text" class="shift-exchange-offer-end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-time"></i>
+								</span>
+							</div>
+						</div>
+					</td>
+					<td>
+						<input type="checkbox" class="shift-exchange-offer-next-day" data-bind="checked: EndTimeNextDay" title="@Resources.NextDay" />
+					</td>
+				</tr>
+				<tr class="form-inline">
+					<td>
+						<label>Shift exchange offer valid to</label>
+					</td>
+					<td>
+						<div class="input-group">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-step-forward"></i>
+							</span>
+							<input class="shift-exchange-offer-end-date form-control" data-bind="datepicker: OfferValidTo, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+						</div>
+					</td>
+					<td />
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<div data-bind="if: ShowError">
+	<div class="shift-exchange-offer-error alert alert-danger" data-bind="html: ErrorMessage" />   
+</div>
+<div class="pull-right">
+	<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
+	<button class="request-new-send btn btn-primary" data-bind="click: SaveShiftExchangeOffer, enable: SaveEnabled">@Resources.Save</button>
+</div>

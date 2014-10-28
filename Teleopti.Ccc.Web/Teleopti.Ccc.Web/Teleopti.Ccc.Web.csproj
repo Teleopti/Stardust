@@ -388,6 +388,7 @@
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ShiftExchangeController.cs" />
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\BadgeLeaderBoardReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProvider.cs" />
@@ -418,6 +419,8 @@
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceAccountProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceAccountProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftExchangeOfferPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftExchangeOfferPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceAccountViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
@@ -1057,6 +1060,7 @@
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeLeaderBoardReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyQueueMetrics.js" />
@@ -1460,6 +1464,7 @@
     <Content Include="Areas\WFM\README.md" />
     <Content Include="App_Build\node.targets" />
     <Content Include="Areas\MyTime\Views\Schedule\AddAbsenceReportPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\AddShiftExchangeOfferPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -42,6 +42,9 @@
 <script type="text/html" id="add-absence-report-detail-template">
 	@Html.Partial("AddAbsenceReportPartial")
 </script>
+<script type="text/html" id="add-shift-exchange-offer-template">
+	@Html.Partial("AddShiftExchangeOfferPartial")
+</script>
 
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
 
@@ -105,31 +108,30 @@
 		</div>
 	</div>
 	<ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
-		<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
-			<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+		<li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'overtime' }">
+			<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
 		</li>
-		<li data-bind="visible: textPermission, css: {active: textRequestActive}">
-			<a id="addTextRequest" class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+		<li data-bind="visible: textPermission, css: {active: requestViewModel()!=undefined && requestViewModel().type() == 0}">
+			<a id="addTextRequest" class="text-request-add" href="#" data-bind="click: showAddTextRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
 		</li>
-		<li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
-			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+		<li data-bind="visible: absenceRequestPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 1 }">
+			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 		</li>
-		<li data-bind="visible: absenceReportPermission && isAbsenceReportEnabled, css: { active: absenceReportActive }">
-			<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: function () { absenceReportActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+		<li data-bind="visible: shiftExchangePermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'shiftOffer' }">
+			<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;Shift Exchange</a>
+		</li>
+		<li data-bind="visible: absenceReportPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'absenceReport' }">
+			<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
 		</li>
 	</ul>
-	<div data-bind="with: requestViewModel">
+	<!-- ko with: requestViewModel -->
+	<div data-bind="with: model">
 		<div id="Request-add-section" class="well well-sm clearfix">
 			<div data-bind="template: Template">
 			</div>
 		</div>
 	</div>
-	<div data-bind="with: absenceReportViewModel">
-		<div id="add-absence-report-section" class="well well-sm clearfix">
-			<div data-bind="template: Template">
-			</div>
-		</div>
-	</div>
+	<!-- /ko -->
 	<div class="container fixed-non-responsive">
 		<div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
 		<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
@@ -181,7 +183,7 @@
 					</div>
 					<!-- ko foreach: layers -->
 					<!-- ko if: isOvertimeAvailability() -->
-					<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }, click: function () { $data.showOvertimeAvailability($parents) }">
+					<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }, click: $parent.showOvertimeAvailability">
 						<i class="glyphicon glyphicon-time"></i>
 					</div>
 					<!-- /ko -->

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
+using NHibernate.Type;
 using NHibernate.UserTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -206,5 +208,110 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		#endregion
+	}
+
+	public class NullableDateTimePeriodCompositeUserType : ICompositeUserType
+	{
+
+		public Type ReturnedClass
+		{
+			get { return typeof (DateTimePeriod?); }
+		}
+
+		public new bool Equals(object x, object y)
+		{
+			if (object.ReferenceEquals(x, y)) return true;
+			if (x == null || y == null) return false;
+			return x.Equals(y);
+		}
+
+		public int GetHashCode(object x)
+		{
+			var obj = x as DateTimePeriod?;
+			return obj.GetHashCode();
+		}
+
+		public object DeepCopy(object value)
+		{
+			return value;
+		}
+
+		public bool IsMutable
+		{
+			get { return false; }
+		}
+
+		public object NullSafeGet(IDataReader dr, string[] names, NHibernate.Engine.ISessionImplementor session, object owner)
+		{
+			object obj0 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[0]);
+			object obj1 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[1]);
+			if (obj0 == null || obj1 == null) return null;
+			var start = (DateTime) obj0;
+			var end = (DateTime) obj1;
+			return new DateTimePeriod(start, end);
+		}
+
+		public void NullSafeSet(IDbCommand cmd, object obj, int index, bool[] settable,
+			NHibernate.Engine.ISessionImplementor session)
+		{
+			var period = (DateTimePeriod?) obj;
+			if (!period.HasValue)
+			{
+				((IDataParameter) cmd.Parameters[index]).Value = DBNull.Value;
+				((IDataParameter) cmd.Parameters[index + 1]).Value = DBNull.Value;
+			}
+			else
+			{
+				((IDataParameter) cmd.Parameters[index]).Value = period.Value.StartDateTime;
+				((IDataParameter) cmd.Parameters[index + 1]).Value = period.Value.EndDateTime;
+			}
+		}
+
+		public object Replace(object original, object target, ISessionImplementor session, object owner)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string[] PropertyNames
+		{
+			get { return new[] {"Start", "End"}; }
+		}
+
+		public NHibernate.Type.IType[] PropertyTypes
+		{
+			get
+			{
+				return new NHibernate.Type.IType[]
+				{
+					NHibernateUtil.UtcDateTime, NHibernateUtil.UtcDateTime
+				};
+			}
+		}
+
+		public object GetPropertyValue(object component, int property)
+		{
+			var period = (DateTimePeriod?) component;
+			if (!period.HasValue) return null;
+			if (property == 0)
+				return period.Value.StartDateTime;
+			return period.Value.EndDateTime;
+		}
+
+		public void SetPropertyValue(object comp, int property, object value)
+		{
+			throw new Exception("Immutable!");
+		}
+
+		public object Assemble(object cached,
+			NHibernate.Engine.ISessionImplementor session, object owner)
+		{
+			return cached;
+		}
+
+		public object Disassemble(object value,
+			NHibernate.Engine.ISessionImplementor session)
+		{
+			return value;
+		}
 	}
 }

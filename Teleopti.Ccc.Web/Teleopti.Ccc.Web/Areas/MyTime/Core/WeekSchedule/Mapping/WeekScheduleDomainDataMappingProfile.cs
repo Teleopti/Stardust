@@ -3,7 +3,9 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -21,10 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
 		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
+		private readonly IToggleManager _toggleManager;
 
 		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, 
 			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, 
-			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider)
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, IToggleManager toggleManager)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -33,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_permissionProvider = permissionProvider;
 			_now = now;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
+			_toggleManager = toggleManager;
 		}
 
 		protected override void Configure()
@@ -204,7 +208,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var absenceRequestPermission =
 										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
 									var absenceReportPermission =
-										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport);
+										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport) && _toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011);
+									var shiftExchangePermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb) &&
+										_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeExchange_31296);
 									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
@@ -218,6 +226,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												OvertimeAvailabilityPermission = overtimeAvailabilityPermission,
 												AbsenceRequestPermission = absenceRequestPermission,
 												AbsenceReportPermission = absenceReportPermission,
+												ShiftExchangePermission = shiftExchangePermission,
 												IsCurrentWeek = isCurrentWeek
 											};
 								});

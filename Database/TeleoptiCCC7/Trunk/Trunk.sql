@@ -42,6 +42,47 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 SET NOCOUNT OFF
 GO
 
+CREATE TABLE dbo.ShiftExchangeOffer
+	(
+	Id uniqueidentifier NOT NULL,
+	Person uniqueidentifier NOT NULL,
+	Date datetime NOT NULL,
+	Checksum bigint NOT NULL,
+	MyShiftStartDateTime datetime NULL,
+	MyShiftEndDateTime datetime NULL,
+	BusinessUnit uniqueidentifier NOT NULL,
+	UpdatedBy uniqueidentifier NOT NULL,
+	UpdatedOn datetime NOT NULL,
+	ValidTo datetime NOT NULL,
+	ShiftWithinStartDateTime datetime NULL,
+	ShiftWithinEndDateTime datetime NULL
+	)
+GO
+ALTER TABLE dbo.ShiftExchangeOffer ADD CONSTRAINT
+	PK_ShiftExchangeOffer PRIMARY KEY CLUSTERED 
+	(
+	Id
+	)
+GO
+
+ALTER TABLE [dbo].[ShiftExchangeOffer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftExchangeOffer_Person] FOREIGN KEY([Person])
+REFERENCES [dbo].[Person] ([Id]);
+
+ALTER TABLE [dbo].[ShiftExchangeOffer] CHECK CONSTRAINT [FK_ShiftExchangeOffer_Person];
+GO
+
+ALTER TABLE [dbo].[ShiftExchangeOffer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftExchangeOffer_BusinessUnit] FOREIGN KEY([BusinessUnit])
+REFERENCES [dbo].[BusinessUnit] ([Id]);
+
+ALTER TABLE [dbo].[ShiftExchangeOffer] CHECK CONSTRAINT [FK_ShiftExchangeOffer_BusinessUnit];
+GO
+
+ALTER TABLE [dbo].[ShiftExchangeOffer]  WITH CHECK ADD  CONSTRAINT [FK_ShiftExchangeOffer_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
+REFERENCES [dbo].[Person] ([Id]);
+
+ALTER TABLE [dbo].[ShiftExchangeOffer] CHECK CONSTRAINT [FK_ShiftExchangeOffer_Person_UpdatedBy];
+GO
+
 ----------------  
 --Name: Henrik Andersson
 --Date: 2014-011-03

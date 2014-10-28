@@ -49,6 +49,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
+		[When(@"I click add new shift exchange offer")]
+		public void WhenIClickAddNewShiftExchangeOffer()
+		{
+			Browser.Interactions.Click(".shift-exchange-offer-add");
+			Browser.Interactions.AssertExists("#Request-add-section");
+		}
+
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
@@ -113,6 +120,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExistsUsingJQuery(overtimeAvailability.EndTimeNextDay
 				                                             ? ".overtime-availability-next-day:checked"
 				                                             : ".overtime-availability-next-day:not(:checked)");
+		}
+		
+		[Then(@"I should see add shift exchange offer form with")]
+		public void ThenIShouldSeeAddShiftExchangeOfferFormWith(Table table)
+		{
+			var exchangeOffer = table.CreateInstance<ShiftExchangeOfferFields>();
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .shift-exchange-offer-end-date",
+															 exchangeOffer.OfferEndDate.ToShortDateString(
+																 DataMaker.Data().MyCulture));
+
+			var st = exchangeOffer.StartTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
+			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
+			var end = exchangeOffer.EndTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
+			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
+
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .shift-exchange-offer-start-time",
+												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .shift-exchange-offer-end-time",
+												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertExistsUsingJQuery(exchangeOffer.EndTimeNextDay
+															 ? ".shift-exchange-offer-next-day:checked"
+															 : ".shift-exchange-offer-next-day:not(:checked)");
 		}
 
 		[Then(@"I should see the request form with '(.*)' as default date")]

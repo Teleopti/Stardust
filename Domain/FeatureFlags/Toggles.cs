@@ -49,6 +49,7 @@
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_AbsenceReport_31011,
+		MyTimeWeb_ShiftTradeExchange_31296,
 
 		Messaging_HttpSender_29205
 	}

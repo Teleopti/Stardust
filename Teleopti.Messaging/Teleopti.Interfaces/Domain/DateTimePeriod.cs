@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -223,6 +224,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns>
         /// 	<c>true</c> if the specified period is contained; otherwise, <c>false</c>.
         /// </returns>
+        [Pure]
         public bool Contains(DateTimePeriod containsPeriod)
         {
             return (ContainsPart(containsPeriod.StartDateTime) && ContainsPart(containsPeriod.EndDateTime));

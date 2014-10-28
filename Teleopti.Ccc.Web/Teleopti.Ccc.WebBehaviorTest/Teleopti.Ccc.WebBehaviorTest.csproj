@@ -146,6 +146,7 @@
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
@@ -176,6 +177,11 @@
     <Compile Include="Bindings\DoNotUse\DefaultTeam.cs" />
     <Compile Include="Data\Setups\Configurable\BadgeSettingsConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\BadgeConfigurable.cs" />
+    <Compile Include="MyTime\31296_ShiftExchangeOfferFromWeekSchedule.feature.cs">
+      <DependentUpon>31296_ShiftExchangeOfferFromWeekSchedule.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHoursStepDefinition.cs" />
     <Compile Include="MyTime\MyReportAgentQueueMetrics.feature.cs">
       <AutoGen>True</AutoGen>
@@ -775,6 +781,10 @@
     <None Include="MyTime\MyReportAgentQueueMetrics.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyReportAgentQueueMetrics.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\31296_ShiftExchangeOfferFromWeekSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>31296_ShiftExchangeOfferFromWeekSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\PreferenceAlertWhenBrokenMinOrMaxHours.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -187,6 +187,7 @@
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
+    <Compile Include="Repositories\ShiftExchangeOfferRepositoryTest.cs" />
     <Compile Include="Rta\ActualAgentStateForTest.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
