@@ -169,6 +169,10 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Teleopti.Ccc.snk" />
+    <None Include="Teleopti.Ccc.IocCommonTest.dll.Config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
