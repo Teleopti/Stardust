@@ -16,8 +16,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
         public override void QueryCellInfo(CellInfo cellInfo)
         {
-            base.QueryCellInfo(cellInfo);
-			drawIntervalIssues(cellInfo);
+			base.QueryCellInfo(cellInfo);
+			if(cellInfo.ColIndex > 0)
+				drawIntervalIssues(cellInfo);
         }
 
         private void drawIntervalIssues(CellInfo cellInfo)
@@ -25,16 +26,25 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             var skillStaffPeriods = SkillStaffPeriodList;
             if (skillStaffPeriods == null || skillStaffPeriods.Count() == 0) return;
 
-
+	        var min = double.MaxValue;
+	        var hasIssue = false;
 	        foreach (var skillStaffPeriod in skillStaffPeriods)
 	        {
+		        if (skillStaffPeriod.IntraIntervalValue < min)
+		        {
+			        min = skillStaffPeriod.IntraIntervalValue;
+				}
+
 		        if (skillStaffPeriod.HasIntraIntervalIssue)
 		        {
-			        cellInfo.Style.Interior = ColorHelper.IntervalIssueBrush;
-			        cellInfo.Style.CellTipText = UserTexts.Resources.IntraIntervalIssue;
-			        break;
+			        hasIssue = true;
+			        
 		        }
 	        }
+			if(hasIssue)
+				cellInfo.Style.Interior = ColorHelper.IntervalIssueBrush;
+
+	        cellInfo.Style.CellValue = min;
         }
 	}
 }
