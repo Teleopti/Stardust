@@ -74,6 +74,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldReturnReadModelsForPersonsWithEmptySchedule()
+		{
+			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
+			var personWithEmptySchedule = Guid.NewGuid();
+			var personSortedSecond = Guid.NewGuid();
+			var personSortedThird = Guid.NewGuid();
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndSaveReadModel(personWithEmptySchedule, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), -1);
+				createAndSaveReadModel(personSortedSecond, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
+				createAndSaveReadModel(personSortedThird, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
+
+				var result = _target.ForPersonsIncludeEmptyDays(new DateOnly(2012, 8, 28),
+												new[] { personWithEmptySchedule, personSortedSecond, personSortedThird }, new Paging());
+
+				var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+				Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personWithEmptySchedule));
+				Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(personSortedSecond));
+				Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(personSortedThird));
+				Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 8, 0, 0)));
+			}
+		}
+
+		[Test]
 		public void ShouldSaveAndLoadReadModelForPerson()
 		{
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
@@ -135,11 +160,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				TeamId = teamId,
 				BusinessUnitId = businessUnitId,
 				PersonId = personId,
-				Start = date.AddHours(shiftStartHour),
-				End = date.AddHours(shiftStartHour + 8),
 				Model = "{shift: blablabla}",
 			};
-
+			//Not empty schedule
+			if (shiftStartHour >= 0)
+			{
+				model.Start = date.AddHours(shiftStartHour);
+				model.End = date.AddHours(shiftStartHour + 8);
+			}
+			else
+			{
+				// empty schedule, no start and end time.
+			}
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
 																	MockRepository.GenerateMock<IMessageBrokerComposite>(),
 																	MockRepository.GenerateMock<ICurrentDataSource>());
