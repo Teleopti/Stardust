@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Web.Security;
+﻿using System.Web.Security;
 using Microsoft.IdentityModel.Web;
 
 namespace Teleopti.Ccc.Web.Core
