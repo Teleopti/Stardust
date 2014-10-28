@@ -1,21 +1,18 @@
 ﻿define([
-	'jquery'
+	'ajax'
 ], function (
-	$
+	ajax
 ) {
 
 	return {
 		ServerCall: function (agentState) {
-			$.ajax({
+			ajax.ajax({
 				url: 'Adherence/ForToday?PersonId='+agentState.PersonId,
 				type: 'GET',
-				//data: JSON.stringify(personId),
-				//dataType: 'json',
-				contentType: "application/json",
+				//accepts: 'application/json',
 				success: function (data) {
 					agentState.HistoricalAdherence(data.AdherencePercent);
 				}
-
 			});
 		}
 	}

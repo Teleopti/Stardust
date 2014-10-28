@@ -23,8 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	    {
 		    var readModel = _adherencePercentageReadModelPersister.Get(new DateOnly(_now.UtcDateTime()), personId);
 
-			var ret = new AdherenceInfo()
-					  {
+		    if (readModel == null)
+		    {
+			    return Json(new object(), JsonRequestBehavior.AllowGet);
+		    }
+
+			var ret = new AdherenceInfo
+			{
 						  MinutesInAdherence = readModel.MinutesInAdherence,
 						  MinutesOutOfAdherence = readModel.MinutesOutOfAdherence,
 						  LastTimestamp = readModel.LastTimestamp,
