@@ -47,10 +47,10 @@
 							<!-- ko if: $root.agentAdherenceEnabled -->
 							<div class="text-info " style="float: right; margin-right: 5px; line-height: 31px; position: relative"> 
 								<span >Adherence Today:</span>
-								<span data-bind="text: $root.AgentAdherence"></span>
+								<span data-bind="text: HistoricalAdherence"></span>
 								<div style="position: absolute; color: gray; font-size: xx-small; right: 0px; bottom: -11px">
-									<span>2</span>
-									<span>seconds ago</span>
+									<span>Time since last update: </span>
+									<span data-bind="text: ElapsedTimeSinceAdherenceCalculation"></span>
 								</div>
 							</div>
 							<!-- /ko -->

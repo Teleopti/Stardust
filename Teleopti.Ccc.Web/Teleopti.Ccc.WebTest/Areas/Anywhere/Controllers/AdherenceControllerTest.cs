@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Web.Mvc;
+using Microsoft.IdentityModel.SecurityTokenService;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -87,6 +90,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var target = new AdherenceController(repo, new Now());
 			dynamic result = target.ForToday(Guid.Empty).Data;
 			((object)result.AdherencePercent).Should().Be.EqualTo(0d);
+		}
+
+		[Test]
+		public void HistoricalAdherence_ShouldNotThrowNullException_WhenThereIsNoReadmodel()
+		{
+			var repo = new FakePersisterForTest(null);
+			var target = new AdherenceController(repo, new Now());
+			
+			Assert.DoesNotThrow(() => target.ForToday(Guid.Empty));
+		}
+
+		[Test]
+		public void HistoricalAdherence_ShouldNotReturnNull_WhenThereIsNoReadmodel_BecauseItCausesAjaxErrorsInJavascript()
+		{
+			var repo = new FakePersisterForTest(null);
+			var target = new AdherenceController(repo, new Now());
+
+			var result = target.ForToday(Guid.Empty);
+
+			result.Should().Not.Be.Null();
 		}
 
 

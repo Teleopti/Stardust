@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Web.Broker;
@@ -33,7 +34,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public void Init(HttpApplication application)
 		{
 			// this will run on every HttpApplication initialization in the application pool
-
 			application.PostAuthenticateRequest += delegate
 			{
 				if (HasStartupError) return;
@@ -46,15 +46,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					.GetService<IRequestContextInitializer>()
 					;
 				requestContextInitializer.SetupPrincipalAndCulture();
-			};
-
-			application.Disposed += (s, e) =>
-			{
-				if (SignalRConfiguration.ActionScheduler is IDisposable)
-				{
-					var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
-					if (actionThrottle != null) actionThrottle.Dispose();
-				}
 			};
 
 			application.Error += errorHandler;
@@ -79,6 +70,19 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				throw ErrorAtStartup;
 			}
+		}
+	}
+
+	public class ActionThrottleObject : IRegisteredObject
+	{
+		public void Stop(bool immediate)
+		{
+			if (SignalRConfiguration.ActionScheduler is IDisposable)
+			{
+				var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
+				if (actionThrottle != null) actionThrottle.Dispose();
+			}
+			HostingEnvironment.UnregisterObject(this);
 		}
 	}
 }

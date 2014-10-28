@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void OnStart(IAppBuilder application)
 		{
+			HostingEnvironment.RegisterObject(new ActionThrottleObject());
 			ApplicationStartModule.ErrorAtStartup = null;
 			try
 			{

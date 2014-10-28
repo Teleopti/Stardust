@@ -3,6 +3,8 @@ using System.Collections;
 using System.Web;
 using log4net;
 using log4net.Config;
+using Microsoft.IdentityModel.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Web;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
@@ -52,12 +54,17 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 		public void OnStart(HttpApplication application)
 		{
 			_configureLogging.Invoke();
+			FederatedAuthentication.SessionAuthenticationModule.CookieHandler.Name = "FedAuth45";
 			FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 		}
 
 		public void OnInit(HttpApplication application)
 		{
 			application.Error += Application_Error;
+			application.BeginRequest += (sender, args) =>
+			{
+				FederatedAuthentication.SessionAuthenticationModule.CookieHandler.Name = "FedAuth45";
+			};
 		}
 
 		public void Application_Error(object sender, EventArgs e) { LogException(_getServerError.Invoke()); }

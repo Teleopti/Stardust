@@ -8,7 +8,8 @@
 		'helpers',
 		'jquery',
 		'lazy',
-		'navigation'
+		'navigation',
+		'views/realtimeadherenceagents/getadherence'
 ],
 	function (ko,
 		agentstate,
@@ -19,14 +20,15 @@
 		helpers,
 		$,
 		lazy,
-		navigation) {
-	return function (historicalAdherenceServercall) {
+		navigation,
+		getadherence) {
+		return function (historicalAdherenceServercall, agentAdherenceEnabled) {
 
 		var that = {};
 		that.Resources = resources;
 		that.permissionAddActivity = ko.observable();
 
-		that.fetchHistoricalAdherence = historicalAdherenceServercall || function () { return 1; }
+		that.fetchHistoricalAdherence = historicalAdherenceServercall || getadherence.ServerCall;
 
 		that.agents = []; 
 		that.agentStates = ko.observableArray();
@@ -40,7 +42,7 @@
 		that.changeScheduleAvailable = ko.observable(false);
 		that.BusinessUnitId = ko.observable();
 		that.rootURI = ko.observable();
-		that.agentAdherenceEnabled = ko.observable(false);
+		that.agentAdherenceEnabled = ko.observable(agentAdherenceEnabled || false);
 		that.AgentAdherence = ko.observable();
 
 		that.SetViewOptions = function (options) {
@@ -165,7 +167,9 @@
 
 		that.SelectAgent = function (agentStateClicked) {
 			deselectAllAgentsExcept(agentStateClicked);
-			agentStateClicked.HistoricalAdherence(that.fetchHistoricalAdherence(agentStateClicked.PersonId));
+			if (that.agentAdherenceEnabled()) {
+				 agentStateClicked.HistoricalAdherence(that.fetchHistoricalAdherence(agentStateClicked));
+			}
 			agentStateClicked.Selected(!agentStateClicked.Selected());
 			
 		};
