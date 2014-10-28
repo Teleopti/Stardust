@@ -546,8 +546,29 @@
 					vm.SelectAgent(agentStateClicked);
 
 					assert.isFalse(hasFetchedHistoricalAdherence);
+				},
+				"should update time since last update" : function() {
+					var agentData = { PersonId: "guid1", Name: "Ashley", TimeZoneOffsetInMinutes: 0 },
+					agentStateData = { PersonId: "guid1" };
 
+					var historicalAdherenceServerCall = function(agentState) {
+						agentState.LastAdherenceUpdate(moment().subtract(10, 'minutes'));
+					};
+
+					var vm = viewModel(historicalAdherenceServerCall, true);
+
+					vm.fillAgents([agentData]);
+					vm.fillAgentsStates([agentStateData]);
+
+					var agentStateClicked = vm.getAgentState("guid1"); 
+					vm.SelectAgent(agentStateClicked);
+
+					var selectedAgentStates = vm.getSelectedAgentState();
+
+					assert.equals(selectedAgentStates[0].ElapsedTimeSinceAdherenceCalculation(), "0:10:00");
 				}
+
+
 			}
 		});
 	};

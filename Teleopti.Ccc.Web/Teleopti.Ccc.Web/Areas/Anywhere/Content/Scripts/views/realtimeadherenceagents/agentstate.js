@@ -28,6 +28,16 @@
             that.Selected = ko.observable(false);
 
             that.HistoricalAdherence = ko.observable(0);
+            that.LastAdherenceUpdate = ko.observable();
+
+	        that.ElapsedTimeSinceAdherenceCalculation = ko.computed(function() {
+	        	var timeSinceLastTimeStamp = moment.duration((new Date).getTime() - moment.utc(that.LastAdherenceUpdate()));
+				if (timeSinceLastTimeStamp == 0) {
+					return that.LastAdherenceUpdate();
+				}
+	        	that.LastAdherenceUpdate(Math.floor(timeSinceLastTimeStamp.asHours()) + moment(timeSinceLastTimeStamp.asMilliseconds()).format(":mm:ss"));
+		        return that.LastAdherenceUpdate();
+	        });
 
 	        that.fill = function (data, name, offset, teamName) {
                 that.PersonId = data.PersonId;

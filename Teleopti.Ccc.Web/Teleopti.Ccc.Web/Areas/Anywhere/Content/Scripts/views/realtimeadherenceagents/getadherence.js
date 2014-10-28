@@ -9,9 +9,10 @@
 			ajax.ajax({
 				url: 'Adherence/ForToday?PersonId='+agentState.PersonId,
 				type: 'GET',
-				//accepts: 'application/json',
+				accepts: 'application/json',
 				success: function (data) {
 					agentState.HistoricalAdherence(data.AdherencePercent);
+					agentState.LastAdherenceUpdate(data.LastTimestamp);
 				}
 			});
 		}
