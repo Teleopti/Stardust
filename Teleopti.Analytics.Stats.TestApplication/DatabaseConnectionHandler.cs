@@ -36,10 +36,6 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				}
 				reader.Close();
 			}
-			{
-				
-			}
-
 			return new DimDateInfo { NumberOfDays = -1 };
 		}
 	}

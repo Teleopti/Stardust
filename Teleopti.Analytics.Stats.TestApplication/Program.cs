@@ -17,6 +17,10 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			Console.WriteLine("\n");
 			while (true)
 			{
+				Console.WriteLine("Nhib data source name:");
+				var nhibDataSourceName = Console.ReadLine();
+				if (checkExit(nhibDataSourceName)) break;
+
 				Console.WriteLine("Queue data source name:");
 				var queueDataSourceName = Console.ReadLine();
 				if (checkExit(queueDataSourceName)) break;
@@ -52,11 +56,21 @@ namespace Teleopti.Analytics.Stats.TestApplication
 
 				var parameters = new QueueDataParameters
 				{
+					NhibDataSourcename = nhibDataSourceName,
+					QueueDataSourceName = queueDataSourceName,
 					IntervalLength = int.Parse(intervalLength),
 					AmountOfDays = int.Parse(amountOfDays),
-					AmountOfQueues = int.Parse(amountOfQueues)
+					AmountOfQueues = int.Parse(amountOfQueues),
+					StartDate = dateCheck.StartDate,
+					
 				};
 				Console.WriteLine("Amount of rows to be posted to mart.fact_queue table is: \n" + rowsToBeGenerated(parameters));
+				Console.WriteLine("Start posting queue data by pressing P.");
+				if (Console.ReadLine().ToUpper() != "P")
+					break;
+				var generator = new QueueStatsGenerator();
+				generator.Create(parameters);
+				break;
 			}
 		}
 
