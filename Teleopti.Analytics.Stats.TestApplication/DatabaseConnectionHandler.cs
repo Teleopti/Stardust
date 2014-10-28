@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 					return new DimDateInfo
 					{
 						NumberOfDays = reader.GetInt32(reader.GetOrdinal("number_of_days")),
-						StartDate = reader.GetDateTime(reader.GetOrdinal("start_date"))
+						StartDate = reader.GetDateTime(reader.GetOrdinal("start_date")).AddDays(1)
 					};
 				}
 				reader.Close();
