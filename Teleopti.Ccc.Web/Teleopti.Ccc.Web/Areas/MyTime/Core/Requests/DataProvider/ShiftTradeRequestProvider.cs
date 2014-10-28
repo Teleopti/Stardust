@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -15,12 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPermissionProvider permissionProvider)
+		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPermissionProvider permissionProvider, IToggleManager toggleManager)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 			_permissionProvider = permissionProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public IWorkflowControlSet RetrieveUserWorkflowControlSet()
@@ -36,10 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return null;
 		}
 
-		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging)
+		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,
+			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging)
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
-			                                 select person.Id.Value).ToList();
+				select person.Id.Value).ToList();
+			if (_toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926))
+				return _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging);
+
 			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
 		}
 

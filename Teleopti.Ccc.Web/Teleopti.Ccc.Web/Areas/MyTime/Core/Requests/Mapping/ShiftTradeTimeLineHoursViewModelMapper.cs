@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private DateTimePeriod? getMyScheduleMinMax(ShiftTradeAddPersonScheduleViewModel mySchedule)
 		{
-			if (mySchedule == null || mySchedule.IsDayOff)
+			if (mySchedule == null || mySchedule.IsDayOff || mySchedule.ScheduleLayers == null)
 				return null;
 			if (!mySchedule.ScheduleLayers.Any())
 				return null;
@@ -67,18 +67,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var schedules = (possibleTradeSchedules as IList<ShiftTradeAddPersonScheduleViewModel>) ?? possibleTradeSchedules.ToList();
 
-			var schedulesWithoutDayoff = schedules.Where(s => s.IsDayOff == false);
-			var schedulesWithoutDO = schedulesWithoutDayoff as IList<ShiftTradeAddPersonScheduleViewModel> ??
-			                         schedulesWithoutDayoff.ToList();
+			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && s.ScheduleLayers != null);
+			var schedulesWithoutDOAndEmpty = schedulesWithoutDayoffAndEmptyDays as IList<ShiftTradeAddPersonScheduleViewModel> ??
+			                         schedulesWithoutDayoffAndEmptyDays.ToList();
 
-			if (!schedulesWithoutDO.Any())
+			if (!schedulesWithoutDOAndEmpty.Any())
 				return null;
 
 			
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var startTime = schedulesWithoutDO.Min(s => s.ScheduleLayers.First().Start);
-			var endTime = schedulesWithoutDO.Max(l => l.ScheduleLayers.Last().End);
+			var startTime = schedulesWithoutDOAndEmpty.Min(s => s.ScheduleLayers.First().Start);
+			var endTime = schedulesWithoutDOAndEmpty.Max(l => l.ScheduleLayers.Last().End);
 
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
 		}

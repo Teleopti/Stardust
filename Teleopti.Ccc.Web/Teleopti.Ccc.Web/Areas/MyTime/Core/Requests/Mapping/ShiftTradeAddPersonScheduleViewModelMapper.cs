@@ -21,24 +21,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public ShiftTradeAddPersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel, bool isMySchedule=false)
 		{
-			if (scheduleReadModel == null || scheduleReadModel.Start == null)
+			if (scheduleReadModel == null)
 				return null;
 
 			var shiftReadModel = JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model);
-			ShiftTradeAddPersonScheduleViewModel ret = null;
-			if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) && (isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
-			{
-				ret = new ShiftTradeAddPersonScheduleViewModel
+			var ret = new ShiftTradeAddPersonScheduleViewModel
 			{
 				PersonId = scheduleReadModel.PersonId,
-				StartTimeUtc = scheduleReadModel.Start.Value,
-				Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName),
-				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule),
-				MinStart = scheduleReadModel.MinStart,
+				Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName),	
 				Total = scheduleReadModel.Total,
-						IsDayOff = false
+				IsDayOff = false
 			};
-		}
+
+
+			if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) &&
+			    (isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
+			{
+				ret.StartTimeUtc = scheduleReadModel.Start.Value;
+				ret.MinStart = scheduleReadModel.MinStart;
+				ret.ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule);
+			}
 
 			if (shiftReadModel.DayOff != null)
 			{
@@ -52,17 +54,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					};
 
 				dayOffProjection.Add(sl);
-				ret = new ShiftTradeAddPersonScheduleViewModel
-				{
-					PersonId = scheduleReadModel.PersonId,
-					StartTimeUtc = scheduleReadModel.Start.Value,
-					Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName),
-					ScheduleLayers = _layerMapper.Map(dayOffProjection),
-					MinStart = scheduleReadModel.MinStart,
-					Total = scheduleReadModel.Total,
-					IsDayOff = true
-				};
+
+				ret.StartTimeUtc = scheduleReadModel.Start.Value;
+				ret.MinStart = scheduleReadModel.MinStart;
+				ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
+				ret.IsDayOff = true;
 			}
+
 			return ret;
 		}
 

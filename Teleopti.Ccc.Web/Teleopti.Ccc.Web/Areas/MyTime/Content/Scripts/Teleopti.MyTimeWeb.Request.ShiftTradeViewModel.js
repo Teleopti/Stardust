@@ -195,7 +195,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 	self._createMySchedule = function(myScheduleObject) {
 		var mappedlayers = [];
-		if (myScheduleObject != null) {
+		if (myScheduleObject != null && myScheduleObject.ScheduleLayers != null) {
 			var layers = myScheduleObject.ScheduleLayers;
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
@@ -211,15 +211,18 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 	self._createPossibleTradeSchedules = function(possibleTradeSchedules) {
 		self.possibleTradeSchedules.removeAll();
-		var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function(personSchedule) {
-			var layers = personSchedule.ScheduleLayers;
-			var scheduleStartTime = moment(layers[0].Start);
-			var scheduleEndTime = moment(layers[layers.length - 1].End);
+		var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function (personSchedule) {
+			var mappedLayers = [];
+			if (personSchedule != null && personSchedule.ScheduleLayers != null) {
+				var layers = personSchedule.ScheduleLayers;
+				var scheduleStartTime = moment(layers[0].Start);
+				var scheduleEndTime = moment(layers[layers.length - 1].End);
 
-			var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function(layer) {
-				var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-				return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
-			});
+				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function(layer) {
+					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
+					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
+				});
+			}
 			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name, personSchedule.PersonId, personSchedule.IsDayOff);
 			self.possibleTradeSchedules.push(model);
 			return model;
