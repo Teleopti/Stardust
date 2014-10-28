@@ -1,7 +1,7 @@
 using System;
 using System.Web;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Web.Core.Aop.Core;
+using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Infrastructure;
 

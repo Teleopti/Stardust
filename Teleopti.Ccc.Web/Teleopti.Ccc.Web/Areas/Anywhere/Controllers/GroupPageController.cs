@@ -5,8 +5,8 @@ using System.Web.Mvc;
 using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
-using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers

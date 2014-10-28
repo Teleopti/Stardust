@@ -5,9 +5,9 @@ using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Core.Aop.Core;
+using Teleopti.Ccc.IocCommon.Aop.Core;
 
-namespace Teleopti.Ccc.WebTest.Core.Aop.Core
+namespace Teleopti.Ccc.IocCommonTest.Aop
 {
 	[TestFixture]
 	public class AspectsTest
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 			[ASimpleAspect(Order = 1)]
 			public virtual void OrderedAspectedMethod() { }
 
-			[AnAttribute]
+			[An]
 			public virtual void AttributedMethod() { }
 
 			[AResolvedAspect]

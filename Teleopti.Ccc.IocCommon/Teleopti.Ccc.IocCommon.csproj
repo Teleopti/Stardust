@@ -101,6 +101,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Extras.DynamicProxy2">
+      <HintPath>..\packages\Autofac.Extras.DynamicProxy2.3.0.4\lib\net40\Autofac.Extras.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.2.2\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
@@ -130,6 +136,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aop\Core\AspectAttribute.cs" />
+    <Compile Include="Aop\Core\AspectInterceptor.cs" />
+    <Compile Include="Aop\Core\AspectsModule.cs" />
+    <Compile Include="Aop\Core\IAspect.cs" />
+    <Compile Include="Aop\Core\IAspectAttribute.cs" />
+    <Compile Include="Aop\Core\IOrderedAspect.cs" />
+    <Compile Include="Aop\Core\IResolvedAspect.cs" />
+    <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
+    <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />

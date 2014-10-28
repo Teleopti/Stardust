@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Web.Core.Aop.Core
+namespace Teleopti.Ccc.IocCommon.Aop.Core
 {
 	public abstract class AspectAttribute : Attribute, IAspectAttribute
 	{

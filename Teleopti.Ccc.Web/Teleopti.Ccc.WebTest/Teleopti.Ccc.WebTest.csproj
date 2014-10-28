@@ -373,7 +373,6 @@
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspectTest.cs" />
-    <Compile Include="Core\Aop\Core\AspectsTest.cs" />
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentIdentityTest.cs" />
@@ -556,6 +555,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\Aop\Core\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

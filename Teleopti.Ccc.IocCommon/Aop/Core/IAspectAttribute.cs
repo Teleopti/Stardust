@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Web.Core.Aop.Core
+namespace Teleopti.Ccc.IocCommon.Aop.Core
 {
 	public interface IAspectAttribute : IOrderedAspect, IAspect
 	{

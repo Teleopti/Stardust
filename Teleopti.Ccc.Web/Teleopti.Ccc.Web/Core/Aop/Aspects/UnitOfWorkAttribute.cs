@@ -1,4 +1,4 @@
-using Teleopti.Ccc.Web.Core.Aop.Core;
+using Teleopti.Ccc.IocCommon.Aop.Core;
 
 namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 {

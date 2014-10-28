@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Autofac.Extras.DynamicProxy2;
+using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
-using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 

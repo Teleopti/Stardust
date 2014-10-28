@@ -484,6 +484,8 @@
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
+    <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIanaTimeZoneProvider.cs" />
@@ -643,15 +645,6 @@
     <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
-    <Compile Include="Core\Aop\Core\AspectAttribute.cs" />
-    <Compile Include="Core\Aop\Core\AspectInterceptor.cs" />
-    <Compile Include="Core\Aop\Core\AspectsModule.cs" />
-    <Compile Include="Core\Aop\Core\IAspect.cs" />
-    <Compile Include="Core\Aop\Core\IAspectAttribute.cs" />
-    <Compile Include="Core\Aop\Core\IOrderedAspect.cs" />
-    <Compile Include="Core\Aop\Core\IResolvedAspect.cs" />
-    <Compile Include="Core\Aop\Core\IResolvedAspectAttribute.cs" />
-    <Compile Include="Core\Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="Core\RequestContext\CurrentHttpContext.cs" />
     <Compile Include="Core\RequestContext\ICurrentHttpContext.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
@@ -725,8 +718,6 @@
     <Compile Include="Areas\Start\Models\Menu\ApplicationViewModel.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
-    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
-    <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />
