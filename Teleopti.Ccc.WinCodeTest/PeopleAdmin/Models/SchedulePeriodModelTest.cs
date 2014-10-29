@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceIn()
         {
-            TimeSpan value = new TimeSpan(1, 1, 1);
+            TimeSpan value = new TimeSpan(1, 1, 0);
             _target.BalanceIn = value;
 
             Assert.AreEqual(value, _target.BalanceIn);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceOut()
         {
-            TimeSpan value = new TimeSpan(1, 1, 1);
+            TimeSpan value = new TimeSpan(1, 1, 0);
             _target.BalanceOut = value;
 
             Assert.AreEqual(value, _target.BalanceOut);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyExtra()
         {
-            TimeSpan value = new TimeSpan(1, 1, 1);
+            TimeSpan value = new TimeSpan(1, 1, 0);
             _target.Extra = value;
 
             Assert.AreEqual(value, _target.Extra);
