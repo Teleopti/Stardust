@@ -30,7 +30,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    case BlockFinderType.SingleDay:
 			    {
 				    blockPeriod = new DateOnlyPeriod(blockOnDate, blockOnDate);
-				    if (isDayOff(roleModelMatrix.GetScheduleDayByKey(blockOnDate).DaySchedulePart()))
+					var periodOk = false;
+					foreach (var matrix in tempMatrixes)
+				    {
+						var scheduleDay = matrix.GetScheduleDayByKey(blockOnDate).DaySchedulePart();
+					    if (!scheduleDay.HasDayOff())
+					    {
+						    periodOk = true;
+							break;
+					    }
+				    }
+					if (!periodOk)
 					    blockPeriod = null;
 
 				    break;
@@ -45,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    case BlockFinderType.BetweenDayOff:
 			    {
 				    var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
-				    blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(tempMatrixes.First(), blockOnDate, singleAgentTeam);
+					blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(roleModelMatrix, blockOnDate, singleAgentTeam);
 				    break;
 			    }
 		    }
@@ -57,17 +67,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		    return new BlockInfo(blockPeriod.Value);
 	    }
-
-		private static bool isDayOff(IScheduleDay scheduleDay)
-		{
-			var significantPart = scheduleDay.SignificantPart();
-			if (significantPart == SchedulePartView.DayOff ||
-				significantPart == SchedulePartView.ContractDayOff)
-			{
-				return true;
-			}
-			return false;
-		}
-
     }
 }

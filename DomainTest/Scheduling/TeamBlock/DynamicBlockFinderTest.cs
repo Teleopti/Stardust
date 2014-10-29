@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date)).Return(new List<IScheduleMatrixPro> { _matrixPro });
 				Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
             }
             using (_mock.Playback())
 			{
@@ -141,12 +141,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro });
 				Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(true);
 			}
 
 			using (_mock.Playback())
 			{
 				Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SingleDay, false));
+			}
+		}
+
+		[Test]
+		public void ShouldNotReturnNullIfProvidedDateIsNotDayOffOnOneOfTheAgentsAndSingleDay()
+		{
+			var matrixProEmpty = _mock.StrictMock<IScheduleMatrixPro>();
+			using (_mock.Record())
+			{
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro, matrixProEmpty });
+				Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(true);
+				Expect.Call(matrixProEmpty.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.IsNotNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SingleDay, false));
 			}
 		}
         
