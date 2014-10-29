@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldReturnReadModelsForPersonsWithEmptySchedule()
 		{
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
