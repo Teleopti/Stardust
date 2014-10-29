@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.IocCommonTest.Aop
 		{
 			ASimpleAspect.BeforeCallback = null;
 			ASimpleAspect.AfterCallback = null;
+			ASimpleAspect.AfterCallbackWithException = null;
 			AnotherAspect.BeforeCallback = null;
 			AnotherAspect.AfterCallback = null;
 			AResolvedAspect.BeforeCallback = null;
@@ -143,6 +144,21 @@ namespace Teleopti.Ccc.IocCommonTest.Aop
 			afterInvoked.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldInvokeAspectAfterMethodWithExceptionFromInvokation()
+		{
+			Exception expected = new FileNotFoundException();
+			Exception actual = null;
+			var container = SetupContainer();
+			ASimpleAspect.AfterCallbackWithException = e => actual = e;
+
+			var target = container.Resolve<AspectedClass>();
+			target.AspectedMethodCallback = () => { throw expected; };
+
+			Assert.Throws<FileNotFoundException>(target.AspectedMethod);
+			actual.Should().Be.SameInstanceAs(expected);
+		}
+
 		[Intercept(typeof(AspectInterceptor))]
 		public class AspectedClass
 		{
@@ -167,16 +183,18 @@ namespace Teleopti.Ccc.IocCommonTest.Aop
 		{
 			public static Action BeforeCallback;
 			public static Action AfterCallback;
+			public static Action<Exception> AfterCallbackWithException;
 
 			public override void OnBeforeInvokation()
 			{
 				base.OnBeforeInvokation();
 				if (BeforeCallback != null) BeforeCallback();
 			}
-			public override void OnAfterInvokation()
+			public override void OnAfterInvokation(Exception exception)
 			{
-				base.OnAfterInvokation();
+				base.OnAfterInvokation(exception);
 				if (AfterCallback != null) AfterCallback();
+				if (AfterCallbackWithException != null) AfterCallbackWithException(exception);
 			}
 		}
 
@@ -190,9 +208,9 @@ namespace Teleopti.Ccc.IocCommonTest.Aop
 				base.OnBeforeInvokation();
 				if (BeforeCallback != null) BeforeCallback();
 			}
-			public override void OnAfterInvokation()
+			public override void OnAfterInvokation(Exception exception)
 			{
-				base.OnAfterInvokation();
+				base.OnAfterInvokation(exception);
 				if (AfterCallback != null) AfterCallback();
 			}
 		}
@@ -216,7 +234,7 @@ namespace Teleopti.Ccc.IocCommonTest.Aop
 					if (BeforeCallback != null) BeforeCallback();
 				}
 
-				public void OnAfterInvokation()
+				public void OnAfterInvokation(Exception exception)
 				{
 					if (AfterCallback != null) AfterCallback();
 				}

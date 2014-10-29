@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, businessUnitFilterOverrider, currentHttpContext);
 
 			target.OnBeforeInvokation();
-			target.OnAfterInvokation();
+			target.OnAfterInvokation(null);
 
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 			businessUnitOverriderScope.AssertWasCalled(x => x.Dispose());

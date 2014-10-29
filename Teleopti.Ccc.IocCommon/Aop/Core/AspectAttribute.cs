@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.IocCommon.Aop.Core
 	{
 		public int Order { get; set; }
 		public virtual void OnBeforeInvokation() { }
-		public virtual void OnAfterInvokation() { }
+		public virtual void OnAfterInvokation(Exception exception) { }
 	}
 }

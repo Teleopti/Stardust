@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 			_businessUnitOverrideScope = _overrider.OverrideWith(id);
 		}
 
-		public void OnAfterInvokation()
+		public void OnAfterInvokation(Exception exception)
 		{
 			_unitOfWork.PersistAll();
 

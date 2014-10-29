@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Autofac;
 using Castle.DynamicProxy;
@@ -35,13 +36,19 @@ namespace Teleopti.Ccc.IocCommon.Aop.Core
 			{
 				array.ForEach(a => a.OnBeforeInvokation());
 
+				Exception exception = null;
 				try
 				{
 					invocation.Proceed();
 				}
+				catch (Exception e)
+				{
+					exception = e;
+					throw;
+				}
 				finally
 				{
-					array.Reverse().ForEach(a => a.OnAfterInvokation());
+					array.Reverse().ForEach(a => a.OnAfterInvokation(exception));
 				}
 			}
 			else
