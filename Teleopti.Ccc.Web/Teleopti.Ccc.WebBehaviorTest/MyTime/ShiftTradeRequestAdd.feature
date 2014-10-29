@@ -116,6 +116,7 @@ Scenario: Show possible shift trades
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with 'OtherAgent'
 
+@ignore
 Scenario: Show possible shift trade when victim has no schedule
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
