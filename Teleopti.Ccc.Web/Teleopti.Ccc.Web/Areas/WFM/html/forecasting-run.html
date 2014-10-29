@@ -2,8 +2,8 @@
     <h4 class="material-title">Period from {{period.startDate}} to {{period.endDate}}</h4>
 </div>
 <div class="material-block-content">
-    <div ng-if="result">
-        {{result}}
+    <div ng-if="result" ng-class="result.success ? 'success' : 'fail'" >
+        {{result.message}}
     </div>
     <div ng-if="!result" class="text-center">
         <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">

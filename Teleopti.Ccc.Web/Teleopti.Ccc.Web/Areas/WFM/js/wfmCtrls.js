@@ -26,10 +26,10 @@ wfmCtrls.controller('ForecastingRunCtrl', [ '$scope', '$stateParams','$http',
             //api/Forecasting/forecast/QuickForecast
             $http.post('../../api/Forecasting/forecast', JSON.stringify({ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate})).
                 success(function(data, status, headers, config) {
-                    $scope.result = 'DONE (success)';
+                    $scope.result = {success: true, message: 'The forecast has been done.'};
                 }).
                 error(function(data, status, headers, config) {
-                    $scope.result = 'DONE (failure)';
+                    $scope.result = {success: false, message: 'The forecast has failed. Please try again later'};
                 });
         }]
 );
