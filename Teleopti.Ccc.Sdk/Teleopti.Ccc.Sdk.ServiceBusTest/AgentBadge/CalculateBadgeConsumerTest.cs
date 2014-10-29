@@ -55,7 +55,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			msgRepository = MockRepository.GenerateMock<IPushMessagePersister>();
 			now = MockRepository.GenerateMock<INow>();
 
+			// Mock badge calculator
 			calculator = MockRepository.GenerateMock<IAgentBadgeCalculator>();
+			calculator.Stub(x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new AgentBadgeSettings()))
+				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
+			calculator.Stub(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
+				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new AgentBadgeSettings()))
+				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
+			calculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new AgentBadgeSettings()))
+				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
+
 			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository,
 				msgRepository, unitOfWorkFactory, calculator, badgeRepository, now);
 		}
@@ -73,7 +82,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(
 				new AgentBadgeSettings
 				{
-					BadgeEnabled = true
+					BadgeEnabled = true,
+					AdherenceBadgeEnabled = true,
+					AHTBadgeEnabled = false,
+					AnsweredCallsBadgeEnabled = true
 				});
 
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
@@ -84,6 +96,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 		
 			target.Consume(message);
+
+			calculator.AssertWasNotCalled(
+				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new AgentBadgeSettings()),
+				o => o.IgnoreArguments());
+
+			calculator.AssertWasCalled(
+				x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
+					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new AgentBadgeSettings()),
+				o => o.IgnoreArguments());
+
+			calculator.AssertWasCalled(
+				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new AgentBadgeSettings()),
+				o => o.IgnoreArguments());
 
 			serviceBus.AssertWasCalled(x => x.DelaySend(new DateTime(), new object()),
 				o =>
