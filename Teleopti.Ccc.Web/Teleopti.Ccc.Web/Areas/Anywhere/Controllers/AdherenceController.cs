@@ -10,12 +10,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
     {
 	    private readonly IAdherencePercentageReadModelPersister _adherencePercentageReadModelPersister;
 	    private readonly INow _now;
-	    private readonly IHistoricalAdherence _historicalAdherence = new HistoricalAdherence();
+	    private readonly IHistoricalAdherence _historicalAdherence;
 
 	    public AdherenceController(IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, INow now)
 	    {
 		    _adherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
 		    _now = now;
+			_historicalAdherence = new HistoricalAdherence(_now);
 	    }
 
 	    [UnitOfWorkAction, HttpGet]
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	    {
 		    var readModel = _adherencePercentageReadModelPersister.Get(new DateOnly(_now.UtcDateTime()), personId);
 
-		    if (readModel == null)
+		    if (readModel == null  || !isValid(readModel))
 		    {
 			    return Json(new object(), JsonRequestBehavior.AllowGet);
 		    }
@@ -33,12 +34,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 						  MinutesInAdherence = readModel.MinutesInAdherence,
 						  MinutesOutOfAdherence = readModel.MinutesOutOfAdherence,
 						  LastTimestamp = readModel.LastTimestamp,
-						  AdherencePercent = _historicalAdherence.ForDay(readModel).ValueAsPercent()
+						  AdherencePercent = (int)_historicalAdherence.ForDay(readModel).ValueAsPercent()
 					  };
 
 			return Json(ret, JsonRequestBehavior.AllowGet);
         }
 
+	    private static  bool isValid(AdherencePercentageReadModel  readModel)
+	    {
+			return readModel.MinutesInAdherence != 0 &&  readModel.MinutesOutOfAdherence != 0;
+	    }
     }
 
 	public class AdherenceInfo
@@ -46,6 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public int MinutesInAdherence { get; set; }
 		public int MinutesOutOfAdherence { get; set; }
 		public DateTime LastTimestamp { get; set; }
-		public double AdherencePercent { get; set; }
+		public int AdherencePercent { get; set; }
 	}
 }

@@ -70,8 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-	
-
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(
 				"SELECT PersonId, BelongsToDate as DATE,LastTimestamp,MinutesInAdherence,MinutesOutOfAdherence,IsLastTimeInAdherence  FROM ReadModel.AdherencePercentage WHERE PersonId =:PersonId and BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
