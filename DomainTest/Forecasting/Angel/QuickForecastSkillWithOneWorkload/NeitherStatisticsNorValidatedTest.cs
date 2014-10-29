@@ -3,9 +3,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
 {
-	public class NeitherStatisticsNorValidatedTest : QuickForecastWorkloadTest
+	public class NeitherStatisticsNorValidatedTest : QuickForecastTest
 	{
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{

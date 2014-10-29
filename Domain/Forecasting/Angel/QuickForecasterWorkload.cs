@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var taskOwnerPeriod = _historicalData.Fetch(workload, historicalPeriod);
 			if (taskOwnerPeriod.TaskOwnerDayCollection.IsEmpty()) return;
 
+			var futureWorkloadDays = _futureData.Fetch(workload, futurePeriod, skillDays);
 			_volumeApplier.Apply(workload, taskOwnerPeriod, futureWorkloadDays);
 		}
 	}
