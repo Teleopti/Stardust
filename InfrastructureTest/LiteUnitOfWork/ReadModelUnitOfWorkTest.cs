@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NHibernate;
@@ -12,7 +13,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
@@ -23,68 +23,47 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[Test]
 		public void ShouldProduceWorkingUnitOfWork()
 		{
-			using (new TestTable())
+			using (new TestTable("TestTable"))
+			using (var c = BuildContainer())
 			{
-				using (var container = BuildContainer())
-				{
-					var target = container.Resolve<ReadModelUnitOfWorkTester>();
-					var value = new Random().Next(-10000, -2).ToString();
-					var result = 0;
-					target.ExecuteNHibernateSql(s =>
-					{
-						s.CreateSQLQuery(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value)).ExecuteUpdate();
-					});
-					target.ExecuteNHibernateSql(s =>
-					{
-						result = s.CreateSQLQuery("SELECT Value FROM TestTable").List<int>().Single();
-					});
-					result.Should().Be(value);
-				}
+				var target = c.Resolve<Outer>();
+				var value = randomValue();
+
+				target.DoUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
+
+				TestTable.Select("TestTable").Single().Should().Be(value);
 			}
 		}
 
 		[Test]
 		public void ShouldRollbackTransaction()
 		{
-			using (new TestTable())
+			using (new TestTable("TestTable"))
+			using (var c = BuildContainer())
 			{
-				using (var container = BuildContainer())
+				Assert.Throws<TestException>(() =>
 				{
-					var target1 = container.Resolve<ReadModelUnitOfWorkTester>();
-					var value = new Random().Next(-10000, -2).ToString();
-					Assert.Throws<TestException>(() =>
+					c.Resolve<Outer>().DoAction(uow =>
 					{
-						target1.ExecuteNHibernateSql(s =>
-						{
-							s.CreateSQLQuery(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value)).ExecuteUpdate();
-							throw new TestException();
-						});
+						uow.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+						throw new TestException();
 					});
+				});
 
-					var target2 = container.Resolve<ReadModelUnitOfWorkTester>();
-					IEnumerable<int> result = null;
-					target2.ExecuteNHibernateSql(s =>
-					{
-						result = s.CreateSQLQuery("SELECT Value FROM TestTable").List<int>();
-					});
-					result.Should().Have.Count.EqualTo(0);
-				}
+				TestTable.Select("TestTable").Should().Have.Count.EqualTo(0);
 			}
 		}
 
 		[Test]
 		public void ShouldProduceUnitOfWorkToInnerObjects()
 		{
-			using (var container = BuildContainer())
+			using (var c = BuildContainer())
 			{
 				string result = null;
-				container.Resolve<ReadModelUnitOfWorkInnerTester1>()
-					.Action = s =>
-					{
-						result = s.CreateSQLQuery("SELECT @@VERSION").List<string>().Single();
-					};
-				var target = container.Resolve<ReadModelUnitOfWorkTester>();
-				target.ExecuteInners();
+				c.Resolve<Inner1>().Action = uow => { result = uow.CreateSQLQuery("SELECT @@VERSION").List<string>().Single(); };
+
+				c.Resolve<Outer>().ExecuteInners();
+
 				result.Should().Contain("SQL");
 			}
 		}
@@ -92,28 +71,69 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[Test]
 		public void ShouldRollbackTransactionForInnerObject()
 		{
-			using (new TestTable())
+			using (new TestTable("TestTable"))
+			using (var c = BuildContainer())
 			{
-				using (var container = BuildContainer())
+				c.Resolve<Inner1>().Action = s =>
 				{
-					container.Resolve<ReadModelUnitOfWorkInnerTester1>()
-						.Action = s =>
-						{
-							s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
-							throw new TestException();
-						};
-					var target1 = container.Resolve<ReadModelUnitOfWorkTester>();
-					Assert.Throws<TestException>(target1.ExecuteInners);
+					s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+					throw new TestException();
+				};
 
-					var target2 = container.Resolve<ReadModelUnitOfWorkTester>();
-					IEnumerable<int> result = null;
-					target2.ExecuteNHibernateSql(s =>
-					{
-						result = s.CreateSQLQuery("SELECT Value FROM TestTable").List<int>();
-					});
-					result.Should().Have.Count.EqualTo(0);
-				}
+				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
+
+				TestTable.Select("TestTable").Should().Have.Count.EqualTo(0);
 			}
+		}
+
+		[Test]
+		public void ShouldSpanTransactionOverAllInnerObjects()
+		{
+			using (new TestTable("TestTable"))
+			using (var c = BuildContainer())
+			{
+				c.Resolve<Inner1>().Action = s => s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+				c.Resolve<Inner2>().Action = s =>
+				{
+					s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
+					throw new TestException();
+				};
+				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
+
+				TestTable.Select("TestTable").Should().Have.Count.EqualTo(0);
+			}
+		}
+
+		[Test]
+		public void ShouldProduceUnitOfWorkForEachThread()
+		{
+			using (new TestTable("TestTable1"))
+			using (new TestTable("TestTable2"))
+			using (var c = BuildContainer())
+			{
+				var task1 = Task.Factory.StartNew(() =>
+				{
+					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSQLQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+				});
+				var task2 = Task.Factory.StartNew(() =>
+				{
+					c.Resolve<Outer>().DoAction(uow =>
+					{
+						1000.Times(i => uow.CreateSQLQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
+						throw new TestException();
+					});
+				});
+
+				Assert.Throws<AggregateException>(() => Task.WaitAll(task1, task2));
+
+				TestTable.Select("TestTable1").Count().Should().Be(1000);
+				TestTable.Select("TestTable2").Count().Should().Be(0);
+			}
+		}
+
+		private static string randomValue()
+		{
+			return new Random().Next(-10000, -2).ToString();
 		}
 
 		private static IContainer BuildContainer()
@@ -122,22 +142,18 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
-			builder.RegisterType<ReadModelUnitOfWorkTester>().EnableClassInterceptors();
-			builder.RegisterType<ReadModelUnitOfWorkInnerTester1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
-			builder.RegisterType<ReadModelUnitOfWorkInnerTester2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
+			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			return builder.Build();
 		}
 	}
 
-	public class ReadModelUnitOfWorkModule : Module
+	public static class Extensions
 	{
-		protected override void Load(ContainerBuilder builder)
+		public static void Times(this int times, Action<int> action)
 		{
-			builder.RegisterType<CurrentReadModelUnitOfWork2>()
-				.SingleInstance()
-				.As<ICurrentReadModelUnitOfWork>();
-			builder.RegisterType<ReadModelUnitOfWorkAspect>()
-				.SingleInstance();
+			Enumerable.Range(0, times).ForEach(action);
 		}
 	}
 
@@ -145,22 +161,36 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	{
 	}
 
-	[Intercept(typeof(AspectInterceptor))]
-	public class ReadModelUnitOfWorkTester
+	public class Outer
 	{
 		private readonly IEnumerable<ReadModelUnitOfWorkInnerTester> _inners;
 		private readonly ICurrentReadModelUnitOfWork _uow;
 
-		public ReadModelUnitOfWorkTester(IEnumerable<ReadModelUnitOfWorkInnerTester> inners, ICurrentReadModelUnitOfWork uow)
+		public Outer(IEnumerable<ReadModelUnitOfWorkInnerTester> inners, ICurrentReadModelUnitOfWork uow)
 		{
 			_inners = inners;
 			_uow = uow;
 		}
 
 		[ReadModelUnitOfWork]
-		public virtual void ExecuteNHibernateSql(Action<ISession> action)
+		public virtual void DoAction(Action<ILiteUnitOfWork> action)
 		{
-			action(_uow.Current().Session());
+			action(_uow.Current());
+		}
+
+		public void DoUpdate(string query)
+		{
+			DoAction(uow => uow.CreateSQLQuery(query).ExecuteUpdate());
+		}
+
+		public T DoSelect<T>(string query, Func<ISQLQuery, T> queryAction)
+		{
+			var result = default(T);
+			DoAction(uow =>
+			{
+				result = queryAction(uow.CreateSQLQuery(query));
+			});
+			return result;
 		}
 
 		[ReadModelUnitOfWork]
@@ -170,17 +200,17 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		}
 	}
 
-	public class ReadModelUnitOfWorkInnerTester1 : ReadModelUnitOfWorkInnerTester
+	public class Inner1 : ReadModelUnitOfWorkInnerTester
 	{
-		public ReadModelUnitOfWorkInnerTester1(ICurrentReadModelUnitOfWork uow)
+		public Inner1(ICurrentReadModelUnitOfWork uow)
 			: base(uow)
 		{
 		}
 	}
 
-	public class ReadModelUnitOfWorkInnerTester2 : ReadModelUnitOfWorkInnerTester
+	public class Inner2 : ReadModelUnitOfWorkInnerTester
 	{
-		public ReadModelUnitOfWorkInnerTester2(ICurrentReadModelUnitOfWork uow)
+		public Inner2(ICurrentReadModelUnitOfWork uow)
 			: base(uow)
 		{
 		}
@@ -195,17 +225,89 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			_uow = uow;
 		}
 
-		public Action<ISession> Action = s => { };
+		public Action<ILiteUnitOfWork> Action = s => { };
 
 		public void ExecuteAction()
 		{
-			Action.Invoke(_uow.Current().Session());
+			Action.Invoke(_uow.Current());
+		}
+	}
+
+
+
+	public class TestTable : IDisposable
+	{
+		private readonly string _name;
+
+		public TestTable(string name)
+		{
+			_name = name;
+			applySql(string.Format("CREATE TABLE {0} (Value int)", _name));
+			//applySql("INSERT INTO TestTable (Value) VALUES (-1)");
+		}
+
+		public static IEnumerable<int> Select(string tableName)
+		{
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("SELECT * FROM " + tableName, connection))
+				using (var reader = command.ExecuteReader())
+					while (reader.Read())
+						yield return reader.GetInt32(0);
+			}
+		}
+
+		public void Dispose()
+		{
+			try
+			{
+				applySql(string.Format("DROP TABLE {0}", _name));
+			}
+			catch (Exception)
+			{
+			}
+		}
+
+		private static void applySql(string Sql)
+		{
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(Sql, connection))
+					command.ExecuteNonQuery();
+			}
+		}
+	}
+
+	public class TestTableModel
+	{
+		public int Value { get; set; }
+	}
+
+
+
+
+
+
+
+
+	public class ReadModelUnitOfWorkModule : Module
+	{
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.RegisterType<CurrentReadModelUnitOfWork2>()
+				.SingleInstance()
+				.As<ICurrentReadModelUnitOfWork>();
+			builder.RegisterType<ReadModelUnitOfWorkAspect>()
+				.SingleInstance();
 		}
 	}
 
 	public class CurrentReadModelUnitOfWork2 : ICurrentReadModelUnitOfWork
 	{
-		private ILiteUnitOfWork _uow;
+		[ThreadStatic]
+		private static ILiteUnitOfWork _uow;
 
 		public void SetCurrentSession(ISession session)
 		{
@@ -227,6 +329,11 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			_session = session;
 		}
 
+		public ISQLQuery CreateSQLQuery(string queryString)
+		{
+			return _session.CreateSQLQuery(queryString);
+		}
+
 		public ISession Session()
 		{
 			return _session;
@@ -244,7 +351,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	public class ReadModelUnitOfWorkAspect : IAspect
 	{
 		private readonly ICurrentReadModelUnitOfWork _uow;
-		private ITransaction _transaction;
 
 		public ReadModelUnitOfWorkAspect(ICurrentReadModelUnitOfWork uow)
 		{
@@ -261,12 +367,18 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			var session = sessionFactory.OpenSession();
 
 			((CurrentReadModelUnitOfWork2)_uow).SetCurrentSession(session);
-			_transaction = session.BeginTransaction();
+			session.BeginTransaction();
 		}
 
-		public void OnAfterInvokation()
+		public void OnAfterInvokation(Exception exception)
 		{
-			_transaction.Commit();
+			var transaction = _uow.Current().Session().Transaction;
+			if (exception != null)
+			{
+				transaction.Dispose();
+				return;
+			}
+			transaction.Commit();
 		}
 	}
 
@@ -278,38 +390,8 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 	public interface ILiteUnitOfWork
 	{
+		ISQLQuery CreateSQLQuery(string queryString);
 		ISession Session();
-	}
-
-
-
-	public class TestTable : IDisposable
-	{
-		public TestTable()
-		{
-			applySql("CREATE TABLE TestTable (Value int)");
-			//applySql("INSERT INTO TestTable (Value) VALUES (-1)");
-		}
-
-		public void Dispose()
-		{
-			applySql("DROP TABLE TestTable");
-		}
-
-		private static void applySql(string Sql)
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
-				using (var command = new SqlCommand(Sql, connection))
-					command.ExecuteNonQuery();
-			}
-		}
-	}
-
-	public class TestTableModel
-	{
-		public int Value { get; set; }
 	}
 
 

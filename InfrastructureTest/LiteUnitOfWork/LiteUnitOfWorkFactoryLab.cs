@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (var factory = LiteUnitOfWorkFactoryForTest.Make())
 			{
-				using (new TestTable())
+				using (new TestTable("TestTable"))
 				{
 					using (var uow = factory.MakeUnitOfWork())
 					{
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (var factory = LiteUnitOfWorkFactoryForTest.Make())
 			{
-				using (new TestTable())
+				using (new TestTable("TestTable"))
 				{
 					using (var uow = factory.MakeUnitOfWork())
 					{
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (var factory = LiteUnitOfWorkFactoryForTest.Make())
 			{
-				using (new TestTable())
+				using (new TestTable("TestTable"))
 				{
 					using (var uow = factory.MakeUnitOfWork())
 					{
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (var factory = LiteUnitOfWorkFactoryForTest.Make())
 			{
-				using (new TestTable())
+				using (new TestTable("TestTable"))
 				{
 					using (var uow = factory.MakeUnitOfWork())
 					{
