@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 		public IEnumerable<ITaskOwner> Fetch(IWorkload workload, DateOnlyPeriod futurePeriod, IEnumerable<ISkillDay> skillDays)
 		{
 			new SkillDayCalculator(workload.Skill, skillDays, futurePeriod);
-			return skillDays.SelectMany(s => s.WorkloadDayCollection);
+			return skillDays.SelectMany(s => s.WorkloadDayCollection.Where(w => workload.Equals(w.Workload)));
 		}
 	}
 }

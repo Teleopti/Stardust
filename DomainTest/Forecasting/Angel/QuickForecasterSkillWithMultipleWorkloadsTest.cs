@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
 	public class QuickForecasterSkillWithMultipleWorkloadsTest
 	{
-		[Test, Ignore("Doesn't work yet")]
+		[Test]
 		public void ShouldCalculateSumOfTasksFromAllWorkloadsOnOneSkill()
 		{
 			var historicalPeriod = new DateOnlyPeriod(2000,1,1,2000,1,1);
