@@ -18,24 +18,32 @@ namespace Teleopti.Analytics.Stats.TestApplication
 
 		public DimDateInfo GetNumberOfDaysInDimDateTable()
 		{
-			using (var connection = martConnection())
-			using (var command = connection.CreateCommand())
+			try
 			{
-				command.CommandType = CommandType.Text;
-				command.CommandText = "mart.sys_dim_date_count";
-
-				connection.Open();
-				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-				while (reader.Read())
+				using (var connection = martConnection())
+				using (var command = connection.CreateCommand())
 				{
-					return new DimDateInfo
+					command.CommandType = CommandType.Text;
+					command.CommandText = "mart.sys_dim_date_count";
+
+					connection.Open();
+					var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+					while (reader.Read())
 					{
-						NumberOfDays = reader.GetInt32(reader.GetOrdinal("number_of_days")),
-						StartDate = reader.GetDateTime(reader.GetOrdinal("start_date")).AddDays(1)
-					};
+						return new DimDateInfo
+						{
+							NumberOfDays = reader.GetInt32(reader.GetOrdinal("number_of_days")),
+							StartDate = reader.GetDateTime(reader.GetOrdinal("start_date")).AddDays(1)
+						};
+					}
+					reader.Close();
 				}
-				reader.Close();
 			}
+			catch (Exception)
+			{
+				return new DimDateInfo { NumberOfDays = -99 };
+			}
+			
 			return new DimDateInfo { NumberOfDays = -1 };
 		}
 	}

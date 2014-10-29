@@ -1,18 +1,23 @@
 using System;
 using System.Configuration;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Teleopti.Analytics.Stats.TestApplication
 {
 	internal class QueueStatsGenerator
 	{
-		public void Create(QueueDataParameters parameters)
+		public async Task CreateAsync(QueueDataParameters parameters)
 		{
 			var webClient = new WebApiClient();
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
 			var baseUrl = ConfigurationManager.AppSettings["WebApiBaseUrl"];
+			int successful = 0, failed = 0;
 
 			int intervalsPerDay = 1440 / parameters.IntervalLength;
 
-			for (DateTime date = parameters.StartDate; date <= (parameters.StartDate.AddDays(parameters.AmountOfDays)); date = date.AddDays(1))
+			for (DateTime date = parameters.StartDate; date < (parameters.StartDate.AddDays(parameters.AmountOfDays)); date = date.AddDays(1))
 			{
 				for (int intervalId = 0; intervalId < intervalsPerDay; intervalId++)
 				{
@@ -41,10 +46,18 @@ namespace Teleopti.Analytics.Stats.TestApplication
 							LongestDelayInQueueAbandoned = 60
 						};
 
-						webClient.PostQueueData(baseUrl, model);
+
+						var result = await webClient.PostQueueDataAsync(baseUrl, model);
+						if (result) successful++;
+						else failed++;
+
+						Console.Write("\rNumber of successful posts: {0}; Number of failed posts: {1}                ",successful,failed);
 					}
 				}
 			}
+
+			stopwatch.Stop();
+			Console.WriteLine("\nThe operation took: {0}",stopwatch.Elapsed);
 		}
 	}
 }
