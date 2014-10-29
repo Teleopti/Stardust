@@ -201,13 +201,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, Action<IEnumerable<ISkillDay>> optionalAction)
 		{
 		    var uniqueDays = period.DayCollection();
+			var datesToProcess = uniqueDays.Except(skillDays.Select(s => s.CurrentDate));
 
-			var daysWithinPeriod = skillDays.Where(s => period.Contains(s.CurrentDate));
-			if (uniqueDays.Count != daysWithinPeriod.Count())
+			if (datesToProcess.Any())
 			{
-				var currentDateTimes = daysWithinPeriod.Select(s => s.CurrentDate);
-				var datesToProcess = uniqueDays.Where(u => !currentDateTimes.Contains(u));
-
 				IList<ISkillDay> skillDaysToRepository = new List<ISkillDay>();
 				foreach (var uniqueDate in datesToProcess)
 				{

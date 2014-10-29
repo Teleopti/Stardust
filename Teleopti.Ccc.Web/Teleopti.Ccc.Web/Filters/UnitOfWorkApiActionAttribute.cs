@@ -18,8 +18,12 @@ namespace Teleopti.Ccc.Web.Filters
 		public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
 		{
 			base.OnActionExecuted(actionExecutedContext);
-
 			var currentUnitOfWork = DependencyResolver.Current.GetService<ICurrentUnitOfWork>().Current();
+			if (actionExecutedContext.Exception != null)
+			{
+				currentUnitOfWork.Dispose();
+				return;
+			}
 			if (currentUnitOfWork != null)
 			{
 				currentUnitOfWork.PersistAll();

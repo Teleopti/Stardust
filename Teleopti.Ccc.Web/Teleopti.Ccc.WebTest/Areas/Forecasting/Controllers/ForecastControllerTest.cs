@@ -22,13 +22,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill = SkillFactory.CreateSkill("_");
 			var workload = new Workload(skill);
 			skill.AddWorkload(workload);
+			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] {skill});
-			var quickForecaster = MockRepository.GenerateMock<IQuickForecasterWorkload>();
+			var quickForecaster = MockRepository.GenerateMock<IQuickForecasterSkill>();
 			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository, now));
 
 			target.QuickForecast(new QuickForecastInputModel{ForecastStart = expectedFuturePeriod.StartDate, ForecastEnd = expectedFuturePeriod.EndDate});
 			
-			quickForecaster.AssertWasCalled(x => x.Execute(workload, expectedHistoricalPeriod, expectedFuturePeriod));
+			quickForecaster.AssertWasCalled(x => x.Execute(skill, expectedHistoricalPeriod, expectedFuturePeriod));
 		}
 
 	}

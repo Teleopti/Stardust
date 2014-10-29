@@ -273,6 +273,7 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryForTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecast\NeitherStatisticsNorValidatedTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\OnlyStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\OnlyValidatedTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\QuickForecastWorkloadTest.cs" />

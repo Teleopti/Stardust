@@ -331,7 +331,6 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\HelloWorldController.cs" />
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
     <Compile Include="Areas\Forecasting\Controllers\QuickForecastInputModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
@@ -669,6 +668,7 @@
     <Compile Include="Core\Startup\Startup.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttribute.cs" />
+    <Compile Include="Filters\AsyncFilter.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -718,6 +718,7 @@
     <Compile Include="Areas\Start\Models\Menu\ApplicationViewModel.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
+    <Compile Include="Filters\AsyncUnitOfWorkApiActionAttribute.cs" />
     <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />
@@ -1210,7 +1211,6 @@
     <Content Include="Areas\WFM\html\main.html" />
     <Content Include="Areas\WFM\html\nav.html" />
     <Content Include="Areas\WFM\index.html" />
-    <Content Include="Areas\WFM\index2.html" />
     <Content Include="Areas\WFM\js\app.js" />
     <Content Include="Areas\WFM\js\wfmCtrls.js" />
     <Content Include="Areas\WFM\tests\conf.js" />

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 		{
 			var currentScenario = _currentScenario.Current();
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, skill, currentScenario);
-			_fillEmptySkillDays.GetAllSkillDays(futurePeriod, skillDays, skill, currentScenario, null);
+			_fillEmptySkillDays.GetAllSkillDays(futurePeriod, skillDays, skill, currentScenario, _skillDayRepository.AddRange);
 			return skillDays;
 		}
 	}

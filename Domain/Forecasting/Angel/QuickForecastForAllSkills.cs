@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -6,13 +8,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class QuickForecastForAllSkills : IQuickForecastForAllSkills
 	{
-		private readonly IQuickForecasterWorkload _quickForecasterWorkload;
+		private readonly IQuickForecasterSkill _quickForecaster;
 		private readonly ISkillRepository _skillRepository;
 		private readonly INow _now;
 
-		public QuickForecastForAllSkills(IQuickForecasterWorkload quickForecasterWorkload, ISkillRepository skillRepository, INow now)
+		public QuickForecastForAllSkills(IQuickForecasterSkill quickForecaster, ISkillRepository skillRepository, INow now)
 		{
-			_quickForecasterWorkload = quickForecasterWorkload;
+			_quickForecaster = quickForecaster;
 			_skillRepository = skillRepository;
 			_now = now;
 		}
@@ -20,12 +22,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public void CreateForecast(DateOnlyPeriod futurePeriod)
 		{
 			var allSkills = _skillRepository.LoadAll();
-			var historicalPeriodStartTime = new DateOnly(_now.UtcDateTime().AddYears(-1));
-			var historicalPeriod = new DateOnlyPeriod(historicalPeriodStartTime, new DateOnly(_now.UtcDateTime()));
-
-			foreach (var workload in allSkills.SelectMany(skill => skill.WorkloadCollection))
+			var historicalPeriodStartTime = new DateOnly(_now.LocalDateOnly().Date.AddYears(-1));
+			var historicalPeriod = new DateOnlyPeriod(historicalPeriodStartTime, new DateOnly(_now.LocalDateOnly()));
+			
+			foreach (var skill in allSkills.Where(s => s.WorkloadCollection.Any(w => w.QueueSourceCollection.Any())))
 			{
-				_quickForecasterWorkload.Execute(workload, historicalPeriod, futurePeriod);
+				_quickForecaster.Execute(skill, historicalPeriod, futurePeriod);
 			}
 		}
 	}
