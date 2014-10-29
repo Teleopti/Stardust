@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest : QuickForecastWorkloadTest
+	public class AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest : QuickForecastTest
 	{
 		private readonly IWorkload _workload;
 

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class AggregatedValidatedTaskTimeTest : QuickForecastWorkloadTest
+	public class AggregatedValidatedTaskTimeTest : QuickForecastTest
 	{
 		private readonly TimeSpan expectedTaskTime = TimeSpan.FromSeconds(12);
 		private readonly TimeSpan expectedAfterTaskTime = TimeSpan.FromSeconds(122);

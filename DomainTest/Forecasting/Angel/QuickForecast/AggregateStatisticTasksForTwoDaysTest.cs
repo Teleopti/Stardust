@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class AggregateStatisticTasksForTwoDaysTest : QuickForecastWorkloadTest
+	public class AggregateStatisticTasksForTwoDaysTest : QuickForecastTest
 	{
 		protected override DateOnlyPeriod HistoricalPeriod
 		{
