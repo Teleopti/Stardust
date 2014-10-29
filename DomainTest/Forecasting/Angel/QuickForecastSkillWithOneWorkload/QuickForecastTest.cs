@@ -70,12 +70,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 		protected virtual IEnumerable<StatisticTask> StatisticTasks()
 		{
-			return Enumerable.Empty<StatisticTask>();
+			yield break;
 		}
 
 		protected virtual IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
 		{
-			return Enumerable.Empty<IValidatedVolumeDay>();
+			yield break;
 		}
 
 		protected virtual ICollection<ISkillDay> CurrentSkillDays()
