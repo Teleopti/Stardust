@@ -1,8 +1,9 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 {
@@ -15,10 +16,19 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 			_queueStatHandler = queueStatHandler;
 		}
 
-		
-		public void Post([FromBody]QueueStatsModel value)
+		public void Post([FromBody]IEnumerable<QueueStatsModel> queueStatsModels)
 		{
-				_queueStatHandler.Handle(value);
+			IEnumerable<string> headerValues;
+			string nhibname = null;
+			int sourceId = 0;
+
+			if (Request.Headers.TryGetValues("database", out headerValues))
+				nhibname = headerValues.First();
+			if (Request.Headers.TryGetValues("sourceId", out headerValues))
+				if (!int.TryParse(headerValues.First(), out sourceId))
+					throw new ArgumentException();
+
+			_queueStatHandler.Handle(queueStatsModels, nhibname, sourceId);
 		}
 	}
 }

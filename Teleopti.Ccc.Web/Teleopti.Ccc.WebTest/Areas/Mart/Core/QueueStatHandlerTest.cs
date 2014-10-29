@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
@@ -9,13 +10,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 	[TestFixture]
 	public class QueueStatHandlerTest
 	{
-
-		[Test, ExpectedException(typeof(ArgumentException))]
-		public void ShouldThrowIfLogObjectNameIsEmpty()
+		[Test]
+		public void ShouldGetLogObjectFromDatabase()
 		{
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
-			target.Handle(new QueueStatsModel());
+			var queueDataList = new List<QueueStatsModel>
+			{
+				new QueueStatsModel
+				{
+					QueueName = "kön", 
+					IntervalStart = "2014-12-12 15:00"
+				}
+			};
+			target.Handle(queueDataList, "nhib", 1);
+
+			Assert.That(fakeRepos.LogObject.Id, Is.EqualTo(1));
 		}
 
 		[Test]
@@ -23,24 +33,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		{
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
-			target.Handle(new QueueStatsModel { LogObjectName = "SomeAcdSomewhere", QueueName = "kön", DateAndTimeString = "2014-12-12 15:00" });
+			var queueDataList = new List<QueueStatsModel>
+			{
+				new QueueStatsModel
+				{
+					QueueName = "kön", 
+					IntervalStart = "2014-12-12 15:00"
+				}
+			};
+			target.Handle(queueDataList, "nhib", 1);
+
 			Assert.That(fakeRepos.SavedQueueModel.QueueId, Is.EqualTo(10));
 		}
+
 
 		[Test, ExpectedException(typeof(ArgumentException))]
 		public void ShouldThrowWhenDateIdNotFoundInDatabase()
 		{
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
 			fakeRepos.SetInvalidDateId();
 			var queueStatsModel = new QueueStatsModel
 			{
-				LogObjectName = "SomeAcdSomewhere",
 				QueueName = "kön",
-				DateAndTimeString = "2014-12-12 15:00"
+				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
 		}
 
 		[Test]
@@ -51,13 +69,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 			var target = new QueueStatHandler(fakeRepos);
 			var queueStatsModel = new QueueStatsModel
 			{
-				LogObjectName = "SomeAcdSomewhere",
 				QueueName = "kön",
-				DateAndTimeString = "2014-12-12 15:00"
+				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
 			Assert.That(fakeRepos.SavedQueueModel.DateId, Is.EqualTo(1515));
-			Assert.That(fakeRepos.DateTimeInUtc, Is.EqualTo(TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueStatsModel.DateAndTimeString), timeZone)));
+			Assert.That(fakeRepos.DateTimeInUtc, Is.EqualTo(TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueStatsModel.IntervalStart), timeZone)));
 		}
 
 		[Test]
@@ -67,11 +84,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 			var target = new QueueStatHandler(fakeRepos);
 			var queueStatsModel = new QueueStatsModel
 			{
-				LogObjectName = "SomeAcdSomewhere",
 				QueueName = "kön",
-				DateAndTimeString = "2014-12-12 15:00"
+				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
 			Assert.That(fakeRepos.SavedQueueModel.IntervalId, Is.EqualTo(56));
 		}
 
@@ -82,9 +98,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 			var target = new QueueStatHandler(fakeRepos);
 			var queueStatsModel = new QueueStatsModel
 			{
-				LogObjectName = "SomeAcdSomewhere",
 				QueueName = "kön",
-				DateAndTimeString = "2014-12-12 15:00",
+				IntervalStart = "2014-12-12 15:00",
 				OfferedCalls = 124,
 				AnsweredCalls = 80,
 				AnsweredCallsWithinServiceLevel = 50,
@@ -100,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				LongestDelayInQueueAnswered = 40,
 				LongestDelayInQueueAbandoned = 43
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
 			Assert.That(fakeRepos.SavedQueueModel.OfferedCalls, Is.EqualTo(queueStatsModel.OfferedCalls));
 			Assert.That(fakeRepos.SavedQueueModel.AnsweredCalls, Is.EqualTo(queueStatsModel.AnsweredCalls));
 			Assert.That(fakeRepos.SavedQueueModel.AnsweredCallsWithinServiceLevel, Is.EqualTo(queueStatsModel.AnsweredCallsWithinServiceLevel));

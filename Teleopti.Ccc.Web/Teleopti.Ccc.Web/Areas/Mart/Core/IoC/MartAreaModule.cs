@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 
 			_configuration.Args().CacheBuilder
 				.For<QueueStatRepository>()
-				.CacheMethod(x => x.GetLogObject("",""))
+				.CacheMethod(x => x.GetLogObject(1, ""))
 				.CacheMethod(x => x.GetQueueId("","",0,""))
 				.CacheMethod(x => x.GetDateId(new DateTime(), ""))
 				.CacheMethod(x => x.GetIntervalLength(""))

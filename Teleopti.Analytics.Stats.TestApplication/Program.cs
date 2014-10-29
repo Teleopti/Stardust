@@ -13,17 +13,16 @@ namespace Teleopti.Analytics.Stats.TestApplication
 		{
 			Console.WriteLine("Welcome to queue data generator!");
 			Console.WriteLine("\n");
-			Console.WriteLine("Write exit to close");
-			Console.WriteLine("\n");
+
 			while (true)
 			{
 				Console.WriteLine("Nhib data source name:");
 				var nhibDataSourceName = Console.ReadLine();
 				if (checkExit(nhibDataSourceName)) break;
 
-				Console.WriteLine("Queue data source name:");
-				var queueDataSourceName = Console.ReadLine();
-				if (checkExit(queueDataSourceName)) break;
+				Console.WriteLine("Queue data source id:");
+				var queueDataSourceId = Console.ReadLine();
+				if (checkExit(queueDataSourceId)) break;
 
 				Console.WriteLine("Interval length:");
 				var intervalLength = Console.ReadLine();
@@ -57,7 +56,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				var parameters = new QueueDataParameters
 				{
 					NhibDataSourcename = nhibDataSourceName,
-					QueueDataSourceName = queueDataSourceName,
+					QueueDataSourceId = int.Parse(queueDataSourceId),
 					IntervalLength = int.Parse(intervalLength),
 					AmountOfDays = int.Parse(amountOfDays),
 					AmountOfQueues = int.Parse(amountOfQueues),

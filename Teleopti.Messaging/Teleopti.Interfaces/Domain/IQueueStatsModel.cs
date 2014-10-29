@@ -9,11 +9,9 @@ namespace Teleopti.Interfaces.Domain
 	/// </remarks>
 	public interface IQueueStatsModel
 	{
-		string DateAndTimeString { get; set; }
-		string LogObjectName { get; set; }
+		string IntervalStart { get; set; }
 		string QueueId { get; set; }
 		string QueueName { get; set; }
-		string NhibName { get; set; }
 		int OfferedCalls { get; set; }
 		int AnsweredCalls { get; set; }
 		int AnsweredCallsWithinServiceLevel { get; set; }

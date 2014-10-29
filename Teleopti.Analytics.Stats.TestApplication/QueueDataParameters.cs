@@ -9,6 +9,6 @@ namespace Teleopti.Analytics.Stats.TestApplication
 		public int AmountOfDays { get; set; }
 		public DateTime StartDate { get; set; }
 		public string NhibDataSourcename { get; set; }
-		public string QueueDataSourceName { get; set; }
+		public int QueueDataSourceId { get; set; }
 	}
 }

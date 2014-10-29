@@ -4,11 +4,9 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Models
 {
 	public class QueueStatsModel : IQueueStatsModel
 	{
-		public string DateAndTimeString { get; set; }
-		public string LogObjectName { get; set; }
+		public string IntervalStart { get; set; }
 		public string QueueId { get; set; }
 		public string QueueName { get; set; }
-		public string NhibName { get; set; }
 		public int OfferedCalls { get; set; }
 		public int AnsweredCalls { get; set; }
 		public int AnsweredCallsWithinServiceLevel { get; set; }
