@@ -40,26 +40,54 @@ AS
 	--Init
 	INSERT INTO @TempList
 	SELECT * FROM dbo.SplitStringString(@personList)
-
+	--loop tempt list
 	SET ROWCOUNT @take;
+	--WITH Ass AS
+	--(
+	--  SELECT TOP (1000000)
+	--         *,
+	--	     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
+ --       FROM (SELECT *,
+	--	             CASE DATEDIFF(MINUTE, sd.Start, sd.[End])
+	--				   WHEN 1440 THEN 1
+	--				   ELSE 0
+	--				 END AS DayOffFlag
+	--	        FROM ReadModel.PersonScheduleDay sd
+	--	       INNER JOIN @TempList t ON t.Person = sd.PersonId
+			   
+	--	       WHERE [BelongsToDate] = @shiftTradeDate
+	--	         --AND DATEDIFF(MINUTE,Start, [End] ) <= 1440
+	--			 ) as s
+	--	ORDER BY DayOffFlag, Start
+	--) 
+
+
 	WITH Ass AS
 	(
 	  SELECT TOP (1000000)
 	         *,
 		     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
-        FROM (SELECT *,
-		             CASE DATEDIFF(MINUTE, sd.Start, sd.[End])
-					   WHEN 1440 THEN 1
-					   ELSE 0
-					 END AS DayOffFlag
-		        FROM ReadModel.PersonScheduleDay sd
-		       INNER JOIN @TempList t ON t.Person = sd.PersonId
-		       WHERE [BelongsToDate] = @shiftTradeDate
-		         --AND DATEDIFF(MINUTE,Start, [End] ) <= 1440
-				 ) as s
+        FROM (select p.Person as PersonId,
+			 isnull(sd.TeamId, t.Id) as TeamID, 
+			 isnull(sd.SiteId, s.Id) as SiteId, 
+			 isnull(sd.BusinessUnitId, s.BusinessUnit) as BusinessUnitId, 
+			 sd.BelongsToDate, sd.Start, sd.[End], sd.Model,
+			 CASE DATEDIFF(MINUTE, sd.Start, sd.[End])
+								   WHEN 1440 THEN 1
+								   ELSE 0
+								 END AS DayOffFlag
+			--t.Id, s.Id, s.BusinessUnit
+			FROM @TempList p left join (select * from ReadModel.PersonScheduleDay where [BelongsToDate] = @shiftTradeDate) sd on sd.PersonId=p.Person
+			join PersonPeriod pp on pp.Parent=p.Person 
+			join Team t on t.Id =pp.Team
+			join [Site] s on s.Id = t.Site
+			where  pp.StartDate=(select max(startdate) from PersonPeriod
+									where startdate <= @shiftTradeDate 
+									and Parent=p.Person
+									group by parent)
+		) as s
 		ORDER BY DayOffFlag, Start
 	) 
-	
 
 	
 	INSERT INTO #tmpOut
