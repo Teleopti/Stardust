@@ -9,20 +9,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class ForecasterModuleTest
 	{
 		[Test]
-		public void ShouldResolveQuickForecasterWorkload()
-		{
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<CommonModule>();
-
-			using (var container = containerBuilder.Build())
-			{
-				container.Resolve<IQuickForecasterWorkload>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveQuickForecasterSkill()
+		public void ShouldResolveQuickForecaster()
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<CommonModule>();
