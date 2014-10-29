@@ -679,5 +679,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(endDateWeek, schedulePeriodWeek.RealDateTo());
 			Assert.AreEqual(endDateMonth, schedulePeriodMonth.RealDateTo());
 		}
+
+		[Test]
+		public void BalanceInShouldRoundToMinutes()
+		{
+			_periodWeek.BalanceIn = TimeSpan.FromMinutes(1.5);
+			Assert.AreEqual(TimeSpan.FromMinutes(2), _periodWeek.BalanceIn);
+
+		}
+
+		[Test]
+		public void BalanceOutShouldRoundToMinutes()
+		{
+			_periodWeek.BalanceOut = TimeSpan.FromMinutes(1.5);
+			Assert.AreEqual(TimeSpan.FromMinutes(2), _periodWeek.BalanceOut);
+
+		}
+
+		[Test]
+		public void ExtraShouldRoundToMinutes()
+		{
+			_periodWeek.Extra = TimeSpan.FromMinutes(1.5);
+			Assert.AreEqual(TimeSpan.FromMinutes(2), _periodWeek.Extra);
+
+		}
     }
 }

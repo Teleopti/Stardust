@@ -586,13 +586,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual TimeSpan BalanceIn
 		{
 			get { return _balanceIn; }
-			set { _balanceIn = value; }
+			set
+			{
+				var roundedValue = TimeSpan.FromMinutes(Math.Round(value.TotalMinutes, 0));
+				_balanceIn = roundedValue;
+			}
 		}
 
 		public virtual TimeSpan Extra
 		{
 			get { return _extra; }
-			set { _extra = value; }
+			set
+			{
+				var roundedValue = TimeSpan.FromMinutes(Math.Round(value.TotalMinutes, 0));
+				_extra = roundedValue;
+			}
 		}
 
 		public virtual Percent Seasonality
@@ -604,7 +612,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual TimeSpan BalanceOut
 		{
 			get { return _balanceOut; }
-			set { _balanceOut = value; }
+			set
+			{
+				var roundedValue = TimeSpan.FromMinutes(Math.Round(value.TotalMinutes, 0));
+				_balanceOut = roundedValue;
+			}
 		}
 
 		#region ICloneable Members
