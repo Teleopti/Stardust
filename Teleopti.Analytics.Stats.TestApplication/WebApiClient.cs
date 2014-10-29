@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,18 +10,22 @@ namespace Teleopti.Analytics.Stats.TestApplication
 {
 	public class WebApiClient
 	{
-		public async Task<bool> PostQueueDataAsync(string baseUrl, QueueStatsModel queueStatsModel)
-		{
-			using (var client = new HttpClient())
-			{
-				client.BaseAddress = new Uri(baseUrl);
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+		private readonly HttpClient _client;
 
-				var postBody = JsonConvert.SerializeObject(queueStatsModel);
-				var response = await client.PostAsync("api/mart/QueueStats", new StringContent(postBody, Encoding.UTF8, "application/json"));
-				return response.IsSuccessStatusCode;
-			}
+		public WebApiClient(HttpClient client)
+		{
+			_client = client;
+			_client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebApiBaseUrl"]);
+			_client.DefaultRequestHeaders.Accept.Clear();
+			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+		}
+
+		public async Task<bool> PostQueueDataAsync(QueueStatsModel queueStatsModel)
+		{
+			var postBody = JsonConvert.SerializeObject(queueStatsModel);
+			var response = await _client.PostAsync("api/mart/QueueStats", new StringContent(postBody, Encoding.UTF8, "application/json"));
+			
+			return response.IsSuccessStatusCode;
 		}
 	}
 }
