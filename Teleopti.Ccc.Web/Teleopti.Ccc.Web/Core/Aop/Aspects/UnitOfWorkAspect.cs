@@ -1,5 +1,4 @@
 using System;
-using System.Web;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -25,7 +24,21 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 		public void OnBeforeInvokation()
 		{
 			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
-			if (_context.Current() == null) return;
+			_businessUnitOverrideScope = overrideBusinessUnitFilter();
+		}
+
+		public void OnAfterInvokation(Exception exception)
+		{
+			_unitOfWork.PersistAll();
+			diposeBusinessUnitFilterOverride();
+			_unitOfWork.Dispose();
+		}
+
+
+
+		private IDisposable overrideBusinessUnitFilter()
+		{
+			if (_context.Current() == null) return null;
 			var buId = string.Empty;
 			var queryString = _context.Current().Request.QueryString;
 			if (queryString != null)
@@ -36,22 +49,16 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 				buId = headers["X-Business-Unit-Filter"] ?? buId;
 			}
 
-			if (string.IsNullOrEmpty(buId)) return;
+			if (string.IsNullOrEmpty(buId)) return null;
 			var id = Guid.Parse(buId);
-			_businessUnitOverrideScope = _overrider.OverrideWith(id);
+			return _overrider.OverrideWith(id);
 		}
 
-		public void OnAfterInvokation(Exception exception)
+		private void diposeBusinessUnitFilterOverride()
 		{
-			_unitOfWork.PersistAll();
-
-			if (_businessUnitOverrideScope != null)
-			{
-				_businessUnitOverrideScope.Dispose();
-				_businessUnitOverrideScope = null;
-			}
-
-			_unitOfWork.Dispose();
+			if (_businessUnitOverrideScope == null) return;
+			_businessUnitOverrideScope.Dispose();
+			_businessUnitOverrideScope = null;
 		}
 	}
 }
