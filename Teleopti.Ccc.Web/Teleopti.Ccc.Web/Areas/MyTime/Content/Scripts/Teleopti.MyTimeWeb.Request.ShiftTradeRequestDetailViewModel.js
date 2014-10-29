@@ -441,10 +441,14 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 			} else if (mySchedule.isDayOff && selectedSchedule.isDayOff) {
 				return allHours;
 			} else {
-				if ((mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') == mySchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') != selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+				var myScheduleFormatedStartTime = mySchedule.scheduleStartTime() != undefined ? mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
+				var myScheduleFormatedEndTime = mySchedule.scheduleEndTime() != undefined ? mySchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
+				var selectedScheduleFormatedStartTime = selectedSchedule.scheduleStartTime() != undefined ? selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
+				var selectedScheduleFormatedEndTime = selectedSchedule.scheduleEndTime() != undefined ? selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
+				if (((myScheduleFormatedStartTime == null)||(myScheduleFormatedStartTime == myScheduleFormatedEndTime)) && (selectedScheduleFormatedStartTime != selectedScheduleFormatedEndTime)) {
 					scheduleStartTime = selectedSchedule.scheduleStartTime();
 					scheduleEndTime = selectedSchedule.scheduleEndTime();
-				} else if ((selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') == selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') != mySchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+				} else if (((selectedScheduleFormatedStartTime == null)||(selectedScheduleFormatedStartTime == selectedScheduleFormatedEndTime)) && (myScheduleFormatedStartTime != myScheduleFormatedEndTime)) {
 					scheduleStartTime = mySchedule.scheduleStartTime();
 					scheduleEndTime = mySchedule.scheduleEndTime();
 				} else {

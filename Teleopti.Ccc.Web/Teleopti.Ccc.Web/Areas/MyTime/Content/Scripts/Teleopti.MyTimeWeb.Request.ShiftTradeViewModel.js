@@ -109,11 +109,15 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				} else if (!self.mySchedule().isDayOff && schedule.isDayOff) {
 					scheduleStartTime = self.mySchedule().scheduleStartTime();
 				} else {
-					if ((self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, h:mm') == self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (schedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') != schedule.scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
+					var myScheduleFormatedStartTime = self.mySchedule().scheduleStartTime() != undefined ? self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
+					var myScheduleFormatedEndTime = self.mySchedule().scheduleEndTime() != undefined ? self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
+					var tradedScheduleFormatedStartTime = schedule.scheduleStartTime() != undefined ? schedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
+					var tradedScheduleFormatedEndTime = schedule.scheduleEndTime() != undefined ? schedule.scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
+					if (((myScheduleFormatedStartTime == null) || (myScheduleFormatedStartTime == myScheduleFormatedEndTime)) && (tradedScheduleFormatedStartTime != tradedScheduleFormatedEndTime)) {
 						scheduleStartTime = schedule.scheduleStartTime();
 					}
-					else if ((schedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') == schedule.scheduleEndTime().format('MMMM Do YYYY, h:mm')) && (self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, h:mm') != self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, h:mm'))) {
-						scheduleStartTime = self.mySchedule().scheduleStartTime()
+					else if (((tradedScheduleFormatedStartTime == null) || (tradedScheduleFormatedStartTime == tradedScheduleFormatedEndTime)) && (myScheduleFormatedStartTime != myScheduleFormatedEndTime)) {
+						scheduleStartTime = self.mySchedule().scheduleStartTime();
 					} else {
 						scheduleStartTime = self.mySchedule().scheduleStartTime() < schedule.scheduleStartTime() ? self.mySchedule().scheduleStartTime() : schedule.scheduleStartTime();
 					}
