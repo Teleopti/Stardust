@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
-	public class QuickForecasterSkillTest
+	public class QuickForecasterSkillWithMultipleWorkloadsTest
 	{
 		[Test]
 		public void ShouldForecastAllWorkloadsOnSkill()
