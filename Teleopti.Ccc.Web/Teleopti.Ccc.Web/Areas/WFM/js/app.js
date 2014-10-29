@@ -6,7 +6,6 @@ var wfm = angular.module('wfm', [
 ]);
 wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/");
-    //debugger;
     $stateProvider.state('main', {
         url:'/',
         templateUrl: 'html/main.html',
@@ -20,11 +19,19 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
         templateUrl: 'html/forecasting-run.html',
         controller: 'ForecastingRunCtrl'
     });
-}]).run(['$rootScope', '$http', '$q', '$location'], function ($rootScope, $http, $q, $location) {
-	var context = $http.get('../../Anywhere/Application/NavigationContent');
-	$rootScope.$on('$routeChangeStart', function (event, next, current) {
-		$q.all(context);
-		context.error(function() { $location.path('../../'); });
-		context.success(function(data) {});
+}]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
+    var timeout = Date.now() + 10000;
+	$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+        if(Date.now() > timeout ) {
+            event.preventDefault();
+            var context = $http.get('../../Anywhere/Application/NavigationContent');
+            context.error(function () {
+                window.location = '../../';
+            });
+            context.success(function (data) {
+                timeout = Date.now() + 10000;
+                $state.go(next, toParams);
+            });
+        }
 	});
-});
+}]);
