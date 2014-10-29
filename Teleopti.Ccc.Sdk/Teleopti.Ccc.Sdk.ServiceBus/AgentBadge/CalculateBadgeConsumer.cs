@@ -64,25 +64,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					message.Datasource, message.TimeZoneCode);
 			}
 
-			var today = _now.LocalDateOnly();
-			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+			var setting = _settingsRepository.GetSettings();
+			if (setting == null)
+			{
+				//error happens
+				Logger.Error("Agent badge threshold setting is null before starting badge calculation");
+				return;
+			}
 
-			// Set badge calculation start at 5:00 AM
-			// Just hard code it now, the best solution is to trigger it from ETL
-			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
+			if (!setting.BadgeEnabled)
+			{
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat("Agent badge is disabled. nothing will be done except send a new CalculateBadgeMessage for "
+					                   + "BusinessUnit {0}, DataSource {1} and timezone {2}",
+						message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
+				}
+				resendMessage(message);
+				return;
+			}
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var setting = _settingsRepository.GetSettings();
-				if (setting == null)
-				{
-					//error happens
-					Logger.Error("Agent badge threshold setting is null before starting badge calculation");
-					return;
-				}
-				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key,
+					new AdherenceReportSetting());
 
+				var today = _now.LocalDateOnly();
 				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var calculateDate = new DateOnly(message.CalculationDate);
@@ -127,20 +134,34 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			if (_serviceBus == null) return;
 
-			_serviceBus.DelaySend(nextMessageShouldBeProcessed, new CalculateBadgeMessage
+			resendMessage(message);
+		}
+
+		private void resendMessage(CalculateBadgeMessage message)
+		{
+			var today = _now.LocalDateOnly();
+			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+
+			// Set badge calculation start at 5:00 AM
+			// Just hard code it now, the best solution is to trigger it from ETL
+			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
+			var newMessage = new CalculateBadgeMessage
 			{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
 				Timestamp = DateTime.UtcNow,
 				TimeZoneCode = message.TimeZoneCode,
 				CalculationDate = message.CalculationDate.AddDays(1)
-			});
+			};
+
+			_serviceBus.DelaySend(nextMessageShouldBeProcessed, newMessage);
 
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
 						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}",
-						message.TimeZoneCode, nextMessageShouldBeProcessed);
+						newMessage.TimeZoneCode, nextMessageShouldBeProcessed);
 			}
 		}
 
