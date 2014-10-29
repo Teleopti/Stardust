@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2);
 			var quickForecasterWorkload = MockRepository.GenerateStub<IQuickForecasterWorkload>();
 			
-			var target = new QuickForecasterSkill(quickForecasterWorkload);
+			var target = new QuickForecaster(quickForecasterWorkload);
 			target.Execute(skill, historicalPeriod, futurePeriod);
 
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(wl1, historicalPeriod, futurePeriod));

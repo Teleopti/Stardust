@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 			using (var container = containerBuilder.Build())
 			{
-				container.Resolve<IQuickForecasterSkill>()
+				container.Resolve<IQuickForecaster>()
 					.Should().Not.Be.Null();
 			}
 		}

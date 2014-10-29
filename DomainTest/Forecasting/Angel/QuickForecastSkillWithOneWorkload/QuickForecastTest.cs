@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 				new FutureData(new FetchAndFillSkillDays(skillDayRepository, currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
 			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
-			var target = new QuickForecasterSkill(quickForecasterWorkload);
+			var target = new QuickForecaster(quickForecasterWorkload);
 			target.Execute(Workload.Skill, HistoricalPeriod, FuturePeriod);
 
 			Assert(skillDays);

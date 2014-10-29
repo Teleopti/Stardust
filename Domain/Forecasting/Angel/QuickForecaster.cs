@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class QuickForecasterSkill : IQuickForecasterSkill
+	public class QuickForecaster : IQuickForecaster
 	{
 		private readonly IQuickForecasterWorkload _quickForecasterWorkload;
 
-		public QuickForecasterSkill(IQuickForecasterWorkload quickForecasterWorkload)
+		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload)
 		{
 			_quickForecasterWorkload = quickForecasterWorkload;
 		}
