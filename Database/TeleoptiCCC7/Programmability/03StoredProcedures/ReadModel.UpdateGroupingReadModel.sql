@@ -36,8 +36,6 @@ BEGIN
 	DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 END 
 
-DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
-
     declare @mainId uniqueidentifier
 	set @mainId='6CE00B41-0722-4B36-91DD-0A3B63C545CF'
 	
@@ -80,7 +78,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join person p on p.id=pp.parent 
 	and p.isdeleted=0 
-	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @mainId)
 	
 	--Insert people from contract
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate)
@@ -102,7 +99,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 	inner join contract c on pp.contract=c.id 
 	inner join person p on p.id=pp.parent 
 	and p.isdeleted=0 
-	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @contractId)
 
 	--Insert people from part time percentage
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -124,7 +120,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 	inner join parttimepercentage c on pp.parttimepercentage=c.id 
 	inner join person p on p.id=pp.parent 
 	and p.isdeleted=0 
-	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @partTimePercentageId)
 	
 	--Insert people from contract schedule
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -145,7 +140,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 	inner join contractschedule c on pp.contractschedule=c.id 
 	inner join person p on p.id=pp.parent 
 	and p.isdeleted=0 
-	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @contractScheduleId)
 	
 	--Insert people from rule set bag
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -167,7 +161,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 	inner join rulesetbag c on pp.rulesetbag=c.id 
 	inner join person p on p.id=pp.parent 
 	and p.isdeleted=0 
-	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @ruleSetBagId)
 	
 	--Insert people from skill
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -195,7 +188,6 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 		on	skill.id=c.skill and skill.isdeleted=0
 	inner join person p
 		on	p.id=pp.parent and p.isdeleted=0 
-	AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[GroupingReadOnly] WHERE PageId = @skillId)
 
 	CREATE TABLE #groupsForSecondCTE
 	(
