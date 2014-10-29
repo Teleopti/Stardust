@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	[TestFixture]
 	public class ReadModelUnitOfWorkTest
 	{
-
 		[Test]
 		public void ShouldProduceWorkingUnitOfWork()
 		{
@@ -155,6 +153,22 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			Enumerable.Range(0, times).ForEach(action);
 		}
+
+		public static void DoUpdate(this Outer instance, string query)
+		{
+			instance.DoAction(uow => uow.CreateSQLQuery(query).ExecuteUpdate());
+		}
+
+		public static T DoSelect<T>(this Outer instance, string query, Func<ISQLQuery, T> queryAction)
+		{
+			var result = default(T);
+			instance.DoAction(uow =>
+			{
+				result = queryAction(uow.CreateSQLQuery(query));
+			});
+			return result;
+		}
+
 	}
 
 	public class TestException : Exception
@@ -176,21 +190,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public virtual void DoAction(Action<ILiteUnitOfWork> action)
 		{
 			action(_uow.Current());
-		}
-
-		public void DoUpdate(string query)
-		{
-			DoAction(uow => uow.CreateSQLQuery(query).ExecuteUpdate());
-		}
-
-		public T DoSelect<T>(string query, Func<ISQLQuery, T> queryAction)
-		{
-			var result = default(T);
-			DoAction(uow =>
-			{
-				result = queryAction(uow.CreateSQLQuery(query));
-			});
-			return result;
 		}
 
 		[ReadModelUnitOfWork]
@@ -232,171 +231,5 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			Action.Invoke(_uow.Current());
 		}
 	}
-
-
-
-	public class TestTable : IDisposable
-	{
-		private readonly string _name;
-
-		public TestTable(string name)
-		{
-			_name = name;
-			applySql(string.Format("CREATE TABLE {0} (Value int)", _name));
-			//applySql("INSERT INTO TestTable (Value) VALUES (-1)");
-		}
-
-		public static IEnumerable<int> Select(string tableName)
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
-				using (var command = new SqlCommand("SELECT * FROM " + tableName, connection))
-				using (var reader = command.ExecuteReader())
-					while (reader.Read())
-						yield return reader.GetInt32(0);
-			}
-		}
-
-		public void Dispose()
-		{
-			try
-			{
-				applySql(string.Format("DROP TABLE {0}", _name));
-			}
-			catch (Exception)
-			{
-			}
-		}
-
-		private static void applySql(string Sql)
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
-				using (var command = new SqlCommand(Sql, connection))
-					command.ExecuteNonQuery();
-			}
-		}
-	}
-
-	public class TestTableModel
-	{
-		public int Value { get; set; }
-	}
-
-
-
-
-
-
-
-
-	public class ReadModelUnitOfWorkModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<CurrentReadModelUnitOfWork2>()
-				.SingleInstance()
-				.As<ICurrentReadModelUnitOfWork>();
-			builder.RegisterType<ReadModelUnitOfWorkAspect>()
-				.SingleInstance();
-		}
-	}
-
-	public class CurrentReadModelUnitOfWork2 : ICurrentReadModelUnitOfWork
-	{
-		[ThreadStatic]
-		private static ILiteUnitOfWork _uow;
-
-		public void SetCurrentSession(ISession session)
-		{
-			_uow = new LiteUnitOfWork2(session);
-		}
-
-		public ILiteUnitOfWork Current()
-		{
-			return _uow;
-		}
-	}
-
-	public class LiteUnitOfWork2 : ILiteUnitOfWork
-	{
-		private readonly ISession _session;
-
-		public LiteUnitOfWork2(ISession session)
-		{
-			_session = session;
-		}
-
-		public ISQLQuery CreateSQLQuery(string queryString)
-		{
-			return _session.CreateSQLQuery(queryString);
-		}
-
-		public ISession Session()
-		{
-			return _session;
-		}
-	}
-
-	public class ReadModelUnitOfWorkAttribute : ResolvedAspectAttribute
-	{
-		public ReadModelUnitOfWorkAttribute()
-			: base(typeof(ReadModelUnitOfWorkAspect))
-		{
-		}
-	}
-
-	public class ReadModelUnitOfWorkAspect : IAspect
-	{
-		private readonly ICurrentReadModelUnitOfWork _uow;
-
-		public ReadModelUnitOfWorkAspect(ICurrentReadModelUnitOfWork uow)
-		{
-			_uow = uow;
-		}
-
-		public void OnBeforeInvokation()
-		{
-			var configuration = new Configuration();
-			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, ConnectionStringHelper.ConnectionStringUsedInTests);
-			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
-			//configuration.SetProperty(NHibernate.Cfg.Environment.CurrentSessionContextClass, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
-			var sessionFactory = configuration.BuildSessionFactory();
-			var session = sessionFactory.OpenSession();
-
-			((CurrentReadModelUnitOfWork2)_uow).SetCurrentSession(session);
-			session.BeginTransaction();
-		}
-
-		public void OnAfterInvokation(Exception exception)
-		{
-			var transaction = _uow.Current().Session().Transaction;
-			if (exception != null)
-			{
-				transaction.Dispose();
-				return;
-			}
-			transaction.Commit();
-		}
-	}
-
-
-	public interface ICurrentReadModelUnitOfWork
-	{
-		ILiteUnitOfWork Current();
-	}
-
-	public interface ILiteUnitOfWork
-	{
-		ISQLQuery CreateSQLQuery(string queryString);
-		ISession Session();
-	}
-
-
-
-
-
 
 }
