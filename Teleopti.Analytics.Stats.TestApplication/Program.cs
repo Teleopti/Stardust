@@ -65,10 +65,11 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				};
 				Console.WriteLine("Amount of rows to be posted to mart.fact_queue table is: \n" + rowsToBeGenerated(parameters));
 				Console.WriteLine("Start posting queue data by pressing P.");
-				if (Console.ReadLine().ToUpper() != "P")
+				if (Console.ReadKey().Key != ConsoleKey.P)
 					break;
 				var generator = new QueueStatsGenerator();
-				generator.Create(parameters);
+				generator.CreateAsync(parameters).Wait();
+				Console.ReadLine();
 				break;
 			}
 		}
