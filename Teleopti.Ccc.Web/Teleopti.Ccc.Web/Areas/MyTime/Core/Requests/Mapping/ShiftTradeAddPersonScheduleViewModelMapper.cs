@@ -37,23 +37,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				Total = scheduleReadModel.Total,
 				IsDayOff = false
 			};
-
+			
+			//for agents with empty schedule, retrieve name from person repository, for those haveing normal schedule, all infor. is included in shiftReadModel
 			if (shiftReadModel == null)
 			{
 				var person = _personRepository.FindPeople(new List<Guid> {scheduleReadModel.PersonId}).First();
 				ret.Name = _personNameProvider.BuildNameFromSetting(person.Name.FirstName, person.Name.LastName);
 			}
-			else
+			else //for agents with non-empty schedule, namely, regular schedule, day off, full day absence (full day abasence is not allowed to trade)
 			{
 				ret.Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName);
+				//while having shift and layers, if it is my schedule it'll get shown, or if others agent's schedule is not full day absence, 
+				//that should be available for trade. (full day absence is not allowed to  be used for trade)
 				if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) &&
 				(isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
 				{
-					ret.StartTimeUtc = scheduleReadModel.Start.Value;
+					if (scheduleReadModel.Start != null) 
+						ret.StartTimeUtc = scheduleReadModel.Start.Value;
 					ret.MinStart = scheduleReadModel.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule);
 				}
 
+				//for DayOff schedule, logic is same except using different mapping method.
 				if (shiftReadModel.DayOff != null)
 				{
 					var dayOffProjection = new List<SimpleLayer>();
@@ -67,7 +72,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 					dayOffProjection.Add(sl);
 
-					ret.StartTimeUtc = scheduleReadModel.Start.Value;
+					if (scheduleReadModel.Start != null) 
+						ret.StartTimeUtc = scheduleReadModel.Start.Value;
 					ret.MinStart = scheduleReadModel.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
 					ret.IsDayOff = true;
