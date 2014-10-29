@@ -260,6 +260,7 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecasterSkillTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateAverageHandlingTimesForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest.cs" />
@@ -274,7 +275,7 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\OnlyStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\OnlyValidatedTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecast\QuickForecastTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecast\QuickForecastWorkloadTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecast\SkillDayAlreadyExistTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreatorTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelperTest.cs" />

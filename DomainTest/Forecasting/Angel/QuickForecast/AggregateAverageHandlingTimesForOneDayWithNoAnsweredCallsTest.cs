@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest : QuickForecastTest
+	public class AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest : QuickForecastWorkloadTest
 	{
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{

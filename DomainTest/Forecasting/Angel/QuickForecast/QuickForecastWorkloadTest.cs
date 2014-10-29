@@ -16,11 +16,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public abstract class QuickForecastTest
+	public abstract class QuickForecastWorkloadTest
 	{
 		private IWorkload _workload;
 
-		protected QuickForecastTest()
+		protected QuickForecastWorkloadTest()
 		{
 			DefaultScenario = new Scenario("default scenario") {DefaultScenario = true};
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 			var futureData =
 				new FutureData(new FetchAndFillSkillDays(skillDayRepository, currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			var target = new QuickForecaster(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
+			var target = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
 			target.Execute(Workload, HistoricalPeriod, FuturePeriod);
 
 			Assert(skillDays);

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workload = new Workload(skill);
 			skill.AddWorkload(workload);
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] {skill});
-			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
+			var quickForecaster = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository, now));
 
 			target.QuickForecast(new QuickForecastInputModel{ForecastStart = expectedFuturePeriod.StartDate, ForecastEnd = expectedFuturePeriod.EndDate});

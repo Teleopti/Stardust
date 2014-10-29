@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class OnlyStatisticsTest : QuickForecastTest
+	public class OnlyStatisticsTest : QuickForecastWorkloadTest
 	{
 		private const int expectedNumberOfTasks = 17;
 

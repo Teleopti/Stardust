@@ -4,13 +4,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class QuickForecaster : IQuickForecaster
+	public class QuickForecasterWorkload : IQuickForecasterWorkload
 	{
 		private readonly IHistoricalData _historicalData;
 		private readonly IFutureData _futureData;
 		private readonly IForecastVolumeApplier _volumeApplier;
 
-		public QuickForecaster(IHistoricalData historicalData, IFutureData futureData, IForecastVolumeApplier volumeApplier)
+		public QuickForecasterWorkload(IHistoricalData historicalData, IFutureData futureData, IForecastVolumeApplier volumeApplier)
 		{
 			_historicalData = historicalData;
 			_futureData = futureData;

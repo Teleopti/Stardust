@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class QuickForecastForAllSkills : IQuickForecastForAllSkills
 	{
-		private readonly IQuickForecaster _quickForecaster;
+		private readonly IQuickForecasterWorkload _quickForecasterWorkload;
 		private readonly ISkillRepository _skillRepository;
 		private readonly INow _now;
 
-		public QuickForecastForAllSkills(IQuickForecaster quickForecaster, ISkillRepository skillRepository, INow now)
+		public QuickForecastForAllSkills(IQuickForecasterWorkload quickForecasterWorkload, ISkillRepository skillRepository, INow now)
 		{
-			_quickForecaster = quickForecaster;
+			_quickForecasterWorkload = quickForecasterWorkload;
 			_skillRepository = skillRepository;
 			_now = now;
 		}
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 			foreach (var workload in allSkills.SelectMany(skill => skill.WorkloadCollection))
 			{
-				_quickForecaster.Execute(workload, historicalPeriod, futurePeriod);
+				_quickForecasterWorkload.Execute(workload, historicalPeriod, futurePeriod);
 			}
 		}
 	}

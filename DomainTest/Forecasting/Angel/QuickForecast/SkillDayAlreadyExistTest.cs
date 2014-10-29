@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecast
 {
-	public class SkillDayAlreadyExistTest : QuickForecastTest
+	public class SkillDayAlreadyExistTest : QuickForecastWorkloadTest
 	{
 		private const int newExpectedNumberOfTasks = 48;
 

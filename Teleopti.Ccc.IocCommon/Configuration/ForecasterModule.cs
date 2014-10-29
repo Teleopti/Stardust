@@ -10,9 +10,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<QuickForecaster>()
+			builder.RegisterType<QuickForecasterWorkload>()
 				.SingleInstance()
-				.As<IQuickForecaster>();
+				.As<IQuickForecasterWorkload>();
+			builder.RegisterType<QuickForecasterSkill>()
+				.SingleInstance()
+				.As<IQuickForecasterSkill>();
 			builder.RegisterType<HistoricalData>()
 				.SingleInstance()
 				.As<IHistoricalData>();
