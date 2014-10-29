@@ -202,35 +202,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 	}
 
-	public class TestTable : IDisposable
-	{
-		public TestTable()
-		{
-			applySql("CREATE TABLE TestTable (Value int)");
-			applySql("INSERT INTO TestTable (Value) VALUES (-1)");
-		}
-
-		public void Dispose()
-		{
-			applySql("DROP TABLE TestTable");
-		}
-
-		private static void applySql(string Sql)
-		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-			{
-				connection.Open();
-				using (var command = new SqlCommand(Sql, connection))
-					command.ExecuteNonQuery();
-			}
-		}
-	}
-
-	public class TestTableModel
-	{
-		public int Value { get; set; }
-	}
-
 	public class LiteUnitOfWorkFactoryForTest : LiteUnitOfWorkFactory
 	{
 		public LiteUnitOfWorkFactoryForTest(string connectionString)
