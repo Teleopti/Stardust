@@ -44,7 +44,7 @@ AS
 
 	WITH Ass AS
 	(
-	  SELECT DISTINCT (TOP (1000000)
+	  SELECT DISTINCT TOP (1000000)
 	         *,
 		     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
         FROM (select p.Person as PersonId,
@@ -65,7 +65,7 @@ AS
 									and Parent = p.Person
 									group by parent)
 		) as s
-		ORDER BY DayOffFlag, Start)
+		ORDER BY DayOffFlag, Start
 	) 
 
 	
