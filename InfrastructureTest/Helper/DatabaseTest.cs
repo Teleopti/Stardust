@@ -16,12 +16,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 {
     public abstract class DatabaseTest
     {
-    	private IState stateMock;
         private bool skipRollback;
     	
     	protected ISession Session { get; private set; }
     	protected IPerson LoggedOnPerson { get; private set; }
-    	protected IRepositoryFactory RepositoryFactory { get; private set; }
     	protected IUnitOfWork UnitOfWork { get; private set; }
     	protected MockRepository Mocks { get; private set; }
 
@@ -29,11 +27,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         public void Setup()
         {
             BusinessUnitFactory.SetBusinessUnitUsedInTestToNull();
-            RepositoryFactory = new RepositoryFactory();
             skipRollback = false;
 
             Mocks = new MockRepository();
-            stateMock = Mocks.StrictMock<IState>();
+            var stateMock = Mocks.StrictMock<IState>();
 
             Guid buGuid = Guid.NewGuid();
             BusinessUnitFactory.BusinessUnitUsedInTest.SetId(buGuid);
@@ -58,7 +55,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 
             
             SetupForRepositoryTest();
-            //logSpy = new SqlLogSpy();
         }
 
         protected virtual void SetupForRepositoryTest(){}

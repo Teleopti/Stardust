@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// </summary>
         protected override void ConcreteSetup()
         {
-            _rep = RepositoryFactory.CreateScenarioRepository(UnitOfWork);
+            _rep = new ScenarioRepository(UnitOfWork);
         }
 
 

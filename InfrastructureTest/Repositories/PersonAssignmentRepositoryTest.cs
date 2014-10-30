@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void ConcreteSetup()
         {
             _dummyCat = ShiftCategoryFactory.CreateShiftCategory("dummyCat");
-            _rep = RepositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
+            _rep = new PersonAssignmentRepository(UnitOfWork);
 						_dummyActivity = new Activity("dummy") { DisplayColor = Color.DodgerBlue };
             PersistAndRemoveFromUnitOfWork(_dummyActivity);
             _dummyAgent = PersonFactory.CreatePerson("m");
