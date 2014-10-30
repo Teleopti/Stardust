@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                                                                (double)dataRow["forecasted_after_call_work_s"];
             //Only campaign
             dataRow["forecasted_after_call_work_excl_campaign_s"] =
-                templateTaskPeriod.AverageTaskTime.TotalSeconds *
+                templateTaskPeriod.AverageAfterTaskTime.TotalSeconds *
                 (double)dataRow["forecasted_calls_excl_campaign"]; //Only tasks
             dataRow["forecasted_handling_time_s"] = (double)dataRow["forecasted_talk_time_sec"] +
                                                     (double)dataRow["forecasted_after_call_work_s"];
