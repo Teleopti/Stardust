@@ -169,7 +169,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 templateTaskPeriod.CampaignAfterTaskTime.Value*(double) dataRow["forecasted_after_call_work_s"],
                 dataRow["forecasted_campaign_after_call_work_s"]);
             Assert.AreEqual(
-                templateTaskPeriod.AverageTaskTime.TotalSeconds*(double) dataRow["forecasted_calls_excl_campaign"],
+                templateTaskPeriod.AverageAfterTaskTime.TotalSeconds*(double) dataRow["forecasted_calls_excl_campaign"],
                 dataRow["forecasted_after_call_work_excl_campaign_s"]);
             Assert.AreEqual(
                 (double) dataRow["forecasted_talk_time_sec"] + (double) dataRow["forecasted_after_call_work_s"],
@@ -240,7 +240,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 templateTaskPeriod.CampaignAfterTaskTime.Value * (double)dataRow["forecasted_after_call_work_s"],
                 dataRow["forecasted_campaign_after_call_work_s"]);
             Assert.AreEqual(
-                templateTaskPeriod.AverageTaskTime.TotalSeconds * (double)dataRow["forecasted_calls_excl_campaign"],
+                templateTaskPeriod.AverageAfterTaskTime.TotalSeconds * (double)dataRow["forecasted_calls_excl_campaign"],
                 dataRow["forecasted_after_call_work_excl_campaign_s"]);
             Assert.AreEqual(
                 (double)dataRow["forecasted_talk_time_sec"] + (double)dataRow["forecasted_after_call_work_s"],
@@ -311,7 +311,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 templateTaskPeriod.CampaignAfterTaskTime.Value * (double)dataRow["forecasted_after_call_work_s"],
                 dataRow["forecasted_campaign_after_call_work_s"]);
             Assert.AreEqual(
-                templateTaskPeriod.AverageTaskTime.TotalSeconds * (double)dataRow["forecasted_calls_excl_campaign"],
+                templateTaskPeriod.AverageAfterTaskTime.TotalSeconds * (double)dataRow["forecasted_calls_excl_campaign"],
                 dataRow["forecasted_after_call_work_excl_campaign_s"]);
             Assert.AreEqual(
                 (double)dataRow["forecasted_talk_time_sec"] + (double)dataRow["forecasted_after_call_work_s"],
