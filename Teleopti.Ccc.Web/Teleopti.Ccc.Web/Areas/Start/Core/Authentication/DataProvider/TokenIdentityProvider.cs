@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider

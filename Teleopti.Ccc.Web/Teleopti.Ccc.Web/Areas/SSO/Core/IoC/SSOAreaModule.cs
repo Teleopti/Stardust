@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DotNetOpenAuth.OpenId.Provider;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC

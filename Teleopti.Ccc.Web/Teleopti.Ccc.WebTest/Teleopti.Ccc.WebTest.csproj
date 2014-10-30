@@ -345,7 +345,6 @@
     <Compile Include="Core\Message\ViewModelFactory\MessageViewModelFactoryTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryRequestsTest.cs" />
-    <Compile Include="Core\RequestContext\CurrentHttpContextTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PossibleShiftTradePersonsProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestProviderTest.cs" />

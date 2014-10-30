@@ -140,6 +140,7 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -473,6 +474,7 @@
     <Compile Include="WebReports\DetailedAdherenceForDay\IntervalsPerDayForDateTest.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDay\ShiftDateForDateTest.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDay\TotalAdherenceForDateTest.cs" />
+    <Compile Include="Web\CurrentHttpContextTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

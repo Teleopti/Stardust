@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Filters;
+﻿using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie

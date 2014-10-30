@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Web;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Infrastructure.Web;
 
-namespace Teleopti.Ccc.WebTest.Core.RequestContext
+namespace Teleopti.Ccc.InfrastructureTest.Web
 {
 	[TestFixture]
 	public class CurrentHttpContextTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldReturnCurrentHttpContext()
 		{
 			var context = new HttpContext(new HttpRequest("file", "http://my.url.com/", "querystring"), new HttpResponse(new StringWriter()));

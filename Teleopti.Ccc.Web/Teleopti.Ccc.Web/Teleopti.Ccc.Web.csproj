@@ -647,8 +647,6 @@
     <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
-    <Compile Include="Core\RequestContext\CurrentHttpContext.cs" />
-    <Compile Include="Core\RequestContext\ICurrentHttpContext.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />

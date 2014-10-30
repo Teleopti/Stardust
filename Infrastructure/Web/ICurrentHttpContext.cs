@@ -1,6 +1,6 @@
 using System.Web;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Infrastructure.Web
 {
 	public interface ICurrentHttpContext
 	{
