@@ -110,7 +110,7 @@ BEGIN
 	DELETE FROM mart.fact_schedule_forecast_skill	WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_agent						WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_agent_queue				WHERE date_id >= @Date_Id
-	DELETE FROM mart.fact_agent_queue				WHERE local_date_id >= @Date_Id
+	DELETE FROM mart.fact_agent_queue				WHERE date_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_deviation		WHERE shift_startdate_local_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_day_count		WHERE shift_startdate_local_id >= @Date_Id
 	DELETE FROM mart.fact_schedule_preference		WHERE date_id >= @Date_Id
