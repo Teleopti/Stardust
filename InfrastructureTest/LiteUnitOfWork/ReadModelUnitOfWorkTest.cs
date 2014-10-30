@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NHibernate;
-using NHibernate.Cfg;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldProduceWorkingUnitOfWork()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = BuildContainer())
+			using (var c = buildContainer())
 			{
 				var target = c.Resolve<Outer>();
 				var value = randomValue();
@@ -37,13 +36,13 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldRollbackTransaction()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = BuildContainer())
+			using (var c = buildContainer())
 			{
 				Assert.Throws<TestException>(() =>
 				{
 					c.Resolve<Outer>().DoAction(uow =>
 					{
-						uow.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+						uow.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
 						throw new TestException();
 					});
 				});
@@ -55,10 +54,10 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[Test]
 		public void ShouldProduceUnitOfWorkToInnerObjects()
 		{
-			using (var c = BuildContainer())
+			using (var c = buildContainer())
 			{
 				string result = null;
-				c.Resolve<Inner1>().Action = uow => { result = uow.CreateSQLQuery("SELECT @@VERSION").List<string>().Single(); };
+				c.Resolve<Inner1>().Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
 
 				c.Resolve<Outer>().ExecuteInners();
 
@@ -70,11 +69,11 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldRollbackTransactionForInnerObject()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = BuildContainer())
+			using (var c = buildContainer())
 			{
 				c.Resolve<Inner1>().Action = s =>
 				{
-					s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+					s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
 					throw new TestException();
 				};
 
@@ -88,12 +87,12 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldSpanTransactionOverAllInnerObjects()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = BuildContainer())
+			using (var c = buildContainer())
 			{
-				c.Resolve<Inner1>().Action = s => s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+				c.Resolve<Inner1>().Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
 				c.Resolve<Inner2>().Action = s =>
 				{
-					s.CreateSQLQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
+					s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
 					throw new TestException();
 				};
 				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
@@ -107,17 +106,44 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (new TestTable("TestTable1"))
 			using (new TestTable("TestTable2"))
-			using (var c = BuildContainer())
+			using (var c = buildContainer())
 			{
 				var task1 = Task.Factory.StartNew(() =>
 				{
-					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSQLQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 				});
 				var task2 = Task.Factory.StartNew(() =>
 				{
 					c.Resolve<Outer>().DoAction(uow =>
 					{
-						1000.Times(i => uow.CreateSQLQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
+						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
+						throw new TestException();
+					});
+				});
+
+				Assert.Throws<AggregateException>(() => Task.WaitAll(task1, task2));
+
+				TestTable.Select("TestTable1").Count().Should().Be(1000);
+				TestTable.Select("TestTable2").Count().Should().Be(0);
+			}
+		}
+
+		[Test]
+		public void ShouldProduceUnitOfWorkForEachWebRequest()
+		{
+			using (new TestTable("TestTable1"))
+			using (new TestTable("TestTable2"))
+			using (var c = buildContainer())
+			{
+				var task1 = Task.Factory.StartNew(() =>
+				{
+					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+				});
+				var task2 = Task.Factory.StartNew(() =>
+				{
+					c.Resolve<Outer>().DoAction(uow =>
+					{
+						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
 						throw new TestException();
 					});
 				});
@@ -134,16 +160,21 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			return new Random().Next(-10000, -2).ToString();
 		}
 
-		private static IContainer BuildContainer()
+		private static IContainer buildContainer()
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
+
 			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
-			return builder.Build();
+
+			var container = builder.Build();
+			container.Resolve<IReadModelUnitOfWorkConfiguration>()
+				.Configure(ConnectionStringHelper.ConnectionStringUsedInTests);
+			return container;
 		}
 	}
 
@@ -156,7 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 		public static void DoUpdate(this Outer instance, string query)
 		{
-			instance.DoAction(uow => uow.CreateSQLQuery(query).ExecuteUpdate());
+			instance.DoAction(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
 		}
 
 		public static T DoSelect<T>(this Outer instance, string query, Func<ISQLQuery, T> queryAction)
@@ -164,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			var result = default(T);
 			instance.DoAction(uow =>
 			{
-				result = queryAction(uow.CreateSQLQuery(query));
+				result = queryAction(uow.CreateSqlQuery(query));
 			});
 			return result;
 		}
@@ -231,5 +262,4 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			Action.Invoke(_uow.Current());
 		}
 	}
-
 }

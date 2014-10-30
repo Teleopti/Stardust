@@ -7,52 +7,25 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
-	public class ReadModelUnitOfWorkModule : Module
+	public interface ICurrentReadModelUnitOfWork
 	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<CurrentReadModelUnitOfWork>()
-				.SingleInstance()
-				.As<ICurrentReadModelUnitOfWork>();
-			builder.RegisterType<ReadModelUnitOfWorkAspect>()
-				.SingleInstance();
-		}
+		ILiteUnitOfWork Current();
 	}
 
-	public class CurrentReadModelUnitOfWork : ICurrentReadModelUnitOfWork
+	public interface ILiteUnitOfWork : IDisposable
 	{
-		[ThreadStatic]
-		private static ILiteUnitOfWork _uow;
-
-		public void SetCurrentSession(ISession session)
-		{
-			_uow = new LiteUnitOfWork(session);
-		}
-
-		public ILiteUnitOfWork Current()
-		{
-			return _uow;
-		}
+		ISQLQuery CreateSqlQuery(string queryString);
+		void Commit();
 	}
 
-	public class LiteUnitOfWork : ILiteUnitOfWork
+	public interface IReadModelUnitOfWorkConfiguration
 	{
-		private readonly ISession _session;
+		void Configure(string connectionString);
+	}
 
-		public LiteUnitOfWork(ISession session)
-		{
-			_session = session;
-		}
-
-		public ISQLQuery CreateSQLQuery(string queryString)
-		{
-			return _session.CreateSQLQuery(queryString);
-		}
-
-		public ISession Session()
-		{
-			return _session;
-		}
+	public interface IReadModelUnitOfWorkFactory
+	{
+		ILiteUnitOfWork NewUnitOfWork();
 	}
 
 	public class ReadModelUnitOfWorkAttribute : ResolvedAspectAttribute
@@ -66,45 +39,104 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	public class ReadModelUnitOfWorkAspect : IAspect
 	{
 		private readonly ICurrentReadModelUnitOfWork _uow;
+		private readonly IReadModelUnitOfWorkFactory _factory;
 
-		public ReadModelUnitOfWorkAspect(ICurrentReadModelUnitOfWork uow)
+		public ReadModelUnitOfWorkAspect(ICurrentReadModelUnitOfWork uow, IReadModelUnitOfWorkFactory factory)
 		{
 			_uow = uow;
+			_factory = factory;
 		}
 
 		public void OnBeforeInvokation()
 		{
-			var configuration = new Configuration();
-			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, ConnectionStringHelper.ConnectionStringUsedInTests);
-			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
-			//configuration.SetProperty(NHibernate.Cfg.Environment.CurrentSessionContextClass, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
-			var sessionFactory = configuration.BuildSessionFactory();
-			var session = sessionFactory.OpenSession();
-
-			((CurrentReadModelUnitOfWork)_uow).SetCurrentSession(session);
-			session.BeginTransaction();
+			_factory.NewUnitOfWork();
 		}
 
 		public void OnAfterInvokation(Exception exception)
 		{
-			var transaction = _uow.Current().Session().Transaction;
-			if (exception != null)
-			{
-				transaction.Dispose();
-				return;
-			}
-			transaction.Commit();
+			if (exception == null)
+				_uow.Current().Commit();
+			_uow.Current().Dispose();
 		}
 	}
 
-	public interface ICurrentReadModelUnitOfWork
+	public class ReadModelUnitOfWorkModule : Module
 	{
-		ILiteUnitOfWork Current();
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.RegisterType<ReadModelUnitOfWorkFactory>()
+				.As<IReadModelUnitOfWorkConfiguration>()
+				.As<IReadModelUnitOfWorkFactory>()
+				.SingleInstance();
+			builder.RegisterType<CurrentReadModelUnitOfWork>()
+				.As<ICurrentReadModelUnitOfWork>()
+				.SingleInstance();
+			builder.RegisterType<ReadModelUnitOfWorkAspect>()
+				.SingleInstance();
+		}
 	}
 
-	public interface ILiteUnitOfWork
+	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkConfiguration, IReadModelUnitOfWorkFactory
 	{
-		ISQLQuery CreateSQLQuery(string queryString);
-		ISession Session();
+		private ISessionFactory _sessionFactory;
+
+		public void Configure(string connectionString)
+		{
+			var configuration = new Configuration();
+			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, connectionString);
+			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			//configuration.SetProperty(NHibernate.Cfg.Environment.CurrentSessionContextClass, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
+			_sessionFactory = configuration.BuildSessionFactory();
+		}
+
+		public ILiteUnitOfWork NewUnitOfWork()
+		{
+			var uow = new LiteUnitOfWork(_sessionFactory.OpenSession());
+			ReadModelUnitOfWorkState.UnitOfWork = uow;
+			return uow;
+		}
 	}
+
+	public static class ReadModelUnitOfWorkState
+	{
+		[ThreadStatic]
+		public static ILiteUnitOfWork UnitOfWork;
+	}
+
+	public class CurrentReadModelUnitOfWork : ICurrentReadModelUnitOfWork
+	{
+		public ILiteUnitOfWork Current()
+		{
+			return ReadModelUnitOfWorkState.UnitOfWork;
+		}
+	}
+
+	public class LiteUnitOfWork : ILiteUnitOfWork
+	{
+		private readonly ISession _session;
+		private readonly ITransaction _transaction;
+
+		public LiteUnitOfWork(ISession session)
+		{
+			_session = session;
+			_transaction = _session.BeginTransaction();
+		}
+
+		public ISQLQuery CreateSqlQuery(string queryString)
+		{
+			return _session.CreateSQLQuery(queryString);
+		}
+
+		public void Commit()
+		{
+			_transaction.Commit();
+		}
+
+		public void Dispose()
+		{
+			_transaction.Dispose();
+			_session.Dispose();
+		}
+	}
+
 }
