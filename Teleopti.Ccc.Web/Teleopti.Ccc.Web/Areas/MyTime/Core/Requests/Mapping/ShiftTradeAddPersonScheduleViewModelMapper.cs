@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var shiftReadModel = scheduleReadModel.Model != null
 				? JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model)
 				: null;
+			//Full day absence for other agent should be excluded from possible tradable schedules.
+			if (!isMySchedule && shiftReadModel != null && shiftReadModel.Shift != null && shiftReadModel.Shift.IsFullDayAbsence)
+			{
+				return null;
+			}
 			var ret = new ShiftTradeAddPersonScheduleViewModel
 			{
 				PersonId = scheduleReadModel.PersonId,
@@ -50,13 +55,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				//while having shift and layers, if it is my schedule it'll get shown, or if others agent's schedule is not full day absence, 
 				//that should be available for trade. (full day absence is not allowed to  be used for trade)
 				if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) &&
-				(isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
+				    (isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
 				{
-					if (scheduleReadModel.Start != null) 
+					if (scheduleReadModel.Start != null)
 						ret.StartTimeUtc = scheduleReadModel.Start.Value;
 					ret.MinStart = scheduleReadModel.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection, isMySchedule);
 				}
+				
 
 				//for DayOff schedule, logic is same except using different mapping method.
 				if (shiftReadModel.DayOff != null)
