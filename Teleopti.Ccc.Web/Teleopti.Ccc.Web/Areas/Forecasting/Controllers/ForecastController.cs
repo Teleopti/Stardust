@@ -1,12 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
@@ -14,17 +12,22 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	public class ForecastController : ApiController
 	{
 		private readonly IQuickForecastForAllSkills _quickForecastForAllSkills;
+		private readonly INow _now;
 
-		public ForecastController(IQuickForecastForAllSkills quickForecastForAllSkills)
+		public ForecastController(IQuickForecastForAllSkills quickForecastForAllSkills, INow now)
 		{
 			_quickForecastForAllSkills = quickForecastForAllSkills;
+			_now = now;
 		}
 
-		[System.Web.Http.HttpPost, AsyncUnitOfWorkApiAction]
+		[HttpPost, AsyncUnitOfWorkApiAction]
 		public Task QuickForecast([FromBody] QuickForecastInputModel model)
 		{
-			var period = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
-			_quickForecastForAllSkills.CreateForecast(period);
+			var nowDate = _now.LocalDateOnly();
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
+			var historicalPeriodStartTime = new DateOnly(nowDate.Date.AddYears(-1));
+			var historicalPeriod = new DateOnlyPeriod(historicalPeriodStartTime, new DateOnly(nowDate));
+			_quickForecastForAllSkills.CreateForecast(historicalPeriod, futurePeriod);
 			return Task.FromResult(true);
 		}
 	}

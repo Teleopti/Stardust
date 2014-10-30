@@ -16,21 +16,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldCallQuickForecasterWithHistorialDataForOneYear()
 		{
 			var now = new Now();
-			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()), new DateOnly(now.UtcDateTime().AddYears(1)));
-			var expectedHistoricalPeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime().AddYears(-1)), new DateOnly(now.UtcDateTime()));
+			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()),
+				new DateOnly(now.UtcDateTime().AddYears(1)));
+			var expectedHistoricalPeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime().AddYears(-1)),
+				new DateOnly(now.UtcDateTime()));
 			var skillRepository = MockRepository.GenerateStub<ISkillRepository>();
 			var skill = SkillFactory.CreateSkill("_");
 			var workload = new Workload(skill);
-			skill.AddWorkload(workload);
 			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] {skill});
 			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository, now));
+			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository), now);
 
-			target.QuickForecast(new QuickForecastInputModel{ForecastStart = expectedFuturePeriod.StartDate, ForecastEnd = expectedFuturePeriod.EndDate});
-			
+			target.QuickForecast(new QuickForecastInputModel
+			{
+				ForecastStart = expectedFuturePeriod.StartDate,
+				ForecastEnd = expectedFuturePeriod.EndDate
+			});
+
 			quickForecaster.AssertWasCalled(x => x.Execute(skill, expectedHistoricalPeriod, expectedFuturePeriod));
 		}
-
 	}
 }
