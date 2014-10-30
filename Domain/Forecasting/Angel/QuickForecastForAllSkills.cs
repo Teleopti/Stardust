@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -17,10 +17,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public void CreateForecast(DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
 		{
-			foreach (var skill in _skillRepository.FindSkillsWithAtLeastOneQueueSource())
-			{
-				_quickForecaster.Execute(skill, historicalPeriod, futurePeriod);
-			}
+			_skillRepository.FindSkillsWithAtLeastOneQueueSource().ForEach(skill =>
+				_quickForecaster.Execute(skill, historicalPeriod, futurePeriod));
 		}
 	}
 }
