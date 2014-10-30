@@ -21,6 +21,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
+			builder.RegisterModule<ForecastingAreaModule>();
 
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 

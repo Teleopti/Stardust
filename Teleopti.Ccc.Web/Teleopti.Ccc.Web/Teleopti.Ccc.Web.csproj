@@ -331,6 +331,9 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
+    <Compile Include="Areas\Forecasting\Core\IoC\ForecastingAreaModule.cs" />
+    <Compile Include="Areas\Forecasting\Core\OneYearHistoryForecastPeriodCalculator.cs" />
+    <Compile Include="Areas\Forecasting\Core\IForecastHistoricalPeriodCalculator.cs" />
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
     <Compile Include="Areas\Forecasting\Controllers\QuickForecastInputModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />

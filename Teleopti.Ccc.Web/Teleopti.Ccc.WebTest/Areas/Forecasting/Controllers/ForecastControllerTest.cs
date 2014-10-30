@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] {skill});
 			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository), now);
+			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository), new OneYearHistoryForecastPeriodCalculator(now));
 
 			target.QuickForecast(new QuickForecastInputModel
 			{
