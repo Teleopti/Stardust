@@ -4,6 +4,8 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.WebTest.TestHelper;
 

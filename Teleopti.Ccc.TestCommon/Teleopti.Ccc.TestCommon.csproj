@@ -77,6 +77,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
@@ -96,6 +97,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />
+    <Compile Include="Web\FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
     <Compile Include="FakeData\AbsenceAccountFactory.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
@@ -304,6 +306,10 @@
     <Compile Include="TestData\Setups\Specific\UserTimeZoneFor.cs" />
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="UsedInTestState.cs" />
+    <Compile Include="Web\FakeHttpContext.cs" />
+    <Compile Include="Web\FakeHttpRequest.cs" />
+    <Compile Include="Web\FakeHttpResponse.cs" />
+    <Compile Include="Web\FakeHttpSessionState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

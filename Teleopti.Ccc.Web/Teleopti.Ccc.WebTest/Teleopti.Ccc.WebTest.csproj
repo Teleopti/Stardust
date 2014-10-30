@@ -359,7 +359,6 @@
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersisterTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
-    <Compile Include="FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProviderTest.cs" />
@@ -405,10 +404,6 @@
     <Compile Include="MappingProfileForProbing.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
-    <Compile Include="TestHelper\FakeHttpContext.cs" />
-    <Compile Include="TestHelper\FakeHttpRequest.cs" />
-    <Compile Include="TestHelper\FakeHttpResponse.cs" />
-    <Compile Include="TestHelper\FakeHttpSessionState.cs" />
     <Compile Include="TestHelper\FirstAvailableMockFactory.cs" />
     <Compile Include="TestHelper\IMockFactory.cs" />
     <Compile Include="TestHelper\IMockProxy.cs" />
