@@ -341,16 +341,17 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		var lastTimeLineHour = moment(hours[hours.length - 1].EndTime);
 		self.setTimeLineLengthInMinutes(firstTimeLineHour, lastTimeLineHour);
 		self.hours([]);
+		var start = moment(hours[1].StartTime);
+		var diff = start.diff(self.timeLineStartTime(), 'minutes');
 		if (hours.length < 18) {
-			var arrayMap = ko.utils.arrayMap(hours, function(hour) {
-				return new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(hour, self.timeLineStartTime(), self.pixelPerMinute(), true);
-			});
-
-			self.hours.push.apply(self.hours, arrayMap);
+			for (var j = 0; j < hours.length; j++) {
+				var newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(j, hours[j], diff, self.pixelPerMinute(), true);
+				self.hours.push(newHour);
+			}
 		} else {
 			for (var i = 0; i < hours.length; i++) {
 				var isVisible = (i % 2 != 0);
-				var newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(hours[i], self.timeLineStartTime(), self.pixelPerMinute(), isVisible);
+				var newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(i, hours[i], diff, self.pixelPerMinute(), isVisible);
 				self.hours.push(newHour);
 			}
 		}

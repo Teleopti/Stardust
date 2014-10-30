@@ -177,16 +177,20 @@ Teleopti.MyTimeWeb.Request.TimeLineHourEditShiftTradeViewModel = function (hour,
 	});
 };
 
-Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute, isVisible) {
+Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (index, hour, baseDiff, pixelPerMinute, isVisible) {
     var self = this;
     self.hourText = hour.HourText;
-    self.startTime = moment(hour.StartTime);
-    self.timeLineStartTime = ko.observable(timeLineStartTime);
+	self.startTime = moment(hour.StartTime);
     self.pixelPerMinute = ko.observable(pixelPerMinute);
 	self.isVisible = ko.observable(isVisible);
 
 	self.leftPos = ko.computed(function () {
-		var minutesSinceTimeLineStart = self.startTime.diff(self.timeLineStartTime(), 'minutes');
+		var minutesSinceTimeLineStart;
+		if (index == 0) {
+			minutesSinceTimeLineStart = 0;
+		} else {//use index calculate timeline in consider daylight saving case
+			minutesSinceTimeLineStart = baseDiff + (index - 1) * 60;
+		}
 		return minutesSinceTimeLineStart * self.pixelPerMinute();
     });
 	
@@ -208,16 +212,22 @@ Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, 
     });
 };
 
-Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel = function (hour, timeLineStartTime, pixelPerMinute) {
+Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel = function (index, hour, baseDiff, pixelPerMinute) {
     var self = this;
     self.hourText = hour.hourText;
-    self.startTime = hour.startTime;
-    self.timeLineStartTime = ko.observable(timeLineStartTime);
+    //self.startTime = hour.startTime;
+    //self.timeLineStartTime = ko.observable(timeLineStartTime);
     self.pixelPerMinute = ko.observable(pixelPerMinute);
     self.isVisible = ko.observable(hour.isVisible());
 
 	self.leftPos = ko.computed(function () {
-		var minutesSinceTimeLineStart = self.startTime.diff(self.timeLineStartTime(), 'minutes');
+		var minutesSinceTimeLineStart;
+		if (index == 0) {
+			minutesSinceTimeLineStart = 0;
+		} else {//use index calculate timeline in consider daylight saving case
+			minutesSinceTimeLineStart = baseDiff + (index - 1) * 60;
+		}
+
 		return minutesSinceTimeLineStart * self.pixelPerMinute();
     });
 	
@@ -463,7 +473,9 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 			var truncatedHours = [];
 			$.each(allHours, function(index, hour) {
 				if ((hour.startTime >= scheduleStartTime) && (hour.startTime <= scheduleEndTime)) {
-					var newHour = new Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel(hour, scheduleStartTime, self.pixelPerMinute());
+					var start = moment(allHours[1].startTime);
+					var diff = start.diff(scheduleStartTime, 'minutes');
+					var newHour = new Teleopti.MyTimeWeb.Request.CloneTimeLineHourAddShiftTradeViewModel(index, hour, diff, self.pixelPerMinute());
 					truncatedHours.push(newHour);
 				}
 			});
