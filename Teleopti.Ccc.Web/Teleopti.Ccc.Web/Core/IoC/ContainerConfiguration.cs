@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 
-			registerAopComponents(builder);
+			builder.RegisterType<UnitOfWorkAspect>();
 
 			builder.RegisterModule(new RuleSetModule(configuration, false));
 			builder.RegisterModule(new AuthenticationCachedModule(configuration));
@@ -122,12 +122,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new ConfigurationSettingsReader());
 
 			return builder.Build();
-		}
-
-		private static void registerAopComponents(ContainerBuilder builder)
-		{
-			builder.RegisterModule<AspectsModule>();
-			builder.RegisterType<UnitOfWorkAspect>();
 		}
 	}
 }

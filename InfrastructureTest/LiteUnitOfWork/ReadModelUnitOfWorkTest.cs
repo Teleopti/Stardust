@@ -203,7 +203,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
-			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 
 			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
