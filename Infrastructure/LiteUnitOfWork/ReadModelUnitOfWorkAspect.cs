@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.Aop;
 
-namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class ReadModelUnitOfWorkAspect : IAspect
 	{

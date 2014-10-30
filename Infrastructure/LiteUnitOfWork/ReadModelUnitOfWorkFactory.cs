@@ -2,7 +2,7 @@
 using NHibernate;
 using NHibernate.Cfg;
 
-namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkConfiguration
 	{
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			var configuration = new Configuration();
 			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, connectionString);
 			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
-			//configuration.SetProperty(NHibernate.Cfg.Environment.CurrentSessionContextClass, "Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HybridWebSessionContext, Teleopti.Ccc.Infrastructure");
 			_sessionFactory = configuration.BuildSessionFactory();
 		}
 

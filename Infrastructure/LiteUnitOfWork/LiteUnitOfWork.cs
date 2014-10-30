@@ -1,7 +1,7 @@
 ﻿using System;
 using NHibernate;
 
-namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class LiteUnitOfWork : ILiteUnitOfWork, IDisposable
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.Web;
 
-namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class ReadModelUnitOfWorkState : ICurrentReadModelUnitOfWork
 	{

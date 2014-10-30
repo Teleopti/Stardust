@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class ReadModelUnitOfWorkModule : Module
 	{
