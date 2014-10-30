@@ -2,10 +2,11 @@
 
 var wfm = angular.module('wfm', [
     'ui.router',
+    'angularMoment',
     'wfmCtrls'
 ]);
 wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise("forecasting");
     $stateProvider.state('main', {
         url:'/',
         templateUrl: 'html/main.html',
@@ -22,7 +23,7 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
 }]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
     var timeout = Date.now() + 10000;
 	$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
-        if(Date.now() > timeout ) {
+        if(Date.now() > timeout ) { // TODO : extract it in a service
             event.preventDefault();
             var context = $http.get('../../Anywhere/Application/NavigationContent');
             context.error(function () {
