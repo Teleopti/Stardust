@@ -2,8 +2,8 @@
 using Autofac;
 using NHibernate;
 using NHibernate.Cfg;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon.Aop.Core;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
@@ -12,20 +12,14 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		ILiteUnitOfWork Current();
 	}
 
-	public interface ILiteUnitOfWork : IDisposable
+	public interface ILiteUnitOfWork
 	{
 		ISQLQuery CreateSqlQuery(string queryString);
-		void Commit();
 	}
 
 	public interface IReadModelUnitOfWorkConfiguration
 	{
 		void Configure(string connectionString);
-	}
-
-	public interface IReadModelUnitOfWorkFactory
-	{
-		ILiteUnitOfWork NewUnitOfWork();
 	}
 
 	public class ReadModelUnitOfWorkAttribute : ResolvedAspectAttribute
@@ -38,25 +32,21 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 	public class ReadModelUnitOfWorkAspect : IAspect
 	{
-		private readonly ICurrentReadModelUnitOfWork _uow;
-		private readonly IReadModelUnitOfWorkFactory _factory;
+		private readonly ReadModelUnitOfWorkFactory _factory;
 
-		public ReadModelUnitOfWorkAspect(ICurrentReadModelUnitOfWork uow, IReadModelUnitOfWorkFactory factory)
+		public ReadModelUnitOfWorkAspect(ReadModelUnitOfWorkFactory factory)
 		{
-			_uow = uow;
 			_factory = factory;
 		}
 
 		public void OnBeforeInvokation()
 		{
-			_factory.NewUnitOfWork();
+			_factory.StartUnitOfWork();
 		}
 
 		public void OnAfterInvokation(Exception exception)
 		{
-			if (exception == null)
-				_uow.Current().Commit();
-			_uow.Current().Dispose();
+			_factory.EndUnitOfWork(exception);
 		}
 	}
 
@@ -65,10 +55,11 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ReadModelUnitOfWorkFactory>()
+				.AsSelf()
 				.As<IReadModelUnitOfWorkConfiguration>()
-				.As<IReadModelUnitOfWorkFactory>()
 				.SingleInstance();
-			builder.RegisterType<CurrentReadModelUnitOfWork>()
+			builder.RegisterType<ReadModelUnitOfWorkState>()
+				.AsSelf()
 				.As<ICurrentReadModelUnitOfWork>()
 				.SingleInstance();
 			builder.RegisterType<ReadModelUnitOfWorkAspect>()
@@ -76,9 +67,15 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		}
 	}
 
-	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkConfiguration, IReadModelUnitOfWorkFactory
+	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkConfiguration
 	{
+		private readonly ReadModelUnitOfWorkState _state;
 		private ISessionFactory _sessionFactory;
+
+		public ReadModelUnitOfWorkFactory(ReadModelUnitOfWorkState state)
+		{
+			_state = state;
+		}
 
 		public void Configure(string connectionString)
 		{
@@ -89,29 +86,53 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			_sessionFactory = configuration.BuildSessionFactory();
 		}
 
-		public ILiteUnitOfWork NewUnitOfWork()
+		public void StartUnitOfWork()
 		{
-			var uow = new LiteUnitOfWork(_sessionFactory.OpenSession());
-			ReadModelUnitOfWorkState.UnitOfWork = uow;
-			return uow;
+			_state.Set(new LiteUnitOfWork(_sessionFactory.OpenSession()));
+		}
+
+		public void EndUnitOfWork(Exception exception)
+		{
+			var uow = _state.Get();
+			if (exception == null)
+				uow.Commit();
+			uow.Dispose();
 		}
 	}
 
-	public static class ReadModelUnitOfWorkState
+	public class ReadModelUnitOfWorkState : ICurrentReadModelUnitOfWork
 	{
 		[ThreadStatic]
-		public static ILiteUnitOfWork UnitOfWork;
-	}
+		private static LiteUnitOfWork _unitOfWork;
+		private readonly ICurrentHttpContext _httpContext;
+		private const string itemsKey = "ReadModelUnitOfWork";
 
-	public class CurrentReadModelUnitOfWork : ICurrentReadModelUnitOfWork
-	{
+		public ReadModelUnitOfWorkState(ICurrentHttpContext httpContext)
+		{
+			_httpContext = httpContext;
+		}
+
+		public LiteUnitOfWork Get()
+		{
+			if (_httpContext.Current() != null)
+				return (LiteUnitOfWork)_httpContext.Current().Items[itemsKey];
+			return _unitOfWork;
+		}
+
+		public void Set(LiteUnitOfWork uow)
+		{
+			_unitOfWork = uow;
+			if (_httpContext.Current() != null)
+				_httpContext.Current().Items[itemsKey] = uow;
+		}
+
 		public ILiteUnitOfWork Current()
 		{
-			return ReadModelUnitOfWorkState.UnitOfWork;
+			return Get();
 		}
 	}
 
-	public class LiteUnitOfWork : ILiteUnitOfWork
+	public class LiteUnitOfWork : ILiteUnitOfWork, IDisposable
 	{
 		private readonly ISession _session;
 		private readonly ITransaction _transaction;

@@ -1,16 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
@@ -28,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 				target.DoUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
 
-				TestTable.Select("TestTable").Single().Should().Be(value);
+				TestTable.Values("TestTable").Single().Should().Be(value);
 			}
 		}
 
@@ -47,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 					});
 				});
 
-				TestTable.Select("TestTable").Should().Have.Count.EqualTo(0);
+				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 			}
 		}
 
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
 
-				TestTable.Select("TestTable").Should().Have.Count.EqualTo(0);
+				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 			}
 		}
 
@@ -97,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				};
 				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
 
-				TestTable.Select("TestTable").Should().Have.Count.EqualTo(0);
+				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 			}
 		}
 
@@ -108,11 +113,11 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			using (new TestTable("TestTable2"))
 			using (var c = buildContainer())
 			{
-				var task1 = Task.Factory.StartNew(() =>
+				var thread1 = onAnotherThread(() =>
 				{
 					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 				});
-				var task2 = Task.Factory.StartNew(() =>
+				var thread2 = onAnotherThread(() =>
 				{
 					c.Resolve<Outer>().DoAction(uow =>
 					{
@@ -120,11 +125,31 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 						throw new TestException();
 					});
 				});
+				thread1.Join();
+				thread2.Join();
 
-				Assert.Throws<AggregateException>(() => Task.WaitAll(task1, task2));
+				TestTable.Values("TestTable1").Count().Should().Be(1000);
+				TestTable.Values("TestTable2").Count().Should().Be(0);
+			}
+		}
 
-				TestTable.Select("TestTable1").Count().Should().Be(1000);
-				TestTable.Select("TestTable2").Count().Should().Be(0);
+		[Test]
+		public void ShouldProduceUnitOfWorkForWebRequestSpanning2Threads()
+		{
+			using (new TestTable("TestTable"))
+			using (var c = buildContainer())
+			{
+				c.Resolve<MutableFakeCurrentHttpContext>().SetContext(new FakeHttpContext());
+				c.Resolve<Outer>().DoAction(uow =>
+				{
+					onAnotherThread(() =>
+					{
+						var current = c.Resolve<ICurrentReadModelUnitOfWork>();
+						current.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+					}).Join();
+				});
+
+				TestTable.Values("TestTable").Count().Should().Be(1);
 			}
 		}
 
@@ -135,24 +160,33 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			using (new TestTable("TestTable2"))
 			using (var c = buildContainer())
 			{
-				var task1 = Task.Factory.StartNew(() =>
+				var thread1 = onAnotherThread(() =>
 				{
+					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
 					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 				});
-				var task2 = Task.Factory.StartNew(() =>
+				var thread2 = onAnotherThread(() =>
 				{
+					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
 					c.Resolve<Outer>().DoAction(uow =>
 					{
 						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
 						throw new TestException();
 					});
 				});
+				thread1.Join();
+				thread2.Join();
 
-				Assert.Throws<AggregateException>(() => Task.WaitAll(task1, task2));
-
-				TestTable.Select("TestTable1").Count().Should().Be(1000);
-				TestTable.Select("TestTable2").Count().Should().Be(0);
+				TestTable.Values("TestTable1").Count().Should().Be(1000);
+				TestTable.Values("TestTable2").Count().Should().Be(0);
 			}
+		}
+
+		private static Thread onAnotherThread(Action action)
+		{
+			var thread = new Thread(() => action());
+			thread.Start();
+			return thread;
 		}
 
 		private static string randomValue()
@@ -167,6 +201,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 
+			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();

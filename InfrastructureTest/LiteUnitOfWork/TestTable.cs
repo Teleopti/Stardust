@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			applySql(string.Format("CREATE TABLE {0} (Value int)", _name));
 		}
 
-		public static IEnumerable<int> Select(string tableName)
+		public static IEnumerable<int> Values(string tableName)
 		{
 			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
 			{

@@ -310,6 +310,7 @@
     <Compile Include="Web\FakeHttpRequest.cs" />
     <Compile Include="Web\FakeHttpResponse.cs" />
     <Compile Include="Web\FakeHttpSessionState.cs" />
+    <Compile Include="Web\MutableFakeCurrentHttpContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
