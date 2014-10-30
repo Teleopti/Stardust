@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NHibernate;
@@ -15,7 +13,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
@@ -29,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			using (var c = buildContainer())
 			{
 				var target = c.Resolve<Outer>();
-				var value = randomValue();
+				var value = new Random().Next(-10000, -2).ToString();
 
 				target.DoUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
 
@@ -182,16 +179,24 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			}
 		}
 
+		[Test]
+		public void ShouldReturnNullWhenNoCurrentUnitOfWork()
+		{
+			using (var c = buildContainer())
+			{
+				var target = c.Resolve<Outer>();
+
+				target.DoAction(uow => { });
+
+				c.Resolve<ICurrentReadModelUnitOfWork>().Current().Should().Be.Null();
+			}
+		}
+
 		private static Thread onAnotherThread(Action action)
 		{
 			var thread = new Thread(() => action());
 			thread.Start();
 			return thread;
-		}
-
-		private static string randomValue()
-		{
-			return new Random().Next(-10000, -2).ToString();
 		}
 
 		private static IContainer buildContainer()

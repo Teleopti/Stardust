@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void EndUnitOfWork(Exception exception)
 		{
 			var uow = _state.Get();
+			_state.Set(null);
 			if (exception == null)
 				uow.Commit();
 			uow.Dispose();
@@ -121,9 +122,12 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 		public void Set(LiteUnitOfWork uow)
 		{
-			_unitOfWork = uow;
 			if (_httpContext.Current() != null)
+			{
 				_httpContext.Current().Items[itemsKey] = uow;
+				return;
+			}
+			_unitOfWork = uow;
 		}
 
 		public ILiteUnitOfWork Current()
