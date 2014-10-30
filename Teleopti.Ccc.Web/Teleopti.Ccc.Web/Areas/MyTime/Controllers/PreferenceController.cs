@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Teleopti.Ccc.IocCommon.Aop.Core;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;

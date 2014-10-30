@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.IocCommon.Aop.Core
+namespace Teleopti.Ccc.Infrastructure.Aop
 {
 	public abstract class ResolvedAspectAttribute : Attribute, IResolvedAspectAttribute
 	{

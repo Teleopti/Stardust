@@ -1,6 +1,7 @@
 using Autofac;
+using Teleopti.Ccc.Infrastructure.Aop;
 
-namespace Teleopti.Ccc.IocCommon.Aop.Core
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AspectsModule : Module
 	{

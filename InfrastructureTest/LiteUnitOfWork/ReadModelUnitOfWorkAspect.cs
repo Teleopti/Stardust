@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.IocCommon.Aop.Core;
+using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {

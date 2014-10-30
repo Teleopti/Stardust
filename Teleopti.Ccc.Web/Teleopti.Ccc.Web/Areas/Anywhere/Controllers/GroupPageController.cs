@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web.Mvc;
 using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
 

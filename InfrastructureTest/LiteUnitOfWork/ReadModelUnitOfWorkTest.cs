@@ -9,9 +9,9 @@ using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
 

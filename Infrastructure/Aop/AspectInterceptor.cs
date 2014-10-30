@@ -4,7 +4,7 @@ using Autofac;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.IocCommon.Aop.Core
+namespace Teleopti.Ccc.Infrastructure.Aop
 {
 	public class AspectInterceptor : IInterceptor
 	{

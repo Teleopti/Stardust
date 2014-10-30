@@ -5,9 +5,9 @@ using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.IocCommon.Aop.Core;
+using Teleopti.Ccc.Infrastructure.Aop;
 
-namespace Teleopti.Ccc.IocCommonTest.Aop
+namespace Teleopti.Ccc.InfrastructureTest.Aop
 {
 	[TestFixture]
 	public class AspectsTest
