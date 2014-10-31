@@ -149,14 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aop\AspectAttribute.cs" />
     <Compile Include="Aop\AspectInterceptor.cs" />
-    <Compile Include="Aop\IAspect.cs" />
-    <Compile Include="Aop\IAspectAttribute.cs" />
-    <Compile Include="Aop\IOrderedAspect.cs" />
-    <Compile Include="Aop\IResolvedAspect.cs" />
-    <Compile Include="Aop\IResolvedAspectAttribute.cs" />
-    <Compile Include="Aop\ResolvedAspectAttribute.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\EventPublisher.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
@@ -179,7 +172,6 @@
     <Compile Include="LiteUnitOfWork\IReadModelUnitOfWorkConfiguration.cs" />
     <Compile Include="LiteUnitOfWork\LiteUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkAspect.cs" />
-    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />

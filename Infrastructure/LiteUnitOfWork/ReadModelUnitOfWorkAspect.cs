@@ -1,9 +1,9 @@
 ﻿using System;
-using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
-	public class ReadModelUnitOfWorkAspect : IAspect
+	public class ReadModelUnitOfWorkAspect : IReadModelUnitOfWorkAspect
 	{
 		private readonly ReadModelUnitOfWorkFactory _factory;
 

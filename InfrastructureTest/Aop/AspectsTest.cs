@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.InfrastructureTest.Aop

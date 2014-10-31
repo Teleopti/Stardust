@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Autofac;
 using Castle.DynamicProxy;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
