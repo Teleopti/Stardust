@@ -9,9 +9,45 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
-	[TestFixture, Ignore("While fixing build")]
+	[TestFixture]
 	public class AdherenceControllerTest
 	{
+		[Test]
+		public void ForToday_WhenAdherenceInfoIsValid_ShouldGenerateResultBasedOnAdherenceInfo()
+		{
+			var calculateAdherence = MockRepository.GenerateStub<ICalculateAdherence>();
+			var personId = Guid.NewGuid();
+			calculateAdherence.Expect(h => h.ForToday(personId)).Return(new AdherenceInfo()
+			                                               {
+															   AdherencePercent = 70,
+															   IsValid = true
+			                                               });
+
+			var target = new AdherenceController(calculateAdherence);
+
+			var result = target.ForToday(personId);
+
+			((AdherenceInfo) result.Data).AdherencePercent.Should().Be.EqualTo(70);
+		}
+
+		[Test]
+		public void ForToday_WhenAdherenceInfoIsNotValid_ShouldHaveFalsyAdherencePercentage()
+		{
+			var calculateAdherence = MockRepository.GenerateStub<ICalculateAdherence>();
+			var personId = Guid.NewGuid();
+			calculateAdherence.Expect(h => h.ForToday(personId)).Return(new AdherenceInfo()
+			{
+				AdherencePercent = 70,
+				IsValid = false
+			});
+
+			var target = new AdherenceController(calculateAdherence);
+
+			var result = target.ForToday(personId);
+
+			Assert.That(isFalsy(result.Data));
+		}
+
 		[Test]
 		public void ForToday_ShouldGetTheReadModelForSuppliedAgentWithTodaysDate()
 		{
@@ -33,12 +69,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 					                                                                                 expectedLastTimeStamp
 			                                                                                 });
 
-			var target = new AdherenceController(readModelRepo, now);
-			dynamic result = target.ForToday(personId).Data;
+			var target = new CalculateAdherence(readModelRepo, now);
+			var result = target.ForToday(personId);
 
-			((object) result.MinutesInAdherence).Should().Be.EqualTo(expectedMinutesInAdherence);
-			((object) result.MinutesOutOfAdherence).Should().Be.EqualTo(expectedminutesOutOfAdherence);
-			((object) result.LastTimestamp).Should().Be.EqualTo(expectedLastTimeStamp);
+			(result.MinutesInAdherence).Should().Be.EqualTo(expectedMinutesInAdherence);
+			(result.MinutesOutOfAdherence).Should().Be.EqualTo(expectedminutesOutOfAdherence);
+			(result.LastTimestamp).Should().Be.EqualTo(expectedLastTimeStamp);
 		}
 
 		[Test]
@@ -52,11 +88,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				           LastTimestamp = now.UtcDateTime(),
 			           };
 			var repo = new PersisterForTest(data);
-			var target = new AdherenceController(repo, now);
+			var target = new CalculateAdherence(repo, now);
 
-			dynamic result = target.ForToday(Guid.Empty).Data;
+			var result = target.ForToday(Guid.Empty);
 
-			((object) result.AdherencePercent).Should().Be.EqualTo(fiftyPercent);
+			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
 
 		[Test]
@@ -71,9 +107,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			           };
 			var repo = new PersisterForTest(data);
 
-			var target = new AdherenceController(repo, now);
-			dynamic result = target.ForToday(Guid.Empty).Data;
-			((object) result.AdherencePercent).Should().Be.EqualTo(hundredPercent);
+			var target = new CalculateAdherence(repo, now);
+			var result = target.ForToday(Guid.Empty);
+
+			result.AdherencePercent.Should().Be.EqualTo(100);
 		}
 
 		[Test]
@@ -87,20 +124,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var repo = new PersisterForTest(data);
 
-			var target = new AdherenceController(repo, new Now());
-			dynamic result = target.ForToday(Guid.Empty).Data;
-			((object) result.AdherencePercent).Should().Be.EqualTo(zeroPercent);
+			var target = new CalculateAdherence(repo, new Now());
+			var result = target.ForToday(Guid.Empty);
+			result.AdherencePercent.Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void HistoricalAdherence_WhenThereIsNoReadmodel_ShouldBeFalsy()
 		{
 			var repo = new PersisterForTest(null);
-			var target = new AdherenceController(repo, new Now());
+			var target = new CalculateAdherence(repo, new Now());
 
 			var result = target.ForToday(Guid.Empty);
 
-			Assert.That(isFalsy(result));
+			result.IsValid.Should().Be.False();
 		}
 
 		[Test]
@@ -118,11 +155,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			           };
 
 			var repo = new PersisterForTest(data);
-			var target = new AdherenceController(repo, now);
+			var target = new CalculateAdherence(repo, now);
 
-			dynamic result = target.ForToday(Guid.Empty).Data;
+			var result = target.ForToday(Guid.Empty);
 
-			((object) result.AdherencePercent).Should().Be.EqualTo(fiftyPercent);
+			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
 
 		[Test]
@@ -139,11 +176,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				           IsLastTimeInAdherence = false,
 			           };
 			var repo = new PersisterForTest(data);
-			var target = new AdherenceController(repo, now);
+			var target = new CalculateAdherence(repo, now);
 
-			dynamic result = target.ForToday(Guid.Empty).Data;
+			var result = target.ForToday(Guid.Empty);
 
-			((object) result.AdherencePercent).Should().Be.EqualTo(fiftyPercent);
+			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
 
 		[Test]
@@ -162,11 +199,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				           ShiftEnd = fiveMinutesAfterStateChanged
 			           };
 			var repo = new PersisterForTest(data);
-			var target = new AdherenceController(repo, now);
+			var target = new CalculateAdherence(repo, now);
 
-			dynamic result = target.ForToday(Guid.Empty).Data;
+			var result = target.ForToday(Guid.Empty);
 
-			((object) result.AdherencePercent).Should().Be.EqualTo(fiftyPercent);
+			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
 
 		[Test]
@@ -180,13 +217,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				LastTimestamp = now.UtcDateTime(),
 			};
 			var repo = new PersisterForTest(data);
-			var target = new AdherenceController(repo, now);
+			var target = new CalculateAdherence(repo, now);
 
-			dynamic result = target.ForToday(Guid.Empty).Data;
+			var result = target.ForToday(Guid.Empty);
 
-			Assert.That(isFalsy(result));
+			result.IsValid.Should().Be.False();
 		}
-
 
 		[Test]
 		public void HistoricalAdherence_WhenShiftEndsIsNotSet_ShouldBeComputedAsIfShiftIsOngoing()
@@ -203,35 +239,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			};
 
 			var repo = new PersisterForTest(data);
-			var target = new AdherenceController(repo, now);
+			var target = new CalculateAdherence(repo, now);
 
-			dynamic result = target.ForToday(Guid.Empty).Data;
+			var result = target.ForToday(Guid.Empty);
 
-			((object)result.AdherencePercent).Should().Be.EqualTo(fiftyPercent);
+			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
 
 		#region helpers
-
-		private static int fiftyPercent
-		{
-			get { return 50; }
-		}
-
-		private static int hundredPercent
-		{
-			get { return 100; }
-		}
-
-		private static int zeroPercent
-		{
-			get { return 0; }
-		}
-
-		private static bool isFalsy(dynamic resultFromController)
-		{
-			return resultFromController.GetType().GetProperty("AdherencePercent") == null;
-		}
-
 		public class PersisterForTest : IAdherencePercentageReadModelPersister
 		{
 			private readonly AdherencePercentageReadModel _model;
@@ -250,6 +265,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			{
 				return _model;
 			}
+		}
+		private static bool isFalsy(dynamic resultFromController)
+		{
+			return resultFromController.GetType().GetProperty("AdherencePercent") == null;
 		}
 		#endregion
 	}

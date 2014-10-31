@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
+			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

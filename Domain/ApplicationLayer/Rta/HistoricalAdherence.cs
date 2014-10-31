@@ -46,4 +46,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return _now.UtcDateTime().Subtract(lastTimeStamp).TotalMinutes;				
 		}
 	}
+
 }
