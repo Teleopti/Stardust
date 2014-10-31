@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			}
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldResolveAgentStateChangedCommandHandler()
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))

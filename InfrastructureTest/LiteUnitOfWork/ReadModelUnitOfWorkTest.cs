@@ -205,7 +205,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
-			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 
 			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));

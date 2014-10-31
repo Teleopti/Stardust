@@ -1,8 +1,9 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 
-namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class ReadModelUnitOfWorkModule : Module
+	internal class ReadModelUnitOfWorkModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

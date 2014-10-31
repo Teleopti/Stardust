@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterModule<AspectsModule>();
+			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
 			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 		}

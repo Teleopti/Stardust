@@ -181,7 +181,6 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
-    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
