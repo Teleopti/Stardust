@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			_restrictionExtractor.Extract(scheduleDay);
 			var effectiveRestriction = _restrictionExtractor.CombinedRestriction(schedulingOptions);
+			if (effectiveRestriction == null)
+				return true;
 
 			var minMaxWorkTime = ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, dateOnly, effectiveRestriction);
 
