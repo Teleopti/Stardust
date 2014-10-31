@@ -12441,4 +12441,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="LowestIntraIntervalBalance" xml:space="preserve">
     <value>Lowest intra interval balance</value>
   </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Absence Report</value>
+    <comment>Permission: Absence Report</comment>
+  </data>
 </root>
