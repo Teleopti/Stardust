@@ -328,13 +328,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 		public void Dispose()
 		{
-			try
-			{
-				applySql(string.Format("DROP TABLE {0}", _name));
-			}
-			catch (Exception)
-			{
-			}
+			applySql(string.Format("DROP TABLE {0}", _name));
 		}
 
 		private static void applySql(string Sql)
