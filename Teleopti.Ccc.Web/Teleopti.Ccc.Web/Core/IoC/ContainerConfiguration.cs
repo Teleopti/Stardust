@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class ContainerConfiguration : IContainerConfiguration
 	{
-		public IContainer Configure(string featureTogglePath)
+		public IContainer Configure(string featureTogglePath, HttpConfiguration httpConfiguration)
 		{
 			var builder = new ContainerBuilder();
 
@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 			builder.RegisterHubs(Assembly.GetExecutingAssembly()).EnableClassInterceptors();
 
+			builder.RegisterWebApiFilterProvider(httpConfiguration);
 			builder.RegisterModule(new AutofacWebTypesModule());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
-			builder.RegisterWebApiFilterProvider(GlobalConfiguration.Configuration);
 			builder.RegisterFilterProvider();
 
 			builder.RegisterModule<BootstrapperModule>();

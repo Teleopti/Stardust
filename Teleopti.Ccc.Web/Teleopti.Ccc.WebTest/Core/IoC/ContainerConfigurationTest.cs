@@ -1,3 +1,4 @@
+using System.Web.Http;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void BootstrapperModuleHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IBootstrapperTask>()
 					.Should().Be.True();
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void RepositoryModuleHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IPersonRepository>()
 					.Should().Be.True();
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void MvcModuleHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<AuthenticationController>()
 					.Should().Be.True();
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void InitializeApplicationHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IInitializeApplication>()
 					.Should().Be.True();
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ApplicationDataHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IApplicationData>()
 					.Should().Be.True();
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void StudentAvailabilityViewModelFactoryHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IStudentAvailabilityViewModelFactory>()
 					.Should().Be.True();
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveNumberOfAgentsInTeamReader()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.Resolve<INumberOfAgentsInTeamReader>()
 					.Should().Not.Be.Null();
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ResourceHandlerModuleHasBeenRegistered()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IUserTextTranslator>()
 					.Should().Be.True();
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveRtaController()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.Resolve<ServiceController>()
 					.Should().Not.Be.Null();
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveForecastController()
 		{
-			using (var container = builder.Configure(string.Empty))
+			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.Resolve<ForecastController>()
 					.Should().Not.Be.Null();

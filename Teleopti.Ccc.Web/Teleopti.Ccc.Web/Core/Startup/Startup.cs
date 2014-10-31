@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
+using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
@@ -69,12 +70,14 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			try
 			{
 				var pathToToggle = Startup.pathToToggle();
-				var container = _containerConfiguration.Configure(pathToToggle);
+				var config = new System.Web.Http.HttpConfiguration();
+				var container = _containerConfiguration.Configure(pathToToggle, config);
+
 				AutofacHostFactory.Container = container;
 				if (!_testMode)
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-					System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+					config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
 					GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container.BeginLifetimeScope());
 					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
@@ -85,6 +88,17 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
+
+
+				config.Routes.MapHttpRoute(
+					name: "Forecasting_API",
+					routeTemplate: "api/Forecasting/{controller}/{id}",
+					defaults: new { id = RouteParameter.Optional });
+
+				application.UseWebApi(config);
+				application.UseAutofacMiddleware(container);
+				application.UseAutofacMvc();
+				application.UseAutofacWebApi(config);
 			}
 			catch (Exception ex)
 			{
