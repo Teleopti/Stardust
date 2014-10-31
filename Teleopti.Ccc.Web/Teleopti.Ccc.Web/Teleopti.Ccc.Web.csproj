@@ -368,6 +368,7 @@
     <Compile Include="Areas\Forecasting\Controllers\NameWithId.cs" />
     <Compile Include="Areas\Forecasting\Controllers\QuickForecastInputModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
+    <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatRepository.cs" />
@@ -375,7 +376,6 @@
     <Compile Include="Areas\Mart\Core\QueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Models\FactQueueModel.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandler.cs" />
-    <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\IoC\MartAreaModule.cs" />
     <Compile Include="Areas\Mart\Models\QueueStatsModel.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
@@ -696,6 +696,7 @@
     <Compile Include="Core\Startup\RegisterAreas.cs" />
     <Compile Include="Core\Startup\RtaStartupTask.cs" />
     <Compile Include="Core\Startup\Startup.cs" />
+    <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttribute.cs" />
     <Compile Include="Filters\AsyncFilter.cs" />
@@ -749,10 +750,14 @@
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Filters\AsyncUnitOfWorkApiActionAttribute.cs" />
+    <Compile Include="Filters\AuthenticationFailureResult.cs" />
     <Compile Include="Filters\AuthenticationModule.cs" />
+    <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
+    <Compile Include="Filters\HttpAuthenticationChallengeContextExtensions.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
+    <Compile Include="Filters\KeyBasedAuthenticationAttribute.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Filters\UnitOfWorkApiActionAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
