@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -15,11 +16,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister = persister;
 		}
 
+		[ReadModelUnitOfWork]
 		public void Handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.Timestamp, true);
 		}
 
+		[ReadModelUnitOfWork]
 		public void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.Timestamp, false);

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldPersist()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldUpdateMinutesInAdherenceWhenPersonOutOfAdherence()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonInAdherence()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldUpdateMinutesInAdherenceWhenPersonInAdherence()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonOutOfAdherence()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonInAndOutOfAdherence()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldUpdateMinutesInAdherenceWhenPersonOutAndInAdherence()
 		{
-			var persister = new FakeAdherencePercentageReadModelRepository();
+			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 	
 
-	public class FakeAdherencePercentageReadModelRepository : IAdherencePercentageReadModelPersister
+	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
 	{
 		public void Persist(AdherencePercentageReadModel model)
 		{

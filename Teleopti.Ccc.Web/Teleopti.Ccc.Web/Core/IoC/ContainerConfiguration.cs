@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterWebApiFilterProvider(httpConfiguration);
 			builder.RegisterModule(new AutofacWebTypesModule());
-			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterFilterProvider();
 
 			builder.RegisterModule<BootstrapperModule>();

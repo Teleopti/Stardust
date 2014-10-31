@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing.Text;
 using NHibernate;
-using NHibernate.Criterion;
 using NHibernate.Transform;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class AdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
 	{
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly ICurrentReadModelUnitOfWork _currentUnitOfWork;
 
-		public AdherencePercentageReadModelPersister(ICurrentUnitOfWork currentUnitOfWork)
+		public AdherencePercentageReadModelPersister(ICurrentReadModelUnitOfWork currentUnitOfWork)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 		}
@@ -37,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void updateReadModel(AdherencePercentageReadModel model)
 		{
-			_currentUnitOfWork.Session().CreateSQLQuery(
+			_currentUnitOfWork.Current().CreateSqlQuery(
 				"UPDATE ReadModel.AdherencePercentage SET" +
 				"	MinutesInAdherence = :MinutesInAdherence," +
 				"		MinutesOutOfAdherence = :MinutesOutOfAdherence," +
@@ -55,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void saveReadModel(AdherencePercentageReadModel model)
 		{
-			_currentUnitOfWork.Session().CreateSQLQuery(
+			_currentUnitOfWork.Current().CreateSqlQuery(
 				"INSERT INTO ReadModel.AdherencePercentage (PersonId,BelongsToDate,MinutesInAdherence,MinutesOutOfAdherence,LastTimestamp,IsLastTimeInAdherence)" +
 					" VALUES (:PersonId,:Date,:MinutesInAdherence,:MinutesOutOfAdherence,:LastTimestamp,:IsLastTimeInAdherence)")
 							  .SetGuid("PersonId", model.PersonId)
@@ -70,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			var result = _currentUnitOfWork.Session().CreateSQLQuery(
+			var result = _currentUnitOfWork.Current().CreateSqlQuery(
 				"SELECT PersonId, BelongsToDate as DATE,LastTimestamp,MinutesInAdherence,MinutesOutOfAdherence,IsLastTimeInAdherence  FROM ReadModel.AdherencePercentage WHERE PersonId =:PersonId and BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
