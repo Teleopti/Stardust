@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Castle.Core.Internal;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Interfaces.MessageBroker;
 
