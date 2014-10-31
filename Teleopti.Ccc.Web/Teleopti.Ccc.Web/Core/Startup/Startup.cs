@@ -56,21 +56,20 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					if (!_applicationStarted)
 					{
 						// this will run only once per application start
-						OnStart(app);
+						OnStart(app, new System.Web.Http.HttpConfiguration());
 						_applicationStarted = true;
 					}
 				}
 			}
 		}
 
-		public void OnStart(IAppBuilder application)
+		public void OnStart(IAppBuilder application, HttpConfiguration config)
 		{
 			HostingEnvironment.RegisterObject(new ActionThrottleObject());
 			ApplicationStartModule.ErrorAtStartup = null;
 			try
 			{
 				var pathToToggle = Startup.pathToToggle();
-				var config = new System.Web.Http.HttpConfiguration();
 				var container = _containerConfiguration.Configure(pathToToggle, config);
 
 				AutofacHostFactory.Container = container;
@@ -89,11 +88,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 
-
-				config.Routes.MapHttpRoute(
-					name: "Forecasting_API",
-					routeTemplate: "api/Forecasting/{controller}/{id}",
-					defaults: new { id = RouteParameter.Optional });
+				registerWebApiRoutes(config);
 
 				application.UseWebApi(config);
 				application.UseAutofacMiddleware(container);
@@ -105,6 +100,19 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				log.Error(ex);
 				ApplicationStartModule.ErrorAtStartup = ex;
 			}
+		}
+
+		private static void registerWebApiRoutes(HttpConfiguration config)
+		{
+			config.Routes.MapHttpRoute(
+				name: "Mart_API",
+				routeTemplate: "api/Mart/{controller}/{id}",
+				defaults: new {id = RouteParameter.Optional});
+
+			config.Routes.MapHttpRoute(
+				name: "Forecasting_API",
+				routeTemplate: "api/Forecasting/{controller}/{id}",
+				defaults: new {id = RouteParameter.Optional});
 		}
 
 		private static string pathToToggle()

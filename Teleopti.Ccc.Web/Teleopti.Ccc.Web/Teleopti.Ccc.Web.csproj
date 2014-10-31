@@ -136,6 +136,10 @@
     <Reference Include="DotNetOpenAuth.Core.UI">
       <HintPath>..\..\packages\DotNetOpenAuth.Core.UI.4.3.4.13329\lib\net40-full\DotNetOpenAuth.Core.UI.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth.Mvc5">
+      <HintPath>..\..\packages\DotNetOpenAuth.Mvc5.4.3.4.13329\lib\net45-full\DotNetOpenAuth.Mvc5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
@@ -300,6 +304,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Teleopti.Secrets.7.5.800.47\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
+    <Reference Include="Validation">
+      <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -364,7 +371,6 @@
     <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\IoC\MartAreaModule.cs" />
     <Compile Include="Areas\Mart\Models\QueueStatsModel.cs" />
-    <Compile Include="Areas\Mart\MartAreaRegistration.cs" />
     <Compile Include="Areas\MessageBrokerTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MessageBrokerTool\MessageBrokerToolAreaRegistration.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
@@ -1606,4 +1612,9 @@ if not exist "$(TargetDir)FeatureFlags" mkdir "$(TargetDir)FeatureFlags"
 copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFlags\toggles.txt"
 </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
 </Project>

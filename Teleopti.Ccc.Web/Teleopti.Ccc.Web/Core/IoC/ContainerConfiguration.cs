@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterControllers(Assembly.GetExecutingAssembly());
-			builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-			builder.RegisterHubs(Assembly.GetExecutingAssembly()).EnableClassInterceptors();
+			builder.RegisterApiControllers(typeof(ContainerConfiguration).Assembly);
+			builder.RegisterControllers(typeof(ContainerConfiguration).Assembly);
+			builder.RegisterHubs(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors();
 
 			builder.RegisterWebApiFilterProvider(httpConfiguration);
 			builder.RegisterModule(new AutofacWebTypesModule());
