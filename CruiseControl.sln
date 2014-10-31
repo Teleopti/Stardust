@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{28CC87B3-CA25-44BD-8F9D-15C7C29DFE0E}"
 	ProjectSection(SolutionItems) = preProject
+		packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets = packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 		.nuget\packages.config = .nuget\packages.config
