@@ -14,3 +14,4 @@ select pp.*,
 	) as EndDate
 from personperiod pp
 inner join person p on pp.parent = p.id and p.IsDeleted = 0
+GO
