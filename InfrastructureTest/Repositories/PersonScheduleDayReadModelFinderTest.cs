@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -74,29 +77,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldReturnReadModelsForPersonsWithEmptySchedule()
 		{
+
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-			var personWithEmptySchedule = Guid.NewGuid();
-			var personSortedSecond = Guid.NewGuid();
-			var personSortedThird = Guid.NewGuid();
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			PersistAndRemoveFromUnitOfWork(site);
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description("sdf");
+			PersistAndRemoveFromUnitOfWork(team);
 
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				createAndSaveReadModel(personWithEmptySchedule, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), -1);
-				createAndSaveReadModel(personSortedSecond, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
-				createAndSaveReadModel(personSortedThird, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
+			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
 
-				var result = _target.ForPersonsIncludeEmptyDays(new DateOnly(2012, 8, 28),
-												new[] { personWithEmptySchedule, personSortedSecond, personSortedThird }, new Paging());
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+			PersistAndRemoveFromUnitOfWork(per3);
 
-				var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
-				Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personWithEmptySchedule));
-				Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(personSortedSecond));
-				Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(personSortedThird));
-				Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 8, 0, 0)));
-			}
+
+			createAndSaveReadModel((Guid) per2.Id, (Guid) team.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8);
+			createAndSaveReadModel((Guid) per3.Id, (Guid) team.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
+
+			var result = _target.ForPersonsIncludeEmptyDays(new DateOnly(2012, 8, 28),
+				new[] {(Guid) per1.Id, (Guid) per2.Id, (Guid) per3.Id}, new Paging());
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(per1.Id));
+			Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(per2.Id));
+			Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(per3.Id));
+			Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 8, 0, 0)));
 		}
 
 		[Test]
@@ -178,6 +192,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 																	MockRepository.GenerateMock<ICurrentDataSource>());
 
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
+		}
+		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
+		{
+			var pContract = PersonContractFactory.CreatePersonContract();
+			if (otherBusinessUnit != null)
+			{
+				pContract.Contract.SetBusinessUnit(otherBusinessUnit);
+				pContract.ContractSchedule.SetBusinessUnit(otherBusinessUnit);
+				pContract.PartTimePercentage.SetBusinessUnit(otherBusinessUnit);
+			}
+			PersistAndRemoveFromUnitOfWork(pContract.Contract);
+			PersistAndRemoveFromUnitOfWork(pContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(pContract.PartTimePercentage);
+			return pContract;
 		}
 	}
 }
