@@ -350,6 +350,7 @@
     <Compile Include="Optimization\DailyBoostedSkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssuesTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationServiceTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizerTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ScheduleDayIntraIntervalIssueExtractorTest.cs" />
