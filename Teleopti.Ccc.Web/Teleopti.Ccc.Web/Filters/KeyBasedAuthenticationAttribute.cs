@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Web.Filters
 {
 	public class KeyBasedAuthenticationAttribute : BasicAuthenticationAttribute
 	{
+#pragma warning disable 1998
 		protected override async Task<IPrincipal> AuthenticateAsync(string userName, string password, CancellationToken cancellationToken)
+#pragma warning restore 1998
 		{
 			var key = ConfigurationManager.AppSettings["AuthenticationKey"];
 			if (!password.Equals(key))
