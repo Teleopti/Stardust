@@ -31,17 +31,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private void handleEvent(Guid personId, DateTime timestamp, bool isInAdherence)
 		{
 			var model = getModel(personId, timestamp, isInAdherence);
-			incrementMinutes(model, timestamp);
+			incrementTime(model, timestamp);
 			model.IsLastTimeInAdherence = isInAdherence;
 			_persister.Persist(model);
 		}
 
-		private static void incrementMinutes(AdherencePercentageReadModel model, DateTime timestamp)
+		private static void incrementTime(AdherencePercentageReadModel model, DateTime timestamp)
 		{
 			if (model.IsLastTimeInAdherence)
+			{
 				model.MinutesInAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
+				model.TimeInAdherence += (timestamp - model.LastTimestamp);
+			}
 			else
+			{
 				model.MinutesOutOfAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
+				model.TimeOutOfAdherence += timestamp - model.LastTimestamp;
+			}
 			model.LastTimestamp = timestamp;
 		}
 

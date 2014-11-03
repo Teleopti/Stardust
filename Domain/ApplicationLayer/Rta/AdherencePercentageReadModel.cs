@@ -16,5 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime LastTimestamp { get; set; }
 		public bool IsLastTimeInAdherence { get; set; }
 		public DateTime? ShiftEnd { get; set; }
+		public TimeSpan TimeInAdherence { get; set; }
+		public TimeSpan TimeOutOfAdherence { get; set; }
 	}
 }

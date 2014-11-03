@@ -41,3 +41,30 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+----------------  
+--Name: Henrik Andersson
+--Date: 2014-011-03
+--Desc: Add new table for adherence percentage
+---------------- 
+
+DROP TABLE [ReadModel].[AdherencePercentage]
+
+CREATE TABLE [ReadModel].[AdherencePercentage](
+	[PersonId] [uniqueidentifier] NOT NULL,
+	[BelongsToDate] [smalldatetime] NOT NULL,
+	[LastTimestamp] [datetime] NULL,
+	[MinutesInAdherence] [int] NULL,
+	[MinutesOutOfAdherence] [int] NULL,
+	[TimeInAdherence] [bigint] NULL,
+	[TimeOutOfAdherence] [bigint] NULL,
+	[IsLastTimeInAdherence] [bit] NULL,
+ CONSTRAINT [PK_AdherencePercentage] PRIMARY KEY CLUSTERED 
+(
+	[PersonId] ASC,
+	[BelongsToDate] ASC
+)
+)
+
+GO
+GO

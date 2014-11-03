@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		public IAdherencePercentageReadModelPersister Target { get; set; }
 
-		private static AdherencePercentageReadModel createReadModel(DateOnly dateOnly, Guid personGuid, DateTime lastTimeStamp, int minOutOfAdherence = 8, int minInAdherence = 22)
+		private static AdherencePercentageReadModel createReadModel(DateOnly dateOnly, Guid personGuid, DateTime lastTimeStamp, TimeSpan timeInAdherence, TimeSpan timeOutOfAdherence, int minOutOfAdherence = 8, int minInAdherence = 22)
 		{
 			//Add tests for timezone
 			//we are missing events of when the shift start and shift end
@@ -35,7 +35,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				LastTimestamp = lastTimeStamp,
 				MinutesInAdherence = minInAdherence,
 				MinutesOutOfAdherence = minOutOfAdherence,
+				TimeInAdherence = timeInAdherence,
+				TimeOutOfAdherence = timeOutOfAdherence,
 				PersonId = personGuid
+
 			};
 		}
 
@@ -45,7 +48,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personGuid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
-			var model = createReadModel(dateOnly, personGuid, new DateTime(2012, 8, 29, 8, 0, 0));
+			var timeInAdherence = TimeSpan.FromMinutes(17);
+			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
+			var model = createReadModel(dateOnly, personGuid, new DateTime(2012, 8, 29, 8, 0, 0),timeInAdherence,timeOutOfAdherence);
 
 			Target.Persist(model);
 
@@ -56,6 +61,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.MinutesInAdherence.Should().Be.EqualTo(model.MinutesInAdherence);
 			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(model.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(model.PersonId);
+			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model.TimeOutOfAdherence);
+			savedModel.TimeInAdherence.Should().Be.EqualTo(model.TimeInAdherence);
+
 		}
 
 		[Test]
@@ -65,10 +73,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var dateOnly1 = new DateOnly(2012, 8, 29);
 			var dateOnly2 = new DateOnly(2012, 8, 30);
 
-			var model1 = createReadModel(dateOnly1, personGuid, new DateTime(2012, 8, 29, 8, 0, 0));
+			var model1 = createReadModel(dateOnly1, personGuid, new DateTime(2012, 8, 29, 8, 0, 0), TimeSpan.FromMinutes(22), TimeSpan.FromMinutes(47));
 			Target.Persist(model1);
 
-			var model2 = createReadModel(dateOnly2, personGuid, new DateTime(2012, 8, 30, 8, 0, 0));
+			var model2 = createReadModel(dateOnly2, personGuid, new DateTime(2012, 8, 30, 8, 0, 0), TimeSpan.FromMinutes(135), TimeSpan.FromSeconds(55));
 			Target.Persist(model2);
 
 			var savedModel = Target.Get(dateOnly1, personGuid);
@@ -78,6 +86,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.MinutesInAdherence.Should().Be.EqualTo(model1.MinutesInAdherence);
 			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(model1.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(model1.PersonId);
+			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model1.TimeOutOfAdherence);
+			savedModel.TimeInAdherence.Should().Be.EqualTo(model1.TimeInAdherence);
 
 			savedModel = Target.Get(dateOnly2, personGuid);
 			savedModel.BelongsToDate.Should().Be.EqualTo(model2.BelongsToDate);
@@ -86,6 +96,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.MinutesInAdherence.Should().Be.EqualTo(model2.MinutesInAdherence);
 			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(model2.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(model2.PersonId);
+			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model2.TimeOutOfAdherence);
+			savedModel.TimeInAdherence.Should().Be.EqualTo(model2.TimeInAdherence);
 		}
 
 		[Test]
@@ -93,11 +105,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personGuid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2014, 8, 29);
+			var timeInAdherence = TimeSpan.FromMinutes(17);
+			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
 
-			var modelOld = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 0, 0), 9, 21);
+			var modelOld = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 0, 0),TimeSpan.Zero,TimeSpan.FromMinutes(8),9, 21);
 			Target.Persist(modelOld);
 
-			var modelUpdated = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 15, 0), 8, 20);
+			var modelUpdated = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 15, 0),timeInAdherence,timeOutOfAdherence, 8, 20);
 			Target.Persist(modelUpdated);
 
 			var savedModel = Target.Get(dateOnly, personGuid);
@@ -107,6 +121,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.MinutesInAdherence.Should().Be.EqualTo(modelUpdated.MinutesInAdherence);
 			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(modelUpdated.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(modelUpdated.PersonId);
+			savedModel.TimeInAdherence.Should().Be.EqualTo(modelUpdated.TimeInAdherence);
+			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(modelUpdated.TimeOutOfAdherence);
 		}
 
 	}

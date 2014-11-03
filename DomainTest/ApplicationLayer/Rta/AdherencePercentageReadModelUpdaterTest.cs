@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
 			});
 
-			persister.PersistedModel.MinutesInAdherence.Should().Be(0);
+			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.Zero);
 		}
 
 		[Test]
-		public void ShouldUpdateMinutesInAdherenceWhenPersonOutOfAdherence()
+		public void ShouldUpdateTimeInAdherenceWhenPersonOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 8, 10, 0)
 			});
 
-			persister.PersistedModel.MinutesInAdherence.Should().Be(10);
+			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(10));
 		}
 
 		[Test]
-		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonInAdherence()
+		public void ShouldUpdateTimeOutOfAdherenceWhenPersonInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 8, 20, 0)
 			});
 
-			persister.PersistedModel.MinutesOutOfAdherence.Should().Be(20);
+			persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(20));
 		}
 
 		[Test]
-		public void ShouldUpdateMinutesInAdherenceWhenPersonInAdherence()
+		public void ShouldUpdateTimeInAdherenceWhenPersonInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -85,11 +85,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 9, 0, 0)
 			});
 
-			persister.PersistedModel.MinutesInAdherence.Should().Be(60);
+			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
 		}
 
 		[Test]
-		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonOutOfAdherence()
+		public void ShouldUpdateTimeOutOfAdherenceWhenPersonOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -106,11 +106,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 9, 10, 0)
 			});
 
-			persister.PersistedModel.MinutesOutOfAdherence.Should().Be(70);
+			persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(70));
 		}
 
 		[Test]
-		public void ShouldUpdateMinutesOutOfAdherenceWhenPersonInAndOutOfAdherence()
+		public void ShouldUpdateTimeOutOfAdherenceWhenPersonInAndOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -132,11 +132,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 8, 30, 0)
 			});
 
-			persister.PersistedModel.MinutesOutOfAdherence.Should().Be(15);
+			persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(15));
 		}
 
 		[Test]
-		public void ShouldUpdateMinutesInAdherenceWhenPersonOutAndInAdherence()
+		public void ShouldUpdateTimeInAdherenceWhenPersonOutAndInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
 			var target = new AdherencePercentageReadModelUpdater(persister);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = new DateTime(2014, 10, 13, 8, 40, 0)
 			});
 
-			persister.PersistedModel.MinutesInAdherence.Should().Be(20);
+			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(20));
 		}
 
 
