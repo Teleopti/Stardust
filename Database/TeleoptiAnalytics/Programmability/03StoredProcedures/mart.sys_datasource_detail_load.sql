@@ -16,7 +16,7 @@ select
 	detail_id			= t.detail_id,
 	target_date_local	= DATEADD(DD,-1,(DATEDIFF(DD, 0, getdate()))), --yesterday
 	target_interval_local=0, --start from midnight
-	intervals_back=0 --Delete only current interval and fetch everything matchning that one and new/later intervals from Agg
+	intervals_back=10 --default to 10 intervals back. Limit on bigger customers!
 from mart.v_log_object_detail lod
 inner join mart.sys_datasource ds
 	on ds.log_object_id = lod.log_object_id
@@ -32,7 +32,7 @@ select
 	detail_id			= t.detail_id,
 	target_date_local	= DATEADD(DD,-1,(DATEDIFF(DD, 0, getdate()))), --yesterday
 	target_interval_local=0, --start from midnight
-	intervals_back=0 --Delete only current interval and fetch everything matchning that one and new/later intervals from Agg
+	intervals_back=10 --default to 10 intervals back. Limit on bigger customers!
 from dbo.log_object_detail lod
 inner join mart.sys_datasource ds
 	on ds.log_object_id = lod.log_object_id
@@ -48,7 +48,7 @@ select
 	detail_id			= t.detail_id,
 	target_date_local	= DATEADD(DD,-1,(DATEDIFF(DD, 0, getdate()))), --yesterday
 	target_interval_local=0, --start from midnight
-	intervals_back=0 --Delete only current interval and fetch everything matchning that one and new/later intervals from Agg
+	intervals_back=10 --default to 10 intervals back. Limit on bigger customers!
 from mart.sys_datasource ds
 inner join mart.sys_datasource_detail_type t
 	on t.detail_id = 3
