@@ -194,8 +194,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
 														};
 
-									var asmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
-                                    var absenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+									var asmPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+									var textRequestPermission =
+										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests);
+									var overtimeAvailabilityPermission =
+										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb);
+									var absenceRequestPermission =
+										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+									var absenceReportPermission =
+										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport);
 									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
@@ -205,7 +214,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												ColorSource = colorSource,
 												MinMaxTime = minMaxTime,
 												AsmPermission = asmPermission,
+												TextRequestPermission = textRequestPermission,
+												OvertimeAvailabilityPermission = overtimeAvailabilityPermission,
 												AbsenceRequestPermission = absenceRequestPermission,
+												AbsenceReportPermission = absenceReportPermission,
 												IsCurrentWeek = isCurrentWeek
 											};
 								});
