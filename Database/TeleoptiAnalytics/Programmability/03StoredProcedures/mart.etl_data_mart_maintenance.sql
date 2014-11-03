@@ -158,6 +158,11 @@ BEGIN
 						from mart.fact_schedule_preference f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
 
 	--External Agg Queue_Logg
+	IF not exists (
+		select 1
+		from mart.sys_crossdatabaseview_custom
+		where view_name = 'v_queue_logg'
+		)
 	delete mart.v_queue_logg
 	from mart.v_queue_logg f
 	where 1=1
@@ -176,6 +181,11 @@ BEGIN
 						from dbo.queue_logg f2)
 
 	--External Agg Agent_Logg
+	IF not exists (
+		select 1
+		from mart.sys_crossdatabaseview_custom
+		where view_name = 'v_agent_logg'
+		)
 	delete mart.v_agent_logg
 	from mart.v_agent_logg f
 	where 1=1
