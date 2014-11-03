@@ -423,9 +423,9 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 	});
 
 
-	self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
+	self.setTimeLineLengthInMinutes = function(firstHour, mins) {
 		self.timeLineStartTime(firstHour);
-		self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
+		self.timeLineLengthInMinutes(mins);
 	};
 
 
@@ -468,7 +468,8 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 				}
 			}
 
-			self.setTimeLineLengthInMinutes(scheduleStartTime, scheduleEndTime);
+			var mins = (hours.length - 1) * 60 + (moment(chooseHistory.hours[chooseHistory.hours.length - 1].EndTime).get('minutes') - moment(chooseHistory.hours[1].StartTime).get('minutes'));
+			self.setTimeLineLengthInMinutes(scheduleStartTime, mins);
 
 			var truncatedHours = [];
 			$.each(allHours, function(index, hour) {

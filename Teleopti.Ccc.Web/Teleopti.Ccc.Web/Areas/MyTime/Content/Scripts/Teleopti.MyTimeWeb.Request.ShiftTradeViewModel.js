@@ -189,9 +189,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		return oneCandidateDayHeight * self.chooseHistorys().length + 'px';
 	});
 
-	self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
+	self.setTimeLineLengthInMinutes = function(firstHour, mins) {
 		self.timeLineStartTime(firstHour);
-		self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
+		self.timeLineLengthInMinutes(mins);
 	};
 	self.pixelPerMinute = ko.computed(function() {
 		return self.layerCanvasPixelWidth() / self.timeLineLengthInMinutes();
@@ -338,8 +338,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 	self._createTimeLine = function(hours) {
 		var firstTimeLineHour = moment(hours[0].StartTime);
-		var lastTimeLineHour = moment(hours[hours.length - 1].EndTime);
-		self.setTimeLineLengthInMinutes(firstTimeLineHour, lastTimeLineHour);
+		//modify for daylight save close day
+		var mins = (hours.length - 1) * 60 + (moment(hours[hours.length - 1].EndTime).get('minutes') - moment(hours[1].StartTime).get('minutes'));
+		self.setTimeLineLengthInMinutes(firstTimeLineHour, mins);
 		self.hours([]);
 		var start = moment(hours[1].StartTime);
 		var diff = start.diff(self.timeLineStartTime(), 'minutes');
