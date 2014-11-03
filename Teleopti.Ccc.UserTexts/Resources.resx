@@ -12363,11 +12363,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Used to display a generic end time cannot be before start time error..</comment>
   </data>
   <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
-    <value>Full Day Absence Request End Time</value>
+    <value>End time</value>
     <comment>System Setting - the start end time applied to a full day absence request.</comment>
   </data>
   <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
-    <value>Full Day Absence Request Start Time</value>
+    <value>Start time</value>
     <comment>System Setting - the start time applied to a full day absence request.</comment>
   </data>
   <data name="FullDayAbsenceSettings" xml:space="preserve">

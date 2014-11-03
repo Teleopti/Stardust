@@ -11786,10 +11786,10 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>{0} kan inte vara tidigare än {1}</value>
   </data>
   <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
-    <value>Sluttid för förfrågan om heldagsfrånvaro</value>
+    <value>Sluttid</value>
   </data>
   <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
-    <value>Starttid för förfrågan om heldagsfrånvaro</value>
+    <value>Starttid</value>
   </data>
   <data name="HiddenSystemSettings" xml:space="preserve">
     <value>Dolda systeminställningar</value>
@@ -11849,6 +11849,12 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Balans inom intervall</value>
   </data>
   <data name="LowestIntraIntervalBalance" xml:space="preserve">
-    <value>Lägst inom intervallbalans</value>
+    <value>Lägsta balans inom intervall</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Kan inte hämta önskemålsinställning.</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Frånvarorapport</value>
   </data>
 </root>
