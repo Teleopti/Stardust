@@ -20,9 +20,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterAssemblyTypes(typeof (IHandleEvent<>).Assembly)
 				.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.EnableInterfaceInterceptors().InterceptedBy(typeof(AspectInterceptor))
-				;
+				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)))
+				.EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 

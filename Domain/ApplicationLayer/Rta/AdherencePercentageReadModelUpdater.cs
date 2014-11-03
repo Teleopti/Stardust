@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonInAdherenceEvent @event)
+		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.Timestamp, true);
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonOutOfAdherenceEvent @event)
+		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.Timestamp, false);
 		}

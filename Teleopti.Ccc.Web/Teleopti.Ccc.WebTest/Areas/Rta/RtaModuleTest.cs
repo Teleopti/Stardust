@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			using (var container = BuildContainer())
 			{
 				container.Resolve<IEnumerable<IHandleEvent<PersonOutOfAdherenceEvent>>>()
-					.Select(x => x.GetType())
-					.Should().Contain(typeof (AdherencePercentageReadModelUpdater));
+					.Where(x => x is AdherencePercentageReadModelUpdater)
+					.Should().Have.Count.EqualTo(1);
 			}
 		}
 
