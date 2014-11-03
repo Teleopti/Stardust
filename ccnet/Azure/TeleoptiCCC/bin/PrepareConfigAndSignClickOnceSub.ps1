@@ -248,14 +248,14 @@ Try
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "E:"
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "CD $ClickOnceSignPath"
     Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
-    #&"$ClickOnceSignPath\SignAdminClient.bat"
+    &"$ClickOnceSignPath\SignAdminClient.bat"
     
     $cmdArgs = @("-s","-a Teleopti.Ccc.AgentPortal.application","-m Teleopti.Ccc.AgentPortal.exe.manifest","-u https://$DataSourceName.teleopticloud.com/MyTime/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $MyTimePath","-p $pwd")
     Remove-Item "$ClickOnceSignPath\SignMyTime.bat"
 	Add-Content "$ClickOnceSignPath\SignMyTime.bat" "E:"
 	Add-Content "$ClickOnceSignPath\SignMyTime.bat" "CD $ClickOnceSignPath"
     Add-Content "$ClickOnceSignPath\SignMyTime.bat" "$ClickOnceTool $cmdArgs"
-    #&"$ClickOnceSignPath\SignMyTime.bat"
+    &"$ClickOnceSignPath\SignMyTime.bat"
  
 }
 Catch [Exception]
