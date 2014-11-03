@@ -1121,11 +1121,7 @@
     <Content Include="Areas\SSO\Content\Css\login.css" />
     <Content Include="Areas\SSO\Content\Css\Site.css" />
     <Content Include="Areas\SSO\Content\Images\ajax-loader-small.gif" />
-    <Content Include="Areas\SSO\Content\Images\body_bg.jpg" />
     <Content Include="Areas\SSO\Content\Images\ccc_icon.png" />
-    <Content Include="Areas\SSO\Content\Images\login_logo.png" />
-    <Content Include="Areas\SSO\Content\Images\login_page_bg.png" />
-    <Content Include="Areas\SSO\Content\Images\mobile_logo.png" />
     <Content Include="Areas\SSO\Content\Images\signin_bg_sprite.png" />
     <Content Include="Areas\SSO\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.AuthenticationState.js" />
@@ -1222,7 +1218,6 @@
     <Content Include="Areas\Start\Content\Css\Site.css" />
     <Content Include="Areas\MyTime\Content\Images\arrow-down.png" />
     <Content Include="Areas\MyTime\Content\Images\main_content_bottom_bg.jpg" />
-    <Content Include="Areas\Start\Content\Images\body_bg.jpg" />
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />

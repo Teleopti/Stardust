@@ -237,11 +237,9 @@
     <Content Include="Content\css\selector.css" />
     <Content Include="Content\css\site.css" />
     <Content Include="Content\favicon.ico" />
-    <Content Include="Content\images\body_bg.jpg" />
     <Content Include="Content\images\facebook.png" />
     <Content Include="Content\images\google.png" />
     <Content Include="Content\images\liveid.png" />
-    <Content Include="Content\images\mobile_logo.png" />
     <Content Include="Content\images\twitter.png" />
     <Content Include="Content\images\yahoo.gif" />
     <Content Include="Default.aspx" />
@@ -268,7 +266,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.9.0.min.map" />
-    <Content Include="Views\Web.config" />
     <Content Include="test-certificate.pfx" />
   </ItemGroup>
   <ItemGroup>
