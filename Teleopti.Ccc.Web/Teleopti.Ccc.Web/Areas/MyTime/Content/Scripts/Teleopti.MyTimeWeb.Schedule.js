@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		$('.body-weekview-inner').show();
 		completelyLoaded();
 	}
-	
+
 	function _fetchData() {
 		ajax.Ajax({
 			url: 'Schedule/FetchData',
@@ -69,6 +69,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.periodSelection = ko.observable();
 		self.asmPermission = ko.observable();
 		self.absenceRequestPermission = ko.observable();
+		self.absenceReportPermission = ko.observable();
+		self.isAbsenceReportEnabled = ko.observable(false);
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
@@ -88,6 +90,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.textRequestActive = ko.observable(false);
 		self.absenceRequestActive = ko.observable(false);
+		self.absenceReportActive = ko.observable(false);
 		self.overtimeAvailabilityActive = ko.observable(false);
 		self.initialRequestDay = null;
 		self.selectedDateSubscription = null;
@@ -96,6 +99,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return (self.requestViewModel() || '') != '';
 		});
 
+		self.featureCheck = function () {
+			ajax.Ajax({
+				url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AbsenceReport_31011",
+				success: function (data) {
+					if (data.IsEnabled) {
+						self.isAbsenceReportEnabled(true);
+					}
+				}
+			});
+		}
 
 		self.increaseRequestCount = function(fixedDate) {
 			var arr = $.grep(self.days(), function(item, index) {
@@ -119,6 +132,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (!self.absenceRequestActive()) {
 				self.absenceRequestActive(true);
 				self.showAddAbsenceRequestForm();
+			}
+		};
+
+		self.absenceReportActivate = function () {
+			self.textRequestActive(false);
+			self.overtimeAvailabilityActive(false);
+			self.absenceRequestActive(false);
+			if (!self.absenceReportActive()) {
+				self.absenceReportActive(true);
+				self.showAddAbsenceReportForm();
 			}
 		};
 
@@ -204,6 +227,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_fillFormData();
 			self.requestViewModel().AddAbsenceRequest(false);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+		};
+
+		self.showAddAbsenceReportForm = function () {
+			if (self.absenceReportPermission() !== true) {
+				return;
+			}
+
+			// TODO: Implement absence report form.
 		};
 
 		self.showAddOvertimeAvailabilityForm = function(data) {
@@ -292,6 +323,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		Initialize: function (data) {
 			var self = this;
 			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
+			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
 			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
@@ -303,6 +335,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 			self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 			self.datePickerFormat(data.DatePickerFormat);
+
+			self.featureCheck();
 			
 			var styleToSet = {};
 			$.each(data.Styles, function (key, value) {

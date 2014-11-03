@@ -110,13 +110,15 @@
 		<li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
 			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 		</li>
+		<li data-bind="visible: absenceReportPermission && isAbsenceReportEnabled, css: { active: absenceReportActive }">
+			<a id="addAbsenceReport" class="absence-report-add" href="#" data-bind="click: absenceReportActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+		</li>
 	</ul>
 	<div data-bind="with: requestViewModel">
-		<div id="Request-add-section" class="well well-small clearfix">
+		<div id="Request-add-section" class="well well-sm clearfix">
 			<div data-bind="template: Template">
 			</div>
 		</div>
-
 	</div>
 	<div class="container fixed-non-responsive">
 		<div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
