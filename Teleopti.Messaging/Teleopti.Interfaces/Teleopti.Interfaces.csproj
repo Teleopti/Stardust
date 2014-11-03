@@ -689,6 +689,7 @@
     <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
     <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
     <Compile Include="Infrastructure\IQueryFilter.cs" />
+    <Compile Include="Infrastructure\IReadModelUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IRootChangeInfo.cs">
       <SubType>Code</SubType>
     </Compile>

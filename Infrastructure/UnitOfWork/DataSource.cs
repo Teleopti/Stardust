@@ -3,23 +3,22 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	/// <summary>
-	/// Holds a ref to IUnitOfWorkFactory towards Raptor and Matrix
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2008-04-17
-	/// </remarks>
-	public sealed class DataSource : IDataSource 
+	public sealed class DataSource : IDataSource
 	{
 		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IAuthenticationSettings authenticationSettings)
+			: this(application, statistic, null, authenticationSettings)
+		{
+		}
+
+		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IReadModelUnitOfWorkFactory readModel, IAuthenticationSettings authenticationSettings)
 		{
 			InParameter.NotNull("application", application);
 			Application = application;
 			Statistic = statistic;
+			ReadModel = readModel;
 			AuthenticationSettings = authenticationSettings;
 		}
-		
+
 		public string OriginalFileName { get; set; }
 
 		public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
@@ -27,6 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IUnitOfWorkFactory Statistic { get; private set; }
 
 		public IUnitOfWorkFactory Application { get; private set; }
+
+		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
 
 		public IAuthenticationSettings AuthenticationSettings { get; private set; }
 
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Dispose()
 		{
-			if(Statistic!=null)
+			if (Statistic != null)
 				Statistic.Dispose();
 			Application.Dispose();
 		}

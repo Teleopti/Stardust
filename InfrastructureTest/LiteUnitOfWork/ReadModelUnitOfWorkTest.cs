@@ -7,15 +7,21 @@ using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NHibernate;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
@@ -206,16 +212,40 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
 
 			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+			builder.RegisterType<FakeDataSourcesProvider>().AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
 
 			var container = builder.Build();
-			container.Resolve<IReadModelUnitOfWorkConfiguration>()
-				.Configure(ConnectionStringHelper.ConnectionStringUsedInTests);
+
+			var dataSource = container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+
+			container.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] {dataSource});
 			return container;
+		}
+	}
+
+	public class FakeDataSourcesProvider : IAvailableDataSourcesProvider
+	{
+		private IEnumerable<IDataSource> _dataSources;
+
+		public void SetAvailableDataSources(IEnumerable<IDataSource> dataSources)
+		{
+			_dataSources = dataSources;
+		}
+
+		public IEnumerable<IDataSource> AvailableDataSources()
+		{
+			return _dataSources;
+		}
+
+		public IEnumerable<IDataSource> UnavailableDataSources()
+		{
+			return null;
 		}
 	}
 
@@ -307,16 +337,28 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	public class TestTable : IDisposable
 	{
 		private readonly string _name;
+		private readonly string _connectionString;
 
 		public TestTable(string name)
+			: this(name, ConnectionStringHelper.ConnectionStringUsedInTests)
+		{
+		}
+
+		public TestTable(string name, string connectionString)
 		{
 			_name = name;
+			_connectionString = connectionString;
 			applySql(string.Format("CREATE TABLE {0} (Value int)", _name));
 		}
 
 		public static IEnumerable<int> Values(string tableName)
 		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
+			return Values(tableName, ConnectionStringHelper.ConnectionStringUsedInTests);
+		}
+
+		public static IEnumerable<int> Values(string tableName, string connectionString)
+		{
+			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
 				using (var command = new SqlCommand("SELECT * FROM " + tableName, connection))
@@ -331,12 +373,12 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			applySql(string.Format("DROP TABLE {0}", _name));
 		}
 
-		private static void applySql(string Sql)
+		private void applySql(string sql)
 		{
-			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
+			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
-				using (var command = new SqlCommand(Sql, connection))
+				using (var command = new SqlCommand(sql, connection))
 					command.ExecuteNonQuery();
 			}
 		}

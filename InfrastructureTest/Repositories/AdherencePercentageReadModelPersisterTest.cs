@@ -16,6 +16,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private void configureApplication()
 		{
-			_container.Resolve<IReadModelUnitOfWorkConfiguration>()
+			_container.Resolve<IReadModelUnitOfWorkFactory>()
 				.Configure(ConnectionStringHelper.ConnectionStringUsedInTests);
 		}
 

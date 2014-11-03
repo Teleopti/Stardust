@@ -9,7 +9,9 @@ using NHibernate.Cfg;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 using Environment = NHibernate.Cfg.Environment;
 using Teleopti.Ccc.Domain.Common.Logging;
@@ -21,15 +23,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
+		private readonly ICurrentHttpContext _httpContext;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 
 		public const string NoDataSourceName = "[not set]";
 
 		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
+			: this(enversConfiguration, messageSenders, dataSourceConfigurationSetter, null)
+		{
+		}
+
+		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter, ICurrentHttpContext httpContext)
 		{
 			_enversConfiguration = enversConfiguration;
 			_messageSenders = messageSenders;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
+			_httpContext = httpContext;
 		}
 
 		private static string isSqlServerOnline(string connectionString)
@@ -76,6 +85,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return false;
 		}
 
+		public IDataSource Create(string applicationDataSourceName, string applicationConnectionString, string statisticConnectionString)
+		{
+			var settings = new Dictionary<string, string>
+			{
+				{
+					Environment.ConnectionString,
+					applicationConnectionString
+				},
+				{
+					Environment.SessionFactoryName,
+					applicationDataSourceName
+				}
+			};
+			var authenticationSettings = createDefaultAuthenticationSettings();
+			return createDataSource(settings, statisticConnectionString, NoDataSourceName, authenticationSettings);
+		}
+
 		public IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString)
 		{
 			var authenticationSettings = createDefaultAuthenticationSettings();
@@ -86,7 +112,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(settings);
-			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider, appConfig.Properties[Environment.ConnectionString], _messageSenders);
+			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];
+			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider, applicationConnectionString, _messageSenders);
+
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				var statConfiguration = createStatisticConfiguration(statisticConnectionString, statisticName);
@@ -96,7 +124,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				statFactory = null;
 			}
-			return new DataSource(appFactory, statFactory, authenticationSettings);
+
+			var readModel = new ReadModelUnitOfWorkFactory(_httpContext);
+			readModel.Configure(applicationConnectionString);
+
+			return new DataSource(appFactory, statFactory, readModel, authenticationSettings);
 		}
 
 		private static ISessionFactory buildSessionFactory(Configuration nhConf)
@@ -179,5 +211,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg);
 			_enversConfiguration.Configure(cfg);
 		}
+
 	}
 }

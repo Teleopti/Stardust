@@ -1,17 +1,19 @@
 ﻿using System;
 using NHibernate;
 using NHibernate.Cfg;
+using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
-	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkConfiguration
+	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkFactory
 	{
 		private readonly ReadModelUnitOfWorkState _state;
 		private ISessionFactory _sessionFactory;
 
-		public ReadModelUnitOfWorkFactory(ReadModelUnitOfWorkState state)
+		public ReadModelUnitOfWorkFactory(ICurrentHttpContext httpContext)
 		{
-			_state = state;
+			_state = new ReadModelUnitOfWorkState(httpContext);
 		}
 
 		public void Configure(string connectionString)

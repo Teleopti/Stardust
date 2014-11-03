@@ -13,88 +13,92 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-    internal  class AuthenticationModule : Module
-    {
-	    public IApplicationData ApplicationData { get; set; }
+	internal class AuthenticationModule : Module
+	{
+		public IApplicationData ApplicationData { get; set; }
 
-	    public AuthenticationModule()
-	    {
-	    }
+		public AuthenticationModule()
+		{
+		}
 
-	    protected override void Load(ContainerBuilder builder)
-        {
+		protected override void Load(ContainerBuilder builder)
+		{
 			builder.RegisterType<WindowsAppDomainPrincipalContext>()
 				.As<ICurrentPrincipalContext>()
 				.SingleInstance();
-        	builder.RegisterType<TeleoptiPrincipalFactory>()
-        		.As<IPrincipalFactory>()
-        		.SingleInstance();
+			builder.RegisterType<TeleoptiPrincipalFactory>()
+				.As<IPrincipalFactory>()
+				.SingleInstance();
 			builder.RegisterType<LogOnOff>()
-                .As<ILogOnOff>()
-                .SingleInstance();
-            builder.RegisterType<RepositoryFactory>()
-                .As<IRepositoryFactory>()
-                .SingleInstance();
-            builder.RegisterType<WindowsDataSourceProvider>()
-                .As<IDataSourceProvider>();
-            builder.RegisterType<ApplicationDataSourceProvider>()
-                .As<IDataSourceProvider>();
-            builder.RegisterType<AvailableDataSourcesProvider>()
-                .As<IAvailableDataSourcesProvider>()
-                .SingleInstance();
-            builder.RegisterType<FindUserDetail>()
-                .As<IFindUserDetail>()
-                .SingleInstance();
-            builder.RegisterType<FindApplicationUser>()
-                .As<IFindApplicationUser>()
-                .SingleInstance();
-            builder.RegisterType<CheckNullUser>()
-                .As<ICheckNullUser>()
-                .SingleInstance();
-            builder.RegisterType<CheckPassword>()
-                .As<ICheckPassword>()
-                .SingleInstance();
-            builder.RegisterType<CheckSuperUser>()
-                .As<ICheckSuperUser>()
-                .SingleInstance();
-            builder.RegisterType<CheckUserDetail>()
-                .As<ICheckUserDetail>()
-                .SingleInstance();
-            builder.RegisterType<CheckPasswordChange>()
-                .As<ICheckPasswordChange>()
-                .SingleInstance();
-            builder.RegisterType<CheckBruteForce>()
-                .As<ICheckBruteForce>()
-                .SingleInstance();
-				builder.Register<IPasswordPolicy>(c =>
-                             	{
-											if(c.Resolve<IApplicationData>().LoadPasswordPolicyService==null)
-												return new DummyPasswordPolicy();
-                             		return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
-                             	})
-                .As<IPasswordPolicy>()
-                .SingleInstance();
-            builder.RegisterType<SystemUserSpecification>()
-                .As<ISystemUserSpecification>()
-                .SingleInstance();
-            builder.RegisterType<SystemUserPasswordSpecification>()
-                .As<ISystemUserPasswordSpecification>()
-                .SingleInstance();
-            builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
-            builder.RegisterType<FunctionsForRoleProvider>().As<IFunctionsForRoleProvider>().InstancePerDependency();
-            builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
-            builder.RegisterType<ExternalFunctionsProvider>().As<IExternalFunctionsProvider>().InstancePerDependency();
+				.As<ILogOnOff>()
+				.SingleInstance();
+			builder.RegisterType<RepositoryFactory>()
+				.As<IRepositoryFactory>()
+				.SingleInstance();
+			builder.RegisterType<WindowsDataSourceProvider>()
+				.As<IDataSourceProvider>();
+			builder.RegisterType<ApplicationDataSourceProvider>()
+				.As<IDataSourceProvider>();
+			builder.RegisterType<AvailableDataSourcesProvider>()
+				.As<IAvailableDataSourcesProvider>()
+				.SingleInstance();
+			builder.RegisterType<FindUserDetail>()
+				.As<IFindUserDetail>()
+				.SingleInstance();
+			builder.RegisterType<FindApplicationUser>()
+				.As<IFindApplicationUser>()
+				.SingleInstance();
+			builder.RegisterType<CheckNullUser>()
+				.As<ICheckNullUser>()
+				.SingleInstance();
+			builder.RegisterType<CheckPassword>()
+				.As<ICheckPassword>()
+				.SingleInstance();
+			builder.RegisterType<CheckSuperUser>()
+				.As<ICheckSuperUser>()
+				.SingleInstance();
+			builder.RegisterType<CheckUserDetail>()
+				.As<ICheckUserDetail>()
+				.SingleInstance();
+			builder.RegisterType<CheckPasswordChange>()
+				.As<ICheckPasswordChange>()
+				.SingleInstance();
+			builder.RegisterType<CheckBruteForce>()
+				.As<ICheckBruteForce>()
+				.SingleInstance();
+			builder.Register<IPasswordPolicy>(c =>
+							{
+								if (c.Resolve<IApplicationData>().LoadPasswordPolicyService == null)
+									return new DummyPasswordPolicy();
+								return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
+							})
+			.As<IPasswordPolicy>()
+			.SingleInstance();
+			builder.RegisterType<SystemUserSpecification>()
+				.As<ISystemUserSpecification>()
+				.SingleInstance();
+			builder.RegisterType<SystemUserPasswordSpecification>()
+				.As<ISystemUserPasswordSpecification>()
+				.SingleInstance();
+			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
+			builder.RegisterType<FunctionsForRoleProvider>().As<IFunctionsForRoleProvider>().InstancePerDependency();
+			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
+			builder.RegisterType<ExternalFunctionsProvider>().As<IExternalFunctionsProvider>().InstancePerDependency();
 			builder.RegisterType<RoleToClaimSetTransformer>().As<IRoleToClaimSetTransformer>().InstancePerDependency();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
-            if (ApplicationData!=null)
+			if (ApplicationData != null)
+			{
 				builder.Register(c => ApplicationData)
-                .As<IApplicationData>();
-            else
-            builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
-                .As<IApplicationData>().SingleInstance();
-            builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService)
-                .As<ILoadPasswordPolicyService>().SingleInstance();
-        	builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();
+					.As<IApplicationData>();
+			}
+			else
+			{
+				builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
+					.As<IApplicationData>().SingleInstance();
+			}
+			builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService)
+				.As<ILoadPasswordPolicyService>().SingleInstance();
+			builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();
 			builder.RegisterType<CurrentTeleoptiPrincipal>()
 				.As<ICurrentTeleoptiPrincipal>()
 				.SingleInstance();
@@ -108,6 +112,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
 			builder.RegisterType<LogonLogger>().As<ILogonLogger>().SingleInstance();
-        }
-    }
+		}
+	}
 }
