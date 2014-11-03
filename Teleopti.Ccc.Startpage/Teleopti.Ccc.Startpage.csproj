@@ -49,7 +49,6 @@
     </Content>
     <Content Include="Images\android.png" />
     <Content Include="Images\blackberry.png" />
-    <Content Include="Images\body_bg.jpg" />
     <Content Include="Images\calendar.png" />
     <Content Include="Images\client.png" />
     <Content Include="Images\mobile.png" />
