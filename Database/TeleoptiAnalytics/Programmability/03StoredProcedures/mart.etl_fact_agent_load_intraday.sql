@@ -10,8 +10,6 @@ GO
 -- =============================================
 --EXEC [mart].[etl_fact_agent_load_intraday] @start_date='2012-09-04',@end_date='2013-03-03',@datasource_id=-2
 CREATE PROCEDURE [mart].[etl_fact_agent_load_intraday] 
-@start_date smalldatetime,
-@end_date smalldatetime,
 @datasource_id int,
 @is_delayed_job bit = 0
 AS
@@ -46,7 +44,7 @@ BEGIN
 	FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		EXEC [mart].[etl_fact_agent_load_intraday] @start_date, @end_date, @datasource_id
+		EXEC [mart].[etl_fact_agent_load_intraday] @datasource_id
 		FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	END
 	CLOSE DataSouceCursor
