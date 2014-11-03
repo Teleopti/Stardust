@@ -161,6 +161,82 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(20));
 		}
 
+		[Test]
+		public void TimeInAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsInAdherence()
+		{
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+			var startTime = new DateTime(2014, 10, 13, 8, 0, 0);
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime
+			});
+
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime.AddSeconds(12)
+			});
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime.AddSeconds(37)
+			});
+
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime.AddMinutes(1).AddSeconds(45)
+			});
+
+			var expected = TimeSpan.FromSeconds(12 + (105 - 37));
+
+			persister.PersistedModel.TimeInAdherence.Should().Be(expected);
+		}
+
+		[Test]
+		public void TimeOutOfAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsOutOfAdherence()
+		{
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+			var startTime = new DateTime(2014, 10, 13, 8, 0, 0);
+
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime
+			});
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime.AddMinutes(3).AddSeconds(12)
+			});
+
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime.AddMinutes(4)
+			});
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = startTime.AddMinutes(4).AddSeconds(1)
+			});
+
+			var expected = TimeSpan
+				.FromMinutes(3).Add(TimeSpan.FromSeconds(12))
+				.Add(TimeSpan.FromSeconds(1));
+
+			persister.PersistedModel.TimeOutOfAdherence.Should().Be(expected);
+		}
+
 
 	}
 
