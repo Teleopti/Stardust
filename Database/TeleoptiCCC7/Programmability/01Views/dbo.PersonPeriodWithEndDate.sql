@@ -17,5 +17,5 @@ select pp.*,
 		,isnull(p.terminaldate,'20591231 00:00')) as EndDate
 from personperiod pp
 inner join person p on pp.parent = p.id and p.IsDeleted = 0
-where pp.StartDate < isnull(p.terminaldate,'20591231 00:00')
+where pp.StartDate <= isnull(p.terminaldate,'20591231 00:00')
 GO
