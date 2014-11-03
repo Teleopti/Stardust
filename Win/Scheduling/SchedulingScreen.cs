@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// this timer is just for fixing bug 17948 regarding dateNavigationControl && show agent info when RTL and coming back from File
 			_tmpTimer.Interval = 50;
 			_tmpTimer.Enabled = false;
-			_tmpTimer.Tick += _tmpTimer_Tick;
+			
 			//if it disappears again in the designer
 			ribbonControlAdv1.QuickPanelVisible = true;
 		}
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateContainer(_container.ComponentRegistry, _schedulerMessageBrokerHandler, _schedulerMessageBrokerHandler, (IClearReferredShiftTradeRequests) _schedulerState);
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState);
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
-			_schedulerMeetingHelper.ModificationOccured += _schedulerMeetingHelper_ModificationOccured;
+			
 			toolStripMenuItemLoggedOnUserTimeZone.Text = _schedulerState.TimeZoneInfo.DisplayName;
 			toolStripButtonRefresh.Text = Resources.Refresh;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
@@ -4616,6 +4616,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlers()
 		{
+			_schedulerMeetingHelper.ModificationOccured += _schedulerMeetingHelper_ModificationOccured;
+			_tmpTimer.Tick += _tmpTimer_Tick;
 			schedulerSplitters1.TabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
 			_grid.CurrentCellKeyDown += grid_CurrentCellKeyDown;
 			_grid.GotFocus += grid_GotFocus;
@@ -4773,6 +4775,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlersOff()
 		{
+			toolStripTabItemHome.Click -= toolStripTabItemHome_Click;
+			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
+			toolStripTabItem1.Click -= toolStripTabItem1_Click;
+			_schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
+			_tmpTimer.Tick -= _tmpTimer_Tick;
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 			_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
 
