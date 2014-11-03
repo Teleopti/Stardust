@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Management;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -50,9 +51,11 @@ namespace CheckPreRequisites.Checks
 		private void CheckComputerName()
 		{
 			var computerName = SystemInformation.ComputerName;
-			_form1.printNewFeature("Operating system", "Computer name", "Allowed characters for computer is [A-Z,a-z,0-9]",
+
+			_form1.printNewFeature("Operating system", "Computer name", "Allowed characters for computer is [A-Z,a-z,0-9], and maximum length is 15",
 			                       computerName);
-			_form1.printFeatureStatus(computerName == Regex.Replace(computerName, "[^a-zA-Z0-9_]", ""));
+			_form1.printFeatureStatus(computerName == Regex.Replace(computerName, "[^a-zA-Z0-9_]", "") &&
+			                          String.Equals(computerName, Dns.GetHostName(), StringComparison.CurrentCultureIgnoreCase));
 		}
 
 		private void CheckArchitecture()
