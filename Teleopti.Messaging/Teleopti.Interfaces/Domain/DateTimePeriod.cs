@@ -184,6 +184,19 @@ namespace Teleopti.Interfaces.Domain
             return EndDateTime.Subtract(StartDateTime);
         }
 
+		/// <summary>
+		/// Convert to local time first, then returns a TimeSpan representing the Elapsed time in the TimePeriod, 
+		/// This case for daylight save start and end day
+		/// </summary>
+		/// <returns></returns>
+		public TimeSpan LocalElapsedTime(TimeZoneInfo timeZoneInfo)
+		{
+			var localStart = StartDateTimeLocal(timeZoneInfo);
+			var localEnd = EndDateTimeLocal(timeZoneInfo);
+
+			return localEnd.Subtract(localStart);
+        }
+
         /// <summary>
         /// Moves the period the spacific amount of time.
         /// </summary>
@@ -653,7 +666,7 @@ namespace Teleopti.Interfaces.Domain
         {
         	TimeSpan startTimeOfDay = StartDateTimeLocal(timeZone).TimeOfDay;
 
-        	return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
+			return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(LocalElapsedTime(timeZone)));
         }
 
         /// <summary>
