@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class AdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
 	{
-		private readonly ICurrentReadModelUnitOfWork _currentUnitOfWork;
+		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 
-		public AdherencePercentageReadModelPersister(ICurrentReadModelUnitOfWork currentUnitOfWork)
+		public AdherencePercentageReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
 		{
-			_currentUnitOfWork = currentUnitOfWork;
+			_unitOfWork = unitOfWork;
 		}
 
 		public void Persist(AdherencePercentageReadModel model)
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void updateReadModel(AdherencePercentageReadModel model)
 		{
-			_currentUnitOfWork.Current().CreateSqlQuery(
+			_unitOfWork.Current().CreateSqlQuery(
 				"UPDATE ReadModel.AdherencePercentage SET" +
 				"	MinutesInAdherence = :MinutesInAdherence," +
 				"		MinutesOutOfAdherence = :MinutesOutOfAdherence," +
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void saveReadModel(AdherencePercentageReadModel model)
 		{
-			_currentUnitOfWork.Current().CreateSqlQuery(
+			_unitOfWork.Current().CreateSqlQuery(
 				"INSERT INTO ReadModel.AdherencePercentage (PersonId,BelongsToDate,MinutesInAdherence,MinutesOutOfAdherence,LastTimestamp,IsLastTimeInAdherence)" +
 					" VALUES (:PersonId,:Date,:MinutesInAdherence,:MinutesOutOfAdherence,:LastTimestamp,:IsLastTimeInAdherence)")
 							  .SetGuid("PersonId", model.PersonId)
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			var result = _currentUnitOfWork.Current().CreateSqlQuery(
+			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT PersonId, BelongsToDate as DATE,LastTimestamp,MinutesInAdherence,MinutesOutOfAdherence,IsLastTimeInAdherence  FROM ReadModel.AdherencePercentage WHERE PersonId =:PersonId and BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)

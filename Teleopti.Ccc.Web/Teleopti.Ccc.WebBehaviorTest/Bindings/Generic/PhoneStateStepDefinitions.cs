@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
 using Newtonsoft.Json;
@@ -54,10 +55,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				handler.AllowAutoRedirect = false;
 				using (var client = new HttpClient(handler))
 				{
-					var post = client.PostAsync(uri, new StringContent(data, Encoding.UTF8, "application/json"));
-					var result = post.Result;
-					if (result.StatusCode != HttpStatusCode.OK)
-						throw new Exception("Posting rta state returned http code " + result.StatusCode);
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+					var requestContent = new StringContent(data, Encoding.UTF8, "application/json");
+					var post = client.PostAsync(uri, requestContent);
+					var response = post.Result;
+					if (response.StatusCode != HttpStatusCode.OK)
+					{
+						var responseContent = response.Content.ReadAsStringAsync().Result;
+						throw new Exception("Posting rta state returned http code " + response.StatusCode + ", Content: " + responseContent);
+					}
 				}
 			}
 		}
