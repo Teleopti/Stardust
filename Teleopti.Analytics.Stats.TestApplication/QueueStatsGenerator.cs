@@ -67,6 +67,9 @@ namespace Teleopti.Analytics.Stats.TestApplication
 							}
 						}
 					}
+
+				stopwatch.Stop();
+				Console.WriteLine("\nThe operation took: {0}", stopwatch.Elapsed);
 				}
 
 				stopwatch.Stop();

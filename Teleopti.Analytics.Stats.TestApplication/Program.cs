@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Teleopti.Analytics.Stats.TestApplication
 {
@@ -36,19 +32,25 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				var amountOfDays = Console.ReadLine();
 				if (checkExit(amountOfDays)) break;
 
-				Console.WriteLine("Checking database connection...");
+				Console.WriteLine("Checking data in mart.dim_date table...");
 				var db = new DatabaseConnectionHandler();
 				var dateCheck = db.GetNumberOfDaysInDimDateTable();
 				if (dateCheck.NumberOfDays == -1)
 				{
-					Console.WriteLine("Database connection failed. Press any key to exit.");
+					Console.WriteLine("No dates found in mart.dim_date. The Initial job in ETL must first be executed. Press any key to exit.");
+					Console.ReadKey();
+					break;
+				}
+				if (dateCheck.NumberOfDays == -99)
+				{
+					Console.WriteLine("Call to Analytics database failed. Check configuration file. Press any key to exit.");
 					Console.ReadKey();
 					break;
 				}
 				if (dateCheck.NumberOfDays < int.Parse(amountOfDays))
 				{
 					Console.WriteLine("You can only generate data for a maximum of " + dateCheck.NumberOfDays + " days. Continue anyway? (Y/N)");
-					if (Console.ReadLine().ToUpper() == "Y")
+					if (Console.ReadKey().Key != ConsoleKey.Y)
 						break;
 					amountOfDays = dateCheck.NumberOfDays.ToString(CultureInfo.InvariantCulture);
 				}

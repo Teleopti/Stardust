@@ -30,6 +30,6 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			var response = await _client.PostAsync("api/mart/QueueStats", new StringContent(postBody, Encoding.UTF8, "application/json"));
 
 			return response.IsSuccessStatusCode;
-		}
+		{
 	}
 }
