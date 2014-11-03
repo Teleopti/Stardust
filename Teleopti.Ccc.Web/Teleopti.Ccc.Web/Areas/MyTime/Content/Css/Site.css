@@ -340,11 +340,6 @@ button.icon-left{padding-left: 35px;}
 	 margin: 0 auto;
 	 width: 499px;    
 }
-#body-signin, #tab-windows, #tab-application, #tab-error, .select-list, .select-list ul li, #body-signin .text-box{
-	 background-image: url(../Images/signin_bg_sprite.png);
-	 background-color: transparent;
-	 background-repeat: no-repeat;
-}
 
 #body-signin{
 	 background-position: 0 0;

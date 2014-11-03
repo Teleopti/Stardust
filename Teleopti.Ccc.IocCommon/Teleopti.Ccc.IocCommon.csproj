@@ -136,16 +136,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aop\Core\AspectAttribute.cs" />
-    <Compile Include="Aop\Core\AspectInterceptor.cs" />
-    <Compile Include="Aop\Core\AspectsModule.cs" />
-    <Compile Include="Aop\Core\IAspect.cs" />
-    <Compile Include="Aop\Core\IAspectAttribute.cs" />
-    <Compile Include="Aop\Core\IOrderedAspect.cs" />
-    <Compile Include="Aop\Core\IResolvedAspect.cs" />
-    <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
-    <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
+    <Compile Include="Configuration\AspectsModule.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
+    <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />
     <Compile Include="IocArgs.cs" />
@@ -176,6 +169,7 @@
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Configuration\WebModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

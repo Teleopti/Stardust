@@ -1,10 +1,9 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecastForAllSkills
 	{
-		void CreateForecast(DateOnlyPeriod futurePeriod);
+		void CreateForecast(DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod);
 	}
 }

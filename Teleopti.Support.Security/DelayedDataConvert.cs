@@ -32,6 +32,8 @@ namespace Teleopti.Support.Security
 					rowsAffected = AddRowsAffected(command, rowsAffected);
 					command.CommandText = "mart.fact_agent_etl_job_delayed";
 					rowsAffected = AddRowsAffected(command, rowsAffected);
+                    command.CommandText = "mart.fact_agent_queue_etl_job_delayed";
+                    rowsAffected = AddRowsAffected(command, rowsAffected);
 					command.CommandText = "mart.main_schedule_etl_job_delayed";
 					rowsAffected = AddRowsAffected(command, rowsAffected);
 					log.Debug(rowsAffected + " jobs to delayed table. Done!");
@@ -51,7 +53,14 @@ namespace Teleopti.Support.Security
 					command.Parameters.Clear();
 					log.Debug("\tfact_agent converted " + rowsAffected + " rows.");
 
-					log.Debug("\tfact_schedule ...");
+                    log.Debug("\tfact_agent_queue ...");
+                    command.CommandText = "mart.etl_execute_delayed_job";
+                    command.Parameters.Add(new SqlParameter("@stored_procedure", "mart.etl_fact_agent_queue_load"));
+                    rowsAffected = AddRowsAffected(command, 0);
+                    command.Parameters.Clear();
+                    log.Debug("\tfact_agent_queue converted " + rowsAffected + " rows.");
+                    
+                    log.Debug("\tfact_schedule ...");
 					command.CommandText = "mart.etl_execute_delayed_job";
 					command.Parameters.Add(new SqlParameter("@stored_procedure", "mart.main_convert_fact_schedule_ccc8_run"));
 					rowsAffected = AddRowsAffected(command, 0);

@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Collection;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod, IEnumerable<ISkillDay> skillDays)
 		{
 			var taskOwnerPeriod = _historicalData.Fetch(workload, historicalPeriod);
-			if (taskOwnerPeriod.TaskOwnerDayCollection.IsEmpty()) return;
 
 			var futureWorkloadDays = _futureData.Fetch(workload, futurePeriod, skillDays);
 			_volumeApplier.Apply(workload, taskOwnerPeriod, futureWorkloadDays);

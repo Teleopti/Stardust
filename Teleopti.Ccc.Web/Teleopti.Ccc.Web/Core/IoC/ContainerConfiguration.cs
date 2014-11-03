@@ -17,10 +17,11 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Aop.Core;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
@@ -36,17 +37,16 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class ContainerConfiguration : IContainerConfiguration
 	{
-		public IContainer Configure(string featureTogglePath)
+		public IContainer Configure(string featureTogglePath, HttpConfiguration httpConfiguration)
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterControllers(Assembly.GetExecutingAssembly());
-			builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-			builder.RegisterHubs(Assembly.GetExecutingAssembly()).EnableClassInterceptors();
+			builder.RegisterApiControllers(typeof(ContainerConfiguration).Assembly);
+			builder.RegisterControllers(typeof(ContainerConfiguration).Assembly);
+			builder.RegisterHubs(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors();
 
+			builder.RegisterWebApiFilterProvider(httpConfiguration);
 			builder.RegisterModule(new AutofacWebTypesModule());
-			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
-			builder.RegisterWebApiFilterProvider(GlobalConfiguration.Configuration);
 			builder.RegisterFilterProvider();
 
 			builder.RegisterModule<BootstrapperModule>();
@@ -66,12 +66,13 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
+			builder.RegisterModule<ForecastingAreaModule>();
 
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 
-			registerAopComponents(builder);
+			builder.RegisterType<UnitOfWorkAspect>();
 
 			builder.RegisterModule(new RuleSetModule(configuration, false));
 			builder.RegisterModule(new AuthenticationCachedModule(configuration));
@@ -119,12 +120,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new ConfigurationSettingsReader());
 
 			return builder.Build();
-		}
-
-		private static void registerAopComponents(ContainerBuilder builder)
-		{
-			builder.RegisterModule<AspectsModule>();
-			builder.RegisterType<UnitOfWorkAspect>();
 		}
 	}
 }

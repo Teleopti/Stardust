@@ -506,4 +506,37 @@
     <state name="Busy Other">7</state>
 	<state name="Reserved">8</state>
   </RtaState>
+  <RtaState name="Alcatel RTI 1.0.4" platformTypeId="B7C0D129-F89D-4744-A936-4CA214E6A8AE">
+	<state name="Agent_PhoneState_Pause">2009</state>
+	<state name="Agent_PhoneState_LineLockout">2001</state>
+	<state name="Agent_PhoneState_WrapUp">2010</state>
+	<state name="Agent_ServiceState_Withdrawn">1003</state>
+	<state name="Agent_PhoneState_PrivateRinging">2017</state>
+	<state name="Agent_PhoneState_PrivateLocalConversation">2018</state>
+	<state name="Agent_PhoneState_AcdRinging">2003</state>
+	<state name="Agent_PhoneState_PrivateConference">2021</state>
+	<state name="Agent_PhoneState_Reserved">2023</state>
+	<state name="Agent_PhoneState_OutOfOrder">2002</state>
+	<state name="Agent_PhoneState_PrivateConsultation">2020</state>
+	<state name="Agent_PhoneState_AcdConversation">2004</state>
+	<state name="Agent_PhoneState_PrivateExternalConversation">2019</state>
+	<state name="Agent_ServiceState_LoggedIn">1000</state>
+	<state name="Agent_PhoneState_BusyTone">2022</state>
+	<state name="Agent_ServiceState_LoggedOut">1001</state>
+	<state name="Agent_PhoneState_ContinuousSupervision">2025</state>
+	<state name="Agent_PhoneState_Help">2006</state>
+	<state name="Agent_PhoneState_AcdConference">2007</state>
+	<state name="Agent_PhoneState_LoggedOut">2014</state>
+	<state name="Agent_PhoneState_Unavailable">2026</state>
+	<state name="Agent_PhoneState_AgentDiscreteListening">2012</state>
+	<state name="Agent_PhoneState_TransactionDial">2008</state>
+	<state name="Agent_PhoneState_AcdOutgoingConversation">2024</state>
+	<state name="Agent_PhoneState_Dialing">2016</state>
+	<state name="Agent_PhoneState_Held">2015</state>
+	<state name="Agent_ServiceState_Assigned">1002</state>
+	<state name="Agent_PhoneState_AcdConsultation">2005</state>
+	<state name="Agent_PhoneState_Recording">2013</state>
+	<state name="Agent_PhoneState_Idle">2000</state>
+	<state name="Agent_PhoneState_SupervisorDiscreteListening">2011</state>
+  </RtaState>
 </Rta>

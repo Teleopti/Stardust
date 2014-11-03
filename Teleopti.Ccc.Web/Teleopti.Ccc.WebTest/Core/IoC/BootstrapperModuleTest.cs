@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web.Http;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void RegisteredGlobalFiltersShouldBeenRegistered()
 		{
-			using (var container = containerConfiguration.Configure(string.Empty))
+			using (var container = containerConfiguration.Configure(string.Empty, new HttpConfiguration()))
 			{
 				var tasks = container.Resolve<IEnumerable<IBootstrapperTask>>();
 				tasks.Should().Have.Count.GreaterThan(0);
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void TasksShouldBeRegisteredAsSingletons()
 		{
-			using (var container = containerConfiguration.Configure(string.Empty))
+			using (var container = containerConfiguration.Configure(string.Empty, new HttpConfiguration()))
 			{
 				var tasks = container.Resolve<IEnumerable<IBootstrapperTask>>();
 				var tasks2 = container.Resolve<IEnumerable<IBootstrapperTask>>();

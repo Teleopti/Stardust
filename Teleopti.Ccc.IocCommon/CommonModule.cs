@@ -39,7 +39,11 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new AuthenticationModule {ApplicationData = ApplicationData});
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterModule<AspectsModule>();
+			builder.RegisterModule<ReadModelUnitOfWorkModule>();
+			builder.RegisterModule<WebModule>();
 			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
+			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

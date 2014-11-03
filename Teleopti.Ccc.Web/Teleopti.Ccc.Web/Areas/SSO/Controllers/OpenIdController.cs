@@ -6,6 +6,7 @@ using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider.Behaviors;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				// handles request from site
 				if (request.IsResponseReady)
 				{
-					return _openIdProvider.PrepareResponse(request).AsActionResult();
+					return _openIdProvider.PrepareResponse(request).AsActionResultMvc5();
 				}
 
 				var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				}
 			}
 
-			return _openIdProvider.PrepareResponse(pendingRequest).AsActionResult();
+			return _openIdProvider.PrepareResponse(pendingRequest).AsActionResultMvc5();
 		}
 
 

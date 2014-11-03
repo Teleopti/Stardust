@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Dynamic;
+using System.Linq;
 using Castle.Core.Internal;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -17,13 +20,15 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var hubContext = MockRepository.GenerateStub<IHubContext>();
 			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<dynamic>>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
-			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
-			clientsContext.Stub(x => x.Group(null)).IgnoreArguments().Return(client);
+			var client = stubClient(clientsContext,
+				"/00000000-0000-0000-0000-000000000000//id/00000000-0000-0000-0000-000000000000",
+				"/00000000-0000-0000-0000-000000000000//ref/00000000-0000-0000-0000-000000000000",
+				"/00000000-0000-0000-0000-000000000000/");
 			var target = new MessageBrokerController(new ActionImmediate()) {HubContext = () => hubContext};
 
 			target.NotifyClients(new Notification());
-			
-			client.AssertWasCalled(x => x.onEventMessage(null, null), o => o.IgnoreArguments());
+
+			client.MakeSureWasCalled();
 		}
 
 		[Test]
@@ -31,15 +36,14 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		{
 			var notification = new Notification();
 			var hubContext = MockRepository.GenerateStub<IHubContext>();
-			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<object>>();
+			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<dynamic>>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
 
 			var expects = (
 				from r in notification.Routes()
-				let client = MockRepository.GenerateMock<IOnEventMessageClient>()
 				select new
 				{
-					client = stubClient(r, clientsContext),
+					client = stubClient(clientsContext,r),
 					route = r
 				}).ToArray();
 
@@ -47,15 +51,13 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			
 			target.NotifyClients(notification);
 
-			expects.ForEach(c =>
-				c.client.AssertWasCalled(x => x.onEventMessage(notification, c.route))
-				);
+			expects.ForEach(c => c.client.MakeSureWasCalledWith(notification, c.route));
 		}
 
 		[Test]
 		public void ShouldNotifyClientsMultiple()
 		{
-			var notifications = new[] { new Notification() { DataSource = "one" }, new Notification() { DataSource = "two" } };
+			var notifications = new[] { new Notification { DataSource = "one" }, new Notification() { DataSource = "two" } };
 			var hubContext = MockRepository.GenerateStub<IHubContext>();
 			var clientsContext = MockRepository.GenerateMock<IHubConnectionContext<dynamic>>();
 			hubContext.Stub(x => x.Clients).Return(clientsContext);
@@ -63,32 +65,39 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var expects = (
 				from n in notifications
 				from r in n.Routes()
+				let typedClient = stubClient(clientsContext, r)
 				select new
 				{
-					client = stubClient(r, clientsContext),
+					client = typedClient,
 					route = r,
 					notification = n
 				}).ToArray();
 
 			var target = new MessageBrokerController(new ActionImmediate()) { HubContext = () => hubContext };
-
+			
 			target.NotifyClientsMultiple(notifications);
 
-			expects.ForEach(c =>
-				c.client.AssertWasCalled(x => x.onEventMessage(c.notification, c.route))
-				);
+			expects.ForEach(c => c.client.MakeSureWasCalledWith(c.notification, c.route));
 		}
 
-		private IOnEventMessageClient stubClient(string r, IHubConnectionContext<dynamic> clientsContext)
+		private dynamic stubClient(IHubConnectionContext<dynamic> clientsContext, params string[] r)
 		{
-			var client = MockRepository.GenerateMock<IOnEventMessageClient>();
-			clientsContext.Stub(x => x.Group(MessageBrokerServer.RouteToGroupName(r))).Return(client);
+			dynamic client = new ExpandoObject();
+			client.onEventMessage = new Action<Notification, string>((notification, route) =>
+			{
+				client.wasCalled = true;
+				client.Notification = notification;
+				client.Route = route;
+			});
+			client.MakeSureWasCalledWith = new Action<Notification, string>((notification, route) =>
+			{
+				Assert.IsTrue(client.wasCalled);
+				Assert.AreEqual(client.Notification, notification);
+				Assert.AreEqual(client.Route, route);
+			});
+			client.MakeSureWasCalled = new Action(() => Assert.IsTrue(client.wasCalled));
+			r.ForEach(v => clientsContext.Stub(x => x.Group(MessageBrokerServer.RouteToGroupName(v))).Return(client));
 			return client;
-		}
-
-		public interface IOnEventMessageClient
-		{
-			void onEventMessage(Notification notification, string route);
 		}
 	}
 }

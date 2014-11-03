@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
+using Teleopti.Ccc.Web.Areas.RtaTool.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Toggle;
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(ApplicationAuthenticationApiController),
 																		typeof(ToggleHandlerController),
 																		typeof(ServiceController),
-																		typeof(MessageBrokerController)
+																		typeof(MessageBrokerController),
+																		typeof(ApplicationController)
 			                                                    	}));
 		}
 	}

@@ -93,6 +93,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Extras.DynamicProxy2">
+      <HintPath>..\packages\Autofac.Extras.DynamicProxy2.3.0.4\lib\net40\Autofac.Extras.DynamicProxy2.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.2.2\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
@@ -143,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\EventPublisher.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
@@ -160,6 +167,13 @@
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="LiteUnitOfWork\ICurrentReadModelUnitOfWork.cs" />
+    <Compile Include="LiteUnitOfWork\ILiteUnitOfWork.cs" />
+    <Compile Include="LiteUnitOfWork\IReadModelUnitOfWorkConfiguration.cs" />
+    <Compile Include="LiteUnitOfWork\LiteUnitOfWork.cs" />
+    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
+    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
     <Compile Include="Repositories\AgentBadgeRepository.cs" />
@@ -471,6 +485,8 @@
     <Compile Include="WebReports\DetailedAdherenceForDayResult.cs" />
     <Compile Include="WebReports\IDailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\IDetailedAdherenceForDayQuery.cs" />
+    <Compile Include="Web\CurrentHttpContext.cs" />
+    <Compile Include="Web\ICurrentHttpContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -533,6 +549,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

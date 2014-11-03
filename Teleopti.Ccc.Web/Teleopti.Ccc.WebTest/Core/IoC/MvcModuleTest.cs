@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using AutoMapper;
 using Autofac;
@@ -25,6 +26,7 @@ using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.Licensing;
+using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[SetUp]
 		public void Setup()
 		{
-			var container = new ContainerConfiguration().Configure(string.Empty);
+			var container = new ContainerConfiguration().Configure(string.Empty, new HttpConfiguration());
 
 			var containerAdder = new ContainerBuilder();
 			containerAdder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			try
 			{
 				File.WriteAllText(tempFile, string.Empty);
-				var container = new ContainerConfiguration().Configure(tempFile);
+				var container = new ContainerConfiguration().Configure(tempFile, new HttpConfiguration());
 				var containerAdder = new ContainerBuilder();
 				containerAdder.Register(_ => MockRepository.GenerateMock<ILicenseActivator>());
 				containerAdder.Update(container);

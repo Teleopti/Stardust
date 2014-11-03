@@ -129,4 +129,12 @@
 							and skill.DefaultResolution=:defaultResolution
 	]]>
 	</query>
+
+	<query name="findSkillsWithAtLeastOneQueueSource">
+		<![CDATA[
+select s from Skill s 
+	inner join s.WorkloadCollection wl
+	inner join wl.QueueSourceCollection
+		]]>
+	</query>
 </hibernate-mapping>

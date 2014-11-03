@@ -182,10 +182,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
 		{
-			//Alla request där UpdatedOn innanför period
+			//Alla request dÃ¤r UpdatedOn innanfÃ¶r period
 			IEnumerable<IPersonRequest> allRequestsBy = FindModifiedWithinPeriodOrPending(person, period);
 
-			//Alla shiftTrades där UpdatedOn innanför Period
+			//Alla shiftTrades dÃ¤r UpdatedOn innanfÃ¶r Period
 			IEnumerable<IPersonRequest> allShiftTradesTo = FindShiftTradesModifiedWithinPeriod(person, period);
 
 			return allRequestsBy.Union(allShiftTradesTo).ToList();
@@ -304,10 +304,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <returns></returns>
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(ICollection<IPerson> persons, DateTimePeriod period)
 		{
-			//Alla request där UpdatedOn innanför period
+			//Alla request dÃ¤r UpdatedOn innanfÃ¶r period
 			IEnumerable<IPersonRequest> allRequestsBy = FindModifiedWithinPeriodOrPendingExceptShiftTrades(persons, period);
 
-			//Alla shiftTrades där UpdatedOn innanför Period
+			//Alla shiftTrades dÃ¤r UpdatedOn innanfÃ¶r Period
 			IEnumerable<IPersonRequest> allShiftTradesTo = FindShiftTradesModifiedWithinPeriod(persons, period);
 
 			return allRequestsBy.Union(allShiftTradesTo).ToList();
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 										.List<IPersonRequest>());
 			}
 
-			//sjukt korkat - men finns inget lämpligt att filtrera på i frågan ovan (varför en lista av requests!?)
+			//sjukt korkat - men finns inget lÃ¤mpligt att filtrera p?i frÃ¥gan ovan (varfÃ¶r en lista av requests!?)
 			retList = retList.Where(pr => !(pr.Request is IShiftTradeRequest)).ToList();
 
 			foreach (var personRequest in retList)

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Web.Http;
 using Autofac;
 using NUnit.Framework;
 using Owin;
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				Tasks = tasks;
 			}
 
-			public IContainer Configure(string featureTogglePath)
+			public IContainer Configure(string featureTogglePath, HttpConfiguration HttpConfiguration)
 			{
 				Tasks = new List<IBootstrapperTask>();
 				var builder = new ContainerBuilder();

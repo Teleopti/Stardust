@@ -120,6 +120,7 @@
 		public const string MyReportQueueMetrics = "0095";
 		public const string ViewBadge = "0101";
 		public const string ViewBadgeLeaderboard = "0102";
+		public const string AbsenceReport = "0103";
 
 		// Anywhere
 		public const string Anywhere = "0080";

@@ -107,7 +107,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="Configuration\AuthenticationTest.cs" />
     <Compile Include="Configuration\DateAndTimeModuleTest.cs" />
     <Compile Include="Configuration\EncryptionTest.cs" />

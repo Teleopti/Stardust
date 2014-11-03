@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -550,6 +549,57 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1,skillToTest.Count());
            
         }
+
+	    [Test]
+	    public void ShouldFindSkillsWithAtLeastOneQueueSource()
+	    {
+		    var activity = new Activity("_");
+		    var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
+		    var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) {Activity = activity,TimeZone = TimeZoneInfo.Utc};
+				PersistAndRemoveFromUnitOfWork(activity);
+				PersistAndRemoveFromUnitOfWork(skillType);
+				PersistAndRemoveFromUnitOfWork(skill);
+				var wl = WorkloadFactory.CreateWorkload(skill);
+				wl.AddQueueSource(new QueueSource());
+				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
+				PersistAndRemoveFromUnitOfWork(wl);
+
+		    var target = new SkillRepository(UnitOfWork);
+		    var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
+			  loadedSkill.Should().Be.EqualTo(skill);
+	    }
+
+			[Test]
+			public void ShouldNotFindSkillsWithWorkloadWithNoQueueSource()
+			{
+				var activity = new Activity("_");
+				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
+				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+				PersistAndRemoveFromUnitOfWork(activity);
+				PersistAndRemoveFromUnitOfWork(skillType);
+				PersistAndRemoveFromUnitOfWork(skill);
+				var wl = WorkloadFactory.CreateWorkload(skill);
+				PersistAndRemoveFromUnitOfWork(wl);
+
+				var target = new SkillRepository(UnitOfWork);
+				target.FindSkillsWithAtLeastOneQueueSource()
+					.Should().Be.Empty();
+			}
+
+			[Test]
+			public void ShouldNotFindSkillsWithNoWorkload()
+			{
+				var activity = new Activity("_");
+				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
+				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+				PersistAndRemoveFromUnitOfWork(activity);
+				PersistAndRemoveFromUnitOfWork(skillType);
+				PersistAndRemoveFromUnitOfWork(skill);
+
+				var target = new SkillRepository(UnitOfWork);
+				target.FindSkillsWithAtLeastOneQueueSource()
+					.Should().Be.Empty();
+			}
 
         protected override Repository<ISkill> TestRepository(IUnitOfWork unitOfWork)
         {

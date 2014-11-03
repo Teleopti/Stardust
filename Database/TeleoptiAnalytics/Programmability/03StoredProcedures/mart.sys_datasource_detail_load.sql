@@ -1,7 +1,6 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_datasource_detail_load]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[sys_datasource_detail_load]
 GO
-
 -- =============================================
 -- Author:		DavidJ
 -- Create date: 2014-10-07
@@ -40,5 +39,20 @@ inner join mart.sys_datasource ds
 inner join mart.sys_datasource_detail_type t
 	on t.detail_id = lod.detail_id
 WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = lod.detail_id)
+AND ds.inactive=0
+
+--agent Queue mart detail
+insert into [mart].[sys_datasource_detail]
+select
+	datasource_id		= ds.datasource_id,
+	detail_id			= t.detail_id,
+	target_date_local	= DATEADD(DD,-1,(DATEDIFF(DD, 0, getdate()))), --yesterday
+	target_interval_local=0, --start from midnight
+	intervals_back=0 --Delete only current interval and fetch everything matchning that one and new/later intervals from Agg
+from mart.sys_datasource ds
+inner join mart.sys_datasource_detail_type t
+	on t.detail_id = 3
+WHERE NOT EXISTS (SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = 3)
+AND EXISTS(SELECT * FROM mart.sys_datasource_detail dd where dd.datasource_id = ds.datasource_id and dd.detail_id = 2)--AGENT SHOULD EXISTS
 AND ds.inactive=0
 GO

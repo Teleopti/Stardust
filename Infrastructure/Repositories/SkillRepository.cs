@@ -288,5 +288,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetProjection(Projections.Min("DefaultResolution"))
 				.UniqueResult<int>();
 	    }
+
+			public IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource()
+			{
+				return Session.GetNamedQuery("findSkillsWithAtLeastOneQueueSource").List<ISkill>();
+			}
     }
 }

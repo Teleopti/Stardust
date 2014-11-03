@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = fact_agent_queue.CreateTable())
 			{
-				table.AddFactAgentQueue(_dateId, _intervalId, _queueId, _acdLoginId, _dateId, _talkTime, _afterCallWorkTime,
+				table.AddFactAgentQueue(_dateId, _intervalId, _queueId, _acdLoginId, _talkTime, _afterCallWorkTime,
 																 _answeredCalls, _transferedCalls);
 				Bulk.Insert(connection, table);
 			}

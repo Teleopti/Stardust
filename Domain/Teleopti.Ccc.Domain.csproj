@@ -176,6 +176,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateChangedCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
+    <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\LoginAttemptModel.cs" />
     <Compile Include="Auditing\Revision.cs" />
@@ -376,6 +378,13 @@
     <Compile Include="Forecasting\Angel\QuickForecasterWorkload.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastForAllSkills.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
+    <Compile Include="Aop\Core\IAspect.cs" />
+    <Compile Include="Aop\Core\IAspectAttribute.cs" />
+    <Compile Include="Aop\Core\IOrderedAspect.cs" />
+    <Compile Include="Aop\Core\IResolvedAspect.cs" />
+    <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
+    <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssues.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizer.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ScheduleDayIntraIntervalIssueExtractor.cs" />
@@ -597,9 +606,11 @@
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManager.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
+    <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
+    <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317.cs" />

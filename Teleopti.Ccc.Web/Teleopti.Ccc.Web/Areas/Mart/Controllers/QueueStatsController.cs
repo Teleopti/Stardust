@@ -7,6 +7,8 @@ using Teleopti.Ccc.Web.Areas.Mart.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 {
+	[KeyBasedAuthentication] // Enable authentication via a key
+	[Authorize] // Require some form of authentication
 	public class QueueStatsController : ApiController
 	{
 		private readonly IQueueStatHandler _queueStatHandler;

@@ -6,17 +6,17 @@
         <form class="material-form forecasting-form">
 
             <div class="group">
-                <input type="text" required ng-model="period.startDate">
+                <input type="date" required ng-model="period.startDate">
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>Start date : yy/mm/dd</label>
+                <label>Start date</label>
             </div>
 
             <div class="group">
-                <input type="text" required ng-model="period.endDate" >
+                <input type="date" required ng-model="period.endDate" >
                 <span class="highlight"></span>
                 <span class="bar"></span>
-                <label>End date : yy/mm/dd</label>
+                <label>End date</label>
             </div>
             <button class="btn btn-primary material-btn material-depth-1 start-forecasting" ng-click="startPeriod(period)">Let's start</button>
         </form>

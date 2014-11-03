@@ -1,5 +1,5 @@
 <div class="material-block-header" >
-    <h4 class="material-title">Period from {{period.startDate}} to {{period.endDate}}</h4>
+   <h4 class="material-title">Period from {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}</h4>
 </div>
 <div class="material-block-content">
     <div ng-if="result" ng-class="result.success ? 'success' : 'fail'" >

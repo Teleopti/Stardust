@@ -4,6 +4,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Infrastructure;

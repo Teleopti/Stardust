@@ -5,38 +5,17 @@ GO
 CREATE VIEW [dbo].[PersonPeriodWithEndDate]
 AS
 
-SELECT pp.*,VirtualEndData.EndDate
-FROM PersonPeriod pp
-INNER JOIN (
-	SELECT 
-		ISNULL(personPeriodVirtual2.Id,personPeriodVirtual1.Id) as Id,
-		ISNULL(DATEADD(d,-1,personPeriodVirtual1.StartDate),ISNULL(personPeriodVirtual2.TerminalDate,'2059-12-31')) as EndDate,
-		personPeriodVirtual2.TerminalDate as TerminalDate2
-	FROM 
+select pp.*,
+	isnull(
 	(
-	SELECT
-		pp1.*,
-		p.TerminalDate,
-		ROW_NUMBER()OVER(PARTITION BY pp1.Parent ORDER BY pp1.Parent,pp1.StartDate) as rn --add a row nuber
-	FROM personperiod pp1
-	INNER JOIN Person p
-	ON pp1.Parent = p.Id
-	WHERE ISNULL(p.TerminalDate+1,'2059-12-31') > pp1.StartDate
-	) personPeriodVirtual1
-	RIGHT OUTER JOIN (
-		SELECT
-			pp1.Id,
-			pp1.Parent,
-			pp1.StartDate,
-			p.TerminalDate,
-			ROW_NUMBER()OVER(PARTITION BY pp1.Parent ORDER BY pp1.Parent,pp1.StartDate) as rn
-		FROM personperiod pp1
-		INNER JOIN person p
-		ON pp1.Parent = p.Id
-	) personPeriodVirtual2
-	ON personPeriodVirtual1.rn-1 = personPeriodVirtual2.rn
-	AND personPeriodVirtual2.parent = personPeriodVirtual1.Parent
-) VirtualEndData
-	ON VirtualEndData.Id = pp.Id
-	WHERE ((ISNULL(VirtualEndData.TerminalDate2+1,pp.StartDate) > pp.StartDate AND VirtualEndData.TerminalDate2 IS NOT NULL)  OR 
-	(ISNULL(VirtualEndData.TerminalDate2+1,pp.StartDate) > '1900-01-01' AND VirtualEndData.TerminalDate2 IS NULL))
+		select case when isnull(p.terminaldate,'20591231 00:00') < min(dateadd(day,-1,isnull(pp2.StartDate,'20591231 00:00'))) then isnull(p.terminaldate,'20591231 00:00')
+					else min(dateadd(day,-1,isnull(pp2.StartDate,'20591231 00:00'))) end
+		from personperiod pp2
+		where pp2.parent = pp.parent
+		and pp2.StartDate > pp.StartDate
+	)
+		,isnull(p.terminaldate,'20591231 00:00')) as EndDate
+from personperiod pp
+inner join person p on pp.parent = p.id and p.IsDeleted = 0
+where pp.StartDate <= isnull(p.terminaldate,'20591231 00:00')
+GO

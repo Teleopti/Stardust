@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IPersonAbsence CreateAggregateWithCorrectBusinessUnit()
         {
-            rep = RepositoryFactory.CreatePersonAbsenceRepository(UnitOfWork);
+            rep = new PersonAbsenceRepository(UnitOfWork);
             dummyAbsence = AbsenceFactory.CreateAbsence("Sjuk");
             PersistAndRemoveFromUnitOfWork(dummyAbsence);
             dummyAgent = PersonFactory.CreatePerson("h");
