@@ -1735,17 +1735,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_schedule_forecast_skill", _dataMartConnectionString);
 		}
 
-		private static List<SqlParameter> parameterList(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone)
+		private static List<SqlParameter> parameterList(int dataSourceId)
 		{
-			//Convert time back to local time before sp call
-			var startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
-			var endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
 
 			//Prepare sql parameters
 			var parameterList = new List<SqlParameter>
 			{
-				new SqlParameter("start_date", startDate.Date), //remove once we got all three _intraday SPs in place
-				new SqlParameter("end_date", endDate.Date), //remove once we got all three _intraday SPs in place
 				new SqlParameter("datasource_id", dataSourceId)
 			};
 			return parameterList;
@@ -1753,7 +1748,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int FillIntradayFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
-			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
+			var parameters = parameterList(dataSourceId);
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_queue_load_intraday", parameters,
 				_dataMartConnectionString);
@@ -1761,7 +1756,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int FillIntradayFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
-			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
+			var parameters = parameterList(dataSourceId);
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_load_intraday", parameters,
 				_dataMartConnectionString);
@@ -1769,7 +1764,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int FillIntradayFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
-			var parameters = parameterList(period, dataSourceId, defaultTimeZone);
+			var parameters = parameterList(dataSourceId);
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_queue_load_intraday", parameters,
 				_dataMartConnectionString);

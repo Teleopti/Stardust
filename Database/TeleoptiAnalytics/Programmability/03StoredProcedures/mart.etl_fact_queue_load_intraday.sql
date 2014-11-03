@@ -2,11 +2,9 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_fact_queue_load_intraday]
 GO
 
---exec mart.etl_fact_queue_load_intraday @start_date='2014-10-09 00:00:00',@end_date='2014-10-15 00:00:00',@datasource_id=-2
+--exec mart.etl_fact_queue_load_intraday @datasource_id=-2
 
 CREATE PROCEDURE [mart].[etl_fact_queue_load_intraday]
-@start_date smalldatetime,
-@end_date smalldatetime,
 @datasource_id int,
 @is_delayed_job bit = 0
 
@@ -18,7 +16,7 @@ DECLARE @detail_id int
 SET @detail_id = 1 --Queue data
 
 --Execute one delayed jobs, if any
-if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETL
+if (@datasource_id=-2 AND @is_delayed_job=0) --called from ETLo
 	EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_queue_load'
 
 --------------------------------------------------------------------------
@@ -42,7 +40,7 @@ BEGIN
 	FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-			EXEC [mart].[etl_fact_queue_load_intraday] @start_date, @end_date, @datasource_id
+			EXEC [mart].[etl_fact_queue_load_intraday] @datasource_id
 			FETCH NEXT FROM DataSouceCursor INTO @datasource_id
 	END
 	CLOSE DataSouceCursor
