@@ -68,8 +68,10 @@ ROBOCOPY "%AZUREDIR%\Customer" "%output%" *.cscfg
 
 ::run cxpack
 echo building cspack ...
-ECHO "c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
-"c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+::ECHO "c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+::"c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+ECHO "C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.4\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /rolePropertiesFile:TeleoptiCCC;AzureRoleProperties.txt /out:"%output%\Azure-%version%.cspkg"
+"C:\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.4\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /rolePropertiesFile:TeleoptiCCC;AzureRoleProperties.txt /out:"%output%\Azure-%version%.cspkg"
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=202
 GOTO :Error
