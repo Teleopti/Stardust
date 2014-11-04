@@ -39,6 +39,10 @@
 <script type="text/html" id="add-overtime-availability-template">
     @Html.Partial("AddOvertimeAvailabilityPartial")
 </script>
+<script type="text/html" id="add-absence-report-detail-template">
+	@Html.Partial("AddAbsenceReportPartial")
+</script>
+
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
 
 <div class="hidden-lg hidden-md topbarparent">
@@ -111,11 +115,17 @@
 			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 		</li>
 		<li data-bind="visible: absenceReportPermission && isAbsenceReportEnabled, css: { active: absenceReportActive }">
-			<a id="addAbsenceReport" class="absence-report-add" href="#" data-bind="click: absenceReportActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+			<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: function () { absenceReportActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
 		</li>
 	</ul>
 	<div data-bind="with: requestViewModel">
 		<div id="Request-add-section" class="well well-sm clearfix">
+			<div data-bind="template: Template">
+			</div>
+		</div>
+	</div>
+	<div data-bind="with: absenceReportViewModel">
+		<div id="add-absence-report-section" class="well well-sm clearfix">
 			<div data-bind="template: Template">
 			</div>
 		</div>

@@ -87,6 +87,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.selectedDate = ko.observable(moment().startOf('day'));
 		
 		self.requestViewModel = ko.observable();
+		self.absenceReportViewModel = ko.observable();
 
 		self.textRequestActive = ko.observable(false);
 		self.absenceRequestActive = ko.observable(false);
@@ -96,7 +97,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.selectedDateSubscription = null;
 
 		self.showAddRequestToolbar = ko.computed(function () {
-			return (self.requestViewModel() || '') != '';
+			return (self.requestViewModel() || self.absenceReportViewModel() || '') != '';
 		});
 
 		self.featureCheck = function () {
@@ -120,6 +121,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.textRequestActivate = function() {
 			self.absenceRequestActive(false);
 			self.overtimeAvailabilityActive(false);
+			self.absenceReportActive(false);
 			if (!self.textRequestActive()) {
 				self.textRequestActive(true);
 				self.showAddTextRequestForm();
@@ -129,6 +131,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.absenceRequestActivate = function () {
 			self.textRequestActive(false);
 			self.overtimeAvailabilityActive(false);
+			self.absenceReportActive(false);
 			if (!self.absenceRequestActive()) {
 				self.absenceRequestActive(true);
 				self.showAddAbsenceRequestForm();
@@ -148,6 +151,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.overtimeAvailabilityActivate = function (data) {
 			self.textRequestActive(false);
 			self.absenceRequestActive(false);
+			self.absenceReportActive(false);
 			if (!self.overtimeAvailabilityActive()) {
 				self.overtimeAvailabilityActive(true);
 				self.showAddOvertimeAvailabilityForm(data);
@@ -209,6 +213,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		}
 
+		function _fillAbsenceReportFormData() {
+			self.absenceReportViewModel().DateFrom(moment(self.initialRequestDay, self.absenceReportViewModel().DateFormat()));
+			self.absenceReportViewModel().DateTo(moment(self.initialRequestDay, self.absenceReportViewModel().DateFormat()));
+
+		}
 		self.showAddTextRequestForm = function() {
 			if (self.textPermission() !== true) {
 				return;
@@ -229,12 +238,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.showAddAbsenceReportForm = function () {
+		self.showAddAbsenceReportForm = function() {
 			if (self.absenceReportPermission() !== true) {
 				return;
 			}
-
-			// TODO: Implement absence report form.
+			self.setAbsenceReportViewModel();
+			_fillAbsenceReportFormData();
 		};
 
 		self.showAddOvertimeAvailabilityForm = function(data) {
@@ -272,6 +281,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.setRequestViewModel = function()
 		{
+			self.absenceReportViewModel(null);
 			var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
 			var model = addRequestViewModel();
 			//ajax.Ajax({
@@ -301,21 +311,30 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.requestViewModel(model);
 		};
 		
-		function displayOvertimeAvailability(overtimeAvailability) {
+		function reloadSchedule() {
 			self.CancelAddingNewRequest();
 			_fetchData();
 		}
 		
 		self.setOvertimeAvailabilityViewModel = function () {
-			var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability);
+			self.absenceReportViewModel(null);
+			var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, reloadSchedule);
 			self.requestViewModel(model);
 		};
 
+		self.setAbsenceReportViewModel = function () {
+			self.requestViewModel(null);
+			var model = new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule);
+			self.absenceReportViewModel(model);
+		}
+
 		self.CancelAddingNewRequest = function() {
 			self.requestViewModel(null);
+			self.absenceReportViewModel(null);
 			self.textRequestActive(false);
 			self.absenceRequestActive(false);
 			self.overtimeAvailabilityActive(false);
+			self.absenceReportActive(false);
 		};
 	};
 

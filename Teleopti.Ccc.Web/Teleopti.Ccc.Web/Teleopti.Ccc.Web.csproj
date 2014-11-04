@@ -1060,6 +1060,7 @@
     <Content Include="Areas\MyTime\Content\Images\silver.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeLeaderBoardReport.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyQueueMetrics.js" />
@@ -1462,6 +1463,7 @@
     <Content Include="package.json" />
     <Content Include="Areas\WFM\README.md" />
     <Content Include="App_Build\node.targets" />
+    <Content Include="Areas\MyTime\Views\Schedule\AddAbsenceReportPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
