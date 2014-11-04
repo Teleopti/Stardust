@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,6 +8,8 @@ namespace ClickOnceSign
 {
     static class Program
     {
+        private static ILog logFile = LogManager.GetLogger(typeof(Program));
+
         private static String application = "";
         private static String manifest = "";
         private static String providerUrl = "";
@@ -20,9 +23,9 @@ namespace ClickOnceSign
         [STAThread]
         static void Main(String[] args)
         {
-            // Console.WriteLine("HEJSAN");
+            log4net.Config.XmlConfigurator.Configure();
 
-            if (! ParseCommandLine(args))
+            if (!ParseCommandLine(args))
                 Usage();
 
             CheckProviderUrl();
@@ -58,7 +61,7 @@ namespace ClickOnceSign
         {
             String usage = "Usage: ClickOnceSign.exe [-f] [-d] [-s] [-a application] [-m manifest] [-u providerurl]"
                 + "[-c certfile] [-p password] [-dir appdir]";
-            MessageBox.Show(usage, "Invalid command line");
+            logFile.Warn(usage);
             Environment.Exit(1);
         }
 
@@ -132,87 +135,3 @@ namespace ClickOnceSign
         }
     }
 }
-
-
-/*
-
-      static void Main(string[] args) 
-        {
-            if (args.Length < 4)
-            {
-                Console.Out.WriteLine("Usage: co_sign.exe application manifest provider_url hostname [certfile [password]]");
-                System.Environment.Exit(1);
-            }
-
-            String application = args[0];
-            String manifest = args[1];
-            String provider_url = args[2];
-            String hostname = args[3];
-            String certfile = "TemporaryKey.pfx";
-            
-            if (args.Length > 4 && args[4].Length > 0) 
-            {
-                certfile = args[4];
-            }
-
-            String signString = " -CertFile " + certfile;
-
-            if (args.Length > 5 && args[5].Length > 0)
-            {
-                signString += " -Password " + args[5];
-            }
-            
-            if (provider_url.StartsWith("http://*"))
-            {
-                provider_url = "http://" + hostname + provider_url.Substring(8);
-            }
-
-            if (provider_url.StartsWith("http://localhost"))
-            {
-                provider_url = "http://" + hostname + provider_url.Substring(16);
-            }
-         
-            try 
-            {                //TODO: Make the copy independent of subdir names
-                RunProgram("cmd.exe", "/C copy /Y *.deploy *.");
-                RunProgram("cmd.exe", "/C copy /Y ar\\*.deploy ar\\*.");
-                RunProgram("cmd.exe", "/C copy /Y no\\*.deploy no\\*.");
-                RunProgram("cmd.exe", "/C copy /Y sv\\*.deploy sv\\*.");
-                RunProgram("cmd.exe", "/C copy /Y zh-chs\\*.deploy zh-chs\\*.");
-
-                RunProgram("mage.exe", "-u " + manifest);
-                RunProgram("mage.exe", "-Sign " + manifest + signString);
-                RunProgram("mage.exe", "-u " + application + " -ProviderUrl " + provider_url);
-                RunProgram("mage.exe", "-u " + application + " -AppManifest " + manifest);
-                RunProgram("mage.exe", "-Sign " + application + signString);                  
-            }
-            catch (Exception e) 
-            {
-                Console.Out.WriteLine(e);
-                System.Environment.Exit(1);
-            }
-
-            System.Environment.Exit(0);
-
-            // TODO: Print message if failed to rerun manually
-        }
-
-        private static void RunProgram(String path, String args)
-        {
-            Console.Out.Write(".");
-            //Console.Out.WriteLine(path + " " + args);
-            ProcessStartInfo ps = new ProcessStartInfo();
-            ps.CreateNoWindow = true;
-            ps.WindowStyle = ProcessWindowStyle.Hidden;
-            ps.FileName = path; 
-            ps.Arguments = args;
-            //ps.UseShellExecute = false;
-            Process p = Process.Start(ps);
-            p.WaitForExit();
-
-            if (p.ExitCode != 0)
-            {
-                throw new Exception("Process error code: " + p.ExitCode + " (" + path + " " + args + ")");
-            }
-        }
-    }*/

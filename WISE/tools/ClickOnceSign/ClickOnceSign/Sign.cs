@@ -2,13 +2,14 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
+using log4net;
 
 namespace ClickOnceSign
 {
     public class Sign
     {
         private static String mage = "mage.exe";
-        private static StreamWriter logFile;
+        private static ILog logFile = LogManager.GetLogger(typeof(Sign));
 
         public static bool CoSign(
             String appDir, String application, String manifest, 
@@ -25,15 +26,7 @@ namespace ClickOnceSign
 
             try
             {
-                DateTime now = DateTime.Now;
-                logFile = new StreamWriter("sign" + now.Hour + now.Minute + now.Second + now.Millisecond + ".log");
-
-                logFile.WriteLine("ClickOnceSign logfile");
-                logFile.WriteLine("appDir: " + appDir);
-                logFile.WriteLine("application: " + application);
-                logFile.WriteLine("manifest: " + manifest);
-                logFile.WriteLine("providerUrl: " + providerUrl);
-                logFile.WriteLine("certFile: " + certFile);
+                logFile.InfoFormat("ClickOnceSign logfile\nappDir: {0}\napplication: {1}\nmanifest: {2}\nproviderUrl: {3}certFile: {4}", appDir, application, manifest, providerUrl, certFile);
                 
                 CheckPreReqs(appDir, application, manifest, certFile);
                 String tempDir = GetTempDirectory();
@@ -51,13 +44,10 @@ namespace ClickOnceSign
             }
             catch (Exception e)
             {
-                logFile.WriteLine("EXCEPTION: " + e);
-                MessageBox.Show(e.Message, "Failed");
-                logFile.Close();
+                logFile.Error(e);
                 return false;
             }
 
-            logFile.Close();
             // MessageBox.Show("Successfully signed ClickOnce deployment files in directory: " + appDir, "Signed");
             return true;
         }
@@ -73,8 +63,9 @@ namespace ClickOnceSign
             {
                 Directory.Delete(tempDir, true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logFile.Error(ex);
                 throw new Exception("Failed to delete temporary directory: " + tempDir);
             }
         }
@@ -87,8 +78,9 @@ namespace ClickOnceSign
                 File.Copy(Path.Combine(tempDir, manifest), Path.Combine(appDir, manifest), true);
                 File.Copy(Path.Combine(tempDir, "setup.exe"), Path.Combine(appDir, "setup.exe"), true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logFile.Error(ex);
                 throw new Exception("Failed to install application or manifest at: " + appDir);
             }
         }
@@ -121,9 +113,10 @@ namespace ClickOnceSign
             {
                 RunProgram(exe, arg);
             }
-            catch (Exception) 
+            catch (Exception ex)
             {
-                throw new Exception(errorMessage);
+                logFile.Error(ex);
+                throw new Exception(errorMessage,ex);
             }
         }
         
@@ -146,13 +139,14 @@ namespace ClickOnceSign
             {
                 path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 
-                logFile.WriteLine("Creating directory:" + path);
+                logFile.InfoFormat("Creating directory: {0}", path);
 
                 Directory.CreateDirectory(path);                
             }
             catch (Exception e)
             {
-                throw new Exception("Failed to create temporary direcory " + path + "\n(" + e.Message + ")");
+                logFile.Error(e);
+                throw new Exception("Failed to create temporary direcory " + path + "\n(" + e.Message + ")",e);
             }
             return path;
         }
@@ -161,14 +155,15 @@ namespace ClickOnceSign
         {
             try
             {
-                logFile.WriteLine("Change Directory to: " + newCd);
+                logFile.InfoFormat("Change Directory to: {0}", newCd);
                 String oldCd = System.Environment.CurrentDirectory;
                 System.Environment.CurrentDirectory = newCd;
                 return oldCd;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("Failed to change to directory: " + newCd);
+                logFile.Error(ex);
+                throw new Exception("Failed to change to directory: " + newCd, ex);
             }
         }
 
@@ -177,7 +172,7 @@ namespace ClickOnceSign
             //TODO: Check for spaces in arguments
            // MessageBox.Show("RUN: " + path + " " + args + "(" + System.Environment.CurrentDirectory + ")");
 
-            logFile.WriteLine("Executing: " + path + " " + args);
+            logFile.InfoFormat("Executing: {0} {1}", path, args);
 
             ProcessStartInfo ps = new ProcessStartInfo();
             ps.CreateNoWindow = true;
@@ -191,7 +186,7 @@ namespace ClickOnceSign
             if (p.ExitCode != 0)
             {
                //  MessageBox.Show("Failed! " + p.ExitCode);
-                logFile.WriteLine("Execute failed");
+                logFile.Warn("Execute failed");
                 throw new Exception("Process error code: " + p.ExitCode + " (" + path + " " + args + ")");
             }
         }
@@ -201,7 +196,7 @@ namespace ClickOnceSign
             // TODO: Check dir exists
             // TODO: Check file copy stuff (check replace)
 
-            logFile.WriteLine("Copying dir: " + origDir + " -> " + destDir);
+            logFile.InfoFormat("Copying dir: {0} -> {1}", origDir, destDir);
 
             if (origDir.EndsWith("\\"))
                 origDir = origDir.Substring(0, origDir.Length - 1);
@@ -228,8 +223,9 @@ namespace ClickOnceSign
             }
             catch (Exception e)
             {
+                logFile.Error(e);
                 throw new Exception("Failed to copy from '" + origDir
-                    + "' to temporary directory '" + destDir + "'" + "\n( + " + e.Message + ")");
+                    + "' to temporary directory '" + destDir + "'" + "\n( + " + e.Message + ")", e);
             }
         }
     }
