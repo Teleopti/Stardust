@@ -52,4 +52,4 @@ MyTimeWeb_FullDayAbsenceConfiguration_30552 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true
 Badge_Leaderboard_30584 = RC
 Request_ShiftTradeWithEmptyDays_28926 = RC
-MyTeam_Reports_31070 = RC
+MyTeam_Reports_31070 = false
