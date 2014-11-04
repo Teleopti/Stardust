@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
-
+			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 		}
 	}
 }
