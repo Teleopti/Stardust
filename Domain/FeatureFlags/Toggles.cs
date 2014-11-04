@@ -38,6 +38,7 @@
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
+		MyTeam_Reports_31070,
         
 		RTA_ViewAgentsForMultipleTeams_28967,
 
