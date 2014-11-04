@@ -825,8 +825,7 @@ Scenario: Should be able to change schedule for multiple business units
 	| End time   | 13:00  |
 	| Color      | Yellow |
 
-@OnlyRunIfEnabled('RTA_SeeHistoricalAdherenceForOneAgent_30783')
-@ignore
+@OnlyRunIfEnabled('RTA_SeePercentageAdherenceForOneAgent_30783')
 Scenario: Should be able to see historical adherence from agent state overview
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -866,11 +865,7 @@ Scenario: Should be able to see historical adherence from agent state overview
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
 	And the current time is '2014-10-06 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And the current time is '2014-10-06 10:00:00'
 	When I view real time adherence view for team 'Red'
-	And the browser time is '2014-10-06 10:00:00'
-	And I click agent state of 'Pierre Baldi'
-	And I wait and click 'historical adherence' in agent menu
-	Then I should see historical adherence for 'Pierre Baldi'
-	| Field     | Value      |
-	| Date      | 2014-10-06 |
-	| Adherence | 50%        |
+	And I click on an agent state
+	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
