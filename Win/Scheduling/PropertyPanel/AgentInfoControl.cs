@@ -155,6 +155,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
 		{
 			perPersonAndGroupListView.Items.Clear();
+
+			if (!_dateOnlyPeriod.Contains(dateOnly))
+				return;
+
 			var service = _container.Resolve<IDistributionReportService>();
 			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly), state.PersonsInOrganization.ToList(), state.Schedules);
 			foreach (var shiftCategory in report.DistributionDictionary.Keys)
