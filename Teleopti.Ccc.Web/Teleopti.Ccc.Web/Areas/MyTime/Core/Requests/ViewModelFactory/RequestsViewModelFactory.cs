@@ -66,7 +66,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 											DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
 									ShiftTradeRequestPermission =
 										_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
+											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+									AbsenceReportPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.AbsenceReport),
+
 			                 	};
 			var dateFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			return new RequestsViewModel
@@ -78,6 +82,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						Name =
 							requestableAbsence.
 							Description.Name
+					}).ToList(),
+				AbsenceTypesForReport =
+					_absenceTypesProvider.GetReportableAbsences().Select(x => new AbsenceTypeViewModel
+					{
+						Id = x.Id,
+						Name = x.Description.Name
 					}).ToList(),
 				RequestPermission = permission,
 				DatePickerFormat = dateFormat

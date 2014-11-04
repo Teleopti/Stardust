@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
+			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
 
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			IPerson person = new Person();
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(absences);
+			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
 
 			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null,
 			                                          null, loggedOnUser, null, null);
@@ -74,6 +76,42 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldRetrieveReportableAbsenceTypesforViewModel()
+		{
+			var absence = new Absence { Description = new Description("Vacation") };
+			absence.SetId(Guid.NewGuid());
+			var absences = new List<IAbsence> { absence };
+
+			var wfcs = MockRepository.GenerateMock<IWorkflowControlSet>();
+			wfcs.Stub(x => x.AllowedReportAbsences).Return(absences);
+
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = new Person
+			{
+				WorkflowControlSet = wfcs
+			};
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
+			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
+			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(absences);
+			
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null,
+													  null, loggedOnUser, null, null);
+
+			var result = target.CreatePageViewModel();
+
+			result.Should().Not.Be.Null();
+			result.AbsenceTypesForReport.Should().Not.Be.Null();
+
+			var firstAbsenceType = result.AbsenceTypesForReport.FirstOrDefault();
+			firstAbsenceType.Id.Should().Be.EqualTo(absence.Id);
+			firstAbsenceType.Name.Should().Be.EqualTo(absence.Description.Name);
+		}
+
+		[Test]
 		public void ShouldRetrieveTextRequestPermissionForViewModel()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
@@ -83,6 +121,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
+			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
+
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).
 				Return(true);
@@ -105,6 +145,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var absenceTypesProvider = MockRepository.GenerateMock<IAbsenceTypesProvider>();
 			absenceTypesProvider.Stub(x => x.GetRequestableAbsences()).Return(new List<IAbsence>());
+			absenceTypesProvider.Stub(x => x.GetReportableAbsences()).Return(new List<IAbsence>());
+
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).
 				Return(true);
