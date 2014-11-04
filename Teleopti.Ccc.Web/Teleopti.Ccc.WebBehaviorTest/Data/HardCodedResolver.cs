@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public object Resolve(Type type)
 		{
 			// use autofac soon?
-			if (type == typeof (IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
+			if (type == typeof(IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
 			{
 				var utcTheTime = CurrentTime.Value() == DateTime.MinValue ? DateTime.UtcNow : CurrentTime.Value();
-				
+
 				return new[]
 					{
 						new ScheduleProjectionReadOnlyUpdater(
@@ -55,13 +55,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							)
 					};
 			}
-			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
+			if (type == typeof(IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return new[]
 					{
 						makeProjectionChangedEventPublisher(),
 						new ScheduleChangedNotifier(messageBroker())
 					};
-			if (type == typeof (IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
+			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return new[]
 					{
 						new ScheduleChangedEventPublisher(new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					{
 						new ScheduleChangedEventPublisher(new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
 					};
-			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
+			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
 					{
 						new PersonScheduleDayReadModelUpdater(
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new PersonScheduleDayReadModelPersister(
 								CurrentUnitOfWork.Make(),
 								messageBroker(),
-								new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()))),
+								new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()),null, null)),
 								null
 							),
 						new ScheduledResourcesChangedHandler(

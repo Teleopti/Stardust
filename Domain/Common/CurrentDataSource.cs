@@ -32,7 +32,13 @@ namespace Teleopti.Ccc.Domain.Common
 		public IDataSource Current()
 		{
 			var identity = _currentIdentity.Current();
-			return identity != null ? identity.DataSource : _rtaConfigurationDataSource.Value;
+			if (identity != null)
+				return identity.DataSource;
+			if (_configReader == null)
+				return null;
+			if (_dataSourcesProvider == null)
+				return null;
+			return _rtaConfigurationDataSource.Value;
 		}
 
 		private IDataSource dataSourceFromRtaConfiguration()
