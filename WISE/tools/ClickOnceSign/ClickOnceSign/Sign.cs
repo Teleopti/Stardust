@@ -10,8 +10,8 @@ namespace ClickOnceSign
     {
         private static String mage = "mage.exe";
         private static ILog logFile = LogManager.GetLogger(typeof(Sign));
-        private const string AzureAdminClient = @"e:\sitesroot\5";
-        private const string AzureMyTimeClient = @"e:\sitesroot\4";
+		private const string AzureAdminClient = @"E:\approot\bin\..\..\sitesroot\5";
+		private const string AzureMyTimeClient = @"E:\approot\bin\..\..\sitesroot\4";
         private const string AzureTempfolder = @"e:\temp";
 
         public static bool CoSign(
@@ -51,7 +51,7 @@ namespace ClickOnceSign
                 return false;
             }
 
-            // MessageBox.Show("Successfully signed ClickOnce deployment files in directory: " + appDir, "Signed");
+			logFile.InfoFormat("Successfully signed ClickOnce deployment files in directory: {0}.", appDir);
             return true;
         }
 
