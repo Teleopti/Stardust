@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Principal;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.Web.Filters
 			{
 				// Authentication was attempted and succeeded. Set Principal to the authenticated user.
 				context.Principal = principal;
+				request.SetUserPrincipal(principal);
 			}
 		}
 
@@ -84,6 +86,7 @@ namespace Teleopti.Ccc.Web.Filters
 			// The currently approved HTTP 1.1 specification says characters here are ISO-8859-1.
 			// However, the current draft updated specification for HTTP 1.1 indicates this encoding is infrequently
 			// used in practice and defines behavior only for ASCII.
+			// we use utf8 because of strange characters in the key used as password sometimes
 			Encoding encoding = Encoding.UTF8;
 			// Make a writable copy of the encoding to enable setting a decoder fallback.
 			encoding = (Encoding)encoding.Clone();

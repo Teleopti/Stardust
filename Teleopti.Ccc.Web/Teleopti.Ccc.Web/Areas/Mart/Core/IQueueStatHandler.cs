@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 {
 	public interface IQueueStatHandler
 	{
-		void Handle(QueueStatsModel queueData);
+		void Handle(QueueStatsModel queueData, string dataSource);
 	}
 }

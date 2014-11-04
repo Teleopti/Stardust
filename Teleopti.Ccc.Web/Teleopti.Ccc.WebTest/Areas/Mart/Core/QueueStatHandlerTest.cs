@@ -9,13 +9,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 	[TestFixture]
 	public class QueueStatHandlerTest
 	{
+		private const string dataSource = "Teleopti WFM";
 
 		[Test, ExpectedException(typeof(ArgumentException))]
 		public void ShouldThrowIfLogObjectNameIsEmpty()
 		{
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
-			target.Handle(new QueueStatsModel());
+			target.Handle(new QueueStatsModel(), dataSource);
 		}
 
 		[Test]
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		{
 			var fakeRepos = new FakeQueueStatRepository();
 			var target = new QueueStatHandler(fakeRepos);
-			target.Handle(new QueueStatsModel { LogObjectName = "SomeAcdSomewhere", QueueName = "kön", DateAndTimeString = "2014-12-12 15:00" });
+			target.Handle(new QueueStatsModel { LogObjectName = "SomeAcdSomewhere", QueueName = "kön", DateAndTimeString = "2014-12-12 15:00" }, dataSource);
 			Assert.That(fakeRepos.SavedQueueModel.QueueId, Is.EqualTo(10));
 		}
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				DateAndTimeString = "2014-12-12 15:00"
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(queueStatsModel, dataSource);
 		}
 
 		[Test]
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				DateAndTimeString = "2014-12-12 15:00"
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(queueStatsModel, dataSource);
 			Assert.That(fakeRepos.SavedQueueModel.DateId, Is.EqualTo(1515));
 			Assert.That(fakeRepos.DateTimeInUtc, Is.EqualTo(TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueStatsModel.DateAndTimeString), timeZone)));
 		}
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				DateAndTimeString = "2014-12-12 15:00"
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(queueStatsModel, dataSource);
 			Assert.That(fakeRepos.SavedQueueModel.IntervalId, Is.EqualTo(56));
 		}
 
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				LongestDelayInQueueAnswered = 40,
 				LongestDelayInQueueAbandoned = 43
 			};
-			target.Handle(queueStatsModel);
+			target.Handle(queueStatsModel, dataSource);
 			Assert.That(fakeRepos.SavedQueueModel.OfferedCalls, Is.EqualTo(queueStatsModel.OfferedCalls));
 			Assert.That(fakeRepos.SavedQueueModel.AnsweredCalls, Is.EqualTo(queueStatsModel.AnsweredCalls));
 			Assert.That(fakeRepos.SavedQueueModel.AnsweredCallsWithinServiceLevel, Is.EqualTo(queueStatsModel.AnsweredCallsWithinServiceLevel));

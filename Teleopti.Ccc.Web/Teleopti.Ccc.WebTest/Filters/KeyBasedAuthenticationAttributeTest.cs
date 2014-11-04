@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var target = new KeyBasedAuthenticationAttribute();
 			
 			var request = new HttpRequestMessage();
-			request.Headers.Authorization = createBasicCredentials("aa", "!#¤atAbgT%");
+			request.Headers.Authorization = createBasicCredentials("Teleopti WFM", "!#¤atAbgT%");
 			var httpActionContext =
 				new HttpActionContext(
 					new HttpControllerContext { ControllerDescriptor = new HttpControllerDescriptor { ControllerType = typeof(object) }, Request = request },
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var target = new KeyBasedAuthenticationAttribute();
 
 			var request = new HttpRequestMessage();
-			request.Headers.Authorization = createBasicCredentials("aa", "InCorrect");
+			request.Headers.Authorization = createBasicCredentials("Teleopti WFM", "InCorrect");
 			var httpActionContext =
 				new HttpActionContext(
 					new HttpControllerContext

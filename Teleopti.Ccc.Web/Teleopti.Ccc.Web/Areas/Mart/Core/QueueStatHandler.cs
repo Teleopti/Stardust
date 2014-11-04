@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			_queueStatRepository = queueStatRepository;
 		}
 
-		public void Handle(QueueStatsModel queueData)
+		public void Handle(QueueStatsModel queueData, string dataSource)
 		{
 			if(string.IsNullOrEmpty(queueData.LogObjectName))
 				throw new ArgumentException();
 
-			var logobject = _queueStatRepository.GetLogObject(queueData.LogObjectName, queueData.NhibName);
-			var queueId = _queueStatRepository.GetQueueId(queueData.QueueName, queueData.QueueId, logobject.Id, queueData.NhibName);
+			var logobject = _queueStatRepository.GetLogObject(queueData.LogObjectName, dataSource);
+			var queueId = _queueStatRepository.GetQueueId(queueData.QueueName, queueData.QueueId, logobject.Id, dataSource);
 			var dateTimeUtc = TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueData.DateAndTimeString),
 				TimeZoneInfo.FindSystemTimeZoneById(logobject.TimeZoneCode));
-			var dateId = _queueStatRepository.GetDateId(dateTimeUtc, queueData.NhibName);
+			var dateId = _queueStatRepository.GetDateId(dateTimeUtc, dataSource);
 			if (dateId == -1)
 				throw new ArgumentException();
-			var intervalId = getIntervalInDay(dateTimeUtc, queueData.NhibName);
+			var intervalId = getIntervalInDay(dateTimeUtc, dataSource);
 
 			var factQueueModels = new List<FactQueueModel>
 			{
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 					LongestDelayInQueueAbandoned = queueData.LongestDelayInQueueAbandoned 
 				}
 			};
-			_queueStatRepository.Save(factQueueModels, queueData.NhibName);
+			_queueStatRepository.Save(factQueueModels, dataSource);
 		}
 
 		private int getIntervalInDay(DateTime dateTimeUtc, string nhibName)
