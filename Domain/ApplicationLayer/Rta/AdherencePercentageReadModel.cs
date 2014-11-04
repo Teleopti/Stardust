@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		/// </summary>
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
-		public int MinutesInAdherence { get; set; }
-		public int MinutesOutOfAdherence { get; set; }
 		public DateTime LastTimestamp { get; set; }
 		public bool IsLastTimeInAdherence { get; set; }
 		public DateTime? ShiftEnd { get; set; }

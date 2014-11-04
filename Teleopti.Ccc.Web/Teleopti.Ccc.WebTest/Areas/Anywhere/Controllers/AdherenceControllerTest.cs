@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ForToday_ShouldGetTheReadModelForSuppliedAgentWithTodaysDate()
 		{
 			var thisIsNow = new DateTime(2014, 12, 24, 15, 0, 0);
-			const int expectedMinutesInAdherence = 12;
-			const int expectedminutesOutOfAdherence = 36;
+			var expectedMinutesInAdherence = TimeSpan.FromMinutes(12);
+			var expectedminutesOutOfAdherence = TimeSpan.FromMinutes(36);
 			var expectedLastTimeStamp = thisIsNow.AddMinutes(-5);
 			var personId = Guid.NewGuid();
 			var now = new ThisIsNow(thisIsNow);
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			readModelRepo.Stub(r => r.Get(new DateOnly(now.UtcDateTime()), personId)).Return(new AdherencePercentageReadModel()
 			                                                                                 {
-				                                                                                 MinutesInAdherence =
+				                                                                                 TimeInAdherence =
 					                                                                                 expectedMinutesInAdherence,
-				                                                                                 MinutesOutOfAdherence =
+				                                                                                 TimeOutOfAdherence =
 					                                                                                 expectedminutesOutOfAdherence,
 				                                                                                 LastTimestamp =
 					                                                                                 expectedLastTimeStamp
@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var target = new CalculateAdherence(readModelRepo, now);
 			var result = target.ForToday(personId);
 
-			(result.MinutesInAdherence).Should().Be.EqualTo(expectedMinutesInAdherence);
-			(result.MinutesOutOfAdherence).Should().Be.EqualTo(expectedminutesOutOfAdherence);
+			(result.TimeInAdherence).Should().Be.EqualTo(expectedMinutesInAdherence);
+			(result.TimeOutOfAdherence).Should().Be.EqualTo(expectedminutesOutOfAdherence);
 			(result.LastTimestamp).Should().Be.EqualTo(expectedLastTimeStamp);
 		}
 
@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(DateTime.Now);
 			var data = new AdherencePercentageReadModel()
 			           {
-				           MinutesInAdherence = 74,
-				           MinutesOutOfAdherence = 74,
+				           TimeInAdherence = TimeSpan.FromMinutes(74),
+						   TimeOutOfAdherence = TimeSpan.FromMinutes(74),
 				           LastTimestamp = now.UtcDateTime(),
 			           };
 			var repo = new PersisterForTest(data);
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(DateTime.Now);
 			var data = new AdherencePercentageReadModel()
 			           {
-				           MinutesInAdherence = 12,
-				           MinutesOutOfAdherence = 0,
+				           TimeInAdherence = TimeSpan.FromMinutes(12),
+				           TimeOutOfAdherence = TimeSpan.FromMinutes(0),
 				           LastTimestamp = now.UtcDateTime(),
 			           };
 			var repo = new PersisterForTest(data);
@@ -118,8 +118,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var data = new AdherencePercentageReadModel()
 			           {
-				           MinutesInAdherence = 0,
-				           MinutesOutOfAdherence = 54
+				           TimeInAdherence = TimeSpan.FromMinutes(0),
+				           TimeOutOfAdherence = TimeSpan.FromMinutes(54)
 			           };
 
 			var repo = new PersisterForTest(data);
@@ -147,8 +147,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(timeThatStateChangedToInAdherence.AddMinutes(60));
 			var data = new AdherencePercentageReadModel()
 			           {
-				           MinutesInAdherence = 0,
-				           MinutesOutOfAdherence = 60,
+				           TimeInAdherence = TimeSpan.FromMinutes(0),
+				           TimeOutOfAdherence = TimeSpan.FromMinutes(60),
 				           LastTimestamp = timeThatStateChangedToInAdherence,
 				           IsLastTimeInAdherence = true,
 				           ShiftEnd = now.UtcDateTime().AddHours(2)
@@ -170,8 +170,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(timeThatStateChangedToOutOfAdherence.AddMinutes(60));
 			var data = new AdherencePercentageReadModel()
 			           {
-				           MinutesInAdherence = 60,
-				           MinutesOutOfAdherence = 0,
+				           TimeInAdherence = TimeSpan.FromMinutes(60),
+				           TimeOutOfAdherence = TimeSpan.FromMinutes(0),
 				           LastTimestamp = timeThatStateChangedToOutOfAdherence,
 				           IsLastTimeInAdherence = false,
 			           };
@@ -192,8 +192,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var fiveMinutesAfterStateChanged = timeThatStateChangedToOutOfAdherence.AddMinutes(5);
 			var data = new AdherencePercentageReadModel()
 			           {
-				           MinutesInAdherence = 5,
-				           MinutesOutOfAdherence = 0,
+				           TimeInAdherence = TimeSpan.FromMinutes(5),
+				           TimeOutOfAdherence = TimeSpan.FromMinutes(0),
 				           LastTimestamp = timeThatStateChangedToOutOfAdherence,
 				           IsLastTimeInAdherence = false,
 				           ShiftEnd = fiveMinutesAfterStateChanged
@@ -212,8 +212,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(DateTime.Now);
 			var data = new AdherencePercentageReadModel()
 			{
-				MinutesInAdherence = 0,
-				MinutesOutOfAdherence = 0,
+				TimeInAdherence = TimeSpan.FromMinutes(0),
+				TimeOutOfAdherence = TimeSpan.FromMinutes(0),
 				LastTimestamp = now.UtcDateTime(),
 			};
 			var repo = new PersisterForTest(data);
@@ -231,8 +231,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var now = new ThisIsNow(timeThatStateChangedToInAdherence.AddMinutes(60));
 			var data = new AdherencePercentageReadModel()
 			{
-				MinutesInAdherence = 0,
-				MinutesOutOfAdherence = 60,
+				TimeInAdherence = TimeSpan.FromMinutes(0),
+				TimeOutOfAdherence = TimeSpan.FromMinutes(60),
 				LastTimestamp = timeThatStateChangedToInAdherence,
 				IsLastTimeInAdherence = true,
 				ShiftEnd = null

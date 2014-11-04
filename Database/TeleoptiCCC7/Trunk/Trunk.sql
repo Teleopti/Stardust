@@ -54,8 +54,6 @@ CREATE TABLE [ReadModel].[AdherencePercentage](
 	[PersonId] [uniqueidentifier] NOT NULL,
 	[BelongsToDate] [smalldatetime] NOT NULL,
 	[LastTimestamp] [datetime] NULL,
-	[MinutesInAdherence] [int] NULL,
-	[MinutesOutOfAdherence] [int] NULL,
 	[TimeInAdherence] [bigint] NULL,
 	[TimeOutOfAdherence] [bigint] NULL,
 	[IsLastTimeInAdherence] [bit] NULL,

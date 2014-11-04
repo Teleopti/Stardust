@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public Percent ForDay(AdherencePercentageReadModel data)
 		{
-			var minIn =Convert.ToDouble(data.MinutesInAdherence);
-			var minOut = Convert.ToDouble(data.MinutesOutOfAdherence);
+			var minIn =Convert.ToDouble(data.TimeInAdherence.TotalSeconds);
+			var minOut = Convert.ToDouble(data.TimeOutOfAdherence.TotalSeconds);
 			var fromLatestStateChange = numberOfMinutesForLastState(data.LastTimestamp, data.ShiftEnd);
 
 			if (data.IsLastTimeInAdherence)

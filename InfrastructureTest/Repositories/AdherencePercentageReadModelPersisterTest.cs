@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Date = dateOnly,
 				IsLastTimeInAdherence = true,
 				LastTimestamp = lastTimeStamp,
-				MinutesInAdherence = minInAdherence,
-				MinutesOutOfAdherence = minOutOfAdherence,
 				TimeInAdherence = timeInAdherence,
 				TimeOutOfAdherence = timeOutOfAdherence,
 				PersonId = personGuid
@@ -58,8 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.BelongsToDate.Should().Be.EqualTo(model.BelongsToDate);
 			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model.IsLastTimeInAdherence);
 			savedModel.LastTimestamp.Should().Be.EqualTo(model.LastTimestamp);
-			savedModel.MinutesInAdherence.Should().Be.EqualTo(model.MinutesInAdherence);
-			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(model.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(model.PersonId);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model.TimeOutOfAdherence);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(model.TimeInAdherence);
@@ -83,8 +79,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.BelongsToDate.Should().Be.EqualTo(model1.BelongsToDate);
 			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model1.IsLastTimeInAdherence);
 			savedModel.LastTimestamp.Should().Be.EqualTo(model1.LastTimestamp);
-			savedModel.MinutesInAdherence.Should().Be.EqualTo(model1.MinutesInAdherence);
-			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(model1.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(model1.PersonId);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model1.TimeOutOfAdherence);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(model1.TimeInAdherence);
@@ -93,8 +87,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.BelongsToDate.Should().Be.EqualTo(model2.BelongsToDate);
 			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model2.IsLastTimeInAdherence);
 			savedModel.LastTimestamp.Should().Be.EqualTo(model2.LastTimestamp);
-			savedModel.MinutesInAdherence.Should().Be.EqualTo(model2.MinutesInAdherence);
-			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(model2.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(model2.PersonId);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model2.TimeOutOfAdherence);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(model2.TimeInAdherence);
@@ -118,8 +110,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.BelongsToDate.Should().Be.EqualTo(modelUpdated.BelongsToDate);
 			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(modelUpdated.IsLastTimeInAdherence);
 			savedModel.LastTimestamp.Should().Be.EqualTo(modelUpdated.LastTimestamp);
-			savedModel.MinutesInAdherence.Should().Be.EqualTo(modelUpdated.MinutesInAdherence);
-			savedModel.MinutesOutOfAdherence.Should().Be.EqualTo(modelUpdated.MinutesOutOfAdherence);
 			savedModel.PersonId.Should().Be.EqualTo(modelUpdated.PersonId);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(modelUpdated.TimeInAdherence);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(modelUpdated.TimeOutOfAdherence);

@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			_unitOfWork.Current().CreateSqlQuery(
 				"UPDATE ReadModel.AdherencePercentage SET" +
-				"	MinutesInAdherence = :MinutesInAdherence," +
-				"		MinutesOutOfAdherence = :MinutesOutOfAdherence," +
 				"			LastTimestamp = :LastTimestamp," +
 				"				IsLastTimeInAdherence = :IsLastTimeInAdherence," +
 				"					TimeInAdherence = :TimeInAdherence," +
@@ -43,8 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"  WHERE PersonId = :PersonId AND BelongsToDate =:Date")
 							  .SetGuid("PersonId", model.PersonId)
 							  .SetDateTime("Date", model.BelongsToDate)
-							  .SetInt32("MinutesInAdherence", model.MinutesInAdherence)
-							  .SetInt32("MinutesOutOfAdherence", model.MinutesOutOfAdherence)
 							  .SetDateTime("LastTimestamp", model.LastTimestamp)
 							  .SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 							  .SetParameter("TimeInAdherence", model.TimeInAdherence)
@@ -55,12 +51,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void saveReadModel(AdherencePercentageReadModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.AdherencePercentage (PersonId,BelongsToDate,MinutesInAdherence,MinutesOutOfAdherence,LastTimestamp,IsLastTimeInAdherence,TimeInAdherence,TimeOutOfAdherence)" +
-					" VALUES (:PersonId,:Date,:MinutesInAdherence,:MinutesOutOfAdherence,:LastTimestamp,:IsLastTimeInAdherence,:TimeInAdherence,:TimeOutOfAdherence)")
+				"INSERT INTO ReadModel.AdherencePercentage (PersonId,BelongsToDate,LastTimestamp,IsLastTimeInAdherence,TimeInAdherence,TimeOutOfAdherence)" +
+					" VALUES (:PersonId,:Date,:LastTimestamp,:IsLastTimeInAdherence,:TimeInAdherence,:TimeOutOfAdherence)")
 							  .SetGuid("PersonId", model.PersonId)
 							  .SetDateTime("Date", model.BelongsToDate)
-							  .SetInt32("MinutesInAdherence", model.MinutesInAdherence)
-							  .SetInt32("MinutesOutOfAdherence", model.MinutesOutOfAdherence)
 							  .SetDateTime("LastTimestamp", model.LastTimestamp)
 							  .SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 							  .SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
@@ -72,12 +66,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
-				"SELECT PersonId, BelongsToDate as DATE,LastTimestamp,MinutesInAdherence,MinutesOutOfAdherence,IsLastTimeInAdherence,TimeInAdherence,TimeOutOfAdherence  FROM ReadModel.AdherencePercentage WHERE PersonId =:PersonId and BelongsToDate =:Date ")
+				"SELECT PersonId, BelongsToDate as DATE,LastTimestamp,IsLastTimeInAdherence,TimeInAdherence,TimeOutOfAdherence  FROM ReadModel.AdherencePercentage WHERE PersonId =:PersonId and BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
-				.AddScalar("MinutesInAdherence", NHibernateUtil.Int16)
-				.AddScalar("MinutesOutOfAdherence", NHibernateUtil.Int16)
 				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)

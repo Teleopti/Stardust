@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 			return new AdherenceInfo
 			       {
-				       MinutesInAdherence = readModel.MinutesInAdherence,
-				       MinutesOutOfAdherence = readModel.MinutesOutOfAdherence,
+				       TimeInAdherence = readModel.TimeInAdherence,
+				       TimeOutOfAdherence = readModel.TimeOutOfAdherence,
 				       LastTimestamp = readModel.LastTimestamp,
 				       AdherencePercent = (int)_historicalAdherence.ForDay(readModel).ValueAsPercent(),
 				       IsValid = true
@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private static bool isValid(AdherencePercentageReadModel readModel)
 		{
-			return !(readModel.MinutesInAdherence == 0 && readModel.MinutesOutOfAdherence == 0);
+			return !(readModel.TimeInAdherence == TimeSpan.Zero && readModel.TimeOutOfAdherence == TimeSpan.Zero);
 		}
 	}
 
 	public class AdherenceInfo
 	{
-		public int MinutesInAdherence { get; set; }
-		public int MinutesOutOfAdherence { get; set; }
+		public TimeSpan TimeInAdherence { get; set; }
+		public TimeSpan TimeOutOfAdherence { get; set; }
 		public DateTime LastTimestamp { get; set; }
 		public int AdherencePercent { get; set; }
 		public bool IsValid { get; set; }

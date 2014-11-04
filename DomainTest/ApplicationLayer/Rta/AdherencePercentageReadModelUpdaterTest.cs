@@ -193,7 +193,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = startTime.AddMinutes(1).AddSeconds(45)
 			});
 
-			var expected = TimeSpan.FromSeconds(12 + (105 - 37));
+			var expected = TimeSpan.FromSeconds(12)
+				.Add(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(45)))
+				.Subtract(TimeSpan.FromSeconds(37));
 
 			persister.PersistedModel.TimeInAdherence.Should().Be(expected);
 		}

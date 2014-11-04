@@ -40,12 +40,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (model.IsLastTimeInAdherence)
 			{
-				model.MinutesInAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
 				model.TimeInAdherence += (timestamp - model.LastTimestamp);
 			}
 			else
 			{
-				model.MinutesOutOfAdherence += Convert.ToInt32((timestamp - model.LastTimestamp).TotalMinutes);
 				model.TimeOutOfAdherence += timestamp - model.LastTimestamp;
 			}
 			model.LastTimestamp = timestamp;
@@ -65,7 +63,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				Date = new DateOnly(timestamp),
 				PersonId = personId,
-				MinutesInAdherence = 0,
+				TimeInAdherence = TimeSpan.Zero,
+				TimeOutOfAdherence = TimeSpan.Zero,
 				LastTimestamp = timestamp,
 				IsLastTimeInAdherence = currentlyInAdherence
 			};
