@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			_databaseConnectionHandler = databaseConnectionHandler;
 		}
 
-		public LogObject GetLogObject(int logObjectId, string nhibDataSourceName)
+		public LogObjectSource GetLogObject(int logObjectId, string nhibDataSourceName)
 		{
 			const string sqlText = @"SELECT  d.[datasource_id],  t.time_zone_code FROM[mart].[sys_datasource] d
 															INNER JOIN [mart].[dim_time_zone] t ON d.time_zone_id = t.time_zone_id 
 															WHERE d.datasource_id = {0}";
 
-			LogObject logObject = null;
+			LogObjectSource logObject = null;
 			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
 			{
 				var command = connection.CreateCommand();
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					logObject = new LogObject
+					logObject = new LogObjectSource
 					{
 						Id = reader.GetInt16(reader.GetOrdinal("datasource_id")),
 						TimeZoneCode = reader.GetString(reader.GetOrdinal("time_zone_code"))

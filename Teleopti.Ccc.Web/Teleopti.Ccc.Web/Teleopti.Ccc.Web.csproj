@@ -372,7 +372,7 @@
     <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatRepository.cs" />
-    <Compile Include="Areas\Mart\Core\LogObject.cs" />
+    <Compile Include="Areas\Mart\Core\LogObjectSource.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Models\FactQueueModel.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandler.cs" />

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -19,16 +21,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 		[Test]
 		public void ShouldCallHandler()
 		{
-			var queueData = new QueueStatsModel();
+			var queueStatsModels = new List<QueueStatsModel> { new QueueStatsModel() };
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
 
-			var controller = setupControllerForTests(handler, "Teleopti WFM");
+			var controller = setupControllerForTests(handler, "Teleopti WFM", 1);
 			
-			controller.Post(queueData);
-			handler.AssertWasCalled(x => x.Handle(queueData, "Teleopti WFM"));
+			controller.Post(queueStatsModels);
+			handler.AssertWasCalled(x => x.Handle(queueStatsModels, "Teleopti WFM", 1));
 		}
 
-		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string name)
+		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId)
 		{
 			//other properties could be set if needed later
 			//var config = new HttpConfiguration();
@@ -39,8 +41,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 			{
 				//ControllerContext = new HttpControllerContext(config, routeData, request),
 				//Request = request,
-				RequestContext = new HttpRequestContext {Principal = createPrincipal(name)}
+				RequestContext = new HttpRequestContext {Principal = createPrincipal(nhibName)},
+				Request = new HttpRequestMessage()
 			};
+
+			controller.Request.Headers.Add("sourceId", sourceId.ToString(CultureInfo.InvariantCulture));
 			//controller.Request.Properties.Add(HttpPropertyKeys.HttpRouteDataKey, routeData);
 			//controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = config;
 			return controller;

@@ -1,11 +1,8 @@
 ﻿using System.Linq;
 using System.Security.Claims;
-using System.Web;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
-using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Ccc.Web.Filters;
@@ -13,7 +10,7 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 {
 	[KeyBasedAuthentication] // Enable authentication via a key
-	[System.Web.Http.Authorize] // Require some form of authentication
+	[Authorize] // Require some form of authentication
 	public class QueueStatsController : ApiController
 	{
 		private readonly IQueueStatHandler _queueStatHandler;
@@ -29,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 			var principal =  RequestContext.Principal as ClaimsPrincipal;
 			Claim claim = null;
 			IEnumerable<string> headerValues;
-			string dataSource;
+			string dataSource = null;
 			int sourceId = 0;
 			if (principal != null)
 				claim = principal.Claims.FirstOrDefault(c => c.Type.Equals(System.IdentityModel.Claims.ClaimTypes.Locality));

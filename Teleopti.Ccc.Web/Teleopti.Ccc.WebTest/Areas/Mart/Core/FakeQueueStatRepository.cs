@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		private int _dateId = 1515;
 		public FactQueueModel SavedQueueModel { get; set; }
 		public DateTime DateTimeInUtc { get; set; }
-		public LogObject LogObject { get; set; }
+		public LogObjectSource LogObject { get; set; }
 
-		public LogObject GetLogObject(int logObjectId, string nhibDataSourceName)
+		public LogObjectSource GetLogObject(int logObjectId, string nhibDataSourceName)
 		{
-			LogObject = new LogObject {Id = logObjectId, TimeZoneCode = "W. Europe Standard Time"};
+			LogObject = new LogObjectSource { Id = logObjectId, TimeZoneCode = "W. Europe Standard Time" };
 			return LogObject;
 		}
 
