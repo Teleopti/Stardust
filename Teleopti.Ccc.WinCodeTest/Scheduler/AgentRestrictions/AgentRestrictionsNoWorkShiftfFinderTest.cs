@@ -85,6 +85,28 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		[Test]
+		public void ShouldFindWhenNoEffectiveRestriction()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
+				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
+				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
+				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
+				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(null);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _finder.Find(_scheduleDay, _schedulingOptions);
+				Assert.IsTrue(result);
+			}
+		}
+
+		[Test]
 		public void ShouldFindWhenNoShiftBag()
 		{
 			using (_mock.Record())
