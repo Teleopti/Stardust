@@ -2,7 +2,6 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_data_mart_maintenance]
 GO
 
-
 SET ANSI_NULLS ON
 GO
 
@@ -157,19 +156,12 @@ BEGIN
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
 						from mart.fact_schedule_preference f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
 
-	--External Agg Queue_Logg
+	--External Agg tables, but only if mapped 1:1 via crossDb-views. If any custom views exists, then skip it
 	IF not exists (
 		select 1
 		from mart.sys_crossdatabaseview_custom
-		where view_name = 'v_queue_logg'
 		)
-	delete mart.v_queue_logg
-	from mart.v_queue_logg f
-	where 1=1
-	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 14
-						and configuration_name = 'YearsToKeepAggQueueStats'),100),getdate())
-	and f.date_from < (select dateadd(day,10,min(f2.date_from))
-						from mart.v_queue_logg f2)
+	exec etl_data_mart_maintenance_aggTables
 
 	--Internal Agg Queue_Logg
 	delete dbo.queue_logg
@@ -179,20 +171,6 @@ BEGIN
 						and configuration_name = 'YearsToKeepAggQueueStats'),100),getdate())
 	and f.date_from < (select dateadd(day,10,min(f2.date_from))
 						from dbo.queue_logg f2)
-
-	--External Agg Agent_Logg
-	IF not exists (
-		select 1
-		from mart.sys_crossdatabaseview_custom
-		where view_name = 'v_agent_logg'
-		)
-	delete mart.v_agent_logg
-	from mart.v_agent_logg f
-	where 1=1
-	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 15
-						and configuration_name = 'YearsToKeepAggAgentStats'),100),getdate())
-	and f.date_from < (select dateadd(day,10,min(f2.date_from))
-						from mart.v_agent_logg f2)
 
 	--Internal Agg Agent_Logg
 	delete dbo.agent_logg
