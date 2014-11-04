@@ -16,6 +16,7 @@ define([
 			self.Resources = resources;
 			self.MyTimeVisible = ko.observable(false);
 			self.RealTimeAdherenceVisible = ko.observable(false);
+			self.ReportsVisible = ko.observable(false);
 			self.TeamScheduleVisible = ko.observable(false);
 			self.ActiveView = ko.observable("");
 			self.UserName = ko.observable("");

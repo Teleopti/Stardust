@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsRealTimeAdherenceAvailable =
 					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
+				IsReportsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToReports),
 				IsTeamScheduleAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules),
 				IanaTimeZone = _ianaTimeZoneProvider.WindowsToIana(principal.Regional.TimeZone.Id)
 			}, JsonRequestBehavior.AllowGet);
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.CannotCreateSecondShiftWhenAddingActivity,
 					UserTexts.Resources.OutOfAdherence,
 					UserTexts.Resources.RealTimeAdherence,
+					UserTexts.Resources.Reports,
 					UserTexts.Resources.WaitingThreeDots,
 					UserTexts.Resources.InsufficientPermission,
 					UserTexts.Resources.AgentName,

@@ -16,7 +16,8 @@ define([
 		'resources',
 		'subscriptions.trackingmessages',
 		'notifications',
-		'shared/timezone-current'
+		'shared/timezone-current',
+		'toggleQuerier'
 ], function (
 		layoutTemplate,
 		menuTemplate,
@@ -34,7 +35,8 @@ define([
 		resources,
 		trackingmessages,
 		notificationsViewModel,
-		timezoneCurrent) {
+		timezoneCurrent,
+		toggleQuerier) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -291,7 +293,12 @@ define([
 	loadNavigationContent(function(responseData) {
 		menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
 		menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
-		menu.TeamScheduleVisible(responseData.IsTeamScheduleAvailable === true);
+		toggleQuerier('MyTeam_Reports_31070', {
+			enabled: function() {
+				menu.ReportsVisible(responseData.IsReportsAvailable === true);
+			}
+		});
+			menu.TeamScheduleVisible(responseData.IsTeamScheduleAvailable === true);
 		if (!responseData.IsTeamScheduleAvailable && responseData.IsRealTimeAdherenceAvailable) {
 			defaultView = 'realtimeadherencesites';
 		}

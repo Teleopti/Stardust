@@ -11,6 +11,14 @@
 				<!-- ko if: RealTimeAdherenceVisible -->
 				<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
 				<!-- /ko -->
+				<!-- ko if: ReportsVisible-->
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown">
+						<span data-bind="text: Resources.Reports"></span>
+						<b class="caret"></b>
+					</a>
+				</li>
+				<!-- /ko -->
 			</ul>
 		</div>
 		<ul class="nav navbar-nav navbar-right">
