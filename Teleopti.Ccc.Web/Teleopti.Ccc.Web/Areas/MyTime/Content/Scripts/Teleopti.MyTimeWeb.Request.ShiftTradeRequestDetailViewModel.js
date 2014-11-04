@@ -368,7 +368,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel());
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel());
 
-	self.pixelPerMinute = function () { return (72 / (data.TimeLineHours.length * 10)); }
+	self.pixelPerMinute = function() { return (72 / (data.TimeLineHours.length * 10)); }
 	self.hours = ko.observableArray();
 	for (var i = 0; i < data.TimeLineHours.length; i++) {
 		var numberOfShownHours = data.TimeLineHours.length;
@@ -378,14 +378,14 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 		self.hours.push(timelineHour);
 	}
 
-	self.createMySchedule = function (myScheduleObject) {
-		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
+	self.createMySchedule = function(myScheduleObject) {
+		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function(layer) {
 			return new Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 		});
 		self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
 	};
-	self.createOtherSchedule = function (myScheduleObject) {
-		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
+	self.createOtherSchedule = function(myScheduleObject) {
+		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function(layer) {
 			return new Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 		});
 		self.otherSchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
@@ -396,7 +396,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 
 	self.createMySchedule(data.From);
 	self.createOtherSchedule(data.To);
-}
+};
 
 Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canvasPixelWidth) {
 	var self = this;
@@ -468,7 +468,7 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 				}
 			}
 
-			var mins = (hours.length - 1) * 60 + (moment(chooseHistory.hours[chooseHistory.hours.length - 1].EndTime).get('minutes') - moment(chooseHistory.hours[1].StartTime).get('minutes'));
+			var mins = (chooseHistory.hours.length - 1) * 60 + (moment(chooseHistory.hours[chooseHistory.hours.length - 1].EndTime).get('minutes') - moment(chooseHistory.hours[1].StartTime).get('minutes'));
 			self.setTimeLineLengthInMinutes(scheduleStartTime, mins);
 
 			var truncatedHours = [];
