@@ -147,5 +147,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             e.Style.VerticalAlignment = GridVerticalAlignment.Middle;
             e.Style.WrapText = false;
         }
+
+	    protected override void OnBeginEdit()
+	    {
+		    base.OnBeginEdit();
+			TextBox.SelectAll();
+	    }
     }
 }

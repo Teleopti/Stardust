@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             MinValue = int.MinValue;
             MaxValue = int.MaxValue;
             HorizontalAlignment = GridHorizontalAlignment.Right;
-        }
+		}
 
         public IntegerCellModel(GridModel grid)
             : base(grid)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
             return new IntegerCellRenderer(control, this);
         }
-
+		
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
             if (string.IsNullOrEmpty(text))
@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
             style.HorizontalAlignment = HorizontalAlignment;
             style.CellValue = d;
+	        
             return true;
         }
 
@@ -103,5 +104,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             e.Style.VerticalAlignment = GridVerticalAlignment.Middle;
             e.Style.WrapText = false;
         }
+
+	    protected override void OnBeginEdit()
+	    {
+		    TextBox.SelectAll();
+	    }
     }
 }

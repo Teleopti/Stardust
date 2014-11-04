@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _grid = grid;
             if (!_grid.CellModels.ContainsKey("ColorPickerCell"))
                 _grid.CellModels.Add("ColorPickerCell", new ColorPickerCellModel(_grid.Model));
+			if (!_grid.CellModels.ContainsKey("NumericCell"))
+				_grid.CellModels.Add("NumericCell", new NumericCellModel(_grid.Model));
         }
 
 

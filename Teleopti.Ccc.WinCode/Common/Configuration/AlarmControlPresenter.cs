@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void QueryStaffingEffect(GridQueryCellInfoEventArgs e)
         {
-            e.Style.CellType = "NumericCell";
+			e.Style.CellType = "NumericCell";
             e.Style.CellValue  = _alarmTypes[e.RowIndex - 1].StaffingEffect ;
         }
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         private void QueryTimespan(GridQueryCellInfoEventArgs e)
         {
             e.Style.CellValue = _alarmTypes[e.RowIndex - 1].ThresholdTime.TotalSeconds ;
-            e.Style.CellType = "NumericCell";
+			e.Style.CellType = "NumericCell";
         }
 
         private void QueryUpdatedBy(GridQueryCellInfoEventArgs e)
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void NewStaffingEffect(GridSaveCellInfoEventArgs e)
         {
-             _alarm.StaffingEffect  = (double)e.Style.CellValue;
+			_alarm.StaffingEffect = (double)e.Style.CellValue;
         }
 
         private void NewColor(GridSaveCellInfoEventArgs e)
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void NewTimeSpan(GridSaveCellInfoEventArgs e)
         {
-            double d = (double) e.Style.CellValue;
+			double d = (double)e.Style.CellValue;
             if(d< 0) return;
 
             _alarm.ThresholdTime = TimeSpan.FromSeconds(d);
