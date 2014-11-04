@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface IIntraIntervalOptimizer
 	{
-		IList<ISkillStaffPeriod> Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IList<ISkillStaffPeriod> intervalIssuesBefore);
+		IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		bool IsCanceled { get; }
 		void Reset();
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
-		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private readonly ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private bool _cancelMe;
@@ -31,17 +31,17 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockScheduler teamBlockScheduler, IShiftProjectionCacheManager shiftProjectionCacheManager,
-			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor,
 			ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator,
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+			IIntraIntervalIssueCalculator intraIntervalIssueCalculator)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockScheduler = teamBlockScheduler;
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
-			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
 			_skillStaffPeriodEvaluator = skillStaffPeriodEvaluator;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
 		}
 
 		public void Reset()
@@ -55,38 +55,33 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			get { return _cancelMe || (_progressEvent != null && _progressEvent.UserCancel); }
 		}
 
-		public IList<ISkillStaffPeriod> Optimize(ISchedulingOptions schedulingOptions,
+		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IList<ISkillStaffPeriod> intervalIssuesBefore)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
 		{
-			IList<ISkillStaffPeriod> intervalIssuesAfter = new List<ISkillStaffPeriod>();
+			IIntraIntervalIssues intervalIssuesAfter = new IntraIntervalIssues();
+
 			var notBetter = true;
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 			var progressCounter = 0;
 			_progressEvent = null;
+
+			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
+			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
+			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
 
 			rollbackService.ClearModificationCollection();
 			while (notBetter)
 			{
 				if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 
-				intervalIssuesAfter.Clear();
-				var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
 				var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
-
-				var shiftProjectionCache = _shiftProjectionCacheManager.ShiftProjectionCacheFromShift(daySchedule.GetEditorShift(),
-					dateOnly, timeZoneInfo);
+				var shiftProjectionCache = _shiftProjectionCacheManager.ShiftProjectionCacheFromShift(daySchedule.GetEditorShift(), dateOnly, timeZoneInfo);
 				schedulingOptions.AddNotAllowedShiftProjectionCache(shiftProjectionCache);
 
-				var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
-				var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
-					schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
-
-				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> {daySchedule},
-					rollbackService, true);
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlock, dateOnly, schedulingOptions, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
+				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlock, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
 
 				if (!success)
 				{
@@ -94,25 +89,33 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
 				}
 
-				var skillDays = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
-				intervalIssuesAfter = _skillDayIntraIntervalIssueExtractor.Extract(skillDays, skill);
+				intervalIssuesAfter = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
+				
+				if (!success) break;
+				if (!checkDayAfter && intervalIssuesAfter.IssuesOnDay.Count == 0) break;
+				if (checkDayAfter && intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
+				
+				notBetter = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayBefore, intervalIssuesAfter.IssuesOnDayBefore);
+				notBetter = notBetter || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+				notBetter = notBetter || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
 
-				if (intervalIssuesAfter.Count == 0 || !success)
+				if (!notBetter)
 				{
-					break;
+					var today = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+					var dayAfter = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
+
+					if (!checkDayAfter) notBetter = !today;
+					if (checkDayAfter) notBetter = !dayAfter;
 				}
 
-				notBetter = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore, intervalIssuesAfter);
-
-				if ((progressCounter%10) == 0)
-					OnReportProgress(string.Concat("(", progressCounter, "/", intervalIssuesAfter.Count, ")"));
+				if ((progressCounter % 10) == 0)
+					OnReportProgress(string.Concat("(", progressCounter, "/", intervalIssuesAfter.IssuesOnDay.Count, ")"));
 
 				progressCounter++;
 			}
 
 			return intervalIssuesAfter;
 		}
-
 
 		public void OnReportProgress(string message)
 		{

@@ -28,14 +28,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private ISkill _skill;
 		private IList<ISkill> _skills;
 		private ISkillDay _skillDay;
-		private IList<ISkillDay> _skillDays;
 		private DateOnly _dateOnly;
-		private ISkillStaffPeriod _skillStaffPeriod;
 		private ISkillStaffPeriod _skillStaffPeriodAfter;
-		private IList<ISkillStaffPeriod> _issuesBefore;
+		private IIntraIntervalIssues _issuesBefore;
 		private IScheduleDictionary _scheduleDictionary;
-		private IList<ISkillStaffPeriod> _issuesAfter;
-		
+		private IList<ISkillStaffPeriod> _skillStaffPeriodIssuesAfter;
+		private IIntraIntervalIssueCalculator _intervalIssueCalculator;
+		private List<ISkillStaffPeriod> _skillStaffPeriodIssuesBefore;
+		private ISkillStaffPeriod _skillStaffPeriodBefore;
+		private IntraIntervalIssues _issuesAfter;
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -43,7 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_skillDayIntraIntervalIssueExtractor = _mock.StrictMock<ISkillDayIntraIntervalIssueExtractor>();
 			_scheduleDayIntraIntervalIssueExtractor = _mock.StrictMock<IScheduleDayIntraIntervalIssueExtractor>();
 			_intraIntervalOptimizer = _mock.StrictMock<IIntraIntervalOptimizer>();
-			_target = new IntraIntervalOptimizationService(_skillDayIntraIntervalIssueExtractor, _scheduleDayIntraIntervalIssueExtractor, _intraIntervalOptimizer);
+			_intervalIssueCalculator = _mock.StrictMock<IIntraIntervalIssueCalculator>();
+			_target = new IntraIntervalOptimizationService(_scheduleDayIntraIntervalIssueExtractor, _intraIntervalOptimizer, _intervalIssueCalculator);
 
 			_schedulingOptions = new SchedulingOptions();
 			_dateOnly = new DateOnly(2014, 1, 1);
@@ -58,38 +61,42 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_skill = SkillFactory.CreateSkill("skill");
 			_skills = new List<ISkill>{_skill};
 			_skillDay = _mock.StrictMock<ISkillDay>();
-			_skillDays = new List<ISkillDay>{_skillDay};
-			_skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriodAfter = _mock.StrictMock<ISkillStaffPeriod>();
-			_issuesBefore = new List<ISkillStaffPeriod> { _skillStaffPeriod };
-			_issuesAfter = new List<ISkillStaffPeriod>{_skillStaffPeriodAfter};
+			_skillStaffPeriodBefore = _mock.StrictMock<ISkillStaffPeriod>();
+			_issuesBefore = new IntraIntervalIssues();
+			_issuesAfter = new IntraIntervalIssues();
+			_skillStaffPeriodIssuesAfter = new List<ISkillStaffPeriod>{_skillStaffPeriodAfter};
+			_skillStaffPeriodIssuesBefore = new List<ISkillStaffPeriod> { _skillStaffPeriodBefore };
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 		}
 
 		[Test]
 		public void ShouldExecute()
 		{
+			_issuesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
+			_issuesBefore.IssuesOnDayAfter = _skillStaffPeriodIssuesBefore;
+			_issuesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
+			_issuesAfter.IssuesOnDayAfter = _skillStaffPeriodIssuesAfter;
+
 			using (_mock.Record())
 			{
 				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
-				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {_dateOnly})).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesBefore);
+				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
+				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore, _skill)).Return(_scheduleDays);
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_intraIntervalOptimizer.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issuesBefore)).Return(_issuesAfter);
-				Expect.Call(_skillStaffPeriodAfter.NoneEntityClone()).Return(_skillStaffPeriodAfter);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(_scheduleDays);
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(_scheduleDays);
+				Expect.Call(_intraIntervalOptimizer.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issuesBefore, false)).Return(_issuesAfter);
+				Expect.Call(_intraIntervalOptimizer.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issuesAfter, true)).Return(_issuesAfter);
 				Expect.Call(() => _intraIntervalOptimizer.Reset());
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
 			}
 
 			using (_mock.Playback())
 			{
-				_target.Execute(_schedulingOptions,_dateOnlyPeriod,_scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros,_rollbackService, _resourceCalculateDelayer);
-				Assert.AreEqual(_skillStaffPeriodAfter, _issuesBefore[0]);
+				_target.Execute(_schedulingOptions, _dateOnlyPeriod, _scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros, _rollbackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -97,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		public void ShouldSkipMaxSeatSkills()
 		{
 			var maxSeatSkill = SkillFactory.CreateSiteSkill("maxSeat");
-			_skills = new List<ISkill>{maxSeatSkill};
+			_skills = new List<ISkill> { maxSeatSkill };
 
 			using (_mock.Record())
 			{
@@ -124,33 +131,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(new List<ISkillStaffPeriod>());
-				Expect.Call(() => _intraIntervalOptimizer.Reset());
-				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
-			}
-
-			using (_mock.Playback())
-			{
-				_target.Execute(_schedulingOptions, _dateOnlyPeriod, _scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros, _rollbackService, _resourceCalculateDelayer);
-			}
-		}
-
-		[Test]
-		public void ShouldStopWhenIssuesSolved()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _intraIntervalOptimizer.ReportProgress += _target.OnReportProgress);
-				Expect.Call(_intraIntervalOptimizer.IsCanceled).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesBefore);
+				Expect.Call(_intervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issuesBefore);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore, _skill)).Return(_scheduleDays);
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_intraIntervalOptimizer.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issuesBefore)).Return(new List<ISkillStaffPeriod>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDay, _skill)).Return(new List<IScheduleDay>());
+				Expect.Call(_scheduleDayIntraIntervalIssueExtractor.Extract(_scheduleDictionary, _dateOnly, _issuesBefore.IssuesOnDayAfter, _skill)).Return(new List<IScheduleDay>());
 				Expect.Call(() => _intraIntervalOptimizer.Reset());
 				Expect.Call(() => _intraIntervalOptimizer.ReportProgress -= _target.OnReportProgress);
 			}
@@ -158,7 +142,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			using (_mock.Playback())
 			{
 				_target.Execute(_schedulingOptions, _dateOnlyPeriod, _scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros, _rollbackService, _resourceCalculateDelayer);
-				Assert.IsEmpty(_issuesBefore);
 			}
 		}
 
@@ -178,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			using (_mock.Playback())
 			{
 				_target.Execute(_schedulingOptions, _dateOnlyPeriod, _scheduleDays, _schedulingResultStateHolder, _allScheduleMatrixPros, _rollbackService, _resourceCalculateDelayer);
-			}	
+			}
 		}
 	}
 }

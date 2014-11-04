@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private ITeamBlockScheduler _teamBlockScheduler;
 		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
-		private ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
 		private ISchedulingOptions _schedulingOptions;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IList<IScheduleMatrixPro> _allScheduleMatrixPros;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISkill _skill;
-		private IList<ISkillStaffPeriod> _issusesBefore;
+		private IIntraIntervalIssues _issusesBefore;
 		private IScheduleRange _scheduleRange;
 		private IScheduleDay _scheduleDay;
 		private IEditableShift _editableShift;
@@ -39,11 +38,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IShiftProjectionCache _shiftProjectionCache;
 		private ITeamInfo _teamInfo;
 		private ITeamBlockInfo _teamBlockInfo;
-		private IList<ISkillDay> _skillDays;
-		private ISkillStaffPeriod _skillStaffPeriod;
-		private IList<ISkillStaffPeriod> _issuesAfter;
+		private ISkillStaffPeriod _skillStaffPeriodBefore;
+		private IList<ISkillStaffPeriod> _skillStaffPeriodIssuesAfter;
 		private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private List<IScheduleDay> _scheduleDayList;
+		private IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
+		private IntraIntervalIssues _issusesAfter;
+		private ISkillStaffPeriod _skillStaffPeriodAfter;
+		private List<ISkillStaffPeriod> _skillStaffPeriodIssuesBefore;
 
 		[SetUp]
 		public void SetUp()
@@ -53,13 +55,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_teamBlockInfoFactory = _mock.StrictMock<ITeamBlockInfoFactory>();
 			_teamBlockScheduler = _mock.StrictMock<ITeamBlockScheduler>();
 			_shiftProjectionCacheManager = _mock.StrictMock<IShiftProjectionCacheManager>();
-			_skillDayIntraIntervalIssueExtractor = _mock.StrictMock<ISkillDayIntraIntervalIssueExtractor>();
 			_skillStaffPeriodEvaluator = _mock.StrictMock<ISkillStaffPeriodEvaluator>();
 			_deleteAndResourceCalculateService = _mock.StrictMock<IDeleteAndResourceCalculateService>();
-			_target = new IntraIntervalOptimizer(_teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler,
-				_shiftProjectionCacheManager, _skillDayIntraIntervalIssueExtractor, _skillStaffPeriodEvaluator,
-				_deleteAndResourceCalculateService);
-			
+			_intraIntervalIssueCalculator = _mock.StrictMock<IIntraIntervalIssueCalculator>();
+			_target = new IntraIntervalOptimizer(_teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler,_shiftProjectionCacheManager, _skillStaffPeriodEvaluator,_deleteAndResourceCalculateService, _intraIntervalIssueCalculator);
 			_schedulingOptions = new SchedulingOptions();
 			_rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
@@ -68,7 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_allScheduleMatrixPros = new List<IScheduleMatrixPro>();
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_skill = SkillFactory.CreateSkill("skill");
-			_issusesBefore = new List<ISkillStaffPeriod>();
+			_issusesBefore = new IntraIntervalIssues();
+			_issusesAfter = new IntraIntervalIssues();
 			_scheduleRange = _mock.StrictMock<IScheduleRange>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_editableShift = _mock.StrictMock<IEditableShift>();
@@ -76,16 +76,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
-			_skillDays = new List<ISkillDay>();
-			_skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
-			_issuesAfter = new List<ISkillStaffPeriod>{_skillStaffPeriod};
+			_skillStaffPeriodBefore = _mock.StrictMock<ISkillStaffPeriod>();
+			_skillStaffPeriodAfter = _mock.StrictMock<ISkillStaffPeriod>();
+			_skillStaffPeriodIssuesAfter = new List<ISkillStaffPeriod>{_skillStaffPeriodAfter};
+			_skillStaffPeriodIssuesBefore = new List<ISkillStaffPeriod> { _skillStaffPeriodBefore };
 			_scheduleDayList = new List<IScheduleDay> { _scheduleDay };
-
 		}
 
 		[Test]
-		public void ShouldReturnIssuesWhenResultGetsBetter()
+		public void ShouldReturnIssuesWhenResultGetsBetterButNotSolved()
 		{
+			_issusesBefore.IssuesOnDayBefore = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDayAfter = _skillStaffPeriodIssuesBefore;
+
+			_issusesAfter.IssuesOnDayBefore = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDayAfter = _skillStaffPeriodIssuesAfter;
+
+
 			using (_mock.Record())
 			{
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -95,18 +104,58 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
-				Expect.Call(
-					() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService,_resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {_dateOnly})).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesAfter);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_issusesBefore, _issuesAfter)).Return(true);
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(true);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore);
-				Assert.IsNotEmpty(result);
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				Assert.IsNotEmpty(result.IssuesOnDay);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnIssuesWhenResultGetsBetterButNotSolvedDayAfter()
+		{
+			_issusesBefore.IssuesOnDayBefore = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDayAfter = _skillStaffPeriodIssuesBefore;
+
+			_issusesAfter.IssuesOnDayBefore = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDayAfter = _skillStaffPeriodIssuesAfter;
+
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(true);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, true);
+				Assert.IsNotEmpty(result.IssuesOnDayAfter);
 			}
 		}
 
@@ -122,82 +171,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(new List<ISkillStaffPeriod>());
-				Expect.Call(
-					() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore);
-				Assert.IsEmpty(result);
-			}	
-		}
-
-		[Test]
-		public void ShouldRollbackResourceCalculateAndReturnIssuesWhenScheduleFailed()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
-				Expect.Call(
-					() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(false).IgnoreArguments();
-				Expect.Call(() => _rollbackService.Rollback());
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesAfter);
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				Assert.IsEmpty(result.IssuesOnDay);
 			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore);
-				Assert.IsNotEmpty(result);
-			}		
 		}
 
 		[Test]
-		public void ShouldUserCancel()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
-				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
-				Expect.Call(
-					() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesAfter);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_issusesBefore, _issuesAfter)).Return(false);
-			}
-
-			using (_mock.Playback())
-			{
-				_target.ReportProgress += _target_ReportProgress;
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore);
-				Assert.IsTrue(_target.IsCanceled);
-				Assert.IsNotEmpty(result);
-				_target.ReportProgress -= _target_ReportProgress;
-				_target.Reset();
-				Assert.IsFalse(_target.IsCanceled);
-			}			
-		}
-
-		[Test]
-		public void ShouldCancel()
+		public void ShouldReturnNoIssuesWhenSolvedDayAfter()
 		{
 			using (_mock.Record())
 			{
@@ -210,21 +197,81 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_issuesAfter);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_issusesBefore, _issuesAfter)).Return(false);
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, true);
+				Assert.IsEmpty(result.IssuesOnDayAfter);
+			}
+		}
+
+		[Test]
+		public void ShouldRollbackResourceCalculateAndReturnIssuesWhenScheduleFailed()
+		{
+			_issusesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(false).IgnoreArguments();
+				Expect.Call(() => _rollbackService.Rollback());
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				Assert.IsNotEmpty(result.IssuesOnDay);
+			}
+		}
+
+		[Test]
+		public void ShouldUserCancel()
+		{
+			_issusesBefore.IssuesOnDayBefore = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDayAfter = _skillStaffPeriodIssuesBefore;
+
+			_issusesAfter.IssuesOnDayBefore = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDayAfter = _skillStaffPeriodIssuesAfter;
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(true);
 			}
 
 			using (_mock.Playback())
 			{
 				_target.ReportProgress += _target_ReportProgress;
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore);
+				_target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
 				Assert.IsTrue(_target.IsCanceled);
-				Assert.IsNotEmpty(result);
 				_target.ReportProgress -= _target_ReportProgress;
 				_target.Reset();
 				Assert.IsFalse(_target.IsCanceled);
-			}
+			}			
 		}
 
 		void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)

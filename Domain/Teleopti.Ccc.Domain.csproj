@@ -384,6 +384,7 @@
     <Compile Include="Aop\Core\IResolvedAspect.cs" />
     <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssues.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizer.cs" />

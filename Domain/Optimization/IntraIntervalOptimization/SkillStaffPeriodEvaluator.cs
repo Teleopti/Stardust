@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	public interface ISkillStaffPeriodEvaluator
 	{
 		bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter);
+		bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter);
 	}
 
 	public class SkillStaffPeriodEvaluator : ISkillStaffPeriodEvaluator
@@ -25,6 +26,17 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				var better = isBetter(skillStaffPeriodAfter, listBefore);
 				if (better) return true;
+			}
+
+			return false;
+		}
+
+		public bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter)
+		{
+			foreach (var skillStaffPeriodAfter in listAfter)
+			{
+				var worse = isWorse(skillStaffPeriodAfter, listBefore);
+				if (worse) return true;
 			}
 
 			return false;

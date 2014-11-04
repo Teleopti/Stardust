@@ -13,19 +13,19 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 	public class IntraIntervalOptimizationService : IIntraIntervalOptimizationService
 	{
-		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private readonly IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
+		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private string _progressSkill;
 		private string _progressDate;
 		private string _progressPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public IntraIntervalOptimizationService(ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor, IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor, IIntraIntervalOptimizer intraIntervalOptimizer)
+		public IntraIntervalOptimizationService(IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor, IIntraIntervalOptimizer intraIntervalOptimizer, IIntraIntervalIssueCalculator intraIntervalIssueCalculator)
 		{
-			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
 			_scheduleDayIntraIntervalIssueExtractor = scheduleDayIntraIntervalIssueExtractor;
-			_intraIntervalOptimizer = intraIntervalOptimizer;	
+			_intraIntervalOptimizer = intraIntervalOptimizer;
+			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -51,11 +51,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					_progressDate = dateOnly.ToShortDateString(cultureInfo);
 					if (_intraIntervalOptimizer.IsCanceled) break;
 
-					var skillDays = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
-					var intervalIssuesBefore = _skillDayIntraIntervalIssueExtractor.Extract(skillDays, skill);
-					if (intervalIssuesBefore.Count == 0) continue;
-
-					var scheduleDaysWithIssue = _scheduleDayIntraIntervalIssueExtractor.Extract(schedulingResultStateHolder.Schedules, dateOnly, intervalIssuesBefore, skill);
+					var intervalIssuesBefore = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
+					var schedules = schedulingResultStateHolder.Schedules;
+					var scheduleDaysWithIssue = _scheduleDayIntraIntervalIssueExtractor.Extract(schedules, dateOnly, intervalIssuesBefore.IssuesOnDay, skill);
+					var scheduleDaysWithIssueDayAfter = _scheduleDayIntraIntervalIssueExtractor.Extract(schedules, dateOnly, intervalIssuesBefore.IssuesOnDayAfter, skill);
 
 					foreach (var scheduleDay in scheduleDaysWithIssue)
 					{
@@ -67,15 +66,24 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 						_progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
-						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore);
+						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, false);
+						if (intervalIssuesAfter.IssuesOnDay.Count == 0) break;
+						intervalIssuesBefore = intervalIssuesAfter;
+					}
 
-						intervalIssuesBefore.Clear();
-						if (intervalIssuesAfter.Count == 0) break;
+					foreach (var scheduleDay in scheduleDaysWithIssueDayAfter)
+					{
+						if (_intraIntervalOptimizer.IsCanceled) break;
 
-						foreach (var skillStaffPeriod in intervalIssuesAfter)
-						{
-							intervalIssuesBefore.Add((ISkillStaffPeriod) skillStaffPeriod.NoneEntityClone());
-						}
+						var person = scheduleDay.Person;
+
+						if (!personHashSet.Contains(person)) continue;
+
+						_progressPerson = person.Name.ToString();
+						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
+						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
+						if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
+						intervalIssuesBefore = intervalIssuesAfter;
 					}
 				}
 			}

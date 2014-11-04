@@ -48,7 +48,32 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		}
 
 		[Test]
-		public void ShouldReturnFalseWhenPeriodIsWorse()
+		public void ShouldReturnTrueWhenPeriodIsWorseAndCheckingForWorse()
+		{
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
+			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
+			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
+
+			skillStaffPeriod1.HasIntraIntervalIssue = true;
+			skillStaffPeriod2.HasIntraIntervalIssue = true;
+			skillStaffPeriod3.HasIntraIntervalIssue = true;
+			skillStaffPeriod4.HasIntraIntervalIssue = true;
+
+			skillStaffPeriod1.IntraIntervalValue = 0.5;
+			skillStaffPeriod2.IntraIntervalValue = 0.9;
+			skillStaffPeriod3.IntraIntervalValue = 0.9;
+			skillStaffPeriod4.IntraIntervalValue = 0.5;
+
+			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 };
+			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
+
+			var result = _target.ResultIsWorse(listBefore, listAfter);
+			Assert.IsTrue(result);	
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenPeriodIsWorseAndCheckingForBetter()
 		{
 			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
 			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
