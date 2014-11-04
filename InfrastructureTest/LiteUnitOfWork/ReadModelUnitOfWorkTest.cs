@@ -170,7 +170,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			using (new TestTable("TestTable2"))
 			using (var c = buildContainer())
 			{
-				Exception e = null;
 				var thread1 = onAnotherThread(() =>
 				{
 					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
