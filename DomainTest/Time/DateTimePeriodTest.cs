@@ -1032,5 +1032,20 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(returnList[0], new DateTimePeriod(new DateTime(2013, 02, 13, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc)));
             Assert.AreEqual(returnList[1], new DateTimePeriod(new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 15, 0, 0, 0, DateTimeKind.Utc)));
         }
+
+			[Test, Ignore("Have this failing test until code is fixed.")]
+			public void ShouldBehaveAsBeforeBecauseLegacyCodeIsDependantOnThisBehaviour()
+			{
+				_period = new DateTimePeriod(
+								new DateTime(2014, 10, 26, 0, 45, 0, DateTimeKind.Utc),
+								new DateTime(2014, 10, 26, 1, 0, 0, DateTimeKind.Utc));
+
+				Assert.AreEqual(
+						new TimePeriod(
+								TimeSpan.FromHours(2).Add(
+										TimeSpan.FromMinutes(45)),
+								TimeSpan.FromHours(3)),
+						_period.TimePeriod((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))));
+			}
     }
 }
