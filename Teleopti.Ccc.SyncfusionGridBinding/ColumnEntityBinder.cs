@@ -208,8 +208,10 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			{
 				T item = _collection[e.ColIndex - 1];
 				var modelProperty = _gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].ValueMember;
+				var typeName = _gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].CellValueType.Name;
+				if (e.Style.IsEmpty)
+					e.Style.CellValue = Type.GetType(typeName);
 				modelProperty.SetModelValue(item, e.Style.CellValue);
-
 			}
 			e.Handled = true;
 		}
