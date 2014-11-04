@@ -97,6 +97,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />
+    <Compile Include="FakeConfigReader.cs" />
     <Compile Include="MutableFakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Web\FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />

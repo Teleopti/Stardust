@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
@@ -23,6 +25,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
@@ -170,19 +173,8 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				Exception e = null;
 				var thread1 = onAnotherThread(() =>
 				{
-					try
-					{
-						c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
-						c.Resolve<Outer>().DoAction(uow =>
-						{
-							1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate());
-						});
-					}
-					catch (Exception ex)
-					{
-						e = ex;
-						throw;
-					}
+					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
+					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 				});
 				var thread2 = onAnotherThread(() =>
 				{
@@ -195,8 +187,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				});
 				thread1.Join();
 				thread2.Join();
-
-				if (e != null) throw e;
 
 				TestTable.Values("TestTable1").Count().Should().Be(1000);
 				TestTable.Values("TestTable2").Count().Should().Be(0);
@@ -217,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		}
 
 		[Test]
-		public void ShouldProduceUnitOfWorkForEachDataSource()
+		public void ShouldProduceUnitOfWorkForEachDataSourceOnPrincipal()
 		{
 			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests))
 			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
@@ -226,7 +216,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				var factory = c.Resolve<IDataSourcesFactory>();
 				var dataSource1 = factory.Create("One", ConnectionStringHelper.ConnectionStringUsedInTests, null);
 				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
-				//c.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] { dataSource1, dataSource2 });
 
 				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
 				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
@@ -236,6 +225,34 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1);
+			}
+		}
+
+		[Test]
+		public void ShouldProduceUnitOfWorkForDataSourceMatchingRtaConnectionStringIfNoPrincipal()
+		{
+			// ConfigurationManager.ConnectionStrings["RtaApplication"]
+			using (new TestTable("TestTable"))
+			using (var c = buildContainer())
+			{
+				var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
+				rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
+				c.Resolve<FakeConfigReader>().ConnectionStrings = new ConnectionStringSettingsCollection
+				{
+					new ConnectionStringSettings("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix),
+					new ConnectionStringSettings("RtaApplication", rtaConnectionString)
+				};
+
+				var factory = c.Resolve<IDataSourcesFactory>();
+				var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
+				var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+				c.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] { dataSource1, dataSource2 }.Randomize());
+
+				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(null);
+
+				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+
+				TestTable.Values("TestTable").Count().Should().Be(1);
 			}
 		}
 
@@ -252,18 +269,24 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			builder.RegisterModule<CommonModule>();
 			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
 
-			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+
+			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterType<FakeDataSourcesProvider>().AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
 			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
+			builder.RegisterType<FakeConfigReader>().As<IConfigReader>().AsSelf().SingleInstance();
 
 			var container = builder.Build();
 
 			var dataSource = container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-			//container.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] {dataSource});
-			container.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource, null, null), null));
+			container.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] { dataSource });
+			container.Resolve<FakeConfigReader>().ConnectionStrings = new ConnectionStringSettingsCollection
+			{
+				new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
+			};
+			container.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(null);
 
 			return container;
 		}
@@ -310,7 +333,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			});
 			return result;
 		}
-
 	}
 
 	public class TestException : Exception

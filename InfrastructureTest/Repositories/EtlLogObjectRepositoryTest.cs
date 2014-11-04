@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadLogObjectDetails()
 		{
-			var target = new EtlLogObjectRepository(new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal())));
+			var target = new EtlLogObjectRepository(CurrentDataSource.Make());
 			var model = target.Load();
 			Assert.That(model, Is.Not.Null);
 		}

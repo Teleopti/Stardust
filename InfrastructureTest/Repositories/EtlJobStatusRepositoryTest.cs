@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadJobStatusModel()
 		{
-			var target = new EtlJobStatusRepository(new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal())));
+			var target = new EtlJobStatusRepository(CurrentDataSource.Make());
 			var model = target.Load(new DateOnly(2010,1,1), true);
 			Assert.That(model,Is.Not.Null);
 		}

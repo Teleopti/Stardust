@@ -10,5 +10,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			get { return ConfigurationManager.AppSettings; }
 		}
+
+		public ConnectionStringSettingsCollection ConnectionStrings
+		{
+			get { return ConfigurationManager.ConnectionStrings; }
+		}
+
 	}
 }

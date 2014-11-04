@@ -98,6 +98,7 @@
       <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
     <Reference Include="System.Data" />
