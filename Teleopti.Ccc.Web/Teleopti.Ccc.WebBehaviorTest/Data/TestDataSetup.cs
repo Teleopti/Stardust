@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				{
 					new EventsMessageSender(
 						new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(),
-							new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
+							new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
 
 				}, true);
 				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				{
 					new EventsMessageSender(
 						new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(),
-							new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
+							new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
 
 				}, false);
 			}

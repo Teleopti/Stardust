@@ -12,6 +12,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -166,10 +167,22 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			using (new TestTable("TestTable2"))
 			using (var c = buildContainer())
 			{
+				Exception e = null;
 				var thread1 = onAnotherThread(() =>
 				{
-					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
-					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					try
+					{
+						c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
+						c.Resolve<Outer>().DoAction(uow =>
+						{
+							1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate());
+						});
+					}
+					catch (Exception ex)
+					{
+						e = ex;
+						throw;
+					}
 				});
 				var thread2 = onAnotherThread(() =>
 				{
@@ -182,6 +195,8 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				});
 				thread1.Join();
 				thread2.Join();
+
+				if (e != null) throw e;
 
 				TestTable.Values("TestTable1").Count().Should().Be(1000);
 				TestTable.Values("TestTable2").Count().Should().Be(0);
@@ -198,6 +213,29 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				target.DoAction(uow => { });
 
 				c.Resolve<ICurrentReadModelUnitOfWork>().Current().Should().Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldProduceUnitOfWorkForEachDataSource()
+		{
+			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests))
+			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			using (var c = buildContainer())
+			{
+				var factory = c.Resolve<IDataSourcesFactory>();
+				var dataSource1 = factory.Create("One", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
+				//c.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] { dataSource1, dataSource2 });
+
+				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
+				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+
+				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
+				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+
+				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);
+				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1);
 			}
 		}
 
@@ -219,12 +257,14 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
 			builder.RegisterType<FakeDataSourcesProvider>().AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
+			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 
 			var container = builder.Build();
 
 			var dataSource = container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+			//container.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] {dataSource});
+			container.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource, null, null), null));
 
-			container.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] {dataSource});
 			return container;
 		}
 	}

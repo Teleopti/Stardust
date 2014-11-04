@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var bu = new BusinessUnit("BU 1");
             PersistAndRemoveFromUnitOfWork(bu);
             var buId = bu.Id.Value;
-            var target = new BusinessUnitFilterOverrider(CurrentUnitOfWork.Make(), new CurrentIdentity());
+            var target = new BusinessUnitFilterOverrider(CurrentUnitOfWork.Make(), new CurrentIdentity(new CurrentTeleoptiPrincipal()));
             
             var site = new Site("1");
             site.SetBusinessUnit(bu);
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var bu1 = new BusinessUnit("BU 1");
             PersistAndRemoveFromUnitOfWork(bu1);
 
-            var target = new BusinessUnitFilterOverrider(CurrentUnitOfWork.Make(), new CurrentIdentity());
+            var target = new BusinessUnitFilterOverrider(CurrentUnitOfWork.Make(), new CurrentIdentity(new CurrentTeleoptiPrincipal()));
 
             var site = new Site("1");
             site.SetBusinessUnit(bu1);

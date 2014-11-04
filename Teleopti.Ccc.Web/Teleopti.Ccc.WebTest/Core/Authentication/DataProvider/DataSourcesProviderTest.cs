@@ -147,6 +147,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				get { throw new NotImplementedException(); }
 			}
 
+			public IReadModelUnitOfWorkFactory ReadModel
+			{
+				get { throw new NotImplementedException(); }
+			}
+
 			public IUnitOfWorkFactory Application
 			{
 				get { throw new NotImplementedException(); }

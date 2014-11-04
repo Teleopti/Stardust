@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -194,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void VerifyDefaultProperty()
 		{
 			MessageBrokerContainerDontUse.Configure(null, null, null);
-			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()), 
+			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext()), 
 				MessageBrokerContainerDontUse.CompositeClient());
 		}
 

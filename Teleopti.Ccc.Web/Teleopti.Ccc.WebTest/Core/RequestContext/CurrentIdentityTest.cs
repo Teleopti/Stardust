@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			Thread.CurrentPrincipal = principal;
 
-			var target = new CurrentIdentity();
+			var target = new CurrentIdentity(new CurrentTeleoptiPrincipal());
 
 			target.Current().Should().Be.SameInstanceAs(identity);
 		}

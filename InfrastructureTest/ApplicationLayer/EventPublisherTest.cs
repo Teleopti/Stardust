@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
             var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
             var resolver = MockRepository.GenerateMock<IResolve>();
             resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
-            var target = new EventPublisher(resolver, new EventContextPopulator(new CurrentIdentity(), new FakeCurrentInitiatorIdentifier()));
+            var target = new EventPublisher(resolver, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new FakeCurrentInitiatorIdentifier()));
             var @event = new TestDomainEvent();
 
             target.Publish(@event);

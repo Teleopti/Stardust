@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 
 			return createTarget(loggedOnUser, 
-				new CurrentDataSource(new CurrentIdentity()),	
+				new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal())),	
 				currentBu,
 				new GlobalSettingDataRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
 		}

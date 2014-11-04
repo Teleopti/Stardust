@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-				                       DataSourceConfigurationSetter.ForDesktop()),
+									   DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext()),
 				messageBroker
 				) {
 					MessageBrokerDisabled = messageBrokerDisabled
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Main
             }
         	
 			var sendToServiceBus = new ServiceBusSender();
-			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WinCode.Main
                                                           new TeamOrSiteChangedMessageSender(eventPublisher),
                                                           new PersonChangedMessageSender(eventPublisher),
                                                           new PersonPeriodChangedMessageSender(eventPublisher)
-												      }, DataSourceConfigurationSetter.ForDesktop()),
+												      }, DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext()),
 					messageBroker)
         			{
         				MessageBrokerDisabled = messageBrokerDisabled

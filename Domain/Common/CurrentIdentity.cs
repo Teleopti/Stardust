@@ -4,9 +4,19 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class CurrentIdentity : ICurrentIdentity
 	{
+		private readonly ICurrentTeleoptiPrincipal _principal;
+
+		public CurrentIdentity(ICurrentTeleoptiPrincipal principal)
+		{
+			_principal = principal;
+		}
+
 		public ITeleoptiIdentity Current()
 		{
-			return TeleoptiPrincipal.Current.Identity as ITeleoptiIdentity;
+			var principal = _principal.Current();
+			if (principal == null)
+				return null;
+			return principal.Identity as ITeleoptiIdentity;
 		}
 	}
 }

@@ -1,28 +1,27 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class ReadModelUnitOfWorkAspect : IReadModelUnitOfWorkAspect
 	{
-		private readonly IAvailableDataSourcesProvider _availableDataSourcesProvider;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public ReadModelUnitOfWorkAspect(IAvailableDataSourcesProvider availableDataSourcesProvider)
+		public ReadModelUnitOfWorkAspect(ICurrentDataSource currentDataSource)
 		{
-			_availableDataSourcesProvider = availableDataSourcesProvider;
+			_currentDataSource = currentDataSource;
 		}
 
 		public void OnBeforeInvokation()
 		{
-			var factory = _availableDataSourcesProvider.AvailableDataSources().FirstOrDefault().ReadModel;
+			var factory = _currentDataSource.Current().ReadModel;
 			factory.StartUnitOfWork();
 		}
 
 		public void OnAfterInvokation(Exception exception)
 		{
-			var factory = _availableDataSourcesProvider.AvailableDataSources().FirstOrDefault().ReadModel;
+			var factory = _currentDataSource.Current().ReadModel;
 			factory.EndUnitOfWork(exception);
 		}
 	}

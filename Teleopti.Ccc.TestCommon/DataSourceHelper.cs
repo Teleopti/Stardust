@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
 			if (!tryRestoreDatabase(ccc7))
 			{
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static IDataSource CreateDataSourceNoBackup(IEnumerable<IMessageSender> messageSenders, bool createCcc7Database)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
 			if (createCcc7Database)
 			{
 				var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);

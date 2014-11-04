@@ -28,11 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public const string NoDataSourceName = "[not set]";
 
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
-			: this(enversConfiguration, messageSenders, dataSourceConfigurationSetter, null)
-		{
-		}
-
 		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter, ICurrentHttpContext httpContext)
 		{
 			_enversConfiguration = enversConfiguration;

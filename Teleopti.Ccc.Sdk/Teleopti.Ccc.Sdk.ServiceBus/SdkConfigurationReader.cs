@@ -5,12 +5,14 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 encryptedAppSettings.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
             	var application =
             		new InitializeApplication(
-            			new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus()),
+						new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus(), new CurrentHttpContext()),
 						messageBroker());
                 application.Start(new BasicState(), encryptedAppSettings,
                                   encryptedNHibConfigs.DecryptList(EncryptionConstants.Image1,
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public IList<IMessageSender> Create()
 		{
 			var sender = _serviceBusSender;
-			var eventPublisher = new ServiceBusEventPublisher(sender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var eventPublisher = new ServiceBusEventPublisher(sender, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 			return new List<IMessageSender>
 				{
 					new ScheduleMessageSender(eventPublisher, new ClearEvents()),
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var application =
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
-							DataSourceConfigurationSetter.ForServiceBus()),
+							DataSourceConfigurationSetter.ForServiceBus(), new CurrentHttpContext()),
 						messageBroker());
 				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
 

@@ -15,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
@@ -88,7 +89,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			var application =
 				new InitializeApplication(
 					new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-					                       DataSourceConfigurationSetter.ForEtl()), null);
+					                       DataSourceConfigurationSetter.ForEtl(), new CurrentHttpContext()), null);
 			application.MessageBrokerDisabled = true;
 			application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper(), true);
 

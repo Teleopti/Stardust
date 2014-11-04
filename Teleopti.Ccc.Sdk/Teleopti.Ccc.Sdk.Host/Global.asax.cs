@@ -10,11 +10,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             AutofacHostFactory.Container = container;
 	        var messageBroker = container.Resolve<IMessageBrokerComposite>();
 
-			var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 			var initializeApplication =
 				new InitializeApplication(
 					new DataSourcesFactory(new EnversConfiguration(),
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					                               new PersonChangedMessageSender(eventPublisher),
 					                               new PersonPeriodChangedMessageSender(eventPublisher)
 				                               },
-										   DataSourceConfigurationSetter.ForSdk()),
+										   DataSourceConfigurationSetter.ForSdk(), new CurrentHttpContext()),
 					messageBroker) { MessageBrokerDisabled = messageBrokerDisabled() };
 			string sitePath = Global.sitePath();
 			initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
