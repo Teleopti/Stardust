@@ -10,6 +10,9 @@ namespace ClickOnceSign
     {
         private static String mage = "mage.exe";
         private static ILog logFile = LogManager.GetLogger(typeof(Sign));
+        private const string AzureAdminClient = @"e:\sitesroot\5";
+        private const string AzureMyTimeClient = @"e:\sitesroot\4";
+        private const string AzureTempfolder = @"e:\temp";
 
         public static bool CoSign(
             String appDir, String application, String manifest, 
@@ -29,7 +32,7 @@ namespace ClickOnceSign
                 logFile.InfoFormat("ClickOnceSign logfile\nappDir: {0}\napplication: {1}\nmanifest: {2}\nproviderUrl: {3}certFile: {4}", appDir, application, manifest, providerUrl, certFile);
                 
                 CheckPreReqs(appDir, application, manifest, certFile);
-                String tempDir = GetTempDirectory();
+                String tempDir = GetTempDirectory(appDir);
                 CopyDir(appDir, tempDir);
                 String cd = ChangeDirectory(tempDir);
                 mage = cd + "\\mage.exe";
@@ -132,12 +135,20 @@ namespace ClickOnceSign
                 throw new Exception("Certificate file do not exists: " + certFile);         
         }
 
-        private static String GetTempDirectory()
+        private static String GetTempDirectory(String appDir)
         {
             string path = "";
             try
             {
-                path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                if (appDir.ToUpper().Contains(AzureAdminClient.ToUpper()) || appDir.ToUpper().Contains(AzureMyTimeClient.ToUpper()))
+                {
+                    path = Path.Combine(AzureTempfolder, Path.GetRandomFileName());
+                }
+                else
+                {
+                    path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                }
+                
 
                 logFile.InfoFormat("Creating directory: {0}", path);
 
