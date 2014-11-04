@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Teleopti.Analytics.Stats.TestApplication
 {
@@ -13,17 +9,16 @@ namespace Teleopti.Analytics.Stats.TestApplication
 		{
 			Console.WriteLine("Welcome to queue data generator!");
 			Console.WriteLine("\n");
-			Console.WriteLine("Write exit to close");
-			Console.WriteLine("\n");
+
 			while (true)
 			{
 				Console.WriteLine("Nhib data source name:");
 				var nhibDataSourceName = Console.ReadLine();
 				if (checkExit(nhibDataSourceName)) break;
 
-				Console.WriteLine("Queue data source name:");
-				var queueDataSourceName = Console.ReadLine();
-				if (checkExit(queueDataSourceName)) break;
+				Console.WriteLine("Queue data source id:");
+				var queueDataSourceId = Console.ReadLine();
+				if (checkExit(queueDataSourceId)) break;
 
 				Console.WriteLine("Interval length:");
 				var intervalLength = Console.ReadLine();
@@ -37,19 +32,25 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				var amountOfDays = Console.ReadLine();
 				if (checkExit(amountOfDays)) break;
 
-				Console.WriteLine("Checking database connection...");
+				Console.WriteLine("Checking data in mart.dim_date table...");
 				var db = new DatabaseConnectionHandler();
 				var dateCheck = db.GetNumberOfDaysInDimDateTable();
 				if (dateCheck.NumberOfDays == -1)
 				{
-					Console.WriteLine("Database connection failed. Press any key to exit.");
+					Console.WriteLine("No dates found in mart.dim_date. The Initial job in ETL must first be executed. Press any key to exit.");
+					Console.ReadKey();
+					break;
+				}
+				if (dateCheck.NumberOfDays == -99)
+				{
+					Console.WriteLine("Call to Analytics database failed. Check configuration file. Press any key to exit.");
 					Console.ReadKey();
 					break;
 				}
 				if (dateCheck.NumberOfDays < int.Parse(amountOfDays))
 				{
 					Console.WriteLine("You can only generate data for a maximum of " + dateCheck.NumberOfDays + " days. Continue anyway? (Y/N)");
-					if (Console.ReadLine().ToUpper() == "Y")
+					if (Console.ReadKey().Key != ConsoleKey.Y)
 						break;
 					amountOfDays = dateCheck.NumberOfDays.ToString(CultureInfo.InvariantCulture);
 				}
@@ -57,7 +58,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				var parameters = new QueueDataParameters
 				{
 					NhibDataSourcename = nhibDataSourceName,
-					QueueDataSourceName = queueDataSourceName,
+					QueueDataSourceId = int.Parse(queueDataSourceId),
 					IntervalLength = int.Parse(intervalLength),
 					AmountOfDays = int.Parse(amountOfDays),
 					AmountOfQueues = int.Parse(amountOfQueues),
@@ -66,10 +67,11 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				};
 				Console.WriteLine("Amount of rows to be posted to mart.fact_queue table is: \n" + rowsToBeGenerated(parameters));
 				Console.WriteLine("Start posting queue data by pressing P.");
-				if (Console.ReadLine().ToUpper() != "P")
+				if (Console.ReadKey().Key != ConsoleKey.P)
 					break;
 				var generator = new QueueStatsGenerator();
-				generator.Create(parameters);
+				generator.CreateAsync(parameters).Wait();
+				Console.ReadLine();
 				break;
 			}
 		}

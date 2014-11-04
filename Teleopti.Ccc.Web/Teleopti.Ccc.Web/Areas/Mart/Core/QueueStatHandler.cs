@@ -15,46 +15,46 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			_queueStatRepository = queueStatRepository;
 		}
 
-		public void Handle(QueueStatsModel queueData, string dataSource)
+		public void Handle(IEnumerable<QueueStatsModel> queueData, string nhibName, int logObjectId)
 		{
-			if(string.IsNullOrEmpty(queueData.LogObjectName))
-				throw new ArgumentException();
-
-			var logobject = _queueStatRepository.GetLogObject(queueData.LogObjectName, dataSource);
-			var queueId = _queueStatRepository.GetQueueId(queueData.QueueName, queueData.QueueId, logobject.Id, dataSource);
-			var dateTimeUtc = TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueData.DateAndTimeString),
-				TimeZoneInfo.FindSystemTimeZoneById(logobject.TimeZoneCode));
-			var dateId = _queueStatRepository.GetDateId(dateTimeUtc, dataSource);
-			if (dateId == -1)
-				throw new ArgumentException();
-			var intervalId = getIntervalInDay(dateTimeUtc, dataSource);
-
-			var factQueueModels = new List<FactQueueModel>
+			foreach (var queueStatsModel in queueData)
 			{
-				new FactQueueModel
+				var logobject = _queueStatRepository.GetLogObject(logObjectId, nhibName);
+				var queueId = _queueStatRepository.GetQueueId(queueStatsModel.QueueName, queueStatsModel.QueueId, logobject.Id, nhibName);
+				var dateTimeUtc = TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueStatsModel.IntervalStart),
+					TimeZoneInfo.FindSystemTimeZoneById(logobject.TimeZoneCode));
+				var dateId = _queueStatRepository.GetDateId(dateTimeUtc, nhibName);
+				if (dateId == -1)
+					throw new ArgumentException();
+				var intervalId = getIntervalInDay(dateTimeUtc, nhibName);
+
+				var factQueueModels = new List<FactQueueModel>
 				{
-					LogObjectId = logobject.Id,
-					QueueId = queueId,
-					DateId = dateId,
-					IntervalId = intervalId,
-					OfferedCalls = queueData.OfferedCalls,
-					AnsweredCalls = queueData.AnsweredCalls,
-					AnsweredCallsWithinServiceLevel = queueData.AnsweredCallsWithinServiceLevel, 
-					AbandonedCalls = queueData.AbandonedCalls,
-					AbandonedCallsWithinServiceLevel = queueData.AbandonedCallsWithinServiceLevel,
-					AbandonedShortCalls = queueData.AbandonedShortCalls,
-					OverflowOutCalls = queueData.OverflowOutCalls,
-					OverflowInCalls = queueData.OverflowInCalls,
-					TalkTime = queueData.TalkTime,
-					AfterCallWork = queueData.AfterCallWork,
-					HandleTime = queueData.TalkTime + queueData.AfterCallWork,
-					SpeedOfAnswer = queueData.SpeedOfAnswer,
-					TimeToAbandon = queueData.TimeToAbandon,
-					LongestDelayInQueueAnswered = queueData.LongestDelayInQueueAnswered,
-					LongestDelayInQueueAbandoned = queueData.LongestDelayInQueueAbandoned 
-				}
-			};
-			_queueStatRepository.Save(factQueueModels, dataSource);
+					new FactQueueModel
+					{
+						LogObjectId = logobject.Id,
+						QueueId = queueId,
+						DateId = dateId,
+						IntervalId = intervalId,
+						OfferedCalls = queueStatsModel.OfferedCalls,
+						AnsweredCalls = queueStatsModel.AnsweredCalls,
+						AnsweredCallsWithinServiceLevel = queueStatsModel.AnsweredCallsWithinServiceLevel,
+						AbandonedCalls = queueStatsModel.AbandonedCalls,
+						AbandonedCallsWithinServiceLevel = queueStatsModel.AbandonedCallsWithinServiceLevel,
+						AbandonedShortCalls = queueStatsModel.AbandonedShortCalls,
+						OverflowOutCalls = queueStatsModel.OverflowOutCalls,
+						OverflowInCalls = queueStatsModel.OverflowInCalls,
+						TalkTime = queueStatsModel.TalkTime,
+						AfterCallWork = queueStatsModel.AfterCallWork,
+						HandleTime = queueStatsModel.TalkTime + queueStatsModel.AfterCallWork,
+						SpeedOfAnswer = queueStatsModel.SpeedOfAnswer,
+						TimeToAbandon = queueStatsModel.TimeToAbandon,
+						LongestDelayInQueueAnswered = queueStatsModel.LongestDelayInQueueAnswered,
+						LongestDelayInQueueAbandoned = queueStatsModel.LongestDelayInQueueAbandoned
+					}
+				};
+				_queueStatRepository.Save(factQueueModels, nhibName);
+			}
 		}
 
 		private int getIntervalInDay(DateTime dateTimeUtc, string nhibName)

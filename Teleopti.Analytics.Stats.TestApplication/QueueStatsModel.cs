@@ -4,10 +4,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 {
 	public class QueueStatsModel : IQueueStatsModel
 	{
-		public string NhibName { get; set; }
-		public string LogObjectName { get; set; }
-
-		public string DateAndTimeString { get; set; }
+		public string IntervalStart { get; set; }
 		public string QueueId { get; set; }
 		public string QueueName { get; set; }
 		public int OfferedCalls { get; set; }

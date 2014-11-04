@@ -6,7 +6,7 @@ using Teleopti.Ccc.Web.Areas.Mart.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core
 {
-	public class QueueStatRepository :IQueueStatRepository
+	public class QueueStatRepository : IQueueStatRepository
 	{
 		private readonly IDatabaseConnectionHandler _databaseConnectionHandler;
 
@@ -15,28 +15,28 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			_databaseConnectionHandler = databaseConnectionHandler;
 		}
 
-		public LogObject GetLogObject(string logobjectName, string nhibDataSourceName)
+		public LogObject GetLogObject(int logObjectId, string nhibDataSourceName)
 		{
 			const string sqlText = @"SELECT  d.[datasource_id],  t.time_zone_code FROM[mart].[sys_datasource] d
-  INNER JOIN [mart].[dim_time_zone] t ON d.time_zone_id = t.time_zone_id 
-  WHERE [datasource_name] = '{0}'";
+															INNER JOIN [mart].[dim_time_zone] t ON d.time_zone_id = t.time_zone_id 
+															WHERE d.datasource_id = {0}";
 
 			LogObject logObject = null;
 			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-				command.CommandText = string.Format(sqlText, logobjectName);
+				command.CommandText = string.Format(sqlText, logObjectId);
 
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					logObject  = new LogObject
+					logObject = new LogObject
 					{
-						Id =  reader.GetInt16(reader.GetOrdinal("datasource_id")),
+						Id = reader.GetInt16(reader.GetOrdinal("datasource_id")),
 						TimeZoneCode = reader.GetString(reader.GetOrdinal("time_zone_code"))
-					
+
 					};
 				}
 				reader.Close();
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 		public int GetIntervalLength(string nhibDataSourceName)
 		{
 			const string sqlText = @"SELECT [value] FROM .[mart].[sys_configuration] WHERE [key] = 'IntervalLengthMinutes'";
-			
+
 			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
 			{
 				var command = connection.CreateCommand();
