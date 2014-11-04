@@ -19,31 +19,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public Percent ForDay(AdherencePercentageReadModel data)
 		{
-			var minIn =Convert.ToDouble(data.TimeInAdherence.TotalSeconds);
-			var minOut = Convert.ToDouble(data.TimeOutOfAdherence.TotalSeconds);
-			var fromLatestStateChange = numberOfMinutesForLastState(data.LastTimestamp, data.ShiftEnd);
+			var secondsInAdherence =Convert.ToDouble(data.TimeInAdherence.TotalSeconds);
+			var secondsOutOfAdherence = Convert.ToDouble(data.TimeOutOfAdherence.TotalSeconds);
+			var fromLatestStateChange = numberOfSecondsForLastState(data.LastTimestamp, data.ShiftEnd);
 
 			if (data.IsLastTimeInAdherence)
 			{
-				minIn += fromLatestStateChange;
+				secondsInAdherence += fromLatestStateChange;
 			}
 			else
 			{
-				minOut += fromLatestStateChange;
+				secondsOutOfAdherence += fromLatestStateChange;
 			}
 
-			var total = minIn + minOut;
+			var total = secondsInAdherence + secondsOutOfAdherence;
 
-			return new Percent(minIn / total);
+			return new Percent(secondsInAdherence / total);
 		}
 
-		private double numberOfMinutesForLastState(DateTime lastTimeStamp, DateTime? shiftEndDateTime)
+		private double numberOfSecondsForLastState(DateTime lastTimeStamp, DateTime? shiftEndDateTime)
 		{
 			if (shiftEndDateTime!=null && _now.UtcDateTime() > shiftEndDateTime)
 			{
-				return ((DateTime)shiftEndDateTime).Subtract(lastTimeStamp).TotalMinutes;
+				return ((DateTime)shiftEndDateTime).Subtract(lastTimeStamp).TotalSeconds;
 			}
-			return _now.UtcDateTime().Subtract(lastTimeStamp).TotalMinutes;				
+			return _now.UtcDateTime().Subtract(lastTimeStamp).TotalSeconds;				
 		}
 	}
 
