@@ -68,7 +68,6 @@ SET TIMESTAMP=%HOUR%:%MIN%
 
 ::Schedule task every 20 minutes
 schtasks /create /sc minute /mo 20 /tn "%taskName%" /f /ru "%admin%" /rp "%pwd%" /tr "%DIRECTORY%CopyPayrollDll.cmd" >> "%FILE%.log"
-schtasks /create /sc once /tn "%taskName2%" /f /ru "%admin%" /rp "%pwd%" /tr "E:\approot\Tools\ClickOnceSign\SignAdminClient.bat" /sd "%date%" /st "%TIMESTAMP%" >> "%FILE%.log"
 
 ::Run for the first time
 schtasks /RUN /TN "%taskName%" >> "%FILE%.log"
