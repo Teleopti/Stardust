@@ -7,18 +7,18 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class InitializeModule : Module
+	internal class InitializeModule : Module
 	{
-		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
+		private readonly IIocConfiguration _iocConfiguration;
 
-		public InitializeModule(IDataSourceConfigurationSetter dataSourceConfigurationSetter)
+		public InitializeModule(IIocConfiguration iocConfiguration)
 		{
-			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
+			_iocConfiguration = iocConfiguration;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterInstance(_dataSourceConfigurationSetter);
+			builder.RegisterInstance(_iocConfiguration.Args().DataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();

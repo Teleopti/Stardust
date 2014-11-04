@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var args = new IocArgs
 			{
 				FeatureToggle = featureTogglePath,
-				CacheLockObjectGenerator = new FixedNumberOfLockObjects(100)
+				CacheLockObjectGenerator = new FixedNumberOfLockObjects(100),
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForWeb()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)));
 			builder.RegisterModule(new CommonModule(configuration));
@@ -67,8 +68,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<AnywhereAreaModule>();
 			builder.RegisterModule<PerformanceToolAreaModule>();
 			builder.RegisterModule<ForecastingAreaModule>();
-
-			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForWeb()));
 
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 

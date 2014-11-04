@@ -152,8 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private void buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<CommonModule>();
-			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
+			builder.RegisterModule(new CommonModule(new IocArgs {DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()}));
 
 			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
 					.Select(o => o.GetType())
-					.Should().Contain(typeof (AgentStateChangedCommandHandler));
+					.Should().Contain(typeof(AgentStateChangedCommandHandler));
 			}
 		}
 
@@ -103,9 +103,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private IContainer BuildContainer()
 		{
 			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(), null);
+			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
 		{
 			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
+			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
 			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));

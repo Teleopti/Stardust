@@ -2,6 +2,7 @@ using System.Configuration;
 using Autofac;
 using MbCache.Configuration;
 using MbCache.ProxyImpl.LinFu;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommon
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.IocCommon
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
 		public ILockObjectGenerator CacheLockObjectGenerator { get; set; }
+		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 
 		private CacheBuilder _cacheModule;
 
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
+
 		}
 	}
 }

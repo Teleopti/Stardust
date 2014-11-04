@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -21,8 +20,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			dataSourceConfigurationSetter = MockRepository.GenerateStub<IDataSourceConfigurationSetter>();
 			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterModule(new InitializeModule(dataSourceConfigurationSetter));
+			containerBuilder.RegisterModule(new CommonModule(new IocArgs { DataSourceConfigurationSetter = dataSourceConfigurationSetter }));
 		}
 
 		[Test]
