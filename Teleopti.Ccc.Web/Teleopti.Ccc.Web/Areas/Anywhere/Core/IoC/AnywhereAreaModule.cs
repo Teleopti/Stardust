@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<GroupPageController>().EnableClassInterceptors();
+			builder.RegisterType<AdherenceController>().EnableClassInterceptors();
 
 			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().As<IIntraIntervalFinderService>();	
 		}
