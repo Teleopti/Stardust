@@ -222,6 +222,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
 		{
 			perPersonAndGroupListView.Items.Clear();
+
+			if (!_dateOnlyPeriod.Contains(dateOnly))
+				return;
+
 			var service = _container.Resolve<IDistributionReportService>();
 			var pointsFairnessHidden = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317);
 			var seniorityFairness = _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111);
