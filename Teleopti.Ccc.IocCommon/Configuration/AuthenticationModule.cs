@@ -89,12 +89,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (ApplicationData != null)
 			{
 				builder.Register(c => ApplicationData)
-					.As<IApplicationData>();
+					.As<IApplicationData>()
+					.ExternallyOwned()
+					;
 			}
 			else
 			{
 				builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
-					.As<IApplicationData>().SingleInstance();
+					.As<IApplicationData>().SingleInstance()
+					.ExternallyOwned();
 			}
 			builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService)
 				.As<ILoadPasswordPolicyService>().SingleInstance();

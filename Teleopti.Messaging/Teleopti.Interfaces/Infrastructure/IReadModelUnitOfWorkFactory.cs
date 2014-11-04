@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IReadModelUnitOfWorkFactory
 	{
-		void Configure(string connectionString);
+		void Configure();
 		void StartUnitOfWork();
 		void EndUnitOfWork(Exception exception);
 	}

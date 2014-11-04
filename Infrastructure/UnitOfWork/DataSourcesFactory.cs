@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				statFactory = null;
 			}
 
-			var readModel = new ReadModelUnitOfWorkFactory(_httpContext);
-			readModel.Configure(applicationConnectionString);
+			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
+			readModel.Configure();
 
 			return new DataSource(appFactory, statFactory, readModel, authenticationSettings);
 		}

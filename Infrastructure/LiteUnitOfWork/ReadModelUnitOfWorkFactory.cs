@@ -8,18 +8,20 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
 	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkFactory
 	{
+		private readonly string _connectionString;
 		private readonly ReadModelUnitOfWorkState _state;
 		private ISessionFactory _sessionFactory;
 
-		public ReadModelUnitOfWorkFactory(ICurrentHttpContext httpContext)
+		public ReadModelUnitOfWorkFactory(ICurrentHttpContext httpContext, string connectionString)
 		{
+			_connectionString = connectionString;
 			_state = new ReadModelUnitOfWorkState(httpContext);
 		}
 
-		public void Configure(string connectionString)
+		public void Configure()
 		{
 			var configuration = new Configuration();
-			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, connectionString);
+			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, _connectionString);
 			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
 			_sessionFactory = configuration.BuildSessionFactory();
 		}

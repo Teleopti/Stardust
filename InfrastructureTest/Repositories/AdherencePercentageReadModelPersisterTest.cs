@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
@@ -7,12 +8,15 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
@@ -132,7 +136,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void BeforeTest(TestDetails testDetails)
 		{
 			buildContainer();
-			configureApplication();
 			startReadModelUnitOfWork();
 			resolveAndSetTarget(testDetails);
 		}
@@ -150,18 +153,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(new InitializeModule(DataSourceConfigurationSetter.ForTest()));
+
+			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
+
 			_container = builder.Build();
+			
+			var dataSource = _container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+			_container.Resolve<MutableFakeCurrentTeleoptiPrincipal>()
+				.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("_", dataSource, null, null), null));
 		}
 
 		private void disposeContainer()
 		{
 			_container.Dispose();
-		}
-
-		private void configureApplication()
-		{
-			_container.Resolve<IReadModelUnitOfWorkFactory>()
-				.Configure(ConnectionStringHelper.ConnectionStringUsedInTests);
 		}
 
 		private void startReadModelUnitOfWork()
