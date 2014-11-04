@@ -62,13 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Click(options());
 		}
 
-		public void WaitClick(string selector)
-		{
-			var option = options();
-			option.Timeout = TimeSpan.FromSeconds(10);
-			_browser.FindCss(selector, option).Click(options());
-		}
-
 		public void DragnDrop(string selector, int x, int y)
 		{
 				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
