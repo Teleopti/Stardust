@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			perPersonAndGroupListView.Items.Clear();
 
-			if (!_dateOnlyPeriod.Contains(dateOnly))
+			if (!_requestedPeriod.Contains(dateOnly))
 				return;
 
 			var service = _container.Resolve<IDistributionReportService>();
