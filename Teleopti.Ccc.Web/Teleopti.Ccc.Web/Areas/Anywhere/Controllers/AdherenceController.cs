@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, HttpGet]
 		public virtual JsonResult ForToday(Guid personId)
 		{
-			var ret = _calculateAdherence.ForToday(personId);
-			return Json(ret.IsValid ? ret : new object(), JsonRequestBehavior.AllowGet);
+			var model = _calculateAdherence.ForToday(personId);
+			return Json(model ?? new object(), JsonRequestBehavior.AllowGet);
 		}
 
     }

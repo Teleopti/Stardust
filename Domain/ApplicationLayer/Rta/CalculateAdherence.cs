@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface ICalculateAdherence
 	{
-		AdherenceInfo ForToday(Guid personId);
+		AdherencePercentageModel ForToday(Guid personId);
 	}
 
 	public class CalculateAdherence : ICalculateAdherence
@@ -21,22 +21,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_historicalAdherence = new HistoricalAdherence(_now);
 		}
 
-		public AdherenceInfo ForToday(Guid personId)
+		public AdherencePercentageModel ForToday(Guid personId)
 		{
 			var readModel = _adherencePercentageReadModelPersister.Get(new DateOnly(_now.UtcDateTime()), personId);
 
 			if (readModel == null || !isValid(readModel))
-			{
-				return new AdherenceInfo() { IsValid = false };
-			}
+				return null;
 
-			return new AdherenceInfo
+			return new AdherencePercentageModel
 			       {
-				       TimeInAdherence = readModel.TimeInAdherence,
-				       TimeOutOfAdherence = readModel.TimeOutOfAdherence,
 				       LastTimestamp = readModel.LastTimestamp,
-				       AdherencePercent = (int)_historicalAdherence.ForDay(readModel).ValueAsPercent(),
-				       IsValid = true
+				       AdherencePercent = (int)_historicalAdherence.ForDay(readModel).ValueAsPercent()
 			       };
 		}
 
@@ -46,12 +41,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 	}
 
-	public class AdherenceInfo
+	public class AdherencePercentageModel
 	{
-		public TimeSpan TimeInAdherence { get; set; }
-		public TimeSpan TimeOutOfAdherence { get; set; }
 		public DateTime LastTimestamp { get; set; }
 		public int AdherencePercent { get; set; }
-		public bool IsValid { get; set; }
 	}
 }
