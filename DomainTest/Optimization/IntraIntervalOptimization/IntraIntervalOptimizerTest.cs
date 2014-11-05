@@ -232,11 +232,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		[Test]
 		public void ShouldBreakWhenTryingToOptimizeIdenticalShifProjectionCaches()
 		{
-			_issusesBefore.IssuesOnDayBefore = _skillStaffPeriodIssuesBefore;
 			_issusesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
 			_issusesBefore.IssuesOnDayAfter = _skillStaffPeriodIssuesBefore;
 
-			_issusesAfter.IssuesOnDayBefore = _skillStaffPeriodIssuesAfter;
 			_issusesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
 			_issusesAfter.IssuesOnDayAfter = _skillStaffPeriodIssuesAfter;
 
@@ -252,7 +250,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
