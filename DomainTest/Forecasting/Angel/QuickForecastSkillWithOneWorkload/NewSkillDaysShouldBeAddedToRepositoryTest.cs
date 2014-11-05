@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 {
 	public class NewSkillDaysShouldBeAddedToRepositoryTest : QuickForecastTest
 	{
-		//this method is probably not needed when
+		//this method is probably not needed when NoStatisticNorValidatedTest passes (depending on whether skilldays are created then or not)
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			var dateTimeOnStartPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);

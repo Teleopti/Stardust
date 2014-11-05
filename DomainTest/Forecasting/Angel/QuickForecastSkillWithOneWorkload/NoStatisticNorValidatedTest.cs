@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
 		{
 			//robin - what should happen?
+			//if skilldays should be created in this case, please remove StatisticTasks method on NewSkillDaysShouldBeAddedToRepositoryTest - not needed there in that case.
 		}
 	}
 }
