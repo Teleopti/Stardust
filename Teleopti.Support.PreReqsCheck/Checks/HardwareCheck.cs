@@ -51,11 +51,11 @@ namespace CheckPreRequisites.Checks
 		private void CheckComputerName()
 		{
 			var computerName = SystemInformation.ComputerName;
-
+			var hostName = Dns.GetHostName();
 			_form1.printNewFeature("Operating system", "Computer name", "Allowed characters for computer is [A-Z,a-z,0-9], and maximum length is 15",
-			                       computerName);
+								   hostName);
 			_form1.printFeatureStatus(computerName == Regex.Replace(computerName, "[^a-zA-Z0-9_]", "") &&
-			                          String.Equals(computerName, Dns.GetHostName(), StringComparison.CurrentCultureIgnoreCase));
+			                          String.Equals(computerName, hostName, StringComparison.CurrentCultureIgnoreCase));
 		}
 
 		private void CheckArchitecture()

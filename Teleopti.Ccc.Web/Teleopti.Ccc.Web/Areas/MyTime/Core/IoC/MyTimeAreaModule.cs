@@ -140,9 +140,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 
 		private static void registerPreferenceTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<PreferenceController>().EnableClassInterceptors();
-			builder.RegisterType<PreferenceFeedbackController>().EnableClassInterceptors();
-
 			builder.RegisterType<PreferenceViewModelFactory>().As<IPreferenceViewModelFactory>();
 			builder.RegisterType<PreferencePeriodFeedbackViewModelFactory>().As<IPreferencePeriodFeedbackViewModelFactory>();
 			builder.RegisterType<PreferenceProvider>().As<IPreferenceProvider>();

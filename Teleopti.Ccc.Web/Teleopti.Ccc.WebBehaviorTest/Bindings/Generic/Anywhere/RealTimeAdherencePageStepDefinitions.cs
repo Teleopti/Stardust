@@ -90,10 +90,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
 		}
 
-		[When(@"I wait and click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
-		public void WhenIWaitAndClickInAgentMenu(CssClass cssClass)
+		[When(@"I click on an agent state")]
+		public void WhenIClickOnAnAgentState()
+		{
+			Browser.Interactions.Click(".agent-state");
+		}
+
+		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
+		public void WhenIClickInAgentMenu(CssClass cssClass)
 		{
 			Browser.Interactions.Click(string.Format(".agent-menu a.{0}", cssClass.Name));
+		}
+
+
+		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
+		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, int adherence)
+		{
+			const string selector = ".historical-adherence:contains('{0}')";
+
+			Browser.Interactions.AssertExistsUsingJQuery(selector, adherence);
 		}
 
 		[When(@"I click the site checkbox for '(.*)'")]

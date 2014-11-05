@@ -38,16 +38,17 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public override void OnAuthorization(AuthorizationContext filterContext)
 		{
-			if (!_excludeControllerTypes.Contains(filterContext.Controller.GetType()))
-				base.OnAuthorization(filterContext);
+			var controllerType = filterContext.Controller.GetType();
+			var controllerIsExcluded = _excludeControllerTypes.Any(t => t == controllerType || controllerType.IsSubclassOf(t));
+			if (controllerIsExcluded)
+				return;
+			base.OnAuthorization(filterContext);
 		}
 
 		protected override bool AuthorizeCore(HttpContextBase httpContext)
 		{
 			if (isInsideStartArea(httpContext))
-			{
 				return httpContext.User.Identity.IsAuthenticated;
-			}
 			return httpContext.User.Identity is ITeleoptiIdentity;
 		}
 
@@ -56,8 +57,7 @@ namespace Teleopti.Ccc.Web.Filters
 			var areaToken = httpContext.Request.RequestContext.RouteData.DataTokens["area"];
 			if (areaToken == null) return false;
 			var area = areaToken.ToString();
-			var isInsideStartArea = area.ToUpperInvariant() == "START";
-			return isInsideStartArea;
+			return area.ToUpperInvariant() == "START";
 		}
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

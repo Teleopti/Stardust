@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 		public TaskOwnerPeriod Fetch(IWorkload workload, DateOnlyPeriod period)
 		{
 			var statistics = _dailyStatisticsAggregator.LoadDailyStatistics(workload, period);
-			var validatedDays = _validatedVolumeDayRepository.FindRange(period, workload) ?? Enumerable.Empty<IValidatedVolumeDay>();
+			var validatedDays = _validatedVolumeDayRepository.FindRange(period, workload);
 
 			var dailyStatistics = new List<DailyStatistic>();
 			foreach (var day in period.DayCollection())

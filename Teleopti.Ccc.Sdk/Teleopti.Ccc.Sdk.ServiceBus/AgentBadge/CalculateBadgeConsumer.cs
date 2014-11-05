@@ -64,28 +64,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					message.Datasource, message.TimeZoneCode);
 			}
 
-			var setting = _settingsRepository.GetSettings();
-			if (setting == null)
-			{
-				//error happens
-				Logger.Error("Agent badge threshold setting is null before starting badge calculation");
-				return;
-			}
-
-			if (!setting.BadgeEnabled)
-			{
-				if (Logger.IsDebugEnabled)
-				{
-					Logger.DebugFormat("Agent badge is disabled. nothing will be done except send a new CalculateBadgeMessage for "
-					                   + "BusinessUnit {0}, DataSource {1} and timezone {2}",
-						message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
-				}
-				resendMessage(message);
-				return;
-			}
-
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
+				var setting = _settingsRepository.GetSettings();
+				if (setting == null)
+				{
+					//error happens
+					Logger.Error("Agent badge threshold setting is null before starting badge calculation");
+					return;
+				}
+
+				if (!setting.BadgeEnabled)
+				{
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat("Agent badge is disabled. nothing will be done except send a new CalculateBadgeMessage for "
+										   + "BusinessUnit {0}, DataSource {1} and timezone {2}",
+							message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
+					}
+					resendMessage(message);
+					return;
+				}
+
 				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key,
 					new AdherenceReportSetting());
 

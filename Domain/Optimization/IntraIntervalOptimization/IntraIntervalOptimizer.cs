@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
 		{
-			IIntraIntervalIssues intervalIssuesAfter = new IntraIntervalIssues();
-
 			var notBetter = true;
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 			var progressCounter = 0;
@@ -70,14 +68,26 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
 			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
 			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
+			var intervalIssuesAfter = intervalIssuesBefore;
+
+			IShiftProjectionCache previousShiftProjectionCache = null;
 
 			rollbackService.ClearModificationCollection();
 			while (notBetter)
 			{
 				if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 
+				if ((progressCounter % 10) == 0)
+					OnReportProgress(string.Concat("(", progressCounter, "/", intervalIssuesAfter.IssuesOnDay.Count, ")"));
+
+				progressCounter++;
+
 				var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 				var shiftProjectionCache = _shiftProjectionCacheManager.ShiftProjectionCacheFromShift(daySchedule.GetEditorShift(), dateOnly, timeZoneInfo);
+
+				if (previousShiftProjectionCache != null && previousShiftProjectionCache.GetHashCode() == shiftProjectionCache.GetHashCode()) break;
+				previousShiftProjectionCache = shiftProjectionCache;
+				
 				schedulingOptions.AddNotAllowedShiftProjectionCache(shiftProjectionCache);
 
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);
@@ -95,8 +105,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				if (!checkDayAfter && intervalIssuesAfter.IssuesOnDay.Count == 0) break;
 				if (checkDayAfter && intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
 				
-				notBetter = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayBefore, intervalIssuesAfter.IssuesOnDayBefore);
-				notBetter = notBetter || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+				notBetter = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
 				notBetter = notBetter || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
 
 				if (!notBetter)
@@ -106,12 +115,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 					if (!checkDayAfter) notBetter = !today;
 					if (checkDayAfter) notBetter = !dayAfter;
-				}
-
-				if ((progressCounter % 10) == 0)
-					OnReportProgress(string.Concat("(", progressCounter, "/", intervalIssuesAfter.IssuesOnDay.Count, ")"));
-
-				progressCounter++;
+				}	
 			}
 
 			return intervalIssuesAfter;

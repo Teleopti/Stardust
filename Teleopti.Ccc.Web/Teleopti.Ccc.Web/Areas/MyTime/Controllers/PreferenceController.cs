@@ -1,9 +1,7 @@
-using Autofac.Extras.DynamicProxy2;
 using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -19,7 +17,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[PreferencePermission]
-	[Intercept(typeof(AspectInterceptor))]
 	public class PreferenceController : Controller
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
