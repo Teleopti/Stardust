@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IPerson _person;
 		private ISkill _skill;
 		private IList<ISkill> _skills;
-		private ISkillDay _skillDay;
 		private DateOnly _dateOnly;
 		private ISkillStaffPeriod _skillStaffPeriodAfter;
 		private IIntraIntervalIssues _issuesBefore;
@@ -60,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_person = PersonFactory.CreatePerson("person");
 			_skill = SkillFactory.CreateSkill("skill");
 			_skills = new List<ISkill>{_skill};
-			_skillDay = _mock.StrictMock<ISkillDay>();
 			_skillStaffPeriodAfter = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriodBefore = _mock.StrictMock<ISkillStaffPeriod>();
 			_issuesBefore = new IntraIntervalIssues();
@@ -101,10 +102,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		}
 
 		[Test]
-		public void ShouldSkipMaxSeatSkills()
+		public void ShouldSkipMaxSeatEmailBackofficeSkills()
 		{
 			var maxSeatSkill = SkillFactory.CreateSiteSkill("maxSeat");
-			_skills = new List<ISkill> { maxSeatSkill };
+			var emailSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeEmail(), 15, TeleoptiPrincipal.Current.Regional.TimeZone, TimeSpan.FromHours(1));
+			var backOfficeSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeBackoffice(), 15, TeleoptiPrincipal.Current.Regional.TimeZone, TimeSpan.FromHours(1));
+			_skills = new List<ISkill> { maxSeatSkill, emailSkill, backOfficeSkill };
 
 			using (_mock.Record())
 			{

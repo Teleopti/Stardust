@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				_progressSkill = skill.Name;
 				if (_intraIntervalOptimizer.IsCanceled) break;
 
-				if(skill.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill)) continue;
+				var skillType = skill.SkillType.ForecastSource;
+				if(skillType != ForecastSource.InboundTelephony && skillType != ForecastSource.Chat) continue;
 				
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
