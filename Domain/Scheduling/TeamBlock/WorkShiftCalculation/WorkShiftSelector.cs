@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -10,6 +11,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
+
+		SortedSet<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
+			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
+			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
 	}
 
 	public class WorkShiftSelector : IWorkShiftSelector
@@ -29,38 +34,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
-			if (shiftList != null)
-				foreach (var shiftProjectionCache in shiftList)
-				{
-					double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, parameters, timeZoneInfo);
+			foreach (var shiftProjectionCache in shiftList)
+			{
+				double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, parameters,
+					timeZoneInfo);
 
-					if (valueForShift.HasValue)
+				if (valueForShift.HasValue)
+				{
+					if (!bestShiftValue.HasValue)
 					{
-						if (!bestShiftValue.HasValue)
+						bestShiftValue = valueForShift.Value;
+						bestShift = shiftProjectionCache;
+
+					}
+					else
+					{
+						if (valueForShift.Value == bestShiftValue)
+						{
+							bestShiftValue = valueForShift.Value;
+							bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
+						}
+
+						if (valueForShift.Value > bestShiftValue)
 						{
 							bestShiftValue = valueForShift.Value;
 							bestShift = shiftProjectionCache;
-
-						}
-						else
-						{
-							if (valueForShift.Value == bestShiftValue)
-							{
-								bestShiftValue = valueForShift.Value;
-								bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
-							}
-
-							if (valueForShift.Value > bestShiftValue)
-							{
-								bestShiftValue = valueForShift.Value;
-								bestShift = shiftProjectionCache;
-							}
-
 						}
 					}
 				}
+			}
 
 			return bestShift;
+		}
+
+		public SortedSet<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
+			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
+			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
+		{
+			var sortedList = new SortedSet<IWorkShiftCalculationResultHolder>(new WorkShiftCalculationResultComparer());
+			foreach (var shiftProjectionCache in shiftList)
+			{
+				double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, parameters, timeZoneInfo);
+				if (!valueForShift.HasValue)
+					continue;
+
+				sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = valueForShift.Value });
+			}
+
+			return sortedList;
 		}
 
 		private double? valueForActivity(IActivity activity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
