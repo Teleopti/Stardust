@@ -22,171 +22,176 @@
 		lazy,
 		navigation,
 		getadherence) {
-		return function (historicalAdherenceServercall, agentAdherenceEnabled) {
+		return function (historicalAdherenceServercall) {
 
-		var that = {};
-		that.Resources = resources;
-		that.permissionAddActivity = ko.observable();
+			var that = {};
+			that.Resources = resources;
+			that.permissionAddActivity = ko.observable();
 
-		that.fetchHistoricalAdherence = historicalAdherenceServercall || getadherence.ServerCall;
+			var fetchHistoricalAdherence = historicalAdherenceServercall || getadherence.ServerCall;
 
-		that.agents = []; 
-		that.agentStates = ko.observableArray();
-		that.resources = resources;
-		that.teamName = ko.observable();
-		that.siteName = ko.observable();
-		that.siteId = ko.observable();
-		that.siteURI = ko.observable();
-		that.filter = ko.observable();
-		that.groupId = ko.observable();
-		that.changeScheduleAvailable = ko.observable(false);
-		that.BusinessUnitId = ko.observable();
-		that.rootURI = ko.observable();
-		that.agentAdherenceEnabled = ko.observable(agentAdherenceEnabled || false);
-		that.AgentAdherence = ko.observable();
+			that.agents = [];
+			that.agentStates = ko.observableArray();
+			that.resources = resources;
+			that.teamName = ko.observable();
+			that.siteName = ko.observable();
+			that.siteId = ko.observable();
+			that.siteURI = ko.observable();
+			that.filter = ko.observable();
+			that.groupId = ko.observable();
+			that.changeScheduleAvailable = ko.observable(false);
+			that.BusinessUnitId = ko.observable();
+			that.rootURI = ko.observable();
+			that.agentAdherenceEnabled = ko.observable(false);
+			that.AgentAdherence = ko.observable();
 
-		that.SetViewOptions = function (options) {
-			that.BusinessUnitId(options.buid);
-			that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
-		};
+			that.SetViewOptions = function (options) {
+				that.BusinessUnitId(options.buid);
+				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
+			};
 
-		that.filteredAgents = ko.computed(function() {
-			var filter = that.filter();
-			if (!filter) {
-				return that.agentStates();
-			} else {
-				return ko.utils.arrayFilter(that.agentStates(), function (item) {
-					return filterService().match(
-					[
-						item.Alarm(),
-						item.Name,
-						item.State(),
-						item.Activity(),
-						item.NextActivity(),
-						item.NextActivityStartTime(),
-						item.TeamName
-					], filter);
+			that.filteredAgents = ko.computed(function () {
+				var filter = that.filter();
+				if (!filter) {
+					return that.agentStates();
+				} else {
+					return ko.utils.arrayFilter(that.agentStates(), function (item) {
+						return filterService().match(
+						[
+							item.Alarm(),
+							item.Name(),
+							item.State(),
+							item.Activity(),
+							item.NextActivity(),
+							item.NextActivityStartTime(),
+							item.TeamName()
+						], filter);
 
-				});
-			}
-		});
-		
-		that.fillAgents = function(data) {
-			for (var i = 0; i < data.length; i++) {
-				var a = agent();
-				a.fill(data[i]);
-				that.agents.push(a);
+					});
+				}
+			});
+
+			var fillSiteAndTeam = function(data) {
 				var locationHash = window.location.hash;
 				if (locationHash.match(/MultipleSites$/)) {
 					that.teamName('');
 					that.siteName('');
 				} else if (locationHash.match(/MultipleTeams$/)) {
 					that.teamName('');
-					that.siteName(data[i].SiteName);
+					that.siteName(data.SiteName);
 				} else {
-					that.teamName(data[i].TeamName);
-					that.siteName(data[i].SiteName);
+					that.teamName(data.TeamName);
+					that.siteName(data.SiteName);
 				}
 
-				that.siteId(data[i].SiteId);
+				that.siteId(data.SiteId);
+				that.siteURI('#realtimeadherenceteams/' + that.BusinessUnitId() + '/' + that.siteId());
+			};
+
+			var fillData = function (data) {
+				var theAgent = that.getAgent(data.PersonId);
+				if (!theAgent) {
+					theAgent = agent();
+					theAgent.fill(data);
+					that.agents.push(theAgent);
+				}
+				var theAgentState = that.getAgentState(data.PersonId);
+				if (!theAgentState) {
+					theAgentState = agentstate();
+					that.agentStates.push(theAgentState);
+				}
+				data.Name = theAgent.Name;
+				data.TimeZoneOffset = theAgent.TimeZoneOffset;
+				data.TeamName = theAgent.TeamName;
+				theAgentState.fill(data);
 			}
-			that.siteURI('#realtimeadherenceteams/' + that.BusinessUnitId() +'/' + that.siteId());
-		};
 
-		that.fillAgentsStates = function(data) {
-			var newagentState, existingState;
-
-			if (!data) {
-				that.agents.forEach(function(agent) {
-					existingState = that.getExistingAgentState(agent.PersonId);
-					if (existingState.length !== 0) {
-						existingState[0].fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);			
-					} else {
-						newagentState = agentstate();
-						newagentState.fill({ PersonId: agent.PersonId }, agent.Name, agent.TimeZoneOffset, agent.TeamName);
-						that.agentStates.push(newagentState);
-					}
-				});
-			} else {
+			that.fillAgents = function (data) {
+				if (!data || data.length == 0)
+					return;
+				fillSiteAndTeam(data[0]);
 				for (var i = 0; i < data.length; i++) {
-					var a = that.getAgent(data[i].PersonId);
-					if (!a) continue;
-					existingState = that.getExistingAgentState(data[i].PersonId);
-					if (existingState.length !== 0) {
-						existingState[0].fill(data[i], a.Name, a.TimeZoneOffset, a.TeamName);
-					} else {
-						newagentState = agentstate();
-						newagentState.fill(data[i], a.Name, a.TimeZoneOffset, a.TeamName);
-						that.agentStates.push(newagentState);
-					}
+					fillData(data[i]);
 				}
+			};
+
+			that.fillAgentsStates = function (data) {
+				for (var i = 0; i < data.length; i++) {
+					fillData(data[i]);
+				}
+				that.agentStates.sort(function (left, right) { return left.Name() == right.Name() ? 0 : (left.Name() < right.Name() ? -1 : 1); });
+			};
+
+			that.getAgent = function (id) {
+				var agent = that.agents.filter(function (item) {
+					return item.PersonId === id;
+				});
+				if (agent.length == 0)
+					return null;
+				return agent[0];
+			};
+			that.getAgentState = function (id) {
+				var agentState = that.agentStates().filter(function (item) {
+					return item.PersonId() === id;
+				});
+				if (agentState.length == 0)
+					return null;
+				return agentState[0];
+			};
+			that.getSelectedAgentState = function () {
+				var selectedAgentState = that.agentStates().filter(function (obj) {
+					return obj.Selected() === true;
+				});
+				return selectedAgentState;
 			}
-			that.agentStates.sort(function(left, right) { return left.Name == right.Name ? 0 : (left.Name < right.Name ? -1 : 1); });
-		};
-		that.getExistingAgentState = function(id) {
-			var existingState = that.agentStates().filter(function(obj) {
-						return obj.PersonId === id;
+
+			that.refreshAlarmTime = function () {
+				that.agentStates().forEach(function (item) {
+					item.refreshAlarmTime();
 				});
-			return existingState;
-		};
-		that.getAgent = function(id) {
-			var agent = that.agents.filter(function(item) {
-				return item.PersonId === id;
-				});
-			return agent[0];
-		};
-		that.getAgentState = function (id) {
-			var agentState = that.agentStates().filter(function (item) {
-				return item.PersonId === id;
-				});
-			return agentState[0];
-		};
-		that.refreshAlarmTime = function () {
-			that.agentStates().forEach(function (item) {
-				item.refreshAlarmTime();
-			});
-		};
+			};
 
-		that.updateFromNotification = function (notification) {
-			var data = JSON.parse(notification.BinaryData);
-			data.Id = notification.DomainId;
-			that.fillAgentsStates(data.AgentStates);
-		};
+			that.updateFromNotification = function (notification) {
+				var data = JSON.parse(notification.BinaryData);
+				data.Id = notification.DomainId;
+				that.fillAgentsStates(data.AgentStates);
+			};
 
-		that.urlForChangingSchedule = function (data) {
-			var a = that.getAgent(data.PersonId);
-			return navigation.UrlForChangingSchedule(that.BusinessUnitId(), a.TeamId, a.PersonId, moment((new Date).getTime()));
-		}
-
-		that.getSelectedAgentState = function() {
-			var selectedAgentState = that.agentStates().filter(function (obj) {
-				return obj.Selected() === true;
-			});
-			return selectedAgentState;
-		}
-
-		that.SelectAgent = function (agentStateClicked) {
-			deselectAllAgentsExcept(agentStateClicked);
-			if (that.agentAdherenceEnabled()) {
-				 agentStateClicked.HistoricalAdherence(that.fetchHistoricalAdherence(agentStateClicked));
+			that.urlForChangingSchedule = function (data) {
+				var a = that.getAgent(data.PersonId());
+				return navigation.UrlForChangingSchedule(that.BusinessUnitId(), a.TeamId, a.PersonId, moment((new Date).getTime()));
 			}
-			agentStateClicked.Selected(!agentStateClicked.Selected());
-			
-		};
 
-		var deselectAllAgentsExcept = function (agentState) {
-			var selectedAgentStates = lazy(that.agentStates())
-				.filter(function (x) {
-					if (agentState && x === agentState)
-						return false;
-					return x.Selected();
+			that.SelectAgent = function (agentStateClicked) {
+				if (typeof agentStateClicked === "string") {
+					agentStateClicked = that.getAgentState(agentStateClicked);
+				}
+
+
+				deselectAllAgentsExcept(agentStateClicked);
+				if (that.agentAdherenceEnabled()) {
+					fetchHistoricalAdherence(function (data) {
+						agentStateClicked.HistoricalAdherence(data.AdherencePercent);
+						agentStateClicked.LastAdherenceUpdate(data.LastTimestamp);
+					}, agentStateClicked.PersonId());
+				}
+				agentStateClicked.Selected(!agentStateClicked.Selected());
+
+			};
+
+			var deselectAllAgentsExcept = function (agentState) {
+				var selectedAgentStates = lazy(that.agentStates())
+					.filter(function (x) {
+						if (agentState && x === agentState)
+							return false;
+						return x.Selected();
+					});
+				selectedAgentStates.each(function (x) {
+					x.Selected(false);
 				});
-			selectedAgentStates.each(function (x) {
-				x.Selected(false);
-			});
+			};
+
+			return that;
 		};
-		
-		return that;
-	};
-}
+	}
 );

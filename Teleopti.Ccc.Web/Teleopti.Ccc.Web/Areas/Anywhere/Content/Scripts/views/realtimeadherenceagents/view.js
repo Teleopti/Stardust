@@ -47,7 +47,6 @@
 					},
 					success: function (data) {
 						viewModel.fillAgents(data);
-						viewModel.fillAgentsStates();
 						ajax.ajax({
 							url: "Agents/GetStates?teamId=" + teamId,
 							error: function (jqXHR, textStatus, errorThrown) {
@@ -57,7 +56,6 @@
 							},
 							success: function (data) {
 								viewModel.fillAgentsStates(data);
-
 							}
 						});
 					}
@@ -123,11 +121,9 @@
 			toggleQuerier('RTA_SeePercentageAdherenceForOneAgent_30783', {
 				enabled: function() {
 					viewModel.agentAdherenceEnabled(true);
-					
 				}
 			});
 
-			viewModel.AgentAdherence(98 + '%');
 		}
 	};
 });

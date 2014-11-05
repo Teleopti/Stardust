@@ -63,3 +63,19 @@
 .realtimeadherenceagents th {
 	vertical-align: middle !important;
 }
+
+.realtimeadherenceagents .person-menu .adherence {
+	float: right; 
+	margin-right: 5px; 
+	line-height: 31px;
+	position: relative;
+}
+
+.realtimeadherenceagents .person-menu .adherence .last-updated{
+	position: absolute; 
+	color: gray; 
+	font-size: xx-small; 
+	right: 0px;
+	bottom: -11px;
+	white-space: nowrap
+}

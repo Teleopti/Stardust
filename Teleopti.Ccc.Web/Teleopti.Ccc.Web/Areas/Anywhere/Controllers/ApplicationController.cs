@@ -122,6 +122,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.PleaseRefreshThePageWithExclamation,
 					UserTexts.Resources.ServerUnavailable,
 					UserTexts.Resources.ModifySchedule,
+					UserTexts.Resources.Adherence,
+					UserTexts.Resources.LastUpdated,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

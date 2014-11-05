@@ -7,7 +7,12 @@
         ) {
         return function () {
 
-            var that = {};
+        	var that = {};
+
+        	that.PersonId = ko.observable();
+        	that.Name = ko.observable();
+        	that.TeamName = ko.observable();
+
             that.TimeInState = ko.observable();
             that.AlarmTime = ko.observable();
             that.State = ko.observable();
@@ -30,27 +35,18 @@
             that.HistoricalAdherence = ko.observable(0);
             that.LastAdherenceUpdate = ko.observable();
 
-	        that.ElapsedTimeSinceAdherenceCalculation = ko.computed(function() {
-	        	var timeSinceLastTimeStamp = moment.duration((new Date).getTime() - moment.utc(that.LastAdherenceUpdate()));
-				if (timeSinceLastTimeStamp == 0) {
-					return that.LastAdherenceUpdate();
-				}
-	        	that.LastAdherenceUpdate(Math.floor(timeSinceLastTimeStamp.asHours()) + moment(timeSinceLastTimeStamp.asMilliseconds()).format(":mm:ss"));
-		        return that.LastAdherenceUpdate();
-	        });
-
-	        that.fill = function (data, name, offset, teamName) {
-                that.PersonId = data.PersonId;
-                that.Name = name;
-                that.TeamName = teamName;
+            that.fill = function (data) {
+            	that.PersonId(data.PersonId);
+            	that.Name(data.Name);
+            	that.TeamName(data.TeamName);
                 that.State(data.State);
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
-                that.NextActivityStartTime(data.NextActivity && data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(offset, 'minutes')) : '');
+                that.NextActivityStartTime(data.NextActivity && data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(data.TimeZoneOffset, 'minutes')) : '');
 				that.EnteredCurrentAlarm(data.StateStart);
                 that.refreshAlarmTime();
 
-                that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(offset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
+                that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(data.TimeZoneOffset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
 
                 if (that.shouldWaitWithUpdatingAlarm()) {
                     that.HaveNewAlarm = true;

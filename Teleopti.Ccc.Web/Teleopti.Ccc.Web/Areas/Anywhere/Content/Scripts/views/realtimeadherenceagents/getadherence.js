@@ -5,15 +5,12 @@
 ) {
 
 	return {
-		ServerCall: function (agentState) {
+		ServerCall: function (callback, personId) {
 			ajax.ajax({
-				url: 'Adherence/ForToday?PersonId='+agentState.PersonId,
+				url: 'Adherence/ForToday?PersonId=' + personId,
 				type: 'GET',
 				accepts: 'application/json',
-				success: function (data) {
-					agentState.HistoricalAdherence(data.AdherencePercent);
-					agentState.LastAdherenceUpdate(data.LastTimestamp);
-				}
+				success: callback
 			});
 		}
 	}
