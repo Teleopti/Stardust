@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Web;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -29,10 +30,15 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			uriBuilder.Query = query.ToString();
 			var url = uriBuilder.ToString();
 
-			using (var client = new WebClient())
+			using (var handler = new HttpClientHandler())
 			{
-				var jsonString = client.DownloadString(url);
-				return JsonConvert.DeserializeObject<ToggleEnabledResult>(jsonString).IsEnabled;
+				handler.AllowAutoRedirect = false;
+				using (var client = new HttpClient(handler))
+				{
+					var result = client.GetAsync(url);
+					var jsonString = result.Result.Content.ReadAsStringAsync().Result;
+					return JsonConvert.DeserializeObject<ToggleEnabledResult>(jsonString).IsEnabled;
+				}
 			}
 		}
 
