@@ -586,6 +586,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					.Should().Be.Empty();
 			}
 
+	    [Test]
+	    public void ShouldFindOneSkillOnlyIfSkillHasMultipleQueueSources()
+	    {
+				var activity = new Activity("_");
+				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
+				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+				PersistAndRemoveFromUnitOfWork(activity);
+				PersistAndRemoveFromUnitOfWork(skillType);
+				PersistAndRemoveFromUnitOfWork(skill);
+				var wl = WorkloadFactory.CreateWorkload(skill);
+				wl.AddQueueSource(new QueueSource());
+				wl.AddQueueSource(new QueueSource());
+				var wl2 = WorkloadFactory.CreateWorkload(skill);
+				wl2.AddQueueSource(new QueueSource());
+				wl2.AddQueueSource(new QueueSource());
+				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.First());
+				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Last());
+				PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.First());
+				PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.Last());
+				PersistAndRemoveFromUnitOfWork(wl);
+				PersistAndRemoveFromUnitOfWork(wl2);
+
+				var target = new SkillRepository(UnitOfWork);
+		    target.FindSkillsWithAtLeastOneQueueSource()
+			    .Count().Should().Be.EqualTo(1);
+	    }
+
 			[Test]
 			public void ShouldNotFindSkillsWithNoWorkload()
 			{

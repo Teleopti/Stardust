@@ -291,7 +291,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			public IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource()
 			{
-				return Session.GetNamedQuery("findSkillsWithAtLeastOneQueueSource").List<ISkill>();
+				return Session.GetNamedQuery("findSkillsWithAtLeastOneQueueSource")
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<ISkill>();
 			}
     }
 }
