@@ -40,14 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 
-			builder.RegisterType<SitesController>().EnableClassInterceptors();
-			builder.RegisterType<PersonScheduleCommandController>().EnableClassInterceptors();
-			builder.RegisterType<StaffingMetricsController>().EnableClassInterceptors();
-			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
-			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
-			builder.RegisterType<GroupPageController>().EnableClassInterceptors();
-			builder.RegisterType<AdherenceController>().EnableClassInterceptors();
-
 			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().As<IIntraIntervalFinderService>();	
 		}
 	}

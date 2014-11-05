@@ -2,16 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	[Intercept(typeof(AspectInterceptor))]
 	public class GroupPageController : Controller
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;

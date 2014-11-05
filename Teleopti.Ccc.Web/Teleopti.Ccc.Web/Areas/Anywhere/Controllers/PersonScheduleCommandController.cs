@@ -3,10 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
-using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Filters;
@@ -14,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	[Intercept(typeof(AspectInterceptor))]
 	public class PersonScheduleCommandController : Controller
 	{
 		private readonly ICommandDispatcher _commandDispatcher;

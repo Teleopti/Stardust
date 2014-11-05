@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resource
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var builder = new ContainerBuilder();
 
 			builder.RegisterApiControllers(typeof(ContainerConfiguration).Assembly);
-			builder.RegisterControllers(typeof(ContainerConfiguration).Assembly);
+			builder.RegisterControllers(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterHubs(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors();
 
 			builder.RegisterWebApiFilterProvider(httpConfiguration);

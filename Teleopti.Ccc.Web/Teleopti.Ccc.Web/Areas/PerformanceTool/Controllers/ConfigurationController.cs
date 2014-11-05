@@ -1,14 +1,11 @@
 using System.Linq;
 using System.Web.Mvc;
-using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 {
-	[Intercept(typeof(AspectInterceptor))]
 	public class ConfigurationController : Controller
 	{
 		private readonly IAbsenceRepository _absenceRepository;
