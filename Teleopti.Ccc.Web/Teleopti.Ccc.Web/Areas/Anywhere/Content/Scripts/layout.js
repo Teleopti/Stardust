@@ -308,7 +308,7 @@ define([
 		menu.RealTimeAdherenceVisible(responseData.IsRealTimeAdherenceAvailable === true);
 		toggleQuerier('MyTeam_Reports_31070', {
 			enabled: function() {
-				menu.ReportsVisible(responseData.IsReportsAvailable === true);
+				menu.ReportsVisible(menu.reports().length > 0);
 			}
 		});
 			menu.TeamScheduleVisible(responseData.IsTeamScheduleAvailable === true);

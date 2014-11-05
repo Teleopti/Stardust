@@ -1,13 +1,10 @@
-using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -15,24 +12,43 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class ReportsController : Controller
 	{
-
-		public ReportsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IAgentStateReader agentStateReader, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider)
+		private readonly IReportsProvider _reportsProvider;
+		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		public ReportsController(IReportsProvider reportsProvider, ISessionSpecificDataProvider sessionSpecificDataProvider)
 		{
-
+			_reportsProvider = reportsProvider;
+			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 		}
 
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult GetReports()
 		{
-
-
-			return Json(new
+			var data = _sessionSpecificDataProvider.GrabFromCookie();
+			var realBu = data.BusinessUnitId;
+			var matrixWebsiteUrl = ConfigurationManager.AppSettings["MatrixWebSiteUrl"];
+			if (!string.IsNullOrEmpty(matrixWebsiteUrl) && !matrixWebsiteUrl.EndsWith("/"))
+				matrixWebsiteUrl += "/";
+			var reports =  new List<IApplicationFunction>(_reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription));
+			var reportsList = new List<ReportItem>();
+			foreach (var applicationFunction in reports)
 			{
-				Name = "report1",
-				Url = "http://localhost:52858/mytime"
-			}, JsonRequestBehavior.AllowGet);
+				var url = string.Format(CultureInfo.CurrentCulture, "{0}Selection.aspx?ReportId={1}&BuId={2}",
+					matrixWebsiteUrl, applicationFunction.ForeignId, realBu);
+
+				reportsList.Add(new ReportItem
+				{
+					Url = url,
+					Name = applicationFunction.LocalizedFunctionDescription,
+				});
+			}
+			return Json(reportsList, JsonRequestBehavior.AllowGet);
 		}
 
 	}
 
+	public class ReportItem
+	{
+		public string Url { get; set; }
+		public string Name { get; set; }
+	}
 }

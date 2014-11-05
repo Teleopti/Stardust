@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsRealTimeAdherenceAvailable =
 					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
-				IsReportsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToReports),
 				IsTeamScheduleAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules),
 				IanaTimeZone = _ianaTimeZoneProvider.WindowsToIana(principal.Regional.TimeZone.Id)
 			}, JsonRequestBehavior.AllowGet);
