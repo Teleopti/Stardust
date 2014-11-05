@@ -25,6 +25,7 @@ define([
 			self.CurrentGroupId = ko.observable();
 			self.IanaTimeZone = ko.observable("");
 			self.businessUnits = ko.observableArray();
+			self.reports = ko.observableArray();
 
 			var businessUnitForId = function (id) {
 				if (!id)
@@ -46,6 +47,12 @@ define([
 					self.businessUnits.push(newBU);
 				}
 			};
+
+			self.fillReports = function (data) {
+				for (var i = 0; i < data.length; i++) {
+					self.reports.push(data[i]);
+				}
+			}
 
 			self.urlForHome = function() {
 				return navigation.UrlForHome(self.CurrentBusinessUnitId(), self.RealTimeAdherenceVisible(), self.TeamScheduleVisible());

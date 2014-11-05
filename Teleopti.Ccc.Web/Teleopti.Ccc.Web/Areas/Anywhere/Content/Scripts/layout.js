@@ -284,7 +284,20 @@ define([
 		});
 	};
 
-	initBusinessUnitsMenu(function(data) {
+	var reportsLoadDeffered = $.Deferred();
+	var initReportsMenu = function (callback) {
+		ajax.ajax({
+			url: "Anywhere/Reports/GetReports",
+			success: callback
+		});
+	};
+
+	initReportsMenu(function (data) {
+		menu.fillReports(data);
+		reportsLoadDeffered.resolve();
+	});
+
+	initBusinessUnitsMenu(function (data) {
 		menu.fillBusinessUnits(data);
 		defaultBu = data[0].Id;
 		businessUnitsDataLoadDeffered.resolve();

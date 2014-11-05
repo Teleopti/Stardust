@@ -341,6 +341,7 @@
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />

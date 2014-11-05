@@ -17,6 +17,9 @@
 						<span data-bind="text: Resources.Reports"></span>
 						<b class="caret"></b>
 					</a>
+					<ul class="dropdown-menu" data-bind="foreach: reports">
+						<li><a data-bind="attr: { href: Url}"><span data-bind="text: Name"></span></a></li>
+					</ul>
 				</li>
 				<!-- /ko -->
 			</ul>
