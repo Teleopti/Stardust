@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
@@ -53,10 +57,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons()
 		{
-			var url = TestSiteConfigurationSetup.URL;
-			using (var client = new WebClient())
+			using (var handler = new HttpClientHandler())
 			{
-				client.DownloadDataAsync(url);
+				handler.AllowAutoRedirect = false;
+				using (var client = new HttpClient(handler))
+				{
+					client.GetAsync(TestSiteConfigurationSetup.URL);
+				}
 			}
 		}
 
