@@ -7,7 +7,7 @@ using System.Web.Http.Filters;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	public class AsyncFilter : FilterAttribute, IActionFilter
+	public abstract class AsyncFilter : FilterAttribute, IActionFilter
 	{
 		public async Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext actionContext,
 			CancellationToken cancellationToken,
@@ -39,15 +39,8 @@ namespace Teleopti.Ccc.Web.Filters
 			return executedContext.Response;
 		}
 
-		public virtual Task InternalActionExecuting(HttpActionContext actionContext, CancellationToken cancellationToken)
-		{
-			return Task.FromResult(true);
-		}
+		public abstract Task InternalActionExecuting(HttpActionContext actionContext, CancellationToken cancellationToken);
 
-		public virtual Task InternalActionExecuted(HttpActionExecutedContext actionExecutedContext,
-			CancellationToken cancellationToken)
-		{
-			return Task.FromResult(true);
-		}
+		public abstract Task InternalActionExecuted(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken);
 	}
 }
