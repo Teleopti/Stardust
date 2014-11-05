@@ -161,7 +161,7 @@ BEGIN
 		select 1
 		from mart.sys_crossdatabaseview_custom
 		)
-	exec etl_data_mart_maintenance_aggTables
+	exec mart.etl_data_mart_maintenance_aggTables
 
 	--Internal Agg Queue_Logg
 	delete dbo.queue_logg
