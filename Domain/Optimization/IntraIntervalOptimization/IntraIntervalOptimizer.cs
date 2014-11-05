@@ -70,6 +70,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
 			var intervalIssuesAfter = intervalIssuesBefore;
 
+			IShiftProjectionCache previousShiftProjectionCache = null;
+
 			rollbackService.ClearModificationCollection();
 			while (notBetter)
 			{
@@ -82,6 +84,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 				var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 				var shiftProjectionCache = _shiftProjectionCacheManager.ShiftProjectionCacheFromShift(daySchedule.GetEditorShift(), dateOnly, timeZoneInfo);
+
+				if (previousShiftProjectionCache != null && previousShiftProjectionCache.GetHashCode() == shiftProjectionCache.GetHashCode()) break;
+				previousShiftProjectionCache = shiftProjectionCache;
+				
 				schedulingOptions.AddNotAllowedShiftProjectionCache(shiftProjectionCache);
 
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);

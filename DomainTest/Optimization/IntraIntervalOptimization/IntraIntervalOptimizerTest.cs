@@ -230,6 +230,43 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		}
 
 		[Test]
+		public void ShouldBreakWhenTryingToOptimizeIdenticalShifProjectionCaches()
+		{
+			_issusesBefore.IssuesOnDayBefore = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
+			_issusesBefore.IssuesOnDayAfter = _skillStaffPeriodIssuesBefore;
+
+			_issusesAfter.IssuesOnDayBefore = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDay = _skillStaffPeriodIssuesAfter;
+			_issusesAfter.IssuesOnDayAfter = _skillStaffPeriodIssuesAfter;
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay).Repeat.Twice();
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift).Repeat.Twice();
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCacheFromShift(_editableShift, _dateOnly, _timeZone)).Return(_shiftProjectionCache).Repeat.Twice();
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(_teamBlockInfo);
+				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).Return(true).IgnoreArguments();
+				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter)).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				Assert.IsNotEmpty(result.IssuesOnDay);
+			}		
+		}
+
+		[Test]
 		public void ShouldUserCancel()
 		{
 			_issusesBefore.IssuesOnDay = _skillStaffPeriodIssuesBefore;
