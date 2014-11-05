@@ -96,6 +96,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click(".agent-state");
 		}
 
+		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
+		public void WhenIClickInAgentMenu(CssClass cssClass)
+		{
+			Browser.Interactions.Click(string.Format(".agent-menu a.{0}", cssClass.Name));
+		}
+
+
 		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
 		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, int adherence)
 		{

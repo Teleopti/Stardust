@@ -756,7 +756,7 @@ Scenario: Should be able to change schedule from agent state overview
 	When I view real time adherence view for team 'Red'
 	And the browser time is '2014-09-09 12:45:00'
 	And I click agent state of 'Pierre Baldi'
-	And I wait and click 'change schedule' in agent menu
+	And I click 'change schedule' in agent menu
 	Then I should see schedule for 'Pierre Baldi'
 	And I should see schedule menu
 
