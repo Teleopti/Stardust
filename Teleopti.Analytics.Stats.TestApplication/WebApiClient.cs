@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -13,6 +14,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 	public class WebApiClient
 	{
 		private readonly HttpClient _client;
+		private readonly int _latency;
 
 		public WebApiClient(HttpClient client, string nhibDataSourcename, int queueDataSourceId)
 		{
@@ -21,9 +23,9 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			_client.DefaultRequestHeaders.Accept.Clear();
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 			_client.DefaultRequestHeaders.Add("Authorization", authorizeHeader(nhibDataSourcename));
-			
 			_client.DefaultRequestHeaders.Add("database", nhibDataSourcename);
 			_client.DefaultRequestHeaders.Add("sourceId", queueDataSourceId.ToString(CultureInfo.InvariantCulture));
+			_latency = int.Parse(ConfigurationManager.AppSettings["Latency"]);
 		}
 
 		private static string authorizeHeader(string nhibDataSourcename)
@@ -33,9 +35,11 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			return "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(authText));
 		}
 
-		public async Task<bool> PostQueueDataAsync(IEnumerable<QueueStatsModel> queueStatsModels)
+		public async Task<bool> PostQueueDataAsync(IEnumerable<QueueStatsModel> queueStatsModels, bool useLatency)
 		{
 			var postBody = JsonConvert.SerializeObject(queueStatsModels);
+			if (_latency > 0)
+				Thread.Sleep(_latency);
 			var response = await _client.PostAsync("api/mart/QueueStats", new StringContent(postBody, Encoding.UTF8, "application/json"));
 
 			return response.IsSuccessStatusCode;

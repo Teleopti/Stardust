@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 
 namespace Teleopti.Analytics.Stats.TestApplication
@@ -7,12 +8,19 @@ namespace Teleopti.Analytics.Stats.TestApplication
 	{
 		private static void Main(string[] args)
 		{
+			bool useLatency = false;
+
 			Console.WriteLine("Welcome to queue data generator!");
 			Console.WriteLine("\n");
 
 			while (true)
 			{
-				Console.WriteLine("Nhib data source name:");
+				Console.WriteLine("Simulate latency ({0} ms)? [Y/N])",
+					ConfigurationManager.AppSettings["Latency"]);
+				if (Console.ReadKey().Key == ConsoleKey.Y)
+					useLatency = true;
+
+				Console.WriteLine("\nNhib data source name:");
 				var nhibDataSourceName = Console.ReadLine();
 				if (checkExit(nhibDataSourceName)) break;
 
@@ -49,7 +57,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 				}
 				if (dateCheck.NumberOfDays < int.Parse(amountOfDays))
 				{
-					Console.WriteLine("You can only generate data for a maximum of " + dateCheck.NumberOfDays + " days. Continue anyway? (Y/N)");
+					Console.WriteLine("You can only generate data for a maximum of " + dateCheck.NumberOfDays + " days. Continue anyway? [Y/N]");
 					if (Console.ReadKey().Key != ConsoleKey.Y)
 						break;
 					amountOfDays = dateCheck.NumberOfDays.ToString(CultureInfo.InvariantCulture);
@@ -63,9 +71,9 @@ namespace Teleopti.Analytics.Stats.TestApplication
 					AmountOfDays = int.Parse(amountOfDays),
 					AmountOfQueues = int.Parse(amountOfQueues),
 					StartDate = dateCheck.StartDate,
-					
+					UseLatency = useLatency
 				};
-				Console.WriteLine("Amount of rows to be posted to mart.fact_queue table is: \n" + rowsToBeGenerated(parameters));
+				Console.WriteLine("\nAmount of rows to be posted to mart.fact_queue table is: \n" + rowsToBeGenerated(parameters));
 				Console.WriteLine("Start posting queue data by pressing P.");
 				if (Console.ReadKey().Key != ConsoleKey.P)
 					break;

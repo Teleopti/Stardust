@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 
 							if (modelsToPost.Count % batchSize == 0 || modelsToPost.Count == expectedPostCount || postCounter == expectedPostCount)
 							{
-								var result = await webClient.PostQueueDataAsync(modelsToPost);
+								var result = await webClient.PostQueueDataAsync(modelsToPost, parameters.UseLatency);
 								if (result) 
 									successful += modelsToPost.Count;
 								else 

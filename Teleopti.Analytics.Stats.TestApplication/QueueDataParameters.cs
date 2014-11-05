@@ -10,5 +10,6 @@ namespace Teleopti.Analytics.Stats.TestApplication
 		public DateTime StartDate { get; set; }
 		public string NhibDataSourcename { get; set; }
 		public int QueueDataSourceId { get; set; }
+		public bool UseLatency { get; set; }
 	}
 }
