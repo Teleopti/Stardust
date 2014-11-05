@@ -20,8 +20,17 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			_client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebApiBaseUrl"]);
 			_client.DefaultRequestHeaders.Accept.Clear();
 			_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			_client.DefaultRequestHeaders.Add("Authorization", authorizeHeader(nhibDataSourcename));
+			
 			_client.DefaultRequestHeaders.Add("database", nhibDataSourcename);
 			_client.DefaultRequestHeaders.Add("sourceId", queueDataSourceId.ToString(CultureInfo.InvariantCulture));
+		}
+
+		private static string authorizeHeader(string nhibDataSourcename)
+		{
+			var authKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+			var authText = string.Format("{0}:{1}", nhibDataSourcename, authKey);
+			return "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(authText));
 		}
 
 		public async Task<bool> PostQueueDataAsync(IEnumerable<QueueStatsModel> queueStatsModels)
