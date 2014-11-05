@@ -16,10 +16,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnRedirectResultWhenGenericPrincipal()
 		{
-			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
-			authenticationModule.Stub(x => x.Issuer).Return("http://myissuer");
-			authenticationModule.Stub(x => x.Realm).Return("http://mytime");
-			var target = new TeleoptiPrincipalAuthorizeAttribute(authenticationModule, MockRepository.GenerateMock<IIdentityProviderProvider>());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
@@ -31,8 +28,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test, Ignore("Should work without other handling")]
 		public void ShouldRedirectToStartAuthenticationSignIn()
 		{
-			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
-			var target = new TeleoptiPrincipalAuthorizeAttribute(authenticationModule, MockRepository.GenerateMock<IIdentityProviderProvider>());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
@@ -43,12 +39,9 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldGetDefaultHomeRealm()
 		{
-			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
-			authenticationModule.Stub(x => x.Issuer).Return("http://myissuer");
-			authenticationModule.Stub(x => x.Realm).Return("http://mytime");
 			var identityProviderProvider = MockRepository.GenerateMock<IIdentityProviderProvider>();
 			identityProviderProvider.Stub(x => x.DefaultProvider()).Return("urn:ProviderX");
-			var target = new TeleoptiPrincipalAuthorizeAttribute(authenticationModule, identityProviderProvider);
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), identityProviderProvider);
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
@@ -59,29 +52,22 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldRedirectToAreasAuthenticationSignIn()
 		{
-			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
-			authenticationModule.Stub(x => x.Issuer).Return("http://myissuer");
-			authenticationModule.Stub(x => x.Realm).Return("http://mytime");
-			var target = new TeleoptiPrincipalAuthorizeAttribute(authenticationModule, MockRepository.GenerateMock<IIdentityProviderProvider>());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>());
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 			filterTester.AddRouteDataToken("area", "MyTime");
 
 			var result = filterTester.InvokeFilter(target) as RedirectResult;
-			result.Url.Should().Contain("http://myissuer");
+			result.Url.Should().Contain(new FakeAuthenticationModule().Issuer);
 		}
 
 		[Test]
 		public void ShouldReturnActionsResultWhenAuthenticated()
 		{
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
-			principal.Stub(x => x.Identity).Return(identity);
-			identity.Stub(x => x.IsAuthenticated).Return(true);
-			var target = new TeleoptiPrincipalAuthorizeAttribute(MockRepository.GenerateMock<IAuthenticationModule>(), MockRepository.GenerateMock<IIdentityProviderProvider>());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>());
 			var filterTester = new FilterTester();
 			filterTester.ActionMethod(() => new ViewResult());
-			filterTester.IsUser(principal);
+			filterTester.IsUser(new TeleoptiPrincipal(new TeleoptiIdentity("_", null, null, null), null));
 
 			var result = filterTester.InvokeFilter(target);
 
@@ -91,10 +77,21 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnViewResultWithGenericPrincipalWhenExcluded()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(MockRepository.GenerateMock<IAuthenticationModule>(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new[] { typeof(FilterTester.TestController) });
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new[] {typeof (FilterTester.TestController)});
 			var filterTester = new FilterTester();
 			filterTester.ActionMethod(() => new ViewResult());
-			filterTester.IsUser(Thread.CurrentPrincipal);
+
+			var result = filterTester.InvokeFilter(target);
+
+			result.Should().Be.OfType<ViewResult>();
+		}
+
+		[Test]
+		public void ShouldBeAbleAccessControllersExcludedByBaseType()
+		{
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new[] { typeof(FilterTester.TestController) });
+			var filterTester = new FilterTester();
+			filterTester.UseController(new TestControllerProxy(() => new ViewResult()));
 
 			var result = filterTester.InvokeFilter(target);
 
@@ -104,15 +101,26 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldReturnHttp403ForbiddenResultWhenAjax()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(MockRepository.GenerateMock<IAuthenticationModule>(), MockRepository.GenerateMock<IIdentityProviderProvider>());
+			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>());
 			var filterTester = new FilterTester();
 			filterTester.IsAjaxRequest();
-			filterTester.IsUser(Thread.CurrentPrincipal);
 
 			var result = filterTester.InvokeFilter(target);
 
 			result.Should().Be.OfType<HttpUnauthorizedResult>();
 		}
-		
+
+		public class TestControllerProxy : FilterTester.TestController
+		{
+			public TestControllerProxy(Func<ActionResult> controllerAction) : base(controllerAction)
+			{
+			}
+		}
+
+		public class FakeAuthenticationModule : IAuthenticationModule
+		{
+			public string Issuer { get { return "http://myissuer"; }}
+			public string Realm { get { return "http://mytime"; } }
+		}
 	}
 }
