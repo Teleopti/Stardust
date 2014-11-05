@@ -37,15 +37,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var skillDays = CurrentSkillDays();
-			var skillDayRepository = MockRepository.GenerateStub<ISkillDayRepository>();
-			skillDayRepository.Stub(x => x.FindRange(FuturePeriod, Workload.Skill, DefaultScenario)).Return(skillDays);
 
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
 			var futureData =new FutureData();
 			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
-			var target = new QuickForecaster(quickForecasterWorkload, new FetchAndFillSkillDays(skillDayRepository, currentScenario, new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
+			var target = new QuickForecaster(quickForecasterWorkload, new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario, new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
 			target.Execute(Workload.Skill, HistoricalPeriod, FuturePeriod);
 
 			Assert(skillDays);
@@ -78,14 +76,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			yield break;
 		}
 
+		private ICollection<ISkillDay> _currentSkillDays;
 		protected virtual ICollection<ISkillDay> CurrentSkillDays()
 		{
-			return new List<ISkillDay>();
+			return _currentSkillDays ?? (_currentSkillDays = new List<ISkillDay>());
 		}
 
 		protected TimeZoneInfo SkillTimeZoneInfo()
 		{
 			return Workload.Skill.TimeZone;
+		}
+
+		protected virtual ISkillDayRepository SkillDayRepository(ICollection<ISkillDay> existingSkillDays)
+		{
+			var skillDayRepository = MockRepository.GenerateStub<ISkillDayRepository>();
+			skillDayRepository.Stub(x => x.FindRange(FuturePeriod, Workload.Skill, DefaultScenario)).Return(existingSkillDays);
+			return skillDayRepository;
 		}
 
 		protected abstract void Assert(IEnumerable<ISkillDay> modifiedSkillDays);
