@@ -289,7 +289,6 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
-    <Compile Include="CurrentThreadUserCulture.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\Hubs\GroupScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\GroupScheduleViewModelMapperTest.cs" />

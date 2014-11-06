@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 					Person.Name = name;
 					new PersonRepository(uow).Add(Person);
 				});
-			Apply(new SwedishCulture());
+			Apply(new Setups.Specific.SwedishCulture());
 			Apply(new UtcTimeZone());
 			setups.ForEach(Apply);
 		}

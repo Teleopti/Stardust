@@ -12,12 +12,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly IAdherencePercentageReadModelPersister _adherencePercentageReadModelPersister;
 		private readonly INow _now;
+		private readonly IUserCulture _culture;
+		private readonly IUserTimeZone _timeZone;
 		private readonly HistoricalAdherence _historicalAdherence;
 
-		public CalculateAdherence(IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, INow now)
+		public CalculateAdherence(
+			IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister,
+			INow now,
+			IUserCulture culture, IUserTimeZone timeZone)
 		{
 			_adherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
 			_now = now;
+			_culture = culture;
+			_timeZone = timeZone;
 			_historicalAdherence = new HistoricalAdherence(_now);
 		}
 
@@ -30,9 +37,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 			return new AdherencePercentageModel
 			       {
-				       LastTimestamp = readModel.LastTimestamp,
+					   LastTimestamp = convertToAgentTimeZoneAndFormatTimestamp(readModel.LastTimestamp),
 				       AdherencePercent = (int)_historicalAdherence.ForDay(readModel).ValueAsPercent()
 			       };
+		}
+
+		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime timestamp)
+		{
+			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(timestamp, _timeZone.TimeZone());
+			return localTimestamp.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
 		}
 
 		private static bool isValid(AdherencePercentageReadModel readModel)
@@ -43,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public class AdherencePercentageModel
 	{
-		public DateTime LastTimestamp { get; set; }
+		public string LastTimestamp { get; set; }
 		public int AdherencePercent { get; set; }
 	}
 }

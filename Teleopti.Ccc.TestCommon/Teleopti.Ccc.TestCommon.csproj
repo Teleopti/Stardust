@@ -92,12 +92,16 @@
   <ItemGroup>
     <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
+    <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="HawaiiTimeZone.cs" />
+    <Compile Include="ThreadCulture.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />
     <Compile Include="FakeConfigReader.cs" />
+    <Compile Include="SwedishCulture.cs" />
     <Compile Include="MutableFakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Web\FakeCurrentHttpContext.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />

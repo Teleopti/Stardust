@@ -444,19 +444,7 @@ namespace Teleopti.Interfaces.Domain
 			return new TimeFormatter(new ThisCulture(cultureInfo)).GetLongHourMinuteTimeString(timeSpan);
         }
 
-		private class ThisCulture : IUserCulture
-		{
-			private readonly CultureInfo _cultureInfo;
-
-			public ThisCulture(CultureInfo cultureInfo)
-			{
-				_cultureInfo = cultureInfo;
-			}
-
-			public CultureInfo GetCulture() { return _cultureInfo; }
-		}
-
-        /// <summary>
+	    /// <summary>
         /// Gets the long hour and minutes tring from a timespan eg. 123:23.
         /// </summary>
         /// <param name="timeSpan">The time span.</param>
