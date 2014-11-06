@@ -13,7 +13,7 @@ Background:
 	| Access to Anywhere       | true                |
 	| Access To Matrix Reports | true                |
 
-	
+@ignore
 Scenario: open report
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2014-11-06'
