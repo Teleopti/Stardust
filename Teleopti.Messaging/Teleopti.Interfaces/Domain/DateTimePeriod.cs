@@ -184,20 +184,27 @@ namespace Teleopti.Interfaces.Domain
             return EndDateTime.Subtract(StartDateTime);
         }
 
-		/// <summary>
-		/// Convert to local time first, then returns a TimeSpan representing the Elapsed time in the TimePeriod, 
-		/// This case for daylight save start and end day
-		/// </summary>
-		/// <returns></returns>
-		public TimeSpan LocalElapsedTime(TimeZoneInfo timeZoneInfo)
-		{
-			var localStart = StartDateTimeLocal(timeZoneInfo);
-			var localEnd = EndDateTimeLocal(timeZoneInfo);
+	    /// <summary>
+	    /// Convert to local time first, then returns a TimeSpan representing the Elapsed time in the TimePeriod, 
+	    /// This case for daylight save start and end day
+	    /// </summary>
+	    /// <returns></returns>
+	    public TimeSpan LocalElapsedTime(TimeZoneInfo timeZoneInfo)
+	    {
+		    var localStart = StartDateTimeLocal(timeZoneInfo);
+		    var localEnd = EndDateTimeLocal(timeZoneInfo);
 
-			return localEnd.Subtract(localStart);
-        }
+		    //for the case timePeriod is very small and end time is little than start time, this is normally in ETL but seldom in schedule
+		    if (localEnd.Subtract(localStart).Hours < 0 || localEnd.Subtract(localStart).Minutes < 0)
+		    {
+			    //there are different rules according different timezone and differrent year, the oldest always be the first item, so we use the newest
+			    return localEnd.Subtract(localStart).Add(timeZoneInfo.GetAdjustmentRules().Last().DaylightDelta);
+		    }
 
-        /// <summary>
+		    return localEnd.Subtract(localStart);
+	    }
+
+	    /// <summary>
         /// Moves the period the spacific amount of time.
         /// </summary>
         /// <param name="timeSpan">A time span.</param>

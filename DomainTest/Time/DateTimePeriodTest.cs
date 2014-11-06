@@ -1033,7 +1033,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(returnList[1], new DateTimePeriod(new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 15, 0, 0, 0, DateTimeKind.Utc)));
         }
 
-			[Test, Ignore("Have this failing test until code is fixed.")]
+			[Test]
 			public void ShouldBehaveAsBeforeBecauseLegacyCodeIsDependantOnThisBehaviour()
 			{
 				_period = new DateTimePeriod(
