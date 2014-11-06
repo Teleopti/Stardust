@@ -106,12 +106,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state)
 		{
-			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase().WithDataFromState(state).Done(), new ThisIsNow(state.Timestamp));
+			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), new ThisIsNow(state.Timestamp));
 		}
 
 		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state, INow now)
 		{
-			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase().WithDataFromState(state).Done(), now);
+			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), now);
 		}
 
 		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database)

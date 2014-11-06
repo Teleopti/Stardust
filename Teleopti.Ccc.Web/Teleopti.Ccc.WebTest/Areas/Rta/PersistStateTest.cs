@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldPersistActualAgentState()
 		{
 			var state = new ExternalUserStateForTest();
-			var database = new FakeRtaDatabase().WithDataFromState(state).Done();
+			var database = new FakeRtaDatabase().WithDataFromState(state).Make();
 			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
 
 			target.SaveExternalUserState(state);
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldCutStateCodeIfToLong()
 		{
 			var state = new ExternalUserStateForTest();
-			var database = new FakeRtaDatabase().WithDataFromState(state).Done();
+			var database = new FakeRtaDatabase().WithDataFromState(state).Make();
 			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
 
 			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldPersistStateCodeToLoggedOutIfNotLoggedIn()
 		{
 			var state = new ExternalUserStateForTest();
-			var database = new FakeRtaDatabase().WithDataFromState(state).Done();
+			var database = new FakeRtaDatabase().WithDataFromState(state).Make();
 			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
 
 			state.IsLoggedOn = false;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithSource(state.SourceId)
 				.WithUser(state.UserCode, personId, businessUnitId)
-				.Done();
+				.Make();
 			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
 
 			target.GetUpdatedScheduleChange(personId, businessUnitId, state.Timestamp);

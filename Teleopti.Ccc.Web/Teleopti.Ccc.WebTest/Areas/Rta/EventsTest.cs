@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId2, activityId, state2.Timestamp.AddHours(-1), state2.Timestamp.AddHours(1))
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 1)
-				.Done();
+				.Make();
 			var publisher = new FakeEventsPublisher();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state1.Timestamp), publisher);
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", Guid.NewGuid())
 				.WithAlarm("statecode", activityId, 0)
-				.Done();
+				.Make();
 			var publisher = new FakeEventsPublisher();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
 

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, phone, inAdherence.Timestamp.AddHours(-1), inAdherence.Timestamp.AddHours(1))
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, 1)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
 			
 			target.SaveExternalUserState(inAdherence);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, phone, inAdherence.Timestamp.AddHours(-1), inAdherence.Timestamp.AddHours(1))
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
 
 			target.SaveExternalUserState(inAdherence);
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId2, phone, outOfAdherence2.Timestamp.AddHours(-1), outOfAdherence2.Timestamp.AddHours(1))
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
 
 			target.SaveExternalUserState(outOfAdherence1);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId2, phone, outOfAdherence2.Timestamp.AddHours(-1), outOfAdherence2.Timestamp.AddHours(1))
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
 
 			target.SaveExternalUserState(outOfAdherence1);

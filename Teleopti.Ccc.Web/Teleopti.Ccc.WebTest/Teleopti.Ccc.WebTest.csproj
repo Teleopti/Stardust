@@ -207,7 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\ReportsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\CalculateAdherenceTest.cs" />
@@ -241,6 +240,7 @@
     <Compile Include="Areas\Rta\FakeSignalRClient.cs" />
     <Compile Include="Areas\Rta\PersistStateTest.cs" />
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
+    <Compile Include="Areas\Rta\PersonShiftStartEventTest.cs" />
     <Compile Include="Areas\Rta\ReturnCodeTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\ActualAgentAssemblerTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\AgentsAdherenceTest.cs" />

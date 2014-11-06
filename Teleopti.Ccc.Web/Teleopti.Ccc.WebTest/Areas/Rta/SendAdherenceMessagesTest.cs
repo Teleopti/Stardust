@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", Guid.NewGuid(), null, teamId, null)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", phone, 1)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var sender = new FakeMessageSender();
 			var database = new FakeRtaDatabase()
 				.WithSource(state.SourceId)
-				.Done();
+				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			target.SaveExternalUserState(state);

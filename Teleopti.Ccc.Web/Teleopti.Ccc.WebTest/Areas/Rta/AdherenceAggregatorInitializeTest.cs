@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(person1, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithSchedule(person2, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("loggedoff", phone, -1)
-				.Done();
+				.Make();
 			database.PersistActualAgentState(new ActualAgentState
 			{
 				PersonId = person1,
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", person1, null, teamId, null)
 				.WithSchedule(person1, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", phone, -1)
-				.Done();
+				.Make();
 			database.PersistActualAgentState(new ActualAgentState
 			{
 				PersonId = person1,

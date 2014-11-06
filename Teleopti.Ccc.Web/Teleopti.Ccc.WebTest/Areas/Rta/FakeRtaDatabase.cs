@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
-		FakeRtaDatabase Done();
+		FakeRtaDatabase Make();
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return this;
 		}
 
-		public FakeRtaDatabase Done()
+		public FakeRtaDatabase Make()
 		{
 			return this;
 		}
