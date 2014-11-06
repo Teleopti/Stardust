@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<IntraIntervalOptimizationService>().As<IntraIntervalOptimizationService>();
 			builder.RegisterType<IntraIntervalOptimizationServiceToggle29846Off>().As<IntraIntervalOptimizationServiceToggle29846Off>();
 			builder.RegisterType<IntraIntervalIssueCalculator>().As<IIntraIntervalIssueCalculator>();
+			builder.RegisterType<ShiftProjectionCacheIntraIntervalValueCalculator>().As<IShiftProjectionCacheIntraIntervalValueCalculator>();
+			builder.RegisterType<SkillStaffPeriodIntraIntervalPeriodFinder>().As<ISkillStaffPeriodIntraIntervalPeriodFinder>();
 
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846)
 			   ? (IIntraIntervalOptimizationService)c.Resolve<IntraIntervalOptimizationService>()

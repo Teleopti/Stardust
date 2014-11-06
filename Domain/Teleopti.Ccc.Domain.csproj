@@ -391,8 +391,11 @@
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizer.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ScheduleDayIntraIntervalIssueExtractor.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionCacheIntraIntervalValueCalculator.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionIntraIntervalBestFitCalculator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillDayIntraIntervalIssueExtractor.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluator.cs" />
+    <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodIntraIntervalPeriodFinder.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
