@@ -76,8 +76,8 @@ END
 	from site s 
 	inner join team t on t.site=s.id
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
-	inner join person p on p.id=pp.parent 
-	and p.isdeleted=0 
+	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join #ids i on i.person = p.Id
 	
 	--Insert people from contract
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate)
@@ -97,8 +97,8 @@ END
 	from team t 
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join contract c on pp.contract=c.id 
-	inner join person p on p.id=pp.parent 
-	and p.isdeleted=0 
+	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join #ids i on i.person = p.Id
 
 	--Insert people from part time percentage
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -118,8 +118,8 @@ END
 	from team t 
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join parttimepercentage c on pp.parttimepercentage=c.id 
-	inner join person p on p.id=pp.parent 
-	and p.isdeleted=0 
+	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join #ids i on i.person = p.Id
 	
 	--Insert people from contract schedule
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -138,8 +138,8 @@ END
 	from team t 
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join contractschedule c on pp.contractschedule=c.id 
-	inner join person p on p.id=pp.parent 
-	and p.isdeleted=0 
+	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join #ids i on i.person = p.Id
 	
 	--Insert people from rule set bag
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -159,8 +159,8 @@ END
 	from team t 
 	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
 	inner join rulesetbag c on pp.rulesetbag=c.id 
-	inner join person p on p.id=pp.parent 
-	and p.isdeleted=0 
+	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join #ids i on i.person = p.Id
 	
 	--Insert people from skill
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
@@ -186,8 +186,8 @@ END
 		and c.active=1 
 	inner join skill
 		on	skill.id=c.skill and skill.isdeleted=0
-	inner join person p
-		on	p.id=pp.parent and p.isdeleted=0 
+	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join #ids i on i.person = p.Id
 
 	CREATE TABLE #groupsForSecondCTE
 	(
