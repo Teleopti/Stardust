@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			var nameAndDomain = nameClaimValue.Split('/').Last();
 			return new TokenIdentity
 			{
-				UserIdentifier = nameAndDomain.Replace('#','\\'),
+				UserIdentifier = nameAndDomain.Replace("#","\\").Replace("$$$" , "."),
 				OriginalToken = nameClaimValue
 			};
 		}
