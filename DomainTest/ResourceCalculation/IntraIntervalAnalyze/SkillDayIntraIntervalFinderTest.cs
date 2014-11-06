@@ -44,14 +44,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 		[Test]
 		public void ShouldSetIntraIntervalIssuesWhenMinLessThenHalfMax()
 		{
+			var samples1 = new List<int> {1000, 2001};
+			var samples2 = new List<int> { 1, 2 };
+
 			using (_mock.Record())
 			{
 				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriods));
 				Expect.Call(_skillDay.Skill).Return(_skill);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod1.Period, _resourceCalculationDataContainer, _skill)).Return(_dateTimePeriods);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod2.Period, _resourceCalculationDataContainer, _skill)).Return(_dateTimePeriods);
-				Expect.Call(_countCollector.Collect(_dateTimePeriods, _skillStaffPeriod1.Period)).Return(new List<int> { 1000, 2001 });
-				Expect.Call(_countCollector.Collect(_dateTimePeriods, _skillStaffPeriod2.Period)).Return(new List<int> { 1, 2 });
+				Expect.Call(_countCollector.Collect(_dateTimePeriods, _skillStaffPeriod1.Period)).Return(samples1);
+				Expect.Call(_countCollector.Collect(_dateTimePeriods, _skillStaffPeriod2.Period)).Return(samples2);
 				Expect.Call(_fullIntervalFinder.FindForInterval(_skillStaffPeriod1.Period, _resourceCalculationDataContainer, _skill,_dateTimePeriods)).Return(0d);
 				Expect.Call(_fullIntervalFinder.FindForInterval(_skillStaffPeriod2.Period, _resourceCalculationDataContainer, _skill, _dateTimePeriods)).Return(0d);
 			}
@@ -60,8 +63,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 			{
 				_target.SetIntraIntervalIssues(_skillDay,_resourceCalculationDataContainer, 0.5);
 				Assert.IsTrue(_skillStaffPeriod1.HasIntraIntervalIssue);
+				Assert.AreEqual(_skillStaffPeriod1.IntraIntervalSamples, samples1);
 				Assert.IsFalse(_skillStaffPeriod2.HasIntraIntervalIssue);
+				Assert.AreEqual(_skillStaffPeriod2.IntraIntervalSamples, samples2);
 			}
+		}
+
+		[Test]
+		public void ShouldSetDefaultValuesWhenNoIntraIntervalActivities()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriods));
+				Expect.Call(_skillDay.Skill).Return(_skill);
+				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod1.Period, _resourceCalculationDataContainer, _skill)).Return(new List<DateTimePeriod>());
+				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod2.Period, _resourceCalculationDataContainer, _skill)).Return(new List<DateTimePeriod>());
+			}
+
+			using (_mock.Playback())
+			{
+				_target.SetIntraIntervalIssues(_skillDay, _resourceCalculationDataContainer, 0.5);
+				Assert.IsFalse(_skillStaffPeriod1.HasIntraIntervalIssue);
+				Assert.IsFalse(_skillStaffPeriod2.HasIntraIntervalIssue);
+				
+				Assert.AreEqual(1.0, _skillStaffPeriod1.IntraIntervalValue);
+				Assert.AreEqual(1.0, _skillStaffPeriod2.IntraIntervalValue);
+
+				Assert.IsEmpty(_skillStaffPeriod1.IntraIntervalSamples);
+				Assert.IsEmpty(_skillStaffPeriod2.IntraIntervalSamples);
+			}	
 		}
 
 		[Test]

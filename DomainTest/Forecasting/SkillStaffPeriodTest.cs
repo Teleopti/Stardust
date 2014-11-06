@@ -33,8 +33,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private IPopulationStatisticsCalculatedValues _populationStatisticsCalculatedValues;
 	    private ISkill _skill;
 	    private ISkillDay _skillDay;
-
-	    [SetUp]
+	    private IList<int> _intraIntervalSamples;
+	    private double _intraIntervalValue;
+			
+		[SetUp]
         public void Setup()
         {
             _tp = new DateTimePeriod(_dt.Add(TimeSpan.FromHours(10)), _dt.Add(TimeSpan.FromHours(11)));
@@ -52,6 +54,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			_skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
 		    _skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.Now);
 			_target.SetSkillDay(_skillDay);
+
+			_intraIntervalSamples = new List<int> {1, 2};
+			_intraIntervalValue = 0.5;
+			_target.IntraIntervalSamples = _intraIntervalSamples;
+			_target.IntraIntervalValue = _intraIntervalValue;
+			_target.HasIntraIntervalIssue = true;
+
         }
 
         [Test]
@@ -74,6 +83,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsNotNull(_target.EstimatedServiceLevel);
             Assert.IsNotNull(_target.EstimatedServiceLevelShrinkage);
             Assert.IsNotNull(_target.ActualServiceLevel);
+			Assert.AreEqual(_intraIntervalSamples, _target.IntraIntervalSamples);
+			Assert.AreEqual(_intraIntervalValue, _target.IntraIntervalValue);
+			Assert.IsTrue(_target.HasIntraIntervalIssue);
 
             Assert.AreEqual(MinMaxStaffBroken.Ok, _target.AggregatedMinMaxStaffAlarm);
             _target.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.BothBroken;

@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 
 				skillStaffPeriod.HasIntraIntervalIssue = min / max < limit;
 				skillStaffPeriod.IntraIntervalValue = min / max;
+				skillStaffPeriod.IntraIntervalSamples = result;
 			}
 		}
 	}

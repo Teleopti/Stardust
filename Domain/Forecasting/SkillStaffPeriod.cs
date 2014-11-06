@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private IPeriodDistribution _periodDistribution;
 
 	    private static readonly object Locker = new object();
-	    
-        public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorServiceFacade staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
+
+	    public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorServiceFacade staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
         {
 	        AggregatedStaffingThreshold = StaffingThreshold.Ok;
 	        _sortedSegmentCollection = new SortedList<DateTime, ISkillStaffSegmentPeriod>();
             _staffingCalculatorService = staffingCalculatorService;
             _segmentInThisCollection = new List<ISkillStaffSegmentPeriod>();
+			IntraIntervalSamples = new List<int>();
         }
 
         public IStatisticTask StatisticTask { get; set; }
@@ -50,9 +51,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public bool HasIntraIntervalIssue { get; set; }
 
 	    public double IntraIntervalValue { get; set; }
-	    
 
-        public double ScheduledAgentsIncoming
+	    public IList<int> IntraIntervalSamples { get; set; }
+
+	    public double ScheduledAgentsIncoming
         {
             get
             {
