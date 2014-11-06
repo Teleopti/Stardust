@@ -617,7 +617,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
         }
 
-		[Ignore]
         [Test]
         public void VerifyApplyTemplateDuringDstSwitch()
         {
@@ -647,7 +646,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(92, workloadDay.TaskPeriodList.Count);
         }
 
-		[Ignore]
         [Test]
         public void VerifyApplyTemplateDuringDstSwitchWithMidnightBreak()
         {
