@@ -207,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceControllerTest.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\ReportsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
