@@ -426,6 +426,11 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private void tabControlAdvKeyPressed(object sender, KeyPressEventArgs e)
 		{
+			if (this.ActiveControl == treeViewAdvMainTabTree)
+			{
+				return;
+			}
+
 			int currentIndex = tabControlAdv.SelectedIndex;
 			int maxIndex = tabControlAdv.TabCount-1;
 			bool tabFound = false;
