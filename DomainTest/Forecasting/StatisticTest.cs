@@ -355,6 +355,32 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		  }
 
 		  [Test]
+		  public void CanReloadTemplateDay()
+		  {
+			  IList<IWorkloadDay> workloadDays1 = WorkloadDayFactory.GetWorkloadDaysForTest(_startDate, _startDate, _workload);
+			  IList<IWorkloadDay> workloadDays2 = WorkloadDayFactory.GetWorkloadDaysForTest(_startDate.AddDays(7), _startDate.AddDays(7), _workload);
+
+			  //Fredag
+			  workloadDays1[0].TaskPeriodList[0].StatisticTask.StatCalculatedTasks = 20;
+			  workloadDays1[0].TaskPeriodList[0].StatisticTask.StatAverageTaskTimeSeconds = 20;
+			  workloadDays1[0].TaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 10;
+
+			  //Fredag
+			  workloadDays2[0].TaskPeriodList[0].StatisticTask.StatCalculatedTasks = 30;
+			  workloadDays2[0].TaskPeriodList[0].StatisticTask.StatAverageTaskTimeSeconds = 30;
+			  workloadDays2[0].TaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 20;
+
+			  Statistic statistic = new Statistic(_workload);
+			  IWorkload workload = statistic.ReloadCustomTemplateDay(workloadDays1.Concat(workloadDays2).OfType<IWorkloadDayBase>().ToList(), 5);
+
+			  IWorkloadDayTemplate template =
+				   ((IWorkloadDayTemplate)workload.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Friday));
+			  Assert.AreEqual(25d, template.TotalTasks);
+			  Assert.AreEqual(new TimeSpan(0, 0, 0, 26), template.AverageTaskTime);
+			  Assert.AreEqual(new TimeSpan(0, 0, 0, 16), template.AverageAfterTaskTime);
+		  }
+
+		  [Test]
 		  public void CanCalculateTemplateDaysWithMidnightBreak()
 		  {
 				_skill.MidnightBreakOffset = TimeSpan.FromHours(7);

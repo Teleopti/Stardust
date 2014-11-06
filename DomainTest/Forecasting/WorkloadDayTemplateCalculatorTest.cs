@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
             using (_mocks.Playback())
             {
-                _target.LoadFilteredWorkloadDayTemplates(new List<DateOnlyPeriod> { new DateOnlyPeriod(startDate, endDate) }, workload, filteredDates);
+                _target.LoadFilteredWorkloadDayTemplates(new List<DateOnlyPeriod> { new DateOnlyPeriod(startDate, endDate) }, workload, filteredDates, 5);
 
             }
 

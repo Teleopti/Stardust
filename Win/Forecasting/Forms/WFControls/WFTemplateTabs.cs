@@ -71,7 +71,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         {
             try
             {
-                Presenter.ReloadFilteredWorkloadDayTemplates(e.FilteredDates);
+				var view = sender as WorkloadDayTemplatesDetailView;
+				if (view != null)
+				{
+					Presenter.ReloadFilteredWorkloadDayTemplates(e.FilteredDates, view.TemplateIndex);
+				}
             }
             catch (DataSourceException dataSourceException)
             {

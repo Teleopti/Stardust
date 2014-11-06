@@ -138,6 +138,25 @@ namespace Teleopti.Ccc.Domain.Forecasting
         	return _workload;
         }
 
+		public IWorkload ReloadCustomTemplateDay(IList<IWorkloadDayBase> workloadDays, int dayIndex)
+		{
+			var day = (DayOfWeek)Enum.GetValues(typeof(DayOfWeek)).GetValue(dayIndex);
+			var workloadDayTemplate = (IWorkloadDayTemplate)_workload.GetTemplate(TemplateTarget.Workload, day);
+
+			string templateName =
+					string.Format(CultureInfo.CurrentUICulture, "<{0}>",
+								  CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(day).ToUpper(
+									  CultureInfo.CurrentUICulture));
+
+			workloadDayTemplate.Create(templateName, DateTime.UtcNow, _workload,
+									   workloadDayTemplate
+										   .OpenHourList.ToList());
+
+			calculateTemplateDay(workloadDayTemplate, GroupDays(day, workloadDays));
+			_workload.SetTemplateAt(dayIndex, workloadDayTemplate);
+			return _workload;
+		}
+
         /// <summary>
         /// Merges the statistic tasks.
         /// </summary>

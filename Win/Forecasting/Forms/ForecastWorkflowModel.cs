@@ -127,10 +127,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 .ToList();
         }
 
-        public void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates)
+        public void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates, int templateIndex)
         {
             _filteredDates.Merge(filteredDates);
-            _dataService.ReloadFilteredWorkloadTemplates(_selectedHistoricTemplatePeriod, _filteredDates.FilteredDateList(), _workload);
+			_dataService.ReloadFilteredWorkloadTemplates(_selectedHistoricTemplatePeriod, _filteredDates.FilteredDateList(), _workload, templateIndex);
         }
 
         public void InitializeWorkloadDaysWithStatistics(IList<DateOnlyPeriod> periodList)
