@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			treeViewAdvMainTabTree.SortWithChildNodes = true;
 			treeViewAdvMainTabTree.Root.SortType = TreeNodeAdvSortType.Text;
 			treeViewAdvMainTabTree.Root.SortOrder = SortOrder.Ascending;
-			treeViewAdvMainTabTree.AllowKeyboardSearch = false;
+	        treeViewAdvMainTabTree.AllowKeyboardSearch = true;
 		}
 
 		private void makeSureDropdownButtonWorksInRightToLeftCultures()
