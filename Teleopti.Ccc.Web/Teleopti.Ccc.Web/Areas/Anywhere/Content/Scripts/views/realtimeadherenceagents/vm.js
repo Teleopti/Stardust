@@ -167,10 +167,10 @@
 					agentStateClicked = that.getAgentState(agentStateClicked);
 				}
 
-
 				deselectAllAgentsExcept(agentStateClicked);
 				if (that.agentAdherenceEnabled()) {
 					fetchHistoricalAdherence(function (data) {
+						agentStateClicked.DisplayAdherencePercentage(data.AdherencePercent != undefined);
 						agentStateClicked.HistoricalAdherence(data.AdherencePercent);
 						agentStateClicked.LastAdherenceUpdate(data.LastTimestamp);
 					}, agentStateClicked.PersonId());

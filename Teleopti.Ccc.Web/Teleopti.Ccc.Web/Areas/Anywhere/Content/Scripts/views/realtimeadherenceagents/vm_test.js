@@ -92,7 +92,7 @@
 				assert.equals("1:00 PM", getDateTimeFormat(moment.utc(state1.NextActivityStartTime).add(1, 'hours')));
 			},
 
-			"should fill state data when filling agents": function() {
+			"should fill state data when filling agents": function () {
 				var vm = viewModel();
 
 				vm.fillAgents([{ PersonId: "guid" }]);
@@ -194,7 +194,7 @@
 
 				vm.fillAgents([agent1]);
 				var expectedUrl = window.baseLocation() + "#teamschedule/" + vm.BusinessUnitId() + "/" + agent1.TeamId + "/" + agent1.PersonId + "/" + moment((new Date).getTime()).format("YYYYMMDD");
-				assert.equals(vm.urlForChangingSchedule({ PersonId: function() { return "personId"; } }), expectedUrl);
+				assert.equals(vm.urlForChangingSchedule({ PersonId: function () { return "personId"; } }), expectedUrl);
 			},
 
 			"filtering:": {
@@ -544,8 +544,33 @@
 					vm.SelectAgent("guid1");
 
 					assert.equals(vm.getSelectedAgentState()[0].LastAdherenceUpdate(), "0:10:00");
-				}
+				},
 
+				"should hide adherence percentage if no data": function () {
+					var vm = viewModel(function (callback) {
+						callback({});
+					});
+					vm.agentAdherenceEnabled(true);
+					vm.fillAgents([{ PersonId: "guid1" }]);
+
+					vm.SelectAgent("guid1");
+					console.log(vm.getSelectedAgentState());
+					refute(vm.getSelectedAgentState()[0].DisplayAdherencePercentage());
+				},
+
+				"should display adherence percentage if data": function () {
+					var vm = viewModel(function (callback) {
+						callback({
+							AdherencePercent: 12
+						});
+					});
+					vm.agentAdherenceEnabled(true);
+					vm.fillAgents([{ PersonId: "guid1" }]);
+
+					vm.SelectAgent("guid1");
+
+					assert(vm.getSelectedAgentState()[0].DisplayAdherencePercentage());
+				}
 			}
 		});
 	};

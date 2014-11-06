@@ -34,6 +34,7 @@
 
             that.HistoricalAdherence = ko.observable(0);
             that.LastAdherenceUpdate = ko.observable();
+	        that.DisplayAdherencePercentage = ko.observable(false);
 
             that.fill = function (data) {
             	that.PersonId(data.PersonId);

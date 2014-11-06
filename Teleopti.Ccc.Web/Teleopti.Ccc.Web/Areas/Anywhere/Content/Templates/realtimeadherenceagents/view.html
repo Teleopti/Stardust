@@ -45,7 +45,8 @@
 								<!-- /ko -->
 							</div>
 							<!-- ko if: $root.agentAdherenceEnabled -->
-							<div class="adherence"> 
+							<!-- ko if: DisplayAdherencePercentage -->
+							<div class="adherence" data-bind="if: "> 
 								<span data-bind="text: $root.resources.Adherence"></span>
 								<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
 								<div class="last-updated">
@@ -53,6 +54,7 @@
 									<span data-bind="text: LastAdherenceUpdate"></span>
 								</div>
 							</div>
+							<!-- /ko -->
 							<!-- /ko -->
 						</div>
 					</td>
