@@ -47,5 +47,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertUrlNotContains("MyTime", "Selection.aspx");
 		    Browser.Interactions.CloseWindow();
 		}
+
+		[When(@"I click one report in drop down list")]
+		public void WhenIClickOneReportInDropDownList()
+		{
+			Browser.Interactions.Click("#report-list :nth-child(1)");
+		}
+
+		[Then(@"The report should be opened in a new window")]
+		public void ThenTheReportShouldBeOpenedInANewWindow()
+		{
+			Browser.Interactions.AssertUrlNotContains("Anywhere", "Selection.aspx");
+			Browser.Interactions.CloseWindow();
+		}
 	}
 }

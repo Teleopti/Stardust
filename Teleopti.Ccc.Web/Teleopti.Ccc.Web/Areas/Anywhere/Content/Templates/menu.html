@@ -12,13 +12,13 @@
 				<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
 				<!-- /ko -->
 				<!-- ko if: ReportsVisible-->
-				<li class="dropdown">
+				<li id="reports" class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown">
 						<span data-bind="text: Resources.Reports"></span>
 						<b class="caret"></b>
 					</a>
-					<ul class="dropdown-menu" data-bind="foreach: reports">
-						<li><a data-bind="attr: { href: Url}"><span data-bind="text: Name"></span></a></li>
+					<ul id="report-list" class="dropdown-menu" data-bind="foreach: reports">
+						<li><a data-bind="attr: { href: Url, target: '_blank'}"><span data-bind="text: Name"></span></a></li>
 					</ul>
 				</li>
 				<!-- /ko -->
