@@ -587,6 +587,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 
 	    [Test]
+	    public void ShouldJoinFetchWorkloadWhenFindSkillsWithAtLeastOneQueueSource()
+	    {
+				var activity = new Activity("_");
+				var skillType = new SkillTypePhone(new Description("_"), new ForecastSource());
+				var skill = new Skill("_", "_", Color.AliceBlue, 1, skillType) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+				PersistAndRemoveFromUnitOfWork(activity);
+				PersistAndRemoveFromUnitOfWork(skillType);
+				PersistAndRemoveFromUnitOfWork(skill);
+				var wl = WorkloadFactory.CreateWorkload(skill);
+				wl.AddQueueSource(new QueueSource());
+				PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Single());
+				PersistAndRemoveFromUnitOfWork(wl);
+
+				var target = new SkillRepository(UnitOfWork);
+				var loadedSkill = target.FindSkillsWithAtLeastOneQueueSource().Single();
+				LazyLoadingManager.IsInitialized(loadedSkill.WorkloadCollection).Should().Be.True();
+	    }
+
+	    [Test]
 	    public void ShouldFindOneSkillOnlyIfSkillHasMultipleQueueSources()
 	    {
 				var activity = new Activity("_");
