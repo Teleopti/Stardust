@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public IEnumerable<IAbsence> GetReportableAbsences()
 		{
-			return _loggedOnUser.CurrentUser().WorkflowControlSet.AllowedReportAbsences;
+			return _loggedOnUser.CurrentUser().WorkflowControlSet.AllowedAbsencesForReport;
 		}
 	}
 }

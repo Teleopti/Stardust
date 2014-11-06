@@ -141,6 +141,12 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         void SetAllowedAbsences(IWorkflowControlSetModel selectedModel);
 
         /// <summary>
+        /// Sets the allowed absences for report.
+        /// </summary>
+        /// <param name="selectedModel">The selected model.</param>
+        void SetAllowedAbsencesForReport(IWorkflowControlSetModel selectedModel);
+
+        /// <summary>
         /// Sets the shift trade target time flexibility.
         /// </summary>
         /// <param name="flexibility">The flexibility.</param>

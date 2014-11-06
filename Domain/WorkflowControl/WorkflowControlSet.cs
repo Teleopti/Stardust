@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private ISet<IShiftCategory> _allowedPreferenceShiftCategories;
         private ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
         private ISet<IAbsence> _allowedPreferenceAbsences;
-        private ISet<IAbsence> _allowedReportAbsences;
+        private ISet<IAbsence> _allowedAbsencesForReport;
         private DateOnly preferencePeriodFromDate;
         private DateOnly preferencePeriodToDate;
         private DateOnly preferenceInputFromDate;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             _allowedPreferenceShiftCategories = new HashSet<IShiftCategory>();
 			_allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>();
 			_allowedPreferenceAbsences = new HashSet<IAbsence>();
-			_allowedReportAbsences = new HashSet<IAbsence>();
+			_allowedAbsencesForReport = new HashSet<IAbsence>();
 			_mustMatchSkills = new HashSet<ISkill>();
             preferencePeriodFromDate = new DateOnly(DateHelper.MinSmallDateTime);
             preferencePeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	        clone._allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(_allowedPreferenceDayOffs);
 	        clone._allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(_allowedPreferenceShiftCategories);
 	        clone._allowedPreferenceAbsences = new HashSet<IAbsence>(_allowedPreferenceAbsences);
-	        clone._allowedReportAbsences = new HashSet<IAbsence>(_allowedReportAbsences);
+			clone._allowedAbsencesForReport = new HashSet<IAbsence>(_allowedAbsencesForReport);
 	        clone._mustMatchSkills = new HashSet<ISkill>(_mustMatchSkills);
             return clone;
         }
@@ -324,21 +324,21 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             _allowedPreferenceAbsences.Remove(absence);
         }
 
-		public virtual IEnumerable<IAbsence> AllowedReportAbsences
+		public virtual IEnumerable<IAbsence> AllowedAbsencesForReport
 		{
-			get { return _allowedReportAbsences; }
-			set { _allowedReportAbsences = new HashSet<IAbsence>(new List<IAbsence>(value)); }
+			get { return _allowedAbsencesForReport; }
+			set { _allowedAbsencesForReport = new HashSet<IAbsence>(new List<IAbsence>(value)); }
 		}
 
-		public virtual void AddAllowedReportAbsence(IAbsence absence)
+		public virtual void AddAllowedAbsenceForReport(IAbsence absence)
 		{
-			_allowedReportAbsences.Add(absence);
+			_allowedAbsencesForReport.Add(absence);
 		}
 
-		public virtual void RemoveAllowedReportAbsence(IAbsence absence)
+		public virtual void RemoveAllowedAbsenceForReport(IAbsence absence)
 		{
-			if (_allowedReportAbsences.Contains(absence))
-				_allowedReportAbsences.Remove(absence);
+			if (_allowedAbsencesForReport.Contains(absence))
+				_allowedAbsencesForReport.Remove(absence);
 		}
     }
 }

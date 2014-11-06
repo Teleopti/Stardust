@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkflowControlSetView));
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle13 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle14 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle15 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle16 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle9 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle10 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle11 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle12 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle1 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -67,6 +67,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tabControlAdvArea = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageBasic = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelBasic = new System.Windows.Forms.TableLayoutPanel();
+			this.twoListSelectorAbsencesForReport = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
+			this.panel9 = new System.Windows.Forms.Panel();
+			this.labelAllowedAbsencesForReport = new System.Windows.Forms.Label();
 			this.twoListSelectorAbsences = new Teleopti.Ccc.Win.Common.Controls.TwoListSelector();
 			this.panel8 = new System.Windows.Forms.Panel();
 			this.labelAbsencesAvailableForExtendedPreference = new System.Windows.Forms.Label();
@@ -164,6 +167,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tabControlAdvArea.SuspendLayout();
 			this.tabPageBasic.SuspendLayout();
 			this.tableLayoutPanelBasic.SuspendLayout();
+			this.panel9.SuspendLayout();
 			this.panel8.SuspendLayout();
 			this.tableLayoutPanelStudentAvailability.SuspendLayout();
 			this.panelVisualizationButtons.SuspendLayout();
@@ -414,11 +418,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.comboBoxAdvWorkflowControlSet.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvWorkflowControlSet.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvWorkflowControlSet.BeforeTouchSize = new System.Drawing.Size(252, 23);
+			this.comboBoxAdvWorkflowControlSet.BeforeTouchSize = new System.Drawing.Size(252, 19);
 			this.comboBoxAdvWorkflowControlSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvWorkflowControlSet.Location = new System.Drawing.Point(207, 7);
 			this.comboBoxAdvWorkflowControlSet.Name = "comboBoxAdvWorkflowControlSet";
-			this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(252, 23);
+			this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(252, 19);
 			this.comboBoxAdvWorkflowControlSet.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvWorkflowControlSet.TabIndex = 3;
 			this.comboBoxAdvWorkflowControlSet.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvWorkflowControlSet_SelectedIndexChanged);
@@ -489,6 +493,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBasic.ColumnCount = 2;
 			this.tableLayoutPanelBasic.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.37349F));
 			this.tableLayoutPanelBasic.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.62651F));
+			this.tableLayoutPanelBasic.Controls.Add(this.twoListSelectorAbsencesForReport, 0, 17);
+			this.tableLayoutPanelBasic.Controls.Add(this.panel9, 0, 16);
 			this.tableLayoutPanelBasic.Controls.Add(this.twoListSelectorAbsences, 0, 13);
 			this.tableLayoutPanelBasic.Controls.Add(this.panel8, 0, 12);
 			this.tableLayoutPanelBasic.Controls.Add(this.tableLayoutPanelStudentAvailability, 0, 5);
@@ -504,15 +510,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBasic.Controls.Add(this.tableLayoutPanelBasicSchedule, 0, 3);
 			this.tableLayoutPanelBasic.Controls.Add(this.tableLayoutPanelOpenPreference, 0, 7);
 			this.tableLayoutPanelBasic.Controls.Add(this.panelOpenPreference, 0, 6);
-			this.tableLayoutPanelBasic.Controls.Add(this.panel6, 0, 16);
-			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessPoints, 0, 17);
-			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessEqual, 0, 18);
+			this.tableLayoutPanelBasic.Controls.Add(this.panel6, 0, 18);
+			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessPoints, 0, 19);
+			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessEqual, 0, 20);
 			this.tableLayoutPanelBasic.Controls.Add(this.panel7, 0, 4);
 			this.tableLayoutPanelBasic.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBasic.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelBasic.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelBasic.Name = "tableLayoutPanelBasic";
-			this.tableLayoutPanelBasic.RowCount = 20;
+			this.tableLayoutPanelBasic.RowCount = 22;
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 115F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -530,11 +536,54 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185F));
+			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelBasic.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelBasic.TabIndex = 0;
+			// 
+			// twoListSelectorAbsencesForReport
+			// 
+			this.twoListSelectorAbsencesForReport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorAbsencesForReport.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorAbsencesForReport, 2);
+			this.twoListSelectorAbsencesForReport.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.twoListSelectorAbsencesForReport.Location = new System.Drawing.Point(0, 1430);
+			this.twoListSelectorAbsencesForReport.Margin = new System.Windows.Forms.Padding(0);
+			this.twoListSelectorAbsencesForReport.Name = "twoListSelectorAbsencesForReport";
+			this.twoListSelectorAbsencesForReport.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.twoListSelectorAbsencesForReport.Size = new System.Drawing.Size(965, 173);
+			this.twoListSelectorAbsencesForReport.TabIndex = 24;
+			// 
+			// panel9
+			// 
+			this.panel9.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.tableLayoutPanelBasic.SetColumnSpan(this.panel9, 2);
+			this.panel9.Controls.Add(this.labelAllowedAbsencesForReport);
+			this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel9.Location = new System.Drawing.Point(3, 1393);
+			this.panel9.Name = "panel9";
+			this.panel9.Size = new System.Drawing.Size(959, 34);
+			this.panel9.TabIndex = 23;
+			// 
+			// labelAllowedAbsencesForReport
+			// 
+			this.labelAllowedAbsencesForReport.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelAllowedAbsencesForReport.AutoSize = true;
+			this.labelAllowedAbsencesForReport.BackColor = System.Drawing.Color.Transparent;
+			this.labelAllowedAbsencesForReport.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelAllowedAbsencesForReport.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelAllowedAbsencesForReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelAllowedAbsencesForReport.Location = new System.Drawing.Point(3, 8);
+			this.labelAllowedAbsencesForReport.Name = "labelAllowedAbsencesForReport";
+			this.labelAllowedAbsencesForReport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
+			this.labelAllowedAbsencesForReport.Size = new System.Drawing.Size(197, 20);
+			this.labelAllowedAbsencesForReport.TabIndex = 0;
+			this.labelAllowedAbsencesForReport.Text = "xxAbsencesAvailableForReport";
+			this.labelAllowedAbsencesForReport.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// twoListSelectorAbsences
 			// 
@@ -874,11 +923,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.comboBoxAdvAllowedPreferenceActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvAllowedPreferenceActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 23);
+			this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 19);
 			this.comboBoxAdvAllowedPreferenceActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvAllowedPreferenceActivity.Location = new System.Drawing.Point(3, 1362);
 			this.comboBoxAdvAllowedPreferenceActivity.Name = "comboBoxAdvAllowedPreferenceActivity";
-			this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 23);
+			this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 19);
 			this.comboBoxAdvAllowedPreferenceActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvAllowedPreferenceActivity.TabIndex = 15;
 			this.comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged);
@@ -1162,7 +1211,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBasic.SetColumnSpan(this.panel6, 2);
 			this.panel6.Controls.Add(this.label4);
 			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel6.Location = new System.Drawing.Point(3, 1393);
+			this.panel6.Location = new System.Drawing.Point(3, 1618);
 			this.panel6.Name = "panel6";
 			this.panel6.Size = new System.Drawing.Size(959, 34);
 			this.panel6.TabIndex = 16;
@@ -1188,7 +1237,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.radioButtonAdvFairnessPoints.BeforeTouchSize = new System.Drawing.Size(932, 24);
 			this.radioButtonAdvFairnessPoints.Checked = true;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvFairnessPoints, 2);
-			this.radioButtonAdvFairnessPoints.Location = new System.Drawing.Point(3, 1435);
+			this.radioButtonAdvFairnessPoints.Location = new System.Drawing.Point(3, 1660);
 			this.radioButtonAdvFairnessPoints.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAdvFairnessPoints.Name = "radioButtonAdvFairnessPoints";
 			this.radioButtonAdvFairnessPoints.Size = new System.Drawing.Size(932, 24);
@@ -1202,11 +1251,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.radioButtonAdvFairnessEqual.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radioButtonAdvFairnessEqual.BeforeTouchSize = new System.Drawing.Size(932, 24);
 			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvFairnessEqual, 2);
-			this.radioButtonAdvFairnessEqual.Location = new System.Drawing.Point(3, 1470);
+			this.radioButtonAdvFairnessEqual.Location = new System.Drawing.Point(3, 1695);
 			this.radioButtonAdvFairnessEqual.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAdvFairnessEqual.Name = "radioButtonAdvFairnessEqual";
 			this.radioButtonAdvFairnessEqual.Size = new System.Drawing.Size(932, 24);
 			this.radioButtonAdvFairnessEqual.TabIndex = 18;
+			this.radioButtonAdvFairnessEqual.TabStop = false;
 			this.radioButtonAdvFairnessEqual.Text = "xxEqualOfEachShiftCategory";
 			this.radioButtonAdvFairnessEqual.ThemesEnabled = true;
 			this.radioButtonAdvFairnessEqual.CheckChanged += new System.EventHandler(this.radioButtonAdvFairnessEqualCheckChanged);
@@ -1343,30 +1393,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// gridControlAbsenceRequestOpenPeriods
 			// 
 			this.gridControlAbsenceRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-			gridBaseStyle13.Name = "Header";
-			gridBaseStyle13.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle13.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle13.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle13.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle13.StyleInfo.CellType = "Header";
-			gridBaseStyle13.StyleInfo.Font.Bold = true;
-			gridBaseStyle13.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle13.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle14.Name = "Standard";
-			gridBaseStyle14.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle14.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle15.Name = "Column Header";
-			gridBaseStyle15.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle15.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle16.Name = "Row Header";
-			gridBaseStyle16.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle16.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle16.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle9.Name = "Header";
+			gridBaseStyle9.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.CellType = "Header";
+			gridBaseStyle9.StyleInfo.Font.Bold = true;
+			gridBaseStyle9.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle9.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle10.Name = "Standard";
+			gridBaseStyle10.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle10.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle11.Name = "Column Header";
+			gridBaseStyle11.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle11.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle12.Name = "Row Header";
+			gridBaseStyle12.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle12.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle12.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlAbsenceRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle13,
-            gridBaseStyle14,
-            gridBaseStyle15,
-            gridBaseStyle16});
+            gridBaseStyle9,
+            gridBaseStyle10,
+            gridBaseStyle11,
+            gridBaseStyle12});
 			this.gridControlAbsenceRequestOpenPeriods.ColCount = 11;
 			this.gridControlAbsenceRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
@@ -1474,7 +1524,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("zh-CN");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
@@ -1567,30 +1617,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// gridControlVisualisation
 			// 
 			this.gridControlVisualisation.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-			gridBaseStyle9.Name = "Header";
-			gridBaseStyle9.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle9.StyleInfo.CellType = "Header";
-			gridBaseStyle9.StyleInfo.Font.Bold = true;
-			gridBaseStyle9.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle9.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle10.Name = "Standard";
-			gridBaseStyle10.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle10.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle11.Name = "Column Header";
-			gridBaseStyle11.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle11.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle12.Name = "Row Header";
-			gridBaseStyle12.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle12.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle12.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle1.Name = "Header";
+			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle1.StyleInfo.CellType = "Header";
+			gridBaseStyle1.StyleInfo.Font.Bold = true;
+			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle2.Name = "Standard";
+			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle3.Name = "Column Header";
+			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle4.Name = "Row Header";
+			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlVisualisation.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle9,
-            gridBaseStyle10,
-            gridBaseStyle11,
-            gridBaseStyle12});
+            gridBaseStyle1,
+            gridBaseStyle2,
+            gridBaseStyle3,
+            gridBaseStyle4});
 			this.gridControlVisualisation.ColCount = 2;
 			this.gridControlVisualisation.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
@@ -1874,7 +1924,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 537;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 851;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
@@ -1948,6 +1998,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tabControlAdvArea.ResumeLayout(false);
 			this.tabPageBasic.ResumeLayout(false);
 			this.tableLayoutPanelBasic.ResumeLayout(false);
+			this.panel9.ResumeLayout(false);
+			this.panel9.PerformLayout();
 			this.panel8.ResumeLayout(false);
 			this.panel8.PerformLayout();
 			this.tableLayoutPanelStudentAvailability.ResumeLayout(false);
@@ -2111,5 +2163,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private Panel panel8;
 		private Label labelAbsencesAvailableForExtendedPreference;
 		private TwoListSelector twoListSelectorAbsences;
+        private Panel panel9;
+        private Label labelAllowedAbsencesForReport;
+        private TwoListSelector twoListSelectorAbsencesForReport;
 	}
 }

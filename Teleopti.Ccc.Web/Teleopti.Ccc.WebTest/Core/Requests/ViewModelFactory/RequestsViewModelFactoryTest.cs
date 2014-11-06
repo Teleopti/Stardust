@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var absences = new List<IAbsence> { absence };
 
 			var wfcs = MockRepository.GenerateMock<IWorkflowControlSet>();
-			wfcs.Stub(x => x.AllowedReportAbsences).Return(absences);
+			wfcs.Stub(x => x.AllowedAbsencesForReport).Return(absences);
 
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var person = new Person

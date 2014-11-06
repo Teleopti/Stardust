@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetFetchMode("AllowedPreferenceDayOffs", FetchMode.Join)
                 .SetFetchMode("AllowedPreferenceShiftCategories", FetchMode.Join)
                 .SetFetchMode("AllowedPreferenceAbsences", FetchMode.Join)
+                .SetFetchMode("AllowedAbsencesForReport", FetchMode.Join)
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IWorkflowControlSet>();
             foreach (var workflowControlSet in list)

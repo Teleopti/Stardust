@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs { get; }
         IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories { get; }
         IEnumerable<IAbsence> AllowedPreferenceAbsences { get; }
+        IEnumerable<IAbsence> AllowedAbsencesForReport { get; }
         IEnumerable<ISkill> MustMatchSkills { get; }
         bool AutoGrantShiftTradeRequest { get; set; }
         void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff);
@@ -38,6 +39,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         void RemoveAllowedPreferenceShiftCategory(IShiftCategory shiftCategory);
         void AddAllowedPreferenceAbsence(IAbsence absence);
         void RemoveAllowedPreferenceAbsence(IAbsence absence);
+        void AddAllowedAbsenceForReport(IAbsence absence);
+        void RemoveAllowedAbsenceForReport(IAbsence absence);
         void UpdateAfterMerge(IWorkflowControlSet updatedWorkflowControlSet);
         void AddSkillToMatchList(ISkill skill);
         void RemoveSkillFromMatchList(ISkill skill);
@@ -238,6 +241,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             }
         }
 
+	    public IEnumerable<IAbsence> AllowedAbsencesForReport
+		{
+			get
+			{
+				return DomainEntity.AllowedAbsencesForReport;
+			}
+		}
+
         public IEnumerable<ISkill> MustMatchSkills
         {
             get { return DomainEntity.MustMatchSkills; }
@@ -270,6 +281,18 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         public virtual void RemoveAllowedPreferenceAbsence(IAbsence absence)
         {
             DomainEntity.RemoveAllowedPreferenceAbsence(absence);
+            IsDirty = true;
+        }
+
+        public virtual void AddAllowedAbsenceForReport(IAbsence absence)
+        {
+            DomainEntity.AddAllowedAbsenceForReport(absence);
+            IsDirty = true;
+        }
+
+        public virtual void RemoveAllowedAbsenceForReport(IAbsence absence)
+        {
+            DomainEntity.RemoveAllowedAbsenceForReport(absence);
             IsDirty = true;
         }
 

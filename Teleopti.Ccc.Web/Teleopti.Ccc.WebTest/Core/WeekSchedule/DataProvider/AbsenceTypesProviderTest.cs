@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			var expected = new List<IAbsence> { new Absence() };
 
 			var wfcs = MockRepository.GenerateMock<IWorkflowControlSet>();
-			wfcs.Stub(x => x.AllowedReportAbsences).Return(expected);
+			wfcs.Stub(x => x.AllowedAbsencesForReport).Return(expected);
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser().WorkflowControlSet).Return(wfcs);
 

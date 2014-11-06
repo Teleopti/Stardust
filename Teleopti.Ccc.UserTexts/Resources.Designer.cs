@@ -286,6 +286,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowed absences for absence report.
+        /// </summary>
+        public static string AbsencesAvailableForReport {
+            get {
+                return ResourceManager.GetString("AbsencesAvailableForReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a person account..
         /// </summary>
         public static string AbsenceSaveWasInvalid {

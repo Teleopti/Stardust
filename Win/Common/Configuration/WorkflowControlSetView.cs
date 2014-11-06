@@ -147,6 +147,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			twoListSelectorAbsences.SelectedAdded += twoListSelectorAbsencesSelectedAdded;
 			twoListSelectorAbsences.SelectedRemoved += twoListSelectorAbsencesSelectedRemoved;
 
+			twoListSelectorAbsencesForReport.SelectedAdded += twoListSelectorAbsencesForReportSelectedAdded;
+			twoListSelectorAbsencesForReport.SelectedRemoved += twoListSelectorAbsencesForReportSelectedRemoved;
+
 			twoListSelectorMatchingSkills.SelectedAdded += twoListSelectorMatchingSkills_SelectedAdded;
 			twoListSelectorMatchingSkills.SelectedRemoved += twoListSelectorMatchingSkills_SelectedRemoved;
 		}
@@ -165,6 +168,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				_presenter.AddAllowedPreferenceAbsence(item);
 		}
 
+		void twoListSelectorAbsencesForReportSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		{
+			var item = e.MovedItem as IAbsence;
+			if (item != null)
+				_presenter.RemoveAllowedAbsenceForReport(item);
+		}
+
+		void twoListSelectorAbsencesForReportSelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		{
+			var item = e.MovedItem as IAbsence;
+			if (item != null)
+				_presenter.AddAllowedAbsenceForReport(item);
+		}
+
 		private void releaseMangedResources()
 		{
 			twoListSelectorDayOffs.SelectedAdded -= twoListSelectorDayOffs_SelectedAdded;
@@ -175,6 +192,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			twoListSelectorAbsences.SelectedAdded -= twoListSelectorAbsencesSelectedAdded;
 			twoListSelectorAbsences.SelectedRemoved -= twoListSelectorAbsencesSelectedRemoved;
+
+			twoListSelectorAbsencesForReport.SelectedAdded -= twoListSelectorAbsencesForReportSelectedAdded;
+			twoListSelectorAbsencesForReport.SelectedRemoved -= twoListSelectorAbsencesForReportSelectedRemoved;
 
 			twoListSelectorMatchingSkills.SelectedAdded -= twoListSelectorMatchingSkills_SelectedAdded;
 			twoListSelectorMatchingSkills.SelectedRemoved -= twoListSelectorMatchingSkills_SelectedRemoved;
@@ -324,6 +344,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			panel6.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			panel7.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			panel8.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel9.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			panelMatchingSkills.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			panelOpenForShiftTrade.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
@@ -346,7 +367,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelTolerance.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelMatchingSkills.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			label3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-
+			labelAllowedAbsencesForReport.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 
 		protected override void SetCommonTexts()
@@ -636,6 +657,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void SetAllowedAbsences(IWorkflowControlSetModel selectedModel)
 		{
 			twoListSelectorAbsences.Initiate(_presenter.AbsencesCollection(), selectedModel.AllowedPreferenceAbsences, "Description", Resources.NotAvailable, Resources.Available);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void SetAllowedAbsencesForReport(IWorkflowControlSetModel selectedModel)
+		{
+			twoListSelectorAbsencesForReport.Initiate(_presenter.AbsencesCollection(), selectedModel.AllowedAbsencesForReport, "Description", Resources.NotAvailable, Resources.Available);
 		}
 
 		public void SetMatchingSkills(IWorkflowControlSetModel selectedModel)

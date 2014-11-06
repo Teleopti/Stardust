@@ -99,6 +99,13 @@
       <many-to-many column="Absence"
                     class="Teleopti.Ccc.Domain.Scheduling.Absence" foreign-key="FK_WorkflowControlSetAllowedAbsences_Absence"/>
     </set>
+
+    <set name="AllowedAbsencesForReport"
+         table="WorkflowControlSetAllowedAbsencesForReport">
+      <key column="WorkflowControlSet" foreign-key="FK_WorkflowControlSetAllowedAbsencesForReport_WorkflowControlSet"/>
+      <many-to-many column="Absence"
+                    class="Teleopti.Ccc.Domain.Scheduling.Absence" foreign-key="FK_WorkflowControlSetAllowedAbsencesReport_Absence"/>
+    </set>
     
     <set name="AllowedPreferenceShiftCategories"
          table="WorkflowControlSetAllowedShiftCategories">

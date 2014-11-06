@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _view.SetAllowedDayOffs(_selectedModel);
             _view.SetAllowedShiftCategories(_selectedModel);
             _view.SetAllowedAbsences(_selectedModel);
+            _view.SetAllowedAbsencesForReport(_selectedModel);
             _view.SetShiftTradeTargetTimeFlexibility(_selectedModel.ShiftTradeTargetTimeFlexibility);
 	        _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
 			_view.SetFairnessType(_selectedModel.GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111)));
@@ -269,7 +270,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     {
                         uow.Reassociate(workflowControlSetModel.OriginalDomainEntity);
                         var updatedWorkflowControlSet = uow.Merge(workflowControlSetModel.DomainEntity);
-                        LazyLoadingManager.Initialize(updatedWorkflowControlSet.AllowedPreferenceActivity);
+						LazyLoadingManager.Initialize(updatedWorkflowControlSet.AllowedPreferenceActivity);
                         LazyLoadingManager.Initialize(updatedWorkflowControlSet.UpdatedBy);
                         foreach (var absenceRequestOpenPeriod in updatedWorkflowControlSet.AbsenceRequestOpenPeriods)
                         {
@@ -513,6 +514,16 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         public virtual void RemoveAllowedPreferenceAbsence(IAbsence absence)
         {
             _selectedModel.RemoveAllowedPreferenceAbsence(absence);
+        }
+
+        public virtual void AddAllowedAbsenceForReport(IAbsence absence)
+        {
+            _selectedModel.AddAllowedAbsenceForReport(absence);
+        }
+
+        public virtual void RemoveAllowedAbsenceForReport(IAbsence absence)
+        {
+            _selectedModel.RemoveAllowedAbsenceForReport(absence);
         }
         
         public void SetShiftTradeTargetTimeFlexibility(TimeSpan flexibility)

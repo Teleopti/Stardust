@@ -65,4 +65,29 @@ CREATE TABLE [ReadModel].[AdherencePercentage](
 )
 
 GO
+
+----------------  
+--Name: Xinfeng Li
+--Date: 2014-11-06
+--Desc: Add new table for allowed absences for report in workflow controlset
+----------------  
+CREATE TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport](
+	[WorkflowControlSet] [uniqueidentifier] NOT NULL,
+	[Absence] [uniqueidentifier] NOT NULL
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport]  WITH CHECK ADD  CONSTRAINT [FK_WorkflowControlSetAllowedAbsencesForReport_Absence] FOREIGN KEY([Absence])
+REFERENCES [dbo].[Absence] ([Id])
+GO
+
+ALTER TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport] CHECK CONSTRAINT [FK_WorkflowControlSetAllowedAbsencesForReport_Absence]
+GO
+
+ALTER TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport]  WITH CHECK ADD  CONSTRAINT [FK_WorkflowControlSetAllowedAbsencesForReport_WorkflowControlSet] FOREIGN KEY([WorkflowControlSet])
+REFERENCES [dbo].[WorkflowControlSet] ([Id])
+GO
+
+ALTER TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport] CHECK CONSTRAINT [FK_WorkflowControlSetAllowedAbsencesForReport_WorkflowControlSet]
 GO
