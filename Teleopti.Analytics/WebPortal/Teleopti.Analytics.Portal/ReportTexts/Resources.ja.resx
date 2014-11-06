@@ -982,4 +982,121 @@
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>終了日（シフト開始）:</value>
   </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>エージェント毎の待機時間</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>待機グループ</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>完了（％）</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>必須</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>未了</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>現在のページ</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>次を検索</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>レポートで文字を検索</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>最初のページ</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>不適切なページ番号</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>最終ページ</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>次</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>次のページ</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>他にマッチするものがありません</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>ページセットアップ</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>ページ幅</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>前ページ</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>印刷レイアウト</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>印刷</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>レンダリング停止</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>文字が見つかりません</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>合計ページ</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>全ページ</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>ズーム</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>データベースへの接続タイムアウト、検索条件を制限して再試行してください</value>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>土曜日</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>エージェントごとの空き状況</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>稼働可能な日にち</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>稼働可能な時間</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>計画された日にち</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>利用</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>アクティブなスキルのみ</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>エージェントスキル</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>アクティブなスキルのみ</value>
+  </data>
 </root>

@@ -712,7 +712,7 @@
     <value>認証情報が無効です。再度実行してください。</value>
   </data>
   <data name="IsFullDayAbsence" xml:space="preserve">
-    <value>全日欠勤</value>
+    <value>終日欠勤</value>
   </data>
   <data name="ItemsSelectedParameter" xml:space="preserve">
     <value>{0} 個の項目が選択されました。</value>
@@ -4557,8 +4557,7 @@
     <value>その他</value>
   </data>
   <data name="MyTime" xml:space="preserve">
-    <!--<value>MyTime</value>-->
-  <value>Teleopti WFM MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
     <value>エージェントスケジュールメッセンジャー (ASM)</value>
@@ -5747,7 +5746,7 @@
     <value>エージェント 予定値と実値</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>エージェントごとのシフトカテゴリと全日欠勤</value>
+    <value>エージェントごとのシフトカテゴリと終日欠勤</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
     <value>1日当たりのシフトカテゴリ</value>
@@ -7816,7 +7815,7 @@
     <value>ワークロードと要員配置のインポート</value>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
-    <value>必須項目の達成</value>
+    <value>必須項目の完了</value>
   </data>
   <data name="DuplicateDaysOffValidationError" xml:space="preserve">
     <value>{0} は休暇が重複しています</value>
@@ -8224,7 +8223,7 @@
     <value>現在、全ての会議を表示できません!</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>1日当たりのシフトカテゴリと全日欠勤</value>
+    <value>1日当たりのシフトカテゴリと終日欠勤</value>
   </data>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
     <value>子スキルと親スキルが同じ名前になっているか、同名の子スキルが複数存在する可能性があります。マルチサイトスキルのプロパティを確認してください。フォーキャスターを終了します。</value>
@@ -8296,13 +8295,13 @@
     <value>最大座席数を超えないようにしてください</value>
   </data>
   <data name="FulfillRestrictions" xml:space="preserve">
-    <value>制限の実現</value>
+    <value>制限の完了</value>
   </data>
   <data name="ShiftLimits" xml:space="preserve">
     <value>シフト上限</value>
   </data>
   <data name="AvailabilityFulfillment" xml:space="preserve">
-    <value>空き状況の達成</value>
+    <value>空き状況の完了</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>プリファレンスの完了</value>
@@ -8311,7 +8310,7 @@
     <value>ローテーションの完了</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>学生の空き状況の達成</value>
+    <value>学生の空き状況の完了</value>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
     <value>要求の割り当て</value>
@@ -8692,7 +8691,7 @@ Teleopti研究開発グループ</value>
     <value>スケジュール期間から</value>
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
-    <value>全日欠勤</value>
+    <value>終日欠勤</value>
   </data>
   <data name="InsufficientPermissionForWeb" xml:space="preserve">
     <value>Webポータルへのアクセス権限がありません。</value>
@@ -8742,5 +8741,857 @@ Teleopti研究開発グループ</value>
   </data>
   <data name="WpfControls_LayerExpander_ShowDetails" xml:space="preserve">
     <value>詳細の表示/非表示</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>終日欠勤リクエスト開始時間</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>終日欠勤設定</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>日中の欠勤追加</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>日中の欠勤</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>既存のシフトに日中の欠勤を追加してください</value>
+  </data>
+  <data name="AddingIntradayAbsenceFor" xml:space="preserve">
+    <value>へ日中の欠勤を追加</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>最適化手順でブロックと同じシフトが選択された場合は複数日の間の時間は実行されません</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>eメール設定</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>通知設定の管理</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>通知設定</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>通知タイプ</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>からeメール送信</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>へテスト送信</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>インターバル内の問題</value>
+  </data>
+  <data name="AgentBadgeSetting" xml:space="preserve">
+    <value>エージェントバッジ</value>
+  </data>
+  <data name="EnableBadge" xml:space="preserve">
+    <value>エージェントバッジを有効化</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>利用</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>インターバル内のフィルター</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>リーダーボード</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>最低1つのバッジタイプを有効化して下さい</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>ランク</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>エージェント毎</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>ズーム</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>レディネス</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0}は{1}より早くできません</value>
+  </data>
+  <data name="BlockFinderTypeSingleDay" xml:space="preserve">
+    <value>＜ブロックしない＞</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>インターバル間の活動</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>シングル</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>シングルエージェントチーム</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>スケジュールされてない日にちを解決しようとしています</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>その日に対して十分な予算が割り当てられていません</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>チーム又はブロックが選択されたときにシフトカテゴリの制限がチェックされていません</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>チーム又はブロックが選択されていると最適化手順で”フレックス時間のシフト”、”フレックス時間の休暇”および”シフトカテゴリの制限”は実行されません</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>バッジのリセットに失敗しました。後で再試行してください。</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>プリファレンスを設定できません</value>
+  </data>
+  <data name="AddingFulldayAbsenceFor" xml:space="preserve">
+    <value>へ終日欠勤を追加</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>予算グループ人数</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>人数</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>同じシフト</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>有効なシフトが見つかりません</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>未読メッセージ数 ({0})</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>無効なエンド日</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>終日欠勤リクエスト終了時間</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>終日欠勤を追加</value>
+  </data>
+  <data name="Resolve" xml:space="preserve">
+    <value>解決</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>解決（分）</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>選択された項目が無効なためプリファレンスを追加できません</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>全ページ</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>有給時間</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>シフトバッグに基づかないシフトを修正してください</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>応答チャット数</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>デスクトップ通知を許可</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>1週間の休憩契約違反の許可</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>ページ幅</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>1週間当たり最大勤務時間契約違反の許可</value>
+  </data>
+  <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
+    <value>シフト交代可能な全チーム</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>ページの設定</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>夜間休憩契約違反の許可</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>残業時間の長さ</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>割り当てオプション</value>
+  </data>
+  <data name="FilterMultiplePerson" xml:space="preserve">
+    <value>複数の人をフィルター</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>テーマが長すぎます</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>ワークシフトを別の日に移動できません。新しいシフトを作成してください。</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>FILE</value>
+  </data>
+  <data name="FileProperCase" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>フェアー</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>受信者はあなたの前のメッセージに返信しました。ウインドウを更新し返信を確認してください。あなたのメッセージは送信されません。</value>
+  </data>
+  <data name="MinimumTimePerWeekColon" xml:space="preserve">
+    <value>1週間当たりの最小時間</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
+    <value>この週の勤務時間が少なすぎます（{0}）。最小値は {1} です。</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>複数</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>残業時間の長さ</value>
+  </data>
+  <data name="MyTradeCart" xml:space="preserve">
+    <value>マイトレードカート</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>新たなシルバーバッジを獲得しました！あなたの{1}日間における処理時間は{0}秒を下回っています。</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>新たなシルバーバッジを獲得しました！あなたの{1}日間における遵守率は{0}を上回っています。</value>
+  </data>
+  <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>新たなシルバーバッジを獲得しました！あなたの{1}日間における応答呼は{0}以上です。</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>新たなゴールドバッジを獲得しました！あなたの{1}日間における処理時間は{0}秒を下回っています。</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>新たなゴールドバッジを獲得しました！あなたの{1}日間における遵守率は{0}を上回っています。</value>
+  </data>
+  <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>新たなゴールドバッジを獲得しました！あなたの{1}日間における応答呼は{0}以上です。</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>新たなブロンズバッジを獲得しました！あなたの{1:yyyy-MM-dd}における平均処理時間は{0}秒を下回っています。</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>新たなブロンズバッジを獲得しました！あなたの{1:yyyy-MM-dd}における応答呼は{0}以上です。</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>残業オプションを予定</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>残業を予定</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>休暇ポイント数</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>残業可能なエージェントのみ</value>
+  </data>
+  <data name="Congratulations" xml:space="preserve">
+    <value>おめでとうございます！</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>シフトカテゴリポイント数</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>残業としてシフト</value>
+  </data>
+  <data name="SeniorityRankingDesc" xml:space="preserve">
+    <value>年功序列ランキング　降順</value>
+  </data>
+  <data name="SeniorityRankingAsc" xml:space="preserve">
+    <value>年功序列ランキング　昇順</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>年功序列ランキング</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>シフトバッグ</value>
+  </data>
+  <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
+    <value>遵守率しきい値</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>応答呼しきい値</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>年功序列ポイント数</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>遵守違反</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[名] [姓]</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[姓] [名]</value>
+  </data>
+  <data name="NoTeam" xml:space="preserve">
+    <value>&lt;該当チームなし&gt;</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>1ページ</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>SMS電話番号を取得する列の設定</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>エージェント毎の空き状況</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>からのチームと比較</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>カレンダーの共有</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>ここへ</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>これ以上一致しません</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>タスク時間</value>
+  </data>
+  <data name="TeamScheduling" xml:space="preserve">
+    <value>チームスケジューリング</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>チャット</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>チャット数　予測値</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>チャット総数</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>トータルタスク時間</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>トータルチャット時間</value>
+  </data>
+  <data name="FilteredResults" xml:space="preserve">
+    <value>フィルター結果</value>
+  </data>
+  <data name="FilteredList" xml:space="preserve">
+    <value>フィルター結果リスト</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>ブロックスケジューリングでは”シフトカテゴリ”、”開始時間”または”同じシフト”のうちの最低一つを選択してください</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>ブロックの最適化では”同じシフトカテゴリ”、”同じ開始時間”または”同じシフト”のうちの最低一つを選択してください</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>ページ総数</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>マイカレンダーの共有</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>レポートで文字を検索</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>休暇の間隔</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>休暇間隔のブロックとチーム休暇を保持しないは同時に最適化することができません。この最適化の結果は最適とはなりません。</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>分析情報</value>
+  </data>
+  <data name="PossibleMatches" xml:space="preserve">
+    <value>可能な組み合わせ</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>完了（%）</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>改善しました</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>文字が見つかりません</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>時</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>有効なチャット数</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>未了</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>次を検索</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>残業の種類</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>残業の種類</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>残業可能</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>残業可能</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>残業可能をフィルター</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>比較対象チーム</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>活動の追加に第2のシフトを作成することはできません</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>無効な終了時刻</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>無効化</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>詳細な遵守率</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>詳細な遵守率</value>
+  </data>
+  <data name="AdvancedFilter" xml:space="preserve">
+    <value>高度なフィルター</value>
+  </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>{0} {1}に対する1週間の休憩時間の解決</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;保持&gt;</value>
+  </data>
+  <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
+    <value>1ゴールドバッジと同じシルバーバッジの数</value>
+  </data>
+  <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
+    <value>1シルバーバッジと同じブロンズバッジの数</value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>1週間当たりの時間が無効です。1週間当たりの最大時間が1週間当たりの最小時間より小さい可能性があります。</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>SDKを選択してください</value>
+  </data>
+  <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
+    <value>Teleoptiのリソースにアクセスするためにメールアドレスを設定してください</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>アクティブエージェント</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>アクティブエージェントを表示</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>あなたに予算グループはありません</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>あなたの欠勤要求は否認されました。要求された日にちの一部に空きがありません。{0}の期間で欠勤要求を送ることができます。</value>
+  </data>
+  <data name="YouAreNotSignedIn" xml:space="preserve">
+    <value>あなたはサインインしていません</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>あなたはどのチームへもアクセスがありません</value>
+  </data>
+  <data name="WeeklyWorkTimeBroken" xml:space="preserve">
+    <value>あなたは週間勤務時間の制限を超えました</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>アラームの時間</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>エージェントスキル</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>エージェントの説明</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>エージェントへ時間後に活動が変わる警告</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>エージェント毎の状態の時間</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>カレンダーアプリからスケジュールを取得するには以下のURLを利用してください。一般的なカレンダーアプリからこれを利用する方法はこちらを参照してください。</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>キャンペーンのチャット数</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>キャンペーンのチャット数 %</value>
+  </data>
+  <data name="QueueMetrics" xml:space="preserve">
+    <value>キューの評価指標</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>この日付ではあなたは従業員ではありません</value>
+  </data>
+  <data name="CompactView" xml:space="preserve">
+    <value>コンパクトビュー</value>
+  </data>
+  <data name="WebServerDown" xml:space="preserve">
+    <value>サーバーを利用できません。これにより一部の機能が有効化できません。</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>サインアウト</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>サインイン</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>サマリ</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>シフトカテゴリ</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>シフトカテゴリのプロパティを入力</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>シフトカテゴリ分布</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>シフトカテゴリ毎</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>シフトを開く</value>
+  </data>
+  <data name="DeleteSkill" xml:space="preserve">
+    <value>スキル削除</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>スキル活動</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>スキル活動</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>スケジュールの再読み込みが必要です</value>
+  </data>
+  <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
+    <value>スケジュールピリオド</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>スタートページ</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>そのチームブロック機関は合法ではありません</value>
+  </data>
+  <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
+    <value>その予測を他のシナリオへ保存</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>チャット</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>チャット</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>チャット数のインデックスを作成</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>チャット時間</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>データベースへの接続がタイムアウトになりました。検索条件を制限して再試行してください。</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>データ収集中</value>
+  </data>
+  <data name="Desktop" xml:space="preserve">
+    <value>デスクトップ</value>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>とサインイン</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>ナビゲート</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>のタグの変更</value>
+  </data>
+  <data name="RemovingAbsenceFor" xml:space="preserve">
+    <value>の欠勤を削除</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>パートタイム比率</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>バッジのリセット</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>バッジリーダーボードを表示</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>バッジを表示</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>ピリオドがありません</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>プリファレンスを追加</value>
+  </data>
+  <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
+    <value>ページを更新</value>
+  </data>
+  <data name="SaveToSpace" xml:space="preserve">
+    <value>へ保存</value>
+  </data>
+  <data name="MovingActivityFor" xml:space="preserve">
+    <value>へ活動を移動</value>
+  </data>
+  <data name="AddingActivityFor" xml:space="preserve">
+    <value>へ活動を追加</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>マイレポート</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>モバイル</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>リアルタイム遵守率の概要</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>レディ時間　/　予定レディ時間</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>レンダリング中止</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>ワークフローコントロールセット</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>中止</value>
+  </data>
+  <data name="ShiftEndingMessage" xml:space="preserve">
+    <value>今のシフトは{0}に終了</value>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>他のユーザーとしてサインイン</value>
+  </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>他のユーザーとしてサインイン</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>低い</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>個人アカウントを表示</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>値</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>元の着信チャット数</value>
+  </data>
+  <data name="PleaseTryAgainWithExclamation" xml:space="preserve">
+    <value>再度実行してください！</value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>再送信</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>分布</value>
+  </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>利用可能なデータソースがありません</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>削除の確認</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>前ページ</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>前もって保存された残業可能</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>勤務時間</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>印刷</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>印刷レイアウト</value>
+  </data>
+  <data name="CalculateLegalState" xml:space="preserve">
+    <value>合法な状態を計算</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>否認</value>
+  </data>
+  <data name="FailedWithExclamation" xml:space="preserve">
+    <value>失敗しました！</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>季節変動の月の日を使用</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>学生の空き状況へ追加</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>実行すると全てのエージェントの全てのバッジが削除されます。OKをクリックすると全てのバッジが削除され元には戻せません。実行しますか？</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>少なくとも1人以上を選択してください</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>少なくとも1日以上がスケジュールできません</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>平均</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>平均チャット数</value>
+  </data>
+  <data name="SetBadgeThresholdForAHT" xml:space="preserve">
+    <value>平均処理時間しきい値 (HH:mm:ss)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>必須項目</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="SuccessWithExclamation" xml:space="preserve">
+    <value>成功！</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>放棄チャット数</value>
+  </data>
+  <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>新たなブロンズバッジを獲得しました！あなたの{1:yyyy-MM-dd}における遵守率は{0}を上回っています。</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>既存シフトの終了の拡張</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>日毎</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>昨日</value>
+  </data>
+  <data name="MoveTimeOn" xml:space="preserve">
+    <value>時間の移動</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>最大同時タスク</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>最終ページ</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>月次スケジュール</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>欠勤要求が承認される可能性</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>次</value>
+  </data>
+  <data name="NextActivity" xml:space="preserve">
+    <value>次の活動</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>次の活動({0})は{1}から開始</value>
+  </data>
+  <data name="NextActivityStartTime" xml:space="preserve">
+    <value>次の活動開始時間</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>次ページ</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>残業可能を追加</value>
+  </data>
+  <data name="MoveActivity" xml:space="preserve">
+    <value>活動を移動</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>状態の時間</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>現在のページ</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>現地時間</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>異なった日付ですのでシフト交代は否認されました</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>着信チャット数</value>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>秒</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>空き状況</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>空き状況をフィルター</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>空き状況を変更</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>算出チャット数</value>
+  </data>
+  <data name="RequestsMenu" xml:space="preserve">
+    <value>要求</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>評価指標</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>追跡者の種類</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>逸脱チャット数</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>選択されたエージェントの視点にスイッチ</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>選択した活動のトータル時間</value>
+  </data>
+  <data name="ShowDuplicateRecipient" xml:space="preserve">
+    <value>重複した受信者を表示</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>高い</value>
   </data>
 </root>
