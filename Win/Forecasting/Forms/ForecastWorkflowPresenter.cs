@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _model.SetWorkPeriod(selectedDate);
         }
 
-        public void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates)
+        public void ReloadFilteredWorkloadDayTemplates(IFilteredData filteredDates, int templateIndex)
         {
-            _model.ReloadFilteredWorkloadDayTemplates(filteredDates);
+			_model.ReloadFilteredWorkloadDayTemplates(filteredDates, templateIndex);
         }
 
 		public void ReloadHistoricalDataDepth(VolumeYear volumeYear, IList<DateOnlyPeriod> selectedDates)

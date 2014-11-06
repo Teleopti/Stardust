@@ -83,13 +83,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             return workloadDays;
         }
 
-        public void ReloadFilteredWorkloadTemplates(IList<DateOnlyPeriod> selectedDates, IList<DateOnly> filteredDates, IWorkload workload)
+        public void ReloadFilteredWorkloadTemplates(IList<DateOnlyPeriod> selectedDates, IList<DateOnly> filteredDates, IWorkload workload, int templateIndex)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var statHelper = new StatisticHelper(_repositoryFactory, uow);
                 var wr = new WorkloadDayTemplateCalculator(statHelper, new OutlierRepository(uow));
-                wr.LoadFilteredWorkloadDayTemplates(selectedDates, workload, filteredDates);
+				wr.LoadFilteredWorkloadDayTemplates(selectedDates, workload, filteredDates, templateIndex);
             }
         }
 

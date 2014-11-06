@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
             statistic.CalculateCustomTemplateDay(filteredWorkloadDays, dayIndex);
         }
 
-        public void LoadFilteredWorkloadDayTemplates(IList<DateOnlyPeriod> dateCollection, IWorkload workload, IList<DateOnly> filteredDates)
+        public void LoadFilteredWorkloadDayTemplates(IList<DateOnlyPeriod> dateCollection, IWorkload workload, IList<DateOnly> filteredDates, int templateIndex)
         {
             var workloadDays = CollectStatistics(dateCollection, workload, new OutlierWorkloadDayFilter<IWorkloadDayBase>(workload, _outlierRepository));
             var filteredWorkloadDays = workloadDays.Where(d => !filteredDates.Contains(d.CurrentDate)).ToList();
 
             var statistic = new Statistic(workload);
-            statistic.CalculateTemplateDays(filteredWorkloadDays);
+            statistic.ReloadCustomTemplateDay(filteredWorkloadDays, templateIndex);
         }
     }
 }
