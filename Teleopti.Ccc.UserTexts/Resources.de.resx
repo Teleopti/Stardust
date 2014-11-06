@@ -364,7 +364,7 @@
     <comment>Add Optional Column</comment>
   </data>
   <data name="AddOutlierThreeDots" xml:space="preserve">
-    <value>Besonderes Event hinzufügen…</value>
+    <value>Besonderes Ereignis hinzufügen…</value>
     <comment>Add special event... menu item</comment>
   </data>
   <data name="AddOvertime" xml:space="preserve">
@@ -3700,7 +3700,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>New Optional Column</comment>
   </data>
   <data name="NewOutlier" xml:space="preserve">
-    <value>Neuer besonderes Event</value>
+    <value>Neues besonderes Ereignis</value>
     <comment>New special event</comment>
   </data>
   <data name="NewPartTimePercentage" xml:space="preserve">
@@ -4239,7 +4239,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Original tasks</comment>
   </data>
   <data name="Outlier" xml:space="preserve">
-    <value>Besonderes Event</value>
+    <value>Besonderes Ereignis</value>
     <comment>Special event</comment>
   </data>
   <data name="Output" xml:space="preserve">
@@ -5768,7 +5768,7 @@ Periods</comment>
     <comment>Sort meny asc</comment>
   </data>
   <data name="SpecialEvents" xml:space="preserve">
-    <value>Besonderes Event</value>
+    <value>Besonderes Ereignis</value>
     <comment>Special events</comment>
   </data>
   <data name="SpecialTemplates" xml:space="preserve">
@@ -11024,7 +11024,7 @@ Diese Optionen sind aktiviert:
     <value>Sie haben eine Begrenzung der wöchentlichen Arbeitszeit gebrochen.</value>
   </data>
   <data name="QueueMetrics" xml:space="preserve">
-    <value>Team Kennzahlen</value>
+    <value>Queue Kennzahlen</value>
   </data>
   <data name="TimeInAlarm" xml:space="preserve">
     <value>Zeit in Alarm</value>
@@ -11198,7 +11198,7 @@ Diese Optionen sind aktiviert:
     <value>[Nachname] [Vorname]</value>
   </data>
   <data name="ResetBadges" xml:space="preserve">
-    <value>Badges zurücksetzen</value>
+    <value>Badges löschen</value>
   </data>
   <data name="ResetBadgesConfirm" xml:space="preserve">
     <value>Es werden alle Badges aller Mitarbeiter gelöscht! Wollen Sie fortfahren? </value>
@@ -11226,5 +11226,65 @@ Diese Optionen sind aktiviert:
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Option "Zeit zwischen den Tagen" wird nicht ausgeführt, wenn bei der Blockplanung "Gleiche Schichten" ausgewählt wurde, </value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Einstellung der Spalte für SMS Telefonnummer</value>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Desktop-Nachrichten erlauben</value>
+  </data>
+  <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
+    <value>Geben Sie die Werte für Schichtkategorien ein</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Badge Rangliste anzeigen</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Mitarbeiter Darstellung</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Schichten an Schichtsammlung anpassen</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>nutzen</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Einstellungen der Ganztags-Abwesenheiten</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Einstellungen Email</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Einstellungen Benachrichtigungen</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Benachrichtigungen</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Benachrichtigungstyp</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Email senden von:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Test senden an:</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Rangliste</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Bitte nutzen Sie mindestens einen Badge-Typ</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Rang</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>Die Präferenz kann nicht ausgewählt werden, da das ausgewählte Element nicht mehr zur Verfügung steht.</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Bericht Abwesenheiten</value>
   </data>
 </root>
