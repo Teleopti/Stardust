@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 						.Date
 				into g
 				select aggregateDailyNumbers(g, calculator);
-			return result;
+			return result.ToArray(); //perf: no deferred execution here!
 		}
 
 		private static DailyStatistic aggregateDailyNumbers(IGrouping<DateTime, IStatisticTask> grouping, QueueStatisticsCalculator calculator)
