@@ -345,6 +345,8 @@
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
+    <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamOutOfAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\SiteOutOfAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SitesController.cs" />
