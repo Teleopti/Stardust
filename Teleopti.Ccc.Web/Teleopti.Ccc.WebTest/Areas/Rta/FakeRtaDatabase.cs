@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				{
 					PayloadId = activityId,
 					StartDateTime = start,
-					EndDateTime = end
+					EndDateTime = end,
+					BelongsToDate = new DateOnly(start.Date)
 				}
 			});
 			return this;

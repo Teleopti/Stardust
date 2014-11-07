@@ -44,34 +44,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveExternalUserState(state2);
 			target.SaveExternalUserState(state1);
 
-			publisher.PublishedEvents.Should().Have.Count.EqualTo(2);
-			var event1 = publisher.PublishedEvents.ElementAt(0) as PersonInAdherenceEvent;
+			var event1 = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			event1.PersonId.Should().Be(personId1);
-			var event2 = publisher.PublishedEvents.ElementAt(1) as PersonOutOfAdherenceEvent;
+			var event2 = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
 			event2.PersonId.Should().Be(personId2);
 		}
 
-		[Test]
-		public void ShouldNotPublishEventsForPersonWithNoScheduledActivity()
-		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
-			};
-			var activityId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", Guid.NewGuid())
-				.WithAlarm("statecode", activityId, 0)
-				.Make();
-			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
-
-			target.SaveExternalUserState(state);
-
-			publisher.PublishedEvents.Should().Have.Count.EqualTo(0);
-		}
 	}
 }

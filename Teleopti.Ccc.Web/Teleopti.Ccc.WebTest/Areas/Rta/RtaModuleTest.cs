@@ -83,9 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))
 			{
-				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
-					.Select(o => o.GetType())
-					.Should().Contain(typeof(AgentStateChangedCommandHandler));
+				container.Resolve<IRtaEventPublisher>().Should().Be.OfType<RtaEventPublisher>();
 			}
 		}
 
@@ -94,9 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, false))
 			{
-				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
-					.Select(o => o.GetType())
-					.Should().Not.Contain(typeof(AgentStateChangedCommandHandler));
+				container.Resolve<IRtaEventPublisher>().Should().Be.OfType<NoEvents>();
 			}
 		}
 

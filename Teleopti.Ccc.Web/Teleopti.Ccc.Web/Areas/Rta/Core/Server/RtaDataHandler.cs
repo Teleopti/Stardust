@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
 		private readonly IEnumerable<IActualAgentStateHasBeenSent> _actualAgentStateHasBeenSent;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IRtaEventPublisher _eventPublisher;
 
 		private readonly ActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory mbCacheFactory,
 			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
-			IEventPublisher eventPublisher)
+			IRtaEventPublisher eventPublisher)
 		{
 			_messageClient = messageClient;
 			_messageSender = messageSender;
@@ -136,8 +136,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				PreviousState = _databaseReader.GetCurrentActualAgentState(personId),
 			};
 
-			info.CurrentActivity = getCurrentActivity(timestamp, info);
-			info.NextActivityInShift = getNextActivityInShift(timestamp, info);
+			info.CurrentActivity = activityForTime(info, timestamp);
+			info.NextActivityInShift = nextAdjacentActivityForTime(info, timestamp);
+			if (info.PreviousState != null)
+				info.PreviousStateActivity = activityForTime(info, info.PreviousState.ReceivedTime);
 
 			info.NewState = _agentAssembler.GetAgentState(
 				info.CurrentActivity,
@@ -152,19 +154,24 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				batch,
 				sourceId);
 
-			//publishShiftStartEvent(info);
+			info.CurrentShiftStartTime = startTimeOfShift(info, info.CurrentActivity);
+			info.CurrentShiftEndTime = endTimeOfShift(info, info.CurrentActivity);
+			if (info.PreviousStateActivity != null)
+				info.PreviousStateShiftStartTime = startTimeOfShift(info, info.PreviousStateActivity);
+
+			_eventPublisher.Publish(info);
 
 			return info;
 		}
 
-		private static ScheduleLayer getCurrentActivity(DateTime timestamp, StateInfo info)
+		private static ScheduleLayer activityForTime(StateInfo info, DateTime time)
 		{
-			return info.ScheduleLayers.FirstOrDefault(l => l.EndDateTime >= timestamp && l.StartDateTime <= timestamp);
+			return info.ScheduleLayers.FirstOrDefault(l => l.EndDateTime >= time && l.StartDateTime <= time);
 		}
 
-		private static ScheduleLayer getNextActivityInShift(DateTime timestamp, StateInfo info)
+		private static ScheduleLayer nextAdjacentActivityForTime(StateInfo info, DateTime time)
 		{
-			var nextActivity = (from l in info.ScheduleLayers where l.StartDateTime > timestamp select l).FirstOrDefault();
+			var nextActivity = (from l in info.ScheduleLayers where l.StartDateTime > time select l).FirstOrDefault();
 			if (nextActivity == null)
 				return null;
 			if (info.CurrentActivity == null)
@@ -174,19 +181,26 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			return null;
 		}
 
-		//private void publishShiftStartEvent(StateInfo info)
-		//{
-			
-		//	if (info.PreviousState == null)
-		//	{
-		//		//_eventPublisher.Publish(new PersonShiftStartEvent { PersonId = personId });
-		//		return;
-		//	}
-		//	if (info.PreviousState.ScheduledId == Guid.Empty && info.NewState.ScheduledId != Guid.Empty)
-		//	{
-		//		_eventPublisher.Publish(new PersonShiftStartEvent { PersonId = info.NewState.PersonId });
-		//	}
-		//}
+		private static DateTime startTimeOfShift(StateInfo info, ScheduleLayer activity)
+		{
+			if (activity == null)
+				return DateTime.MinValue;
+			return activitiesThisShift(info, activity).Select(x => x.StartDateTime).Min();
+		}
+
+		private static DateTime endTimeOfShift(StateInfo info, ScheduleLayer activity)
+		{
+			if (activity == null)
+				return DateTime.MinValue;
+			return activitiesThisShift(info, activity).Select(x => x.EndDateTime).Max();
+		}
+
+		private static IEnumerable<ScheduleLayer> activitiesThisShift(StateInfo info, ScheduleLayer activity)
+		{
+			return from l in info.ScheduleLayers
+				where l.BelongsToDate == activity.BelongsToDate
+				select l;
+		}
 
 		private void handleLastOfBatch(DateTime batchId, string sourceId)
 		{

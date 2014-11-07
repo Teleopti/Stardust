@@ -33,10 +33,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			var utcDate = _now.UtcDateTime().Date;
 			var query = string.Format(CultureInfo.InvariantCulture,
-				@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+				@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor, BelongsToDate 
 											FROM ReadModel.ScheduleProjectionReadOnly rta
 											WHERE PersonId='{0}'
-											AND BelongsToDate BETWEEN '{1}' AND '{2}'", personId,
+											AND BelongsToDate BETWEEN '{1}' AND '{2}'",
+				personId,
 				utcDate.AddDays(-1),
 				utcDate.AddDays(1));
 			var layers = new List<ScheduleLayer>();
@@ -50,14 +51,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				while (reader.Read())
 				{
 					var layer = new ScheduleLayer
-						{
-							PayloadId = reader.GetGuid(reader.GetOrdinal("PayloadId")),
-							StartDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime")),
-							EndDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime")),
-							Name = reader.GetString(reader.GetOrdinal("Name")),
-							ShortName = reader.GetString(reader.GetOrdinal("ShortName")),
-							DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"))
-						};
+					{
+						PayloadId = reader.GetGuid(reader.GetOrdinal("PayloadId")),
+						StartDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime")),
+						EndDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime")),
+						Name = reader.GetString(reader.GetOrdinal("Name")),
+						ShortName = reader.GetString(reader.GetOrdinal("ShortName")),
+						DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor")),
+						BelongsToDate = new DateOnly(reader.GetDateTime(reader.GetOrdinal("BelongsToDate")))
+					};
 					layers.Add(layer);
 				}
 				reader.Close();

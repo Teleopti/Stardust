@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -33,7 +38,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Should().Be.Null();
 		}
 
-
 		[Test]
 		public void ShouldGetCurrentActualAgentStates()
 		{
@@ -50,5 +54,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldReadBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var layer = new ProjectionChangedEventLayer
+				{
+					StartDateTime = "2014-11-07 10:00".ToTime(),
+					EndDateTime = "2014-11-07 10:00".ToTime()
+				};
+				var repository = new ScheduleProjectionReadOnlyRepository(new FixedCurrentUnitOfWork(uow));
+				repository.AddProjectedLayer(new DateOnly("2014-11-07".ToTime()), Guid.NewGuid(), personId, layer);
+				uow.PersistAll();
+			}
+			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new ThisIsNow("2014-11-07 06:00"));
+
+			var result = target.GetCurrentSchedule(personId);
+
+			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".ToTime()));
+		}
 	}
 }

@@ -495,7 +495,6 @@
     <Compile Include="Areas\Rta\Core\Server\AlarmMapper.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAlarmMapper.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
-    <Compile Include="Areas\Rta\Core\Server\StateInfo.cs" />
     <Compile Include="Areas\Rta\Core\Server\IRtaDataHandler.cs" />
     <Compile Include="Areas\Rta\Core\Server\NotificationFactory.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />

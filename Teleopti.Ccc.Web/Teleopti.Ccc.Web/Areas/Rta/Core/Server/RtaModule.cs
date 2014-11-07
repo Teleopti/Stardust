@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				.SingleInstance()
 				;
 			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
-				builder.RegisterType<AgentStateChangedCommandHandler>().SingleInstance().As<IActualAgentStateHasBeenSent>();
+				builder.RegisterType<RtaEventPublisher>().SingleInstance().As<IRtaEventPublisher>();
+			else
+				builder.RegisterType<NoEvents>().SingleInstance().As<IRtaEventPublisher>();
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 

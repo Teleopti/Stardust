@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !data.ActualAgentState.StaffingEffect.Equals(actualAgentState.StaffingEffect);
+				adherenceChanged = !data.ActualAgentState.InAdherence.Equals(actualAgentState.InAdherence);
 				data.ActualAgentState = actualAgentState;
 				data.OrganizationData = personOrganizationData;
 				return data;
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		{
 			return _aggregationDatas
 					.Where(k => k.Value.OrganizationData.TeamId == teamId)
-					.Count(x => Math.Abs(x.Value.ActualAgentState.StaffingEffect) > 0.01);
+					.Count(x => !x.Value.ActualAgentState.InAdherence);
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)
 		{
 			return _aggregationDatas
 				.Where(k => k.Value.OrganizationData.SiteId == siteId)
-				.Count(x => Math.Abs(x.Value.ActualAgentState.StaffingEffect) > 0.01);
+				.Count(x => !x.Value.ActualAgentState.InAdherence);
 		}
 
 		public IEnumerable<IActualAgentState> GetActualAgentStateForTeam(Guid teamId)

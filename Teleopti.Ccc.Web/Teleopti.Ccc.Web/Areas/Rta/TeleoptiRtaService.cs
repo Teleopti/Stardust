@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory cacheFactory,
 			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
+			IRtaEventPublisher eventPublisher,
 			INow now,
-			IConfigReader configReader,
-			IEventPublisher eventPublisher)
+			IConfigReader configReader)
 		{
 			_rtaDataHandler = new RtaDataHandler(
 				signalRClient,

@@ -17,9 +17,15 @@ namespace Teleopti.Ccc.Domain.Common.Time
 			_mutatedUtc = utc;
 		}
 
+		public void Mutate(string utc)
+		{
+			Mutate(utc.ToTime());
+		}
+
 		public bool IsMutated()
 		{
 			return _mutatedUtc.HasValue;
 		}
+
 	}
 }

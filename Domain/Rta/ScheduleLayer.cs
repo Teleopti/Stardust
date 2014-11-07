@@ -12,8 +12,9 @@ namespace Teleopti.Ccc.Domain.Rta
         public string Name { get; set; }
         public string ShortName { get; set; }
         public int DisplayColor { get; set; }
+	    public DateOnly BelongsToDate { get; set; }
 
-        public Color TheColor()
+	    public Color TheColor()
         {
             return Color.FromArgb(DisplayColor);
         }

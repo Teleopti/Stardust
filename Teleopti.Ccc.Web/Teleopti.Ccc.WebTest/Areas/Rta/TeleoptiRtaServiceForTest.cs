@@ -25,10 +25,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
-				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), MockRepository.GenerateMock<IMessageSender>()),
+				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IMessageSender>()),
+				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>()),
 				new Now(),
-				new FakeConfigReader(),
-				MockRepository.GenerateMock<IEventPublisher>())
+				new FakeConfigReader()
+				)
 		{
 		}
 
@@ -39,10 +40,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
-				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), MockRepository.GenerateMock<IMessageSender>()),
+				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IMessageSender>()),
+				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>()),
 				now,
-				new FakeConfigReader(),
-				MockRepository.GenerateMock<IEventPublisher>())
+				new FakeConfigReader())
 		{
 		}
 
@@ -53,10 +54,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
-				makeActualAgentStateHasBeenSent(database, eventPublisher, MockRepository.GenerateMock<IMessageSender>()),
+				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IMessageSender>()),
+				new RtaEventPublisher(eventPublisher),
 				now,
-				new FakeConfigReader(),
-				eventPublisher)
+				new FakeConfigReader())
 		{
 		}
 
@@ -67,11 +68,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
-				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), messageSender),
+				makeActualAgentStateHasBeenSent(database, messageSender),
+				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>()),
 				now,
-				new FakeConfigReader(),
-				MockRepository.GenerateMock<IEventPublisher>()
-			  )
+				new FakeConfigReader())
 		{
 		}
 
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory cacheFactory,
 			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
+			IRtaEventPublisher eventPublisher,
 			INow now,
-			IConfigReader configReader,
-			IEventPublisher eventPublisher)
+			IConfigReader configReader)
 			: base(
 				signalRClient,
 				messageSender,
@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				databaseWriter,
 				cacheFactory,
 				actualAgentStateHasBeenSent,
+				eventPublisher,
 				now,
-				configReader,
-				eventPublisher
+				configReader
 				)
 		{
 			_messageSender = messageSender;
@@ -131,15 +131,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
 		}
 
-		private static IEnumerable<IActualAgentStateHasBeenSent> makeActualAgentStateHasBeenSent(FakeRtaDatabase database, IEventPublisher eventPublisher, IMessageSender messageSender)
+		private static IEnumerable<IActualAgentStateHasBeenSent> makeActualAgentStateHasBeenSent(FakeRtaDatabase database, IMessageSender messageSender)
 		{
 			return new IActualAgentStateHasBeenSent[]
 			{
 				new AdherenceAggregator(
-				messageSender,
-				new OrganizationForPerson(new PersonOrganizationProvider(database))
-				),
-				new AgentStateChangedCommandHandler(eventPublisher)
+					messageSender,
+					new OrganizationForPerson(new PersonOrganizationProvider(database))
+				)
 			};
 		}
 
