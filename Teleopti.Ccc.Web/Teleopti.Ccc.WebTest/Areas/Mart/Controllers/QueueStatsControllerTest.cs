@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Web.Http;
 using System.Web.Http.Controllers;
-using System.Web.Http.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Web.Areas.Mart.Controllers;
@@ -27,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 			var controller = setupControllerForTests(handler, "Teleopti WFM", 1);
 			
 			controller.Post(queueStatsModels);
-			handler.AssertWasCalled(x => x.Handle(queueStatsModels, "Teleopti WFM", 1));
+			handler.AssertWasCalled(x => x.Handle(queueStatsModels, "Teleopti WFM", 1, 0));
 		}
 
 		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId)

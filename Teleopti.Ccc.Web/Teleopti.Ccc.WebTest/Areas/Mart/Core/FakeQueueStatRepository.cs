@@ -8,9 +8,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 	public class FakeQueueStatRepository : IQueueStatRepository
 	{
 		private int _dateId = 1515;
-		public FactQueueModel SavedQueueModel { get; set; }
+		public List<FactQueueModel> SavedQueueModelBatch { get; set; }
 		public DateTime DateTimeInUtc { get; set; }
 		public LogObjectSource LogObject { get; set; }
+		public int Latency { get; set; }
+		public int BatchCounter { get; set; }
+
+		public FakeQueueStatRepository()
+		{
+			SavedQueueModelBatch = new List<FactQueueModel>();
+		}
+
+		public FactQueueModel SavedQueueModel
+		{
+			get { return SavedQueueModelBatch[0]; }
+		}
 
 		public LogObjectSource GetLogObject(int logObjectId, string nhibDataSourceName)
 		{
@@ -34,10 +46,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		{
 			return 15;
 		}
-
-		public void Save(IList<FactQueueModel> factQueueModel, string nhibDataSourceName)
+		
+		public void SaveBatch(IList<FactQueueModel> factQueueModels, string nhibDataSourceName)
 		{
-			SavedQueueModel = factQueueModel[0];
+			SavedQueueModelBatch.AddRange(factQueueModels);
+			BatchCounter++;
+		}
+
+		public void SetLatency(int latency)
+		{
+			Latency = latency;
 		}
 
 		public void SetInvalidDateId()

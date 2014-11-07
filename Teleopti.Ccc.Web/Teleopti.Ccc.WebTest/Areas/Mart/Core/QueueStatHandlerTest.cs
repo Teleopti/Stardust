@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using NUnit.Framework;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 					IntervalStart = "2014-12-12 15:00"
 				}
 			};
-			target.Handle(queueDataList, "nhib", 1);
+			target.Handle(queueDataList, "nhib", 1, 0);
 
 			Assert.That(fakeRepos.LogObject.Id, Is.EqualTo(1));
 		}
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 					IntervalStart = "2014-12-12 15:00"
 				}
 			};
-			target.Handle(queueDataList, "nhib", 1);
+			target.Handle(queueDataList, "nhib", 1, 0);
 
 			Assert.That(fakeRepos.SavedQueueModel.QueueId, Is.EqualTo(10));
 		}
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1, 0);
 		}
 
 		[Test]
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1, 0);
 			Assert.That(fakeRepos.SavedQueueModel.DateId, Is.EqualTo(1515));
 			Assert.That(fakeRepos.DateTimeInUtc, Is.EqualTo(TimeZoneHelper.ConvertToUtc(DateTime.Parse(queueStatsModel.IntervalStart), timeZone)));
 		}
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1, 0);
 			Assert.That(fakeRepos.SavedQueueModel.IntervalId, Is.EqualTo(56));
 		}
 
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				LongestDelayInQueueAnswered = 40,
 				LongestDelayInQueueAbandoned = 43
 			};
-			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1);
+			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1, 0);
 			Assert.That(fakeRepos.SavedQueueModel.OfferedCalls, Is.EqualTo(queueStatsModel.OfferedCalls));
 			Assert.That(fakeRepos.SavedQueueModel.AnsweredCalls, Is.EqualTo(queueStatsModel.AnsweredCalls));
 			Assert.That(fakeRepos.SavedQueueModel.AnsweredCallsWithinServiceLevel, Is.EqualTo(queueStatsModel.AnsweredCallsWithinServiceLevel));
@@ -131,6 +133,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 			Assert.That(fakeRepos.SavedQueueModel.TimeToAbandon, Is.EqualTo(queueStatsModel.TimeToAbandon));
 			Assert.That(fakeRepos.SavedQueueModel.LongestDelayInQueueAnswered, Is.EqualTo(queueStatsModel.LongestDelayInQueueAnswered));
 			Assert.That(fakeRepos.SavedQueueModel.LongestDelayInQueueAbandoned, Is.EqualTo(queueStatsModel.LongestDelayInQueueAbandoned));
+		}
+
+		[Test]
+		public void ShouldBatchSaveQueueData()
+		{
+			int batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["StatsBatchSize"]);
+
+			var fakeRepos = new FakeQueueStatRepository();
+			var target = new QueueStatHandler(fakeRepos);
+			var modelList = new List<QueueStatsModel>();
+			for (int i = 0; i < batchSize + 1; i++)
+			{
+				modelList.Add(new QueueStatsModel{ QueueName = "kön", IntervalStart = "2014-12-12 15:00"});
+			}
+			target.Handle(modelList, "nhib", 1, 0);
+
+			Assert.That(fakeRepos.BatchCounter, Is.EqualTo(2));
+			Assert.That(fakeRepos.SavedQueueModelBatch.Count, Is.EqualTo(batchSize + 1));
 		}
 	}
 }

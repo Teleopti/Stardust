@@ -18,6 +18,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 
 		public WebApiClient(HttpClient client, string nhibDataSourcename, int queueDataSourceId)
 		{
+			_latency = int.Parse(ConfigurationManager.AppSettings["Latency"]);
 			_client = client;
 			_client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebApiBaseUrl"]);
 			_client.DefaultRequestHeaders.Accept.Clear();
@@ -25,7 +26,8 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			_client.DefaultRequestHeaders.Add("Authorization", authorizeHeader(nhibDataSourcename));
 			_client.DefaultRequestHeaders.Add("database", nhibDataSourcename);
 			_client.DefaultRequestHeaders.Add("sourceId", queueDataSourceId.ToString(CultureInfo.InvariantCulture));
-			_latency = int.Parse(ConfigurationManager.AppSettings["Latency"]);
+			_client.DefaultRequestHeaders.Add("dbLatency", _latency.ToString(CultureInfo.InvariantCulture));
+			
 		}
 
 		private static string authorizeHeader(string nhibDataSourcename)

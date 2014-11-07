@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 			IEnumerable<string> headerValues;
 			string dataSource = null;
 			int sourceId = 0;
+			int latency = 0;
+
 			if (principal != null)
 				claim = principal.Claims.FirstOrDefault(c => c.Type.Equals(System.IdentityModel.Claims.ClaimTypes.Locality));
 			if (claim != null)
@@ -37,8 +39,11 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 				if (!int.TryParse(headerValues.First(), out sourceId))
 					throw new ArgumentException();
 
+			if (Request.Headers.TryGetValues("dbLatency", out headerValues))
+				latency = int.Parse(headerValues.First());
+
 			if (!string.IsNullOrEmpty(dataSource))
-				_queueStatHandler.Handle(queueStatsModels, dataSource, sourceId);
+				_queueStatHandler.Handle(queueStatsModels, dataSource, sourceId, latency);
 		}
 	}
 }

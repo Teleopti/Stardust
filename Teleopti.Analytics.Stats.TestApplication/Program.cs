@@ -15,8 +15,9 @@ namespace Teleopti.Analytics.Stats.TestApplication
 
 			while (true)
 			{
-				Console.WriteLine("Simulate latency ({0} ms)? [Y/N])",
-					ConfigurationManager.AppSettings["Latency"]);
+				Console.WriteLine("Simulate latency (web api request {0} ms + db {1} ms)? [Y/N])",
+					ConfigurationManager.AppSettings["Latency"],
+					ConfigurationManager.AppSettings["DbLatency"]);
 				if (Console.ReadKey().Key == ConsoleKey.Y)
 					useLatency = true;
 

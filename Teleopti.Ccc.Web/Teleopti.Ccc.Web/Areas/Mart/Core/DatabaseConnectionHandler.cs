@@ -1,12 +1,13 @@
 ﻿using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core
 {
 	public interface IDatabaseConnectionHandler
 	{
-		SqlConnection MartConnection(string name);
+		SqlConnection MartConnection(string name, int latency);
 	}
 
 	public class DatabaseConnectionHandler : IDatabaseConnectionHandler
@@ -31,11 +32,16 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			return "";
 		}
 
-		public SqlConnection MartConnection(string name)
+		public SqlConnection MartConnection(string name, int latency)
 		{
 			var connectionString = martConnectionString(name);
-			if(connectionString != "")
+			if (connectionString != "")
+			{
+				if (latency > 0)
+					Thread.Sleep(latency);
 				return new SqlConnection(connectionString);
+			}
+				
 			return null;
 		}
 	}

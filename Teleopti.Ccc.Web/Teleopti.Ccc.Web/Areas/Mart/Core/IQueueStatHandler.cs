@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 {
 	public interface IQueueStatHandler
 	{
-		void Handle(IEnumerable<QueueStatsModel> queueData, string nhibName, int logObjectId);
+		void Handle(IEnumerable<QueueStatsModel> queueData, string nhibName, int logObjectId, int latency);
 	}
 }

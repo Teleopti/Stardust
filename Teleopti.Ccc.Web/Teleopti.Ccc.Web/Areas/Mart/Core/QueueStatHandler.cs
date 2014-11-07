@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -15,9 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			_queueStatRepository = queueStatRepository;
 		}
 
-		public void Handle(IEnumerable<QueueStatsModel> queueData, string nhibName, int logObjectId)
+		public void Handle(IEnumerable<QueueStatsModel> queueData, string nhibName, int logObjectId, int latency)
 		{
-			foreach (var queueStatsModel in queueData)
+			int batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["StatsBatchSize"]);
+			int batchCounter = 0;
+			var modelsBatch = new List<FactQueueModel>();
+
+			var queueStatsModels = queueData.ToArray();
+			foreach (var queueStatsModel in queueStatsModels)
 			{
 				var logobject = _queueStatRepository.GetLogObject(logObjectId, nhibName);
 				var queueId = _queueStatRepository.GetQueueId(queueStatsModel.QueueName, queueStatsModel.QueueId, logobject.Id, nhibName);
@@ -28,8 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 					throw new ArgumentException();
 				var intervalId = getIntervalInDay(dateTimeUtc, nhibName);
 
-				var factQueueModels = new List<FactQueueModel>
-				{
+				modelsBatch.Add(
 					new FactQueueModel
 					{
 						LogObjectId = logobject.Id,
@@ -51,16 +57,21 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 						TimeToAbandon = queueStatsModel.TimeToAbandon,
 						LongestDelayInQueueAnswered = queueStatsModel.LongestDelayInQueueAnswered,
 						LongestDelayInQueueAbandoned = queueStatsModel.LongestDelayInQueueAbandoned
-					}
-				};
-				_queueStatRepository.Save(factQueueModels, nhibName);
+					});
+				batchCounter++;
+
+				if (modelsBatch.Count == batchSize || batchCounter == queueStatsModels.Length)
+				{
+					_queueStatRepository.SaveBatch(modelsBatch, nhibName);
+					modelsBatch.Clear();
+				}
 			}
 		}
 
 		private int getIntervalInDay(DateTime dateTimeUtc, string nhibName)
 		{
 			var systemIntervalLength = _queueStatRepository.GetIntervalLength(nhibName);
-			return (int)dateTimeUtc.TimeOfDay.TotalMinutes/systemIntervalLength;
+			return (int)dateTimeUtc.TimeOfDay.TotalMinutes / systemIntervalLength;
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 	public class QueueStatRepository : IQueueStatRepository
 	{
 		private readonly IDatabaseConnectionHandler _databaseConnectionHandler;
+		private int _latency = 0;
 
 		public QueueStatRepository(IDatabaseConnectionHandler databaseConnectionHandler)
 		{
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 															WHERE d.datasource_id = {0}";
 
 			LogObjectSource logObject = null;
-			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
+			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -47,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 
 		public int GetQueueId(string queueName, string queueId, int logObjectId, string nhibDataSourceName)
 		{
-			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
+			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 		{
 			const string sqlText = @"SELECT [date_id] FROM [mart].[dim_date] WHERE date_date = '{0}'";
 			var dateString = dateTime.ToString("yyyy-MM-dd");
-			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
+			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 		{
 			const string sqlText = @"SELECT [value] FROM .[mart].[sys_configuration] WHERE [key] = 'IntervalLengthMinutes'";
 
-			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
+			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -114,41 +116,104 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 			return -1;
 		}
 
-		public void Save(IList<FactQueueModel> factQueueModel, string nhibDataSourceName)
+		public void SaveBatch(IList<FactQueueModel> factQueueModels, string nhibDataSourceName)
 		{
-			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName))
+			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
-				connection.Open();
-				foreach (var queueModel in factQueueModel)
+				var dataRows = getTable(factQueueModels);
+				var adapter = new SqlDataAdapter();
+				adapter.InsertCommand = new SqlCommand("mart.fact_queue_save", connection)
 				{
-					using (var command = connection.CreateCommand())
-					{
-						command.CommandType = CommandType.StoredProcedure;
-						command.CommandText = "mart.fact_queue_save";
-						command.Parameters.Add(new SqlParameter("@datasource_id", queueModel.LogObjectId));
-						command.Parameters.Add(new SqlParameter("@date_id", queueModel.DateId));
-						command.Parameters.Add(new SqlParameter("@interval_id", queueModel.IntervalId));
-						command.Parameters.Add(new SqlParameter("@queue_id", queueModel.QueueId));
-						command.Parameters.Add(new SqlParameter("@offered_calls", queueModel.OfferedCalls));
-						command.Parameters.Add(new SqlParameter("@answered_calls", queueModel.AnsweredCalls));
-						command.Parameters.Add(new SqlParameter("@answered_calls_within_SL", queueModel.AnsweredCallsWithinServiceLevel));
-						command.Parameters.Add(new SqlParameter("@abandoned_calls", queueModel.AbandonedCalls));
-						command.Parameters.Add(new SqlParameter("@abandoned_calls_within_SL", queueModel.AbandonedCallsWithinServiceLevel));
-						command.Parameters.Add(new SqlParameter("@abandoned_short_calls", queueModel.AbandonedShortCalls));
-						command.Parameters.Add(new SqlParameter("@overflow_out_calls", queueModel.OverflowOutCalls));
-						command.Parameters.Add(new SqlParameter("@overflow_in_calls", queueModel.OverflowInCalls));
-						command.Parameters.Add(new SqlParameter("@talk_time_s", queueModel.TalkTime));
-						command.Parameters.Add(new SqlParameter("@after_call_work_s", queueModel.AfterCallWork));
-						command.Parameters.Add(new SqlParameter("@handle_time_s", queueModel.HandleTime));
-						command.Parameters.Add(new SqlParameter("@speed_of_answer_s", queueModel.SpeedOfAnswer));
-						command.Parameters.Add(new SqlParameter("@time_to_abandon_s", queueModel.TimeToAbandon));
-						command.Parameters.Add(new SqlParameter("@longest_delay_in_queue_answered_s", queueModel.LongestDelayInQueueAnswered));
-						command.Parameters.Add(new SqlParameter("@longest_delay_in_queue_abandoned_s", queueModel.LongestDelayInQueueAbandoned));
+					CommandType = CommandType.StoredProcedure,
+					UpdatedRowSource = UpdateRowSource.None
+				};
+				// Set the Parameter with appropriate Source Column Name
 
-						command.ExecuteNonQuery();
-					}
-				}
+				adapter.InsertCommand.Parameters.Add("@date_id", SqlDbType.Int, 4, dataRows.Columns[0].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@interval_id", SqlDbType.SmallInt, 2, dataRows.Columns[1].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@queue_id", SqlDbType.Int, 4, dataRows.Columns[2].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@offered_calls", SqlDbType.Decimal, 19, dataRows.Columns[3].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@answered_calls", SqlDbType.Decimal, 19, dataRows.Columns[4].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@answered_calls_within_SL", SqlDbType.Decimal, 19, dataRows.Columns[5].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@abandoned_calls", SqlDbType.Decimal, 19, dataRows.Columns[6].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@abandoned_calls_within_SL", SqlDbType.Decimal, 19, dataRows.Columns[7].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@abandoned_short_calls", SqlDbType.Decimal, 19, dataRows.Columns[8].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@overflow_out_calls", SqlDbType.Decimal, 19, dataRows.Columns[9].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@overflow_in_calls", SqlDbType.Decimal, 19, dataRows.Columns[10].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@talk_time_s", SqlDbType.Decimal, 19, dataRows.Columns[11].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@after_call_work_s", SqlDbType.Decimal, 19, dataRows.Columns[12].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@handle_time_s", SqlDbType.Decimal, 19, dataRows.Columns[13].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@speed_of_answer_s", SqlDbType.Decimal, 19, dataRows.Columns[14].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@time_to_abandon_s", SqlDbType.Decimal, 19, dataRows.Columns[15].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@longest_delay_in_queue_answered_s", SqlDbType.Decimal, 19, dataRows.Columns[16].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@longest_delay_in_queue_abandoned_s", SqlDbType.Decimal, 19, dataRows.Columns[17].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@datasource_id", SqlDbType.SmallInt, 2, dataRows.Columns[18].ColumnName);
+
+				// Specify the number of records to be Inserted/Updated in one go. Default is 1.
+				adapter.UpdateBatchSize = 20;
+
+				connection.Open();
+				int recordsInserted = adapter.Update(dataRows);
+				
 			}
+		}
+
+		private static DataTable getTable(IEnumerable<FactQueueModel> factQueueModels)
+		{
+			var table = new DataTable("mart.fact_queue") { Locale = Thread.CurrentThread.CurrentCulture };
+			table.Columns.Add("date_id", typeof(int));
+			table.Columns.Add("interval_id", typeof(int));
+			table.Columns.Add("queue_id", typeof(int));
+			table.Columns.Add("offered_calls", typeof(double));
+			table.Columns.Add("answered_calls", typeof(double));
+			table.Columns.Add("answered_calls_within_SL", typeof(double));
+			table.Columns.Add("abandoned_calls", typeof(double));
+			table.Columns.Add("abandoned_calls_within_SL", typeof(double));
+			table.Columns.Add("abandoned_short_calls", typeof(double));
+			table.Columns.Add("overflow_out_calls", typeof(double));
+			table.Columns.Add("overflow_in_calls", typeof(double));
+			table.Columns.Add("talk_time_s", typeof(double));
+			table.Columns.Add("after_call_work_s", typeof(double));
+			table.Columns.Add("handle_time_s", typeof(double));
+			table.Columns.Add("speed_of_answer_s", typeof(double));
+			table.Columns.Add("time_to_abandon_s", typeof(double));
+			table.Columns.Add("longest_delay_in_queue_answered_s", typeof(double));
+			table.Columns.Add("longest_delay_in_queue_abandoned_s", typeof(double));
+			table.Columns.Add("datasource_id", typeof(int));
+			table.Columns.Add("insert_date", typeof(DateTime));
+
+			foreach (var model in factQueueModels)
+			{
+				DataRow row = table.NewRow();
+				row["date_id"] = model.DateId;
+				row["interval_id"] = model.IntervalId;
+				row["queue_id"] = model.QueueId;
+				row["offered_calls"] = model.OfferedCalls;
+				row["answered_calls"] = model.AnsweredCalls;
+				row["answered_calls_within_SL"] = model.AnsweredCallsWithinServiceLevel;
+				row["abandoned_calls"] = model.AbandonedCalls;
+				row["abandoned_calls_within_SL"] = model.AbandonedCallsWithinServiceLevel;
+				row["abandoned_short_calls"] = model.AbandonedShortCalls;
+				row["overflow_out_calls"] = model.OverflowOutCalls;
+				row["overflow_in_calls"] = model.OverflowInCalls;
+				row["talk_time_s"] = model.TalkTime;
+				row["after_call_work_s"] = model.AfterCallWork;
+				row["handle_time_s"] = model.HandleTime;
+				row["speed_of_answer_s"] = model.SpeedOfAnswer;
+				row["time_to_abandon_s"] = model.TimeToAbandon;
+				row["longest_delay_in_queue_answered_s"] = model.LongestDelayInQueueAnswered;
+				row["longest_delay_in_queue_abandoned_s"] = model.LongestDelayInQueueAbandoned;
+				row["datasource_id"] = model.LogObjectId;
+
+				table.Rows.Add(row);
+			}
+
+			return table;
+		}
+
+		public void SetLatency(int latency)
+		{
+			_latency = latency;
 		}
 	}
 }
