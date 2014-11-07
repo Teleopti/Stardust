@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -21,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId);
 		FakeRtaDatabase Make();
 	}
 
@@ -31,9 +30,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
 		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
-		private readonly IDictionary<Guid, ScheduleLayer> _schedule = new Dictionary<Guid, ScheduleLayer>();
+		private readonly List<ScheduleLayer2> _schedules = new List<ScheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
-		 
+
+		private class ScheduleLayer2
+		{
+			public Guid PersonId { get; set; }
+			public ScheduleLayer ScheduleLayer { get; set; }
+		}
+
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
 		private readonly Guid _businessUnitId;
@@ -111,11 +116,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end)
 		{
-			_schedule.Add(personId, new ScheduleLayer { PayloadId = activityId, StartDateTime = start, EndDateTime = end });
+			_schedules.Add(new ScheduleLayer2
+			{
+				PersonId = personId,
+				ScheduleLayer = new ScheduleLayer
+				{
+					PayloadId = activityId,
+					StartDateTime = start,
+					EndDateTime = end
+				}
+			});
 			return this;
 		}
 
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect)
+		{
+			return WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect);
+		}
+
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId)
+		{
+			return WithAlarm(stateCode, activityId, alarmId, 0);
+		}
+
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect)
 		{
 			//putting all this logic here is just WRONG
 			var stateGroupId = Guid.NewGuid();
@@ -142,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 					StateGroupId = stateGroupId,
 					ActivityId = activityId,
 					BusinessUnit = _businessUnitId,
-					AlarmTypeId = Guid.NewGuid(),
+					AlarmTypeId = alarmId,
 					StaffingEffect = staffingEffect
 				}
 			};
@@ -177,7 +201,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
-			return _schedule.ContainsKey(personId) ? new List<ScheduleLayer> { _schedule[personId] } : new List<ScheduleLayer>();
+			var layers = from l in _schedules
+				where l.PersonId == personId
+				select l.ScheduleLayer;
+			return new List<ScheduleLayer>(layers);
 		}
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)

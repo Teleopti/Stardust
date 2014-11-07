@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), MockRepository.GenerateMock<IMessageSender>()),
 				new Now(),
-				new FakeConfigReader())
+				new FakeConfigReader(),
+				MockRepository.GenerateMock<IEventPublisher>())
 		{
 		}
 
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), MockRepository.GenerateMock<IMessageSender>()),
 				now,
-				new FakeConfigReader())
+				new FakeConfigReader(),
+				MockRepository.GenerateMock<IEventPublisher>())
 		{
 		}
 
@@ -53,20 +55,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				makeActualAgentStateHasBeenSent(database, eventPublisher, MockRepository.GenerateMock<IMessageSender>()),
 				now,
-				new FakeConfigReader())
+				new FakeConfigReader(),
+				eventPublisher)
 		{
 		}
 
 		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
 			: this(
 				new FakeSignalRClient(),
-				MockRepository.GenerateMock<IMessageSender>(),
+				messageSender,
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				makeActualAgentStateHasBeenSent(database, MockRepository.GenerateMock<IEventPublisher>(), messageSender),
 				now,
-				new FakeConfigReader())
+				new FakeConfigReader(),
+				MockRepository.GenerateMock<IEventPublisher>()
+			  )
 		{
 		}
 
@@ -82,7 +87,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			IMbCacheFactory cacheFactory,
 			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
 			INow now,
-			IConfigReader configReader)
+			IConfigReader configReader,
+			IEventPublisher eventPublisher)
 			: base(
 				signalRClient,
 				messageSender,
@@ -91,7 +97,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				cacheFactory,
 				actualAgentStateHasBeenSent,
 				now,
-				configReader
+				configReader,
+				eventPublisher
 				)
 		{
 			_messageSender = messageSender;

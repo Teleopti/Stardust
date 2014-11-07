@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -28,6 +31,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			else
 				LastSiteNotification = notification;
 			AllNotifications.Add(notification);
+		}
+
+		public Notification NotificationOfType<T>()
+		{
+			return AllNotifications.Where(n => n.DomainType.Equals(typeof (T).Name)).FirstOrDefault();
 		}
 
 		public void SendMultiple(IEnumerable<Notification> notifications)

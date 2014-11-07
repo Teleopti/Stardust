@@ -157,11 +157,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
-		public bool SendOverMessageBroker { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
 		public bool Equals(IActualAgentState other)
 		{
 			return other != null && GetHashCode().Equals(other.GetHashCode());
@@ -200,5 +195,6 @@ namespace Teleopti.Interfaces.Domain
 				                       "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}",
 				                       PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart);
 		}
+
 	}
 }

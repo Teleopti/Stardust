@@ -9,34 +9,30 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
-    public class ActualAgentAssembler : IActualAgentAssembler
+	public class ActualAgentAssembler
 	{
-        private readonly IMbCacheFactory _mbCacheFactory;
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IActualAgentAssembler));
+		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(ActualAgentAssembler));
 		private const string notInBatchStatecode = "CCC Logged out";
 
-		protected ICurrentAndNextLayerExtractor CurrentAndNextLayerExtractor;
 		protected IAlarmMapper AlarmMapper;
 		protected IDatabaseReader DatabaseReader;
 
 		public ActualAgentAssembler(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory)
 		{
 			DatabaseReader = databaseReader;
-		    CurrentAndNextLayerExtractor = new CurrentAndNextLayerExtractor();
-		    _mbCacheFactory = mbCacheFactory;
 			AlarmMapper = new AlarmMapper(databaseReader, databaseWriter, mbCacheFactory);
 		}
 
 		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId)
 		{
-			LoggingSvc.InfoFormat("Getting missing agent states from from batch: {0}, sourceId: {1}", batchId, sourceId);
-			var missingAgentStates = DatabaseReader.GetMissingAgentStatesFromBatch(batchId, sourceId);
+			loggingSvc.InfoFormat("Getting missing agent states from from batch: {0}, sourceId: {1}", batchId, sourceId);
+			var missingAgentStates = DatabaseReader.GetMissingAgentStatesFromBatch(batchId, sourceId).ToList();
 			if (!missingAgentStates.Any())
 			{
-				LoggingSvc.Info("Did not find any missing agent states, all were included in batch");
+				loggingSvc.Info("Did not find any missing agent states, all were included in batch");
 				return new Collection<IActualAgentState>();
 			}
-			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count());
+			loggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count());
 
 			var updatedAgents = new List<IActualAgentState>();
 			var notLoggedOutAgents = missingAgentStates
@@ -44,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 														   a.StateCode,
 														   a.PlatformTypeId,
 														   a.BusinessUnit)).ToList();
-			LoggingSvc.InfoFormat("Found {0} agents that are not logged out", notLoggedOutAgents.Count);
+			loggingSvc.InfoFormat("Found {0} agents that are not logged out", notLoggedOutAgents.Count);
 			foreach (var agentState in notLoggedOutAgents)
 			{
 				RtaAlarmLight foundAlarm;
@@ -72,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				{
 					if (agentState.StateId == foundAlarm.StateGroupId)
 					{
-						LoggingSvc.DebugFormat("Agent {0} is already in state {1}", agentState.PersonId, agentState.StateId);
+						loggingSvc.DebugFormat("Agent {0} is already in state {1}", agentState.PersonId, agentState.StateId);
 						continue;
 					}
 
@@ -92,105 +88,54 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					agentState.StateId = stateGroup.StateGroupId;
 				updatedAgents.Add(agentState);
 			}
-			LoggingSvc.InfoFormat("{0} agent states have changed", updatedAgents.Count);
+			loggingSvc.InfoFormat("{0} agent states have changed", updatedAgents.Count);
 			return updatedAgents;
 		}
 
-		public IActualAgentState GetAgentStateForScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public IActualAgentState GetAgentState(
+			ScheduleLayer currentLayer,
+			ScheduleLayer nextLayer,
+			IActualAgentState previousState,
+			Guid personId,
+			Guid businessUnitId,
+			Guid platformTypeId,
+			string stateCode,
+			DateTime timestamp,
+			TimeSpan timeInState,
+			DateTime? batchId,
+			string originalSourceId)
 		{
-			var platformId = Guid.Empty;
-			var stateCode = string.Empty;
-			var originalSourceId = string.Empty;
+			loggingSvc.DebugFormat("Starting to build ActualAgentState for personId: {0}", personId);
 
-			LoggingSvc.DebugFormat("Getting readmodel for person: {0}", personId);
-			var readModelLayers = DatabaseReader.GetCurrentSchedule(personId);
-			if (readModelLayers.Any())
-				LoggingSvc.DebugFormat("Found {0} layers", readModelLayers.Count);
-			else
-				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
-
-			var scheduleLayers = CurrentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
-			var previousState = DatabaseReader.GetCurrentActualAgentState(personId);
-
-			if (previousState == null)
-				return buildAgentState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
-									   businessUnitId, null, originalSourceId);
-
-			if (isScheduleSame(scheduleLayers, previousState))
+			if (previousState != null)
 			{
-				LoggingSvc.InfoFormat("Schedule have not changed for person {0}, will not save or send state", personId);
-				return null;
+				if (!batchId.HasValue)
+					batchId = previousState.BatchId;
+				if (platformTypeId == Guid.Empty)
+					platformTypeId = previousState.PlatformTypeId;
+				if (stateCode == null)
+					stateCode = previousState.StateCode;
+				if (originalSourceId == null)
+					originalSourceId = previousState.OriginalDataSourceId;
 			}
 
-			platformId = previousState.PlatformTypeId;
-			stateCode = previousState.StateCode;
-			originalSourceId = previousState.OriginalDataSourceId;
-			var batchId = previousState.BatchId;
-
-			return buildAgentState(scheduleLayers, previousState, personId, platformId, stateCode, timestamp, new TimeSpan(0),
-								   businessUnitId, batchId, originalSourceId);
-		}
-
-        private static bool isScheduleSame(Tuple<ScheduleLayer, ScheduleLayer> layers, IActualAgentState oldState)
-		{
-			// It might seem strange to check both current.EndDateTime and next.StartDateTime against oldState
-			// But either they are the same or some layer will be null.
-			var currentSame = layers.Item1 != null
-										? layers.Item1.PayloadId == oldState.ScheduledId &&
-										  layers.Item1.EndDateTime == oldState.NextStart
-										: oldState.ScheduledId == Guid.Empty;
-
-			var nextSame = layers.Item2 != null
-										 ? layers.Item2.PayloadId == oldState.ScheduledNextId &&
-										   layers.Item2.StartDateTime == oldState.NextStart
-										 : oldState.ScheduledNextId == Guid.Empty;
-
-			return currentSame && nextSame;
-		}
-
-		public IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
-											   DateTime timestamp,
-											   TimeSpan timeInState, DateTime? batchId, string originalSourceId)
-		{
-			LoggingSvc.DebugFormat("Getting readmodel for person: {0}", personId);
-			var readModelLayers = DatabaseReader.GetCurrentSchedule(personId);
-			if (readModelLayers.Any())
-				LoggingSvc.DebugFormat("Found {0} layers", readModelLayers.Count);
-			else
-				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
-
-			var scheduleLayers = CurrentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
-			var previousState = DatabaseReader.GetCurrentActualAgentState(personId);
-			return buildAgentState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState,
-								   businessUnitId, batchId, originalSourceId);
-		}
-
-
-        private IActualAgentState buildAgentState(Tuple<ScheduleLayer, ScheduleLayer> currentAndNextScheduleLayers, IActualAgentState previousState,
-												  Guid personId, Guid platformTypeId,
-												  string stateCode, DateTime timestamp, TimeSpan timeInState,
-												  Guid businessUnitId, DateTime? batchId, string originalSourceId)
-		{
-			RtaAlarmLight foundAlarm;
-			LoggingSvc.DebugFormat("Starting to build ActualAgentState for personId: {0}", personId);
-			var scheduleLayer = currentAndNextScheduleLayers.Item1;
-			var nextLayer = currentAndNextScheduleLayers.Item2;
-			var activityId = scheduleLayer != null ? scheduleLayer.PayloadId : Guid.Empty;
+			var activityId = currentLayer != null ? currentLayer.PayloadId : Guid.Empty;
 
 			var newState = new ActualAgentState
-				{
-					PersonId = personId,
-					StateCode = stateCode,
-					AlarmStart = timestamp,
-					PlatformTypeId = platformTypeId,
-					ReceivedTime = timestamp,
-					OriginalDataSourceId = originalSourceId,
-					BusinessUnit = businessUnitId
-				};
+			{
+				PersonId = personId,
+				StateCode = stateCode,
+				AlarmStart = timestamp,
+				PlatformTypeId = platformTypeId,
+				ReceivedTime = timestamp,
+				OriginalDataSourceId = originalSourceId,
+				BusinessUnit = businessUnitId
+			};
 
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
+			RtaAlarmLight foundAlarm;
 			var state = AlarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
@@ -216,11 +161,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (previousState != null && previousState.AlarmId == newState.AlarmId)
 				newState.StateStart = previousState.StateStart;
 
-			if (scheduleLayer != null)
+			if (currentLayer != null)
 			{
-				newState.Scheduled = scheduleLayer.Name;
-				newState.ScheduledId = scheduleLayer.PayloadId;
-				newState.NextStart = scheduleLayer.EndDateTime;
+				newState.Scheduled = currentLayer.Name;
+				newState.ScheduledId = currentLayer.PayloadId;
+				newState.NextStart = currentLayer.EndDateTime;
 			}
 
 			if (nextLayer != null)
@@ -230,24 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				newState.ScheduledNextId = nextLayer.PayloadId;
 				newState.NextStart = nextLayer.StartDateTime;
 			}
-
-			//if same don't send it, but should be saved to db to keep batch intact
-			if (previousState != null && newState.Equals(previousState))
-			{
-				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send change over message broker",
-									  newState.PersonId);
-				newState.SendOverMessageBroker = false;
-			}
-			else
-				newState.SendOverMessageBroker = true;
-
 			return newState;
-		}
-
-		public void InvalidateReadModelCache(Guid personId)
-		{
-			LoggingSvc.DebugFormat("Clearing ReadModel cache for Person: {0}", personId);
-			_mbCacheFactory.Invalidate(DatabaseReader, x => x.GetCurrentSchedule(personId), true);
-		}
+		}	
 	}
 }

@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
 			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}

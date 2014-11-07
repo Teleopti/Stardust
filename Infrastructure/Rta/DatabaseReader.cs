@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			var utcDate = _now.UtcDateTime().Date;
 			var query = string.Format(CultureInfo.InvariantCulture,
-										@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+				@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 											FROM ReadModel.ScheduleProjectionReadOnly rta
 											WHERE PersonId='{0}'
 											AND BelongsToDate BETWEEN '{1}' AND '{2}'", personId,
-						utcDate.AddDays(-1),
+				utcDate.AddDays(-1),
 				utcDate.AddDays(1));
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))

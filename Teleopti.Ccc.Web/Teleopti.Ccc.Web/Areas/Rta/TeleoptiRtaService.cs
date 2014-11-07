@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Rta.WebService;
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IMbCacheFactory cacheFactory,
 			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
 			INow now,
-			IConfigReader configReader)
+			IConfigReader configReader,
+			IEventPublisher eventPublisher)
 		{
 			_rtaDataHandler = new RtaDataHandler(
 				signalRClient,
@@ -44,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				databaseReader,
 				databaseWriter,
 				cacheFactory,
-				actualAgentStateHasBeenSent);
+				actualAgentStateHasBeenSent,
+				eventPublisher);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");

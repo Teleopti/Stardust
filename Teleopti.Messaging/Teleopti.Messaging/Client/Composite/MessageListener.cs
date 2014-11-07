@@ -129,6 +129,7 @@ namespace Teleopti.Messaging.Client.Composite
 				DomainUpdateType = d.DomainUpdateTypeAsDomainUpdateType()
 			};
 
+			// assuming all binary data sent is base 64? 
 			var domainObject = d.BinaryData;
 			if (!string.IsNullOrEmpty(domainObject))
 			{
