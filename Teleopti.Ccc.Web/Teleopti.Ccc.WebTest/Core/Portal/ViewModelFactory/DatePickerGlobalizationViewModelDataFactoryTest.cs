@@ -24,14 +24,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.IsRtl.Should().Be.False();
 		}
 
-		[Test, SetCulture("ar-SA"), SetUICulture("ar-SA")]
-		public void ShouldCreateModelWithFromArSaCulture()
-		{
-			var result = target.CreateDatePickerGlobalizationViewModel();
-
-			result.FirstDay.Should().Be.EqualTo(6);
-			result.IsRtl.Should().Be.True();
-		}
 		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
 		public void ShouldCreateModelWithFromSvSeCulture()
 		{

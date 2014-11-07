@@ -64,22 +64,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(weekStart, theWeek.StartDate);
         }
 
-        [Test]
-        public void CheckReturnWeekendIsCorrect()
-        {
-            DateTime dateWorkday = new DateTime(2007, 11, 22);
-            DateTime dateWeekend1 = new DateTime(2007, 11, 24);
-            DateTime dateWeekend2 = new DateTime(2007, 11, 25);
-            DateTime dateWeekend3 = new DateTime(2007, 12, 13);
-
-            Assert.IsFalse(DateHelper.IsWeekend(dateWorkday, _cult));
-            Assert.IsTrue(DateHelper.IsWeekend(dateWeekend1, _cult));
-            Assert.IsTrue(DateHelper.IsWeekend(dateWeekend2, _cult));
-            CultureInfo arabic = new CultureInfo("ar-SA");
-            Assert.IsTrue(DateHelper.IsWeekend(dateWeekend3, arabic));
-            Assert.IsTrue(DateHelper.IsWeekend(dateWeekend3.AddDays(1), arabic));
-            Assert.IsFalse(DateHelper.IsWeekend(dateWeekend3.AddDays(2), arabic));
-        }
 
         /// <summary>
         /// Checks the first date of month is returned.
@@ -123,47 +107,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.AreEqual(expected, DateHelper.GetLastDateInMonth(dateToUse, culture));
         }
 
-        /// <summary>
-        /// Checks the first date of week is returned.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        [Test]
-        public void CheckFirstDateOfWeekIsReturned()
-        {
-            DateTime dateToUse = new DateTime(2007, 12, 20);
-            DateTime expected = new DateTime(2007, 12, 17);
-            CultureInfo culture = CultureInfo.GetCultureInfo(1053); //Swedish
-
-            Assert.AreEqual(expected, DateHelper.GetFirstDateInWeek(dateToUse, culture));
-
-            expected = new DateTime(2007, 12, 15);
-            culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
-            Assert.AreEqual(expected, DateHelper.GetFirstDateInWeek(dateToUse, culture));
-        }
-
-        /// <summary>
-        /// Checks the last date of week is returned.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        [Test]
-        public void CheckLastDateOfWeekIsReturned()
-        {
-            DateTime dateToUse = new DateTime(2007, 12, 20);
-            DateTime expected = new DateTime(2007, 12, 23);
-            CultureInfo culture = CultureInfo.GetCultureInfo(1053); //Swedish
-
-            Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
-
-            expected = new DateTime(2007, 12, 21);
-            culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
-            Assert.AreEqual(expected, DateHelper.GetLastDateInWeek(dateToUse, culture));
-        }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldGetQuarter()
@@ -191,31 +134,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			result.StartDate.Should().Be.EqualTo(new DateOnly(2012, 10, 15));
 			result.EndDate.Should().Be.EqualTo(new DateOnly(2012, 10, 21));
 		}
-
-        /// <summary>
-        /// Verifies the day of week collection is returned.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        [Test]
-        public void VerifyDayOfWeekCollectionIsReturned()
-        {
-            CultureInfo culture = CultureInfo.GetCultureInfo(1053); //Swedish
-            IList<DayOfWeek> weekDays = DateHelper.GetDaysOfWeek(culture);
-
-            Assert.AreEqual(7, weekDays.Count);
-            Assert.AreEqual(DayOfWeek.Monday, weekDays[0]);
-            Assert.AreEqual(DayOfWeek.Sunday, weekDays[6]);
-
-            culture = CultureInfo.GetCultureInfo(1025); //Arabic - Saudi
-            weekDays = DateHelper.GetDaysOfWeek(culture);
-
-            Assert.AreEqual(7, weekDays.Count);
-            Assert.AreEqual(DayOfWeek.Saturday, weekDays[0]);
-            Assert.AreEqual(DayOfWeek.Friday, weekDays[6]);
-        }
 
 		[Test]
 		public void ShouldGetWeekdayNames() {
