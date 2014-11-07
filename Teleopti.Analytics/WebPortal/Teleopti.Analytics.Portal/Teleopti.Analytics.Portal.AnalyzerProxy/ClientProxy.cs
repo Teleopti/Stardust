@@ -276,14 +276,21 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 
             if (doCreateDataSource)
             {
+
                 // Create data source given in constructor
                 _log.Debug("Create Analyzer data source.");
                 var dataSource = new DataSource();
                 dataSource.ServerName = _olapServer;
                 dataSource.InitialCatalog = _olapDatabase;
                 dataSource.Name = _olapServer;
-                dataSource.SourceType = DataSourceType.SqlAs2005;
-                DataSource outDataSource = _az.CreateDataSource(CurrentContext, dataSource);
+
+				var version = _az.GetVersion();
+				var versions = version.Split('.');
+				var minorVersion = int.Parse(versions[2]);
+				dataSource.SourceType = minorVersion>=2359 ? DataSourceType.SqlAs2005Or2008 : DataSourceType.SqlAs2005;
+
+
+	            DataSource outDataSource = _az.CreateDataSource(CurrentContext, dataSource);
                 if (!outDataSource.Success)
                 {
                     // Failed to create data source!!!

@@ -6063,6 +6063,15 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy.AnalyzerRef {
         
         /// <remarks/>
         SqlAs2005,
+
+		/// <remarks/>
+		SqlAs2005Or2008,
+
+		/// <remarks/>
+		SqlAs2012,
+
+		/// <remarks/>
+		SqlAs2012Tabular,
     }
     
     /// <remarks/>
