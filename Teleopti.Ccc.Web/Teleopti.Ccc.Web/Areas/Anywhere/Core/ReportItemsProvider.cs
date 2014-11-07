@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
@@ -12,18 +11,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		private readonly IReportsProvider _reportsProvider;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IMatrixWebsiteUrl _matrixWebsiteUrl;
 
-		public ReportItemsProvider(IReportsProvider reportsProvider, ICurrentBusinessUnit currentBusinessUnit)
+		public ReportItemsProvider(IReportsProvider reportsProvider, ICurrentBusinessUnit currentBusinessUnit, IMatrixWebsiteUrl matrixWebsiteUrl)
 		{
 			_reportsProvider = reportsProvider;
 			_currentBusinessUnit = currentBusinessUnit;
+			_matrixWebsiteUrl = matrixWebsiteUrl;
 		}
 
 		public List<ReportItem> GetReportItems()
 		{
 			var realBu = _currentBusinessUnit.Current().Id;
-			var matrixWebsiteUrl = ConfigurationManager.AppSettings["MatrixWebSiteUrl"];
-			if (!string.IsNullOrEmpty(matrixWebsiteUrl) && !matrixWebsiteUrl.EndsWith("/")) matrixWebsiteUrl += "/";
+			var matrixWebsiteUrl = _matrixWebsiteUrl.Build();
 
 			var reports = new List<IApplicationFunction>(_reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription));
 			var reportItems = new List<ReportItem>();
