@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<PersonScheduleViewModelMapper>().As<IPersonScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<DailyStaffingMetricsViewModelFactory>().As<IDailyStaffingMetricsViewModelFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ReportItemsProvider>().As<IReportItemsProvider>().SingleInstance();
+			builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();
 			builder.RegisterType<ResourceCalculateSkillCommand>().As<IResourceCalculateSkillCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillLoaderDecider>().As<ISkillLoaderDecider>().SingleInstance();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();

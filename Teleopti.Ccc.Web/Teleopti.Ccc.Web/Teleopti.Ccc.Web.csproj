@@ -345,8 +345,8 @@
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
-    <Compile Include="Areas\Anywhere\Core\IMatrixWebsiteUrl.cs" />
-    <Compile Include="Areas\Anywhere\Core\MatrixWebsiteUrl.cs" />
+    <Compile Include="Areas\Anywhere\Core\IReportUrl.cs" />
+    <Compile Include="Areas\Anywhere\Core\ReportUrl.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamOutOfAdherence.cs" />

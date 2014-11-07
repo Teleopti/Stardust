@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	{
 		private IReportsProvider _reportsProvider;
 		private ICurrentBusinessUnit _currentBusinessUnit;
-		private IMatrixWebsiteUrl _matrixWebsiteUrl;
+		private IReportUrl _matrixWebsiteUrl;
 		private Guid _guid;
 
 		[SetUp]
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
 			_currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
-			_matrixWebsiteUrl = MockRepository.GenerateMock<IMatrixWebsiteUrl>();
+			_matrixWebsiteUrl = MockRepository.GenerateMock<IReportUrl>();
 			_currentBusinessUnit.Stub(x => x.Current().Id).Return(_guid);
 		}
 
@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			applicationFunciton.Stub(x => x.LocalizedFunctionDescription).Return(localizedFunctionDescription);
 			applicationFunciton.Stub(y => y.ForeignId).Return("foreignId");
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() { applicationFunciton });
+			var matrixUrl = "Selection.aspx?ReportId=foreignId&BuId=" + _guid;
+			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton.ForeignId, _guid)).Return(matrixUrl);
 
 			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit, _matrixWebsiteUrl);
 			var result = target.GetReportItems();
@@ -61,16 +63,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldSeperateWithSlashWhenHasMatrixWebsiteUrl()
 		{
-			var matrixUrl = "MatrixUrl/";
-			_matrixWebsiteUrl.Stub(x => x.Build()).Return(matrixUrl);
+			var foreignId = "foreignId";
 			var applicationFunciton = MockRepository.GenerateMock<IApplicationFunction>();
-			applicationFunciton.Stub(y => y.ForeignId).Return("foreignId");
+			applicationFunciton.Stub(y => y.ForeignId).Return(foreignId);
+			var matrixUrl = "MatrixUrl/Selection.aspx?ReportId=foreignId&BuId=" + _guid;
+			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton.ForeignId, _guid)).Return(matrixUrl);
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() { applicationFunciton });
 
 			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit, _matrixWebsiteUrl);
 			var result = target.GetReportItems();
 
-			result[0].Url.Should().Be.EqualTo(matrixUrl + "Selection.aspx?ReportId=foreignId&BuId=" + _guid);
+			result[0].Url.Should().Be.EqualTo(matrixUrl);
 		}
 
 		[Test]

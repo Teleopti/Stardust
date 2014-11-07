@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		private readonly IReportsProvider _reportsProvider;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
-		private readonly IMatrixWebsiteUrl _matrixWebsiteUrl;
+		private readonly IReportUrl _matrixWebsiteUrl;
 
-		public ReportItemsProvider(IReportsProvider reportsProvider, ICurrentBusinessUnit currentBusinessUnit, IMatrixWebsiteUrl matrixWebsiteUrl)
+		public ReportItemsProvider(IReportsProvider reportsProvider, ICurrentBusinessUnit currentBusinessUnit, IReportUrl matrixWebsiteUrl)
 		{
 			_reportsProvider = reportsProvider;
 			_currentBusinessUnit = currentBusinessUnit;
@@ -22,19 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public List<ReportItem> GetReportItems()
 		{
-			var realBu = _currentBusinessUnit.Current().Id;
-			var matrixWebsiteUrl = _matrixWebsiteUrl.Build();
+			var realBu = (Guid) _currentBusinessUnit.Current().Id;
 
 			var reports = new List<IApplicationFunction>(_reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription));
 			var reportItems = new List<ReportItem>();
 			foreach (var applicationFunction in reports)
 			{
-				var url = string.Format(CultureInfo.CurrentCulture, "{0}Selection.aspx?ReportId={1}&BuId={2}",
-					matrixWebsiteUrl, applicationFunction.ForeignId, realBu);
-
 				reportItems.Add(new ReportItem
 				{
-					Url = url,
+					Url = _matrixWebsiteUrl.Build(applicationFunction.ForeignId, realBu),
 					Name = applicationFunction.LocalizedFunctionDescription,
 				});
 			}
