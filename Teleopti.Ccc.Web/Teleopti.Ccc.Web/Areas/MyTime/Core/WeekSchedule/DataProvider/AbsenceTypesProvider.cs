@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public IEnumerable<IAbsence> GetReportableAbsences()
 		{
+			if (_loggedOnUser == null ||
+			    _loggedOnUser.CurrentUser() == null ||
+			    _loggedOnUser.CurrentUser().WorkflowControlSet == null ||
+			    _loggedOnUser.CurrentUser().WorkflowControlSet.AllowedAbsencesForReport == null)
+			{
+				return new List<IAbsence>();
+			}
+
 			return _loggedOnUser.CurrentUser().WorkflowControlSet.AllowedAbsencesForReport;
 		}
 	}
