@@ -95,3 +95,38 @@ GO
 
 ALTER TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport] CHECK CONSTRAINT [FK_WorkflowControlSetAllowedAbsencesForReport_WorkflowControlSet]
 GO
+
+----------------  
+--Name: Anders
+--Date: 2014-11-07
+--Desc: #31264 Fail fast with natural key
+----------------
+DROP TABLE [ReadModel].[GroupingReadOnly]
+GO
+
+CREATE TABLE [ReadModel].[GroupingReadOnly](
+	[PersonId] [uniqueidentifier] NOT NULL,
+	[StartDate] [smalldatetime] NOT NULL,
+	[TeamId] [uniqueidentifier] NULL,
+	[SiteId] [uniqueidentifier] NULL,
+	[BusinessUnitId] [uniqueidentifier] NULL,
+	[GroupId] [uniqueidentifier] NOT NULL,
+	[GroupName] [nvarchar](200) NULL,
+	[FirstName] [nvarchar](50) NULL,
+	[LastName] [nvarchar](50) NULL,
+	[PageId] [uniqueidentifier] NOT NULL,
+	[PageName] [nvarchar](50) NULL,
+	[EmploymentNumber] [nvarchar](50) NULL,
+	[EndDate] [smalldatetime] NULL,
+	[LeavingDate] [smalldatetime] NULL,
+ CONSTRAINT [PK_GroupingReadOnly] PRIMARY KEY CLUSTERED 
+(
+	[PersonId] ASC,
+	[StartDate] ASC,
+	[PageId] ASC,
+	[GroupId] ASC
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+--No need to run the update proc to fill the table now as that is part of the sproc creation script
