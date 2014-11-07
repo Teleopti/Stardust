@@ -74,7 +74,11 @@ GO
 CREATE TABLE [dbo].[WorkflowControlSetAllowedAbsencesForReport](
 	[WorkflowControlSet] [uniqueidentifier] NOT NULL,
 	[Absence] [uniqueidentifier] NOT NULL
-) ON [PRIMARY]
+ CONSTRAINT [PK_WorkflowControlSetAllowedAbsencesForReport] PRIMARY KEY CLUSTERED 
+(
+	[WorkflowControlSet] ASC,
+	[Absence] ASC
+))
 
 GO
 
