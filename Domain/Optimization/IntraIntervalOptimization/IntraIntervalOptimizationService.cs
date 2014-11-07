@@ -82,8 +82,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 						_progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
+
+						var affect = affectIssue(scheduleDay, intervalIssuesBefore.IssuesOnDayAfter);
+						if(!affect) continue;
+
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
-						if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
+						//if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
 						intervalIssuesBefore = intervalIssuesAfter;
 					}
 				}
@@ -91,6 +95,20 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			_intraIntervalOptimizer.Reset();
 			_intraIntervalOptimizer.ReportProgress -= OnReportProgress;
+		}
+
+		private bool affectIssue(IScheduleDay scheduleDay, IList<ISkillStaffPeriod> issues)
+		{
+			var affects = false;
+
+			foreach (var skillStaffPeriod in issues)
+			{
+				if (!scheduleDay.PersonAssignment().Period.Intersect(skillStaffPeriod.Period)) continue;
+				affects = true;
+				break;
+			}
+
+			return affects;
 		}
 
 		public void OnReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
