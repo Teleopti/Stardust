@@ -145,20 +145,39 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\AnalyzerRef\Company.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AnalyzerRef\ComponentPackage.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AnalyzerRef\ReportPackage.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AnalyzerRef\Subscription.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AnalyzerRef\UserFavorite.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\AnalyzerRef\UserInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost/TeleoptiPM/services/Analyzer2005.asmx">
+    <WebReferenceUrl Include="http://cccrc/TeleoptiPM/services/Analyzer2005.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\AnalyzerRef\</RelPath>
-      <UpdateFromURL>http://localhost/TeleoptiPM/services/Analyzer2005.asmx</UpdateFromURL>
+      <UpdateFromURL>http://cccrc/TeleoptiPM/services/Analyzer2005.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
