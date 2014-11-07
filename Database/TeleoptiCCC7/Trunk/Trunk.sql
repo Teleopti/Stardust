@@ -125,8 +125,8 @@ CREATE TABLE [ReadModel].[GroupingReadOnly](
 	[StartDate] ASC,
 	[PageId] ASC,
 	[GroupId] ASC
-) ON [PRIMARY]
-) ON [PRIMARY]
+)
+)
 GO
 
 --No need to run the update proc to fill the table now as that is part of the sproc creation script
