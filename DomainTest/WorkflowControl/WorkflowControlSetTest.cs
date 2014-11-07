@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -196,7 +194,38 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.AreEqual(1, _target.AllowedPreferenceAbsences.Count());
             Assert.AreEqual(absenceTwoToAdd, _target.AllowedPreferenceAbsences.First());
-        }
+		}
+
+		[Test]
+		public void CanAddAllowedAbsenceForReport()
+		{
+			Assert.AreEqual(0, _target.AllowedAbsencesForReport.Count());
+
+			IAbsence absenceToAdd = new Absence();
+
+			_target.AddAllowedAbsenceForReport(absenceToAdd);
+
+			Assert.AreEqual(1, _target.AllowedAbsencesForReport.Count());
+			Assert.AreEqual(absenceToAdd, _target.AllowedAbsencesForReport.First());
+		}
+
+
+		[Test]
+		public void CanRemoveAllowedAbsenceForReport()
+		{
+			IAbsence absenceOneToAdd = new Absence();
+			IAbsence absenceTwoToAdd = new Absence();
+
+			_target.AddAllowedAbsenceForReport(absenceOneToAdd);
+			_target.AddAllowedAbsenceForReport(absenceTwoToAdd);
+
+			Assert.AreEqual(2, _target.AllowedAbsencesForReport.Count());
+
+			_target.RemoveAllowedAbsenceForReport(absenceOneToAdd);
+
+			Assert.AreEqual(1, _target.AllowedAbsencesForReport.Count());
+			Assert.AreEqual(absenceTwoToAdd, _target.AllowedAbsencesForReport.First());
+		}
 
         [Test]
         public void CanAddAllowedDayOff()

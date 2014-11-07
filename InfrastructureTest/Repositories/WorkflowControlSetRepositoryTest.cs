@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             workflowControlSet.AddAllowedPreferenceDayOff(_dayOff);
             workflowControlSet.AddAllowedPreferenceShiftCategory(_shiftCategory);
             workflowControlSet.AddAllowedPreferenceAbsence(_absence);
+            workflowControlSet.AddAllowedAbsenceForReport(_absence);
 
             workflowControlSet.AutoGrantShiftTradeRequest = true;
             return workflowControlSet;
@@ -95,6 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(loadedAggregateFromDatabase.AllowedPreferenceDayOffs.Count(), Is.EqualTo(1));
             Assert.That(loadedAggregateFromDatabase.AllowedPreferenceShiftCategories.Count(), Is.EqualTo(1));
             Assert.That(loadedAggregateFromDatabase.AllowedPreferenceAbsences.Count(), Is.EqualTo(1));
+            Assert.That(loadedAggregateFromDatabase.AllowedAbsencesForReport.Count(), Is.EqualTo(1));
             Assert.That(loadedAggregateFromDatabase.AutoGrantShiftTradeRequest, Is.True);
         }
 

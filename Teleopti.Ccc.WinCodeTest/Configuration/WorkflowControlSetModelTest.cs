@@ -303,6 +303,18 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.AreEqual(0, _target.AllowedPreferenceAbsences.Count());
         }
 
+		[Test]
+		public void CanAddAndRemoveAllowedAbsencesForReport()
+		{
+			var absence = new Absence();
+
+			Assert.AreEqual(0, _target.AllowedAbsencesForReport.Count());
+			_target.AddAllowedAbsenceForReport(absence);
+			Assert.AreEqual(1, _target.AllowedAbsencesForReport.Count());
+			_target.RemoveAllowedAbsenceForReport(absence);
+			Assert.AreEqual(0, _target.AllowedAbsencesForReport.Count());
+		}
+
         [Test]
         public void CanAddAndRemoveAllowedDayOffs()
         {
