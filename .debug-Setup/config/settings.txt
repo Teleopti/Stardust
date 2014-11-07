@@ -5,7 +5,7 @@ $(DB_ANALYTICS)|TeleoptiAnalytics_Demo
 $(AS_DATABASE)|TeleoptiAnalytics_Demo
 $(IIS_AUTH)|Windows
 $(LOCAL_WIKI)|c:\temp
-$(PM_ASMX)|http://CCCRC/TeleoptiPM/services/Analyzer2005.asmx
+$(PM_ASMX)|http://localhost/TeleoptiPM/services/Analyzer2005.asmx
 $(PM_AUTH_MODE)|Anonymous
 $(PM_ANONYMOUS_DOMAINUSER)|YourDomain\theUser
 $(PM_ANONYMOUS_PWD)|pw
@@ -38,4 +38,5 @@ $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
 $(SDK_nhibConfPath)|c:\nhib
 $(DATASOURCE_NAME)|Teleopti WFM
+$(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
 _replace_|c:\InfraTest.ini
