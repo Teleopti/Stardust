@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private ISkillStaffPeriodIntraIntervalPeriodFinder _skillStaffPeriodIntraIntervalPeriodFinder;
 		private ISkillActivityCounter _skillActivityCounter;
 		private IShiftProjectionCacheIntraIntervalValueCalculator _shiftProjectionCacheIntraIntervalValueCalculator;
-		private SortedSet<IWorkShiftCalculationResultHolder> _sortedListResources;
+		private IList<IWorkShiftCalculationResultHolder> _sortedListResources;
 		private ISkillStaffPeriod _skillStaffPeriod1;
 		private ISkillStaffPeriod _skillStaffPeriod2;
 		private DateTimePeriod _period1;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			_samplesBefore = new List<int>();
 
-			_sortedListResources = new SortedSet<IWorkShiftCalculationResultHolder>(new WorkShiftCalculationResultComparer())
+			_sortedListResources = new List<IWorkShiftCalculationResultHolder>
 			{
 				_workShiftCalculationResultHolder1,
 				_workShiftCalculationResultHolder2

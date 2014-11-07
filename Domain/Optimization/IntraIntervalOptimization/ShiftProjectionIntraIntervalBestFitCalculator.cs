@@ -5,8 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	//TODO PROTOTYPE ADD TESTS
-	public class ShiftProjectionIntraIntervalBestFitCalculator
+	public interface IShiftProjectionIntraIntervalBestFitCalculator
+	{
+		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCachesSortedByBestIntraIntervalFit(IList<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill);
+	}
+
+	public class ShiftProjectionIntraIntervalBestFitCalculator : IShiftProjectionIntraIntervalBestFitCalculator
 	{
 		private readonly ISkillStaffPeriodIntraIntervalPeriodFinder _skillStaffPeriodIntraIntervalPeriodFinder;
 		private readonly ISkillActivityCounter _skillActivityCounter;
@@ -19,9 +23,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_shiftProjectionCacheIntraIntervalValueCalculator = shiftProjectionCacheIntraIntervalValueCalculator;
 		}
 
-		public SortedSet<IWorkShiftCalculationResultHolder> GetShiftProjectionCachesSortedByBestIntraIntervalFit(SortedSet<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill)
+		public IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCachesSortedByBestIntraIntervalFit(IList<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill)
 		{
-			var sortedList = new SortedSet<IWorkShiftCalculationResultHolder>(new WorkShiftCalculationResultComparer());
+			IComparer<IWorkShiftCalculationResultHolder> comparer = new WorkShiftCalculationResultComparer();
+			var sortedList = new List<IWorkShiftCalculationResultHolder>();
 
 			foreach (var workShiftCalculationResultHolder in workShiftCalculationResults)
 			{
@@ -41,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			}
 
+			sortedList.Sort(comparer);
 			return sortedList;
 		}	
 	}

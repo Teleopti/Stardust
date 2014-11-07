@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 
-		SortedSet<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
+		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
 			IPerson person,
 			DateOnly datePointer,
@@ -58,14 +58,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		// TODO Move to separate class
-		public SortedSet<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
+		public IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
 			IPerson person,
 			DateOnly datePointer,
 			ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			var resultList = new SortedSet<IWorkShiftCalculationResultHolder>();
+			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
 			if (selectedTeamMembers.IsEmpty())

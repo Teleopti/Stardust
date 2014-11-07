@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 
-		SortedSet<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
+		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
 			ISchedulingOptions schedulingOptions,
 			DateOnly day,
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		// TODO Move to separate class
-		public SortedSet<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
+		public IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
 			ISchedulingOptions schedulingOptions, 
 			DateOnly day,
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			bool isMaxSeatToggleEnabled, 
 			IPerson person)
 		{
-			var resultList = new SortedSet<IWorkShiftCalculationResultHolder>();
+			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
 			var isSingleAgentTeamAndBlockWithSameShift = !schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
 															 schedulingOptions.BlockSameShift;
 			if (isSingleAgentTeamAndBlockWithSameShift)

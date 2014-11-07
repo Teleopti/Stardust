@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
 
-		SortedSet<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
+		IList<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
 			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
 			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
 	}
@@ -67,11 +67,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return bestShift;
 		}
 
-		public SortedSet<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
+		public IList<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
 			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
 			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
-			var sortedList = new SortedSet<IWorkShiftCalculationResultHolder>(new WorkShiftCalculationResultComparer());
+			IComparer<IWorkShiftCalculationResultHolder> comparer = new WorkShiftCalculationResultComparer();
+			var sortedList = new List<IWorkShiftCalculationResultHolder>();
+
 			foreach (var shiftProjectionCache in shiftList)
 			{
 				double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, parameters, timeZoneInfo);
@@ -81,6 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = valueForShift.Value });
 			}
 
+			sortedList.Sort(comparer);
 			return sortedList;
 		}
 
