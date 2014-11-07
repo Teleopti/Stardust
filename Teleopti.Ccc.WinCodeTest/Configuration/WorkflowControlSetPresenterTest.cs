@@ -880,6 +880,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.SetAllowedDayOffs(null)).IgnoreArguments();
                 Expect.Call(() => _view.SetAllowedShiftCategories(null)).IgnoreArguments();
                 Expect.Call(() => _view.SetAllowedAbsences(null)).IgnoreArguments();
+                Expect.Call(() => _view.SetAllowedAbsencesForReport(null)).IgnoreArguments();
                 Expect.Call(() => _view.LoadDateOnlyVisualizer()).Repeat.Any();
                 Expect.Call(() => _view.SetAutoGrant(false));
                 Expect.Call(() => _view.SetFairnessType(FairnessType.EqualNumberOfShiftCategory));
@@ -1070,6 +1071,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetAllowedDayOffs(null)).IgnoreArguments();
             Expect.Call(() => view.SetAllowedShiftCategories(null)).IgnoreArguments();
             Expect.Call(() => view.SetAllowedAbsences(null)).IgnoreArguments();
+            Expect.Call(() => view.SetAllowedAbsencesForReport(null)).IgnoreArguments();
             Expect.Call(() => view.SetShiftTradeTargetTimeFlexibility(new TimeSpan()));
             Expect.Call(() => view.SetAutoGrant(false)).IgnoreArguments();
             Expect.Call(() => view.SetFairnessType(FairnessType.FairnessPoints)).IgnoreArguments();
