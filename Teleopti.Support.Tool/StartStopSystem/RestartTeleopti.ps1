@@ -119,39 +119,6 @@ function IIS-Restart {
 	Invoke-Expression -Command:"iisreset /START"
 }
 
-function fnAddTrustedSite ([string]$Site)
-{
-    if ($Site -match "https://") {
-        $ssl = $True
-    } else {
-        $ssl = $False
-    }
-    
-
-    $Site = $Site -replace "http://", ""
-    $Site = $Site -replace "https://", ""
-    $Site = $Site.Split("/")[0].ToLower()
-
-    $regpath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\" +$Site
-    $Escregpath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains\" +$Site
-    if (-not (Test-Path -Path "$regpath"))
-    {
-        $null = New-Item -Path "$regpath"
-    }
-    if (-not (Test-Path -Path "$Escregpath"))
-    {
-        $null = New-Item -Path "$Escregpath"
-    }
-    
-    if ($ssl) {
-        Set-ItemProperty -Path "$regpath" -Name https -Value 1 -Type DWord
-        Set-ItemProperty -Path "$Escregpath" -Name https -Value 1 -Type DWord
-    } else {
-        Set-ItemProperty -Path "$regpath" -Name http -Value 1 -Type DWord
-        Set-ItemProperty -Path "$Escregpath" -Name http -Value 1 -Type DWord
-    }
-}
-
 function AppPools-Start {
     param([bool]$IsAzure)
     if (!$IsAzure) {
@@ -300,9 +267,6 @@ Try
 
 	$isAzure = fnIsAzure
 	$BaseUrl = BaseUrl-get $isAzure
-	if (!$isAzure) {
-		fnAddTrustedSite $BaseUrl	
-		}
 	TeleoptiWindowsServices-Stop $isAzure
 	IIS-Restart
 	write-host "sleep 5 seconds for IIS to restart ..."
