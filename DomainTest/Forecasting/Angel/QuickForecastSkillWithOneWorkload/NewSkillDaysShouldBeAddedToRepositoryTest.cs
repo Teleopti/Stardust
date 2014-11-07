@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,13 +9,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 {
 	public class NewSkillDaysShouldBeAddedToRepositoryTest : QuickForecastTest
 	{
-		//this method is probably not needed when NoStatisticNorValidatedTest passes (depending on whether skilldays are created then or not)
-		protected override IEnumerable<StatisticTask> StatisticTasks()
-		{
-			var dateTimeOnStartPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
-			yield return new StatisticTask { Interval = dateTimeOnStartPeriod, StatOfferedTasks = 23 };
-		}
-
 		private skillDayRepositoryForTest skillDayRepository;
 
 		protected override ISkillDayRepository SkillDayRepository(ICollection<ISkillDay> existingSkillDays)
