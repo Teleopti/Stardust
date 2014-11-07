@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -15,18 +15,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	public class ReportItemProviderTest
 	{
 		private IReportsProvider _reportsProvider;
-		private ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private ICurrentBusinessUnit _currentBusinessUnit;
 		private Guid _guid;
 
 		[SetUp]
 		public void Setup()
 		{
 			_guid = Guid.NewGuid();
-			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
-			_sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
 
-			_sessionSpecificDataProvider.Stub(x => x.GrabFromCookie())
-												 .Return(new SessionSpecificData(_guid, "DataSourceName", _guid));
+			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
+			_currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			_currentBusinessUnit.Stub(x => x.Current().Id).Return(_guid);
 		}
 
 		[Test]
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() {new ApplicationFunction()});
 
-			var target = new ReportItemsProvider(_reportsProvider, _sessionSpecificDataProvider);
+			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit);
 			var result = target.GetReportItems();
 
 			result.Count.Should().Be(1);
@@ -50,11 +49,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			applicationFunciton.Stub(y => y.ForeignId).Return("foreignId");
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() { applicationFunciton });
 
-			var target = new ReportItemsProvider(_reportsProvider, _sessionSpecificDataProvider);
+			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit);
 			var result = target.GetReportItems();
 
 			result[0].Name.Should().Be.EqualTo(localizedFunctionDescription);
-			result[0].Url.Should().Be.EqualTo("Selection.aspx?ReportId=foreignId&BuId=" + _guid.ToString());
+			result[0].Url.Should().Be.EqualTo("Selection.aspx?ReportId=foreignId&BuId=" + _guid);
 		}
 
 		[Test]
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			applicationFunctions.Add(applicationFunciton1);
 			_reportsProvider.Stub(x => x.GetReports()).Return(applicationFunctions);
 
-			var target = new ReportItemsProvider(_reportsProvider, _sessionSpecificDataProvider);
+			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit);
 			var result = target.GetReportItems();
 
 			result[0].Name.Should().Be.EqualTo(localizedFunctionDescription1);

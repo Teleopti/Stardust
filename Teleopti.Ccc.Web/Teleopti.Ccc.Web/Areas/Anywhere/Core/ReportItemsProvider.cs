@@ -2,8 +2,8 @@
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -11,18 +11,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class ReportItemsProvider : IReportItemsProvider
 	{
 		private readonly IReportsProvider _reportsProvider;
-		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public ReportItemsProvider(IReportsProvider reportsProvider, ISessionSpecificDataProvider sessionSpecificDataProvider)
+		public ReportItemsProvider(IReportsProvider reportsProvider, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_reportsProvider = reportsProvider;
-			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		public List<ReportItem> GetReportItems()
 		{
-			var data = _sessionSpecificDataProvider.GrabFromCookie();
-			var realBu = data.BusinessUnitId;
+			var realBu = _currentBusinessUnit.Current().Id;
 			var matrixWebsiteUrl = ConfigurationManager.AppSettings["MatrixWebSiteUrl"];
 			if (!string.IsNullOrEmpty(matrixWebsiteUrl) && !matrixWebsiteUrl.EndsWith("/")) matrixWebsiteUrl += "/";
 
