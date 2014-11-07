@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.FileImport
         [Test]
         public void VerifyData()
         {
-            Assert.AreEqual(_target.Interval, "06:00");
+            Assert.AreEqual(_target.Interval, "24");
             Assert.AreEqual(_target.Date, "20090220");
             Assert.AreEqual(_target.Time, "06:00");
             Assert.AreEqual(_target.Queue, "6");

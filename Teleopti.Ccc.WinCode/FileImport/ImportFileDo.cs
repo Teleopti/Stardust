@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.FileImport
                 throw new FileImportException("Wrong format on line " + line);
             }
 
-            Interval = strings[2];
+            Interval = strings[0];
             Date = strings[1];
             Time = strings[2];
             Queue = strings[3];
