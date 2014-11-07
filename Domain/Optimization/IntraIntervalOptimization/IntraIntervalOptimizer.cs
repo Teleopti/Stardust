@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
 			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
 			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
-			IIntraIntervalIssues intervalIssuesAfter = new IntraIntervalIssues();
 
 			rollbackService.ClearModificationCollection();
 			
@@ -103,20 +102,17 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					continue;
 				}
 
-				intervalIssuesAfter = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
-				var notBetter = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
-				notBetter = notBetter || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
+				var intervalIssuesAfter = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
+				var worse = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+				worse = worse || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
 
-				if (!notBetter)
+				if (!worse)
 				{
-					var today = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
-					var dayAfter = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
-
-					if (!checkDayAfter) notBetter = !today;
-					if (checkDayAfter) notBetter = !dayAfter;
+					if(!checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+					if(checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
 				}
 	
-				if (notBetter)
+				if (worse)
 				{
 					rollbackService.Rollback();
 					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
@@ -126,13 +122,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				else
 				{
 					reportProgress(checkDayAfter, intervalIssuesAfter, progressCounter);
-					break;
+					return intervalIssuesAfter;
 				}
 
 				progressCounter++;
 			}
 
-			return intervalIssuesAfter;
+			return intervalIssuesBefore;
 		}
 
 		private void reportProgress(bool checkDayAfter, IIntraIntervalIssues intervalIssues, int progressCounter)
