@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new[] {(Guid) per1.Id, (Guid) per2.Id, (Guid) per3.Id}, new Paging());
 
 			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
-			Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(per1.Id));
-			Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(per2.Id));
-			Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(per3.Id));
+			Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(per1.Id));
+			Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(per2.Id));
+			Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(per3.Id));
 			Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 8, 0, 0)));
 		}
 

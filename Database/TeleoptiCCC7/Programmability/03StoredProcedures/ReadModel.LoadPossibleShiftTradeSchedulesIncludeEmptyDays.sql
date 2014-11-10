@@ -46,16 +46,18 @@ AS
 	(
 	  SELECT DISTINCT TOP (1000000)
 	         *,
-		     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
+		     ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, DayOffFlag, Start) AS 'RowNumber'
         FROM (select p.Person as PersonId,
 			 isnull(sd.TeamId, t.Id) as TeamID, 
 			 isnull(sd.SiteId, s.Id) as SiteId, 
 			 isnull(sd.BusinessUnitId, s.BusinessUnit) as BusinessUnitId, 
-			 sd.BelongsToDate, sd.Start, sd.[End], sd.Model,
+			 isnull(sd.BelongsToDate, @shiftTradeDate) as BelongsToDate, 
+			 sd.Start, sd.[End], sd.Model,
 			 CASE DATEDIFF(MINUTE, sd.Start, sd.[End])
 								   WHEN 1440 THEN 1
 								   ELSE 0
-								 END AS DayOffFlag
+								 END AS DayOffFlag,
+			 CASE WHEN Start IS NULL THEN 1 ELSE 0 END As IsEmptySchedule
 			FROM @TempList p left join (select * from ReadModel.PersonScheduleDay where [BelongsToDate] = @shiftTradeDate) sd on sd.PersonId=p.Person
 			join PersonPeriod pp on pp.Parent = p.Person 
 			join Team t on t.Id = pp.Team
@@ -65,7 +67,7 @@ AS
 									and Parent = p.Person
 									group by parent)
 		) as s
-		ORDER BY DayOffFlag, Start
+		ORDER BY IsEmptySchedule, DayOffFlag, Start
 	) 
 
 	
