@@ -63,6 +63,7 @@ SET HISTORYDIR=%DEPLOYSHARE%\%Version%
 
 ::This must be before the drive mapping below
 SET WORKINGDIR=C:\Temp\WiseWORKINGDIR
+IF NOT EXIST "%WORKINGDIR%" MKDIR "%WORKINGDIR%"
 
 ::Hardcoded drive letter used inside WISE project.
 SET WISEDRIVELETTER=K:
