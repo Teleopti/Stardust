@@ -3,7 +3,10 @@
 <table class="table-condensed">
 	<tr>
 		<td>
-			<div class="col-xs-6" style="padding-top: 6px;">
+			<label>
+				@Resources.AbsenceType
+			</label>
+			<div>
 				<select class="request-edit-absence form-control" data-bind="value: AbsenceId">
 					@foreach (var absenceType in Model.AbsenceTypesForReport)
 					{
@@ -12,6 +15,7 @@
 				</select>
 			</div>
 		</td>
+
 	</tr>
 	<tr>
 		<td>
@@ -23,18 +27,33 @@
 								<i class="glyphicon glyphicon-step-backward"></i>
 							</span>
 							<![if (!IE)|(gt IE 8)]>
-							<input class="absence-report-start-date form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" />
+								<input class="absence-report-start-date form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
 							<![endif]>
 							<!--[if lte IE 8]>
-							<input class="absence-report-start-date input-sm form-control" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
+								<input class="absence-report-start-date input-sm form-control" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
 							<![endif]-->
-							<span class="input-group-btn">
-								<button class="btn" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }">
-									<i class="glyphicon glyphicon-calendar"></i>
-								</button>
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-calendar"></i>
 							</span>
 						</span>
 					</td>
+					<!--
+					<td>
+						<label>
+							@Resources.AbsenceType
+						</label>
+					</td>
+					<td>
+						<div>
+							<select class="request-edit-absence form-control" data-bind="value: AbsenceId">
+								@foreach (var absenceType in Model.AbsenceTypesForReport)
+								{
+									<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+								}
+							</select>
+						</div>
+					</td>
+						-->
 					<!--
 					<td>
 						<div class="bootstrap-timepicker">
@@ -56,15 +75,13 @@
 								<i class="glyphicon glyphicon-step-forward"></i>
 							</span>
 							<![if (!IE)|(gt IE 8)]>
-							<input class="absence-report-end-date form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" />
+							<input class="absence-report-end-date form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
 							<![endif]>
 							<!--[if lte IE 8]>
 							<input class="absence-report-end-date input-sm form-control" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
 							<![endif]-->
-							<span class="input-group-btn">
-								<button class="btn" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat() }">
-									<i class="glyphicon glyphicon-calendar"></i>
-								</button>
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-calendar"></i>
 							</span>
 						</span>
 					</td>
