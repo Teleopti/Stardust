@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -18,8 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public List<ReportItem> GetReportItems()
 		{
-			var reports = new List<IApplicationFunction>(_reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription));
+			var reports = _reportsProvider.GetReports().OrderBy(x => x.LocalizedFunctionDescription);
 			var reportItems = new List<ReportItem>();
+
 			foreach (var applicationFunction in reports)
 			{
 				reportItems.Add(new ReportItem
