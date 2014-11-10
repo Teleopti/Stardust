@@ -215,6 +215,7 @@
     <Compile Include="Areas\Anywhere\Controllers\SitesControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\TeamsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\ReportUrlTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\FakeClientBuilder.cs" />
     <Compile Include="Areas\Anywhere\Hubs\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>

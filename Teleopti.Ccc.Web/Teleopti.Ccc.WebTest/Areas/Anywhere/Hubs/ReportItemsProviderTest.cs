@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
@@ -15,27 +13,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	public class ReportItemProviderTest
 	{
 		private IReportsProvider _reportsProvider;
-		private ICurrentBusinessUnit _currentBusinessUnit;
 		private IReportUrl _matrixWebsiteUrl;
-		private Guid _guid;
-
+		
 		[SetUp]
 		public void Setup()
 		{
-			_guid = Guid.NewGuid();
-
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
-			_currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			_matrixWebsiteUrl = MockRepository.GenerateMock<IReportUrl>();
-			_currentBusinessUnit.Stub(x => x.Current().Id).Return(_guid);
-		}
+			}
 
 		[Test]
 		public void ShouldGetReportItems()
 		{
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() {new ApplicationFunction()});
 
-			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit, _matrixWebsiteUrl);
+			var target = new ReportItemsProvider(_reportsProvider, _matrixWebsiteUrl);
 			var result = target.GetReportItems();
 
 			result.Count.Should().Be(1);
@@ -48,31 +40,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var applicationFunciton = MockRepository.GenerateMock<IApplicationFunction>();
 			applicationFunciton.Stub(x => x.LocalizedFunctionDescription).Return(localizedFunctionDescription);
-			applicationFunciton.Stub(y => y.ForeignId).Return("foreignId");
 			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() { applicationFunciton });
-			var matrixUrl = "Selection.aspx?ReportId=foreignId&BuId=" + _guid;
-			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton.ForeignId, _guid)).Return(matrixUrl);
+			var matrixUrl = "Selection.aspx?ReportId=foreignId&BuId=00000001";
+			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton.ForeignId)).Return(matrixUrl);
 
-			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit, _matrixWebsiteUrl);
+			var target = new ReportItemsProvider(_reportsProvider, _matrixWebsiteUrl);
 			var result = target.GetReportItems();
 
 			result[0].Name.Should().Be.EqualTo(localizedFunctionDescription);
-			result[0].Url.Should().Be.EqualTo("Selection.aspx?ReportId=foreignId&BuId=" + _guid);
-		}
-
-		[Test]
-		public void ShouldSeperateWithSlashWhenHasMatrixWebsiteUrl()
-		{
-			var foreignId = "foreignId";
-			var applicationFunciton = MockRepository.GenerateMock<IApplicationFunction>();
-			applicationFunciton.Stub(y => y.ForeignId).Return(foreignId);
-			var matrixUrl = "MatrixUrl/Selection.aspx?ReportId=foreignId&BuId=" + _guid;
-			_matrixWebsiteUrl.Stub(x => x.Build(applicationFunciton.ForeignId, _guid)).Return(matrixUrl);
-			_reportsProvider.Stub(x => x.GetReports()).Return(new List<IApplicationFunction>() { applicationFunciton });
-
-			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit, _matrixWebsiteUrl);
-			var result = target.GetReportItems();
-
 			result[0].Url.Should().Be.EqualTo(matrixUrl);
 		}
 
@@ -92,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			applicationFunctions.Add(applicationFunciton1);
 			_reportsProvider.Stub(x => x.GetReports()).Return(applicationFunctions);
 
-			var target = new ReportItemsProvider(_reportsProvider, _currentBusinessUnit, _matrixWebsiteUrl);
+			var target = new ReportItemsProvider(_reportsProvider, _matrixWebsiteUrl);
 			var result = target.GetReportItems();
 
 			result[0].Name.Should().Be.EqualTo(localizedFunctionDescription1);
