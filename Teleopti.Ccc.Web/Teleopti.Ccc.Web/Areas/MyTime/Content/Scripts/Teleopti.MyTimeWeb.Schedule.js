@@ -88,7 +88,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		
 		self.requestViewModel = ko.observable();
 
-		self.initialRequestDay = null;
+		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
 
 		self.showAddRequestToolbar = ko.computed(function () {
@@ -151,7 +151,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					requestViewModel.LoadRequestData(data);
 				} else {
 					var day = ko.utils.arrayFirst(self.days(), function (item) {
-						return item.date() == self.initialRequestDay;
+						return item.date() == self.initialRequestDay();
 					});
 					var oaData = day.overtimeAvailability();
 					requestViewModel.LoadRequestData(oaData);
@@ -159,7 +159,24 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		}
 
-		self.showAddTextRequestForm = function (data) {
+		self.isAbsenceReportAvailable = ko.computed(function () {
+			if (self.initialRequestDay() == null)
+				return false;
+			var today = moment().startOf('day');
+			var formatToday = today.format('l');
+			var formatTomorrow = today.add(1, 'day').format('l');
+			var formatInitialRequestDay = self.initialRequestDay().format('l');
+			//Absence report is available only for today and tomorrow.
+			var isPermittedDate = (formatInitialRequestDay == formatToday) || (formatInitialRequestDay == formatTomorrow);
+			return self.absenceReportPermission() && isPermittedDate;
+		});
+
+function _fillAbsenceReportFormData() {
+			self.absenceReportViewModel().DateFrom(moment(self.initialRequestDay(), self.absenceReportViewModel().DateFormat()));
+			self.absenceReportViewModel().DateTo(moment(self.initialRequestDay(), self.absenceReportViewModel().DateFormat()));
+
+		}
+		self.showAddTextRequestForm = function() {
 			if (self.textPermission() !== true) {
 				return;
 			}
@@ -234,7 +251,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		self.showAddRequestFormWithData = function(date, data) {
-			self.initialRequestDay = date;
+			self.initialRequestDay(date);
 
 			if ((self.requestViewModel() || '') != '') {
 				_fillFormData(data);

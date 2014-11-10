@@ -121,7 +121,7 @@
 			<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;Shift Exchange</a>
 		</li>
 		<!-- ko if:isAbsenceReportEnabled -->
-		<li data-bind="visible: absenceReportPermission, css: { active: absenceReportActive }">
+		<li data-bind="visible: isAbsenceReportAvailable, css: { active: absenceReportActive }">
 			<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: function () { absenceReportActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
 		</li>
 		<!-- /ko -->
