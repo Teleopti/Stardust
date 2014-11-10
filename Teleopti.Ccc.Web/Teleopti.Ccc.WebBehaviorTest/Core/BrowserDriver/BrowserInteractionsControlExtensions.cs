@@ -22,5 +22,11 @@
 			interactions.Javascript("$(\"{0}\").change();", selector.JSEncode());
 		}
 
+		public static string GetInputText(this IBrowserInteractions interactions, string selector)
+		{
+			selector = selector + ":enabled";
+			interactions.AssertExists(selector);
+			return interactions.Javascript("return document.querySelector(\"{0}\").value;", selector.JSEncode());
+		}
 	}
 }

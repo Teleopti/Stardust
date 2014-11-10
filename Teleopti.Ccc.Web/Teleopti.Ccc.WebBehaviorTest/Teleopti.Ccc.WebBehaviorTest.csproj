@@ -147,6 +147,7 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
     <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
     <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
@@ -154,6 +155,12 @@
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
     <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
+    <Compile Include="Forecasting\QuickForecaster.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuickForecaster.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\QuickForecasterStepDefinition.cs" />
     <Compile Include="HealthCheck\HealthCheck.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -752,6 +759,10 @@
     <None Include="Anywhere\Reports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Reports.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Forecasting\QuickForecaster.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>QuickForecaster.feature.cs</LastGenOutput>
     </None>
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

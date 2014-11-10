@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public interface IBrowserInteractions
 	{
-		object Javascript(string javascript);
+		string Javascript(string javascript);
 
 		void GoToWaitForCompleted(string uri);
 		void GoToWaitForUrlAssert(string uri, string assertUrlContains);

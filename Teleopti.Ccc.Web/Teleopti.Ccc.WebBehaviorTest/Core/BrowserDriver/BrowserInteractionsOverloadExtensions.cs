@@ -2,9 +2,9 @@
 {
 	public static class BrowserInteractionsOverloadExtensions
 	{
-		public static void Javascript(this IBrowserInteractions interactions, string javascript, params object[] args)
+		public static string Javascript(this IBrowserInteractions interactions, string javascript, params object[] args)
 		{
-			interactions.Javascript(string.Format(javascript, args));
+			return interactions.Javascript(string.Format(javascript, args));
 		}
 
 		public static void AssertExists(this IBrowserInteractions interactions, string selector, params object[] args)

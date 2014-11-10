@@ -379,6 +379,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
                     date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
                     new ApplicationStartupTimeout());
 	    }
+
+		public static void GotoQuickForecaster()
+		{
+			GoToWaitForCompleted("areas/wfm", new ApplicationStartupTimeout());
+		}
 	}
 
 	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor

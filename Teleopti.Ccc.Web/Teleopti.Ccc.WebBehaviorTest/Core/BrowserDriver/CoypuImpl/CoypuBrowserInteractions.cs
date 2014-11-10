@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			}
 		}
 
-		public object Javascript(string javascript)
+		public string Javascript(string javascript)
 		{
 			return retryJavascript(javascript);
 		}

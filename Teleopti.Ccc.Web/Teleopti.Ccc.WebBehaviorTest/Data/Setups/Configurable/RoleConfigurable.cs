@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AddActivity { get; set; }
 		public bool MoveActivity { get; set; }
 
+		public bool QuickForecaster { get; set; }
+
 		public RoleConfigurable()
 		{
 			Name = RandomName.Make("A role");
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			RemoveAbsence = true;
 			AddActivity = true;
 			MoveActivity = true;
+			QuickForecaster = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -248,6 +251,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MoveActivity
 									   select f;
+			if(!QuickForecaster)
+				applicationFunctions = from f in applicationFunctions
+															 where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenForecasterPage
+															 select f;
 
 			return applicationFunctions;
 		}

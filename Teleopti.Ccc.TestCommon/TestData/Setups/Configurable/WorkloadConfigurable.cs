@@ -1,0 +1,26 @@
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
+{
+	public class WorkloadConfigurable : IDataSetup
+	{
+		public string SkillName { get; set; }
+		public string QueueSourceName { get; set; }
+
+		public void Apply(IUnitOfWork uow)
+		{
+			var skill = new SkillRepository(uow).LoadAll().Single(x => x.Name.Equals(SkillName));
+			var wl = new Workload(skill);
+			if (QueueSourceName != null)
+			{
+				var qs = new QueueSourceRepository(uow).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
+				wl.AddQueueSource(qs);
+			}
+			new WorkloadRepository(uow).Add(wl);
+		}
+	}
+}

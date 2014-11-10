@@ -10,8 +10,8 @@ wfmCtrls.controller('MainCtrl',
 
 wfmCtrls.controller('ForecastingCtrl', ['$scope', '$state',
         function ($scope, $state) {
-            var startDate = moment().utc().add(1,'months').startOf('month').toDate();
-            var endDate = moment().utc().add(1,'months').endOf('month').toDate();
+            var startDate = moment().add(1,'months').startOf('month').toDate();
+            var endDate = moment().add(2, 'months').startOf('month').toDate();
             $scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 
             $scope.startPeriod = function (period) {
