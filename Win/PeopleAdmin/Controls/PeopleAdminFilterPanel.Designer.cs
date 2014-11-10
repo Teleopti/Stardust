@@ -122,6 +122,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(342, 505);
 			this.tableLayoutPanel1.TabIndex = 3;
+			this.tableLayoutPanel1.VisibleChanged += new System.EventHandler(this.tableLayoutPanel1_VisibleChanged);
 			// 
 			// PeopleAdminFilterPanel
 			// 

@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var filteredGuids = new HashSet<Guid>(filteredPersons.Keys);
 			_personSelectorPresenter.SetSelectedPersonGuids(filteredGuids);
+			Close();
 		}
 
 		public HashSet<Guid> SelectedAgentGuids()
