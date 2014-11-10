@@ -105,8 +105,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			DateTime? batchId,
 			string originalSourceId)
 		{
-			loggingSvc.DebugFormat("Starting to build ActualAgentState for personId: {0}", personId);
-
 			if (!batchId.HasValue)
 				batchId = previousState.BatchId;
 			if (platformTypeId == Guid.Empty)

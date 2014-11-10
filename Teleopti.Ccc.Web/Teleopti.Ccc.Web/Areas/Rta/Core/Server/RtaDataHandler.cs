@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void sendRtaState(IActualAgentState agentState)
 		{
-			loggingSvc.InfoFormat("Adding message to message broker queue AgentState: {0} ", agentState);
+			loggingSvc.InfoFormat("Sending message: {0} ", agentState);
 
 			var notification = NotificationFactory.CreateNotification(agentState);
 
