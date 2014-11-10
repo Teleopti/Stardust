@@ -94,6 +94,7 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DatabaseHelper.cs" />
