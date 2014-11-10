@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			}
 		}
 
-		[Test]
+		[Ignore, Test]
 		public void ShouldNotExtractWhenMainActivityMatchSkillActivity()
 		{
 			using (_mock.Record())
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			}	
 		}
 
-		[Test]
+		[Ignore, Test]
 		public void ShouldNotExtractWhenMainPeriodContainsIntervalPeriod()
 		{
 			using (_mock.Record())

@@ -28,26 +28,35 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			if (!scheduleDay.SignificantPart().Equals(SchedulePartView.MainShift)) return;
 
-			var projection = scheduleDay.ProjectionService().CreateProjection();
+
+			
+
+			//var projection = scheduleDay.ProjectionService().CreateProjection();
 
 			foreach (var skillStaffPeriod in issues)
 			{
-				var found = false;
+				//var found = false;
 
-				foreach (var visualLayer in projection)
+				if (scheduleDay.PersonAssignment().Period.Intersect(skillStaffPeriod.Period))
 				{
-					if (visualLayer.Period.Contains(skillStaffPeriod.Period)) continue;
-					if (visualLayer.Period.Intersect(skillStaffPeriod.Period))
-					{
-						var activity = visualLayer.Payload as Activity;
-						if (activity != null && activity.Equals(skill.Activity)) continue;
-						result.Add(scheduleDay);
-						found = true;
-						break;
-					}
+					result.Add(scheduleDay);
+					break;
 				}
 
-				if (found) break;
+				//foreach (var visualLayer in projection)
+				//{
+				//	if (visualLayer.Period.Contains(skillStaffPeriod.Period)) continue;
+				//	if (visualLayer.Period.Intersect(skillStaffPeriod.Period))
+				//	{
+				//		var activity = visualLayer.Payload as Activity;
+				//		if (activity != null && activity.Equals(skill.Activity)) continue;
+				//		result.Add(scheduleDay);
+				//		found = true;
+				//		break;
+				//	}
+				//}
+
+				//if (found) break;
 			}
 		}
 	}

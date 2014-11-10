@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Collection;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
@@ -38,6 +40,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 				var result = _countCollector.Collect(list, skillStaffPeriod.Period);
 				var fullInterval = _fullIntervalFinder.FindForInterval(skillStaffPeriod.Period, resourceCalculationDataContainer, skill, list);
 
+				var totals = new List<int>();
+
+				var f = (int)Math.Round(fullInterval, 0);
+				foreach (var i in result)
+				{
+					totals.Add(i + f);
+				}
+
 				var min = double.MaxValue;
 				var max = double.MinValue;
 
@@ -49,7 +59,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 
 				skillStaffPeriod.HasIntraIntervalIssue = min / max < limit;
 				skillStaffPeriod.IntraIntervalValue = min / max;
-				skillStaffPeriod.IntraIntervalSamples = result;
+
+				if (skillStaffPeriod.HasIntraIntervalIssue)
+				{
+					
+				}
+
+				skillStaffPeriod.IntraIntervalSamples = totals;
 			}
 		}
 	}

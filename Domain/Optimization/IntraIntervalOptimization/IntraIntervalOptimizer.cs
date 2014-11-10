@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			_progressEvent = null;
 			var progressCounter = 0;
+			var limit = 0.8;
 
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
 			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
@@ -76,8 +77,18 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);
 
+			intervalIssuesBefore = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
+
+			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
+			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(1) });
+
+			var allSkillstaffPeriodsOnDay = Extract(skillDaysOnDay, skill);
+			var allSkillStaffPeriodsOnDayAfter = Extract(skillDaysOnDayAfter, skill);
+
 			var listResources = _teamBlockScheduler.GetShiftProjectionCaches(teamBlock, person, dateOnly, schedulingOptions, schedulingResultStateHolder);
-			var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? intervalIssuesBefore.IssuesOnDayAfter : intervalIssuesBefore.IssuesOnDay, skill);
+			//var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? intervalIssuesBefore.IssuesOnDayAfter : intervalIssuesBefore.IssuesOnDay, skill);
+
+			var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? allSkillStaffPeriodsOnDayAfter : allSkillstaffPeriodsOnDay, skill, limit);
 
 			if (listBestFit.Count == 0)
 			{
@@ -103,14 +114,22 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				}
 
 				var intervalIssuesAfter = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
-				var worse = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
-				worse = worse || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
+				//var worse = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+				//worse = worse || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
 
-				if (!worse)
-				{
-					if(!checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
-					if(checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
-				}
+				var worse = false;
+
+				if (!checkDayAfter)
+					worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+				if (checkDayAfter)
+					worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);	
+				
+
+				//if (!worse)
+				//{
+				//	if(!checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
+				//	if(checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
+				//}
 	
 				if (worse)
 				{
@@ -129,6 +148,26 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			}
 
 			return intervalIssuesBefore;
+		}
+
+		private IList<ISkillStaffPeriod> Extract(IList<ISkillDay> skillDays, ISkill skill)
+		{
+			var result = new List<ISkillStaffPeriod>();
+
+			foreach (var skillDay in skillDays)
+			{
+				if (skillDay.Skill != skill) continue;
+
+				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+				{
+					//if (skillStaffPeriod.HasIntraIntervalIssue)
+					//{
+						result.Add((ISkillStaffPeriod)skillStaffPeriod.NoneEntityClone());
+					//}
+				}
+			}
+
+			return result;
 		}
 
 		private void reportProgress(bool checkDayAfter, IIntraIntervalIssues intervalIssues, int progressCounter)

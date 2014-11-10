@@ -5,30 +5,50 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface ISkillStaffPeriodEvaluator
 	{
-		bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter);
+		bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit);
 		bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter);
 	}
 
 	public class SkillStaffPeriodEvaluator : ISkillStaffPeriodEvaluator
 	{
-		public bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter)
+		//public bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter)
+		//{
+		//	foreach (var skillStaffPeriodAfter in listAfter)
+		//	{
+		//		var worse = isWorse(skillStaffPeriodAfter, listBefore);
+		//		if (worse) return false;
+		//	}
+
+		//	if(listAfter.Count<listBefore.Count)
+		//		return true;
+
+		//	foreach (var skillStaffPeriodAfter in listAfter)
+		//	{
+		//		var better = isBetter(skillStaffPeriodAfter, listBefore);
+		//		if (better) return true;
+		//	}
+
+		//	return false;
+		//}
+
+		public bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit)
 		{
-			foreach (var skillStaffPeriodAfter in listAfter)
+			var beforeTotals = 0d;
+			var afterTotals = 0d;
+
+			if (listAfter.Count == 0) return true;
+
+			foreach (var skillStaffPeriod in listBefore)
 			{
-				var worse = isWorse(skillStaffPeriodAfter, listBefore);
-				if (worse) return false;
+				beforeTotals += limit - skillStaffPeriod.IntraIntervalValue;
 			}
 
-			if(listAfter.Count<listBefore.Count)
-				return true;
-
-			foreach (var skillStaffPeriodAfter in listAfter)
+			foreach (var skillStaffPeriod in listAfter)
 			{
-				var better = isBetter(skillStaffPeriodAfter, listBefore);
-				if (better) return true;
+				afterTotals += limit - skillStaffPeriod.IntraIntervalValue;
 			}
 
-			return false;
+			return afterTotals < beforeTotals;
 		}
 
 		public bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter)
