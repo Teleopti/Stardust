@@ -36,6 +36,10 @@ namespace ReplaceString
 
 		private const string Teleopti10 =
 			"load.php@debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector&amp;%252A";
+		
+		private const string Teleopti11 =
+			"load.php@debug=false&amp;lang=en&amp;modules=ext.uls.nojs%257Cmediawiki.legacy.commonPrint,shared%257Cmediawiki.skinning.interface%257Cmediawiki.ui.button%257Cskins.vector.styles&amp;only=styles&amp;skin=vector&amp;%252A";
+
 
 		private static int Main(string[] args)
 		{
@@ -131,6 +135,9 @@ namespace ReplaceString
 					case "load.php@debug=false&lang=en&modules=startup&only=scripts&skin=vector&%2A":
 						File.Move(file, path + "\\" + "teleopti10.css");
 						break;
+					case "load.php@debug=false&lang=en&modules=ext.uls.nojs%7Cmediawiki.legacy.commonPrint,shared%7Cmediawiki.skinning.interface%7Cmediawiki.ui.button%7Cskins.vector.styles&only=styles&skin=vector&%2A":
+						File.Move(file, path + "\\" + "teleopti11.css");
+						break;
 				}
 			}
 		}
@@ -158,6 +165,7 @@ namespace ReplaceString
 				content = content.Replace(Teleopti8, "teleopti8.css");
 				content = content.Replace(Teleopti9, "teleopti9.css");
 				content = content.Replace(Teleopti10, "teleopti10.css");
+				content = content.Replace(Teleopti11, "teleopti11.css");
 			}
 
 			var script = isInSubFolder
