@@ -46,7 +46,16 @@ namespace Teleopti.Ccc.Win.Scheduling
            
             SetTexts();
 			BackColor = Color.FromArgb(191, 219, 254);
-        }
+			
+			selectorView.DoFilter += selectorView_DoFilter;
+
+		}
+
+		void selectorView_DoFilter(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
+			Close();
+		}
 
         public HashSet<Guid> SelectedAgentGuids()
         {
