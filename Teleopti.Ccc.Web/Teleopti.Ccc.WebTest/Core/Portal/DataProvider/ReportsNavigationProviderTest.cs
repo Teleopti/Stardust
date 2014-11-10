@@ -9,8 +9,8 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
@@ -21,18 +21,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		private IPrincipalAuthorization _principalAuthorization;
 		private IReportsNavigationProvider _target;
 		private IReportsProvider _reportsProvider;
-		private ISessionSpecificDataProvider _sessionProvider;
 		private IToggleManager _toggleManagger;
+		private IReportUrl _reportUrl;
 
 		[SetUp]
 		public void Setup()
 		{
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
-			_sessionProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
 			_toggleManagger = MockRepository.GenerateMock<IToggleManager>();
-			_target = new ReportsNavigationProvider(_principalAuthorization, _reportsProvider, _sessionProvider, _toggleManagger);
-			_sessionProvider.Stub(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), "", Guid.NewGuid()));
+			_reportUrl = MockRepository.GenerateMock<IReportUrl>();
+			_target = new ReportsNavigationProvider(_principalAuthorization, _reportsProvider, _reportUrl, _toggleManagger);
 		}
 
 		[Test]
