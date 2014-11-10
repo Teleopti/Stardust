@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Win.Grouping
         private readonly IEventAggregator _globalEventAggregator;
         private DateOnlyPeriod? _selectedPeriod;
 
+		public event EventHandler DoFilter;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public PersonSelectorView(IEventAggregatorLocator eventAggregatorLocator,IGroupPageHelper groupPageHelper)
         {
@@ -390,6 +392,7 @@ namespace Teleopti.Ccc.Win.Grouping
         {
             if (e.KeyCode == Keys.Enter)
             {
+				OnDoFilter(new EventArgs());
                 _eventAggregator.GetEvent<OpenModuleClicked>().Publish("");
                 e.Handled = true;
             }
@@ -418,6 +421,15 @@ namespace Teleopti.Ccc.Win.Grouping
         {
             _eventAggregator.GetEvent<RefreshGroupPageClicked>().Publish("");
         }
+
+		protected virtual void OnDoFilter(EventArgs e)
+		{
+			EventHandler handler = DoFilter;
+			if (handler != null)
+			{
+				handler(this, e);
+			}
+		}
         
     }
 
