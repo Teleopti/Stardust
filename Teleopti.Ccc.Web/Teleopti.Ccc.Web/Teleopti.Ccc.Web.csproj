@@ -701,7 +701,6 @@
     <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttribute.cs" />
-    <Compile Include="Filters\AsyncFilter.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -751,7 +750,6 @@
     <Compile Include="Areas\Start\Models\Menu\ApplicationViewModel.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
-    <Compile Include="Filters\AsyncUnitOfWorkApiActionAttribute.cs" />
     <Compile Include="Filters\AuthenticationFailureResult.cs" />
     <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />

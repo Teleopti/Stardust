@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Reflection;
 using System.Web.Http;
 using Autofac;
 using Autofac.Configuration;
@@ -18,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
@@ -30,7 +28,6 @@ using Teleopti.Ccc.Web.Areas.Rta.Core.IoC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 
@@ -42,7 +39,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterApiControllers(typeof(ContainerConfiguration).Assembly);
+			builder.RegisterApiControllers(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterControllers(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterHubs(typeof(ContainerConfiguration).Assembly).EnableClassInterceptors();
 

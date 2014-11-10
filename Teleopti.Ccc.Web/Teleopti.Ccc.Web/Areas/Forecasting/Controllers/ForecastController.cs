@@ -3,6 +3,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_forecastHistoricalPeriodCalculator = forecastHistoricalPeriodCalculator;
 		}
 
-		[HttpPost, AsyncUnitOfWorkApiAction]
-		public Task QuickForecast([FromBody] QuickForecastInputModel model)
+		[HttpPost, UnitOfWork]
+		public virtual Task QuickForecast([FromBody] QuickForecastInputModel model)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
 			var historicalPeriod = _forecastHistoricalPeriodCalculator.HistoricalPeriod(futurePeriod);
