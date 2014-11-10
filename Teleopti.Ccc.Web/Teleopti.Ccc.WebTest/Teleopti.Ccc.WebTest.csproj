@@ -221,7 +221,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />
