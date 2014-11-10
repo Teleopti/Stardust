@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -18,7 +19,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Publish(StateInfo info)
 		{
 			publishShiftStartEvent(info);
+			publishShiftEndEvent(info);
 			publishAdherenceEvent(info);
+		}
+
+		private void publishShiftStartEvent(StateInfo info)
+		{
+			if (info.IsScheduled && !info.WasScheduled)
+			{
+				_eventPublisher.Publish(new PersonShiftStartEvent
+				{
+					PersonId = info.NewState.PersonId,
+					ShiftStartTime = info.CurrentShiftStartTime,
+					ShiftEndTime = info.CurrentShiftEndTime
+				});
+			}
+		}
+
+		private void publishShiftEndEvent(StateInfo info)
+		{
+			if (!info.IsScheduled && info.WasScheduled)
+			{
+				_eventPublisher.Publish(new PersonShiftEndEvent
+				{
+					PersonId = info.NewState.PersonId,
+					ShiftStartTime = info.PreviousShiftStartTime,
+					ShiftEndTime = info.PreviousShiftEndTime
+				});
+			}
+
 		}
 
 		private void publishAdherenceEvent(StateInfo info)
@@ -48,19 +77,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_sentEvents[agentState.PersonId] = @event.GetType();
 		}
 
-		private void publishShiftStartEvent(StateInfo info)
-		{
-			if (info.CurrentActivity == null) return;
-
-			if (info.CurrentShiftStartTime != info.PreviousStateShiftStartTime)
-			{
-				_eventPublisher.Publish(new PersonShiftStartEvent
-				{
-					PersonId = info.NewState.PersonId,
-					ShiftStartTime = info.CurrentShiftStartTime,
-					ShiftEndTime = info.CurrentShiftEndTime
-				});
-			}
-		}
 	}
 }

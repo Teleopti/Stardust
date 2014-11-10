@@ -245,6 +245,7 @@
     <Compile Include="Areas\Rta\FakeSignalRClient.cs" />
     <Compile Include="Areas\Rta\PersistStateTest.cs" />
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
+    <Compile Include="Areas\Rta\PersonShiftEndEventTest.cs" />
     <Compile Include="Areas\Rta\PersonShiftStartEventTest.cs" />
     <Compile Include="Areas\Rta\ReturnCodeTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\AgentsAdherenceTest.cs" />

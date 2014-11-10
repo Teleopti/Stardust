@@ -104,17 +104,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 				var state = getState(p.PersonId, p.BusinessUnitId, stateCode, timeInState, timestamp, platformTypeId, sourceId, batch);
 
-				if (state.NewState == null)
-				{
-					loggingSvc.WarnFormat(
-						"Could not get state for Person: {0}, Business unit: {1}, PlatformTypeId: {2}, StateCode: {3}, Timestamp: {4}, Time in state: {5}, Batch {6}, SourceId{7}",
-						p.PersonId, p.BusinessUnitId, platformTypeId, stateCode, timestamp,
-						timeInState, batchId, sourceId);
-					continue;
-				}
-				loggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode, state.NewState);
 				_databaseWriter.PersistActualAgentState(state.NewState);
-				if (state.SendOverMessageBroker)
+
+				if (state.Send)
 					sendRtaState(state.NewState);
 			}
 			return 1;
@@ -136,10 +128,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				PreviousState = _databaseReader.GetCurrentActualAgentState(personId),
 			};
 
+			if (info.PreviousState == null)
+				info.PreviousState = new ActualAgentState
+				{
+					PersonId = personId,
+					StateId = Guid.NewGuid(),
+				};
+
 			info.CurrentActivity = activityForTime(info, timestamp);
 			info.NextActivityInShift = nextAdjacentActivityForTime(info, timestamp);
-			if (info.PreviousState != null)
-				info.PreviousStateActivity = activityForTime(info, info.PreviousState.ReceivedTime);
+			info.PreviousActivity = activityForTime(info, info.PreviousState.ReceivedTime);
 
 			info.NewState = _agentAssembler.GetAgentState(
 				info.CurrentActivity,
@@ -154,10 +152,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				batch,
 				sourceId);
 
+			info.WasScheduled = info.PreviousState.ScheduledId != Guid.Empty;
+			info.IsScheduled = info.NewState.ScheduledId != Guid.Empty;
+
 			info.CurrentShiftStartTime = startTimeOfShift(info, info.CurrentActivity);
 			info.CurrentShiftEndTime = endTimeOfShift(info, info.CurrentActivity);
-			if (info.PreviousStateActivity != null)
-				info.PreviousStateShiftStartTime = startTimeOfShift(info, info.PreviousStateActivity);
+			info.PreviousShiftStartTime = startTimeOfShift(info, info.PreviousActivity);
+			info.PreviousShiftEndTime = endTimeOfShift(info, info.PreviousActivity);
 
 			_eventPublisher.Publish(info);
 

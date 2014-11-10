@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var database = new FakeRtaDatabase()
 				.WithDataFromState(state)
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var database = new FakeRtaDatabase()
 				.WithDataFromState(state)
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".ToTime());
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.Should().Not.Be.Null();
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00".ToTime(), "2014-10-20 11:00".ToTime())
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.WithAlarm("statecode", activityId, alarmId)
 				.Make();
 			var sender = new FakeMessageSender();
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		[Test]
 		public void ShouldSendWithStateStart()
 		{
-			var expected = "2014-10-20 10:00".ToTime();
+			var expected = "2014-10-20 10:00".Utc();
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithAlarm("statecode", activityId, 0)
-				.WithSchedule(personId, activityId, "2014-10-20 9:00".ToTime(), "2014-10-20 11:00".ToTime())
+				.WithSchedule(personId, activityId, "2014-10-20 9:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime(),
+				Timestamp = "2014-10-20 10:00".Utc(),
 				SecondsInState = 60
 			};
 			var personId = Guid.NewGuid();
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithAlarm("statecode", activityId, 0)
-				.WithSchedule(personId, activityId, "2014-10-20 9:00".ToTime(), "2014-10-20 11:00".ToTime())
+				.WithSchedule(personId, activityId, "2014-10-20 9:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveExternalUserState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
-			sent.StateStart.Should().Be.EqualTo("2014-10-20 9:59".ToTime());
+			sent.StateStart.Should().Be.EqualTo("2014-10-20 9:59".Utc());
 		}
 
 		[Test]
@@ -185,14 +185,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00".ToTime(), "2014-10-20 11:00".ToTime())
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var database = new FakeRtaDatabase()
 				.WithDataFromState(state)
@@ -231,14 +231,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 11:00".ToTime(), "2014-10-20 12:00".ToTime())
+				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 12:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
@@ -256,15 +256,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00".ToTime(), "2014-10-20 11:00".ToTime())
-				.WithSchedule(personId, activityId, "2014-10-20 11:00".ToTime(), "2014-10-20 11:00".ToTime())
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
@@ -282,14 +282,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00".ToTime(), "2014-10-20 11:00".ToTime())
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-21 10:00".ToTime(), "2014-10-21 11:00".ToTime())
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-21 10:00".Utc(), "2014-10-21 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
@@ -307,14 +307,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".ToTime()
+				Timestamp = "2014-10-20 10:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 11:00".ToTime(), "2014-10-20 12:00".ToTime())
+				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 12:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);

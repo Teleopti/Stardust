@@ -156,6 +156,7 @@
     <Compile Include="ApplicationLayer\Events\PersonPeriodRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodStartDateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonReactivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonShiftEndEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonShiftStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonSkillActivatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonSkillAddedEvent.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
     <Compile Include="Common\Time\MutableNow.cs" />
+    <Compile Include="Common\Time\StringExtensions.cs" />
     <Compile Include="Common\Time\ThisIsNow.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />

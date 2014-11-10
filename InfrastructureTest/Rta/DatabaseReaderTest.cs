@@ -62,18 +62,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				var layer = new ProjectionChangedEventLayer
 				{
-					StartDateTime = "2014-11-07 10:00".ToTime(),
-					EndDateTime = "2014-11-07 10:00".ToTime()
+					StartDateTime = "2014-11-07 10:00".Utc(),
+					EndDateTime = "2014-11-07 10:00".Utc()
 				};
 				var repository = new ScheduleProjectionReadOnlyRepository(new FixedCurrentUnitOfWork(uow));
-				repository.AddProjectedLayer(new DateOnly("2014-11-07".ToTime()), Guid.NewGuid(), personId, layer);
+				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer);
 				uow.PersistAll();
 			}
 			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new ThisIsNow("2014-11-07 06:00"));
 
 			var result = target.GetCurrentSchedule(personId);
 
-			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".ToTime()));
+			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}
 	}
 }

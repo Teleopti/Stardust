@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Common.Time
 
 		public void Mutate(string utc)
 		{
-			Mutate(utc.ToTime());
+			Mutate(utc.Utc());
 		}
 
 		public bool IsMutated()

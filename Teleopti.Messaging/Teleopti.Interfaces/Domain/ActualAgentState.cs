@@ -67,27 +67,8 @@ namespace Teleopti.Interfaces.Domain
 		public string OriginalDataSourceId { get; set; }
 		public DateTime? BatchId { get; set; }
 		public Guid BusinessUnit { get; set; }
-		public bool InAdherence { get { return StaffingEffect.Equals(0); } }
-		public bool Equals(IActualAgentState other)
-		{
-			return other != null && GetHashCode().Equals(other.GetHashCode());
-		}
 
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				var result = 0;
-				result = (result*397) ^ ScheduledId.GetHashCode();
-				result = (result*397) ^ ScheduledNextId.GetHashCode();
-				result = (result*397) ^ AlarmId.GetHashCode();
-				result = (result*397) ^ StateId.GetHashCode();
-				if (ScheduledNext != null)
-					result = (result*397) ^ ScheduledNext.GetHashCode();
-				result = (result*397) ^ NextStart.GetHashCode();
-				return result;
-			}
-		}
+		public bool InAdherence { get { return StaffingEffect.Equals(0); } }
 
 		public override string ToString()
 		{

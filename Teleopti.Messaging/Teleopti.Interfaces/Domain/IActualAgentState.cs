@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IActualAgentState : IEquatable<IActualAgentState>
+	public interface IActualAgentState
 	{
 		Guid PersonId { get; set; }
 		string State { get; set; }

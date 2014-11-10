@@ -107,17 +107,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			loggingSvc.DebugFormat("Starting to build ActualAgentState for personId: {0}", personId);
 
-			if (previousState != null)
-			{
-				if (!batchId.HasValue)
-					batchId = previousState.BatchId;
-				if (platformTypeId == Guid.Empty)
-					platformTypeId = previousState.PlatformTypeId;
-				if (stateCode == null)
-					stateCode = previousState.StateCode;
-				if (originalSourceId == null)
-					originalSourceId = previousState.OriginalDataSourceId;
-			}
+			if (!batchId.HasValue)
+				batchId = previousState.BatchId;
+			if (platformTypeId == Guid.Empty)
+				platformTypeId = previousState.PlatformTypeId;
+			if (stateCode == null)
+				stateCode = previousState.StateCode;
+			if (originalSourceId == null)
+				originalSourceId = previousState.OriginalDataSourceId;
 
 			var activityId = currentLayer != null ? currentLayer.PayloadId : Guid.Empty;
 
@@ -158,7 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				newState.StateStart = timestamp.Add(timeInState.Negate());
 			}
 
-			if (previousState != null && previousState.AlarmId == newState.AlarmId)
+			if (previousState.AlarmId == newState.AlarmId)
 				newState.StateStart = previousState.StateStart;
 
 			if (currentLayer != null)

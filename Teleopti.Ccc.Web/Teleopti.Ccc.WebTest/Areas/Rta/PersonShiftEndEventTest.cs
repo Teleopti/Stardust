@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	[TestFixture]
-	public class PersonShiftStartEventTest
+	public class PersonShiftEndEventTest
 	{
 		[Test]
 		public void ShouldPublishEvent()
@@ -25,22 +25,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var now = new MutableNow();
 			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
 
-			now.Mutate("2014-10-19 17:02".Utc());
-			target.SaveExternalUserState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "logout",
-				Timestamp = "2014-10-19 17:02".Utc()
-			});
-			now.Mutate("2014-10-20 10:00".Utc());
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			now.Mutate("2014-10-20 10:01");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			now.Mutate("2014-10-20 11:02");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 		}
 
 		[Test]
-		public void ShouldPublishIfPersonNeverHasSignedIn()
+		public void ShouldNotPublishWhenCurrentlyInShift()
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
@@ -48,47 +43,43 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
-				.Make();
-			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:02"), publisher);
-
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
-
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
-			@event.PersonId.Should().Be(personId);
-		}
-
-		[Test]
-		public void ShouldPublishWhenNextShiftStarts()
-		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-19 10:00".Utc(), "2014-10-19 11:00".Utc())
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
 			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
 
-			now.Mutate("2014-10-19 10:59");
-			target.SaveExternalUserState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "logout",
-				Timestamp = "2014-10-19 10:59".Utc()
-			});
-			now.Mutate("2014-10-19 11:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-19 11:01".Utc());
-			now.Mutate("2014-10-20 10:00");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			now.Mutate("2014-10-20 10:01");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			now.Mutate("2014-10-20 10:45");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:45".Utc());
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Last();
-			@event.ShiftStartTime.Should().Be("2014-10-20 10:00".Utc());
+			publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldPublishEventOnce()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.Make();
+			var publisher = new FakeEventsPublisher();
+			var now = new MutableNow();
+			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+
+			now.Mutate("2014-10-20 10:01");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			now.Mutate("2014-10-20 11:02");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
+			now.Mutate("2014-10-20 11:03");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:03".Utc());
+
+			publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -104,11 +95,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:02"), publisher);
+			var now = new MutableNow();
+			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
 
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
+			now.Mutate("2014-10-20 09:01");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 09:01".Utc());
+			now.Mutate("2014-10-20 11:02");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.ShiftStartTime.Should().Be("2014-10-20 09:00".Utc());
 		}
 
@@ -125,13 +120,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 12:00".Utc())
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:02"), publisher);
-			
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
+			var now = new MutableNow();
+			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
 
-			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			now.Mutate("2014-10-20 10:01");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			now.Mutate("2014-10-20 12:02");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 12:02".Utc());
+
+			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.ShiftEndTime.Should().Be("2014-10-20 12:00".Utc());
 		}
-
 	}
+
 }

@@ -230,6 +230,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public void PersistActualAgentState(IActualAgentState actualAgentState)
 		{
+			var previousState = (from s in _actualAgentStates where s.PersonId == actualAgentState.PersonId select s).FirstOrDefault();
+			if (previousState != null)
+				_actualAgentStates.Remove(previousState);
 			_actualAgentStates.Add(actualAgentState);
 			PersistedActualAgentState = actualAgentState;
 		}
