@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 	        selectorView.VisiblePersonIds = _filteredPeopleHolder.PersonCollection.Select(p => p.Id.GetValueOrDefault());
 
             _personSelectorPresenter.LoadTabs();
+			_personSelectorPresenter.View.DoFilter += ButtonAdvOkClick;
         }
 
         void ReloadPeople()
@@ -91,5 +92,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         {
             Hide();
         }
+
+		private void tableLayoutPanel1_VisibleChanged(object sender, EventArgs e)
+		{
+			if(this.Visible)
+				this.Focus();
+		}
     }
 }
