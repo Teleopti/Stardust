@@ -53,21 +53,23 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				
 					var samples = _skillActivityCounter.Count(affectedPeriods, skillStaffPeriod.Period);
 
-					//if (skillStaffPeriod.IntraIntervalSamples.Count == 0)
-					//{
-					//	//totalValue += skillStaffPeriod.IntraIntervalValue;
-					//	continue;
-					//}
+					if (skillStaffPeriod.IntraIntervalSamples.Count == 0)
+					{
+						//totalValue += skillStaffPeriod.IntraIntervalValue;
+						continue;
+					}
 
 					var value = _shiftProjectionCacheIntraIntervalValueCalculator.Calculate(skillStaffPeriod.IntraIntervalSamples, samples);
 
 					if (value > limit)
 					{
-						totalValue += 1.0 - value;
+						//totalValue += 1.0 - value;
+						continue;
+						
 					}
 					
-					else
-						totalValue += limit - value;
+					
+					totalValue += limit - value;
 				}
 
 				sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = totalValue });
