@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.WinCode.Grouping
 {
     public interface IPersonSelectorView
     {
+		event EventHandler DoFilter;
+
         void ResetTabs(TabPageAdv[] tabs, IExecutableCommand mainTabLoadCommand);
         DateOnly SelectedDate { get; }
         void ResetTreeView(object treeNodeAdv);

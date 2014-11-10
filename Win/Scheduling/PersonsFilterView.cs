@@ -57,7 +57,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SetTexts();
 			buttonAdvance.Visible = isAdvancedEnabled;
 			_selectedPersons = selectedPersons.Values ;
+			selectorView.DoFilter += selectorViewDoFilter;
 
+		}
+
+		void selectorViewDoFilter(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
 		}
 
 		public void SetCurrentFilter(IDictionary<Guid, IPerson> filteredPersons)
