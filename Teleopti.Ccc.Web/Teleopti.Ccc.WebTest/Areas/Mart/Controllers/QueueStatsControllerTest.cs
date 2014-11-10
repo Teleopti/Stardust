@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
 
 			var controller = setupControllerForTests(handler, "Teleopti WFM", 1);
-			
-			controller.Post(queueStatsModels);
+
+			controller.PostIntervals(queueStatsModels);
 			handler.AssertWasCalled(x => x.Handle(queueStatsModels, "Teleopti WFM", 1, 0));
 		}
 

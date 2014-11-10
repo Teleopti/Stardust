@@ -104,10 +104,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private static void registerWebApiRoutes(HttpConfiguration config)
 		{
-			config.Routes.MapHttpRoute(
-				name: "Mart_API",
-				routeTemplate: "api/Mart/{controller}/{id}",
-				defaults: new {id = RouteParameter.Optional});
+			// Web API routes
+			config.MapHttpAttributeRoutes();
+
+			//config.Routes.MapHttpRoute(
+			//	name: "Mart_API",
+			//	routeTemplate: "api/Mart/{controller}/{id}",
+			//	defaults: new {id = RouteParameter.Optional});
 
 			config.Routes.MapHttpRoute(
 				name: "Forecasting_API",

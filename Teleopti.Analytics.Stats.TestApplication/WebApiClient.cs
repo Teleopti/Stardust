@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 			var postBody = JsonConvert.SerializeObject(queueStatsModels);
 			if (_latency > 0)
 				Thread.Sleep(_latency);
-			var response = await _client.PostAsync("api/mart/QueueStats", new StringContent(postBody, Encoding.UTF8, "application/json"));
+			var response = await _client.PostAsync("api/mart/QueueStats/PostIntervals", new StringContent(postBody, Encoding.UTF8, "application/json"));
 
 			return response.IsSuccessStatusCode;
 		}

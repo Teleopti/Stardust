@@ -20,10 +20,25 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 			_queueStatHandler = queueStatHandler;
 		}
 
-		public void Post([FromBody]IEnumerable<QueueStatsModel> queueStatsModels)
+		[Route("api/Mart/QueueStats/PostIntervalsCompleted")]
+		[HttpPost]
+		public void PostIntervalsCompleted([FromBody] QueueDataCompleted queueDataCompleted)
 		{
-			// would be possible to send the datasource (the name in the nhib) as a claim
-			var principal =  RequestContext.Principal as ClaimsPrincipal;
+			var headers = getHeader();
+			// Call some kind of logic to do comparison of forecasted and actual calls and then send notification
+		}
+
+		[Route("api/Mart/QueueStats/PostIntervals")]
+		[HttpPost]
+		public void PostIntervals([FromBody]IEnumerable<QueueStatsModel> queueStatsModels)
+		{
+			var headers = getHeader();
+			_queueStatHandler.Handle(queueStatsModels, headers.DataSource, headers.SourceId, headers.DatabaseLatency);
+		}
+
+		private postHeader getHeader()
+		{
+			var principal = RequestContext.Principal as ClaimsPrincipal;
 			Claim claim = null;
 			IEnumerable<string> headerValues;
 			string dataSource = null;
@@ -34,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 				claim = principal.Claims.FirstOrDefault(c => c.Type.Equals(System.IdentityModel.Claims.ClaimTypes.Locality));
 			if (claim != null)
 				dataSource = claim.Value;
-				
+
 			if (Request.Headers.TryGetValues("sourceId", out headerValues))
 				if (!int.TryParse(headerValues.First(), out sourceId))
 					throw new ArgumentException();
@@ -42,8 +57,22 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 			if (Request.Headers.TryGetValues("dbLatency", out headerValues))
 				latency = int.Parse(headerValues.First());
 
-			if (!string.IsNullOrEmpty(dataSource))
-				_queueStatHandler.Handle(queueStatsModels, dataSource, sourceId, latency);
+			if (string.IsNullOrEmpty(dataSource))
+				throw new ArgumentException();
+
+			return new postHeader {DataSource = dataSource, SourceId = sourceId, DatabaseLatency = latency};
 		}
+
+		private class postHeader
+		{
+			public int SourceId { get; set; }
+			public string DataSource { get; set; }
+			public int DatabaseLatency { get; set; }
+		}
+	}
+
+	public class QueueDataCompleted
+	{
+		public string DataSentUpUntilInterval { get; set; }
 	}
 }
