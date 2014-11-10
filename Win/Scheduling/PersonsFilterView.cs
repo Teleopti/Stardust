@@ -57,14 +57,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SetTexts();
 			buttonAdvance.Visible = isAdvancedEnabled;
 			_selectedPersons = selectedPersons.Values ;
+			selectorView.DoFilter += selectorViewDoFilter;
 
+		}
+
+		void selectorViewDoFilter(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
 		}
 
 		public void SetCurrentFilter(IDictionary<Guid, IPerson> filteredPersons)
 		{
 			var filteredGuids = new HashSet<Guid>(filteredPersons.Keys);
 			_personSelectorPresenter.SetSelectedPersonGuids(filteredGuids);
-			Close();
 		}
 
 		public HashSet<Guid> SelectedAgentGuids()

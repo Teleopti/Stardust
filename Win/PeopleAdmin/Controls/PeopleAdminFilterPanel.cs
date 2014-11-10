@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 	        selectorView.VisiblePersonIds = _filteredPeopleHolder.PersonCollection.Select(p => p.Id.GetValueOrDefault());
 
             _personSelectorPresenter.LoadTabs();
-			_personSelectorPresenter.View.DoFilter += ButtonAdvOkClick;
+			_personSelectorPresenter.View.DoFilter += buttonAdvOkClick;
         }
 
         void reloadPeople()
