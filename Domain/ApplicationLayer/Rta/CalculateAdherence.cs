@@ -14,18 +14,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly INow _now;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
-		private readonly HistoricalAdherence _historicalAdherence;
+		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
-		public CalculateAdherence(
-			IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister,
-			INow now,
-			IUserCulture culture, IUserTimeZone timeZone)
+		public CalculateAdherence(INow now, IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, IUserCulture culture, IUserTimeZone timeZone)
 		{
 			_adherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
 			_now = now;
 			_culture = culture;
 			_timeZone = timeZone;
-			_historicalAdherence = new HistoricalAdherence(_now);
+			_calculateAdherencePercent = new CalculateAdherencePercent(_now);
 		}
 
 		public AdherencePercentageModel ForToday(Guid personId)
@@ -38,13 +35,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return new AdherencePercentageModel
 			       {
 					   LastTimestamp = convertToAgentTimeZoneAndFormatTimestamp(readModel.LastTimestamp),
-				       AdherencePercent = (int)_historicalAdherence.ForDay(readModel).ValueAsPercent()
+				       AdherencePercent = (int)_calculateAdherencePercent.ForDay(readModel).ValueAsPercent()
 			       };
 		}
 
-		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime timestamp)
+		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
 		{
-			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(timestamp, _timeZone.TimeZone());
+			if (!timestamp.HasValue)
+			{
+				return string.Empty;
+			}
+			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
 			return localTimestamp.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
 		}
 

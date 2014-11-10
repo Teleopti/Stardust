@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class AdherencePercentageReadModelUpdater :
 		IHandleEvent<PersonInAdherenceEvent>,
-		IHandleEvent<PersonOutOfAdherenceEvent>
+		IHandleEvent<PersonOutOfAdherenceEvent>,
+		IHandleEvent<PersonShiftEndEvent>
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
 
@@ -19,55 +20,55 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			handleEvent(@event.PersonId, @event.Timestamp, true);
+			handleEvent(@event.PersonId, @event.Timestamp, m => m.IsLastTimeInAdherence = true);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			handleEvent(@event.PersonId, @event.Timestamp, false);
+			handleEvent(@event.PersonId, @event.Timestamp, m => m.IsLastTimeInAdherence = false);
 		}
 
-		private void handleEvent(Guid personId, DateTime timestamp, bool isInAdherence)
+		[ReadModelUnitOfWork]
+		public void Handle(PersonShiftEndEvent @event)
 		{
-			var model = getModel(personId, timestamp, isInAdherence);
-			incrementTime(model, timestamp);
-			model.IsLastTimeInAdherence = isInAdherence;
-			_persister.Persist(model);
-		}
-
-		private static void incrementTime(AdherencePercentageReadModel model, DateTime timestamp)
-		{
-			if (model.IsLastTimeInAdherence)
+			handleEvent(@event.PersonId, @event.ShiftEndTime, m =>
 			{
-				model.TimeInAdherence += (timestamp - model.LastTimestamp);
+				m.ShiftHasEnded = true;
+				m.LastTimestamp = null;
+				m.IsLastTimeInAdherence = null;
+			});
+		}
+
+		private void handleEvent(Guid personId, DateTime time, Action<AdherencePercentageReadModel> mutate)
+		{
+			var model = _persister.Get(new DateOnly(time), personId);
+			if (model == null)
+			{
+				model = new AdherencePercentageReadModel
+				{
+					Date = new DateOnly(time),
+					PersonId = personId,
+					LastTimestamp = time
+				};
 			}
 			else
 			{
-				model.TimeOutOfAdherence += timestamp - model.LastTimestamp;
+				if (model.ShiftHasEnded)
+					return;
+				incrementTime(model, time);
 			}
-			model.LastTimestamp = timestamp;
+			mutate(model);
+			_persister.Persist(model);
 		}
 
-		private AdherencePercentageReadModel getModel(Guid personId, DateTime timestamp, bool currentlyInAdherence)
+		private static void incrementTime(AdherencePercentageReadModel model, DateTime time)
 		{
-			var model = _persister.Get(new DateOnly(timestamp), personId);
-			if (model == null)
-				model = makeModel(personId, timestamp, currentlyInAdherence);
-			return model;
-		}
-
-		private static AdherencePercentageReadModel makeModel(Guid personId, DateTime timestamp, bool currentlyInAdherence)
-		{
-			return new AdherencePercentageReadModel
-			{
-				Date = new DateOnly(timestamp),
-				PersonId = personId,
-				TimeInAdherence = TimeSpan.Zero,
-				TimeOutOfAdherence = TimeSpan.Zero,
-				LastTimestamp = timestamp,
-				IsLastTimeInAdherence = currentlyInAdherence
-			};
+			if (model.IsLastTimeInAdherence.Value)
+				model.TimeInAdherence += (time - model.LastTimestamp.Value);
+			else
+				model.TimeOutOfAdherence += time - model.LastTimestamp.Value;
+			model.LastTimestamp = time;
 		}
 
 	}

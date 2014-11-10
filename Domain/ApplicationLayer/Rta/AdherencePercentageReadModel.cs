@@ -11,10 +11,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		/// </summary>
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
-		public DateTime LastTimestamp { get; set; }
-		public bool IsLastTimeInAdherence { get; set; }
-		public DateTime? ShiftEnd { get; set; }
 		public TimeSpan TimeInAdherence { get; set; }
 		public TimeSpan TimeOutOfAdherence { get; set; }
+
+		public DateTime? LastTimestamp { get; set; }
+		public bool? IsLastTimeInAdherence { get; set; }
+		public bool ShiftHasEnded { get; set; }
 	}
 }

@@ -53,10 +53,11 @@ DROP TABLE [ReadModel].[AdherencePercentage]
 CREATE TABLE [ReadModel].[AdherencePercentage](
 	[PersonId] [uniqueidentifier] NOT NULL,
 	[BelongsToDate] [smalldatetime] NOT NULL,
-	[LastTimestamp] [datetime] NULL,
 	[TimeInAdherence] [bigint] NULL,
 	[TimeOutOfAdherence] [bigint] NULL,
+	[LastTimestamp] [datetime] NULL,
 	[IsLastTimeInAdherence] [bit] NULL,
+	[ShiftHasEnded] [bit] NULL,
  CONSTRAINT [PK_AdherencePercentage] PRIMARY KEY CLUSTERED 
 (
 	[PersonId] ASC,

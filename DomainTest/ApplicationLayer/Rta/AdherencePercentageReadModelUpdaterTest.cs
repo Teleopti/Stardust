@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Common.Time;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -239,27 +239,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.PersistedModel.TimeOutOfAdherence.Should().Be(expected);
 		}
 
-
-	}
-
-	
-
-	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
-	{
-		public void Persist(AdherencePercentageReadModel model)
+		[Test]
+		public void ShouldUpdateAdherenceTimesWhenShiftEnds()
 		{
-			PersistedModel = model;
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-10-13 15:00".Utc()
+			});
+			target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-10-13 16:00".Utc()
+			});
+			target.Handle(new PersonShiftEndEvent
+			{
+				PersonId = personId,
+				ShiftEndTime = "2014-10-13 17:00".Utc()
+			});
+
+			persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(60));
+			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
 		}
 
-		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
+		[Test]
+		public void ShouldStopUpdatingAdherenceTimesWhenShiftEnded()
 		{
-			if (PersistedModel == null)
-				return null;
-			if (PersistedModel.BelongsToDate == date && PersistedModel.PersonId.Equals(personId))
-				return PersistedModel;
-			return null;
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var target = new AdherencePercentageReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-10-13 16:00".Utc()
+			});
+			target.Handle(new PersonShiftEndEvent
+			{
+				PersonId = personId,
+				ShiftEndTime = "2014-10-13 17:00".Utc()
+			});
+			target.Handle(new PersonInAdherenceEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-10-13 17:30".Utc()
+			});
+
+			persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.Zero);
+			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
 		}
 
-		public AdherencePercentageReadModel PersistedModel { get; private set; }
 	}
 }

@@ -1,26 +1,15 @@
 ﻿using System;
-using System.Drawing;
-using System.Threading;
 using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -36,18 +25,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new AdherencePercentageReadModel
 			{
 				Date = dateOnly,
-				IsLastTimeInAdherence = true,
-				LastTimestamp = lastTimeStamp,
+				PersonId = personGuid,
 				TimeInAdherence = timeInAdherence,
 				TimeOutOfAdherence = timeOutOfAdherence,
-				PersonId = personGuid
-
+				IsLastTimeInAdherence = true,
+				LastTimestamp = lastTimeStamp,
+				ShiftHasEnded = true
 			};
 		}
 
-
 		[Test]
-		public void ShouldBeAbleToSaveReadModelForPerson()
+		public void ShouldSaveReadModelForPerson()
 		{
 			var personGuid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
@@ -58,17 +46,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(model);
 
 			var savedModel = Target.Get(dateOnly, personGuid);
-			savedModel.BelongsToDate.Should().Be.EqualTo(model.BelongsToDate);
-			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model.IsLastTimeInAdherence);
-			savedModel.LastTimestamp.Should().Be.EqualTo(model.LastTimestamp);
 			savedModel.PersonId.Should().Be.EqualTo(model.PersonId);
+			savedModel.BelongsToDate.Should().Be.EqualTo(model.BelongsToDate);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model.TimeOutOfAdherence);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(model.TimeInAdherence);
-
+			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model.IsLastTimeInAdherence);
+			savedModel.LastTimestamp.Should().Be.EqualTo(model.LastTimestamp);
+			savedModel.ShiftHasEnded.Should().Be.EqualTo(model.ShiftHasEnded);
 		}
 
 		[Test]
-		public void ShouldBeAbleToSaveReadModelOnDifferentDaysForSamePerson()
+		public void ShouldSaveReadModelOnDifferentDaysForSamePerson()
 		{
 			var personGuid = Guid.NewGuid();
 			var dateOnly1 = new DateOnly(2012, 8, 29);
@@ -81,24 +69,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(model2);
 
 			var savedModel = Target.Get(dateOnly1, personGuid);
-			savedModel.BelongsToDate.Should().Be.EqualTo(model1.BelongsToDate);
-			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model1.IsLastTimeInAdherence);
-			savedModel.LastTimestamp.Should().Be.EqualTo(model1.LastTimestamp);
 			savedModel.PersonId.Should().Be.EqualTo(model1.PersonId);
+			savedModel.BelongsToDate.Should().Be.EqualTo(model1.BelongsToDate);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model1.TimeOutOfAdherence);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(model1.TimeInAdherence);
+			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model1.IsLastTimeInAdherence);
+			savedModel.LastTimestamp.Should().Be.EqualTo(model1.LastTimestamp);
+			savedModel.ShiftHasEnded.Should().Be.EqualTo(model1.ShiftHasEnded);
 
 			savedModel = Target.Get(dateOnly2, personGuid);
-			savedModel.BelongsToDate.Should().Be.EqualTo(model2.BelongsToDate);
-			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model2.IsLastTimeInAdherence);
-			savedModel.LastTimestamp.Should().Be.EqualTo(model2.LastTimestamp);
 			savedModel.PersonId.Should().Be.EqualTo(model2.PersonId);
+			savedModel.BelongsToDate.Should().Be.EqualTo(model2.BelongsToDate);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(model2.TimeOutOfAdherence);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(model2.TimeInAdherence);
+			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(model2.IsLastTimeInAdherence);
+			savedModel.LastTimestamp.Should().Be.EqualTo(model2.LastTimestamp);
+			savedModel.ShiftHasEnded.Should().Be.EqualTo(model2.ShiftHasEnded);
 		}
 
 		[Test]
-		public void ShouldBeAbleToUpdateExistingReadModel()
+		public void ShouldUpdateExistingReadModel()
 		{
 			var personGuid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2014, 8, 29);
@@ -112,14 +102,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(modelUpdated);
 
 			var savedModel = Target.Get(dateOnly, personGuid);
-			savedModel.BelongsToDate.Should().Be.EqualTo(modelUpdated.BelongsToDate);
-			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(modelUpdated.IsLastTimeInAdherence);
-			savedModel.LastTimestamp.Should().Be.EqualTo(modelUpdated.LastTimestamp);
 			savedModel.PersonId.Should().Be.EqualTo(modelUpdated.PersonId);
+			savedModel.BelongsToDate.Should().Be.EqualTo(modelUpdated.BelongsToDate);
 			savedModel.TimeInAdherence.Should().Be.EqualTo(modelUpdated.TimeInAdherence);
 			savedModel.TimeOutOfAdherence.Should().Be.EqualTo(modelUpdated.TimeOutOfAdherence);
+			savedModel.IsLastTimeInAdherence.Should().Be.EqualTo(modelUpdated.IsLastTimeInAdherence);
+			savedModel.LastTimestamp.Should().Be.EqualTo(modelUpdated.LastTimestamp);
+			savedModel.ShiftHasEnded.Should().Be.EqualTo(modelUpdated.ShiftHasEnded);
 		}
 
+		[Test]
+		public void ShouldUpdateNullables()
+		{
+			var personGuid = Guid.NewGuid();
+			var dateOnly = new DateOnly(2012, 8, 29);
+			var timeInAdherence = TimeSpan.FromMinutes(17);
+			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
+			var model = createReadModel(dateOnly, personGuid, new DateTime(2012, 8, 29, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
+			model.IsLastTimeInAdherence = null;
+			model.LastTimestamp = null;
+
+			Target.Persist(model);
+
+			var savedModel = Target.Get(dateOnly, personGuid);
+			savedModel.IsLastTimeInAdherence.Should().Be(null);
+			savedModel.LastTimestamp.Should().Be(null);
+		}
 	}
 
 	[ReadModelReadWriteTest]
