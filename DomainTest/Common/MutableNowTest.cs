@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var target = new MutableNow();
 			var nu = DateTime.UtcNow;
 			target.Mutate(nu.AddYears(2));
-			target.Mutate(null);
+			target.Mutate((DateTime?)null);
 
 			target.UtcDateTime().Should().Be.IncludedIn(nu.AddMinutes(-1), nu.AddMinutes(1));
 		}
