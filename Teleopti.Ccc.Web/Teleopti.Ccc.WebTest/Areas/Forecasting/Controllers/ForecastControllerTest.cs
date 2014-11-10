@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill});
 			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository), new OneYearHistoryForecastPeriodCalculator(now));
+			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository), new OneYearHistoryForecastPeriodCalculator(now), null);
 
 			target.QuickForecast(new QuickForecastInputModel
 			{
@@ -36,6 +36,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			});
 
 			quickForecaster.AssertWasCalled(x => x.Execute(skill, expectedHistoricalPeriod, expectedFuturePeriod));
+		}
+
+		[Test]
+		public void ShouldGetTheCurrentIdentityName()
+		{
+			var target = new ForecastController(null, null, new FakeCurrentIdentity("Pelle"));
+			dynamic result = target.GetThatShouldBeInAMoreGenericControllerLaterOn();
+			Assert.AreEqual("Pelle", result.UserName);
 		}
 	}
 }

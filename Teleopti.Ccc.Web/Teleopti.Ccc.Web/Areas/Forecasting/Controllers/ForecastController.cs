@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Web.Http;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
@@ -14,12 +15,19 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private readonly IQuickForecastForAllSkills _quickForecastForAllSkills;
 		private readonly IForecastHistoricalPeriodCalculator _forecastHistoricalPeriodCalculator;
+		private readonly ICurrentIdentity _currentIdentity;
 
 		public ForecastController(IQuickForecastForAllSkills quickForecastForAllSkills, 
-														IForecastHistoricalPeriodCalculator forecastHistoricalPeriodCalculator)
+														IForecastHistoricalPeriodCalculator forecastHistoricalPeriodCalculator, ICurrentIdentity currentIdentity)
 		{
 			_quickForecastForAllSkills = quickForecastForAllSkills;
 			_forecastHistoricalPeriodCalculator = forecastHistoricalPeriodCalculator;
+			_currentIdentity = currentIdentity;
+		}
+
+		public object GetThatShouldBeInAMoreGenericControllerLaterOn()
+		{
+			return new {UserName = _currentIdentity.Current().Name};
 		}
 
 		[HttpPost, UnitOfWork]
