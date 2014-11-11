@@ -640,7 +640,7 @@ Scenario: See shifts from users in other timezones
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see OtherAgent in the shift trade list
 
-@ignore
+
 Scenario: Show other shifts to trade with from users in other timezones translated to my timezone
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
