@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public static void BeforeScenario()
 		{
 			log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
-			ToggleStepDefinition.CheckIfRunTestDueToToggleFlags();
-
 			Browser.SelectBrowserByTag();
+
+			ToggleStepDefinition.CheckIfRunTestDueToToggleFlags();
 
 			addExtraDataSource();
 			TestControllerMethods.BeforeScenario();
