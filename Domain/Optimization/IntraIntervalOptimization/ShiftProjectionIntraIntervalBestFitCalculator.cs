@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				var shiftProjectionCache = workShiftCalculationResultHolder.ShiftProjection;
 				double? totalValue = null;
-				//double totalValue = 0d;
 
 				foreach (var skillStaffPeriod in issues)
 				{
@@ -63,12 +62,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						
 					}
 
-					totalValue = totalValue.Value + limit - value;
+					if (!totalValue.HasValue)
+						totalValue = 0;
 
-					//totalValue += limit - value;
+					totalValue = totalValue.Value + (limit - value);
 				}
 
-				if (totalValue.HasValue)
+				if(totalValue.HasValue)
 					sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = totalValue.Value });
 
 			}

@@ -40,8 +40,9 @@ namespace Teleopti.Ccc.WinCode.Common
 		private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
 	    private bool _filterOnOvertimeAvailability;
 		private bool _filterOnHourlyAvailability;
-
-
+		private HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
+			
+			
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons)
 			: this(loadScenario, loadPeriod, allPermittedPersons, new SchedulingResultStateHolder())
@@ -423,6 +424,11 @@ namespace Teleopti.Ccc.WinCode.Common
 		public int DefaultSegmentLength
 		{
 			get { return _defaultSegment.SegmentLength; }
+		}
+
+		public HashSet<TimeZoneInfo> DetectedTimeZoneInfos
+		{
+			get { return _detectedTimeZoneInfos; }
 		}
 
 		public bool AgentFilter()

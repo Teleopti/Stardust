@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_backgroundWorker = backgroundWorker;
 			_intervalOptimizationService.ReportProgress += intervalOptimizationServiceReportProgress;
 			_intervalOptimizationService.Execute(schedulingOptions,selectedPeriod,selectedSchedules,schedulingResultStateHolder,allScheduleMatrixPros,rollbackService,resourceCalculateDelayer);
+			_intervalOptimizationService.Execute(schedulingOptions, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
 			_intervalOptimizationService.ReportProgress -= intervalOptimizationServiceReportProgress;
 		}
 
