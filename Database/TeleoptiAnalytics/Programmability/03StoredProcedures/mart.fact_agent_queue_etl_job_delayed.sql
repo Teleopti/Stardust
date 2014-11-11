@@ -22,7 +22,7 @@ RETURN
 DECLARE @start_date datetime
 DECLARE @max_date_agg datetime
 DECLARE @chunkDays int
-SET @chunkDays=60
+SET @chunkDays=10
 
 SELECT @start_date = date_date
 FROM mart.dim_date

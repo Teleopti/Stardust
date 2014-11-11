@@ -280,6 +280,7 @@ BEGIN  --Single datasource_id
 		) OR (date_from >'''+ CAST(@target_date_local as nvarchar(20))+'''
 		)
 		AND EXISTS (SELECT 1 FROM #agg_queue_ids tmp WHERE agg.queue=tmp.queue_agg_id)	
+		AND EXISTS (SELECT 1 FROM #agg_acdlogin_ids tmp WHERE agg.agent_id=tmp.acd_login_agg_id)
 		) stg
 	INNER JOIN
 		mart.dim_date		d
