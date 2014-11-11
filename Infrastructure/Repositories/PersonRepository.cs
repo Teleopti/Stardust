@@ -312,19 +312,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public int NumberOfActiveAgents()
         {
-            const string buFilterName = "businessUnitFilter";
-            DateTime now = DateTime.UtcNow;
-
-            //dirty duplicated code here - fix and move
-            var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
-            Guid buId = identity != null && identity.BusinessUnit != null
-                            ? identity.BusinessUnit.Id.GetValueOrDefault()
-                            : Guid.Empty;
-            Session.DisableFilter(buFilterName);
-            int totalInAllBusinessUnits = (int)Session.GetNamedQuery("ActiveAgents")
+            var now = DateTime.UtcNow;
+            var totalInAllBusinessUnits = (int)Session.GetNamedQuery("ActiveAgents")
                                     .SetDateTime("currentDate", now)
                                     .UniqueResult<long>();
-            Session.EnableFilter(buFilterName).SetParameter("businessUnitParameter", buId);
             return totalInAllBusinessUnits;
         }
 
