@@ -349,9 +349,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				 "exec [mart].[raptor_forecast_actual_differ_notifications]";
 
 				 return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
-					 .AddScalar("Receiver", NHibernateUtil.String)
-					 .AddScalar("Subject", NHibernateUtil.String)
-					 .AddScalar("Body", NHibernateUtil.String)
 					 .SetReadOnly(true)
 					 .SetResultTransformer(Transformers.AliasToBean(typeof(ForecastActualDifferNotification))).List<ForecastActualDifferNotification>();
 			 }
