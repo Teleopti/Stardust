@@ -1,3 +1,7 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[raptor_forecast_actual_differ_notifications]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[raptor_forecast_actual_differ_notifications]
+GO
+
 
 CREATE PROCEDURE [mart].[raptor_forecast_actual_differ_notifications]
 @date_from datetime = NULL, --convert(varchar(8),getdate(),112),
@@ -169,6 +173,12 @@ SELECT 	@intmin = min(interval_name),
 		@Fcalls = sum(isnull(forecasted_calls,0)),
 		@Ccalls = sum(isnull(calculated_calls,0))
 FROM #pre_result
+
+IF @Fcalls = 0
+BEGIN
+	SELECT * FROM #output
+	RETURN 
+END
 
 select @Kvot = @Ccalls / @Fcalls
 select @Perc = ((@Ccalls - @Fcalls) / @Fcalls)*100
