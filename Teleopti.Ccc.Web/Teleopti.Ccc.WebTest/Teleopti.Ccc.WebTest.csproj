@@ -242,6 +242,7 @@
     <Compile Include="Areas\Rta\FakeEventsPublisher.cs" />
     <Compile Include="Areas\Rta\FakeRtaDatabase.cs" />
     <Compile Include="Areas\Rta\FakeSignalRClient.cs" />
+    <Compile Include="Areas\Rta\NotifyPossibleActivityChangeTest.cs" />
     <Compile Include="Areas\Rta\PersistStateTest.cs" />
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\PersonShiftEndEventTest.cs" />

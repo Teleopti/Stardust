@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
-				.WithAlarm("ready", phone, 1)
-				.WithAlarm("phone", phone, 1)
+				.WithAlarm("ready", phone, "my first state")
+				.WithAlarm("phone", phone, "my second state")
 				.Make();
 			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveExternalUserState(state2);
 
 			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(sender.LastAgentsNotification.BinaryData);
-			jsonResult.AgentStates.Single().State.Should().Be.EqualTo("phone");
+			jsonResult.AgentStates.Single().State.Should().Be.EqualTo("my second state");
 		}
 
 		[Test]

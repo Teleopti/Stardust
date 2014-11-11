@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -35,12 +34,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public Notification NotificationOfType<T>()
 		{
-			return AllNotifications.Where(n => n.DomainType.Equals(typeof (T).Name)).FirstOrDefault();
+			return NotificationsOfType<T>().FirstOrDefault();
+		}
+
+		public IEnumerable<Notification> NotificationsOfType<T>()
+		{
+			return AllNotifications.Where(n => n.DomainType.Equals(typeof(T).Name));
 		}
 
 		public void SendMultiple(IEnumerable<Notification> notifications)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

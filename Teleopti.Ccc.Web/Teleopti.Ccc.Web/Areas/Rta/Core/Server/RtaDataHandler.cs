@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
-			var state = getState(personId, businessUnitId, string.Empty, TimeSpan.Zero, timestamp, Guid.Empty, null, null);
+			var state = getState(personId, businessUnitId, null, TimeSpan.Zero, timestamp, Guid.Empty, null, null);
 			send(state);
 		}
 

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder WithSource(string sourceId);
+		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode);
 		IFakeDataBuilder WithUser(string userCode, Guid personId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, string name);
 		FakeRtaDatabase Make();
 	}
 
@@ -41,13 +43,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IActualAgentState PersistedActualAgentState { get; set; }
 
-		private readonly Guid _businessUnitId;
+		private Guid _businessUnitId;
 		private string _platformTypeId;
 
 		public FakeRtaDatabase()
 		{
 			_businessUnitId = Guid.NewGuid();
-			_platformTypeId = Guid.Empty.ToString();
+			WithDefaultsFromState(new ExternalUserStateForTest());
 		}
 
 		public IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state)
@@ -66,7 +68,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IFakeDataBuilder WithSource(string sourceId)
 		{
+			if (_datasources.Any(x => x.Key == sourceId))
+				return this;
 			_datasources.Add(new KeyValuePair<string, int>(sourceId, 0));
+			return this;
+		}
+
+		public IFakeDataBuilder WithBusinessUnit(Guid businessUnitId)
+		{
+			_businessUnitId = businessUnitId;
 			return this;
 		}
 
@@ -132,15 +142,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect)
 		{
-			return WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect);
+			return withAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null);
 		}
 
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId)
 		{
-			return WithAlarm(stateCode, activityId, alarmId, 0);
+			return withAlarm(stateCode, activityId, alarmId, 0, null);
 		}
 
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect)
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, string name)
+		{
+			return withAlarm(stateCode, activityId, Guid.NewGuid(), 0, name);
+		}
+
+		private IFakeDataBuilder withAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name)
 		{
 			//putting all this logic here is just WRONG
 			var stateGroupId = Guid.NewGuid();
@@ -151,9 +166,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				new RtaStateGroupLight
 				{
 					StateGroupId = stateGroupId,
-					StateGroupName = stateCode,
+					StateGroupName = name,
 					BusinessUnitId = _businessUnitId,
-					StateName = stateCode,
 					PlatformTypeId = platformTypeIdGuid,
 					StateCode = stateCode,
 					StateId = stateId
@@ -164,12 +178,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				new RtaAlarmLight
 				{
+					Name = name,
 					StateGroupId = stateGroupId,
 					ActivityId = activityId,
 					BusinessUnit = _businessUnitId,
 					AlarmTypeId = alarmId,
 					StaffingEffect = staffingEffect,
-					StateGroupName = stateCode
+					StateGroupName = name
 				}
 			};
 			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroupId, _businessUnitId), alarms));
@@ -204,8 +219,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
 			var layers = from l in _schedules
-				where l.PersonId == personId
-				select l.ScheduleLayer;
+						 where l.PersonId == personId
+						 select l.ScheduleLayer;
 			return new List<ScheduleLayer>(layers);
 		}
 
