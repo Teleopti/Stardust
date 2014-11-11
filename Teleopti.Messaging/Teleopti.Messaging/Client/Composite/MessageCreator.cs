@@ -10,6 +10,7 @@ namespace Teleopti.Messaging.Client.Composite
 {
 	public class MessageCreator : IMessageCreator
 	{
+		private const int MessagesPerBatch = 75; //Tried out maximum to around 85.
 		private readonly IMessageSender _messageSender;
 		private readonly IMessageFilterManager _messageFilterManager;
 
@@ -82,7 +83,7 @@ namespace Teleopti.Messaging.Client.Composite
 					eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType,
 					eventMessage.DomainObject));
 
-				if (notificationList.Count > 200)
+				if (notificationList.Count > MessagesPerBatch)
 				{
 					_messageSender.SendMultiple(notificationList);
 					notificationList.Clear();
