@@ -241,7 +241,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId, Guid businessUnit)
 		{
-			return null;
+			return new RtaStateGroupLight
+			{
+				StateCode = stateCode,
+				PlatformTypeId = platformTypeId,
+				BusinessUnitId = businessUnit
+			};
 		}
 
 		public void PersistActualAgentState(IActualAgentState actualAgentState)

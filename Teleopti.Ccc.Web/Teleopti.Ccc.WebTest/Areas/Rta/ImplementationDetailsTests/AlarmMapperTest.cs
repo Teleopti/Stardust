@@ -253,19 +253,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests
 		}
 
 		[Test]
-		public void IsAgentLoggedOut_NoStateGroupFound_ReturnFalse()
-		{
-			var stateGroup = new RtaStateGroupLight();
-            var stateDictionary = new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
-            stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("stateCode", _platFormTypeId, _businessUnitId), new List<RtaStateGroupLight> { stateGroup });
-
-			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
-
-			var result = _target.IsAgentLoggedOut(_personId, "", _platFormTypeId, _businessUnitId);
-			result.Should().Be.False();
-		}
-
-		[Test]
 		public void IsAgentLoggedOut_NoAlarm_ShouldNotCrashRta()
 		{
 			var stateGroup = new RtaStateGroupLight

@@ -130,16 +130,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
-			RtaAlarmLight foundAlarm;
 			var state = AlarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
-			if (state != null)
-			{
-				newState.StateId = state.StateGroupId;
-				newState.State = state.StateGroupName;
-				foundAlarm = AlarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
-			}
-			else
-				foundAlarm = AlarmMapper.GetAlarm(activityId, Guid.Empty, businessUnitId);
+			newState.StateId = state.StateGroupId;
+			newState.State = state.StateGroupName;
+			var foundAlarm = AlarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
 
 			if (foundAlarm != null)
 			{
@@ -148,8 +142,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				newState.AlarmStart = newState.AlarmStart.AddTicks(foundAlarm.ThresholdTime);
 				newState.Color = foundAlarm.DisplayColor;
 				newState.StaffingEffect = foundAlarm.StaffingEffect;
-				newState.State = foundAlarm.StateGroupName;
-				newState.StateId = foundAlarm.StateGroupId;
 				newState.StateStart = timestamp.Add(timeInState.Negate());
 			}
 
@@ -171,6 +163,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				newState.NextStart = nextLayer.StartDateTime;
 			}
 			return newState;
-		}	
+		}
 	}
 }

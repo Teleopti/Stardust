@@ -51,17 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			List<RtaStateGroupLight> stateGroupsForStateCode;
 			if (allStateGroups.TryGetValue(new Tuple<string, Guid, Guid>(stateCode.ToUpper(CultureInfo.InvariantCulture), platformTypeId, businessUnitId), out stateGroupsForStateCode))
 			{
-				var stateGroup = stateGroupsForStateCode.FirstOrDefault();
-				if (stateGroup != null)
-					return stateGroup;
+				return stateGroupsForStateCode.First();
 			}
-			else if (!string.IsNullOrEmpty(stateCode))
-			{
-				var defaultStateGroup = _databaseWriter.AddAndGetNewRtaState(stateCode, platformTypeId, businessUnitId);
-				invalidateStateGroupCache();
-				return defaultStateGroup;
-			}
-			return null;
+			
+			var newState = _databaseWriter.AddAndGetNewRtaState(stateCode, platformTypeId,businessUnitId);
+			invalidateStateGroupCache();
+			return newState;
 		}
 
 		public bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId)
