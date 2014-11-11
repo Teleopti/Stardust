@@ -70,7 +70,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.asmPermission = ko.observable();
 		self.absenceRequestPermission = ko.observable();
 		self.absenceReportPermission = ko.observable();
-		self.isAbsenceReportEnabled = ko.observable(false);
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
@@ -182,11 +181,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				}
 			});
 		}
-		function _fillAbsenceReportFormData() {
-			self.absenceReportViewModel().DateFrom(moment(self.initialRequestDay(), self.absenceReportViewModel().DateFormat()));
-			self.absenceReportViewModel().DateTo(moment(self.initialRequestDay(), self.absenceReportViewModel().DateFormat()));
 
-		}
 		self.showAddTextRequestForm = function(data) {
 			if (self.textPermission() !== true) {
 				return;
@@ -314,7 +309,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 			self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
 			self.datePickerFormat(data.DatePickerFormat.toUpperCase());
-			self.featureCheck();
 
 			var styleToSet = {};
 			$.each(data.Styles, function (key, value) {
