@@ -122,6 +122,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             target.LoadFactQueues();
         }
 
+		  [Test]
+		  public void CheckForecastDifferShouldWork()
+		  {
+			  target.ShouldNotifyOnForecastDiffer();
+		  }
+
         protected override void SetupForRepositoryTest()
         {
             target = StatisticRepositoryFactory.Create();

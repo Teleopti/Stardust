@@ -168,6 +168,7 @@
     <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
     <Compile Include="AutofacServiceBus.cs" />
+    <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="Notification\EmailConfiguration.cs" />
     <Compile Include="Notification\EmailSender.cs" />
     <Compile Include="Notification\IEmailConfiguration.cs" />

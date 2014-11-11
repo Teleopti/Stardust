@@ -153,6 +153,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new List<Guid>();
 	    }
 
+	    public bool ShouldNotifyOnForecastDiffer()
+	    {
+		    return true;
+	    }
+
 	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {
             return new List<Guid>();

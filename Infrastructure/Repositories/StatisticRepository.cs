@@ -342,7 +342,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-        private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
+	    public bool ShouldNotifyOnForecastDiffer()
+	    {
+			 using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			 {
+				 const string sql =
+				 "exec [mart].[raptor_should_notify_forecast_differ]";
+
+				 return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
+					 .AddScalar("result", NHibernateUtil.Boolean)
+					 .SetReadOnly(true).UniqueResult<bool>();
+			 }
+	    }
+
+	    private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
             return identity.DataSource.Statistic;
