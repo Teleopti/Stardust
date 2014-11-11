@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -8,13 +8,14 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class DatabaseReaderTest
+	public class DatabaseReaderTest : IActualAgentStateReadWriteTest
 	{
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
@@ -129,5 +130,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}
+	}
+
+	[ActualAgentStateReadWriteTest]
+	public interface IActualAgentStateReadWriteTest
+	{
+	}
+
+	public class ActualAgentStateReadWriteTestAttribute : Attribute, ITestAction
+	{
+		public void BeforeTest(TestDetails testDetails)
+		{
+		}
+
+		public void AfterTest(TestDetails testDetails)
+		{
+			applySql("DELETE FROM RTA.ActualAgentState");
+		}
+
+		public ActionTargets Targets { get { return ActionTargets.Test; } }
+
+		private void applySql(string sql)
+		{
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(sql, connection))
+					command.ExecuteNonQuery();
+			}
+		}
+
 	}
 }

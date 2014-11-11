@@ -222,5 +222,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	            LoggingSvc.DebugFormat("Saved state: {0} to database", actualAgentState);
             }
         }
+
     }
 }

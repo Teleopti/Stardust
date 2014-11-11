@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var dateOnly = new DateOnly(2012, 8, 29);
 			var timeInAdherence = TimeSpan.FromMinutes(17);
 			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
-			var model = createReadModel(dateOnly, personGuid, new DateTime(2012, 8, 29, 8, 0, 0),timeInAdherence,timeOutOfAdherence);
+			var model = createReadModel(dateOnly, personGuid, new DateTime(2012, 8, 29, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
 
 			Target.Persist(model);
 
@@ -95,10 +95,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var timeInAdherence = TimeSpan.FromMinutes(17);
 			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
 
-			var modelOld = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 0, 0),TimeSpan.Zero,TimeSpan.FromMinutes(8),9, 21);
+			var modelOld = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 0, 0), TimeSpan.Zero, TimeSpan.FromMinutes(8), 9, 21);
 			Target.Persist(modelOld);
 
-			var modelUpdated = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 15, 0),timeInAdherence,timeOutOfAdherence, 8, 20);
+			var modelUpdated = createReadModel(dateOnly, personGuid, new DateTime(2014, 8, 29, 8, 15, 0), timeInAdherence, timeOutOfAdherence, 8, 20);
 			Target.Persist(modelUpdated);
 
 			var savedModel = Target.Get(dateOnly, personGuid);
@@ -154,18 +154,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			disposeContainer();
 		}
 
-		public ActionTargets Targets { get; private set; }
+		public ActionTargets Targets { get { return ActionTargets.Test; } }
 
 
 		private void buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocArgs {DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()}));
+			builder.RegisterModule(new CommonModule(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }));
 
 			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 
 			_container = builder.Build();
-			
+
 			var dataSource = _container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
 			_container.Resolve<MutableFakeCurrentTeleoptiPrincipal>()
 				.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("_", dataSource, null, null), null));
