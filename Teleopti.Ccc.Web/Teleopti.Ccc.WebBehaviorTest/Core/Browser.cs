@@ -61,11 +61,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Timeouts.Poll = retry;
 		}
 
-		public static void SelectDefaultVisibleBrowser()
-		{
-			_activator = activators.First(x => x.Visible);
-		}
-
 		public static void SelectBrowserByTag()
 		{
 			var activatorsWithMatchingTag = activators

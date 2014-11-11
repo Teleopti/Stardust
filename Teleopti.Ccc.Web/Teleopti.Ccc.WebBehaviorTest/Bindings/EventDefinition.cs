@@ -23,22 +23,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			log.Debug("Preparing for test run");
 
-			Browser.SelectDefaultVisibleBrowser();
-			try
-			{
-				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
-				TestSiteConfigurationSetup.Setup();
-				TestDataSetup.CreateDataSourceAndStartWebApp();
-			}
-			catch (Exception)
-			{
-				Browser.Close();
-				throw;
-			}
-			finally
-			{
-				log.Debug("Starting test run");
-			}
+			Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
+			TestSiteConfigurationSetup.Setup();
+			TestDataSetup.CreateDataSourceAndStartWebApp();
+
+			log.Debug("Starting test run");
 		}
 		
 		[BeforeScenario]

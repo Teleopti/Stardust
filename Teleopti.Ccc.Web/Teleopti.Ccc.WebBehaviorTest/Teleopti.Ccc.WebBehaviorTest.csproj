@@ -150,6 +150,7 @@
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
+    <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
     <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
     <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
