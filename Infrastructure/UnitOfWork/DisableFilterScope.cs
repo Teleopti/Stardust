@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -7,16 +8,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     {
     	private readonly NHibernateFilterManager _filterManager;
     	private readonly IQueryFilter _queryFilter;
+	    private readonly IDictionary<string, object> _parameters;
 
-        public DisableFilterScope(NHibernateFilterManager filterManager, IQueryFilter queryFilter)
+	    public DisableFilterScope(NHibernateFilterManager filterManager, IQueryFilter queryFilter, IDictionary<string, object> parameters)
         {
         	_filterManager = filterManager;
         	_queryFilter = queryFilter;
+	        _parameters = parameters;
         }
 
-        public void Dispose()
+	    public void Dispose()
         {
-            _filterManager.Enable(_queryFilter);
+            _filterManager.Enable(_queryFilter, _parameters);
         }
     }
 }
