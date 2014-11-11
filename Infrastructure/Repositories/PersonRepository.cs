@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
@@ -312,20 +311,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public int NumberOfActiveAgents()
         {
-            const string buFilterName = "businessUnitFilter";
-            DateTime now = DateTime.UtcNow;
-
-            //dirty duplicated code here - fix and move
-            var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
-            Guid buId = identity != null && identity.BusinessUnit != null
-                            ? identity.BusinessUnit.Id.GetValueOrDefault()
-                            : Guid.Empty;
-			Session.DisableFilter(buFilterName);
-            int totalInAllBusinessUnits = (int)Session.GetNamedQuery("ActiveAgents")
-                                    .SetDateTime("currentDate", now)
-                                    .UniqueResult<long>();
-			Session.EnableFilter(buFilterName).SetParameter("businessUnitParameter", buId);
-            return totalInAllBusinessUnits;
+	        DateTime now = DateTime.UtcNow;
+	        
+			using (UnitOfWork.DisableFilter(QueryFilter.BusinessUnit))
+			{
+				var totalInAllBusinessUnits = (int)Session.GetNamedQuery("ActiveAgents")
+									.SetDateTime("currentDate", now)
+									.UniqueResult<long>();
+				return totalInAllBusinessUnits;
+			}
         }
 
 				public ICollection<IPerson> FindAllSortByName()
