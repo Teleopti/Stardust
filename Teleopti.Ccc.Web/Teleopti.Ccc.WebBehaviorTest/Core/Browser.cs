@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
 	public static class Browser
 	{
-		private class RegisteredActivator
+		private class registeredActivator
 		{
 			public string Tag { get; set; }
 			public IBrowserActivator Activator { get; set; }
@@ -19,22 +19,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			public bool Started { get; set; }
 		}
 
-		private static readonly IList<RegisteredActivator> Activators =
-			new List<RegisteredActivator>
+		private static readonly IEnumerable<registeredActivator> activators =
+			new List<registeredActivator>
 				{
-					new RegisteredActivator
+					new registeredActivator
 						{
 							Tag = "Chrome",
 							Activator = new CoypuChromeActivator(),
 							Visible = true
-						}
+						},
+					new registeredActivator
+					{
+						Tag = "NoBrowser",
+						Activator =  new NoBrowserActivator(),
+						Visible = false
+					}
 				};
 
-		private static RegisteredActivator _activator;
+		private static registeredActivator _activator;
 
 		static Browser()
 		{
-			_activator = Activators.First();
+			_activator = activators.First();
 		}
 
 		private static IBrowserActivator GetStartedActivator()
@@ -57,17 +63,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void SelectDefaultVisibleBrowser()
 		{
-			_activator = Activators.First(x => x.Visible);
+			_activator = activators.First(x => x.Visible);
 		}
 
 		public static void SelectBrowserByTag()
 		{
-			var activatorsWithMatchingTag = Activators
+			var activatorsWithMatchingTag = activators
 				.Where(a => ScenarioContext.Current.IsTaggedWith(a.Tag))
 				.ToArray();
 			_activator = activatorsWithMatchingTag.Any() ? 
 				activatorsWithMatchingTag.First() : 
-				Activators.First();
+				activators.First();
 		}
 
 		public static IDisposable TimeoutScope(TimeSpan timeout)
@@ -77,7 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void Close()
 		{
-			Activators.ForEach(a => a.Activator.Close());
+			activators.ForEach(a => a.Activator.Close());
 		}
 	}
 }
