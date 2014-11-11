@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		  [Test]
 		  public void CheckForecastDifferShouldWork()
 		  {
-			  target.ShouldNotifyOnForecastDiffer();
+			  target.ForecastActualDifferNotifications();
 		  }
 
         protected override void SetupForRepositoryTest()

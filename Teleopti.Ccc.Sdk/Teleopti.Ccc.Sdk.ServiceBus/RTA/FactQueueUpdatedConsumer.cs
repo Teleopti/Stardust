@@ -20,8 +20,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 
 		public void Consume(FactQueueUpdatedMessage message)
 		{
-			if(_statisticRepository.ShouldNotifyOnForecastDiffer())
-				_sender.SendNotification(new NotificationMessage { Subject = "nuru ringer det" }, new NotificationHeader { EmailReceiver = "ola@teleopti.com", EmailSender = "han som kollar hur många som ringer" });
+			foreach (var notication in _statisticRepository.ForecastActualDifferNotifications())
+			{
+				_sender.SendNotification(new NotificationMessage { Subject = notication.Subject }, new NotificationHeader { EmailReceiver = notication.Receiver,EmailSender = "EarlyWarningW@teleopti.com"});
+			}
+				
 		}
 	}
 }

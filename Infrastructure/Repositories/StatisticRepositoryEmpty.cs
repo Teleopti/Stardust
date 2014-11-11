@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using NHibernate.Mapping;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -153,9 +154,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new List<Guid>();
 	    }
 
-	    public bool ShouldNotifyOnForecastDiffer()
+	    public IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications()
 	    {
-		    return true;
+		    return new List<ForecastActualDifferNotification>();
 	    }
 
 	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)

@@ -9,7 +9,6 @@ using System.Globalization;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -342,16 +341,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-	    public bool ShouldNotifyOnForecastDiffer()
+	    public IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications()
 	    {
 			 using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			 {
 				 const string sql =
-				 "exec [mart].[raptor_should_notify_forecast_differ]";
+				 "exec [mart].[raptor_forecast_actual_differ_notifications]";
 
 				 return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
-					 .AddScalar("result", NHibernateUtil.Boolean)
-					 .SetReadOnly(true).UniqueResult<bool>();
+					 .AddScalar("Receiver", NHibernateUtil.String)
+					 .AddScalar("Subject", NHibernateUtil.String)
+					 .AddScalar("Body", NHibernateUtil.String)
+					 .SetReadOnly(true)
+					 .SetResultTransformer(Transformers.AliasToBean(typeof(ForecastActualDifferNotification))).List<ForecastActualDifferNotification>();
 			 }
 	    }
 

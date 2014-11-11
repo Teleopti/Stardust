@@ -3,9 +3,11 @@ using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 {
@@ -14,10 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 	public class QueueStatsController : ApiController
 	{
 		private readonly IQueueStatHandler _queueStatHandler;
+		private IServiceBusEventPublisher _serviceBusSender;
 
-		public QueueStatsController(IQueueStatHandler queueStatHandler)
+		public QueueStatsController(IQueueStatHandler queueStatHandler, IServiceBusEventPublisher serviceBusSender)
 		{
 			_queueStatHandler = queueStatHandler;
+			_serviceBusSender = serviceBusSender;
 		}
 
 		[Route("api/Mart/QueueStats/PostIntervalsCompleted")]
@@ -26,6 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 		{
 			var headers = getHeader();
 			// Call some kind of logic to do comparison of forecasted and actual calls and then send notification
+			if (_serviceBusSender.EnsureBus())
+			{
+				_serviceBusSender.Publish(new FactQueueUpdatedMessage
+				{
+					Datasource = headers.DataSource,
+					SourceId = headers.SourceId,
+					DataSentUpUntilInterval = queueDataCompleted.DataSentUpUntilInterval
+				});
+			}
 		}
 
 		[Route("api/Mart/QueueStats/PostIntervals")]

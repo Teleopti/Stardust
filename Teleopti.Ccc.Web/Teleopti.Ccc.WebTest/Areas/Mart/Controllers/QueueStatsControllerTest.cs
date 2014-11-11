@@ -5,9 +5,11 @@ using System.Security.Claims;
 using System.Web.Http.Controllers;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Mart.Controllers;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 {
@@ -20,21 +22,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 		{
 			var queueStatsModels = new List<QueueStatsModel> { new QueueStatsModel() };
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
+			var publisher = MockRepository.GenerateMock<IServiceBusEventPublisher>();
 
-			var controller = setupControllerForTests(handler, "Teleopti WFM", 1);
+			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
 
 			controller.PostIntervals(queueStatsModels);
 			handler.AssertWasCalled(x => x.Handle(queueStatsModels, "Teleopti WFM", 1, 0));
 		}
 
-		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId)
+		[Test]
+		public void ShouldCallBusSender()
+		{
+			var queueDataCompleted =  new QueueDataCompleted{DataSentUpUntilInterval = "20"} ;
+			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
+			var publisher = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
+			publisher.Stub(x => x.EnsureBus()).Return(true);
+			controller.PostIntervalsCompleted(queueDataCompleted);
+			
+			publisher.AssertWasCalled(x => x.Publish(Arg<FactQueueUpdatedMessage>.Is.Anything));
+		}
+
+		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId, IServiceBusEventPublisher publisher)
 		{
 			//other properties could be set if needed later
 			//var config = new HttpConfiguration();
 			//var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/queuestat");
 			//var route = config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}");
 			//var routeData = new HttpRouteData(route, new HttpRouteValueDictionary { { "controller", "queuestat" } });
-			var controller = new QueueStatsController(handler)
+			var controller = new QueueStatsController(handler, publisher)
 			{
 				//ControllerContext = new HttpControllerContext(config, routeData, request),
 				//Request = request,

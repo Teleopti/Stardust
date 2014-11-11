@@ -125,6 +125,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<Guid> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold);
 		IEnumerable<Guid> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold);
 		IEnumerable<Guid> LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold);
-		bool ShouldNotifyOnForecastDiffer();
+		IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications();
 	}
 }
