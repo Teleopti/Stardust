@@ -168,6 +168,7 @@
     
 		<filter name="deletedFlagFilter"
 		  condition="IsDeleted = 0" />
+	  
     
 	</class>
 
@@ -187,9 +188,12 @@
         and exists(from PersonPeriod pp where pp.Parent=p.Id and pp.StartDate<:currentDate)
                         and exists(from PersonAssignment pa
                                     inner join pa.Scenario s
+									inner join s.BusinessUnit bu
                                 where pa.Person = p
                                     and pa.ShiftCategory is not null 
-                                    and s.DefaultScenario = 1)
+                                    and s.DefaultScenario = 1
+									and bu.IsDeleted = 0
+									)
     ]]>
 	</query>
 	<query name="AgentSkillMatrix">

@@ -1511,6 +1511,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(buTemp);
 			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
 													 newStateMock);
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
 			addPersonAssignmentInAnotherBu(act, shiftCategory);
 
@@ -1537,6 +1538,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                                                     shiftCategory,
 																	scenario);
 			PersistAndRemoveFromUnitOfWork(ass);
+
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
 			//change logged on BU
 			MockRepository newMock = new MockRepository();
