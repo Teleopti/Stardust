@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	{
 		bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit);
 		bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter);
+		bool ResultIsWorseX(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit);
 	}
 
 	public class SkillStaffPeriodEvaluator : ISkillStaffPeriodEvaluator
@@ -49,6 +50,26 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			}
 
 			return afterTotals < beforeTotals;
+		}
+
+		public bool ResultIsWorseX(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit)
+		{
+			var beforeTotals = 0d;
+			var afterTotals = 0d;
+
+			if (listAfter.Count == 0) return false;
+
+			foreach (var skillStaffPeriod in listBefore)
+			{
+				beforeTotals += limit - skillStaffPeriod.IntraIntervalValue;
+			}
+
+			foreach (var skillStaffPeriod in listAfter)
+			{
+				afterTotals += limit - skillStaffPeriod.IntraIntervalValue;
+			}
+
+			return afterTotals > beforeTotals;
 		}
 
 		public bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter)

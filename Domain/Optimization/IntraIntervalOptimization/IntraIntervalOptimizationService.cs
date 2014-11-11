@@ -67,6 +67,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 						_progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
+
+						var affect = affectIssue(scheduleDay, intervalIssuesBefore.IssuesOnDay);
+						if(!affect) continue;
+						
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, false);
 						if (intervalIssuesAfter.IssuesOnDay.Count == 0) break;
 						intervalIssuesBefore = intervalIssuesAfter;
@@ -87,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if(!affect) continue;
 
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
-						//if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
+						if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
 						intervalIssuesBefore = intervalIssuesAfter;
 					}
 				}

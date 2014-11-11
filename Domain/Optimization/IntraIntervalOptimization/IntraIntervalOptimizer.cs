@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -88,7 +89,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var listResources = _teamBlockScheduler.GetShiftProjectionCaches(teamBlock, person, dateOnly, schedulingOptions, schedulingResultStateHolder);
 			//var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? intervalIssuesBefore.IssuesOnDayAfter : intervalIssuesBefore.IssuesOnDay, skill);
 
-			var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? allSkillStaffPeriodsOnDayAfter : allSkillstaffPeriodsOnDay, skill, limit);
+			var totalSkillStaffPeriods = allSkillstaffPeriodsOnDay.ToList();
+			totalSkillStaffPeriods.AddRange(allSkillStaffPeriodsOnDayAfter);
+
+
+			//var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? allSkillStaffPeriodsOnDayAfter : allSkillstaffPeriodsOnDay, skill, limit);
+			var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, totalSkillStaffPeriods, skill, limit);
 
 			if (listBestFit.Count == 0)
 			{
@@ -119,17 +125,26 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 				var worse = false;
 
-				if (!checkDayAfter)
-					worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
-				if (checkDayAfter)
-					worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);	
-				
+				//if (!checkDayAfter)
+				//	worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+				//if (checkDayAfter)
+				//	worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
 
-				//if (!worse)
-				//{
-				//	if(!checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
-				//	if(checkDayAfter) worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
-				//}
+
+				if (!checkDayAfter)
+				{
+					var betterToday = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+					var worseDayAfter = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
+					worse = !betterToday || worseDayAfter;
+
+				}
+				if (checkDayAfter)
+				{
+					var betterDayAfter = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
+					var worseToday = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+					worse = !betterDayAfter || worseToday;
+				}
+
 	
 				if (worse)
 				{

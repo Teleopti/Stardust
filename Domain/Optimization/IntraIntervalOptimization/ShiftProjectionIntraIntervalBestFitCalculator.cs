@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Interfaces.Domain;
@@ -32,17 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			foreach (var workShiftCalculationResultHolder in workShiftCalculationResults)
 			{
 				var shiftProjectionCache = workShiftCalculationResultHolder.ShiftProjection;
-				var totalValue = 0d;
-
-				if (shiftProjectionCache.TheMainShift.LayerCollection[1].Period.StartDateTime.Minute == 40)
-				{
-					
-				}
-
-				if (shiftProjectionCache.TheMainShift.LayerCollection[1].Period.StartDateTime.Minute == 0)
-				{
-
-				}
+				double? totalValue = null;
+				//double totalValue = 0d;
 
 				foreach (var skillStaffPeriod in issues)
 				{
@@ -50,6 +42,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 					if(affectedPeriods.Count == 0) 
 						continue;
+
+					if (!totalValue.HasValue)
+						totalValue = 0;
 				
 					var samples = _skillActivityCounter.Count(affectedPeriods, skillStaffPeriod.Period);
 
@@ -67,17 +62,26 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						continue;
 						
 					}
-					
-					
-					totalValue += limit - value;
+
+					totalValue = totalValue.Value + limit - value;
+
+					//totalValue += limit - value;
 				}
 
-				sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = totalValue });
+				if (totalValue.HasValue)
+					sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = totalValue.Value });
 
 			}
 
 			sortedList.Sort(comparer);
-			return sortedList;
+
+			var first = sortedList.FirstOrDefault();
+			if (first == null)
+				return sortedList;
+		
+			return new List<IWorkShiftCalculationResultHolder> {first};
+			
+			//return sortedList;
 		}	
 	}
 }
