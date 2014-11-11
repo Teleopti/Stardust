@@ -1532,6 +1532,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			verifyNumberOfActiveAgents();
 		}
 
+		[Test]
+		public void VerifyNumberOfActiveAgentsIfBusinessUnitIsDeleted()
+		{
+			SetupPersonsInOrganizationWithContract();
+			IList<IPerson> resTemp = new List<IPerson>(target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false)); //returns 2
+
+			//add pers ass
+			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
+			scenario.DefaultScenario = true;
+			IActivity act = new Activity("df");
+			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Scheduled");
+			PersistAndRemoveFromUnitOfWork(shiftCategory);
+			PersistAndRemoveFromUnitOfWork(scenario);
+			PersistAndRemoveFromUnitOfWork(act);
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
+																	resTemp[0],
+																	new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+																	shiftCategory,
+																	scenario);
+			PersistAndRemoveFromUnitOfWork(ass);
+
+			//change logged on BU
+			MockRepository newMock = new MockRepository();
+			IState newStateMock = newMock.StrictMock<IState>();
+			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
+			((BusinessUnit)buTemp).SetDeleted();
+			PersistAndRemoveFromUnitOfWork(buTemp);
+			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
+													 newStateMock);
+
+			addPersonAssignmentInAnotherBu(act, shiftCategory);
+
+			Assert.AreEqual(1, target.NumberOfActiveAgents());
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void verifyNumberOfActiveAgents()
 		{
@@ -1561,6 +1596,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
 													 newStateMock);
 
+			addPersonAssignmentInAnotherBu(act, shiftCategory);
+			Assert.AreEqual(2, target.NumberOfActiveAgents());
+		}
+
+		private void addPersonAssignmentInAnotherBu(IActivity act, IShiftCategory shiftCategory)
+		{
 			//add pers ass in another BU
 			IContract ctr = new Contract("cf");
 			IPartTimePercentage part = new PartTimePercentage("d");
@@ -1570,21 +1611,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = TeamFactory.CreateSimpleTeam("dd");
 			team.Site = site;
 			IPerson p = PersonFactory.CreatePerson("ff", "ff");
-			p.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900,1,1), new PersonContract(ctr, part, ctrSched), team));
+			p.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900, 1, 1),
+				new PersonContract(ctr, part, ctrSched), team));
 			PersistAndRemoveFromUnitOfWork(ctrSched);
 			PersistAndRemoveFromUnitOfWork(part);
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 			PersistAndRemoveFromUnitOfWork(p);
-			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf",true);
+			IScenario scenarioNew = ScenarioFactory.CreateScenarioAggregate("sdf", true);
 			PersistAndRemoveFromUnitOfWork(scenarioNew);
 			IPersonAssignment assNew = PersonAssignmentFactory.CreateAssignmentWithMainShift(act,
-																	p,
-																	new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
-                                                                    shiftCategory,
-																	scenarioNew);
+				p,
+				new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+				shiftCategory,
+				scenarioNew);
 			PersistAndRemoveFromUnitOfWork(assNew);
-			Assert.AreEqual(2, target.NumberOfActiveAgents());
 		}
 
 		[Test]
