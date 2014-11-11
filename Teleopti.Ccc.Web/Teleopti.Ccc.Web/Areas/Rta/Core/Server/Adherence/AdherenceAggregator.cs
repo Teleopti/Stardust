@@ -1,11 +1,11 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
-	public interface IAdherenceAggregator : IActualAgentStateHasBeenSent
+	public interface IAdherenceAggregator
 	{
+		void Aggregate(IActualAgentState actualAgentState);
 		void Initialize(IActualAgentState actualAgentState);
 	}
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			_agentAdherenceAggregator = new AgentAdherenceAggregator(_aggregationState);
 		}
 
-		public void Invoke(IActualAgentState actualAgentState)
+		public void Aggregate(IActualAgentState actualAgentState)
 		{
 			aggregate(actualAgentState, true);
 		}
@@ -46,11 +46,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 				return;
 
 			var adherenceChanged = _aggregationState.Update(personOrganizationData, actualAgentState);
-			if (!adherenceChanged)
-				return;
+
 			if (!sendMessages)
 				return;
 
+			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
+			if (agentsAdherence != null)
+				_messageSender.Send(agentsAdherence);
+
+			if (!adherenceChanged)
+				return;
+			
 			var siteAdherence = _siteAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
 			if (siteAdherence != null)
 				_messageSender.Send(siteAdherence);
@@ -59,9 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			if (teamAdherence != null)
 				_messageSender.Send(teamAdherence);
 
-			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
-			if (agentsAdherence != null)
-				_messageSender.Send(agentsAdherence);
 		}
 
 	}

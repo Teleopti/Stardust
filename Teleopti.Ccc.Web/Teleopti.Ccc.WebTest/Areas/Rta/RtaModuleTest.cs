@@ -32,16 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldResolveAdherenceAggregator()
-		{
-			using (var container = BuildContainer())
-			{
-				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
-					.Single().GetType().Should().Be<AdherenceAggregator>();
-			}
-		}
-
-		[Test]
 		public void ShouldResolveAdherenceAggregatorInitializor()
 		{
 			using (var container = BuildContainer())

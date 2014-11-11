@@ -6,11 +6,11 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
 using MbCache.Core;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory cacheFactory,
-			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
+			IAdherenceAggregator adherenceAggregator,
 			IRtaEventPublisher eventPublisher,
 			INow now,
 			IConfigReader configReader)
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				databaseReader,
 				databaseWriter,
 				cacheFactory,
-				actualAgentStateHasBeenSent,
+				adherenceAggregator,
 				eventPublisher);
 			_now = now;
 

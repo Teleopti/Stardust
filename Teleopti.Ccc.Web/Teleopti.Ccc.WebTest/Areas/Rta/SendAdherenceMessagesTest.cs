@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Helpers;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldNotSendMessageIfAdherenceHasNotChanged()
+		public void ShouldNotSendAggregatedAdherenceMessagesIfAdherenceHasNotChanged()
 		{
 			var state = new ExternalUserStateForTest
 			{
@@ -58,7 +60,75 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 			sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
-			sender.AllNotifications.Where(x => x.DomainType == typeof(AgentsAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSendAgentAdhereneMesasgeIfStateGroupHasChanged()
+		{
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ready",
+				Timestamp = "2014-10-20 9:00".Utc()
+			};
+			var state2 = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone",
+				Timestamp = "2014-10-20 9:01".Utc()
+			};
+			var sender = new FakeMessageSender();
+			var teamId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(state)
+				.WithUser("usercode", personId, null, teamId, null)
+				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithAlarm("ready", phone, 1)
+				.WithAlarm("phone", phone, 1)
+				.Make();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+
+			target.SaveExternalUserState(state);
+			target.SaveExternalUserState(state2);
+
+			sender.AllNotifications.Where(x => x.DomainType == typeof(AgentsAdherenceMessage).Name).Should().Have.Count.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldUpdateAgentStateBeforeSending()
+		{
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ready",
+				Timestamp = "2014-10-20 9:00".Utc()
+			};
+			var state2 = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone",
+				Timestamp = "2014-10-20 9:01".Utc()
+			};
+			var sender = new FakeMessageSender();
+			var teamId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(state)
+				.WithUser("usercode", personId, null, teamId, null)
+				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithAlarm("ready", phone, 1)
+				.WithAlarm("phone", phone, 1)
+				.Make();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+
+			target.SaveExternalUserState(state);
+			target.SaveExternalUserState(state2);
+
+			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(sender.LastAgentsNotification.BinaryData);
+			jsonResult.AgentStates.Single().State.Should().Be.EqualTo("phone");
 		}
 
 		[Test]

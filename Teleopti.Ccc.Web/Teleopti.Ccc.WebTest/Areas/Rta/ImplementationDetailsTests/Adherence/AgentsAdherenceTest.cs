@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 				.Return(new PersonOrganizationData { TeamId = Guid.NewGuid(), PersonId = personId});
 			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			target.Invoke(actualAgentState);
+			target.Aggregate(actualAgentState);
 
 			broker.LastAgentsNotification.DeserializeBindaryData<AgentsAdherenceMessage>().AgentStates.Single().Should().Be(expected.AgentStates.Single());
 		}

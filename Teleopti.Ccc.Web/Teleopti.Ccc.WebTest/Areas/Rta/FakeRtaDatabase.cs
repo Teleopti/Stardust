@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				new RtaStateGroupLight
 				{
 					StateGroupId = stateGroupId,
-					StateGroupName = "",
+					StateGroupName = stateCode,
 					BusinessUnitId = _businessUnitId,
 					StateName = stateCode,
 					PlatformTypeId = platformTypeIdGuid,
@@ -168,7 +168,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 					ActivityId = activityId,
 					BusinessUnit = _businessUnitId,
 					AlarmTypeId = alarmId,
-					StaffingEffect = staffingEffect
+					StaffingEffect = staffingEffect,
+					StateGroupName = stateCode
 				}
 			};
 			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroupId, _businessUnitId), alarms));

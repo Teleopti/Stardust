@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class RtaDataHandler
 	{
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
-		private readonly IEnumerable<IActualAgentStateHasBeenSent> _actualAgentStateHasBeenSent;
+		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IRtaEventPublisher _eventPublisher;
 
 		private readonly ActualAgentAssembler _agentAssembler;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory mbCacheFactory,
-			IEnumerable<IActualAgentStateHasBeenSent> actualAgentStateHasBeenSent,
+			IAdherenceAggregator adherenceAggregator,
 			IRtaEventPublisher eventPublisher)
 		{
 			_messageClient = messageClient;
@@ -45,21 +46,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_agentAssembler = new ActualAgentAssembler(databaseReader, databaseWriter, mbCacheFactory);
 			_databaseWriter = databaseWriter;
 			_mbCacheFactory = mbCacheFactory;
-			_actualAgentStateHasBeenSent = actualAgentStateHasBeenSent;
+			_adherenceAggregator = adherenceAggregator;
 			_eventPublisher = eventPublisher;
 		}
 
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
-
 			var state = getState(personId, businessUnitId, string.Empty, TimeSpan.Zero, timestamp, Guid.Empty, null, null);
-
-			if (state.NewState == null)
-				return;
-
-			_databaseWriter.PersistActualAgentState(state.NewState);
-			sendRtaState(state.NewState);
+			send(state);
 		}
 
 		public bool IsAlive
@@ -83,43 +78,45 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			if (isSnapshot && string.IsNullOrEmpty(logOn))
 			{
-				loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId,
-					sourceId);
-				handleLastOfBatch(batchId, sourceId);
+				loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId, sourceId);
+				handleClosingOfSnapshot(batchId, sourceId);
 				return 0;
 			}
 
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
 			{
-				loggingSvc.InfoFormat(
-					"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
-					dataSourceId, logOn);
+				loggingSvc.InfoFormat("No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.", dataSourceId, logOn);
 				return 0;
 			}
 
 			foreach (var p in personWithBusinessUnits)
 			{
 				loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, p.PersonId);
-
 				var state = getState(p.PersonId, p.BusinessUnitId, stateCode, timeInState, timestamp, platformTypeId, sourceId, batch);
-
-				_databaseWriter.PersistActualAgentState(state.NewState);
-
-				if (state.Send)
-					sendRtaState(state.NewState);
+				send(state);
 			}
 			return 1;
+		}
+
+		private void handleClosingOfSnapshot(DateTime batchId, string sourceId)
+		{
+			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
+			foreach (var agent in missingAgents.Where(agent => agent != null))
+			{
+				_databaseWriter.PersistActualAgentState(agent);
+				send(new StateInfo { NewState = agent });
+			}
 		}
 
 		private StateInfo getState(
 			Guid personId,
 			Guid businessUnitId,
-			string stateCode, 
-			TimeSpan timeInState, 
-			DateTime timestamp, 
+			string stateCode,
+			TimeSpan timeInState,
+			DateTime timestamp,
 			Guid platformTypeId,
-			string sourceId, 
+			string sourceId,
 			DateTime? batch)
 		{
 			var info = new StateInfo
@@ -160,8 +157,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			info.PreviousShiftStartTime = startTimeOfShift(info, info.PreviousActivity);
 			info.PreviousShiftEndTime = endTimeOfShift(info, info.PreviousActivity);
 
-			_eventPublisher.Publish(info);
-
 			return info;
 		}
 
@@ -199,34 +194,29 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private static IEnumerable<ScheduleLayer> activitiesThisShift(StateInfo info, ScheduleLayer activity)
 		{
 			return from l in info.ScheduleLayers
-				where l.BelongsToDate == activity.BelongsToDate
-				select l;
+				   where l.BelongsToDate == activity.BelongsToDate
+				   select l;
 		}
 
-		private void handleLastOfBatch(DateTime batchId, string sourceId)
+		private void send(StateInfo state)
 		{
-			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
-			foreach (var agent in missingAgents.Where(agent => agent != null))
-			{
-				_databaseWriter.PersistActualAgentState(agent);
-				sendRtaState(agent);
-			}
-		}
+			_databaseWriter.PersistActualAgentState(state.NewState);
 
-		private void sendRtaState(IActualAgentState agentState)
-		{
-			loggingSvc.InfoFormat("Sending message: {0} ", agentState);
+			loggingSvc.InfoFormat("Sending message: {0} ", state.NewState);
 
-			var notification = NotificationFactory.CreateNotification(agentState);
+			var notification = NotificationFactory.CreateNotification(state.NewState);
 
-			_messageSender.Send(notification);
-			if (_actualAgentStateHasBeenSent != null)
-			{
-				foreach (var actualAgentStateHasBeenSent in _actualAgentStateHasBeenSent)
-				{
-					actualAgentStateHasBeenSent.Invoke(agentState);
-				}
-			}
+			if (state.Send)
+				_messageSender.Send(notification);
+
+			// this means closing of snapshot, and aggregation and events doesnt work here.
+			// BUG
+			if (state.ScheduleLayers == null)
+				return;
+
+			_adherenceAggregator.Aggregate(state.NewState);
+
+			_eventPublisher.Publish(state);
 		}
 	}
 }

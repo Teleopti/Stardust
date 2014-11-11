@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
 				taskar.Add(Task.Factory.StartNew(() =>
 				{
 					var agentId = personGuids[loopVarde];
-					target.Invoke(new ActualAgentState { StaffingEffect = 0, PersonId = agentId });
-					target.Invoke(new ActualAgentState { StaffingEffect = 1, PersonId = agentId });
+					target.Aggregate(new ActualAgentState { StaffingEffect = 0, PersonId = agentId });
+					target.Aggregate(new ActualAgentState { StaffingEffect = 1, PersonId = agentId });
 				}));
 			}
 			Task.WaitAll(taskar.ToArray());

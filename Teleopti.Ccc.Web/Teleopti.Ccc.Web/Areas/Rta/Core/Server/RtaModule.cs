@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			builder.RegisterType<AdherenceAggregator>()
 				.As<IAdherenceAggregator>()
-				.As<IActualAgentStateHasBeenSent>()
 				.SingleInstance()
 				;
 			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))

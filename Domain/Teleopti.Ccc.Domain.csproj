@@ -180,7 +180,6 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentShiftStartedCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaEventPublisher.cs" />
@@ -189,7 +188,6 @@
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherencePercent.cs" />
-    <Compile Include="ApplicationLayer\Rta\IActualAgentStateHasBeenSent.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
