@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			public string Tag { get; set; }
 			public IBrowserActivator Activator { get; set; }
-			public bool Visible { get; set; }
 			public bool Started { get; set; }
 		}
 
@@ -25,14 +24,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 					new registeredActivator
 						{
 							Tag = "Chrome",
-							Activator = new CoypuChromeActivator(),
-							Visible = true
+							Activator = new CoypuChromeActivator()
 						},
 					new registeredActivator
 					{
 						Tag = "NoBrowser",
-						Activator =  new NoBrowserActivator(),
-						Visible = false
+						Activator =  new NoBrowserActivator()
 					}
 				};
 
