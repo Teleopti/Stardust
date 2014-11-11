@@ -3292,7 +3292,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
 			{
 				validatePersonAccounts(permittedPerson);
+				_schedulerState.DetectedTimeZoneInfos.Add(permittedPerson.PermissionInformation.DefaultTimeZone());
 			}
+			
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
 			backgroundWorkerLoadData.ReportProgress(1);
@@ -5392,14 +5394,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
-			IList<TimeZoneInfo> otherList = new List<TimeZoneInfo> { _schedulerState.TimeZoneInfo };
-			foreach (IPerson person in _schedulerState.AllPermittedPersons)
-			{
-				if (!otherList.Contains(person.PermissionInformation.DefaultTimeZone()))
-					otherList.Add(person.PermissionInformation.DefaultTimeZone());
-			}
 
-			foreach (TimeZoneInfo info in otherList)
+			foreach (TimeZoneInfo info in _schedulerState.DetectedTimeZoneInfos)
 			{
 				if (info != _schedulerState.TimeZoneInfo)
 				{

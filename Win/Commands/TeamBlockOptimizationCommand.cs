@@ -139,6 +139,8 @@ namespace Teleopti.Ccc.Win.Commands
 		{
 
 			_backgroundWorker = backgroundWorker;
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, LanguageResourceHelper.Translate("XXCollectingData"));
+			_backgroundWorker.ReportProgress(1, args);
 
 			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 

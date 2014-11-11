@@ -109,6 +109,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 				if (!daySchedule.IsScheduled())
 				{
+					rollbackService.Rollback();
+					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
 					reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
 					continue;
 				}
@@ -136,15 +138,16 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					rollbackService.Rollback();
 					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
 					reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
+					break;
 				}
 
-				else
-				{
-					reportProgress(checkDayAfter, intervalIssuesAfter, progressCounter);
-					return intervalIssuesAfter;
-				}
+				//else
+				//{
+				//	reportProgress(checkDayAfter, intervalIssuesAfter, progressCounter);
+				//	return intervalIssuesAfter;
+				//}
 
-				progressCounter++;
+				//progressCounter++;
 			}
 
 			return intervalIssuesBefore;

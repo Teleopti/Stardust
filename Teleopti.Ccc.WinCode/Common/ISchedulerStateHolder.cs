@@ -170,8 +170,9 @@ namespace Teleopti.Ccc.WinCode.Common
         IEnumerable<DateOnly> DaysToRecalculate { get; }
 
         DateTimePeriod? LoadedPeriod { get; }
+	    HashSet<TimeZoneInfo> DetectedTimeZoneInfos { get; }
 
-        void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
+	    void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
                                 IPersonRequestCheckAuthorization authorization);
 
         IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId);

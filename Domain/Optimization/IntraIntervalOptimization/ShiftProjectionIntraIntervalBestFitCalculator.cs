@@ -32,17 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			foreach (var workShiftCalculationResultHolder in workShiftCalculationResults)
 			{
 				var shiftProjectionCache = workShiftCalculationResultHolder.ShiftProjection;
-				var totalValue = 0d;
-
-				if (shiftProjectionCache.TheMainShift.LayerCollection[1].Period.StartDateTime.Minute == 40)
-				{
-					
-				}
-
-				if (shiftProjectionCache.TheMainShift.LayerCollection[1].Period.StartDateTime.Minute == 0)
-				{
-
-				}
+				double? totalValue = null;
 
 				foreach (var skillStaffPeriod in issues)
 				{
@@ -67,12 +57,15 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						continue;
 						
 					}
-					
-					
-					totalValue += limit - value;
+
+					if (!totalValue.HasValue)
+						totalValue = 0;
+
+					totalValue = totalValue.Value + (limit - value);
 				}
 
-				sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = totalValue });
+				if(totalValue.HasValue)
+					sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = totalValue.Value });
 
 			}
 
