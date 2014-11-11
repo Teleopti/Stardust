@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setValuesFromIdentity(IRaptorDomainMessageInfo message)
 		{
-			message.Timestamp = DateTime.UtcNow;
 			if (_identity == null) return;
 
 			var identity = _identity.Current();

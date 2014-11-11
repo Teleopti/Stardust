@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 Logger.InfoFormat(
                     "Message requires the domain. (Message Id = {0}, DataSource = {1}, BusinessUnit = {2}, Timestamp = {3})",
-                    arg.MessageId, raptorDomainMessage.Datasource, raptorDomainMessage.BusinessUnitId,
-                    raptorDomainMessage.Timestamp);
+                    arg.MessageId, raptorDomainMessage.Datasource, raptorDomainMessage.BusinessUnitId, DateTime.UtcNow);
             }
 
             var dataSourceContainer = DataSourceFactory.GetDesiredDataSource(_applicationDataSourceProvider,
