@@ -6,6 +6,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
@@ -29,13 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly PersonResolver _personResolver;
 
-		public RtaDataHandler(
-			ISignalRClient messageClient,
-			IMessageSender messageSender,
-			IDatabaseReader databaseReader,
-			IDatabaseWriter databaseWriter,
-			IMbCacheFactory mbCacheFactory,
-			IAdherenceAggregator adherenceAggregator,
+		public RtaDataHandler(ISignalRClient messageClient, IMessageSender messageSender, IDatabaseReader databaseReader,
+			IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory, IAdherenceAggregator adherenceAggregator,
 			IRtaEventPublisher eventPublisher)
 		{
 			_messageClient = messageClient;
@@ -215,7 +211,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				return;
 
 			_adherenceAggregator.Aggregate(state.NewState);
-
+			
 			_eventPublisher.Publish(state);
 		}
 	}

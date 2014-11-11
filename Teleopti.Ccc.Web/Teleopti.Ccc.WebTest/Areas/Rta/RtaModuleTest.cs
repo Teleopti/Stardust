@@ -16,6 +16,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -99,8 +100,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
 		{
 			var builder = new ContainerBuilder();
+			var applicationData = MockRepository.GenerateMock<IApplicationData>();
 			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, ToggleManager(toggle, value));
-			builder.RegisterModule(new CommonModule(config));
+			builder.RegisterModule(new CommonModule(config) {ApplicationData = applicationData});
 			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();

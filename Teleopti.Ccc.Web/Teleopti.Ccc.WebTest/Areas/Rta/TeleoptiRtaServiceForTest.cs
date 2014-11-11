@@ -2,6 +2,7 @@ using MbCache.Core;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.TestCommon;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>()),
+				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>(), new FakeCurrentDatasource()),
 				new Now(),
 				new FakeConfigReader()
 				)
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>()),
+				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>(), new FakeCurrentDatasource()),
 				now,
 				new FakeConfigReader())
 		{
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(eventPublisher),
+				new RtaEventPublisher(eventPublisher, new FakeCurrentDatasource()),
 				now,
 				new FakeConfigReader())
 		{
@@ -66,7 +67,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(messageSender, new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>()),
+				new RtaEventPublisher(MockRepository.GenerateMock<IEventPublisher>(), new FakeCurrentDatasource()),
+				now,
+				new FakeConfigReader())
+		{
+		}
+
+		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
+			: this(
+				new FakeSignalRClient(),
+				MockRepository.GenerateMock<IMessageSender>(),
+				database,
+				database,
+				MockRepository.GenerateMock<IMbCacheFactory>(),
+				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
+				new RtaEventPublisher(eventPublisher, dataSource),
 				now,
 				new FakeConfigReader())
 		{

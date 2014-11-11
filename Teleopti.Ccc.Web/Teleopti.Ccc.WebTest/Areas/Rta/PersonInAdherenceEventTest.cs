@@ -4,6 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -118,6 +120,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			var @event = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			@event.Timestamp.Should().Be(state.Timestamp);
+		}
+
+		[Test]
+		public void ShouldPublishEventWithLogOnInfo()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-11-11 10:00".Utc(), "2014-11-11 12:00".Utc())
+				.WithAlarm("statecode", activityId, 0)
+				.Make();
+			var publisher = new FakeEventsPublisher();
+			var dataSource = new FakeCurrentDatasource("datasource");
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-11-11 11:00"), publisher, dataSource);
+
+			target.SaveExternalUserState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = "2014-11-11 11:00".Utc()
+			});
+
+			var @event = (ILogOnInfo) publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
+			@event.BusinessUnitId.Should().Be(businessUnitId);
+			@event.Datasource.Should().Be("datasource");
 		}
 
 	}

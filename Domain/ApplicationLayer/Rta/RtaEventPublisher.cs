@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class RtaEventPublisher : IRtaEventPublisher
 	{
 		private readonly IEventPublisher _eventPublisher;
+		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IDictionary<Guid, Type> _sentEvents = new Dictionary<Guid, Type>();
 
-		public RtaEventPublisher(IEventPublisher eventPublisher)
+		public RtaEventPublisher(IEventPublisher eventPublisher, ICurrentDataSource currentDataSource)
 		{
 			_eventPublisher = eventPublisher;
+			_currentDataSource = currentDataSource;
 		}
 
 		public void Publish(StateInfo info)
@@ -31,7 +33,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
-					ShiftEndTime = info.CurrentShiftEndTime
+					ShiftEndTime = info.CurrentShiftEndTime,
+					BusinessUnitId = info.NewState.BusinessUnit,
+					Datasource = _currentDataSource.CurrentName()
 				});
 			}
 		}
@@ -44,7 +48,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.PreviousShiftStartTime,
-					ShiftEndTime = info.PreviousShiftEndTime
+					ShiftEndTime = info.PreviousShiftEndTime,
+					BusinessUnitId = info.NewState.BusinessUnit,
+					Datasource = _currentDataSource.CurrentName()
 				});
 			}
 
@@ -59,13 +65,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				@event = new PersonInAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
-					Timestamp = agentState.ReceivedTime
+					Timestamp = agentState.ReceivedTime,
+					BusinessUnitId = agentState.BusinessUnit,
+					Datasource = _currentDataSource.CurrentName()
 				};
 			else
 				@event = new PersonOutOfAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
-					Timestamp = agentState.ReceivedTime
+					Timestamp = agentState.ReceivedTime,
+					BusinessUnitId = agentState.BusinessUnit,
+					Datasource = _currentDataSource.CurrentName()
 				};
 
 			Type current;

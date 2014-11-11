@@ -7,6 +7,7 @@ using System.ServiceModel.Activation;
 using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
@@ -29,16 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public static string DefaultAuthenticationKey = "!#¤atAbgT%";
 
-		public TeleoptiRtaService(
-			ISignalRClient signalRClient,
-			IMessageSender messageSender,
-			IDatabaseReader databaseReader,
-			IDatabaseWriter databaseWriter,
-			IMbCacheFactory cacheFactory,
-			IAdherenceAggregator adherenceAggregator,
-			IRtaEventPublisher eventPublisher,
-			INow now,
-			IConfigReader configReader)
+		public TeleoptiRtaService(ISignalRClient signalRClient, IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory cacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher eventPublisher, INow now, IConfigReader configReader)
 		{
 			_rtaDataHandler = new RtaDataHandler(
 				signalRClient,

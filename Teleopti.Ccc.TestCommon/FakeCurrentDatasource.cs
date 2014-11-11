@@ -16,10 +16,9 @@ namespace Teleopti.Ccc.TestCommon
 			_name = name;
 		}
 
-		//implement me if required
 		public IDataSource Current()
 		{
-			throw new System.NotImplementedException();
+			return null;
 		}
 
 		public string CurrentName()

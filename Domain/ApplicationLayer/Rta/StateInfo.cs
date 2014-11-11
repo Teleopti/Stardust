@@ -36,5 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			}
 		}
 
+		public string DataSource { get; set; }
 	}
 }
