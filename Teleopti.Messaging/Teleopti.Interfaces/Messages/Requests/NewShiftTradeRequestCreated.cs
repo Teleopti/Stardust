@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Messages.Requests
     /// Created by: robink
     /// Created date: 2010-02-24
     /// </remarks>
-    public class NewShiftTradeRequestCreated : RaptorDomainMessage
+    public class NewShiftTradeRequestCreated : MessageWithLogOnInfo
     {
         /// <summary>
         /// Identity for this message

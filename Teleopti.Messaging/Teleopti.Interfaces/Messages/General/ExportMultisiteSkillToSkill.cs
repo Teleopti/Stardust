@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Messages.General
 	///<summary>
 	/// Message with details to perform an export of forecasting data from sub skills of multisite skills to a regular skill.
 	///</summary>
-	public class ExportMultisiteSkillToSkill : RaptorDomainMessage
+	public class ExportMultisiteSkillToSkill : MessageWithLogOnInfo
 	{
 		///<summary>
 		/// The Id of the job this message will feed with updates.

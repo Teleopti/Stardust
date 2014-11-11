@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages;
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	[Serializable]
-	public class EventsPackageMessage : RaptorDomainMessage
+	public class EventsPackageMessage : MessageWithLogOnInfo
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 		public override Guid Identity { get { return _messageId; } }

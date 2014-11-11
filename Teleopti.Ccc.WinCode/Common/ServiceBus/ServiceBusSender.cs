@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
-				var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+				var raptorDomainMessage = message as ILogOnInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;

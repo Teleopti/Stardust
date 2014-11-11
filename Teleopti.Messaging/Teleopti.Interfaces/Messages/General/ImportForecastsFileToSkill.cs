@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.General
     /// <summary>
     /// Message with details of importing forecasts to skill
     /// </summary>
-    public class ImportForecastsFileToSkill : RaptorDomainMessage
+    public class ImportForecastsFileToSkill : MessageWithLogOnInfo
     {
         ///<summary>
         /// The Id of the job this message will feed with updates.

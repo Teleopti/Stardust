@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
-				var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+				var raptorDomainMessage = message as ILogOnInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;

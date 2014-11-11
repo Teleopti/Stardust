@@ -23,16 +23,16 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-    public class RaptorDomainMessageModule : IMessageModule
+    public class ApplicationLogOnMessageModule : IMessageModule
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (RaptorDomainMessageModule));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (ApplicationLogOnMessageModule));
         private readonly ILogOnOff _logOnOff;
         private readonly IApplicationDataSourceProvider _applicationDataSourceProvider;
         private readonly IRoleToClaimSetTransformer _roleToClaimSetTransformer;
         private readonly IRepositoryFactory _repositoryFactory;
     	private readonly ClaimCache _claimCache;
 
-    	public RaptorDomainMessageModule(ILogOnOff logOnOff, IApplicationDataSourceProvider applicationDataSourceProvider, IRoleToClaimSetTransformer roleToClaimSetTransformer, IRepositoryFactory repositoryFactory, ClaimCache claimCache)
+    	public ApplicationLogOnMessageModule(ILogOnOff logOnOff, IApplicationDataSourceProvider applicationDataSourceProvider, IRoleToClaimSetTransformer roleToClaimSetTransformer, IRepositoryFactory repositoryFactory, ClaimCache claimCache)
         {
             _logOnOff = logOnOff;
             _applicationDataSourceProvider = applicationDataSourceProvider;
@@ -57,26 +57,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         bool transport_MessageArrived(Rhino.ServiceBus.Impl.CurrentMessageInformation arg)
         {
-			var raptorDomainMessage = arg.Message as IRaptorDomainMessageInfo;
+			var logOnInfo = arg.Message as ILogOnInfo;
             if (Logger.IsDebugEnabled)
             {
                 Logger.DebugFormat("Message recieved. Message Id = {0}", arg.MessageId);
             }
-            if (raptorDomainMessage == null) return false;
+            if (logOnInfo == null) return false;
             if (Logger.IsInfoEnabled)
             {
                 Logger.InfoFormat(
                     "Message requires the domain. (Message Id = {0}, DataSource = {1}, BusinessUnit = {2}, Timestamp = {3})",
-                    arg.MessageId, raptorDomainMessage.Datasource, raptorDomainMessage.BusinessUnitId, DateTime.UtcNow);
+                    arg.MessageId, logOnInfo.Datasource, logOnInfo.BusinessUnitId, DateTime.UtcNow);
             }
 
             var dataSourceContainer = DataSourceFactory.GetDesiredDataSource(_applicationDataSourceProvider,
-                                                                           raptorDomainMessage.Datasource);
+                                                                           logOnInfo.Datasource);
             if (Logger.IsInfoEnabled)
             {
                 Logger.Info("UnitOfWorkFactory configured");
             }
-            LogOnRaptorDomain(dataSourceContainer, raptorDomainMessage.BusinessUnitId);
+            LogOnRaptorDomain(dataSourceContainer, logOnInfo.BusinessUnitId);
             if (Logger.IsInfoEnabled)
             {
                 Logger.Info("Logged on the domain");

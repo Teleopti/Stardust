@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 			}
 		}
 
-		public class TestMessage : RaptorDomainMessage
+		public class TestMessage : MessageWithLogOnInfo
 		{
 			public override Guid Identity { get { return Guid.Empty; } }
 		}

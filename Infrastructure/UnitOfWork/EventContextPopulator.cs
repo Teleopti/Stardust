@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void PopulateEventContext(IEvent @event)
 		{
-			var domainEvents = @event as IRaptorDomainMessageInfo;
+			var domainEvents = @event as ILogOnInfo;
 			if (domainEvents == null) return;
 			
 			setInitiator(domainEvents);
@@ -26,25 +26,25 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 
-		public void PopulateEventContext(IRaptorDomainMessageInfo @event)
+		public void PopulateEventContext(ILogOnInfo @event)
 		{
 			setInitiator(@event);
 			setValuesFromIdentity(@event);
 		}
 
-		private void setInitiator(IRaptorDomainMessageInfo domainEvents)
+		private void setInitiator(ILogOnInfo domainEvents)
 		{
 			var initiatorIdentifier = _initiatorIdentifier.Current();
 			if (initiatorIdentifier != null)
 				domainEvents.InitiatorId = initiatorIdentifier.InitiatorId;
 		}
 
-		public void PopulateEventContextWithoutInitiator(IRaptorDomainMessageInfo message)
+		public void PopulateEventContextWithoutInitiator(ILogOnInfo message)
 		{
 			setValuesFromIdentity(message);
 		}
 
-		private void setValuesFromIdentity(IRaptorDomainMessageInfo message)
+		private void setValuesFromIdentity(ILogOnInfo message)
 		{
 			if (_identity == null) return;
 

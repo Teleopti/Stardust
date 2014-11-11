@@ -826,14 +826,14 @@
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
     <Compile Include="Messages\General\BadgeCalculationInitMessage.cs" />
-    <Compile Include="Messages\IRaptorDomainMessageInfo.cs" />
+    <Compile Include="Messages\ILogOnInfo.cs" />
     <Compile Include="Messages\Rta\FactQueueUpdatedMessage.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
-    <Compile Include="Messages\RaptorDomainMessage.cs" />
+    <Compile Include="Messages\MessageWithLogOnInfo.cs" />
     <Compile Include="Messages\Rta\AgentAdherenceStateInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\UnderstaffingDetails.cs" />

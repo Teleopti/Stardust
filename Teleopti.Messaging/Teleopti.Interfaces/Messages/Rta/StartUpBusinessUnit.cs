@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.Rta
     /// <summary>
     /// 
     /// </summary>
-    public class StartUpBusinessUnit : RaptorDomainMessage
+    public class StartUpBusinessUnit : MessageWithLogOnInfo
     {
         private readonly Guid _messageId = Guid.NewGuid();
 

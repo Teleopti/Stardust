@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Messages.Requests
     /// Created by: robink
     /// Created date: 2010-02-24
     /// </remarks>
-    public class NewAbsenceRequestCreated : RaptorDomainMessage
+    public class NewAbsenceRequestCreated : MessageWithLogOnInfo
     {
         /// <summary>
         /// Gets or sets the person request id.

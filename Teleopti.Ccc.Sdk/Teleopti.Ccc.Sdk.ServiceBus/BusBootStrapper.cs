@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			base.ConfigureBusFacility(configuration);
 
 			var build = new ContainerBuilder();
-			build.RegisterType<RaptorDomainMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(RaptorDomainMessageModule).FullName);
+			build.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(ApplicationLogOnMessageModule).FullName);
 			build.Update(Container);
 
 			var reader = new ConfigurationReaderFactory();

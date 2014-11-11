@@ -8,7 +8,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	/// Denormalize the Person finder.
 	/// </summary>
 	[Serializable]
-	public class PersonChangedMessage : RaptorDomainMessage
+	public class PersonChangedMessage : MessageWithLogOnInfo
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 		private string _serializedPeople;

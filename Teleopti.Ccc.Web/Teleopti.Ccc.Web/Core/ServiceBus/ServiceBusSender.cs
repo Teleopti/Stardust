@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 		{
 			var bus = Resolve<IOnewayBus>();
 
-            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+            var raptorDomainMessage = message as ILogOnInfo;
 
 			if (Logger.IsDebugEnabled)
 			{

@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Messages.General
     /// <summary>
     /// Message with details to perform an import of forecasting data to a target skill.
     /// </summary>
-    public class OpenAndSplitTargetSkill : RaptorDomainMessage
+    public class OpenAndSplitTargetSkill : MessageWithLogOnInfo
     {
         ///<summary>
         /// The Id of the job this message will feed with updates.

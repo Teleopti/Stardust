@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
 			target.Persist(form);
 
-			serviceBusSender.AssertWasNotCalled(x => x.Publish(Arg<RaptorDomainMessage>.Is.Anything));
+			serviceBusSender.AssertWasNotCalled(x => x.Publish(Arg<MessageWithLogOnInfo>.Is.Anything));
 			personRequest.AssertWasCalled(x => x.Pending());
 		}
 

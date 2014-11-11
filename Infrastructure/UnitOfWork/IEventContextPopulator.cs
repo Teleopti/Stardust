@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public interface IEventContextPopulator
 	{
 		void PopulateEventContext(IEvent @event);
-		void PopulateEventContext(IRaptorDomainMessageInfo @event);
-		void PopulateEventContextWithoutInitiator(IRaptorDomainMessageInfo message);
+		void PopulateEventContext(ILogOnInfo @event);
+		void PopulateEventContextWithoutInitiator(ILogOnInfo message);
 	}
 }

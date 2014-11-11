@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Messages.Payroll
     /// Created by: peterwe
     /// Created date: 2010-11-22
     /// </remarks>
-    public class RunPayrollExport : RaptorDomainMessage
+    public class RunPayrollExport : MessageWithLogOnInfo
     {
 
         /// <summary>

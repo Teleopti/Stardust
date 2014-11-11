@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public void SendTrackingMessage(IRaptorDomainMessageInfo originatingEvent, TrackingMessage message)
+		public void SendTrackingMessage(ILogOnInfo originatingEvent, TrackingMessage message)
 		{
 			_sender.Send(new Notification
 			{

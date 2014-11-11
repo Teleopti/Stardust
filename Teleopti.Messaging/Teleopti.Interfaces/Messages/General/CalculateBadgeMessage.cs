@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.General
 {
-	public class CalculateBadgeMessage : RaptorDomainMessage
+	public class CalculateBadgeMessage : MessageWithLogOnInfo
 	{
 		public override Guid Identity
 		{

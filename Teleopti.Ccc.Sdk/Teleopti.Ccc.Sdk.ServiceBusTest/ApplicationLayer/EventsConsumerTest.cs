@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			}
 
 			trackingMessageSender.AssertWasCalled(x => x.SendTrackingMessage(
-				Arg<IRaptorDomainMessageInfo>.Matches(e =>
+				Arg<ILogOnInfo>.Matches(e =>
 					e.InitiatorId == initiatorId &&
 					e.BusinessUnitId == businessUnitId
 					),

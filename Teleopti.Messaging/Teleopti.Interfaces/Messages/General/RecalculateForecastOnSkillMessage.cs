@@ -26,7 +26,7 @@ namespace Teleopti.Interfaces.Messages.General
     /// Container for Recalculate messages
     /// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
-	public class RecalculateForecastOnSkillMessageCollection : RaptorDomainMessage
+	public class RecalculateForecastOnSkillMessageCollection : MessageWithLogOnInfo
     {
         private readonly Guid _messageId = Guid.NewGuid();
 

@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Interfaces.Messages.General
 {
-	public class CalculateTimeZoneMessage : RaptorDomainMessage
+	public class CalculateTimeZoneMessage : MessageWithLogOnInfo
 	{
 		public override Guid Identity
 		{

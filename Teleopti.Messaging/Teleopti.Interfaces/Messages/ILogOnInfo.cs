@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Interfaces.Messages
 {
-	public interface IRaptorDomainMessageInfo
+	public interface ILogOnInfo
 	{
 		Guid InitiatorId { get; set; }
 		string Datasource { get; set; }

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			appData.Expect(c => c.LoadPasswordPolicyService).Return(MockRepository.GenerateMock<ILoadPasswordPolicyService>());
 			
 			var builder = new ContainerBuilder();
-			builder.RegisterType<RaptorDomainMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
+			builder.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
 			builder.RegisterModule(new CommonModule() { ApplicationData = appData });
 			builder.RegisterModule<ServiceBusCommonModule>();

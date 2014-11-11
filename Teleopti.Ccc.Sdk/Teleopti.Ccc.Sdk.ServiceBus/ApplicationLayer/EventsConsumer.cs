@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			if (Logger.IsDebugEnabled)
 				Logger.Debug("Consuming message of type " + message.GetType().Name);
 
-			var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+			var raptorDomainMessage = message as ILogOnInfo;
 			if (raptorDomainMessage == null)
 			{
 				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())

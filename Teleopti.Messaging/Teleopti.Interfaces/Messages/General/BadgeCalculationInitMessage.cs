@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Messages.General
     /// <summary>
     /// 
     /// </summary>
-	public class BadgeCalculationInitMessage : RaptorDomainMessage
+	public class BadgeCalculationInitMessage : MessageWithLogOnInfo
     {
         private readonly Guid _messageId = Guid.NewGuid();
 
