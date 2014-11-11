@@ -233,20 +233,8 @@ if ($myWindowsPrincipal.IsInRole($adminRole))
 else
    {
    # We are not running "as Administrator" - so relaunch as administrator
-   
-   # Create a new process object that starts PowerShell
-   $newProcess = new-object System.Diagnostics.ProcessStartInfo "PowerShell";
-   
-   # Specify the current script path and name as a parameter
-   $newProcess.Arguments = $myInvocation.MyCommand.Definition;
-   
-   # Indicate that the process should be elevated
-   $newProcess.Verb = "runas";
-   
-   # Start the new process, in elevated mode
-   [System.Diagnostics.Process]::Start($newProcess);
-   
-   # Exit from the current, non elevated process
+   $scriptpath = $myInvocation.MyCommand.Definition
+   Start-Process -FilePath PowerShell.exe  -Verb runAs -ArgumentList "& '$scriptPath'"
    exit
    }
  
