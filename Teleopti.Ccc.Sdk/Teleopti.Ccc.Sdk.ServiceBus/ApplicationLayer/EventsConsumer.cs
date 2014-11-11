@@ -48,10 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			{
 				try
 				{
-					using (
-						var unitOfWork =
-							_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()
-								.CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(raptorDomainMessage)))
+					using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(raptorDomainMessage)))
 					{
 						_publisher.Publish(message);
 						unitOfWork.PersistAll();
