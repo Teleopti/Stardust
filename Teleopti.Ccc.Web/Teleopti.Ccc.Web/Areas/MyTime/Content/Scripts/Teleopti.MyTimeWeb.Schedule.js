@@ -187,7 +187,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.absenceReportViewModel().DateTo(moment(self.initialRequestDay(), self.absenceReportViewModel().DateFormat()));
 
 		}
-		self.showAddTextRequestForm = function() {
+		self.showAddTextRequestForm = function(data) {
 			if (self.textPermission() !== true) {
 				return;
 			}
@@ -228,7 +228,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var innerRequestModel = createRequestViewModel();
 		var addRequestModel = { model: innerRequestModel, type: innerRequestModel.TypeEnum, CancelAddingNewRequest: self.CancelAddingNewRequest };
 		var addShiftOfferModel = { model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, self.CancelAddingNewRequest, {format: self.datePickerFormat, defaultTimes: defaultDateTimes }), type: function () { return 'shiftOffer'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
-		var addAbsenceReportModel = { model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule), type: function() { return 'absenceReport'; } };
+		var addAbsenceReportModel = { model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule), type: function () { return 'absenceReport'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 
 		self.showAddShiftExchangeOfferForm = function(data) {
 			if (!self.shiftExchangePermission()) {
