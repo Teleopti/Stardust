@@ -63,9 +63,9 @@ namespace Teleopti.Interfaces.Domain
 		public Guid ScheduledId { get; set; }
 		public Guid PlatformTypeId { get; set; }
 		public DateTime ReceivedTime { get; set; }
-		public TimeSpan TimeInState { get; set; }
 		public string OriginalDataSourceId { get; set; }
 		public DateTime? BatchId { get; set; }
+
 		public Guid BusinessUnit { get; set; }
 
 		public bool InAdherence { get { return StaffingEffect.Equals(0); } }

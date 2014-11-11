@@ -55,6 +55,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		public void ShouldGetCurrentActualAgentStatesWithAllData()
+		{
+			var writer = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+			var state = new ActualAgentStateForTest
+			{
+				PersonId = Guid.NewGuid(),
+				AlarmId = Guid.NewGuid(),
+				AlarmName = "alarm",
+				AlarmStart = "2014-11-11 10:33".Utc(),
+				BatchId = "2014-11-11 10:34".Utc(),
+				BusinessUnit = Guid.NewGuid(),
+				Color = 3,
+				NextStart = "2014-11-11 10:35".Utc(),
+				OriginalDataSourceId = "1",
+				PlatformTypeId = Guid.NewGuid(),
+				ReceivedTime = "2014-11-11 10:36".Utc(),
+				Scheduled = "schedule",
+				ScheduledId = Guid.NewGuid(),
+				ScheduledNext = "next",
+				ScheduledNextId = Guid.NewGuid(),
+				StaffingEffect = 1,
+				State = "state",
+				StateCode = "statecode",
+				StateId = Guid.NewGuid(),
+				StateStart = "2014-11-11 10:37".Utc(),
+			};
+			writer.PersistActualAgentState(state);
+			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+
+			var result = target.GetActualAgentStates().Single();
+
+			result.PersonId.Should().Be(state.PersonId);
+			result.AlarmId.Should().Be(state.AlarmId);
+			result.AlarmName.Should().Be(state.AlarmName);
+			result.AlarmStart.Should().Be(state.AlarmStart);
+			result.BatchId.Should().Be(state.BatchId);
+			//result.BusinessUnit.Should().Be(state.BusinessUnit);
+			result.Color.Should().Be(state.Color);
+			result.NextStart.Should().Be(state.NextStart);
+			result.OriginalDataSourceId.Should().Be(state.OriginalDataSourceId);
+			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
+			result.ReceivedTime.Should().Be(state.ReceivedTime);
+			result.Scheduled.Should().Be(state.Scheduled);
+			result.ScheduledId.Should().Be(state.ScheduledId);
+			result.ScheduledNext.Should().Be(state.ScheduledNext);
+			result.ScheduledNextId.Should().Be(state.ScheduledNextId);
+			result.StaffingEffect.Should().Be(state.StaffingEffect);
+			result.State.Should().Be(state.State);
+			result.StateCode.Should().Be(state.StateCode);
+			result.StateId.Should().Be(state.StateId);
+			result.StateStart.Should().Be(state.StateStart);
+		}
+
+		[Test]
 		public void ShouldReadBelongsToDate()
 		{
 			var personId = Guid.NewGuid();

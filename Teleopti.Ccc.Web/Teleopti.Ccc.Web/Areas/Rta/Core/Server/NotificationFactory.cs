@@ -10,17 +10,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		public static Notification CreateNotification(IActualAgentState actualAgentState)
 		{
-			var type = typeof (IActualAgentState);
+			var type = typeof(IActualAgentState);
 			var notification = new Notification
 				{
-					StartDate =
-						Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
+					StartDate = Subscription.DateToString(actualAgentState.ReceivedTime),
 					EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
 					DomainId = Subscription.IdToString(actualAgentState.PersonId),
 					DomainType = type.Name,
 					DomainQualifiedType = type.AssemblyQualifiedName,
 					ModuleId = Subscription.IdToString(Guid.Empty),
-					DomainUpdateType = (int) DomainUpdateType.Insert,
+					DomainUpdateType = (int)DomainUpdateType.Insert,
 					BusinessUnitId = Subscription.IdToString(actualAgentState.BusinessUnit)
 				};
 			notification.SeralizeActualAgentState(actualAgentState);

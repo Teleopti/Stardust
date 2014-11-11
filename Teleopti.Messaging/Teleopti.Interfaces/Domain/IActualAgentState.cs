@@ -21,10 +21,11 @@ namespace Teleopti.Interfaces.Domain
 		string StateCode { get; set; }
 		Guid PlatformTypeId { get; set; }
 		DateTime ReceivedTime { get; set; }
-		TimeSpan TimeInState { get; set; }
 		DateTime? BatchId { get; set; }
 		string OriginalDataSourceId { get; set; }
+
 		Guid BusinessUnit { get; set; }
+
 		bool InAdherence { get; }
 	}
 }

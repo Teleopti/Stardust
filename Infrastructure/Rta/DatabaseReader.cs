@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private IEnumerable<IActualAgentState> queryActualAgentStates(Guid? personId)
 		{
-			var query = "SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState";
+			var query = "SELECT * FROM RTA.ActualAgentState";
 			if (personId.HasValue)
-				query = string.Format("SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
+				query = string.Format("SELECT * FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
@@ -103,22 +103,28 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				{
 					while (reader.Read())
 					{
+						var sqlDataReader = reader as SqlDataReader;
 						yield return new ActualAgentState
 						{
 							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
+							//BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit")),
 							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
 							StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
+							State = reader.GetString(reader.GetOrdinal("State")),
 							ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
-							AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
+							Scheduled = reader.GetString(reader.GetOrdinal("Scheduled")),
 							ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
+							ScheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext")),
+							ReceivedTime = reader.GetDateTime(reader.GetOrdinal("ReceivedTime")),
+							Color = reader.GetInt32(reader.GetOrdinal("Color")),
+							AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
+							AlarmName = reader.GetString(reader.GetOrdinal("AlarmName")),
 							StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
 							NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
 							BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
 								? reader.GetDateTime(reader.GetOrdinal("BatchId"))
 								: (DateTime?) null,
-							OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-								? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-								: "",
+							OriginalDataSourceId = reader.GetString(reader.GetOrdinal("OriginalDataSourceId")),
 							AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
 							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
 							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
