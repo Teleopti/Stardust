@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--EXTERNAL_PROPERTIES: CCNetProject;CCNetWorkingDirectory-->
+
+<Project DefaultTargets="AzureDeploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+	<PropertyGroup>
+		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>		
+		<AzureMasterLogin>teleopti@s8v4m110k9</AzureMasterLogin>
+		<AzureMasterPwd>T3l30pt1</AzureMasterPwd>
+		<AzureDbLogin>ccnet</AzureDbLogin>
+		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
+		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
+		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
+		<AzureDBNamePrefix>$(CCNetProject)</AzureDBNamePrefix>
+		<DbManagerExe>$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Release\DBManager.exe</DbManagerExe>
+		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>	
+	</PropertyGroup>
+	
+	<UsingTask AssemblyFile="$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+	
+	<Target Name="AzureDeploy">
+		<CallTarget Targets="AzurePreDropDatabase" />
+		<CallTarget Targets="AzureCreateDatabase" />
+		<CallTarget Targets="AzureAnalyticsReportTest" />
+		<CallTarget Targets="AzurePostDropDatabase" />
+	</Target>
+	
+	<Target Name="AzurePreDropDatabase">
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
+	</Target>
+	<Target Name="AzureCreateDatabase">
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+	</Target>
+	<Target Name="AzureAnalyticsReportTest">
+		<ItemGroup>
+			<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
+		</ItemGroup>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
+	</Target>
+	<Target Name="AzurePostDropDatabase">
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
+	</Target>
+	
+</Project>
