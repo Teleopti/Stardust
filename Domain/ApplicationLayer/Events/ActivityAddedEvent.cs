@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class ActivityAddedEvent : RaptorDomainEvent, ITrackableEvent
+	public class ActivityAddedEvent : EventWithLogOnAndInitiator, ITrackInfo
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly Date { get; set; }

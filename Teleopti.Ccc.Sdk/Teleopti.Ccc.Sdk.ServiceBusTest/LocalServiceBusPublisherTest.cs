@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		}
 	}
 
-	public class AnEventThatCanHaveInitiatorId : RaptorDomainEvent
+	public class AnEventThatCanHaveInitiatorId : EventWithLogOnAndInitiator
 	{
 	}
 

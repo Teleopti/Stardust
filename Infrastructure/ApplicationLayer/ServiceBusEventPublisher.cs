@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");
 
-			_eventContextPopulator.PopulateEventContextWithoutInitiator(message);
+			_eventContextPopulator.PopulateEventContext(message);
 
 			_sender.Send(message);
 		}

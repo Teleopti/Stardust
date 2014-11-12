@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonTeamChangedEvent : RaptorDomainEvent
+	public class PersonTeamChangedEvent : EventWithLogOnAndInitiator
 	{
 		public Guid PersonId { get; set; }
 		public DateTime StartDate { get; set; }

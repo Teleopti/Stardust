@@ -5,6 +5,6 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface ITrackingMessageSender
 	{
-		void SendTrackingMessage(ILogOnInfo originatingEvent, TrackingMessage message);
+		void SendTrackingMessage(IEvent originatingEvent, TrackingMessage message);
 	}
 }

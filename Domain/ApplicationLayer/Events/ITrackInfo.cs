@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public interface ITrackableEvent
+	public interface ITrackInfo
 	{
 		Guid TrackId { get; set; }
 	}

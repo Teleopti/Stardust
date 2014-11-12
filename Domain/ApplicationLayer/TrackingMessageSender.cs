@@ -19,17 +19,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public void SendTrackingMessage(ILogOnInfo originatingEvent, TrackingMessage message)
+		public void SendTrackingMessage(IEvent originatingEvent, TrackingMessage message)
 		{
+			string dataSource = null;
+			var businessUnitId = Guid.Empty;
+			var initiatorId = Guid.Empty;
+
+			var logOnInfo = originatingEvent as ILogOnInfo;
+			if (logOnInfo != null)
+			{
+				dataSource = logOnInfo.Datasource;
+				businessUnitId = logOnInfo.BusinessUnitId;
+			}
+			var initiatorInfo = originatingEvent as IInitiatorInfo;
+			if (initiatorInfo != null)
+			{
+				initiatorId = initiatorInfo.InitiatorId;
+			}
+
 			_sender.Send(new Notification
 			{
-				DataSource = originatingEvent.Datasource,
-				BusinessUnitId = originatingEvent.BusinessUnitId.ToString(),
-				ModuleId = originatingEvent.InitiatorId.ToString(),
+				DataSource = dataSource,
+				BusinessUnitId = businessUnitId.ToString(),
+				ModuleId = initiatorId.ToString(),
 				BinaryData = _jsonSerializer.SerializeObject(message),
 				DomainId = message.TrackId.ToString(),
 				DomainType = "TrackingMessage",
-				DomainReferenceId = originatingEvent.InitiatorId.ToString()
+				DomainReferenceId = initiatorId.ToString()
 			});
 		}
 	}

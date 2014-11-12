@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			}
 
 			trackingMessageSender.AssertWasCalled(x => x.SendTrackingMessage(
-				Arg<ILogOnInfo>.Matches(e =>
+				Arg<ActivityAddedEvent>.Matches(e =>
 					e.InitiatorId == initiatorId &&
 					e.BusinessUnitId == businessUnitId
 					),
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 
 	}
 
-	public class AnEventWithInitiatorId : RaptorDomainEvent
+	public class AnEventWithInitiatorId : EventWithLogOnAndInitiator
 	{
 	}
 

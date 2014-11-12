@@ -3,7 +3,7 @@
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	//todo: what to include?
-	public class ActivityMovedEvent : RaptorDomainEvent, ITrackableEvent
+	public class ActivityMovedEvent : EventWithLogOnAndInitiator, ITrackInfo
 	{
 		public Guid PersonId { get; set; }
 		public Guid ScenarioId { get; set; }

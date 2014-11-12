@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class InitiatorIdentifierFromMessage : IInitiatorIdentifier
 	{
-		public InitiatorIdentifierFromMessage(ILogOnInfo logOn)
+		public InitiatorIdentifierFromMessage(IInitiatorInfo initiatorInfo)
 		{
-			InitiatorId = logOn.InitiatorId;
+			InitiatorId = initiatorInfo.InitiatorId;
 		}
 
 		public Guid InitiatorId { get; set; }

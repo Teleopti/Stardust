@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	public abstract class ScheduleChangedEventBase : RaptorDomainEvent, ITrackableEvent
+	public abstract class ScheduleChangedEventBase : EventWithLogOnAndInitiator, ITrackInfo
 	{
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }

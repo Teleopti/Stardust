@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -16,39 +15,32 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public void PopulateEventContext(IEvent @event)
+		public void PopulateEventContext(object @event)
 		{
-			var domainEvents = @event as ILogOnInfo;
-			if (domainEvents == null) return;
-			
-			setInitiator(domainEvents);
-			PopulateEventContext(domainEvents);
+			var initiatorInfo = @event as IInitiatorInfo;
+			if (initiatorInfo != null)
+				setInitiator(initiatorInfo);
+			var logOnInfo = @event as ILogOnInfo;
+			if (logOnInfo != null)
+				setLogOnInfo(logOnInfo);
 		}
 
-
-		public void PopulateEventContext(ILogOnInfo @event)
-		{
-			setInitiator(@event);
-			setValuesFromIdentity(@event);
-		}
-
-		private void setInitiator(ILogOnInfo domainEvents)
+		private void setInitiator(IInitiatorInfo @event)
 		{
 			var initiatorIdentifier = _initiatorIdentifier.Current();
 			if (initiatorIdentifier != null)
-				domainEvents.InitiatorId = initiatorIdentifier.InitiatorId;
+				@event.InitiatorId = initiatorIdentifier.InitiatorId;
 		}
 
-		public void PopulateEventContextWithoutInitiator(ILogOnInfo message)
-		{
-			setValuesFromIdentity(message);
-		}
-
-		private void setValuesFromIdentity(ILogOnInfo message)
+		// should use ICurrentDataSource and I...stuff or something
+		private void setLogOnInfo(ILogOnInfo message)
 		{
 			if (_identity == null) return;
 
 			var identity = _identity.Current();
+			if (identity == null)
+				return;
+
 			message.BusinessUnitId = message.BusinessUnitId.Equals(Guid.Empty)
 				? identity.BusinessUnit.Id.GetValueOrDefault()
 				: message.BusinessUnitId;

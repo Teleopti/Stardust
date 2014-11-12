@@ -30,17 +30,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			_trackingMessageSender = trackingMessageSender;
 		}
 
-		public void Consume(IEvent message)
+		public void Consume(IEvent @event)
 		{
 			if (Logger.IsDebugEnabled)
-				Logger.Debug("Consuming message of type " + message.GetType().Name);
+				Logger.Debug("Consuming message of type " + @event.GetType().Name);
 
-			var raptorDomainMessage = message as ILogOnInfo;
-			if (raptorDomainMessage == null)
+			var logOnInfo = @event as ILogOnInfo;
+			var initiatorInfo = @event as IInitiatorInfo;
+			if (logOnInfo == null)
 			{
+				// will NEVER EVER WORK, why was this gradually refactored into something this ... )?"/#¤)IPU"`!!
+				// everyone in the whole world knows we cant create uow without being loogged in!
 				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 				{
-					_publisher.Publish(message);
+					_publisher.Publish(@event);
 					unitOfWork.PersistAll();
 				}
 			}
@@ -48,22 +51,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			{
 				try
 				{
-					using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(raptorDomainMessage)))
+					using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 					{
-						_publisher.Publish(message);
+						_publisher.Publish(@event);
 						unitOfWork.PersistAll();
 					}
 				}
 				catch (Exception)
 				{
-					if (_trackingMessageSender != null && message is ITrackableEvent)
+					if (_trackingMessageSender != null && @event is ITrackInfo)
 					{
-						var msg1 = message as ITrackableEvent;
-						if (msg1.TrackId != Guid.Empty)
-							_trackingMessageSender.SendTrackingMessage(raptorDomainMessage, new TrackingMessage
+						var trackInfo = @event as ITrackInfo;
+						if (trackInfo.TrackId != Guid.Empty)
+							_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
 							{
 								Status = TrackingMessageStatus.Failed,
-								TrackId = msg1.TrackId
+								TrackId = trackInfo.TrackId
 							});
 					}
 					throw;

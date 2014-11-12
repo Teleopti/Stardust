@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Messages;
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	[Serializable]
-	public abstract class RaptorDomainEvent : Event, ILogOnInfo
+	public abstract class EventWithLogOnAndInitiator : Event, ILogOnInfo, IInitiatorInfo
 	{
 		public DateTime Timestamp { get; set; }
 		public Guid InitiatorId { get; set; }

@@ -148,7 +148,7 @@
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\ITrackableEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
@@ -246,7 +246,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IProjectionChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\IPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForPersonScheduleDay.cs" />
-    <Compile Include="ApplicationLayer\RaptorDomainEvent.cs" />
+    <Compile Include="ApplicationLayer\EventWithLogOnAndInitiator.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedEventBase.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisher.cs" />

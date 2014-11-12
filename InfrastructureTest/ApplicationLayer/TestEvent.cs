@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	{
 	}
 
-    public class TestDomainEvent : RaptorDomainEvent
+    public class TestDomainEvent : EventWithLogOnAndInitiator
     {
     }
 }

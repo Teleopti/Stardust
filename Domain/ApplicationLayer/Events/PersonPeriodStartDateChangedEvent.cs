@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonPeriodStartDateChangedEvent : RaptorDomainEvent
+	public class PersonPeriodStartDateChangedEvent : EventWithLogOnAndInitiator
 	{
 		public Guid PersonId { get; set; }
 		public DateTime OldStartDate { get; set; }

@@ -826,6 +826,7 @@
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
     <Compile Include="Messages\General\BadgeCalculationInitMessage.cs" />
+    <Compile Include="Messages\IInitiatorInfo.cs" />
     <Compile Include="Messages\ILogOnInfo.cs" />
     <Compile Include="Messages\Rta\FactQueueUpdatedMessage.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
