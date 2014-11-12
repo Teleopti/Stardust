@@ -143,7 +143,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		function _fillFormData(data) {
 			var requestViewModel = self.requestViewModel().model;
-			var requestDay = moment(self.initialRequestDay(), requestViewModel.DateFormat());
+			requestViewModel.DateFormat(self.datePickerFormat());
+			var requestDay = moment(self.initialRequestDay(),requestViewModel.DateFormat());
 			requestViewModel.DateFrom(requestDay);
 			requestViewModel.DateTo(requestDay);
 			if (requestViewModel.LoadRequestData) {
@@ -170,17 +171,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var isPermittedDate = (formatInitialRequestDay == formatToday) || (formatInitialRequestDay == formatTomorrow);
 			return self.absenceReportPermission() && isPermittedDate;
 		});
-
-		self.featureCheck = function () {
-			ajax.Ajax({
-				url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AbsenceReport_31011",
-				success: function (data) {
-					if (data.IsEnabled) {
-						self.isAbsenceReportEnabled(true);
-					}
-				}
-			});
-		}
 
 		self.showAddTextRequestForm = function(data) {
 			if (self.textPermission() !== true) {
