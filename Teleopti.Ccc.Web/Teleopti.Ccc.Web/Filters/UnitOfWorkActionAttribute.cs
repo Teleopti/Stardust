@@ -18,11 +18,18 @@ namespace Teleopti.Ccc.Web.Filters
 			base.OnResultExecuted(filterContext);
 
 			var currentUnitOfWork = DependencyResolver.Current.GetService<ICurrentUnitOfWork>().Current();
-			if (currentUnitOfWork != null)
+			if (currentUnitOfWork == null) return;
+
+			if (shouldPersist(filterContext))
 			{
 				currentUnitOfWork.PersistAll();
-				currentUnitOfWork.Dispose();
 			}
+			currentUnitOfWork.Dispose();
+		}
+
+		private bool shouldPersist(ResultExecutedContext filterContext)
+		{
+			return filterContext.Exception == null || filterContext.ExceptionHandled;
 		}
 	}
 }

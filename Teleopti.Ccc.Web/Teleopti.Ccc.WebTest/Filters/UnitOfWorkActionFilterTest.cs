@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Web.Filters;
@@ -74,5 +75,38 @@ namespace Teleopti.Ccc.WebTest.Filters
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 		}
 
+		[Test]
+		public void ShouldNotPersistUnitOfWorkWhenNotHandledExceptionOccurs()
+		{
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
+			DependencyResolver.SetResolver(dependencyResolver);
+			var target = new UnitOfWorkActionAttribute();
+
+			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWork))).Return(currentUnitOfWork);
+			currentUnitOfWork.Stub(x => x.Current()).Return(unitOfWork);
+
+			target.OnResultExecuted(new ResultExecutedContext{Exception = new Exception(),ExceptionHandled = false});
+
+			unitOfWork.AssertWasNotCalled(x => x.PersistAll());
+		}
+
+		[Test]
+		public void ShouldPersistUnitOfWorkWhenHandledExceptionOccurs()
+		{
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
+			DependencyResolver.SetResolver(dependencyResolver);
+			var target = new UnitOfWorkActionAttribute();
+
+			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWork))).Return(currentUnitOfWork);
+			currentUnitOfWork.Stub(x => x.Current()).Return(unitOfWork);
+
+			target.OnResultExecuted(new ResultExecutedContext { Exception = new Exception(), ExceptionHandled = true });
+
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+		}
     }
 }
