@@ -9,6 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	// This class is registered in servicebus and sdk as well
 	public class ResourceOptimizationHelper : IResourceOptimizationHelper
 	{
 		private readonly ISchedulingResultStateHolder _stateHolder;
