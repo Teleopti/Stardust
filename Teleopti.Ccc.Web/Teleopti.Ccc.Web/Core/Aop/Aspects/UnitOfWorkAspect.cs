@@ -29,11 +29,17 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 
 		public void OnAfterInvokation(Exception exception)
 		{
-			_unitOfWork.PersistAll();
+			persistWhenNoExpcetion(exception);
 			diposeBusinessUnitFilterOverride();
 			_unitOfWork.Dispose();
 		}
 
+		private void persistWhenNoExpcetion(Exception exception)
+		{
+			if (exception != null) return;
+
+			_unitOfWork.PersistAll();
+		}
 
 
 		private IDisposable overrideBusinessUnitFilter()
