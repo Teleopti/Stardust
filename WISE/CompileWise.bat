@@ -1,6 +1,6 @@
 @ECHO OFF
 ::Depends on:
-::Version, ProductId, SRCDIR, OUTDIR, WISEPROJFILE, ccc7_server, ccc7_forecast,ccc7_client,ccc7_mytime,WISEEXE
+::Version, ProductId, SRCDIR, OUTDIR, WISEPROJFILE, ccc7_server, ccc7_forecast,ccc7_client,ccc7_mytime,WISEEXE, WISESCRIPT
 ::All set by outer batch file
 
 ::If  Version is nothing get it from user
@@ -43,14 +43,14 @@ TYPE NUL>"%WISEPROJFILE%\%Product%\%Product%.stub"
 
 ::compile all .wse files
 if exist "%WISEPROJFILE%\%Product%\*.wse" (
-FOR /F %%I IN ('dir /b "%WISEPROJFILE%\%Product%\*.wse"') DO "C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe" /c "%WISEPROJFILE%\%Product%\%%I"
+FOR /F %%I IN ('dir /b "%WISEPROJFILE%\%Product%\*.wse"') DO "%WISESCRIPT%" /c /s "%WISEPROJFILE%\%Product%\%%I"
 IF %ERRORLEVEL% NEQ 0 GOTO Error
 ECHO Compiling WISE project, Done!
 )
 
 ::Start Wise compile
-ECHO "%WISEEXE%" "%WISEPROJFILE%\%Product%\%Product%.wsi" /c
-"%WISEEXE%" "%WISEPROJFILE%\%Product%\%Product%.wsi" /c
+ECHO "%WISEEXE%" "%WISEPROJFILE%\%Product%\%Product%.wsi" /c /s
+"%WISEEXE%" "%WISEPROJFILE%\%Product%\%Product%.wsi" /c /s
 IF %ERRORLEVEL% NEQ 0 GOTO Error
 ECHO Compiling WISE project, Done!
 
