@@ -195,15 +195,18 @@ namespace Teleopti.Interfaces.Domain
 		    var localStart = StartDateTimeLocal(timeZoneInfo);
 		    var localEnd = EndDateTimeLocal(timeZoneInfo);
 
-		    //for the case timePeriod is very small and end time is little than start time, this is normally in ETL but seldom in schedule
-		    if (localEnd.Subtract(localStart).Hours < 0 || localEnd.Subtract(localStart).Minutes < 0)
-		    {
-			    //there are different rules according different timezone and differrent year, the oldest always be the first item, so we use the newest
-			    return localEnd.Subtract(localStart).Add(timeZoneInfo.GetAdjustmentRules().Last().DaylightDelta);
-		    }
-
-		    return localEnd.Subtract(localStart);
+			 return checkForEdgeCaseDueToDaylightSavings(localEnd, localStart) ? ElapsedTime() : localEnd.Subtract(localStart);
 	    }
+
+		 /// <summary>
+		 /// in daylight saving close day, end time may little than start time 
+		 /// eg: 2:45-2:00 (second 2am)
+		 /// </summary>
+		 /// <returns></returns>
+		 private static bool checkForEdgeCaseDueToDaylightSavings(DateTime localEnd, DateTime localStart)
+		 {
+			 return localEnd < localStart;
+		 }
 
 	    /// <summary>
         /// Moves the period the spacific amount of time.
