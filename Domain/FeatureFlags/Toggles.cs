@@ -27,6 +27,7 @@
 		Request_SeePossibleShiftTradesFromAllTeams_28770,
 		Request_FilterPossibleShiftTradeByTime_24560,
 		Request_ShiftTradeWithEmptyDays_28926,
+		Request_ShiftTradeBulletinBoard_31296,
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
 
@@ -39,7 +40,7 @@
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
 		MyTeam_Reports_31070,
-        
+		
 		RTA_ViewAgentsForMultipleTeams_28967,
 
 		MyTimeWeb_AgentBadge_28913,
