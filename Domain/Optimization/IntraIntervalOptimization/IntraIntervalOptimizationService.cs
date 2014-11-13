@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private string _progressDate;
 		private string _progressPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+		private ResourceOptimizerProgressEventArgs _progressEvent;
+		private bool _cancelMe;
 
 		public IntraIntervalOptimizationService(IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor, IIntraIntervalOptimizer intraIntervalOptimizer, IIntraIntervalIssueCalculator intraIntervalIssueCalculator)
 		{
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			var personHashSet = new HashSet<IPerson>();
 			var cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
-			_intraIntervalOptimizer.ReportProgress += OnReportProgress;
+			_progressEvent = null;
+			_cancelMe = false;
 
 			foreach (var selectedSchedule in selectedSchedules)
 			{
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			foreach (var skill in schedulingResultStateHolder.Skills)
 			{
 				_progressSkill = skill.Name;
-				if (_intraIntervalOptimizer.IsCanceled) break;
+				if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 
 				var skillType = skill.SkillType.ForecastSource;
 				if(skillType != ForecastSource.InboundTelephony && skillType != ForecastSource.Chat) continue;
@@ -50,18 +53,17 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
 					_progressDate = dateOnly.ToShortDateString(cultureInfo);
-					if (_intraIntervalOptimizer.IsCanceled) break;
+			
+					if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 
 					var intervalIssuesBefore = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
 					var schedules = schedulingResultStateHolder.Schedules;
 					var scheduleDaysWithIssue = _scheduleDayIntraIntervalIssueExtractor.Extract(schedules, dateOnly, intervalIssuesBefore.IssuesOnDay, skill);
 					var scheduleDaysWithIssueDayAfter = _scheduleDayIntraIntervalIssueExtractor.Extract(schedules, dateOnly, intervalIssuesBefore.IssuesOnDayAfter, skill);
 
-					
-
 					foreach (var scheduleDay in scheduleDaysWithIssue)
 					{
-						if (_intraIntervalOptimizer.IsCanceled) break;
+						if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 
 						var person = scheduleDay.Person;
 
@@ -74,13 +76,18 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if(!affect) continue;
 						
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, false);
-						if (intervalIssuesAfter.IssuesOnDay.Count == 0) break;
+
+						OnReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"));
+
 						intervalIssuesBefore = intervalIssuesAfter;
+
+						if (intervalIssuesAfter.IssuesOnDay.Count == 0) break;
+						
 					}
 
 					foreach (var scheduleDay in scheduleDaysWithIssueDayAfter)
 					{
-						if (_intraIntervalOptimizer.IsCanceled) break;
+						if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
 
 						var person = scheduleDay.Person;
 
@@ -93,15 +100,15 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (!affect) continue;
 
 						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
-						if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
+
+						OnReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"));
+
 						intervalIssuesBefore = intervalIssuesAfter;
-					}
-					
+
+						if (intervalIssuesAfter.IssuesOnDayAfter.Count == 0) break;
+					}	
 				}
 			}
-
-			_intraIntervalOptimizer.Reset();
-			_intraIntervalOptimizer.ReportProgress -= OnReportProgress;
 		}
 
 		private bool affectIssue(IScheduleDay scheduleDay, IList<ISkillStaffPeriod> issues)
@@ -118,15 +125,21 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			return affects;
 		}
 
-		public void OnReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+		public void OnReportProgress(string message)
 		{
 			var handler = ReportProgress;
 			if (handler == null) return;
-			var progressMessage = string.Concat(_progressSkill, " ", _progressDate, " ", _progressPerson, " ", e.Message);
+			var progressMessage = string.Concat(_progressSkill, " ", _progressDate, " ", _progressPerson, " ", message);
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, progressMessage);
+
 			handler(this, args);
-			e.Cancel = args.Cancel;
-			e.UserCancel = args.UserCancel;
+
+			if (args.Cancel || args.UserCancel)
+				_cancelMe = true;
+
+			if (_progressEvent != null && _progressEvent.UserCancel) return;
+
+			_progressEvent = args;
 		}
 	}
 
@@ -138,11 +151,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				
 		}
 
-		public void OnReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+		public void OnReportProgress(string message)
 		{
 			var handler = ReportProgress;
 			if (handler == null) return;
-			handler(this, e);
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
+			handler(this, args);
 		}
 	}
 }

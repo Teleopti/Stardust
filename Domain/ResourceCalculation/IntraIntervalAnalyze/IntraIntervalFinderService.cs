@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 			foreach (var skillDay in skillDays)
 			{
 				var forcastSource = skillDay.Skill.SkillType.ForecastSource;
-				if (forcastSource != ForecastSource.InboundTelephony || forcastSource != ForecastSource.Chat)
+				if (forcastSource != ForecastSource.InboundTelephony && forcastSource != ForecastSource.Chat)
 					continue;
 
 				_skillDayIntraIntervalFinder.SetIntraIntervalIssues(skillDay, resourceCalculationDataContainer, 0.7999);

@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	{
 		IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		bool IsCanceled { get; }
-		void Reset();
 	}
 
 	public class IntraIntervalOptimizer : IIntraIntervalOptimizer
@@ -27,10 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
-		private bool _cancelMe;
-
-
+		
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockScheduler teamBlockScheduler,
 			ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator,
@@ -51,28 +46,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
 		}
 
-		public void Reset()
-		{
-			_progressEvent = null;
-			_cancelMe = false;
-		}
-
-		public bool IsCanceled
-		{
-			get { return _cancelMe || (_progressEvent != null && _progressEvent.UserCancel); }
-		}
-
-		
 		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
 		{
-			_progressEvent = null;
-			var progressCounter = 0;
 			var limit = 0.7999;
-
-			//if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) return intervalIssuesBefore;
 
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
 			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
@@ -99,7 +78,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				rollbackService.Rollback();
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-				reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
 				return intervalIssuesBefore;
 			}
 		
@@ -111,7 +89,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				rollbackService.Rollback();
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-				reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
 				return intervalIssuesBefore;
 			}
 
@@ -136,37 +113,14 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				rollbackService.Rollback();
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-				reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
 			}
 
 			else
 			{
-				reportProgress(checkDayAfter, intervalIssuesAfter, progressCounter);
 				return intervalIssuesAfter;
 			}
 			
 			return intervalIssuesBefore;
-		}
-
-		private void reportProgress(bool checkDayAfter, IIntraIntervalIssues intervalIssues, int progressCounter)
-		{
-			var issueCounter = checkDayAfter ? intervalIssues.IssuesOnDayAfter.Count : intervalIssues.IssuesOnDay.Count;
-			if ((progressCounter % 10) == 0) OnReportProgress(string.Concat("(", progressCounter + 1, "/", issueCounter, ")"));	
-		}
-
-		public void OnReportProgress(string message)
-		{
-			var handler = ReportProgress;
-			if (handler == null) return;
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
-			handler(this, args);
-
-			if (args.Cancel || args.UserCancel)
-				_cancelMe = true;
-				
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
-
-			_progressEvent = args;
 		}
 	}
 }
