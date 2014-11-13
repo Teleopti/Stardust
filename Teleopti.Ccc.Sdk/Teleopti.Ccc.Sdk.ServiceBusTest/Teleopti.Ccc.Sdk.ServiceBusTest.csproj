@@ -156,6 +156,7 @@
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
+    <Compile Include="NewAbsenceReportConsumerTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\MultipleNotificationSenderFactoryTest.cs" />
     <Compile Include="Notification\NotificationValidationCheckTest.cs" />
