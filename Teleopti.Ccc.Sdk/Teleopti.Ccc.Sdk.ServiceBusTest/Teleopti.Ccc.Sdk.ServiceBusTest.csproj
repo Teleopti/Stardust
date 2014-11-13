@@ -129,7 +129,6 @@
     <Compile Include="AgentBadge\BadgeCalculationInitConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateBadgeConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumerTest.cs" />
-    <Compile Include="ApplicationLayer\EventsConsumerTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
@@ -256,7 +255,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ApplicationLayer\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

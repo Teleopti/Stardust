@@ -1,5 +1,6 @@
 ﻿using System;
 using log4net;
+using Microsoft.FSharp.Data.UnitSystems.SI.UnitNames;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -11,7 +12,7 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 {
-	public class EventsConsumer : 
+	public class EventsConsumer :
 		ConsumerOf<IEvent>,
 		ConsumerOf<EventsPackageMessage>
 	{
@@ -37,42 +38,49 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 
 			var logOnInfo = @event as ILogOnInfo;
 			var initiatorInfo = @event as IInitiatorInfo;
-			if (logOnInfo == null)
+			var trackInfo = @event as ITrackInfo;
+
+			try
 			{
-				// will NEVER EVER WORK, why was this gradually refactored into something this ... )?"/#¤)IPU"`!!
-				// everyone in the whole world knows we cant create uow without being loogged in!
-				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+				if (logOnInfo == null)
 				{
 					_publisher.Publish(@event);
-					unitOfWork.PersistAll();
 				}
+				else
+				{
+					if (initiatorInfo == null)
+					{
+						using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+						{
+							_publisher.Publish(@event);
+							unitOfWork.PersistAll();
+						}
+					}
+					else
+					{
+						using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
+						{
+							_publisher.Publish(@event);
+							unitOfWork.PersistAll();
+						}
+					}
+
+				}
+
 			}
-			else
+			catch (Exception)
 			{
-				try
-				{
-					using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
+				if (_trackingMessageSender == null) throw;
+				if (trackInfo == null) throw;
+				if (trackInfo.TrackId != Guid.Empty)
+					_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
 					{
-						_publisher.Publish(@event);
-						unitOfWork.PersistAll();
-					}
-				}
-				catch (Exception)
-				{
-					if (_trackingMessageSender != null && @event is ITrackInfo)
-					{
-						var trackInfo = @event as ITrackInfo;
-						if (trackInfo.TrackId != Guid.Empty)
-							_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
-							{
-								Status = TrackingMessageStatus.Failed,
-								TrackId = trackInfo.TrackId
-							});
-					}
-					throw;
-				}
-				
+						Status = TrackingMessageStatus.Failed,
+						TrackId = trackInfo.TrackId
+					});
+				throw;
 			}
+
 		}
 
 		public void Consume(EventsPackageMessage message)
