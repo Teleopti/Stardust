@@ -18,9 +18,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	this.EndTimeNextDay = ko.observable(false);
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
-	this.DateFormat = ko.computed(function () {
-		return dateFormat.format();
-	});
+	this.DateFormat = ko.observable(dateFormat.format());
 
 	//Interface....
 	this.DateFrom = function(date) {
