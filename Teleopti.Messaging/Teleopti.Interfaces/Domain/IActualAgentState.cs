@@ -24,7 +24,7 @@ namespace Teleopti.Interfaces.Domain
 		DateTime? BatchId { get; set; }
 		string OriginalDataSourceId { get; set; }
 
-		Guid BusinessUnit { get; set; }
+		Guid BusinessUnitId { get; set; }
 
 		bool InAdherence { get; }
 	}

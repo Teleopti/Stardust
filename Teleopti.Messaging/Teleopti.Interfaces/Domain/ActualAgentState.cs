@@ -13,8 +13,9 @@ namespace Teleopti.Interfaces.Domain
 		private string _scheduled = "";
 		private string _scheduledNext = "";
 		private string _alarmName = "";
-		
+
 		public Guid PersonId { get; set; }
+		public Guid BusinessUnitId { get; set; }
 		public string State
 		{
 			get { return _state; }
@@ -66,20 +67,19 @@ namespace Teleopti.Interfaces.Domain
 		public string OriginalDataSourceId { get; set; }
 		public DateTime? BatchId { get; set; }
 
-		public Guid BusinessUnit { get; set; }
 
 		public bool InAdherence { get { return StaffingEffect.Equals(0); } }
 
 		public override string ToString()
 		{
 			return BatchId.HasValue
-				       ? string.Format(CultureInfo.InvariantCulture,
-				                       "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}, BatchId: {8}",
-				                       PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart,
-				                       BatchId)
-				       : string.Format(CultureInfo.InvariantCulture,
-				                       "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}",
-				                       PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart);
+					   ? string.Format(CultureInfo.InvariantCulture,
+									   "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}, BatchId: {8}",
+									   PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart,
+									   BatchId)
+					   : string.Format(CultureInfo.InvariantCulture,
+									   "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}",
+									   PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart);
 		}
 
 	}

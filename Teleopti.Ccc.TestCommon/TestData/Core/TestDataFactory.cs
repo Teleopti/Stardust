@@ -36,6 +36,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			return AddPerson(name, new Name("Person", name));
 		}
 
+		public IEnumerable<PersonDataFactory> AllPersons()
+		{
+			return _persons.Values;
+		} 
+
 		protected PersonDataFactory AddPerson(string referenceName, Name actualName)
 		{
 			referenceName = trimName(referenceName);

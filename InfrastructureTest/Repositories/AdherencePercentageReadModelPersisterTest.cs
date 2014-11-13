@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldUpdateNullables()
+		public void ShouldSaveWithNullables()
 		{
 			var personGuid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
@@ -122,6 +122,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.IsLastTimeInAdherence = null;
 			model.LastTimestamp = null;
 
+			Target.Persist(model);
+
+			var savedModel = Target.Get(dateOnly, personGuid);
+			savedModel.IsLastTimeInAdherence.Should().Be(null);
+			savedModel.LastTimestamp.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldUpdateToNullables()
+		{
+			var personGuid = Guid.NewGuid();
+			var dateOnly = new DateOnly(2012, 8, 29);
+			var timeInAdherence = TimeSpan.FromMinutes(17);
+			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
+			var model = createReadModel(dateOnly, personGuid, new DateTime(2012, 8, 29, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
+			Target.Persist(model);
+
+			model.IsLastTimeInAdherence = null;
+			model.LastTimestamp = null;
 			Target.Persist(model);
 
 			var savedModel = Target.Get(dateOnly, personGuid);

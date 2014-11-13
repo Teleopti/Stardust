@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
 					ShiftEndTime = info.CurrentShiftEndTime,
-					BusinessUnitId = info.NewState.BusinessUnit,
+					BusinessUnitId = info.NewState.BusinessUnitId,
 					Datasource = _currentDataSource.CurrentName()
 				});
 			}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.PreviousShiftStartTime,
 					ShiftEndTime = info.PreviousShiftEndTime,
-					BusinessUnitId = info.NewState.BusinessUnit,
+					BusinessUnitId = info.NewState.BusinessUnitId,
 					Datasource = _currentDataSource.CurrentName()
 				});
 			}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					PersonId = agentState.PersonId,
 					Timestamp = agentState.ReceivedTime,
-					BusinessUnitId = agentState.BusinessUnit,
+					BusinessUnitId = agentState.BusinessUnitId,
 					Datasource = _currentDataSource.CurrentName()
 				};
 			else
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					PersonId = agentState.PersonId,
 					Timestamp = agentState.ReceivedTime,
-					BusinessUnitId = agentState.BusinessUnit,
+					BusinessUnitId = agentState.BusinessUnitId,
 					Datasource = _currentDataSource.CurrentName()
 				};
 

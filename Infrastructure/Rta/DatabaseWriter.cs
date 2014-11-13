@@ -211,13 +211,27 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			            Direction = ParameterDirection.Input,
 			            Value = DBNull.Value
 		            });
-	            command.Parameters.Add(new SqlParameter
+	            if (actualAgentState.OriginalDataSourceId == null)
 	            {
-		            ParameterName = "@OriginalDataSourceId",
-		            SqlDbType = SqlDbType.NVarChar,
-		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.OriginalDataSourceId
-	            });
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@OriginalDataSourceId",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = DBNull.Value
+					});
+				}
+	            else
+	            {
+					command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@OriginalDataSourceId",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = actualAgentState.OriginalDataSourceId
+					});
+				}
+
 	            command.ExecuteNonQuery();
 	            LoggingSvc.DebugFormat("Saved state: {0} to database", actualAgentState);
             }

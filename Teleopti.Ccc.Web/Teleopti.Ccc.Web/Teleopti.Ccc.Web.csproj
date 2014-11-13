@@ -481,7 +481,9 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\RtaTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\RtaTool\RtaToolAreaRegistration.cs" />
-    <Compile Include="Areas\Rta\Controllers\ServiceController.cs" />
+    <Compile Include="Areas\Rta\CheckForActivityChangeInputModel.cs" />
+    <Compile Include="Areas\Rta\Controllers\ActivityChangeController.cs" />
+    <Compile Include="Areas\Rta\Controllers\StateController.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializor.cs" />

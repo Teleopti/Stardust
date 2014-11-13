@@ -192,6 +192,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return result;
 		}
 
+		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
+		{
+			GetUpdatedScheduleChange(input.PersonId, input.BusinessUnitId, input.Timestamp);
+		}
+
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			Log.InfoFormat(

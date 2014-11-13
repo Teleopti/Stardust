@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
-				container.Resolve<ServiceController>()
+				container.Resolve<StateController>()
 					.Should().Not.Be.Null();
 			}
 		}

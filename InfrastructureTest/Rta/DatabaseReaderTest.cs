@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				AlarmName = "alarm",
 				AlarmStart = "2014-11-11 10:33".Utc(),
 				BatchId = "2014-11-11 10:34".Utc(),
-				BusinessUnit = Guid.NewGuid(),
+				BusinessUnitId = Guid.NewGuid(),
 				Color = 3,
 				NextStart = "2014-11-11 10:35".Utc(),
 				OriginalDataSourceId = "1",

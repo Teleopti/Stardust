@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"WHERE " +
 				"	PersonId = :PersonId AND " +
 				"	BelongsToDate =:Date")
-							  .SetGuid("PersonId", model.PersonId)
-							  .SetDateTime("Date", model.BelongsToDate)
-							  .SetDateTime("LastTimestamp", model.LastTimestamp.Value)
-							  .SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
-							  .SetParameter("TimeInAdherence", model.TimeInAdherence)
-							  .SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
-							  .SetParameter("ShiftHasEnded", model.ShiftHasEnded)
-							  .ExecuteUpdate();
+				.SetGuid("PersonId", model.PersonId)
+				.SetDateTime("Date", model.BelongsToDate)
+				.SetParameter("LastTimestamp", model.LastTimestamp)
+				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
+				.SetParameter("TimeInAdherence", model.TimeInAdherence)
+				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
+				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
+				.ExecuteUpdate();
 		}
 
 		private void saveReadModel(AdherencePercentageReadModel model)
@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	ShiftHasEnded " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
-				"	BelongsToDate =:Date "
-				)
+				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
@@ -109,9 +108,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateTime("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AdherencePercentageReadModel)))
 				.List<AdherencePercentageReadModel>();
-			return (AdherencePercentageReadModel) result.FirstOrNull();
+			return (AdherencePercentageReadModel)result.FirstOrNull();
 		}
 
-		
+
 	}
 }

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					a.PersonId,
 					a.StateCode,
 					a.PlatformTypeId,
-					a.BusinessUnit)
+					a.BusinessUnitId)
 				select a;
 			return agentsNotAlreadyLoggedOut;
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				PlatformTypeId = platformTypeId,
 				ReceivedTime = timestamp,
 				OriginalDataSourceId = originalSourceId,
-				BusinessUnit = businessUnitId
+				BusinessUnitId = businessUnitId
 			};
 
 			if (batchId.HasValue)

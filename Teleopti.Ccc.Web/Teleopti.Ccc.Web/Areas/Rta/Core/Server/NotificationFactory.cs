@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					DomainQualifiedType = type.AssemblyQualifiedName,
 					ModuleId = Subscription.IdToString(Guid.Empty),
 					DomainUpdateType = (int)DomainUpdateType.Insert,
-					BusinessUnitId = Subscription.IdToString(actualAgentState.BusinessUnit)
+					BusinessUnitId = Subscription.IdToString(actualAgentState.BusinessUnitId)
 				};
 			notification.SeralizeActualAgentState(actualAgentState);
 			return notification;

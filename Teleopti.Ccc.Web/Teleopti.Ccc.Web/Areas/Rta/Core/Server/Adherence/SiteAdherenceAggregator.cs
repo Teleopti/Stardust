@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		public Notification CreateNotification(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
 		{
 			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForSite(personOrganizationData.SiteId);
-			return createSiteNotification(numberOfOutOfAdherence, actualAgentState.BusinessUnit, personOrganizationData.SiteId);
+			return createSiteNotification(numberOfOutOfAdherence, actualAgentState.BusinessUnitId, personOrganizationData.SiteId);
 		}
 
 		private static Notification createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)

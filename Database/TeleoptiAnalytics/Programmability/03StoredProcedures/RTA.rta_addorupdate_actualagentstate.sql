@@ -55,6 +55,9 @@ BEGIN
            
            If @@ROWCOUNT = 0     
            insert into [RTA].[ActualAgentState]
+		   (PersonId, StateCode, PlatformTypeId, State, StateId, Scheduled, ScheduledId, StateStart,
+			ScheduledNext, ScheduledNextId, NextStart, AlarmName, AlarmId, Color, AlarmStart, StaffingEffect, 
+			ReceivedTime, BatchId, OriginalDataSourceId)
            values(@PersonId, @StateCode, @PlatformTypeId, @State, @StateId, @Scheduled, @ScheduledId, @StateStart,
 			@ScheduledNext, @ScheduledNextId, @NextStart, @AlarmName, @AlarmId, @Color, @AlarmStart, @StaffingEffect, 
 			@ReceivedTime, @BatchId, @OriginalDataSourceId)

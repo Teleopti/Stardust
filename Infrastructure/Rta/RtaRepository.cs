@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
                     .FirstOrDefault();
             }
         }
+
         public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
         {
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonShiftEndEvent @event)
+		public virtual void Handle(PersonShiftEndEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.ShiftEndTime, m =>
 			{

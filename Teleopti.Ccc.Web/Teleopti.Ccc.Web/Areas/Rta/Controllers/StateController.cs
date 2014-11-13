@@ -2,21 +2,20 @@
 using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Rta.WebService;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-    public class ServiceController : Controller
+    public class StateController : Controller
     {
 		private readonly TeleoptiRtaService _teleoptiRtaService;
 
-	    public ServiceController(TeleoptiRtaService teleoptiRtaService)
+	    public StateController(TeleoptiRtaService teleoptiRtaService)
 	    {
 		    _teleoptiRtaService = teleoptiRtaService;
 	    }
 
 		[HttpPost]
-		public JsonResult SaveExternalUserState(ExternalUserStateWebModel state)
+		public JsonResult Change(ExternalUserStateWebModel state)
 		{
 			var result = _teleoptiRtaService.SaveExternalUserState(
 				new ExternalUserStateInputModel

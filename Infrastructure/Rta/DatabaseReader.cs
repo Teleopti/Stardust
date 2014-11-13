@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				{
 					while (reader.Read())
 					{
-						var sqlDataReader = reader as SqlDataReader;
 						yield return new ActualAgentState
 						{
 							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
@@ -124,7 +123,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
 								? reader.GetDateTime(reader.GetOrdinal("BatchId"))
 								: (DateTime?) null,
-							OriginalDataSourceId = reader.GetString(reader.GetOrdinal("OriginalDataSourceId")),
+							OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
+								? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
+								: null,
 							AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
 							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
 							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				{
 					missingUsers.Add(new ActualAgentState
 						{
-							BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
+							BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
 							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
 							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
 							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
