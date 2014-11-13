@@ -62,11 +62,6 @@
 		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
 	</ItemGroup>
 
-	<PropertyGroup>
-	    <!--override, needs to be done after imports I think...-->
-		<DoCodeAnalysis>false</DoCodeAnalysis>
-	</PropertyGroup>
-
 	<ItemGroup>
 
 		<!-- TODO: update _all_ AssemblyInfos. This will not work until this is fixed: http://challenger:8080/tfs/web/wi.aspx?id=14648 -->
@@ -606,15 +601,6 @@
 		Properties="Configuration=$(Configuration);HtmlHelpName=Documentation" />
 		<Message Text="Generating SDK help file. Done"/>
 	</Target>
-
-	<!--
-  <Target Name="CreateDeployShare">
-	<Message Text="Create new directory for this build"/>
-	<Exec Command="MKDIR &quot;$(DeployPath)&quot;"/>
-	<Exec Command="MKDIR &quot;$(MSIPath)&quot;"/>
-	<Message Text="Create new directory for this build. done"/>
-  </Target>
--->
 
 	<!-- Note: Each Copy command have a corresponding set of files in the above "ItemGroup" -->
 	<Target Name="CopyFiles" DependsOnTargets="AllFilesIncluded">
