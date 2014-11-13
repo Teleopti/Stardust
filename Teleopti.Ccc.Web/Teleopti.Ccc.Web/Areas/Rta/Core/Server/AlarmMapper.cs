@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IDatabaseReader _databaseReader;
 		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IMbCacheFactory _mbCacheFactory;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(IAlarmMapper));
 
 		public AlarmMapper(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory)
 		{
@@ -61,17 +60,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId)
 		{
-			Logger.DebugFormat("Checking if agent is already in a stategroup marked as logged out state, personId: {0}", personId);
 			var state = GetStateGroup(stateCode, platformTypeId, businessUnitId);
-			if (state != null)
-			{
-				Logger.DebugFormat(state.IsLogOutState
-									  ? "Agent: {0} is already logged out"
-									  : "Agent: {0} is not logged out",
-								  personId);
-				return state.IsLogOutState;
-			}
-			return false;
+			return state != null && state.IsLogOutState;
 		}
 
 		private void invalidateStateGroupCache()

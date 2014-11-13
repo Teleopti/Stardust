@@ -60,6 +60,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return SaveBatchExternalUserState(state1.AuthenticationKey, state1.PlatformTypeId, state1.SourceId, new Collection<ExternalUserState>(new List<ExternalUserState>(states)));
 		}
 
+		public int SaveExternalUserStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
+		{
+			var state = states.First();
+			SaveBatchExternalUserState(state.AuthenticationKey, state.PlatformTypeId, state.SourceId, new Collection<ExternalUserState>(new List<ExternalUserState>(states)));
+			return SaveExternalUserState(new ExternalUserStateInputModel
+			{
+				AuthenticationKey = state.AuthenticationKey,
+				PlatformTypeId = state.PlatformTypeId,
+				SourceId = state.SourceId,
+				UserCode = "",
+				IsSnapshot = true,
+				BatchId = state.BatchId,
+				Timestamp = state.Timestamp
+			});
+		}
+
 		public int SaveExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ExternalUserState state)
 		{
 			return SaveExternalUserState(authenticationKey, state.UserCode, state.StateCode, state.StateDescription,

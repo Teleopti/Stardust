@@ -2,7 +2,9 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -19,10 +21,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, string name);
 		FakeRtaDatabase Make();
+	}
+
+	public static class FakeDatabaseBuilderExtensions
+	{
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder dataBuilder, string stateCode, Guid activityId)
+		{
+			return dataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null);
+		}
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
@@ -139,23 +150,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 			return this;
 		}
-
+		
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect)
 		{
-			return withAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null);
+			return WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null);
 		}
 
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId)
 		{
-			return withAlarm(stateCode, activityId, alarmId, 0, null);
+			return WithAlarm(stateCode, activityId, alarmId, 0, null);
 		}
 
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, string name)
 		{
-			return withAlarm(stateCode, activityId, Guid.NewGuid(), 0, name);
+			return WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, name);
 		}
 
-		private IFakeDataBuilder withAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name)
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name)
 		{
 			//putting all this logic here is just WRONG
 			var stateGroupId = Guid.NewGuid();
@@ -226,7 +237,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
-			yield break;
+			return from s in _actualAgentStates.ToList()
+				where s.OriginalDataSourceId == dataSourceId &&
+				      (s.BatchId < batchId ||
+					  s.BatchId == null)
+				select s;
 		}
 
 		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> ExternalLogOns()

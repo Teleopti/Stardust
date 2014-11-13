@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Helpers;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -32,6 +32,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveExternalUserState(state);
 
 			sender.LastNotification.DomainId.Should().Be(teamId.ToString());
+		}
+
+		[Test]
+		public void ShouldUpdateTeamAdherenceAfterLoggingOutAgentMissingFromSnapshot()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode1", Guid.NewGuid(), businessUnitId, teamId, siteId)
+				.WithUser("usercode2", personId, businessUnitId, teamId, siteId)
+				.WithAlarm("statecode", Guid.Empty, 1)
+				.WithAlarm("CCC Logged out", Guid.Empty, 0)
+				.Make();
+			var sender = new FakeMessageSender();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveExternalUserStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				{
+					UserCode = "usercode1",
+					StateCode = "statecode",
+				},
+				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				{
+					UserCode = "usercode2",
+					StateCode = "statecode",
+				}
+			});
+
+			target.SaveExternalUserStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				{
+					UserCode = "usercode1",
+					StateCode = "statecode",
+				}
+			});
+			
+			var jsonResult = JsonConvert.DeserializeObject<TeamAdherenceMessage>(sender.LastTeamNotification.BinaryData);
+			jsonResult.OutOfAdherence.Should().Be.EqualTo(1);
 		}
 
 		[Test]

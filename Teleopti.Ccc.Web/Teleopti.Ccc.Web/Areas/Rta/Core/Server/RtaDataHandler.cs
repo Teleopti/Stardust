@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private void handleClosingOfSnapshot(DateTime batchId, string sourceId)
 		{
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
-			foreach (var agent in missingAgents.Where(agent => agent != null))
+			foreach (var agent in missingAgents)
 			{
-				_databaseWriter.PersistActualAgentState(agent);
-				send(new StateInfo { NewState = agent });
+				var state = getState(agent.PersonId, agent.BusinessUnit, "CCC Logged out", TimeSpan.Zero, batchId,agent.PlatformTypeId, sourceId, batchId);
+				send(state);
 			}
 		}
 
@@ -207,10 +207,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			// this means closing of snapshot, and aggregation and events doesnt work here.
 			// BUG
-			if (state.ScheduleLayers == null)
-				return;
 
 			_adherenceAggregator.Aggregate(state.NewState);
+
+
+			if (state.ScheduleLayers == null)
+				return;
 			
 			_eventPublisher.Publish(state);
 		}
