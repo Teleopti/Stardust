@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using MbCache.Core;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
@@ -100,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents)
 			{
-				var state = getState(agent.PersonId, agent.BusinessUnit, "CCC Logged out", TimeSpan.Zero, batchId,agent.PlatformTypeId, sourceId, batchId);
+				var state = getState(agent.PersonId, agent.BusinessUnitId, "CCC Logged out", TimeSpan.Zero, batchId,agent.PlatformTypeId, sourceId, batchId);
 				send(state);
 			}
 		}
