@@ -11,7 +11,7 @@
 		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
-		<AzureDBNamePrefix>$(CCNetProject)</AzureDBNamePrefix>
+		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 		<DbManagerExe>$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Release\DBManager.exe</DbManagerExe>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>	
 	</PropertyGroup>

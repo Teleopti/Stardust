@@ -20,12 +20,12 @@ RMDIR %TargetDir% /S /Q
 MKDIR %TargetDir%
 
 ::replace dbnames
-ECHO "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%"
-CALL "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%"
+ECHO "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%" %config%
+CALL "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%" %config%
 
 ::fix some special stuff
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "c:\nhib" "%TargetDir%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
 cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Data Source=.;Integrated Security=SSPI" "%SQL_AUTH_STRING%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
 
-ECHO "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
+ECHO.
 "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug

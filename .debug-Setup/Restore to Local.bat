@@ -15,6 +15,7 @@ SET SqlInstanceName=%5
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%SqlInstanceName%
 IF "%INSTANCE%"=="" SET INSTANCE=%COMPUTERNAME%
+IF "%temp%"=="" SET temp=C:\Temp\Build
 
 IF "%Silent%"=="" SET /A Silent=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
@@ -65,15 +66,17 @@ CD "%ROOTDIR%"
 IF EXIST DBManager*.log DEL DBManager*.log /Q
 
 ::Build DbManager, include double quotes for IF to work?!
-ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
-IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
-IF %ERRORLEVEL% EQU 0 (
-SET DATABASEPATH="%ROOTDIR%\..\Database"
-SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%configuration%\DBManager.exe"
-SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%configuration%"
-) else (
-SET /A ERRORLEV=6
-GOTO :error
+SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%\DBManager.exe"
+IF NOT EXIST DBMANAGER (
+	ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
+	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
+	IF %ERRORLEVEL% EQU 0 (
+	SET DATABASEPATH="%ROOTDIR%\..\Database"
+	SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%"
+	) else (
+	SET /A ERRORLEV=6
+	GOTO :error
+	)
 )
 
 ::remove double quotes
@@ -296,8 +299,10 @@ CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
-IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
+IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" (
+	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
+	IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
+)
 
 "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" -EE >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
@@ -356,7 +361,7 @@ SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\databas
 )
 
 ::FixMyConfig
-ECHO.
+ECHO FixMyConfig
 CHOICE /C yn /M "Fix my config?"
 IF ERRORLEVEL 2 GOTO Finish
 IF ERRORLEVEL 1 (

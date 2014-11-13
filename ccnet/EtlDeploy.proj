@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--EXTERNAL_PROPERTIES: CCNetProject;CCNetWorkingDirectory-->
 
-<Project DefaultTargets="Run" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="RunETL" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
 		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
@@ -9,12 +9,12 @@
 		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
-		<ETLNightlyBuild-InstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-InstallSvc.cmd"</ETLNightlyBuild-InstallSvcCmd>
-		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd>
+		<!-- <ETLNightlyBuild-InstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-InstallSvc.cmd"</ETLNightlyBuild-InstallSvcCmd>
+		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd> -->
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
 		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2014</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
-		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
+		<ETLServiceBinDir>$(CCNetWorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETLServiceBinDir>
 		<ETLCCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</ETLCCC7DB>
 		<ETLAnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</ETLAnalyticsDB>
 		<ETLAggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</ETLAggDB>
@@ -26,19 +26,18 @@
 		<BakDir>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\DemoDatabase</BakDir>
 		<LogObjectId>1</LogObjectId>
 		<RestoreToLocal>"$(CCNetWorkingDirectory)\.debug-Setup\Restore to Local.bat"</RestoreToLocal>
-		<Configuration>Release</Configuration>
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
-	<Target Name="Run" DependsOnTargets="RunETL">
-	</Target>
 	<Target Name="RunETL" DependsOnTargets="ETLCompile;RestoreToLocal;MoveOneLogObject">
 		<!-- Un-Install ETL Service-->
-		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		<!-- <Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/> -->
 		<!-- Install ETL Service-->
-		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
- 		<Exec Command ="NET START AnalyticsEtlService"/>
+		<!-- <Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/> -->
+ 		<!-- <Exec Command ="NET START AnalyticsEtlService"/> -->
+		<Exec Command ="$(ETLServiceBinDir)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe"/>
+		
 		<CallTarget Targets="AddSchedule"/>
  	<!--
  	This is our Test!!!
@@ -48,9 +47,9 @@
  		<!-- Clean up-->
  		<!--Sleep for 10 secs then STOP service-->
  		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
- 		<Exec Command ="NET STOP AnalyticsEtlService"/>
+ 		<!-- <Exec Command ="NET STOP AnalyticsEtlService"/> -->
 		<!-- Un-Install ETL Service-->
-		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
+		<!-- <Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/> -->
 	</Target>
 	
   		<!-- 
@@ -80,12 +79,12 @@
 		<CallTarget Targets="PreCompile" />
 		<CallTarget Targets="PrepareFiles" />
 	
-		<ItemGroup>
+		<!-- <ItemGroup>
 			<ETLServiceFiles Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*"/>
 		</ItemGroup>
 		
 		<Copy	SourceFiles="@(ETLServiceFiles)"
-			DestinationFiles="@(ETLServiceFiles->'$(ETLServiceBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+			DestinationFiles="@(ETLServiceFiles->'$(ETLServiceBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"/> -->
 
 	</Target>
 
