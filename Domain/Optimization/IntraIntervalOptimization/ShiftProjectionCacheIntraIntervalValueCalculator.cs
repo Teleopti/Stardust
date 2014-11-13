@@ -12,9 +12,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	{
 		public double Calculate(IList<int> samplesBefore, IList<int> samplesToAdd)
 		{
-			var minBefore = double.MaxValue;
-			var maxBefore = double.MinValue;
-
 			var minAfter = double.MaxValue;
 			var maxAfter = double.MinValue;
 
@@ -28,19 +25,12 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			var samplesAfter = samplesBefore.Select((t, i) => t + samplesToAdd[i]).ToList();
 
-			foreach (var i in samplesBefore)
-			{
-				if (i < minBefore) minBefore = i;
-				if (i > maxBefore) maxBefore = i;
-			}
-
 			foreach (var i in samplesAfter)
 			{
 				if (i < minAfter) minAfter = i;
 				if (i > maxAfter) maxAfter = i;
 			}
 
-			var valueBefore = minBefore / maxBefore;
 			var valueAfter = minAfter / maxAfter;
 
 			return valueAfter;

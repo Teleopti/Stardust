@@ -16,14 +16,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private ISkill _skill;
 		private DateOnly _dateOnly;
 		private IntraIntervalIssueCalculator _target;
-		private ISkillDay _skillDayBefore;
 		private ISkillDay _skillDay;
 		private ISkillDay _skillDayAfter;
 		private IList<ISkillDay> _skillDays;
 		private IList<ISkillDay> _skillDaysAfter;
 		private IList<ISkillStaffPeriod> _skillStaffPeriods;
 		private IList<ISkillStaffPeriod> _skillStaffPeriodsAfter;
-		private ISkillStaffPeriod _skillStaffPeriodBefore;
 		private ISkillStaffPeriod _skillStaffPeriod;
 		private ISkillStaffPeriod _skillStaffPeriodAfter;
 		
@@ -36,12 +34,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 			_skill = SkillFactory.CreateSkill("skill");
 			_dateOnly = new DateOnly(2014, 1, 1);
-			_skillDayBefore = _mock.StrictMock<ISkillDay>();
 			_skillDay = _mock.StrictMock<ISkillDay>();
 			_skillDayAfter = _mock.StrictMock<ISkillDay>();
 			_skillDays = new List<ISkillDay> { _skillDay };
 			_skillDaysAfter = new List<ISkillDay> { _skillDayAfter };
-			_skillStaffPeriodBefore = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriodAfter = _mock.StrictMock<ISkillStaffPeriod>();
 			_skillStaffPeriods = new List<ISkillStaffPeriod> { _skillStaffPeriod };
@@ -64,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			using (_mock.Playback())
 			{
 				var result = _target.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly);
-
 				Assert.AreEqual(_skillStaffPeriods, result.IssuesOnDay);
 				Assert.AreEqual(_skillStaffPeriodsAfter, result.IssuesOnDayAfter);
 			}

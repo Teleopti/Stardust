@@ -145,5 +145,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Assert.AreEqual(0d, result.Value);
 			}
 		}
+
+		[Test]
+		public void ShouldReturnNullWhenCouldNotFindAnyAffectedPeriods()
+		{
+			var affectedPeriods1 = new List<DateTimePeriod>();
+			
+			using (_mock.Record())
+			{
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache1, _skill)).Return(affectedPeriods1);
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache2, _skill)).Return(affectedPeriods1);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> { _skillStaffPeriod1 }, _skill, 0.8);
+				Assert.IsNull(result);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenNoShifts()
+		{
+			_sortedListResources.Clear();
+			var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> { _skillStaffPeriod1 }, _skill, 0.8);
+			Assert.IsNull(result);		
+		}
 	}
 }

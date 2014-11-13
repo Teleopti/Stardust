@@ -15,17 +15,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_target = new ShiftProjectionCacheIntraIntervalValueCalculator();	
 		}
 
-		[Ignore, Test]
+		[Test]
 		public void ShouldCalculate()
 		{
 			var samplesBefore = new List<int> {1, 1, 1, 10};
 			var samplesToAdd = new List<int> {1, 1, 1, 5};
-			const double valueBefore = 1 / 10d;
 			const double valueAfter = 2 / 15d;
-			const double expectedValue = valueBefore - valueAfter;
-
 			var result = _target.Calculate(samplesBefore, samplesToAdd);
-			Assert.AreEqual(expectedValue, result);
+			Assert.AreEqual(valueAfter, result);
+		}
+
+		[Test]
+		public void ShouldFillSamplesBeforeIfNoValues()
+		{
+			var samplesBefore = new List<int>();
+			var samplesToAdd = new List<int> { 0, 0, 0, 0 };
+			const double valueAfter = 1 / 1d;
+			var result = _target.Calculate(samplesBefore, samplesToAdd);
+			Assert.AreEqual(valueAfter, result);
 		}
 	}
 }

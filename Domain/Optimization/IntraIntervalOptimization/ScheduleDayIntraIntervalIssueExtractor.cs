@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
@@ -28,35 +27,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			if (!scheduleDay.SignificantPart().Equals(SchedulePartView.MainShift)) return;
 
-
-			
-
-			//var projection = scheduleDay.ProjectionService().CreateProjection();
-
 			foreach (var skillStaffPeriod in issues)
 			{
-				//var found = false;
-
 				if (scheduleDay.PersonAssignment().Period.Intersect(skillStaffPeriod.Period))
 				{
 					result.Add(scheduleDay);
 					break;
-				}
-
-				//foreach (var visualLayer in projection)
-				//{
-				//	if (visualLayer.Period.Contains(skillStaffPeriod.Period)) continue;
-				//	if (visualLayer.Period.Intersect(skillStaffPeriod.Period))
-				//	{
-				//		var activity = visualLayer.Payload as Activity;
-				//		if (activity != null && activity.Equals(skill.Activity)) continue;
-				//		result.Add(scheduleDay);
-				//		found = true;
-				//		break;
-				//	}
-				//}
-
-				//if (found) break;
+				}		
 			}
 		}
 	}

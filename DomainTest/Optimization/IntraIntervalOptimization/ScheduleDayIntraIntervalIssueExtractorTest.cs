@@ -67,40 +67,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			}
 		}
 
-		[Ignore, Test]
-		public void ShouldNotExtractWhenMainActivityMatchSkillActivity()
+		[Test]
+		public void ShouldNotExtractWhenNoMainShift()
 		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod.Period).Return(_intervalPeriod).Repeat.AtLeastOnce();
-			}
-
-			using (_mock.Playback())
-			{
-				_skill.Activity = _mainActivity;
-				var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues, _skill);
-				Assert.AreEqual(0, result.Count);
-			}	
-		}
-
-		[Ignore, Test]
-		public void ShouldNotExtractWhenMainPeriodContainsIntervalPeriod()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriod.Period).Return(_mainShiftPeriod).Repeat.AtLeastOnce();
-			}
-
-			using (_mock.Playback())
-			{
-				_skill.Activity = _mainActivity;
-				var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues, _skill);
-				Assert.AreEqual(0, result.Count);
-			}
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _mainShiftPeriod);
+			_scheduleDictionary = ScheduleDictionaryForTest.WithPersonAbsence(_scenario, _mainShiftPeriod, personAbsence);
+			_skill.Activity = _mainActivity;
+			var result = _target.Extract(_scheduleDictionary, _dateOnly, _issues, _skill);
+			Assert.AreEqual(0, result.Count);
 		}
 
 		[Test]
-		public void ShouldNotExtractWhenMainPeriodDontIntersectIntervalPeriod()
+		public void ShouldNotExtractWhenPersonAssingmentDontIntersectIntervalPeriod()
 		{
 			using (_mock.Record())
 			{

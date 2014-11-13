@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 	{
 		private IntraIntervalOptimizationService _target;
 		private MockRepository _mock;
-		private ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private IIntraIntervalOptimizer _intraIntervalOptimizer;
 		private ISchedulingOptions _schedulingOptions;
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		public void SetUp()
 		{
 			_mock = new MockRepository();
-			_skillDayIntraIntervalIssueExtractor = _mock.StrictMock<ISkillDayIntraIntervalIssueExtractor>();
 			_scheduleDayIntraIntervalIssueExtractor = _mock.StrictMock<IScheduleDayIntraIntervalIssueExtractor>();
 			_intraIntervalOptimizer = _mock.StrictMock<IIntraIntervalOptimizer>();
 			_intervalIssueCalculator = _mock.StrictMock<IIntraIntervalIssueCalculator>();
