@@ -22675,6 +22675,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Trade Bulletin Board.
+        /// </summary>
+        public static string ShiftTradeBulletinBoard {
+            get {
+                return ResourceManager.GetString("ShiftTradeBulletinBoard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade denied because shifts are on different dates..
         /// </summary>
         public static string ShiftTradeDifferentDateDenyReason {

@@ -12452,4 +12452,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="AbsenceCanNotBeReported" xml:space="preserve">
     <value>Absence can not be reported.</value>
   </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Shift Trade Bulletin Board</value>
+    <comment>use in MyTimeWeb request model, a new board for shift trade bulletin</comment>
+  </data>
 </root>

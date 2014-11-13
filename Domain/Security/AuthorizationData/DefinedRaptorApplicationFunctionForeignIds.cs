@@ -112,6 +112,7 @@
 		public const string AgentScheduleMessenger = "0078";
 		public const string ExtendedPreferencesWeb = "0079";
 		public const string ShiftTradeRequestsWeb = "0083";
+		public const string ShiftTradeBulletinBoard = "0104";
 		public const string ViewAllGroupPages = "0084";
 		public const string ShareCalendar = "0088";
 		public const string OvertimeAvailabilityWeb = "0089";
