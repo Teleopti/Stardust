@@ -832,6 +832,7 @@
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
+    <Compile Include="Messages\Requests\NewAbsenceReportCreated.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\MessageWithLogOnInfo.cs" />

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -21,13 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly INow _now;
 		private readonly IOvertimeAvailabilityPersister _overtimeAvailabilityPersister;
+		private readonly IAbsenceReportPersister _absenceReportPersister;
 
-		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, IRequestsViewModelFactory requestsViewModelFactory, INow now, IOvertimeAvailabilityPersister overtimeAvailabilityPersister)
+		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, IRequestsViewModelFactory requestsViewModelFactory, INow now, IOvertimeAvailabilityPersister overtimeAvailabilityPersister, IAbsenceReportPersister absenceReportPersister)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_now = now;
 			_overtimeAvailabilityPersister = overtimeAvailabilityPersister;
+			_absenceReportPersister = absenceReportPersister;
 		}
 
 		[EnsureInPortal]
@@ -83,6 +86,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return ModelState.ToJson();
 			}
 			return Json(_overtimeAvailabilityPersister.Persist(input), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPost]
+		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.AbsenceReport)]
+		public JsonResult ReportAbsence(AbsenceReportInput input)
+		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			try
+			{
+				return Json(_absenceReportPersister.Persist(input), JsonRequestBehavior.AllowGet);
+			}
+			catch (InvalidOperationException e)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return e.ExceptionToJson(Resources.AbsenceCanNotBeReported);
+			}
 		}
 
 		[UnitOfWorkAction]

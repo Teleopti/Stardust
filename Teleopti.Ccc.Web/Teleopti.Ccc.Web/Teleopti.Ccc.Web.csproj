@@ -453,6 +453,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceReportPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
@@ -469,6 +471,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestReplyForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelDataForAllTeams.cs" />
+    <Compile Include="Areas\MyTime\Models\WeekSchedule\AbsenceReportInput.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />

@@ -12449,4 +12449,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Allowed absences for absence report</value>
     <comment>Label in workflow control set</comment>
   </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Absence can not be reported.</value>
+  </data>
 </root>
