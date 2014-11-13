@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit )).Return(true);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorseX(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
 			}
 
 			using (_mock.Playback())
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(true);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorseX(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
 			}
 
 			using (_mock.Playback())
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
-				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorseX(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(true);
+				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(true);
 
 				Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);

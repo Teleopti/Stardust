@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	public interface IIntraIntervalOptimizer
 	{
 		IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
-		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
 	public class IntraIntervalOptimizer : IIntraIntervalOptimizer
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
-		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -98,14 +96,14 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			if (!checkDayAfter)
 			{
 				var betterToday = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
-				var worseDayAfter = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
+				var worseDayAfter = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
 				worse = !betterToday || worseDayAfter;
 
 			}
 			if (checkDayAfter)
 			{
 				var betterDayAfter = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
-				var worseToday = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+				var worseToday = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
 				worse = !betterDayAfter || worseToday;
 			}
 

@@ -32,15 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
 			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 
-			skillStaffPeriod1.HasIntraIntervalIssue = true;
-			skillStaffPeriod2.HasIntraIntervalIssue = true;
-			skillStaffPeriod3.HasIntraIntervalIssue = true;
-			skillStaffPeriod4.HasIntraIntervalIssue = true;
-
 			skillStaffPeriod1.IntraIntervalValue = 0.5;
 			skillStaffPeriod2.IntraIntervalValue = 0.5;
-			skillStaffPeriod3.IntraIntervalValue = 0.9;
-			skillStaffPeriod4.IntraIntervalValue = 0.5;
+
+			skillStaffPeriod3.IntraIntervalValue = 0.6;
+			skillStaffPeriod4.IntraIntervalValue = 0.6;
 
 			var listBefore = new List<ISkillStaffPeriod>{skillStaffPeriod1, skillStaffPeriod2};
 			var listAfter = new List<ISkillStaffPeriod>{skillStaffPeriod3, skillStaffPeriod4};
@@ -50,116 +46,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		}
 
 		[Test]
-		public void ShouldReturnTrueWhenPeriodIsWorseAndCheckingForWorse()
+		public void ShouldReturnTrueWhenPeriodIsWorse()
 		{
 			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
 			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
 			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
 
-			skillStaffPeriod1.HasIntraIntervalIssue = true;
-			skillStaffPeriod2.HasIntraIntervalIssue = true;
-			skillStaffPeriod3.HasIntraIntervalIssue = true;
-			skillStaffPeriod4.HasIntraIntervalIssue = true;
-
 			skillStaffPeriod1.IntraIntervalValue = 0.5;
-			skillStaffPeriod2.IntraIntervalValue = 0.9;
-			skillStaffPeriod3.IntraIntervalValue = 0.9;
-			skillStaffPeriod4.IntraIntervalValue = 0.5;
+			skillStaffPeriod2.IntraIntervalValue = 0.5;
 
-			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 };
-			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
-
-			var result = _target.ResultIsWorse(listBefore, listAfter);
-			Assert.IsTrue(result);	
-		}
-
-		[Test]
-		public void ShouldReturnFalseWhenPeriodIsWorseAndCheckingForBetter()
-		{
-			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
-			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
-			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
-			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
-
-			skillStaffPeriod1.HasIntraIntervalIssue = true;
-			skillStaffPeriod2.HasIntraIntervalIssue = true;
-			skillStaffPeriod3.HasIntraIntervalIssue = true;
-			skillStaffPeriod4.HasIntraIntervalIssue = true;
-
-			skillStaffPeriod1.IntraIntervalValue = 0.5;
-			skillStaffPeriod2.IntraIntervalValue = 0.9;
-			skillStaffPeriod3.IntraIntervalValue = 0.9;
-			skillStaffPeriod4.IntraIntervalValue = 0.5;
-
-			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 };
-			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
-
-			var result = _target.ResultIsBetter(listBefore, listAfter, _limit);
-			Assert.IsFalse(result);
-		}
-
-		[Test]
-		public void ShouldReturnFalseWhenPeriodIsEven()
-		{
-			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
-			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
-			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
-			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
-
-			skillStaffPeriod1.HasIntraIntervalIssue = true;
-			skillStaffPeriod2.HasIntraIntervalIssue = true;
-			skillStaffPeriod3.HasIntraIntervalIssue = true;
-			skillStaffPeriod4.HasIntraIntervalIssue = true;
-
-			skillStaffPeriod1.IntraIntervalValue = 0.5;
-			skillStaffPeriod2.IntraIntervalValue = 0.9;
 			skillStaffPeriod3.IntraIntervalValue = 0.5;
-			skillStaffPeriod4.IntraIntervalValue = 0.9;
+			skillStaffPeriod4.IntraIntervalValue = 0.4;
 
 			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2 };
 			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
 
-			var result = _target.ResultIsBetter(listBefore, listAfter, _limit);
-			Assert.IsFalse(result);
-		}
-
-		[Ignore, Test]
-		public void ShouldReturnFalseWhenMoreNewPeriods()
-		{
-			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
-			var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period1, new Task(), new ServiceAgreement());
-			var skillStaffPeriod4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_period2, new Task(), new ServiceAgreement());
-
-			skillStaffPeriod1.HasIntraIntervalIssue = true;
-			skillStaffPeriod3.HasIntraIntervalIssue = true;
-			skillStaffPeriod4.HasIntraIntervalIssue = true;
-
-			skillStaffPeriod1.IntraIntervalValue = 0.5;
-			skillStaffPeriod3.IntraIntervalValue = 0.9;
-			skillStaffPeriod4.IntraIntervalValue = 0.9;
-
-			var listBefore = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
-			var listAfter = new List<ISkillStaffPeriod> { skillStaffPeriod3, skillStaffPeriod4 };
-
-			var result = _target.ResultIsBetter(listBefore, listAfter, _limit);
-			Assert.IsFalse(result);
-		}
-
-		[Test]
-		public void ShouldReturnBetterIfNumberOfIssuesIsLessAndAnyExistingIssueIsNotWorse()
-		{
-			var period1 = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 9);
-			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period1, new Task(), new ServiceAgreement());
-			skillStaffPeriod1.HasIntraIntervalIssue = true;
-			skillStaffPeriod1.IntraIntervalValue = 0.773;
-			var period2 = new DateTimePeriod(2014, 1, 1, 20, 2014, 1, 1, 21);
-			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period2, new Task(), new ServiceAgreement());
-			skillStaffPeriod2.HasIntraIntervalIssue = true;
-			skillStaffPeriod2.IntraIntervalValue = 0.727;
-			var listBefore = new List<ISkillStaffPeriod> {skillStaffPeriod1, skillStaffPeriod2};
-			var listAfter = new List<ISkillStaffPeriod> {skillStaffPeriod2 };
-			Assert.IsTrue(_target.ResultIsBetter(listBefore, listAfter, _limit));
+			var result = _target.ResultIsWorse(listBefore, listAfter, _limit);
+			Assert.IsTrue(result);
 		}	
 	}
 }
