@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class ActualAgentAssembler
 	{
-		protected IAlarmMapper AlarmMapper;
+		protected AlarmMapper AlarmMapper;
 		protected IDatabaseReader DatabaseReader;
 
 		public ActualAgentAssembler(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory)

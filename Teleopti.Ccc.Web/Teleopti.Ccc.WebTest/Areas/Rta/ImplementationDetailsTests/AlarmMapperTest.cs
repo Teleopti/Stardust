@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests
 	[TestFixture]
 	public class AlarmMapperTest
 	{
-		private IAlarmMapper _target;
+		private AlarmMapper _target;
 		private IDatabaseReader _databaseReader;
 		private IMbCacheFactory _cacheFactory;
 
