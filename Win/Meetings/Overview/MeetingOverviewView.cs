@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             
            scheduleControl1.Calendar.Visible = false;
             _calendarAndTextPanel.BringToFront();
-           scheduleControl1.Culture = CultureInfo.CurrentUICulture;
+           scheduleControl1.Culture = TeleoptiPrincipal.Current.Regional.Culture;
 		   scheduleControl1.Appearance.WorkWeekHeaderFormat = "d dddd";
            selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
            if (scheduleControl1.RightToLeft == RightToLeft.Yes)
