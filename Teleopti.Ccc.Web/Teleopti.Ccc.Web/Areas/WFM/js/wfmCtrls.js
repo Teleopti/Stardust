@@ -27,7 +27,7 @@ wfmCtrls.controller('ForecastingRunCtrl', [ '$scope', '$stateParams','$http',
             //api/Forecasting/forecast/QuickForecast
             $http.post('../../api/Forecasting/forecast', JSON.stringify({ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate})).
                 success(function(data, status, headers, config) {
-                    $scope.result = {success: true, message: 'You now have an updated forecast in your default scenario.'};
+                    $scope.result = {success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.'};
                 }).
                 error(function(data, status, headers, config) {
                     $scope.result = {success: false, message: 'The forecast has failed. Please try again later'};
