@@ -2,9 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -16,24 +14,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder WithSource(string sourceId);
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
-		IFakeDataBuilder WithUser(string userCode);
-		IFakeDataBuilder WithUser(string userCode, Guid personId);
-		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, string name);
 		FakeRtaDatabase Make();
-	}
-
-	public static class FakeDatabaseBuilderExtensions
-	{
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder dataBuilder, string stateCode, Guid activityId)
-		{
-			return dataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null);
-		}
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
@@ -43,10 +27,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
 		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
-		private readonly List<ScheduleLayer2> _schedules = new List<ScheduleLayer2>();
+		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
 
-		private class ScheduleLayer2
+		private class scheduleLayer2
 		{
 			public Guid PersonId { get; set; }
 			public ScheduleLayer ScheduleLayer { get; set; }
@@ -73,8 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state)
 		{
 			WithDefaultsFromState(state);
-			WithUser(state.UserCode, Guid.NewGuid());
-			return this;
+			return this.WithUser(state.UserCode, Guid.NewGuid());
 		}
 
 		public IFakeDataBuilder WithSource(string sourceId)
@@ -88,22 +71,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IFakeDataBuilder WithBusinessUnit(Guid businessUnitId)
 		{
 			_businessUnitId = businessUnitId;
-			return this;
-		}
-
-		public IFakeDataBuilder WithUser(string userCode)
-		{
-			return WithUser(userCode, Guid.NewGuid(), null, null, null);
-		}
-
-		public IFakeDataBuilder WithUser(string userCode, Guid personId)
-		{
-			return WithUser(userCode, personId, null, null, null);
-		}
-
-		public IFakeDataBuilder WithUser(string userCode, Guid personId, Guid businessUnitId)
-		{
-			WithUser(userCode, personId, businessUnitId, null, null);
 			return this;
 		}
 
@@ -137,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, DateTime start, DateTime end)
 		{
-			_schedules.Add(new ScheduleLayer2
+			_schedules.Add(new scheduleLayer2
 			{
 				PersonId = personId,
 				ScheduleLayer = new ScheduleLayer
@@ -149,21 +116,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				}
 			});
 			return this;
-		}
-		
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, double staffingEffect)
-		{
-			return WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null);
-		}
-
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId)
-		{
-			return WithAlarm(stateCode, activityId, alarmId, 0, null);
-		}
-
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, string name)
-		{
-			return WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, name);
 		}
 
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name)
@@ -206,6 +158,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			return this;
 		}
+
+
 
 		public IActualAgentState GetCurrentActualAgentState(Guid personId)
 		{
@@ -277,7 +231,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			return _personOrganizationData;
 		}
+	}
 
+	public static class FakeDatabaseBuilderExtensions
+	{
+		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode)
+		{
+			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null);
+		}
+
+		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode, Guid personId)
+		{
+			return fakeDataBuilder.WithUser(userCode, personId, null, null, null);
+		}
+
+		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode, Guid personId, Guid businessUnitId)
+		{
+			return fakeDataBuilder.WithUser(userCode, personId, businessUnitId, null, null);
+		}
+
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null);
+		}
+
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, double staffingEffect)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null);
+		}
+
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, Guid alarmId)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, alarmId, 0, null);
+		}
+
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, string name)
+		{
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, name);
+		}
 	}
 
 }
