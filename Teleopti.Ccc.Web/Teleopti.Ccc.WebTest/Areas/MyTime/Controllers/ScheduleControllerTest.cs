@@ -165,5 +165,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				model.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
 			}
 		}
+
+		[Test]
+		public void ShouldPersistAbsenceReport()
+		{
+			var absenceReportPersister = MockRepository.GenerateMock<IAbsenceReportPersister>();
+			var input = new AbsenceReportInput();
+			var absenceReportViewModel = new AbsenceReportViewModel();
+			absenceReportPersister.Stub(x => x.Persist(input)).Return(absenceReportViewModel);
+			using (var target = new ScheduleController(null, null, null, null, absenceReportPersister))
+			{
+				var model = target.ReportAbsence(input).Data as AbsenceReportViewModel;
+				model.Should().Be.SameInstanceAs(absenceReportViewModel);
+			}
+		}
 	}
 }
