@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             target.LoadFactQueues();
         }
 
-		  [Test, Ignore("failed from 2014-11-13, something related time?")]
+		  [Test]
 		  public void CheckForecastDifferShouldWork()
 		  {
 			  target.ForecastActualDifferNotifications();

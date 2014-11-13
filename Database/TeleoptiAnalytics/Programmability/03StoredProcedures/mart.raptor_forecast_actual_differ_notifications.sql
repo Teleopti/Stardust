@@ -19,12 +19,14 @@ declare @TheSubject nvarchar(200), @TheBody nvarchar(2000)
 select @scenario_id = scenario_id from dim_scenario where default_scenario = 1
 select @time_zone_id = time_zone_id from mart.dim_time_zone where time_zone_code = 'W. Europe Standard Time'
 
+CREATE TABLE #output(Receiver nvarchar(200), [Subject] nvarchar(500), Body nvarchar(1000))
 
-
+SET NOCOUNT ON
 if @date_from is NULL
 begin
 	if datepart(hour,getdate()) not between 10 and 16
 	begin
+	SELECT * FROM #output
 		return
 	end
 	select @date_from = convert(nvarchar(8),getdate(),112)
@@ -35,9 +37,9 @@ begin
 	select @interval_from = @interval_to - 3
 end
 
-SET NOCOUNT ON
 
-CREATE TABLE #output(Receiver nvarchar(200), [Subject] nvarchar(500), Body nvarchar(1000))
+
+
 
 CREATE TABLE #skills(id int)
 CREATE TABLE #workloads(id int)
