@@ -116,6 +116,16 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
             }
         }
 
+	    public double NowTimeOpacity
+	    {
+			get { return _nowTimeOpacity; }
+		    set
+		    {
+			    _nowTimeOpacity = value;
+				NotifyPropertyChanged("NowTimeOpacity");
+		    }
+	    }
+
         public DateTimePeriod SelectedPeriod
         {
             get { return _selecteDateTimePeriod; }
@@ -264,8 +274,9 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
         private bool _showLayers;
         private bool _showSelectedPeriod;
         private bool _showHoverTime;
+	    private double _nowTimeOpacity = 1;
 
-        private static IList<DateTimePeriod> EvenHourPeriodsInCurrentTimeZone(DateTimePeriod period, TimeZoneInfo info)
+	    private static IList<DateTimePeriod> EvenHourPeriodsInCurrentTimeZone(DateTimePeriod period, TimeZoneInfo info)
         {
             //We must check from the Gui if the timezone has different minutes:
             //Henrik 2009-04-01 This needs some refactoring and rethinking

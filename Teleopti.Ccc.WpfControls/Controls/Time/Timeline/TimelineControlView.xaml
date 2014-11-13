@@ -339,7 +339,8 @@
 									 Grid.ColumnSpan="2"
 									 Grid.RowSpan="2"
 									 IsHitTestVisible="False"
-									 Background="Transparent">
+									 Background="Transparent"
+									 Opacity="{Binding Path=NowTimeOpacity}">
 			<Panel.Style>
 				<Style TargetType="Panel">
 					<Style.Triggers>
