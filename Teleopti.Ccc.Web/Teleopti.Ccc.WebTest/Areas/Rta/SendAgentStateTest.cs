@@ -347,5 +347,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(activityId);
 		}
+
+		[Test, Ignore]
+		public void ShouldUseAlarmForNoScheudledAcitivtyWhenNoScheduledActivity()
+		{
+
+		}
+
+		[Test, Ignore]
+		public void ShouldUseDefaultStateGroupIfStateCodeIsNotRecognized()
+		{
+
+		}
 	}
 }

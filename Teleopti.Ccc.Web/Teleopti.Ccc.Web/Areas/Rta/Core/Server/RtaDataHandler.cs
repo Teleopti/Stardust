@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			{
 				loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId, sourceId);
 				handleClosingOfSnapshot(batchId, sourceId);
-				return 0;
+				return 1;
 			}
 
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
@@ -196,23 +196,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void send(StateInfo state)
 		{
-			_databaseWriter.PersistActualAgentState(state.NewState);
-
 			loggingSvc.InfoFormat("Sending message: {0} ", state.NewState);
 
-			var notification = NotificationFactory.CreateNotification(state.NewState);
-
+			_databaseWriter.PersistActualAgentState(state.NewState);
+			
 			if (state.Send)
-				_messageSender.Send(notification);
-
-			// this means closing of snapshot, and aggregation and events doesnt work here.
-			// BUG
-
+				_messageSender.Send(NotificationFactory.CreateNotification(state.NewState));
+			
 			_adherenceAggregator.Aggregate(state.NewState);
-
-
-			if (state.ScheduleLayers == null)
-				return;
 			
 			_eventPublisher.Publish(state);
 		}

@@ -99,35 +99,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.StateCode.Should().Be("statecode1");
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotLogOutAlreadyLoggedOutAgents()
 		{
-			Assert.Fail();
-		}
+			var personId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithUser("usercode1", Guid.NewGuid())
+				.WithUser("usercode2", personId)
+				.WithAlarm("statecode", Guid.Empty)
+				.WithAlarm("statecode2", Guid.Empty, true)
+				.Make();
+			var sender = new FakeMessageSender();
+			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveExternalUserStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				{
+					UserCode = "usercode1",
+					StateCode = "statecode"
+				},
+				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				{
+					UserCode = "usercode2",
+					StateCode = "statecode2"
+				}
+			});
 
-		[Test, Ignore]
-		public void ShouldNotSendStateIfStateGroupHasNotChanged()
-		{
-			Assert.Fail();
-		}
-		
-		//GENERAL
-		[Test, Ignore]
-		public void ShouldNotSendIfNoChanges()
-		{
+			target.SaveExternalUserStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				{
+					UserCode = "usercode1",
+					StateCode = "statecode"
+				},
+			});
 
-		}
-
-		[Test, Ignore]
-		public void ShouldUseAlarmForNoScheudledAcitivtyWhenNoScheduledActivity()
-		{
-
-		}
-
-		[Test, Ignore]
-		public void ShouldUseDefaultStateGroupIfStateCodeIsNotRecognized()
-		{
-
+			sender.NotificationsOfType<IActualAgentState>()
+				.Select(x => x.DeseralizeActualAgentState())
+				.Single(x => x.PersonId == personId)
+				.StateCode.Should().Be("statecode2");
 		}
 	}
 }
