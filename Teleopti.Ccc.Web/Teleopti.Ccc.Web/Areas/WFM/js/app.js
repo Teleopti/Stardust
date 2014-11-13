@@ -35,4 +35,10 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
             });
         }
 	});
+	var ab1 = new ABmetrics();
+	ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
+	$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+		ab1.sendPageView();
+	});
+	
 }]);
