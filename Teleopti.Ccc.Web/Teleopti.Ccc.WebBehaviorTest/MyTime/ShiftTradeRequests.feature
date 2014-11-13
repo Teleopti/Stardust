@@ -640,7 +640,6 @@ Scenario: See shifts from users in other timezones
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see OtherAgent in the shift trade list
 
-@ignore
 Scenario: Show other shifts to trade with from users in other timezones translated to my timezone
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -651,7 +650,7 @@ Scenario: Show other shifts to trade with from users in other timezones translat
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And 'OtherAgent' is located in 'Moscow'
+	And 'OtherAgent' is located in 'Istanbul'
 	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -661,10 +660,10 @@ Scenario: Show other shifts to trade with from users in other timezones translat
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with
 	| Field			| Value |
-	| Start time	| 03:00 |
-	| End time		| 13:00 |
+	| Start time	| 05:00 |
+	| End time		| 15:00 |
 
-@ignore
+
 Scenario: Show shifts in ongoing trades from users in other timezone translated to my timezone
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -679,7 +678,7 @@ Scenario: Show shifts in ongoing trades from users in other timezone translated 
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
 	| Lunch3HoursAfterStart | True             |
-	And 'Ashley Andeen' is located in 'Moscow'
+	And 'Ashley Andeen' is located in 'Istanbul'
 	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -699,8 +698,8 @@ Scenario: Show shifts in ongoing trades from users in other timezone translated 
 	| End time		| 16:00 |
 	And I should see details with a schedule to
 	| Field			| Value |
-	| Start time	| 03:00 |
-	| End time		| 13:00 |
+	| Start time	| 05:00 |
+	| End time		| 15:00 |
 
 Scenario: Navigate to shifttrade with url
 	Given I have the role 'Full access to mytime'
