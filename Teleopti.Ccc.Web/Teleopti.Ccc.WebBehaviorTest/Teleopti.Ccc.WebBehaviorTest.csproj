@@ -100,6 +100,31 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Anywhere\RealTimeAdherenceAgentsMultiTeams.feature.cs">
+      <DependentUpon>RealTimeAdherenceAgentsMultiTeams.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\RealTimeAdherenceAgents.feature.cs">
+      <DependentUpon>RealTimeAdherenceAgents.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\RealTimeAdherenceMultiBusinessUnits.feature.cs">
+      <DependentUpon>RealTimeAdherenceMultiBusinessUnits.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\RealTimeAdherenceChangeSchedule.feature.cs">
+      <DependentUpon>RealTimeAdherenceChangeSchedule.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\RealTimeAdherencePercentage.feature.cs">
+      <DependentUpon>RealTimeAdherencePercentage.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\ScheduleChangePermissionControl.feature.cs">
       <DependentUpon>ScheduleChangePermissionControl.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -715,6 +740,26 @@
     <None Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ManageAgentScheduleInOtherTimeZone.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherenceAgentsMultiTeams.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RealTimeAdherenceAgentsMultiTeams.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherenceAgents.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RealTimeAdherenceAgents.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherenceMultiBusinessUnits.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RealTimeAdherenceMultiBusinessUnits.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherenceChangeSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RealTimeAdherenceChangeSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherencePercentage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RealTimeAdherencePercentage.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ScheduleChangePermissionControl.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
