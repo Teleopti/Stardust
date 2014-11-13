@@ -1,9 +1,8 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Messages.Requests
 {
-	public class NewAbsenceReportCreated : RaptorDomainMessage
+	public class NewAbsenceReportCreated : MessageWithLogOnInfo
 	{
 		/// <summary>
 		/// Message to inform consumers that a new absence report has been created
