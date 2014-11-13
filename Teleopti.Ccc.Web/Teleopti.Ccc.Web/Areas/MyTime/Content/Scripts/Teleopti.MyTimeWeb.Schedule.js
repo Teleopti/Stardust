@@ -249,6 +249,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.showAddRequestFormWithData = function(date, data) {
 			self.initialRequestDay(date);
 
+			if ((self.requestViewModel() != undefined) && (self.requestViewModel().type() == 'absenceReport') && !self.isAbsenceReportAvailable()) {
+				self.requestViewModel(null);
+			}
+
 			if ((self.requestViewModel() || '') != '') {
 				_fillFormData(data);
 				return;
