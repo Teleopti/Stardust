@@ -960,6 +960,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\manageadherence\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
@@ -1016,6 +1017,7 @@
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
     <Content Include="Areas\Anywhere\Content\Templates\diagnosis\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\manageadherence\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\notification.html" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />

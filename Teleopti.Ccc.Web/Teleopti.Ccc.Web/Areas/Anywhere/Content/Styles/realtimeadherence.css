@@ -71,11 +71,12 @@
 	position: relative;
 }
 
-.realtimeadherenceagents .person-menu .adherence .last-updated{
-	position: absolute; 
-	color: gray; 
-	font-size: xx-small; 
+.realtimeadherenceagents .person-menu .adherence .last-updated {
+	position: absolute;
+	color: gray;
+	font-size: xx-small;
 	right: 0px;
 	bottom: -11px;
-	white-space: nowrap
+	white-space: nowrap;
+	margin-right: 18px;
 }

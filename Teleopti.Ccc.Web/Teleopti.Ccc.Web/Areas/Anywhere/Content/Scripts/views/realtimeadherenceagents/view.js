@@ -124,6 +124,12 @@
 				}
 			});
 
+			toggleQuerier('RTA_SeeAdherenceDetailsForOneAgent_31285', {
+				enabled: function() {
+					viewModel.agentAdherenceDetailsEnabled(true);
+				}
+			});
+
 		}
 	};
 });

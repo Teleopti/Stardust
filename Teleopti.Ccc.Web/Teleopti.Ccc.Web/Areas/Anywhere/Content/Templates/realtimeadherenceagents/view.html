@@ -46,9 +46,17 @@
 							</div>
 							<!-- ko if: $root.agentAdherenceEnabled -->
 							<!-- ko if: DisplayAdherencePercentage -->
-							<div class="adherence"> 
+							<div class="adherence btn-group">
+								<!-- ko if: $root.agentAdherenceDetailsEnabled -->
+								<a href="#manageadherence" class="btn">
+									<span data-bind="text: $root.resources.Adherence"></span>
+									<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
+								</a>
+								<!-- /ko -->
+								<!-- ko if: !$root.agentAdherenceDetailsEnabled -->
 								<span data-bind="text: $root.resources.Adherence"></span>
 								<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
+								<!-- /ko -->
 								<div class="last-updated">
 									<span data-bind="text: $root.resources.LastUpdated"></span>
 									<span data-bind="text: LastAdherenceUpdate"></span>

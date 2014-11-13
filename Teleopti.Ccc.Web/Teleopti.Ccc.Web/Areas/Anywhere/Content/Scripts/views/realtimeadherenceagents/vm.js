@@ -43,6 +43,7 @@
 			that.BusinessUnitId = ko.observable();
 			that.rootURI = ko.observable();
 			that.agentAdherenceEnabled = ko.observable(false);
+			that.agentAdherenceDetailsEnabled = ko.observable(false);
 			that.AgentAdherence = ko.observable();
 
 			that.SetViewOptions = function (options) {
