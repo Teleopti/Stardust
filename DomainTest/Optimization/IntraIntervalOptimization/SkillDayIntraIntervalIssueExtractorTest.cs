@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		}
 
 		[Test]
-		public void ShouldExtract()
+		public void ShouldExtractOnIssues()
 		{
 			using (_mock.Record())
 			{
@@ -50,10 +50,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_skillDays, _skill2);
+				var result = _target.ExtractOnIssues(_skillDays, _skill2);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(_skillStaffPeriod2, result[0]);
 			}
+		}
+
+		[Test]
+		public void ShouldExtractAll()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_skillDay1.Skill).Return(_skill1);
+				Expect.Call(_skillDay2.Skill).Return(_skill2);
+				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2 }));
+				Expect.Call(_skillStaffPeriod1.NoneEntityClone()).Return(_skillStaffPeriod1);
+				Expect.Call(_skillStaffPeriod2.NoneEntityClone()).Return(_skillStaffPeriod2);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.ExtractAll(_skillDays, _skill2);
+				Assert.AreEqual(2, result.Count);
+			}	
 		}
 	}
 }

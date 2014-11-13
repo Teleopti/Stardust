@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
+		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private bool _cancelMe;
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
 			ITeamScheduling  teamScheduling,
-			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator)
+			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,
+			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
 			_teamScheduling = teamScheduling;
 			_shiftProjectionIntraIntervalBestFitCalculator = shiftProjectionIntraIntervalBestFitCalculator;
+			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
 		}
 
 		public void Reset()
@@ -67,7 +70,9 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			_progressEvent = null;
 			var progressCounter = 0;
-			var limit = 0.8;
+			var limit = 0.7999;
+
+			//if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) return intervalIssuesBefore;
 
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
 			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
@@ -78,25 +83,31 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);
 
-			intervalIssuesBefore = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
-
 			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
 			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(1) });
 
-			var allSkillstaffPeriodsOnDay = Extract(skillDaysOnDay, skill);
-			var allSkillStaffPeriodsOnDayAfter = Extract(skillDaysOnDayAfter, skill);
+			var allSkillstaffPeriodsOnDay = _skillDayIntraIntervalIssueExtractor.ExtractAll(skillDaysOnDay, skill);
+			var allSkillStaffPeriodsOnDayAfter = _skillDayIntraIntervalIssueExtractor.ExtractAll(skillDaysOnDayAfter, skill);
 
 			var listResources = _teamBlockScheduler.GetShiftProjectionCaches(teamBlock, person, dateOnly, schedulingOptions, schedulingResultStateHolder);
-			//var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? intervalIssuesBefore.IssuesOnDayAfter : intervalIssuesBefore.IssuesOnDay, skill);
-
 			var totalSkillStaffPeriods = allSkillstaffPeriodsOnDay.ToList();
 			totalSkillStaffPeriods.AddRange(allSkillStaffPeriodsOnDayAfter);
+			
+			var bestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, totalSkillStaffPeriods, skill, limit);
 
+			if (bestFit == null)
+			{
+				rollbackService.Rollback();
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
+				return intervalIssuesBefore;
+			}
+		
+			var shiftProjectionCacheBestFit = bestFit.ShiftProjection;
+			_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer);
 
-			//var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, checkDayAfter ? allSkillStaffPeriodsOnDayAfter : allSkillstaffPeriodsOnDay, skill, limit);
-			var listBestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, totalSkillStaffPeriods, skill, limit);
-
-			if (listBestFit.Count == 0)
+			daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
+			if (!daySchedule.IsScheduled())
 			{
 				rollbackService.Rollback();
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
@@ -104,88 +115,37 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 				return intervalIssuesBefore;
 			}
 
-			foreach (var workShiftCalculationResultHolder in listBestFit)
+			var intervalIssuesAfter = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
+			var worse = false;
+
+			if (!checkDayAfter)
 			{
-				if (_cancelMe || (_progressEvent != null && _progressEvent.UserCancel)) break;
-					
-				var shiftProjectionCacheBestFit = workShiftCalculationResultHolder.ShiftProjection;
-				_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer);
+				var betterToday = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+				var worseDayAfter = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
+				worse = !betterToday || worseDayAfter;
 
-				//TODO DETECT IF NOT ABLE TO SCHEDULE
-				daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
-				if (!daySchedule.IsScheduled())
-				{
-					rollbackService.Rollback();
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-					reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
-					continue;
-				}
-
-				var intervalIssuesAfter = _intraIntervalIssueCalculator.CalculateIssues(schedulingResultStateHolder, skill, dateOnly);
-				//var worse = _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay);
-				//worse = worse || _skillStaffPeriodEvaluator.ResultIsWorse(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter);
-
-				var worse = false;
-
-				//if (!checkDayAfter)
-				//	worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
-				//if (checkDayAfter)
-				//	worse = !_skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
-
-
-				if (!checkDayAfter)
-				{
-					var betterToday = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
-					var worseDayAfter = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
-					worse = !betterToday || worseDayAfter;
-
-				}
-				if (checkDayAfter)
-				{
-					var betterDayAfter = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
-					var worseToday = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
-					worse = !betterDayAfter || worseToday;
-				}
-
-	
-				if (worse)
-				{
-					rollbackService.Rollback();
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-					reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
-					break;
-				}
-
-				//else
-				//{
-				//	reportProgress(checkDayAfter, intervalIssuesAfter, progressCounter);
-				//	return intervalIssuesAfter;
-				//}
-
-				//progressCounter++;
+			}
+			if (checkDayAfter)
+			{
+				var betterDayAfter = _skillStaffPeriodEvaluator.ResultIsBetter(intervalIssuesBefore.IssuesOnDayAfter, intervalIssuesAfter.IssuesOnDayAfter, limit);
+				var worseToday = _skillStaffPeriodEvaluator.ResultIsWorseX(intervalIssuesBefore.IssuesOnDay, intervalIssuesAfter.IssuesOnDay, limit);
+				worse = !betterDayAfter || worseToday;
 			}
 
+			if (worse)
+			{
+				rollbackService.Rollback();
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				reportProgress(checkDayAfter, intervalIssuesBefore, progressCounter);
+			}
+
+			else
+			{
+				reportProgress(checkDayAfter, intervalIssuesAfter, progressCounter);
+				return intervalIssuesAfter;
+			}
+			
 			return intervalIssuesBefore;
-		}
-
-		private IList<ISkillStaffPeriod> Extract(IList<ISkillDay> skillDays, ISkill skill)
-		{
-			var result = new List<ISkillStaffPeriod>();
-
-			foreach (var skillDay in skillDays)
-			{
-				if (skillDay.Skill != skill) continue;
-
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-				{
-					//if (skillStaffPeriod.HasIntraIntervalIssue)
-					//{
-						result.Add((ISkillStaffPeriod)skillStaffPeriod.NoneEntityClone());
-					//}
-				}
-			}
-
-			return result;
 		}
 
 		private void reportProgress(bool checkDayAfter, IIntraIntervalIssues intervalIssues, int progressCounter)

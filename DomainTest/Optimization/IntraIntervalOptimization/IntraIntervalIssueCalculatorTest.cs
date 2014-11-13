@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly.AddDays(1) })).Return(_skillDaysAfter);
 
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDays, _skill)).Return(_skillStaffPeriods);
-				Expect.Call(_skillDayIntraIntervalIssueExtractor.Extract(_skillDaysAfter, _skill)).Return(_skillStaffPeriodsAfter);
+				Expect.Call(_skillDayIntraIntervalIssueExtractor.ExtractOnIssues(_skillDays, _skill)).Return(_skillStaffPeriods);
+				Expect.Call(_skillDayIntraIntervalIssueExtractor.ExtractOnIssues(_skillDaysAfter, _skill)).Return(_skillStaffPeriodsAfter);
 			}
 
 			using (_mock.Playback())

@@ -23,10 +23,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 			
 			foreach (var skillDay in skillDays)
 			{
-				if(skillDay.Skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
+				var forcastSource = skillDay.Skill.SkillType.ForecastSource;
+				if (forcastSource != ForecastSource.InboundTelephony || forcastSource != ForecastSource.Chat)
 					continue;
 
-				_skillDayIntraIntervalFinder.SetIntraIntervalIssues(skillDay, resourceCalculationDataContainer, 0.8);
+				_skillDayIntraIntervalFinder.SetIntraIntervalIssues(skillDay, resourceCalculationDataContainer, 0.7999);
 			}
 		}
 	}

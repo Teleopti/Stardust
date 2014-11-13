@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_workShiftCalculationResultHolder1.Value = 1;
 			_workShiftCalculationResultHolder2.Value = 2;
 
-			_samplesBefore = new List<int>();
+			_samplesBefore = new List<int>{0};
 
 			_sortedListResources = new List<IWorkShiftCalculationResultHolder>
 			{
@@ -69,42 +68,81 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_target = new ShiftProjectionIntraIntervalBestFitCalculator(_skillStaffPeriodIntraIntervalPeriodFinder, _skillActivityCounter, _shiftProjectionCacheIntraIntervalValueCalculator);
 		}
 
-		[Ignore,Test]
-		public void ShouldCalculate()
+		[Test]
+		public void ShouldGetBestShift()
 		{
-			var affectedPeriods = new List<DateTimePeriod> {_period1};
-			var samples = new List<int>();
+			var affectedPeriods1 = new List<DateTimePeriod> {_period1};
+			var affectedPeriods2 = new List<DateTimePeriod> { _period1 };
+			var samples1 = new List<int>{1};
+			var samples2 = new List<int> { 1 };
 
 			using (_mock.Record())
 			{
-				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache1, _skill)).Return(affectedPeriods);
-				Expect.Call(_skillActivityCounter.Count(affectedPeriods, _period1)).Return(samples);
-				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples)).Return(20d);
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache1, _skill)).Return(affectedPeriods1);
+				Expect.Call(_skillActivityCounter.Count(affectedPeriods1, _period1)).Return(samples1);
+				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples1)).Return(0.3d);
 
-				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache2, _skill)).Return(affectedPeriods);
-				Expect.Call(_skillActivityCounter.Count(affectedPeriods, _period1)).Return(samples);
-				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples)).Return(20d);
-
-
-				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period2, _shiftProjectionCache1, _skill)).Return(affectedPeriods);
-				Expect.Call(_skillActivityCounter.Count(affectedPeriods, _period2)).Return(samples);
-				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples)).Return(10d);
-
-				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period2, _shiftProjectionCache2, _skill)).Return(affectedPeriods);
-				Expect.Call(_skillActivityCounter.Count(affectedPeriods, _period2)).Return(samples);
-				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples)).Return(10d);
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache2, _skill)).Return(affectedPeriods2);
+				Expect.Call(_skillActivityCounter.Count(affectedPeriods2, _period1)).Return(samples2);
+				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples2)).Return(0.1d);
+	
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> {_skillStaffPeriod1, _skillStaffPeriod2}, _skill, 0.8);
-				Assert.AreEqual(2, result.Count);
+				var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> {_skillStaffPeriod1}, _skill, 0.8);
+				Assert.AreEqual(_shiftProjectionCache1, result.ShiftProjection);
+			}
+		}
 
-				var first = result.First() as WorkShiftCalculationResult;
-				var last = result.Last() as WorkShiftCalculationResult;
+		[Test]
+		public void ShouldNotCountShiftWhenOutsideSkillStaffPeriod()
+		{
+			var affectedPeriods1 = new List<DateTimePeriod>();
+			var affectedPeriods2 = new List<DateTimePeriod> { _period1 };
+			var samples2 = new List<int> { 1 };
 
-				Assert.AreEqual(first.Value, 20d);
-				Assert.AreEqual(last.Value, 40d);
+			using (_mock.Record())
+			{
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache1, _skill)).Return(affectedPeriods1);
+				
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache2, _skill)).Return(affectedPeriods2);
+				Expect.Call(_skillActivityCounter.Count(affectedPeriods2, _period1)).Return(samples2);
+				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples2)).Return(0.1d);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> { _skillStaffPeriod1 }, _skill, 0.8);
+				Assert.AreEqual(_shiftProjectionCache2, result.ShiftProjection);
+			}	
+		}
+
+		[Test]
+		public void ShouldSetValueToZeroWhenOverLimit()
+		{
+			var affectedPeriods1 = new List<DateTimePeriod> { _period1 };
+			var affectedPeriods2 = new List<DateTimePeriod> { _period1 };
+			var samples1 = new List<int> { 1 };
+			var samples2 = new List<int> { 1 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache1, _skill)).Return(affectedPeriods1);
+				Expect.Call(_skillActivityCounter.Count(affectedPeriods1, _period1)).Return(samples1);
+				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples1)).Return(0.9d);
+
+				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache2, _skill)).Return(affectedPeriods2);
+				Expect.Call(_skillActivityCounter.Count(affectedPeriods2, _period1)).Return(samples2);
+				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples2)).Return(0.1d);
+
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> { _skillStaffPeriod1 }, _skill, 0.8);
+				Assert.AreEqual(_shiftProjectionCache1, result.ShiftProjection);
+				Assert.AreEqual(0d, result.Value);
 			}
 		}
 	}
