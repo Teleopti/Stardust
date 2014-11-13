@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private static DateTime endTimeOfShift(StateInfo info, ScheduleLayer activity)
 		{
 			if (activity == null)
-				return DateTime.MinValue;
+				return info.NewState.ReceivedTime;
 			return activitiesThisShift(info, activity).Select(x => x.EndDateTime).Max();
 		}
 

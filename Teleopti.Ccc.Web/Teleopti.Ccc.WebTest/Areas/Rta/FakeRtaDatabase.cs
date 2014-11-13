@@ -118,6 +118,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return this;
 		}
 
+
+		public IFakeDataBuilder ClearSchedule(Guid personId)
+		{
+			_schedules.RemoveAll(x => x.PersonId == personId);
+			return this;
+		}
+
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState)
 		{
 			//putting all this logic here is just WRONG

@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
 			@event.ShiftEndTime.Should().Be("2014-10-20 12:00".Utc());
 		}
-
+		
 		[Test]
 		public void ShouldPublishEventWithLogOnInfo()
 		{

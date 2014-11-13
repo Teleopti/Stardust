@@ -135,6 +135,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
+		public void ShouldSetShiftEndTimeToRecievedTimeWhenScheduleIsRemoved()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.Make();
+			var publisher = new FakeEventsPublisher();
+			var now = new MutableNow();
+			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+
+			now.Mutate("2014-10-20 10:01");
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+
+			now.Mutate("2014-10-20 10:30");
+			database.ClearSchedule(personId);
+			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:30".Utc());
+
+			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
+			@event.ShiftEndTime.Should().Be("2014-10-20 10:30".Utc());
+		}
+
+		[Test]
 		public void ShouldPublishEventWithLogOnInfo()
 		{
 			var personId = Guid.NewGuid();
