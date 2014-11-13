@@ -28,25 +28,25 @@ Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewM
 	});
 
 	// TODO: Implement absence report save
+
 	this.SaveAbsenceReport = function () {
-	/*
 		ajax.Ajax({
 			url: "Schedule/ReportAbsence",
 			dataType: "json",
-			data: { Date: self.DateFrom().format(self.DateFormat()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
+			data: { Date: self.DateFrom().format(self.DateFormat()), AbsenceId: self.AbsenceId() },
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				reloadSchedule(data);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
-			if (jqXHR.status == 400) {
-				var data = $.parseJSON(jqXHR.responseText);
-				self.ErrorMessage(data.Errors.join('</br>'));
-				return;
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.ErrorMessage(data.Errors.join('</br>'));
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
-			Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-		}
 		});
-	//*/
+		
 	};
 };

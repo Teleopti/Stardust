@@ -75,7 +75,7 @@
 								<i class="glyphicon glyphicon-step-forward"></i>
 							</span>
 							<![if (!IE)|(gt IE 8)]>
-							<input class="absence-report-end-date form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
+							<input class="absence-report-end-date form-control" data-bind="datepicker: DateToForDisplay(), datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
 							<![endif]>
 							<!--[if lte IE 8]>
 							<input class="absence-report-end-date input-sm form-control" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
