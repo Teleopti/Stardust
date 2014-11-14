@@ -44,7 +44,12 @@ CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
 	person_code uniqueidentifier,
-	acd_login_id int
+	team_id int, 
+	acd_login_id int, 
+	valid_from_date_id int,
+	valid_from_interval_id int,
+	valid_to_date_id_maxDate int,
+	valid_to_interval_id_maxdate int
 	)
 
 CREATE TABLE  #rights_agents
@@ -104,7 +109,12 @@ INSERT INTO #person_acd_subSP
 SELECT
 	person_id	= a.right_id,
 	person_code	= p.person_code,
-	acd_login_id= acd.acd_login_id
+	team_id		= p.team_id,
+	acd_login_id= acd.acd_login_id,
+	valid_from_date_id =p.valid_from_date_id,
+	valid_from_interval_id =p.valid_from_interval_id,
+	valid_to_date_id_maxDate =p.valid_to_date_id_maxDate,
+	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate
 FROM #rights_agents a
 INNER JOIN mart.dim_person p
 	on p.person_id = a.right_id
@@ -178,7 +188,7 @@ SELECT	r.date_date AS 'date',
 			WHEN SUM(r.scheduled_ready_time_m)<=0 THEN 0
 			ELSE SUM(r.ready_time_s)/CONVERT(float,sum(r.scheduled_ready_time_m*60))
 		END AS 'ready_time_per_scheduled_ready_time',
-		SUM(r.answered_calls) AS 'answered_calls',
+		SUM(ISNULL(r.answered_calls,0)) AS 'answered_calls',
 		CASE
 			WHEN CONVERT(float,SUM(r.scheduled_ready_time_m)/60.0)<=0 THEN 0
 			ELSE SUM(r.answered_calls)/(CONVERT(float,SUM(r.scheduled_ready_time_m)/60.0))
@@ -197,7 +207,7 @@ SELECT	r.date_date AS 'date',
 			ELSE (SUM(r.adherence_calc_s) - SUM(r.deviation_s))/SUM(r.adherence_calc_s)
 		END AS 'adherence',
 		SUM(r.deviation_s) AS 'deviation_s',
-		SUM(r.handling_time_s) AS 'handling_time_s'
+		SUM(isnull(r.handling_time_s,0)) AS 'handling_time_s'
 FROM #pre_result_subSP r
 INNER JOIN mart.dim_person p
 ON r.person_id = p.person_id

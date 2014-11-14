@@ -59,7 +59,12 @@ CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
 	person_code uniqueidentifier,
-	acd_login_id int
+	team_id int, 
+	acd_login_id int, 
+	valid_from_date_id int,
+	valid_from_interval_id int,
+	valid_to_date_id_maxDate int,
+	valid_to_interval_id_maxdate int
 	)
 
 CREATE TABLE  #rights_agents
@@ -166,7 +171,12 @@ INSERT INTO #person_acd_subSP
 SELECT
 	person_id	= b.id,
 	person_code	= p.person_code,
-	acd_login_id= acd.acd_login_id
+	team_id		= p.team_id,
+	acd_login_id= acd.acd_login_id,
+	valid_from_date_id =p.valid_from_date_id,
+	valid_from_interval_id =p.valid_from_interval_id,
+	valid_to_date_id_maxDate =p.valid_to_date_id_maxDate,
+	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate
 FROM #rights_agents a
 INNER JOIN #agents b
 	ON a.right_id = b.id
@@ -187,16 +197,6 @@ EXEC [mart].[report_data_schedule_result_subSP]
 	@report_id		= @report_id,
 	@scenario_id	= @scenario_id,
 	@language_id	= @language_id
-
---get person info
-UPDATE #pre_result_subSP
-SET person_id	= dp.person_id
-FROM #pre_result_subSP me
-INNER JOIN #person_acd_subSP acd
-	ON me.acd_login_id = acd.acd_login_id
-INNER JOIN mart.dim_person dp
-	ON acd.person_id = dp.person_id
-	AND me.date_date between dp.valid_from_date and dp.valid_to_date
 
 --Delete ACD-logins that have been logged on without being a agent in CCC7
 DELETE FROM #pre_result_subSP

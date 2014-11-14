@@ -145,6 +145,9 @@ INNER JOIN #acd_login acd2
 	ON acd2.acd_login_id = acd1.acd_login_id
 	AND acd2.person_code = acd1.person_code
 WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
+AND EXISTS(SELECT 1 FROM #person_acd_subSP p where p.acd_login_id = faq.acd_login_id AND(faq.date_id > p.valid_from_date_id AND faq.date_id < p.valid_to_date_id_maxDate)
+		OR (faq.date_id = p.valid_from_date_id AND faq.interval_id >= p.valid_from_interval_id)
+		OR (faq.date_id = p.valid_to_date_id_maxdate AND faq.interval_id <= p.valid_to_interval_id_maxdate))
 GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id, acd1.person_code
 
 --Get the ready time from mart.fact_agent 
@@ -161,6 +164,9 @@ INNER JOIN #acd_login acd2
 	ON acd2.acd_login_id = acd1.acd_login_id
 	AND acd2.person_code = acd1.person_code
 WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id
+AND EXISTS(SELECT 1 FROM #person_acd_subSP p where p.acd_login_id = faq.acd_login_id AND(faq.date_id > p.valid_from_date_id AND faq.date_id < p.valid_to_date_id_maxDate)
+		OR (faq.date_id = p.valid_from_date_id AND faq.interval_id >= p.valid_from_interval_id)
+		OR (faq.date_id = p.valid_to_date_id_maxdate AND faq.interval_id <= p.valid_to_interval_id_maxdate))
 GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id, acd1.person_code
 
 UPDATE #agent_queue_statistics_subSP
@@ -180,6 +186,11 @@ FROM #agent_queue_statistics_subSP ags
 INNER JOIN #person_acd_subSP acd
 	ON ags.acd_login_id = acd.acd_login_id
 	AND ags.person_code = acd.person_code
+	AND (
+		(ags.date_id > acd.valid_from_date_id AND ags.date_id < acd.valid_to_date_id_maxDate)
+		OR (ags.date_id = acd.valid_from_date_id AND ags.interval_id >= acd.valid_from_interval_id)
+		OR (ags.date_id = acd.valid_to_date_id_maxdate AND ags.interval_id <= acd.valid_to_interval_id_maxdate)
+	)
 
 --Get agent schedule
 INSERT INTO #fact_schedule_subSP(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
@@ -197,14 +208,15 @@ AND fs.scenario_id = @scenario_id
 GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
 
 --Prepare result
-INSERT #pre_result_subSP(date_id,interval_id,person_id,answered_calls,talk_time_s,after_call_work_time_s,ready_time_s)
+INSERT #pre_result_subSP(date_id,interval_id,person_id,answered_calls,talk_time_s,after_call_work_time_s,ready_time_s, handling_time_s)
 SELECT	date_id,
 		interval_id, 
 		person_id,
 		answered_calls, 
 		talk_time_s, 
 		after_call_work_time_s, 
-		ready_time_s
+		ready_time_s,
+		ISNULL(talk_time_s,0) + ISNULL(after_call_work_time_s,0)
 FROM #agent_queue_statistics_subSP
 
 INSERT #pre_result_subSP(date_id,interval_id,person_id,scheduled_ready_time_m,scheduled_time_m,scheduled_contract_time_m)
@@ -262,16 +274,12 @@ WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id
 AND NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id
 				AND fsd.interval_id=fs.interval_id)
 
-
 UPDATE #pre_result_subSP
 SET
-	team_id			 = p.team_id,
-	handling_time_s	 = ISNULL(talk_time_s,0) + ISNULL(after_call_work_time_s,0)
+	team_id			 = p.team_id
 FROM #pre_result_subSP r
-INNER JOIN mart.dim_person p
+INNER JOIN #person_acd_subSP p
 	ON p.person_id=r.person_id
-INNER JOIN mart.dim_interval i
-	ON i.interval_id = r.interval_id
 
 RETURN 0
 GO
