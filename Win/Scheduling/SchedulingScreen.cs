@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTimePeriod _selectedPeriod;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
-        private readonly SchedulingScreenPermissionHelper _permissionHelper;
+        private SchedulingScreenPermissionHelper _permissionHelper;
         private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
 		private Form _mainWindow;
 		private bool _cancelButtonPressed;
@@ -884,6 +885,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setPermissionOnControls();
             schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
             schedulerSplitters1.MultipleHostControl3.GotFocus += MultipleHostControl3OnGotFocus;
+
+			//releaseEvents(this);
+
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
 			//No code after the call to runworkerasynk
@@ -961,8 +965,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
+			
 			Cursor.Current = Cursors.Default;
 		}
+
+		
 
 		#endregion
 
@@ -3829,6 +3836,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupContextMenuSkillGrid()
 		{
+			
 			var skillGridMenuItem = new ToolStripMenuItem(Resources.Period) { Name = "Period", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period) };
 			skillGridMenuItem.Click += skillGridMenuItemPeriodClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
@@ -4777,6 +4785,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlersOff()
 		{
+			toolStripButtonFilterStudentAvailability.Click -= toolStripButtonFilterStudentAvailability_Click;
+			toolStripButtonFilterOvertimeAvailability.Click -= toolStripButtonFilterOvertimeAvailability_Click;
+			toolStripButtonFilterAgents.Click -= toolStripButtonFilterAgents_Click;
 			toolStripTabItemHome.Click -= toolStripTabItemHome_Click;
 			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
@@ -4784,6 +4795,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Tick -= _tmpTimer_Tick;
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 			_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
+			backStageButtonMainMenuSave.Click -= toolStripButtonMainMenuSave_Click;
+			backStageButtonMainMenuHelp.Click -= toolStripButtonMainMenuHelp_Click;
+			backStageButtonMainMenuClose.Click -= toolStripButtonMainMenuClose_Click;
+			backStageButtonOptions.Click -= toolStripButtonOptions_Click;
+			backStageButtonSystemExit.Click -= toolStripButtonSystemExit_Click;
+			backStage1.VisibleChanged -= backStage1VisibleChanged;
+			foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls)
+			{
+				ButtonAdv button = control as ButtonAdv;
+				if(button != null)
+					button.Click -= menuItemClick;
+			}
+			toolStripButtonQuickAccessSave.Click -= toolStripButtonQuickAccessSaveClick;
+			toolStripButtonQuickAccessCancel.Click -= toolStripButtonQuickAccessCancel_Click;
+			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedo_Click_1;
+			toolStripMenuItemQuickAccessUndo.Click -= toolStripSplitButtonQuickAccessUndo_ButtonClick;
+			toolStripMenuItemQuickAccessUndoAll.Click -= toolStripMenuItemQuickAccessUndoAll_Click_1;
+			toolStripButtonShowTexts.Click -= toolStripButtonShowTexts_Click;
+			toolStripButtonMainMenuSave.Click -= toolStripButtonMainMenuSave_Click;
+
+			if (_permissionHelper != null)
+				_permissionHelper = null;
 
 			if (_schedulerMessageBrokerHandler != null)
 			{
@@ -5255,6 +5288,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             // bug 28705 hide it so we don't get strange paint events
             Hide();
 			_mainWindow.Activate();
+
+			releaseEvents(this);
+
 			if (_schedulerState != null && _schedulerState.Schedules != null)
 			{
 				_schedulerState.Schedules.Clear();
@@ -5285,6 +5321,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (contextMenuViews != null) contextMenuViews.Dispose();
 			if (schedulerSplitters1 != null) schedulerSplitters1.Dispose();
 
+			
+
+			backStageView.BackStage = null;
+			backStage1.Parent = null;
+			backStageView.HostControl = null;
+			backStageView.HostForm = null;
+			backStageView = null;
+			ribbonControlAdv1.BackStageView = null;
+					
 			if (!Disposing)
 			{
 				Dispose(true);
