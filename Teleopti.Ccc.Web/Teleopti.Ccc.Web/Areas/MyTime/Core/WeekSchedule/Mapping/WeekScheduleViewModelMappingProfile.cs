@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					OvertimeAvailabilityPermission = s.OvertimeAvailabilityPermission,
 					AbsenceRequestPermission = s.AbsenceRequestPermission,
 					AbsenceReportPermission = s.AbsenceReportPermission,
-					ShiftExchangePermission = s.ShiftExchangePermission
+					ShiftExchangePermission = s.ShiftExchangePermission,
+					ShiftTradeBulletinBoardPermission = s.ShiftTradeBulletinBoardPermission
 				}))
 				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern))
 				;

@@ -209,6 +209,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
 									var absenceReportPermission =
 										_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport) && _toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011);
+									var shiftTradeBulletinBoardPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 									var shiftExchangePermission =
 										_permissionProvider.HasApplicationFunctionPermission(
 											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb) &&
@@ -227,7 +230,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												AbsenceRequestPermission = absenceRequestPermission,
 												AbsenceReportPermission = absenceReportPermission,
 												ShiftExchangePermission = shiftExchangePermission,
-												IsCurrentWeek = isCurrentWeek
+												IsCurrentWeek = isCurrentWeek,
+												ShiftTradeBulletinBoardPermission = shiftTradeBulletinBoardPermission,
 											};
 								});
 		}

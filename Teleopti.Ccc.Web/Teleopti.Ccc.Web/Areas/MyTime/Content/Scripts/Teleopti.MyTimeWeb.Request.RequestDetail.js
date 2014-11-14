@@ -56,8 +56,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         return $('#Request-detail-datepicker-format').val().toUpperCase();
     }
 
+	function _hideOthers() {
+		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
+		Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.HideShiftTradeBulletinBoard();
+	}
+
     function _prepareForAddingRequest() {
-        Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
+	    _hideOthers();
         var model = parentViewModel.createRequestViewModel();
         model.AddRequestCallback = _addItemAtTop;
         model.DateFormat(_datePickerFormat());

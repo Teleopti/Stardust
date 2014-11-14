@@ -1,8 +1,10 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -23,6 +25,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
         self.addTextRequestActive = ko.observable(false);
         self.addAbsenceRequestActive = ko.observable(false);
         self.addShiftTradeRequestActive = ko.observable(false);
+        self.addShiftTradeBulletinBoardActive = ko.observable(false);
+        self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 
         self.addTextRequest = function () {
             self.resetToolbarActiveButtons();
@@ -62,15 +66,37 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			}
         };
 
+        self.addShiftTradeBulletinBoardRequest = function (date) {
+	        self.resetToolbarActiveButtons();
+	        self.addShiftTradeBulletinBoardActive(true);
+			Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.OpenAddShiftTradeBulletinBoard(date);
+			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+
+			var subnavbar = $('.subnavbar');
+			if (subnavbar != undefined && subnavbar.hasClass('in')) {
+				$('.subnavbar').collapse('toggle');
+			}
+        };
+
         self.resetToolbarActiveButtons = function() {
             self.addTextRequestActive(false);
             self.addAbsenceRequestActive(false);
             self.addShiftTradeRequestActive(false);
+            self.addShiftTradeBulletinBoardActive(false);
         };
     }
 
     function _initNavigationViewModel() {
-		requestNavigationViewModel = new RequestNavigationViewModel();
+    	requestNavigationViewModel = new RequestNavigationViewModel();
+    	var ajax = new Teleopti.MyTimeWeb.Ajax();
+    	    ajax.Ajax({
+    		        url: "../ToggleHandler/IsEnabled?toggle=Request_ShiftTradeBulletinBoard_31296",
+			        success: function (data) {
+    		           if (data.IsEnabled) {
+    			              requestNavigationViewModel.isShiftTradeBulletinBoardEnabled(true);
+    			           }
+    		        }
+    	    });
 		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
 		ko.applyBindings(requestNavigationViewModel, $('div.navbar.hidden-sm')[0]);
 	}
