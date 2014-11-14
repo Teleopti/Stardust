@@ -5288,9 +5288,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             // bug 28705 hide it so we don't get strange paint events
             Hide();
 			_mainWindow.Activate();
-
-			releaseEvents(this);
-
 			if (_schedulerState != null && _schedulerState.Schedules != null)
 			{
 				_schedulerState.Schedules.Clear();
