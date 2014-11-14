@@ -23,6 +23,7 @@
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
 		
-		<Message Text="##teamcity[buildNumber '$(majorVersion).$(minorVersion).$(Revision)']" Importance="high"/>
+		<Message Text="##teamcity[setParameter name='system.teleopti_version' value='$(majorVersion).$(minorVersion).$(Revision)']" />
+		<Message Text="##teamcity[buildNumber '$(majorVersion).$(minorVersion).$(Revision)']" />
 	</Target>
 </Project>
