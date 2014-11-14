@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 					IsLoggedOn = state.IsLoggedOn,
 					SecondsInState = state.SecondsInState,
 					Timestamp = DateTime.Parse(state.Timestamp),
-					BatchId = DateTime.Parse(state.BatchId),
+					BatchId = DateTime.Parse(state.BatchId ?? state.Timestamp),
 					IsSnapshot = state.IsSnapshot,
 				});
 

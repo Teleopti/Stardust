@@ -241,6 +241,7 @@
     <Compile Include="Areas\Rta\EventsTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForTest.cs" />
+    <Compile Include="Areas\Rta\ExternalUserStateWebModelForTest.cs" />
     <Compile Include="Areas\Rta\FakeEventsPublisher.cs" />
     <Compile Include="Areas\Rta\FakeRtaDatabase.cs" />
     <Compile Include="Areas\Rta\FakeSignalRClient.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Areas\Rta\ImplementationDetailsTests\OrganizationForPersonTest.cs" />
     <Compile Include="Areas\Rta\SendAdherenceMessagesTest.cs" />
     <Compile Include="Areas\Rta\SnapshotTests.cs" />
+    <Compile Include="Areas\Rta\StateControllerTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />
