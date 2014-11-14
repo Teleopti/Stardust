@@ -161,18 +161,21 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			throw new FaultException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
-		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
-		{
-			CheckForActivityChange(input.PersonId, input.BusinessUnitId, input.Timestamp);
-		}
-
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-			Log.InfoFormat(
-				"Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", personId,
-				businessUnitId, timestamp);
+			CheckForActivityChange(new CheckForActivityChangeInputModel
+			{
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				Timestamp = timestamp
+			});
+		}
 
-			_rtaDataHandler.ProcessScheduleUpdate(personId, businessUnitId, timestamp);
+		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
+		{
+			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", input.PersonId, input.BusinessUnitId, input.Timestamp);
+
+			_rtaDataHandler.ProcessScheduleUpdate(input.PersonId, input.BusinessUnitId, input.Timestamp);
 		}
 
 		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)

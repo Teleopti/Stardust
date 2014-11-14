@@ -1,3 +1,4 @@
+using System;
 using MbCache.Core;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -147,5 +148,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				_database
 				).Initialize();
 		}
+
 	}
 }

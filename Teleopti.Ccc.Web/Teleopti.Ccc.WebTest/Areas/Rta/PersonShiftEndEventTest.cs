@@ -147,14 +147,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+			var target = new RtaForTest(database, now, publisher);
 
 			now.Mutate("2014-10-20 10:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
 
 			now.Mutate("2014-10-20 10:30");
 			database.ClearSchedule(personId);
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:30".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:30".Utc());
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.ShiftEndTime.Should().Be("2014-10-20 10:30".Utc());

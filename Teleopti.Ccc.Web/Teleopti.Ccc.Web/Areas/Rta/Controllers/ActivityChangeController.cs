@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[HttpPost]
+		// seems this works without the CheckForActivityChangeWebModel at this side...
 		public void CheckFor(CheckForActivityChangeInputModel model)
 		{
 			_rta.CheckForActivityChange(model);
