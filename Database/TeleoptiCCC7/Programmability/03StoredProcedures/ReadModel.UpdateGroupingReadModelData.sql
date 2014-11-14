@@ -13,55 +13,41 @@ CREATE PROCEDURE ReadModel.UpdateGroupingReadModelData
 @remids nvarchar(max)
 AS
 BEGIN
+	
+CREATE TABLE #Remids(remid uniqueidentifier)
+INSERT INTO #Remids SELECT * FROM SplitStringString(@remids) 
 
-	
-	CREATE TABLE #Remids(remid uniqueidentifier)
-    INSERT INTO #Remids SELECT * FROM SplitStringString(@remids) 
-	
-	
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  = Name
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN PartTimePercentage  
-	ON PartTimePercentage.Id = GroupId  
-	INNER JOIN #Remids on #Remids.remid = GroupId 
-	
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  = Name
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN RuleSetBag  
-	ON RuleSetBag.Id = GroupId 
-	INNER JOIN #Remids on #Remids.remid = GroupId 
-	
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  = Name
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN Contract  
-	ON  Contract.Id = GroupId 
-	INNER JOIN #Remids on #Remids.remid = GroupId
+UPDATE [ReadModel].[GroupingReadOnly]
+SET GroupName  = Name
+FROM [ReadModel].[GroupingReadOnly] g
+INNER JOIN (SELECT i.Id, i.Name
+			FROM PartTimePercentage i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			UNION
+			SELECT i.Id, i.Name
+			FROM RuleSetBag i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			UNION
+			SELECT i.Id, i.Name
+			FROM Contract i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			UNION
+			SELECT i.Id, i.Name
+			FROM ContractSchedule i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			UNION
+			SELECT i.Id, i.Name
+			FROM BudgetGroup i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			UNION
+			SELECT i.Id, i.Name
+			FROM Skill i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			UNION
+			SELECT i.Id, i.Name
+			FROM Skill i
+			INNER JOIN #Remids on #Remids.remid = i.Id
+			) as n ON g.GroupId = n.Id
 
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  = Name
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN ContractSchedule  
-	ON  ContractSchedule.Id = GroupId 
-	INNER JOIN #Remids on #Remids.remid = GroupId
-	
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  = Name
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN BudgetGroup  
-	ON  BudgetGroup.Id = GroupId 
-	INNER JOIN #Remids on #Remids.remid = GroupId
-
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  = Name
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN Skill  
-	ON  Skill.Id = GroupId 
-	INNER JOIN #Remids on #Remids.remid = GroupId
-
-	UPDATE [ReadModel].[GroupingReadOnly]
-	SET GroupName  =  t.Name + ' ' + s.Name 
-	FROM [ReadModel].[GroupingReadOnly] INNER JOIN PersonPeriod pp ON pp.Id = GroupId 
-	INNER JOIN Team t ON pp.Team = t.Id
-	INNER JOIN Site s ON s.Id = t.Site
-	INNER JOIN #Remids on #Remids.remid = GroupId
-	WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
-	
 END
 GO
