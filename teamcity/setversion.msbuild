@@ -24,6 +24,5 @@
 		</HgVersion>
 		
 		<Message Text="##teamcity[setParameter name='system.teleopti_version' value='$(majorVersion).$(minorVersion).$(Revision)']" />
-		<Message Text="##teamcity[buildNumber '$(majorVersion).$(minorVersion).$(Revision)']" />
 	</Target>
 </Project>
