@@ -142,7 +142,7 @@
     <value>Agente</value>
   </data>
   <data name="ResAnsweredCalls" xml:space="preserve">
-    <value>Chamadas Antendidas</value>
+    <value>Chamadas Atendidas</value>
   </data>
   <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
     <value>Atendidas Fora do NS</value>

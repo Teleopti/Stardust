@@ -5758,7 +5758,7 @@ As seguintes opções estão ativas:
     <value>Editar a descrição comum do agente para formatar a exportação de uma agenda</value>
   </data>
   <data name="CommonAgentDescriptionForScheduleExports" xml:space="preserve">
-    <value>Descrição Agente em Agendas Exportadas</value>
+    <value>Descrição do Agente nas Escalas Exportadas</value>
   </data>
   <data name="ActualServiceLevel" xml:space="preserve">
     <value>Nível de serviço real</value>
