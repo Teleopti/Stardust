@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using Teleopti.Ccc.Rta.WebService;
@@ -31,27 +32,50 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			bool isSnapshot)
 		{
 			return _rta.SaveState(
-				authenticationKey, 
-				userCode, 
-				stateCode, 
-				stateDescription,
-				isLoggedOn, 
-				secondsInState, 
-				timestamp, 
-				platformTypeId, 
-				sourceId, 
-				batchId,
-				isSnapshot);
+				new ExternalUserStateInputModel
+				{
+					AuthenticationKey = authenticationKey,
+					UserCode = userCode,
+					StateCode = stateCode,
+					StateDescription = stateDescription,
+					IsLoggedOn = isLoggedOn,
+					SecondsInState = secondsInState,
+					Timestamp = timestamp,
+					PlatformTypeId = platformTypeId,
+					SourceId = sourceId,
+					BatchId = batchId,
+					IsSnapshot = isLoggedOn
+				});
 		}
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)
 		{
-			return _rta.SaveStateBatch(authenticationKey, platformTypeId, sourceId, externalUserStateBatch);
+			var states = from s in externalUserStateBatch
+				select new ExternalUserStateInputModel
+				{
+					AuthenticationKey = authenticationKey,
+					UserCode = s.UserCode,
+					StateCode = s.StateCode,
+					StateDescription = s.StateDescription,
+					IsLoggedOn = s.IsLoggedOn,
+					SecondsInState = s.SecondsInState,
+					Timestamp = s.Timestamp,
+					PlatformTypeId = platformTypeId,
+					SourceId = sourceId,
+					BatchId = s.BatchId,
+					IsSnapshot = s.IsLoggedOn
+				};
+			return _rta.SaveStateBatch(states.ToArray());
 		}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-			_rta.CheckForActivityChange(personId, businessUnitId, timestamp);
+			_rta.CheckForActivityChange(new CheckForActivityChangeInputModel
+			{
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				Timestamp = timestamp
+			});
 		}
 	}
 }
