@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 1)
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow(state1.Timestamp), publisher);
 
 			target.SaveState(state1);

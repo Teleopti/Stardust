@@ -13,13 +13,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
-			builder.RegisterType<EventPublisher>()
-				.As<IEventPublisher>()
+			builder.RegisterType<EventPopulatingPublisher>()
+				.As<IEventPopulatingPublisher>()
 				.As<IPublishEventsFromEventHandlers>()
 				.SingleInstance();
+			builder.RegisterType<EventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>();
-			builder.RegisterType<IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService>().As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
+			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>();
 		}
 	}
 
@@ -29,15 +30,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
-			builder.RegisterType<ServiceBusEventPublisher>()
-				.As<IEventPublisher>()
-				.As<IServiceBusEventPublisher>()
+			builder.RegisterType<ServiceBusEventPopulatingPublisher>()
+				.As<IEventPopulatingPublisher>()
+				.As<IServiceBusEventPopulatingPublisher>()
 				.SingleInstance();
+			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
 			builder.RegisterType<CannotPublishEventsFromEventHandlers>()
 				.As<IPublishEventsFromEventHandlers>()
 				.SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>();
-			builder.RegisterType<CannotGetUpdatedScheduleChangeFromTeleoptiRtaService>().As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
+			builder.RegisterType<ThrowOnNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>();
 		}
 	}
 }

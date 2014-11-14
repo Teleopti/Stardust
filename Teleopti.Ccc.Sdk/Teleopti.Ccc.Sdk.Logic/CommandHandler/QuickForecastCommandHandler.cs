@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
     {
-		private readonly IServiceBusEventPublisher _busSender;
+		private readonly IServiceBusEventPopulatingPublisher _busSender;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public QuickForecastCommandHandler(IServiceBusEventPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public QuickForecastCommandHandler(IServiceBusEventPopulatingPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;

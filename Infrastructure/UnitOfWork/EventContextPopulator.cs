@@ -27,24 +27,28 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setInitiator(IInitiatorInfo @event)
 		{
+			if (@event.InitiatorId != Guid.Empty)
+				return;
 			var initiatorIdentifier = _initiatorIdentifier.Current();
 			if (initiatorIdentifier != null)
 				@event.InitiatorId = initiatorIdentifier.InitiatorId;
 		}
 
-		// should use ICurrentDataSource and I...stuff or something
-		private void setLogOnInfo(ILogOnInfo message)
+		private void setLogOnInfo(ILogOnInfo @event)
 		{
+			if (!string.IsNullOrEmpty(@event.Datasource))
+				return;
+
 			if (_identity == null) return;
 
 			var identity = _identity.Current();
 			if (identity == null)
 				return;
 
-			message.BusinessUnitId = message.BusinessUnitId.Equals(Guid.Empty)
+			@event.BusinessUnitId = @event.BusinessUnitId.Equals(Guid.Empty)
 				? identity.BusinessUnit.Id.GetValueOrDefault()
-				: message.BusinessUnitId;
-			message.Datasource = identity.DataSource.Application.Name;
+				: @event.BusinessUnitId;
+			@event.Datasource = identity.DataSource.Application.Name;
 		}
 	}
 }

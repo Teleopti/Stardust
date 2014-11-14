@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldSendToBus()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var target = new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator());
+			var target = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new DummyContextPopulator());
 			var @event = new Event();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldThrowIfBusCannotBeEnsured()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var target = new ServiceBusEventPublisher(serviceBusSender, null);
+			var target = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), null);
 			var @event = new Event();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(false);
 

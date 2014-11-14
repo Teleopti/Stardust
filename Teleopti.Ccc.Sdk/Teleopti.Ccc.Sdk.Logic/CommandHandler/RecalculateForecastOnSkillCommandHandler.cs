@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class RecalculateForecastOnSkillCommandHandler : IHandleCommand<RecalculateForecastOnSkillCollectionCommandDto>
 	{
-		private readonly IServiceBusEventPublisher _busSender;
+		private readonly IServiceBusEventPopulatingPublisher _busSender;
 
-		public RecalculateForecastOnSkillCommandHandler(IServiceBusEventPublisher busSender)
+		public RecalculateForecastOnSkillCommandHandler(IServiceBusEventPopulatingPublisher busSender)
 		{
 			_busSender = busSender;
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
             }
 	        
-				 _busSender.PublishWithoutInitiatorInfo(message);
+				 _busSender.Publish(message);
 	        
            
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };

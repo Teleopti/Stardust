@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	    private readonly IScheduleRepository _scheduleRepository;
 	    private readonly IPersonRequestRepository _personRequestRepository;
 	    private readonly ICurrentScenario _currentScenario;
-	    private readonly IServiceBusEventPublisher _serviceBusSender;
+	    private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
         private readonly PersonRequestDto _personRequestDto;
 
-        public AcceptPreviouslyReferredShiftTradeCommand(IScheduleRepository scheduleRepository, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IServiceBusEventPublisher serviceBusSender, PersonRequestDto personRequestDto)
+        public AcceptPreviouslyReferredShiftTradeCommand(IScheduleRepository scheduleRepository, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IServiceBusEventPopulatingPublisher serviceBusSender, PersonRequestDto personRequestDto)
         {
             _scheduleRepository = scheduleRepository;
 	        _personRequestRepository = personRequestRepository;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			            PersonRequestId =
 				            _personRequestDto.Id.GetValueOrDefault(Guid.Empty)
 		            };
-                _serviceBusSender.PublishWithoutInitiatorInfo(message);
+                _serviceBusSender.Publish(message);
             }
         }
     }

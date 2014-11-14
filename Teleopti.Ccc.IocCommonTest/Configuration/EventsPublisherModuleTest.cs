@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder.RegisterModule<LocalInMemoryEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
+			container.Resolve<IEventPopulatingPublisher>().Should().Be.OfType<EventPopulatingPublisher>();
 		}
 
 		[Test]
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder.RegisterModule<ServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<ServiceBusEventPublisher>();
+			container.Resolve<IEventPopulatingPublisher>().Should().Be.OfType<ServiceBusEventPopulatingPublisher>();
 		}
 
 		[Test]
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder.RegisterModule<CommonModule>();
 			containerBuilder.RegisterModule<ServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
-			container.Resolve<IServiceBusEventPublisher>().Should().Not.Be.Null();
-			container.Resolve<IServiceBusEventPublisher>().Should().Be.OfType<ServiceBusEventPublisher>();
+			container.Resolve<IServiceBusEventPopulatingPublisher>().Should().Not.Be.Null();
+			container.Resolve<IServiceBusEventPopulatingPublisher>().Should().Be.OfType<ServiceBusEventPopulatingPublisher>();
 		}
 	}
 }

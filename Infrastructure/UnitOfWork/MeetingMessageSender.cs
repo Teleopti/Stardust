@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class MeetingMessageSender : IMessageSender
 	{
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 
-		public MeetingMessageSender(IServiceBusEventPublisher serviceBusSender)
+		public MeetingMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}

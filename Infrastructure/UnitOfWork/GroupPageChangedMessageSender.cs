@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class GroupPageChangedMessageSender : IMessageSender
 	{
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 
 		private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
 		                                                        		typeof (IGroupPage)
 		                                                        	};
 
-		public GroupPageChangedMessageSender(IServiceBusEventPublisher serviceBusSender)
+		public GroupPageChangedMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}

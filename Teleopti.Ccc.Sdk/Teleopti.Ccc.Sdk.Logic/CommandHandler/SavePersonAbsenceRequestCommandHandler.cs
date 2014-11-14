@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersistPersonRequest _persistPersonRequest;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly IServiceBusEventPublisher _serviceBusSender;
+        private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 
 
-        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusEventPublisher serviceBusSender)
+        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusEventPopulatingPublisher serviceBusSender)
         {
             _persistPersonRequest = persistPersonRequest;
             _unitOfWorkFactory = unitOfWorkFactory;

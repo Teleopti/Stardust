@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	public class QuickForecastCommandHandlerTest
 	{
 		private MockRepository _mocks;
-		private IServiceBusEventPublisher _busSender;
+		private IServiceBusEventPopulatingPublisher _busSender;
 		private  ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private  IJobResultRepository _jobResultRepository;
 		private QuickForecastCommandHandler _target;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_busSender = _mocks.DynamicMock<IServiceBusEventPublisher>();
+			_busSender = _mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
 			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
 			_target = new QuickForecastCommandHandler(_busSender, _unitOfWorkFactory, _jobResultRepository);

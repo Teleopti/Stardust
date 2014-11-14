@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
 	public class AbsenceReportPersister : IAbsenceReportPersister
 	{
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public AbsenceReportPersister(IServiceBusEventPublisher serviceBusSender, ICurrentBusinessUnit businessUnitProvider, ICurrentDataSource currentDataSource, INow now, ICurrentUnitOfWork currentUnitOfWork, ILoggedOnUser loggedOnUser)
+		public AbsenceReportPersister(IServiceBusEventPopulatingPublisher serviceBusSender, ICurrentBusinessUnit businessUnitProvider, ICurrentDataSource currentDataSource, INow now, ICurrentUnitOfWork currentUnitOfWork, ILoggedOnUser loggedOnUser)
 		{
 			_serviceBusSender = serviceBusSender;
 			_businessUnitProvider = businessUnitProvider;

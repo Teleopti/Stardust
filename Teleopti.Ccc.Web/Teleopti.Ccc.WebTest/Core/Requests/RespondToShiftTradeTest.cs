@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var busSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var busSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			busSender.Expect(x => x.EnsureBus()).Return(false);
 			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, busSender, null);
 			var requestViewModel = new RequestViewModel();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var busSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var busSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("gegga");

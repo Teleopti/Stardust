@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
     {
-		private readonly IServiceBusEventPublisher _busSender;
+		private readonly IServiceBusEventPopulatingPublisher _busSender;
 
-		public DenormalizeScheduleCommandHandler(IServiceBusEventPublisher busSender)
+		public DenormalizeScheduleCommandHandler(IServiceBusEventPopulatingPublisher busSender)
 		{
 			_busSender = busSender;
 		}

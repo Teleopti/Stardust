@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Main
             }
         	
 			var sendToServiceBus = new ServiceBusSender();
-			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),

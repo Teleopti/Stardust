@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 		{
 			var queueStatsModels = new List<QueueStatsModel> { new QueueStatsModel() };
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
-			var publisher = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var publisher = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 
 			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 		{
 			var queueDataCompleted =  new QueueDataCompleted{DataSentUpUntilInterval = "20"} ;
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
-			var publisher = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var publisher = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
 			publisher.Stub(x => x.EnsureBus()).Return(true);
 			controller.PostIntervalsCompleted(queueDataCompleted);
@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 			publisher.AssertWasCalled(x => x.Publish(Arg<FactQueueUpdatedMessage>.Is.Anything));
 		}
 
-		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId, IServiceBusEventPublisher publisher)
+		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId, IServiceBusEventPopulatingPublisher populatingPublisher)
 		{
 			//other properties could be set if needed later
 			//var config = new HttpConfiguration();
 			//var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/queuestat");
 			//var route = config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}");
 			//var routeData = new HttpRouteData(route, new HttpRouteValueDictionary { { "controller", "queuestat" } });
-			var controller = new QueueStatsController(handler, publisher)
+			var controller = new QueueStatsController(handler, populatingPublisher)
 			{
 				//ControllerContext = new HttpControllerContext(config, routeData, request),
 				//Request = request,

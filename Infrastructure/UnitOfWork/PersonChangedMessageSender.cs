@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
     public class PersonChangedMessageSender :IMessageSender
     {
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 
 	    private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
 		                                                        		typeof (IPerson),
 		                                                        	};
 
-		public PersonChangedMessageSender(IServiceBusEventPublisher serviceBusSender)
+		public PersonChangedMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}

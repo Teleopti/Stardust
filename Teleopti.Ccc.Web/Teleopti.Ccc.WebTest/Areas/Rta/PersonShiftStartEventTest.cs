@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher);
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:02"), publisher);
 
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-19 10:00".Utc(), "2014-10-19 11:00".Utc())
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher);
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 09:00".Utc(), "2014-10-20 10:00".Utc())
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:02"), publisher);
 
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 12:00".Utc())
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:02"), publisher);
 
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var dataSource = new FakeCurrentDatasource("datasource");
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher, dataSource);

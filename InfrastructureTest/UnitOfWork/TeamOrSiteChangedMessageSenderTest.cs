@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender _target;
 		private MockRepository _mocks;
-		private IServiceBusEventPublisher _serviceBusSender;
+		private IServiceBusEventPopulatingPublisher _serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_serviceBusSender = _mocks.DynamicMock<IServiceBusEventPublisher>();
+			_serviceBusSender = _mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
 			_target = new TeamOrSiteChangedMessageSender(_serviceBusSender);
 		}
 

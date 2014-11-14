@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-    public interface IServiceBusSender : IDisposable
+	public interface IServiceBusSender : IDisposable
     {
-	    void Send(object message);
-        bool EnsureBus();
+		bool EnsureBus();
+		void Send(object message);
     }
 }

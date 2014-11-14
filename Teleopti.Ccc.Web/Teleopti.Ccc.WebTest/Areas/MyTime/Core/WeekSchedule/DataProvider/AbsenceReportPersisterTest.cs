@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 			serviceBusSender.AssertWasNotCalled(x => x.Publish(Arg<MessageWithLogOnInfo>.Is.Anything));
 		}
 
-		private static IServiceBusEventPublisher mockPersistAbsenceReport(bool shouldEnsureBus,
+		private static IServiceBusEventPopulatingPublisher mockPersistAbsenceReport(bool shouldEnsureBus,
 			ICurrentUnitOfWork currentUnitOfWork, out NewAbsenceReportCreated message)
 		{
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(shouldEnsureBus);
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();

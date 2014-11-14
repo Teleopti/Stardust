@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeEventsPublisher : IEventPublisher
+	public class FakeEventPopulatingPublisher : IEventPopulatingPublisher
 	{
 		public IList<IEvent> PublishedEvents = new List<IEvent>();
 

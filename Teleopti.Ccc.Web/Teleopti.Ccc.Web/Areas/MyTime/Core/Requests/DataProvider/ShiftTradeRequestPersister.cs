@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentDataSource _dataSourceProvider;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
 																		IShiftTradeRequestMapper shiftTradeRequestMapper, 
 																		IMappingEngine autoMapper,
-																		IServiceBusEventPublisher serviceBusSender,
+																		IServiceBusEventPopulatingPublisher serviceBusSender,
 																		INow now,
 																		ICurrentDataSource dataSourceProvider,
 																		ICurrentBusinessUnit businessUnitProvider,

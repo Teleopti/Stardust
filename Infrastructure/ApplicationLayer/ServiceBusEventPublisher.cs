@@ -1,57 +1,15 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public interface IServiceBusEventPublisher : IEventPublisher
-	{
-		bool EnsureBus();
-		void Publish(ILogOnInfo message);
-		void PublishWithoutInitiatorInfo(ILogOnInfo message);
-	}
-
 	public class ServiceBusEventPublisher : IServiceBusEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
-		private readonly IEventContextPopulator _eventContextPopulator;
 
-		public ServiceBusEventPublisher(IServiceBusSender sender, IEventContextPopulator eventContextPopulator)
+		public ServiceBusEventPublisher(IServiceBusSender sender)
 		{
 			_sender = sender;
-			_eventContextPopulator = eventContextPopulator;
-		}
-
-		public void Publish(IEvent @event)
-		{
-			if (!_sender.EnsureBus())
-				throw new ApplicationException("Cant find the bus, cant publish the event!");
-
-			_eventContextPopulator.PopulateEventContext(@event);
-
-			_sender.Send(@event);
-		}
-		
-		public void Publish(ILogOnInfo message)
-		{
-			if (!_sender.EnsureBus())
-				throw new ApplicationException("Cant find the bus, cant publish the event!");
-
-			_eventContextPopulator.PopulateEventContext(message);
-
-			_sender.Send(message);
-		}
-
-		public void PublishWithoutInitiatorInfo(ILogOnInfo message)
-		{
-			if (!_sender.EnsureBus())
-				throw new ApplicationException("Cant find the bus, cant publish the event!");
-
-			_eventContextPopulator.PopulateEventContext(message);
-
-			_sender.Send(message);
 		}
 
 		public bool EnsureBus()
@@ -59,5 +17,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			return _sender.EnsureBus();
 		}
 
+		public void Publish(IEvent @event)
+		{
+			_sender.Send(@event);
+		}
+
+		public void Publish(ILogOnInfo nonEvent)
+		{
+			_sender.Send(nonEvent);
+		}
 	}
 }

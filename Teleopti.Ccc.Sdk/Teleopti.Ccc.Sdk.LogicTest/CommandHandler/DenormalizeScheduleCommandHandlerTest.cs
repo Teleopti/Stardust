@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class DenormalizeScheduleCommandHandlerTest
     {
-		private IServiceBusEventPublisher _busSender;
+		private IServiceBusEventPopulatingPublisher _busSender;
         private MockRepository _mock;
         private DenormalizeScheduleCommandHandler _target;
         private DenormalizeScheduleCommandDto _denormalizeScheduleCommandDto;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
+			_busSender = _mock.StrictMock<IServiceBusEventPopulatingPublisher>();
             _target = new DenormalizeScheduleCommandHandler(_busSender);
             _denormalizeScheduleCommandDto = new DenormalizeScheduleCommandDto();
         }

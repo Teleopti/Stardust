@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ExportMultisiteSkillToSkillCommandHandler : IHandleCommand<ExportMultisiteSkillToSkillCommandDto>
     {
-		private readonly IServiceBusEventPublisher _busSender;
+		private readonly IServiceBusEventPopulatingPublisher _busSender;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public ExportMultisiteSkillToSkillCommandHandler(IServiceBusEventPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public ExportMultisiteSkillToSkillCommandHandler(IServiceBusEventPopulatingPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
             _unitOfWorkFactory = unitOfWorkFactory;

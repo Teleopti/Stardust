@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 	public class QueueStatsController : ApiController
 	{
 		private readonly IQueueStatHandler _queueStatHandler;
-		private IServiceBusEventPublisher _serviceBusSender;
+		private IServiceBusEventPopulatingPublisher _serviceBusSender;
 
-		public QueueStatsController(IQueueStatHandler queueStatHandler, IServiceBusEventPublisher serviceBusSender)
+		public QueueStatsController(IQueueStatHandler queueStatHandler, IServiceBusEventPopulatingPublisher serviceBusSender)
 		{
 			_queueStatHandler = queueStatHandler;
 			_serviceBusSender = serviceBusSender;

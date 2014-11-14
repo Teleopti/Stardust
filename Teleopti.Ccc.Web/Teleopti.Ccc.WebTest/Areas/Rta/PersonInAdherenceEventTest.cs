@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, 0)
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), publisher);
 
 			target.SaveState(state);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), publisher);
 
 			target.SaveState(state);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 0)
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow(state1.Timestamp), publisher);
 
 			target.SaveState(state1);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", activityId, 0)
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), publisher);
 
 			target.SaveState(state);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-11-11 10:00".Utc(), "2014-11-11 12:00".Utc())
 				.WithAlarm("statecode", activityId, 0)
 				.Make();
-			var publisher = new FakeEventsPublisher();
+			var publisher = new FakeEventPopulatingPublisher();
 			var dataSource = new FakeCurrentDatasource("datasource");
 			var target = new RtaForTest(database, new ThisIsNow("2014-11-11 11:00"), publisher, dataSource);
 

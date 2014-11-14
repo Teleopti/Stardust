@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class TeamOrSiteChangedMessageSender : IMessageSender
 	{
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 
 		private readonly IEnumerable<Type> _otherTriggerInterfaces = new List<Type>
 			{
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				typeof (ISite),
 			};
 
-		public TeamOrSiteChangedMessageSender(IServiceBusEventPublisher serviceBusSender)
+		public TeamOrSiteChangedMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}

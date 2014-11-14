@@ -12,14 +12,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
+			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 			builder.RegisterType<EventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<LocalServiceBusPublisher>()
 				.As<IPublishEventsFromEventHandlers>()
 				.As<ISendDelayedMessages>()
 				.SingleInstance();
-			builder.RegisterType<GetUpdatedScheduleChangeFromTeleoptiRtaService>()
-				.As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>()
+			builder.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>()
+				.As<INotifyRtaToCheckForActivityChange>()
 				.SingleInstance();
 		}
 	}

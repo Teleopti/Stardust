@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					{
 						new ScheduleProjectionReadOnlyUpdater(
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
-							new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))),
+							new EventPopulatingPublisher(new EventPublisher(this), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))),
 							new ThisIsNow(utcTheTime)
 							)
 					};
@@ -64,12 +64,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return new[]
 					{
-						new ScheduleChangedEventPublisher(new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
+						new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new EventPublisher(this), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
 					};
 			if (type == typeof(IEnumerable<IHandleEvent<FullDayAbsenceAddedEvent>>))
 				return new[]
 					{
-						new ScheduleChangedEventPublisher(new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
+						new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new EventPublisher(this), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
 					};
 			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								messageBroker(),
 								new UnitOfWorkTransactionEventSyncronization(CurrentUnitOfWork.Make())),
 							new PersonSkillProvider(),
-							new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
+							new EventPopulatingPublisher(new EventPublisher(this), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
 					};
 			Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
 			return null;
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private object makeProjectionChangedEventPublisher()
 		{
 			return new ProjectionChangedEventPublisher(
-					 new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))),
+					 new EventPopulatingPublisher(new EventPublisher(this), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))),
 					 new ScenarioRepository(CurrentUnitOfWork.Make()),
 					 new PersonRepository(CurrentUnitOfWork.Make()),
 					 new ScheduleRepository(CurrentUnitOfWork.Make()),

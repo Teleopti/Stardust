@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public class PayrollResultFactory : IPayrollResultFactory
     {
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 		private readonly IPayrollResultRepository _payrollResultRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPayrollExportRepository _payrollExportRepository;
 
-		public PayrollResultFactory(IServiceBusEventPublisher serviceBusSender, IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository, IPayrollExportRepository payrollExportRepository)
+		public PayrollResultFactory(IServiceBusEventPopulatingPublisher serviceBusSender, IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository, IPayrollExportRepository payrollExportRepository)
 		{
 			_serviceBusSender = serviceBusSender;
 			_payrollResultRepository = payrollResultRepository;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         payrollExport.ExportPersonCollection;
                 }
 
-                _serviceBusSender.PublishWithoutInitiatorInfo(message);
+                _serviceBusSender.Publish(message);
             }
             return payrollResultId;
         }

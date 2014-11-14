@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class SyncEventsPublisher : IEventsPublisher
 	{
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 
-		public SyncEventsPublisher(IEventPublisher eventPublisher) { _eventPublisher = eventPublisher; }
+		public SyncEventsPublisher(IEventPopulatingPublisher eventPopulatingPublisher) { _eventPopulatingPublisher = eventPopulatingPublisher; }
 
 		public void Publish(IEnumerable<IEvent> events)
 		{
-			events.ForEach(e => _eventPublisher.Publish(e));
+			events.ForEach(e => _eventPopulatingPublisher.Publish(e));
 		}
 	}
 }

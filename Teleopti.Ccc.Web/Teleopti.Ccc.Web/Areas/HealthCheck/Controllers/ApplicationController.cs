@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
     public class ApplicationController : Controller
     {
-	    private readonly IServiceBusEventPublisher _publisher;
+	    private readonly IServiceBusEventPopulatingPublisher _populatingPublisher;
 	    private readonly IEtlJobStatusRepository _etlJobStatusRepository;
 		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
 
-		public ApplicationController(IServiceBusEventPublisher publisher, IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository)
+		public ApplicationController(IServiceBusEventPopulatingPublisher populatingPublisher, IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository)
 	    {
-		    _publisher = publisher;
+		    _populatingPublisher = populatingPublisher;
 		    _etlJobStatusRepository = etlJobStatusRepository;
 		    _etlLogObjectRepository = etlLogObjectRepository;
 	    }
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 	    public ActionResult CheckBus()
 	    {
 		    var diagnosticsMessage = new DiagnosticsMessage();
-		    _publisher.Publish(diagnosticsMessage);
+		    _populatingPublisher.Publish(diagnosticsMessage);
 		    return Json(new {diagnosticsMessage.InitiatorId},JsonRequestBehavior.AllowGet);
 	    }
 

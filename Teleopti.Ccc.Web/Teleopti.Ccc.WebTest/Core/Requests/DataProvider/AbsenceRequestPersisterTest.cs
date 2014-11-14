@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(false);
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			var now = MockRepository.GenerateMock<INow>();

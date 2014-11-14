@@ -242,7 +242,6 @@
     <Compile Include="Areas\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateWebModelForTest.cs" />
-    <Compile Include="Areas\Rta\FakeEventsPublisher.cs" />
     <Compile Include="Areas\Rta\FakeRtaDatabase.cs" />
     <Compile Include="Areas\Rta\FakeSignalRClient.cs" />
     <Compile Include="Areas\Rta\NotifyPossibleActivityChangeTest.cs" />

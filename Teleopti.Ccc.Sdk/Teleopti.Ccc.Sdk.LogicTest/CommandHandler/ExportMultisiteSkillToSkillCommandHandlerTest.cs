@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class ExportMultisiteSkillToSkillCommandHandlerTest
     {
         private MockRepository _mock;
-		private IServiceBusEventPublisher _busSender;
+		private IServiceBusEventPopulatingPublisher _busSender;
         private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IJobResultRepository _jobResultRepository;
         private ExportMultisiteSkillToSkillCommandHandler _target;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
+			_busSender = _mock.StrictMock<IServiceBusEventPopulatingPublisher>();
             _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
             _target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository);

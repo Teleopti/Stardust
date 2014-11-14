@@ -16,16 +16,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		ConsumerOf<IEvent>,
 		ConsumerOf<EventsPackageMessage>
 	{
-		private readonly IEventPublisher _publisher;
+		private readonly IEventPopulatingPublisher _populatingPublisher;
 		private readonly IServiceBus _bus;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(EventsConsumer));
 
-		public EventsConsumer(IEventPublisher publisher, IServiceBus bus, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITrackingMessageSender trackingMessageSender)
+		public EventsConsumer(IEventPopulatingPublisher populatingPublisher, IServiceBus bus, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITrackingMessageSender trackingMessageSender)
 		{
-			_publisher = publisher;
+			_populatingPublisher = populatingPublisher;
 			_bus = bus;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_trackingMessageSender = trackingMessageSender;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			{
 				if (logOnInfo == null)
 				{
-					_publisher.Publish(@event);
+					_populatingPublisher.Publish(@event);
 				}
 				else
 				{
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 					{
 						using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 						{
-							_publisher.Publish(@event);
+							_populatingPublisher.Publish(@event);
 							unitOfWork.PersistAll();
 						}
 					}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 					{
 						using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 						{
-							_publisher.Publish(@event);
+							_populatingPublisher.Publish(@event);
 							unitOfWork.PersistAll();
 						}
 					}

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
-		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
 		private readonly INow _nu;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 									ILoggedOnUser loggedOnUser,
 									IMappingEngine mapper,
-									IServiceBusEventPublisher serviceBusSender,
+									IServiceBusEventPopulatingPublisher serviceBusSender,
 									INow nu)
 		{
 			_personRequestRepository = personRequestRepository;

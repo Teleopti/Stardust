@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	public class RecalculateForecastOnSkillCommandHandlerTest
 	{
 		private MockRepository _mocks;
-		private IServiceBusEventPublisher _busSender;
+		private IServiceBusEventPopulatingPublisher _busSender;
 		private RecalculateForecastOnSkillCommandHandler _target;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_busSender = _mocks.DynamicMock<IServiceBusEventPublisher>();
+			_busSender = _mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
 
 			_target = new RecalculateForecastOnSkillCommandHandler(_busSender);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			               	};
 			var message = new RecalculateForecastOnSkillMessageCollection();
 			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() =>_busSender.PublishWithoutInitiatorInfo(message)).IgnoreArguments();
+			Expect.Call(() =>_busSender.Publish(message)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Handle(commands);
 			_mocks.VerifyAll();

@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class ScheduleMessageSender : IMessageSender
 	{
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 		private readonly IBeforeSendEvents _clearEvents;
 		private static readonly Type[] IncludedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 
-		public ScheduleMessageSender(IEventPublisher eventPublisher, IBeforeSendEvents clearEvents)
+		public ScheduleMessageSender(IEventPopulatingPublisher eventPopulatingPublisher, IBeforeSendEvents clearEvents)
 		{
-			_eventPublisher = eventPublisher;
+			_eventPopulatingPublisher = eventPopulatingPublisher;
 			_clearEvents = clearEvents;
 		}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
 					              	};
-					_eventPublisher.Publish(message);
+					_eventPopulatingPublisher.Publish(message);
 				}
 			}
 		}

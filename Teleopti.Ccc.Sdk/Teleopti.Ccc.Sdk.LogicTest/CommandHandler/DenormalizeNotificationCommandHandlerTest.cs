@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class DenormalizeNotificationCommandHandlerTest
     {
-		private IServiceBusEventPublisher _busSender;
+		private IServiceBusEventPopulatingPublisher _busSender;
         private MockRepository _mock;
         private DenormalizeNotificationCommandHandler _target;
         private DenormalizeNotificationCommandDto _denormalizeNotificationCommandDto;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
+			_busSender = _mock.StrictMock<IServiceBusEventPopulatingPublisher>();
             _target = new DenormalizeNotificationCommandHandler(_busSender);
             _denormalizeNotificationCommandDto = new DenormalizeNotificationCommandDto();
         }

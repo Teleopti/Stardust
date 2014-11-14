@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class RtaEventPublisher : IRtaEventPublisher
 	{
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IDictionary<Guid, Type> _sentEvents = new Dictionary<Guid, Type>();
 
-		public RtaEventPublisher(IEventPublisher eventPublisher, ICurrentDataSource currentDataSource)
+		public RtaEventPublisher(IEventPopulatingPublisher eventPopulatingPublisher, ICurrentDataSource currentDataSource)
 		{
-			_eventPublisher = eventPublisher;
+			_eventPopulatingPublisher = eventPopulatingPublisher;
 			_currentDataSource = currentDataSource;
 		}
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (info.IsScheduled && !info.WasScheduled)
 			{
-				_eventPublisher.Publish(new PersonShiftStartEvent
+				_eventPopulatingPublisher.Publish(new PersonShiftStartEvent
 				{
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (!info.IsScheduled && info.WasScheduled)
 			{
-				_eventPublisher.Publish(new PersonShiftEndEvent
+				_eventPopulatingPublisher.Publish(new PersonShiftEndEvent
 				{
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.PreviousShiftStartTime,
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var adherenceHasChanged = current == null || current != @event.GetType();
 			if (!adherenceHasChanged) return;
 
-			_eventPublisher.Publish(@event);
+			_eventPopulatingPublisher.Publish(@event);
 			_sentEvents[agentState.PersonId] = @event.GetType();
 		}
 
