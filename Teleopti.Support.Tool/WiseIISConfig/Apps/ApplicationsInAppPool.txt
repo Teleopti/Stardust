@@ -1,12 +1,12 @@
-Level1;TeleoptiWFM;Teleopti ASP.NET v4.0;v4.0;vdir;index.html;None;TeleoptiWFM
-Level2;Analytics;Teleopti ASP.NET v4.0;v4.0;app;Default.aspx;None;Analytics
-Level2;Client;Teleopti ASP.NET v4.0;v4.0;vdir;default.htm;None;Client
-Level2;MyTime;Teleopti ASP.NET v4.0;v4.0;vdir;default.htm;None;MyTime
-Level2;PMService;Teleopti ASP.NET v4.0;v4.0;app;None;None;PMService
-Level2;RTA;Teleopti ASP.NET v4.0 RTA;v4.0;app;None;None;Web
-Level2;SDK;Teleopti ASP.NET v4.0 SDK;v4.0;app;None;None;SDK
-Level2;Broker;Teleopti ASP.NET v4.0 Broker;v4.0;app;None;aspnet_isapi;Broker
-Level2;Broker.backplane;Teleopti ASP.NET v4.0 Broker;v4.0;app;None;aspnet_isapi;Broker.backplane
-Level2;Web;Teleopti ASP.NET v4.0 Web;v4.0;app;None;aspnet_isapi;Web
-Level2;AuthenticationBridge;Teleopti ASP.NET v4.0 Web;v4.0;app;None;aspnet_isapi;AuthenticationBridge
-Level2;WindowsIdentityProvider;Teleopti ASP.NET v4.0 Web;v4.0;app;None;aspnet_isapi;WindowsIdentityProvider
+Level1;TeleoptiWFM;Teleopti WFM;v4.0;vdir;index.html;None;TeleoptiWFM
+Level2;Analytics;Teleopti WFM;v4.0;app;Default.aspx;None;Analytics
+Level2;Client;Teleopti WFM;v4.0;vdir;default.htm;None;Client
+Level2;MyTime;Teleopti WFM;v4.0;vdir;default.htm;None;MyTime
+Level2;PMService;Teleopti WFM;v4.0;app;None;None;PMService
+Level2;RTA;Teleopti WFM RTA;v4.0;app;None;None;Web
+Level2;SDK;Teleopti WFM SDK;v4.0;app;None;None;SDK
+Level2;Broker;Teleopti WFM Broker;v4.0;app;None;aspnet_isapi;Broker
+Level2;Broker.backplane;Teleopti WFM Broker;v4.0;app;None;aspnet_isapi;Broker.backplane
+Level2;Web;Teleopti WFM Web;v4.0;app;None;aspnet_isapi;Web
+Level2;AuthenticationBridge;Teleopti WFM Web;v4.0;app;None;aspnet_isapi;AuthenticationBridge
+Level2;WindowsIdentityProvider;Teleopti WFM Web;v4.0;app;None;aspnet_isapi;WindowsIdentityProvider
