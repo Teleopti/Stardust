@@ -20,13 +20,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var fakeMessageSender = new FakeMessageSender();
 			var target =
-				new StateController(new TeleoptiRtaServiceForTest(fakeRtaDatabase, new ThisIsNow("2014-11-14 10:00"),
+				new StateController(new RtaForTest(fakeRtaDatabase, new ThisIsNow("2014-11-14 10:00"),
 					fakeMessageSender));
 
 			target.Change(new ExternalUserStateWebModelForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode"
+				StateCode = "statecode",
+				Timestamp = "2014-11-14 10:00"
 			});
 
 			fakeMessageSender.NotificationOfType<IActualAgentState>()

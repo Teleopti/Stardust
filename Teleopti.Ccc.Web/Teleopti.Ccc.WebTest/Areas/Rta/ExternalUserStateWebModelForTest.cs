@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -8,7 +7,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public ExternalUserStateWebModelForTest()
 		{
-			AuthenticationKey = TeleoptiRtaService.DefaultAuthenticationKey;
+			AuthenticationKey = Web.Areas.Rta.Rta.DefaultAuthenticationKey;
 			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 			IsLoggedOn = true;
