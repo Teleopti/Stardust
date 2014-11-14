@@ -530,8 +530,8 @@
 		<!-- adding additional info for the the Client-->
 		<AssemblyInfo CodeLanguage="CS"
 						OutputFile="$(ClientProperties)\AssemblyInfo.cs"
-						AssemblyTitle="Teleopti WFM"
-					AssemblyDescription="Teleopti WFM"
+						AssemblyTitle="WFM"
+					AssemblyDescription="WFM"
 					AssemblyConfiguration=""
 					AssemblyCompany="$(Company)"
 					AssemblyProduct="$(ProductName)"
@@ -551,8 +551,8 @@
 		<Message Text="Update MyTime Version ..."/>
 		<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(MyTimeProperties)\AssemblyInfo.cs"
-				AssemblyTitle="TELEOPTI WFM - MyTime"
-				AssemblyDescription="TELEOPTI WFM - MyTime"
+				AssemblyTitle="WFM"
+				AssemblyDescription="WFM"
 				AssemblyConfiguration=""
 				AssemblyCompany="$(Company)"
 				AssemblyProduct="$(ProductName)"
@@ -574,8 +574,8 @@
 		<Message Text="Update Support Tool Version ..."/>
 		<AssemblyInfo CodeLanguage="CS"
 				OutputFile="$(SupportToolProperties)\AssemblyInfo.cs"
-				AssemblyTitle="TELEOPTI WFM Support Tool"
-				AssemblyDescription="TELEOPTI WFM Support Tool"
+				AssemblyTitle="WFM"
+				AssemblyDescription="WFM"
 				AssemblyConfiguration=""
 				AssemblyCompany="$(Company)"
 				AssemblyProduct="$(ProductName)"
