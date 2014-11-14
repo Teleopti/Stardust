@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			send(state);
 		}
 
-		public bool IsAlive
-		{
-			get { return _messageClient.IsAlive; }
-		}
-
 		public int ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
 			int dataSourceId;

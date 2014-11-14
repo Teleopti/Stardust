@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode", Guid.Empty)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveExternalUserStateSnapshot(new[]
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 			sender.AllNotifications.Clear();
 
-			target.SaveExternalUserStateSnapshot(new[]
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode1", Guid.Empty)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveExternalUserStateSnapshot(new[]
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 					StateCode = "statecode1"
 				}
 			});
-			target.SaveExternalUserStateSnapshot(new[]
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				}
 			});
 
-			target.SaveExternalUserStateSnapshot(new[]
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode2", Guid.Empty, true)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveExternalUserStateSnapshot(new[]
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				}
 			});
 
-			target.SaveExternalUserStateSnapshot(new[]
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{

@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				PersonId = person1,
 				StaffingEffect = -1
 			});
-			var service = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var service = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			service.Initialize();
-			service.SaveExternalUserState(state);
+			service.SaveState(state);
 
 			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				PersonId = person1,
 				StaffingEffect = -1
 			});
-			var service = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var service = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
 			service.Initialize();
 

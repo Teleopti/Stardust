@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, 1)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
 
-			target.SaveExternalUserState(inAdherence);
-			target.SaveExternalUserState(outOfAdherence);
+			target.SaveState(inAdherence);
+			target.SaveState(outOfAdherence);
 
 			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
@@ -66,10 +66,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
 
-			target.SaveExternalUserState(inAdherence);
-			target.SaveExternalUserState(outOfAdherence);
+			target.SaveState(inAdherence);
+			target.SaveState(outOfAdherence);
 
 			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
@@ -103,10 +103,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
 
-			target.SaveExternalUserState(outOfAdherence1);
-			target.SaveExternalUserState(outOfAdherence2);
+			target.SaveState(outOfAdherence1);
+			target.SaveState(outOfAdherence2);
 
 			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
@@ -139,10 +139,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
 
-			target.SaveExternalUserState(outOfAdherence1);
-			target.SaveExternalUserState(outOfAdherence2);
+			target.SaveState(outOfAdherence1);
+			target.SaveState(outOfAdherence2);
 
 			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
@@ -163,9 +163,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, null, siteId)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.LastTeamNotification.DomainReferenceId
 				.Should().Be.EqualTo(siteId.ToString());

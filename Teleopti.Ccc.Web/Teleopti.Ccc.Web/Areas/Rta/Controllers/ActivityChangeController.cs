@@ -4,17 +4,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	public class ActivityChangeController : Controller
 	{
-		private readonly TeleoptiRtaService _teleoptiRtaService;
+		private readonly IRta _rta;
 
-		public ActivityChangeController(TeleoptiRtaService teleoptiRtaService)
+		public ActivityChangeController(IRta rta)
 		{
-			_teleoptiRtaService = teleoptiRtaService;
+			_rta = rta;
 		}
 
 		[HttpPost]
 		public void CheckFor(CheckForActivityChangeInputModel model)
 		{
-			_teleoptiRtaService.CheckForActivityChange(model);
+			_rta.CheckForActivityChange(model);
 		}
 	}
 }

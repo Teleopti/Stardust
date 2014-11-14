@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public ExternalUserStateForTest()
 		{
-			AuthenticationKey = TeleoptiRtaService.DefaultAuthenticationKey;
+			AuthenticationKey = Web.Areas.Rta.Rta.DefaultAuthenticationKey;
 			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 			UserCode = "8808";

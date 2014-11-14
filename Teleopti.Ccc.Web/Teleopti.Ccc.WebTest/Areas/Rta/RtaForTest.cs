@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,9 +13,9 @@ using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
-	public class TeleoptiRtaServiceForTest : TeleoptiRtaService
+	public class RtaForTest : Web.Areas.Rta.Rta
 	{
-		public TeleoptiRtaServiceForTest(FakeRtaDatabase database)
+		public RtaForTest(FakeRtaDatabase database)
 			: this(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
-		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now)
+		public RtaForTest(FakeRtaDatabase database, INow now)
 			: this(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
-		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher)
+		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher)
 			: this(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
-		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
+		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
 			: this(
 				new FakeSignalRClient(),
 				messageSender,
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
-		public TeleoptiRtaServiceForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
+		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
 			: this(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private FakeRtaDatabase _database;
 
-		public TeleoptiRtaServiceForTest(
+		public RtaForTest(
 			ISignalRClient signalRClient,
 			IMessageSender messageSender,
 			IDatabaseReader databaseReader,
@@ -116,29 +115,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			_database = databaseReader as FakeRtaDatabase;
 		}
 
-		public static TeleoptiRtaService Make()
+		public static Web.Areas.Rta.Rta Make()
 		{
-			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase());
+			return new RtaForTest(new FakeRtaDatabase());
 		}
 
-		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state)
+		public static Web.Areas.Rta.Rta MakeBasedOnState(ExternalUserStateForTest state)
 		{
-			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), new ThisIsNow(state.Timestamp));
+			return new RtaForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), new ThisIsNow(state.Timestamp));
 		}
 
-		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state, INow now)
+		public static Web.Areas.Rta.Rta MakeBasedOnState(ExternalUserStateForTest state, INow now)
 		{
-			return new TeleoptiRtaServiceForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), now);
+			return new RtaForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), now);
 		}
 
-		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database)
+		public static Web.Areas.Rta.Rta MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database)
 		{
-			return new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp));
+			return new RtaForTest(database, new ThisIsNow(state.Timestamp));
 		}
 
-		public static TeleoptiRtaService MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
+		public static Web.Areas.Rta.Rta MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
 		{
-			return new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
+			return new RtaForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
 		}
 
 		public void Initialize()

@@ -5,6 +5,7 @@ namespace Teleopti.Interfaces.Domain
 	public interface IActualAgentState
 	{
 		Guid PersonId { get; set; }
+		Guid BusinessUnitId { get; set; }
 		string State { get; set; }
 		Guid StateId { get; set; }
 		string Scheduled { get; set; }
@@ -23,8 +24,6 @@ namespace Teleopti.Interfaces.Domain
 		DateTime ReceivedTime { get; set; }
 		DateTime? BatchId { get; set; }
 		string OriginalDataSourceId { get; set; }
-
-		Guid BusinessUnitId { get; set; }
 
 		bool InAdherence { get; }
 	}

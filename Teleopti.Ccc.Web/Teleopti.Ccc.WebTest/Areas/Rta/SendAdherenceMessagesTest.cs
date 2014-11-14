@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", Guid.NewGuid(), null, teamId, null)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.LastNotification.DomainId.Should().Be(teamId.ToString());
 		}
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("CCC Logged out", Guid.Empty, 0)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveExternalUserStateSnapshot(new[]
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				}
 			});
 
-			target.SaveExternalUserStateSnapshot(new[]
+			target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -96,10 +96,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
 				.WithAlarm("statecode", phone, 1)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
+			target.SaveState(state);
 
 			sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 			sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
@@ -131,10 +131,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("ready", phone, 1)
 				.WithAlarm("phone", phone, 1)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
-			target.SaveExternalUserState(state2);
+			target.SaveState(state);
+			target.SaveState(state2);
 
 			sender.AllNotifications.Where(x => x.DomainType == typeof(AgentsAdherenceMessage).Name).Should().Have.Count.EqualTo(2);
 		}
@@ -165,10 +165,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("ready", phone, "my first state")
 				.WithAlarm("phone", phone, "my second state")
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
-			target.SaveExternalUserState(state2);
+			target.SaveState(state);
+			target.SaveState(state2);
 
 			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(sender.LastAgentsNotification.BinaryData);
 			jsonResult.AgentStates.Single().State.Should().Be.EqualTo("my second state");
@@ -189,9 +189,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.LastTeamNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
 		}
@@ -211,9 +211,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 		}
@@ -233,9 +233,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.LastSiteNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
 		}
@@ -255,9 +255,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 		}
@@ -274,9 +274,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithSource(state.SourceId)
 				.Make();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			sender.AllNotifications.Should().Be.Empty();
 		}

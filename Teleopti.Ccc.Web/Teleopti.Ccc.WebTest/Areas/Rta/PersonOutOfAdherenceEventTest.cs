@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode", activityId, 1)
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), publisher);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var @event = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
 			@event.PersonId.Should().Be(personId);
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode", activityId, -1)
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), publisher);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var @event = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
 			@event.PersonId.Should().Be(personId);
@@ -89,10 +89,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode2", activityId, 1)
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state1.Timestamp), publisher);
+			var target = new RtaForTest(database, new ThisIsNow(state1.Timestamp), publisher);
 
-			target.SaveExternalUserState(state1);
-			target.SaveExternalUserState(state2);
+			target.SaveState(state1);
+			target.SaveState(state2);
 
 			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
@@ -115,9 +115,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode", activityId, -1)
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state.Timestamp), publisher);
+			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), publisher);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var @event = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
 			@event.Timestamp.Should().Be(state.Timestamp);
@@ -137,9 +137,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var dataSource = new FakeCurrentDatasource("datasource");
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-11-11 11:00"), publisher, dataSource);
+			var target = new RtaForTest(database, new ThisIsNow("2014-11-11 11:00"), publisher, dataSource);
 
-			target.SaveExternalUserState(new ExternalUserStateForTest
+			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",

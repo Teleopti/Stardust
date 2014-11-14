@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+			var target = new RtaForTest(database, now, publisher);
 
 			now.Mutate("2014-10-20 10:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
 			now.Mutate("2014-10-20 11:02");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.PersonId.Should().Be(personId);
@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+			var target = new RtaForTest(database, now, publisher);
 
 			now.Mutate("2014-10-20 10:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
 			now.Mutate("2014-10-20 10:45");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:45".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:45".Utc());
 
 			publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Should().Have.Count.EqualTo(0);
 		}
@@ -72,14 +72,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+			var target = new RtaForTest(database, now, publisher);
 
 			now.Mutate("2014-10-20 10:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
 			now.Mutate("2014-10-20 11:02");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
 			now.Mutate("2014-10-20 11:03");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:03".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 11:03".Utc());
 
 			publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Should().Have.Count.EqualTo(1);
 		}
@@ -98,12 +98,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+			var target = new RtaForTest(database, now, publisher);
 
 			now.Mutate("2014-10-20 09:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 09:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 09:01".Utc());
 			now.Mutate("2014-10-20 11:02");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.ShiftStartTime.Should().Be("2014-10-20 09:00".Utc());
@@ -123,12 +123,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventsPublisher();
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher);
+			var target = new RtaForTest(database, now, publisher);
 
 			now.Mutate("2014-10-20 10:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
 			now.Mutate("2014-10-20 12:02");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 12:02".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 12:02".Utc());
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.ShiftEndTime.Should().Be("2014-10-20 12:00".Utc());
@@ -174,12 +174,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var publisher = new FakeEventsPublisher();
 			var dataSource = new FakeCurrentDatasource("datasource");
 			var now = new MutableNow();
-			var target = new TeleoptiRtaServiceForTest(database, now, publisher, dataSource);
+			var target = new RtaForTest(database, now, publisher, dataSource);
 
 			now.Mutate("2014-10-20 10:01");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:01".Utc());
 			now.Mutate("2014-10-20 11:02");
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 11:02".Utc());
 
 			var @event = (ILogOnInfo)publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
 			@event.BusinessUnitId.Should().Be(businessUnitId);

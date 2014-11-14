@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest();
 			var database = new FakeRtaDatabase().WithDataFromState(state).Make();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
+			var target = RtaForTest.MakeBasedOnState(state, database);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode);
 		}
@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest();
 			var database = new FakeRtaDatabase().WithDataFromState(state).Make();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
+			var target = RtaForTest.MakeBasedOnState(state, database);
 
 			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode.Substring(0, 25));
 		}
@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest();
 			var database = new FakeRtaDatabase().WithDataFromState(state).Make();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
+			var target = RtaForTest.MakeBasedOnState(state, database);
 
 			state.IsLoggedOn = false;
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
-			database.PersistedActualAgentState.StateCode.Should().Be(TeleoptiRtaService.LogOutStateCode);
+			database.PersistedActualAgentState.StateCode.Should().Be(Web.Areas.Rta.Rta.LogOutStateCode);
 		}
 
 		[Test]
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSource(state.SourceId)
 				.WithUser(state.UserCode, personId, businessUnitId)
 				.Make();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, database);
+			var target = RtaForTest.MakeBasedOnState(state, database);
 
-			target.GetUpdatedScheduleChange(personId, businessUnitId, state.Timestamp);
+			target.CheckForActivityChange(personId, businessUnitId, state.Timestamp);
 
 			database.PersistedActualAgentState.PersonId.Should().Be(personId);
 		}

@@ -5,19 +5,19 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-    public class StateController : Controller
-    {
-		private readonly TeleoptiRtaService _teleoptiRtaService;
+	public class StateController : Controller
+	{
+		private readonly IRta _rta;
 
-	    public StateController(TeleoptiRtaService teleoptiRtaService)
-	    {
-		    _teleoptiRtaService = teleoptiRtaService;
-	    }
+		public StateController(IRta rta)
+		{
+			_rta = rta;
+		}
 
 		[HttpPost]
 		public JsonResult Change(ExternalUserStateWebModel state)
 		{
-			var result = _teleoptiRtaService.SaveExternalUserState(
+			var result = _rta.SaveState(
 				new ExternalUserStateInputModel
 				{
 					AuthenticationKey = state.AuthenticationKey,
@@ -37,6 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			if (result == 1 || result == 0)
 				return Json(result);
 			throw new HttpException("Result from TeleoptiRtaService was " + result);
-	    }
-    }
+		}
+	}
 }

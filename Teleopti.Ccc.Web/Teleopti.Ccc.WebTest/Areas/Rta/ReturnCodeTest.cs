@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldProcessValidState()
 		{
 			var state = new ExternalUserStateForTest();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state);
+			var target = RtaForTest.MakeBasedOnState(state);
 
-			var result = target.SaveExternalUserState(state);
+			var result = target.SaveState(state);
 
 			result.Should().Be.EqualTo(1);
 		}
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
 			var state = new ExternalUserStateForTest() { Timestamp = christmas.AddHours(1) };
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, new ThisIsNow(christmas));
+			var target = RtaForTest.MakeBasedOnState(state, new ThisIsNow(christmas));
 
-			var result = target.SaveExternalUserState(state);
+			var result = target.SaveState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var now = MockRepository.GenerateStub<INow>();
 			now.Expect(n => n.UtcDateTime()).Return(christmas);
 			var state = new ExternalUserStateForTest { Timestamp = christmas.Subtract(TimeSpan.FromHours(1)) };
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state, now);
+			var target = RtaForTest.MakeBasedOnState(state, now);
 
-			var result = target.SaveExternalUserState(state);
+			var result = target.SaveState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -53,10 +53,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldNotProcessIfNoSourceId()
 		{
 			var state = new ExternalUserStateForTest();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state);
+			var target = RtaForTest.MakeBasedOnState(state);
 			state.SourceId = string.Empty;
 
-			var result = target.SaveExternalUserState(state);
+			var result = target.SaveState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldNotProcessStateIfNoPlatformId()
 		{
 			var state = new ExternalUserStateForTest();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state);
+			var target = RtaForTest.MakeBasedOnState(state);
 			state.PlatformTypeId = string.Empty;
 
-			var result = target.SaveExternalUserState(state);
+			var result = target.SaveState(state);
 
 			result.Should().Not.Be.EqualTo(1);
 		}
@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state1 = new ExternalUserStateForTest();
 			var state2 = new ExternalUserStateForTest();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state1);
+			var target = RtaForTest.MakeBasedOnState(state1);
 
-			var result = target.SaveBatchExternalUserState(new[] { state1, state2 });
+			var result = target.SaveStateBatch(new[] { state1, state2 });
 
 			result.Should().Be.EqualTo(1);
 		}
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			for (var i = 0; i < tooManyStates; i++)
 				externalStates.Add(new ExternalUserStateForTest());
 			var state = new ExternalUserStateForTest();
-			var target = TeleoptiRtaServiceForTest.MakeBasedOnState(state);
+			var target = RtaForTest.MakeBasedOnState(state);
 
-			Assert.Throws(typeof(FaultException), () => target.SaveBatchExternalUserState(externalStates));
+			Assert.Throws(typeof(FaultException), () => target.SaveStateBatch(externalStates));
 		}
 
 	}

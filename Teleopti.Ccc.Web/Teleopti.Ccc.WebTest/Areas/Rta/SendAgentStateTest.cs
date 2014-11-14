@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDataFromState(state)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.Should().Not.Be.Null();
@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode", activityId, "my state")
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(new ExternalUserStateForTest
+			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
@@ -87,10 +87,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDataFromState(state)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
+			target.SaveState(state);
 
 			var sent = sender.AllNotifications.Where(n => n.DomainType == typeof (IActualAgentState).Name);
 			sent.Should().Have.Count.EqualTo(1);
@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, businessUnitId)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.Should().Not.Be.Null();
@@ -139,9 +139,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode", activityId, alarmId)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.AlarmId.Should().Be(alarmId);
@@ -166,9 +166,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 9:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.StateStart.Should().Be.EqualTo(expected);
@@ -193,9 +193,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 9:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.StateStart.Should().Be.EqualTo("2014-10-20 9:59".Utc());
@@ -218,9 +218,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledId.Should().Be(activityId);
@@ -239,9 +239,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDataFromState(state)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledId.Should().Be(Guid.Empty);
@@ -264,9 +264,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 12:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledId.Should().Be(Guid.Empty);
@@ -290,9 +290,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(activityId);
@@ -315,9 +315,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, Guid.NewGuid(), "2014-10-21 10:00".Utc(), "2014-10-21 11:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(Guid.Empty);
@@ -340,9 +340,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId, "2014-10-20 11:00".Utc(), "2014-10-20 12:00".Utc())
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(state);
+			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(activityId);

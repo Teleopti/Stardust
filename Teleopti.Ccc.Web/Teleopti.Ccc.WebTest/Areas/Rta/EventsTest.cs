@@ -38,11 +38,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode2", activityId, 1)
 				.Make();
 			var publisher = new FakeEventsPublisher();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow(state1.Timestamp), publisher);
+			var target = new RtaForTest(database, new ThisIsNow(state1.Timestamp), publisher);
 
-			target.SaveExternalUserState(state1);
-			target.SaveExternalUserState(state2);
-			target.SaveExternalUserState(state1);
+			target.SaveState(state1);
+			target.SaveState(state2);
+			target.SaveState(state1);
 
 			var event1 = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			event1.PersonId.Should().Be(personId1);

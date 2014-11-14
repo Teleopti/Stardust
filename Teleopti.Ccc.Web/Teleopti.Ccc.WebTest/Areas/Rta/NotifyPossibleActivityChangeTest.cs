@@ -20,15 +20,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, businessUnitId)
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(new ExternalUserStateForTest
+			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
 				Timestamp = "2014-10-20 10:00".Utc()
 			});
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
 
 			var sent = sender.NotificationsOfType<IActualAgentState>().Last().DeseralizeActualAgentState();
 			sent.StateCode.Should().Be("phone");
@@ -47,15 +47,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("phone", activityId, "alarm")
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new TeleoptiRtaServiceForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
 
-			target.SaveExternalUserState(new ExternalUserStateForTest
+			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
 				Timestamp = "2014-10-20 10:00".Utc()
 			});
-			target.GetUpdatedScheduleChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
 
 			var sent = sender.NotificationsOfType<IActualAgentState>().Last().DeseralizeActualAgentState();
 			sent.State.Should().Be("alarm");
