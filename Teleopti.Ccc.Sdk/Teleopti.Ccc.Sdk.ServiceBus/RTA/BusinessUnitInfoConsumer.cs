@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			{
 				try
 				{
-					_serviceBus.Send(new PersonActivityStarting
+					_serviceBus.Send(new PersonActivityChangePulseEvent
 						{
 							Datasource = message.Datasource,
 							BusinessUnitId = message.BusinessUnitId,
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 						});
 
 					Logger.DebugFormat(
-						"Sending PersonActivityStarting Message to Service Bus for Person={0} and Bussiness Unit Id={1}", person,
+						"Sending PersonActivityChangePulseEvent Message to Service Bus for Person={0} and Bussiness Unit Id={1}", person,
 						message.BusinessUnitId);
 				}
 				catch (Exception exception)
 				{
-					Logger.Error("Exception occured while sending PersonActivityStarting message to Service Bus", exception);
+					Logger.Error("Exception occured while sending PersonActivityChangePulseEvent message to Service Bus", exception);
 					return;
 				}
 			}

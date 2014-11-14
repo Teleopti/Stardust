@@ -191,7 +191,7 @@
     <Compile Include="Container\ContainerConfiguration.cs" />
     <Compile Include="Diagnostics\DiagnosticsConsumer.cs" />
     <Compile Include="GeneralBusBootStrapper.cs" />
-    <Compile Include="GetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
+    <Compile Include="NotifyTeleoptiRtaServiceToCheckForActivityChange.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
     <Compile Include="Notification\ISignificantChangeChecker.cs" />
     <Compile Include="LocalServiceBusEventsPublisherModule.cs" />

@@ -7,20 +7,20 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public class UpdatedScheduleInfoHandler : 
-		IHandleEvent<PersonActivityStarting>,
+	public class PersonActivityChangePulseLoop : 
+		IHandleEvent<PersonActivityChangePulseEvent>,
 		IHandleEvent<ScheduleProjectionReadOnlyChanged>
 	{
 		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IPersonRepository _personRepository;
-        private readonly IGetUpdatedScheduleChangeFromTeleoptiRtaService _teleoptiRtaService;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoHandler));
+        private readonly INotifyRtaToCheckForActivityChange _teleoptiRtaService;
+        private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonActivityChangePulseLoop));
 
-		public UpdatedScheduleInfoHandler(
+		public PersonActivityChangePulseLoop(
 			ISendDelayedMessages serviceBus, 
 			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
-			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService, 
+			INotifyRtaToCheckForActivityChange teleoptiRtaService, 
 			IPersonRepository personRepository)
 		{
 			_serviceBus = serviceBus;
@@ -29,10 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_personRepository = personRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
-		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "exception"),
-		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Handle(PersonActivityStarting message)
+		public void Handle(PersonActivityChangePulseEvent message)
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 			
@@ -40,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			
 			try
 			{
-                _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
@@ -58,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 			_serviceBus.DelaySend(
 				TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(startTime.Value, DateTimeKind.Unspecified), TimeZoneInfo.Local),
-				new PersonActivityStarting
+				new PersonActivityChangePulseEvent
 					{
 						Datasource = message.Datasource,
 						BusinessUnitId = message.BusinessUnitId,
@@ -68,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "excpetion"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Handle(ScheduleProjectionReadOnlyChanged message)
 		{
             Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
@@ -77,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			
 			try
 			{
-                _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
@@ -98,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			_serviceBus.DelaySend(
 				TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(startTime.Value, DateTimeKind.Unspecified), TimeZoneInfo.Local),
-				new PersonActivityStarting
+				new PersonActivityChangePulseEvent
 					{
 						Datasource = message.Datasource,
 						BusinessUnitId = message.BusinessUnitId,

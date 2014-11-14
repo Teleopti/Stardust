@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Common
 	    // adding this event so servicebus and rta do a check if person should be monitored in rta
 		private void addPersonActivityStartingEvent()
 		{
-			AddEvent(new PersonActivityStarting
+			AddEvent(new PersonActivityChangePulseEvent
 			{
 				PersonId = Id.GetValueOrDefault()
 			});
