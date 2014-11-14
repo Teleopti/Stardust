@@ -19,13 +19,13 @@ define([
 				userCode: data.Person.ExternalLogOn,
 				stateCode: data.StateCode,
 				isLoggedOn: 'true',
-				timestamp: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
+				timestamp: data.Timestamp || moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				platformTypeId: data.PlatformTypeId,
 				sourceId: data.SourceId,
 				isSnapshot: 'false'
 			};
 			$.ajax({
-				url: 'Rta/Service/SaveExternalUserState',
+				url: 'Rta/State/Change',
 				type: 'POST',
 				contentType: 'application/json',
 				cache: false,

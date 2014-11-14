@@ -60,6 +60,7 @@ define([
 						StateCode: configuration.States[s],
 						IsEndingIteration: s === configuration.States.length - 1,
 						ExpectedEndingStateGroup: configuration.ExpectedEndingStateGroup,
+						Timestamp: configuration.Timestamp,
 						Success: function () {
 							progressItemReadModel.Success();
 							calculateRunDone();

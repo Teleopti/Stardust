@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 					}
 				},
 				States = new[] {"Phone"},
-				ExpectedEndingStateGroup = "Phone"
+				ExpectedEndingStateGroup = "Phone",
+				Timestamp = CurrentTime.Value()
 			};
 
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
