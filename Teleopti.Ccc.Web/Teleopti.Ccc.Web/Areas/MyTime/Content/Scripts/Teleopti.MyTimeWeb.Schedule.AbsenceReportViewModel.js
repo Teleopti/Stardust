@@ -26,9 +26,7 @@ Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewM
 	this.ShowError = ko.computed(function () {
 		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
-
-	// TODO: Implement absence report save
-
+	
 	this.SaveAbsenceReport = function () {
 		ajax.Ajax({
 			url: "Schedule/ReportAbsence",

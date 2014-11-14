@@ -49,7 +49,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
         PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
         	if ($('.weekview-mobile').length > 0) {
 		        completelyLoaded = completelyLoadedCallback;
-	        	vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+		        vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(ajax, _fetchData);
 	        	ko.applyBindings(vm, $('#page')[0]);
 	        	_fetchData();
 	        	readyForInteractionCallback();

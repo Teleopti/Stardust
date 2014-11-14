@@ -14,7 +14,7 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
     Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
+Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	var self = this;
 
 	self.dayViewModels = ko.observableArray();
@@ -22,7 +22,15 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 	self.nextWeekDate = ko.observable(moment());
 	self.previousWeekDate = ko.observable(moment());
 	self.selectedDate = ko.observable(moment().startOf('day'));
+	
 	self.selectedDateSubscription = null;
+	self.initialRequestDay = ko.observable();
+	self.formattedRequestDate = ko.computed(function () {
+		return moment(self.initialRequestDay()).format("l");
+	});
+	self.requestViewModel = ko.observable();
+	self.datePickerFormat = ko.observable();
+	self.absenceReportPermission = ko.observable();
 
 	self.setCurrentDate = function (date) {
 		if (self.selectedDateSubscription)
@@ -46,24 +54,83 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 		self.selectedDate(self.previousWeekDate());
 	};
 
-	self.readData = function(data) {
+	self.showAddRequestToolbar = ko.computed(function () {
+		return (self.requestViewModel() || '') != '';
+	});
 
+	self.showAddRequestForm = function (day) {
+		self.showAddRequestFormWithData(day.fixedDate());
+	};
+	var defaultRequestFunction = function () {
+		if (self.absenceReportPermission())
+			return self.showAddAbsenceReportForm;
+	}
+	self.showAddRequestFormWithData = function (date) {
+		self.initialRequestDay(date);
+
+		if ((self.requestViewModel() != undefined) && (self.requestViewModel().type() == 'absenceReport')) {
+			self.requestViewModel(null);
+		}
+
+		if ((self.requestViewModel() || '') != '') {
+			_fillFormData();
+			return;
+		}
+
+		defaultRequestFunction()();
+	};
+
+
+	function _fillFormData() {
+		var requestViewModel = self.requestViewModel().model;
+		requestViewModel.DateFormat(self.datePickerFormat());
+		var requestDay = moment(self.initialRequestDay());
+		requestViewModel.DateFrom(requestDay);
+		requestViewModel.DateTo(requestDay);
+	}
+
+	var addAbsenceReportModel = {
+		model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
+		type: function () { return 'absenceReport'; },
+		CancelAddingNewRequest: function() { self.CancelAddingNewRequest(); }
+	};
+
+	self.showAddAbsenceReportForm = function (data) {
+		if (self.absenceReportPermission() !== true) {
+			return;
+		}
+		self.requestViewModel(addAbsenceReportModel);
+		_fillFormData(data);
+	};
+
+	self.CancelAddingNewRequest = function () {
+		self.requestViewModel(undefined);
+	};
+
+	function reloadSchedule() {
+		self.CancelAddingNewRequest();
+		reloadData();
+	}
+	self.readData = function (data) {
+		self.datePickerFormat(data.DatePickerFormat.toUpperCase());
+		self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
 		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
-
-			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay);
-
+			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, data.RequestPermission.AbsenceReportPermission);
 			self.dayViewModels.push(vm);
 		});
 		self.displayDate(data.PeriodSelection.Display);
 	};
 };
 
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay) {
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceReportPermission) {
 	var self = this;
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
 	self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
 	self.summaryColor = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Color : null);
 	self.fixedDate = ko.observable(scheduleDay.FixedDate);
+	self.formattedFixedDate = ko.computed(function () {
+		return moment(self.fixedDate()).format("l");
+	});
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
 	self.isDayoff = ko.computed(function() {
@@ -87,5 +154,16 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay) {
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
     self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
 
- };
+    self.absenceReportPermission = ko.observable(absenceReportPermission);
+	self.isPermittedToReportAbsence = ko.computed(function() {
+		var today = moment().startOf('day');
+		var formatToday = today.format('l');
+		var formatTomorrow = today.add(1, 'day').format('l');
+		var formatCurrentDate = moment(self.fixedDate()).format('l');
+		//Absence report is available only for today and tomorrow.
+		var isPermittedDate = (formatCurrentDate == formatToday) || (formatCurrentDate == formatTomorrow);
+		var result = self.absenceReportPermission() && isPermittedDate;
+		return result;
+	});
+};
 

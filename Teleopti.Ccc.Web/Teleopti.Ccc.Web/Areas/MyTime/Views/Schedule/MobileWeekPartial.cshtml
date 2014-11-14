@@ -3,6 +3,12 @@
 	Layout = null;
 }
 
+<script type="text/html" id="add-absence-report-detail-template">
+	@Html.Partial("AddAbsenceReportPartial")
+</script>
+
+<input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />
+
 <div class="container weekview-mobile">
 	<div class="navbar navbar-teleopti">
 		<div class="container">
@@ -23,6 +29,7 @@
 			</div>
 		</div>
 	</div>
+	
 	<div class="body">
 		<!-- ko foreach: dayViewModels-->
 		<div class="day panel panel-default" data-bind="attr: { 'data-mytime-date': fixedDate }">
@@ -36,6 +43,23 @@
 				</div>
 				<div data-bind="text: summaryTimeSpan"></div>
 			</div>
+			<!-- ko if: isPermittedToReportAbsence() -->
+			<ul class="nav nav-pills navbar-weekview">
+				<li data-bind="css: { active: $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
+					<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: $parent.showAddRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+				</li>
+			</ul>
+			<div data-bind="visible: formattedFixedDate() === $parent.formattedRequestDate()">
+				<!-- ko with: $parent.requestViewModel -->
+				<div data-bind="with: model">
+					<div id="Request-add-section" class="well well-sm clearfix">
+						<div data-bind="template: Template">
+						</div>
+					</div>
+				</div>
+				<!-- /ko -->
+			</div>
+			<!-- /ko -->
 		</div>
 		<!-- /ko -->
 	</div>
