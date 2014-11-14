@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="SetVersion" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+	<PropertyGroup>
+		<RootFolder>$(teamcity_build_checkoutDir)</RootFolder>
+		<MajorFile>$(RootFolder)\ActiveMajorVersion.txt</MajorFile>
+		<MinorFile>$(RootFolder)\ActiveBranchVersion.txt</MinorFile>
+		<MsBuildPath>$(RootFolder)\ccnet\MSBuild</MsBuildPath>
+		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
+		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
+
+	<Target Name="SetVersion">
+		<ReadLinesFromFile File="$(MajorFile)" >
+			<Output TaskParameter="Lines" PropertyName="majorVersion" />
+		</ReadLinesFromFile>
+		<ReadLinesFromFile File="$(MinorFile)" >
+			<Output TaskParameter="Lines" PropertyName="minorVersion" />
+		</ReadLinesFromFile>
+		<HgVersion LocalPath="$(RootFolder)">
+			<Output TaskParameter="Revision" PropertyName="Revision" />
+		</HgVersion>
+		
+		<Message Text="##teamcity[buildNumber '$(majorVersion).$(minorVersion).$(Revision)']" Importance="high"/>
+	</Target>
+</Project>
