@@ -60,7 +60,12 @@ CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
 	person_code uniqueidentifier,
-	acd_login_id int
+	team_id int, 
+	acd_login_id int, 
+	valid_from_date_id int,
+	valid_from_interval_id int,
+	valid_to_date_id_maxDate int,
+	valid_to_interval_id_maxdate int
 	)
 			
 CREATE TABLE #pre_result(
@@ -106,7 +111,7 @@ CREATE TABLE #result(
            service_level_denominator decimal(18,3), --denumerator    
            adherence_calc_s decimal(18,3),
            deviation_s decimal(18,3),
-           adherence decimal(18,3),
+           adherence decimal(18,6),
            hide_time_zone bit,
            interval_type int,
            weekday_number int,
@@ -180,7 +185,12 @@ INSERT INTO #person_acd_subSP
 SELECT
 	person_id	= a.right_id,
 	person_code	= p.person_code,
-	acd_login_id= acd.acd_login_id
+	team_id		= p.team_id,
+	acd_login_id= acd.acd_login_id,
+	valid_from_date_id =p.valid_from_date_id,
+	valid_from_interval_id =p.valid_from_interval_id,
+	valid_to_date_id_maxDate =p.valid_to_date_id_maxDate,
+	valid_to_interval_id_maxdate =p.valid_to_interval_id_maxdate
 FROM #rights_agents a
 INNER JOIN mart.dim_person p
 	on p.person_id = a.right_id
@@ -255,8 +265,8 @@ EXEC [mart].[report_data_schedule_result_subSP]
 	@language_id	= @language_id
 
 --Now group/sum #pre_result_subSP into #pre_result
-INSERT INTO #pre_result(date_id,interval_id,adherence_calc_s,deviation_s)
-SELECT date_id,interval_id,SUM(adherence_calc_s),SUM(deviation_s)
+INSERT INTO #pre_result(date_id,interval_id,adherence_calc_s,deviation_s, talk_time_s,after_call_work_time_s)
+SELECT date_id,interval_id,SUM(adherence_calc_s),SUM(deviation_s), sum(talk_time_s),sum(after_call_work_time_s)
 FROM #pre_result_subSP
 GROUP BY date_id, interval_id
 
@@ -271,19 +281,6 @@ SELECT
 	sum(fs.scheduled_paid_time_m * 60) --we want seconds here
 FROM #fact_schedule fs
 GROUP BY fs.schedule_date_id, fs.interval_id --Group by utc date_id,interval
-
--- fact_agent_queue, utc datetime
-INSERT INTO #pre_result (date_id,interval_id,talk_time_s,after_call_work_time_s)
-SELECT 
-	faq.date_id, --utc date
-	faq.interval_id, --utc interval
-	sum(faq.talk_time_s),
-	sum(faq.after_call_work_time_s)
-FROM mart.fact_agent_queue faq
-INNER JOIN #person_acd_subSP al
-	ON faq.acd_login_id = al.acd_login_id
-WHERE faq.date_id between @date_from_id and @date_to_id	
-GROUP BY faq.date_id, faq.interval_id --Group by utc date_id,interval
 
 -- fact_queue, utc datetime
 INSERT INTO #pre_result (date_id,interval_id,calls_offered,calls_answered,calls_answ_within_sl,calls_abnd_within_sl)
