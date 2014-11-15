@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 1)
 				.Make();
-			var publisher = new FakeEventPopulatingPublisher();
+			var publisher = new FakeEventPublisher();
 			var target = new RtaForTest(database, new ThisIsNow(state1.Timestamp), publisher);
 
 			target.SaveState(state1);

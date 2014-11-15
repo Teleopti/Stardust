@@ -6,11 +6,14 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
+using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(MockRepository.GenerateMock<IEventPopulatingPublisher>(), new FakeCurrentDatasource()),
+				rtaEventPublisher(),
 				new Now(),
 				new FakeConfigReader()
 				)
@@ -39,13 +42,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(MockRepository.GenerateMock<IEventPopulatingPublisher>(), new FakeCurrentDatasource()),
+				rtaEventPublisher(),
 				now,
 				new FakeConfigReader())
 		{
 		}
 
-		public RtaForTest(FakeRtaDatabase database, INow now, IEventPopulatingPublisher eventPopulatingPublisher)
+		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher)
 			: this(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(eventPopulatingPublisher, new FakeCurrentDatasource()),
+				rtaEventPublisher(eventPublisher),
 				now,
 				new FakeConfigReader())
 		{
@@ -67,13 +70,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(messageSender, new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(MockRepository.GenerateMock<IEventPopulatingPublisher>(), new FakeCurrentDatasource()),
+				rtaEventPublisher(),
 				now,
 				new FakeConfigReader())
 		{
 		}
 
-		public RtaForTest(FakeRtaDatabase database, INow now, IEventPopulatingPublisher eventPopulatingPublisher, ICurrentDataSource dataSource)
+		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
 			: this(
 				new FakeSignalRClient(),
 				MockRepository.GenerateMock<IMessageSender>(),
@@ -81,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				new AdherenceAggregator(MockRepository.GenerateMock<IMessageSender>(), new OrganizationForPerson(new PersonOrganizationProvider(database))),
-				new RtaEventPublisher(eventPopulatingPublisher, dataSource),
+				rtaEventPublisher(eventPublisher, dataSource),
 				now,
 				new FakeConfigReader())
 		{
@@ -116,6 +119,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			_database = databaseReader as FakeRtaDatabase;
 		}
 
+		private static IRtaEventPublisher rtaEventPublisher()
+		{
+			return rtaEventPublisher(new FakeEventPublisher());
+		}
+
+		private static IRtaEventPublisher rtaEventPublisher(IEventPublisher eventPublisher)
+		{
+			return rtaEventPublisher(eventPublisher, new FakeCurrentDatasource());
+		}
+
+		private static IRtaEventPublisher rtaEventPublisher(IEventPublisher eventPublisher, ICurrentDataSource dataSource)
+		{
+			return new RtaEventPublisher(new EventPopulatingPublisher(eventPublisher, new EventContextPopulator(null, dataSource, null)));
+		}
+
 		public static Web.Areas.Rta.Rta Make()
 		{
 			return new RtaForTest(new FakeRtaDatabase());
@@ -136,9 +154,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return new RtaForTest(database, new ThisIsNow(state.Timestamp));
 		}
 
-		public static Web.Areas.Rta.Rta MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPopulatingPublisher eventPopulatingPublisher)
+		public static Web.Areas.Rta.Rta MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
 		{
-			return new RtaForTest(database, new ThisIsNow(state.Timestamp), eventPopulatingPublisher);
+			return new RtaForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
 		}
 
 		public void Initialize()
@@ -150,4 +168,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 	}
+
 }

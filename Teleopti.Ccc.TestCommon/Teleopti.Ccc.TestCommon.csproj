@@ -95,7 +95,7 @@
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
-    <Compile Include="FakeEventPopulatingPublisher.cs" />
+    <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\Configurable\QueueSourceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />

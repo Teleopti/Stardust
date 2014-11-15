@@ -9,13 +9,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class RtaEventPublisher : IRtaEventPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
-		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IDictionary<Guid, Type> _sentEvents = new Dictionary<Guid, Type>();
 
-		public RtaEventPublisher(IEventPopulatingPublisher eventPopulatingPublisher, ICurrentDataSource currentDataSource)
+		public RtaEventPublisher(IEventPopulatingPublisher eventPopulatingPublisher)
 		{
 			_eventPopulatingPublisher = eventPopulatingPublisher;
-			_currentDataSource = currentDataSource;
 		}
 
 		public void Publish(StateInfo info)
@@ -34,8 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
 					ShiftEndTime = info.CurrentShiftEndTime,
-					BusinessUnitId = info.NewState.BusinessUnitId,
-					Datasource = _currentDataSource.CurrentName()
+					BusinessUnitId = info.NewState.BusinessUnitId
 				});
 			}
 		}
@@ -49,8 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = info.NewState.PersonId,
 					ShiftStartTime = info.PreviousShiftStartTime,
 					ShiftEndTime = info.PreviousShiftEndTime,
-					BusinessUnitId = info.NewState.BusinessUnitId,
-					Datasource = _currentDataSource.CurrentName()
+					BusinessUnitId = info.NewState.BusinessUnitId
 				});
 			}
 
@@ -66,16 +62,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					PersonId = agentState.PersonId,
 					Timestamp = agentState.ReceivedTime,
-					BusinessUnitId = agentState.BusinessUnitId,
-					Datasource = _currentDataSource.CurrentName()
+					BusinessUnitId = agentState.BusinessUnitId
 				};
 			else
 				@event = new PersonOutOfAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
 					Timestamp = agentState.ReceivedTime,
-					BusinessUnitId = agentState.BusinessUnitId,
-					Datasource = _currentDataSource.CurrentName()
+					BusinessUnitId = agentState.BusinessUnitId
 				};
 
 			Type current;
