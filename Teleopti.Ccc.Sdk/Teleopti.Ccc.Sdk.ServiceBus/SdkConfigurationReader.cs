@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public IList<IMessageSender> Create()
 		{
 			var sender = _serviceBusSender;
-			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(sender), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(sender), EventContextPopulator.Make());
 			return new List<IMessageSender>
 				{
 					new ScheduleMessageSender(eventPublisher, new ClearEvents()),

@@ -5,17 +5,17 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class CurrentBusinessUnit : ICurrentBusinessUnit
 	{
-		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly ICurrentIdentity _identity;
 
-		public CurrentBusinessUnit(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+		public CurrentBusinessUnit(ICurrentIdentity identity)
 		{
-			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_identity = identity;
 		}
 
 		public IBusinessUnit Current()
 		{
-			var currentPrincipal = _currentTeleoptiPrincipal.Current();
-			return currentPrincipal == null ? null : ((TeleoptiIdentity)currentPrincipal.Identity).BusinessUnit;
+			var identity = _identity.Current();
+			return identity == null ? null : identity.BusinessUnit;
 		}
 	}
 }

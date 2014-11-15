@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.DatabaseConverter;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", new ConfigurationManagerWrapper());
 
 			AvailableDataSourcesProvider availableDataSourcesProvider =
-			    new AvailableDataSourcesProvider(StateHolderReader.Instance.StateReader.ApplicationScopeData);
+				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
 			var repositoryFactory = new RepositoryFactory();
 			var passwordPolicy = new DummyPasswordPolicy();
 			ApplicationDataSourceProvider applicationDataSourceProvider =

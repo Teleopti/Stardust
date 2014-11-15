@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -86,12 +87,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExternalFunctionsProvider>().As<IExternalFunctionsProvider>().InstancePerDependency();
 			builder.RegisterType<RoleToClaimSetTransformer>().As<IRoleToClaimSetTransformer>().InstancePerDependency();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
+
+			builder.RegisterType<CurrentApplicationData>().As<ICurrentApplicationData>().SingleInstance();
 			if (ApplicationData != null)
 			{
 				builder.Register(c => ApplicationData)
 					.As<IApplicationData>()
-					.ExternallyOwned()
-					;
+					.ExternallyOwned();
 			}
 			else
 			{
@@ -99,8 +101,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IApplicationData>().SingleInstance()
 					.ExternallyOwned();
 			}
-			builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService)
-				.As<ILoadPasswordPolicyService>().SingleInstance();
+
+			builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService).As<ILoadPasswordPolicyService>().SingleInstance();
 			builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();
 			builder.RegisterType<CurrentTeleoptiPrincipal>()
 				.As<ICurrentTeleoptiPrincipal>()

@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
     public class AvailableDataSourcesProvider : IAvailableDataSourcesProvider
     {
-        private readonly IApplicationData _applicationData;
+		private readonly ICurrentApplicationData _applicationData;
         private bool _initialized;
         private readonly IList<IDataSource> _availableDataSources = new List<IDataSource>();
         private readonly IList<IDataSource> _unavailableDataSources = new List<IDataSource>();
         private readonly object _initializeLock = new object();
 
-        public AvailableDataSourcesProvider(IApplicationData applicationData)
+        public AvailableDataSourcesProvider(ICurrentApplicationData applicationData)
         {
             _applicationData = applicationData;
         }
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             {
                 if (!_initialized)
                 {
-                    foreach (IDataSource dataSource in _applicationData.RegisteredDataSourceCollection)
+                    foreach (IDataSource dataSource in _applicationData.Current().RegisteredDataSourceCollection)
                     {
                         try
                         {

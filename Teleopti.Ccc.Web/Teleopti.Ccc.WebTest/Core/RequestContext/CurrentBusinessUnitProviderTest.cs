@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void Setup()
 		{
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new CurrentBusinessUnit(currentTeleoptiPrincipal);
+			target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal));
 		}
 
 		#endregion

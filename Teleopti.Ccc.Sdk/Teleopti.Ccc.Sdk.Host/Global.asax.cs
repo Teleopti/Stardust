@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             AutofacHostFactory.Container = container;
 	        var messageBroker = container.Resolve<IMessageBrokerComposite>();
 
-			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(busSender), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(busSender), EventContextPopulator.Make());
 			var initializeApplication =
 				new InitializeApplication(
 					new DataSourcesFactory(new EnversConfiguration(),

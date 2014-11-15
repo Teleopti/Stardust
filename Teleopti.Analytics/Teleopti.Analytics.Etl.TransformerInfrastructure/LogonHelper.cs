@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Authentication;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -100,7 +101,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_logonService =
 				new LogOnService(
 					new ApplicationDataSourceProvider(
-						new AvailableDataSourcesProvider(StateHolderReader.Instance.StateReader.ApplicationScopeData),
+						new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData)),
 						_repositoryFactory,
 						new FindApplicationUser(
 							new CheckNullUser(

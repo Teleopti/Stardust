@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 			var initiatorIdentifier = new FakeInitiatorIdentifier { InitiatorId = Guid.NewGuid() };
-			var target = new ScheduleMessageSender(new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new EventContextPopulator(null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))), beforeSendEvents);
+			var target = new ScheduleMessageSender(new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(serviceBusSender), new EventContextPopulator(null, null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))), beforeSendEvents);
 
 			target.Execute(new[] { rootChangeInfo });
 

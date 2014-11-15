@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		{
 			var handler = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
-			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] {handler});
+			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler });
 			var target = new EventPublisher(resolver);
 			var @event = new TestEvent();
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var handler1 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var handler2 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
-            resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler1, handler2 });
+			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler1, handler2 });
 			var target = new EventPublisher(resolver);
 			var @event = new TestEvent();
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		public void ShouldCallCorrectHandleMethod()
 		{
 			var handler = MockRepository.GenerateMock<ITestHandler>();
-            var resolver = MockRepository.GenerateMock<IResolve>();
+			var resolver = MockRepository.GenerateMock<IResolve>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEventTwo>>))).Return(new[] { handler });
 			var target = new EventPublisher(resolver);
 			var @event = new TestEventTwo();
@@ -59,20 +59,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			handler.AssertWasCalled(x => x.Handle(@event));
 		}
 
-        [Test]
-        public void ShouldSetContextDetails()
-        {
-            var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
-            var resolver = MockRepository.GenerateMock<IResolve>();
-            resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
-            var target = new EventPopulatingPublisher(new EventPublisher(resolver), new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new FakeCurrentInitiatorIdentifier()));
-            var @event = new TestDomainEvent();
+		[Test]
+		public void ShouldSetContextDetails()
+		{
+			var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
+			var resolver = MockRepository.GenerateMock<IResolve>();
+			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
+			var target = new EventPopulatingPublisher(new EventPublisher(resolver), new EventContextPopulator(new CurrentBusinessUnit(new CurrentIdentity(new CurrentTeleoptiPrincipal())), new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null), new FakeCurrentInitiatorIdentifier()));
+			var @event = new TestDomainEvent();
 
-            target.Publish(@event);
+			target.Publish(@event);
 
-            handler.AssertWasCalled(x => x.Handle(@event));
-            @event.Datasource.Should().Not.Be.Empty();
-            @event.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
-        }
+			handler.AssertWasCalled(x => x.Handle(@event));
+			@event.Datasource.Should().Not.Be.Empty();
+			@event.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
+		}
 	}
 }

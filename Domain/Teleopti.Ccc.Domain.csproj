@@ -325,6 +325,7 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
+    <Compile Include="CurrentApplicationData.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolver.cs" />
     <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\ConsecutiveDayOffValidator.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="Aop\Core\IResolvedAspect.cs" />
     <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssues.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalOptimizationService.cs" />
@@ -1391,6 +1393,7 @@
     <Compile Include="SystemSetting\PersonalSettingData.cs" />
     <Compile Include="SystemSetting\SettingData.cs" />
     <Compile Include="SystemSetting\SettingValue.cs" />
+    <Compile Include="ThisApplicationData.cs" />
     <Compile Include="Time\ISetupDateTimePeriod.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForAbsence.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForActivities.cs" />

@@ -33,8 +33,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
 				{
 					new EventsMessageSender(
-						new SyncEventsPublisher(new EventPopulatingPublisher(new EventPublisher(new HardCodedResolver()),
-							new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
+						new SyncEventsPublisher(
+							new EventPopulatingPublisher(
+									new EventPublisher(
+										new HardCodedResolver()
+										),
+									EventContextPopulator.Make())))
 
 				}, true);
 				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
@@ -48,8 +52,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
 				{
 					new EventsMessageSender(
-						new SyncEventsPublisher(new EventPopulatingPublisher(new EventPublisher(new HardCodedResolver()),
-							new EventContextPopulator(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())))))
+						new SyncEventsPublisher(
+							new EventPopulatingPublisher(
+								new EventPublisher(
+									new HardCodedResolver()
+									),
+							EventContextPopulator.Make())))
 
 				}, false);
 			}

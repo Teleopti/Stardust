@@ -1,17 +1,30 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class EventContextPopulator : IEventContextPopulator
 	{
-		private readonly ICurrentIdentity _identity;
+		private readonly ICurrentBusinessUnit _businessUnit;
+		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
 
-		public EventContextPopulator(ICurrentIdentity identity, ICurrentInitiatorIdentifier initiatorIdentifier)
+		public static IEventContextPopulator Make()
 		{
-			_identity = identity;
+			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
+			return new EventContextPopulator(
+				new CurrentBusinessUnit(identity),
+				new CurrentDataSource(identity, null, null),
+				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())
+				);
+		}
+
+		public EventContextPopulator(ICurrentBusinessUnit businessUnit, ICurrentDataSource dataSource, ICurrentInitiatorIdentifier initiatorIdentifier)
+		{
+			_businessUnit = businessUnit;
+			_dataSource = dataSource;
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
@@ -39,16 +52,25 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (!string.IsNullOrEmpty(@event.Datasource))
 				return;
 
-			if (_identity == null) return;
+			if (@event.BusinessUnitId.Equals(Guid.Empty))
+			{
+				if (_businessUnit != null)
+				{
+					var businessUnit = _businessUnit.Current();
+					if (businessUnit != null)
+					{
+						@event.BusinessUnitId = businessUnit.Id.Value;
+					}
+				}
+			}
 
-			var identity = _identity.Current();
-			if (identity == null)
-				return;
-
-			@event.BusinessUnitId = @event.BusinessUnitId.Equals(Guid.Empty)
-				? identity.BusinessUnit.Id.GetValueOrDefault()
-				: @event.BusinessUnitId;
-			@event.Datasource = identity.DataSource.Application.Name;
+			if (string.IsNullOrEmpty(@event.Datasource))
+			{
+				if (_dataSource != null)
+				{
+					@event.Datasource = _dataSource.CurrentName();
+				}
+			}
 		}
 	}
 }
