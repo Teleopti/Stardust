@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<ShiftEventPublisher>();
 				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<AdherenceEventPublisher>();
-				container.Resolve<IStateGroupEventPublisher>().Should().Be.OfType<StateGroupEventPublisher>();
+				container.Resolve<IStateEventPublisher>().Should().Be.OfType<StateEventPublisher>();
 				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<ActivityEventPublisher>();
 			}
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<NoEvents>();
 				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<NoEvents>();
-				container.Resolve<IStateGroupEventPublisher>().Should().Be.OfType<NoEvents>();
+				container.Resolve<IStateEventPublisher>().Should().Be.OfType<NoEvents>();
 				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<NoEvents>();
 			}
 		}

@@ -168,6 +168,7 @@
     <Compile Include="ApplicationLayer\Events\PersonSkillProficiencyChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonSkillRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonSkillResetEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonStateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
@@ -189,13 +190,13 @@
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\IStateGroupEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\StateGroupEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ThrowOnNotifyRtaToCheckForActivityChange.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherencePercent.cs" />

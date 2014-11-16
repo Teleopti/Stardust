@@ -72,12 +72,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			}
 			if (_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
 			{
-				builder.RegisterType<StateGroupEventPublisher>().SingleInstance().As<IStateGroupEventPublisher>();
+				builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
 			}
 			else
 			{
-				builder.RegisterType<NoEvents>().SingleInstance().As<IStateGroupEventPublisher>();
+				builder.RegisterType<NoEvents>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<NoEvents>().SingleInstance().As<IActivityEventPublisher>();
 			}
 
