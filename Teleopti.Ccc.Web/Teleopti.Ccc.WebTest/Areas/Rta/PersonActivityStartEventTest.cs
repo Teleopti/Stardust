@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -74,6 +75,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
 			@event.StartTime.Should().Be("2014-10-20 10:00".Utc());
 			@event.Name.Should().Be("phone");
+		}
+
+		[Test]
+		public void ShouldPublishWithLogOnInfo()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var dataSource = new FakeCurrentDatasource("datasource");
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher, dataSource);
+
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+
+			var @event = (ILogOnInfo)publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
+			@event.BusinessUnitId.Should().Be(businessUnitId);
+			@event.Datasource.Should().Be("datasource");
 		}
 
 	}

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				_eventPublisher.Publish(new PersonStateChangedEvent
 				{
 					PersonId = info.NewState.PersonId,
+					Timestamp = info.NewState.ReceivedTime,
 					BusinessUnitId = info.NewState.BusinessUnitId
 				});
 		}

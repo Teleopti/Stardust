@@ -71,6 +71,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
+		public void ShouldPublishWithTime()
+		{
+			var personId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = "2014-10-20 10:02".Utc()
+			});
+
+			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.Timestamp.Should().Be("2014-10-20 10:02".Utc());
+		}
+
+		[Test]
 		public void ShouldPublishWithLogOnInfo()
 		{
 			var personId = Guid.NewGuid();
