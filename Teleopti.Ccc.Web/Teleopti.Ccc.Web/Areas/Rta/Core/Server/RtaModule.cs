@@ -57,7 +57,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				;
 
 			builder.RegisterType<RtaEventPublisher>().SingleInstance().As<IRtaEventPublisher>();
-			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
+			if (
+				_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
+				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)
+				)
 			{
 				builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
 				builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
@@ -66,6 +69,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			{
 				builder.RegisterType<NoEvents>().SingleInstance().As<IShiftEventPublisher>();
 				builder.RegisterType<NoEvents>().SingleInstance().As<IAdherenceEventPublisher>();
+			}
+			if (_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
+			{
+				builder.RegisterType<StateGroupEventPublisher>().SingleInstance().As<IStateGroupEventPublisher>();
+				builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
+			}
+			else
+			{
+				builder.RegisterType<NoEvents>().SingleInstance().As<IStateGroupEventPublisher>();
+				builder.RegisterType<NoEvents>().SingleInstance().As<IActivityEventPublisher>();
 			}
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();

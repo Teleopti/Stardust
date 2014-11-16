@@ -89,6 +89,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			}
 		}
 
+		[Test]
+		public void ShouldResolveAdherenceDetailsFeatureEventHandlers()
+		{
+			using (var container = BuildContainerWithToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285, true))
+			{
+				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<ShiftEventPublisher>();
+				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<AdherenceEventPublisher>();
+				container.Resolve<IStateGroupEventPublisher>().Should().Be.OfType<StateGroupEventPublisher>();
+				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<ActivityEventPublisher>();
+			}
+		}
+
+		[Test]
+		public void ShouldNotResolveAdherenceDetailsFeatureEventHandlers()
+		{
+			using (var container = BuildContainerWithToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285, false))
+			{
+				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<NoEvents>();
+				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<NoEvents>();
+				container.Resolve<IStateGroupEventPublisher>().Should().Be.OfType<NoEvents>();
+				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<NoEvents>();
+			}
+		}
+
 		private IContainer BuildContainer()
 		{
 			var builder = new ContainerBuilder();
