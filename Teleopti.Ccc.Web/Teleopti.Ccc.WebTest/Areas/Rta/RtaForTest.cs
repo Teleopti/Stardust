@@ -134,7 +134,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var populatingEventPublisher = new EventPopulatingPublisher(eventPublisher, new EventContextPopulator(null, dataSource, null));
 			return new RtaEventPublisher(
 				new ShiftEventPublisher(populatingEventPublisher),
-				new AdherenceEventPublisher(populatingEventPublisher)
+				new AdherenceEventPublisher(populatingEventPublisher),
+				new ActivityEventPublisher(populatingEventPublisher)
 				);
 		}
 

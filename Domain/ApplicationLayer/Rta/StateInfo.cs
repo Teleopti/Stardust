@@ -30,12 +30,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					   !NewState.ScheduledNextId.Equals(PreviousState.ScheduledNextId) ||
 					   !NewState.AlarmId.Equals(PreviousState.AlarmId) ||
 					   !NewState.StateId.Equals(PreviousState.StateId) ||
-					   !NewState.ScheduledNext.Equals(PreviousState.ScheduledNext) ||
+					   NewState.ScheduledNext != PreviousState.ScheduledNext ||
 					   !NewState.NextStart.Equals(PreviousState.NextStart)
 					;
 			}
 		}
-
-		public string DataSource { get; set; }
 	}
 }

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private static ScheduleLayer activityForTime(StateInfo info, DateTime time)
 		{
-			return info.ScheduleLayers.FirstOrDefault(l => l.EndDateTime >= time && l.StartDateTime <= time);
+			return info.ScheduleLayers.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
 		}
 
 		private static ScheduleLayer nextAdjacentActivityForTime(StateInfo info, DateTime time)

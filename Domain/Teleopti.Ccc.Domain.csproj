@@ -150,6 +150,7 @@
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonOutOfAdherenceEvent.cs" />
