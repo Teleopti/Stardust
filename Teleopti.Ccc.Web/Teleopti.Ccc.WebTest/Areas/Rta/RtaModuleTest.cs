@@ -70,20 +70,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldResolveAgentStateChangedCommandHandler()
+		public void ShouldResolvePercentageFeatureEventHandlers()
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))
 			{
-				container.Resolve<IRtaEventPublisher>().Should().Be.OfType<RtaEventPublisher>();
+				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<ShiftEventPublisher>();
+				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<AdherenceEventPublisher>();
 			}
 		}
 
 		[Test]
-		public void ShouldNotResolveAgentStateChangedCommandHandler()
+		public void ShouldNotResolvePercentageFeatureEventHandlers()
 		{
 			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, false))
 			{
-				container.Resolve<IRtaEventPublisher>().Should().Be.OfType<NoEvents>();
+				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<NoEvents>();
+				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<NoEvents>();
 			}
 		}
 

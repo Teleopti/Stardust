@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
 		private readonly IAdherenceAggregator _adherenceAggregator;
-		private readonly IRtaEventPublisher _eventPublisher;
+		private readonly IRtaEventPublisher _rtaEventPublisher;
 
 		private readonly ActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
@@ -27,9 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly PersonResolver _personResolver;
 
-		public RtaDataHandler(ISignalRClient messageClient, IMessageSender messageSender, IDatabaseReader databaseReader,
-			IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory, IAdherenceAggregator adherenceAggregator,
-			IRtaEventPublisher eventPublisher)
+		public RtaDataHandler(ISignalRClient messageClient, IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher rtaEventPublisher)
 		{
 			_messageClient = messageClient;
 			_messageSender = messageSender;
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_databaseWriter = databaseWriter;
 			_mbCacheFactory = mbCacheFactory;
 			_adherenceAggregator = adherenceAggregator;
-			_eventPublisher = eventPublisher;
+			_rtaEventPublisher = rtaEventPublisher;
 		}
 
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
@@ -197,7 +195,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			
 			_adherenceAggregator.Aggregate(state.NewState);
 			
-			_eventPublisher.Publish(state);
+			_rtaEventPublisher.Publish(state);
 		}
 	}
 }

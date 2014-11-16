@@ -55,10 +55,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				.As<IAdherenceAggregator>()
 				.SingleInstance()
 				;
+
+			builder.RegisterType<RtaEventPublisher>().SingleInstance().As<IRtaEventPublisher>();
 			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783))
-				builder.RegisterType<RtaEventPublisher>().SingleInstance().As<IRtaEventPublisher>();
+			{
+				builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
+				builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
+			}
 			else
-				builder.RegisterType<NoEvents>().SingleInstance().As<IRtaEventPublisher>();
+			{
+				builder.RegisterType<NoEvents>().SingleInstance().As<IShiftEventPublisher>();
+				builder.RegisterType<NoEvents>().SingleInstance().As<IAdherenceEventPublisher>();
+			}
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 

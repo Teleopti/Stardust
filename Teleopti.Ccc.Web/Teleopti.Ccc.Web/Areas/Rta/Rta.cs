@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public static string DefaultAuthenticationKey = "!#¤atAbgT%";
 
-		public Rta(ISignalRClient signalRClient, IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory cacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher eventPublisher, INow now, IConfigReader configReader)
+		public Rta(ISignalRClient signalRClient, IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory cacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher rtaEventPublisher, INow now, IConfigReader configReader)
 		{
 			_rtaDataHandler = new RtaDataHandler(
 				signalRClient,
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				databaseWriter,
 				cacheFactory,
 				adherenceAggregator,
-				eventPublisher);
+				rtaEventPublisher);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");
