@@ -91,6 +91,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="PmGetUsersException.cs" />
     <Compile Include="ImpersonationInspector.cs" />
     <Compile Include="ImpersonationValidationAttribute.cs" />
@@ -101,7 +104,6 @@
       <DependentUpon>PMService.svc</DependentUpon>
     </Compile>
     <Compile Include="IPMService.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronizer.cs" />
     <Compile Include="UserDto.cs" />
     <Compile Include="UserHandler.cs" />
@@ -118,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

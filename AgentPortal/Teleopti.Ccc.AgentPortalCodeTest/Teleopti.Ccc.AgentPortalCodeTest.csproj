@@ -116,6 +116,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AgentPreference\EditStudentAvailabilityPresenterTest.cs" />
     <Compile Include="AgentPreference\EditStudentAvailabilityModelTest.cs" />
     <Compile Include="AgentPreference\PainterHelperTest.cs" />
@@ -128,7 +131,6 @@
     <Compile Include="AgentSchedule\LegendsTest.cs" />
     <Compile Include="AgentStudentAvailability\StudentAvailabilityModelTest.cs" />
     <Compile Include="Common\AbsenceTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AbsenceRequestPresenterTest.cs" />
     <Compile Include="Requests\PersonAccountTest.cs" />
     <Compile Include="Requests\RequestMaster\RequestMasterTest.cs" />
@@ -171,7 +173,9 @@
       <Link>CodeAnalysisDictionary.xml</Link>
     </CodeAnalysisDictionary>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

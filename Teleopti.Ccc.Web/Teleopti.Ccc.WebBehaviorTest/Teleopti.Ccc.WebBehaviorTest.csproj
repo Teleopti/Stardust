@@ -95,6 +95,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature.cs">
       <DependentUpon>ManageAgentScheduleInOtherTimeZone.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -692,7 +695,6 @@
       <DependentUpon>License.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\EventDefinition.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.feature.cs">
       <DependentUpon>Security.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1146,7 +1148,9 @@
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"

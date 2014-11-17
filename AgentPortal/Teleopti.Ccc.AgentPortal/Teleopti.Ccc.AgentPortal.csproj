@@ -151,6 +151,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AgentPreferenceView\ClipboardControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -505,7 +508,6 @@
       <DependentUpon>ScheduleTeamView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Teleopti-WFM-main-icon.ico" />
     <EmbeddedResource Include="AgentPreferenceView\ClipboardControl.resx">
       <DependentUpon>ClipboardControl.cs</DependentUpon>

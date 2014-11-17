@@ -319,6 +319,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionImmediate.cs">
       <Link>Core\MessageBroker\ActionImmediate.cs</Link>
     </Compile>
@@ -929,7 +932,6 @@
     <Compile Include="Areas\MyTime\Models\Portal\PortalViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\WeekScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
     <Compile Include="Areas\Rta\Rta.cs" />
   </ItemGroup>

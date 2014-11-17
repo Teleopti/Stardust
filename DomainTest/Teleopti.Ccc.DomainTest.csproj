@@ -140,6 +140,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
     <Compile Include="AgentInfo\Requests\InvalidRequestStateTransitionExceptionTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
@@ -1246,7 +1249,6 @@
     <Compile Include="Time\TimeZoneInfoExtensionsTest.cs" />
     <Compile Include="Time\DateOnlyTest.cs" />
     <Compile Include="Time\DateTimePeriodTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Time\PeriodScaleUnitTest.cs" />
     <Compile Include="Time\DateTimeExtensionsTest.cs" />
     <Compile Include="Time\SelectedSchedulesAreEmptyTest.cs" />
@@ -1384,6 +1386,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">

@@ -282,6 +282,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Budgeting\AddShrinkageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2518,7 +2521,6 @@
     <Compile Include="Shifts\WorkShiftsExplorer.designer.cs">
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBetweenDaysValidator.cs" />

@@ -108,6 +108,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="DataTableDefinition\StateGroupInfrastructure.cs" />
     <Compile Include="DataTableDefinition\HourlyAvailabilityInfrastructure.cs" />
     <Compile Include="DataTableDefinition\ScheduleChangedInfrastructure.cs" />
@@ -149,7 +152,6 @@
     <Compile Include="HelperFunctions.cs" />
     <Compile Include="LogonService.cs" />
     <Compile Include="DataTableDefinition\PersonInfrastructure.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RaptorRepository.cs" />
     <Compile Include="DataTableDefinition\ScenarioInfrastructure.cs" />
     <Compile Include="DataTableDefinition\ShiftCategoryInfrastructure.cs" />
@@ -213,6 +215,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

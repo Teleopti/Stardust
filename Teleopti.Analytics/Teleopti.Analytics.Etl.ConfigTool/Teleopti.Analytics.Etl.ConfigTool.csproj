@@ -123,6 +123,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -182,7 +185,6 @@
     <Compile Include="Transformer\BackGroundJob.cs" />
     <Compile Include="Transformer\DataSourceValidCollection.cs" />
     <Compile Include="Transformer\JobCollectionFactory.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Gui\JobSchedule.resx">
       <DependentUpon>JobSchedule.cs</DependentUpon>
       <SubType>Designer</SubType>

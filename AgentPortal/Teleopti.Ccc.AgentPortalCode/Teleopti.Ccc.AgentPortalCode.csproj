@@ -154,6 +154,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AgentPreference\PainterHelper.cs" />
     <Compile Include="AgentPreference\PlanningTimeBankHelper.cs" />
     <Compile Include="AgentPreference\PlanningTimeBankModel.cs" />
@@ -236,7 +239,6 @@
     <Compile Include="Helper\ReplyMessageEventArgs.cs" />
     <Compile Include="Helper\ScheduleHelper.cs" />
     <Compile Include="Helper\SdkServiceHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

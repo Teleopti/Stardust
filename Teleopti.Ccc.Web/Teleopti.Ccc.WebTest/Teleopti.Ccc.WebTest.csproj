@@ -206,6 +206,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitControllerTest.cs" />
@@ -532,7 +535,6 @@
     <Compile Include="RhinoMocksStubProxy.cs" />
     <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttributeTest.cs" />
     <Compile Include="Filters\UnitOfWorkActionFilterTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -576,6 +578,7 @@
   <ItemGroup>
     <Folder Include="Core\Aop\Core\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

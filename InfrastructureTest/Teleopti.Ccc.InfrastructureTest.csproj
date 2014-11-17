@@ -163,6 +163,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
     <Compile Include="ApplicationLayer\ITestHandler.cs" />
@@ -401,7 +404,6 @@
     <Compile Include="Repositories\SkillDayRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAssignmentRepositoryTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ApplicationFunctionRepositoryTest.cs" />
     <Compile Include="Repositories\ApplicationRoleRepositoryTest.cs" />
     <Compile Include="Repositories\BusinessUnitRepositoryTest.cs" />
@@ -576,7 +578,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

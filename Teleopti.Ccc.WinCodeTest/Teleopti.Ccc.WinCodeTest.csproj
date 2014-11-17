@@ -210,6 +210,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AddAbsenceCommandTest.cs" />
     <Compile Include="AddOvertimeCommandTest.cs" />
     <Compile Include="Autofac\BackToLegalShiftModuleTest.cs" />
@@ -844,7 +847,6 @@
     <Compile Include="Settings\ScheduleRestrictionBaseViewTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Scheduler\ViewBaseHelperTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -928,6 +930,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\PersonPicker\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -124,6 +124,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumerTest.cs" />
@@ -165,7 +168,6 @@
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumerTest.cs" />
     <Compile Include="Rta\NotifyRtaDeciderTest.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoConsumerResolveTest.cs" />
@@ -258,6 +260,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ApplicationLayer\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
