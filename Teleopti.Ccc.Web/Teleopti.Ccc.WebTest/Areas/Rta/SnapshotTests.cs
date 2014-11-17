@@ -139,5 +139,51 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode2");
 		}
+
+		[Test]
+		public void ShouldUseEmptyPlatformTypeIdWhenLoggingOutAgent()
+		{
+			var personId = Guid.NewGuid();
+			var platformTypeId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(new ExternalUserStateForTest {PlatformTypeId = platformTypeId.ToString()})
+				.WithUser("usercode1", Guid.NewGuid())
+				.WithUser("usercode2", personId)
+				.WithAlarm("statecode", Guid.Empty)
+				.Make();
+			var sender = new FakeMessageSender();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+			target.SaveStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				{
+					UserCode = "usercode1",
+					StateCode = "statecode",
+					PlatformTypeId = platformTypeId.ToString()
+				},
+				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				{
+					UserCode = "usercode2",
+					StateCode = "statecode",
+					PlatformTypeId = platformTypeId.ToString()
+				}
+			});
+			sender.AllNotifications.Clear();
+
+			target.SaveStateSnapshot(new[]
+			{
+				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				{
+					UserCode = "usercode1",
+					StateCode = "statecode",
+					PlatformTypeId = platformTypeId.ToString()
+				},
+			});
+
+			sender.NotificationsOfType<IActualAgentState>()
+				.Select(x => x.DeseralizeActualAgentState())
+				.Single(x => x.PersonId == personId)
+				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);
+		}
 	}
 }

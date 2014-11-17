@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
-			var state = getState(personId, businessUnitId, null, TimeSpan.Zero, timestamp, Guid.Empty, null, null);
+			var state = getState(personId, businessUnitId, null, TimeSpan.Zero, timestamp, null, null, null);
 			send(state);
 		}
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents)
 			{
-				var state = getState(agent.PersonId, agent.BusinessUnitId, "CCC Logged out", TimeSpan.Zero, batchId,agent.PlatformTypeId, sourceId, batchId);
+				var state = getState(agent.PersonId, agent.BusinessUnitId, "CCC Logged out", TimeSpan.Zero, batchId, Guid.Empty, sourceId, batchId);
 				send(state);
 			}
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			string stateCode,
 			TimeSpan timeInState,
 			DateTime timestamp,
-			Guid platformTypeId,
+			Guid? platformTypeId,
 			string sourceId,
 			DateTime? batch)
 		{

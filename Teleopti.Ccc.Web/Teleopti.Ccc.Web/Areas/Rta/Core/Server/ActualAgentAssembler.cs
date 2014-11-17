@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IActualAgentState previousState,
 			Guid personId,
 			Guid businessUnitId,
-			Guid platformTypeId,
+			Guid? platformTypeId,
 			string stateCode,
 			DateTime timestamp,
 			TimeSpan timeInState,
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			if (!batchId.HasValue)
 				batchId = previousState.BatchId;
-			if (platformTypeId == Guid.Empty)
+			if (!platformTypeId.HasValue)
 				platformTypeId = previousState.PlatformTypeId;
 			if (stateCode == null)
 				stateCode = previousState.StateCode;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				PersonId = personId,
 				StateCode = stateCode,
 				AlarmStart = timestamp,
-				PlatformTypeId = platformTypeId,
+				PlatformTypeId = platformTypeId.Value,
 				ReceivedTime = timestamp,
 				OriginalDataSourceId = originalSourceId,
 				BusinessUnitId = businessUnitId
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
-			var state = AlarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
+			var state = AlarmMapper.GetStateGroup(stateCode, platformTypeId.Value, businessUnitId);
 			newState.StateId = state.StateGroupId;
 			newState.State = state.StateGroupName;
 			var foundAlarm = AlarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
