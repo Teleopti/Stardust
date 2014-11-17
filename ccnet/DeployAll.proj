@@ -38,7 +38,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-	<Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
+	<Target Name="DeployAll" DependsOnTargets="GetVersion;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -61,17 +61,6 @@
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
 		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
 	</ItemGroup>
-
-	<ItemGroup>
-
-		<!-- TODO: update _all_ AssemblyInfos. This will not work until this is fixed: http://challenger:8080/tfs/web/wi.aspx?id=14648 -->
-		<AssemblyInfos
-		Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Properties\AssemblyInfo.cs"
-	  />
-
-		<GetVersionAssembly Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe"/>
-	</ItemGroup>
-
 
 	<Target Name="CallJenkinsForDeployment" Condition="'$(CCNetProject)' == '$(MainMSIProjectName)'">
 	<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
@@ -490,104 +479,6 @@
 		<Message Text="DeployPath is: [$(DeployPath)]" Importance="high"/>
 		<Message Text="Version is: $(CCCMajorMinor).$(BranchVersion).$(Revision)" Importance="high"/>
 
-	</Target>
-	
-
-	<!--Enable this target to get version on all assemblies-->
-	<Target Name="UpdateAssemblyInfos" Inputs="@(AssemblyInfos)" Outputs="%(Identity).Dummy" DependsOnTargets="GetVersion">
-
-		<Message Text="Setting readWrite on all files named: AssemblyInfo.cs  ..."/>
-		<Exec Command="attrib -R &quot;%(AssemblyInfos.FullPath)&quot;"/>
-		<Message Text="Setting readWrite on AssemblyInfo.cs. Done!"/>
-
-		<!-- mark all assemblies with version-->
-		<Message Text="Set version on assembly: %(AssemblyInfos.FullPath) ..."/>
-
-
-		<AssemblyInfo CodeLanguage="CS"
-						OutputFile="%(AssemblyInfos.FullPath)"
-					AssemblyCompany="$(Company)"
-					AssemblyProduct="$(ProductName)"
-					AssemblyCopyright="Copyright © Teleopti AB 2014"
-					AssemblyVersion="$(CCCVersion)"
-					AssemblyFileVersion="$(CCCVersion)"
-					CLSCompliant ="false"
-					ComVisible="false"
-				 
-		/>
-		<Message Text="Done"/>
-
-	</Target>
-
-	<Target Name="UpdateClientAssemblyInfos" DependsOnTargets="GetVersion">
-
-		<Message Text="Setting readWrite on all file $(ClientProperties)\AssemblyInfo.cs  ..."/>
-		<Exec Command="attrib -R &quot;$(ClientProperties)\AssemblyInfo.cs&quot;"/>
-		<Message Text="Setting readWrite. Done!"/>
-
-
-		<Message Text="Update Client Version ..."/>
-		<!-- adding additional info for the the Client-->
-		<AssemblyInfo CodeLanguage="CS"
-						OutputFile="$(ClientProperties)\AssemblyInfo.cs"
-						AssemblyTitle="WFM"
-					AssemblyDescription="WFM"
-					AssemblyConfiguration=""
-					AssemblyCompany="$(Company)"
-					AssemblyProduct="$(ProductName)"
-					AssemblyCopyright="Copyright © Teleopti AB 2014"
-					AssemblyTrademark=""
-					CLSCompliant ="false"
-					ComVisible="false"
-					AssemblyVersion="$(CCCVersion)"
-					AssemblyFileVersion="$(CCCVersion)"
-		/>
-		<Message Text="Update Client Version. done"/>
-
-		<Message Text="Setting readWrite on all file $(MyTimeProperties)\AssemblyInfo.cs  ..."/>
-		<Exec Command="attrib -R &quot;$(MyTimeProperties)\AssemblyInfo.cs&quot;"/>
-		<Message Text="Setting readWrite. Done!"/>
-
-		<Message Text="Update MyTime Version ..."/>
-		<AssemblyInfo CodeLanguage="CS"
-				OutputFile="$(MyTimeProperties)\AssemblyInfo.cs"
-				AssemblyTitle="WFM"
-				AssemblyDescription="WFM"
-				AssemblyConfiguration=""
-				AssemblyCompany="$(Company)"
-				AssemblyProduct="$(ProductName)"
-				AssemblyCopyright="Copyright © Teleopti AB 2014"
-				AssemblyTrademark=""
-				CLSCompliant ="false"
-				ComVisible="false"
-				AssemblyVersion="$(CCCVersion)"
-				AssemblyFileVersion="$(CCCVersion)"
-		/>
-
-		<Message Text="Update MyTime. done"/>
-		
-		
-		<Message Text="Setting readWrite on all file $(SupportToolProperties)\AssemblyInfo.cs  ..."/>
-		<Exec Command="attrib -R &quot;$(SupportToolProperties)\AssemblyInfo.cs&quot;"/>
-		<Message Text="Setting readWrite. Done!"/>
-
-		<Message Text="Update Support Tool Version ..."/>
-		<AssemblyInfo CodeLanguage="CS"
-				OutputFile="$(SupportToolProperties)\AssemblyInfo.cs"
-				AssemblyTitle="WFM"
-				AssemblyDescription="WFM"
-				AssemblyConfiguration=""
-				AssemblyCompany="$(Company)"
-				AssemblyProduct="$(ProductName)"
-				AssemblyCopyright="Copyright © Teleopti AB 2014"
-				AssemblyTrademark=""
-				CLSCompliant ="false"
-				ComVisible="false"
-				AssemblyVersion="$(CCCVersion)"
-				AssemblyFileVersion="$(CCCVersion)"
-		/>
-
-		<Message Text="Update Support Tool. done"/>
 	</Target>
 
 
