@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				var identifier = new Uri(currentHttp.Request.Url,userIdentifier);
 				if (useLocalhostIdentifier)
 				{
-					identifier = new Uri(new Uri("http://localhost/"), userIdentifier);
+					identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"), userIdentifier);
 				}
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
