@@ -27,7 +27,6 @@
 		Request_SeePossibleShiftTradesFromAllTeams_28770,
 		Request_FilterPossibleShiftTradeByTime_24560,
 		Request_ShiftTradeWithEmptyDays_28926,
-		Request_ShiftTradeBulletinBoard_31296,
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
 
@@ -51,7 +50,7 @@
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_AbsenceReport_31011,
-		MyTimeWeb_ShiftTradeExchange_31296,
+		MyTimeWeb_ShiftTradeExchangeBulletin_31296,
 
 		Messaging_HttpSender_29205
 	}

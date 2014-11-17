@@ -1,4 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchange_31296')
+﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Feature: Publish shift exchange offer
 	In order to trade a shift I don't want
 	As an agent 

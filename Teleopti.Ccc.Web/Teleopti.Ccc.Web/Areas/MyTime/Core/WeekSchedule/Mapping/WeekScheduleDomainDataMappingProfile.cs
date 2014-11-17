@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var shiftExchangePermission =
 										_permissionProvider.HasApplicationFunctionPermission(
 											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb) &&
-										_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeExchange_31296);
+										_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeExchangeBulletin_31296);
 									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
