@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
-		private static ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
 
 		public OpenIdController()
 			: this(
@@ -60,8 +61,15 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		[Authorize]
 		public ActionResult TriggerWindowsAuthorization()
 		{
-			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
+			var useLocalhostIdentifierSetting = ConfigurationManager.AppSettings["UseLocalhostIdentifier"];
+			var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
+				var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
 			_providerEndpointWrapper.PendingRequest = null;
+			if (useLocalhostIdentifier && idrequest.ProviderEndpoint != null)
+			{
+				idrequest.ProviderEndpoint = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"), idrequest.ProviderEndpoint.MakeRelativeUri(
+					new Uri(idrequest.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))));
+			} 
 			if (idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler()) != RelyingPartyDiscoveryResult.Success)
 			{
 				idrequest.IsAuthenticated = false;
@@ -72,9 +80,16 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			{
 				_logger.Warn("Found WindowsAccount");
 				var currentHttp = _currentHttpContext.Current();
-				idrequest.LocalIdentifier =
-					new Uri(currentHttp.Request.Url,
-							currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + Uri.EscapeDataString(windowsAccount.DomainName + "#" + windowsAccount.UserName.Replace(".", "$$$"))));
+				var userIdentifier =
+					currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" +
+					                                          Uri.EscapeDataString(windowsAccount.DomainName + "#" +
+					                                                               windowsAccount.UserName.Replace(".", "$$$")));
+				var identifier = new Uri(currentHttp.Request.Url,userIdentifier);
+				if (useLocalhostIdentifier)
+				{
+					identifier = new Uri(new Uri("http://localhost/"), userIdentifier);
+				}
+				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
 				_openIdProvider.SendResponse(idrequest);
 			}
