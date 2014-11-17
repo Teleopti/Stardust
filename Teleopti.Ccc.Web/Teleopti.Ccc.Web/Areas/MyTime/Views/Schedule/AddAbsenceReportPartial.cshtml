@@ -37,36 +37,6 @@
 							</span>
 						</span>
 					</td>
-					<!--
-					<td>
-						<label>
-							@Resources.AbsenceType
-						</label>
-					</td>
-					<td>
-						<div>
-							<select class="request-edit-absence form-control" data-bind="value: AbsenceId">
-								@foreach (var absenceType in Model.AbsenceTypesForReport)
-								{
-									<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-								}
-							</select>
-						</div>
-					</td>
-						-->
-					<!--
-					<td>
-						<div class="bootstrap-timepicker">
-							<div class="input-group" title="@Resources.StartTime">
-								<input type="text" class="absence-report-start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-time"></i>
-								</span>
-							</div>
-						</div>
-					</td>
-					<td/>
-					-->
 				</tr>
 				<tr class="form-inline">
 					<td>
@@ -85,21 +55,6 @@
 							</span>
 						</span>
 					</td>
-					<!--
-					<td>
-						<div class="bootstrap-timepicker">
-							<div class="input-group" title="@Resources.EndTime">
-								<input type="text" class="absence-report-end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-time"></i>
-								</span>
-							</div>
-						</div>
-					</td>
-					<td>
-						<input type="checkbox" class="absence-report-next-day" data-bind="checked: EndTimeNextDay" title="@Resources.NextDay" />
-					</td>
-					-->
 				</tr>
 			</table>
 		</td>
