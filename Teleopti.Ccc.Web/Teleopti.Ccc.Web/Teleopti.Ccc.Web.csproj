@@ -934,6 +934,7 @@
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
     <Compile Include="Areas\Rta\Rta.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\feature.js" />
