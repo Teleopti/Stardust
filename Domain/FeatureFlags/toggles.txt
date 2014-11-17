@@ -53,3 +53,4 @@ Settings_AlertViaEmailFromSMSLink_30444 = true
 Badge_Leaderboard_30584 = RC
 Request_ShiftTradeWithEmptyDays_28926 = RC
 MyTeam_Reports_31070 = RC
+Schedule_IntraIntervalOptimizer_29846 = RC
