@@ -11,7 +11,11 @@ $(document).ready(function () {
 				Display: null
 			}],
 			Days: [{
-			}]
+			}],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 
 		equal(vm.dayViewModels().length, 1);
@@ -26,7 +30,11 @@ $(document).ready(function () {
 			}],
 			Days: [{
 				FixedDate: "2014-04-14"
-			}]
+			}],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 
 		equal(vm.dayViewModels()[0].fixedDate(), "2014-04-14");
@@ -45,7 +53,11 @@ $(document).ready(function () {
 					StyleClassName: "dayoff striped",
 					Color: "rgb(0, 0, 0)"
 				}
-			}]
+			}],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 
 		equal(vm.dayViewModels()[0].summaryName(), "Early");
@@ -65,7 +77,11 @@ $(document).ready(function () {
 				Summary: {
 					StyleClassName: "dayoff striped",
 				}
-			}]
+			}],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 
 		equal(vm.dayViewModels()[0].isDayoff(), true);
@@ -81,7 +97,11 @@ $(document).ready(function () {
 			Days: [{
 				Periods: [{
 				}]
-			}]
+			}],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 
 		equal(vm.dayViewModels()[0].hasShift(), true);
@@ -93,7 +113,11 @@ $(document).ready(function () {
 			PeriodSelection: [{
 				Display: null
 			}],
-			Days: [{ Header: { Title: "Monday" } }]
+			Days: [{ Header: { Title: "Monday" } }],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 		equal(vm.dayViewModels()[0].weekDayHeaderTitle(), "Monday");
 	});
@@ -112,7 +136,11 @@ $(document).ready(function () {
 				},
 				Periods: [{
 				}]
-			}]
+			}],
+			RequestPermission:
+			{
+				AbsenceReportPermission: true
+			}
 		});
 		equal(vm.dayViewModels()[0].hasFulldayAbsence(), true);
 		equal(vm.dayViewModels()[0].summaryColor(), "rgb(255,0,0)");

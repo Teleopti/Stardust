@@ -112,7 +112,11 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		reloadData();
 	}
 	self.readData = function (data) {
-		self.datePickerFormat(data.DatePickerFormat.toUpperCase());
+		if (data.DatePickerFormat != undefined && data.DatePickerFormat != null) {
+			self.datePickerFormat(data.DatePickerFormat.toUpperCase());
+		} else {
+			self.datePickerFormat("");
+		}
 		self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
 		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
 			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, data.RequestPermission.AbsenceReportPermission);

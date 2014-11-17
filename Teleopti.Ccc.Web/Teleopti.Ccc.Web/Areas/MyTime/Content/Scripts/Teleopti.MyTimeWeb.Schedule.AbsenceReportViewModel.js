@@ -19,7 +19,10 @@ Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewM
 	});
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
-	this.DateFormat = ko.observable($('#Request-detail-datepicker-format').val().toUpperCase());
+	this.DateFormat = ko.computed(function() {
+		var format = $('#Request-detail-datepicker-format').val();
+		return (format === undefined || format === null) ? "" : format.toUpperCase();
+	});
 
 	this.ErrorMessage = ko.observable('');
 	
