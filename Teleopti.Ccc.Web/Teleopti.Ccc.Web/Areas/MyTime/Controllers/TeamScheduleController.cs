@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TeamSchedule)]
+	[CLSCompliant(false)]
 	public class TeamScheduleController : Controller
 	{
 		private readonly INow _now;

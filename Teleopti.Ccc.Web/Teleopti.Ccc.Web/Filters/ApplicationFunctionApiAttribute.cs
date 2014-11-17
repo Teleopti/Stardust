@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public ApplicationFunctionApiAttribute() : this(null) { }
 
-		public ApplicationFunctionApiAttribute(params string[] applicationFunctionPathses)
+		public ApplicationFunctionApiAttribute(string applicationFunctionPath)
 		{
-			_applicationFunctionPaths = applicationFunctionPathses;
+			_applicationFunctionPaths = new []{applicationFunctionPath};
 		}
 
 		public IPermissionProvider PermissionProvider { get; set; }

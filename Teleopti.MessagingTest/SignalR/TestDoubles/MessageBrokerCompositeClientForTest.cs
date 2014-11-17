@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -10,6 +10,7 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
 	public class MessageBrokerCompositeClientForTest : MessageBrokerCompositeClient
 	{
+		[CLSCompliant(false)]
 		public static MessageBrokerCompositeClientForTest Make(
 			IMessageFilterManager typeFilter,
 			IHubConnectionWrapper hubConnection

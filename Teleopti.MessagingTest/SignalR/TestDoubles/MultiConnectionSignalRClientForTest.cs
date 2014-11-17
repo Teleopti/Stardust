@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -6,6 +7,7 @@ using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
+	[CLSCompliant(false)]
 	public class MultiConnectionSignalRClientForTest : SignalRClient
 	{
 		private readonly Queue<IHubConnectionWrapper> _hubConnections;

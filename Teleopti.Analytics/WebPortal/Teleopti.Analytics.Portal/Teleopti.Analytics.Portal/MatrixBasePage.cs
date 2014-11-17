@@ -14,6 +14,7 @@ namespace Teleopti.Analytics.Portal
 {
 	public class MatrixBasePage : Page
 	{
+		[CLSCompliant(false)]
 		protected Guid _reportId;
 
 		public MatrixBasePage()

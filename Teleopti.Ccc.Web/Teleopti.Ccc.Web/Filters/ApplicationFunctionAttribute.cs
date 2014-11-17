@@ -45,9 +45,18 @@ namespace Teleopti.Ccc.Web.Filters
 	{
 		private readonly string[] _applicationFunctionPaths;
 
-		public ApplicationFunctionAttribute() : this(null) { }
+		public ApplicationFunctionAttribute() : this((string[])null) { }
 
-		public ApplicationFunctionAttribute(params string[] applicationFunctionPathses)
+		//hack to make cls compliant
+		public ApplicationFunctionAttribute(string applicationFunctionPath)
+			: this(new[] { applicationFunctionPath}){}
+		public ApplicationFunctionAttribute(string applicationFunctionPath1, string applicationFunctionPath2)
+			: this(new[] { applicationFunctionPath1, applicationFunctionPath2 }) { }
+		public ApplicationFunctionAttribute(string applicationFunctionPath1, string applicationFunctionPath2, string applicationFunctionPath3)
+			: this(new[] { applicationFunctionPath1, applicationFunctionPath2, applicationFunctionPath3 }) { }
+
+
+		private ApplicationFunctionAttribute(params string[] applicationFunctionPathses)
 		{
 			_applicationFunctionPaths = applicationFunctionPathses;
 			Order = 3;

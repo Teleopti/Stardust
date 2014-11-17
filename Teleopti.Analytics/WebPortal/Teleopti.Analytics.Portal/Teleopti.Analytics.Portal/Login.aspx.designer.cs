@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Teleopti.Analytics.Portal {
     
     
@@ -28,6 +30,7 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
+				[CLSCompliant(false)]
         protected global::System.Web.UI.WebControls.Label _labelInfo;
         
         /// <summary>

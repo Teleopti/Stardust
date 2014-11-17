@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace Teleopti.Analytics.Portal {
     
     
@@ -28,6 +30,7 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
+				[CLSCompliant(false)]
         protected global::System.Web.UI.WebControls.Label _labelErrorMessage;
         
         /// <summary>
@@ -37,6 +40,8 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
+        /// 
+				[CLSCompliant(false)]
         protected global::System.Web.UI.WebControls.Label _labelPossibleSolutionHeader;
         
         /// <summary>
@@ -46,7 +51,8 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelPossibleSolution;
+				[CLSCompliant(false)]
+				protected global::System.Web.UI.WebControls.Label _labelPossibleSolution;
         
         /// <summary>
         /// _labelTechnicalDetailHeader control.
@@ -55,7 +61,8 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelTechnicalDetailHeader;
+				[CLSCompliant(false)]
+				protected global::System.Web.UI.WebControls.Label _labelTechnicalDetailHeader;
         
         /// <summary>
         /// _labelUser control.
@@ -64,7 +71,8 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelUser;
+				[CLSCompliant(false)]
+				protected global::System.Web.UI.WebControls.Label _labelUser;
         
         /// <summary>
         /// _labelWebAuthMode control.
@@ -73,7 +81,8 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelWebAuthMode;
+				[CLSCompliant(false)]
+				protected global::System.Web.UI.WebControls.Label _labelWebAuthMode;
         
         /// <summary>
         /// _labelClientAuthMode control.
@@ -82,6 +91,7 @@ namespace Teleopti.Analytics.Portal {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelClientAuthMode;
+				[CLSCompliant(false)]
+				protected global::System.Web.UI.WebControls.Label _labelClientAuthMode;
     }
 }

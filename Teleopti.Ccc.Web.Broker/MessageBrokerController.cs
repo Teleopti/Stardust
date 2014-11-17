@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Web.Broker
 		}
 	}
 
+	[CLSCompliant(false)]
 	public class CustomHubConnectionContext<T> : IHubCallerConnectionContext<T>
 	{
 		private readonly IHubConnectionContext<object> _clients;
