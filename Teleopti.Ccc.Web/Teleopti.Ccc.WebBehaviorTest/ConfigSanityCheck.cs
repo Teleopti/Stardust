@@ -18,17 +18,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				Is.EqualTo("Yes, configuration is loaded!"), 
 				"No! Configuration is not loaded!!!");
 		}
-
-		[Test]
-		public void ShouldHaveThreadApartmentStateSTAWithoutAttribute()
-		{
-			Assert.That(Thread.CurrentThread.GetApartmentState(), Is.EqualTo(ApartmentState.STA));
-		}
-
-		[Test, RequiresSTA]
-		public void ShouldHaveThreadApartmentStateSTAWith()
-		{
-			Assert.That(Thread.CurrentThread.GetApartmentState(), Is.EqualTo(ApartmentState.STA));
-		}
 	}
 }
