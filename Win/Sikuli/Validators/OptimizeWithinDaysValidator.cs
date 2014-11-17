@@ -60,20 +60,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public static TimeSpan GetCurrentContractTime(IScheduleRange wholeRange, DateOnlyPeriod period)
 		{
-			//if (!wholeRange.CalculatedContractTimeHolder.HasValue)
-			//{
-			//	TimeSpan contractTime = TimeSpan.Zero;
-			//	foreach (var scheduleDay in wholeRange.ScheduledDayCollection(period))
-			//	{
-			//		DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			//		IPerson person = scheduleDay.Person;
-			//		if (!person.IsAgent(dateOnly))
-			//			continue;
-
-			//		contractTime = contractTime.Add(scheduleDay.ProjectionService().CreateProjection().ContractTime());
-			//	}
-			//	wholeRange.CalculatedContractTimeHolder = contractTime;
-			//}
 			return wholeRange.CalculatedContractTimeHolder.Value;
 		}
 	}
