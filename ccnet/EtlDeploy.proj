@@ -12,7 +12,7 @@
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
 		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2014</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
-		<ETLServiceBinDir>$(CCNetWorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETLServiceBinDir>
+		<ETLServiceBinDir>$(CCNetWorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)</ETLServiceBinDir>
 		<ETLCCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</ETLCCC7DB>
 		<ETLAnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</ETLAnalyticsDB>
 		<ETLAggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</ETLAggDB>
@@ -57,7 +57,7 @@
 	</Target>
   
 	<Target Name="RestoreToLocal">
-		<Exec Command ="$(RestoreToLocal) DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName)"/>
+		<Exec Command ="$(RestoreToLocal) DemoSales $(debug_release) 1 $(ETLDBNamePrefix) $(SqlInstanceName)"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
@@ -78,6 +78,6 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
-	</Target>
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(debug_release) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
+	</Target>	
 </Project>
