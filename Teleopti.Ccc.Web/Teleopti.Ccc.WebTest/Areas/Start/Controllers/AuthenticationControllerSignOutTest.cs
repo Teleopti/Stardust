@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			_formsAuthentication = mocks.DynamicMock<IFormsAuthentication>();
 			_sessionSpecificDataProvider = mocks.DynamicMock<ISessionSpecificDataProvider>();
 			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
-			authenticationModule.Stub(x => x.Issuer).Return("http://issuer");
+			authenticationModule.Stub(x => x.Issuer(null)).IgnoreArguments().Return(new Uri("http://issuer"));
 			authenticationModule.Stub(x => x.Realm).Return("testrealm");
 
 			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule);

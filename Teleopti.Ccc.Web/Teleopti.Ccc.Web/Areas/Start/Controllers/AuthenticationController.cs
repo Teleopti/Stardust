@@ -42,13 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_formsAuthentication.SignOut();
 
 			var url = Request.Url;
+			var issuerUrl = _authenticationModule.Issuer(HttpContext);
 
-			var signInReply = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), _authenticationModule.Realm)
+			var signInReply = new SignInRequestMessage(issuerUrl, _authenticationModule.Realm)
 			{
 				Context = "ru=" + url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignOut", StringComparison.OrdinalIgnoreCase)),
 			};
 
-			var signOut = new SignOutRequestMessage(new Uri(_authenticationModule.Issuer), signInReply.WriteQueryString());
+			var signOut = new SignOutRequestMessage(issuerUrl, signInReply.WriteQueryString());
 
 			return new RedirectResult(signOut.WriteQueryString());  
 		}

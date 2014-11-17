@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Web;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.AddRouteDataToken("area", "MyTime");
 
 			var result = filterTester.InvokeFilter(target) as RedirectResult;
-			result.Url.Should().Contain(new FakeAuthenticationModule().Issuer);
+			result.Url.Should().Contain(new FakeAuthenticationModule().Issuer(null).ToString());
 		}
 
 		[Test]
@@ -119,7 +120,11 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 		public class FakeAuthenticationModule : IAuthenticationModule
 		{
-			public string Issuer { get { return "http://myissuer"; }}
+			public Uri Issuer(HttpContextBase request)
+			{
+				return new Uri("http://myissuer");
+			}
+
 			public string Realm { get { return "http://mytime"; } }
 		}
 	}

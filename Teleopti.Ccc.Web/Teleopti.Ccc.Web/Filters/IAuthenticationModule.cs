@@ -1,8 +1,11 @@
-﻿namespace Teleopti.Ccc.Web.Filters
+﻿using System;
+using System.Web;
+
+namespace Teleopti.Ccc.Web.Filters
 {
 	public interface IAuthenticationModule
 	{
-		string Issuer { get; }
+		Uri Issuer(HttpContextBase request);
 		string Realm { get; }
 	}
 }

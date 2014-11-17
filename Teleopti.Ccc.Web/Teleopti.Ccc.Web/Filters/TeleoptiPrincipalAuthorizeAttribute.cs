@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Filters
 				return;
 			}
 
-			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), Realm ?? _authenticationModule.Realm)
+			var signIn = new SignInRequestMessage(_authenticationModule.Issuer(filterContext.HttpContext), Realm ?? _authenticationModule.Realm)
 			{
 				Context = "ru=" + filterContext.HttpContext.Request.Path,
 				HomeRealm = _identityProviderProvider.DefaultProvider()
