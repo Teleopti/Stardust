@@ -14,6 +14,8 @@
 		public const string OptimizeBetweenDays = "OptimizeBetweenDays";
 		public const string OptimizeWithinDays = "OptimizeWithinDays";
 		public const string OptimizeBlockTeam = "OptimizeBlockTeam";
+		public const string OptimizeIntervalBalanceBefore = "OptimizeIntervalBalanceBefore";
+		public const string OptimizeIntervalBalanceAfter = "OptimizeIntervalBalanceAfter";
 
 	}
 }

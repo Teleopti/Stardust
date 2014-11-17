@@ -2520,12 +2520,14 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
+    <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\DeleteAllValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
+    <Compile Include="Sikuli\Validators\IntervalBalanceBeforeValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
     <Compile Include="Sikuli\Validators\ValidatorHelper.cs" />
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">

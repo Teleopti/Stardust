@@ -143,7 +143,6 @@
 			this.MinimizeBox = false;
 			this.Name = "SikuliResultView";
 			this.ShowIcon = false;
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Additional testing information";
 			this.tableLayoutPanel1.ResumeLayout(false);
