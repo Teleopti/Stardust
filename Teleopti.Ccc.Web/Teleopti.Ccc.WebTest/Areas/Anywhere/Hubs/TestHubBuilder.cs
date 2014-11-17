@@ -6,6 +6,7 @@ using Rhino.Mocks;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
+	[CLSCompliant(false)]
 	public class TestHubBuilder
 	{
 		public void SetupHub(Hub hub)
