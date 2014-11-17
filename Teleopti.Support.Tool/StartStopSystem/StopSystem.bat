@@ -17,23 +17,23 @@ call :processServiceList
 ::Finally stop our two App pools
 if exist "%windir%\system32\inetsrv\AppCmd.exe" (
 echo trying to stop iis 7.0 or 7.5 App Pools ...
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 Web"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Web" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 Broker"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Broker" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 SDK"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 SDK" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti ASP.NET v4.0 RTA"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 RTA" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti WFM"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti WFM" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti Web"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Web" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti Broker"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Broker" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti SDK"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti SDK" /autoStart:false
+"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti RTA"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti RTA" /autoStart:false
 ) else (
 echo trying to stop iis 5.1 or 6.0 App Pools ...
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Web"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Broker"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 SDK"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 RTA"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti WFM"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti Web"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti Broker"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti SDK"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti RTA"
 )
 
 echo stopping App Pools. Done

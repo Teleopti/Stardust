@@ -20,23 +20,23 @@ SET serviceList=MsDtc;TeleoptiServiceBus;TeleoptiEtlService
 ::Finally start our two App pools
 if exist "%windir%\system32\inetsrv\AppCmd.exe" (
 echo trying to start iis 7.0 or 7.5 App Pools ...
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 Web"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Web" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 Broker"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 Broker" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 SDK"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 SDK" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti ASP.NET v4.0 RTA"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti ASP.NET v4.0 RTA" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti WFM"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti WFM" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti Web"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Web" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti Broker"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Broker" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti SDK"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti SDK" /autoStart:true
+"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti RTA"
+"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti RTA" /autoStart:true
 ) else (
 echo trying to start iis 5.1 or 6.0 App Pools ...
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Web"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 Broker"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 SDK"
-CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti ASP.NET v4.0 RTA"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti WFM"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti Web"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti Broker"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti SDK"
+CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti RTA"
 )
 
 echo Start App Pools. Done
