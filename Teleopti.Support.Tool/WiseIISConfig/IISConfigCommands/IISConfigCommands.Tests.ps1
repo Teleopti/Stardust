@@ -123,7 +123,7 @@ function TearDown {
 		}
         
 		It "should stop the SDK" {
-			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
+			stop-AppPool -PoolName "Teleopti SDK"
 			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
@@ -243,7 +243,7 @@ function Test-SitesAndServicesOk {
 
         #start system
 		It "should start SDK" {
-			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
+			start-AppPool -PoolName "Teleopti SDK"
 			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			$temp = Check-HttpStatus -url $SDKUrl -credentials $cred
 			$temp | Should be $True
