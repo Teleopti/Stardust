@@ -247,7 +247,7 @@
     <Compile Include="Areas\Rta\ExternalUserStateWebModelForTest.cs" />
     <Compile Include="Areas\Rta\FakeRtaDatabase.cs" />
     <Compile Include="Areas\Rta\FakeSignalRClient.cs" />
-    <Compile Include="Areas\Rta\NotifyPossibleActivityChangeTest.cs" />
+    <Compile Include="Areas\Rta\CheckForActivityChangeTest.cs" />
     <Compile Include="Areas\Rta\PersistStateTest.cs" />
     <Compile Include="Areas\Rta\PersonActivityStartEventTest.cs" />
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
