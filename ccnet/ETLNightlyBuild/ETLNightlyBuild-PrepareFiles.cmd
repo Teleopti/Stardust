@@ -12,13 +12,6 @@ SET SqlInstanceName=%~8
 SET SQL_AUTH_STRING=Data Source=%SqlInstanceName%;User Id=%AppSqlLogin%;Password=%AppSqlPwd%
 SET ETL_SERVICE_nhibConfPath=%TargetDir%
 
-::Delete target Dir
-ECHO RMDIR "%TargetDir%" /S /Q
-RMDIR %TargetDir% /S /Q
-
-::Create Dir 
-MKDIR %TargetDir%
-
 ::replace dbnames
 ECHO "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%" %config%
 CALL "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%" %config%

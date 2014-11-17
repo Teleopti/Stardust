@@ -30,9 +30,10 @@ COPY "%masterSettings%" "%MySettings%"
 cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
 cscript .\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
-::Build Teleopti.Support.Tool.exe
-ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
+
 IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
+	::Build Teleopti.Support.Tool.exe
+	ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
 	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 )
 COPY "%MySettings%" "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt"
