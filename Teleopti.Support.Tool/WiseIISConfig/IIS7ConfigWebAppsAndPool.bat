@@ -42,9 +42,11 @@ for /f "delims==" %%g in ('"%appcmd%" list site /text:name') do (
 IF "%DefaultSite%"=="" SET DefaultSite=Default Web Site
 
 ::remove applications
-CALL:DeleteApp "%DefaultSite%" "%MainSiteName%/ContextHelp" "app" >> %logfile%
-for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
-for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
+::CALL:DeleteApp "%DefaultSite%" "%MainSiteName%/ContextHelp" "app" >> %logfile%
+::for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
+::for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
+%appcmd% list app /apppool.name:"$=*Teleopti*" /xml | %appcmd% delete app /in
+%appcmd% list apppool /name:"$=*Teleopti*" /xml | %appcmd% delete apppool /in
 
 ::remove web site
 %appcmd% DELETE vdir "%DefaultSite%/TeleoptiCCC"
