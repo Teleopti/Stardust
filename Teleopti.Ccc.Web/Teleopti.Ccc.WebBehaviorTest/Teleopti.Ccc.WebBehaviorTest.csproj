@@ -199,6 +199,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HealthCheck.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\ShiftTradeBulletinBoardFromRequests.feature.cs">
+      <DependentUpon>ShiftTradeBulletinBoardFromRequests.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -829,6 +834,10 @@
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\ShiftTradeBulletinBoardFromRequests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeBulletinBoardFromRequests.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\AgentBadge.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

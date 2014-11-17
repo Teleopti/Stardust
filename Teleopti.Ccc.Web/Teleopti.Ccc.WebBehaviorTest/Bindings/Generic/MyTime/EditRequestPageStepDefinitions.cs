@@ -41,6 +41,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
+		[When(@"I click to shift trade bulletin board")]
+		public void WhenIClickToShiftTradeBulletinBoard()
+		{
+			Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
+		}
+
+		[Then(@"I should see the bulletin board")]
+		public void ThenIShouldSeeTheBulletinBoard()
+		{
+			Browser.Interactions.AssertExists("#Request-shift-trade-bulletin-board");
+		}
+
 		[When(@"I click overtime availability")]
 		[When(@"I click add new overtime availability")]
 		public void WhenIClickAddNewOvertimeAvailability()

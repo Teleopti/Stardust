@@ -69,7 +69,14 @@
 						<a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 					</li>
 				}
-				<li>12343242543563454534534</li>
+				<!-- ko if: isShiftTradeBulletinBoardEnabled-->
+				@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
+				{
+					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }">
+						<a href="#" id="addShiftTradeRequestFromBulletinBoard" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+					</li>
+				}
+				<!--/ko-->
 			</ul>
 		</div>
 	</div>
