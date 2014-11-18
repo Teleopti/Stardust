@@ -6,7 +6,6 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.js"/>
 
 
 Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {

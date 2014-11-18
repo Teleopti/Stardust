@@ -58,7 +58,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _hideOthers() {
 		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-		Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.HideShiftTradeBulletinBoard();
+		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeBulletinBoard();
 	}
 
     function _prepareForAddingRequest() {

@@ -4,7 +4,6 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -69,7 +68,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
         self.addShiftTradeBulletinBoardRequest = function (date) {
 	        self.resetToolbarActiveButtons();
 	        self.addShiftTradeBulletinBoardActive(true);
-			Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoard.OpenAddShiftTradeBulletinBoard(date);
+	        Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeBulletinWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 
 			var subnavbar = $('.subnavbar');
