@@ -122,27 +122,17 @@ function IIS-Restart {
 function AppPools-Start {
     param([bool]$IsAzure)
     if (!$IsAzure) {
-
-        $AppPoolArray = @(
-                "Teleopti ASP.NET v4.0",
-                "Teleopti ASP.NET v4.0 Web",
-                "Teleopti ASP.NET v4.0 Broker",
-                "Teleopti ASP.NET v4.0 SDK",
-                "Teleopti ASP.NET v4.0 RTA"
-                )
-
-        for ($i=0; $i -lt $AppPoolArray.length; $i++) {
-            try
-            {
-				$AppPoolName = $AppPoolArray[$i]
-				&"$env:windir\system32\inetsrv\AppCmd.exe" Start AppPool "$AppPoolName"
-				&"$env:windir\system32\inetsrv\AppCmd.exe" Set Apppool "$AppPoolName" /autoStart:true
-            }
-            Catch {
-                $err=$Error[0]
-                Write-host "$err"
-            }
-        }
+		$appcmd="$env:windir\system32\inetsrv\AppCmd.exe"
+        
+		try
+		{
+			&$appcmd list apppool /state:Stopped /name:"$=*Teleopti*" /xml | &$appcmd Set apppool /autoStart:true /in
+			&$appcmd list apppool /state:Stopped /name:"$=*Teleopti*" /xml | &$appcmd start apppool /in
+		}
+		Catch {
+			$err=$Error[0]
+			Write-host "$err"
+		}
 	}
 }
 

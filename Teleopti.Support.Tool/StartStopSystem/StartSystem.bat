@@ -19,17 +19,10 @@ SET serviceList=MsDtc;TeleoptiServiceBus;TeleoptiEtlService
 
 ::Finally start our two App pools
 if exist "%windir%\system32\inetsrv\AppCmd.exe" (
+SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 echo trying to start iis 7.0 or 7.5 App Pools ...
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti WFM"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti WFM" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti Web"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Web" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti Broker"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Broker" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti SDK"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti SDK" /autoStart:true
-"%windir%\system32\inetsrv\AppCmd.exe" Start Apppool "Teleopti RTA"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti RTA" /autoStart:true
+%appcmd% list apppool /name:"$=*Teleopti*" /xml | %appcmd% start apppool /in
+%appcmd% list apppool /name:"$=*Teleopti*" /xml | %appcmd% Set apppool /autoStart:true /in
 ) else (
 echo trying to start iis 5.1 or 6.0 App Pools ...
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Teleopti WFM"

@@ -16,17 +16,10 @@ call :processServiceList
 
 ::Finally stop our two App pools
 if exist "%windir%\system32\inetsrv\AppCmd.exe" (
+SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 echo trying to stop iis 7.0 or 7.5 App Pools ...
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti WFM"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti WFM" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti Web"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Web" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti Broker"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti Broker" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti SDK"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti SDK" /autoStart:false
-"%windir%\system32\inetsrv\AppCmd.exe" Stop Apppool "Teleopti RTA"
-"%windir%\system32\inetsrv\AppCmd.exe" Set Apppool "Teleopti RTA" /autoStart:false
+%appcmd% list apppool /name:"$=*Teleopti*" /xml | %appcmd% stop apppool /in
+%appcmd% list apppool /name:"$=*Teleopti*" /xml | %appcmd% Set apppool /autoStart:false /in
 ) else (
 echo trying to stop iis 5.1 or 6.0 App Pools ...
 CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" STOP_SERVER "W3SVC/AppPools/Teleopti WFM"
