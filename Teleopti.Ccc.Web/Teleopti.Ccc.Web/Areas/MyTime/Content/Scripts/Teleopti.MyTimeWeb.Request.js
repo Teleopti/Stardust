@@ -89,7 +89,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
     	requestNavigationViewModel = new RequestNavigationViewModel();
     	var ajax = new Teleopti.MyTimeWeb.Ajax();
     	    ajax.Ajax({
-    		        url: "../ToggleHandler/IsEnabled?toggle=Request_ShiftTradeBulletinBoard_31296",
+    	    	url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeExchangeBulletin_31296",
 			        success: function (data) {
     		           if (data.IsEnabled) {
     			              requestNavigationViewModel.isShiftTradeBulletinBoardEnabled(true);

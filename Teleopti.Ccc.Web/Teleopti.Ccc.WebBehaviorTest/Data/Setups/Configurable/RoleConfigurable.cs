@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToTextRequests { get; set; }
 		public bool AccessToAbsenceRequests { get; set; }
 		public bool AccessToShiftTradeRequests { get; set; }
+		public bool AccessToShiftTradeBulletinBoard { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
 		public bool AccessToCalendarLink { get; set; }
 		public bool AccessToOvertimeAvailability { get; set; }
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToTextRequests = true;
 			AccessToAbsenceRequests = true;
 			AccessToShiftTradeRequests = true;
+			AccessToShiftTradeBulletinBoard = true;
 			AccessToAnywhere = false;
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
@@ -189,6 +191,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToShiftTradeRequests)
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
+											  select f;			
+			if (!AccessToShiftTradeBulletinBoard)
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard
 											  select f;
 			if (!AccessToViewAllGroupPages)
 				applicationFunctions = from f in applicationFunctions
