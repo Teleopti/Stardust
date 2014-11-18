@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -10,6 +9,25 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 {
 	public static class ValidatorHelper
 	{
+
+		public static IEnumerable<double?> GetDailyLowestIntraIntervalBalanceForPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill)
+		{
+			try
+			{
+				var result = new List<double?>();
+				var skillStaffPeriodsOfFullPeriod = getDailySkillStaffPeriodsForFullPeriod(stateHolder, singleSkill);
+				foreach (var dailySkillStaffPeriodList in skillStaffPeriodsOfFullPeriod)
+				{
+					result.Add(dailySkillStaffPeriodList.Min(c => c.IntraIntervalValue));
+				}
+				return result;
+			}
+			catch
+			{
+				return null;
+			}
+		}
+
 		public static IEnumerable<double?> GetDailyScheduledHoursForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
 		{
 			try
@@ -67,6 +85,22 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(stateHolder.TimeZoneInfo);
 				var skillStaffPeriods = skillStaffPeriodsTotal.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
 				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriods);
+			}
+			return dailySkillStaffPeriodsForFullPeriod;
+		}
+
+		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill)
+		{
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
+			var skillStaffPeriods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>{ singleSkill }, period);
+
+			var dailySkillStaffPeriodsForFullPeriod = new List<IList<ISkillStaffPeriod>>();
+
+			foreach (var day in stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection())
+			{
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(stateHolder.TimeZoneInfo);
+				var skillStaffPeriodsOnDay = skillStaffPeriods.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
+				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriodsOnDay);
 			}
 			return dailySkillStaffPeriodsForFullPeriod;
 		}

@@ -33,6 +33,13 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.DeleteAll:
 						return new DeleteAllValidator(schedulerState, totalSkill);
 
+					case SikuliValidatorRegister.OptimizeIntervalBalanceBefore:
+						return new IntervalBalanceBeforeValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.OptimizeIntervalBalanceAfter:
+						return new IntervalBalanceAfterValidator(schedulerState, totalSkill);
+
+
 					default:
 						return null;
 				}
