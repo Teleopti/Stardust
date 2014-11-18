@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		                ICollection<IPersonAbsenceAccount> personAbsenceAccounts,
 		                IEnumerable<IPersonRequest> personRequests,
 		                ICollection<IPersonWriteProtectionInfo> writeProtectionInfos,
-		                out IEnumerable<PersistConflict> foundConflicts);
+						ICollection<IWorkflowControlSet> workflowControlSets,
+						out IEnumerable<PersistConflict> foundConflicts);
 	}
 }

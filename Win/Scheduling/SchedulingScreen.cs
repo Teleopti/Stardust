@@ -443,6 +443,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updater.RegisterType<PersonAccountConflictResolver>().As<IPersonAccountConflictResolver>().InstancePerLifetimeScope();
 			updater.RegisterType<RequestPersister>().As<IRequestPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<WriteProtectionPersister>().As<IWriteProtectionPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<WorkflowControlSetPersisterToggle30929Off>().As<WorkflowControlSetPersisterToggle30929Off>().InstancePerLifetimeScope();
+			updater.RegisterType<WorkflowControlSetPersister>().As<WorkflowControlSetPersister>().InstancePerLifetimeScope();
+			updater.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_PublishSchedules_30929)
+			   ? (IWorkflowControlSetPersister)c.Resolve<WorkflowControlSetPersister>()
+			   : c.Resolve<WorkflowControlSetPersisterToggle30929Off>())
+				   .As<IWorkflowControlSetPersister>().InstancePerLifetimeScope();
+
+
+
+
 			updater.Register(c => clearReferredShiftTradeRequests).As<IClearReferredShiftTradeRequests>().InstancePerLifetimeScope();
 			updater.Update(componentRegistry);
 		}
@@ -3661,6 +3671,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						_schedulerState.Schedules.ModifiedPersonAccounts,
 																						_schedulerState.PersonRequests,
 																						_modifiedWriteProtections,
+																						_schedulerState.CommonStateHolder.WorkflowControlSets,
 																						out foundConflicts))
 			{
 				handleConflicts(new List<IPersistableScheduleData>(), foundConflicts);

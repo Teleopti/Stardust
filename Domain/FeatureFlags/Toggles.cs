@@ -19,6 +19,7 @@
 		Scheduler_BackToLegalShift_29831,
 		Scheduler_IntraIntervalSolver_29845,
 		Schedule_IntraIntervalOptimizer_29846,
+		Schedule_PublishSchedules_30929,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,

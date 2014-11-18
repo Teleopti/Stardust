@@ -584,6 +584,7 @@
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
     <Compile Include="Scheduler\MultiplicatorsetForPasteSpecialFilterTest.cs" />
     <Compile Include="Scheduler\PasteAsOvertimeTest.cs" />
+    <Compile Include="Scheduler\PublishScheduleCommandTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestComparerTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityAddCommandTest.cs" />

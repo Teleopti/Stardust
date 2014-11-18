@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             createInitializeCommonStateHolderExpectation();
 			createPersonalAccountLoadingExpectation();
             createScheduleTagLoadingExpectation();
+			createWorkflowControlSetLoadingExpectation();
 			
 			_permittedPeople[0].Stub(x => x.PersonSchedulePeriods(new DateOnlyPeriod())).IgnoreArguments().Return(new List<ISchedulePeriod>());
 			_permittedPeople[0].Stub(x => x.Name).Return(new Name("first", "last"));
@@ -208,5 +209,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _repositoryFactory.Stub(x => x.CreateScheduleTagRepository(_uow)).Return(scheduleTagRep);
             scheduleTagRep.Stub(x => x.LoadAll()).Return( new List<IScheduleTag>());
         }
+
+	    private void createWorkflowControlSetLoadingExpectation()
+	    {
+		    var workflowControlSetRepository = MockRepository.GenerateMock<IWorkflowControlSetRepository>();
+		    _repositoryFactory.Stub(x => x.CreateWorkflowControlSetRepository(_uow)).Return(workflowControlSetRepository);
+		    workflowControlSetRepository.Stub(x => x.LoadAll()).Return(new List<IWorkflowControlSet>());
+	    }
     }
 }

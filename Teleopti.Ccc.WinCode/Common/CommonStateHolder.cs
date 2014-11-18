@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly List<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
         private readonly List<IDayOffTemplate> _dayOffs = new List<IDayOffTemplate>();
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
+		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>(); 
 
         public void LoadCommonStateHolder(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
         {
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			_dayOffs.Clear();
 			_scheduleTags.Clear();
 			_shiftCategories.Clear();
+			_workflowControlSets.Clear();
 
             using(unitOfWork.DisableFilter(QueryFilter.Deleted))
             {
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
                 LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
                 loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
+	            loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
             }
         }
 
@@ -42,6 +45,16 @@ namespace Teleopti.Ccc.WinCode.Common
             _scheduleTags.AddRange(scheduleTagRepository.LoadAll().OrderBy(t => t.Description));
             _scheduleTags.Insert(0, NullScheduleTag.Instance);
         }
+
+	    private void loadWorkflowControlSets(IWorkflowControlSetRepository workflowControlSetRepository)
+	    {
+			_workflowControlSets.AddRange(workflowControlSetRepository.LoadAll());   
+	    }
+
+		public ICollection<IWorkflowControlSet> WorkflowControlSets
+	    {
+			get { return _workflowControlSets; }
+	    }
         
         public IEnumerable<IScheduleTag> ScheduleTags
         {

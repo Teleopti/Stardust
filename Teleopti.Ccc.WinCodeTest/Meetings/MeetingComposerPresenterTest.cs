@@ -221,6 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var contractScheduleRepMock = _mocks.StrictMock<IContractScheduleRepository>();
             var businessUnitRepository = _mocks.StrictMock<IBusinessUnitRepository>();
             var scheduleTagRepository = _mocks.StrictMock<IScheduleTagRepository>();
+	        var workflowControlSetRepository = _mocks.StrictMock<IWorkflowControlSetRepository>();
 
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             Expect.Call(_repositoryFactory.CreateAbsenceRepository(unitOfWork)).Return(absenceRepository);
@@ -232,6 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_repositoryFactory.CreateContractScheduleRepository(unitOfWork)).Return(contractScheduleRepMock);
             Expect.Call(_repositoryFactory.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
             Expect.Call(_repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRepository);
+	        Expect.Call(_repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
 
             unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
@@ -246,6 +248,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);
             Expect.Call(businessUnitRepository.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit>());
             Expect.Call(scheduleTagRepository.LoadAll()).Return(new List<IScheduleTag>());
+	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(new List<IWorkflowControlSet>());
 
             _view.EnableAfterLoadingStateHolder();
 

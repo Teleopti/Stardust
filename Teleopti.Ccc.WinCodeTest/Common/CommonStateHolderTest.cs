@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private readonly IList<IDayOffTemplate> _dayOffColl = new List<IDayOffTemplate>();
         private readonly IList<IContract> _contractList = new List<IContract>();
         private readonly ICollection<IContractSchedule> _contractScheduleColl = new List<IContractSchedule>();
+		private readonly IList<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>(); 
 
         private CommonStateHolder _commonStateHolder;
 
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             deleted.SetDeleted();
             _activityColl.Add(deleted);
             _shiftCategoryColl.Add(ShiftCategoryFactory.CreateShiftCategory("act2"));
+			_workflowControlSets.Add(_mockRep.StrictMock<IWorkflowControlSet>());
 
             var unitOfWork = _mockRep.DynamicMock<IUnitOfWork>();
             var repositoryFactory = _mockRep.StrictMock<IRepositoryFactory>();
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var contractRepMock = _mockRep.StrictMock<IContractRepository>();
             var contractScheduleRepMock = _mockRep.StrictMock<IContractScheduleRepository>();
             var scheduleTagRep = _mockRep.StrictMock<IScheduleTagRepository>();
+	        var workflowControlSetRepository = _mockRep.StrictMock<IWorkflowControlSetRepository>();
 
             Expect.Call(repositoryFactory.CreateAbsenceRepository(unitOfWork)).Return(absenceRepMock);
             Expect.Call(repositoryFactory.CreateDayOffRepository(unitOfWork)).Return(dayOffRepMock);
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(repositoryFactory.CreateContractRepository(unitOfWork)).Return(contractRepMock);
             Expect.Call(repositoryFactory.CreateContractScheduleRepository(unitOfWork)).Return(contractScheduleRepMock);
             Expect.Call(repositoryFactory.CreateScheduleTagRepository(unitOfWork)).Return(scheduleTagRep).Repeat.Once();
+	        Expect.Call(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork)).Return(workflowControlSetRepository);
             Expect.Call(activityRepMock.LoadAll()).IgnoreArguments().Return(_activityColl);
             Expect.Call(dayOffRepMock.LoadAll()).IgnoreArguments().Return(_dayOffColl);
             Expect.Call(absenceRepMock.LoadAll()).IgnoreArguments().Return(_absenceColl);
@@ -65,6 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(contractRepMock.FindAllContractByDescription()).Return(_contractList);
             Expect.Call(contractScheduleRepMock.LoadAllAggregate()).Return(_contractScheduleColl);
             Expect.Call(scheduleTagRep.LoadAll()).Return(new List<IScheduleTag>()).Repeat.Once();
+	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(_workflowControlSets);
 
             _mockRep.ReplayAll();
             _commonStateHolder.LoadCommonStateHolder(repositoryFactory,unitOfWork);
@@ -79,6 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(1, _commonStateHolder.ActiveScheduleTags.Count());
             Assert.AreEqual(1, _commonStateHolder.ShiftCategories.Count());
             Assert.AreEqual(1, _commonStateHolder.ActiveShiftCategories.Count());
+			Assert.AreEqual(1, _commonStateHolder.WorkflowControlSets.Count);
             _mockRep.VerifyAll();
         }
 
