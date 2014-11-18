@@ -241,6 +241,7 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
+    <Compile Include="Areas\Rta\EventOrderTest.cs" />
     <Compile Include="Areas\Rta\EventsTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForTest.cs" />

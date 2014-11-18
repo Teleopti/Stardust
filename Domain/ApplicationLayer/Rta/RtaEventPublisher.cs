@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Publish(StateInfo info)
 		{
 			_shiftEventPublisher.Publish(info);
-			_adherenceEventPublisher.Publish(info);
 			_activityEventPublisher.Publish(info);
 			_stateEventPublisher.Publish(info);
+			_adherenceEventPublisher.Publish(info);
 		}
 	}
 }

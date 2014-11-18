@@ -90,6 +90,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
+		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender, IEventPublisher eventPublisher)
+			: this(
+				new FakeSignalRClient(),
+				messageSender,
+				database,
+				database,
+				MockRepository.GenerateMock<IMbCacheFactory>(),
+				new AdherenceAggregator(messageSender, new OrganizationForPerson(new PersonOrganizationProvider(database))),
+				rtaEventPublisher(eventPublisher),
+				now,
+				new FakeConfigReader())
+		{
+		}
+
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private FakeRtaDatabase _database;
 
