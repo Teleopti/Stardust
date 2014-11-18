@@ -138,6 +138,8 @@ union all
 select lo.acd_type_id,2,'Agent data','load_queue',32,dateadd(dd,-5,getdate())
 from $(TELEOPTIAGG).[dbo].[log_object] lo
 
+exec $(TELEOPTIANALYTICS).[mart].[etl_job_intraday_settings_load]
+
 ----------------
 --load all agent,queue,agent_queue from Agg int Mart
 ----------------
@@ -159,7 +161,7 @@ GO
 ----------------
 --create + copy deviation date from template - 4 week data
 ----------------
---run v8 convert to local date
+--run v8 convert to Schedule local date
 declare @count int
 set @count=1
 WHILE @count > 0
@@ -169,6 +171,7 @@ BEGIN
 	FROM $(TELEOPTIANALYTICS).mart.etl_job_delayed
 END 
 
+--reload deviation
 declare @TemplateEndDate datetime
 declare @TemplateStartDate datetime
 declare @MondayThreeWeeksAgo datetime

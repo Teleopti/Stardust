@@ -33,7 +33,7 @@ namespace Teleopti.Support.Security
 					command.Parameters.Clear();
 					command.ExecuteNonQuery();
 
-					command.CommandText = "mart.sys_datasource_detail_load";
+					command.CommandText = "mart.etl_job_intraday_settings_load";
 					command.Parameters.Clear();
 					command.ExecuteNonQuery();
 				}

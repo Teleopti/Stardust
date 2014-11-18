@@ -115,7 +115,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_save",
 											parameterList, _dataMartConnectionString);
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_detail_load", null,
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load", null,
 											_dataMartConnectionString);
 		}
 

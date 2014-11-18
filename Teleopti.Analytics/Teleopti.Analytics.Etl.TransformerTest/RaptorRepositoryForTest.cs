@@ -366,7 +366,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return 0;
         }
 
-        public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday)
+        public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, int isIntraday, DateTime? nowUtc)
         {
             return 0;
         }

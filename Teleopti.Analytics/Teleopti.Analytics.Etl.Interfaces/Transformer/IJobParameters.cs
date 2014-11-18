@@ -20,5 +20,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         bool IsPmInstalled { get; }
 		CultureInfo CurrentCulture { get; }
 		IEtlToggleManager EtlToggleManager { get; }
+		DateTime? NowForTestPurpose { get; set; }
     }
 }
