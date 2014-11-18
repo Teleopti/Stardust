@@ -499,14 +499,14 @@
 			// 
 			this.tableLayoutPanel6.ColumnCount = 1;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Controls.Add(this.checkBoxAdvIntraIntervalOptimization, 0, 7);
-			this.tableLayoutPanel6.Controls.Add(this.checkBoxFairness, 0, 6);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxShiftsWithinDay, 0, 5);
+			this.tableLayoutPanel6.Controls.Add(this.checkBoxFairness, 0, 7);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxDaysOffFromFlexibleWorkTime, 0, 4);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxShiftsForFlexibleWorkTime, 0, 3);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxTimeBetweenDays, 0, 2);
 			this.tableLayoutPanel6.Controls.Add(this.checkBoxDaysOff, 0, 1);
 			this.tableLayoutPanel6.Controls.Add(this.labelOptimizationSteps, 0, 0);
+			this.tableLayoutPanel6.Controls.Add(this.checkBoxAdvIntraIntervalOptimization, 0, 6);
 			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 39);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
@@ -526,9 +526,8 @@
 			// checkBoxAdvIntraIntervalOptimization
 			// 
 			this.checkBoxAdvIntraIntervalOptimization.BeforeTouchSize = new System.Drawing.Size(442, 24);
-			this.checkBoxAdvIntraIntervalOptimization.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxAdvIntraIntervalOptimization.DrawFocusRectangle = false;
-			this.checkBoxAdvIntraIntervalOptimization.Location = new System.Drawing.Point(10, 213);
+			this.checkBoxAdvIntraIntervalOptimization.Location = new System.Drawing.Point(10, 183);
 			this.checkBoxAdvIntraIntervalOptimization.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxAdvIntraIntervalOptimization.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvIntraIntervalOptimization.Name = "checkBoxAdvIntraIntervalOptimization";
@@ -541,9 +540,8 @@
 			// checkBoxFairness
 			// 
 			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(442, 24);
-			this.checkBoxFairness.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxFairness.DrawFocusRectangle = false;
-			this.checkBoxFairness.Location = new System.Drawing.Point(10, 183);
+			this.checkBoxFairness.Location = new System.Drawing.Point(10, 213);
 			this.checkBoxFairness.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxFairness.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxFairness.Name = "checkBoxFairness";
