@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 
     self.absenceReportPermission = ko.observable(absenceReportPermission);
 	self.isPermittedToReportAbsence = ko.computed(function() {
-		var today = moment().startOf('day');
+		var today = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
 		var formatToday = today.format('l');
 		var formatTomorrow = today.add(1, 'day').format('l');
 		var formatCurrentDate = moment(self.fixedDate()).format('l');

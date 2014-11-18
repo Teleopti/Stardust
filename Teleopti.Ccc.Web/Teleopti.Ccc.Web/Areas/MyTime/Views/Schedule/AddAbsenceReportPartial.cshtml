@@ -7,7 +7,7 @@
 				@Resources.AbsenceType
 			</label>
 			<div>
-				<select class="request-edit-absence form-control" data-bind="value: AbsenceId">
+				<select class="report-edit-absence form-control" data-bind="value: AbsenceId">
 					@foreach (var absenceType in Model.AbsenceTypesForReport)
 					{
 						<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>

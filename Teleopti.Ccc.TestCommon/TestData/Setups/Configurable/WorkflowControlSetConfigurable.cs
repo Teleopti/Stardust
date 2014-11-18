@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Engine;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -17,6 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string AvailableShiftCategory { get; set; }
 		public string AvailableDayOff { get; set; }
 		public string AvailableAbsence { get; set; }
+		public string ReportableAbsence { get; set; }
 		public string AvailableActivity { get; set; }
 		public bool PreferencePeriodIsClosed { get; set; }
 		public string PreferencePeriodStart { get; set; }
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
 						break;
 					case "mix":
-						var mixedList = new List<IAbsenceRequestValidator>(){
+						var mixedList = new List<IAbsenceRequestValidator>{
 							new BudgetGroupAllowanceValidator(), 
 							new BudgetGroupHeadCountValidator(),
 							new StaffingThresholdValidator()
@@ -156,6 +156,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				var activity = new ActivityRepository(uow).LoadAll().Single(c => c.Description.Name == AvailableActivity);
 				workflowControlSet.AllowedPreferenceActivity = activity;
+			}
+
+			if (!string.IsNullOrEmpty(ReportableAbsence))
+			{
+				var absence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == ReportableAbsence);
+				workflowControlSet.AddAllowedAbsenceForReport(absence);
 			}
 
 			if (ShiftTradeSlidingPeriodStart != 0 || ShiftTradeSlidingPeriodEnd != 0)

@@ -93,7 +93,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	};
 	
 	function loadAbsenceAccount() {
-		if (!self.PersonalAccountPermission)
+		if (!self.PersonalAccountPermission || self.AbsenceId() == undefined || self.AbsenceId() == null )
 			return;
 		var absenceChanged = self.AbsenceId() != self.PreviousAbsenceId();
 		var dateToChanged = !self.DateTo().isSame(self.PreviousDateTo().format("YYYY-MM-DD HH:mm:ss"));
