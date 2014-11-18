@@ -71,7 +71,7 @@ namespace Teleopti.Support.Tool
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			_productVersion = new Version(Application.ProductVersion);
+			_productVersion = new Version(Application.ProductVersion.Split('-')[0]);
 #if (DEBUG)
 			{
 					_productVersion = new Version(8, 0, 397, 28396);
