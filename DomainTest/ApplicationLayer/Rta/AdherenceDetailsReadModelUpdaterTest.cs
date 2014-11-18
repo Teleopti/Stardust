@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
@@ -200,6 +201,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			persister.Rows.Last().ActualStartTime.Should().Be(null);
 		}
+
+		[Test]
+		public void ShouldPersistTimeInAdherenceWhenActivityStarts()
+		{
+			var personId = Guid.NewGuid();
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
+
+			persister.Rows.Single().TimeInAdherence.Should().Be(TimeSpan.Zero);
+		}
+
+		[Test]
+		public void ShouldPersistTimeInAdherenceWhenStateChanges()
+		{
+			var personId = Guid.NewGuid();
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 9:00".Utc(), InAdherence = false });
+			persister.Rows.Single().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
+		}
+
+		[Test]
+		public void ShouldPersistTimeInAdherenceWhenActivityChanges()
+		{
+			var personId = Guid.NewGuid();
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
+			persister.Rows.First().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
+		}
+
+		[Test]
+		public void ShouldPersistTimeInAdherenceWhenOutAdherenceBeforeActivityChanges()
+		{
+			var personId = Guid.NewGuid();
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = false });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
+			persister.Rows.First().TimeInAdherence.Should().Be(TimeSpan.FromMinutes(55));
+		}
+
 	}
 
 	public class AdherenceDetailsReadModelUpdater :
@@ -222,7 +273,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Name = @event.Name,
 				StartTime = @event.StartTime,
 				PersonId = @event.PersonId,
-				Date = new DateOnly(@event.StartTime)
+				Date = new DateOnly(@event.StartTime),
+				TimeInAdherence = TimeSpan.Zero,
+				IsInAdherence = @event.InAdherence
 			};
 			var previous = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime)).LastOrDefault();
 			if (previous != null)
@@ -232,9 +285,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					model.ActualStartTime = @event.StartTime;
 				}
 				if (@event.InAdherence && !previous.IsInAdherence)
+				{
 					model.ActualStartTime = previous.LastStateChangedTime;
-				if(previous.Name == null)
-					_persister.Remove(model.PersonId, model.Date);		
+				}
+				if (previous.Name == null)
+					_persister.Remove(model.PersonId, model.Date);
+				else
+				{
+					if (previous.IsInAdherence)
+					{
+
+
+						if (previous.LastStateChangedTime != null)
+						{
+							previous.TimeInAdherence += @event.StartTime - previous.LastStateChangedTime.Value;
+						}
+						else
+						{
+							previous.TimeInAdherence += @event.StartTime - previous.StartTime;
+						}
+					}
+					_persister.Update(previous);
+				}
 			}
 			_persister.Add(model);	
 		}
@@ -244,6 +316,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).LastOrDefault();
 			if (existingModel != null)
 			{
+				if (existingModel.IsInAdherence)
+				{
+					if (!existingModel.LastStateChangedTime.HasValue)
+						existingModel.TimeInAdherence += @event.Timestamp - existingModel.StartTime;
+					else
+						existingModel.TimeInAdherence += @event.Timestamp - existingModel.LastStateChangedTime.Value;
+				}
 				existingModel.LastStateChangedTime = @event.Timestamp;
 				if (@event.InAdherence && existingModel.ActualStartTime == null)
 					existingModel.ActualStartTime = @event.Timestamp;
@@ -276,6 +355,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
 	{
 		public IList<AdherenceDetailsReadModel> Rows = new List<AdherenceDetailsReadModel>();
+		public AdherenceDetailsReadModel PersistedModel { get; set; }
 
 		public void Add(AdherenceDetailsReadModel model)
 		{
@@ -316,7 +396,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					   Name = m.Name,
 					   ActualStartTime = m.ActualStartTime,
 					   LastStateChangedTime = m.LastStateChangedTime,
-					   IsInAdherence = m.IsInAdherence
+					   IsInAdherence = m.IsInAdherence,
+					   TimeInAdherence = m.TimeInAdherence
 				   };
 		}
 	}
@@ -331,6 +412,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public DateTime? LastStateChangedTime { get; set; }
 		public bool IsInAdherence { get; set; }
+		public TimeSpan TimeInAdherence { get; set; }
 	}
 
 	public interface IAdherenceDetailsReadModelPersister
