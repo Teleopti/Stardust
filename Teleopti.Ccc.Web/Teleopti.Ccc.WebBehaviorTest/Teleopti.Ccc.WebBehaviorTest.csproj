@@ -199,6 +199,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HealthCheck.feature</DependentUpon>
     </Compile>
+    <Compile Include="License.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>License.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\ShiftTradeBulletinBoard.feature.cs">
       <DependentUpon>ShiftTradeBulletinBoard.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -691,11 +696,6 @@
       <DependentUpon>StudentAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="License.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>License.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\EventDefinition.cs" />
     <Compile Include="Security.feature.cs">

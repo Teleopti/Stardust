@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = info.NewState.PersonId,
 					StartTime = info.CurrentActivity.StartDateTime,
 					Name = info.CurrentActivity.Name,
-					BusinessUnitId = info.NewState.BusinessUnitId
+					BusinessUnitId = info.NewState.BusinessUnitId,
+					InAdherence = info.NewState.InAdherence
 				});
 			}
 		}

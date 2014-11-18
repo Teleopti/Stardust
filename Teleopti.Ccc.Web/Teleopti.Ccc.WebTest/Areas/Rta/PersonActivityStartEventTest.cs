@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -97,6 +98,66 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var @event = (ILogOnInfo)publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
 			@event.BusinessUnitId.Should().Be(businessUnitId);
 			@event.Datasource.Should().Be("datasource");
+		}
+
+		[Test]
+		public void ShouldPublishWithInAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("statecode", activityId, 0d)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var mutableNow = new MutableNow();
+			mutableNow.Mutate("2014-10-20 09:50");
+			var target = new RtaForTest(database, mutableNow, publisher);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = mutableNow.UtcDateTime()
+			});
+			mutableNow.Mutate("2014-10-20 10:02");
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
+
+			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
+			@event.InAdherence.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldPublishWithOutAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("statecode", activityId, 1d)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var mutableNow = new MutableNow();
+			mutableNow.Mutate("2014-10-20 09:50");
+			var target = new RtaForTest(database, mutableNow, publisher);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = mutableNow.UtcDateTime()
+			});
+			mutableNow.Mutate("2014-10-20 10:02");
+			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:02".Utc());
+
+			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
+			@event.InAdherence.Should().Be(false);
 		}
 
 	}

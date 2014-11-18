@@ -116,5 +116,59 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			@event.BusinessUnitId.Should().Be(businessUnitId);
 			@event.Datasource.Should().Be("datasource");
 		}
+
+		[Test]
+		public void ShouldPublishWithInAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("statecode", activityId, 0d)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var dataSource = new FakeCurrentDatasource("datasource");
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher, dataSource);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = "2014-10-20 10:00".Utc()
+			});
+
+			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.InAdherence.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldPublishWithOutAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("statecode", activityId, 1d)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var dataSource = new FakeCurrentDatasource("datasource");
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher, dataSource);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+				Timestamp = "2014-10-20 10:00".Utc()
+			});
+
+			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.InAdherence.Should().Be(false);
+		}
 	}
 }

@@ -69,6 +69,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
+		public void ShouldPersistActivitiesStartTimeWhenStateChangedBeforeShiftStarted()
+		{
+			var personId = Guid.NewGuid();
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+
+			target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 7:55".Utc(),
+				InAdherence = false
+			});
+			target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				Name = "Phone",
+				StartTime = "2014-11-17 8:00".Utc(),
+				InAdherence = true
+			});
+
+			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
+		}
+
+		[Test]
 		public void ShouldPersistActualStartTime()
 		{
 			var personId = Guid.NewGuid();
@@ -84,14 +108,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
-				Timestamp = "2014-11-17 8:00".Utc()
+				Timestamp = "2014-11-17 8:00".Utc(),
+				InAdherence = true
 			});
-			target.Handle(new PersonInAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2014-11-17 8:00".Utc()
-			});
-
 			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
@@ -102,11 +121,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:00".Utc() });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" , InAdherence = false});
 
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc() });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc() });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc(), InAdherence = true});
 
 			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
 		}
@@ -118,16 +135,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:00".Utc() });
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" , InAdherence = false});
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() ,InAdherence = true});
 
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc() });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc() });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = false});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Break" });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 9:00".Utc() });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Break", InAdherence = true});
 
 			persister.Rows.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
 		}
@@ -139,8 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:00".Utc() });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false});
 
 			persister.Rows.Single().ActualStartTime.Should().Be(null);
 		}
@@ -152,14 +164,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:00".Utc() });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false});
 
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true});
 
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:10".Utc() });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:15".Utc() });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:10".Utc(), InAdherence = true});
 
 			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
 		}
@@ -171,12 +180,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:00".Utc() });
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
-
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Phone 2" });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" , InAdherence = false});
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() , InAdherence = true});
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Phone 2", InAdherence = true });
 
 			persister.Rows.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
@@ -188,13 +194,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:00".Utc() });
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
-			target.Handle(new PersonInAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc() });
-
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch" });
-			target.Handle(new PersonOutOfAdherenceEvent { PersonId = personId, Timestamp = "2014-11-17 9:00".Utc() });
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true});
+			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch" , InAdherence = false});
 
 			persister.Rows.Last().ActualStartTime.Should().Be(null);
 		}
@@ -225,42 +227,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var previous = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime)).LastOrDefault();
 			if (previous != null)
 			{
-				model.LastStateChangedTime = previous.LastStateChangedTime;
-				model.IsInAdherence = previous.IsInAdherence;
-				if (previous.IsInAdherence)
+				if (@event.InAdherence && previous.IsInAdherence)
+				{
 					model.ActualStartTime = @event.StartTime;
+				}
+				if (@event.InAdherence && !previous.IsInAdherence)
+					model.ActualStartTime = previous.LastStateChangedTime;
+				if(previous.Name == null)
+					_persister.Remove(model.PersonId, model.Date);		
 			}
-			_persister.Add(model);
+			_persister.Add(model);	
 		}
 
 		public void Handle(PersonStateChangedEvent @event)
 		{
-			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).Last();
-			existingModel.LastStateChangedTime = @event.Timestamp;
-			_persister.Update(existingModel);
+			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).LastOrDefault();
+			if (existingModel != null)
+			{
+				existingModel.LastStateChangedTime = @event.Timestamp;
+				if (@event.InAdherence && existingModel.ActualStartTime == null)
+					existingModel.ActualStartTime = @event.Timestamp;
+				existingModel.IsInAdherence = @event.InAdherence;
+				_persister.Update(existingModel);
+			}
+			else
+			{
+				var model = new AdherenceDetailsReadModel
+				{
+					PersonId = @event.PersonId,
+					Date = new DateOnly(@event.Timestamp),
+					LastStateChangedTime = @event.Timestamp,
+				};
+				_persister.Add(model);
+			}
 		}
 
 		public void Handle(PersonInAdherenceEvent @event)
 		{
-			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).Last();
-			if (!existingModel.ActualStartTime.HasValue)
-				existingModel.ActualStartTime = existingModel.LastStateChangedTime;
-			existingModel.IsInAdherence = true;
-			_persister.Update(existingModel);
+			
 		}
 
 		public void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).Last();
-			existingModel.IsInAdherence = false;
-			if (personWentOutOfAdherenceWhenTheActivityStarted(@event, existingModel))
-				existingModel.ActualStartTime = null;
-			_persister.Update(existingModel);
-		}
-
-		private static bool personWentOutOfAdherenceWhenTheActivityStarted(PersonOutOfAdherenceEvent @event, AdherenceDetailsReadModel existingModel)
-		{
-			return existingModel.StartTime == @event.Timestamp;
+			
 		}
 	}
 
@@ -283,6 +292,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Rows.Remove(existing.Single());
 			Rows.Add(model);
 			Rows = Rows.OrderBy(x => x.StartTime).ToList();
+		}
+
+		public void Remove(Guid personId, DateOnly date)
+		{
+			var existing = from m in Rows
+						   where m.PersonId == personId &&
+								 m.Date == date
+						   select m;
+			Rows.Remove(existing.Single());
 		}
 
 		public IEnumerable<AdherenceDetailsReadModel> Get(Guid personId, DateOnly date)
@@ -320,5 +338,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		void Add(AdherenceDetailsReadModel model);
 		void Update(AdherenceDetailsReadModel model);
 		IEnumerable<AdherenceDetailsReadModel> Get(Guid personId, DateOnly date);
+		void Remove(Guid personId, DateOnly date);
 	}
 }
