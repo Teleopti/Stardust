@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -95,7 +96,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("phone", activityId, "alarm")
 				.Make();
 			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:02"), sender);
+			var publisher = new FakeEventPublisher();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:02"), sender, publisher);
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -104,11 +106,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				Timestamp = "2014-10-20 9:01".Utc()
 			});
 			sender.AllNotifications.Clear();
+			publisher.PublishedEvents.Clear();
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 9:03".Utc());
 
 			var sent = sender.NotificationsOfType<IActualAgentState>();
 			sent.Should().Have.Count.EqualTo(0);
 			database.PersistedActualAgentState.ReceivedTime.Should().Be("2014-10-20 9:01".Utc());
+			publisher.PublishedEvents.Should().Have.Count.EqualTo(0);
 		}
 	}
 }
