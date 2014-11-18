@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 		
         <%
-            var version = DateTime.UtcNow.Ticks;
+	        var version = 123;//DateTime.UtcNow.Ticks;
         %>
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.js?bust=<%=version%>"></script>
@@ -23,6 +23,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.RequestViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.js?bust=<%=version%>"></script>
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.DayViewModel.js?bust=<%=version%>"></script>
@@ -38,6 +39,7 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.js?bust=<%=version%>"></script>
 		
 		
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.Tests.js?bust=<%=version%>"></script>
