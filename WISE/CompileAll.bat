@@ -147,7 +147,6 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_forecast\ForecastDatabase\TeleoptiCCC_Forecasts.BA
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiAnalytics_Demo.bak" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7_Demo.bak" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7Agg_Demo.BAK" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\ccc7_server\ReportViewer2010.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\RegisterEventLogSource.exe" "%WISESOURCEFILE%\Wise\ccc7_server\Logs\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\ntrights.exe" "%WISESOURCEFILE%\Wise\ccc7_server\Logs\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\ntrights.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
@@ -156,22 +155,13 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\S
 ::WISE
 ROBOCOPY "%DEPENDENCIESSRC%\images" "%WISESOURCEFILE%\images" /MIR
 
-::get short version
-if "%Version:~0,-6%"=="7.5.390" (
-set shortVersion=%Version:~0,-6%
-) else (
-set shortVersion=Default
-)
+hg clone http://atom:5000/tools/Wise.wsi wsi
 
-if exist "%DEPENDENCIESSRC%\wsi\%shortVersion%" (
-XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_server.wsi" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_mytime.wsi" "%WISESOURCEFILE%\Wise\ccc7_mytime\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_forecast.wsi" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_client.wsi" "%WISESOURCEFILE%\Wise\ccc7_client\" /D /Y
-) else (
-SET ERRORLEV=102
-GOTO Error
-)
+XCOPY "%WISESOURCEFILE%\wsi\ccc7_server.wsi" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
+XCOPY "%WISESOURCEFILE%\wsi\ccc7_mytime.wsi" "%WISESOURCEFILE%\Wise\ccc7_mytime\" /D /Y
+XCOPY "%WISESOURCEFILE%\wsi\ccc7_forecast.wsi" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
+XCOPY "%WISESOURCEFILE%\wsi\ccc7_client.wsi" "%WISESOURCEFILE%\Wise\ccc7_client\" /D /Y
+
 
 ::--------
 ::Create WISE artifact structure
