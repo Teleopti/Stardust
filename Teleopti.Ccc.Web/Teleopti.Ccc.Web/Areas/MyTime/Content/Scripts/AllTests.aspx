@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 		
         <%
-	        var version = 123;//DateTime.UtcNow.Ticks;
+	        var version = DateTime.UtcNow.Ticks;
         %>
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.js?bust=<%=version%>"></script>
