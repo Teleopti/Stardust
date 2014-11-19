@@ -57,7 +57,22 @@
 						</td>
 					</tr>
 				</tbody>
+				<tbody data-bind="foreach: possibleTradeSchedules">
+					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
+						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName"></td>
+						<td class="shift-trade-possible-trade-schedule">
+							<div data-bind="foreach: $data.layers">
+								<div class="shift-trade-layer-container floatleft">
+									<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
 			</table>
+		</div>
+		<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
+			@Resources.NoAgentsAvailableForShiftTrade
 		</div>
 	</div>
 </div>
