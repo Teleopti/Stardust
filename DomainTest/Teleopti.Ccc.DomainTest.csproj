@@ -160,6 +160,7 @@
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
