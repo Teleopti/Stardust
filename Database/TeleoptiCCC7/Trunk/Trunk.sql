@@ -9,7 +9,7 @@ BEGIN
 CREATE TABLE [ReadModel].[AdherenceDetails](
 	[PersonId] [uniqueidentifier] NOT NULL,
 	[BelongsToDate] [smalldatetime] NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
+	[Name] [nvarchar](50) NULL,
 	[StartTime] [datetime] NULL,
 	[ActualStartTime] [datetime] NULL,
 	[LastStateChangedTime] [datetime] NULL,
