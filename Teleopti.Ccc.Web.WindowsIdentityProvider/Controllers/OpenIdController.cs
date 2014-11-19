@@ -67,8 +67,10 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			_providerEndpointWrapper.PendingRequest = null;
 			if (useLocalhostIdentifier && idrequest.ProviderEndpoint != null)
 			{
-				idrequest.ProviderEndpoint = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"), idrequest.ProviderEndpoint.MakeRelativeUri(
-					new Uri(idrequest.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))));
+				idrequest.ProviderEndpoint =
+					new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+						new Uri(idrequest.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+							.MakeRelativeUri(idrequest.ProviderEndpoint));
 			} 
 			if (idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler()) != RelyingPartyDiscoveryResult.Success)
 			{
@@ -87,7 +89,8 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				var identifier = new Uri(currentHttp.Request.Url,userIdentifier);
 				if (useLocalhostIdentifier)
 				{
-					identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"), userIdentifier);
+					identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"),
+						new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
 				}
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
