@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		public ICollection<PersonDto> Handle(GetPeopleByGroupPageGroupQueryDto query)
 		{
 			var queryDate = query.QueryDate.ToDateOnly();
-			var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
-
-			var availableDetails = details.Where(
-				p => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-				                                                                  queryDate, p));
-
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
+				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
+
+				var availableDetails = details.Where(
+					p => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+				                                                                  queryDate, p));
+
 				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 				return _personAssembler.DomainEntitiesToDtos(people).ToList();
 			}
