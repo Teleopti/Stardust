@@ -892,6 +892,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemSeniorityRankDesc.Visible = seniorityEnabled;
 			toolStripMenuItemSeniorityRankAsc.Visible = seniorityEnabled;
 
+			var publishScedule = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_PublishSchedules_30929) && authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			toolStripMenuItemPublish.Visible = publishScedule;
+
 			setPermissionOnControls();
             schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
             schedulerSplitters1.MultipleHostControl3.GotFocus += MultipleHostControl3OnGotFocus;
@@ -3671,7 +3674,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						_schedulerState.Schedules.ModifiedPersonAccounts,
 																						_schedulerState.PersonRequests,
 																						_modifiedWriteProtections,
-																						_schedulerState.CommonStateHolder.WorkflowControlSets,
+																						_schedulerState.CommonStateHolder.ModifiedWorkflowControlSets,
 																						out foundConflicts))
 			{
 				handleConflicts(new List<IPersistableScheduleData>(), foundConflicts);
@@ -4563,7 +4566,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_schedulerState.Schedules == null)
 				return 0;
 
-			if (!_schedulerState.Schedules.DifferenceSinceSnapshot().IsEmpty() || _schedulerState.ChangedRequests() || !_modifiedWriteProtections.IsEmpty())
+			if (!_schedulerState.Schedules.DifferenceSinceSnapshot().IsEmpty() || _schedulerState.ChangedRequests() || !_modifiedWriteProtections.IsEmpty() || !_schedulerState.CommonStateHolder.ModifiedWorkflowControlSets.IsEmpty())
 			{
 				DialogResult res = ShowConfirmationMessage(Resources.DoYouWantToSaveChangesYouMade, Resources.Save);
 				switch (res)
@@ -6281,6 +6284,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemShiftBackToLegalClick(object sender, EventArgs e)
 		{
 			scheduleSelected(true);
+		}
+
+		private void publishToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			using (var view = new PublishScheduleDateView(_scheduleView.SelectedSchedules()))
+			{
+				if (view.ShowDialog(this) != DialogResult.OK) return;
+				var workflowControlSets = view.WorkflowControlSets;
+				var publishToDate = view.PublishScheduleTo;
+				var publishCommand = new PublishScheduleCommand(workflowControlSets, publishToDate, _schedulerState.CommonStateHolder);
+				publishCommand.Execute();
+				enableSave();
+			}	
 		}
 	}
 }

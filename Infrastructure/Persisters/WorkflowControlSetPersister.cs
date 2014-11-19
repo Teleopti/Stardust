@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				_workflowControlSetRepository.AddRange(workflowControlSets);
 				unitOfWork.PersistAll(_initiatorIdentifier);
 				unitOfWork.Reassociate(workflowControlSets);
+				workflowControlSets.Clear();
 			}
 		}
 	}

@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly List<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
         private readonly List<IDayOffTemplate> _dayOffs = new List<IDayOffTemplate>();
         private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
-		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>(); 
+		private readonly List<IWorkflowControlSet> _workflowControlSets = new List<IWorkflowControlSet>();
+		private readonly List<IWorkflowControlSet> _modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
 
         public void LoadCommonStateHolder(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
         {
@@ -55,7 +56,12 @@ namespace Teleopti.Ccc.WinCode.Common
 	    {
 			get { return _workflowControlSets; }
 	    }
-        
+
+		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets
+		{
+			get { return _modifiedWorkflowControlSets; }
+		}
+
         public IEnumerable<IScheduleTag> ScheduleTags
         {
             get { return _scheduleTags; }

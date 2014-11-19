@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private MockRepository _mock;
 		private IWorkflowControlSet _workflowControlSet;
 		private IList<IWorkflowControlSet> _workflowControlSets;
+		private IList<IWorkflowControlSet> _modifiedWorkflowControlSets;
 		private DateTime _publishToDate;
 		private ICommonStateHolder _commonStateHolder;
 		
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mock = new MockRepository();
 			_workflowControlSet = _mock.StrictMock<IWorkflowControlSet>();
 			_workflowControlSets = new List<IWorkflowControlSet> { _workflowControlSet };
+			_modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
 			_publishToDate = new DateTime(2014, 1 ,1 );
 			_commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
 			_target = new PublishScheduleCommand(_workflowControlSets, _publishToDate, _commonStateHolder);	
@@ -37,11 +39,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_commonStateHolder.WorkflowControlSets).Return(_workflowControlSets);
 				Expect.Call(_workflowControlSet.Equals(_workflowControlSet)).Return(true);
 				Expect.Call(() => _workflowControlSet.SchedulePublishedToDate = _publishToDate);
+				Expect.Call(_commonStateHolder.ModifiedWorkflowControlSets).Return(_modifiedWorkflowControlSets);
 			}
 
 			using (_mock.Playback())
 			{
 				_target.Execute();
+				Assert.AreEqual(1, _modifiedWorkflowControlSets.Count);
 			}
 		}
 	}

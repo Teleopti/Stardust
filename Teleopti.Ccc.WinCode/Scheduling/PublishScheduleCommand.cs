@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (controlSet.Equals(modifiedControlSet))
 					{
 						controlSet.SchedulePublishedToDate = _publishToDate;
+						_commonStateHolder.ModifiedWorkflowControlSets.Add(controlSet);
 					}
 				}	
 			}
