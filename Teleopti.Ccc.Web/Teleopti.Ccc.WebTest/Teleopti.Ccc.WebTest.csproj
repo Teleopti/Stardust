@@ -229,6 +229,7 @@
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeBulletinBoardControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoard\ViewModelFactory\BadgeLeaderBoardReportViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProviderTest.cs" />

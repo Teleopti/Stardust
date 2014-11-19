@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftTradeAddPersonScheduleViewModelMapper>().As<IShiftTradeAddPersonScheduleViewModelMapper>();
 			builder.RegisterType<ShiftTradeTimeLineHoursViewModelMapper>().As<IShiftTradeTimeLineHoursViewModelMapper>();
 			builder.RegisterType<ShiftTradeAddScheduleLayerViewModelMapper>().As<IShiftTradeAddScheduleLayerViewModelMapper>();
-			builder.RegisterType<RequestsShiftTradeScheduleFilterViewModelFactory>()
-				.As<IRequestsShiftTradeScheduleFilterViewModelFactory>().SingleInstance();
+			builder.RegisterType<RequestsShiftTradeScheduleFilterViewModelFactory>().As<IRequestsShiftTradeScheduleFilterViewModelFactory>().SingleInstance();
+			builder.RegisterType<RequestsShiftTradebulletinViewModelFactory>().As<IRequestsShiftTradebulletinViewModelFactory>().SingleInstance();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)

@@ -212,7 +212,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 		var skip = 0;//(self.selectedPageIndex() - 1) * take;
 
 		ajax.Ajax({
-			url: "Requests/ShiftTradeRequestScheduleForAllTeams",
+			url: "RequestsShiftTradeBulletinBoard/BulletinSchedules",
 			dataType: "json",
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
