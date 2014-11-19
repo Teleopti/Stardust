@@ -3,9 +3,6 @@
 --Date: 2014-11-19
 --Desc: Add new table for adherence details
 ---------------- 
-IF  NOT EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'[ReadModel].[AdherenceDetails]') AND type in (N'U'))
-BEGIN
 CREATE TABLE [ReadModel].[AdherenceDetails](
 	[PersonId] [uniqueidentifier] NOT NULL,
 	[BelongsToDate] [smalldatetime] NOT NULL,
@@ -17,5 +14,13 @@ CREATE TABLE [ReadModel].[AdherenceDetails](
 	[TimeInAdherence] [bigint] NULL,
 	[TimeOutOfAdherence] [bigint] NULL,
 )
-END
 GO
+CREATE CLUSTERED INDEX [PK_AdherenceDetails] ON [ReadModel].[AdherenceDetails]
+(
+	[PersonId] ASC,
+	[BelongsToDate] ASC
+)
+--Added temporary clustered key
+--No unique key exists yet
+GO
+
