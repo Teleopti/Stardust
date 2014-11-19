@@ -1,5 +1,5 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_AbsenceReport_31011')
-Feature: Absence Report On Desktop Week Schedule
+Feature: Absence Report On Mobile Week Schedule
  In order to report absence directly
  As an agent
  I want to report I need be on absence for today or tomorrow directly when I feel sick for example.
@@ -29,41 +29,44 @@ Feature: Absence Report On Desktop Week Schedule
 	| Field      | Value      |
 	| Start date | 2022-08-19 |
 	
-
 Scenario: Open add absence report form from day summary only for today and tomorrow
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05 08:00:00'
-	And I view my week schedule for date '2020-10-05'
-	When I click on the day summary for date '2020-10-05'
-	And I click to add a new absence report
+	And the current time is '2020-10-05'
+    When I view my mobile week schedule for date '2020-10-05'
+	Then I should see add absence report button for '2020-10-05'
+	And I should see add absence report button for '2020-10-06'
+	And I should not see add absence report button for '2020-10-07'
+	When I click on add absence report button for '2020-10-05'
 	Then I should see the add absence report form
-	When I click on the day summary for date '2020-10-06'
-	And I click to add a new absence report
-	Then I should see the add absence report form
-	When I click on the day summary for date '2020-10-07'
-	Then I should not see the add absence report button
 
 Scenario: Cancel a draft absence report
 	Given I have the role 'Full access to mytime'
 	And the current time is '2020-10-05'
-	And I view my week schedule for date '2020-10-05'
-	When I click on the day summary for date '2020-10-05'
-	And I click to add a new absence report
+    When I view my mobile week schedule for date '2020-10-05'
+	And I click on add absence report button for '2020-10-05'
 	And I cancel the current absence report draft
 	Then I should not see the add absence report form
 
-Scenario: Save an absence report
+Scenario: Save a draft absence report
 	Given I have the role 'Full access to mytime'
 	And the current time is '2020-10-05'
-	And I view my week schedule for date '2020-10-05'
-	When I click on the day summary for date '2020-10-05'
-	And I click to add a new absence report
-	And I save the current absence report
+    When I view my mobile week schedule for date '2020-10-05'
+	And I click on add absence report button for '2020-10-05'
+	And I save the current absence report draft
 	Then I should not see the add absence report form
 
 Scenario: Can not add absence report if no permission
 	Given I have the role 'No access to absence report'
-	And I view my week schedule for date '2020-10-05'
-	When I click on the day symbol area for date '2020-10-05'
-	Then I should not see the add absence report button
+    When I view my mobile week schedule for date '2020-10-05'
+	Then I should not see any add absence report button
 
+Scenario: Switch between today and tomorrow
+	Given I have the role 'Full access to mytime'
+	And the current time is '2020-10-05'
+    When I view my mobile week schedule for date '2020-10-05'
+	And I click on add absence report button for '2020-10-05'
+	Then I should see the add absence report form for '2020-10-05'
+	And I should not see the add absence report form for '2020-10-06'
+	When I click on add absence report button for '2020-10-06'
+	Then I should see the add absence report form for '2020-10-06'
+	And I should not see the add absence report form for '2020-10-05'

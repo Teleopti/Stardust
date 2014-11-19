@@ -1,11 +1,13 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
+	[Scope(Feature = "Absence Report On Desktop Week Schedule")]
 	[Binding]
-	class AbsenceReportStepDefinitions
+	class AbsenceReportFromWeekScheduleStepDefinitions
 	{
 		[When(@"I click to add a new absence report")]
 		public void WhenIClickToAddANewAbsenceReport()

@@ -204,6 +204,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>License.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature.cs">
+      <DependentUpon>AbsenceReportFromMobileWeekSchedule.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MyTime\AbsenceReportFromMobileWeekScheduleStepDefinitions.cs" />
     <Compile Include="MyTime\ShiftTradeBulletinBoard.feature.cs">
       <DependentUpon>ShiftTradeBulletinBoard.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -214,7 +220,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MyTime\AbsenceReportStepDefinitions.cs" />
+    <Compile Include="MyTime\AbsenceReportFromWeekScheduleStepDefinitions.cs" />
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -840,6 +846,10 @@
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AbsenceReportFromMobileWeekSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftTradeBulletinBoard.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
