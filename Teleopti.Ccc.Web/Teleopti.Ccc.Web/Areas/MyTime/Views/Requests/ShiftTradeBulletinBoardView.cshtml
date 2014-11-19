@@ -30,4 +30,34 @@
 			</tr>
 		</table>
 	</div>
+	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150, fadeOutDuration: 50">
+		<div class="shift-trade-add-schedule" data-bind="visible: !missingWorkflowControlSet()">
+			<div class="shift-trade-timeline">
+				<div class="relative">
+					<div data-bind="foreach: hours">
+						<div class="shift-trade-ruler absolute" data-bind="style: rulerStyleJson, visible: showHourLine"></div>
+						<div class="shift-trade-label label label-info absolute" data-bind="style: labelStyleJson, text: hourText, visible: isVisible"></div>
+					</div>
+				</div>
+			</div>
+			<table style="width: 100%">
+				<thead>
+					<tr>
+						<td>&nbsp;</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="shift-trade-my-schedule-row">
+						<td class="shift-trade-agent-name">@Resources.MySchedule</td>
+						<td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
+							<div class="shift-trade-layer-container floatleft">
+								<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
