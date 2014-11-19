@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CommonAgentNameProvider>().As<ICommonAgentNameProvider>().SingleInstance();
 			builder.RegisterType<TrackingMessageSender>().As<ITrackingMessageSender>().SingleInstance();
 			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
+			builder.RegisterType<AdherenceDetailsReadModelPersister>().SingleInstance().As<IAdherenceDetailsReadModelPersister>();
 		}
 	}
 

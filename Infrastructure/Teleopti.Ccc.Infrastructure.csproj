@@ -188,6 +188,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPersister.cs" />
+    <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
     <Compile Include="Repositories\AgentBadgeRepository.cs" />
     <Compile Include="Repositories\AgentBadgeSettingsRepository.cs" />

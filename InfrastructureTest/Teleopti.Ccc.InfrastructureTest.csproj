@@ -166,6 +166,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
     <Compile Include="ApplicationLayer\ITestHandler.cs" />

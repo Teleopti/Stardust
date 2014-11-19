@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				model.ActualStartTime = calculateActualStartTime(previous, @event.InAdherence, @event.StartTime);
 
 				if (noActivityStarted(previous))
-					_persister.Remove(model.PersonId, model.Date);
+					_persister.Remove(model.PersonId, model.BelongsToDate);
 				else
 				{
 					updateAdherence(previous, @event.StartTime);
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				: timestamp - model.StartTime;
 
 			if (model.IsInAdherence)
-				model.TimeInAdherence += timeToAdd;
+				model.TimeInAdherence += timeToAdd.Value;
 			else
-				model.TimeOutAdherence += timeToAdd;
+				model.TimeOutOfAdherence += timeToAdd.Value;
 		}
 
 	}

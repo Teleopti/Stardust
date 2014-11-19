@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					LastStateChangedTime = m.LastStateChangedTime,
 					IsInAdherence = m.IsInAdherence,
 					TimeInAdherence = m.TimeInAdherence,
-					TimeOutAdherence = m.TimeOutAdherence
+					TimeOutOfAdherence = m.TimeOutOfAdherence
 				};
 		}
 	}

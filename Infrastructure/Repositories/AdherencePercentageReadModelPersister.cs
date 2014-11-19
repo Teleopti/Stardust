@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	ShiftHasEnded" +
 				") VALUES (" +
 				"	:PersonId," +
-				"	:Date," +
+				"	:BelongsToDate," +
 				"	:LastTimestamp," +
 				"	:IsLastTimeInAdherence," +
 				"	:TimeInAdherence," +
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	:ShiftHasEnded" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("Date", model.BelongsToDate)
+				.SetDateTime("BelongsToDate", model.BelongsToDate)
 				.SetParameter("LastTimestamp", model.LastTimestamp, NHibernateUtil.DateTime)
 				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
