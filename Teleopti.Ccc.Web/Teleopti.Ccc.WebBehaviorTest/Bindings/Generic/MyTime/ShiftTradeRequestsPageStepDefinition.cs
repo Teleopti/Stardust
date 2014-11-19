@@ -122,6 +122,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".previous-date:disabled");
 		}
 
+		[Then(@"I cannot navigate to the bulletin previous date")]
+		public void ThenICannotNavigateToTheBulletinPreviousDate()
+		{
+			Browser.Interactions.AssertExists(".bulletin-previous-date:disabled");
+		}
+
+
 		[Then(@"I cannot navigate to the next date")]
 		public void ThenICannotNavigateToTheNextDate()
 		{

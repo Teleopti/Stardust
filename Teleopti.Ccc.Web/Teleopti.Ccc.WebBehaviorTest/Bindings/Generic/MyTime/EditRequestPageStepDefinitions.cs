@@ -45,11 +45,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIClickToShiftTradeBulletinBoard()
 		{
 			Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
-		}
-
-		[Then(@"I should see the bulletin board")]
-		public void ThenIShouldSeeTheBulletinBoard()
-		{
 			Browser.Interactions.AssertExists("#Request-shift-trade-bulletin-board");
 		}
 
