@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -7,9 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class AdherenceDetailsReadModelUpdater :
 		IHandleEvent<PersonActivityStartEvent>,
-		IHandleEvent<PersonStateChangedEvent>,
-		IHandleEvent<PersonInAdherenceEvent>,
-		IHandleEvent<PersonOutOfAdherenceEvent>
+		IHandleEvent<PersonStateChangedEvent>
 	{
 		private readonly IAdherenceDetailsReadModelPersister _persister;
 
@@ -18,7 +17,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister = persister;
 		}
 
-		public void Handle(PersonActivityStartEvent @event)
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonActivityStartEvent @event)
 		{
 			var model = new AdherenceDetailsReadModel
 			{
@@ -45,25 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister.Add(model);	
 		}
 
-		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, bool inAdherence, DateTime timestamp)
-		{
-			if (inAdherence && model.IsInAdherence)
-			{
-				return timestamp;
-			}
-			if (inAdherence && !model.IsInAdherence)
-			{
-				return model.LastStateChangedTime;
-			}
-			return null;
-		}
-
-		private static bool noActivityStarted(AdherenceDetailsReadModel model)
-		{
-			return model.Name == null;
-		}
-
-		public void Handle(PersonStateChangedEvent @event)
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonStateChangedEvent @event)
 		{
 			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).LastOrDefault();
 			if (existingModel == null)
@@ -88,14 +71,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			}
 		}
 
-		public void Handle(PersonInAdherenceEvent @event)
+		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, bool inAdherence, DateTime timestamp)
 		{
-			
+			if (inAdherence && model.IsInAdherence)
+			{
+				return timestamp;
+			}
+			if (inAdherence && !model.IsInAdherence)
+			{
+				return model.LastStateChangedTime;
+			}
+			return null;
 		}
 
-		public void Handle(PersonOutOfAdherenceEvent @event)
+		private static bool noActivityStarted(AdherenceDetailsReadModel model)
 		{
-			
+			return model.Name == null;
 		}
 
 		private static void updateAdherence(AdherenceDetailsReadModel model, DateTime timestamp)
