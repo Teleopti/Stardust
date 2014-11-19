@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var previous = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime)).LastOrDefault();
 			if (previous != null)
 			{
-				model.ActualStartTime = calculateActualStartTime(previous, @event.InAdherence, @event.StartTime);
+				model.ActualStartTime = calculateActualStartTime(previous, @event);
 
 				if (noActivityStarted(previous))
 					_persister.Remove(model.PersonId, model.BelongsToDate);
@@ -63,21 +63,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				updateAdherence(existingModel, @event.Timestamp);
 
-				if (@event.InAdherence && existingModel.ActualStartTime == null)
+				if (lateForActivity(existingModel, @event))
 					existingModel.ActualStartTime = @event.Timestamp;
+
 				existingModel.LastStateChangedTime = @event.Timestamp;
 				existingModel.IsInAdherence = @event.InAdherence;
 				_persister.Update(existingModel);
 			}
 		}
 
-		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, bool inAdherence, DateTime timestamp)
+		private static bool lateForActivity(AdherenceDetailsReadModel model, PersonStateChangedEvent @event)
 		{
-			if (inAdherence && model.IsInAdherence)
+			return (@event.InAdherence && model.ActualStartTime == null);
+		}
+
+		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, PersonActivityStartEvent @event)
+		{
+			if (@event.InAdherence && model.IsInAdherence)
 			{
-				return timestamp;
+				return @event.StartTime;
 			}
-			if (inAdherence && !model.IsInAdherence)
+			if (@event.InAdherence && !model.IsInAdherence)
 			{
 				return model.LastStateChangedTime;
 			}
