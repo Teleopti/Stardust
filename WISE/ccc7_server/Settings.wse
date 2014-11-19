@@ -398,6 +398,11 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(DNS_ALIAS)|%DNS_ALIAS_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(HOST_NAME)|%HOST_NAME_TMP%
   Line Number=0
 end

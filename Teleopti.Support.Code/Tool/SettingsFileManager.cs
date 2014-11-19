@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Teleopti.Support.Code.Tool
 {
@@ -22,12 +23,17 @@ namespace Teleopti.Support.Code.Tool
 
         public IList<SearchReplace> GetReplaceList()
         {
-            return
-                _reader.GetSearchReplaceList(
-                    File.ReadAllText(CurrentPath()));
+	        var searchReplaceListInSettingsFile = _reader.GetSearchReplaceList(File.ReadAllText(CurrentPath()));
+	        var hostName = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(HOST_NAME)");
+	        var dnsAlias = searchReplaceListInSettingsFile.SingleOrDefault(x => x.SearchFor == "$(DNS_ALIAS)");
+			if (hostName != null && dnsAlias!=null)
+	        {
+				hostName.ReplaceWith = dnsAlias.ReplaceWith.Replace(@"http://", "").Replace(@"https://", "").TrimEnd('/');
+	        }
+	        return searchReplaceListInSettingsFile;
         }
 
-        public void SaveReplaceList(IList<SearchReplace> searchReplaces)
+	    public void SaveReplaceList(IList<SearchReplace> searchReplaces)
         {
             var path = CurrentPath();
             var text = "";
