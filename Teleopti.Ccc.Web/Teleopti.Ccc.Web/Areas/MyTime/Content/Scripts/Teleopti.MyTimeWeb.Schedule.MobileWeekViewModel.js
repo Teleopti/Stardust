@@ -117,9 +117,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		} else {
 			self.datePickerFormat("");
 		}
-		self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
+		var hasAbsenceReportPermission = data.RequestPermission != null ? data.RequestPermission.AbsenceReportPermission : false;
+		self.absenceReportPermission(hasAbsenceReportPermission);
 		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
-			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, data.RequestPermission.AbsenceReportPermission);
+			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission);
 			self.dayViewModels.push(vm);
 		});
 		self.displayDate(data.PeriodSelection.Display);
@@ -158,7 +159,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
     self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
 
-    self.absenceReportPermission = ko.observable(absenceReportPermission);
+    self.absenceReportPermission = ko.observable(absenceReportPermission != undefined ? absenceReportPermission : false);
 	self.isPermittedToReportAbsence = ko.computed(function () {
 		var today;
 		if (new Date().getTeleoptiTime == undefined) {
