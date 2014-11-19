@@ -183,8 +183,23 @@ define([
 			if (!self.PossbileIntersectWithShift()) {
 				return resources.CannotCreateSecondShiftWhenAddingActivity;
 			}
+			if (!self.ValidEndTime()) {
+				return resources.StartTimeShouldBeEarlierThanEndTime;
+			}
 			return undefined;
 		});
 
+		this.ValidEndTime = ko.computed(function() {
+			startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.ScheduleDate);
+			endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), timezoneCurrent.IanaTimeZone(), self.ScheduleDate);
+
+			if (!self.PossbileIntersectWithShift())
+				return true;
+
+			if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
+				return false;
+			}
+			return true;
+		});
 	};
 });
