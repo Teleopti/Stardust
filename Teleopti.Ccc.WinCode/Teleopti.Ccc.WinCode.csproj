@@ -635,6 +635,7 @@
     <Compile Include="Scheduling\MultiplicatorsetForPasteSpecialFilter.cs" />
     <Compile Include="Scheduling\PasteAsOvertime.cs" />
     <Compile Include="Scheduling\PublishScheduleCommand.cs" />
+    <Compile Include="Scheduling\PublishScheduleDatePresenter.cs" />
     <Compile Include="Scheduling\Restriction\HourlyAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />

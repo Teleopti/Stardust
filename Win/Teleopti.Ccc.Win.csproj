@@ -699,6 +699,12 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="Scheduling\PublishScheduleDateView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PublishScheduleDateView.Designer.cs">
+      <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Sikuli\ISikuliValidator.cs" />
     <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
@@ -2838,6 +2844,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FilterMultiplePersons.resx">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PublishScheduleDateView.resx">
+      <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sikuli\SikuliEnterValidatorDialog.resx">
       <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>

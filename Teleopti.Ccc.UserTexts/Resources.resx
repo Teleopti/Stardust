@@ -12456,4 +12456,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift Trade Bulletin Board</value>
     <comment>use in MyTimeWeb request model, a new board for shift trade bulletin</comment>
   </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publish schedules for:</value>
+    <comment>Label for what workflowcontrol sets that should be published</comment>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publish shedules to:</value>
+  </data>
 </root>
