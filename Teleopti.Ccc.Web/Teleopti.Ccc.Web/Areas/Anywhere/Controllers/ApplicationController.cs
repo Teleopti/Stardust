@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.IntradayAbsence,
 					UserTexts.Resources.Absence,
 					UserTexts.Resources.InvalidIntradayAbsenceTimes,
-					UserTexts.Resources.InvalidEndTime,
+					//UserTexts.Resources.InvalidEndTime,
 					UserTexts.Resources.CannotCreateSecondShiftWhenAddingActivity,
 					UserTexts.Resources.OutOfAdherence,
 					UserTexts.Resources.RealTimeAdherence,

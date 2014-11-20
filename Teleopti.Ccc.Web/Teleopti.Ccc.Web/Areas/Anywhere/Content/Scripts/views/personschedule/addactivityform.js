@@ -178,16 +178,6 @@ define([
 			}
 			return false;
 		});
-		
-		this.ErrorMessage = ko.computed(function () {
-			if (!self.PossbileIntersectWithShift()) {
-				return resources.CannotCreateSecondShiftWhenAddingActivity;
-			}
-			if (!self.ValidEndTime()) {
-				return resources.StartTimeShouldBeEarlierThanEndTime;
-			}
-			return undefined;
-		});
 
 		this.ValidEndTime = ko.computed(function() {
 			startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.ScheduleDate);
@@ -200,6 +190,16 @@ define([
 				return false;
 			}
 			return true;
+		});
+
+		this.ErrorMessage = ko.computed(function () {
+			if (!self.PossbileIntersectWithShift()) {
+				return resources.CannotCreateSecondShiftWhenAddingActivity;
+			}
+			if (!self.ValidEndTime()) {
+				return resources.StartTimeShouldBeEarlierThanEndTime;
+			}
+			return undefined;
 		});
 	};
 });
