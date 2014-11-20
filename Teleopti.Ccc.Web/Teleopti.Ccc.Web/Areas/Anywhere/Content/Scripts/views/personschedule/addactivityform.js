@@ -183,12 +183,8 @@ define([
 			if (!self.PossbileIntersectWithShift()) {
 				return resources.CannotCreateSecondShiftWhenAddingActivity;
 			}
-			if (!self.ValidEndTime()) {
-				return resources.StartTimeShouldBeEarlierThanEndTime;
-			}
 			return undefined;
 		});
 
-		}
-	}
-)
+	};
+});
