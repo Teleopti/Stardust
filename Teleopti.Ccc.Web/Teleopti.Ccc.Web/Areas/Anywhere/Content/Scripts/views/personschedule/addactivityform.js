@@ -189,6 +189,6 @@ define([
 			return undefined;
 		});
 
-		});
-	};
-});
+		}
+	}
+)
