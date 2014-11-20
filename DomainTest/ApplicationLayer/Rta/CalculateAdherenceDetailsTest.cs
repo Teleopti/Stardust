@@ -6,8 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeInAdherence = TimeSpan.FromMinutes(10)
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] {model}), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] {model}));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastStateChangedTime = now
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] {model}), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] {model}));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastStateChangedTime = now
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] {model}), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] {model}));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -88,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeOutOfAdherence = TimeSpan.FromMinutes(60),
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] {model}), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] {model}));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastStateChangedTime = now
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model1, model2 }), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] { model1, model2 }));
 
 			var result = target.ForDetails(personId);
 
@@ -131,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldReturnEmptyResultIfNoDataIsFound()
 		{
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(null), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(null));
 
 			var result = target.ForDetails(Guid.NewGuid());
 
@@ -153,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeOutOfAdherence = TimeSpan.Zero
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -174,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				IsInAdherence = true
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -195,11 +193,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				IsInAdherence = false
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }));
 
 			var result = target.ForDetails(model.PersonId);
 
 			result.Single().AdherencePercent.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotAddTimeAfterActivityHasEnded()
+		{
+			var model = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-11-20".Utc(),
+				StartTime = "2014-11-20 8:00".Utc(),
+				TimeInAdherence = TimeSpan.FromMinutes(30),
+				TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+				LastStateChangedTime = "2014-11-20 9:00".Utc(),
+				IsInAdherence = false,
+				ActivityHasEnded = true
+			};
+			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 10:00".Utc()),
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }));
+
+			var result = target.ForDetails(model.PersonId);
+
+			result.Single().AdherencePercent.Should().Be(50);
 		}
 
 
@@ -239,50 +259,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				throw new NotImplementedException();
 			}
 		}
-	}
-
-	public class CalculateAdherenceDetails
-	{
-		private readonly INow _now;
-		private readonly IAdherenceDetailsReadModelPersister _readModelPersister;
-		private readonly IUserCulture _userCulture;
-		private readonly IUserTimeZone _timeZone;
-		private readonly CalculateAdherencePercent _calculateAdherencePercent;
-
-		public CalculateAdherenceDetails(INow now, IAdherenceDetailsReadModelPersister readModelPersister, IUserCulture userCulture, IUserTimeZone timeZone)
-		{
-			_now = now;
-			_readModelPersister = readModelPersister;
-			_userCulture = userCulture;
-			_timeZone = timeZone;
-			_calculateAdherencePercent = new CalculateAdherencePercent(_now);
-		}
-
-		public IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId)
-		{
-			var readModels = _readModelPersister.Get(personId, new DateOnly(_now.UtcDateTime()));
-			var result = new List<AdherenceDetailsPercentageModel>();
-			readModels.ForEach(m =>
-			{
-				if (m == null || !isValid(m))
-					return;
-				result.Add(new AdherenceDetailsPercentageModel
-				{
-					AdherencePercent = (int)_calculateAdherencePercent.ForActivity(m).ValueAsPercent()
-				});
-			});
-			return result;
-		}
-
-
-		private static bool isValid(AdherenceDetailsReadModel readModel)
-		{
-			return !(readModel.TimeInAdherence == TimeSpan.Zero && readModel.TimeOutOfAdherence == TimeSpan.Zero);
-		}
-	}
-
-	public class AdherenceDetailsPercentageModel
-	{
-		public int AdherencePercent { get; set; }
 	}
 }
