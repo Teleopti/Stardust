@@ -580,12 +580,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		public PeoplePeriodGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder) :
 			base(grid, filteredPeopleHolder)
 		{
-			Init();
-			var cellModel = new GridDropDownMonthCalendarAdvCellModel(grid.Model);
-			cellModel.HideNoneButton();
-			cellModel.HideTodayButton();
-			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
-
+			InitCellModels(grid);
 			Grid.HorizontalScroll += Grid_HorizontalScroll;
 		}
 
@@ -594,9 +589,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			PrepareView();
 		}
 
-		private void Init()
+		private void InitCellModels(GridControl grid)
 		{
 			Grid.CellModels.Add(GridCellModelConstants.CellTypeGridInCell, new GridInCellModel(Grid.Model));
+			var cellModel = new GridDropDownMonthCalendarAdvCellModel(grid.Model);
+			cellModel.HideNoneButton();
+			cellModel.HideTodayButton();
+			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 		}
 
 		private bool IsValidRow()
