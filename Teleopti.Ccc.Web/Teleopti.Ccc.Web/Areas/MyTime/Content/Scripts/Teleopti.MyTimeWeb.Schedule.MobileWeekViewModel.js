@@ -167,7 +167,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 			: moment(new Date(new Date().getTeleoptiTime())).startOf('day');
 		var momentCurrentDate = moment(self.fixedDate());
 
-		var dateDiff = momentCurrentDate.diff(momentToday);
+		var dateDiff = momentCurrentDate.diff(momentToday, 'days');
 
 		//Absence report is available only for today and tomorrow.
 		var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
