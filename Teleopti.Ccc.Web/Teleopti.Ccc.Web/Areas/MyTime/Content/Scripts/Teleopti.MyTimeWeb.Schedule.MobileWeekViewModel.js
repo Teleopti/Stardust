@@ -161,17 +161,15 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 
     self.absenceReportPermission = ko.observable(absenceReportPermission != undefined ? absenceReportPermission : false);
 	self.isPermittedToReportAbsence = ko.computed(function () {
-		var today;
-		if (new Date().getTeleoptiTime == undefined) {
-			today = moment().startOf('day');
-		} else {
-			today = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
-		}
-		var formatToday = today.format('l');
-		var formatTomorrow = today.add(1, 'day').format('l');
-		var formatCurrentDate = moment(self.fixedDate()).format('l');
+		var momentToday = (new Date().getTeleoptiTime == undefined)
+			? moment().startOf('day')
+			: moment(new Date(new Date().getTeleoptiTime())).startOf('day');
+		var momentCurrentDate = moment(self.fixedDate());
+
+		var dateDiff = momentCurrentDate.diff(momentToday);
+
 		//Absence report is available only for today and tomorrow.
-		var isPermittedDate = (formatCurrentDate == formatToday) || (formatCurrentDate == formatTomorrow);
+		var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
 		var result = self.absenceReportPermission() && isPermittedDate;
 		return result;
 	});

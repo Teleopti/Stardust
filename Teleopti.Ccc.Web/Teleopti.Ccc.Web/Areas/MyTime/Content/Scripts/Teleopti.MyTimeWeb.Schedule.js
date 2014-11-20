@@ -163,12 +163,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.isAbsenceReportAvailable = ko.computed(function () {
 			if (self.initialRequestDay() == null)
 				return false;
-			var today = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
-			var formatToday = today.format('l');
-			var formatTomorrow = today.add(1, 'day').format('l');
-			var formatInitialRequestDay = moment(self.initialRequestDay()).format('l');
+
+			var momentToday = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
+			var momentInitialRequestDay = moment(self.initialRequestDay(), self.datePickerFormat());
+			var dateDiff = momentInitialRequestDay.diff(momentToday, 'days');
+
 			//Absence report is available only for today and tomorrow.
-			var isPermittedDate = (formatInitialRequestDay == formatToday) || (formatInitialRequestDay == formatTomorrow);
+			var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
 			return self.absenceReportPermission() && isPermittedDate;
 		});
 
