@@ -178,9 +178,7 @@ define([
 			}
 			return false;
 		});
-
-		});
-
+		
 		this.ErrorMessage = ko.computed(function () {
 			if (!self.PossbileIntersectWithShift()) {
 				return resources.CannotCreateSecondShiftWhenAddingActivity;
@@ -189,5 +187,8 @@ define([
 				return resources.StartTimeShouldBeEarlierThanEndTime;
 			}
 			return undefined;
+		});
+
+		});
 	};
 });
