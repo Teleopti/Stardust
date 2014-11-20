@@ -26,11 +26,28 @@ Scenario: Should be able to see adherence details for one agent within working h
 	| Start time               | 2014-10-06 08:00 |
 	| End time                 | 2014-10-06 10:00 |
 	| Activity                 | Phone            |
-	And the current time is '2014-10-06 08:30:00'
+	And there is an alarm with 
+	| Field           | Value        |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Alarm Color     | Red          |
+	| Name            | Not adhering |
+	| Staffing effect | -1           |
+	And there is an alarm with 
+	| Field           | Value    |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Name            | Adhering |
+	| Alarm Color     | Green    |
+	| Staffing effect | 0        |
+	When the current time is '2014-10-06 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
+	And the current time is '2014-10-06 08:30:00'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the current time is '2014-10-06 10:00:00'
-	When I view manage adherence view for agent 'Pierre Baldi'
-	Then I should see 'Phone' for 'Pierre Baldi' with adherence of 75%
+	And I view manage adherence view for agent 'Pierre Baldi'
+	Then I should see daily adherencely for 'Pierre Baldi' is 25%
+	And I should see 'Phone' with adherence of 25%
 
 @OnlyRunIfEnabled('RTA_SeeAdherenceDetailsForOneAgent_31285')
 @ignore
@@ -55,8 +72,24 @@ Scenario: Should be able to see adherence details for one agent outside of worki
 	| Start time               | 2014-10-06 08:00 |
 	| End time                 | 2014-10-06 10:00 |
 	| Activity                 | Phone            |
-	And the current time is '2014-10-06 08:30:00'
+	And there is an alarm with 
+	| Field           | Value        |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Alarm Color     | Red          |
+	| Name            | Not adhering |
+	| Staffing effect | -1           |
+	And there is an alarm with 
+	| Field           | Value    |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Name            | Adhering |
+	| Alarm Color     | Green    |
+	| Staffing effect | 0        |
+	When the current time is '2014-10-06 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
-	And the current time is '2014-10-06 17:30:00'
-	When I view manage adherence view for agent 'Pierre Baldi'
-	Then I should see 'Phone' for 'Pierre Baldi' with adherence of 75%
+	And the current time is '2014-10-06 08:30:00'
+	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
+	And the current time is '2014-10-06 17:00:00'
+	Then I should see daily adherencely for 'Pierre Baldi' is 25%
+	And I should see 'Phone' with adherence of 25%

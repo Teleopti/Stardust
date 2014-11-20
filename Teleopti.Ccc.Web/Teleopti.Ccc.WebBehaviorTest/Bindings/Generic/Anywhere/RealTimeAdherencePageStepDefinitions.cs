@@ -111,6 +111,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(selector, adherence);
 		}
 
+		[Then(@"I should see daily adherencely for '(.*)' is (.*)%")]
+		public void ThenIShouldSeeDailyAdherencelyForIs(string p0, int p1)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see '(.*)' with adherence of (.*)%")]
+		public void ThenIShouldSeeWithAdherenceOf(string person, int adherence)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".agent-name:contains('{0}')", person);
+			Browser.Interactions.AssertExistsUsingJQuery(".daily-percent:contains('{0}')", adherence);
+		}
+
 		[When(@"I click the site checkbox for '(.*)'")]
 		[When(@"I click the team checkbox for '(.*)'")]
 		public void WhenIClickTheCheckboxFor(string name)

@@ -308,6 +308,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
 		}
 
+		public static void GotoAnywhereRealTimeManageAdherenceOverview(Guid buId, Guid personId)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#manageadherence/{0}/{1}",buId, personId),
+				"Anywhere#manageadherence",
+				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
+		}
+
 		public static void GotoAnywhereRealTimeAdherenceTeamOverview(Guid buId, Guid idForTeam)
 		{
 			GoToWaitForUrlAssert(
