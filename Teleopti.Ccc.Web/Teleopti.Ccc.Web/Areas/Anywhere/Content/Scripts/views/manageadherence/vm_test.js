@@ -8,9 +8,9 @@
 
 			"should set view options": function () {
 				var vm = new viewModel();
-				vm.setViewOptions({ personid: 'guid1' });
+				vm.setViewOptions({ id: 'guid1' });
 				assert.equals(vm.PersonId(), 'guid1');
-			},
+			}
 		});
 	};
 });

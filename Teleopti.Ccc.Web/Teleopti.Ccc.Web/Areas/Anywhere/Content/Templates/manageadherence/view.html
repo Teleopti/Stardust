@@ -25,12 +25,12 @@
 											<th>Adherence</th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody data-bind="foreach: AdherenceDetails">
 										<tr>
-											<td class="activity-name">Phone</td>
-											<td class="activity-startime">09:00</td>
-											<td class="realstarttime">09:13</td>
-											<td class="adherence-percent">78%</td>
+											<td class="activity-name" data-bind="text: Name"></td>
+											<td class="activity-startime" data-bind="text: StartTime"></td>
+											<td class="realstarttime" data-bind="text: ActualStartTime"></td>
+											<td class="adherence-percent" data-bind="text: AdherencePercent"></td>
 										</tr>
 									</tbody>
 								</table>

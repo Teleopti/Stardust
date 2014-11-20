@@ -222,6 +222,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.Single().AdherencePercent.Should().Be(50);
 		}
 
+		[Test]
+		public void ShouldReturnModel()
+		{
+			var now = "2014-11-20 9:00".Utc();
+			var model = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Name = "phone",
+				Date = "2014-11-20".Utc(),
+				StartTime = "2014-11-20 8:00".Utc(),
+				TimeInAdherence = TimeSpan.FromMinutes(30),
+				TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+				LastStateChangedTime = now,
+				ActualStartTime = "2014-11-20 9:00".Utc()
+			};
+			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }));
+
+			var result = target.ForDetails(model.PersonId);
+
+			result.Single().Name.Should().Be(model.Name);
+			result.Single().StartTime.Should().Be(model.StartTime);
+			result.Single().ActualStartTime.Should().Be(model.ActualStartTime);
+			result.Single().AdherencePercent.Should().Be(50);
+		}
+
 
 		public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
 		{
