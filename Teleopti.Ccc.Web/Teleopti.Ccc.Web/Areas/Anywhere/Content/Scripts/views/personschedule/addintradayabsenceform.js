@@ -128,12 +128,9 @@ define([
 		});
 
 		this.ValidEndTime = ko.computed(function () {
-			startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.Date);
-			endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), timezoneCurrent.IanaTimeZone(), self.Date);
-			
 			if (!self.PossbileStartTimeWithinShift())
 				return true;
-
+			
 			if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
 				return false;
 			}
@@ -145,7 +142,7 @@ define([
 				return resources.InvalidIntradayAbsenceTimes;
 			}
 			if (!self.ValidEndTime()) {
-				return resources.StartTimeShouldBeEarlierThanEndTime;
+				return resources.InvalidEndTime;
 			}
 			return undefined;
 		});

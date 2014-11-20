@@ -124,7 +124,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.ModifySchedule,
 					UserTexts.Resources.Adherence,
 					UserTexts.Resources.LastUpdated,
-					UserTexts.Resources.StartTimeShouldBeEarlierThanEndTime,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

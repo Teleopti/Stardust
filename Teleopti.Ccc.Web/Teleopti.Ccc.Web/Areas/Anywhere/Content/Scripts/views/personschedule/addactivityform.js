@@ -179,17 +179,6 @@ define([
 			return false;
 		});
 
-		this.ValidEndTime = ko.computed(function() {
-			startTimeAsMoment = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.ScheduleDate);
-			endTimeAsMoment = timezoneDisplay.FromTimeInput(self.EndTime(), timezoneCurrent.IanaTimeZone(), self.ScheduleDate);
-
-			if (!self.PossbileIntersectWithShift())
-				return true;
-
-			if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
-				return false;
-			}
-			return true;
 		});
 
 		this.ErrorMessage = ko.computed(function () {
@@ -200,6 +189,5 @@ define([
 				return resources.StartTimeShouldBeEarlierThanEndTime;
 			}
 			return undefined;
-		});
 	};
 });

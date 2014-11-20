@@ -24026,15 +24026,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start time should be earlier than end time..
-        /// </summary>
-        public static string StartTimeShouldBeEarlierThanEndTime {
-            get {
-                return ResourceManager.GetString("StartTimeShouldBeEarlierThanEndTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Start time {0} should be earlier than end time {1}..
         /// </summary>
         public static string StartTimeShouldBeEarlierThanEndTimeDot {

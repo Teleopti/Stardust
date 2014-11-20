@@ -12459,10 +12459,6 @@ Reduce the complexity to use these shifts.</value>
   <data name="Publish" xml:space="preserve">
     <value>Publish</value>
     <comment>Used in description for setting published date on schedule</comment>
-  </data>    
-  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
-    <value>Start time should be earlier than end time.</value>
-    <comment>Start time should be earlier than end time.</comment>
   </data>
   <data name="PublishSchedulesForColon" xml:space="preserve">
     <value>Publish schedules for:</value>
