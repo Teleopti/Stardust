@@ -39,6 +39,13 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             }
         });
     };
+	_cleanBinding = function() {
+		ko.cleanNode($('#page')[0]);
+		if (vm != null) {
+			vm.dayViewModels([]);
+			vm = null;
+		}
+	}
 
     return {
         Init: function () {
@@ -56,6 +63,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 	        }
         },
         PartialDispose: function () {
+	        _cleanBinding();
         }
     };
 
