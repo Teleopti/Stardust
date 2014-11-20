@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             }
             else
             {
-                e.Style.CellType = "ComboBox";
+				e.Style.CellType = GridCellModelConstants.CellTypeComboBox;
                 TData dataItem = dataItems.ElementAt(e.RowIndex - 1);
                 IList<TComboItemType> comboCollection =
                     (IList<TComboItemType>) _propertyReflector.GetValue(dataItem, _dependantProperty);

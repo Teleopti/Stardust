@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 
 namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 {
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             var value = currentItem.GetType().GetProperty(BindingProperty).GetValue(currentItem,null);
             if (value != null)
             {
-                e.Style.CellType = "ComboBox";
+	            e.Style.CellType = GridCellModelConstants.CellTypeComboBox;
                 e.Style.DataSource = _comboItems;
                 e.Style.DisplayMember = _displayMember;
                 if (!string.IsNullOrEmpty(_valueMember)) e.Style.ValueMember = _valueMember;

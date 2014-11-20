@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             {
                 TData dataItem = dataItems[e.RowIndex - 1];
 
-                e.Style.CellType = "ComboBox";
+				e.Style.CellType = GridCellModelConstants.CellTypeComboBox;
                 e.Style.DataSource = _comboItems;
                 e.Style.DisplayMember = _displayMember;
                 e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;

@@ -67,7 +67,7 @@ namespace Teleopti.Interfaces.Domain
             {
                 if (_name == null)
                     _name = string.Empty;
-                return _name;
+                return _name.Trim();
             }
         }
 
@@ -81,7 +81,7 @@ namespace Teleopti.Interfaces.Domain
             {
                 if (_shortName == null)
                     _shortName = string.Empty;
-                return _shortName;
+                return _shortName.Trim();
             }
         }
 
