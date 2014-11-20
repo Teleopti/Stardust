@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Common.Configuration.Columns
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
-            e.Style.CellType = "ComboBox";
+            e.Style.CellType = GridCellModelConstants.CellTypeComboBox;
             OnQueryComboItems(e);
             e.Style.DisplayMember = _displayMember;
             e.Style.CellValue = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
