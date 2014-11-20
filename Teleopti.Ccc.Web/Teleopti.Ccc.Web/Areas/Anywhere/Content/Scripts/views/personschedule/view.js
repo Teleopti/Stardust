@@ -84,8 +84,9 @@ define([
 									var workingShift = viewModel.WorkingShift();
 									var minStartPixel = (workingShift.OriginalShiftStartMinutes - viewModel.TimeLine.StartMinutes()) * viewModel.TimeLine.PixelsPerMinute();
 									var maxEndPixel = (workingShift.OriginalShiftEndMinutes - viewModel.TimeLine.StartMinutes()) * viewModel.TimeLine.PixelsPerMinute();
-									if (ui.position.left + ui.helper[0].offsetWidth <= maxEndPixel && 
-										ui.position.left >= minStartPixel) {
+									var pixelTolerance = 1; /*make activity can be moved to the beginning or the end of the shift. bug 30603*/
+									if (ui.position.left + ui.helper[0].offsetWidth <= (maxEndPixel + pixelTolerance) &&
+										ui.position.left >= (minStartPixel - pixelTolerance)) {
 									    var pixelsChanged = ui.position.left - ui.originalPosition.left;
                                         viewModel.updateStartTime(pixelsChanged);
 										if (viewModel.MoveActivityForm.isMovingToAnotherDay()) 
