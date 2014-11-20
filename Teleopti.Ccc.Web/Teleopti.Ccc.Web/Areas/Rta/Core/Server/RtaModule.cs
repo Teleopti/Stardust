@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();
 
 			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
+			builder.RegisterType<CalculateAdherenceDetails>().SingleInstance().As<ICalculateAdherenceDetails>();
 
 			registerAdherenceComponents(builder);
 		}

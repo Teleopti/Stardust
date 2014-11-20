@@ -5,7 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public class CalculateAdherenceDetails
+	public interface ICalculateAdherenceDetails
+	{
+		IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId);
+	}
+	public class CalculateAdherenceDetails : ICalculateAdherenceDetails
 	{
 		private readonly INow _now;
 		private readonly IAdherenceDetailsReadModelPersister _readModelPersister;
