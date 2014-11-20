@@ -194,6 +194,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			}
 		}
 
+		[Test]
+		public void GetPersonName_ShouldGetPersonNameForAPerson()
+		{
+			var person = new Person().WithId();
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
+			var commonAgentNameProvider = MockRepository.GenerateMock<ICommonAgentNameProvider>();
+			var commonAgentNameSettings = new CommonNameDescriptionSetting();
+			commonAgentNameProvider.Stub(x => x.CommonAgentNameSettings).Return(commonAgentNameSettings);
+
+			person.Name = new Name("bill", "gates");
+
+			using (var target = new StubbingControllerBuilder().CreateController<AgentsController>(new FakePermissionProvider(), null, personRepository, new Now(), null, null, commonAgentNameProvider))
+			{
+				dynamic result = target.PersonDetails(person.Id.GetValueOrDefault()).Data;
+				((object)result.Name).Should().Be(commonAgentNameSettings.BuildCommonNameDescription(person));
+			}
+		}
+
 		
 		private class fakeStateReader : IAgentStateReader
 		{

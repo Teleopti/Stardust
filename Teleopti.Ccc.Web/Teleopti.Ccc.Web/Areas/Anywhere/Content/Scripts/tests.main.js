@@ -26,6 +26,7 @@ var testCases = [
 	'views/realtimeadherenceteams/vm_test',
 	'views/realtimeadherenceagents/vm_test',
 	'views/realtimeadherenceteams/team_test',
+	'views/manageadherence/vm_test',
 	'helpers_test',
 	'navigation_test'
 ];

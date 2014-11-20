@@ -99,6 +99,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var team = person.MyTeam(new DateOnly(date));
 			return Json(team.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult PersonDetails(Guid personId)
+		{
+			return Json(new
+					{
+						Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(personId))
+					},
+					JsonRequestBehavior.AllowGet);
+		}
 	}
 
 }
