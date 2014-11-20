@@ -83,16 +83,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             float break1Top = top;
             float lunchTop = top;
             float break2Top = top;
+			float left = 490;
 
-			if (GetSchedulePartView(part))
-			{
-				DrawLine(personTop - 3, pageWidth, 1);
-				return personTop;
-			}
-			float left = 190;
-            IVisualLayerCollection projection = part.ProjectionService().CreateProjection();
-            if (projection.HasLayers && projection.Period().HasValue)
+            var projection = part.ProjectionService().CreateProjection();
+            if (!GetSchedulePartView(part) && projection.HasLayers && projection.Period().HasValue)
             {
+	            left = 190;
                 // ReSharper disable PossibleNullReferenceException
                 DateTimePeriod period = projection.Period().Value;
                 // ReSharper restore PossibleNullReferenceException
@@ -141,9 +137,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 if (break1Top > top) top = break1Top;
                 if (break2Top > top) top = break2Top;
             }
-            // if there was no layers
-           
-
+            
             if(publicNote)
             {
                 var note = part.PublicNoteCollection().FirstOrDefault();
