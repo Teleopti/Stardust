@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Absence Report.
+        ///   Looks up a localized string similar to Absence Reporting.
         /// </summary>
         public static string AbsenceReport {
             get {
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allowed absences for absence report.
+        ///   Looks up a localized string similar to Allowed absences for absence reporting.
         /// </summary>
         public static string AbsencesAvailableForReport {
             get {

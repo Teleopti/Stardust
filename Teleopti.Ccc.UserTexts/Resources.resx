@@ -12442,11 +12442,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Lowest intra interval balance</value>
   </data>
   <data name="AbsenceReport" xml:space="preserve">
-    <value>Absence Report</value>
-    <comment>Permission: Absence Report</comment>
+    <value>Absence Reporting</value>
+    <comment>Permission: Absence Reporting</comment>
   </data>
   <data name="AbsencesAvailableForReport" xml:space="preserve">
-    <value>Allowed absences for absence report</value>
+    <value>Allowed absences for absence reporting</value>
     <comment>Label in workflow control set</comment>
   </data>
   <data name="AbsenceCanNotBeReported" xml:space="preserve">
