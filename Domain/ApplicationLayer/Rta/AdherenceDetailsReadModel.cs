@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool IsInAdherence { get; set; }
 		public TimeSpan TimeInAdherence { get; set; }
 		public TimeSpan TimeOutOfAdherence { get; set; }
+		public bool ActivityHasEnded { get; set; }
 	}
 }

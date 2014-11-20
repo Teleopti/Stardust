@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class AdherenceDetailsReadModelUpdater :
 		IHandleEvent<PersonActivityStartEvent>,
-		IHandleEvent<PersonStateChangedEvent>
+		IHandleEvent<PersonStateChangedEvent>,
+		IHandleEvent<PersonShiftEndEvent>
 	{
 		private readonly IAdherenceDetailsReadModelPersister _persister;
 
@@ -32,12 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (previous != null)
 			{
 				model.ActualStartTime = calculateActualStartTime(previous, @event);
-
+				
 				if (noActivityStarted(previous))
 					_persister.Remove(model.PersonId, model.BelongsToDate);
 				else
 				{
 					updateAdherence(previous, @event.StartTime);
+					previous.ActivityHasEnded = true;
 					_persister.Update(previous);
 				}
 			}
@@ -70,6 +72,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				existingModel.IsInAdherence = @event.InAdherence;
 				_persister.Update(existingModel);
 			}
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonShiftEndEvent @event)
+		{
+			var lastModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime)).Last();
+			lastModel.ActivityHasEnded = true;
+			_persister.Update(lastModel);
 		}
 
 		private static bool lateForActivity(AdherenceDetailsReadModel model, PersonStateChangedEvent @event)
@@ -106,6 +116,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			else
 				model.TimeOutOfAdherence += timeToAdd.Value;
 		}
-
 	}
 }
