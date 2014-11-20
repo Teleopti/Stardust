@@ -892,7 +892,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemSeniorityRankDesc.Visible = seniorityEnabled;
 			toolStripMenuItemSeniorityRankAsc.Visible = seniorityEnabled;
 
-			var publishScedule = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_PublishSchedules_30929) && authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			var publishScedule = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_PublishSchedules_30929) && authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PublishSchedule);
 			toolStripMenuItemPublish.Visible = publishScedule;
 
 			setPermissionOnControls();

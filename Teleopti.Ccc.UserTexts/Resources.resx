@@ -12467,4 +12467,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="PublisSchedulesToDateColon" xml:space="preserve">
     <value>Publish shedules to:</value>
   </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publish Schedule</value>
+    <comment>Publish Schedule</comment>
+  </data>
 </root>

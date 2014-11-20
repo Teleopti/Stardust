@@ -18469,6 +18469,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Publish Schedule.
+        /// </summary>
+        public static string PublishSchedule {
+            get {
+                return ResourceManager.GetString("PublishSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Publish schedules for:.
         /// </summary>
         public static string PublishSchedulesForColon {
