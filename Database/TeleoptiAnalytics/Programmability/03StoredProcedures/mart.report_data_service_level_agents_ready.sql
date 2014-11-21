@@ -262,6 +262,7 @@ INNER JOIN mart.bridge_skillset_skill bs
 INNER JOIN #bridge_time_zone b
 	ON fs.interval_id = b.interval_id
 	AND fs.schedule_date_id= b.date_id
+	AND fs.shift_startdate_local_id BETWEEN b.date_id -1 AND b.date_id +1
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
 	AND d.date_date BETWEEN @date_from AND @date_to

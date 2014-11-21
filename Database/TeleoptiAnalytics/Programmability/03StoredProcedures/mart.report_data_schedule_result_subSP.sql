@@ -127,7 +127,8 @@ SELECT
 FROM mart.fact_schedule_deviation fsd
 INNER JOIN #person a
 	ON fsd.person_id = a.person_id
-WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id	
+WHERE fsd.shift_startdate_local_id BETWEEN @date_from_id -1 AND @date_to_id +1
+AND fsd.date_id BETWEEN @date_from_id AND @date_to_id	
 GROUP BY fsd.date_id,fsd.person_id,fsd.interval_id
 
 --Get agent statistics
@@ -202,9 +203,9 @@ SELECT	fs.schedule_date_id,
 		SUM(fs.scheduled_ready_time_m), 
 		SUM(fs.scheduled_contract_time_m)
 FROM mart.fact_schedule fs
-INNER JOIN #person a
-	ON fs.person_id = a.person_id
-WHERE fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
+WHERE fs.shift_startdate_local_id BETWEEN  @date_from_id -1 AND @date_to_id +1
+AND fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
+AND  fs.person_id in (SELECT DISTINCT person_id from #person)
 AND fs.scenario_id = @scenario_id
 GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
 
