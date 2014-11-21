@@ -52,7 +52,7 @@ item: Global
   Variable Default7=ccc7_forecast.exe
   Variable Name8=_PACKAGECODE_
   Variable Description8=The package code for the application to be installed.
-  Variable Default8={742975B9-F562-4820-B006-BAB15774C62E}
+  Variable Default8={709423F4-93F1-41A1-A822-3E47346CCDB2}
   Variable Name9=_SVSWRAPPER_
   Variable Default9=0
   Variable Flags9=00001000
@@ -409,6 +409,24 @@ item: Edit INI File
   Settings=Count=%COUNT%
   Settings=
 end
+item: Set Variable
+  Variable=FILEPATH1
+  Value=%WORKINGDIR%\FILEPATH1\SQLEXPR_x86_ENU.exe
+end
+item: Install File
+  Source=K:\Src\Wise\ccc7_forecast\SQL2008R2\SQLEXPR_x86_ENU.exe
+  Destination=%FILEPATH1%
+  Flags=0000000010100010
+end
+item: Set Variable
+  Variable=CMDLINE1
+  Value=/q /X: "%TEMP%\TeleoptiForecast"
+end
+item: Execute Program
+  Pathname=%FILEPATH1%
+  Command Line=%CMDLINE1%
+  Flags=00000010
+end
 item: End Block
 end
 item: If/While Statement
@@ -427,16 +445,16 @@ item: Edit INI File
 end
 item: Set Variable
   Variable=FILEPATH2
-  Value=%WORKINGDIR%\FILEPATH2\SQLEXPR.EXE
+  Value=%WORKINGDIR%\FILEPATH2\InstallSQLExpress2008R2.bat
 end
 item: Install File
-  Source=SQLEXPR.EXE
+  Source=K:\Src\Wise\ccc7_forecast\SQL2008R2\InstallSQLExpress2008R2.bat
   Destination=%FILEPATH2%
   Flags=0000000010100010
 end
 item: Set Variable
   Variable=CMDLINE2
-  Value=/qb ADDLOCAL=SQL_Engine INSTANCENAME=TELEOPTIFORECAST DISABLENETWORKPROTOCOLS=0 SECURITYMODE=SQL SAPWD=38745jj#!Q_g COLLATION=SQL_Latin1_General_Cp1_CI_AS
+  Value="%TEMP%\TeleoptiForecast"
 end
 item: Execute Program
   Pathname=%FILEPATH2%

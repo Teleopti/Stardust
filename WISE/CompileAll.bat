@@ -140,7 +140,7 @@ CD "%WISESOURCEFILE%"
 ::Get None Source Controlled stuff
 ::--------
 ::CCC_forecast
-XCOPY "%DEPENDENCIESSRC%\ccc7_forecast\SQLEXPR.EXE" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_forecast\SQLEXPR_x86_ENU.EXE" "%WISESOURCEFILE%\Wise\ccc7_forecast\SQL2008R2\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_forecast\ForecastDatabase\TeleoptiCCC_Forecasts.BAK" "%WISESOURCEFILE%\ForecastDatabase\" /D /Y
 
 ::CCC_server
