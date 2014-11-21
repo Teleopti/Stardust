@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenCurrentTimeIs(DateTime time)
 		{
 			CurrentTime.Set(time);
-			if (FeatureContext.Current.FeatureInfo.Title == "Real time adherence percentage")
+			var featuresCheckActivityChanges = new List<string> {"Real time adherence percentage", "Manage Adherence"};
+			if (featuresCheckActivityChanges.Contains(FeatureContext.Current.FeatureInfo.Title))
 				PhoneStateStepDefinitions.CheckForActivityChange();
 		}
 

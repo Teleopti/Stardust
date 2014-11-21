@@ -49,7 +49,6 @@ Scenario: Should be able to see adherence details for one agent within working h
 	And I should see 'Phone' with adherence of 25%
 
 @OnlyRunIfEnabled('RTA_SeeAdherenceDetailsForOneAgent_31285')
-@ignore
 Scenario: Should be able to see adherence details for one agent outside of working hour
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
