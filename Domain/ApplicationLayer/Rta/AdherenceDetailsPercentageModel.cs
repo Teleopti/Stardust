@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public int AdherencePercent { get; set; }
 		public string Name { get; set; }
-		public DateTime StartTime { get; set; }
-		public DateTime ActualStartTime { get; set; }
+		public string StartTime { get; set; }
+		public string ActualStartTime { get; set; }
 	}
 }

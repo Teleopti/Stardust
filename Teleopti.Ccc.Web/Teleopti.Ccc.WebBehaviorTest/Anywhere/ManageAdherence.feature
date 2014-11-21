@@ -4,7 +4,6 @@
 	I want to see whom and when was adhered and not adhered to the schedule
 
 @OnlyRunIfEnabled('RTA_SeeAdherenceDetailsForOneAgent_31285')
-@ignore
 Scenario: Should be able to see adherence details for one agent within working hour
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -46,7 +45,7 @@ Scenario: Should be able to see adherence details for one agent within working h
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the current time is '2014-10-06 10:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
-	Then I should see daily adherencely for 'Pierre Baldi' is 25%
+	Then I should see daily adherence for 'Pierre Baldi' is 25%
 	And I should see 'Phone' with adherence of 25%
 
 @OnlyRunIfEnabled('RTA_SeeAdherenceDetailsForOneAgent_31285')
@@ -91,5 +90,6 @@ Scenario: Should be able to see adherence details for one agent outside of worki
 	And the current time is '2014-10-06 08:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the current time is '2014-10-06 17:00:00'
-	Then I should see daily adherencely for 'Pierre Baldi' is 25%
+	And I view manage adherence view for agent 'Pierre Baldi'
+	Then I should see daily adherence for 'Pierre Baldi' is 25%
 	And I should see 'Phone' with adherence of 25%
