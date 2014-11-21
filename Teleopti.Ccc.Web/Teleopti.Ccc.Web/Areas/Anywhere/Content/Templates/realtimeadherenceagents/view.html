@@ -48,7 +48,7 @@
 							<!-- ko if: DisplayAdherencePercentage -->
 							<div class="adherence btn-group">
 								<!-- ko if: $root.agentAdherenceDetailsEnabled -->
-								<a href="#manageadherence" class="btn">
+								<a class="btn" data-bind="attr: { href: $root.urlForAdherenceDetails($data)}">
 									<span data-bind="text: $root.resources.Adherence"></span>
 									<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
 								</a>

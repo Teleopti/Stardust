@@ -45,6 +45,9 @@ define([
 		UrlForChangingSchedule : function(buid,teamId,personId,date) {
 			return window.baseLocation() + "#teamschedule/" + buid + "/" + teamId + "/" + personId + "/" + toDateString(date);
 		},
+		UrlForAdherenceDetails : function(buid,personId) {
+			return window.baseLocation() + "#manageadherence/" + buid + "/" + personId;
+		},
 		UrlForRealTimeAdherence: function (buid) {
 			return window.baseLocation() + "#realtimeadherencesites/" + buid ;
 		},

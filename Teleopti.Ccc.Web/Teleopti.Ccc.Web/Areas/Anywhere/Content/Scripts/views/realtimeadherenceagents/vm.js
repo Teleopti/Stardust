@@ -163,6 +163,11 @@
 				return navigation.UrlForChangingSchedule(that.BusinessUnitId(), a.TeamId, a.PersonId, moment((new Date).getTime()));
 			}
 
+			that.urlForAdherenceDetails = function (data) {
+				var a = that.getAgent(data.PersonId());
+				return navigation.UrlForAdherenceDetails(that.BusinessUnitId(), a.PersonId);
+			}
+
 			that.SelectAgent = function (agentStateClicked) {
 				if (typeof agentStateClicked === "string") {
 					agentStateClicked = that.getAgentState(agentStateClicked);
