@@ -3,9 +3,12 @@
 <table class="table-condensed">
 	<tr>
 		<td>
-			<label>
-				@Resources.AbsenceType
-			</label>
+			<span>@Resources.ReportAbsenceFor</span>
+			<span data-bind="text: DateToForDisplay()"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
 			<div>
 				<select class="report-edit-absence form-control" data-bind="value: AbsenceId">
 					@foreach (var absenceType in Model.AbsenceTypesForReport)
@@ -16,48 +19,6 @@
 			</div>
 		</td>
 
-	</tr>
-	<tr>
-		<td>
-			<table class="table-condensed">
-				<tr class="form-inline">
-					<td>
-						<span class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-step-backward"></i>
-							</span>
-							<![if (!IE)|(gt IE 8)]>
-								<input class="absence-report-start-date form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
-							<![endif]>
-							<!--[if lte IE 8]>
-								<input class="absence-report-start-date input-sm form-control" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
-							<![endif]-->
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</span>
-						</span>
-					</td>
-				</tr>
-				<tr class="form-inline">
-					<td>
-						<span class="input-group">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-step-forward"></i>
-							</span>
-							<![if (!IE)|(gt IE 8)]>
-							<input class="absence-report-end-date form-control" data-bind="datepicker: DateToForDisplay(), datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
-							<![endif]>
-							<!--[if lte IE 8]>
-							<input class="absence-report-end-date input-sm form-control" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
-							<![endif]-->
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</span>
-						</span>
-					</td>
-				</tr>
-			</table>
-		</td>
 	</tr>
 </table>
 <div data-bind="if: ShowError">

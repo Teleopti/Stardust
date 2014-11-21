@@ -14,14 +14,16 @@ Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewM
 	this.StartTime = ko.observable('');
 	this.EndTime = ko.observable('');
 	this.EndTimeNextDay = ko.observable(false);
-	this.DateToForDisplay = ko.computed(function () {
-		return self.EndTimeNextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
-	});
-
-	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	this.DateFormat = ko.observable(($('#Request-detail-datepicker-format').val() != undefined
 		&& $('#Request-detail-datepicker-format').val() != null)
 		? $('#Request-detail-datepicker-format').val().toUpperCase() : "");
+
+	this.DateToForDisplay = ko.computed(function () {
+		var date = self.EndTimeNextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
+		return date.format(self.DateFormat());
+	});
+
+	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 
 	this.ErrorMessage = ko.observable('');
 	

@@ -12474,4 +12474,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
     <value>Start time should be earlier than end time</value>  
   </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Report absence for </value>
+    <comment>Label for MyTimeWeb</comment>
+  </data>
 </root>

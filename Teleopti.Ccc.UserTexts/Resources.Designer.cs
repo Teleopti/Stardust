@@ -19165,6 +19165,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Report absence for .
+        /// </summary>
+        public static string ReportAbsenceFor {
+            get {
+                return ResourceManager.GetString("ReportAbsenceFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Report As.
         /// </summary>
         public static string ReportLevel {
