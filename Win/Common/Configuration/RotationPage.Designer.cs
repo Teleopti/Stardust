@@ -102,7 +102,7 @@
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelBody.Size = new System.Drawing.Size(877, 550);
+			this.tableLayoutPanelBody.Size = new System.Drawing.Size(877, 317);
 			this.tableLayoutPanelBody.TabIndex = 59;
 			// 
 			// tableLayoutPanelSubHeader2
@@ -395,7 +395,7 @@
 			this.gridControlRotation.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlRotation.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlRotation.Size = new System.Drawing.Size(871, 344);
+			this.gridControlRotation.Size = new System.Drawing.Size(871, 81);
 			this.gridControlRotation.SmartSizeBox = false;
 			this.gridControlRotation.TabIndex = 0;
 			this.gridControlRotation.Text = "gridControl1";
@@ -454,7 +454,7 @@
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "RotationPage";
-			this.Size = new System.Drawing.Size(877, 612);
+			this.Size = new System.Drawing.Size(877, 379);
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.PerformLayout();

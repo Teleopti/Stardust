@@ -98,7 +98,7 @@
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelBody.Size = new System.Drawing.Size(876, 475);
+			this.tableLayoutPanelBody.Size = new System.Drawing.Size(876, 312);
 			this.tableLayoutPanelBody.TabIndex = 59;
 			// 
 			// tableLayoutPanelSubHeader2
@@ -394,7 +394,7 @@
 			this.gridControlAvailability.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlAvailability.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlAvailability.Size = new System.Drawing.Size(870, 239);
+			this.gridControlAvailability.Size = new System.Drawing.Size(870, 77);
 			this.gridControlAvailability.SmartSizeBox = false;
 			this.gridControlAvailability.TabIndex = 0;
 			this.gridControlAvailability.Text = "gridControl1";
@@ -454,7 +454,7 @@
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "AvailabilityPage";
-			this.Size = new System.Drawing.Size(876, 537);
+			this.Size = new System.Drawing.Size(876, 374);
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.PerformLayout();
