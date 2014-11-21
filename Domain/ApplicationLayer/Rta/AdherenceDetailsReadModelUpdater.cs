@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var lastModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime)).LastOrDefault();
 			if (lastModel != null)
 			{
+				updateAdherence(lastModel, @event.ShiftEndTime);
 				lastModel.ActivityHasEnded = true;
 				_persister.Update(lastModel);
 			}
