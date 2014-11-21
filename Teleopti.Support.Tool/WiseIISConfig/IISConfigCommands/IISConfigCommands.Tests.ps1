@@ -37,7 +37,7 @@ $computerName=(get-childitem -path env:computername).Value
 $global:BaseURL = "http://" + $computerName + "/"
 $global:zipFile
 $global:MsiFile
-$global:version = 'main'
+$global:branch = 'main'
 $global:batName = 'PesterTest-DbSQL'
 $global:Server = ''
 $global:Db = ''
@@ -54,7 +54,7 @@ function Config-Load {
 	Describe "Shold load config from Hebe "{
 		[string] $serverConfigFile = '\\hebe\Installation\PBImsi\testservers.config'
 
-        It "Should find the right version from the config file"{
+        It "Should find the right branch from the config file"{
         
             # initialize the xml object
             $serverConfig = New-Object XML
@@ -65,7 +65,7 @@ function Config-Load {
             {
                 if ($testServer.name -eq  $computerName)
                 {
-                    $global:version =  $testServer.version
+                    $global:branch =  $testServer.branch
                     $global:batName =  $testServer.batname
                     $global:Server =  $testServer.DBServerInstance
                     $global:Db = $testServer.DB
@@ -85,7 +85,7 @@ function Config-Load {
 						$global:BaseURL = $testServer.BaseURL
 					}
 					
-					if ($global:version -ne 'main')
+					if ($global:branch -ne 'main')
 					{
 						$global:SubSite = 'TeleoptiCCC'
 						$global:displayName = 'Teleopti CCC Server, version 7'
@@ -96,7 +96,7 @@ function Config-Load {
             }
 			Write-Host '--------config----------'
 			Write-Host 'BaseURL:: ' $global:BaseURL
-            Write-Host 'version: ' $global:version
+            Write-Host 'branch: ' $global:branch
             Write-Host 'restToBaseline: '$global:resetToBaseline
 			Write-Host '------------------------'
         }
@@ -165,7 +165,7 @@ function Setup-PreReqs {
 		}
 		
 		It "should copy latest .zip-file from build server"{
-			$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
+			$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -branch "$global:branch"
 			Test-Path $global:zipFile | Should Be $True
 		}
 
@@ -287,7 +287,7 @@ function Add-CccLicenseToDemo
     if($global:Server -ne '')
     {
         
-		if ($global:version -ne 'main')
+		if ($global:branch -ne 'main')
 					{
 						$LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
 					}

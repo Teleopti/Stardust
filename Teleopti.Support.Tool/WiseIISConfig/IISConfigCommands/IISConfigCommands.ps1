@@ -216,10 +216,10 @@ function UnZip-File(){
 function Copy-ZippedMsi{
     param(
         $workingFolder,
-        $version
+        $branch
     )
 	#"\\HEBE\Installation\PBImsi\Kanbox\CCC-7.5.390-MSI"
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\CCC-' + $version + '-MSI'
+    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\CCC-' + $branch + '-MSI'
     $destFolder=$workingFolder
     Write-Host 'source: ' $scrFolder
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
