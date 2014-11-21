@@ -45,25 +45,23 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 262F));
-			this.tableLayoutPanel1.Controls.Add(this.datePicker, 2, 2);
-			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 2, 3);
-			this.tableLayoutPanel1.Controls.Add(this.labelPublishToDate, 2, 1);
-			this.tableLayoutPanel1.Controls.Add(this.labelControlSets, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.listViewControlSets, 1, 2);
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.listViewControlSets, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.labelControlSets, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.datePicker, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.labelPublishToDate, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 205F));
+			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(517, 319);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(316, 296);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// datePicker
@@ -141,13 +139,13 @@
 			this.datePicker.DropDownSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(179)))), ((int)(((byte)(255)))));
 			this.datePicker.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.datePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.datePicker.Location = new System.Drawing.Point(258, 49);
+			this.datePicker.Location = new System.Drawing.Point(3, 25);
 			this.datePicker.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.datePicker.MinValue = new System.DateTime(1990, 12, 31, 23, 59, 0, 0);
 			this.datePicker.Name = "datePicker";
 			this.datePicker.NoneButtonVisible = false;
 			this.datePicker.ShowCheckBox = false;
-			this.datePicker.Size = new System.Drawing.Size(256, 21);
+			this.datePicker.Size = new System.Drawing.Size(310, 21);
 			this.datePicker.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.datePicker.TabIndex = 9;
 			this.datePicker.ThemedChildControls = true;
@@ -157,17 +155,17 @@
 			// 
 			// tableLayoutPanel2
 			// 
-			this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel2.ColumnCount = 2;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.47959F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.52041F));
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvOk, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvCancel, 1, 0);
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(301, 254);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 234);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(213, 59);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(310, 59);
 			this.tableLayoutPanel2.TabIndex = 10;
 			// 
 			// buttonAdvOk
@@ -178,7 +176,7 @@
 			this.buttonAdvOk.BeforeTouchSize = new System.Drawing.Size(91, 31);
 			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvOk.IsBackStageButton = false;
-			this.buttonAdvOk.Location = new System.Drawing.Point(3, 16);
+			this.buttonAdvOk.Location = new System.Drawing.Point(87, 16);
 			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 3, 12, 12);
 			this.buttonAdvOk.Name = "buttonAdvOk";
 			this.buttonAdvOk.Size = new System.Drawing.Size(91, 31);
@@ -196,7 +194,7 @@
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(109, 16);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(206, 16);
 			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(3, 3, 12, 12);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(92, 31);
@@ -207,7 +205,7 @@
 			// labelPublishToDate
 			// 
 			this.labelPublishToDate.AutoSize = true;
-			this.labelPublishToDate.Location = new System.Drawing.Point(258, 18);
+			this.labelPublishToDate.Location = new System.Drawing.Point(3, 0);
 			this.labelPublishToDate.Name = "labelPublishToDate";
 			this.labelPublishToDate.Size = new System.Drawing.Size(172, 15);
 			this.labelPublishToDate.TabIndex = 12;
@@ -216,7 +214,7 @@
 			// labelControlSets
 			// 
 			this.labelControlSets.AutoSize = true;
-			this.labelControlSets.Location = new System.Drawing.Point(11, 18);
+			this.labelControlSets.Location = new System.Drawing.Point(3, 68);
 			this.labelControlSets.Name = "labelControlSets";
 			this.labelControlSets.Size = new System.Drawing.Size(158, 15);
 			this.labelControlSets.TabIndex = 11;
@@ -226,14 +224,14 @@
 			// 
 			this.listViewControlSets.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.listViewControlSets.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listViewControlSets.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listViewControlSets.Location = new System.Drawing.Point(11, 49);
+			this.listViewControlSets.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+			this.listViewControlSets.Location = new System.Drawing.Point(3, 97);
 			this.listViewControlSets.MultiSelect = false;
 			this.listViewControlSets.Name = "listViewControlSets";
-			this.listViewControlSets.Size = new System.Drawing.Size(241, 199);
+			this.listViewControlSets.Size = new System.Drawing.Size(310, 131);
 			this.listViewControlSets.TabIndex = 13;
 			this.listViewControlSets.UseCompatibleStateImageBehavior = false;
-			this.listViewControlSets.View = System.Windows.Forms.View.List;
+			this.listViewControlSets.View = System.Windows.Forms.View.Details;
 			this.listViewControlSets.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listViewControlSetsItemSelectionChanged);
 			// 
 			// PublishScheduleDateView
@@ -243,7 +241,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonAdvCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			this.ClientSize = new System.Drawing.Size(517, 319);
+			this.ClientSize = new System.Drawing.Size(316, 296);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

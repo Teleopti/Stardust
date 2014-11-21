@@ -28,10 +28,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void SetWorkflowControlSets(IList<IWorkflowControlSet> workflowControlSets)
 		{
-			var items = listViewControlSets.Items;
+			listViewControlSets.Columns.Add(UserTexts.Resources.WorkflowControlSet, -2, HorizontalAlignment.Left);
+			listViewControlSets.Columns.Add(UserTexts.Resources.Current, -2, HorizontalAlignment.Left);
+
 			foreach (var workflowControlSet in workflowControlSets)
 			{
-				items.Add(workflowControlSet.Name);
+				var current= workflowControlSet.SchedulePublishedToDate.HasValue? workflowControlSet.SchedulePublishedToDate.Value.ToShortDateString() : UserTexts.Resources.NotPublished;
+				var item = new ListViewItem(new[] {workflowControlSet.Name, current});
+				listViewControlSets.Items.Add(item);
 			}			
 		}
 
