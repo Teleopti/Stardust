@@ -16,20 +16,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public IList<IScheduleDay> AllRestrictedDays(IList<IScheduleDay> scheduleDays)
         {
-            if (scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+            if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
 
             var restrictedDays = new List<IScheduleDay>();
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+	            _restrictionExtractor.Extract(scheduleDay);
 
-                if (_restrictionExtractor.RotationList.Any())
-                    restrictedDays.Add(scheduleDay);
+	            if (_restrictionExtractor.RotationList.Any(
+					rotRestriction => rotRestriction.StartTimeLimitation.HasValue() 
+					|| rotRestriction.EndTimeLimitation.HasValue() 
+					|| rotRestriction.WorkTimeLimitation.HasValue() 
+					|| rotRestriction.ShiftCategory != null 
+					|| rotRestriction.DayOffTemplate != null))
+	            {
+		            restrictedDays.Add(scheduleDay);
+	            }
             }
 
-            return restrictedDays;
+	        return restrictedDays;
         }
 
 
