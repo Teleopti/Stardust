@@ -1,8 +1,10 @@
 create proc dbo.Add_QueueAgent_stat
-@TestDay datetime = null,
-@agent_id int = 52,
-@orig_agent_id int = 152,
-@agent_name nvarchar(50) = 'Ashley Andeen'
+@TestDay datetime,
+@agent_id int,
+@orig_agent_id int,
+@agent_name nvarchar(50),
+@queue_id int
+
 --select * from mart.v_agent_logg
 --exec mart.etl_fact_agent_load '2014-01-01','2014-02-01',2
 --exec mart.etl_fact_schedule_deviation_load '2014-01-01','2014-02-01','80E3AABD-3329-4111-B647-A2C200A5A1BD'
@@ -20,7 +22,7 @@ declare @todayPlus1 smalldatetime
 
 SELECT @todayMinus2 = DATEADD(dd, -2, DATEDIFF(dd, 0, @TestDay)) --day before yesterday
 SELECT @todayMinus1 = DATEADD(dd, -1, DATEDIFF(dd, 0, @TestDay)) --yesterday
-SELECT @today = DATEADD(dd, 0, DATEDIFF(dd, 0, @TestDay)) --yesterday
+SELECT @today = DATEADD(dd, 0, DATEDIFF(dd, 0, @TestDay)) --today
 SELECT @todayPlus1 = DATEADD(dd, 1, DATEDIFF(dd, 0, @TestDay)) --tomorrow
 
 --add cti data
@@ -39,12 +41,10 @@ delete from dbo.agent_logg
 declare @log_object_id int
 select @log_object_id = isnull(max(log_object_id),1) from dbo.log_object
 
-declare @queue_id int
 declare @orig_queue_id int
 declare @orig_desc nvarchar(50)
 declare @queue_display_desc nvarchar(50)
 
-set @queue_id = 11
 set @orig_queue_id = 111
 set @queue_display_desc = N'queue_orig_desc'
 set @orig_desc = N'queue_orig_desc'
@@ -88,3 +88,19 @@ insert dbo.agent_logg values (@queue_id,@todayMinus1,49,@agent_id,@agent_name,@M
 insert dbo.agent_logg values (@queue_id,@todayMinus1,56,@agent_id,@agent_name,@Minute*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,58,@agent_id,@agent_name,@Minute*12,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,59,@agent_id,@agent_name,@Minute*9,180,180,0,0,0,2,0,0,0,0,0,NULL)
+
+
+declare @maxdate smalldatetime
+declare @maxinterval int
+
+select @maxdate=isnull(max(date_from),@todayMinus2) from dbo.queue_logg
+select @maxinterval=isnull(max(interval),0) from dbo.queue_logg where date_from=@maxdate
+
+INSERT INTO dbo.log_object_detail
+SELECT @log_object_id,1,'Queue data','load_queue',@maxinterval,@maxdate
+
+select @maxdate=isnull(max(date_from),@todayMinus2) from dbo.agent_logg
+select @maxinterval=isnull(max(interval),0) from dbo.agent_logg where date_from=@maxdate
+
+INSERT INTO dbo.log_object_detail
+SELECT @log_object_id,2,'Agent data','load_agent',@maxinterval,@maxdate

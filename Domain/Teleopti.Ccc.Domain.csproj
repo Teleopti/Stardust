@@ -512,6 +512,7 @@
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\DayOffRulesValidator.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixKeepActivityLocker.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLocker.cs" />
     <Compile Include="Optimization\DaysOffLegalStateValidatorsFactory.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterEx.cs" />

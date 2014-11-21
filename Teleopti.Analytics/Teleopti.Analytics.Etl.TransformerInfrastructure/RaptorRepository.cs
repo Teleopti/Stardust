@@ -1391,7 +1391,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday)
+		public int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, int isIntraday, DateTime? nowUtc)
 		{
 			//Convert time back to local time before sp call
 			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
@@ -1403,7 +1403,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					new SqlParameter("start_date", startDate.Date),
 					new SqlParameter("end_date", endDate.Date),
 					new SqlParameter("business_unit_code", businessUnit.Id),
-					new SqlParameter("isIntraday", isIntraday)
+					new SqlParameter("isIntraday", isIntraday),
+					new SqlParameter("is_delayed_job", 0),
+					new SqlParameter("now_utc", nowUtc)
 				};
 
 			return

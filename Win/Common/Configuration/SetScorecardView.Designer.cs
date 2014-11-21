@@ -113,7 +113,7 @@
 			this.gridControl1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControl1.Size = new System.Drawing.Size(700, 414);
+			this.gridControl1.Size = new System.Drawing.Size(700, 173);
 			this.gridControl1.SmartSizeBox = false;
 			this.gridControl1.TabIndex = 17;
 			this.gridControl1.ThemesEnabled = true;
@@ -139,7 +139,7 @@
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelBody.Size = new System.Drawing.Size(700, 529);
+			this.tableLayoutPanelBody.Size = new System.Drawing.Size(700, 288);
 			this.tableLayoutPanelBody.TabIndex = 3;
 			// 
 			// tableLayoutPanelSubHeader2
@@ -327,7 +327,7 @@
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SetScorecardView";
-			this.Size = new System.Drawing.Size(700, 591);
+			this.Size = new System.Drawing.Size(700, 350);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.setScorecardLayout);
 			((System.ComponentModel.ISupportInitialize)(this.gridControl1)).EndInit();
 			this.tableLayoutPanelBody.ResumeLayout(false);

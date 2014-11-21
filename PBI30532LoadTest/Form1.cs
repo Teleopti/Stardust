@@ -11,8 +11,11 @@ using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -131,8 +134,13 @@ namespace PBI30532LoadTest
 		private void sendToServiceBus(int numberOfPersons)
 		{
 			var sendToServiceBus = new ServiceBusSender();
-			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus,
-				new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
+			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
+			var ctxpop = new  EventContextPopulator(
+				new CurrentBusinessUnit(identity),
+				new CurrentDataSource(identity, null, null),
+				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())
+				);
+			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus);
 
 			var persons =
 				HelperFunctions.ExecuteDataSet(CommandType.Text, string.Format("SELECT TOP {0} Id FROM Person",numberOfPersons), new List<SqlParameter>(),

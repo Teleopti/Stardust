@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
@@ -65,6 +66,32 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			
 			return result;
+		}
+
+		private static List<IJobResult> RunJob(string jobName, IEnumerable<IJobStep> jobStepCollection)
+		{
+			var jobList = new List<IJobResult>();
+			var Result = new JobResult(TestState.BusinessUnit, jobList)
+			{
+				Name = jobName,
+				Status = string.Format("Running ({0})", TestState.BusinessUnit.Name),
+				Success = true
+			}; // Inject list of BUs
+
+			foreach (var step in jobStepCollection)
+			{
+				var jobStepResult = step.Run(new List<IJobStep>(), TestState.BusinessUnit, jobList, true);
+				Result.JobStepResultCollection.Add(jobStepResult);
+
+				//Stop the Job if any JobStep goes wrong !!
+				if (jobStepResult.JobStepException != null)
+				{
+					Result.Success = false;
+					break;
+				}
+				}
+			jobList.Add(Result);
+			return jobList;
 		}
 
 		public static List<IJobResult> RunNightly(JobParameters jobParameters)

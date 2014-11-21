@@ -15,6 +15,7 @@ truncate table dbo.agent_logg
 
 delete from dbo.queues
 delete from dbo.agent_info
+delete from dbo.log_object_detail
 delete from dbo.log_object
 delete from dbo.acd_type
 delete from dbo.ccc_system_info
@@ -122,9 +123,8 @@ INSERT INTO [dbo].[log_object]
            ,20
            ,5)
 
-
 exec mart.sys_datasource_load
-exec mart.sys_datasource_detail_load
+exec mart.etl_job_intraday_settings_load
 exec mart.sys_datasource_set_raptor_time_zone
 
 declare @time_zone_id int

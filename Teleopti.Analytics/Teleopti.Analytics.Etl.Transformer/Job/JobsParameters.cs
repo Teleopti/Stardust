@@ -38,6 +38,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
         public string OlapDatabase { get; private set; }
 
+		public DateTime? NowForTestPurpose { get;  set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; set; }
 

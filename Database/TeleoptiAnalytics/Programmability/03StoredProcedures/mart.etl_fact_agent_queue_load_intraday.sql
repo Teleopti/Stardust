@@ -35,7 +35,7 @@ BEGIN
 	DECLARE DataSouceCursor CURSOR FOR
 	SELECT ds.datasource_id
 	FROM mart.sys_datasource ds
-	INNER JOIN mart.sys_datasource_detail dsd
+	INNER JOIN mart.etl_job_intraday_settings dsd
 		ON ds.datasource_id = dsd.datasource_id
 	WHERE ds.datasource_id NOT IN (-1,1)
 	AND ds.time_zone_id IS NOT NULL
@@ -90,10 +90,10 @@ BEGIN  --Single datasource_id
 		ds.datasource_id= @datasource_id
 
 	SELECT
-		@target_date_local=target_date_local,
-		@target_interval_local=target_interval_local,
+		@target_date_local=target_date,
+		@target_interval_local=target_interval,
 		@intervals_back=intervals_back
-	FROM [mart].[sys_datasource_detail] ds WITH (TABLOCKX) --Block any other process from even reading this data. Wait until ETL is done processing!
+	FROM [mart].[etl_job_intraday_settings] ds WITH (TABLOCKX) --Block any other process from even reading this data. Wait until ETL is done processing!
 	WHERE datasource_id = @datasource_id
 	AND detail_id = @mart_detail_id
 
@@ -306,10 +306,10 @@ BEGIN  --Single datasource_id
 	--finally
 	--update with last logged interval
 	
-	UPDATE [mart].[sys_datasource_detail]
+	UPDATE [mart].[etl_job_intraday_settings]
 	SET
-		target_date_local		= @source_date_local,
-		target_interval_local	= @source_interval_local
+		target_date		= @source_date_local,
+		target_interval	= @source_interval_local
 	WHERE datasource_id = @datasource_id
 	AND detail_id = @mart_detail_id
 

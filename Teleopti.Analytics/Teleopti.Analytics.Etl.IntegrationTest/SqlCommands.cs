@@ -31,6 +31,44 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 		}
 
+		public static int DataSourceIdGet(string datasourceName)
+		{
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				string sql = "select datasource_id from mart.sys_datasource where datasource_name=@datasourceName";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@datasourceName", datasourceName);
+					return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+				}
+			}
+		}
+
+		public static int TimezoneIdGet(string timezoneName)
+		{
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				string sql = "select time_zone_id from mart.dim_time_zone where time_zone_code=@timezoneName";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@timezoneName", timezoneName);
+					return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+				}
+			}
+		}
+		public static void EtlJobIntradaySettingsReset(DateTime targetDate)
+		{
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				string sql = "update mart.etl_job_intraday_settings set target_date=@target_date";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@target_date", targetDate);
+					sqlCommand.ExecuteNonQuery();
+				}
+			}
+		}
+
 		public static int RowsInFactSchedule(DateTime? startTime = null)
 		{
 			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
@@ -43,6 +81,53 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 					if (startTime.HasValue)
 						sqlCommand.Parameters.AddWithValue("@startTime", startTime.Value);
 					return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+				}
+			}
+		}
+
+		public static int EtlErrors()
+		{
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				string sql = "select count(1) from mart.etl_jobstep_error";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+				}
+			}
+		}
+
+		public static int MaxIntervalLogObjectDetail(int detailId, int dataSourceId)
+		{
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				string sql = "select int_value from dbo.log_object_detail od inner join mart.sys_datasource ds on od.log_object_id=ds.log_object_id " +
+								"where ds.datasource_id=@dataSourceId and detail_id=@detailId";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@detailId", detailId);
+					sqlCommand.Parameters.AddWithValue("@dataSourceId", dataSourceId);
+					return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+				}
+			}
+		}
+
+		public static bool IntradayDetailSynced(int detailId, int dataSourceId)
+		{
+			using (var sqlConnection = connectAndOpen(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				string sql = "select count(1) from dbo.log_object_detail od inner join mart.sys_datasource ds on od.log_object_id=ds.log_object_id " +
+								"inner join mart.etl_job_intraday_settings s on s.detail_id=od.detail_id and s.datasource_id=ds.datasource_id " +
+								"where ds.datasource_id=@dataSourceId and od.detail_id=@detailId";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@detailId", detailId);
+					sqlCommand.Parameters.AddWithValue("@dataSourceId", dataSourceId);
+					var ret = Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+					if (ret == 1)
+						return true;
+					else
+						return false;
 				}
 			}
 		}

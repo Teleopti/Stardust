@@ -27,15 +27,21 @@ GO
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-02-04 00:00:00',@end_date='2013-02-06 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-02-17 00:00:00',@end_date='2014-02-23 00:00:00',@business_unit_code='9D812B66-A7BD-4FFF-A2D8-A2D90001CAF1',@isIntraday=1
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-03-04 00:00:00',@end_date='2014-03-05 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=1
---exec mart.etl_fact_schedule_deviation_load @start_date='2014-10-21 00:00:00',@end_date='2014-10-22 00:00:00',@business_unit_code='1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B',@isIntraday=1
+--exec mart.etl_fact_schedule_deviation_load @start_date='2014-10-21 00:00:00',@end_date='2014-10-22 00:00:00',@business_unit_code='0B43736B-4ED5-4D9F-B2E4-A34200A7EF70',@isIntraday=1
+--exec mart.etl_fact_schedule_deviation_load @start_date='2013-06-11 00:00:00',@end_date='2013-06-11 00:00:00',@business_unit_code='13DBFFE3-CA0A-4E7B-8CC8-A3E601034177',@isIntraday=2,@is_delayed_job=NULL,@now_utc=NULL
+--exec mart.etl_fact_schedule_deviation_load @start_date='2013-06-11 00:00:00',@end_date='2013-06-11 00:00:00',@business_unit_code='057E2EE2-315E-4DED-B8DA-A3E700F71835',@isIntraday=2,@is_delayed_job=NULL,@now_utc='2013-06-15 00:00:00'
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
 @business_unit_code uniqueidentifier,
-@isIntraday bit = 0,
-@is_delayed_job bit = 0
+@isIntraday tinyint = 0,
+@is_delayed_job bit = 0,
+@now_utc smalldatetime = null
+
 AS
 SET NOCOUNT ON
+IF @now_utc is null
+SET @now_utc = cast(getutcdate() as smalldatetime)
 
 --Execute one delayed jobs, if any
 if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_delayed_job=1
@@ -53,6 +59,16 @@ DECLARE @scenario_id int
 DECLARE @scenario_code uniqueidentifier
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
+
+declare @now_date_date_utc smalldatetime
+declare @now_interval_id_utc smallint
+declare @now_date_id_utc int
+declare @from_interval_id_utc smallint
+declare @from_date_id_utc int
+declare @from_date_date_utc smalldatetime
+declare @intervals_back smallint
+declare @detail_id int
+SET @detail_id=4 --deviation
 
 CREATE TABLE #fact_schedule_deviation(
 	shift_startdate_local_id int,
@@ -159,7 +175,6 @@ BEGIN
 		mart.dim_person p 
 	ON p.person_id=fs.person_id
 	WHERE fs.shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
-		AND fs.business_unit_id = @business_unit_id
 		AND fs.scenario_id = @scenario_id
 	GROUP BY 
 		fs.shift_startdate_local_id,
@@ -214,96 +229,210 @@ BEGIN
 		fa.date_id BETWEEN @start_date_id-1 AND @end_date_id+1 --extend stat to cover local date
 		AND b.business_unit_id = @business_unit_id
 END
-
-if (@isIntraday=1)
+ELSE
 BEGIN
-	INSERT INTO #stg_schedule_changed
-	SELECT  p.person_id,
-			dd.date_id,
-			p.person_code
-	FROM stage.stg_schedule_changed ch
-	INNER JOIN mart.dim_person p
-		ON p.person_code = ch.person_code
-			AND --trim
+	if (@isIntraday=1)
+	BEGIN
+		INSERT INTO #stg_schedule_changed
+		SELECT  p.person_id,
+				dd.date_id,
+				p.person_code
+		FROM stage.stg_schedule_changed ch
+		INNER JOIN mart.dim_person p
+			ON p.person_code = ch.person_code
+				AND --trim
+				(
+						(ch.schedule_date_local	>= p.valid_from_date_local)
+					AND
+						(ch.schedule_date_local <= p.valid_to_date_local)
+				)
+		INNER JOIN mart.dim_date dd
+			ON dd.date_date = ch.schedule_date_local
+		WHERE ch.scenario_code = @scenario_code
+		AND ch.schedule_date_local <= dateadd(dd,1,@now_utc)
+
+		INSERT INTO #fact_schedule
+		--First get changed day via #stg_schedule_changed (full local agent day)
+		SELECT
+			 fs.shift_startdate_local_id,
+			 fs.schedule_date_id, 
+			 fs.shift_startdate_id,
+			 fs.shift_startinterval_id,
+			 fs.shift_endinterval_id,
+			 fs.shift_endtime,
+			 fs.interval_id,
+			 fs.person_id, 
+			sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
+			sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
+			sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
+			fs.business_unit_id,
+			ch.person_code
+		FROM mart.fact_schedule fs
+		INNER JOIN #stg_schedule_changed ch
+			ON ch.shift_startdate_local_id = fs.shift_startdate_local_id 
+			AND ch.person_id = fs.person_id
+		WHERE fs.scenario_id = @scenario_id
+		GROUP BY 
+			fs.shift_startdate_local_id,
+			fs.schedule_date_id, 
+			fs.shift_startdate_id,
+			fs.shift_startinterval_id,
+			fs.shift_endinterval_id,
+			fs.shift_endtime,
+			fs.interval_id,
+			fs.person_id,
+			fs.business_unit_id,
+			ch.person_code
+
+		/* a) Gather agent ready time */
+		INSERT INTO #fact_schedule_deviation
 			(
-					(ch.schedule_date_local	>= p.valid_from_date_local)
-				AND
-					(ch.schedule_date_local <= p.valid_to_date_local)
+			date_id, 
+			interval_id,
+			person_id, 
+			acd_login_id,--new 20131128
+			ready_time_s,
+			is_logged_in,
+			business_unit_id,
+			person_code
 			)
-	INNER JOIN mart.dim_date dd
-		ON dd.date_date = ch.schedule_date_local
-	WHERE ch.scenario_code = @scenario_code
 
-	--if in Intraday-mode, we have get the dates based on Agent stat job which is of no use.
-	--Instead use min/max date from changed table
-	SELECT
-		@start_date_id	= min(shift_startdate_local_id),
-		@end_date_id	= max(shift_startdate_local_id)
-	FROM #stg_schedule_changed
+		SELECT DISTINCT
+			date_id					= fa.date_id, 
+			interval_id				= fa.interval_id,
+			person_id				= b.person_id,
+			acd_login_id			= fa.acd_login_id, --new 20131128
+			ready_time_s			= fa.ready_time_s,
+			is_logged_in			= 1, --marks that we do have logged in time
+			business_unit_id		= b.business_unit_id,
+			person_code				= ch.person_code
+		FROM mart.bridge_acd_login_person b
+		INNER JOIN mart.fact_agent fa
+			ON b.acd_login_id = fa.acd_login_id
+		INNER JOIN #stg_schedule_changed ch
+			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
+			AND ch.person_id			= b.person_id
+			AND b.acd_login_id			= fa.acd_login_id
+			AND EXISTS (SELECT 1 FROM #stg_schedule_changed tmp WHERE tmp.person_id = b.person_id)
+	END
 
-	INSERT INTO #fact_schedule
-	SELECT
-		 fs.shift_startdate_local_id,
-		 fs.schedule_date_id, 
-		 fs.shift_startdate_id,
-		 fs.shift_startinterval_id,
-		 fs.shift_endinterval_id,
-		 fs.shift_endtime,
-		 fs.interval_id,
-		 fs.person_id, 
-		sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
-		sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
-		sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
-		fs.business_unit_id,
-		ch.person_code
-	FROM mart.fact_schedule fs
-	INNER JOIN #stg_schedule_changed ch
-		ON ch.shift_startdate_local_id = fs.shift_startdate_local_id 
-		AND ch.person_id = fs.person_id
-	WHERE fs.business_unit_id = @business_unit_id
-	AND fs.scenario_id = @scenario_id
-	GROUP BY 
-		fs.shift_startdate_local_id,
-		fs.schedule_date_id, 
-		fs.shift_startdate_id,
-		fs.shift_startinterval_id,
-		fs.shift_endinterval_id,
-		fs.shift_endtime,
-		fs.interval_id,
-		fs.person_id,
-		fs.business_unit_id,
-		ch.person_code
+	if (@isIntraday=2)
+	BEGIN
+		select
+			@now_date_id_utc	=date_id,
+			@now_date_date_utc	=CONVERT(DATE,@now_utc)
+		from mart.dim_date
+		where date_date=CONVERT(DATE,@now_utc)
 
-	/* a) Gather agent ready time */
-	INSERT INTO #fact_schedule_deviation
-		(
-		date_id, 
-		interval_id,
-		person_id, 
-		acd_login_id,--new 20131128
-		ready_time_s,
-		is_logged_in,
-		business_unit_id,
-		person_code
+		select
+			@now_interval_id_utc=interval_id
+		from mart.dim_interval
+		where CONVERT(TIME, @now_utc) between CONVERT(TIME,interval_start) and CONVERT(TIME,interval_end)
+
+		SELECT
+			@from_date_date_utc=target_date,
+			@from_interval_id_utc=target_interval,
+			@intervals_back=intervals_back
+		FROM [mart].[etl_job_intraday_settings] ds WITH (TABLOCKX) --Block any other process from even reading this data. Wait until ETL is done processing!
+		WHERE business_unit_id = @business_unit_id
+		AND detail_id = @detail_id
+
+		IF (
+			@from_date_date_utc IS NULL
+			OR
+			@from_interval_id_utc IS NULL
+			)
+		Raiserror ('@from_date_id_utc or @from_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
+
+		--if any "go back number of intervals"
+		SELECT
+			@from_date_id_utc=d.date_id,
+			@from_interval_id_utc=d_i.interval_id
+		FROM [mart].[SubtractInterval](@from_date_date_utc,@from_interval_id_utc,@intervals_back) d_i
+		INNER JOIN mart.dim_date d
+		 on d_i.date_from = d.date_date
+
+		IF (
+			@now_date_id_utc IS NULL
+			OR
+			@now_interval_id_utc IS NULL
+			)
+		Raiserror ('@now_date_id_utc or @now_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
+
+		--get last n intervals according to mart.sys_datasource_detail
+		INSERT INTO #fact_schedule
+		SELECT
+			 fs.shift_startdate_local_id,
+			 fs.schedule_date_id, 
+			 fs.shift_startdate_id,
+			 fs.shift_startinterval_id,
+			 fs.shift_endinterval_id,
+			 fs.shift_endtime,
+			 fs.interval_id,
+			 fs.person_id, 
+			sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
+			sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
+			sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
+			fs.business_unit_id,
+			p.person_code
+		FROM mart.fact_schedule fs
+		INNER JOIN mart.dim_person p
+			ON fs.person_id = p.person_id
+		WHERE shift_startdate_local_id between @from_date_id_utc-1 and @now_date_id_utc+1
+		AND	(
+			(schedule_date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
+			OR
+			(schedule_date_id between @from_date_id_utc+1 AND @now_date_id_utc-1)
+			OR
+			(schedule_date_id = @now_date_id_utc AND interval_id <= @now_interval_id_utc)
 		)
-	SELECT DISTINCT
-		date_id					= fa.date_id, 
-		interval_id				= fa.interval_id,
-		person_id				= b.person_id,
-		acd_login_id			= fa.acd_login_id, --new 20131128
-		ready_time_s			= fa.ready_time_s,
-		is_logged_in			= 1, --marks that we do have logged in time
-		business_unit_id		= b.business_unit_id,
-		person_code				= ch.person_code
-	FROM mart.bridge_acd_login_person b
-	INNER JOIN mart.fact_agent fa
-		ON b.acd_login_id = fa.acd_login_id
-	INNER JOIN #stg_schedule_changed ch
-		ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
-		AND ch.person_id			= b.person_id
-		AND b.acd_login_id			= fa.acd_login_id
-		AND EXISTS (SELECT 1 FROM #stg_schedule_changed tmp WHERE tmp.person_id = b.person_id)
-	WHERE b.business_unit_id = @business_unit_id
+		AND fs.scenario_id = @scenario_id
+
+		GROUP BY 
+			fs.shift_startdate_local_id,
+			fs.schedule_date_id, 
+			fs.shift_startdate_id,
+			fs.shift_startinterval_id,
+			fs.shift_endinterval_id,
+			fs.shift_endtime,
+			fs.interval_id,
+			fs.person_id,
+			fs.business_unit_id,
+			p.person_code
+
+		INSERT INTO #fact_schedule_deviation
+			(
+			date_id, 
+			interval_id,
+			person_id, 
+			acd_login_id,--new 20131128
+			ready_time_s,
+			is_logged_in,
+			business_unit_id,
+			person_code
+			)
+		SELECT 
+			date_id					= fa.date_id, 
+			interval_id				= fa.interval_id,
+			person_id				= b.person_id,
+			acd_login_id			= fa.acd_login_id, --new 20131128
+			ready_time_s			= fa.ready_time_s,
+			is_logged_in			= 1, --marks that we do have logged in time
+			business_unit_id		= b.business_unit_id,
+			person_code				= p.person_code
+		FROM mart.fact_agent fa
+		INNER JOIN mart.bridge_acd_login_person b
+			ON b.acd_login_id = fa.acd_login_id
+			AND b.business_unit_id=@business_unit_id
+		INNER JOIN mart.dim_person p
+			ON p.person_id = b.person_id
+		WHERE (date_id between @from_date_id_utc+1 AND @now_date_id_utc)
+		OR
+		(
+			date_id=@from_date_id_utc
+			AND interval_id >= @from_interval_id_utc
+		)
+	END
 END
 
 /* b) Gather agent schedule time */
@@ -336,6 +465,8 @@ SELECT
 	business_unit_id		= fs.business_unit_id,
 	person_code				= fs.person_code
 FROM #fact_schedule fs
+
+
 
 /*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
 UPDATE #fact_schedule_deviation
@@ -459,7 +590,6 @@ GROUP BY
 --Deviation will be set to zero for ScheduledReadyTime + contract calculation
 --Deviation will be set to ABS(scheduled_ready_time_s-ready_time_s) for scheduled time calculation
 
-
 --See: http://challenger/sites/DefaultCollection/matrix/Shared%20Documents/Design%20Specifications/Adherance.xlsx
 --First handle a special case for [deviation_schedule_ready_s]
 --If we have no Scheduled Ready Time there can be no deviation
@@ -513,14 +643,23 @@ BEGIN
 	WHERE shift_startdate_local_id between @start_date_id AND @end_date_id
 	AND business_unit_id = @business_unit_id
 END
-ELSE
+IF @isIntraday = 1 --changed day
+BEGIN
+ 	DELETE fs
+	FROM #stg_schedule_changed ch
+ 	INNER JOIN mart.fact_schedule_deviation fs
+		ON ch.person_id = fs.person_id
+		AND ch.shift_startdate_local_id = fs.shift_startdate_local_id
+END
+IF @isIntraday = 2 --last 10 intervals
 BEGIN --INTRADAY
 	DELETE fs
-	FROM #stg_schedule_changed ch
+	FROM #fact_schedule_deviation_merge d
 	INNER JOIN mart.fact_schedule_deviation fs
-		ON ch.person_id = fs.person_id
-		AND ch.shift_startdate_local_id = fs.shift_startdate_local_id 
-	WHERE fs.business_unit_id = @business_unit_id
+		ON d.person_id = fs.person_id
+		AND d.shift_startdate_local_id = fs.shift_startdate_local_id
+		AND d.date_id = fs.date_id
+		AND d.interval_id = fs.interval_id
 END 
 
 /* Insert of new data */
@@ -563,4 +702,15 @@ SELECT
 	shift_startinterval_id		= shift_startinterval_id
 FROM 
 	#fact_schedule_deviation_merge
+
+	--finally
+	--update with now interval
+	if @isIntraday = 2
+	update [mart].[etl_job_intraday_settings]
+	set
+		target_date		= @now_date_date_utc,
+		target_interval	= @now_interval_id_utc
+	WHERE business_unit_id = @business_unit_id
+	AND detail_id = @detail_id
+
 GO

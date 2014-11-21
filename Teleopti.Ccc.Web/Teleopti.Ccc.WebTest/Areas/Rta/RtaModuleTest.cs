@@ -76,6 +76,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<ShiftEventPublisher>();
 				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<AdherenceEventPublisher>();
+				container.Resolve<IStateEventPublisher>().Should().Be.OfType<StateEventPublisher>();
+				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<ActivityEventPublisher>();
 			}
 		}
 

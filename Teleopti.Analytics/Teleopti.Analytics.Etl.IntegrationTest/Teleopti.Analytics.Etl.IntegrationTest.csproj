@@ -36,10 +36,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Teleopti.Support.CodeTest\bin\Debug\Rhino.Mocks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -95,6 +91,10 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
       <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
       <Name>Teleopti.Analytics.Etl.Interfaces</Name>
@@ -112,6 +112,9 @@
     <Content Include="License.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\dbo.Add_One_Interval.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\dbo.Add_QueueAgent_stat.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

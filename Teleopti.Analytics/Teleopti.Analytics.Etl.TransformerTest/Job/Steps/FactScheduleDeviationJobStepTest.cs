@@ -40,7 +40,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobHelper = new JobHelper(_repository, null, null, null);
 			jobParameters.Helper = jobHelper;
 
-			_repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false)).Constraints(
+			_repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, 0, null)).Constraints(
+																	Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything(),
@@ -68,11 +69,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobHelper = new JobHelper(_repository, null, null, null);
             jobParameters.Helper = jobHelper;
 
-            _repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false)).Constraints(
+            _repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, 0, null)).Constraints(
                                                                     Rhino.Mocks.Constraints.Is.Anything(),
                                                                     Rhino.Mocks.Constraints.Is.Anything(),
                                                                     Rhino.Mocks.Constraints.Is.Anything(),
-                                                                    Rhino.Mocks.Constraints.Is.Anything()
+                                                                    Rhino.Mocks.Constraints.Is.Anything(),
+																	Rhino.Mocks.Constraints.Is.Anything()
                                                                     )
                                                                     .Return(0)
                                                                     .Repeat.Times(1); 

@@ -4,6 +4,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using System.Configuration;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
@@ -17,26 +18,43 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			_isIntraday = isIntraday;
 			Name = "fact_schedule_deviation";
 			JobCategory = JobCategoryType.AgentStatistics;
-		}
 
+			if (jobParameters.NowForTestPurpose.Equals(null))
+			{
+				DateTime nowForTestPurpose;
+				if (DateTime.TryParse(ConfigurationManager.AppSettings["NowForTestPurpose"], out nowForTestPurpose))
+					JobParameters.NowForTestPurpose = nowForTestPurpose;
+			}
+		}
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
 			const int chunkTimeSpan = 30;
-		    var affectedRows = 0;
+			var affectedRows = 0;
+			
+            //assume nightly
+            var toDate = JobCategoryDatePeriod.EndDateUtc;
+            var fromDate = JobCategoryDatePeriod.StartDateUtc;
 
-			//call once for intraday, dates does not matter
+			//call once for intraday, dates does not matter for 1st run
 			if (_isIntraday)
 			{
-				affectedRows = _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(new DateTimePeriod(JobCategoryDatePeriod.StartDateUtc,JobCategoryDatePeriod.EndDateUtc), 
-																								   RaptorTransformerHelper.CurrentBusinessUnit, 
-																								   _jobParameters.DefaultTimeZone,
-																								   true);
+				affectedRows = _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(new DateTimePeriod(fromDate, toDate), 
+																								RaptorTransformerHelper.CurrentBusinessUnit, 
+																								_jobParameters.DefaultTimeZone,
+																								1,
+																								_jobParameters.NowForTestPurpose);
+				affectedRows += _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(new DateTimePeriod(fromDate, toDate),
+																								RaptorTransformerHelper.CurrentBusinessUnit,
+																								_jobParameters.DefaultTimeZone,
+																								2,
+																								_jobParameters.NowForTestPurpose);
 			}
+			else
+			{
+				//call in "nightly"  mode and chunk dates used in Agent period
 
-			//then call in "nightly"  mode and chunk dates used in Agent period
-			var toDate = JobCategoryDatePeriod.EndDateUtc;
-		    for (DateTime startDateTime = JobCategoryDatePeriod.StartDateUtc;
+            for (DateTime startDateTime = fromDate;
                 startDateTime <= toDate;
 					startDateTime = startDateTime.AddDays(chunkTimeSpan))
 				{
@@ -48,10 +66,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					affectedRows += _jobParameters.Helper.Repository.FillScheduleDeviationDataMart(period,
 																								   RaptorTransformerHelper.CurrentBusinessUnit, 
 																								   _jobParameters.DefaultTimeZone,
-																								   false);
+																								   0,
+																								   _jobParameters.NowForTestPurpose);
 					Result.RowsAffected = affectedRows;
 				}
-
+			}
 			return affectedRows;
 		}
 	}

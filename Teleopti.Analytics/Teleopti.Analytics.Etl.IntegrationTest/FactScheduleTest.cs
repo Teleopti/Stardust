@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using NUnit.Framework;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
+using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -21,12 +26,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	{
 		private const int aheranceTypeReadyTime = 1;
 		private const int aheranceTypeSchedule = 2;
-		private const int aheranceTypeContract = 3;
+		private const string datasourceName = "Teleopti CCC Agg: Default log object";
 
 		[SetUp]
 		public void Setup()
 		{
 			SetupFixtureForAssembly.BeginTest();
+			AnalyticsRunner.DropAndCreateTestProcedures();
 		}
 
 		[TearDown]
@@ -40,8 +46,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = new DateTime(2013, 06, 15);
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			const int queueId = 19;
 
-			AnalyticsRunner.RunSysSetupTestData(testDate);
+			AnalyticsRunner.RunSysSetupTestData(testDate, queueId);
 			const string timeZoneId = "W. Europe Standard Time";
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
@@ -68,7 +75,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
-				DataSource = 2
+				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
@@ -104,8 +111,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = new DateTime(2013, 06, 15);
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			const int queueId = 19;
 
-			AnalyticsRunner.RunSysSetupTestData(testDate);
+			AnalyticsRunner.RunSysSetupTestData(testDate, queueId);
 			const string timeZoneId = "W. Europe Standard Time";
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
@@ -131,7 +139,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
-				DataSource = 2
+				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
@@ -155,9 +163,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = new DateTime(2013, 06, 15);
 			const string timeZoneId = "W. Europe Standard Time";
+			const int queueId = 19;
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
-			AnalyticsRunner.RunSysSetupTestData(testDate);
+			AnalyticsRunner.RunSysSetupTestData(testDate, queueId);
 
 			var el = new ExternalLogonConfigurable
 			{
@@ -195,7 +204,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
-				DataSource = 2
+				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
@@ -247,6 +256,132 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var cellValue = IntervalValueGet(adherance, testDate.AddDays(-1), "deviation_m", "09:15-09:30", person);
 			Assert.That(cellValue, Is.EqualTo(0));
 
+		}
+
+		[Test]
+		public void TestCtiPlattformUpdate()
+		{
+			DateTime testDate = new DateTime(2013, 06, 15);
+			const string timeZoneId = "W. Europe Standard Time";
+			const int queueId = 19;
+
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunSysSetupTestData(testDate, queueId);
+			
+
+			var el = new ExternalLogonConfigurable
+			{
+				AcdLogOnAggId = 52,
+				AcdLogOnMartId = 1,
+				AcdLogOnOriginalId = "152",
+				AcdLogOnName = "Ola H"
+			};
+			Data.Apply(el);
+
+			IPerson person;
+			BasicShiftSetup.SetupBasicForShifts();
+			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H", testDate);
+
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red", InWorkTime = false };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
+			//Add basic shift 09:00 - 17:00
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 9, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+
+			var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
+			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.AgentStatistics);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.Forecast);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.QueueStatistics);
+
+			var jobHelper = new JobHelper();
+			var etlToggleManager = new EtlToggleManager();
+			etlToggleManager.AddToggle("PBI30787OnlyLatestQueueAgentStatistics", true);
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, etlToggleManager)
+			{
+				Helper = jobHelper, 
+				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
+			};
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+
+			var jobRunner = new JobRunner();
+			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);
+			var jobResultCollection = new List<IJobResult>();
+
+			var jobListResult = jobRunner.Run(nightlyJob, new List<IBusinessUnit> {TestState.BusinessUnit}, jobResultCollection, new List<IJobStep>());
+
+			Assert.That(jobListResult[0].HasError, Is.False);
+
+			//save the current datasource
+			var gen = new GeneralFunctions(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			gen.SaveDataSource(jobParameters.DataSource, SqlCommands.TimezoneIdGet(timeZoneId));
+			SqlCommands.EtlJobIntradaySettingsReset(testDate.AddDays(-3));
+
+			jobParameters.NowForTestPurpose = testDate.AddDays(0);
+
+			var intradayJob = new JobBase(jobParameters, new IntradayJobCollection(jobParameters), "Intraday", true, true);
+			jobResultCollection = new List<IJobResult>(); //reset
+			
+			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			Assert.That(jobListResult[0].HasError, Is.False);
+			//check max interval value before (59)
+			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource),  Is.EqualTo(59));
+			AnalyticsRunner.AddOneInterval(el.AcdLogOnAggId, el.AcdLogOnName, queueId, 8, null, null);
+			//check interval max value after 60
+			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(60));
+			//run intraday and check that agg and mart is synced
+			jobResultCollection = new List<IJobResult>(); //reset
+			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			Assert.That(jobListResult[0].HasError, Is.False);
+
+			Assert.That(SqlCommands.IntradayDetailSynced(1, jobParameters.DataSource), Is.True);
+			Assert.That(SqlCommands.IntradayDetailSynced(2, jobParameters.DataSource), Is.True);
+
+			//add intervals to check devation in sync
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(0), 9, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+
+			var startInterval = 32;
+			var stopInterval = 68;
+
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(0)), Is.EqualTo(0));
+
+			while (startInterval <= stopInterval)
+			{
+				AnalyticsRunner.AddOneInterval(el.AcdLogOnAggId, el.AcdLogOnName, queueId, 8, testDate, startInterval);
+				startInterval++;
+			}
+			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(stopInterval));
+
+			//run intraday and check that agg and mart is synced
+			jobResultCollection = new List<IJobResult>(); //reset
+			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			Assert.That(jobListResult[0].HasError, Is.False);
+			//check deviation is loaded for today and that all sync dates/intervals are OK. Number of intervals in deviation is now 36
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(0), "deviation_schedule_s"), Is.EqualTo(16080));
+			Assert.That(SqlCommands.IntradayDetailSynced(1, jobParameters.DataSource), Is.True);
+			Assert.That(SqlCommands.IntradayDetailSynced(2, jobParameters.DataSource), Is.True);
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(0)), Is.EqualTo(37));
+
+			//Add one extra interval outside shift (and of shift)
+			stopInterval = stopInterval + 1;
+			AnalyticsRunner.AddOneInterval(el.AcdLogOnAggId, el.AcdLogOnName, queueId, 8, null, null);
+			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(stopInterval));
+			
+			//move @now ahead and run intraday again and verfiy agg and mart is synced, Number of intervals in deviation is now 37
+			jobParameters.NowForTestPurpose = testDate.AddDays(0).AddHours(20);
+			jobResultCollection = new List<IJobResult>(); //reset
+			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			Assert.That(jobListResult[0].HasError, Is.False);
+			Assert.That(SqlCommands.IntradayDetailSynced(1, jobParameters.DataSource), Is.True);
+			Assert.That(SqlCommands.IntradayDetailSynced(2, jobParameters.DataSource), Is.True);
+
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(0)), Is.EqualTo(38));
 		}
 
 		public static int IntervalValueGet(DataTable adherance, DateTime testDate, String testColumn, String intervalName, IPerson person)
