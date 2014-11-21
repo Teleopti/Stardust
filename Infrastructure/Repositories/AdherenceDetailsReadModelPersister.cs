@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	LastStateChangedTime," +
 				"	IsInAdherence," +
 				"	TimeInAdherence," +
-				"	TimeOutOfAdherence" +
+				"	TimeOutOfAdherence," +
+				"	ActivityHasEnded" +
 				") VALUES (" +
 				"	:PersonId," +
 				"	:BelongsToDate," +
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	:LastStateChangedTime," +
 				"	:IsInAdherence," +
 				"	:TimeInAdherence," +
-				"	:TimeOutOfAdherence" +
+				"	:TimeOutOfAdherence," +
+				"	:ActivityHasEnded" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("IsInAdherence", model.IsInAdherence)
 				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
 				.SetTimeSpan("TimeOutOfAdherence", model.TimeOutOfAdherence)
+				.SetParameter("ActivityHasEnded", model.ActivityHasEnded)
 				.ExecuteUpdate();
 		}
 
@@ -63,7 +66,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			"			LastStateChangedTime = :LastStateChangedTime," +
 			"			IsInAdherence = :IsInAdherence," +
 			"			TimeInAdherence = :TimeInAdherence," +
-			"			TimeOutOfAdherence = :TimeOutOfAdherence " +
+			"			TimeOutOfAdherence = :TimeOutOfAdherence, " +
+			"			ActivityHasEnded = :ActivityHasEnded " +
 			"WHERE " +
 			"	PersonId = :PersonId AND " +
 			"	StartTime =:StartTime")
@@ -75,6 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			.SetParameter("IsInAdherence", model.IsInAdherence)
 			.SetParameter("TimeInAdherence", model.TimeInAdherence)
 			.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
+			.SetParameter("ActivityHasEnded", model.ActivityHasEnded)
 			.ExecuteUpdate();
 		}
 
@@ -90,7 +95,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	LastStateChangedTime," +
 				"	IsInAdherence," +
 				"	TimeInAdherence," +
-				"	TimeOutOfAdherence " +
+				"	TimeOutOfAdherence, " +
+				"	ActivityHasEnded " +
 				"FROM ReadModel.AdherenceDetails WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
@@ -103,6 +109,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("IsInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
+				.AddScalar("ActivityHasEnded", NHibernateUtil.Boolean)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AdherenceDetailsReadModel)))

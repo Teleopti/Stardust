@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModels.Single().IsInAdherence.Should().Be(model.IsInAdherence);
 			savedModels.Single().TimeInAdherence.Should().Be(model.TimeInAdherence);
 			savedModels.Single().TimeOutOfAdherence.Should().Be(model.TimeOutOfAdherence);
+			savedModels.Single().ActivityHasEnded.Should().Be(model.ActivityHasEnded);
 		}
 
 
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModels.First().IsInAdherence.Should().Be(model1.IsInAdherence);
 			savedModels.First().TimeInAdherence.Should().Be(model1.TimeInAdherence);
 			savedModels.First().TimeOutOfAdherence.Should().Be(model1.TimeOutOfAdherence);
+			savedModels.First().ActivityHasEnded.Should().Be(model1.ActivityHasEnded);
 
 			savedModels.Last().PersonId.Should().Be(personId);
 			savedModels.Last().Name.Should().Be(model2.Name);
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModels.Last().IsInAdherence.Should().Be(model2.IsInAdherence);
 			savedModels.Last().TimeInAdherence.Should().Be(model2.TimeInAdherence);
 			savedModels.Last().TimeOutOfAdherence.Should().Be(model2.TimeOutOfAdherence);
+			savedModels.Last().ActivityHasEnded.Should().Be(model2.ActivityHasEnded);
 		}
 
 		[Test]
@@ -115,6 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModels.Single().IsInAdherence.Should().Be(model1.IsInAdherence);
 			savedModels.Single().TimeInAdherence.Should().Be(model1.TimeInAdherence);
 			savedModels.Single().TimeOutOfAdherence.Should().Be(model1.TimeOutOfAdherence);
+			savedModels.Single().ActivityHasEnded.Should().Be(model1.ActivityHasEnded);
 			
 			savedModels = Target.Get(personId, dateOnly2);
 
@@ -127,6 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModels.Single().IsInAdherence.Should().Be(model2.IsInAdherence);
 			savedModels.Single().TimeInAdherence.Should().Be(model2.TimeInAdherence);
 			savedModels.Single().TimeOutOfAdherence.Should().Be(model2.TimeOutOfAdherence);
+			savedModels.Single().ActivityHasEnded.Should().Be(model2.ActivityHasEnded);
 		}
 
 		[Test]
@@ -156,6 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModels.Single().IsInAdherence.Should().Be(model.IsInAdherence);
 			savedModels.Single().TimeInAdherence.Should().Be(model.TimeInAdherence);
 			savedModels.Single().TimeOutOfAdherence.Should().Be(model.TimeOutOfAdherence);
+			savedModels.Single().ActivityHasEnded.Should().Be(model.ActivityHasEnded);
 		}
 		
 		[Test]
@@ -207,7 +213,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				LastStateChangedTime = lastStateChangedTime,
 				ActualStartTime = lastStateChangedTime,
 				Name = activityName,
-				StartTime = lastStateChangedTime
+				StartTime = lastStateChangedTime,
+				ActivityHasEnded = true
 			};
 		}
 	}
