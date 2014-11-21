@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -37,12 +39,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         }
 
         [Test]
-        public void ShouldGetAllDaysWithRotations()
+        public void ShouldGetAllDaysWithRotationsOnStartTimeLimitiations()
         {
+	        var startTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(11));
             using(_mock.Record())
             {
                 Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
                 Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+	            Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
             }
 
             using(_mock.Playback())
@@ -52,6 +56,128 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Assert.AreEqual(_scheduleDay, restrictedDays.First());
             }
         }
+
+		[Test]
+		public void ShouldGetAllDaysWithRotationsOnEndTimeLimitiations()
+		{
+			var startTimeLimitation = new StartTimeLimitation(null, null);
+			var endTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(11));
+			
+			using (_mock.Record())
+			{
+				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
+				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
+				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
+			}
+
+			using (_mock.Playback())
+			{
+				var restrictedDays = _target.AllRestrictedDays(_scheduleDays);
+				Assert.AreEqual(1, restrictedDays.Count);
+				Assert.AreEqual(_scheduleDay, restrictedDays.First());
+			}
+		}
+
+		[Test]
+		public void ShouldGetAllDaysWithRotationsOnWorkTimeLimitiations()
+		{
+			var startTimeLimitation = new StartTimeLimitation(null, null);
+			var endTimeLimitation = new EndTimeLimitation(null, null);
+			var workTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(11));
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
+				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
+				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
+				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
+			}
+
+			using (_mock.Playback())
+			{
+				var restrictedDays = _target.AllRestrictedDays(_scheduleDays);
+				Assert.AreEqual(1, restrictedDays.Count);
+				Assert.AreEqual(_scheduleDay, restrictedDays.First());
+			}
+		}
+
+		[Test]
+		public void ShouldGetAllDaysWithRotationsOnShiftCategory()
+		{
+			var startTimeLimitation = new StartTimeLimitation(null, null);
+			var endTimeLimitation = new EndTimeLimitation(null, null);
+			var workTimeLimitation = new WorkTimeLimitation(null, null);
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
+				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
+				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
+				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
+				Expect.Call(_rotationRestriction.ShiftCategory).Return(new ShiftCategory("shiftCategory"));
+			}
+
+			using (_mock.Playback())
+			{
+				var restrictedDays = _target.AllRestrictedDays(_scheduleDays);
+				Assert.AreEqual(1, restrictedDays.Count);
+				Assert.AreEqual(_scheduleDay, restrictedDays.First());
+			}
+		}
+
+		[Test]
+		public void ShouldGetAllDaysWithRotationsOnDayOff()
+		{
+			var startTimeLimitation = new StartTimeLimitation(null, null);
+			var endTimeLimitation = new EndTimeLimitation(null, null);
+			var workTimeLimitation = new WorkTimeLimitation(null, null);
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
+				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
+				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
+				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
+				Expect.Call(_rotationRestriction.ShiftCategory).Return(null);
+				Expect.Call(_rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("dayOff")));
+			}
+
+			using (_mock.Playback())
+			{
+				var restrictedDays = _target.AllRestrictedDays(_scheduleDays);
+				Assert.AreEqual(1, restrictedDays.Count);
+				Assert.AreEqual(_scheduleDay, restrictedDays.First());
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetAnyDaysWhenNoRotationRestrictionOnDay()
+		{
+			var startTimeLimitation = new StartTimeLimitation(null, null);
+			var endTimeLimitation = new EndTimeLimitation(null, null);
+			var workTimeLimitation = new WorkTimeLimitation(null, null);
+
+			using (_mock.Record())
+			{
+				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
+				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
+				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
+				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
+				Expect.Call(_rotationRestriction.ShiftCategory).Return(null);
+				Expect.Call(_rotationRestriction.DayOffTemplate).Return(null);
+			}
+
+			using (_mock.Playback())
+			{
+				var restrictedDays = _target.AllRestrictedDays(_scheduleDays);
+				Assert.AreEqual(0, restrictedDays.Count);
+			}
+		}
 
         [Test]
         public void ShouldGetAllDaysWithDayOffRotation()
