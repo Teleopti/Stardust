@@ -77,9 +77,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
-			var lastModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime)).Last();
-			lastModel.ActivityHasEnded = true;
-			_persister.Update(lastModel);
+			var lastModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime)).LastOrDefault();
+			if (lastModel != null)
+			{
+				lastModel.ActivityHasEnded = true;
+				_persister.Update(lastModel);
+			}
 		}
 
 		private static bool lateForActivity(AdherenceDetailsReadModel model, PersonStateChangedEvent @event)
