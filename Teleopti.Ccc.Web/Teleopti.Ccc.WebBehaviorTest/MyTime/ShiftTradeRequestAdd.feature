@@ -635,6 +635,7 @@ Scenario: Should be able to cancel a not sent shift trade and go back to overvie
 	When I click cancel button
 	Then I should see 'OtherAgent' last in the list
 
+@ignore
 @OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: The added days should be sorted by date
 	Given I have the role 'Full access to mytime'
