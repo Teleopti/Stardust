@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data);
 		ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelDataForAllTeams data);
+		ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelDataForAllTeams data);
 	}
 }

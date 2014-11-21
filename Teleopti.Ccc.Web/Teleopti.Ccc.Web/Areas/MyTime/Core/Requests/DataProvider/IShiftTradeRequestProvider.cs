@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -11,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		IWorkflowControlSet RetrieveUserWorkflowControlSet();
 		IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date);
 		IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging);
+		IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, DateTimePeriod mySchedulePeriod, Paging paging);
 
 		IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons,
 																															  Paging paging, TimeFilterInfo timeFilter);

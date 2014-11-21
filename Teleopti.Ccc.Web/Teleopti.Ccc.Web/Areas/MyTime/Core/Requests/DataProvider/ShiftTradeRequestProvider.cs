@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -49,6 +48,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging);
 
 			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
+		}
+
+		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(DateOnly date,
+			IEnumerable<IPerson> possibleShiftTradePersons, DateTimePeriod mySchedulePeriod, Paging paging)
+		{
+			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
+				select person.Id.Value).ToList();
+			if (_toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926))
+				return _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging);
+
+			return _scheduleDayReadModelFinder.ForBulletinPersons(date, personIdList, mySchedulePeriod, paging);
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,

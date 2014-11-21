@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IShiftTradeAddPersonScheduleViewModelMapper _shiftTradePersonScheduleViewModelMapper;
 		private IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 		private ShiftTradeScheduleViewModelMapper _target;
+		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
 		public void Setup()
@@ -29,10 +30,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_possibleShiftTradePersonsProvider = MockRepository.GenerateMock<IPossibleShiftTradePersonsProvider>();
 			_shiftTradePersonScheduleViewModelMapper = MockRepository.GenerateMock<IShiftTradeAddPersonScheduleViewModelMapper>();
 			_shiftTradeTimeLineHoursViewModelMapper = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelMapper>();
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 			                                                _shiftTradePersonScheduleViewModelMapper,
-			                                                _shiftTradeTimeLineHoursViewModelMapper);
+																			_shiftTradeTimeLineHoursViewModelMapper, _userTimeZone);
 		}
 
 		[Test]
@@ -81,6 +84,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 			
 			var result = _target.Map(data);
+
+			result.PossibleTradeSchedules.Should().Not.Be.Null();
+		}		
+		
+		[Test, Ignore]
+		public void ShouldMapBulletinShiftsFromReadModel()
+		{
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = DateOnly.Today, TeamIds = new List<Guid>(){Guid.NewGuid()}, Paging = new Paging() { Take = 1 } };
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
+			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
+			var myScheduleDayReadModel = new PersonScheduleDayReadModel();
+
+			var myScheduleStart = new DateTime(2012, 8, 28, 12, 0, 0, DateTimeKind.Utc);
+			var myScheduleEnd = new DateTime(2012, 8, 28, 16, 0, 0, DateTimeKind.Utc);
+
+			var shiftTradeAddPersonScheduleViewModel = new ShiftTradeAddPersonScheduleViewModel() {
+				StartTimeUtc = myScheduleStart,
+				ScheduleLayers = new List<ShiftTradeAddScheduleLayerViewModel>() { new ShiftTradeAddScheduleLayerViewModel() { End = myScheduleEnd } }
+			};
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(data.ShiftTradeDate)).Return(myScheduleDayReadModel);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(myScheduleDayReadModel, true)).Return(shiftTradeAddPersonScheduleViewModel);
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersonsForAllTeams(data)).Return(persons);
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveBulletinTradeSchedules(persons.Date, persons.Persons, new DateTimePeriod(myScheduleStart, myScheduleEnd), data.Paging)).Return(scheduleReadModels);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
+
+			var result = _target.MapForBulletin(data);
 
 			result.PossibleTradeSchedules.Should().Not.Be.Null();
 		}

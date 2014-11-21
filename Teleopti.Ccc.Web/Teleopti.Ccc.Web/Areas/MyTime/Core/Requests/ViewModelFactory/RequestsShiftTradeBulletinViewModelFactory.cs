@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public ShiftTradeScheduleViewModel CreateShiftTradeBulletinViewModel(ShiftTradeScheduleViewModelDataForAllTeams data)
 		{
-			return _shiftTradeScheduleViewModelMapper.Map(data);
+			return _shiftTradeScheduleViewModelMapper.MapForBulletin(data);
 		}
 
 	}

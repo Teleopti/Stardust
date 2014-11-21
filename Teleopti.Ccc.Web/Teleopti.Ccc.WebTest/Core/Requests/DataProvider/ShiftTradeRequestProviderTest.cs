@@ -73,6 +73,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var result = target.RetrievePossibleTradeSchedules(date, new[] { person1, person2 }, new Paging());
 
 			result.Should().Be.SameInstanceAs(scheduleReadModels);
+		}		
+		
+		[Test]
+		public void ShouldGetScheduleForBulletinTradePersons()
+		{
+			var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			DateOnly date = DateOnly.Today;
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.SetId(Guid.NewGuid());
+			person2.SetId(Guid.NewGuid());
+			var scheduleReadModels = new[] {new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel()};
+			var myScheduleStart = new DateTime(2012, 8, 28, 12, 0, 0, DateTimeKind.Utc);
+			var myScheduleEnd = new DateTime(2012, 8, 28, 16, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(myScheduleStart, myScheduleEnd);
+
+			scheduleDayReadModelFinder.Stub(x => x.ForBulletinPersons(date, new[] { person1.Id.Value, person2.Id.Value }, period, new Paging())).Return(scheduleReadModels);
+
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+
+			var result = target.RetrieveBulletinTradeSchedules(date, new[] { person1, person2 }, period, new Paging());
+
+			result.Should().Be.SameInstanceAs(scheduleReadModels);
 		}
 
 		[Test]
