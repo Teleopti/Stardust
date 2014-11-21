@@ -12470,5 +12470,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="PublishSchedule" xml:space="preserve">
     <value>Publish Schedule</value>
     <comment>Publish Schedule</comment>
+  </data>    
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Start time should be earlier than end time</value>  
   </data>
 </root>
