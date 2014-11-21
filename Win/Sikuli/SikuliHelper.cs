@@ -87,7 +87,10 @@ namespace Teleopti.Ccc.Win.Sikuli
 				_timer.SetEnd();
 			var assertResult = validator.Validate();
 			if (_timer != null)
+			{
 				assertResult.Details.AppendLine(string.Format("Duration = {0}", _timer.GetDuration().ToString(@"mm\:ss")));
+				_timer = null;
+			}
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog(owner);
