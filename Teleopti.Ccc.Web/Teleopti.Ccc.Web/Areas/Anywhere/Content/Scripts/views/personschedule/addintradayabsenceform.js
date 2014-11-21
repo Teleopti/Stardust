@@ -127,12 +127,17 @@ define([
 			return false;
 		});
 
-		this.ValidEndTime = ko.computed(function () {
-			if (!self.PossbileStartTimeWithinShift())
+		this.ValidEndTime = ko.computed(function() {
+			if (self.StartTime() && self.EndTime()) {
+				//when start time is not within shift period, no need to validate end time since the start time 
+				//error message has been shown on screen
+				if (!self.PossbileStartTimeWithinShift())
+					return true;
+
+				if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
+					return false;
+				}
 				return true;
-			
-			if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
-				return false;
 			}
 			return true;
 		});
@@ -142,7 +147,7 @@ define([
 				return resources.InvalidIntradayAbsenceTimes;
 			}
 			if (!self.ValidEndTime()) {
-				return resources.InvalidEndTime;
+				return resources.StartDateMustBeSmallerThanEndDate;
 			}
 			return undefined;
 		});
