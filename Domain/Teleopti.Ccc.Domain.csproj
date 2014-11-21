@@ -407,6 +407,7 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixKeepActivityLocker.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLocker.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportData.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportService.cs" />

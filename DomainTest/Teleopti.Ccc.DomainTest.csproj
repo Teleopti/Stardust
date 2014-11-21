@@ -323,6 +323,7 @@
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
+    <Compile Include="Optimization\MatrixLockers\MatrixKeepActivityLockerTest.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixNotPermittedLockerTest.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
