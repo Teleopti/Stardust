@@ -7,6 +7,29 @@ namespace Teleopti.Ccc.Win.Sikuli
 	public static class SikuliHelper
 	{
 
+		private class Duration
+		{
+			private DateTime _starTime;
+			private DateTime _endTime;
+
+			public void SetStart()
+			{
+				_starTime = DateTime.Now;
+			}
+
+			public void SetEnd()
+			{
+				_endTime = DateTime.Now;
+			}
+
+			public TimeSpan GetDuration()
+			{
+				return _endTime - _starTime;
+			}
+		}
+
+		private static Duration _timer;
+
 		public static bool TestMode
 		{
 			get { return StateHolderReader.Instance.StateReader.SessionScopeData.TestMode; }
@@ -34,6 +57,8 @@ namespace Teleopti.Ccc.Win.Sikuli
 				if (dialog.DialogResult == DialogResult.OK)
 				{
 					CurrentValidator = dialog.GetValidatorName;
+					_timer = new Duration();
+					_timer.SetStart();
 				}
 			}
 		}
@@ -58,7 +83,11 @@ namespace Teleopti.Ccc.Win.Sikuli
 		{
 			if (!TestMode)
 				return;
+			if (_timer != null) 
+				_timer.SetEnd();
 			var assertResult = validator.Validate();
+			if (_timer != null)
+				assertResult.Details.AppendLine(string.Format("Duration = {0}", _timer.GetDuration().ToString(@"mm\:ss")));
 			var testView = 
 				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
 			testView.ShowDialog(owner);
