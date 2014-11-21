@@ -94,6 +94,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			matrixShiftsNotAvailibleLocker.Execute(matrixList);
 	        var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
 			matrixUnselectedDaysLocker.Execute();
+
+	        var matrixKeepActivityLocker = new MatrixKeepActivityLocker(matrixList, optimizationPreferences.Shifts.SelectedActivities);
+			matrixKeepActivityLocker.Execute();
         }
 
 		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)
