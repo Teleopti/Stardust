@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	[TestFixture]
 	public class CalculateAdherenceTest
