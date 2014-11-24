@@ -86,6 +86,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	    return vm.requestedDate().format('YYYY-MM-DD');
 	}
 
+	function setShiftTradeBulletinBoardDate(date) {
+		vmBulletin.isReadyLoaded(false);
+		vmBulletin.requestedDate(moment(date));
+		return vmBulletin.requestedDate().format('YYYY-MM-DD');
+	}
+
 	function _hideShiftTradeWindow() {
 		$('#Request-add-shift-trade').hide();
 	}
@@ -114,6 +120,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		},
 		SetShiftTradeRequestDate: function (date) {
 			return setShiftTradeRequestDate(date);
+		},
+		SetShiftTradeBulletinBoardDate: function (date) {
+			return setShiftTradeBulletinBoardDate(date);
 		},
 		OpenAddShiftTradeWindow: function (date) {
 			if (vm.chooseHistorys != undefined) {

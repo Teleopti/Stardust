@@ -85,7 +85,20 @@
 					</tr>
 				</tbody>
 			</table>
+			<div style="float:right" data-bind="visible:  isPageVisible()">
+				<a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a>
+				<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
+				<!-- ko foreach: selectablePages() -->
+				<a data-bind="text: $data.index(), click: $parent.selectPage, css: {'page-selected': $data.isSelected()}"></a>
+				<!-- /ko -->
+				<a data-bind="click: goNextPages, visible: isMore()">...</a>
+				<a data-bind="click: goToLastPage"><i class="glyphicon glyphicon-fast-forward"></i></a>
+			</div>
 		</div>
+
+		<p></p>
+		<p></p>
+
 		<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
 			@Resources.NoAgentsAvailableForShiftTrade
 		</div>

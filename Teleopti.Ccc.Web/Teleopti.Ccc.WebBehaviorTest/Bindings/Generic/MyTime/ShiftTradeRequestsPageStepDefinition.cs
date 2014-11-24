@@ -32,12 +32,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
+		[When(@"I view Shift Trade Bulletin Board for date '(.*)'")]
+		public void WhenIViewShiftTradeBulletinBoardForDate(DateTime date)
+		{
+			gotoShfitTradeBulletinBoardToday();
+			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
+			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeBulletinBoardDate('{0}');", dateAsSwedishString);
+			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
+			Browser.Interactions.AssertExists(".bulletin-ready-loading-flag.is-ready-loaded");
+		}
+
 		private static void gotoAddRequestToday()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Browser.Interactions.Click("#addShiftTradeRequest");
 			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
+		}		
+		
+		private static void gotoShfitTradeBulletinBoardToday()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRequests();
+			Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
+			Browser.Interactions.AssertExists(".bulletin-ready-loading-flag.is-ready-loaded");
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]

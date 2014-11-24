@@ -64,9 +64,9 @@ Scenario: Should show my shift and other shift in bulletin board
 	| Offer end date | 2029-12-31 |
 	| Start time     | 9:00       |
 	| End time       | 17:00      |
-	And the current time is '2029-12-31'
+	And the current time is '2029-12-27'
 	And I am viewing requests
-	When I click to shift trade bulletin board
+	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	Then I should see my schedule with
 	| Field			| Value |
 	| Start time	| 09:00 |
