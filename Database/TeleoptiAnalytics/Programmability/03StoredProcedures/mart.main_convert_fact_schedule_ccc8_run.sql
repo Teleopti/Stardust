@@ -39,6 +39,7 @@ DECLARE @min_date_id int
 SET @nl  = char(13) + char(10)
 --check tempdb before
 IF  (SELECT [dbo].[IsAzureDB] ()) <> 1 AND @is_delayed_job=0
+AND (SELECT HAS_PERMS_BY_NAME(null, null, 'VIEW SERVER STATE'))=1
 BEGIN
 	SELECT @martfileid=fileid
 	FROM sys.sysfiles
@@ -145,6 +146,7 @@ SELECT * FROM mart.fact_schedule_convert
 
 --check tempdb after
 IF  (SELECT [dbo].[IsAzureDB] ()) <> 1 AND @is_delayed_job=0
+AND (SELECT HAS_PERMS_BY_NAME(null, null, 'VIEW SERVER STATE'))=1
 BEGIN
 	PRINT 'tempdb I/O stats:'
 	SELECT @io_statistics_string =

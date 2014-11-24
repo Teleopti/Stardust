@@ -612,7 +612,11 @@ SET @minDateId =(SELECT date_id FROM mart.dim_date WHERE @minDate = date_date)
 SET @maxDateId =(SELECT date_id FROM mart.dim_date WHERE @maxDate = date_date)
 
 --check tempdb before
-IF  (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
+IF  (
+		(SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
+		AND
+		(SELECT HAS_PERMS_BY_NAME(null, null, 'VIEW SERVER STATE'))=1
+	)
 BEGIN
 	DECLARE @time_Start datetime
 	DECLARE @num_of_bytes_written bigint
@@ -702,7 +706,11 @@ DECLARE @io_statistics_string nvarchar(2000)
 Declare @nl Char(2)
 Set @nl  = char(13) + char(10)
 
-IF  (SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
+IF  (
+		(SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))) <> 'SQL Azure'
+		AND
+		(SELECT HAS_PERMS_BY_NAME(null, null, 'VIEW SERVER STATE'))=1
+	)
 BEGIN
 	PRINT 'tempdb I/O stats:'
 	SELECT @io_statistics_string =
