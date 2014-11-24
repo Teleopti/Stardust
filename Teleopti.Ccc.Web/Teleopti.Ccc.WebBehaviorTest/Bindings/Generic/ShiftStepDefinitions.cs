@@ -1,4 +1,5 @@
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 
@@ -14,5 +15,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.ApplyFromTable<ShiftConfigurable>(person, table);
 		}
 
+		[Given(@"'?(.*)'? has a shift exchange for bulletin")]
+		public void GivenOtherAgentHasAShiftExchangeForBulletin(string person, Table table)
+		{
+			table.CreateInstance<ShiftExchangeOfferFields>();
+		}
 	}
 }

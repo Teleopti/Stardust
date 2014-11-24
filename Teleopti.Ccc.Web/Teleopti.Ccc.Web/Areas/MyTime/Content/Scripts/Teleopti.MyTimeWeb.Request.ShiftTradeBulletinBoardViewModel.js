@@ -40,6 +40,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			if (self.requestedDateInternal().diff(value) == 0) return;
 			self.requestedDateInternal(value);
 
+			self.prepareLoad();
 			self.loadBulletinSchedules(self.getDateWithFormat());
 		}
 	});
@@ -75,6 +76,18 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.nextDateValid = ko.computed(function () {
 		return self.openPeriodEndDate().diff(self.requestedDateInternal()) > 0;
 	});
+
+	self.prepareLoad = function () {
+		//self.selectedPageIndex(1);
+		//self.selectablePages.removeAll();
+		//self.isPreviousMore(false);
+		//self.isMore(false);
+		//if (self.agentChoosed() != null && self.isTradeForMultiDaysEnabled()) {
+		//	self.keepSelectedAgentVisible();
+		//} else
+		//	self.chooseAgent(null);
+		self.IsLoading(false);
+	};
 
 	self.setDatePickerRange = function (now, relativeStart, relativeEnd) {
 		self.openPeriodStartDate(moment(now).add('days', relativeStart));
@@ -272,6 +285,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 						}
 					}
 					self.requestedDate(requestedDate);
+				} else {
+					self.isReadyLoaded(true);
 				}
 				self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 			}

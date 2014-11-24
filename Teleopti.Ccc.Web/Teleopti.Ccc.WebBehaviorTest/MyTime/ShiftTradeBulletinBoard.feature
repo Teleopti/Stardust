@@ -4,19 +4,37 @@ Feature: Shift trade bulletin board from requests
 	As an agent
 	I want to be able to see and pick a shift trade from bulletin board
 
-	Background:
+Background:
 	Given there is a site named 'The site'
 	And there is a team named 'My team' on 'The site'
 	And there is a role with
 	| Field        | Value                 |
 	| Name         | Full access to mytime |
-	| AccessToTeam | My team            |
+	| AccessToTeam | My team               |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
 	| Schedule published to date       | 2040-06-24                                |
 	| Shift Trade sliding period start | 1                                         |
 	| Shift Trade sliding period end   | 30                                        |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
+	| Late  |
 
 
 Scenario: Shift trade in Bulletin board should start from tomorrow
@@ -26,3 +44,31 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 	And I am viewing requests
 	When I click to shift trade bulletin board
 	Then I cannot navigate to the bulletin previous date	
+
+Scenario: Should show my shift and other shift in bulletin board
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 09:00 |
+	| EndTime               | 2030-01-01 17:00 |
+	| Shift category		| Day	           |
+	And OtherAgent has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 08:00 |
+	| EndTime        | 2030-01-01 18:00 |
+	| Shift category | Day              |
+	And OtherAgent has a shift exchange for bulletin
+	| Field          | Value      |
+	| Offer end date | 2029-12-31 |
+	| Start time     | 9:00       |
+	| End time       | 17:00      |
+	And the current time is '2029-12-31'
+	And I am viewing requests
+	When I click to shift trade bulletin board
+	Then I should see my schedule with
+	| Field			| Value |
+	| Start time	| 09:00 |
+	| End time		| 17:00 |
+	And I should see a possible schedule trade with 'OtherAgent'

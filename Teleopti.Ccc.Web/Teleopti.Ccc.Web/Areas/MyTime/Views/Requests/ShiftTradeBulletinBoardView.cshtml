@@ -2,6 +2,7 @@
 
 
 <div id="Request-shift-trade-bulletin-board" class="well well-sm displaynone fixed-non-responsive">
+	<span class="bulletin-ready-loading-flag displaynone" data-bind="css: { 'is-ready-loaded': isReadyLoaded }"></span>
 	<div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
@@ -18,7 +19,7 @@
 						<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
 
 						<span class="input-group-btn">
-							<button class="btn" xdata-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+							<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
 							<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
