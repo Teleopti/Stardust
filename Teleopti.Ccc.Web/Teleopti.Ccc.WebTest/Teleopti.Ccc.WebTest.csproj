@@ -242,7 +242,7 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
-    <Compile Include="Areas\Rta\EventOrderTest.cs" />
+    <Compile Include="Areas\Rta\PersonEventsOrderTest.cs" />
     <Compile Include="Areas\Rta\EventsTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForTest.cs" />
@@ -252,6 +252,7 @@
     <Compile Include="Areas\Rta\CheckForActivityChangeTest.cs" />
     <Compile Include="Areas\Rta\PersistStateTest.cs" />
     <Compile Include="Areas\Rta\PersonActivityStartEventTest.cs" />
+    <Compile Include="Areas\Rta\PersonEventsStreamTest.cs" />
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\PersonShiftEndEventTest.cs" />
     <Compile Include="Areas\Rta\PersonShiftStartEventTest.cs" />

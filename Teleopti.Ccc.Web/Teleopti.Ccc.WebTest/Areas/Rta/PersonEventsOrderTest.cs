@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	[TestFixture]
-	public class EventOrderTest
+	public class PersonEventsOrderTest
 	{
 		[Test]
 		public void ShouldPublishShiftStartBeforeActivityStart()

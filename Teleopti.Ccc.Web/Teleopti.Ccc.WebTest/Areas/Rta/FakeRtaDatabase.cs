@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<IActualAgentState> _actualAgentStates = new List<IActualAgentState>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
-		private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
+		//private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
+		private readonly Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> _stateGroups = new Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
@@ -132,20 +133,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var stateGroupId = Guid.NewGuid();
 			var stateId = Guid.NewGuid();
 			var platformTypeIdGuid = new Guid(_platformTypeId);
-			var states = new List<RtaStateGroupLight>
+
+			var stateGroupKey = new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId);
+			if (!_stateGroups.ContainsKey(stateGroupKey))
 			{
-				new RtaStateGroupLight
+				var states = new List<RtaStateGroupLight>
 				{
-					StateGroupId = stateGroupId,
-					StateGroupName = name,
-					BusinessUnitId = _businessUnitId,
-					PlatformTypeId = platformTypeIdGuid,
-					StateCode = stateCode,
-					StateId = stateId,
-					IsLogOutState = isLoggedOutState
-				}
-			};
-			_stateGroups.Add(new KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states));
+					new RtaStateGroupLight
+					{
+						StateGroupId = stateGroupId,
+						StateGroupName = name,
+						BusinessUnitId = _businessUnitId,
+						PlatformTypeId = platformTypeIdGuid,
+						StateCode = stateCode,
+						StateId = stateId,
+						IsLogOutState = isLoggedOutState
+					}
+				};
+				_stateGroups.Add(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states);
+			}
+
 			var alarms = new List<RtaAlarmLight>
 			{
 				new RtaAlarmLight

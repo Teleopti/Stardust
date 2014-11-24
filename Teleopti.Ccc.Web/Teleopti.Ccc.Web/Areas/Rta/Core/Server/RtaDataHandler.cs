@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_rtaEventPublisher = rtaEventPublisher;
 		}
 
-		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
 			var state = getState(personId, businessUnitId, null, TimeSpan.Zero, timestamp, Guid.Empty, null, null);
@@ -118,6 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					StateId = Guid.NewGuid(),
 				};
 
+			
 			info.CurrentActivity = activityForTime(info, timestamp);
 			info.NextActivityInShift = nextAdjacentActivityForTime(info, timestamp);
 			info.PreviousActivity = activityForTime(info, info.PreviousState.ReceivedTime);

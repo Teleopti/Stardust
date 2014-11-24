@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
