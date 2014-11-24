@@ -41,6 +41,10 @@ GO
 EXEC dbo.sp_rename @objname = N'[mart].[sys_datasource_detail_type]', @newname = N'etl_job_intraday_settings_type', @objtype = N'OBJECT'
 GO
 
+--fix failing build. Yes - then when can make correction in release script. (not shipped)
+EXEC sp_rename N'[mart].[etl_job_intraday_settings_type].[PK_sys_datasource_detail_type]', N'PK_etl_job_intraday_settings_type', N'INDEX'
+GO
+
 DROP TABLE mart.sys_datasource_detail
 GO
 INSERT INTO mart.etl_job_intraday_settings_type
