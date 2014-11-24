@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--EXTERNAL_PROPERTIES: CCNetProject;WorkingDirectory-->
+<!--EXTERNAL_PROPERTIES: WorkingDirectory-->
 
 <Project DefaultTargets="PrepareETLTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
 		<ETLStuff>$(WorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
-		<ETLDBNamePrefix>$(Computername)_$(CCNetProject)</ETLDBNamePrefix>
+		<ETLDBNamePrefix>prefix</ETLDBNamePrefix>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
