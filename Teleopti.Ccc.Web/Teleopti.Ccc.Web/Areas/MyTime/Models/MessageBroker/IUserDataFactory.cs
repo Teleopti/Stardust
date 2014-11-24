@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
+﻿using System.Web;
+
+namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 {
 	public interface IUserDataFactory
 	{
-		UserData CreateViewModel();
+		UserData CreateViewModel(HttpRequestBase context);
 	}
 }
