@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 		// Fields
 		//private MonthCalendar calendar;
 		private MonthCalendarAdv calendar;
-		private static Size calendarControlSize = Size.Empty;
+		private Size calendarControlSize = Size.Empty;
 		private string noneButtonText;
 		private string todayButtonText;
 		private bool showNoneButton = true;
@@ -354,7 +354,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
 			calendar.DateSelected += calendarDateSelected;
 			calendar.NoneButtonClick += calendarNoneButtonClick;
-			calendar.VisibleChanged += calendarVisibleChanged;	
+			calendar.VisibleChanged += calendarVisibleChanged;
+			calendar.Width = 250;
 			DropDownContainer.Size = calendar.Size;
 			DropDownContainer.Controls.Add(Calendar);
 		}
@@ -370,7 +371,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			CurrentCell.CloseDropDown(PopupCloseType.Canceled);
 		}
 
-		public static Size CalendarControlSize
+		public Size CalendarControlSize
 		{
 			get
 			{
@@ -378,10 +379,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 				{
 					var window = new TopLevelWindow {Location = new Point(0x2710, 0x2710), Size = new Size(500, 500)};
 					window.ShowWindowTopMost();
-					var calendar = new MonthCalendarAdv {Style = VisualStyle.Metro};
-					window.Controls.Add(calendar);
+					var monthCalendarAdv = new MonthCalendarAdv {Style = VisualStyle.Metro, Width = 250};
+					window.Controls.Add(monthCalendarAdv);
 					window.Visible = true;
-					calendarControlSize = calendar.Size;
+					calendarControlSize = monthCalendarAdv.Size;
 					window.Dispose();
 				}
 				return calendarControlSize;
