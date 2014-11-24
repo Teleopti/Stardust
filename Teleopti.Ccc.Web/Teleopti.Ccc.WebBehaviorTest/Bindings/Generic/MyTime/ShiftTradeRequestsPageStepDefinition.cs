@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -283,7 +281,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Given(@"I add '(.*)' to my shift trade list")]
 		public void WhenIAddToMyShiftTradeList(string p0)
 		{
-			Browser.Interactions.Click("#shift-trade-add");
+			Browser.Interactions.ClickUsingJQuery("#shift-trade-add");
 		}
 
 		[Then(@"I should see '(.*)' in my shift trade list for date '(.*)'")]
