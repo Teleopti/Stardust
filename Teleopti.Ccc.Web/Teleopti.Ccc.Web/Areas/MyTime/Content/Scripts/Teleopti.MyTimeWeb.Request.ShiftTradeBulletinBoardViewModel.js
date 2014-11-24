@@ -64,8 +64,16 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 		self.changeRequestedDate(-1);
 	};
 
+	self.nextDate = function () {
+		self.changeRequestedDate(1);
+	};
+
 	self.previousDateValid = ko.computed(function () {
 		return self.requestedDateInternal().diff(self.openPeriodStartDate()) > 0;
+	});
+
+	self.nextDateValid = ko.computed(function () {
+		return self.openPeriodEndDate().diff(self.requestedDateInternal()) > 0;
 	});
 
 	self.setDatePickerRange = function (now, relativeStart, relativeEnd) {

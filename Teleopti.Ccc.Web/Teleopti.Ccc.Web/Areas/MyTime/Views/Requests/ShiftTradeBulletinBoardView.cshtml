@@ -21,8 +21,8 @@
 							<button class="btn" xdata-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-							<button class="next-date btn" xdata-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
-								<i class="glyphicon glyphicon-chevron-right" xdata-bind="enable: !IsLoading()"></i>
+							<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+								<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
 							</button>
 						</span>
 					</div>
