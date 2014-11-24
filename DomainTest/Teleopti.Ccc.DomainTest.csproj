@@ -158,7 +158,10 @@
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\AdherenceDetailsReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ActivityEndedTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\InAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\OutOfAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\StartTimesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetailsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
