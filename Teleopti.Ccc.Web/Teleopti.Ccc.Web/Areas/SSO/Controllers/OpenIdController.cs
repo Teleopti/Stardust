@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using DotNetOpenAuth.OpenId.Provider;
@@ -162,6 +163,16 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				// Is this is an identity authentication request? (as opposed to an anonymous request)...
 				if (pending != null)
 				{
+					var useLocalhostIdentifierSetting = ConfigurationManager.AppSettings["UseLocalhostIdentifier"];
+					var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
+					if (useLocalhostIdentifier && pending.ProviderEndpoint != null)
+					{
+						pending.ProviderEndpoint =
+							new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+								new Uri(pending.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+									.MakeRelativeUri(pending.ProviderEndpoint));
+					} 
+
 					if (pendingRequest.IsReturnUrlDiscoverable(_openIdProvider.Channel().WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
 					{
 						pending.IsAuthenticated = false;
@@ -218,10 +229,20 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		private Uri createUserLocalIdentifier(string userName)
 		{
+			var useLocalhostIdentifierSetting = ConfigurationManager.AppSettings["UseLocalhostIdentifier"];
+			var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
 			var currentHttp = _currentHttpContext.Current();
-			Uri userLocalIdentifier = new Uri(currentHttp.Request.Url,
-				currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + userName));
-			return userLocalIdentifier;
+
+
+			var userIdentifier = currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + userName);
+			var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
+			if (useLocalhostIdentifier)
+			{
+				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"),
+					new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
+			}
+			
+			return identifier;
 		}
 	}
 }
