@@ -11,6 +11,7 @@ GO
 -- 2009-02-11 New mart schema KJ
 -- 2009-02-09 Stage moved to mart db, removed view KJ
 -- 2013-09-20  Removed check on min/maxdate in stage
+-- 2014-11-27 Changed to INNER JOINs instead when insert to fact - Ola
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_forecast_workload_load] 
 @start_date smalldatetime,
@@ -123,15 +124,15 @@ SELECT
 	datasource_update_date					= f.datasource_update_date
 FROM
 	(SELECT * FROM Stage.stg_forecast_workload WHERE date between @start_date and @end_date) f
-LEFT JOIN
+INNER JOIN
 	mart.dim_date		fd
 ON
 	f.date	= fd.date_date
-LEFT JOIN
+INNER JOIN
 	mart.dim_workload	dw
 ON
 	f.workload_code = dw.workload_code
-LEFT JOIN
+INNER JOIN
 	mart.dim_scenario	ds
 ON
 	f.scenario_code = ds.scenario_code
