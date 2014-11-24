@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			}
 			else
 			{
+				if (existingModel.ActivityHasEnded) return;
 				updateAdherence(existingModel, @event.Timestamp);
 
 				if (lateForActivity(existingModel, @event))
