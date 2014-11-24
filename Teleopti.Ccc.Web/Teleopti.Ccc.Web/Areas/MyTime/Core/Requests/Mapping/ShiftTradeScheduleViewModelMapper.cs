@@ -109,12 +109,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 
-			var start = DateTime.SpecifyKind(mySchedule.StartTimeUtc, DateTimeKind.Utc);
-			var end = DateTime.SpecifyKind(TimeZoneHelper.ConvertToUtc(mySchedule.ScheduleLayers.Last().End, _userTimeZone.TimeZone()), DateTimeKind.Utc);
-			var mySchedulePeroid = new DateTimePeriod(start, end);
+	
 			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
-
-			possibleTradeSchedule = getBulletinSchedules(mySchedulePeroid, possibleTradePersons, data.Paging).ToList();
+			var startUtc = DateTime.SpecifyKind((DateTime) myScheduleDayReadModel.Start, DateTimeKind.Utc);
+			var endUtc = DateTime.SpecifyKind((DateTime) myScheduleDayReadModel.End, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startUtc, endUtc);
+			possibleTradeSchedule = getBulletinSchedules(period, possibleTradePersons, data.Paging).ToList();
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
 

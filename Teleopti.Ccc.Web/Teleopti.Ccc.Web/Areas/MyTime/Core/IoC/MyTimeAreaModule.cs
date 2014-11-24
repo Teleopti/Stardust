@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftExchangeOfferPersister>().As<IShiftExchangeOfferPersister>();
 			builder.RegisterType<ShiftTradeRequestPersister>().As<IShiftTradeRequestPersister>();
 			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
-			builder.RegisterType<ShiftTradeRequestProvider>().As<IShiftTradeRequestProvider>();
+			builder.RegisterType<ShiftTradeRequestProvider>().As<IShiftTradeRequestProvider>().SingleInstance();
 			builder.RegisterType<RespondToShiftTrade>().As<IRespondToShiftTrade>();
 			builder.RegisterType<MyTimeWebPersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
 			builder.RegisterType<ShiftTradePeriodViewModelMapper>().As<IShiftTradePeriodViewModelMapper>();

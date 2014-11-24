@@ -88,17 +88,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PossibleTradeSchedules.Should().Not.Be.Null();
 		}		
 		
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapBulletinShiftsFromReadModel()
 		{
+			var myScheduleStart = new DateTime(2012, 8, 28, 12, 0, 0, DateTimeKind.Utc);
+			var myScheduleEnd = new DateTime(2012, 8, 28, 16, 0, 0, DateTimeKind.Utc);
 			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = DateOnly.Today, TeamIds = new List<Guid>(){Guid.NewGuid()}, Paging = new Paging() { Take = 1 } };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
 			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>();
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
-			var myScheduleDayReadModel = new PersonScheduleDayReadModel();
-
-			var myScheduleStart = new DateTime(2012, 8, 28, 12, 0, 0, DateTimeKind.Utc);
-			var myScheduleEnd = new DateTime(2012, 8, 28, 16, 0, 0, DateTimeKind.Utc);
+			var myScheduleDayReadModel = new PersonScheduleDayReadModel() { Start = myScheduleStart, End = myScheduleEnd };
+			var period = new DateTimePeriod(myScheduleStart, myScheduleEnd);
 
 			var shiftTradeAddPersonScheduleViewModel = new ShiftTradeAddPersonScheduleViewModel() {
 				StartTimeUtc = myScheduleStart,
@@ -108,7 +108,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(data.ShiftTradeDate)).Return(myScheduleDayReadModel);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(myScheduleDayReadModel, true)).Return(shiftTradeAddPersonScheduleViewModel);
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersonsForAllTeams(data)).Return(persons);
-			_shiftTradeRequestProvider.Stub(x => x.RetrieveBulletinTradeSchedules(persons.Date, persons.Persons, new DateTimePeriod(myScheduleStart, myScheduleEnd), data.Paging)).Return(scheduleReadModels);
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveBulletinTradeSchedules(persons.Date, persons.Persons, period, data.Paging))
+				.Return(scheduleReadModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 
 			var result = _target.MapForBulletin(data);
