@@ -31,11 +31,28 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime dateInUserTimeZone)
 		{
-			var dateTimeInUtc= TimeZoneInfo.ConvertTime(dateInUserTimeZone, _user.CurrentUser().PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
-			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(25));
+			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
+
+			var yesterdayIsDaylightSavingTime = userTimeZone.IsDaylightSavingTime(dateTimeInUtc.AddDays(-1));
+			var todayIsDaylightSavingTime = userTimeZone.IsDaylightSavingTime(dateTimeInUtc);
+
+			var periodLengthInHour = 24;
+			// First day of day light saving time period
+			if (!yesterdayIsDaylightSavingTime && todayIsDaylightSavingTime)
+			{
+				periodLengthInHour = 23;
+			}
+			// First day after day light saving time period
+			else if (yesterdayIsDaylightSavingTime && !todayIsDaylightSavingTime)
+			{
+				periodLengthInHour = 25;
+			}
+
+			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(periodLengthInHour));
+
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(dateInUserTimeZone), groupId,
-			                                                                 DefinedRaptorApplicationFunctionPaths.
-																				 MyTeamSchedules).ToArray();
+				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules).ToArray();
 			var emptyReadModel = new PersonScheduleDayReadModel[] {};
 			var data = new GroupScheduleData
 				{
