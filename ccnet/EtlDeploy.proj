@@ -9,7 +9,6 @@
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
-		<SqlInstanceName Condition="'$(computername)' == 'HEBE'">HEBE\SQL2014</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
 		<ETLServiceBinDir>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)</ETLServiceBinDir>
 		<ETLCCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</ETLCCC7DB>
