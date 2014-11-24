@@ -38,6 +38,7 @@ $global:BaseURL = "http://" + $computerName + "/"
 $global:zipFile
 $global:MsiFile
 $global:branch = 'main'
+$global:version = ''
 $global:batName = 'PesterTest-DbSQL'
 $global:Server = ''
 $global:Db = ''
@@ -66,6 +67,7 @@ function Config-Load {
                 if ($testServer.name -eq  $computerName)
                 {
                     $global:branch =  $testServer.branch
+                    $global:version =  $testServer.version
                     $global:batName =  $testServer.batname
                     $global:Server =  $testServer.DBServerInstance
                     $global:Db = $testServer.DB
