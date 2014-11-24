@@ -355,7 +355,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.loadSchedule = function (date, teamIds) {
 		if (teamIds.length > 0) {
 			if (self.IsLoading()) return;
-			var take = 1;//self.maxShiftsPerPage;
+			var take = self.maxShiftsPerPage;
 			var skip = (self.selectedPageIndex() - 1) * take;
 
 			ajax.Ajax({
