@@ -32,11 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public static string DefaultAuthenticationKey = "!#¤atAbgT%";
 
-		public Rta(ISignalRClient signalRClient, IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory cacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher rtaEventPublisher, INow now, IConfigReader configReader)
+		public Rta(IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory cacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher rtaEventPublisher, INow now, IConfigReader configReader)
 		{
-			_rtaDataHandler = new RtaDataHandler(
-				signalRClient,
-				messageSender,
+			_rtaDataHandler = new RtaDataHandler(messageSender,
 				databaseReader,
 				databaseWriter,
 				cacheFactory,

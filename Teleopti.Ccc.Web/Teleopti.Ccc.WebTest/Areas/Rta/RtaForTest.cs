@@ -1,4 +1,3 @@
-using System;
 using MbCache.Core;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -20,9 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	public class RtaForTest : Web.Areas.Rta.Rta
 	{
 		public RtaForTest(FakeRtaDatabase database)
-			: this(
-				new FakeSignalRClient(),
-				MockRepository.GenerateMock<IMessageSender>(),
+			: this(MockRepository.GenerateMock<IMessageSender>(),
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
@@ -35,9 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now)
-			: this(
-				new FakeSignalRClient(),
-				MockRepository.GenerateMock<IMessageSender>(),
+			: this(MockRepository.GenerateMock<IMessageSender>(),
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
@@ -49,9 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher)
-			: this(
-				new FakeSignalRClient(),
-				MockRepository.GenerateMock<IMessageSender>(),
+			: this(MockRepository.GenerateMock<IMessageSender>(),
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
@@ -63,9 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
-			: this(
-				new FakeSignalRClient(),
-				messageSender,
+			: this(messageSender,
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
@@ -77,9 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
-			: this(
-				new FakeSignalRClient(),
-				MockRepository.GenerateMock<IMessageSender>(),
+			: this(MockRepository.GenerateMock<IMessageSender>(),
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
@@ -91,9 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender, IEventPublisher eventPublisher)
-			: this(
-				new FakeSignalRClient(),
-				messageSender,
+			: this(messageSender,
 				database,
 				database,
 				MockRepository.GenerateMock<IMbCacheFactory>(),
@@ -105,11 +91,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		private readonly IAdherenceAggregator _adherenceAggregator;
-		private FakeRtaDatabase _database;
+		private readonly FakeRtaDatabase _database;
 
-		public RtaForTest(
-			ISignalRClient signalRClient,
-			IMessageSender messageSender,
+		public RtaForTest(IMessageSender messageSender,
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory cacheFactory,
@@ -117,9 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			IRtaEventPublisher eventPublisher,
 			INow now,
 			IConfigReader configReader)
-			: base(
-				signalRClient,
-				messageSender,
+			: base(messageSender,
 				databaseReader,
 				databaseWriter,
 				cacheFactory,
