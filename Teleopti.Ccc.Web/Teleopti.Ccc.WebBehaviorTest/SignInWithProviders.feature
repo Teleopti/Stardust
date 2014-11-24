@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Sign in with different providers
+﻿Feature: Sign in with different providers
 	In order to access the site
 	As a user that is not signed in
 	I want to be able to sign in by selecting providers
