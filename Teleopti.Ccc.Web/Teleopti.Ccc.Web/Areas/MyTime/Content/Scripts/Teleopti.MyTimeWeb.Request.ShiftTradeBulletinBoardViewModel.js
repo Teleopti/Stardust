@@ -340,7 +340,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 
 	self.getCanvasWidth = function () {
 		var canvasWidth;
-		var containerWidth = $("#Request-add-shift-trade").width();
+		var containerWidth = $("#Request-shift-trade-bulletin-board").width();
 		var nameCellWidth = $("td.shift-trade-agent-name").width();
 		canvasWidth = containerWidth - nameCellWidth;
 		return canvasWidth;
