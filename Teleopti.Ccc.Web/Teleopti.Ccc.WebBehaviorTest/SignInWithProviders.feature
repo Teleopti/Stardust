@@ -21,6 +21,7 @@ Background:
 	| Business Unit        | Business Unit 2          |
 	| Access to mytime web | true                     |
 
+@ignore
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Sign in without being a windows user in CCC
 	Given I have the role 'Role for business unit 1'
@@ -58,6 +59,8 @@ Scenario: Sign in as a windows user in CCC with multiple business units
 	When I go to mytime web
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
+
+@ignore
 @WindowsAsDefaultIdentityProviderLogon
 @ExtraDataSource
 Scenario: Sign in as a windows user in CCC with multiple data sources and multiple business units
