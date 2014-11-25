@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Project DefaultTargets="SQLServerTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<PropertyGroup>
+		<SQLServerInstance>Teleopti729</SQLServerInstance>		
+		<AdminSQLLogin>teamcity</AdminSQLLogin>
+		<AdminSQLPwd>asldkj345HHG</AdminSQLPwd>
+		<ApplicationDbLogin>testApplicationLogin</ApplicationDbLogin>
+		<ApplicationDbPwd>V3rrYH@Passw0rd!</ApplicationDbPwd>
+		<SQLAuthString>-U$(AdminSQLLogin) -P$(AdminSQLPwd) -dmaster</SQLAuthString>
+		<WinAuthString>-E -dmaster</WinAuthString>
+	
+		<DbNamePrefix>Prefix</DbNamePrefix>
+		<AppDB>$(DbNamePrefix)_App</AppDB>
+		<MartDB>$(DbNamePrefix)_Mart</MartDB>
+		<AggDB>$(DbNamePrefix)_Agg</AggDB>
+		<DbManagerExe>$(WorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe</DbManagerExe>
+		<DBManagerString>-S$(SQLServerInstance) -U$(AdminSQLLogin) -P$(AdminSQLPwd) -T -L$(ApplicationDbLogin):$(ApplicationDbPwd)</DBManagerString>
+		
+		<SecurityExe>$(WorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe</SecurityExe>		
+		<SecurityExeString>-DS$(SQLServerInstance) -DU$(AdminSQLLogin) -DP$(AdminSQLPwd)</SecurityExeString>
+		
+		<DatabasePath>"$(WorkingDirectory)\database"</DatabasePath>	
+	</PropertyGroup>
+	
+	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+	
+	<Target Name="SQLServerTest">
+		<CallTarget Targets="PreTarget" />
+		<CallTarget Targets="CreateDatabaseWithSQLAdmin" />
+		<CallTarget Targets="RevokeServerRoles" />
+		<CallTarget Targets="DataModifications" />
+		<CallTarget Targets="ScriptedTestsRunOnAllDBs" />
+		<CallTarget Targets="AnalyticsReportsTest" />
+<!--		<CallTarget Targets="PostTarget" /> -->
+	</Target>
+	
+	<Target Name="PreTarget">
+		<Exec Command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'$(AppDB)') DROP DATABASE [$(AppDB)]&quot;"/>
+		<Exec Command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'$(MartDB)') DROP DATABASE [$(MartDB)]&quot;"/>
+		<Exec Command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'$(AggDB)') DROP DATABASE [$(AggDB)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;IF  EXISTS (SELECT * FROM sys.server_principals WHERE name = N'$(AdminSQLLogin)') DROP LOGIN [$(AdminSQLLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;CREATE LOGIN [$(AdminSQLLogin)] WITH PASSWORD=N'$(AdminSQLPwd)', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;ALTER SERVER ROLE [dbcreator] ADD MEMBER [$(AdminSQLLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;ALTER SERVER ROLE [SecurityAdmin] ADD MEMBER [$(AdminSQLLogin)]&quot;"/>
+	</Target>
+	
+	<Target Name="CreateDatabaseWithSQLAdmin">
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(MartDB) -OTeleoptiAnalytics -F%22$(DatabasePath)%22">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(AppDB) -OTeleoptiCCC7 -F%22$(DatabasePath)%22">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -C -D$(AggDB) -OTeleoptiCCCAgg -F%22$(DatabasePath)%22">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+	</Target>
+
+	<Target Name="RevokeServerRoles">
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;ALTER SERVER ROLE [dbcreator] DROP MEMBER [$(AdminSQLLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;ALTER SERVER ROLE [securityadmin] DROP MEMBER [$(AdminSQLLogin)]&quot;"/>
+	</Target>
+
+	<Target Name="PatchDatabaseWithDboOnly">
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(MartDB) -OTeleoptiAnalytics -F%22$(DatabasePath)%22">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(AppDB) -OTeleoptiCCC7 -F%22$(DatabasePath)%22">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerString) -D$(AggDB) -OTeleoptiCCCAgg -F%22$(DatabasePath)%22">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+	</Target>
+
+	<Target Name="DataModifications">
+		<Exec Command ="%22$(SecurityExe)%22 $(SecurityExeString) -DD$(AppDB)">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Exec Command ="%22$(SecurityExe)%22 $(SecurityExeString) -DD$(MartDB) -CD$(AggDB)">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>		
+	</Target>
+	
+	<Target Name="ScriptedTestsRunOnAllDBs">
+		<ItemGroup>
+			<ScriptList Include="$(WorkingDirectory)\Database\Tools\PK-namingStandard.sql"/>
+		</ItemGroup>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AppDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AggDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>		
+	</Target>
+
+	<Target Name="AnalyticsReportsTest">
+		<ItemGroup>
+			<AnalyticsReportsTest Include="$(WorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
+		</ItemGroup>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
+	</Target>
+	
+	<Target Name="PostTarget">
+		<Exec Command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;DROP DATABASE [$(AppDB)]&quot;"/>
+		<Exec Command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;DROP DATABASE [$(MartDB)]&quot;"/>
+		<Exec Command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;DROP DATABASE [$(AggDB)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) $(WinAuthString) -Q&quot;DROP LOGIN [$(AdminSQLLogin)]&quot;"/>
+	</Target>
+
+</Project>
