@@ -236,7 +236,7 @@ function Copy-VersionZippedMsi{
         $version
     )
 	# "\\hebe\Installation\msi\8.1.415.31945\Teleopti WFM 8.1.415.31945.zip"
-    $scrFolder='\\hebe\Installation\' + $version + '\Teleopti WFM ' + $version
+    $scrFolder='\\hebe\Installation\msi\' + $version + '\Teleopti WFM ' + $version
     $destFolder=$workingFolder
     Write-Host 'source: ' $scrFolder
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
