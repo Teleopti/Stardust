@@ -12,9 +12,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			// STAGE TABLES
 			Add(new StageDateJobStep(jobParameters));                    // BU independent
 			Add(new DimDateJobStep(jobParameters));                     // BU independent
-			Add(new StageTimeZoneJobStep(jobParameters));               // BU independent
-			Add(new DimTimeZoneJobStep(jobParameters));                 // BU independent
-			Add(new StageTimeZoneBridgeJobStep(jobParameters));         // BU independent
+            //Add(new StageTimeZoneJobStep(jobParameters));               // BU independent //removed 2014-11-25 to reduce duration/Load
+            //Add(new DimTimeZoneJobStep(jobParameters));                 // BU independent //removed 2014-11-25 to reduce duration/Load
+            //Add(new StageTimeZoneBridgeJobStep(jobParameters));         // BU independent //removed 2014-11-25 to reduce duration/Load
 			Add(new StageBusinessUnitJobStep(jobParameters));            // BU independent
 			Add(new DimQueueJobStep(jobParameters));                    // BU independent
 			Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new IntradayStageRequestJobStep(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
-			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
+            //Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent //removed 2014-11-25 to reduce duration/Load
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
 			Add(new DimSiteJobStep(jobParameters));
