@@ -30,16 +30,11 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public int GetOtherScriptFilesHash(DatabaseType databaseType)
 		{
-			var trunkPath = _databaseFolder.TrunkPath(databaseType);
 			var programmabilityPath = _databaseFolder.ProgrammabilityPath(databaseType);
-			var trunkFile = Path.Combine(trunkPath, "Trunk.sql");
 			var programmabilityFiles = Directory.GetFiles(programmabilityPath, "*.sql", SearchOption.AllDirectories);
 
-			var files = programmabilityFiles
-				.Concat(new[] {trunkFile});
-
 			var hash = 19;
-			foreach (var file in files)
+			foreach (var file in programmabilityFiles)
 			{
 				hash = hash * 31 + File.ReadAllText(file).GetHashCode();
 			}

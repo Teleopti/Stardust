@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseFolder
@@ -31,12 +29,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var path = System.IO.Path.Combine(Path(), databaseType.GetName());
 			return System.IO.Path.Combine(path, "Releases");
-		}
-
-		public string TrunkPath(DatabaseType databaseType)
-		{
-			var path = System.IO.Path.Combine(Path(), databaseType.GetName());
-			return System.IO.Path.Combine(path, "Trunk");
 		}
 
 		public string ProgrammabilityPath(DatabaseType databaseType)

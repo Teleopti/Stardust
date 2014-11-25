@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		public void Create(DatabaseType databaseType)
 		{
 			applyReleases(databaseType);
-			applyTrunk(databaseType);
 			applyProgrammability(databaseType);
 			addInstallLogRow();
 		}
@@ -72,20 +71,6 @@ namespace Teleopti.Ccc.DBManager.Library
 					throw new NotExecutableScriptException(scriptFile.file.FullName, "scriptFile", exception);
 				}
 			}
-		}
-
-		private void applyTrunk(DatabaseType databaseType)
-		{
-			_logger.Write("Applying Trunk...");
-			var trunkPath = _databaseFolder.TrunkPath(databaseType);
-
-			if (!Directory.Exists(trunkPath)) return;
-
-			var trunkFile = Path.Combine(trunkPath, "Trunk.sql");
-			var sql = File.ReadAllText(trunkFile);
-
-			new SqlBatchExecutor(_sqlConnection, _logger)
-				.ExecuteBatchSql(sql);
 		}
 
 		private void applyProgrammability(DatabaseType databaseType)
