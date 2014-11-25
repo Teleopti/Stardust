@@ -2,7 +2,7 @@
 
 <Project DefaultTargets="SQLServerTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<PropertyGroup>
-		<SQLServerInstance>Teleopti729</SQLServerInstance>		
+		<SQLServerInstance>localhost</SQLServerInstance>		
 		<AdminSQLLogin>teamcity</AdminSQLLogin>
 		<AdminSQLPwd>asldkj345HHG</AdminSQLPwd>
 		<ApplicationDbLogin>testApplicationLogin</ApplicationDbLogin>
@@ -29,6 +29,7 @@
 		<CallTarget Targets="PreTarget" />
 		<CallTarget Targets="CreateDatabaseWithSQLAdmin" />
 		<CallTarget Targets="RevokeServerRoles" />
+		<CallTarget Targets="PatchDatabaseWithDboOnly" />
 		<CallTarget Targets="DataModifications" />
 		<CallTarget Targets="ScriptedTestsRunOnAllDBs" />
 		<CallTarget Targets="AnalyticsReportsTest" />
