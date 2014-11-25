@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -8,9 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -34,9 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof (IHandleEvent<>).Assembly)
 				.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
 				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.Where(t =>
-					t.GetCustomAttributes(typeof (OnlyHandleWhenEnabledAttribute), true).IsEmpty()
-					|| _config.Toggle((((OnlyHandleWhenEnabledAttribute) t.GetCustomAttributes(typeof (OnlyHandleWhenEnabledAttribute), true).First()).Toggle)))
+				.Where(t => t.FeatureIsEnabled(_config))
 				.EnableClassInterceptors().InterceptedBy(typeof (AspectInterceptor));
 			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
@@ -54,5 +49,4 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AdherenceDetailsReadModelPersister>().SingleInstance().As<IAdherenceDetailsReadModelPersister>();
 		}
 	}
-
 }

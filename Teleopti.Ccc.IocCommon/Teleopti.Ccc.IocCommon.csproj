@@ -141,6 +141,7 @@
     </Compile>
     <Compile Include="Configuration\AspectsModule.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
+    <Compile Include="Configuration\OnlyHandleIfEnabledExtension.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />

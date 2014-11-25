@@ -129,6 +129,7 @@
     <Compile Include="Toggle\CustomerTest.cs" />
     <Compile Include="Toggle\DeveloperTest.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />
+    <Compile Include="Toggle\HandleIfEnabledTest.cs" />
     <Compile Include="Toggle\RcTest.cs" />
     <Compile Include="Toggle\ToggleBaseTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
