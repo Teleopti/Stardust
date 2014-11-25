@@ -1,6 +1,6 @@
 @ECHO OFF
 SET ROOTDIR=%~dp0
-SET ROOTDIR=%ROOTDIR:~0,-10%
+SET ROOTDIR=%ROOTDIR:~0,-26%
 
 SET configuration=debug
 SET WorkingDirectory=%ROOTDIR%
@@ -11,7 +11,7 @@ SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 "%MSBUILD%" /property:Configuration=debug "%WorkingDirectory%\Teleopti.Support.Security\Teleopti.Support.Security.csproj"
 "%MSBUILD%" /property:Configuration=debug "%WorkingDirectory%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
 
-"%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;SQLServerInstance=%COMPUTERNAME% "%~dp0SQLVersionTests.msbuild"
+"%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;SQLServerInstance=%COMPUTERNAME% "%ROOTDIR%\teamcity\SQLVersionTests.msbuild"
 CD %~dp0
 PAUSE
 
