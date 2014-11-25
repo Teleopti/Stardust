@@ -171,6 +171,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			persister.Rows.Last().ActualEndTime.Should().Be(null);
 
 		}
+
+		[Test]
+		public void ShouldPersistLastStateChangeAfterShiftEnds()
+		{
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+			target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 7:30".Utc(),
+				InAdherence = false
+			});
+			target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				Name = "Phone",
+				StartTime = "2014-11-17 8:00".Utc(),
+				InAdherence = true
+			});
+			target.Handle(new PersonShiftEndEvent
+			{
+				PersonId = personId,
+				ShiftStartTime = "2014-11-17 8:00".Utc(),
+				ShiftEndTime = "2014-11-17 9:00".Utc(),
+			});
+			target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 9:22".Utc(),
+				InAdherence = false,
+				InAdherenceForPreviousActivity = true,
+			});
+			target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 9:25".Utc(),
+				InAdherence = false,
+				InAdherenceForPreviousActivity = true,
+			});
+			target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 9:30".Utc(),
+				InAdherence = false,
+				InAdherenceForPreviousActivity = false,
+			});
+			persister.Rows.Single().ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
+		}
 		
 		
 	}
