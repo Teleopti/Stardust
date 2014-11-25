@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly SqlConnection _sqlConnection;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly ILog _logger;
+		private const int buildNumberWhenTrunkDisappeared = 500;
 
 		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
 		{
@@ -32,13 +33,18 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void addInstallLogRow()
 		{
+			const string sql = "insert into databaseversion_installlog (databaseversion, codeversion) values ({0}, '{1}')";
 			var latestDatabaseBuildNumber = _versionInformation.GetDatabaseVersion();
+			new SqlBatchExecutor(_sqlConnection, _logger)
+				.ExecuteBatchSql(string.Format(sql, latestDatabaseBuildNumber, codeVersion()));
+		}
+
+		private string codeVersion()
+		{
 			var codeVersion = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(GetType()).Location).ProductVersion;
 			if (codeVersion.TrimStart().StartsWith("1"))
 				codeVersion = "[develop install]";
-			const string sql = "insert into databaseversion_installlog (databaseversion, codeversion) values ({0}, '{1}')";
-			new SqlBatchExecutor(_sqlConnection, _logger)
-				.ExecuteBatchSql(string.Format(sql, latestDatabaseBuildNumber, codeVersion));
+			return codeVersion;
 		}
 
 		private void applyReleases(DatabaseType databaseType)
@@ -65,6 +71,12 @@ namespace Teleopti.Ccc.DBManager.Library
 					var sql = File.ReadAllText(scriptFile.file.FullName);
 					new SqlBatchExecutor(_sqlConnection, _logger)
 						.ExecuteBatchSql(sql);
+					if (scriptFile.number >= buildNumberWhenTrunkDisappeared)
+					{
+						const string dbVersionSql = "INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES ({0},'{1}')";
+						new SqlBatchExecutor(_sqlConnection, _logger)
+							.ExecuteBatchSql(string.Format(dbVersionSql, scriptFile.number, codeVersion()));
+					}
 				}
 				catch (SqlException exception)
 				{
