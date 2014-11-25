@@ -237,11 +237,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.Click(".send-button");
 		}
 
-		
+		[When(@"I click send button in bulletin board")]
+		public void WhenIClickSendButtonInBulletinBoard()
+		{
+			Browser.Interactions.Click("#Shift-trade-bulletin-board-send");
+		}
+
 		[Then(@"Add Shift Trade Request view should not be visible")]
 		public void ThenAddShiftTradeRequestViewShouldNotBeVisible()
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-shift-trade");
+		}
+
+		[Then(@"Shift trade bulletin board view should not be visible")]
+		public void ThenShiftTradeBulletinBoardViewShouldNotBeVisible()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-shift-trade-bulletin-board");
 		}
 
 		[Then(@"I should see details with message that tells the user that the status of the shifttrade is new")]

@@ -15087,6 +15087,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No agents available for bulletin board.
+        /// </summary>
+        public static string NoAgentsAvailableForBulletinBoard {
+            get {
+                return ResourceManager.GetString("NoAgentsAvailableForBulletinBoard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No agents available for shift trade.
         /// </summary>
         public static string NoAgentsAvailableForShiftTrade {

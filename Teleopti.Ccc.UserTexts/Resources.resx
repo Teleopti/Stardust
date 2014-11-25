@@ -12470,12 +12470,16 @@ Reduce the complexity to use these shifts.</value>
   <data name="PublishSchedule" xml:space="preserve">
     <value>Publish Schedule</value>
     <comment>Publish Schedule</comment>
-  </data>    
+  </data>
   <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
-    <value>Start time should be earlier than end time</value>  
+    <value>Start time should be earlier than end time</value>
   </data>
   <data name="ReportAbsenceFor" xml:space="preserve">
     <value>Report absence for </value>
     <comment>Label for MyTimeWeb</comment>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>No agents available for bulletin board</value>
+    <comment>use for MyTime Request Bulletin board, warning message</comment>
   </data>
 </root>

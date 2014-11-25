@@ -3,6 +3,30 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel");
 
+	test("should clean data when prepare load", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
+		viewModel.isDetailVisible = function () {
+			return false;
+		}
+
+		viewModel.prepareLoad();
+
+		equal(viewModel.selectablePages().length, 0);
+		equal(viewModel.selectedPageIndex(), 1);
+		equal(viewModel.isPreviousMore(), false);
+		equal(viewModel.isMore(), false);
+		equal(viewModel.IsLoading(), false);
+		equal(viewModel.chooseAgent(), null);
+	});
+
+	test("should get date with format", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
+		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
+
+		var result = viewModel.getDateWithFormat();
+
+		equal(result, "1995-12-25");
+	});
 
 	test("should hide page view when no data", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
@@ -140,7 +164,6 @@ $(document).ready(function () {
 		equal(viewModel.isMore(), true);
 		equal(viewModel.selectablePages().length, 5);
 	});
-
 
 	test("should set date picker range", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();

@@ -66,7 +66,7 @@
 					</tr>
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
-					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
+					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName"></td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
@@ -85,7 +85,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<div style="float:right" data-bind="visible:  isPageVisible()">
+			<div style="float:right" data-bind="visible:  !isDetailVisible() && isPageVisible()">
 				<a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a>
 				<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
 				<!-- ko foreach: selectablePages() -->
@@ -98,9 +98,23 @@
 
 		<p></p>
 		<p></p>
-
+		<div class="row" style="margin: 0;">
+			<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6" style="margin-bottom: 0">
+				<div class="form-group">
+					<input id="Request-add-shift-trade-subject-input" class="form-control" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
+				</div>
+				<div class="form-group">
+					<textarea id="Request-add-shift-trade-message-input" class="form-control" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
+				</div>
+				<div class="pull-right">
+					<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+					<button id="Shift-trade-bulletin-board-send" class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
+				</div>
+				<div class="error" data-bind="html: errorMessage"></div>
+			</div>
+		</div>
 		<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
-			@Resources.NoAgentsAvailableForShiftTrade
+			@Resources.NoAgentsAvailableForBulletinBoard
 		</div>
 	</div>
 </div>
