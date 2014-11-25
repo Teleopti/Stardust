@@ -65,30 +65,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				if (existingModel.ActivityHasEnded)
 				{
-					if (!@event.InAdherenceForPreviousActivity && existingModel.ActualEndTime == null)
-					{
-						existingModel.ActualEndTime = @event.Timestamp;
-						_persister.Update(existingModel);
-					}
-					return;
+					existingModel.ActualEndTime = calculateActualEndTimeWhenActivityEnds(existingModel, @event);
 				}
-				updateAdherence(existingModel, @event.Timestamp);
+				else
+				{
+					updateAdherence(existingModel, @event.Timestamp);
 
-				if (lateForActivity(existingModel, @event))
-					existingModel.ActualStartTime = @event.Timestamp;
+					if (lateForActivity(existingModel, @event))
+						existingModel.ActualStartTime = @event.Timestamp;
 
-				existingModel.LastStateChangedTime = @event.Timestamp;
-				existingModel.IsInAdherence = @event.InAdherence;
-
-				if (!@event.InAdherence && existingModel.ActualEndTime == null)
-					existingModel.ActualEndTime = existingModel.LastStateChangedTime;
-
-				if (@event.InAdherence)
-					existingModel.ActualEndTime = null;
-
+					existingModel.LastStateChangedTime = @event.Timestamp;
+					existingModel.IsInAdherence = @event.InAdherence;
+					existingModel.ActualEndTime = calculateActualEndTimeBeforeActivityEnds(existingModel, @event);
+				}
 				_persister.Update(existingModel);
+
 			}
 		}
+
+		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,
+			PersonStateChangedEvent @event)
+		{
+			if (!@event.InAdherenceForPreviousActivity && model.ActualEndTime == null)
+			{
+				return @event.Timestamp;
+			}
+			return model.ActualEndTime;
+		}
+
+		private static DateTime? calculateActualEndTimeBeforeActivityEnds(AdherenceDetailsReadModel model,
+			PersonStateChangedEvent @event)
+		{
+			if (@event.InAdherence)
+				return null;
+			if (!@event.InAdherence && model.ActualEndTime == null)
+				return @event.Timestamp;
+			return model.ActualEndTime;
+		}
+
+
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
