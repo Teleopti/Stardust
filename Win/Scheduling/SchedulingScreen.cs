@@ -4260,9 +4260,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 
 				var period = new ScheduleDateTimePeriod(SchedulerState.RequestedPeriod.Period(), SchedulerState.SchedulingResultState.PersonsInOrganization);
-				ISchedulingOptions options = new SchedulingOptions();
-				OptimizerHelperHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization, SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
-				SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
+				if (!_teamLeaderMode)
+				{
+					ISchedulingOptions options = new SchedulingOptions();
+					OptimizerHelperHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization, SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
+					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
+				}
+				else
+				{
+					SchedulerState.ConsiderShortBreaks = false;
+				}
 				initMessageBroker(period.LoadedPeriod());
 			}
 
@@ -4271,10 +4278,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
-		
-			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
+
+			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
+			{
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
-			_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
+				_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
+			}
+			
 
 			if (e.Cancel)
 				return;
