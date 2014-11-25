@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
+﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ISameShiftCategoryBlockSpecification _sameShiftCategoryBlockSpecification;
 		private readonly ISameShiftCategoryTeamSpecification _sameShiftCategoryTeamSpecification;
 		private readonly ISameShiftBlockSpecification _sameShiftBlockSpecification;
+		private readonly ITeamBlockOpenHoursValidator _teamBlockOpenHoursValidator;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		public TeamBlockSteadyStateValidator(ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 											 ISameStartTimeBlockSpecification sameStartTimeBlockSpecification,
@@ -24,7 +27,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 											 ISameEndTimeTeamSpecification sameEndTimeTeamSpecification,
 											 ISameShiftCategoryBlockSpecification sameShiftCategoryBlockSpecification,
 											 ISameShiftCategoryTeamSpecification sameShiftCategoryTeamSpecification,
-											 ISameShiftBlockSpecification sameShiftBlockSpecification)
+											 ISameShiftBlockSpecification sameShiftBlockSpecification,
+											 ITeamBlockOpenHoursValidator teamBlockOpenHoursValidator,
+											 ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_sameStartTimeBlockSpecification = sameStartTimeBlockSpecification;
@@ -33,6 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_sameShiftCategoryBlockSpecification = sameShiftCategoryBlockSpecification;
 			_sameShiftCategoryTeamSpecification = sameShiftCategoryTeamSpecification;
 			_sameShiftBlockSpecification = sameShiftBlockSpecification;
+			_teamBlockOpenHoursValidator = teamBlockOpenHoursValidator;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
@@ -52,10 +59,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				isSteadyState &= _sameShiftCategoryTeamSpecification.IsSatisfiedBy(teamBlockInfo);
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) ||
 			    _teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
+			{
 				isSteadyState &= _sameShiftBlockSpecification.IsSatisfiedBy(teamBlockInfo);
+				isSteadyState &= _teamBlockOpenHoursValidator.Validate(teamBlockInfo, _schedulingResultStateHolder);
+			}
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(schedulingOptions) ||
 			    _teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(schedulingOptions))
 				isSteadyState &= _sameEndTimeTeamSpecification.IsSatisfiedBy(teamBlockInfo);
+			
 			return isSteadyState;
 		}
 	}

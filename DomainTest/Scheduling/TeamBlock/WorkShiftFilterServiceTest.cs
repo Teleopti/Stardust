@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
 		private ITeamInfo _teamInfo;
 		private IDisallowedShiftProjectionCashesFilter _disallowedShiftProjectionCashesFilter;
+		private ITeamBlockOpenHoursFilter _teamBlockOpenHoursFilter;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -94,6 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
 		    _ruleSetPersonalSkillsActivityFilter = _mocks.StrictMock<IRuleSetPersonalSkillsActivityFilter>();
 			_disallowedShiftProjectionCashesFilter = _mocks.StrictMock<IDisallowedShiftProjectionCashesFilter>();
+			_teamBlockOpenHoursFilter = _mocks.StrictMock<ITeamBlockOpenHoursFilter>();
 			_target = new WorkShiftFilterService(_activityRestrictionsShiftFilter, _businessRulesShiftFilter,
 												 _commonMainShiftFilter, _contractTimeShiftFilter,
 												 _disallowedShiftCategoriesShiftFilter, _effectiveRestrictionShiftFilter,
@@ -107,7 +109,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 												 _ruleSetAccordingToAccessibilityFilter,
 												 _shiftProjectionCacheManager,
 												 _ruleSetPersonalSkillsActivityFilter,
-												 _disallowedShiftProjectionCashesFilter);
+												 _disallowedShiftProjectionCashesFilter,
+												 _teamBlockOpenHoursFilter
+												 );
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
@@ -169,6 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();
 		    _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+			_schedulingOptions.BlockSameShift = true;
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var caches = getCashes();
 			var ruleSetList = new List<IWorkShiftRuleSet>();
@@ -185,6 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
                 Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
 				filterForRoleModel(caches, effectiveRestriction);
+				Expect.Call(_teamBlockOpenHoursFilter.Filter(caches, _teamBlockInfo, _finderResult)).Return(caches);
 			}
 			using (_mocks.Playback())
 			{

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private ISameShiftCategoryTeamSpecification _sameShiftCategoryTeamSpecification;
 	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 	    private SchedulingOptions _schedulingOptions;
+	    private ITeamBlockOpenHoursValidator _teamBlockOpenHoursValidator;
+	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 	    [SetUp]
 		public void Setup()
@@ -39,10 +42,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_sameShiftCategoryTeamSpecification = _mock.StrictMock<ISameShiftCategoryTeamSpecification>();
 			_sameShiftBlockSpecification = _mock.StrictMock<ISameShiftBlockSpecification>();
 			_teamBlockSchedulingOptions = _mock.StrictMock<ITeamBlockSchedulingOptions>();
+		    _teamBlockOpenHoursValidator = _mock.StrictMock<ITeamBlockOpenHoursValidator>();
+		    _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 		    _target = new TeamBlockSteadyStateValidator(_teamBlockSchedulingOptions, _sameStartTimeBlockSpecification,
 		                                                _sameStartTimeTeamSpecification, _sameEndTimeTeamSpecification,
 		                                                _sameShiftCategoryBlockSpecification,
-		                                                _sameShiftCategoryTeamSpecification, _sameShiftBlockSpecification);
+		                                                _sameShiftCategoryTeamSpecification, _sameShiftBlockSpecification, 
+														_teamBlockOpenHoursValidator,
+														_schedulingResultStateHolder);
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 		    _schedulingOptions = new SchedulingOptions();
 			_today = new DateOnly();
@@ -146,6 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_sameShiftBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
+				Expect.Call(_teamBlockOpenHoursValidator.Validate(_teamBlockInfo, _schedulingResultStateHolder)).Return(true);
             }
             using (_mock.Playback())
             {
@@ -296,6 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_sameShiftBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+	            Expect.Call(_teamBlockOpenHoursValidator.Validate(_teamBlockInfo, _schedulingResultStateHolder)).Return(true);
             }
             using (_mock.Playback())
             {
@@ -352,5 +361,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
+
+		[Test]
+		public void ShouldValidateOpenHours()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+				Expect.Call(_teamBlockOpenHoursValidator.Validate(_teamBlockInfo, _schedulingResultStateHolder)).Return(false);
+			}
+			using (_mock.Playback())
+			{
+				Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+			}
+		}
+
     }
 }
