@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule(new AuthenticationModule { ApplicationData = ApplicationData });
 			builder.RegisterModule<ForecasterModule>();
-			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterModule(new EventHandlersModule(_configuration));
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterModule<WebModule>();

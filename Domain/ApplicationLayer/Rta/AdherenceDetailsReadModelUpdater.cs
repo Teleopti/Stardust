@@ -2,10 +2,12 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
+	[OnlyHandleWhenEnabled(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	public class AdherenceDetailsReadModelUpdater :
 		IHandleEvent<PersonActivityStartEvent>,
 		IHandleEvent<PersonStateChangedEvent>,

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -7,7 +8,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -15,15 +18,27 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
+	
+
 	internal class EventHandlersModule : Module
 	{
+		private readonly IIocConfiguration _config;
+
+		public EventHandlersModule(IIocConfiguration config)
+		{
+			_config = config;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterAssemblyTypes(typeof (IHandleEvent<>).Assembly)
 				.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)))
-				.EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
-
+				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
+				.Where(t =>
+					t.GetCustomAttributes(typeof (OnlyHandleWhenEnabledAttribute), true).IsEmpty()
+					|| _config.Toggle((((OnlyHandleWhenEnabledAttribute) t.GetCustomAttributes(typeof (OnlyHandleWhenEnabledAttribute), true).First()).Toggle)))
+				.EnableClassInterceptors().InterceptedBy(typeof (AspectInterceptor));
+			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 
 			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>().SingleInstance();

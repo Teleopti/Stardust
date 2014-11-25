@@ -200,6 +200,7 @@
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
+    <Compile Include="ApplicationLayer\Rta\OnlyHandleWhenEnabledAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
