@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Teleopti.Ccc.DBManager.Library;
 
 namespace Teleopti.Ccc.DBManager
@@ -204,12 +202,9 @@ namespace Teleopti.Ccc.DBManager
                                     applyAzureStartDDL(_commandLineArgument.TargetDatabaseTypeName);
                                 }
 
-                                //Add Released DDL
-                                applyReleases(_commandLineArgument.TargetDatabaseType);
-                                //Add upcoming DDL (Trunk)
-                                applyTrunk(_commandLineArgument.TargetDatabaseType);
-                                //Add Programmabilty
-                                applyProgrammability(_commandLineArgument.TargetDatabaseType);
+	                            var dbCreator = new DatabaseSchemaCreator(_databaseVersionInformation,
+		                            _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger);
+															dbCreator.Create(_commandLineArgument.TargetDatabaseType);
                             }
                             else
                             {
@@ -299,12 +294,6 @@ namespace Teleopti.Ccc.DBManager
 			}
 		}
 
-        private static void applyReleases(DatabaseType databaseType)
-        {
-			new DatabaseSchemaCreator(_databaseVersionInformation, _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger)
-				.ApplyReleases(databaseType);
-        }
-
         private static void applyAzureStartDDL(string databaseTypeName)
         {
             logWrite("Applying Azure DDL starting point...");
@@ -325,18 +314,6 @@ namespace Teleopti.Ccc.DBManager
     	{
 			new SqlBatchExecutor(_sqlConnection,_logger).ExecuteBatchSql(sql);
     	}
-
-		private static void applyTrunk(DatabaseType databaseType)
-        {
-			new DatabaseSchemaCreator(_databaseVersionInformation, _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger)
-				.ApplyTrunk(databaseType);
-        }
-
-		private static void applyProgrammability(DatabaseType databaseType)
-		{
-			new DatabaseSchemaCreator(_databaseVersionInformation, _schemaVersionInformation, _sqlConnection, _databaseFolder, _logger)
-				.ApplyProgrammability(databaseType);
-		}
 
         private static int GetDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseVersion(); }
 

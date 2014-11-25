@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 
@@ -23,14 +24,12 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void Create(DatabaseType databaseType)
 		{
-			ApplyReleases(databaseType);
-			ApplyTrunk(databaseType);
-			ApplyProgrammability(databaseType);
+			applyReleases(databaseType);
+			applyTrunk(databaseType);
+			applyProgrammability(databaseType);
 		}
 
-
-
-		public void ApplyReleases(DatabaseType databaseType)
+		private void applyReleases(DatabaseType databaseType)
 		{
 			var currentDatabaseBuildNumber = _versionInformation.GetDatabaseVersion();
 			var releasesPath = _databaseFolder.ReleasePath(databaseType);
@@ -62,8 +61,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-
-		public void ApplyTrunk(DatabaseType databaseType)
+		private void applyTrunk(DatabaseType databaseType)
 		{
 			_logger.Write("Applying Trunk...");
 			var trunkPath = _databaseFolder.TrunkPath(databaseType);
@@ -77,9 +75,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				.ExecuteBatchSql(sql);
 		}
 
-
-
-		public void ApplyProgrammability(DatabaseType databaseType)
+		private void applyProgrammability(DatabaseType databaseType)
 		{
 			var programmabilityPath = _databaseFolder.ProgrammabilityPath(databaseType);
 			var directories = Directory.GetDirectories(programmabilityPath);
