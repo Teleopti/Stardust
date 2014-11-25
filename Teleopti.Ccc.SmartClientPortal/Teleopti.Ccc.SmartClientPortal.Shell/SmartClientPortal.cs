@@ -236,6 +236,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			Enabled = false;
 			Cursor = Cursors.WaitCursor;
+			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
+			_mainStatusStrip.Refresh();
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+			var loggedOnBu = identity.BusinessUnit;
+			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
+			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
+			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
+			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
+													ApplicationTextHelper.LoggedOnUserText;
 
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
 			{
@@ -249,15 +258,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					goToPublicPage(false);
 				}
 			}
-
-
-			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			var loggedOnBu = identity.BusinessUnit;
-			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
-			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
-			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
-			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
-													ApplicationTextHelper.LoggedOnUserText;
 
 			setNotifyData(_systemChecker.IsOk());
 
@@ -279,7 +279,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
-
 		}
 
 		private void showMem()
@@ -709,6 +708,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 
 			
+			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXReady");
 		}
 
 		private void webView1_Command(object sender, CommandEventArgs e)

@@ -117,10 +117,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// toolStripStatusLabelSpring
 			// 
+			this.toolStripStatusLabelSpring.ForeColor = System.Drawing.Color.White;
+			this.toolStripStatusLabelSpring.Margin = new System.Windows.Forms.Padding(5, 3, 0, 2);
 			this.toolStripStatusLabelSpring.Name = "toolStripStatusLabelSpring";
 			this.SetShortcut(this.toolStripStatusLabelSpring, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(758, 19);
+			this.toolStripStatusLabelSpring.Size = new System.Drawing.Size(539, 19);
 			this.toolStripStatusLabelSpring.Spring = true;
+			this.toolStripStatusLabelSpring.Text = "xx";
+			this.toolStripStatusLabelSpring.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabelSpring.Click += new System.EventHandler(this.toolStripStatusLabelSpring_Click);
 			// 
 			// toolStripStatusLabelCurrentDatabase
@@ -391,7 +395,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(26, 116);
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-40, 116);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(126, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
@@ -401,7 +405,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// backStageSeparator1
 			// 
 			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(15, 147);
+			this.backStageSeparator1.Location = new System.Drawing.Point(39, 22);
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator1.TabIndex = 15;
@@ -427,7 +431,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
-			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(26, 178);
+			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-40, 178);
 			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
 			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(120, 25);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;

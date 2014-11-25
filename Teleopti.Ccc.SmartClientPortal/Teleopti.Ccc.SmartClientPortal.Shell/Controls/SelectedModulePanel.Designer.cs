@@ -68,7 +68,6 @@
 			this.autoLabelHeader.Name = "autoLabelHeader";
 			this.autoLabelHeader.Size = new System.Drawing.Size(233, 38);
 			this.autoLabelHeader.TabIndex = 1;
-			this.autoLabelHeader.Text = "Header";
 			this.autoLabelHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SelectedModulePanel
