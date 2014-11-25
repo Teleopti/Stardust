@@ -4,7 +4,7 @@ DECLARE @tablename sysname
 DECLARE @pkname sysname
 DECLARE @schema sysname
 	DECLARE @ErrorMessage varchar(4000)
-	SET @ErrorMessage = ''
+	SET @ErrorMessage = '----------------'
 	
 	DECLARE cur CURSOR FOR
 	SELECT 
@@ -23,7 +23,9 @@ DECLARE @schema sysname
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
 			SELECT @ErrorMessage = @ErrorMessage + char(13)+ char(10) + 'Table: [' + @schema + '].[' +@tablename +'] has a badly named PK-key: [' + @pkname + ']'
-
+			+ char(13)+ char(10) + 'please consider:'
+			+ char(13)+ char(10) + 'EXEC sp_rename N''[' + @schema + '].[' +@tablename +'].[' + @pkname + ']'', N''PK_' + @tablename + ''', N''INDEX'''
+			+ char(13)+ char(10) + '----------------'
 			FETCH NEXT FROM cur INTO @tablename, @pkname, @schema;
 		END
 		CLOSE cur;

@@ -252,7 +252,9 @@ ROLLBACK TRAN
 
 	--To be dropped when customer goes from CCC 7 to CCC 8
 	EXEC dbo.sp_rename @objname = N'[dbo].[PersonDayOff]', @newname = N'PersonDayOff_old', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonDayOff_old].[PK_PersonDayOff]', @newname = N'PK_PersonDayOff_old', @objtype = N'INDEX'
 	EXEC dbo.sp_rename @objname = N'[Auditing].[PersonDayOff_AUD]', @newname = N'PersonDayOff_AUD_old', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[Auditing].[PersonDayOff_AUD_old].[PK_PersonDayOff_AUD]',@newname =  N'PK_PersonDayOff_AUD_old', @objtype = N'INDEX'
 
 	PRINT char(9) + 'Total number of DayOff converted:' + cast(@Converted as nvarchar(10))
 

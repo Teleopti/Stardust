@@ -45,3 +45,14 @@ ALTER TABLE [dbo].[DatabaseVersion_InstallLog]  WITH CHECK ADD  CONSTRAINT [FK_D
 REFERENCES [dbo].[DatabaseVersion] ([BuildNumber])
 ALTER TABLE [dbo].[DatabaseVersion_InstallLog] CHECK CONSTRAINT [FK_DatabaseVersion_InstallLog_DatabaseVersion]
 GO
+
+----------------  
+--Name: David Jonsson
+--Desc: Fixing build error
+---------------- 
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonDayOff_old]') AND name = N'PK_PersonDayOff_old')
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonDayOff_old].[PK_PersonDayOff]', @newname = N'PK_PersonDayOff_old', @objtype = N'INDEX'
+GO
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[Auditing].[PersonDayOff_AUD_old]') AND name = N'PK_PersonDayOff_AUD')
+	EXEC dbo.sp_rename @objname = N'[Auditing].[PersonDayOff_AUD_old].[PK_PersonDayOff_AUD]',@newname =  N'PK_PersonDayOff_AUD_old', @objtype = N'INDEX'
+GO
