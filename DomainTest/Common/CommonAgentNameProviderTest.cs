@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldGetSettingFromRepositoryOnetime()
 		{
 			Expect.Call(_settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())).Return(
-					new CommonNameDescriptionSetting()).IgnoreArguments();
+					new CommonNameDescriptionSetting()).IgnoreArguments().Repeat.Twice();
 			_mocks.ReplayAll();
 			var sett1 = _target.CommonAgentNameSettings;
 			var sett2 = _target.CommonAgentNameSettings;
