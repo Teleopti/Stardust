@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				
 
 				//for DayOff schedule, logic is same except using different mapping method.
-				if (shiftReadModel.DayOff != null)
+				if (((shiftReadModel.DayOff != null) && shiftReadModel.Shift != null && !shiftReadModel.Shift.IsFullDayAbsence))
 				{
 					var dayOffProjection = new List<SimpleLayer>();
 					var sl = new SimpleLayer
