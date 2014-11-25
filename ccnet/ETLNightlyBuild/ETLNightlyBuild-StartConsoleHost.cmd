@@ -5,4 +5,4 @@ tasklist /FI "IMAGENAME eq Teleopti.Analytics.Etl.ServiceConsoleHost.exe" 2>NUL 
 if "%ERRORLEVEL%"=="0" (
 	taskkill /IM Teleopti.Analytics.Etl.ServiceConsoleHost.exe
 )
-start "%CCNetWorkDir%\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Config%\Teleopti.Analytics.Etl.ServiceConsoleHost.exe"
+start %CCNetWorkDir%\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Config%\Teleopti.Analytics.Etl.ServiceConsoleHost.exe
