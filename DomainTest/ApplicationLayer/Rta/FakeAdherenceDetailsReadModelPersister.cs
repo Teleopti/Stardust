@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					IsInAdherence = m.IsInAdherence,
 					TimeInAdherence = m.TimeInAdherence,
 					TimeOutOfAdherence = m.TimeOutOfAdherence,
-					ActivityHasEnded = m.ActivityHasEnded
+					ActivityHasEnded = m.ActivityHasEnded,
+					ActualEndTime = m.ActualEndTime
 				};
 		}
 	}

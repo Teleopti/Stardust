@@ -71,6 +71,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 				existingModel.LastStateChangedTime = @event.Timestamp;
 				existingModel.IsInAdherence = @event.InAdherence;
+
+				if (!@event.InAdherence && existingModel.ActualEndTime == null)
+					existingModel.ActualEndTime = existingModel.LastStateChangedTime;
+
+				if (@event.InAdherence)
+					existingModel.ActualEndTime = null;
+
 				_persister.Update(existingModel);
 			}
 		}
@@ -79,12 +86,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
 			var lastModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime)).LastOrDefault();
-			if (lastModel != null)
-			{
-				updateAdherence(lastModel, @event.ShiftEndTime);
-				lastModel.ActivityHasEnded = true;
-				_persister.Update(lastModel);
-			}
+			if (lastModel == null) return;
+			
+			updateAdherence(lastModel, @event.ShiftEndTime);
+			lastModel.ActivityHasEnded = true;
+			_persister.Update(lastModel);
 		}
 
 		private static bool lateForActivity(AdherenceDetailsReadModel model, PersonStateChangedEvent @event)
