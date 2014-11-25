@@ -1,0 +1,4 @@
+----------------  
+--This is just a "marker" script.
+--Above 500 -> dbmanager will insert log scripts into databaseversion.
+----------------  
