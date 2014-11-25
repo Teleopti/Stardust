@@ -24,7 +24,7 @@ AS
 SET NOCOUNT ON
 
 DECLARE @name varchar(200)
-CREATE TABLE #out (report_name_resource_key nvarchar(50), name varchar(500), saved_name nvarchar(200), create_time datetime, modified_time datetime, help_key nvarchar(500))
+CREATE TABLE #out (report_name_resource_key nvarchar(50), name nvarchar(500), saved_name nvarchar(200), create_time datetime, modified_time datetime, help_key nvarchar(500))
 
 INSERT into #out
 SELECT report_name_resource_key, report_name, '', null, null, help_key
