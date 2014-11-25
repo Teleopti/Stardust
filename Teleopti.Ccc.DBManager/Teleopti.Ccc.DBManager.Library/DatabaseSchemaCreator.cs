@@ -1,7 +1,8 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -27,6 +28,18 @@ namespace Teleopti.Ccc.DBManager.Library
 			applyReleases(databaseType);
 			applyTrunk(databaseType);
 			applyProgrammability(databaseType);
+			addInstallLogRow();
+		}
+
+		private void addInstallLogRow()
+		{
+			var latestDatabaseBuildNumber = _versionInformation.GetDatabaseVersion();
+			var codeVersion = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(GetType()).Location).ProductVersion;
+			if (codeVersion.TrimStart().StartsWith("1"))
+				codeVersion = "[develop install]";
+			const string sql = "insert into databaseversion_installlog (databaseversion, codeversion) values ({0}, '{1}')";
+			new SqlBatchExecutor(_sqlConnection, _logger)
+				.ExecuteBatchSql(string.Format(sql, latestDatabaseBuildNumber, codeVersion));
 		}
 
 		private void applyReleases(DatabaseType databaseType)
