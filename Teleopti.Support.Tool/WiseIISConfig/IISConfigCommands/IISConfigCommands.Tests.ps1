@@ -167,7 +167,7 @@ function Setup-PreReqs {
 		}
 		
 		It "should copy latest .zip-file from build server"{
-			if([string]::IsNullOrEmpty($testServer.version))
+			if([string]::IsNullOrEmpty($global.version))
 			{
 				$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -branch "$global:branch"
 			}
