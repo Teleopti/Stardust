@@ -5,18 +5,18 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters
 {
-	public interface IWorkflowControlSetPersister
+	public interface IWorkflowControlSetPublishDatePersister
 	{
 		void Persist(ICollection<IWorkflowControlSet> workflowControlSets);
 	}
 
-	public class WorkflowControlSetPersister : IWorkflowControlSetPersister
+	public class WorkflowControlSetPublishDatePersister : IWorkflowControlSetPublishDatePersister
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 		private readonly IInitiatorIdentifier _initiatorIdentifier;
 
-		public WorkflowControlSetPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IWorkflowControlSetRepository workflowControlSetRepository, IInitiatorIdentifier initiatorIdentifier)
+		public WorkflowControlSetPublishDatePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IWorkflowControlSetRepository workflowControlSetRepository, IInitiatorIdentifier initiatorIdentifier)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_workflowControlSetRepository = workflowControlSetRepository;
@@ -27,6 +27,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		{
 			using (var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
+				foreach (var workflowControlSet in workflowControlSets)
+				{
+					var date = workflowControlSet.SchedulePublishedToDate;
+					unitOfWork.Refresh(workflowControlSet);
+					workflowControlSet.SchedulePublishedToDate = date;
+				}
+
 				_workflowControlSetRepository.AddRange(workflowControlSets);
 				unitOfWork.PersistAll(_initiatorIdentifier);
 				unitOfWork.Reassociate(workflowControlSets);
@@ -35,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		}
 	}
 
-	public class WorkflowControlSetPersisterToggle30929Off : IWorkflowControlSetPersister
+	public class WorkflowControlSetPublishDatePersisterToggle30929Off : IWorkflowControlSetPublishDatePersister
 	{
 		public void Persist(ICollection<IWorkflowControlSet> workflowControlSets)
 		{

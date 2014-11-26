@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IPersonAccountPersister _personAccountPersister;
 		private readonly IRequestPersister _requestPersister;
 		private readonly IWriteProtectionPersister _writeProtectionPersister;
-		private readonly IWorkflowControlSetPersister _workflowControlSetPersister;
+		private readonly IWorkflowControlSetPublishDatePersister _workflowControlSetPublishDatePersister;
 
 		public SchedulingScreenPersister(IScheduleDictionaryPersister scheduleDictionaryPersister,
 																		IPersonAccountPersister personAccountPersister,
 																		IRequestPersister requestPersister,
 																		IWriteProtectionPersister writeProtectionPersister,
-																		IWorkflowControlSetPersister workflowControlSetPersister)
+																		IWorkflowControlSetPublishDatePersister workflowControlSetPublishDatePersister)
 		{
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 			_personAccountPersister = personAccountPersister;
 			_requestPersister = requestPersister;
 			_writeProtectionPersister = writeProtectionPersister;
-			_workflowControlSetPersister = workflowControlSetPersister;
+			_workflowControlSetPublishDatePersister = workflowControlSetPublishDatePersister;
 		}
 
 		public bool TryPersist(IScheduleDictionary scheduleDictionary,
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_personAccountPersister.Persist(personAbsenceAccounts);
 			_requestPersister.Persist(personRequests);
 			_writeProtectionPersister.Persist(writeProtectionInfos);
-			_workflowControlSetPersister.Persist(workflowControlSets);
+			_workflowControlSetPublishDatePersister.Persist(workflowControlSets);
 			
 			return foundConflicts==null || !foundConflicts.Any();
 		}

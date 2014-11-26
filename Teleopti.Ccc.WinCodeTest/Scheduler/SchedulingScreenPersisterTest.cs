@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPersonAccountPersister personAccountPersister;
 		private IRequestPersister requestPersister;
 		private IWriteProtectionPersister writeProtectionPersister;
-		private IWorkflowControlSetPersister _workflowControlSetPersister;
+		private IWorkflowControlSetPublishDatePersister _workflowControlSetPublishDatePersister;
 
 		[SetUp]
 		public void Setup()
@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionaryPersister>();
 			requestPersister = MockRepository.GenerateMock<IRequestPersister>();
 			writeProtectionPersister = MockRepository.GenerateMock<IWriteProtectionPersister>();
-			_workflowControlSetPersister = MockRepository.GenerateMock<IWorkflowControlSetPersister>();
-			target = new SchedulingScreenPersister(scheduleDictionaryPersister, personAccountPersister, requestPersister, writeProtectionPersister, _workflowControlSetPersister);
+			_workflowControlSetPublishDatePersister = MockRepository.GenerateMock<IWorkflowControlSetPublishDatePersister>();
+			target = new SchedulingScreenPersister(scheduleDictionaryPersister, personAccountPersister, requestPersister, writeProtectionPersister, _workflowControlSetPublishDatePersister);
 		}
 
 		[Test]
@@ -66,13 +66,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldPersistWorkflowControlSets()
+		public void ShouldPersistWorkflowControlSetPublishDate()
 		{
 			IEnumerable<PersistConflict> foo;
 			var workflowControlSets = new List<IWorkflowControlSet>();
 			target.TryPersist(null, null, null, null, workflowControlSets, out foo);
 
-			_workflowControlSetPersister.AssertWasCalled(x => x.Persist(workflowControlSets));	
+			_workflowControlSetPublishDatePersister.AssertWasCalled(x => x.Persist(workflowControlSets));	
 		}
 
 		[Test]
