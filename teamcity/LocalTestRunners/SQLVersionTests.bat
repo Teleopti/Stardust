@@ -1,6 +1,6 @@
 @ECHO OFF
 SET ROOTDIR=%~dp0
-SET ROOTDIR=%ROOTDIR:~0,-26%
+SET ROOTDIR=%ROOTDIR:~0,-27%
 
 SET configuration=debug
 SET WorkingDirectory=%ROOTDIR%
