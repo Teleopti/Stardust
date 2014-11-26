@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
 				select person.Id.Value).ToList();
-			if (_toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926))
-				return _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging);
 
 			return _scheduleDayReadModelFinder.ForBulletinPersons(date, personIdList, mySchedulePeriod, paging);
 		}
