@@ -67,7 +67,7 @@ AS
 	)
 
 	INSERT INTO @BulletinResult
-	SELECT 
+	SELECT
 		Person
 	FROM (
 			--Shifts
@@ -85,7 +85,7 @@ AS
 			AND ValidTo >= GETUTCDATE()
 	)bulletin
 
-	SET ROWCOUNT @take;		
+	SET ROWCOUNT @take;
 	WITH Ass AS
 	(
 		SELECT *,
@@ -122,15 +122,15 @@ AS
 		RowNumber
 	FROM Ass
 	WHERE Ass.RowNumber > @skip
-	
-	 DECLARE @lastPage bit 
+
+	 DECLARE @lastPage bit
 	 SET @lastPage = 0
 	 IF ((SELECT COUNT(*) FROM @output) < @take)
 		 SET @lastPage = 1
 
 	 DECLARE @thisLastRow int
 	 SET @thisLastRow = (SELECT MAX(Rownumber) FROM @output)
-	
+
 	 IF (SELECT MAX(Total) FROM @output) = @thisLastRow
 		 SET @lastPage = 1
 
