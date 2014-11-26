@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var model = savedModel.Model.DetailModels.First();
 			model.StartTime.Should().Be(null);
 			model.ActualStartTime.Should().Be(null);
-			model.ActualEndTime.Should().Be(null);
 			model.LastStateChangedTime.Should().Be(null);
 		}
 

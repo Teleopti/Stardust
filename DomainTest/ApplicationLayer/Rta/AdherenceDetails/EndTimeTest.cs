@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 9:00".Utc(),
 			});
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
+			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
 		}
 
 		[Test]
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 9:00".Utc(),
 			});
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
+			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
 		}
 
 		[Test]
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false
 			});
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 8:53".Utc());
+			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 8:53".Utc());
 		}
 
 		[Test]
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 10:00".Utc(),
 			});
 
-			persister.Rows.Single().Model.DetailModels.Last().ActualEndTime.Should().Be(null);
+			persister.Rows.Single().Model.ActualEndTime.Should().Be(null);
 
 		}
 
@@ -216,9 +216,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false,
 				InAdherenceWithPreviousActivity = false,
 			});
-			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
+			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
 		}
-		
-		
+
+		[Test]
+		public void ShouldPersistShiftEndTime()
+		{
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var personId = Guid.NewGuid();
+			target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				Name = "Phone",
+				StartTime = "2014-11-17 8:00".Utc(),
+				InAdherence = true
+			});
+			target.Handle(new PersonShiftEndEvent
+			{
+				PersonId = personId,
+				ShiftStartTime = "2014-11-17 8:00".Utc(),
+				ShiftEndTime = "2014-11-17 9:00".Utc(),
+			});
+
+			target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 9:30".Utc(),
+				InAdherence = false
+			});
+
+			persister.Rows.Single().Model.ShiftEndTime.Should().Be("2014-11-17 9:00".Utc());
+		}
 	}
 }
