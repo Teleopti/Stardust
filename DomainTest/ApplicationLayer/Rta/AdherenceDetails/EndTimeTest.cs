@@ -202,21 +202,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:22".Utc(),
 				InAdherence = false,
-				InAdherenceForPreviousActivity = true,
+				InAdherenceWithPreviousActivity = true,
 			});
 			target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:25".Utc(),
 				InAdherence = false,
-				InAdherenceForPreviousActivity = true,
+				InAdherenceWithPreviousActivity = true,
 			});
 			target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:30".Utc(),
 				InAdherence = false,
-				InAdherenceForPreviousActivity = false,
+				InAdherenceWithPreviousActivity = false,
 			});
 			persister.Rows.Single().ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
 		}

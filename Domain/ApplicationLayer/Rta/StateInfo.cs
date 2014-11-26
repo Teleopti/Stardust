@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -11,17 +10,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly Lazy<IEnumerable<ScheduleLayer>> _scheduleLayers;
-		private readonly Lazy<ScheduleLayer> _previousActivity;
+		private readonly Lazy<ScheduleLayer> _activityForPreviousState;
 		private readonly Lazy<ScheduleLayer> _currentActivity;
 		private readonly Lazy<ScheduleLayer> _nextActivityInShift;
 		private readonly Lazy<IActualAgentState> _previousState;
 		private readonly Lazy<DateTime> _currentShiftStartTime;
 		private readonly Lazy<DateTime> _currentShiftEndTime;
-		private readonly Lazy<DateTime> _previousShiftStartTime;
-		private readonly Lazy<DateTime> _previousShiftEndTime;
-		private readonly Lazy<bool> _adherenceForNewActivity;
+		private readonly Lazy<DateTime> _shiftStartTimeForPreviousState;
+		private readonly Lazy<DateTime> _shiftEndTimeForPreviousState;
+		private readonly Lazy<bool> _inAdherenceWithNewActivity;
 		private readonly Lazy<IActualAgentState> _newState;
-		private Lazy<bool> _inAdherence;
+		private readonly Lazy<bool> _inAdherence;
+		private readonly Lazy<bool> _inAdherenceWithPreviousActivity;
+		private Guid? _platformTypeId;
+		private PersonWithBusinessUnit _person;
+		private IActualAgentAssembler _actualAgentStateAssembler;
 
 		public StateInfo(
 			IDatabaseReader databaseReader,
@@ -31,42 +34,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 
 			_input = input;
-			var time = input.Timestamp;
-			var personId = person.PersonId;
-			Guid? platformTypeId = null;
+			_person = person;
+			_actualAgentStateAssembler = actualAgentStateAssembler;
+
+			_platformTypeId = null;
 			if (input.PlatformTypeId != null)
-				platformTypeId = Guid.Parse(input.PlatformTypeId);
-
-			_previousState = new Lazy<IActualAgentState>(() => databaseReader.GetCurrentActualAgentState(personId) ??
-															   new ActualAgentState
-															   {
-																   PersonId = personId,
-																   StateId = Guid.NewGuid(),
-															   });
-			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(personId));
-			_previousActivity = new Lazy<ScheduleLayer>(() => activityForTime(PreviousState.ReceivedTime));
-			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(time));
-			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
-			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(CurrentActivity));
-			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(CurrentActivity));
-			_previousShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(PreviousActivity));
-			_previousShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(PreviousActivity));
-
-			_inAdherence = new Lazy<bool>(() => AdherenceFor(NewState));
-			_adherenceForNewActivity = new Lazy<bool>(() =>
-			{
-				if (CurrentActivity != PreviousActivity)
-				{
-					var stateGroup = actualAgentStateAssembler.GetStateGroup(
-						PreviousState.StateCode,
-						platformTypeId.HasValue ? platformTypeId.Value : Guid.Empty,
-						person.BusinessUnitId);
-					var alarm = actualAgentStateAssembler.GetAlarm(NewState.ScheduledId, stateGroup.StateGroupId, person.BusinessUnitId);
-
-					return alarm == null || AdherenceFor(alarm);
-				}
-				return true;
-			});
+				_platformTypeId = Guid.Parse(input.PlatformTypeId);
 
 			var batchId = input.IsSnapshot
 				? input.BatchId
@@ -76,14 +49,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				CurrentActivity,
 				NextActivityInShift,
 				PreviousState,
-				personId,
+				person.PersonId,
 				person.BusinessUnitId,
-				platformTypeId,
+				_platformTypeId,
 				input.StateCode,
 				input.Timestamp,
 				TimeSpan.FromSeconds(input.SecondsInState),
 				batchId,
 				input.SourceId));
+
+			_previousState = new Lazy<IActualAgentState>(() => databaseReader.GetCurrentActualAgentState(person.PersonId) ??
+															   new ActualAgentState
+															   {
+																   PersonId = person.PersonId,
+																   StateId = Guid.NewGuid(),
+															   });
+			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(person.PersonId));
+			_activityForPreviousState = new Lazy<ScheduleLayer>(() => activityForTime(PreviousState.ReceivedTime));
+			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(_input.Timestamp));
+			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
+			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(CurrentActivity));
+			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(CurrentActivity));
+			_shiftStartTimeForPreviousState = new Lazy<DateTime>(() => startTimeOfShift(ActivityForPreviousState));
+			_shiftEndTimeForPreviousState = new Lazy<DateTime>(() => endTimeOfShift(ActivityForPreviousState));
+
+			_inAdherence = new Lazy<bool>(() => AdherenceFor(NewState));
+			_inAdherenceWithNewActivity = new Lazy<bool>(() =>
+			{
+				if (CurrentActivity == ActivityForPreviousState)
+					return true;
+				return AdherenceFor(PreviousState.StateCode, NewState.ScheduledId);
+			});
+			_inAdherenceWithPreviousActivity = new Lazy<bool>(() =>
+			{
+				var previousActivity = (from l in ScheduleLayers where l.EndDateTime < _input.Timestamp select l).LastOrDefault();
+				return AdherenceFor(_input.StateCode, previousActivity);
+			});
 
 		}
 
@@ -94,17 +95,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool IsScheduled { get { return NewState.ScheduledId != Guid.Empty; } }
 		public bool WasScheduled { get { return PreviousState.ScheduledId != Guid.Empty; }}
 
+		public ScheduleLayer CurrentActivity { get { return _currentActivity.Value; } }
+		public ScheduleLayer NextActivityInShift { get { return _nextActivityInShift.Value; } }
 		public DateTime CurrentShiftStartTime { get { return _currentShiftStartTime.Value; } }
 		public DateTime CurrentShiftEndTime { get { return _currentShiftEndTime.Value; } }
 
-		public ScheduleLayer CurrentActivity { get { return _currentActivity.Value; } }
-		public ScheduleLayer NextActivityInShift { get { return _nextActivityInShift.Value; } }
-		public ScheduleLayer PreviousActivity { get { return _previousActivity.Value; } }
-		public DateTime PreviousShiftStartTime { get { return _previousShiftStartTime.Value; } }
-		public DateTime PreviousShiftEndTime { get { return _previousShiftEndTime.Value; } }
+		public ScheduleLayer ActivityForPreviousState { get { return _activityForPreviousState.Value; } }
+		public DateTime ShiftStartTimeForPreviousState { get { return _shiftStartTimeForPreviousState.Value; } }
+		public DateTime ShiftEndTimeForPreviousState { get { return _shiftEndTimeForPreviousState.Value; } }
 
 		public bool InAdherence { get { return _inAdherence.Value; } }
-		public bool AdherenceForNewActivity { get { return _adherenceForNewActivity.Value; } }
+		public bool InAdherenceWithNewActivity { get { return _inAdherenceWithNewActivity.Value; } }
+		public bool InAdherenceWithPreviousActivity { get { return _inAdherenceWithPreviousActivity.Value; } }
 
 		public bool Send
 		{
@@ -118,6 +120,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					   NewState.ScheduledNext != PreviousState.ScheduledNext
 					;
 			}
+		}
+
+		public bool AdherenceFor(string stateCode, ScheduleLayer activity)
+		{
+			return activity == null || AdherenceFor(stateCode, activity.PayloadId);
+		}
+
+		public bool AdherenceFor(string stateCode, Guid activityId)
+		{
+			var stateGroup = _actualAgentStateAssembler.GetStateGroup(
+				stateCode,
+				_platformTypeId.HasValue ? _platformTypeId.Value : Guid.Empty,
+				_person.BusinessUnitId);
+			var alarm = _actualAgentStateAssembler.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
+			return alarm == null || AdherenceFor(alarm);
 		}
 
 		public static bool AdherenceFor(IActualAgentState state)
@@ -172,5 +189,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return nextActivity;
 			return null;
 		}
+
 	}
 }

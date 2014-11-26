@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				PersonId = info.NewState.PersonId,
 				Timestamp = info.NewState.ReceivedTime,
 				BusinessUnitId = info.NewState.BusinessUnitId,
-				InAdherence = info.InAdherence
+				InAdherence = info.InAdherence,
+				InAdherenceWithPreviousActivity = info.InAdherenceWithPreviousActivity
 			});
 
 			_adherenceEventPublisher.Publish(info, info.NewState.ReceivedTime, info.InAdherence);

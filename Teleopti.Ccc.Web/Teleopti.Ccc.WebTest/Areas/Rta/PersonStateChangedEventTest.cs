@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId)
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("statetwo", Guid.NewGuid())
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId)
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -122,16 +122,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
-				.WithAlarm("statecode", activityId, 0d)
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("statecode", activityId, 0)
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var dataSource = new FakeCurrentDatasource("datasource");
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher, dataSource);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -145,30 +142,76 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldPublishWithOutAdherence()
+		public void ShouldPublishWithOutOfAdherence()
 		{
 			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
-				.WithAlarm("statecode", activityId, 1d)
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("break", phone, 1)
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var dataSource = new FakeCurrentDatasource("datasource");
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher, dataSource);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
 
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
+				StateCode = "break",
 				Timestamp = "2014-10-20 10:00".Utc()
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
 			@event.InAdherence.Should().Be(false);
 		}
+
+		[Test]
+		public void ShouldPublishInAdherenceForPreviousActivity()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("phone", activityId, 0)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 11:05"), publisher);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone",
+				Timestamp = "2014-10-20 11:05".Utc()
+			});
+
+			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.InAdherenceWithPreviousActivity.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldPublishOutOfAdherenceForPreviousActivity()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("phone", activityId, 1)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 11:05"), publisher);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone",
+				Timestamp = "2014-10-20 11:05".Utc()
+			});
+
+			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
+			@event.InAdherenceWithPreviousActivity.Should().Be(false);
+		}
+
 	}
 }

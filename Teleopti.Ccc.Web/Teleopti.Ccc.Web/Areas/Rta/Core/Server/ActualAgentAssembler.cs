@@ -134,6 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			var allStateGroups = DatabaseReader.StateGroups();
 			List<RtaStateGroupLight> stateGroupsForStateCode;
+			if (stateCode == null) stateCode = "";
 			var tuple = new Tuple<string, Guid, Guid>(stateCode.ToUpper(CultureInfo.InvariantCulture), platformTypeId, businessUnitId);
 			if (allStateGroups.TryGetValue(tuple, out stateGroupsForStateCode))
 			{

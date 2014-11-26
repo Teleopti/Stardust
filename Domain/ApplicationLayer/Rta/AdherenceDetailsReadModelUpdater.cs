@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,
 			PersonStateChangedEvent @event)
 		{
-			if (!@event.InAdherenceForPreviousActivity && model.ActualEndTime == null)
+			if (!@event.InAdherenceWithPreviousActivity && model.ActualEndTime == null)
 			{
 				return @event.Timestamp;
 			}

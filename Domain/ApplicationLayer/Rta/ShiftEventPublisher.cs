@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				_eventPublisher.Publish(new PersonShiftEndEvent
 				{
 					PersonId = info.NewState.PersonId,
-					ShiftStartTime = info.PreviousShiftStartTime,
-					ShiftEndTime = info.PreviousShiftEndTime,
+					ShiftStartTime = info.ShiftStartTimeForPreviousState,
+					ShiftEndTime = info.ShiftEndTimeForPreviousState,
 					BusinessUnitId = info.NewState.BusinessUnitId
 				});
 			}

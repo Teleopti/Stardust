@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				StartTime = startTime,
 				Name = info.CurrentActivity.Name,
 				BusinessUnitId = info.NewState.BusinessUnitId,
-				InAdherence = info.AdherenceForNewActivity
+				InAdherence = info.InAdherenceWithNewActivity
 			});
 
-			_adherenceEventPublisher.Publish(info, startTime, info.AdherenceForNewActivity);
+			_adherenceEventPublisher.Publish(info, startTime, info.InAdherenceWithNewActivity);
 		}
 	}
 }
