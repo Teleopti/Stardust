@@ -39,6 +39,7 @@ Scenario: Sign in as a windows user in CCC
 	When I go to mytime web
 	Then I should be signed in
 
+@ignore
 @ExtraDataSource
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Sign in as a windows user in CCC with multiple data sources
