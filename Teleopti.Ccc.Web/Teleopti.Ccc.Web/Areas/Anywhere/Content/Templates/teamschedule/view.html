@@ -33,31 +33,31 @@
                 </optgroup>
             </select>
         </div>
-    <div class="col-xs-12 col-md-4 pull-right">
-        <div class="btn-group">
-            <div class="input-group date" id="date-picker">
-                <span class="input-group-btn">
-                    <button class="btn" data-bind="attr: { title: Resources.Previous }, click: PreviousDay">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </button>
-                </span>
-                <input class="form-control date-input text-center" size="16" type="text" readonly="readonly" data-bind="value: DateFormatted" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                    </button>
-                    <button class="btn" data-bind="attr: { title: Resources.Next }, click: NextDay">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </button>
-                    <button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="disable: Loading, click: ToggleDisplayDescriptions">
-                        <i class="glyphicon glyphicon-question-sign"></i>
-                    </button>
-                </span>
+		<div class="col-xs-12 col-md-4 pull-right">
+			<div class="btn-group">
+				<div class="input-group date" id="date-picker">
+					<span class="input-group-btn">
+						<button class="btn btn-navigation" data-bind="attr: { title: Resources.Previous }, click: PreviousDay">
+							<i class="glyphicon glyphicon-chevron-left"></i>
+						</button>
+					</span>
+					<input class="form-control date-input text-center" size="16" type="text" readonly="readonly" data-bind="value: DateFormatted" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-navigation" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+						<button class="btn btn-navigation" data-bind="attr: { title: Resources.Next }, click: NextDay">
+							<i class="glyphicon glyphicon-chevron-right"></i>
+						</button>
+						<button class="btn btn-navigation toggle-descriptions" data-toggle="button" disabled data-bind="disable: Loading, click: ToggleDisplayDescriptions">
+							<i class="glyphicon glyphicon-question-sign"></i>
+						</button>
+					</span>
 
 
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
     </div>
 
     <div class="row">

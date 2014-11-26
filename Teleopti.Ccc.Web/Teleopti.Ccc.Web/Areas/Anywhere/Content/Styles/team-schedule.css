@@ -207,3 +207,7 @@ sh
 #date-picker {
     width: 360px;
 }
+
+.btn-navigation {
+	background: rgb(234, 234, 234);
+}
