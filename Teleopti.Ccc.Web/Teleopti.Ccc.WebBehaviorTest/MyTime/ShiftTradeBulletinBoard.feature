@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-Feature: Shift trade bulletin board from requests
+﻿Feature: Shift trade bulletin board from requests
 	In order to make a shift trade with someone who has the same wishs
 	As an agent
 	I want to be able to see and pick a shift trade from bulletin board
@@ -36,7 +35,7 @@ Background:
 	| Night |
 	| Late  |
 
-
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
