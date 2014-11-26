@@ -39,7 +39,7 @@
 		This is our Test!!!
 		The SP will Loop until ETL job is finished. If it finds an error Then a RaisError Should make SQLCMD to bail out
 		-->
- 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True"/>
+ 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="300" ConnectionString="Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True"/>
  		<!-- Clean up-->
  		<!--Sleep for 10 secs then STOP service for clean up later on-->
  		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
