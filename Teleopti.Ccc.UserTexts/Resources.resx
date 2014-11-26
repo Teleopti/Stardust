@@ -12489,4 +12489,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="ApplyTo" xml:space="preserve">
     <value>Apply to</value>
   </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planned</value>
+    <comment>activity planned</comment>
+  </data>
 </root>

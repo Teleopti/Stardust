@@ -16,21 +16,25 @@
 					<tr style="background: #eeeeee;">
 						<td colspan="2">
 							<div class="person-menu">
-								<table class="table table-condensed" style="background: #eeeeee;">
+								<table class="table table-condensed  table-bordered" style="background: #eeeeee;">
 									<thead>
 										<tr>
-											<th>Planned Activity</th>
-											<th>Planned activity time</th>
-											<th>Time Real</th>
-											<th>Adherence</th>
+											<th colspan="2" data-bind="text: $root.Resources.Planned" style="text-align: center;"></th>
+											<th colspan="2" data-bind="text: $root.Resources.Actual" style="text-align: center;"></th>
+										</tr>
+										<tr>
+											<th data-bind="text: $root.Resources.Activity"></th>
+											<th data-bind="text: $root.Resources.Start"></th>
+											<th data-bind="text: $root.Resources.Start"></th>
+											<th data-bind="text: $root.Resources.Adherence"></th>
 										</tr>
 									</thead>
 									<tbody data-bind="foreach: AdherenceDetails">
 										<tr>
-											<td class="activity-name" data-bind="text: Name"></td>
-											<td class="activity-startime" data-bind="text: StartTime"></td>
-											<td class="realstarttime" data-bind="text: ActualStartTime"></td>
-											<td class="adherence-percent">
+											<td class="activity-name col-md-3" data-bind="text: Name"></td>
+											<td class="activity-startime  col-md-3" data-bind="text: StartTime"></td>
+											<td class="realstarttime  col-md-3" data-bind="text: ActualStartTime"></td>
+											<td class="adherence-percent col-md-3">
 												<span data-bind="text: AdherencePercent"></span>%
 											</td>
 										</tr>

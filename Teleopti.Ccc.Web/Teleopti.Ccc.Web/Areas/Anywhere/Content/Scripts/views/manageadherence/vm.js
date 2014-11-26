@@ -3,14 +3,16 @@
 		'ajax',
 		'views/manageadherence/getpersondetails',
 		'views/manageadherence/getadherencedetails',
-		'views/realtimeadherenceagents/getadherence'
+		'views/realtimeadherenceagents/getadherence',
+		'resources'
 ],
 	function(
 		ko,
 		ajax,
 		getpersondetails,
 		getadherencedetails,
-		getadherence
+		getadherence,
+		resources
 	) {
 		return function() {
 
@@ -19,6 +21,7 @@
 			that.AgentName = ko.observable();
 			that.DailyPercent = ko.observable();
 			that.AdherenceDetails = ko.observableArray();
+			that.Resources = resources;
 
 			that.setViewOptions = function(options) {
 				that.PersonId(options.id);
