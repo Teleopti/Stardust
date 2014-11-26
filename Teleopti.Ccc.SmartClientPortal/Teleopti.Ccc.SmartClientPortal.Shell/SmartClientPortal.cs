@@ -689,9 +689,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
 			{
+				DateTime start = DateTime.Now;
 				while (!_webViewLoaded)
 				{
 					Application.DoEvents();
+					//temp ? fix for bug 31541 (an issue in eo.webbrowser after a windows update)
+					if ((DateTime.Now - start).TotalSeconds >= 10)
+						break;
 				}
 			}
 
