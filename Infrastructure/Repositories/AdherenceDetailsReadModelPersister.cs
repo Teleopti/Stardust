@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -24,109 +25,79 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"(" +
 				"	PersonId," +
 				"	BelongsToDate," +
-				"	Name," +
-				"	StartTime," +
-				"	ActualStartTime," +
-				"	LastStateChangedTime," +
-				"	IsInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence," +
-				"	ActivityHasEnded" +
+				"	Model" +
 				") VALUES (" +
 				"	:PersonId," +
 				"	:BelongsToDate," +
-				"	:Name," +
-				"	:StartTime," +
-				"	:ActualStartTime," +
-				"	:LastStateChangedTime," +
-				"	:IsInAdherence," +
-				"	:TimeInAdherence," +
-				"	:TimeOutOfAdherence," +
-				"	:ActivityHasEnded" +
+				"	:Model" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetParameter("Name", model.Name)
-				.SetParameter("StartTime", model.StartTime,NHibernateUtil.DateTime)
-				.SetParameter("ActualStartTime", model.ActualStartTime, NHibernateUtil.DateTime)
-				.SetParameter("LastStateChangedTime", model.LastStateChangedTime, NHibernateUtil.DateTime)
-				.SetParameter("IsInAdherence", model.IsInAdherence)
-				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
-				.SetTimeSpan("TimeOutOfAdherence", model.TimeOutOfAdherence)
-				.SetParameter("ActivityHasEnded", model.ActivityHasEnded)
+				.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
 				.ExecuteUpdate();
 		}
 
 		public void Update(AdherenceDetailsReadModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(
-			"UPDATE ReadModel.AdherenceDetails SET" +
-			"			Name = :Name," +
-			"			ActualStartTime = :ActualStartTime," +
-			"			LastStateChangedTime = :LastStateChangedTime," +
-			"			IsInAdherence = :IsInAdherence," +
-			"			TimeInAdherence = :TimeInAdherence," +
-			"			TimeOutOfAdherence = :TimeOutOfAdherence, " +
-			"			ActivityHasEnded = :ActivityHasEnded " +
-			"WHERE " +
-			"	PersonId = :PersonId AND " +
-			"	StartTime =:StartTime")
-			.SetGuid("PersonId", model.PersonId)
-			.SetParameter("Name", model.Name)
-			.SetParameter("StartTime", model.StartTime)
-			.SetParameter("ActualStartTime", model.ActualStartTime)
-			.SetParameter("LastStateChangedTime", model.LastStateChangedTime)
-			.SetParameter("IsInAdherence", model.IsInAdherence)
-			.SetParameter("TimeInAdherence", model.TimeInAdherence)
-			.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
-			.SetParameter("ActivityHasEnded", model.ActivityHasEnded)
-			.ExecuteUpdate();
+				"UPDATE ReadModel.AdherenceDetails SET" +
+				"			Model = :Model " +
+				"WHERE " +
+				"	PersonId = :PersonId AND " +
+				"	BelongsToDate =:Date")
+				.SetGuid("PersonId", model.PersonId)
+				.SetDateTime("Date", model.BelongsToDate)
+				.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
+				.ExecuteUpdate();
 		}
 
-		public IEnumerable<AdherenceDetailsReadModel> Get(Guid personId, DateOnly date)
+		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
+			var readModel = new AdherenceDetailsReadModel();
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
 				"	PersonId," +
-				"	BelongsToDate AS Date," +
-				"	Name," +
-				"	StartTime," +
-				"	ActualStartTime," +
-				"	LastStateChangedTime," +
-				"	IsInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence, " +
-				"	ActivityHasEnded " +
+				"	BelongsToDate AS Date, " +
+				"	Model " +
 				"FROM ReadModel.AdherenceDetails WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
-				.AddScalar("Name", NHibernateUtil.String)
-				.AddScalar("StartTime", NHibernateUtil.DateTime)
-				.AddScalar("ActualStartTime", NHibernateUtil.DateTime)
-				.AddScalar("LastStateChangedTime", NHibernateUtil.DateTime)
-				.AddScalar("IsInAdherence", NHibernateUtil.Boolean)
-				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
-				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
-				.AddScalar("ActivityHasEnded", NHibernateUtil.Boolean)
+				.AddScalar("Model", NHibernateUtil.String)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AdherenceDetailsReadModel)))
-				.List<AdherenceDetailsReadModel>();
-			return result;
+				.SetReadOnly(true)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(adherenceDetailsReadModel)))
+				.List<adherenceDetailsReadModel>().FirstOrDefault();
+			if (result == null) return null;
+			readModel.PersonId = result.PersonId;
+			readModel.Date = result.Date;
+			readModel.Model = new NewtonsoftJsonDeserializer().DeserializeObject<AdherenceDetailsModel>(result.Model);
+			return readModel;
 		}
 
-		public void Remove(Guid personId, DateOnly date)
+		public void ClearDetails(AdherenceDetailsReadModel model)
 		{
+			model.Model.DetailModels.Clear();
 			_unitOfWork.Current().CreateSqlQuery(
-			"DELETE FROM ReadModel.AdherenceDetails " +
+			"UPDATE ReadModel.AdherenceDetails SET" +
+			"			Model = :Model " +
 			"WHERE " +
 			"	PersonId = :PersonId AND " +
-			"	BelongsToDate =:BelongsToDate")
-			.SetGuid("PersonId", personId)
-			.SetDateTime("BelongsToDate", date)
+			"	BelongsToDate =:Date")
+			.SetGuid("PersonId", model.PersonId)
+			.SetDateTime("Date", model.BelongsToDate)
+			.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
 			.ExecuteUpdate();
+		}
+
+		class adherenceDetailsReadModel
+		{
+			public Guid PersonId { get; set; }
+			public DateTime Date { get; set; }
+			public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
+			public string Model { get; set; }
 		}
 	}
 }

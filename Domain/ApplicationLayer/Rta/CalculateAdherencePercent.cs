@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return new Percent(secondsInAdherence / total);
 		}
 
-		public Percent ForActivity(AdherenceDetailsReadModel data)
+		public Percent ForActivity(AdherenceDetailModel data)
 		{
 			var secondsInAdherence = Convert.ToDouble(data.TimeInAdherence.TotalSeconds);
 			var secondsOutOfAdherence = Convert.ToDouble(data.TimeOutOfAdherence.TotalSeconds);
-			if (!data.ActivityHasEnded)
+			if (!data.HasActivityEnded)
 			{
 				var lastTimestamp = data.LastStateChangedTime ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;

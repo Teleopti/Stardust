@@ -28,9 +28,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId)
 		{
-			var readModels = _readModelPersister.Get(personId, new DateOnly(_now.UtcDateTime()));
+			var readModel = _readModelPersister.Get(personId, new DateOnly(_now.UtcDateTime()));
 			var result = new List<AdherenceDetailsPercentageModel>();
-			readModels.ForEach(m =>
+			if (readModel == null) return result;
+			readModel.Model.DetailModels.ForEach(m =>
 			{
 				if (m == null || !isValid(m))
 					return;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 
-		private static bool isValid(AdherenceDetailsReadModel readModel)
+		private static bool isValid(AdherenceDetailModel readModel)
 		{
 			return !(readModel.TimeInAdherence == TimeSpan.Zero && readModel.TimeOutOfAdherence == TimeSpan.Zero);
 		}

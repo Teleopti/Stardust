@@ -14,18 +14,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void Add(AdherenceDetailsReadModel model)
 		{
 			Rows.Add(model);
-			Rows = Rows.OrderBy(x => x.StartTime).ToList();
 		}
 
 		public void Update(AdherenceDetailsReadModel model)
 		{
 			var existing = from m in Rows
 				where m.PersonId == model.PersonId &&
-				      m.StartTime == model.StartTime
+				      m.Date == model.Date
 				select m;
 			Rows.Remove(existing.Single());
 			Rows.Add(model);
-			Rows = Rows.OrderBy(x => x.StartTime).ToList();
 		}
 
 		public void Remove(Guid personId, DateOnly date)
@@ -37,25 +35,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Rows.Remove(existing.Single());
 		}
 
-		public IEnumerable<AdherenceDetailsReadModel> Get(Guid personId, DateOnly date)
+		public void ClearDetails(AdherenceDetailsReadModel model)
 		{
-			return from m in Rows
-				where m.PersonId == personId &&
-				      m.Date == date
-				select new AdherenceDetailsReadModel
+			model.Model.DetailModels.Clear();
+			Update(model);
+		}
+
+		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
+		{
+			return Rows.Where(r => r.PersonId == personId && r.Date == date)
+				.Select(m => new AdherenceDetailsReadModel
 				{
 					PersonId = m.PersonId,
 					Date = m.Date,
-					StartTime = m.StartTime,
-					Name = m.Name,
-					ActualStartTime = m.ActualStartTime,
-					LastStateChangedTime = m.LastStateChangedTime,
-					IsInAdherence = m.IsInAdherence,
-					TimeInAdherence = m.TimeInAdherence,
-					TimeOutOfAdherence = m.TimeOutOfAdherence,
-					ActivityHasEnded = m.ActivityHasEnded,
-					ActualEndTime = m.ActualEndTime
-				};
+					Model = new AdherenceDetailsModel
+					{
+						DetailModels = new List<AdherenceDetailModel>(
+							from d in m.Model.DetailModels
+							select new AdherenceDetailModel
+							{
+								StartTime = d.StartTime,
+								Name = d.Name,
+								ActualStartTime = d.ActualStartTime,
+								ActualEndTime = d.ActualEndTime,
+								LastStateChangedTime = d.LastStateChangedTime,
+								IsInAdherence = d.IsInAdherence,
+								TimeInAdherence = d.TimeInAdherence,
+								TimeOutOfAdherence = d.TimeOutOfAdherence,
+								HasActivityEnded = d.HasActivityEnded
+							}),
+						ShiftEndTime = m.Model.ShiftEndTime,
+						HasShiftEnded = m.Model.HasShiftEnded
+					}
+				}).FirstOrDefault();
 		}
 	}
 }

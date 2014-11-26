@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
 
-			persister.Rows.Single().TimeInAdherence.Should().Be(TimeSpan.Zero);
+			persister.Rows.Single().Model.DetailModels.Single().TimeInAdherence.Should().Be(TimeSpan.Zero);
 		}
 
 		[Test]
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 9:00".Utc(), InAdherence = false });
-			persister.Rows.Single().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
+			persister.Rows.Single().Model.DetailModels.Single().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = false });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
-			persister.Rows.First().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
+			persister.Rows.Single().Model.DetailModels.First().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
 		}
 
 		[Test]
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = false });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
-			persister.Rows.First().TimeInAdherence.Should().Be(TimeSpan.FromMinutes(55));
+			persister.Rows.Single().Model.DetailModels.First().TimeInAdherence.Should().Be(TimeSpan.FromMinutes(55));
 		}
 
 		[Test]
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:40".Utc(), InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:45".Utc(), InAdherence = true });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = false });
-			persister.Rows.First().TimeInAdherence.Should().Be(TimeSpan.FromMinutes(25 + 10 + 10));
+			persister.Rows.Single().Model.DetailModels.First().TimeInAdherence.Should().Be(TimeSpan.FromMinutes(25 + 10 + 10));
 		}
 	}
 }

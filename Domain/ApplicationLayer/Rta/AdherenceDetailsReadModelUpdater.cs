@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -23,49 +24,83 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonActivityStartEvent @event)
 		{
-			var model = new AdherenceDetailsReadModel
+			var detailModel = new AdherenceDetailModel
 			{
 				Name = @event.Name,
 				StartTime = @event.StartTime,
-				PersonId = @event.PersonId,
-				Date = new DateOnly(@event.StartTime),
-				IsInAdherence = @event.InAdherence
+				IsInAdherence = @event.InAdherence,
 			};
-			var previous = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime)).LastOrDefault();
+			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime));
+			if (readModel == null)
+			{
+				var model = new AdherenceDetailsReadModel
+				{
+					PersonId = @event.PersonId,
+					Date = new DateOnly(@event.StartTime),
+					Model = new AdherenceDetailsModel
+					{
+						DetailModels = new List<AdherenceDetailModel>()
+					}
+				};
+				model.Model.DetailModels.Add(detailModel);
+				_persister.Add(model);
+				return;
+			}
+
+			var previous = readModel.Model.DetailModels.LastOrDefault();
 			if (previous != null)
 			{
-				model.ActualStartTime = calculateActualStartTime(previous, @event);
-				
+				detailModel.ActualStartTime = calculateActualStartTime(previous, @event);
+
 				if (noActivityStarted(previous))
-					_persister.Remove(model.PersonId, model.BelongsToDate);
+					_persister.ClearDetails(readModel);
 				else
 				{
 					updateAdherence(previous, @event.StartTime);
-					previous.ActivityHasEnded = true;
-					_persister.Update(previous);
+					previous.HasActivityEnded = true;
 				}
 			}
-
-			_persister.Add(model);	
+			readModel.Model.DetailModels.Add(detailModel);
+			_persister.Update(readModel);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonStateChangedEvent @event)
 		{
-			var existingModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp)).LastOrDefault();
-			if (existingModel == null)
+			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp));
+			if (readModel == null)
 			{
 				var model = new AdherenceDetailsReadModel
 				{
 					PersonId = @event.PersonId,
 					Date = new DateOnly(@event.Timestamp),
-					LastStateChangedTime = @event.Timestamp,
+					Model = new AdherenceDetailsModel
+					{
+						DetailModels = new List<AdherenceDetailModel>
+						{
+							new AdherenceDetailModel
+							{
+								LastStateChangedTime = @event.Timestamp
+							}
+						}
+					}
 				};
 				_persister.Add(model);
+				return;
+			}
+
+			var existingModel = readModel.Model.DetailModels.LastOrDefault();
+			if (existingModel == null)
+			{
+				var detailModel = new AdherenceDetailModel
+				{
+					LastStateChangedTime = @event.Timestamp
+				};
+				readModel.Model.DetailModels.Add(detailModel);
 			}
 			else
 			{
-				if (existingModel.ActivityHasEnded)
+				if (existingModel.HasActivityEnded)
 				{
 					existingModel.ActualEndTime = calculateActualEndTimeWhenActivityEnds(existingModel, @event);
 				}
@@ -80,12 +115,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					existingModel.IsInAdherence = @event.InAdherence;
 					existingModel.ActualEndTime = calculateActualEndTimeBeforeActivityEnds(existingModel, @event);
 				}
-				_persister.Update(existingModel);
-
+				_persister.Update(readModel);
 			}
 		}
 
-		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,
+		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailModel model,
 			PersonStateChangedEvent @event)
 		{
 			if (!@event.InAdherenceWithPreviousActivity && model.ActualEndTime == null)
@@ -95,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return model.ActualEndTime;
 		}
 
-		private static DateTime? calculateActualEndTimeBeforeActivityEnds(AdherenceDetailsReadModel model,
+		private static DateTime? calculateActualEndTimeBeforeActivityEnds(AdherenceDetailModel model,
 			PersonStateChangedEvent @event)
 		{
 			if (@event.InAdherence)
@@ -110,20 +144,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
-			var lastModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime)).LastOrDefault();
-			if (lastModel == null) return;
+			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime));
+			if (readModel == null)
+				return;
+			var lastModel = readModel.Model.DetailModels.LastOrDefault();
+			if (lastModel == null)
+				return;
 			
 			updateAdherence(lastModel, @event.ShiftEndTime);
-			lastModel.ActivityHasEnded = true;
-			_persister.Update(lastModel);
+			lastModel.HasActivityEnded = true;
+			_persister.Update(readModel);
 		}
 
-		private static bool lateForActivity(AdherenceDetailsReadModel model, PersonStateChangedEvent @event)
+		private static bool lateForActivity(AdherenceDetailModel model, PersonStateChangedEvent @event)
 		{
 			return (@event.InAdherence && model.ActualStartTime == null);
 		}
 
-		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, PersonActivityStartEvent @event)
+		private static DateTime? calculateActualStartTime(AdherenceDetailModel model, PersonActivityStartEvent @event)
 		{
 			if (@event.InAdherence && model.IsInAdherence)
 			{
@@ -136,12 +174,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return null;
 		}
 
-		private static bool noActivityStarted(AdherenceDetailsReadModel model)
+		private static bool noActivityStarted(AdherenceDetailModel model)
 		{
 			return model.Name == null;
 		}
 
-		private static void updateAdherence(AdherenceDetailsReadModel model, DateTime timestamp)
+		private static void updateAdherence(AdherenceDetailModel model, DateTime timestamp)
 		{
 			var timeToAdd = model.LastStateChangedTime.HasValue
 				? timestamp - model.LastStateChangedTime.Value

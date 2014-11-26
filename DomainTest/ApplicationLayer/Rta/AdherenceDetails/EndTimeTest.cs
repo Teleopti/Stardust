@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 9:00".Utc(),
 			});
 
-			persister.Rows.Single().ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
+			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
 		}
 
 		[Test]
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 9:00".Utc(),
 			});
 
-			persister.Rows.Single().ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
+			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
 		}
 
 		[Test]
@@ -124,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false
 			});
 
-			persister.Rows.Single().ActualEndTime.Should().Be("2014-11-17 8:53".Utc());
+			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 8:53".Utc());
 		}
 
 		[Test]
@@ -168,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 10:00".Utc(),
 			});
 
-			persister.Rows.Last().ActualEndTime.Should().Be(null);
+			persister.Rows.Single().Model.DetailModels.Last().ActualEndTime.Should().Be(null);
 
 		}
 
@@ -218,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false,
 				InAdherenceWithPreviousActivity = false,
 			});
-			persister.Rows.Single().ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
+			persister.Rows.Single().Model.DetailModels.Single().ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
 		}
 		
 		

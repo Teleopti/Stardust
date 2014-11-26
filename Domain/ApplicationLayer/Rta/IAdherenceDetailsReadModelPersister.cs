@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -8,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		void Add(AdherenceDetailsReadModel model);
 		void Update(AdherenceDetailsReadModel model);
-		IEnumerable<AdherenceDetailsReadModel> Get(Guid personId, DateOnly date);
-		void Remove(Guid personId, DateOnly date);
+		AdherenceDetailsReadModel Get(Guid personId, DateOnly date);
+		void ClearDetails(AdherenceDetailsReadModel model);
 	}
 }
