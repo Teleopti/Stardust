@@ -1,8 +1,15 @@
-﻿
-	return function (rtaServerCall, moment, ko) {
+﻿define([
+	'knockout',
+	'moment',
+	'rta'
+], function (
+	ko,
+	moment,
+	rta
+) {
 
+	return function (rtaServerCall) {
 		var self = this;
-
 		rtaServerCall = rtaServerCall || rta.ServerCall;
 
 		self.AuthenticationKey = '!#¤atAbgT%';
@@ -30,11 +37,19 @@
 			rtaServerCall(makeAgentState('', false));
 		}
 
-		var makeAgentState = function (stateCode, isLoggedOn) {
+		self.name = ko.observable();
 
+		self.usercode = ko.observable();
+
+		self.fill = function(agent) {
+			self.name(agent.name);
+			self.usercode(agent.usercode);
+		}
+
+		var makeAgentState = function (stateCode, isLoggedOn) {
 			return {
 				AuthenticationKey: self.AuthenticationKey,
-				UserCode: usercode,
+				UserCode: self.usercode(),
 				StateCode: stateCode,
 				StateDescription: stateCode,
 				IsLoggedOn: isLoggedOn,

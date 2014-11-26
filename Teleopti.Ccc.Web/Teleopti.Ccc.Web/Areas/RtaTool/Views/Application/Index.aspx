@@ -27,11 +27,39 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
-	<div class="container ">
-		
-		
+		<h3>RTA Tool</h3>
+		<table class="table table-striped">
+			<tbody data-bind="foreach: agents">
+				<tr>
+					<td>
+						<div data-bind="text: name"></div>
+					</td>
+				<td>
+					<button class="btn btn-default btn-sm" data-bind="click: answer">Answer</button>					
+				</td>
+				<td>
+					<button class="btn btn-danger btn-sm" data-bind="click: hangUp">Hang up</button>
+				</td>
+				
+				<td>
+					
+				</td>
+				<td>
+					<input data-bind="value: specifiedState"/>
+					<button class="btn btn-default btn-sm" data-bind="click: sendState">Send</button>
+				</td>
+				<td></td>
+				<td>
+					<button class="btn btn-default btn-sm" data-bind="click: logOn">Log On</button>					
+				</td>
+				<td>
+					<button class="btn btn-danger btn-sm" data-bind="click: logOff">Log Off</button>
+				</td>
+				</tr>
+			</tbody>
+		</table>
 	
-		<table class="table">
+		<%--<table class="table">
 			<tr>
 				<td>Ashley Andeen</td>
 				<td>
@@ -56,7 +84,7 @@
 					<button class="btn btn-danger" data-bind="click: logOff">Log Off</button>
 				</td>
 			</tr>
-		</table>
+		</table>--%>
 	</div>
 
 </body>

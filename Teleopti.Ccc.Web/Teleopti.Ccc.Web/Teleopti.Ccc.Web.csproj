@@ -1131,6 +1131,8 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\vm_test.js" />
     <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
+    <Content Include="Areas\RtaTool\Content\Scripts\agentvm.js" />
+    <Content Include="Areas\RtaTool\Content\Scripts\agentvm_test.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\main.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\RtaTool\Content\Scripts\rta.js" />
