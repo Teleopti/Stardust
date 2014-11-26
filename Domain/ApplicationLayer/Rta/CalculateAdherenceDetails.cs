@@ -43,6 +43,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					AdherencePercent = (int)_calculateAdherencePercent.ForActivity(m).ValueAsPercent()
 				});
 			});
+			if (readModel.Model.HasShiftEnded)
+			{
+				result.Add(new AdherenceDetailsPercentageModel
+				{
+					Name = UserTexts.Resources.End,
+					StartTime = convertToAgentTimeZoneAndFormatTimestamp(readModel.Model.ShiftEndTime),
+					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(readModel.Model.ActualEndTime)
+				});
+			}
 			return result;
 		}
 

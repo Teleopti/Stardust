@@ -337,6 +337,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.Single().AdherencePercent.Should().Be(50);
 		}
 
+		[Test]
+		public void ShouldReturnEndStatusIfShiftHasEnded()
+		{
+			var model = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					ShiftEndTime = "2014-11-20 9:00".Utc(),
+					HasShiftEnded = true,
+					ActualEndTime = "2014-11-20 9:00".Utc(),
+					DetailModels = new[]
+					{
+						new AdherenceDetailModel
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = TimeSpan.FromMinutes(30),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+							LastStateChangedTime = "2014-11-20 9:00".Utc(),
+							IsInAdherence = false,
+							HasActivityEnded = true
+						}
+					}
+				}
+			};
+			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
+				new FakeAdherenceDetailsReadModelPersister(new[] {model}), new SwedishCulture(), new UtcTimeZone());
+
+			var result = target.ForDetails(model.PersonId);
+
+			result.Count().Should().Be(2);
+			result.Last().Name.Should().Be(UserTexts.Resources.End);
+			result.Last().StartTime.Should().Be(model.Model.ShiftEndTime.Value.ToShortTimeString(new SwedishCulture().GetCulture()));
+			result.Last().ActualStartTime.Should().Be(model.Model.ActualEndTime.Value.ToShortTimeString(new SwedishCulture().GetCulture()));
+			result.Last().AdherencePercent.Should().Be(null);
+		}
+
 		public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
 		{
 			private readonly IList<AdherenceDetailsReadModel> _models;
