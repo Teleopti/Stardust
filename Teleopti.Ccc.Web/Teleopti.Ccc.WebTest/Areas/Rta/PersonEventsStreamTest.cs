@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldPublishActivityAndAdherenceEventsFromNowWhenChangingThePast()
 		{
 			var personId = Guid.NewGuid();
@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var admin = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
 				.WithAlarm("admin", phone, 1)
 				.WithAlarm("admin", admin, 0)
@@ -87,6 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 9:31".Utc());
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:30".Utc());
+			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be.True();
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:30".Utc());
 		}
 	}

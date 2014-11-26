@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				MockRepository.GenerateMock<IMbCacheFactory>(),
 				_adherenceAggregator,
 				new ShiftEventPublisher(eventPopulatingPublisher),
-				new ActivityEventPublisher(eventPopulatingPublisher, adherenceEventPublisher),
+				new ActivityEventPublisher(eventPopulatingPublisher, adherenceEventPublisher, now),
 				new StateEventPublisher(eventPopulatingPublisher, adherenceEventPublisher),
 				now,
 				new FakeConfigReader());
