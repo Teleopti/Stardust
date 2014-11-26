@@ -241,8 +241,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return self.showAddOvertimeAvailabilityForm;
 			if (self.absenceRequestPermission())
 				return self.showAddAbsenceRequestForm;
-			if (self.absenceReportPermission())
-				return self.showAddAbsenceReportForm;
 
 			return self.showAddTextRequestForm;
 		}
