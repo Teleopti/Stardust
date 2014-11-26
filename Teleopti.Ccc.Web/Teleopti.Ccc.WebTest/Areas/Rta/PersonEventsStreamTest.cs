@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldPublishActivityAndAdherenceEventsFromNowWhenChangingThePast()
+		public void ShouldPublishActivityAndAdherenceEventsFromLastStateChangeWhenRewritingHistory()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			database.WithSchedule(personId, admin, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc());
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 9:31".Utc());
 
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:30".Utc());
+			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be.True();
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:30".Utc());
+			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
 		}
 	}
 }

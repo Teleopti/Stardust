@@ -1,6 +1,4 @@
-using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -8,16 +6,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IAdherenceEventPublisher _adherenceEventPublisher;
-		private readonly INow _now;
 
-		public ActivityEventPublisher(
-			IEventPopulatingPublisher eventPublisher, 
-			IAdherenceEventPublisher adherenceEventPublisher,
-			INow now)
+		public ActivityEventPublisher(IEventPopulatingPublisher eventPublisher, IAdherenceEventPublisher adherenceEventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
-			_now = now;
 		}
 
 		public void Publish(StateInfo info)
@@ -26,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 			var activityStartedInThePast = info.CurrentActivity.StartDateTime < info.PreviousState.ReceivedTime;
 			var startTime = activityStartedInThePast
-				? _now.UtcDateTime()
+				? info.PreviousState.ReceivedTime
 				: info.CurrentActivity.StartDateTime;
 
 			_eventPublisher.Publish(new PersonActivityStartEvent
