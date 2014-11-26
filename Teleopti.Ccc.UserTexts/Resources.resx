@@ -12486,4 +12486,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Filter on open hours</value>
     <comment>Scheduling error message</comment>
   </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Apply to</value>
+  </data>
 </root>

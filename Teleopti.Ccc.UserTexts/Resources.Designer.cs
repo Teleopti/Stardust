@@ -2260,6 +2260,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply to.
+        /// </summary>
+        public static string ApplyTo {
+            get {
+                return ResourceManager.GetString("ApplyTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Appointment Recurrence.
         /// </summary>
         public static string AppointmentRecurrence {
