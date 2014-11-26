@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.LastStateChangedTime.Should().Be(detailModel.LastStateChangedTime);
 			model.IsInAdherence.Should().Be(detailModel.IsInAdherence);
 			model.TimeInAdherence.Should().Be(detailModel.TimeInAdherence);
-			model.HasActivityEnded.Should().Be(detailModel.HasActivityEnded);
 			model.TimeOutOfAdherence.Should().Be(detailModel.TimeOutOfAdherence);
 		}
 
@@ -90,7 +89,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			firstModel.IsInAdherence.Should().Be(detailModel1.IsInAdherence);
 			firstModel.TimeInAdherence.Should().Be(detailModel1.TimeInAdherence);
 			firstModel.TimeOutOfAdherence.Should().Be(detailModel1.TimeOutOfAdherence);
-			firstModel.HasActivityEnded.Should().Be(detailModel1.HasActivityEnded);
 
 			var secondModel = savedModel.Model.DetailModels.Last();
 			secondModel.Name.Should().Be(detailModel2.Name);
@@ -100,7 +98,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			secondModel.IsInAdherence.Should().Be(detailModel2.IsInAdherence);
 			secondModel.TimeInAdherence.Should().Be(detailModel2.TimeInAdherence);
 			secondModel.TimeOutOfAdherence.Should().Be(detailModel2.TimeOutOfAdherence);
-			secondModel.HasActivityEnded.Should().Be(detailModel2.HasActivityEnded);
 		}
 
 		[Test]
@@ -134,7 +131,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedDetailModel1.IsInAdherence.Should().Be(detailModel1.IsInAdherence);
 			savedDetailModel1.TimeInAdherence.Should().Be(detailModel1.TimeInAdherence);
 			savedDetailModel1.TimeOutOfAdherence.Should().Be(detailModel1.TimeOutOfAdherence);
-			savedDetailModel1.HasActivityEnded.Should().Be(detailModel1.HasActivityEnded);
 			
 			var savedModel2 = Target.Get(personId, dateOnly2);
 
@@ -148,7 +144,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedDetailModel2.IsInAdherence.Should().Be(detailModel2.IsInAdherence);
 			savedDetailModel2.TimeInAdherence.Should().Be(detailModel2.TimeInAdherence);
 			savedDetailModel2.TimeOutOfAdherence.Should().Be(detailModel2.TimeOutOfAdherence);
-			savedDetailModel2.HasActivityEnded.Should().Be(detailModel2.HasActivityEnded);
 		}
 
 		[Test]
@@ -247,8 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				LastStateChangedTime = lastStateChangedTime,
 				ActualStartTime = lastStateChangedTime,
 				Name = activityName,
-				StartTime = lastStateChangedTime,
-				HasActivityEnded = true
+				StartTime = lastStateChangedTime
 			};
 		}
 	}

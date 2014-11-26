@@ -280,6 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
+					HasActivityEnded = true,
 					DetailModels = new[]
 					{
 						new AdherenceDetailModel
@@ -288,8 +289,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 							TimeInAdherence = TimeSpan.FromMinutes(30),
 							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
 							LastStateChangedTime = "2014-11-20 9:00".Utc(),
-							IsInAdherence = false,
-							HasActivityEnded = true
+							IsInAdherence = false
 						}
 					}
 				}
@@ -348,6 +348,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					ShiftEndTime = "2014-11-20 9:00".Utc(),
 					HasShiftEnded = true,
+					HasActivityEnded = true,
 					ActualEndTime = "2014-11-20 9:00".Utc(),
 					DetailModels = new[]
 					{
@@ -357,8 +358,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 							TimeInAdherence = TimeSpan.FromMinutes(30),
 							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
 							LastStateChangedTime = "2014-11-20 9:00".Utc(),
-							IsInAdherence = false,
-							HasActivityEnded = true
+							IsInAdherence = false
 						}
 					}
 				}
