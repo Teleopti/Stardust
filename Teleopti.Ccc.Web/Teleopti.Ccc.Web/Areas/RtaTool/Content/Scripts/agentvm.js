@@ -8,9 +8,30 @@
 	rta
 ) {
 
-	return function (rtaServerCall) {
+	return function (rtaServerCall, rtaStateCodes) {
+
+		var statecodevm = function(code,send) {
+			var that = this;
+			that.code = ko.observable(code);
+			that.sendCode = send;
+
+			return that;
+		};
+
 		var self = this;
+
 		rtaServerCall = rtaServerCall || rta.ServerCall;
+		rtaStateCodes = rtaStateCodes || rta.FetchStateCodes;
+
+		self.statecodes = ko.observableArray();
+
+		ko.utils.arrayForEach(rtaStateCodes(), function (data) {
+			var svm = new statecodevm(data,function() {
+				var state = makeAgentState(data, true);
+				rtaServerCall(state);
+			});
+			self.statecodes().push(svm);
+		});
 
 		self.AuthenticationKey = '!#¤atAbgT%';
 
@@ -45,6 +66,8 @@
 			self.name(agent.name);
 			self.usercode(agent.usercode);
 		}
+
+		self.selected = ko.observable(false);
 
 		var makeAgentState = function (stateCode, isLoggedOn) {
 			return {

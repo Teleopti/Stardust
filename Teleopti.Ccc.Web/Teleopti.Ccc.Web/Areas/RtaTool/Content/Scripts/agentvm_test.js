@@ -93,7 +93,34 @@
 				vm.logOff();
 
 				expect(actualState.IsLoggedOn).toEqual(false);
+			},
+
+			"should load statecodes" : function() {
+				var expectedStateCodes = ['AUX1', 'Phone', 'AUX23'];
+				var vm = new agentvm(function () {},function() { return expectedStateCodes; });
+
+				for (var i = 0; i < expectedStateCodes.length; i++) {
+					expect(vm.statecodes()[i].code()).toEqual(expectedStateCodes[i]);
+				}
+			},
+
+			"should send statecode when executed" : function() {
+				var expectedStateCodes = ['AUX1', 'Phone'];
+				var actualState = {};
+
+				var vm = new agentvm(function (state) {
+					actualState = state;
+				}, function () { return expectedStateCodes; });
+
+				vm.statecodes()[0].sendCode();
+				expect(actualState.StateCode).toEqual('AUX1');
+
+				vm.statecodes()[1].sendCode();
+				expect(actualState.StateCode).toEqual('Phone');
+
 			}
+
+
 		});
 	};
 });

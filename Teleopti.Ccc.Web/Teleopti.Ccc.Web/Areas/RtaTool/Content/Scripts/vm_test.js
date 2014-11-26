@@ -1,7 +1,7 @@
 ﻿define(['buster','vm','moment'], function (buster,viewmodel,moment) {
 	return function () {
 
-		buster.testCase("=>Rta Tool viewmodel", {
+		buster.testCase("Rta Tool viewmodel", {
 			"should create agents":function() {
 				var agents = [
 					{ name: 'Ashley Andeen', usercode: '0085' },

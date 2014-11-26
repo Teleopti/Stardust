@@ -14,8 +14,8 @@
 				dataType : 'json',
 				contentType: "application/json"
 			});
-
 		},
+
 		FetchAgents : function() {
 			return [
 				{ name: 'Ashley Andeen', usercode: '0085' },
@@ -28,6 +28,19 @@
 				{ name: 'Prashant Arora', usercode: '0068' },
 				{ name: 'Robert Klashner', usercode: '2002' },
 				{ name: 'Stephen Bay', usercode: '0238' }
+			];
+		},
+
+		FetchStateCodes: function () {
+			return [
+			   { code: 'Ready' },
+			   { code: 'InCall' },
+			   { code: 'ACW' },
+			   { code: 'AUX1' },
+			   { code: 'AUX2' },
+			   { code: 'AUX3' },
+			   { code: 'AUX4' },
+			   { code: 'AUX5' }
 			];
 		}
 	}
