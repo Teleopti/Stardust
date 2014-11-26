@@ -23,6 +23,7 @@ using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using System.Configuration;
 
 namespace PBI30532LoadTest
 {
@@ -42,9 +43,9 @@ namespace PBI30532LoadTest
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			_logOnHelper = new LogOnHelper("CCCAdmin", "1234567", "c:\\nhib");
+			_logOnHelper = new LogOnHelper("demo", "demo", "c:\\nhib");
 
-			var bu = _logOnHelper.GetBusinessUnitCollection().Where(b => b.Id.Equals(new Guid("1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B"))).First();
+			var bu = _logOnHelper.GetBusinessUnitCollection().Where(b => b.Id.Equals(new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"))).First();
 			_logOnHelper.LogOn(bu);
 		}
 
@@ -134,42 +135,43 @@ namespace PBI30532LoadTest
 		private void sendToServiceBus(int numberOfPersons)
 		{
 			var sendToServiceBus = new ServiceBusSender();
-			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
-			var ctxpop = new  EventContextPopulator(
-				new CurrentBusinessUnit(identity),
-				new CurrentDataSource(identity, null, null),
-				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())
-				);
 			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus);
 
-			var persons =
-				HelperFunctions.ExecuteDataSet(CommandType.Text, string.Format("SELECT TOP {0} Id FROM Person",numberOfPersons), new List<SqlParameter>(),
-					"Data Source=.;Integrated Security=SSPI;Initial Catalog=main_Telia_TeleoptiCCC7;Current Language=us_english")
-					.Tables[0];
+			var connectionString = ConfigurationManager.ConnectionStrings["App"].ConnectionString; 
+			// "Data Source=.;Integrated Security=SSPI;Initial Catalog=main_clone_DemoSales_TeleoptiCCC7;Current Language=us_english";
 			var scenarios =
 				HelperFunctions.ExecuteDataSet(CommandType.Text, "SELECT TOP 1 Id FROM Scenario  where DefaultScenario = 1",
 					new List<SqlParameter>(),
-					"Data Source=.;Integrated Security=SSPI;Initial Catalog=main_Telia_TeleoptiCCC7;Current Language=us_english")
+					connectionString)
 					.Tables[0];
-			var dates = new List<DateTime>();
-			var date = new DateTime(2013, 11, 4, 0, 0, 0, DateTimeKind.Utc);
-			for (int i = 0; i < 7; i++)
-			{
-				dates.Add(date.AddDays(i));
-			}
+			var scenario = (Guid)scenarios.Rows[0]["Id"];
+			var sql = @"SELECT TOP {0} Date, Person FROM PersonAssignment WHERE Scenario = '{1}' AND Date >= '{2}' ORDER BY Date";
+			var persons =
+				HelperFunctions.ExecuteDataSet(CommandType.Text, string.Format(sql,numberOfPersons, scenario, "2014-11-25"), new List<SqlParameter>(),
+					connectionString)
+					.Tables[0];
+			
+			//var dates = new List<DateTime>();
+			//var date = new DateTime(2013, 11, 4, 0, 0, 0, DateTimeKind.Utc);
+			//for (int i = 0; i < 7; i++)
+			//{
+			//	dates.Add(date.AddDays(i));
+			//}
 			using (IUnitOfWork uow = _logOnHelper.ChoosenDataSource.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
+				eventPublisher.EnsureBus();
 				var index = 0;
 				foreach (DataRow row in persons.Rows)
 				{
-					var personId = (Guid)row["Id"];
-					var scenario = (Guid)scenarios.Rows[0]["Id"];
+					var personId = (Guid)row["Person"];
+					var date = new DateTime(((DateTime) row["Date"]).Ticks, DateTimeKind.Utc);
 					IEvent message = new ScheduleChangedEvent
 					{
 						ScenarioId = scenario,
-						StartDateTime = dates[index],
-						EndDateTime = dates[index],
+						StartDateTime = date,
+						EndDateTime = date,
 						PersonId = personId,
+						Datasource = _logOnHelper.ChoosenDataSource.DataSource.Application.Name
 					};
 
 					eventPublisher.Publish(message);
