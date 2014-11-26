@@ -42,6 +42,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.filterStartTimeList = ko.observableArray();
 	self.filteredStartTimesText = ko.observableArray();
 	self.isDayoffFiltered = ko.observable(false);
+	self.filterEndTimeList = ko.observableArray();
+	self.filteredEndTimesText = ko.observableArray();
+	
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
@@ -117,7 +120,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 
 	self.filterTime = ko.computed(function () {
 		self.filteredStartTimesText.removeAll();
-		//self.filteredEndTimesText.removeAll();
+		self.filteredEndTimesText.removeAll();
 
 		$.each(self.filterStartTimeList(), function (idx, timeInFilter) {
 			if (timeInFilter.isChecked()) {
@@ -134,12 +137,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			}
 		});
 
-		//$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
-		//	if (timeInFilter.isChecked()) {
-		//		var timeText = timeInFilter.start + ":00-" + timeInFilter.end + ":00";
-		//		self.filteredEndTimesText.push(timeText);
-		//	}
-		//});
+		$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
+			if (timeInFilter.isChecked()) {
+				var timeText = timeInFilter.start + ":00-" + timeInFilter.end + ":00";
+				self.filteredEndTimesText.push(timeText);
+			}
+		});
 	});
 
 	self.filterTime.subscribe(function () {
@@ -155,24 +158,24 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			var rangEnd = rangStart + 2;
 			var hourText = hourTexts[i] + " - " + hourTexts[i + 2];
 			var filterStartTime = new Teleopti.MyTimeWeb.Request.FilterStartTimeView(hourText, rangStart, rangEnd, false, false);
-			//var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
+			var filterEndTime = new Teleopti.MyTimeWeb.Request.FilterEndTimeView(hourText, rangStart, rangEnd, false);
 			self.filterStartTimeList.push(filterStartTime);
-			//self.filterEndTimeList.push(filterEndTime);
+			self.filterEndTimeList.push(filterEndTime);
 			rangStart += 2;
 		}
 	};
 
 	self.cleanTimeFiler = function () {
 		self.filteredStartTimesText.removeAll();
-		//self.filteredEndTimesText.removeAll();
+		self.filteredEndTimesText.removeAll();
 
 		$.each(self.filterStartTimeList(), function (idx, filter) {
 			if (filter.isChecked()) filter.isChecked(false);
 		});
 
-		//$.each(self.filterEndTimeList(), function (idx, filter) {
-		//	if (filter.isChecked()) filter.isChecked(false);
-		//});
+		$.each(self.filterEndTimeList(), function (idx, filter) {
+			if (filter.isChecked()) filter.isChecked(false);
+		});
 	};
 
 	self.chooseAgent = function (agent) {
@@ -187,7 +190,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			window.scrollTo(0, 0);
 			self.isSendEnabled(true);
 
-			//self.cleanTimeFiler();
+			self.cleanTimeFiler();
 		}
 		self.agentChoosed(agent);
 		self.errorMessage('');
@@ -471,7 +474,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	};
 
 	self.isFiltered = function () {
-		if (self.filteredStartTimesText().length == 0 /*&& self.filteredEndTimesText().length == 0*/ && !self.isDayoffFiltered()) {
+		if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
 			return false;
 		}
 		return true;
@@ -501,7 +504,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 					selectedDate: date,
 					teamIds: teamIds.join(","),
 					filteredStartTimes: self.filteredStartTimesText().join(","),
-					//filteredEndTimes: self.filteredEndTimesText().join(","),
+					filteredEndTimes: self.filteredEndTimesText().join(","),
 					isDayOff: self.isDayoffFiltered(),
 					Take: take,
 					Skip: skip

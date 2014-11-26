@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetAllBulletinSchedulesWithFilters()
 		{
-			var filteredStartTimes = "";
 			var isDayOff = true;
 
 			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradebulletinViewModelFactory>();
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _userTimeZone);
 
-			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), filteredStartTimes, isDayOff, new Paging());
+			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 	}

@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, string teamIds, string filteredStartTimes, bool isDayOff, Paging paging)
+		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, string teamIds, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
 			 var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			 var filterHelper = new FilterHelper(_userTimeZone);
-			 var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = filterHelper.GetFilter(selectedDate, filteredStartTimes, "", isDayOff) };
+			 var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = filterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			 return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
