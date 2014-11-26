@@ -5,6 +5,7 @@
 
 	<PropertyGroup>
 		<ETLStuff>$(WorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
+		<ETLTeamCityStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
 		<ETLDBNamePrefix>prefix</ETLDBNamePrefix>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
@@ -30,7 +31,7 @@
 	</Target>
 	
 	<Target Name="RunETLTest" DependsOnTargets="PrepareETLTest">
-		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="$(ETLStuff)\ETLNightlyBuild-StartConsoleHost.cmd $(WorkingDirectory) $(debug_release)"/>
+		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="$(ETLTeamCityStuff)\ETLNightlyBuild-StartConsoleHost.cmd $(WorkingDirectory) $(debug_release)"/>
 		<Message Text="Make sure the etl service is running..." />
 		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
 		<CallTarget Targets="AddSchedule"/>
@@ -42,7 +43,7 @@
  		<!-- Clean up-->
  		<!--Sleep for 10 secs then STOP service for clean up later on-->
  		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
-		<Exec Command ="$(ETLStuff)\ETLNightlyBuild-StopConsoleHost.cmd"/>
+		<Exec Command ="$(ETLTeamCityStuff)\ETLNightlyBuild-StopConsoleHost.cmd"/>
  	</Target>
 	
   		<!-- 
