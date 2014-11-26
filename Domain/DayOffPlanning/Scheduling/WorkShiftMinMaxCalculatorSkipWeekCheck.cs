@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 	/// <remarks>
 	///	The week should be skipped, if ...
 	/// 1. The schedule period changes within the week and at least one of them is invalid
-	/// 2. pr the MaxTimePerWeek value changes within the week
+	/// 2. or  MaxTimePerWeek value in contract changes within the week
 	/// Max time can be changed through the persons contract. The contract is part of the
 	/// person period so it can be changed when the person period changes within the week.
 	/// This can happen two ways: the current person period either starts on the week or ends on the week.
@@ -29,21 +29,26 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
 			if (weekPeriod.Contains(personPeriod.StartDate.AddDays(-1)))
 			{
-				var contract = personPeriod.PersonContract.Contract;
 				IPersonPeriod previousPersonPeriod = person.PreviousPeriod(personPeriod);
-				if (previousPersonPeriod != null)
-				{
-					if (contract.WorkTimeDirective.MaxTimePerWeek != previousPersonPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
-						return true;
-				}
+				if (previousPersonPeriod == null)
+					return true;
+				var contract = personPeriod.PersonContract.Contract;
+				if(contract.WorkTimeDirective.MaxTimePerWeek != previousPersonPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
+					return true;
 			}
 
-			IPersonPeriod nextPeriod = person.NextPeriod(personPeriod);
-			if (nextPeriod != null && weekPeriod.Contains(nextPeriod.StartDate))
+			if (weekPeriod.Contains(personPeriod.EndDate().AddDays(+1)))
 			{
-				var contract = personPeriod.PersonContract.Contract;
-				if (contract.WorkTimeDirective.MaxTimePerWeek != nextPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
+				IPersonPeriod nextPeriod = person.NextPeriod(personPeriod);
+				if (nextPeriod == null)
 					return true;
+				if (weekPeriod.Contains(nextPeriod.StartDate))
+				{
+					var contract = personPeriod.PersonContract.Contract;
+					if (contract.WorkTimeDirective.MaxTimePerWeek !=
+					    nextPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
+						return true;
+				}
 			}
 
 			var schedulePeriod = matrix.SchedulePeriod;
@@ -65,7 +70,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 					return true;
 
 			}
-
 
 			return false;
 		}

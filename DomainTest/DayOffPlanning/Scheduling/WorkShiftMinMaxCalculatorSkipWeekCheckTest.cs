@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			_dateToScheck = new DateOnly(new DateTime(2014, 10, 30));
 			_personPeriodOne.StartDate = new DateOnly(new DateTime(2014, 10, 1));
 			var schedulePeriodNext = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			var schedulePeriodDatePeriodNext = new DateOnlyPeriod(new DateOnly(2014, 11, 1), new DateOnly(2014, 11, 30));
 			var schedulePeriodDatePeriod = new DateOnlyPeriod(new DateOnly(2014, 10, 1), new DateOnly(2014, 10, 31));
 
 			using (_mocks.Record())
@@ -209,6 +208,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.Person).Return(_person);
+				Expect.Call(_personPeriodOne.EndDate()).Return(new DateOnly(new DateTime(2014, 10, 30)));
 				Expect.Call(_person.Period(_dateToScheck)).Return(_personPeriodOne);
 				Expect.Call(_person.NextPeriod(_personPeriodOne)).Return(_personPeriodTwo);
 			}
