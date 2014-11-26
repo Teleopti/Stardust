@@ -24,7 +24,5 @@ namespace Teleopti.Interfaces.Domain
 		DateTime ReceivedTime { get; set; }
 		DateTime? BatchId { get; set; }
 		string OriginalDataSourceId { get; set; }
-
-		bool InAdherence { get; }
 	}
 }

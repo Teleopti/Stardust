@@ -15,23 +15,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info)
+		public void Publish(StateInfo info, DateTime time, bool inAdherence)
 		{
 			var agentState = info.NewState;
 
 			IEvent @event;
-			if (agentState.InAdherence)
+			if (inAdherence)
 				@event = new PersonInAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
-					Timestamp = agentState.ReceivedTime,
+					Timestamp = time,
 					BusinessUnitId = info.NewState.BusinessUnitId
 				};
 			else
 				@event = new PersonOutOfAdherenceEvent
 				{
 					PersonId = agentState.PersonId,
-					Timestamp = agentState.ReceivedTime,
+					Timestamp = time,
 					BusinessUnitId = info.NewState.BusinessUnitId
 				};
 

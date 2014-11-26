@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
@@ -16,185 +15,105 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
 		private readonly IAdherenceAggregator _adherenceAggregator;
-		private readonly IRtaEventPublisher _rtaEventPublisher;
+		private readonly IShiftEventPublisher _shiftEventPublisher;
+		private readonly IActivityEventPublisher _activityEventPublisher;
+		private readonly IStateEventPublisher _stateEventPublisher;
 
 		private readonly ActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IMbCacheFactory _mbCacheFactory;
 		private readonly IMessageSender _messageSender;
 		private readonly IDatabaseReader _databaseReader;
-		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly PersonResolver _personResolver;
-
-		public RtaDataHandler(IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher rtaEventPublisher)
+		
+		public RtaDataHandler(
+			IMessageSender messageSender,
+			IDatabaseReader databaseReader,
+			IDatabaseWriter databaseWriter,
+			IMbCacheFactory mbCacheFactory,
+			IAdherenceAggregator adherenceAggregator,
+			IShiftEventPublisher shiftEventPublisher,
+			IActivityEventPublisher activityEventPublisher,
+			IStateEventPublisher stateEventPublisher)
 		{
 			_messageSender = messageSender;
 			_databaseReader = databaseReader;
-			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_personResolver = new PersonResolver(databaseReader);
 			_agentAssembler = new ActualAgentAssembler(databaseReader, databaseWriter, mbCacheFactory);
 			_databaseWriter = databaseWriter;
 			_mbCacheFactory = mbCacheFactory;
 			_adherenceAggregator = adherenceAggregator;
-			_rtaEventPublisher = rtaEventPublisher;
+			_shiftEventPublisher = shiftEventPublisher;
+			_activityEventPublisher = activityEventPublisher;
+			_stateEventPublisher = stateEventPublisher;
 		}
 
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
-			var state = getState(personId, businessUnitId, null, TimeSpan.Zero, timestamp, null, null, null);
-			send(state);
+			process(
+				new ExternalUserStateInputModel{Timestamp = timestamp}, 
+				new PersonWithBusinessUnit{BusinessUnitId = businessUnitId, PersonId = personId} 
+				);
 		}
 
-		public int ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp, Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+		public int ProcessStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
-			int dataSourceId;
-			var batch = isSnapshot
-				? batchId
-				: (DateTime?)null;
-
-			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
-			{
-				loggingSvc.WarnFormat(
-					"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
-				return 0;
-			}
-
-			if (isSnapshot && string.IsNullOrEmpty(logOn))
-			{
-				loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId, sourceId);
-				handleClosingOfSnapshot(batchId, sourceId);
-				return 1;
-			}
-
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
-			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
+			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
 			{
-				loggingSvc.InfoFormat("No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.", dataSourceId, logOn);
+				loggingSvc.InfoFormat("No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.", dataSourceId, input.UserCode);
 				return 0;
 			}
 
+			//GLHF
 			foreach (var p in personWithBusinessUnits)
 			{
-				loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, p.PersonId);
-				var state = getState(p.PersonId, p.BusinessUnitId, stateCode, timeInState, timestamp, platformTypeId, sourceId, batch);
-				send(state);
+				loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
+				process(input, p);
 			}
 			return 1;
 		}
 
-		private void handleClosingOfSnapshot(DateTime batchId, string sourceId)
+		public int CloseSnapshot(ExternalUserStateInputModel input, int dataSourceId)
 		{
+			var sourceId = input.SourceId;
+			var batchId = input.BatchId;
+
+			loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId, sourceId);
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents)
 			{
-				var state = getState(agent.PersonId, agent.BusinessUnitId, "CCC Logged out", TimeSpan.Zero, batchId, Guid.Empty, sourceId, batchId);
-				send(state);
+				input.StateCode = "CCC Logged out";
+				input.SecondsInState = 0;
+				input.PlatformTypeId = Guid.Empty.ToString();
+				process(input, new PersonWithBusinessUnit {BusinessUnitId = agent.BusinessUnitId, PersonId = agent.PersonId});
 			}
+			return 1;
 		}
 
-		private StateInfo getState(
-			Guid personId,
-			Guid businessUnitId,
-			string stateCode,
-			TimeSpan timeInState,
-			DateTime timestamp,
-			Guid? platformTypeId,
-			string sourceId,
-			DateTime? batch)
+		private void process(
+			ExternalUserStateInputModel input,
+			PersonWithBusinessUnit person
+			)
 		{
-			var info = new StateInfo
-			{
-				ScheduleLayers = _databaseReader.GetCurrentSchedule(personId),
-				PreviousState = _databaseReader.GetCurrentActualAgentState(personId),
-			};
+			var info = new StateInfo(
+				_databaseReader,
+				_agentAssembler,
+				person,
+				input
+				);
 
-			if (info.PreviousState == null)
-				info.PreviousState = new ActualAgentState
-				{
-					PersonId = personId,
-					StateId = Guid.NewGuid(),
-				};
+			_databaseWriter.PersistActualAgentState(info.NewState);
 
-			
-			info.CurrentActivity = activityForTime(info, timestamp);
-			info.NextActivityInShift = nextAdjacentActivityForTime(info, timestamp);
-			info.PreviousActivity = activityForTime(info, info.PreviousState.ReceivedTime);
+			if (info.Send)
+				_messageSender.Send(NotificationFactory.CreateNotification(info.NewState));
 
-			info.NewState = _agentAssembler.GetAgentState(
-				info.CurrentActivity,
-				info.NextActivityInShift,
-				info.PreviousState,
-				personId,
-				businessUnitId,
-				platformTypeId,
-				stateCode,
-				timestamp,
-				timeInState,
-				batch,
-				sourceId);
+			_adherenceAggregator.Aggregate(info.NewState);
 
-			info.WasScheduled = info.PreviousState.ScheduledId != Guid.Empty;
-			info.IsScheduled = info.NewState.ScheduledId != Guid.Empty;
-
-			info.CurrentShiftStartTime = startTimeOfShift(info, info.CurrentActivity);
-			info.CurrentShiftEndTime = endTimeOfShift(info, info.CurrentActivity);
-			info.PreviousShiftStartTime = startTimeOfShift(info, info.PreviousActivity);
-			info.PreviousShiftEndTime = endTimeOfShift(info, info.PreviousActivity);
-
-			return info;
-		}
-
-		private static ScheduleLayer activityForTime(StateInfo info, DateTime time)
-		{
-			return info.ScheduleLayers.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
-		}
-
-		private static ScheduleLayer nextAdjacentActivityForTime(StateInfo info, DateTime time)
-		{
-			var nextActivity = (from l in info.ScheduleLayers where l.StartDateTime > time select l).FirstOrDefault();
-			if (nextActivity == null)
-				return null;
-			if (info.CurrentActivity == null)
-				return nextActivity;
-			if (nextActivity.StartDateTime == info.CurrentActivity.EndDateTime)
-				return nextActivity;
-			return null;
-		}
-
-		private static DateTime startTimeOfShift(StateInfo info, ScheduleLayer activity)
-		{
-			if (activity == null)
-				return DateTime.MinValue;
-			return activitiesThisShift(info, activity).Select(x => x.StartDateTime).Min();
-		}
-
-		private static DateTime endTimeOfShift(StateInfo info, ScheduleLayer activity)
-		{
-			if (activity == null)
-				return info.NewState.ReceivedTime;
-			return activitiesThisShift(info, activity).Select(x => x.EndDateTime).Max();
-		}
-
-		private static IEnumerable<ScheduleLayer> activitiesThisShift(StateInfo info, ScheduleLayer activity)
-		{
-			return from l in info.ScheduleLayers
-				   where l.BelongsToDate == activity.BelongsToDate
-				   select l;
-		}
-
-		private void send(StateInfo state)
-		{
-			loggingSvc.InfoFormat("Sending message: {0} ", state.NewState);
-
-			_databaseWriter.PersistActualAgentState(state.NewState);
-			
-			if (state.Send)
-				_messageSender.Send(NotificationFactory.CreateNotification(state.NewState));
-			
-			_adherenceAggregator.Aggregate(state.NewState);
-			
-			_rtaEventPublisher.Publish(state);
+			_shiftEventPublisher.Publish(info);
+			_activityEventPublisher.Publish(info);
+			_stateEventPublisher.Publish(info);
 		}
 	}
 }

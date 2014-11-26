@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -130,35 +131,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState)
 		{
 			//putting all this logic here is just WRONG
-			var stateGroupId = Guid.NewGuid();
-			var stateId = Guid.NewGuid();
 			var platformTypeIdGuid = new Guid(_platformTypeId);
 
-			var stateGroupKey = new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId);
-			if (!_stateGroups.ContainsKey(stateGroupKey))
-			{
-				var states = new List<RtaStateGroupLight>
-				{
-					new RtaStateGroupLight
-					{
-						StateGroupId = stateGroupId,
-						StateGroupName = name,
-						BusinessUnitId = _businessUnitId,
-						PlatformTypeId = platformTypeIdGuid,
-						StateCode = stateCode,
-						StateId = stateId,
-						IsLogOutState = isLoggedOutState
-					}
-				};
-				_stateGroups.Add(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states);
-			}
+			var stateGroup = getOrAddState(stateCode, name, isLoggedOutState, platformTypeIdGuid);
 
 			var alarms = new List<RtaAlarmLight>
 			{
 				new RtaAlarmLight
 				{
 					Name = name,
-					StateGroupId = stateGroupId,
+					StateGroupId = stateGroup.StateGroupId,
 					ActivityId = activityId,
 					BusinessUnit = _businessUnitId,
 					AlarmTypeId = alarmId,
@@ -166,8 +148,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 					StateGroupName = name
 				}
 			};
-			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroupId, _businessUnitId), alarms));
+			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroup.StateGroupId, _businessUnitId), alarms));
 			return this;
+		}
+
+		private RtaStateGroupLight getOrAddState(string stateCode, string name, bool isLoggedOutState, Guid platformTypeIdGuid)
+		{
+			var stateGroupId = Guid.NewGuid();
+			var stateId = Guid.NewGuid();
+			var stateGroupKey = new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId);
+			
+			if (_stateGroups.ContainsKey(stateGroupKey)) return _stateGroups[stateGroupKey].Single();
+
+			var states = new List<RtaStateGroupLight>
+			{
+				new RtaStateGroupLight
+				{
+					StateGroupId = stateGroupId,
+					StateGroupName = name,
+					BusinessUnitId = _businessUnitId,
+					PlatformTypeId = platformTypeIdGuid,
+					StateCode = stateCode,
+					StateId = stateId,
+					IsLogOutState = isLoggedOutState
+				}
+			};
+			_stateGroups.Add(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states);
+			return states.Single();
 		}
 
 		public FakeRtaDatabase Make()
@@ -226,12 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId, Guid businessUnit)
 		{
-			return new RtaStateGroupLight
-			{
-				StateCode = stateCode,
-				PlatformTypeId = platformTypeId,
-				BusinessUnitId = businessUnit
-			};
+			return getOrAddState(stateCode, null, false, platformTypeId);
 		}
 
 		public void PersistActualAgentState(IActualAgentState actualAgentState)

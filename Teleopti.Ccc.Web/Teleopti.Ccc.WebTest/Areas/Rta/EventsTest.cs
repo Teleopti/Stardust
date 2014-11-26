@@ -45,10 +45,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(state2);
 			target.SaveState(state1);
 
-			var event1 = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
-			event1.PersonId.Should().Be(personId1);
-			var event2 = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
-			event2.PersonId.Should().Be(personId2);
+			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Where(x => x.PersonId == personId1).Should().Have.Count.GreaterThan(0);
+			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Where(x => x.PersonId == personId2).Should().Have.Count.GreaterThan(0);
 		}
 
 	}

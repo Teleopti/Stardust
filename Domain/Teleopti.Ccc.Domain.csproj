@@ -196,12 +196,12 @@
     <Compile Include="ApplicationLayer\Rta\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\IActualAgentAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\OnlyHandleWhenEnabledAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\RtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />

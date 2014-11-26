@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 	{
 		private readonly ConcurrentDictionary<Guid, rtaAggregationData> _aggregationDatas = new ConcurrentDictionary<Guid, rtaAggregationData>();
 
-		public bool Update(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
+		public bool Update(PersonOrganizationData personOrganizationData, IActualAgentState state)
 		{
 			var adherenceChanged = false;
 			_aggregationDatas.AddOrUpdate(personOrganizationData.PersonId, guid =>
@@ -19,14 +20,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 				adherenceChanged = true;
 				return new rtaAggregationData
 				{
-					ActualAgentState = actualAgentState,
+					ActualAgentState = state,
 					OrganizationData = personOrganizationData
 				};
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !data.ActualAgentState.InAdherence.Equals(actualAgentState.InAdherence);
-				data.ActualAgentState = actualAgentState;
+				adherenceChanged = !StateInfo.AdherenceFor(data.ActualAgentState).Equals(StateInfo.AdherenceFor(state));
+				data.ActualAgentState = state;
 				data.OrganizationData = personOrganizationData;
 				return data;
 			});
@@ -37,14 +38,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		{
 			return _aggregationDatas
 					.Where(k => k.Value.OrganizationData.TeamId == teamId)
-					.Count(x => !x.Value.ActualAgentState.InAdherence);
+					.Count(x => !StateInfo.AdherenceFor(x.Value.ActualAgentState));
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)
 		{
 			return _aggregationDatas
 				.Where(k => k.Value.OrganizationData.SiteId == siteId)
-				.Count(x => !x.Value.ActualAgentState.InAdherence);
+				.Count(x => !StateInfo.AdherenceFor(x.Value.ActualAgentState));
 		}
 
 		public IEnumerable<IActualAgentState> GetActualAgentStateForTeam(Guid teamId)

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 {
 	public interface IRta
 	{
-		int SaveState(ExternalUserStateInputModel state);
+		int SaveState(ExternalUserStateInputModel input);
 		int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states);
 		int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states);
 		void CheckForActivityChange(CheckForActivityChangeInputModel input);
@@ -31,15 +32,29 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
 
 		public static string DefaultAuthenticationKey = "!#¤atAbgT%";
+		private readonly DataSourceResolver _dataSourceResolver;
 
-		public Rta(IMessageSender messageSender, IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory cacheFactory, IAdherenceAggregator adherenceAggregator, IRtaEventPublisher rtaEventPublisher, INow now, IConfigReader configReader)
+		public Rta(
+			IMessageSender messageSender, 
+			IDatabaseReader databaseReader, 
+			IDatabaseWriter databaseWriter, 
+			IMbCacheFactory cacheFactory, 
+			IAdherenceAggregator adherenceAggregator, 
+			IShiftEventPublisher shiftEventPublisher, 
+			IActivityEventPublisher activityEventPublisher, 
+			IStateEventPublisher stateEventPublisher,
+			INow now, 
+			IConfigReader configReader)
 		{
+			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_rtaDataHandler = new RtaDataHandler(messageSender,
 				databaseReader,
 				databaseWriter,
 				cacheFactory,
 				adherenceAggregator,
-				rtaEventPublisher);
+				shiftEventPublisher,
+				activityEventPublisher,
+				stateEventPublisher);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");
@@ -81,66 +96,75 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return result;
 		}
 
-		public int SaveState(ExternalUserStateInputModel state)
+		public int SaveState(ExternalUserStateInputModel input)
 		{
 			var messageId = Guid.NewGuid();
 
-			verifyAuthenticationKey(state.AuthenticationKey, messageId);
+			verifyAuthenticationKey(input.AuthenticationKey, messageId);
 
 			Log.InfoFormat(System.Globalization.CultureInfo.InvariantCulture,
 						   "Incoming message: MessageId = {10}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, SecondsInState = {4}, TimeStamp = {5}, PlatformTypeId = {6}, SourceId = {7}, BatchId = {8}, IsSnapshot = {9}.",
-						   state.UserCode, state.StateCode, state.StateDescription, state.IsLoggedOn, state.SecondsInState, state.Timestamp,
-						   state.PlatformTypeId, state.SourceId, state.BatchId, state.IsSnapshot, messageId);
+						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.SecondsInState, input.Timestamp,
+						   input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot, messageId);
 
-			if (string.IsNullOrEmpty(state.SourceId))
+			if (string.IsNullOrEmpty(input.SourceId))
 			{
-				Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId = {1})", state.SourceId, messageId);
+				Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId = {1})", input.SourceId, messageId);
 				return -300;
 			}
 
-			if (string.IsNullOrEmpty(state.PlatformTypeId))
+			if (string.IsNullOrEmpty(input.PlatformTypeId))
 			{
 				Log.ErrorFormat("The platform type id cannot be empty or null. (MessageId = {0})", messageId);
 				return -200;
 			}
 
-			var parsedPlatformTypeId = new Guid(state.PlatformTypeId);
-
-			if (!state.IsLoggedOn)
+			if (!input.IsLoggedOn)
 			{
 				//If the user isn't logged on we'll substitute the stateCode to reflect this
-				Log.InfoFormat(
-					"This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})",
-					state.StateCode, LogOutStateCode, messageId);
-				state.StateCode = LogOutStateCode;
+				Log.InfoFormat("This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})", input.StateCode, LogOutStateCode, messageId);
+				input.StateCode = LogOutStateCode;
 			}
 
 			//The DateTimeKind.Utc is not set automatically when deserialising from soap message
-			state.Timestamp = DateTime.SpecifyKind(state.Timestamp, DateTimeKind.Utc);
-			if (Math.Abs(state.Timestamp.Subtract(_now.UtcDateTime()).TotalMinutes) > 30)
+			input.Timestamp = DateTime.SpecifyKind(input.Timestamp, DateTimeKind.Utc);
+			if (Math.Abs(input.Timestamp.Subtract(_now.UtcDateTime()).TotalMinutes) > 30)
 			{
-				Log.ErrorFormat(
-					"The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
-					_now.UtcDateTime(), state.Timestamp, messageId);
+				Log.ErrorFormat("The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})", _now.UtcDateTime(), input.Timestamp, messageId);
 				return -400;
 			}
 
 			const int stateCodeMaxLength = 25;
-			state.StateCode = state.StateCode.Trim();
-			if (state.StateCode.Length > stateCodeMaxLength)
+			input.StateCode = input.StateCode.Trim();
+			if (input.StateCode.Length > stateCodeMaxLength)
 			{
-				var newStateCode = state.StateCode.Substring(0, stateCodeMaxLength);
-				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId = {2})",
-							   state.StateCode, newStateCode, messageId);
-				state.StateCode = newStateCode;
+				var newStateCode = input.StateCode.Substring(0, stateCodeMaxLength);
+				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId = {2})", input.StateCode, newStateCode, messageId);
+				input.StateCode = newStateCode;
 			}
 
-			Log.InfoFormat(
-				"Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", state.UserCode, state.StateCode, messageId);
-			var result = _rtaDataHandler.ProcessRtaData(state.UserCode.Trim(), state.StateCode, TimeSpan.FromSeconds(state.SecondsInState), state.Timestamp,
-										   parsedPlatformTypeId, state.SourceId, state.BatchId, state.IsSnapshot);
+			Log.InfoFormat("Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", input.UserCode, input.StateCode, messageId);
 
-			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", state.UserCode, state.StateCode, messageId);
+			int dataSourceId;
+			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
+			{
+				Log.WarnFormat("No data source available for source id = {0}. Event will not be handled before data source is set up.", input.SourceId);
+				return 0;
+			}
+
+			input.UserCode = input.UserCode.Trim();
+
+			int result;
+			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
+			{
+				result = _rtaDataHandler.CloseSnapshot(input, dataSourceId);
+			}
+			else
+			{
+				result = _rtaDataHandler.ProcessStateChange(input, dataSourceId);
+			}
+
+			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", input.UserCode, input.StateCode, messageId);
 
 			return result;
 		}
@@ -157,16 +181,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey = {0}. (MessageId = {1})",
 				authenticationKey, messageId);
 			throw new FaultException("You supplied an invalid authentication key. Please verify the key and try again.");
-		}
-
-		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
-		{
-			CheckForActivityChange(new CheckForActivityChangeInputModel
-			{
-				PersonId = personId,
-				BusinessUnitId = businessUnitId,
-				Timestamp = timestamp
-			});
 		}
 
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)

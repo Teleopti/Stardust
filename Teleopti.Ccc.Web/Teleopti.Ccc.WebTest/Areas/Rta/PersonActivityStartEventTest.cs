@@ -104,13 +104,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldPublishWithInAdherence()
 		{
 			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
-				.WithAlarm("statecode", activityId, 0d)
+				.WithSchedule(personId, phone, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithAlarm("phone", phone, 0)
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var mutableNow = new MutableNow();
@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = mutableNow.UtcDateTime()
+				StateCode = "phone",
+				Timestamp = "2014-10-20 09:50".Utc()
 			});
 			mutableNow.Mutate("2014-10-20 10:02");
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:02".Utc());

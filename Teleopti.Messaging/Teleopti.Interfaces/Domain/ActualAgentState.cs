@@ -67,9 +67,6 @@ namespace Teleopti.Interfaces.Domain
 		public string OriginalDataSourceId { get; set; }
 		public DateTime? BatchId { get; set; }
 
-
-		public bool InAdherence { get { return StaffingEffect.Equals(0); } }
-
 		public override string ToString()
 		{
 			return BatchId.HasValue

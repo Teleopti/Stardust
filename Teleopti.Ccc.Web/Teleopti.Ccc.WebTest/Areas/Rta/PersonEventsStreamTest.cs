@@ -11,20 +11,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	[TestFixture]
 	public class PersonEventsStreamTest
 	{
-		[Test, Ignore]
+		[Test]
 		public void ShouldPublishAdherenceEventsForBothCausesInASingleTrigger()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var breakk = Guid.NewGuid();
+			var brejk = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
-				.WithSchedule(personId, breakk, "2014-10-20 10:00".Utc(), "2014-10-20 10:15".Utc())
+				.WithSchedule(personId, brejk, "2014-10-20 10:00".Utc(), "2014-10-20 10:15".Utc())
 				.WithAlarm("phone", phone, 0)
+				.WithAlarm("phone", brejk, 1)
+				.WithAlarm("break", brejk, 0)
 				.WithAlarm("break", phone, 1)
-				.WithAlarm("break", breakk, 0)
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var now = new MutableNow();
@@ -47,8 +48,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 10:00".Utc());
+			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be.False();
 			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:00".Utc());
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
+			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().InAdherence.Should().Be.True();
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
 		}
 
@@ -63,7 +66,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
-				.WithAlarm("phone", phone, 0)
 				.WithAlarm("admin", phone, 1)
 				.WithAlarm("admin", admin, 0)
 				.Make();

@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				.SingleInstance()
 				;
 
-			builder.RegisterType<RtaEventPublisher>().SingleInstance().As<IRtaEventPublisher>();
 			if (
 				_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
 				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)

@@ -104,14 +104,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "usercode",
 				StateCode = "statecode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				Timestamp = "2014-10-20 9:00".Utc()
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, activityId, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
 				.WithAlarm("statecode", activityId, -1)
 				.Make();
 			var publisher = new FakeEventPublisher();

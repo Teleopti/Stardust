@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta

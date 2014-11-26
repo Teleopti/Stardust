@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
-	public class ActualAgentAssembler
+	public class ActualAgentAssembler : IActualAgentAssembler
 	{
-		protected AlarmMapper AlarmMapper;
 		protected IDatabaseReader DatabaseReader;
+		private readonly IDatabaseWriter _databaseWriter;
+		private readonly IMbCacheFactory _mbCacheFactory;
 
 		public ActualAgentAssembler(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory)
 		{
 			DatabaseReader = databaseReader;
-			AlarmMapper = new AlarmMapper(databaseReader, databaseWriter, mbCacheFactory);
+			_databaseWriter = databaseWriter;
+			_mbCacheFactory = mbCacheFactory;
 		}
 
 		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchid, string sourceId)
 		{
 			var missingAgents = DatabaseReader.GetMissingAgentStatesFromBatch(batchid, sourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
-				where !AlarmMapper.IsAgentLoggedOut(
+				where !IsAgentLoggedOut(
 					a.PersonId,
 					a.StateCode,
 					a.PlatformTypeId,
@@ -69,11 +73,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
-			var state = AlarmMapper.GetStateGroup(stateCode, platformTypeId.Value, businessUnitId);
+			var state = GetStateGroup(stateCode, platformTypeId.Value, businessUnitId);
+			var foundAlarm = GetAlarm(activityId, state.StateGroupId, businessUnitId);
+
 			newState.StateId = state.StateGroupId;
 			newState.State = state.StateGroupName;
-			var foundAlarm = AlarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
-
 			if (foundAlarm != null)
 			{
 				newState.AlarmName = foundAlarm.Name;
@@ -102,6 +106,54 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				newState.NextStart = nextLayer.StartDateTime;
 			}
 			return newState;
+		}
+
+		public RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit)
+		{
+			return findAlarmForActivity(activityId, stateGroupId, businessUnit, DatabaseReader.ActivityAlarms());
+		}
+
+		private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId, Guid businessUnit,
+														  IDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> allAlarms)
+		{
+			List<RtaAlarmLight> alarmForActivity;
+			if (allAlarms.TryGetValue(new Tuple<Guid, Guid, Guid>(activityId, stateGroupId, businessUnit), out alarmForActivity))
+			{
+				var alarmForStateGroup = alarmForActivity.FirstOrDefault();
+				if (alarmForStateGroup != null && alarmForStateGroup.AlarmTypeId == Guid.Empty)
+					return null;
+
+				return alarmForStateGroup;
+			}
+			return activityId != Guid.Empty
+					   ? findAlarmForActivity(Guid.Empty, stateGroupId, businessUnit, allAlarms)
+					   : null;
+		}
+
+		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
+		{
+			var allStateGroups = DatabaseReader.StateGroups();
+			List<RtaStateGroupLight> stateGroupsForStateCode;
+			var tuple = new Tuple<string, Guid, Guid>(stateCode.ToUpper(CultureInfo.InvariantCulture), platformTypeId, businessUnitId);
+			if (allStateGroups.TryGetValue(tuple, out stateGroupsForStateCode))
+			{
+				return stateGroupsForStateCode.First();
+			}
+
+			var newState = _databaseWriter.AddAndGetNewRtaState(stateCode, platformTypeId, businessUnitId);
+			invalidateStateGroupCache();
+			return newState;
+		}
+
+		public bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId)
+		{
+			var state = GetStateGroup(stateCode, platformTypeId, businessUnitId);
+			return state != null && state.IsLogOutState;
+		}
+
+		private void invalidateStateGroupCache()
+		{
+			_mbCacheFactory.Invalidate(DatabaseReader, x => x.StateGroups(), false);
 		}
 	}
 }
