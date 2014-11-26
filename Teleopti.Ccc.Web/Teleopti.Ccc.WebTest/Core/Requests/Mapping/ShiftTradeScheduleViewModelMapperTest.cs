@@ -115,6 +115,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = _target.MapForBulletin(data);
 
 			result.PossibleTradeSchedules.Should().Not.Be.Null();
+		}		
+		
+		[Test]
+		public void ShouldMapBulletinShiftsWithTimeFilterFromReadModel()
+		{
+			var myScheduleStart = new DateTime(2012, 8, 28, 12, 0, 0, DateTimeKind.Utc);
+			var myScheduleEnd = new DateTime(2012, 8, 28, 16, 0, 0, DateTimeKind.Utc);
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = DateOnly.Today, TeamIds = new List<Guid>(){Guid.NewGuid()}, Paging = new Paging() { Take = 1 }, TimeFilter = new TimeFilterInfo()};
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
+			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
+			var myScheduleDayReadModel = new PersonScheduleDayReadModel() { Start = myScheduleStart, End = myScheduleEnd };
+			var period = new DateTimePeriod(myScheduleStart, myScheduleEnd);
+
+			var shiftTradeAddPersonScheduleViewModel = new ShiftTradeAddPersonScheduleViewModel() {
+				StartTimeUtc = myScheduleStart,
+				ScheduleLayers = new List<ShiftTradeAddScheduleLayerViewModel>() { new ShiftTradeAddScheduleLayerViewModel() { End = myScheduleEnd } }
+			};
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(data.ShiftTradeDate)).Return(myScheduleDayReadModel);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(myScheduleDayReadModel, true)).Return(shiftTradeAddPersonScheduleViewModel);
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersonsForAllTeams(data)).Return(persons);
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveBulletinTradeSchedulesWithTimeFilter(persons.Date, persons.Persons, period, data.Paging, data.TimeFilter))
+				.Return(scheduleReadModels);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
+
+			var result = _target.MapForBulletin(data);
+
+			result.PossibleTradeSchedules.Should().Not.Be.Null();
 		}
 
 		[Test]

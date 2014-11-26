@@ -114,7 +114,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var startUtc = DateTime.SpecifyKind((DateTime) myScheduleDayReadModel.Start, DateTimeKind.Utc);
 			var endUtc = DateTime.SpecifyKind((DateTime) myScheduleDayReadModel.End, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startUtc, endUtc);
-			possibleTradeSchedule = getBulletinSchedules(period, possibleTradePersons, data.Paging).ToList();
+			
+			if (data.TimeFilter == null)
+			{
+				possibleTradeSchedule = getBulletinSchedules(period, possibleTradePersons, data.Paging).ToList();
+			}
+			else
+			{
+				possibleTradeSchedule = getBulletinSchedulesWithTimeFilter(period, possibleTradePersons, data.Paging, data.TimeFilter).ToList();
+			}
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
 
@@ -139,8 +147,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			return new List<ShiftTradeAddPersonScheduleViewModel>();
-		}		
-		
+		}
+
+		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getBulletinSchedulesWithTimeFilter(DateTimePeriod mySchedulePeriod, DatePersons datePersons, Paging paging, TimeFilterInfo filter)
+		{
+			if (datePersons.Persons.Any())
+			{
+				var schedules = _shiftTradeRequestProvider.RetrieveBulletinTradeSchedulesWithTimeFilter(datePersons.Date, datePersons.Persons, mySchedulePeriod, paging, filter);
+				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
+			}
+
+			return new List<ShiftTradeAddPersonScheduleViewModel>();
+		}	
+
 		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons, Paging paging)
 		{
 			if (datePersons.Persons.Any())

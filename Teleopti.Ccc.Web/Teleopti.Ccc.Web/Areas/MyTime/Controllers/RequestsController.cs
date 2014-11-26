@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
@@ -28,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly FilterHelper _filterHelper;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
@@ -44,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_respondToShiftTrade = respondToShiftTrade;
 			_permissionProvider = permissionProvider;
 			_userTimeZone = timeZone;
+			_filterHelper = new FilterHelper(_userTimeZone);
 		}
 
 		[EnsureInPortal]
@@ -167,97 +167,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
-		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)
-		{
-			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] {} : timesString.Split(',');
-			var periodsAsString = from t in startTimesx
-										 let parts = t.Split('-')
-										 let start = parts[0]
-										 let end = parts[1]
-										 select new
-										 {
-											 Start = start,
-											 End = end
-										 };
-
-			var periods = from ps in periodsAsString
-				let start = int.Parse(ps.Start.Split(':')[0])
-				let end = int.Parse(ps.End.Split(':')[0])
-				select new MinMax<DateTime>(
-					selectedDate.Date.Add(TimeSpan.FromHours(start)),
-					selectedDate.Date.Add(TimeSpan.FromHours(end)));
-			var periodsList = periods.ToList();
-
-			if (!periodsList.Any())
-			{
-				if (isFullDay)
-				{
-					periodsList.Add(new MinMax<DateTime>(
-						selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						selectedDate.Date.Add(TimeSpan.FromHours(48))
-						));
-				}
-				else
-				{
-					periodsList.Add(new MinMax<DateTime>(
-						selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						selectedDate.Date.Add(TimeSpan.FromHours(0))
-						));
-				}
-			}else if (isEndFilter)
-			{//only do it for end time filter
-				IList<MinMax<DateTime>> oldCopy = new List<MinMax<DateTime>>();
-				oldCopy.AddRange(periodsList);
-
-				foreach (var t in oldCopy)
-				{// plus 24 hours to get night shifts which may end with tomorrow
-					var plus = new MinMax<DateTime>(t.Minimum.Add(TimeSpan.FromHours(24)), t.Maximum.Add(TimeSpan.FromHours(24)));
-					periodsList.Add(plus);
-				}
-			}
-
-			var periodsDateUtc = from p in periodsList
-										let start = TimeZoneHelper.ConvertToUtc(p.Minimum, _userTimeZone.TimeZone())
-										let end = TimeZoneHelper.ConvertToUtc(p.Maximum, _userTimeZone.TimeZone())
-										let period = new DateTimePeriod(start, end)
-										select period;
-
-			var utcTimes = periodsDateUtc.ToList();
-			return utcTimes;
-		}
-
-		private TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes, bool isDayOff)
-		{
-			TimeFilterInfo filter;
-			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
-			{
-				if (isDayOff)
-				{
-					filter = new TimeFilterInfo();
-					filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false);
-					filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false);
-					filter.IsDayOff = isDayOff;
-				}
-				else
-				{
-					filter = null;
-				}
-			}
-			else
-			{
-				filter = new TimeFilterInfo();
-				filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true);
-				filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true, true);
-				filter.IsDayOff = isDayOff;
-			}
-			return filter;
-		}
-
 		[UnitOfWorkAction]
 		[HttpGet]
 		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = _filterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
@@ -266,7 +180,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly selectedDate, string teamIds, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = _filterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModelForAllTeams(data), JsonRequestBehavior.AllowGet);
 		}
 

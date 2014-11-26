@@ -17,6 +17,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
+		class TimeFilterString
+		{
+			public string startTimes;
+			public string endTimes;
+		}
+
+		private TimeFilterString getTimeFilterString(TimeFilterInfo filter)
+		{
+			var filterString = new TimeFilterString();
+			var startTimesAsString = from s in filter.StartTimes
+											 let start = s.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+											 let end = s.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+											 select new
+											 {
+												 startTime = start + ";" + end,
+											 };
+			var endTimesAsString = from e in filter.EndTimes
+										  let start = e.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+										  let end = e.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+										  select new
+										  {
+											  endTime = start + ";" + end,
+										  };
+			filterString.startTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
+			filterString.endTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
+
+			return filterString;
+		}
+
 		public PersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork)
 		{
 			InParameter.NotNull("unitOfWork", unitOfWork);
@@ -132,6 +161,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .List<PersonScheduleDayReadModel>();
 		}
 
+		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersonsWithTimeFilter(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, DateTimePeriod mySchedulePeriod, Paging paging, TimeFilterInfo filter)
+		{
+			var idlist = string.Join(",", personIdList);
+			var filterString = getTimeFilterString(filter);
+			return _unitOfWork.Session().CreateSQLQuery(
+				@"EXEC  [ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList,
+										@currentScheduleStart=:myScheduleStart, @currentScheduleEnd=:myScheduleEnd, @filterStartTimes=:filterStartTimes, @filterEndTimes=:filterEndTimes,
+										@isDayOff=:isDayOff, @skip=:skip, @take=:take")
+							  .AddScalar("PersonId", NHibernateUtil.Guid)
+							  .AddScalar("TeamId", NHibernateUtil.Guid)
+							  .AddScalar("SiteId", NHibernateUtil.Guid)
+							  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+							  .AddScalar("Date", NHibernateUtil.DateTime)
+							  .AddScalar("Start", NHibernateUtil.DateTime)
+							  .AddScalar("End", NHibernateUtil.DateTime)
+							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+							  .AddScalar("MinStart", NHibernateUtil.DateTime)
+							  .AddScalar("Total", NHibernateUtil.Int16)
+							  .AddScalar("IsLastPage", NHibernateUtil.Boolean)
+							  .SetDateTime("shiftTradeDate", shiftTradeDate)
+							  .SetParameter("personIdList", idlist, NHibernateUtil.StringClob)
+							  .SetParameter("myScheduleStart", mySchedulePeriod.StartDateTime)
+							  .SetParameter("myScheduleEnd", mySchedulePeriod.EndDateTime)
+							  .SetParameter("filterStartTimes", filterString.startTimes, NHibernateUtil.StringClob)
+							  .SetParameter("filterEndTimes", filterString.endTimes, NHibernateUtil.StringClob)
+							  .SetParameter("isDayOff", filter.IsDayOff, NHibernateUtil.Boolean)
+							  .SetParameter("skip", paging.Skip)
+							  .SetParameter("take", paging.Take)
+							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+							  .SetReadOnly(true)
+							  .List<PersonScheduleDayReadModel>();
+		}
+
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPersonsIncludeEmptyDays(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging)
 		{
@@ -162,22 +224,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var idlist = string.Join(",", personIdList);
 
-			var startTimesAsString = from s in filter.StartTimes
-											 let start = s.StartDateTime.ToString("yyyy-MM-dd HH:mm")
-											 let end = s.EndDateTime.ToString("yyyy-MM-dd HH:mm")
-											 select new
-											 {
-												 startTime = start + ";" + end,
-											 };
-			var endTimesAsString = from e in filter.EndTimes
-										  let start = e.StartDateTime.ToString("yyyy-MM-dd HH:mm")
-										  let end = e.EndDateTime.ToString("yyyy-MM-dd HH:mm")
-										  select new
-										  {
-											  endTime = start + ";" + end,
-										  };
-			var filterStartTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
-			var filterEndTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
+			//var startTimesAsString = from s in filter.StartTimes
+			//								 let start = s.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+			//								 let end = s.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+			//								 select new
+			//								 {
+			//									 startTime = start + ";" + end,
+			//								 };
+			//var endTimesAsString = from e in filter.EndTimes
+			//							  let start = e.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+			//							  let end = e.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+			//							  select new
+			//							  {
+			//								  endTime = start + ";" + end,
+			//							  };
+			//var filterStartTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
+			//var filterEndTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
+			var filterString = getTimeFilterString(filter);
 			return _unitOfWork.Session().CreateSQLQuery(
 				@"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, 
 							@filterStartTimes=:filterStartTimes, @filterEndTimes=:filterEndTimes, @isDayOff=:isDayOff,
@@ -195,8 +258,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .AddScalar("IsLastPage", NHibernateUtil.Boolean)
 							  .SetDateTime("shiftTradeDate", shiftTradeDate)
 							  .SetParameter("personIdList", idlist,NHibernateUtil.StringClob)
-							  .SetParameter("filterStartTimes", filterStartTimes, NHibernateUtil.StringClob)
-							  .SetParameter("filterEndTimes", filterEndTimes, NHibernateUtil.StringClob)
+							  .SetParameter("filterStartTimes", filterString.startTimes, NHibernateUtil.StringClob)
+							  .SetParameter("filterEndTimes", filterString.endTimes, NHibernateUtil.StringClob)
 							  .SetParameter("isDayOff", filter.IsDayOff, NHibernateUtil.Boolean)
 							  .SetParameter("skip", paging.Skip)
 							  .SetParameter("take", paging.Take)
