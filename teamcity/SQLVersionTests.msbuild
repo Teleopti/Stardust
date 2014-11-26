@@ -89,6 +89,7 @@
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER DATABASE [$(AggDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(AggDB)]&quot;"/>
 		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;DROP LOGIN [$(AdminSQLLogin)]&quot;"/>
 		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;DROP LOGIN [$(ApplicationDbLogin)]&quot;"/>
+		<Exec command="DEL &quot;$(WorkingDirectory)\teamcity\DBManager*.log&quot; /F /Q"/>
 	</Target>
 
 </Project>
