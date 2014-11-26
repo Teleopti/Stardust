@@ -5,7 +5,7 @@
 
 	<PropertyGroup>
 		<ETLStuff>$(WorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
-		<ETLTeamCityStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
+		<ETLTeamCityStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLTeamCityStuff>
 		<ETLDBNamePrefix>prefix</ETLDBNamePrefix>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
