@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_dateOnly = date;
 			}
 
+			if (_workflowControlSets.Count == 0)
+			{
+				_view.DisableOk();
+				return;
+			}
+
 			_workflowControlSets.Sort((contrlSet1, contrlSet2) => String.Compare(contrlSet1.Name, contrlSet2.Name, TeleoptiPrincipal.Current.Regional.Culture, CompareOptions.None));
 
 			_view.SetDate(_dateOnly);

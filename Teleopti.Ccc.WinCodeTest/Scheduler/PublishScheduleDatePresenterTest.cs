@@ -87,5 +87,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_target.Initialize();
 			}	
 		}
+
+		[Test]
+		public void ShouldDisableButtonOkWhenNoSelectedControlSets()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay1.Person).Return(_person1);
+				Expect.Call(_scheduleDay2.Person).Return(_person2);
+				Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyPeriodAsDateTimePeriod1);
+				Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyPeriodAsDateTimePeriod2);
+				Expect.Call(_dateOnlyPeriodAsDateTimePeriod1.DateOnly).Return(_dateOnly1);
+				Expect.Call(_dateOnlyPeriodAsDateTimePeriod2.DateOnly).Return(_dateOnly2);
+				Expect.Call(() => _view.DisableOk());	
+			}
+
+			using (_mock.Playback())
+			{
+				_person1.WorkflowControlSet = null;
+				_person2.WorkflowControlSet = null;
+
+				_target.Initialize();
+				Assert.AreEqual(0, _target.WorkflowControlSets.Count);
+			}
+		}
 	}
 }
