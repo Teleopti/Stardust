@@ -58,14 +58,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 								Name = d.Name,
 								ActualStartTime = d.ActualStartTime,
 								LastStateChangedTime = d.LastStateChangedTime,
-								IsInAdherence = d.IsInAdherence,
 								TimeInAdherence = d.TimeInAdherence,
 								TimeOutOfAdherence = d.TimeOutOfAdherence
 							}),
 						ShiftEndTime = m.Model.ShiftEndTime,
 						ActualEndTime = m.Model.ActualEndTime,
 						HasShiftEnded = m.Model.HasShiftEnded,
-						HasActivityEnded = m.Model.HasActivityEnded
+						HasActivityEnded = m.Model.HasActivityEnded,
+						IsInAdherence = m.Model.IsInAdherence,
 					}
 				}).FirstOrDefault();
 		}

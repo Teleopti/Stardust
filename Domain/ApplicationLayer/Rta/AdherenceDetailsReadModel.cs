@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool HasShiftEnded { get; set; }
 		public DateTime? ShiftEndTime { get; set; }
 		public DateTime? ActualEndTime { get; set; }
+		public bool IsInAdherence { get; set; }
 	}
 
 	public class AdherenceDetailModel
@@ -27,7 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime? StartTime { get; set; }
 		public DateTime? ActualStartTime { get; set; }
 		public DateTime? LastStateChangedTime { get; set; }
-		public bool IsInAdherence { get; set; }
 		public TimeSpan TimeInAdherence { get; set; }
 		public TimeSpan TimeOutOfAdherence { get; set; }
 	}

@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var detailModel = new AdherenceDetailModel
 			{
 				Name = @event.Name,
-				StartTime = @event.StartTime,
-				IsInAdherence = @event.InAdherence,
+				StartTime = @event.StartTime
 			};
 			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime));
 			if (readModel == null)
@@ -39,6 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					Date = new DateOnly(@event.StartTime),
 					Model = new AdherenceDetailsModel
 					{
+						IsInAdherence = @event.InAdherence,
 						DetailModels = new List<AdherenceDetailModel>()
 					}
 				};
@@ -50,16 +50,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var previous = readModel.Model.DetailModels.LastOrDefault();
 			if (previous != null)
 			{
-				detailModel.ActualStartTime = calculateActualStartTime(previous, @event);
+				detailModel.ActualStartTime = calculateActualStartTime(readModel, previous, @event);
 
 				if (noActivityStarted(previous))
 					_persister.ClearDetails(readModel);
 				else
 				{
-					updateAdherence(previous, @event.StartTime);
+					updateAdherence(readModel, previous, @event.StartTime);
 					readModel.Model.HasActivityEnded = true;
 				}
 			}
+			readModel.Model.IsInAdherence = @event.InAdherence;
 			readModel.Model.DetailModels.Add(detailModel);
 			readModel.Model.ActualEndTime = null;
 			_persister.Update(readModel);
@@ -107,13 +108,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				}
 				else
 				{
-					updateAdherence(existingModel, @event.Timestamp);
+					updateAdherence(readModel, existingModel, @event.Timestamp);
 
 					if (lateForActivity(existingModel, @event))
 						existingModel.ActualStartTime = @event.Timestamp;
 
 					existingModel.LastStateChangedTime = @event.Timestamp;
-					existingModel.IsInAdherence = @event.InAdherence;
+					readModel.Model.IsInAdherence = @event.InAdherence;
 					readModel.Model.ActualEndTime = calculateActualEndTimeBeforeActivityEnds(readModel, @event);
 				}
 				_persister.Update(readModel);
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (lastModel == null)
 				return;
 			
-			updateAdherence(lastModel, @event.ShiftEndTime);
+			updateAdherence(readModel, lastModel, @event.ShiftEndTime);
 			readModel.Model.HasActivityEnded = true;
 			readModel.Model.ShiftEndTime = @event.ShiftEndTime;
 			_persister.Update(readModel);
@@ -163,15 +164,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return (@event.InAdherence && model.ActualStartTime == null);
 		}
 
-		private static DateTime? calculateActualStartTime(AdherenceDetailModel model, PersonActivityStartEvent @event)
+		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, AdherenceDetailModel detailModel, PersonActivityStartEvent @event)
 		{
-			if (@event.InAdherence && model.IsInAdherence)
+			if (@event.InAdherence && model.Model.IsInAdherence)
 			{
 				return @event.StartTime;
 			}
-			if (@event.InAdherence && !model.IsInAdherence)
+			if (@event.InAdherence && !model.Model.IsInAdherence)
 			{
-				return model.LastStateChangedTime;
+				return detailModel.LastStateChangedTime;
 			}
 			return null;
 		}
@@ -181,16 +182,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return model.Name == null;
 		}
 
-		private static void updateAdherence(AdherenceDetailModel model, DateTime timestamp)
+		private static void updateAdherence(AdherenceDetailsReadModel model, AdherenceDetailModel detailModel, DateTime timestamp)
 		{
-			var timeToAdd = model.LastStateChangedTime.HasValue
-				? timestamp - model.LastStateChangedTime.Value
-				: timestamp - model.StartTime;
+			var timeToAdd = detailModel.LastStateChangedTime.HasValue
+				? timestamp - detailModel.LastStateChangedTime.Value
+				: timestamp - detailModel.StartTime;
 
-			if (model.IsInAdherence)
-				model.TimeInAdherence += timeToAdd.Value;
+			if (model.Model.IsInAdherence)
+				detailModel.TimeInAdherence += timeToAdd.Value;
 			else
-				model.TimeOutOfAdherence += timeToAdd.Value;
+				detailModel.TimeOutOfAdherence += timeToAdd.Value;
 		}
 	}
 }
