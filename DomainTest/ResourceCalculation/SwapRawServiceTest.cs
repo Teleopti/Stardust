@@ -323,5 +323,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.AreEqual(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignment().Period.StartDateTime);
 			}
 		}
+
+		[Test]
+		public void ShouldNotTouchPersonAbsenceOutsideDay()
+		{
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+				Expect.Call(_scheduleDictionary.PermissionsEnabled).Return(true);
+			}
+
+			using (_mockRepository.Playback())
+			{
+				var dateTimePeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc));
+				var dateTimePeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 9, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 17, 0, 0, DateTimeKind.Utc));
+				var dateTimePeriod3 = new DateTimePeriod(new DateTime(2011, 1, 3, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 22, 0, 0, DateTimeKind.Utc));
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
+				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
+				_scheduleDayThreePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 3));
+
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
+				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod2));
+				_scheduleDayTwoPersonOne.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), dateTimePeriod3));
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				_scheduleDayOnePersonOne.PersonAssignment().Should().Not.Be.Null();
+				_scheduleDayTwoPersonOne.PersonAssignment().Should().Not.Be.Null();
+				Assert.AreEqual(2, _scheduleDayTwoPersonOne.PersistableScheduleDataCollection().Count());
+			}	
+		}
 	}
 }

@@ -92,7 +92,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private IEnumerable<IPersonAbsence> getAndRemoveAbsences(IScheduleDay scheduleDay)
 		{
 			var tmpAbsences = scheduleDay.PersonAbsenceCollection();
-			scheduleDay.Clear<IPersonAbsence>();
+
+			foreach (var personAbsence in tmpAbsences)
+			{
+				scheduleDay.Remove(personAbsence);
+			}
+
 			return tmpAbsences;
 		}
 
