@@ -83,38 +83,20 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 					SignalRConfiguration.Configure(()=>application.MapSignalR(new HubConfiguration{EnableJSONP = true}));
 				}
-				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 				
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 
-				registerWebApiRoutes(config);
-
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
+				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 			}
 			catch (Exception ex)
 			{
 				log.Error(ex);
 				ApplicationStartModule.ErrorAtStartup = ex;
 			}
-		}
-
-		private static void registerWebApiRoutes(HttpConfiguration config)
-		{
-			// Web API routes
-			config.MapHttpAttributeRoutes();
-
-			//config.Routes.MapHttpRoute(
-			//	name: "Mart_API",
-			//	routeTemplate: "api/Mart/{controller}/{id}",
-			//	defaults: new {id = RouteParameter.Optional});
-
-			config.Routes.MapHttpRoute(
-				name: "Forecasting_API",
-				routeTemplate: "api/Forecasting/{controller}/{id}",
-				defaults: new {id = RouteParameter.Optional});
 		}
 
 		private static string pathToToggle()

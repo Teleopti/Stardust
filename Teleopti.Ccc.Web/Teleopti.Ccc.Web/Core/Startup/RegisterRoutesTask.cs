@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -24,8 +25,21 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute()
 		{
-			registerRoutes(RouteTable.Routes);
-			return null;
+			return Task.Factory.StartNew(() =>
+			{
+				registerRoutes(RouteTable.Routes);
+				GlobalConfiguration.Configure(registerWebApiRoutes);
+			});
+		}
+
+		private static void registerWebApiRoutes(HttpConfiguration config)
+		{
+			config.MapHttpAttributeRoutes();
+
+			config.Routes.MapHttpRoute(
+				name: "Forecasting_API",
+				routeTemplate: "api/Forecasting/{controller}/{id}",
+				defaults: new { id = RouteParameter.Optional });
 		}
 
 		public void registerRoutes(RouteCollection routes)
