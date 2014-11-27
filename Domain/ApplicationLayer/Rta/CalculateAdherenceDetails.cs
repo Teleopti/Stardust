@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private static bool isActivityEnded(int modelIndex, int totalActivites, bool hasShiftEnded)
 		{
-			return modelIndex < totalActivites || hasShiftEnded;
+			return modelIndex < totalActivites - 1 || hasShiftEnded;
 		}
 
 		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
