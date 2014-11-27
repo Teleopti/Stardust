@@ -70,6 +70,7 @@
 	<Target Name="ScriptedTestsRunOnAllDBs">
 		<ItemGroup>
 			<ScriptList Include="$(WorkingDirectory)\Database\Tools\PK-namingStandard.sql"/>
+			<ScriptList Include="$(WorkingDirectory)\Database\Tools\NoHeapsCheck.sql"/>
 		</ItemGroup>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AppDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
