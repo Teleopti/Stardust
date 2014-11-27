@@ -232,7 +232,7 @@
     <value>Info agent...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC MyTime</value>
+    <value>Teleopti WFM MyTime</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agents</value>
@@ -1621,7 +1621,7 @@
     <value>Position Auto</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Déconnexion Teleopti CCC</value>
+    <value>Déconnexion Teleopti WFM</value>
   </data>
   <data name="Periods" xml:space="preserve">
     <value>Périodes</value>
@@ -1687,7 +1687,7 @@
     <value>Rapports</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Pourcentage temps-partiel</value>
@@ -1735,7 +1735,7 @@
     <value>Modifier heures supplémentaires</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Ouvrir Teleopti CCC</value>
+    <value>Ouvrir Teleopti WFM</value>
   </data>
   <data name="DeleteActivity" xml:space="preserve">
     <value>Supprimer activité</value>
@@ -2350,10 +2350,10 @@
     <value>Aperçu résumé</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Portail principal</value>
+    <value>Teleopti WFM: Portail principal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Plannings - Teleopti CCC</value>
+    <value>Plannings - Teleopti WFM</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Outils</value>
@@ -2464,7 +2464,7 @@
     <value>Banque d'horaires</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
   </data>
   <data name="GridRowsInChart" xml:space="preserve">
     <value>Propriétés diagramme</value>
@@ -2827,7 +2827,7 @@
     <value>Connexion Windows</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>Personnes - Teleopti CCC</value>
+    <value>Personnes - Teleopti WFM</value>
   </data>
   <data name="RemoveParticipant" xml:space="preserve">
     <value>Supprimer participants sélectionnés</value>
@@ -2842,7 +2842,7 @@
     <value>Permissions</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Permissions - Teleopti CCC</value>
+    <value>Permissions - Teleopti WFM</value>
   </data>
   <data name="SelectPeopleToAddToRole" xml:space="preserve">
     <value>Sélectioner personnes à ajouter au rôle</value>
@@ -2854,7 +2854,7 @@
     <value>Nouvelle règle d'horaires</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Horaires - Teleopti CCC</value>
+    <value>Horaires - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Nom règle d'horaires &gt;</value>
@@ -2977,7 +2977,7 @@
     <value>Seuil</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Intra-journalier - Teleopti CCC</value>
+    <value>Intra-journalier - Teleopti WFM</value>
   </data>
   <data name="OpenASM" xml:space="preserve">
     <value>Agent Schedule Messenger</value>
@@ -4591,7 +4591,7 @@
     <value>Choisir contrôle de flux d'activités à modifier</value>
   </data>
   <data name="ManageWorkflowControlSets" xml:space="preserve">
-    <value>Gérer Propriétés de contrôle de flux d'activités</value>
+    <value>Gérer propriétés de contrôle de flux d'activités</value>
   </data>
   <data name="OpenForAbsenceRequests" xml:space="preserve">
     <value>Ouvrir pour demandes d'absence</value>
@@ -5218,7 +5218,7 @@
     <value>Periode objectif à partir de</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Prévisions - Teleopti CCC</value>
+    <value>Prévisions - Teleopti WFM</value>
   </data>
   <data name="TimeZone" xml:space="preserve">
     <value>Fuseau horaire</value>
@@ -6082,10 +6082,10 @@
     <value>Utiliser déviation Intra Intervalle </value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Système OK</value>
+    <value>Teleopti WFM - Système OK</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Alerte Système </value>
+    <value>Teleopti WFM - Alerte Système </value>
   </data>
   <data name="SchedulePlusRestrictions" xml:space="preserve">
     <value>Planning + Restrictions</value>
@@ -6700,7 +6700,7 @@
     <value>Orientation équité</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} - Teleopti CCC: {1} - {2} Scénario: {3}</value>
+    <value>{0} - Teleopti WFM: {1} - {2} Scénario: {3}</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
     <value>Le fichier PDF attaché contient votre planning de {0} à {1}.</value>
@@ -7549,14 +7549,14 @@ Supprimez la date de l'évènement spécial ou choisissez une autre date.</value
     <value>Le système est occupé par une autre requête d'arrière-plan. Merci de ré-essayer plus tard.</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC a rencontré un problème et doit fermer.  Nous sommes désolés pour le désagrément causé. Si vous étiez en plein travail, les informations sur lesquelles vous travailliez peuvent être perdues.
+    <value>Teleopti WFM a rencontré un problème et doit fermer.  Nous sommes désolés pour le désagrément causé. Si vous étiez en plein travail, les informations sur lesquelles vous travailliez peuvent être perdues.
 
 Pour nous donner des informations pertinentes sur cette erreur, nous vous demandons de bien vouloir nous le signaler en cliquant sur le bouton "Envoyer rapport par e-mail". Cela va ouvrir votre programme d'e-mail par défaut.
 Merci d'inclure:
 
 1. Comment reproduire l'erreur étape par étape:
 2. Informations sur les données avec lesquelles vous travailliez:
-3. Capture d'écran de l'erreur avec Teleopti CCC en arrière-plan:
+3. Capture d'écran de l'erreur avec Teleopti WFM en arrière-plan:
 
 Vous pouvez aussi copier le message d'erreur dans le presse-papiers et le copier dans l'e-mail.
 
@@ -7572,7 +7572,7 @@ Teleopti R&amp;D</value>
 2. Informations sur les données avec lesquelles vous travailliez:
 
 
-3. Capture d'écran de l'erreur avec Teleopti CCC en arrière-plan:
+3. Capture d'écran de l'erreur avec Teleopti WFM en arrière-plan:
 
 
 Merci
@@ -8456,7 +8456,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Paramètres SMS</value>
   </data>
   <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
-    <value>Vos horaires de travail ont changé</value>
+    <value>Vos horaires de travail ont changé :</value>
   </data>
   <data name="GraphLOC" xml:space="preserve">
     <value>Graphe (loc)</value>
@@ -8767,10 +8767,10 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Messages ({0})</value>
   </data>
   <data name="BudgetGroupHeadCount" xml:space="preserve">
-    <value>Nombre de têtes groupe budget</value>
+    <value>Effectif groupe budget</value>
   </data>
   <data name="HeadCount" xml:space="preserve">
-    <value>Nombre de têtes</value>
+    <value>Effectif</value>
   </data>
   <data name="NotEnoughAllowance" xml:space="preserve">
     <value>Il n'y a pas assez de permission pour le jour:</value>
@@ -9073,7 +9073,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Type de Repère</value>
   </data>
   <data name="WorkflowControlSetHeader" xml:space="preserve">
-    <value>Propriété de flux d'activités</value>
+    <value>Contrôle de flux d'activités</value>
   </data>
   <data name="WorkTimeHeader" xml:space="preserve">
     <value>Temps Travaillé</value>
@@ -9496,7 +9496,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Liste filtrée</value>
   </data>
   <data name="FilterMultiplePerson" xml:space="preserve">
-    <value>Filtré personnes multiples</value>
+    <value>Filtre personnes multiples</value>
   </data>
   <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
     <value>Entrer valeurs propriétés pour catégories d'horaires</value>
@@ -9557,5 +9557,107 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="ResetBadgesFailed" xml:space="preserve">
     <value>Echec de la mise à zéro des badges, merci de réessayer plus tard!</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Voir le classement des badges</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>Utiliser</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} ne peut pas être plus tôt que {1}</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Heure de fin</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Heure de début</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Paramètres d'absence journée entière</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>L'étape d'optimisation "longueurs d'horaires entre jours" n'est pas exécutée lorsque blocs et même horaires sont sélectionnés.</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Paramètres d'e-mails</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Gérer paramètres de notification</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Paramètres de notification</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Type de notification</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Envoyer email depuis:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Tester l'envoi vers:</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Problème d'équilibre intra-intervalle</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filtrer sur les intra-intervalles</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Classement</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Merci d'activer au moins un type de badge.</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>La préférence ne peut être ajoutée car l'élément sélectionné n'est plus disponible.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Equilibre intra-intervalle</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Ne peut obtenir le paramètre de préférence</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Equilibre intra-intervalle le plus bas</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Suivi des rapports d'absence</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Absences permises pour les rapports d'absences</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>L'absence ne peut être dans les rapports</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Tableau d'échange d'horaires</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publier</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publier plannings pour:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publier plannings pour:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publier planning</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>L' heure de début doit être plus tôt que l'heure de fin</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Rapporter l'absence pour</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Pas d'agents disponibles pour le bulletin</value>
   </data>
 </root>

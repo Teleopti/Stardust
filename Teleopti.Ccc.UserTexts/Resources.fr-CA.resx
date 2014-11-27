@@ -9574,6 +9574,90 @@ Réduisez la complexité pour utiliser ces quarts.</value>
     <value>L'étape d'optimisation "Longueurs de quarts entre jours" n'est pas exécutée lorsque blocs et mêmes quarts sont sélectionnés.</value>
   </data>
   <data name="IntraIntervalIssue" xml:space="preserve">
-    <value>Erreur d'intra intervalle</value>
+    <value>Problème d'équilibre intra-intervalle</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>Utiliser</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Paramètres d'absence journée entière</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Paramètres de courriels</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Gérer paramètres de notification</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Paramètres de notification</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Type de notification</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Envoyer courriel depuis:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>Message Texte</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Tester l'envoi vers:</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filtrer sur les intra-intervalles</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Classement</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Merci d'activer au moins un type de badge.</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>La préférence ne peut être ajoutée car l'élément sélectionné n'est plus disponible.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Equilibre intra-intervalle</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Ne peut obtenir le paramètre de préférence</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Equilibre intra-intervalle le plus bas</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Suivi des rapports d'absence</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Absences permises pour les rapports d'absences</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>L'absence ne peut être dans les rapports</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Tableau d'échange de quarts</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publier</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publier plannings pour:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publier plannings pour:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publier planning</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>L' heure de début doit être plus tôt que l'heure de fin</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Rapporter l'absence pour</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Pas d'agents disponibles pour le bulletin</value>
   </data>
 </root>

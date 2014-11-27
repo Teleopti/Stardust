@@ -8449,7 +8449,7 @@ Period: {3}</value>
     <value>Din förfrågan kunde inte behandlas. Du har inget arbetsflöde uppsatt.</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
-    <value>Aktivitet tillgänglig för utökade önskemål</value>
+    <value>Aktiviteter tillgängliga för utökade önskemål</value>
   </data>
   <data name="Basic" xml:space="preserve">
     <value>Grundläggande</value>
@@ -9740,7 +9740,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Inloggning kundwebb</value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Frånvaro tillgängligt för önskemål</value>
+    <value>Frånvarotyper tillgängliga för önskemål</value>
   </data>
   <data name="CannotDisplayAllMeetings" xml:space="preserve">
     <value>Kan inte visa alla möten på denna tid!</value>
@@ -11856,5 +11856,35 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="AbsenceReport" xml:space="preserve">
     <value>Frånvarorapport</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Frånvarotyper tillgängliga för rapportering</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Anslagstavla för skiftbyten</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publicera...</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publicera scheman för:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publicera scheman till:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publicera schema</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Starttiden måste vara tidigare än sluttiden</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Rapportera frånvaro för</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>Filtrera på öppettider</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planned</value>
   </data>
 </root>
