@@ -526,7 +526,6 @@
 		<Message Importance="high" Text="make folder ..."/>
 		<Exec Command="if not exist &quot;$(MSIPath)&quot; mkdir &quot;$(MSIPath)&quot;"/>
 		<Message Importance="high" Text="make folderWiki. Done!"/>
-		<CallTarget Targets="CreateHgChangesetFile" />
 	
 		<Copy SourceFiles="@(PreReq)"
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
@@ -536,14 +535,6 @@
 			  DestinationFiles="@(UnInstall->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
 			  
 		<Message Text="Copying files to $(DeployPath). Done"/>
-	</Target>
-	
-	<Target Name="CreateHgChangesetFile">
-		<HgVersion LocalPath="$(CCNetWorkingDirectory)">
-			<Output TaskParameter="Changeset" PropertyName="HgChangeset" />
-		</HgVersion>
-		<WriteLinesToFile File="$(MSIPath)\lastchangeset.txt"
-						Lines="$(HgChangeset)" />
 	</Target>
 
 	<Target Name="TagAndPush" DependsOnTargets="GetVersion" Condition="'$(doTagging)'=='true'">
