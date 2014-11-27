@@ -1,16 +1,6 @@
-
-/****** Object:  StoredProcedure [ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter]    Script Date: 2013-11-14 13:35:09 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[LoadShiftTradeBulletinSchedules]
 GO
-
-/****** Object:  StoredProcedure [ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter]    Script Date: 2013-11-14 13:35:09 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 -- =============================================
 -- Author:		Mingdi
@@ -27,7 +17,7 @@ ReadModel.LoadShiftTradeBulletinSchedulesWithTimeFilter
 '2014-08-08 20:00;2014-08-08 22:00,2014-08-09 00:00;2014-08-09 01:00',
 true,0,20
 */
-CREATE PROCEDURE [ReadModel].LoadShiftTradeBulletinSchedulesWithTimeFilter
+CREATE PROCEDURE ReadModel.LoadShiftTradeBulletinSchedulesWithTimeFilter
 @shiftTradeDate smalldatetime,
 @personList varchar(max),
 @currentScheduleStart smalldatetime,
