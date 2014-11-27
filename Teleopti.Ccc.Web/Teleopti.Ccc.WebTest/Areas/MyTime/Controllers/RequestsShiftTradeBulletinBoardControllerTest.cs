@@ -3,8 +3,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -14,13 +14,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class RequestsShiftTradeBulletinBoardControllerTest
 	{
-		private IUserTimeZone _userTimeZone;
+		private ITimeFilterHelper _timeFilterHelper;
 		[SetUp]
 		public void Setup()
 		{
-			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			_userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);	
+			_timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
 		}
 
 		[Test]
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
 							.Return(model);
 
-			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _userTimeZone);
+			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
 
 			var result = target.BulletinSchedules(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
@@ -48,8 +46,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
 							.Return(model);
-
-			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _userTimeZone);
+	
+			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
 
 			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);

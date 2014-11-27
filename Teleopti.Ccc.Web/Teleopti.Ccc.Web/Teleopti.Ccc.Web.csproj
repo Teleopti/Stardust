@@ -389,7 +389,8 @@
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\HealthCheck\HealthCheckAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportController.cs" />
-    <Compile Include="Areas\MyTime\Controllers\FilterHelper.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ITimeFilterHelper.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\TimeFilterHelper.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeBulletinBoardController.cs" />
     <Compile Include="Areas\MyTime\Controllers\RequestsShiftTradeScheduleFilterController.cs" />

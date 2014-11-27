@@ -4,15 +4,15 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
+namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
 	[TestFixture]
-	public class FilterHelperTest
+	public class TimeFilterHelperTest
 	{
-		private FilterHelper _filterHelper;
+		private TimeFilterHelper _filterHelper;
 
 		[SetUp]
 		public void SetUp()
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
-			_filterHelper = new FilterHelper(userTimeZone);
+			_filterHelper = new TimeFilterHelper(userTimeZone);
 		}
 
 		[Test]

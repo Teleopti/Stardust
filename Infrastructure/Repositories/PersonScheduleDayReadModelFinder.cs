@@ -17,35 +17,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		class TimeFilterString
-		{
-			public string startTimes;
-			public string endTimes;
-		}
-
-		private TimeFilterString getTimeFilterString(TimeFilterInfo filter)
-		{
-			var filterString = new TimeFilterString();
-			var startTimesAsString = from s in filter.StartTimes
-											 let start = s.StartDateTime.ToString("yyyy-MM-dd HH:mm")
-											 let end = s.EndDateTime.ToString("yyyy-MM-dd HH:mm")
-											 select new
-											 {
-												 startTime = start + ";" + end,
-											 };
-			var endTimesAsString = from e in filter.EndTimes
-										  let start = e.StartDateTime.ToString("yyyy-MM-dd HH:mm")
-										  let end = e.EndDateTime.ToString("yyyy-MM-dd HH:mm")
-										  select new
-										  {
-											  endTime = start + ";" + end,
-										  };
-			filterString.startTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
-			filterString.endTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
-
-			return filterString;
-		}
-
 		public PersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork)
 		{
 			InParameter.NotNull("unitOfWork", unitOfWork);
@@ -223,23 +194,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPersonsByFilteredTimes(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filter)
 		{
 			var idlist = string.Join(",", personIdList);
-
-			//var startTimesAsString = from s in filter.StartTimes
-			//								 let start = s.StartDateTime.ToString("yyyy-MM-dd HH:mm")
-			//								 let end = s.EndDateTime.ToString("yyyy-MM-dd HH:mm")
-			//								 select new
-			//								 {
-			//									 startTime = start + ";" + end,
-			//								 };
-			//var endTimesAsString = from e in filter.EndTimes
-			//							  let start = e.StartDateTime.ToString("yyyy-MM-dd HH:mm")
-			//							  let end = e.EndDateTime.ToString("yyyy-MM-dd HH:mm")
-			//							  select new
-			//							  {
-			//								  endTime = start + ";" + end,
-			//							  };
-			//var filterStartTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
-			//var filterEndTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
 			var filterString = getTimeFilterString(filter);
 			return _unitOfWork.Session().CreateSQLQuery(
 				@"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedulesWithTimeFilter] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, 
@@ -266,6 +220,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
 							  .SetReadOnly(true)
 							  .List<PersonScheduleDayReadModel>();
+		}
+
+		class TimeFilterString
+		{
+			public string startTimes;
+			public string endTimes;
+		}
+
+		private TimeFilterString getTimeFilterString(TimeFilterInfo filter)
+		{
+			var filterString = new TimeFilterString();
+			var startTimesAsString = from s in filter.StartTimes
+											 let start = s.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+											 let end = s.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+											 select new
+											 {
+												 startTime = start + ";" + end,
+											 };
+			var endTimesAsString = from e in filter.EndTimes
+										  let start = e.StartDateTime.ToString("yyyy-MM-dd HH:mm")
+										  let end = e.EndDateTime.ToString("yyyy-MM-dd HH:mm")
+										  select new
+										  {
+											  endTime = start + ";" + end,
+										  };
+			filterString.startTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
+			filterString.endTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));
+
+			return filterString;
 		}
 	}
 }

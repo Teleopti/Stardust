@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -25,8 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IUserTimeZone _userTimeZone;
-		private readonly FilterHelper _filterHelper;
+		private readonly ITimeFilterHelper _timeFilterHelper;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 								IShiftTradeRequestPersister shiftTradeRequestPersister,
 								IRespondToShiftTrade respondToShiftTrade, 
 								IPermissionProvider permissionProvider,
-								IUserTimeZone timeZone)
+								ITimeFilterHelper timeFilterHelper)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_shiftTradeRequestPersister = shiftTradeRequestPersister;
 			_respondToShiftTrade = respondToShiftTrade;
 			_permissionProvider = permissionProvider;
-			_userTimeZone = timeZone;
-			_filterHelper = new FilterHelper(_userTimeZone);
+			_timeFilterHelper = timeFilterHelper;
 		}
 
 		[EnsureInPortal]
@@ -171,7 +170,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = _filterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging, TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
@@ -180,7 +179,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly selectedDate, string teamIds, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = _filterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
+			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModelForAllTeams(data), JsonRequestBehavior.AllowGet);
 		}
 

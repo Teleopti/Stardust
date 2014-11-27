@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -296,16 +297,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetScheduleModelForOneTeamWithTimeFilter()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
 			var model = new ShiftTradeScheduleViewModel();
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 							.Return(model);
 
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
+			
 
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), userTimeZone);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), timeFilterHelper);
 
 			var result = target.ShiftTradeRequestScheduleByFilterTime(DateOnly.Today, Guid.NewGuid().ToString(), "8:00-10:00", "16:00-18:00", false, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
@@ -315,15 +315,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetScheduleModelForAllTeamWithTimeFilter()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
 			var model = new ShiftTradeScheduleViewModel();
 
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModelForAllTeams(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
 							.Return(model);
 
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			userTimeZone.Expect(c => c.TimeZone()).Return(timeZone);
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), userTimeZone);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), timeFilterHelper);
 
 			var result = target.ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly.Today, Guid.NewGuid().ToString(), "8:00-10:00", "16:00-18:00", true, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);

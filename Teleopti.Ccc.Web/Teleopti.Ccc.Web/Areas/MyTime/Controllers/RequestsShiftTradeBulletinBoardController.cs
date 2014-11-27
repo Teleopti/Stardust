@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Filters;
@@ -13,12 +15,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class RequestsShiftTradeBulletinBoardController : Controller
 	{
 		private IRequestsShiftTradebulletinViewModelFactory _requestsShiftTradebulletinViewModelFactory;
-		private readonly IUserTimeZone _userTimeZone;
+		private readonly ITimeFilterHelper _timeFilterHelper;
 
-		public RequestsShiftTradeBulletinBoardController(IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory, IUserTimeZone userTimeZone)
+		public RequestsShiftTradeBulletinBoardController(IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory, ITimeFilterHelper timeFilterHelper)
 		{
 			_requestsShiftTradebulletinViewModelFactory = requestsShiftTradebulletinViewModelFactory;
-			_userTimeZone = userTimeZone;
+			_timeFilterHelper = timeFilterHelper;
 		}
 
 		[UnitOfWorkAction]
@@ -35,8 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, string teamIds, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
 		{
 			 var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			 var filterHelper = new FilterHelper(_userTimeZone);
-			 var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = filterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
+			 var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			 return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 

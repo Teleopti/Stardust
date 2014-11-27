@@ -4,13 +4,13 @@ using System.Linq;
 using DDay.iCal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
-	public class FilterHelper
+	public class TimeFilterHelper : ITimeFilterHelper
 	{
 		private readonly IUserTimeZone _userTimeZone;
 
-		public FilterHelper(IUserTimeZone userTimeZone)
+		public TimeFilterHelper(IUserTimeZone userTimeZone)
 		{
 			_userTimeZone = userTimeZone;
 		}
