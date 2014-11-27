@@ -42,6 +42,9 @@ namespace Teleopti.Ccc.Web.Broker
 				settings.ScaleOutBackplaneUrl = uri;
 			}
 
+			value = ConfigurationManager.AppSettings["EnablePerformanceCounters"];
+			settings.EnablePerformanceCounters = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
+
 			value = ConfigurationManager.AppSettings["ThrottleMessages"];
 			settings.ThrottleMessages = string.IsNullOrEmpty(value) || Convert.ToBoolean(value);
 
@@ -59,5 +62,6 @@ namespace Teleopti.Ccc.Web.Broker
 		public Uri ScaleOutBackplaneUrl { get; set; }
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
+		public bool EnablePerformanceCounters { get; set; }
 	}
 }

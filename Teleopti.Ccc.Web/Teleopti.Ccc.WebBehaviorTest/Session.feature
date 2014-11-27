@@ -8,7 +8,7 @@ Background:
 	| Field | Value                 |
 	| Name  | Full access to mytime |
 
-@ignore
+
 Scenario: Stay signed in after server restart
 	Given I am viewing an application page
 	Then I should be signed in
