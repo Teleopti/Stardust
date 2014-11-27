@@ -25,14 +25,12 @@
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
-		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 		<MainMSIProjectName>CCC-Main-MSI</MainMSIProjectName>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
-		<FullBuild>No</FullBuild>
 		<ProductsToBuild>1</ProductsToBuild> <!-- only Server MSI -->
 		<MSIShare>D:\Installation\PBImsi</MSIShare>
 	</PropertyGroup>
@@ -98,7 +96,7 @@
 		<Message Text="Scanning done!" Importance="high" />
 	</Target>
 	
-	<Target Name="CreateAzure" Condition="'$(FullBuild)' == 'Yes'">
+	<Target Name="CreateAzure">
 		<Message Text="Building Azure packages ..." Importance="high" />
 		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\BuildAzurePackages.bat&quot; $(CCCVersion)"/>
@@ -112,18 +110,8 @@
      ZipLevel="9" />
   </Target>
   
-  <Target Name="RenameZip" Condition="'$(FullBuild)' == 'No'">
-	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
-	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti WFM $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
-  </Target>
-  
   <Target Name="MoveToKanbox">
-	<PropertyGroup Condition="'$(FullBuild)' == 'No'">
-		<ZIPName>$(CCNetProject)</ZIPName>
-		<KanboxShare>$(MSIShare)</KanboxShare>
-	</PropertyGroup>
-	
-	<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
+	<PropertyGroup>
 		<ZIPName>Teleopti WFM $(CCCVersion)</ZIPName>
 		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
 	</PropertyGroup>
@@ -134,16 +122,9 @@
 	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
   </Target>
 
-  <Target Name="Kanbox" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox">
+  <Target Name="Kanbox" DependsOnTargets="ZipServerInstall;MoveToKanbox">
     <Message Text="Calling upload target"/>
   </Target>
-  
-  <Target Name="DeletePBIMSI" Condition="'$(FullBuild)' == 'No'">
-	<Message Text="Deleting PBIMSI folders to get new ones"/>
-	<Exec Command="rd &quot;$(DeployPath)&quot; /Q /S"/>
-	<Exec Command="rd &quot;$(MSIPath)&quot; /Q /S"/>
-  </Target>
-  
  
 	<Target Name="BuildLocalWiki" DependsOnTargets="CompileExtraApps">
 		<Message Text="Buliding local wiki ... " />
@@ -162,7 +143,7 @@
 		<Message Text="An error has occurred while building localWiki. Please run batch file manually to find out what's wrong"/>
 	</Target>
 			
-	<Target Name="AllFilesIncluded" DependsOnTargets="DeletePBIMSI">
+	<Target Name="AllFilesIncluded">
 		<ItemGroup>
 
 
@@ -454,31 +435,14 @@
 		</HgVersion>
 		<Message Text="HG Revision: $(Revision)" Importance="high"/>
 		
-		<!--Adding 1000 to revision to sync with previous msis now when we moved to a new repo -->
-		<!-- NOT WORKING SO I´LL REMOVE THIS FOR NOW
-		<MSBuild.ExtensionPack.Science.Maths TaskAction="Add" Numbers="$(TmpRevision);1000">
-            <Output PropertyName="Revision" TaskParameter="Result"/>
-        </MSBuild.ExtensionPack.Science.Maths> 
-		
-		<Message Text="HG Revision + 1000: $(Revision)" Importance="high"/>-->
-		
-		<PropertyGroup Condition="'$(FullBuild)' == 'No'">
-			<CCCVersion>$(CCCMajorMinor).0.0</CCCVersion>
-			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
-			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
-		</PropertyGroup>
-		
-		<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
+		<PropertyGroup>
 			<CCCVersion>$(CCCMajorMinor).$(BranchVersion).$(Revision)</CCCVersion>
 			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
 			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
 		</PropertyGroup>
 		
-		
-		
 		<Message Text="DeployPath is: [$(DeployPath)]" Importance="high"/>
 		<Message Text="Version is: $(CCCMajorMinor).$(BranchVersion).$(Revision)" Importance="high"/>
-
 	</Target>
 
 
