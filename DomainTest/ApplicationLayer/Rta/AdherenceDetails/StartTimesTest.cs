@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				StartTime = "2014-11-17 8:00".Utc()
 			});
 
-			persister.Rows.Single().Model.DetailModels.Single().Name.Should().Be("Phone");
+			persister.Rows.Single().Name.Should().Be("Phone");
 		}
 
 		[Test]
@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
 			var target = new AdherenceDetailsReadModelUpdater(persister);
+
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				StartTime = "2014-11-17 9:00".Utc()
 			});
 
-			persister.Rows.Single().Model.DetailModels.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
+			persister.Rows.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
 		}
 
 		[Test]
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				StartTime = "2014-11-17 8:00".Utc()
 			});
 
-			persister.Rows.Single().Model.DetailModels.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
+			persister.Rows.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = true
 			});
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
+			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
 		}
 
 		[Test]
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				Timestamp = "2014-11-17 8:00".Utc(),
 				InAdherence = true
 			});
-			persister.Rows.Single().Model.DetailModels.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
+			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc(), InAdherence = true });
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
+			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
 		}
 
 		[Test]
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Break", InAdherence = true });
 
-			persister.Rows.Single().Model.DetailModels.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
+			persister.Rows.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
 		}
 
 		[Test]
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualStartTime.Should().Be(null);
+			persister.Rows.Single().ActualStartTime.Should().Be(null);
 		}
 
 		[Test]
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:10".Utc(), InAdherence = true });
 
-			persister.Rows.Single().Model.DetailModels.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
+			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
 		}
 
 		[Test]
@@ -181,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Phone 2", InAdherence = true });
 
-			persister.Rows.Single().Model.DetailModels.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
+			persister.Rows.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
 
 		[Test]
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
 
-			persister.Rows.Single().Model.DetailModels.Last().ActualStartTime.Should().Be(null);
+			persister.Rows.Last().ActualStartTime.Should().Be(null);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 9:00".Utc(),
 			});
 
-			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
+			persister.Model.ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
 		}
 
 		[Test]
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 9:00".Utc(),
 			});
 
-			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
+			persister.Model.ActualEndTime.Should().Be("2014-11-17 8:30".Utc());
 		}
 
 		[Test]
@@ -122,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false
 			});
 
-			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 8:53".Utc());
+			persister.Model.ActualEndTime.Should().Be("2014-11-17 8:53".Utc());
 		}
 
 		[Test]
@@ -166,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				ShiftEndTime = "2014-11-17 10:00".Utc(),
 			});
 
-			persister.Rows.Single().Model.ActualEndTime.Should().Be(null);
+			persister.Model.ActualEndTime.Should().Be(null);
 
 		}
 
@@ -216,9 +218,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false,
 				InAdherenceWithPreviousActivity = false,
 			});
-			persister.Rows.Single().Model.ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
+			persister.Model.ActualEndTime.Should().Be("2014-11-17 9:30".Utc());
 		}
-
+		
 		[Test]
 		public void ShouldPersistShiftEndTime()
 		{
@@ -246,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false
 			});
 
-			persister.Rows.Single().Model.ShiftEndTime.Should().Be("2014-11-17 9:00".Utc());
+			persister.Model.ShiftEndTime.Should().Be("2014-11-17 9:00".Utc());
 		}
 	}
 }

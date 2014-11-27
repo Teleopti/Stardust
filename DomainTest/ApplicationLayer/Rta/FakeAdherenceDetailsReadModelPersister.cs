@@ -8,31 +8,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
 	{
-		public IList<AdherenceDetailsReadModel> Rows = new List<AdherenceDetailsReadModel>();
-		public AdherenceDetailsReadModel PersistedModel { get; set; }
+		private readonly IList<AdherenceDetailsReadModel> _data = new List<AdherenceDetailsReadModel>();
+
+		public AdherenceDetailsModel Model
+		{
+			get { return _data.Single().Model; }
+		}
+
+		public IEnumerable<AdherenceDetailModel> Rows
+		{
+			get { return _data.Single().Model.DetailModels; }
+		}
 
 		public void Add(AdherenceDetailsReadModel model)
 		{
-			Rows.Add(model);
+			_data.Add(model);
 		}
 
 		public void Update(AdherenceDetailsReadModel model)
 		{
-			var existing = from m in Rows
+			var existing = from m in _data
 				where m.PersonId == model.PersonId &&
 				      m.Date == model.Date
 				select m;
-			Rows.Remove(existing.Single());
-			Rows.Add(model);
-		}
-
-		public void Remove(Guid personId, DateOnly date)
-		{
-			var existing = from m in Rows
-				where m.PersonId == personId &&
-				      m.Date == date
-				select m;
-			Rows.Remove(existing.Single());
+			_data.Remove(existing.Single());
+			_data.Add(model);
 		}
 
 		public void ClearDetails(AdherenceDetailsReadModel model)
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
-			return Rows.Where(r => r.PersonId == personId && r.Date == date)
+			return _data.Where(r => r.PersonId == personId && r.Date == date)
 				.Select(m => new AdherenceDetailsReadModel
 				{
 					PersonId = m.PersonId,
