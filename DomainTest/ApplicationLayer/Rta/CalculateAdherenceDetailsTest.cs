@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					HasActivityEnded = true,
+					HasShiftEnded = true,
 					IsInAdherence = false,
 					DetailModels = new[]
 					{
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			var result = target.ForDetails(model.PersonId);
 
-			result.Single().AdherencePercent.Should().Be(50);
+			result.First().AdherencePercent.Should().Be(50);
 		}
 		
 		[Test]
@@ -348,7 +348,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					ShiftEndTime = "2014-11-20 9:00".Utc(),
 					HasShiftEnded = true,
-					HasActivityEnded = true,
 					ActualEndTime = "2014-11-20 9:00".Utc(),
 					IsInAdherence = false,
 					DetailModels = new[]

@@ -55,10 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				if (noActivityStarted(previous))
 					_persister.ClearDetails(readModel);
 				else
-				{
 					updateAdherence(readModel, previous, @event.StartTime);
-					readModel.Model.HasActivityEnded = true;
-				}
 			}
 			readModel.Model.IsInAdherence = @event.InAdherence;
 			readModel.Model.DetailModels.Add(detailModel);
@@ -102,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			}
 			else
 			{
-				if (readModel.Model.HasActivityEnded)
+				if (readModel.Model.HasShiftEnded)
 				{
 					readModel.Model.ActualEndTime = calculateActualEndTimeWhenActivityEnds(readModel, @event);
 				}
@@ -154,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return;
 			
 			updateAdherence(readModel, lastModel, @event.ShiftEndTime);
-			readModel.Model.HasActivityEnded = true;
+			readModel.Model.HasShiftEnded = true;
 			readModel.Model.ShiftEndTime = @event.ShiftEndTime;
 			_persister.Update(readModel);
 		}

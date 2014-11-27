@@ -162,6 +162,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\EndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\InAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\OutOfAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftEndedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\StartTimesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetailsTest.cs" />
