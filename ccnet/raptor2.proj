@@ -70,7 +70,7 @@
 	
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;BuildSSASXmla">
+	<Target Name="Compile" DependsOnTargets="BuildSSASXmla">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
@@ -128,58 +128,6 @@
 		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
 	</Target>
 	
-	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">
-		<Message Importance="high" Text="Dropping Analytics DB on local instance" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_analytics') BEGIN ALTER DATABASE [$(DBNamePrefix)_analytics] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_analytics] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
-		<Message Importance="high" Text="Dropping Analytics DB finished" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
-		<Message Importance="high" Text="Dropping $(DBNamePrefix)_ccc7 finished" />
-		
-		<Message Importance="high" Text="Creating Analytics ..."/>
-		<PropertyGroup>
-			<CreateDBCommand>"@(DBManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A -F$(DatabasePath)</CreateDBCommand>
-		</PropertyGroup>
-
-		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
-		<Message Text="The exit code is $(ErrorCode)"/>
-		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" Condition="'$(ErrorCode)' != '0'" />
-
-		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
-		<Message Text="The exit code is $(ErrorCode)"/>
-		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" Condition="'$(ErrorCode)' != '0'" />
-
-		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
-		<Message Text="The exit code is $(ErrorCode)"/>
-		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" Condition="'$(ErrorCode)' != '0'" />
-		
-		<Message Importance="high" Text="Creation of dbs finished." />
-
-		<Message Importance="high" Text="Check Naming Standard on [$(DBNamePrefix)_ccc7] at $(DBServer) ..."/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(SQLFiles)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_ccc7;Integrated Security=True"/>
-		<Message Importance="high" Text="Check Naming Standard. Finished"/>
-		
-		<Message Importance="high" Text="Check Naming Standard on [$(DBNamePrefix)_analytics] at $(DBServer)..."/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(SQLFiles)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
-		<Message Importance="high" Text="Check Naming Standard. Finished"/>
-
-		<Message Importance="high" Text="Deploy Cross Db views  on local instance ..."/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Sql="EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '$(DBNamePrefix)_agg'" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Sql="EXEC mart.sys_crossDatabaseView_load" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
-		<Message Importance="high" Text="Deploy Cross Db views. Finished"/>
-
-		<Message Importance="high" Text="Check all Analytics report controls and reports are working on local instance..."/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_analytics;Integrated Security=True"/>
-		<Message Importance="high" Text="Analytics report controls. Finished"/>
-
-		<OnError ExecuteTargets="MessageErrorHandler"/>
-	</Target>
 
 	<Target Name="MessageErrorHandler" DependsOnTargets="BuildDBManager">
 		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: @(DBManagerExe)"/>
