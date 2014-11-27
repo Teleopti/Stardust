@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				registerWebApiRoutes(config);
 
-				application.UseWebApi(config);
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
