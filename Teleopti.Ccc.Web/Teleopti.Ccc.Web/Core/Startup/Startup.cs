@@ -83,6 +83,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 					SignalRConfiguration.Configure(()=>application.MapSignalR(new HubConfiguration{EnableJSONP = true}));
 				}
+
+				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 				
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
@@ -90,7 +92,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
-				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 			}
 			catch (Exception ex)
 			{
