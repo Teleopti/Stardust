@@ -98,7 +98,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EO.WebBrowser">
-      <HintPath>..\..\packages\EO.WebBrowser.3.0.60\lib\EO.WebBrowser.dll</HintPath>
+      <HintPath>..\..\packages\EO.WebBrowser.3.0.91\lib\EO.WebBrowser.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>

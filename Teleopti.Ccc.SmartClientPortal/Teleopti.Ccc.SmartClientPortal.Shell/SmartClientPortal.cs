@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			webView1.LoadComplete += webView1_LoadComplete;
+			webView1.LoadCompleted += webView1_LoadComplete;
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -689,13 +689,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
 			{
-				DateTime start = DateTime.Now;
+				//DateTime start = DateTime.Now;
 				while (!_webViewLoaded)
 				{
 					Application.DoEvents();
-					//temp ? fix for bug 31541 (an issue in eo.webbrowser after a windows update)
-					if ((DateTime.Now - start).TotalSeconds >= 10)
-						break;
+					////temp ? fix for bug 31541 (an issue in eo.webbrowser after a windows update)
+					//if ((DateTime.Now - start).TotalSeconds >= 10)
+					//	break;
 				}
 			}
 
