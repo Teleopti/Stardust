@@ -29,10 +29,6 @@
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 		<MainMSIProjectName>CCC-Main-MSI</MainMSIProjectName>
 	</PropertyGroup>
-	
-	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
-		<MSIShare>D:\Installation\PBImsi</MSIShare>
-	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
 	<Target Name="DeployAll" DependsOnTargets="GetVersion;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
@@ -112,7 +108,7 @@
   <Target Name="MoveToKanbox">
 	<PropertyGroup>
 		<ZIPName>Teleopti WFM $(CCCVersion)</ZIPName>
-		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
+		<KanboxShare>D:\Installation\PBImsi</KanboxShare> <!-- this is a strange folder but I don't change anything now...-->
 	</PropertyGroup>
 	
 	<Exec Command="rd &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
