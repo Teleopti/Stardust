@@ -25,13 +25,12 @@
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
-		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
+		<ProductsToBuild>0</ProductsToBuild> <!-- build all products-->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 		<MainMSIProjectName>CCC-Main-MSI</MainMSIProjectName>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
-		<ProductsToBuild>1</ProductsToBuild> <!-- only Server MSI -->
 		<MSIShare>D:\Installation\PBImsi</MSIShare>
 	</PropertyGroup>
 
