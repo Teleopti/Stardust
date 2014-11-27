@@ -26,12 +26,15 @@
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<ProductsToBuild>0</ProductsToBuild> <!-- build all products-->
-		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
 		<CCNetProject>CCC-Main-MSI</CCNetProject>
+		
+		<CCCVersion>xxx.xxx.xxx</CCCVersion> <!-- must be set from caller of this script! -->
+		<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
+		<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-	<Target Name="DeployAll" DependsOnTargets="GetVersion;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
+	<Target Name="DeployAll" DependsOnTargets="Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -42,11 +45,6 @@
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.tasks"/>
 	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
-
-	<ItemGroup>
-		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
-		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
-	</ItemGroup>
 
 	<Target Name="CallJenkinsForDeployment">
 	<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
@@ -402,38 +400,6 @@
 		</ItemGroup>
 	</Target>
 
-
-
-	<Target Name="GetVersion">
-		<Message Text="Set DeployPath: [$(DeployPath)] ..." Importance="high"/>
-		<ReadLinesFromFile File="@(VersionFile)" >
-			<Output TaskParameter="Lines"
-			  PropertyName="BranchVersion" />
-		</ReadLinesFromFile>
-		<Message Text="BranchVersion: $(BranchVersion)" Importance="high"/>
-		
-		<ReadLinesFromFile File="@(MajorVersionFile)" >
-			<Output TaskParameter="Lines"
-			  PropertyName="CCCMajorMinor" />
-		</ReadLinesFromFile>
-		<Message Text="MajorVersion: $(CCCMajorMinor)" Importance="high"/>
-
-		<HgVersion LocalPath="$(CCNetWorkingDirectory)" Timeout="5000">
-			<Output TaskParameter="Revision" PropertyName="Revision" />
-		</HgVersion>
-		<Message Text="HG Revision: $(Revision)" Importance="high"/>
-		
-		<PropertyGroup>
-			<CCCVersion>$(CCCMajorMinor).$(BranchVersion).$(Revision)</CCCVersion>
-			<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
-			<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
-		</PropertyGroup>
-		
-		<Message Text="DeployPath is: [$(DeployPath)]" Importance="high"/>
-		<Message Text="Version is: $(CCCMajorMinor).$(BranchVersion).$(Revision)" Importance="high"/>
-	</Target>
-
-
 	<!-- Create SDK chm file -->
 	<Target Name="GenerateSdkDoc">
 		<Message Text="Generating SDK help file. Skipping this step for now. SandCastle and HTML help stuff needed as pre-reqs"/>
@@ -537,11 +503,4 @@
 		<Message Text="Copying files to $(DeployPath). Done"/>
 	</Target>
 
-	<Target Name="TagAndPush" DependsOnTargets="GetVersion" Condition="'$(doTagging)'=='true'">
-		<exec command="hg update -C -r default" />
-		<exec command="hg revert -a"/>
-		<exec command="hg tag &quot;$(CCCVersion)&quot; -r &quot;$(branch)&quot;"/>
-		<exec command="hg fetch $(ServerRepo)" /> 
-		<exec command="hg push $(ServerRepo)"/>
-	</Target>
 </Project>
