@@ -129,7 +129,7 @@ namespace PBI30532LoadTest
 
 		private void button2_Click_1(object sender, EventArgs e)
 		{
-			sendToServiceBus(500);
+			sendToServiceBus(1500);
 		}
 
 		private void sendToServiceBus(int numberOfPersons)
@@ -173,12 +173,7 @@ namespace PBI30532LoadTest
 						PersonId = personId,
 						Datasource = _logOnHelper.ChoosenDataSource.DataSource.Application.Name
 					};
-					const string update = @"UPDATE PersonAssignment SET UpdatedOn = GETDATE()
-WHERE Person = '{0}'
-AND Date = '{1}'";
-					HelperFunctions.ExecuteNonQuery(CommandType.Text, string.Format(update, personId, date.ToString("yyyy-MM-dd")),
-						new List<SqlParameter>(),
-						connectionString);
+					
 					eventPublisher.Publish(message);
 					index++;
 					if (index == 7) index = 0;
