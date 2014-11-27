@@ -3,21 +3,21 @@
 <Project DefaultTargets="SQLServerTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
 		<SQLServerInstance>localhost</SQLServerInstance>		
-		<AdminSQLLogin>teamcity</AdminSQLLogin>
-		<AdminSQLPwd>asldkj345HHG</AdminSQLPwd>
+		<InstallAndPatchSqlLogin>teamcity</InstallAndPatchSqlLogin>
+		<InstallAndPatchSqlPwd>asldkj345HHG</InstallAndPatchSqlPwd>
 		<ApplicationDbLogin>testApplicationLogin</ApplicationDbLogin>
 		<ApplicationDbPwd>V3rrYH@Passw0rd!</ApplicationDbPwd>
-		<SQLAuthString>-U$(AdminSQLLogin) -P$(AdminSQLPwd) -dmaster</SQLAuthString>
+		<SQLAuthString>-U$(InstallAndPatchSqlLogin) -P$(InstallAndPatchSqlPwd) -dmaster</SQLAuthString>
 	
 		<DbNamePrefix>Prefix</DbNamePrefix>
 		<AppDB>$(DbNamePrefix)_App</AppDB>
 		<MartDB>$(DbNamePrefix)_Mart</MartDB>
 		<AggDB>$(DbNamePrefix)_Agg</AggDB>
 		<DbManagerExe>$(WorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe</DbManagerExe>
-		<DBManagerString>-S$(SQLServerInstance) -U$(AdminSQLLogin) -P$(AdminSQLPwd) -T -L$(ApplicationDbLogin):$(ApplicationDbPwd)</DBManagerString>
+		<DBManagerString>-S$(SQLServerInstance) -U$(InstallAndPatchSqlLogin) -P$(InstallAndPatchSqlPwd) -T -L$(ApplicationDbLogin):$(ApplicationDbPwd)</DBManagerString>
 		
 		<SecurityExe>$(WorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe</SecurityExe>		
-		<SecurityExeString>-DS$(SQLServerInstance) -DU$(AdminSQLLogin) -DP$(AdminSQLPwd)</SecurityExeString>
+		<SecurityExeString>-DS$(SQLServerInstance) -DU$(InstallAndPatchSqlLogin) -DP$(InstallAndPatchSqlPwd)</SecurityExeString>
 		
 		<DatabasePath>"$(WorkingDirectory)\database"</DatabasePath>	
 	</PropertyGroup>
@@ -39,10 +39,10 @@
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'$(AppDB)') DROP DATABASE [$(AppDB)]&quot;"/>
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'$(MartDB)') DROP DATABASE [$(MartDB)]&quot;"/>
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;IF  EXISTS (SELECT name FROM sys.databases WHERE name = N'$(AggDB)') DROP DATABASE [$(AggDB)]&quot;"/>
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;IF  EXISTS (SELECT * FROM sys.server_principals WHERE name = N'$(AdminSQLLogin)') DROP LOGIN [$(AdminSQLLogin)]&quot;"/>
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;CREATE LOGIN [$(AdminSQLLogin)] WITH PASSWORD=N'$(AdminSQLPwd)', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF&quot;"/>
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [dbcreator] ADD MEMBER [$(AdminSQLLogin)]&quot;"/>
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [SecurityAdmin] ADD MEMBER [$(AdminSQLLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;IF  EXISTS (SELECT * FROM sys.server_principals WHERE name = N'$(InstallAndPatchSqlLogin)') DROP LOGIN [$(InstallAndPatchSqlLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;CREATE LOGIN [$(InstallAndPatchSqlLogin)] WITH PASSWORD=N'$(InstallAndPatchSqlPwd)', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [dbcreator] ADD MEMBER [$(InstallAndPatchSqlLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [SecurityAdmin] ADD MEMBER [$(InstallAndPatchSqlLogin)]&quot;"/>
 	</Target>
 	
 	<Target Name="CreateDatabaseWithSQLAdmin">
@@ -52,8 +52,8 @@
 	</Target>
 
 	<Target Name="RevokeServerRoles">
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [dbcreator] DROP MEMBER [$(AdminSQLLogin)]&quot;"/>
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [securityadmin] DROP MEMBER [$(AdminSQLLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [dbcreator] DROP MEMBER [$(InstallAndPatchSqlLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER SERVER ROLE [securityadmin] DROP MEMBER [$(InstallAndPatchSqlLogin)]&quot;"/>
 	</Target>
 
 	<Target Name="PatchDatabaseWithDboOnly">
@@ -72,9 +72,9 @@
 			<ScriptList Include="$(WorkingDirectory)\Database\Tools\PK-namingStandard.sql"/>
 			<ScriptList Include="$(WorkingDirectory)\Database\Tools\NoHeapsCheck.sql"/>
 		</ItemGroup>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AppDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AggDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>		
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(InstallAndPatchSqlLogin);Password=$(InstallAndPatchSqlPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AppDB);User Id=$(InstallAndPatchSqlLogin);Password=$(InstallAndPatchSqlPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(ScriptList)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(AggDB);User Id=$(InstallAndPatchSqlLogin);Password=$(InstallAndPatchSqlPwd)"/>		
 	</Target>
 
 	<Target Name="AnalyticsReportsTest">
@@ -88,7 +88,7 @@
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER DATABASE [$(AppDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(AppDB)]&quot;"/>
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER DATABASE [$(MartDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(MartDB)]&quot;"/>
 		<Exec Command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;ALTER DATABASE [$(AggDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(AggDB)]&quot;"/>
-		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;DROP LOGIN [$(AdminSQLLogin)]&quot;"/>
+		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;DROP LOGIN [$(InstallAndPatchSqlLogin)]&quot;"/>
 		<Exec command="SQLCMD -S$(SQLServerInstance) -E -dmaster -Q&quot;DROP LOGIN [$(ApplicationDbLogin)]&quot;"/>
 		<Exec command="DEL &quot;$(WorkingDirectory)\teamcity\DBManager*.log&quot; /F /Q"/>
 	</Target>
