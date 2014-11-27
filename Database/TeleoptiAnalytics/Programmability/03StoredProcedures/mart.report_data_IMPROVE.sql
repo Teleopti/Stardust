@@ -247,7 +247,7 @@ SELECT fs.schedule_date_id,
 		fs.scheduled_contract_time_m,
 		fs.scheduled_paid_time_m
 FROM mart.fact_schedule fs
-WHERE fs.schedule_date_id between @date_from_id and @date_to_id	
+WHERE fs.shift_startdate_local_id between @date_from_id and @date_to_id	--we use the expanded utc (-1,+1) from above when filtering on shift_startdate_local_id
 AND fs.scenario_id=@scenario_id
 AND fs.person_id in (SELECT DISTINCT person_id from #person_acd_subSP)
 
