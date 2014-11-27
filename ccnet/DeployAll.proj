@@ -27,7 +27,7 @@
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<ProductsToBuild>0</ProductsToBuild> <!-- build all products-->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
-		<MainMSIProjectName>CCC-Main-MSI</MainMSIProjectName>
+		<CCNetProject>CCC-Main-MSI</CCNetProject>
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
@@ -48,7 +48,7 @@
 		<MajorVersionFile Include="$(CCNetWorkingDirectory)\ActiveMajorVersion.txt"/>
 	</ItemGroup>
 
-	<Target Name="CallJenkinsForDeployment" Condition="'$(CCNetProject)' == '$(MainMSIProjectName)'">
+	<Target Name="CallJenkinsForDeployment">
 	<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
                 FailOnNon2xxResponse="true" />
 	</Target>
