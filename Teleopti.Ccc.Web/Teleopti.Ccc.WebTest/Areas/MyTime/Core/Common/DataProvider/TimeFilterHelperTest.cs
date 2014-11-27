@@ -101,6 +101,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(endTimesEnd);
 			result.EndTimes.Last().StartDateTime.Should().Be.EqualTo(endTimePlusStart);
 			result.EndTimes.Last().EndDateTime.Should().Be.EqualTo(endTimesPlusEnd);
+		}		
+		
+		[Test]
+		public void ShouldForGetFilterWithPlusEndTime()
+		{
+			var startTime = "06:00-08:00";
+			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, "", false);
+
+			var endTimeStart = DateTime.Today.Add(TimeSpan.FromHours(-1));
+			var endTimesEnd = DateTime.Today.Add(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(23)));
+
+			result.EndTimes.First().StartDateTime.Should().Be.EqualTo(endTimeStart);
+			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(endTimesEnd);
 		}
 	}
 }
