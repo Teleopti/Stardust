@@ -105,7 +105,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				}
 				else
 				{
-					updateAdherence(readModel, existingModel, @event.Timestamp);
+					if (!noActivityStarted(existingModel))
+						updateAdherence(readModel, existingModel, @event.Timestamp);
 
 					if (lateForActivity(existingModel, @event))
 						existingModel.ActualStartTime = @event.Timestamp;

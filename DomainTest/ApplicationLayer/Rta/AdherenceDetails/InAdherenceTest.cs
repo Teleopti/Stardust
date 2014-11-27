@@ -74,5 +74,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = false });
 			persister.Details.First().TimeInAdherence.Should().Be(TimeSpan.FromMinutes(25 + 10 + 10));
 		}
+
+		[Test]
+		public void ShouldNotPersistTimeInAdherenceWhenNoActivityStarts()
+		{
+			var personId = Guid.NewGuid();
+			var persister = new FakeAdherenceDetailsReadModelPersister();
+			var target = new AdherenceDetailsReadModelUpdater(persister);
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:55".Utc(), InAdherence = true });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = true });
+			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 9:55".Utc(), InAdherence = true });
+			
+			persister.Details.Single().TimeInAdherence.Should().Be(TimeSpan.Zero);
+		}
 	}
 }
