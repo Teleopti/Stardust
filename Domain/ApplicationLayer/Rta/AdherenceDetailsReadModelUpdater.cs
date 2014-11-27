@@ -52,10 +52,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				detailModel.ActualStartTime = calculateActualStartTime(readModel, previous, @event);
 
-				if (noActivityStarted(previous))
-					_persister.ClearDetails(readModel);
-				else
+				if (shiftHasStarted(previous))
 					updateAdherence(readModel, previous, @event.StartTime);
+				else
+					_persister.ClearDetails(readModel);
+					
 			}
 			readModel.Model.IsInAdherence = @event.InAdherence;
 			readModel.Model.Details.Add(detailModel);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				}
 				else
 				{
-					if (!noActivityStarted(existingModel))
+					if (shiftHasStarted(existingModel))
 						updateAdherence(readModel, existingModel, @event.Timestamp);
 
 					if (lateForActivity(existingModel, @event))
@@ -175,9 +176,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return null;
 		}
 
-		private static bool noActivityStarted(AdherenceDetailModel model)
+		private static bool shiftHasStarted(AdherenceDetailModel model)
 		{
-			return model.Name == null;
+			return model.Name != null;
 		}
 
 		private static void updateAdherence(AdherenceDetailsReadModel model, AdherenceDetailModel detailModel, DateTime timestamp)
