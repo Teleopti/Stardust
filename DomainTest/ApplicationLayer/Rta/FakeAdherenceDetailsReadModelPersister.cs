@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public IEnumerable<AdherenceDetailModel> Details
 		{
-			get { return _data.Single().Model.DetailModels; }
+			get { return _data.Single().Model.Details; }
 		}
 
 		public void Add(AdherenceDetailsReadModel model)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public void ClearDetails(AdherenceDetailsReadModel model)
 		{
-			model.Model.DetailModels.Clear();
+			model.Model.Details.Clear();
 			Update(model);
 		}
 
@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					Date = m.Date,
 					Model = new AdherenceDetailsModel
 					{
-						DetailModels = new List<AdherenceDetailModel>(
-							from d in m.Model.DetailModels
+						Details = new List<AdherenceDetailModel>(
+							from d in m.Model.Details
 							select new AdherenceDetailModel
 							{
 								StartTime = d.StartTime,

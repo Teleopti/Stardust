@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var timeOutOfAdherence = TimeSpan.FromMinutes(20);
 			var readModel = createReadModel(dateOnly, personId);
 			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.DetailModels.Add(detailModel);
+			readModel.Model.Details.Add(detailModel);
 			
 			Target.Add(readModel);
 
 			var savedModel = Target.Get(personId, dateOnly);
-			var model = savedModel.Model.DetailModels.First();
+			var model = savedModel.Model.Details.First();
 			savedModel.Model.IsInAdherence.Should().Be(readModel.Model.IsInAdherence);
 			model.Name.Should().Be(detailModel.Name);
 			model.StartTime.Should().Be(detailModel.StartTime);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
 			var readModel = createReadModel(dateOnly, personId);
 			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.DetailModels.Add(detailModel);
+			readModel.Model.Details.Add(detailModel);
 
 			detailModel.LastStateChangedTime = null;
 			detailModel.ActualStartTime = null;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var savedModel = Target.Get(personId, dateOnly);
 
-			var model = savedModel.Model.DetailModels.First();
+			var model = savedModel.Model.Details.First();
 			model.StartTime.Should().Be(null);
 			model.ActualStartTime.Should().Be(null);
 			model.LastStateChangedTime.Should().Be(null);
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var readModel = createReadModel(dateOnly, personId);
 			var detailModel1 = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
 			var detailModel2 = createAdherenceDetail("Lunch", new DateTime(2014, 11, 19, 9, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.DetailModels.Add(detailModel1);
-			readModel.Model.DetailModels.Add(detailModel2);
+			readModel.Model.Details.Add(detailModel1);
+			readModel.Model.Details.Add(detailModel2);
 			Target.Add(readModel);
 
 			var savedModel = Target.Get(personId, dateOnly);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.BelongsToDate.Should().Be(readModel.BelongsToDate);
 			savedModel.Model.IsInAdherence.Should().Be(readModel.Model.IsInAdherence);
 			
-			var firstModel = savedModel.Model.DetailModels.First();
+			var firstModel = savedModel.Model.Details.First();
 			firstModel.Name.Should().Be(detailModel1.Name);
 			firstModel.StartTime.Should().Be(detailModel1.StartTime);
 			firstModel.ActualStartTime.Should().Be(detailModel1.ActualStartTime);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			firstModel.TimeOutOfAdherence.Should().Be(detailModel1.TimeOutOfAdherence);
 			firstModel.LastStateChangedTime.Should().Be(detailModel1.LastStateChangedTime);
 
-			var secondModel = savedModel.Model.DetailModels.Last();
+			var secondModel = savedModel.Model.Details.Last();
 			secondModel.Name.Should().Be(detailModel2.Name);
 			secondModel.StartTime.Should().Be(detailModel2.StartTime);
 			secondModel.ActualStartTime.Should().Be(detailModel2.ActualStartTime);
@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var readModel2 = createReadModel(dateOnly2, personId);
 			var detailModel1 = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
 			var detailModel2 = createAdherenceDetail("Phone", new DateTime(2014, 11, 20, 9, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel1.Model.DetailModels.Add(detailModel1);
-			readModel2.Model.DetailModels.Add(detailModel2);
+			readModel1.Model.Details.Add(detailModel1);
+			readModel2.Model.Details.Add(detailModel2);
 
 			Target.Add(readModel1);
 			Target.Add(readModel2);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.BelongsToDate.Should().Be(readModel1.BelongsToDate);
 			savedModel.Model.IsInAdherence.Should().Be(readModel1.Model.IsInAdherence);
 
-			var savedDetailModel1 = savedModel.Model.DetailModels.First();
+			var savedDetailModel1 = savedModel.Model.Details.First();
 			savedDetailModel1.Name.Should().Be(detailModel1.Name);
 			savedDetailModel1.StartTime.Should().Be(detailModel1.StartTime);
 			savedDetailModel1.ActualStartTime.Should().Be(detailModel1.ActualStartTime);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel2.BelongsToDate.Should().Be(readModel2.BelongsToDate);
 			savedModel2.Model.IsInAdherence.Should().Be(readModel2.Model.IsInAdherence);
 
-			var savedDetailModel2 = savedModel2.Model.DetailModels.First();
+			var savedDetailModel2 = savedModel2.Model.Details.First();
 			savedDetailModel2.Name.Should().Be(detailModel2.Name);
 			savedDetailModel2.StartTime.Should().Be(detailModel2.StartTime);
 			savedDetailModel2.ActualStartTime.Should().Be(detailModel2.ActualStartTime);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var readModel = createReadModel(dateOnly, personId);
 			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.DetailModels.Add(detailModel);
+			readModel.Model.Details.Add(detailModel);
 			Target.Add(readModel);
 			detailModel.ActualStartTime = new DateTime(2014, 11, 19, 10, 0, 0);
 			detailModel.LastStateChangedTime = new DateTime(2014, 11, 19, 10, 0, 0);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			savedModel.PersonId.Should().Be(personId);
 			savedModel.BelongsToDate.Should().Be(dateOnly);
 			savedModel.Model.HasShiftEnded.Should().Be(true);
-			var model = savedModel.Model.DetailModels.First();
+			var model = savedModel.Model.Details.First();
 			model.ActualStartTime.Should().Be(detailModel.ActualStartTime);
 			savedModel.Model.IsInAdherence.Should().Be(readModel.Model.IsInAdherence);
 			model.TimeInAdherence.Should().Be(detailModel.TimeInAdherence);
@@ -187,15 +187,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
 			var readModel = createReadModel(dateOnly, personId);
 			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.DetailModels.Add(detailModel);
+			readModel.Model.Details.Add(detailModel);
 			Target.Add(readModel);
 			detailModel.LastStateChangedTime = null;
 			detailModel.ActualStartTime = null;
 			Target.Update(readModel);
 
 			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.Model.DetailModels.First().ActualStartTime.Should().Be(null);
-			savedModel.Model.DetailModels.First().LastStateChangedTime.Should().Be(null);
+			savedModel.Model.Details.First().ActualStartTime.Should().Be(null);
+			savedModel.Model.Details.First().LastStateChangedTime.Should().Be(null);
 		}
 
 		[Test]
@@ -208,20 +208,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var readModel = createReadModel(dateOnly, personId);
 			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.DetailModels.Add(detailModel);
+			readModel.Model.Details.Add(detailModel);
 			Target.Add(readModel);
 
 			Target.ClearDetails(readModel);
 
 			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.Model.DetailModels.Count.Should().Be(0);
+			savedModel.Model.Details.Count.Should().Be(0);
 		}
 
 		private static AdherenceDetailsReadModel createReadModel(DateOnly dateOnly, Guid personId)
 		{
 			var detailsModel = new AdherenceDetailsModel
 			{
-				DetailModels = new List<AdherenceDetailModel>()
+				Details = new List<AdherenceDetailModel>()
 			};
 			
 			return new AdherenceDetailsReadModel

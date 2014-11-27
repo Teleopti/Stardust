@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void ClearDetails(AdherenceDetailsReadModel model)
 		{
-			model.Model.DetailModels.Clear();
+			model.Model.Details.Clear();
 			_unitOfWork.Current().CreateSqlQuery(
 			"UPDATE ReadModel.AdherenceDetails SET" +
 			"			Model = :Model " +

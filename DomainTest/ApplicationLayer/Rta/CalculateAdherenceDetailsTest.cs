@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = date,
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = date,
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					IsInAdherence = true,
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					IsInAdherence = false,
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					HasShiftEnded = true,
 					IsInAdherence = false,
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					DetailModels = new[]
+					Details = new[]
 					{
 						detailModel
 					}
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					HasShiftEnded = true,
 					ActualEndTime = "2014-11-20 9:00".Utc(),
 					IsInAdherence = false,
-					DetailModels = new[]
+					Details = new[]
 					{
 						new AdherenceDetailModel
 						{

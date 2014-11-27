@@ -39,15 +39,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					Model = new AdherenceDetailsModel
 					{
 						IsInAdherence = @event.InAdherence,
-						DetailModels = new List<AdherenceDetailModel>()
+						Details = new List<AdherenceDetailModel>()
 					}
 				};
-				model.Model.DetailModels.Add(detailModel);
+				model.Model.Details.Add(detailModel);
 				_persister.Add(model);
 				return;
 			}
 
-			var previous = readModel.Model.DetailModels.LastOrDefault();
+			var previous = readModel.Model.Details.LastOrDefault();
 			if (previous != null)
 			{
 				detailModel.ActualStartTime = calculateActualStartTime(readModel, previous, @event);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					updateAdherence(readModel, previous, @event.StartTime);
 			}
 			readModel.Model.IsInAdherence = @event.InAdherence;
-			readModel.Model.DetailModels.Add(detailModel);
+			readModel.Model.Details.Add(detailModel);
 			readModel.Model.ActualEndTime = null;
 			_persister.Update(readModel);
 		}
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					Date = new DateOnly(@event.Timestamp),
 					Model = new AdherenceDetailsModel
 					{
-						DetailModels = new List<AdherenceDetailModel>
+						Details = new List<AdherenceDetailModel>
 						{
 							new AdherenceDetailModel
 							{
@@ -88,14 +88,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return;
 			}
 
-			var existingModel = readModel.Model.DetailModels.LastOrDefault();
+			var existingModel = readModel.Model.Details.LastOrDefault();
 			if (existingModel == null)
 			{
 				var detailModel = new AdherenceDetailModel
 				{
 					LastStateChangedTime = @event.Timestamp
 				};
-				readModel.Model.DetailModels.Add(detailModel);
+				readModel.Model.Details.Add(detailModel);
 			}
 			else
 			{
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime));
 			if (readModel == null)
 				return;
-			var lastModel = readModel.Model.DetailModels.LastOrDefault();
+			var lastModel = readModel.Model.Details.LastOrDefault();
 			if (lastModel == null)
 				return;
 			

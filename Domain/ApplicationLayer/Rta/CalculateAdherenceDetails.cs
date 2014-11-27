@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var readModel = _readModelPersister.Get(personId, new DateOnly(_now.UtcDateTime()));
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
-			readModel.Model.DetailModels.ForEach(m =>
+			readModel.Model.Details.ForEach(m =>
 			{
 				if (m == null || !isValid(m))
 					return;
