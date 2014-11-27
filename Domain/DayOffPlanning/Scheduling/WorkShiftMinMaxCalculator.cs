@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
             int weekIndex = weekIndexFromDate(dayToSchedule, matrix);
             bool skipThisWeek = false;
-            if (weekIndex == 0 || weekIndex == numberOfWeeks - 1)
-                skipThisWeek = skipWeekCheck(matrix, firstDateInWeekIndex(weekIndex, matrix));
-
+	        if (weekIndex == 0 || weekIndex == numberOfWeeks - 1)
+				skipThisWeek = new WorkShiftMinMaxCalculatorSkipWeekCheck().SkipWeekCheck(matrix, firstDateInWeekIndex(weekIndex, matrix));
+	        
             if (!skipThisWeek)
             {
                 TimeSpan? maxLengthByWeek = _weekCalculator.MaxAllowedLength(weekIndex, PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions), dayToSchedule, matrix);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
                 {
                     bool skipWeek = false;
                     if (i == 0 || i == numberOfWeeks - 1)
-                        skipWeek = skipWeekCheck(matrix, firstDateInWeekIndex(i, matrix));
+                        skipWeek = new WorkShiftMinMaxCalculatorSkipWeekCheck().SkipWeekCheck(matrix, firstDateInWeekIndex(i, matrix));
 
                     if(!skipWeek)
                         sumCorrection = sumCorrection.Add(_weekCalculator.CorrectionDiff(i, PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions), dayToSchedule, matrix));
@@ -162,39 +162,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
         {
             _possibleMinMaxWorkShiftLengthState = null;
             _possibleMinMaxWorkShiftLengthExtractor.ResetCache();
-        }
-
-        private static bool skipWeekCheck(IScheduleMatrixPro matrix, DateOnly dateToCheck)
-        {
-            var contract = matrix.SchedulePeriod.Contract;
-            var weekPeriod = DateHelper.GetWeekPeriod(dateToCheck, matrix.Person.FirstDayOfWeek);
-            IPersonPeriod period = matrix.Person.Period(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
-
-            if (weekPeriod.Contains(matrix.SchedulePeriod.DateOnlyPeriod.StartDate.AddDays(-1)))
-            {
-                IPersonPeriod previousPeriod = matrix.Person.PreviousPeriod(period);
-                if (previousPeriod != null)
-                {
-                    if (contract.WorkTimeDirective.MaxTimePerWeek != previousPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
-                        return true;
-                }
-
-                IVirtualSchedulePeriod schedulePeriod =
-                    matrix.Person.VirtualSchedulePeriod(matrix.SchedulePeriod.DateOnlyPeriod.StartDate.AddDays(-1));
-                if (!schedulePeriod.IsValid)
-                    return true;
-            }
-            if (weekPeriod.Contains(matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1)))
-            {
-                IPersonPeriod nextPeriod = matrix.Person.NextPeriod(period);
-                if (nextPeriod != null)
-                {
-                    if (contract.WorkTimeDirective.MaxTimePerWeek != nextPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
-                        return true;
-                }
-            }
-
-            return false;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
