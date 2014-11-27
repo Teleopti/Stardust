@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				StartTime = "2014-11-17 8:00".Utc()
 			});
 
-			persister.Rows.Single().Name.Should().Be("Phone");
+			persister.Details.Single().Name.Should().Be("Phone");
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				StartTime = "2014-11-17 9:00".Utc()
 			});
 
-			persister.Rows.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
+			persister.Details.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				StartTime = "2014-11-17 8:00".Utc()
 			});
 
-			persister.Rows.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
+			persister.Details.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = true
 			});
 
-			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
+			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				Timestamp = "2014-11-17 8:00".Utc(),
 				InAdherence = true
 			});
-			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
+			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc(), InAdherence = true });
 
-			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
+			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
 		}
 
 		[Test]
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Break", InAdherence = true });
 
-			persister.Rows.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
+			persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
 		}
 
 		[Test]
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
-			persister.Rows.Single().ActualStartTime.Should().Be(null);
+			persister.Details.Single().ActualStartTime.Should().Be(null);
 		}
 
 		[Test]
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:10".Utc(), InAdherence = true });
 
-			persister.Rows.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
+			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
 		}
 
 		[Test]
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Phone 2", InAdherence = true });
 
-			persister.Rows.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
+			persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
 
 		[Test]
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
 
-			persister.Rows.Last().ActualStartTime.Should().Be(null);
+			persister.Details.Last().ActualStartTime.Should().Be(null);
 		}
 	}
 }

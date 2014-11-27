@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			get { return _data.Single().Model; }
 		}
 
-		public IEnumerable<AdherenceDetailModel> Rows
+		public IEnumerable<AdherenceDetailModel> Details
 		{
 			get { return _data.Single().Model.DetailModels; }
 		}
