@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
-		public void ShouldNotAddTimeAfterActivityHasEnded()
+		public void ShouldNotAddTimeAfterShiftHasEnded()
 		{
 			var model = new AdherenceDetailsReadModel
 			{
@@ -291,6 +291,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
 							LastStateChangedTime = "2014-11-20 9:00".Utc()
 						}
+					}
+				}
+			};
+			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 10:00".Utc()),
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+
+			var result = target.ForDetails(model.PersonId);
+
+			result.First().AdherencePercent.Should().Be(50);
+		}
+
+		[Test]
+		public void ShouldNotAddTimeAfterActivityHasEnded()
+		{
+			var model = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					IsInAdherence = false,
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = TimeSpan.FromMinutes(30),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+							LastStateChangedTime = "2014-11-20 9:00".Utc()
+						},
+						new AdherenceDetailModel
+						{
+							StartTime = "2014-11-20 9:00".Utc(),
+							TimeInAdherence = TimeSpan.FromMinutes(60),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(0),
+							LastStateChangedTime = "2014-11-20 10:00".Utc()
+						},
 					}
 				}
 			};

@@ -31,18 +31,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var readModel = _readModelPersister.Get(personId, new DateOnly(_now.UtcDateTime()));
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
-			readModel.Model.Details.ForEach(m =>
+			var detailModels = readModel.Model.Details;
+			for (var i = 0; i < detailModels.Count; i++)
 			{
-				if (m == null || !isValid(m))
-					return;
+				if (detailModels[i] == null || !isValid(detailModels[i]))
+					continue;
 				result.Add(new AdherenceDetailsPercentageModel
 				{
-					Name = m.Name,
-					StartTime = convertToAgentTimeZoneAndFormatTimestamp(m.StartTime),
-					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(m.ActualStartTime),
-					AdherencePercent = (int)_calculateAdherencePercent.ForActivity(m, readModel.Model.HasShiftEnded, readModel.Model.IsInAdherence).ValueAsPercent()
+					Name = detailModels[i].Name,
+					StartTime = convertToAgentTimeZoneAndFormatTimestamp(detailModels[i].StartTime),
+					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(detailModels[i].ActualStartTime),
+					AdherencePercent =
+						(int)_calculateAdherencePercent.ForActivity(detailModels[i],isActivityEnded(i, detailModels.Count, readModel.Model.HasShiftEnded), readModel.Model.IsInAdherence)
+								.ValueAsPercent()
 				});
-			});
+			}
 			if (readModel.Model.HasShiftEnded)
 			{
 				result.Add(new AdherenceDetailsPercentageModel
@@ -53,6 +56,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				});
 			}
 			return result;
+		}
+
+		private static bool isActivityEnded(int modelIndex, int totalActivites, bool hasShiftEnded)
+		{
+			return modelIndex < totalActivites || hasShiftEnded;
 		}
 
 		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
