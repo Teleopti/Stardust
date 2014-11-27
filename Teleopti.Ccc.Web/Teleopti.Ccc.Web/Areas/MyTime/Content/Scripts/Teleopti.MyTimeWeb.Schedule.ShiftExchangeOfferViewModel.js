@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 
 	//Interface....
 	this.DateFrom = function(date) {
-		self.OfferValidTo(date.clone().add('days', -2));
+		self.OfferValidTo(date.clone().add('days', -7));
 	};
 
 	this.DateTo = ko.observable();
