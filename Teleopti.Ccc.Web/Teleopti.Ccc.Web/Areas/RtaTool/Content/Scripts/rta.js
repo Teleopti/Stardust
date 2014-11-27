@@ -33,18 +33,17 @@
 
 		FetchStateCodes: function () {
 			return [
-			   { code: 'Ready' },
-			   { code: 'InCall' },
-			   { code: 'ACW' },
-			   { code: 'AUX1' },
-			   { code: 'AUX2' },
-			   { code: 'AUX3' },
-			   { code: 'AUX4' },
-			   { code: 'AUX5' }
+			   { code: 'Ready', loggedon: true },
+			   { code: 'InCall', loggedon: true },
+			   { code: 'ACW', loggedon: true },
+			   { code: 'AUX1', loggedon: true },
+			   { code: 'AUX2', loggedon: true },
+			   { code: 'AUX3', loggedon: true },
+			   { code: 'AUX4', loggedon: true },
+			   { code: 'AUX5' , loggedon : true },
+			   { code: 'LOG OFF' , loggedon : false }
 			];
 		}
 	}
-
-	
 });
 

@@ -1,22 +1,16 @@
 ﻿define([
 	'knockout',
 	'moment',
-	'rta'
+	'rta',
+	'statecodevm'
 ], function (
 	ko,
 	moment,
-	rta
+	rta,
+	statecodevm
 ) {
 
 	return function (rtaServerCall, rtaStateCodes) {
-
-		var statecodevm = function(code,send) {
-			var that = this;
-			that.code = ko.observable(code);
-			that.sendCode = send;
-
-			return that;
-		};
 
 		var self = this;
 
@@ -26,37 +20,14 @@
 		self.statecodes = ko.observableArray();
 
 		ko.utils.arrayForEach(rtaStateCodes(), function (data) {
-			var svm = new statecodevm(data,function() {
-				var state = makeAgentState(data, true);
+			var svm = new statecodevm(data, function () {
+				var state = makeAgentState(data.code, data.loggedon);
 				rtaServerCall(state);
 			});
 			self.statecodes().push(svm);
 		});
 
 		self.AuthenticationKey = '!#¤atAbgT%';
-
-		self.answer = function () {
-			rtaServerCall(makeAgentState('InCall', true));
-		};
-
-		self.hangUp = function () {
-			rtaServerCall(makeAgentState('Ready', true));
-		};
-
-		self.specifiedState = ko.observable('');
-
-		self.sendState = function () {
-			rtaServerCall(makeAgentState(self.specifiedState(), true));
-		}
-
-		self.logOn = function () {
-			makeAgentState('Ready', true);
-			rtaServerCall(makeAgentState('Ready', true));
-		}
-
-		self.logOff = function () {
-			rtaServerCall(makeAgentState('', false));
-		}
 
 		self.name = ko.observable();
 
@@ -67,10 +38,8 @@
 			self.usercode(agent.usercode);
 		}
 
-		self.selected = ko.observable(false);
-
 		var makeAgentState = function (stateCode, isLoggedOn) {
-			return {
+			return  {
 				AuthenticationKey: self.AuthenticationKey,
 				UserCode: self.usercode(),
 				StateCode: stateCode,
@@ -82,7 +51,7 @@
 				SourceId: 1,
 				BatchId: moment.utc().format('YYYY-MM-DD HH:mm:ss'),
 				IsSnapshot: false
-			}
+			};
 		}
 	};
 });

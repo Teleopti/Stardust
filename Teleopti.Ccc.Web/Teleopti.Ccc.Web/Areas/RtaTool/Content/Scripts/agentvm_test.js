@@ -10,11 +10,14 @@
 			"should state basic info for state": function () {
 
 				var actualState = {};
+				var states = [{ code: 'AUX1', loggedon: true }];
 				var vm = new agentvm(function (state) {
 					actualState = state;
-				});
+				},
+					function () { return states; });
+
 				vm.fill({ name: '', usercode: '0097' });
-				vm.sendState();
+				vm.statecodes()[0].sendState();
 
 				expect(actualState.AuthenticationKey).toEqual(vm.AuthenticationKey);
 				expect(actualState.UserCode).toEqual('0097');
@@ -27,99 +30,39 @@
 				expect(actualState.IsSnapshot).toBe(false);
 
 			},
-
-
-			"should send in call state when answer": function () {
-
-				var actualState = {};
-				var vm = new agentvm(function (state) {
-					actualState = state;
-				});
-
-				vm.answer();
-
-				expect(actualState.StateCode).toEqual('InCall');
-				expect(actualState.StateDescription).toEqual('InCall');
-
-			},
-
-
-			"should send ready call state when hang up": function () {
-
-				var actualState = {};
-				var vm = new agentvm(function (state) {
-					actualState = state;
-				});
-
-				vm.hangUp();
-
-				expect(actualState.StateCode).toEqual('Ready');
-				expect(actualState.StateDescription).toEqual('Ready');
-
-			},
-
-			"should send specified state on send": function () {
-
-				var actualState = {};
-				var vm = new agentvm(function (state) {
-					actualState = state;
-				});
-
-				vm.specifiedState("AUX1");
-				vm.sendState();
-
-				expect(actualState.StateCode).toEqual('AUX1');
-				expect(actualState.StateDescription).toEqual('AUX1');
-			},
-
-			"should send logon when logging on": function () {
-				var actualState = {};
-				var vm = new agentvm(function (state) {
-					actualState = state;
-				});
-
-				vm.logOn();
-
-				expect(actualState.IsLoggedOn).toEqual(true);
-				expect(actualState.StateCode).toEqual('Ready');
-			},
-
-			"should send logoff when logging off": function () {
-				var actualState = {};
-				var vm = new agentvm(function (state) {
-					actualState = state;
-				});
-
-				vm.logOff();
-
-				expect(actualState.IsLoggedOn).toEqual(false);
-			},
+	
 
 			"should load statecodes" : function() {
-				var expectedStateCodes = ['AUX1', 'Phone', 'AUX23'];
+				var expectedStateCodes = [{ code : 'AUX1' }, { code : 'Phone' }, { code : 'AUX23' }];
 				var vm = new agentvm(function () {},function() { return expectedStateCodes; });
 
 				for (var i = 0; i < expectedStateCodes.length; i++) {
-					expect(vm.statecodes()[i].code()).toEqual(expectedStateCodes[i]);
+					expect(vm.statecodes()[i].code()).toEqual(expectedStateCodes[i].code);
 				}
 			},
 
-			"should send statecode when executed" : function() {
-				var expectedStateCodes = ['AUX1', 'Phone'];
+			"should send selected statecode" : function() {
+				var expectedStateCodes = [
+					{ code: 'AUX1', loggedon: true},
+					{ code: 'Phone', loggedon: false }];
+
 				var actualState = {};
 
 				var vm = new agentvm(function (state) {
 					actualState = state;
-				}, function () { return expectedStateCodes; });
+				}, function() {
+					return expectedStateCodes;
+				});
 
-				vm.statecodes()[0].sendCode();
+				vm.statecodes()[0].sendState();
 				expect(actualState.StateCode).toEqual('AUX1');
+				expect(actualState.IsLoggedOn).toEqual(true);
 
-				vm.statecodes()[1].sendCode();
+				vm.statecodes()[1].sendState();
 				expect(actualState.StateCode).toEqual('Phone');
+				expect(actualState.IsLoggedOn).toEqual(false);
 
 			}
-
 
 		});
 	};

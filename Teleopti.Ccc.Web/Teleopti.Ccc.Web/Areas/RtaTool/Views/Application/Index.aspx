@@ -34,58 +34,12 @@
 					<td>
 						<div data-bind="text: name"></div>
 					</td>
-				<td>
-					<button class="btn btn-default btn-sm" data-bind="click: answer">Answer</button>					
-				</td>
-				<td>
-					<button class="btn btn-danger btn-sm" data-bind="click: hangUp">Hang up</button>
-				</td>
-				
-				<td>
-					
-				</td>
-				<td>
-					<input data-bind="value: specifiedState"/>
-					<button class="btn btn-default btn-sm" data-bind="click: sendState">Send</button>
-				</td>
-				<td></td>
-				<td>
-					<button class="btn btn-default btn-sm" data-bind="click: logOn">Log On</button>					
-				</td>
-				<td>
-					<button class="btn btn-danger btn-sm" data-bind="click: logOff">Log Off</button>
-				</td>
+					<td data-bind="foreach: $data.statecodes">
+							<button class="btn btn-danger btn-sm" data-bind="click: $data.sendState, text: $data.code"></button>	
+					</td>
 				</tr>
 			</tbody>
 		</table>
-	
-		<%--<table class="table">
-			<tr>
-				<td>Ashley Andeen</td>
-				<td>
-					<button class="btn btn-default" data-bind="click: answer">Answer</button>					
-				</td>
-				<td>
-					<button class="btn btn-danger" data-bind="click: hangUp">Hang up</button>
-				</td>
-				
-				<td>
-					
-				</td>
-				<td>
-					<input data-bind="value: specifiedState"/>
-					<button class="btn btn-default" data-bind="click: sendState">Send</button>
-				</td>
-				<td></td>
-				<td>
-					<button class="btn btn-default" data-bind="click: logOn">Log On</button>					
-				</td>
-				<td>
-					<button class="btn btn-danger" data-bind="click: logOff">Log Off</button>
-				</td>
-			</tr>
-		</table>--%>
-	</div>
 
 </body>
 </html>
