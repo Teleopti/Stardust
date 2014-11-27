@@ -240,6 +240,7 @@
     <Compile Include="DayOffPlanning\Scheduling\PossibleMinMaxWorkShiftLengthExtractorTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\ShiftCategoryFairnessShiftValueCalculatorTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\ShiftLengthDeciderTest.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculatorSkipWeekCheckTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxLengthCalculatorTest.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftWeekMinMaxCalculatorTest.cs" />
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateServiceTest.cs" />
