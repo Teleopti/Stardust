@@ -1,5 +1,5 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [ReadModel].[LoadShiftTradeBulletinSchedules]
+DROP PROCEDURE [ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter]
 GO
 
 -- =============================================
