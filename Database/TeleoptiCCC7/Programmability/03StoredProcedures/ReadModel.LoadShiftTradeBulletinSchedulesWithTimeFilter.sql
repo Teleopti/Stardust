@@ -172,5 +172,16 @@ AS
 	FROM Ass
 	WHERE Ass.RowNumber > @skip
 
-	SELECT * FROM @output
+	 DECLARE @lastPage bit
+	 SET @lastPage = 0
+	 IF ((SELECT COUNT(*) FROM @output) < @take)
+		 SET @lastPage = 1
+
+	 DECLARE @thisLastRow int
+	 SET @thisLastRow = (SELECT MAX(Rownumber) FROM @output)
+
+	 IF (SELECT MAX(Total) FROM @output) = @thisLastRow
+		 SET @lastPage = 1
+
+	 SELECT *, @lastPage AS IsLastPage FROM @output
 
