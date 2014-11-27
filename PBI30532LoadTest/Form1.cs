@@ -145,7 +145,7 @@ namespace PBI30532LoadTest
 					connectionString)
 					.Tables[0];
 			var scenario = (Guid)scenarios.Rows[0]["Id"];
-			var sql = @"SELECT TOP {0} Date, Person FROM PersonAssignment WHERE Scenario = '{1}' AND Date >= '{2}' ORDER BY Date";
+			const string sql = @"SELECT TOP {0} Date, Person FROM PersonAssignment WHERE Scenario = '{1}' AND Date >= '{2}' ORDER BY Date";
 			var persons =
 				HelperFunctions.ExecuteDataSet(CommandType.Text, string.Format(sql,numberOfPersons, scenario, "2014-11-25"), new List<SqlParameter>(),
 					connectionString)
@@ -173,7 +173,12 @@ namespace PBI30532LoadTest
 						PersonId = personId,
 						Datasource = _logOnHelper.ChoosenDataSource.DataSource.Application.Name
 					};
-
+					const string update = @"UPDATE PersonAssignment SET UpdatedOn = GETDATE()
+WHERE Person = '{0}'
+AND Date = '{1}'";
+					HelperFunctions.ExecuteNonQuery(CommandType.Text, string.Format(update, personId, date.ToString("yyyy-MM-dd")),
+						new List<SqlParameter>(),
+						connectionString);
 					eventPublisher.Publish(message);
 					index++;
 					if (index == 7) index = 0;
