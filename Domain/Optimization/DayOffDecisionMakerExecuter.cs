@@ -166,8 +166,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				removedIllegalWorkTimeDays = removeIllegalWorkTimeDays(currentScheduleMatrix, schedulingOptions, _schedulePartModifyAndRollbackService);
 				if (removedIllegalWorkTimeDays == null)
+				{
+					rollbackMovedDays(movedDates, new List<DateOnly>(), currentScheduleMatrix);
 					return false;
-
+				}
+				
 				if (removedIllegalWorkTimeDays.Count > 0)
 					writeToLogWorkShiftBackToLegalStateRemovedDays(removedIllegalWorkTimeDays);
 			}

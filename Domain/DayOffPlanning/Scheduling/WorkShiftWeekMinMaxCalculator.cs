@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
         
         public bool IsInLegalState(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, IScheduleMatrixPro matrix)
         {
-			bool skipThisWeek = false;
 			int weekCount = matrix.FullWeeksPeriodDays.Count / 7;
 			if (weekIndex == 0 || weekIndex == weekCount - 1)
-				skipThisWeek = skipWeekCheck(matrix, matrix.FullWeeksPeriodDays[weekIndex * 7].Day);
-
-	        if (skipThisWeek)
-		        return true;
+			{
+				var skipThisWeek = new WorkShiftMinMaxCalculatorSkipWeekCheck().SkipWeekCheck(matrix, matrix.FullWeeksPeriodDays[weekIndex * 7].Day);
+				if (skipThisWeek)
+					return true;
+	        }
 
             var contract = matrix.SchedulePeriod.Contract;
             TimeSpan maxWeekWorktime =
@@ -118,38 +118,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             }
             return new MinMax<TimeSpan>(min, max);
         }
-
-		private static bool skipWeekCheck(IScheduleMatrixPro matrix, DateOnly dateToCheck)
-		{
-			var contract = matrix.SchedulePeriod.Contract;
-			var weekPeriod = DateHelper.GetWeekPeriod(dateToCheck, matrix.Person.FirstDayOfWeek);
-			IPersonPeriod period = matrix.Person.Period(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
-
-			if (weekPeriod.Contains(matrix.SchedulePeriod.DateOnlyPeriod.StartDate.AddDays(-1)))
-			{
-				IPersonPeriod previousPeriod = matrix.Person.PreviousPeriod(period);
-				if (previousPeriod != null)
-				{
-					if (contract.WorkTimeDirective.MaxTimePerWeek != previousPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
-						return true;
-				}
-
-				IVirtualSchedulePeriod schedulePeriod =
-					matrix.Person.VirtualSchedulePeriod(matrix.SchedulePeriod.DateOnlyPeriod.StartDate.AddDays(-1));
-				if (!schedulePeriod.IsValid)
-					return true;
-			}
-			if (weekPeriod.Contains(matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1)))
-			{
-				IPersonPeriod nextPeriod = matrix.Person.NextPeriod(period);
-				if (nextPeriod != null)
-				{
-					if (contract.WorkTimeDirective.MaxTimePerWeek != nextPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek)
-						return true;
-				}
-			}
-
-			return false;
-		}
     }
 }
