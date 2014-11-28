@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				if (!DesignMode)
 				{
 					SetTexts();
-					
+					ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
 					ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlAdv1BeforeContextMenuOpen;
 				}
 			}
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
-			ribbonControlAdv1.MenuButtonText = LanguageResourceHelper.Translate(ribbonControlAdv1.MenuButtonText);
+			
 			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
 			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
 													ApplicationTextHelper.LoggedOnUserText;
