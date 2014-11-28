@@ -18,18 +18,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var groupScheduleProvider = MockRepository.GenerateMock<IGroupScheduleViewModelFactory>();
 			var groupId = Guid.NewGuid();
 			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
-			var data = new[] { new GroupScheduleShiftViewModel { PersonId = Guid.NewGuid().ToString() } };
-			groupScheduleProvider.Stub(x => x.CreateViewModel(groupId, dateTime)).Return(data);
+			var schedules = new[] {new GroupScheduleShiftViewModel {PersonId = Guid.NewGuid().ToString()}};
+			groupScheduleProvider.Stub(x => x.CreateViewModel(groupId, dateTime)).Return(schedules);
+
 			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.Utc);
+
+			user.Stub(x => x.CurrentUser().PermissionInformation.DefaultTimeZone()).Return(userTimeZone.TimeZone());
+
 			var target = new GroupScheduleHub(groupScheduleProvider, user);
 			var hubBuilder = new TestHubBuilder();
-			IEnumerable<dynamic> actual = null;
-			hubBuilder.SetupHub(target, hubBuilder.FakeClient<IEnumerable<dynamic>>("incomingGroupSchedule", a => { actual = a; }));
+
+			dynamic actual = null;
+			var hubClient = hubBuilder.FakeClient<dynamic>("incomingGroupSchedule", a => { actual = a; });
+			hubBuilder.SetupHub(target, hubClient);
 
 			target.SubscribeGroupSchedule(groupId, dateTime);
 
-			Assert.That(actual.Single().PersonId, Is.EqualTo(data.First().PersonId));
+			var actualBaseDate = actual.BaseDate;
+			var actualSchedules = new List<GroupScheduleShiftViewModel>(actual.Schedules);
+			Assert.That(actualBaseDate, Is.EqualTo(dateTime));
+			Assert.That(actualSchedules.Single().PersonId, Is.EqualTo(schedules.First().PersonId));
 		}
 
 	}
