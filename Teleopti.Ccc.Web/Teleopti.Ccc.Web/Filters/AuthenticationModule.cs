@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Filters
 			Uri issuerUrl;
 			if (!Uri.TryCreate(_authenticationModule.Issuer,UriKind.Absolute,out issuerUrl))
 			{
-				issuerUrl = new Uri(new Uri(new Uri(request.Request.Url.GetLeftPart(UriPartial.Authority)), helper.Content("~")), _authenticationModule.Issuer);
+				issuerUrl = new Uri(new Uri(request.Request.Url.GetLeftPart(UriPartial.Authority)), _authenticationModule.Issuer);
 			}
 			return issuerUrl;
 		}
