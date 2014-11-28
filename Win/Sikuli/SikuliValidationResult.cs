@@ -1,18 +1,27 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
 	public class SikuliValidationResult
 	{
+		public enum ResultValue
+		{
+			Pass,
+			Fail,
+			Warn
+		}
+
+
 		private readonly StringBuilder _stringBuilder;
 
-		public SikuliValidationResult(bool defaultResult)
+		public SikuliValidationResult(ResultValue defaultResult)
 		{
 			Result = defaultResult;
 			_stringBuilder = new StringBuilder();
 		}
 
-		public bool Result { get; set; }
+		public ResultValue Result { get; set; }
 
 		public StringBuilder Details
 		{
@@ -21,7 +30,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 		public void AppendLimitValueLine(string name, string limit, string value)
 		{
-			var line = string.Format("{0} : Limit = {1}; Value = {2}", name, limit, value);
+			var line = String.Format("{0} : Limit = {1}; Value = {2}", name, limit, value);
 			Details.AppendLine(line);
 		}
 	}

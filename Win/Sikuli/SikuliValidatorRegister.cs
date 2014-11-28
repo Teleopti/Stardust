@@ -6,6 +6,13 @@
 		/// <summary>
 		/// Identifier for validators
 		/// </summary>
+		
+		/// test validators
+		public const string Pass = "Pass";
+		public const string Warning = "Warning";
+		public const string Fail = "Fail";
+
+		/// real validators
 		public const string None = "None";
 		public const string DeleteAll = "DeleteAll";
 		public const string Schedule = "Schedule";
@@ -16,6 +23,7 @@
 		public const string OptimizeBlockTeam = "OptimizeBlockTeam";
 		public const string OptimizeIntervalBalanceBefore = "OptimizeIntervalBalanceBefore";
 		public const string OptimizeIntervalBalanceAfter = "OptimizeIntervalBalanceAfter";
+
 
 	}
 }

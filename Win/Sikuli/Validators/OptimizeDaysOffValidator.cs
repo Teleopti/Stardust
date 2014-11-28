@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public SikuliValidationResult Validate()
 		{
-			SikuliValidationResult result = new SikuliValidationResult(true);
+			SikuliValidationResult result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);
 			result.Details.AppendLine("Details:");
 			result.AppendLimitValueLine("Period StdDev", "0,06", std.ToString());
 			if (!std.HasValue || std.Value > 0.06)
 			{
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 			}
 			return result;
 		}

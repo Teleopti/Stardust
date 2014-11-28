@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public SikuliValidationResult Validate()
 		{
-			SikuliValidationResult result = new SikuliValidationResult(true);
+			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
 			result.Details.AppendLine("Details:");
 			if (scheduledHours.Any(d => d.HasValue && d.Value > 0))
 			{
 				result.Details.AppendLine("Scheduled hours = 0 : Fail");
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 				return result;
 			}
 			result.Details.AppendLine("Scheduled hours = 0 : OK");

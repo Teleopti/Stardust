@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Win.Sikuli.Validators;
+using Teleopti.Ccc.Win.Sikuli.Validators.TestValidators;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -39,6 +40,14 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.OptimizeIntervalBalanceAfter:
 						return new IntervalBalanceAfterValidator(schedulerState, totalSkill);
 
+					case SikuliValidatorRegister.Pass:
+						return new PassValidator();
+
+					case SikuliValidatorRegister.Warning:
+						return new WarnValidator();
+
+					case SikuliValidatorRegister.Fail:
+						return new FailValidator();
 
 					default:
 						return null;

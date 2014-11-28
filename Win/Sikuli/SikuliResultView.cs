@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections;
+using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
@@ -20,19 +21,24 @@ namespace Teleopti.Ccc.Win.Sikuli
 			}
 		}
 
-		public bool Result
+		public SikuliValidationResult.ResultValue Result
 		{
 			set
 			{
-				if (value)
+				switch (value)
 				{
-					labelResult.Text = "PASS";
-					labelResult.ForeColor = System.Drawing.Color.Green;
-				}
-				else
-				{
-					labelResult.Text = "FAIL";
-					labelResult.ForeColor = System.Drawing.Color.Red;
+					case SikuliValidationResult.ResultValue.Pass:
+						labelResult.Text = "PASS";
+						labelResult.ForeColor = System.Drawing.Color.Green;
+						break;
+					case SikuliValidationResult.ResultValue.Warn:
+						labelResult.Text = "WARN";
+						labelResult.ForeColor = System.Drawing.Color.DarkOrange;
+						break;
+					default :
+						labelResult.Text = "FAIL";
+						labelResult.ForeColor = System.Drawing.Color.Red;
+						break;
 				}
 				
 			}

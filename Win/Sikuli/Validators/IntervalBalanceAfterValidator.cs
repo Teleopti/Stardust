@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -18,11 +17,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public SikuliValidationResult Validate()
 		{
-			var result = new SikuliValidationResult(true);
+			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState, _totalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 				result.Details.AppendLine("Validator failure");
 			}
 			var checkResult = lowestIntervalBalances != null && checkInternalBalanceRuleBreaks(lowestIntervalBalances, 1);
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			else
 			{
 				result.Details.AppendLine("Lowest intra interval balance: Fail");
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 			}
 			return result;
 		}

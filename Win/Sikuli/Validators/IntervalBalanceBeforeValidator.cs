@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 		public SikuliValidationResult Validate()
 		{
 
-			var result = new SikuliValidationResult(true);
+			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState, _totalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 				result.Details.AppendLine("Validator failure");
 			}
 			var checkResult = lowestIntervalBalances != null && lowestIntervalBalances.Any(c => c > 0 && c < 0.8);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			else
 			{
 				result.Details.AppendLine("Lowest intra interva balance: Fail");
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 			}
 			return result;
 		}
