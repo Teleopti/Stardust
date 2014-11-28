@@ -1,13 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Project DefaultTargets="DeployAll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40</MSBuildExtensionPackPath>
-		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
-		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<Company>Teleopti</Company>
 		<ProductName>Teleopti WFM</ProductName>
@@ -44,10 +41,9 @@
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<Import Project="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.tasks"/>
-	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
 
 	<Target Name="CallJenkinsForDeployment">
-	<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
+		<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
                 FailOnNon2xxResponse="true" />
 	</Target>
 	
