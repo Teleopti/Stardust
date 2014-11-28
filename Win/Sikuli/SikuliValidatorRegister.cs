@@ -9,7 +9,7 @@
 		
 		/// test validators
 		public const string Pass = "Pass";
-		public const string Warning = "Warning";
+		public const string Warn = "Warn";
 		public const string Fail = "Fail";
 
 		/// real validators

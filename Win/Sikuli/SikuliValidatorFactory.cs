@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.Pass:
 						return new PassValidator();
 
-					case SikuliValidatorRegister.Warning:
+					case SikuliValidatorRegister.Warn:
 						return new WarnValidator();
 
 					case SikuliValidatorRegister.Fail:
