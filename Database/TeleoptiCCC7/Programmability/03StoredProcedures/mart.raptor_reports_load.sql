@@ -16,11 +16,13 @@ CREATE TABLE #report(
 	[report_id] [uniqueidentifier] NOT NULL,
 	[url] [nvarchar](500) NULL,
 	[target] [nvarchar](50) NULL,
-	[report_name_resource_key] [nvarchar](50) NOT NULL
+	[report_name_resource_key] [nvarchar](50) NOT NULL,
+	[Version]  varchar(3) NOT NULL
 )
 
 SELECT	report_id						as ReportId,
 		'xx' + report_name_resource_key as ReportName, 
                                     url as ReportUrl,
-                                    target as TargetFrame
+                                    target as TargetFrame,
+		[Version]							as 'Version'
 FROM #report
