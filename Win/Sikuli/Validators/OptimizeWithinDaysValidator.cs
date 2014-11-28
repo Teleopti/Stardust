@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			bool contractTimeResult = true;
 			bool daysOffResult = true;
 
-			SikuliValidationResult result = new SikuliValidationResult(true);
+			SikuliValidationResult result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
 			
 			stdDevSumResult = std < 4.6d;
@@ -48,8 +48,10 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 			}
 
-			result.Result = stdDevSumResult && contractTimeResult && daysOffResult;
-
+			result.Result = (stdDevSumResult && contractTimeResult && daysOffResult) ?
+				SikuliValidationResult.ResultValue.Pass :
+				SikuliValidationResult.ResultValue.Fail;
+				
 			result.Details.AppendLine("Details:");
 			result.AppendLimitValueLine("Daily StdDev sum", "4.6", std.ToString());
 			result.Details.AppendLine(contractTimeResult ? "Contract time : OK" : "Contract time : FAIL");

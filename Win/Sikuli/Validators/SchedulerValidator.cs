@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public SikuliValidationResult Validate()
 		{
-			var result = new SikuliValidationResult(true);
+			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
 			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
 			result.Details.AppendLine("Details:");
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			else
 			{
 				result.Details.AppendLine("Scheduled hours pattern : Fail");
-				result.Result = false;
+				result.Result = SikuliValidationResult.ResultValue.Fail;
 			}
 			return result;
 		}

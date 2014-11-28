@@ -2537,6 +2537,9 @@
     <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceBeforeValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
+    <Compile Include="Sikuli\Validators\TestValidators\WarnValidator.cs" />
+    <Compile Include="Sikuli\Validators\TestValidators\FailValidator.cs" />
+    <Compile Include="Sikuli\Validators\TestValidators\PassValidator.cs" />
     <Compile Include="Sikuli\Validators\ValidatorHelper.cs" />
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
