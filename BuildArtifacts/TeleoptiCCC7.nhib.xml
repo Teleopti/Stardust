@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <datasource>
 	<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+		<!--WISEMETA: name="[DATASOURCE_NAME]"-->
 		<session-factory name="$(DATASOURCE_NAME)">
 			<!-- properties -->
 			<property name="connection.connection_string">
