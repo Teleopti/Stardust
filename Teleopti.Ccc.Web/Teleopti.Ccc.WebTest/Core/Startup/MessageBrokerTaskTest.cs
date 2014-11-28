@@ -5,11 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
 {
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var currentHttpContext = CurrentHttpContext("http://localhost", "/");
 			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			var settings = MockRepository.GenerateMock<ISettings>();
-			settings.Stub(x => x.MessageBrokerLongPolling()).Return("true");
+			settings.Stub(x => x.MessageBrokerLongPolling()).Return(true);
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			Task.WaitAll(target.Execute());

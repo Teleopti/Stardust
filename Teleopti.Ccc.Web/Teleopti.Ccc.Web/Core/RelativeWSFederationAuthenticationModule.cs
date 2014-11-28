@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Web;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Core
@@ -17,12 +19,14 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			base.InitializePropertiesFromConfiguration(serviceName);
 
-			if (Issuer.StartsWith("http://dummy/"))
-			{
-				var field = typeof(WSFederationAuthenticationModule).GetField("_issuer",
-					BindingFlags.NonPublic | BindingFlags.Instance);
-				field.SetValue(this, Issuer.Replace("http://dummy",""));
-			}
+			if (!ConfigurationManager.AppSettings.GetBoolSetting("UseRelativeConfiguration")) return;
+
+			var field = typeof(WSFederationAuthenticationModule).GetField("_issuer",
+				BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var issuerUri = new Uri(Issuer, UriKind.RelativeOrAbsolute);
+			issuerUri = new Uri(issuerUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(issuerUri);
+			field.SetValue(this, issuerUri.ToString());
 		}
 
 		protected override string GetSessionTokenContext()
@@ -35,7 +39,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		private string getCustomFederationPassiveSignOutUrl(string issuer, string signOutReply, string signOutQueryString)
 		{
-			SignOutRequestMessage signOutRequestMessage = new SignOutRequestMessage(new Uri(issuer));
+			var signOutRequestMessage = new SignOutRequestMessage(new Uri(issuer));
 			if (!string.IsNullOrEmpty(signOutReply))
 			{
 				signOutRequestMessage.Reply = signOutReply;

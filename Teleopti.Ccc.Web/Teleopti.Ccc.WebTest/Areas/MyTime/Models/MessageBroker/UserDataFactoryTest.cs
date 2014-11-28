@@ -65,11 +65,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		}
 
 		[Test]
-		public void ShouldSetMessageBrokerUrlFromContextWhenSetToDummy()
+		public void ShouldSetMessageBrokerUrlFromContextWhenSetToReplace()
 		{
-			const string configured = "http://dummy";
+			const string configured = "http://-replace-";
 			var nameValue = new NameValueCollection();
 			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, configured);
+			nameValue.Add("UseRelativeConfiguration", "true");
 			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
 
 			var request = new FakeHttpRequest("/asdf", new Uri("http://asdf/asdf/"),new Uri("http://asdf"));

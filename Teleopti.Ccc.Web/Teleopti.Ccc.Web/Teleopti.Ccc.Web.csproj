@@ -533,6 +533,7 @@
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
+    <Compile Include="Core\ConfigurationExtensions.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIanaTimeZoneProvider.cs" />

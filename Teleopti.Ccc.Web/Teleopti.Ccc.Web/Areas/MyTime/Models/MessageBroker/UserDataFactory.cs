@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Web;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,8 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 		private readonly ILoggedOnUser _loggedOnUser;
 		public const string MessageBrokerUrlKey = "MessageBroker";
 		public static bool EnableMyTimeMessageBroker = true;
-		private const string DummyHostName = "dummy";
-
+		
 		public UserDataFactory(ICurrentBusinessUnit businessUnitProvider, 
 												Func<IDataSource> dataSource, 
 												IConfigReader configReader, 
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 		private static string replaceDummyHostName(HttpRequestBase context, NameValueCollection appSettings)
 		{
 			var url = appSettings[MessageBrokerUrlKey];
-			if (!url.Contains(DummyHostName)) return url;
+			if (!appSettings.GetBoolSetting("UseRelativeConfiguration")) return url;
 
 			var uri = new Uri(url);
 			var site = new Uri(context.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped));

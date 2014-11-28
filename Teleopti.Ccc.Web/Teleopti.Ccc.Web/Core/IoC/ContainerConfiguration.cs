@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<AgentStatesReader>().As<IAgentStateReader>().SingleInstance();
 			
 			// ErikS: Bug 25359
-			var useNewResourceCalculationConfiguration = ConfigurationManager.AppSettings["EnableNewResourceCalculation"];
-			if (useNewResourceCalculationConfiguration != null && bool.Parse(useNewResourceCalculationConfiguration))
+			if (ConfigurationManager.AppSettings.GetBoolSetting("EnableNewResourceCalculation"))
 			{
 				builder.RegisterType<ScheduledResourcesReadModelStorage>()
 					   .As<IScheduledResourcesReadModelPersister>()

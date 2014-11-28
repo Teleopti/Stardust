@@ -163,8 +163,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				// Is this is an identity authentication request? (as opposed to an anonymous request)...
 				if (pending != null)
 				{
-					var useLocalhostIdentifierSetting = ConfigurationManager.AppSettings["UseLocalhostIdentifier"];
-					var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
+					var useLocalhostIdentifier = ConfigurationManager.AppSettings.GetBoolSetting("UseLocalhostIdentifier");
 					if (useLocalhostIdentifier && pending.ProviderEndpoint != null)
 					{
 						pending.ProviderEndpoint =
@@ -229,10 +228,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		private Uri createUserLocalIdentifier(string userName)
 		{
-			var useLocalhostIdentifierSetting = ConfigurationManager.AppSettings["UseLocalhostIdentifier"];
-			var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
+			var useLocalhostIdentifier = ConfigurationManager.AppSettings.GetBoolSetting("UseLocalhostIdentifier");
 			var currentHttp = _currentHttpContext.Current();
-
 
 			var userIdentifier = currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + userName);
 			var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
