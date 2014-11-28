@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(false);
 				Expect.Call(_workShiftBackToLegalStateStep.ExecuteWeekStep(0, _matrix, _rollbackService))
                     .Return(null);
+
             }
             using (_mocks.Playback())
             {
@@ -95,17 +96,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWekPeriodDays));
 			Expect.Call(scheduleDayPro.Day).Return(_dateMinValue);
 			Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
-			Expect.Call(schedulePeriod.Contract).Return(contract);
-			Expect.Call(_matrix.Person).Return(person).Repeat.Times(4);
+			//Expect.Call(schedulePeriod.Contract).Return(contract);
+			Expect.Call(_matrix.Person).Return(person).Repeat.AtLeastOnce();
 			Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
 			Expect.Call(schedulePeriod.DateOnlyPeriod)
 			      .Return(new DateOnlyPeriod(_dateMinValue, _dateMinValue.AddDays(6))).Repeat.AtLeastOnce();
 			Expect.Call(person.Period(_dateMinValue)).Return(personPeriod);
 			Expect.Call(person.PreviousPeriod(personPeriod)).Return(personPeriod);
-			Expect.Call(personPeriod.PersonContract).Return(personContract);
-			Expect.Call(personContract.Contract).Return(contract);
+			Expect.Call(personPeriod.PersonContract).Return(personContract).Repeat.AtLeastOnce(); ;
+			Expect.Call(personContract.Contract).Return(contract).Repeat.AtLeastOnce();
 			Expect.Call(person.VirtualSchedulePeriod(_dateMinValue)).Return(schedulePeriod).IgnoreArguments();
 			Expect.Call(schedulePeriod.IsValid).Return(true);
+			Expect.Call(personPeriod.StartDate).Return(_dateMinValue);
+			Expect.Call(personPeriod.EndDate()).Return(_dateMinValue.AddDays(28));
 		}
 
         [Test]
