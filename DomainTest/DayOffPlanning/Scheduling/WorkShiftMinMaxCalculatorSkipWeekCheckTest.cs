@@ -151,9 +151,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			const int maxHours = 40;
 
 			var maxTimePerWeekOne = TimeSpan.FromHours(maxHours);
-			var workTimeDirectiveOne = new WorkTimeDirective(maxTimePerWeekOne, TimeSpan.Zero, TimeSpan.Zero);
+			var workTimeDirectiveOne = new WorkTimeDirective(TimeSpan.Zero, maxTimePerWeekOne, TimeSpan.Zero, TimeSpan.Zero);
 			var maxTimePerWeekTwo = TimeSpan.FromHours(maxHours);
-			var workTimeDirectiveTwo = new WorkTimeDirective(maxTimePerWeekTwo, TimeSpan.Zero, TimeSpan.Zero);
+			var workTimeDirectiveTwo = new WorkTimeDirective(TimeSpan.Zero, maxTimePerWeekTwo, TimeSpan.Zero, TimeSpan.Zero);
 
 			_contractOne.WorkTimeDirective = workTimeDirectiveOne;
 			_personContractOne.Contract = _contractOne;
@@ -190,9 +190,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			const int maxHourTwo = 48;
 
 			var maxTimePerWeekOne = TimeSpan.FromHours(maxHoursOne);
-			var workTimeDirectiveOne = new WorkTimeDirective(maxTimePerWeekOne, TimeSpan.Zero, TimeSpan.Zero);
+			var workTimeDirectiveOne = new WorkTimeDirective(TimeSpan.Zero, maxTimePerWeekOne, TimeSpan.Zero, TimeSpan.Zero);
 			var maxTimePerWeekTwo = TimeSpan.FromHours(maxHourTwo);
-			var workTimeDirectiveTwo = new WorkTimeDirective(maxTimePerWeekTwo, TimeSpan.Zero, TimeSpan.Zero);
+			var workTimeDirectiveTwo = new WorkTimeDirective(TimeSpan.Zero, maxTimePerWeekTwo, TimeSpan.Zero, TimeSpan.Zero);
 
 			_contractOne.WorkTimeDirective = workTimeDirectiveOne;
 			_personContractOne.Contract = _contractOne;
@@ -227,9 +227,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			const int maxHourTwo = 48;
 
 			var maxTimePerWeekOne = TimeSpan.FromHours(maxHoursOne);
-			var workTimeDirectiveOne = new WorkTimeDirective(maxTimePerWeekOne, TimeSpan.Zero, TimeSpan.Zero);
+			var workTimeDirectiveOne = new WorkTimeDirective(TimeSpan.Zero, maxTimePerWeekOne, TimeSpan.Zero, TimeSpan.Zero);
 			var maxTimePerWeekTwo = TimeSpan.FromHours(maxHourTwo);
-			var workTimeDirectiveTwo = new WorkTimeDirective(maxTimePerWeekTwo, TimeSpan.Zero, TimeSpan.Zero);
+			var workTimeDirectiveTwo = new WorkTimeDirective(TimeSpan.Zero, maxTimePerWeekTwo, TimeSpan.Zero, TimeSpan.Zero);
 
 			_contractOne.WorkTimeDirective = workTimeDirectiveOne;
 			_personContractOne.Contract = _contractOne;
