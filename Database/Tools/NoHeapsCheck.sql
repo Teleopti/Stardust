@@ -31,16 +31,7 @@ SET @ErrorMessage = ''
 		DEALLOCATE cur;
 
 	--Check if we have PKs with wrong name
-	IF EXISTS (
-		SELECT 1
-		FROM sys.indexes i 
-		INNER JOIN sys.objects o ON i.object_id = o.object_id
-		INNER JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
-		INNER JOIN sys.schemas s ON o.schema_id = s.schema_id
-		LEFT OUTER JOIN sys.dm_db_index_usage_stats ius ON i.object_id = ius.object_id AND i.index_id = ius.index_id
-		WHERE i.type_desc = 'HEAP'
-		AND object_name(o.object_id) <> 'sysfiles1'
-	)
+	IF @ErrorMessage<>''
 	BEGIN
 		-- Return an error with state 127 since it will abort SQLCMD
 		RAISERROR (@ErrorMessage, 16, 127)
