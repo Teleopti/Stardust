@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			builder.RegisterModule<VerifyLicenseModule>();
 			builder.RegisterType<RegisterArea>().SingleInstance().As<IRegisterArea>();
 			builder.RegisterType<RegisterAreas>().SingleInstance().As<IRegisterAreas>();
+			builder.RegisterType<GlobalConfigurationWrapper>().SingleInstance().As<IGlobalConfiguration>();
 			builder.RegisterType<FindAreaRegistrations>().SingleInstance().As<IFindAreaRegistrations>();
 		}
 	}

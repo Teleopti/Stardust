@@ -11,21 +11,24 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	public class RegisterRoutesTask : IBootstrapperTask
 	{
 		private readonly IRegisterAreas _registerAreas;
+		private readonly IGlobalConfiguration _globalConfiguration;
 		private readonly Action<RouteCollection> _runBefore;
 
-		public RegisterRoutesTask(IRegisterAreas registerAreas) : this(r => { }, registerAreas)
+		public RegisterRoutesTask(IRegisterAreas registerAreas, IGlobalConfiguration globalConfiguration)
+			: this(r => { }, registerAreas, globalConfiguration)
 		{
 		}
 
-		public RegisterRoutesTask(Action<RouteCollection> runBefore, IRegisterAreas registerAreas)
+		public RegisterRoutesTask(Action<RouteCollection> runBefore, IRegisterAreas registerAreas, IGlobalConfiguration globalConfiguration)
 		{
 			_runBefore = runBefore;
 			_registerAreas = registerAreas;
+			_globalConfiguration = globalConfiguration;
 		}
 
 		public Task Execute()
 		{
-			GlobalConfiguration.Configure(registerWebApiRoutes);
+			_globalConfiguration.Configure(registerWebApiRoutes);
 			registerRoutes(RouteTable.Routes);
 			return Task.FromResult(true);
 		}
