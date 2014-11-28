@@ -25,11 +25,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute()
 		{
-			return Task.Factory.StartNew(() =>
-			{
-				registerRoutes(RouteTable.Routes);
-				GlobalConfiguration.Configure(registerWebApiRoutes);
-			});
+			GlobalConfiguration.Configure(registerWebApiRoutes);
+			registerRoutes(RouteTable.Routes);
+			return Task.FromResult(true);
 		}
 
 		private static void registerWebApiRoutes(HttpConfiguration config)

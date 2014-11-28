@@ -76,16 +76,15 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				if (!_testMode)
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-					config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+					GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
 					GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container.BeginLifetimeScope());
 					container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
-
-					SignalRConfiguration.Configure(()=>application.MapSignalR(new HubConfiguration{EnableJSONP = true}));
 				}
 
 				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
-				
+
+				SignalRConfiguration.Configure(() => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 
