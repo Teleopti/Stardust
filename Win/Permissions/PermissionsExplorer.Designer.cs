@@ -213,7 +213,6 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewFunctions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.treeViewFunctions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.treeViewFunctions.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			// 
 			// 
 			// 
@@ -226,6 +225,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.Location = new System.Drawing.Point(3, 43);
 			this.treeViewFunctions.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.treeViewFunctions.Name = "treeViewFunctions";
+			this.treeViewFunctions.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Silver;
+			this.treeViewFunctions.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Silver;
 			this.treeViewFunctions.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewFunctions.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewFunctions.ShowCheckBoxes = true;
@@ -256,7 +257,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewData.CanSelectDisabledNode = false;
 			this.treeViewData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewData.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-			this.treeViewData.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+			this.treeViewData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.treeViewData.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			// 
 			// 
 			// 
@@ -269,8 +271,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewData.HelpTextControl.Visible = true;
 			this.treeViewData.Location = new System.Drawing.Point(3, 43);
 			this.treeViewData.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.treeViewData.MetroScrollBars = true;
 			this.treeViewData.Name = "treeViewData";
-			this.treeViewData.Office2007ScrollBars = true;
+			this.treeViewData.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Silver;
 			this.treeViewData.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewData.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewData.ShowCheckBoxes = true;
@@ -580,7 +583,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStage1.Controls.Add(this.backStageButton4);
 			this.backStage1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.backStage1.ItemSize = new System.Drawing.Size(150, 40);
-			this.backStage1.Location = new System.Drawing.Point(1, 51);
+			this.backStage1.Location = new System.Drawing.Point(0, 0);
 			this.backStage1.Name = "backStage1";
 			this.backStage1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
 			this.backStage1.Size = new System.Drawing.Size(1061, 652);
@@ -594,9 +597,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton1.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton1.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton1.IsBackStageButton = false;
-			this.backStageButton1.Location = new System.Drawing.Point(0, 16);
+			this.backStageButton1.Location = new System.Drawing.Point(34, 10);
 			this.backStageButton1.Name = "backStageButton1";
-			this.backStageButton1.Size = new System.Drawing.Size(149, 38);
+			this.backStageButton1.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton1.TabIndex = 3;
 			this.backStageButton1.Text = "xxSave";
 			this.backStageButton1.Click += new System.EventHandler(this.backStageButton1Click);
@@ -604,7 +607,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			// backStageSeparator1
 			// 
 			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(25, 60);
+			this.backStageSeparator1.Location = new System.Drawing.Point(39, 22);
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator1.TabIndex = 4;
@@ -616,9 +619,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton2.IsBackStageButton = false;
-			this.backStageButton2.Location = new System.Drawing.Point(0, 66);
+			this.backStageButton2.Location = new System.Drawing.Point(34, 35);
 			this.backStageButton2.Name = "backStageButton2";
-			this.backStageButton2.Size = new System.Drawing.Size(149, 38);
+			this.backStageButton2.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton2.TabIndex = 5;
 			this.backStageButton2.Text = "xxClose";
 			this.backStageButton2.Click += new System.EventHandler(this.backStageButton2Click);
@@ -626,7 +629,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			// backStageSeparator2
 			// 
 			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator2.Location = new System.Drawing.Point(25, 110);
+			this.backStageSeparator2.Location = new System.Drawing.Point(39, 34);
 			this.backStageSeparator2.Name = "backStageSeparator2";
 			this.backStageSeparator2.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator2.TabIndex = 6;
@@ -638,9 +641,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton3.IsBackStageButton = false;
-			this.backStageButton3.Location = new System.Drawing.Point(0, 116);
+			this.backStageButton3.Location = new System.Drawing.Point(34, 60);
 			this.backStageButton3.Name = "backStageButton3";
-			this.backStageButton3.Size = new System.Drawing.Size(149, 38);
+			this.backStageButton3.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton3.TabIndex = 7;
 			this.backStageButton3.Text = "xxOptions";
 			this.backStageButton3.Click += new System.EventHandler(this.backStageButton3Click);
@@ -652,9 +655,9 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(0, 154);
+			this.backStageButton4.Location = new System.Drawing.Point(-14, 85);
 			this.backStageButton4.Name = "backStageButton4";
-			this.backStageButton4.Size = new System.Drawing.Size(149, 38);
+			this.backStageButton4.Size = new System.Drawing.Size(120, 25);
 			this.backStageButton4.TabIndex = 8;
 			this.backStageButton4.Text = "xxExitTELEOPTICCC";
 			this.backStageButton4.VisibleChanged += new System.EventHandler(this.backStageButton4VisibleChanged);
