@@ -5,12 +5,8 @@
 		<RootFolder>$(teamcity_build_checkoutDir)</RootFolder>
 		<MajorFile>$(RootFolder)\ActiveMajorVersion.txt</MajorFile>
 		<MinorFile>$(RootFolder)\ActiveBranchVersion.txt</MinorFile>
-		<MsBuildPath>$(RootFolder)\ccnet\MSBuild</MsBuildPath>
-		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
-		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
+		<RevisionNumber>XXX</RevisionNumber> <!--must be set from caller -->
 	</PropertyGroup>
-
-	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
 
 	<Target Name="SetVersion">
 		<ReadLinesFromFile File="$(MajorFile)" >
@@ -19,10 +15,7 @@
 		<ReadLinesFromFile File="$(MinorFile)" >
 			<Output TaskParameter="Lines" PropertyName="minorVersion" />
 		</ReadLinesFromFile>
-		<HgVersion LocalPath="$(RootFolder)">
-			<Output TaskParameter="Revision" PropertyName="Revision" />
-		</HgVersion>
 		
-		<Message Text="##teamcity[setParameter name='teleopti_version' value='$(majorVersion).$(minorVersion).$(Revision)']" />
+		<Message Text="##teamcity[setParameter name='teleopti_version' value='$(majorVersion).$(minorVersion).$(RevisionNumber)']" />
 	</Target>
 </Project>
