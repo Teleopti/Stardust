@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
             _layerCollectionForShift = _mocks.StrictMock<IVisualLayerCollection>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _schedulingOptions = new SchedulingOptions();
-            //_personPeriod = _mocks.StrictMock<IPersonPeriod>();
             _target = new WorkShiftWeekMinMaxCalculator();
             IList<IScheduleDayPro> tmpList = new List<IScheduleDayPro> { _scheduleDayPro3, _scheduleDayPro4, _scheduleDayPro5, _scheduleDayPro6 };
             _periodList = new ReadOnlyCollection<IScheduleDayPro>(tmpList);
@@ -76,11 +75,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 	        IPersonPeriod personPeriod = _mocks.StrictMock<IPersonPeriod>();
             using (_mocks.Record())
             {
-	            Expect.Call(_matrix.FullWeeksPeriodDays).Return(_periodList).Repeat.Twice();
-	            Expect.Call(_matrix.Person).Return(person).Repeat.Twice();
+				Expect.Call(_matrix.FullWeeksPeriodDays).Return(_periodList).Repeat.AtLeastOnce();
+	            Expect.Call(_matrix.Person).Return(person).Repeat.AtLeastOnce();
 	            Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
-	            Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_startDate, _startDate.AddDays(6))).Repeat.Times(3);
-	            Expect.Call(person.Period(_startDate)).Return(personPeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_startDate, _startDate.AddDays(6))).Repeat.AtLeastOnce();
+				Expect.Call(person.Period(_startDate.AddDays(3))).Return(personPeriod);
+				Expect.Call(personPeriod.StartDate).Return(_startDate);
+				Expect.Call(personPeriod.EndDate()).Return(_startDate.AddDays(28));
                 commonMocks();
                 legalStateMocks();
             }
@@ -98,11 +99,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			IPersonPeriod personPeriod = _mocks.StrictMock<IPersonPeriod>();
             using (_mocks.Record())
             {
-				Expect.Call(_matrix.FullWeeksPeriodDays).Return(_periodList).Repeat.Twice();
-				Expect.Call(_matrix.Person).Return(person).Repeat.Twice();
+				Expect.Call(_matrix.FullWeeksPeriodDays).Return(_periodList).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.Person).Return(person).Repeat.AtLeastOnce();
 				Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_startDate, _startDate.AddDays(6))).Repeat.Times(3);
-				Expect.Call(person.Period(_startDate)).Return(personPeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_startDate, _startDate.AddDays(6))).Repeat.AtLeastOnce();
+				Expect.Call(person.Period(_startDate.AddDays(3))).Return(personPeriod);
+				Expect.Call(personPeriod.StartDate).Return(_startDate);
+				Expect.Call(personPeriod.EndDate()).Return(_startDate.AddDays(28));
                 commonMocks();
                 ilegalStateMocks();
             }
