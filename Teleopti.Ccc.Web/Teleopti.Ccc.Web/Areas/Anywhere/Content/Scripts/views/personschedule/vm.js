@@ -204,19 +204,20 @@ timezoneCurrent,
 		};
 
 		this.UpdateSchedules = function (data) {
+			var schedules = data.Schedules;
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
-				data = lazy(data)
+				schedules = lazy(schedules)
 					.filter(function (x) {return x.PersonId == self.PersonId(); })
 					.toArray();
 			}
-			// data might include the same person more than once, with data for more than one day
+			// data might include the same person more than once, with schedule for more than one day
 			self.Persons([]);
 
 			// add schedule data. a person might get more than 1 schedule added
 			var people = [];
-			for (var i = 0; i < data.length; i++) {
-				var schedule = data[i];
+			for (var i = 0; i < schedules.length; i++) {
+				var schedule = schedules[i];
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.ScheduleDate().clone();
 				schedule.Date = moment.tz(schedule.Date, timezoneCurrent.IanaTimeZone());
@@ -233,7 +234,9 @@ timezoneCurrent,
                 self.MoveActivityForm.WorkingShift(self.WorkingShift());
                 var selectedLayer = self.SelectedLayer();
                 self.MoveActivityForm.update(selectedLayer);
-            }
+			}
+
+			self.TimeLine.BaseDate(data.BaseDate);
 		};
 
 		this.SelectedLayer = function() {

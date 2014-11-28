@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ToArray();
 		}
 
-		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone, ICommonNameDescriptionSetting commonNameDescriptionSetting)
+		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, IPersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone, ICommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
 			GroupScheduleDayOffViewModel dayOff = null;
 			if (model.DayOff != null)

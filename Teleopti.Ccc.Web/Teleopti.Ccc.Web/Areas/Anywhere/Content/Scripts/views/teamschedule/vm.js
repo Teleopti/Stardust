@@ -111,9 +111,12 @@ define([
 			
 			self.Persons([]);
 			var personArray = [];
+
 			// add schedule data. a person might get more than 1 schedule added
-			for (var i = 0; i < data.length; i++) {
-				var schedule = data[i];
+			var schedules = data.Schedules;
+			for (var i = 0; i < schedules.length; i++) {
+				var schedule = schedules[i];
+
 				schedule.BusinessUnitId = self.BusinessUnitId();
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.Date();
@@ -121,10 +124,13 @@ define([
 				var personvm = personForId(schedule.PersonId, personArray);
 				personvm.AddData(schedule, self.TimeLine);
 			}
+
 			self.Persons.push.apply(self.Persons, personArray);
 			if (self.PreSelectedPersonId()) {
 				self.SelectPerson(personForId(self.PreSelectedPersonId(), personArray));
 			}
+
+			this.TimeLine.BaseDate(data.BaseDate);
 		};
 
 		this.NextDay = function () {
@@ -173,20 +179,6 @@ define([
 				x.Selected(false);
 			});
 		};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		this.StaffingMetricsVisible = ko.observable(false);
 

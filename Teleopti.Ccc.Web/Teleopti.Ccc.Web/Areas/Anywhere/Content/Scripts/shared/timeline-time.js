@@ -12,9 +12,11 @@ define([
 	resources
 ) {
 
-	return function(timeline, minutes, hideLabel, ianaTimeZoneOther) {
+	return function(timeline, minutes, hideLabel, ianaTimeZoneOther, baseDate) {
+		var time = ((baseDate == undefined)
+			? moment.tz(timezoneCurrent.IanaTimeZone())
+			: moment.tz(baseDate, timezoneCurrent.IanaTimeZone())).startOf('day').add('minutes', minutes);
 
-		var time = moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day').add('minutes', minutes);
 		var formattedTime = time.format(resources.TimeFormatForMoment);
 
 		this.Minutes = function() {

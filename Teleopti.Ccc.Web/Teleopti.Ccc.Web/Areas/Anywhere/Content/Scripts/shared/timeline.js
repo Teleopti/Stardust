@@ -8,8 +8,10 @@ define([
 
 		var minutes = helpers.Minutes;
 
-		return function (timeLineLayers) {
+		return function (timeLineLayers, baseDate) {
 			var self = this;
+
+			this.BaseDate = ko.observable(baseDate);
 
 			this.WidthPixels = ko.observable();
 
@@ -73,7 +75,7 @@ define([
 				}
 				var isHidden = false;
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time, hideEven && isHidden, self.IanaTimeZoneOther()));
+					times.push(new timeViewModel(self, time, hideEven && isHidden, self.IanaTimeZoneOther(), self.BaseDate()));
 					time = minutes.AddHours(time, 1);
 					isHidden = !isHidden;
 				}
