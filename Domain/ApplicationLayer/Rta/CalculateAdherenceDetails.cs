@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 
-		private static bool isValid(AdherenceDetailModel readModel)
+		private static bool isValid(AdherenceDetailModel detailModel)
 		{
-			return !(readModel.TimeInAdherence == TimeSpan.Zero && readModel.TimeOutOfAdherence == TimeSpan.Zero);
+			return detailModel.StartTime.HasValue;
 		}
 	}
 }

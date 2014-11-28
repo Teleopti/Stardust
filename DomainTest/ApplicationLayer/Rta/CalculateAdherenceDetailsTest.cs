@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
-		public void ShouldResultInEmptyWhenNoAdherenceData()
+		public void ShouldReturnWhenActivityHasStartedEvenNoAdherenceData()
 		{
 			var now = "2014-11-20 9:00".Utc();
 			var personId = Guid.NewGuid();
@@ -197,6 +197,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						new AdherenceDetailModel
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = TimeSpan.Zero,
+							TimeOutOfAdherence = TimeSpan.Zero
+						}
+					}
+				}
+			};
+			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+
+			var result = target.ForDetails(model.PersonId);
+
+			result.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotReturnWhenActivityHasNotStartedYet()
+		{
+			var now = "2014-11-20 9:00".Utc();
+			var personId = Guid.NewGuid();
+			var date = "2014-11-20".Utc();
+			var model = new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = date,
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
 							TimeInAdherence = TimeSpan.Zero,
 							TimeOutOfAdherence = TimeSpan.Zero
 						}
