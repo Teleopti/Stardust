@@ -320,6 +320,7 @@
 			<SupportTools Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\$(Configuration)\**\*.*" />
 			<StartStopSystem Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\StartStopSystem\*.*" />
 			<SQLServerPerformance Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\SQLServerPerformance\**\*.*" />
+			<SQLServerPerformance Include="$(CCNetWorkingDirectory)\packages\SQLServerSideTrace.1.3.6\**\*.*" />
       <WiseIISConfig Include="$(CCNetWorkingDirectory)\Teleopti.Support.Tool\WiseIISConfig\**\*.*" />
 
       <!-- ClientClickOnce -->
