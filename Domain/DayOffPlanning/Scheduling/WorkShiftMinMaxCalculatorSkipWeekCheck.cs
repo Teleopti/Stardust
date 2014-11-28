@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			var person = matrix.Person;
 			var weekPeriod = DateHelper.GetWeekPeriod(dateToCheck, person.FirstDayOfWeek);
 			var personPeriod = person.Period(dateToCheck);
+			if(personPeriod == null)
+				return true;
 
 			if (weekPeriod.Contains(personPeriod.StartDate.AddDays(-1)))
 			{
