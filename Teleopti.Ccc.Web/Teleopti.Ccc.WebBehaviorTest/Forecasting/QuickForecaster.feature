@@ -3,6 +3,7 @@
 	As a user
 	I want to be able to do a forecast
 
+@ignore
 Scenario: Simple forecast
 	Given I have a role with
 	| Field           | Value      |
