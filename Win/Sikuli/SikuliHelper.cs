@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 				_timer = null;
 			}
 			var details = validationResult.Details.ToString();
-			if (string.IsNullOrWhiteSpace(details))
+			if (!string.IsNullOrWhiteSpace(details))
 				details = details.Insert(0, "Details:\n");
 			var testView = new SikuliResultView { Header = "Task Done", Result = validationResult.Result, Details = details };
 			testView.ShowDialog(owner);
