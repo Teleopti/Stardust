@@ -11,11 +11,11 @@ SET configuration=%2
 SET /A Silent=%3
 SET Branch=%4
 SET SqlInstanceName=%5
+SET CustomPath=%~6
 
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%SqlInstanceName%
 IF "%INSTANCE%"=="" SET INSTANCE=%COMPUTERNAME%
-IF "%temp%"=="" SET temp=C:\Temp\Build
 
 IF "%Silent%"=="" SET /A Silent=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
@@ -54,6 +54,12 @@ echo %Tfiles%> "%DbBaseline%"
 )
 set /p Tfiles=<"%DbBaseline%"
 
+if not "%CustomPath%"=="" (
+DEL "%CustomPathConfig%" /F /Q
+DEL "%CustomTfiles%" /F /Q
+CALL :SETDATAPATH "%CustomPath%"
+)
+
 ::Get current Branch
 CD "%ROOTDIR%\.."
 SET HgFolder=%CD%
@@ -69,7 +75,7 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%\DBManager.exe"
 IF NOT EXIST DBMANAGER (
 	ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
-	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
+	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% EQU 0 (
 	SET DATABASEPATH="%ROOTDIR%\..\Database"
 	SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%"
@@ -97,19 +103,10 @@ SET FINDTHIS=0 File(s) copied
 
 ECHO.
 
-goto MakeCustomPath
 :MakeCustomPath
 if exist "%CustomPathConfig%" (
 set /p CustomPath=<%CustomPathConfig%
 ) ELSE (
-CALL :GETDATAPATH
-)
-
-if not "%CustomPath:~1,2%"==":\" (
-COLOR E
-CLS
-ECHO Sorry
-echo The data storage path must now be a valid local path, separate from your source control folder^(s^)
 CALL :GETDATAPATH
 )
 
@@ -120,11 +117,7 @@ echo could not create direcroty: %CustomPath%
 goto MakeCustomPath
 )
 
-CALL :SETDATAPATH %CustomPath%
-
-IF NOT EXIST "%DataFolder%" MKDIR "%DataFolder%"
-IF NOT EXIST "%RarFolder%" MKDIR "%RarFolder%"
-IF NOT EXIST "%Zip7Folder%" MKDIR "%Zip7Folder%"
+CALL :SETDATAPATH "%CustomPath%"
 
 ECHO Note: Database will be restored from "%Tfiles%". Feel free to change this path in "%DbBaseline%" if you want restore from other location!
 ECHO.
@@ -174,9 +167,9 @@ ECHO -------------------------------------------
 :PickDb
 SET /P Customer=Restore which fileset (e.g. Demo):
 
-findstr /B /C:"%Customer%" /I "%Tfiles%\Databases.txt" > %temp%\string.txt
+findstr /B /C:"%Customer%" /I "%Tfiles%\Databases.txt" > %LogFolder%\string.txt
 if %errorlevel% neq 0 GOTO PickDb
-for /f "tokens=1,2,3 delims=;" %%g in (%temp%\string.txt) do set DBPath=%%i
+for /f "tokens=1,2,3 delims=;" %%g in (%LogFolder%\string.txt) do set DBPath=%%i
 if "%DBPath%"=="" set DBPath=%Tfiles%
 
 SET AppRar=%Customer%App.rar
@@ -192,16 +185,15 @@ IF ERRORLEVEL 2 SET /A LOADSTAT=0
 ECHO.
 ECHO ------
 ECHO Refresh .rar-file(s) ...
-ECHO. > "%temp%\NumberOfFiles.txt"
+ECHO. > "%LogFolder%\NumberOfFiles.txt"
 
 ::Check if app databases changed
 ECHO Refreshing %AppRar% ...
-
 if not exist "%DBPath%\%AppRar%" SET /A ERRORLEV=18 & GOTO :error
-XCOPY "%DBPath%\%AppRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
+XCOPY "%DBPath%\%AppRar%" "%RarFolder%\" /D /Y > "%LogFolder%\NumberOfFiles.txt"
 
 ::unRar only if new
-findstr /C:"0 File(s) copied" "%temp%\NumberOfFiles.txt"
+findstr /C:"0 File(s) copied" "%LogFolder%\NumberOfFiles.txt"
 if %errorlevel% EQU 0 (
 ECHO No need to un-rar. File is the same
 ping 127.0.0.1 -n 3 > NUL
@@ -210,11 +202,11 @@ ECHO Unrar file: "%RarFolder%\%AppRar%" ...
 %UNRAR% "%RarFolder%\%AppRar%"
 )
 ::Check if stat databases changed
-ECHO. > "%temp%\NumberOfFiles.txt"
+ECHO. > "%LogFolder%\NumberOfFiles.txt"
 
 IF %LOADSTAT% EQU 1 (
 ECHO Refreshing %StatRar% ...
-XCOPY "%DBPath%\%StatRar%" "%RarFolder%\" /D /Y > "%temp%\NumberOfFiles.txt"
+XCOPY "%DBPath%\%StatRar%" "%RarFolder%\" /D /Y > "%LogFolder%\NumberOfFiles.txt"
 ) ELSE (
 GOTO SkipStat
 )
@@ -226,7 +218,7 @@ ECHO.
 ECHO.
 ECHO ------
 ECHO Un-rar ...
-findstr /C:"0 File(s) copied" "%temp%\NumberOfFiles.txt"
+findstr /C:"0 File(s) copied" "%LogFolder%\NumberOfFiles.txt"
 if %errorlevel% EQU 0 (
 ECHO No need to un-rar. File is the same
 ping 127.0.0.1 -n 3 > NUL
@@ -277,13 +269,13 @@ ECHO ------
 ECHO Upgrade databases ...
 
 ::check if we need to create Agg (no stat)
-SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIAGG%'" -h-1 > "%temp%\FindDB.txt"
-findstr /I /C:"%TELEOPTIAGG%" "%temp%\FindDB.txt" > NUL
+SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIAGG%'" -h-1 > "%LogFolder%\FindDB.txt"
+findstr /I /C:"%TELEOPTIAGG%" "%LogFolder%\FindDB.txt" > NUL
 if %errorlevel% NEQ 0 SET CreateAgg=-C
 
 ::check if we need to create Agg (no stat)
-SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIANALYTICS%'" -h-1 > "%temp%\FindDB.txt"
-findstr /I /C:"%TELEOPTIANALYTICS%" "%temp%\FindDB.txt" > NUL
+SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIANALYTICS%'" -h-1 > "%LogFolder%\FindDB.txt"
+findstr /I /C:"%TELEOPTIANALYTICS%" "%LogFolder%\FindDB.txt" > NUL
 if %errorlevel% NEQ 0 SET CreateAnalytics=-C
 
 ::create or patch Analytics
@@ -300,7 +292,7 @@ CD "%DBMANAGERPATH%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
 IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" (
-	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
+	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 )
 
@@ -382,10 +374,10 @@ IF %ERRORLEV% EQU 2 ECHO Analytics DB have a bad trunk or the database is out of
 IF %ERRORLEV% EQU 3 ECHO CCC7 DB have a bad trunk or the database is out of version sync
 IF %ERRORLEV% EQU 4 ECHO Agg DB have a bad trunk or the database is out of version sync
 IF %ERRORLEV% EQU 5 ECHO Could not create views in Mart: EXEC %TELEOPTIANALYTICS%.mart.sys_crossDatabaseView_load
-IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%temp%\build.log"
+IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%LogFolder%\build.log"
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
-IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
+IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%LogFolder%\build.log"
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
 ECHO.
@@ -417,17 +409,24 @@ goto:eof
 
 :GETDATAPATH
 IF %Silent% equ 1 (
-SET CustomPath=c:\temp\RestoreToLocal
+ECHO silent mode, datapath is: %CustomPath%
 ) else (
 SET /P CustomPath=Please provide a custom path for data storage:
 )
 GOTO :EOF
 
 :SETDATAPATH
-ECHO %1 > "%CustomPathConfig%"
-SET DataFolder=%1\Data
-SET RarFolder=%1\Baseline
-SET Zip7Folder=%1\7zip
+ECHO %~1>"%CustomPathConfig%"
+SET DataFolder=%~1\Data
+SET RarFolder=%~1\Baseline
+SET Zip7Folder=%~1\7zip
+SET LogFolder=%~1\Logs
+
+IF NOT EXIST "%DataFolder%" MKDIR "%DataFolder%"
+IF NOT EXIST "%RarFolder%" MKDIR "%RarFolder%"
+IF NOT EXIST "%Zip7Folder%" MKDIR "%Zip7Folder%"
+IF NOT EXIST "%LogFolder%" MKDIR "%LogFolder%"
+
 GOTO :EOF
 
 :EOF
