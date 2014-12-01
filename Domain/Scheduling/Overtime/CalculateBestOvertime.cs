@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface ICalculateBestOvertime
     {
-        List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, DateTime shiftEndingTime, int minimumResolution);
+        List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution);
     }
 
     public class CalculateBestOvertime : ICalculateBestOvertime
     {
 
-		public List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, DateTime shiftEndingTime, int minimumResolution)
+		public List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution)
         {
             var possibleOvertimeDurationsToCalculate = new List<TimeSpan>();
             for (int minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 var duration = TimeSpan.FromMinutes(minutes);
                 possibleOvertimeDurationsToCalculate.Add(duration);
             }
+
+			var shiftEndingTime = scheduleDay.ProjectionService().CreateProjection().Period().GetValueOrDefault().EndDateTime;
 
             var calculatedOvertimePeriods = new Dictionary<TimeSpan, double>();
             foreach (var duration in possibleOvertimeDurationsToCalculate)

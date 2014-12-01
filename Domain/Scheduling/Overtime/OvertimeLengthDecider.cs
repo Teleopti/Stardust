@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IOvertimeLengthDecider
     {
-		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, DateTime overtimeStartTime, IActivity activity,
+		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity,
                              MinMax<TimeSpan> duration);
     }
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _calculateBestOvertime = calculateBestOvertime;
         }
 
-        public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, DateTime overtimeStartTime, IActivity activity, MinMax<TimeSpan> duration)
+        public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration)
         {
 	        var result = new List<DateTimePeriod>();
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
             var aggregatedMappedData  = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(nestedList);
 
-			result = _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), overtimeStartTime, minimumResolution);
+			result = _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), scheduleDay, minimumResolution);
 	        return result;
         }
 

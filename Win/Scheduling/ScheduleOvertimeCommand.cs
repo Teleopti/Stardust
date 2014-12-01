@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
                     var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;
                     //Calculate best length (if any) for overtime
-                    var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleEndTime,
+                    var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay,
                                                                             overtimePreferences.SkillActivity,
                                                                             new MinMax<TimeSpan>(
                                                                                 overtimePreferences.SelectedTimePeriod.StartTime,
