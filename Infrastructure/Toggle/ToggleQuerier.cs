@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Web;
 using Newtonsoft.Json;
@@ -29,11 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			uriBuilder.Query = query.ToString();
 			var url = uriBuilder.ToString();
 
-			using (var client = new WebClient())
-			{
-				var jsonString = client.DownloadString(url);
-				return JsonConvert.DeserializeObject<ToggleEnabledResult>(jsonString).IsEnabled;
-			}
+			var jsonString = downloadString(url);
+			return JsonConvert.DeserializeObject<ToggleEnabledResult>(jsonString).IsEnabled;
 		}
 
 		public void FillAllToggles()
@@ -41,11 +39,22 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/AllToggles");
 			var url = uriBuilder.ToString();
 
-			using (var client = new WebClient())
+			var jsonString = downloadString(url);
+			_loadedToggles = JsonConvert.DeserializeObject<IDictionary<Toggles, bool>>(jsonString);
+		}
+
+		private static string downloadString(string url)
+		{
+			var request = (HttpWebRequest)HttpWebRequest.Create(url);
+			request.AllowAutoRedirect = false;
+			using (var response = request.GetResponse())
 			{
-				var jsonString = client.DownloadString(url);
-				_loadedToggles = JsonConvert.DeserializeObject<IDictionary<Toggles, bool>>(jsonString);
+				using (var reader = new StreamReader(response.GetResponseStream()))
+				{
+					return reader.ReadToEnd();
+				}
 			}
 		}
+
 	}
 }
