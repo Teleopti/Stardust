@@ -162,6 +162,90 @@
 				assert.equals(vm.PreSelectedPersonId(), 1);
 				assert.equals(vm.Persons()[0].Selected(), true);
 			},
+
+			"should show timeline correct for daylight saving time begin boundary day": function (done) {
+				var vm = new viewModel();
+
+				vm.SetViewOptions({
+					date: '20150328'
+				});
+
+				var data = {
+					BaseDate: "2015-03-28",
+					Schedules: [
+						{
+							PersonId: "1",
+							Date: "2015-03-28",
+							Projection: [
+								{
+									Start: "2015-03-28 23:00",
+									Minutes: 480
+								}
+							]
+						}
+					]
+				};
+
+				vm.UpdateSchedules(data);
+
+				setTimeout(function () {
+					assert.equals(vm.TimeLine.StartTime(), "23:00");
+					assert.equals(vm.TimeLine.EndTime(), "08:00");
+
+					var actualCount = 0;
+					var times = vm.TimeLine.Times();
+					for (var i = 0; i < times.length; i++) {
+						if (times[i].Time == "02:00") {
+							actualCount++;
+						}
+					}
+					assert.equals(actualCount, 0);
+
+					done();
+				}, 2);
+			},
+
+			"should show timeline correct for daylight saving time end boundary day": function (done) {
+				var vm = new viewModel();
+
+				vm.SetViewOptions({
+					date: '20141025'
+				});
+
+				var data = {
+					BaseDate: "2014-10-25",
+					Schedules: [
+						{
+							PersonId: "1",
+							Date: "2014-10-25",
+							Projection: [
+								{
+									Start: "2014-10-25 22:00",
+									Minutes: 480
+								}
+							]
+						}
+					]
+				};
+
+				vm.UpdateSchedules(data);
+
+				setTimeout(function () {
+					assert.equals(vm.TimeLine.StartTime(), "22:00");
+					assert.equals(vm.TimeLine.EndTime(), "05:00");
+
+					var actualCount = 0;
+					var times = vm.TimeLine.Times();
+					for (var i = 0; i < times.length; i++) {
+						if (times[i].Time == "02:00") {
+							actualCount++;
+						}
+					}
+					assert.equals(actualCount, 2);
+
+					done();
+				}, 2);
+			}
 		});
 	};
 });
