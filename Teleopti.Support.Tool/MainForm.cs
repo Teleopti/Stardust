@@ -62,8 +62,7 @@ namespace Teleopti.Support.Tool
 		private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			panelContent.Controls.Remove(_activeControl);
-			Version version = new Version(_productVersion.Major, _productVersion.Minor, _productVersion.Build);
-			_activeControl = new ManageDatabaseVersions(this, version, _db);
+            _activeControl = new ManageDatabaseVersions(this, _productVersion, _db);
 			_activeControl.Dock = DockStyle.Fill;
 			PTracks.Hide();
 			panelContent.Controls.Add(_activeControl);
@@ -74,8 +73,10 @@ namespace Teleopti.Support.Tool
 			_productVersion = new Version(Application.ProductVersion.Split('-')[0]);
 #if (DEBUG)
 			{
-					_productVersion = new Version(8, 0, 397, 28396);
-			}
+                //8.1.417.32156
+                _productVersion = new Version(8, 1, 417, 32156);
+                //_productVersion = new Version(8, 0, 397, 28396);
+            }
 #else
 			{
 				//_productVersion = new Version(8, 0, 397, 28396);
