@@ -53,7 +53,7 @@
 									<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
 								</a>
 								<!-- /ko -->
-								<!-- ko if: !$root.agentAdherenceDetailsEnabled -->
+								<!-- ko ifnot: $root.agentAdherenceDetailsEnabled -->
 								<span data-bind="text: $root.resources.Adherence"></span>
 								<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
 								<!-- /ko -->
