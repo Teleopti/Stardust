@@ -19,5 +19,6 @@
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Release\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Release\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,BuildArtifacts\AppETLService.config
-
+..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Debug\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
+..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Debug\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,BuildArtifacts\AppETLService.config
 

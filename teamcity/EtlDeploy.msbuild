@@ -4,9 +4,8 @@
 <Project DefaultTargets="RunETLTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 
 	<PropertyGroup>
-		<ETLStuff>$(WorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
-		<ETLTeamCityStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLTeamCityStuff>
-		<ETLDBNamePrefix>prefix</ETLDBNamePrefix>
+		<ETLStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
+		<ETLDBNamePrefix>ETLTest</ETLDBNamePrefix>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
@@ -31,7 +30,7 @@
 	</Target>
 	
 	<Target Name="RunETLTest" DependsOnTargets="PrepareETLTest">
-		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="$(ETLTeamCityStuff)\ETLNightlyBuild-StartConsoleHost.cmd $(WorkingDirectory) $(debug_release)"/>
+		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="$(ETLStuff)\ETLNightlyBuild-StartConsoleHost.cmd $(WorkingDirectory) $(debug_release)"/>
 		<Message Text="Make sure the etl service is running..." />
 		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
 		<CallTarget Targets="AddSchedule"/>
@@ -43,7 +42,7 @@
  		<!-- Clean up-->
  		<!--Sleep for 10 secs then STOP service for clean up later on-->
  		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
-		<Exec Command ="$(ETLTeamCityStuff)\ETLNightlyBuild-StopConsoleHost.cmd"/>
+		<Exec Command ="$(ETLStuff)\ETLNightlyBuild-StopConsoleHost.cmd"/>
  	</Target>
 	
   		<!-- 
@@ -59,7 +58,7 @@
 	</Target>
   
 	<Target Name="RestoreToLocal">
-		<Exec Command ="$(RestoreToLocal) DemoSales $(debug_release) 1 $(ETLDBNamePrefix) $(SqlInstanceName)"/>
+		<Exec Command ="$(RestoreToLocal) DemoSales $(debug_release) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(WorkingDirectory)\ETL_R2L"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
@@ -70,6 +69,7 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
+		<Message text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(WorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(debug_release) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
 		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(WorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(debug_release) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
 	</Target>	
 </Project>
