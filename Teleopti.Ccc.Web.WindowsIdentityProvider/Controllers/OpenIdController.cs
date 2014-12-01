@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
+using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using log4net;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
@@ -71,6 +73,13 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 					new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
 						new Uri(idrequest.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
 							.MakeRelativeUri(idrequest.ProviderEndpoint));
+				var realmUriField = typeof (Realm).GetField("uri", BindingFlags.NonPublic | BindingFlags.Instance);
+				var realmUri = (Uri)realmUriField.GetValue(idrequest.Realm);
+				
+				realmUri = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+					new Uri(realmUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+						.MakeRelativeUri(realmUri));
+				realmUriField.SetValue(idrequest.Realm,realmUri);
 			} 
 			if (idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler()) != RelyingPartyDiscoveryResult.Success)
 			{
