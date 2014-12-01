@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="ObfuscateInfraDll" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+	<!-- should be set by the caller! -->
+	<PropertyGroup>
+		<WorkingDirectory>C:\stuff\ccc\teleopticcc</WorkingDirectory>
+		<PathToConfuserEx>D:\good2have\confuserex\lib</PathToConfuserEx>
+	</PropertyGroup>
+	<!---------------------------------->
+		
+	<ItemGroup>
+		<SourceFile Include="$(WorkingDirectory)\infrastructure\bin\release\obfuscated\teleopti.ccc.infrastructure.dll" />
+		<InfraDlls Include="$(WorkingDirectory)\**\Teleopti.Ccc.Infrastructure.dll"
+					Exclude="@(SourceFile)"/>
+	</ItemGroup>
+
+	<Target Name="ObfuscateInfraDll" DependsOnTargets="DoObfuscation">
+		<Copy SourceFiles="@(SourceFile)"
+			DestinationFiles="%(InfraDlls.FullPath)">
+			<Output TaskParameter="CopiedFiles"
+                    ItemName="Changed" />
+		</Copy>
+		<Delete Files="@(SourceFile)" />
+		
+		<Error Condition="'@(Changed->Count())'&lt;1" 
+				Message="No infrastructure dlls replaced - something wrong!" />
+	</Target>
+	
+	<Target Name="DoObfuscation">
+		<Exec Command='"$(PathToConfuserEx)\confuser.cli.exe" teleopti.crproj"'/>
+	</Target>
+</Project>
