@@ -603,11 +603,11 @@
   <data name="Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
-    <value>ApplyLicense</value>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>ApplyProductActivationKey</value>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
-    <value>ApplyLicenseInstructions</value>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>ApplyProductActivationKeyInstructions</value>
   </data>
   <data name="ApplyNewTemplateQuestion" xml:space="preserve">
     <value>ApplyNewTemplateQuestion</value>
@@ -1026,7 +1026,7 @@
   <data name="CanNotLoadSmartPartModule" xml:space="preserve">
     <value>CanNotLoadSmartPartModule</value>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>CannotReadLicenseFile</value>
   </data>
   <data name="CapitalTo" xml:space="preserve">
@@ -2883,19 +2883,19 @@
   <data name="LessThanWorkloadNameGreaterThan" xml:space="preserve">
     <value>LessThanWorkloadNameGreaterThan</value>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>License</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>LicenseApplicationSuccess</value>
   </data>
   <data name="LicensedToColon" xml:space="preserve">
     <value>LicensedToColon</value>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>LicenseHasExpiredPleaseApplyANewOne</value>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>LicenseIsInvalidPerhapsForgedPleaseApplyANewOne</value>
   </data>
   <data name="Limit" xml:space="preserve">
@@ -3537,16 +3537,16 @@
   <data name="NewGroupPageName" xml:space="preserve">
     <value>NewGroupPageName</value>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>NewLicenseAlreadyExpired</value>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>NewLicenseCorrupted</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>NewLicenseDoesNotCoverEnoughActiveAgents</value>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>NewLicenseNotValidFile</value>
   </data>
   <data name="NewLimitation" xml:space="preserve">
@@ -3726,7 +3726,7 @@
   <data name="NoFunctionsAvailable" xml:space="preserve">
     <value>NoFunctionsAvailable</value>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>NoLicensePleaseApplyANewOne</value>
   </data>
   <data name="NoMultiplicators" xml:space="preserve">
@@ -3933,7 +3933,7 @@
   <data name="OpenHoursColon" xml:space="preserve">
     <value>OpenHoursColon</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>OpenLicenseFile</value>
   </data>
   <data name="OpenMyReport" xml:space="preserve">
@@ -5793,7 +5793,7 @@
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
     <value>TeleoptiCCCColonModuleColonFromToDateScenarioColon</value>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>TeleoptiLicenseException</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
@@ -6174,7 +6174,7 @@
   <data name="UpdateStatistics" xml:space="preserve">
     <value>UpdateStatistics</value>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>UploadingNewLicenseFailed</value>
   </data>
   <data name="UseAvailability" xml:space="preserve">
@@ -6636,7 +6636,7 @@
   <data name="YourChangesWillBeDiscardedReloading" xml:space="preserve">
     <value>YourChangesWillBeDiscardedReloading</value>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>YourLicensWillExpireDoNotForgetToRenewItInTime</value>
   </data>
   <data name="YourScheduleForDateParameters" xml:space="preserve">

@@ -4289,10 +4289,10 @@ standard</value>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>RTA statusgrupper må konfigureres først.</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Bruk lisens</value>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Instruksjoner: 
 * Kjøp en lisens (kontaktinformasjon her www.teleopti.com) 
 * Motta lisensfil (for eksempel via e-post) 
@@ -4306,7 +4306,7 @@ Teleopti WFM lukkes automatisk
 Ved ny oppstart skal ikke varsel om lisensnøkkel komme opp på ny
 </value>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Lisensfil "{0}" kunne ikke åpnes. Informasjon om feil: 
 {1}</value>
   </data>
@@ -4316,27 +4316,27 @@ Ved ny oppstart skal ikke varsel om lisensnøkkel komme opp på ny
   <data name="EnterValidFile" xml:space="preserve">
     <value>Sett inn et gyldig filnavn navn, inkludert sti</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>Lisensnøkkel suksess. Gratulerer! Du er nå en lisensiert bruker av denne prisvinnende løsning. Applikasjonen blir lukket. Deretter kan du starte den igjen. Du kan også starte MyTime for å få tilgang til nye lisensierte alternativer.</value>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Lisensnøkkelen din er utgått, vennligst bruk en ny</value>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Lisensnøkkelen din er ugyldig, muligens modifisert, vennligst bruk en ny</value>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>Lisensen {0} du forsøker å bruke er gammel, den er allerede utgått.</value>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>Lisensfilen {0} er ugyldig, den kan være forfalsket</value>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>Lisensfilen {0} er ikke i et gyldig (xml) format.
 Informasjon om feil:
 {1}</value>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Du har ikke søkt om lisens, vennligst gjør det</value>
   </data>
   <data name="NoSuchFile" xml:space="preserve">
@@ -4345,10 +4345,10 @@ Informasjon om feil:
   <data name="Success" xml:space="preserve">
     <value>Lyktes</value>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>Lisensapplikasjonen mislykket</value>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Lisensnøkkelen din er gyldig til {0}, ikke glem å fornye den tidsnok</value>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -4363,7 +4363,7 @@ Informasjon om feil:
   <data name="About" xml:space="preserve">
     <value>Om</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Velg lisensfil</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
@@ -4393,7 +4393,7 @@ Informasjon om feil:
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
     <value>Noen endret de samme dataene før deg.</value>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>Dette produktet er lisensiert til "{0}" inntil {1}. 
 
 Denne lisensen dekker maksimum {2} aktive agenter. 
@@ -4412,7 +4412,7 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
     <value>Du har {0} aktive agenter, men er lisensiert for bare {1}. Du må oppgradere lisensnøkkelen din før du kan fortsette</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Lisensen dekker bare {0} aktive agenter, men du har {1}.  Du må skaffe deg en lisens som dekker nok aktive agenter</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
@@ -5033,7 +5033,7 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
   <data name="IntervalStdev" xml:space="preserve">
     <value>Intervall standardavvik</value>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Teleopti License Exception</value>
   </data>
   <data name="AddMeeting" xml:space="preserve">
@@ -7452,10 +7452,10 @@ ukedag</value>
   <data name="ExportMeetings" xml:space="preserve">
     <value>Eksporter møter</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Denne lisensen dekker kun {0} plasser. Du må skaffe en lisens som dekker nok plasser.</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>Dette systemet er lisensiert for "{0}" ifølge vilkår og betingelser i lisens-avtalen og lisens nøkkel går ut {1}.
 
 Lisensen dekker maximalt {2} plasser.

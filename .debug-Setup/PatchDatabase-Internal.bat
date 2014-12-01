@@ -140,7 +140,7 @@ IF %ERRORLEV% EQU 9 ECHO An error occured while changing to Date Only in Forecas
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
-IF %ERRORLEV% EQU 13 ECHO Could not apply license on demoreg database
+IF %ERRORLEV% EQU 13 ECHO Could not apply a product activation key on demoreg database
 IF %ERRORLEV% EQU 14 ECHO Could not create empty Analytics DB
 IF %ERRORLEV% EQU 15 ECHO Could not create empty Agg DB
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics

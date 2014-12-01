@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 			catch (InvalidLicenseException)
 			{
-				return errorMessage(Resources.TeleoptiLicenseException);
+				return errorMessage(Resources.TeleoptiProductActivationKeyException);
 			}
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}

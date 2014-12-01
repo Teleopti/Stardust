@@ -3440,7 +3440,7 @@
   <data name="About" xml:space="preserve">
     <value>情報</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>ライセンスファイルの選択</value>
   </data>
   <data name="LastUpdateColonParameter0" xml:space="preserve">
@@ -5476,10 +5476,10 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>はじめにRTA状態グループを設定してください。</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>ライセンスの適用</value>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>ライセンスファイル "{0}" にアクセスできませんでした。エラー詳細: {1}</value>
   </data>
   <data name="DatabaseProblem" xml:space="preserve">
@@ -5488,32 +5488,32 @@
   <data name="EnterValidFile" xml:space="preserve">
     <value>パスを含む有効なファイル名を入力してください</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>ライセンスキーの適用に成功しました。おめでとうございます! これで、定評のあるワークフォースマネジメントソリューションのライセンスを取得できました。
 このアプリケーションを一旦終了します。その後、アプリケーションを起動して使用することができます。その際、新たにライセンスが与えられたオプションを使用するには、MyTimeも起動する必要があります。</value>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>ライセンスキーの有効期限が切れています。新しいライセンスを適用してください。</value>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>ライセンスキーが無効です（ライセンスが変更された可能性があります）。新しいライセンスキーを適用してください。</value>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>適用しようとしているライセンス "{0}" は既に期限が切れています。</value>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>ライセンスファイル "{0}" は無効です。不正に作成された可能性があります。</value>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>ライセンスファイル "{0}" は有効な（xml）形式ではありません。エラー詳細: {1}</value>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>ライセンスが適用されていません。ライセンスを適用してください。</value>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>ライセンスの適用に失敗しました</value>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>お使いのライセンスキーは {0} で有効期限が切れます。期限内に更新してください。</value>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -5543,7 +5543,7 @@
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
     <value>{0} 名のアクティブなエージェントがいますが、{1} 名分のライセンスしか保有していません。作業を継続する前に、ライセンスキーを更新する必要があります</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>このライセンスは {0} 名のアクティブなエージェントにしか対応していません。{1} 名のアクティブなエージェントに対応したライセンスを取得する必要があります</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
@@ -5931,7 +5931,7 @@
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>問題が発生しました。ファイルを開いている場合はファイルを閉じてください。</value>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Teleoptiライセンスの例外</value>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
@@ -8165,10 +8165,10 @@
   <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
     <value>ユーザーが作成した（ただしユーザーは参加しない）会議も表示します。</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>このライセンスは {0} 席までしか対応していません。必要な座席数に対応したライセンスを取得する必要があります。</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>このシステムは、ライセンス契約の契約条項に基づいて "{0}" にライセンスされています。このライセンスキーは {1} に期限が切れます。
 
 このライセンスは、最大 {2} 席まで対応しています。
@@ -8411,7 +8411,7 @@
   <data name="HistoricalPeriod" xml:space="preserve">
     <value>期間履歴</value>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>手順:
 * ライセンスを購入します（お問い合わせ先の情報はこちら www.teleopti.com）
 * メールなどでライセンスファイルを受け取ります
@@ -8423,7 +8423,7 @@
 * MyTimeを再起動し、ライセンスが与えられた新規オプションを取得します
 * アプリケーションを再起動します</value>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>このシステムは、ライセンス契約の契約条項に基づいて "{0}" にライセンスされています。ライセンスキーは {1} に有効期限が切れます。
 
 このライセンスは、最大 {2} 名のアクティブエージェントに対応しています。

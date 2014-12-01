@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         public void Setup()
         {
             _isValidLicenseFound = false;
-            FaultDto exception = new FaultDto("LicenseIsInvalidPerhapsForgedPleaseApplyANewOne");
-            FaultDto warning = new FaultDto("YourLicensWillExpireDoNotForgetToRenewItInTime");
+			FaultDto exception = new FaultDto("ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne");
+			FaultDto warning = new FaultDto("YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime");
 
             _target = new LicenseVerificationResultDto(_isValidLicenseFound);
             _target.AddExceptionToCollection(exception);

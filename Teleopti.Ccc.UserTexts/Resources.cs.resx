@@ -5740,11 +5740,11 @@ osoby</value>
     <value>Nejdříve musí být konfigurovány RTA stavové skupiny.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Použít licenci</value>
     <comment>the license upload dialog window title</comment>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Pokyny:
 * Kupte si licenci (kontaktní informace naleznete na www.teleopti.com)
 * Získejte licenční soubor (např. prostřednictvím e-mailu)
@@ -5757,7 +5757,7 @@ osoby</value>
 * Spusťte znovu aplikaci</value>
     <comment>instructions for applying license in license window</comment>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Nelze přistoupit k licenčnímu souboru "{0}" 
 Detaily chyby: 
 {1}</value>
@@ -5773,36 +5773,36 @@ Detaily chyby:
     <value>Vložte platné jméno souboru včetně cesty</value>
     <comment>file not found in license window</comment>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>Licence byla úspěšně zavedena.
 Gratulujeme! Nyní jste licencovaným uživatelem tohoto oceněného řešení pro management zaměstnanců.
 Aplikace bude nyní ukončena.
 Aplikaci restartujte. Chcete-li získat přístup k novým licencovaným možnostem, restartujte rovněž MyTime.</value>
     <comment>license upload success message</comment>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Skončila platnost vaší licence, použijte prosím novou licenci.</value>
     <comment>explanation for license failure in license window</comment>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Vaše licence je neplatná, pravděpodobně byla neoprávněně modifikována. Použijte prosím novou licenci.</value>
     <comment>explanation for modified license in license window</comment>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>Snažíte se zavést licenci "{0}", které již vypršela platnost.</value>
     <comment>expiration exception for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>Licenční soubor "{0}" je neplatný.</value>
     <comment>SignatureValidationException for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>Licenční soubor "{0}" nemá platný (xlm) formát
 Detaily chyby:
 {1}</value>
     <comment>Xml exception when parcing xml file in LogOnScreen</comment>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Dosud jste nepoužili licenci, prosím použijte ji.</value>
     <comment>explanation shown at first startup in license window</comment>
   </data>
@@ -5814,11 +5814,11 @@ Detaily chyby:
     <value>Úspěšný</value>
     <comment>Success</comment>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>Zavedení licence se nezdařilo</value>
     <comment>license application error dialog title</comment>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Vaše licence je platná pouze do {0}, nezapomeňte ji obnovit.</value>
     <comment>license expiration warning in LogOnScreen</comment>
   </data>
@@ -5837,7 +5837,7 @@ Detaily chyby:
     <value>Kolem</value>
     <comment>About</comment>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Zvolte licenční soubor</value>
     <comment>open licese file dialog title</comment>
   </data>
@@ -5873,7 +5873,7 @@ Detaily chyby:
     <value>Někdo změnil tytéž údaje před vámi.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>Tento produkt je licencován "{0}" do {1}.
 
 Licence platí pro maximálně {2} aktivních agentů.
@@ -5899,7 +5899,7 @@ Jsou aktivovány tyto volby:
     <value>Máte {0} aktivních agentů, licencovaných máte pouze {1} agentů. Před pokračováním musíte provést aktualizaci vaší licence.</value>
     <comment>license error when maximum active agents have been exceeded</comment>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Tato licence platí pro {0} aktivních agentů, vy máte však {1} agentů. Musíte zakoupit licenci pro příslušný počet aktivních agentů.</value>
     <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
@@ -6721,7 +6721,7 @@ Jsou aktivovány tyto volby:
     <value>Interval směrodatné odchylky</value>
     <comment>Skill grid scheduler</comment>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Licenční výjimka Teleopti</value>
     <comment>Teleopti License Exception</comment>
   </data>
@@ -9245,7 +9245,7 @@ Chybová zpráva: {0}</value>
   <data name="SendASM" xml:space="preserve">
     <value>Odeslat zprávu (ASM)</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Licence pokrývá pouze {0} míst. Musíte zajistit licenci pokrývající dostatek míst.</value>
   </data>
   <data name="AllAbsences" xml:space="preserve">
@@ -9482,7 +9482,7 @@ Chybová zpráva: {0}</value>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
     <value>Plánovaní a aktuální agenti</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>Systém je licencován na "{0}" v souladu se smluvními podmínkami a licenční klíč vyprší {1}
 
 Licence pokrývá maximum {2} míst.

@@ -4029,7 +4029,7 @@
   <data name="About" xml:space="preserve">
     <value>Sobre</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Escolha arquivo de licença</value>
   </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
@@ -5316,10 +5316,10 @@
   <data name="RowsPerPageFifty" xml:space="preserve">
     <value>Cinquenta</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Aplicar Licença</value>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Instruções:
 * Compre uma licença (informações para contato em: www.teleopti.com)
 * Receba o arquivo de licença (por exemplo via e-mail)
@@ -5331,7 +5331,7 @@
 * Reinicie o MyTime para obter as novas funcionalidades
 * Inicie novamente a aplicação</value>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>O arquivo de licença "{0}" não pôde ser aberto.
 Detalhes do erro:
 {1}</value>
@@ -5359,7 +5359,7 @@ Detalhes do erro:
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>O campo de texto não pode ser vazio.</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>A licença foi aplicada com sucesso.
 Parabéns! Você é agora um usuário licenciado dessa reconhecida solução de gestão de força de trabalho.
 A aplicação será finalizada agora e poderá ser reiniciada em seguida.
@@ -5392,7 +5392,7 @@ Talvez seja necessário que você reinicie o MyTime para que você possa ter ace
   <data name="DoYouWantToDeleteTag" xml:space="preserve">
     <value>Você deseja excluir a marca {0}?</value>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>A sua licença expirou, por favor adquira uma nova.</value>
   </data>
   <data name="DeleteTag" xml:space="preserve">
@@ -5407,16 +5407,16 @@ Talvez seja necessário que você reinicie o MyTime para que você possa ter ace
   <data name="MissingSubject" xml:space="preserve">
     <value>Falta o indivíduo</value>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>A sua licença está inválida (o arquivo de licença pode ter sido modificado). Por favor adquira uma nova licença</value>
   </data>
   <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
     <value>Você tem certeza que deseja excluir o item '{0}'?</value>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>A licença "{0}" que você está tentando aplicar expirou.</value>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>O arquivo de licença "{0}" é inválido</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
@@ -5461,12 +5461,12 @@ Talvez seja necessário que você reinicie o MyTime para que você possa ter ace
   <data name="NoRequestsFound" xml:space="preserve">
     <value>Nenhuma solicitação pôde ser encontrada</value>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>O arquivo de licença "{0}" não é um XML válido
 Detalhes do erro:
 {1}</value>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Você ainda não aplicou uma licença, por favor faça isso agora</value>
   </data>
   <data name="NoSuchFile" xml:space="preserve">
@@ -5526,13 +5526,13 @@ Detalhes do erro:
   <data name="AuditingReportAbsence" xml:space="preserve">
     <value>Ausência</value>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>A aplicação da licença falhou</value>
   </data>
   <data name="AuditingPageName" xml:space="preserve">
     <value>Auditoria</value>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>A sua licença é válida somente até {0}, não se esqueça de renová-la a tempo</value>
   </data>
   <data name="ErrorMsgDuplicateUserCredentials" xml:space="preserve">
@@ -5640,7 +5640,7 @@ Detalhes do erro:
   <data name="Error" xml:space="preserve">
     <value>Erro</value>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>Este sistema está licenciado para "{0}" de acordo com os termos e condições do acordo de licença. Esta licença irá expirar em {1}.
 
 Essa licença permite o número máximo de {2} agentes ativos.
@@ -5694,7 +5694,7 @@ As seguintes opções estão ativas:
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Você quase atingiu o limite de {0} PAs. Por favor faça o upgrade da sua licença</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>O sistema está licenciado para "{0}" de acordo com os termos e condições do acordo de licença. Esta licença irá expirar em {1}.
 
 Essa licença comporta ao máximo {2} PAs.
@@ -5703,7 +5703,7 @@ O tipo de licença é "{3}".
 As seguintes opções estão ativas:
 {4}</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Essa licença suporta apenas {0} PAs. Você deve adquirir uma licença que suporte PAs suficientes.</value>
   </data>
   <data name="SendASM" xml:space="preserve">
@@ -6102,7 +6102,7 @@ As seguintes opções estão ativas:
   <data name="AnchorColon" xml:space="preserve">
     <value>Âncora:</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Essa licença suporta somente {0} agentes ativos, no entanto você tem {1} agentes. Você deve obter uma licença que suporte um número suficiente de agentes</value>
   </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
@@ -6402,7 +6402,7 @@ As seguintes opções estão ativas:
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>Erro tentar importar o arquivo. Por favor feche o arquivo se ele estiver aberto.</value>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Teleopti License Exception</value>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">

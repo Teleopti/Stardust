@@ -646,11 +646,11 @@
     <value>Verwenden</value>
     <comment>Apply</comment>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Lizenz einspielen</value>
     <comment>the license upload dialog window title</comment>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Anweisungen:
 * Bestellen Sie eine Lizenz (Informationen erhalten Sie unter www.teleopti.com)
 * Erhalten Sie die Lizenzdatei (z.B. via E-Mail)
@@ -1101,7 +1101,7 @@
     <value>Smart Part Modul konnte nicht geladen werden</value>
     <comment>Unable to load the Smart Part Module</comment>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Auf die Lizenzdatei {0}" kann nicht zugegriffen werden.</value>
   </data>
   <data name="CapitalTo" xml:space="preserve">
@@ -2973,7 +2973,7 @@ Ausschließlich</value>
     <value>&lt;Workload Name&gt;</value>
     <comment>Default workload name when creating a new workload</comment>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>Dieses Produkt ist für "{0}" bis {1} lizenziert.
 
 Die Lizenz gillt für höchstens {2} aktive Agenten.
@@ -2982,7 +2982,7 @@ Das Lizenzschema ist "{3}".
 Diese Optionen sind aktiviert: 
 {4}</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>Lizenz wurde erfolgreich eingespielt.
 Herzlichen Glückwunsch. Sie sind nun ein lizenzierter Nutzer des preisgekrönten Workforce Mangement Systems Teleopti CCC.
 Das Programm wird nun geschlossen.
@@ -2993,11 +2993,11 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <value>Lizensiert für:</value>
     <comment>Title bar</comment>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Ihre Lizenz ist abgelaufen, bitte beantragen Sie eine neue.</value>
     <comment>explanation for license failure in license window</comment>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Ihre Lizenz ist ungültig, möglicherweise wurde diese unerlaubt geändert, bitte beantragen Sie eine neue.</value>
     <comment>explanation for modified license in license window</comment>
   </data>
@@ -3668,19 +3668,19 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <value>Neuen Namen für Gruppierung vergeben</value>
     <comment>New Group Page Name</comment>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>Die Lizenz "{0}", die Sie versuchen einzuspielen ist zu alt, sie ist bereits abgelaufen.</value>
     <comment>expiration exception for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>Die Lizenzdatei ist ungültig "{0}", möglicherweise ist diese gefälscht.</value>
     <comment>SignatureValidationException for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Diese Lizenz beeinhaltet nur {0} aktive Agenten, sie haben allerdings eine Agentenanzahl von {1} im System hinterlegt. Sie benötigen eine Lizenz, die die Anzahl Ihrer Agenten abdeckt.</value>
     <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>Die Lizendatei  {0}" ist in keinem gültigen (xml) Format.</value>
   </data>
   <data name="NewLimitation" xml:space="preserve">
@@ -3890,7 +3890,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <value>Keine Funktionen verfügbar</value>
     <comment>No functions available</comment>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Sie haben noch keine Lizenz eingespielt, holen Sie dies bitte nach</value>
     <comment>explanation shown at first startup in license window</comment>
   </data>
@@ -4086,7 +4086,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <value>Öffnungszeiten…</value>
     <comment>Open hours</comment>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Lizenzdatei auswählen</value>
     <comment>open licese file dialog title</comment>
   </data>
@@ -5988,7 +5988,7 @@ Periods</comment>
     <value>Teamsicht</value>
     <comment>Team view</comment>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Teleopti Lizenz Ausnahmen</value>
     <comment>Teleopti License Exception</comment>
   </data>
@@ -6392,7 +6392,7 @@ Periods</comment>
     <value>Aktualisiere Statistiken</value>
     <comment>Update statistics</comment>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>Lizenzeinspielung fehlgeschlagen</value>
     <comment>license application error dialog title</comment>
   </data>
@@ -6838,7 +6838,7 @@ Periods</comment>
     <value>Ihre Änderungen werden verworfen. Laden…</value>
     <comment>Your changes will be discarded. Reloading...</comment>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Ihre Lizenz ist nur gültig bis zum {0}, vergessen Sie nicht Ihre Lizenz zu erneuern.</value>
     <comment>license expiration warning in LogOnScreen</comment>
   </data>
@@ -9232,10 +9232,10 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="SendASM" xml:space="preserve">
     <value>Sende ASM</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Die Lizenz deckt nur {0} Plätze ab. Sie brauchen eine Lizenz, die ausreichend Plätze abdeckt.</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>Dieses System ist entsprechend den Geschäftsbedingungen und Lizenzvereinbarungen lizensiert für "{0}". Diese Lizenz wird ungültig {1}. 
 
 Die Lizenz deckt maximal {2} Plätze.

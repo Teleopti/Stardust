@@ -4230,10 +4230,10 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Daha önce RTA durum grupları konfigüre edilmelidir</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Lisansı yükle</value>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Lisans dosyası "{0}" ulaşılamaz durumda. Hata detayları {1}</value>
   </data>
   <data name="DatabaseProblem" xml:space="preserve">
@@ -4242,22 +4242,22 @@
   <data name="EnterValidFile" xml:space="preserve">
     <value>İz bilgisi içeren geçerli dosya ismi gir. </value>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Lisansınızın süresi dolmuştur, lğtfen yenisini yükleyiniz. </value>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Lisansınız geçersiz, muhtemelen yasadışı olarak değiştirilmiş. Lütfen yenisini yükleyin.</value>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>Yüklemeye çalıştığınız Lisans "{0}" eskidir ve süresi dolmuş bulunmaktadır.</value>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>Lisans dosyası "{0}" geçersizdir. Kopya lisans olabilir.</value>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>Lisans dosyası "{0}" geçersiz bir (xml) formatdadır. Hata detayları: {1}</value>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Lisans yüklenmemiş durumda, lütfen yükleyiniz.</value>
   </data>
   <data name="NoSuchFile" xml:space="preserve">
@@ -4266,10 +4266,10 @@
   <data name="Success" xml:space="preserve">
     <value>Başarı</value>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>Lisans yüklemesi başarısız</value>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Lisansınız "{0}" kadar geçerlidir. Lütfen yenilemeyi unutmayın.</value>
   </data>
   <data name="Browse" xml:space="preserve">
@@ -4284,7 +4284,7 @@
   <data name="About" xml:space="preserve">
     <value>Hakkında</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Lisans dosyası seç</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
@@ -4323,7 +4323,7 @@
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
     <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen devam edebilmek için lisanslarınızı güncelleyin.</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen tüm müşteri temsilcilerinizi kapsayacak sayıda lisana tedarik ediniz. </value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">

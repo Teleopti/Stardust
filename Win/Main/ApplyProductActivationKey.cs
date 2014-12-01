@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Win.Main
     /// <summary>
     /// A dialog letting the user apply a license
     /// </summary>
-    public partial class ApplyLicense : BaseDialogForm
+    public partial class ApplyProductActivationKey : BaseDialogForm
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public ApplyLicense(string explanation, IUnitOfWorkFactory unitOfWorkFactory)
+        public ApplyProductActivationKey(string explanation, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             InitializeComponent();
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Main
             SetColors();
 
             labelExplanation.Text = explanation;
-            textBoxIntructions.Text = Resources.ApplyLicenseInstructions;
+            textBoxIntructions.Text = Resources.ApplyProductActivationKeyInstructions;
         }
 
         private void SetColors()
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Win.Main
                     licenseStatusUpdater.RunCheck();
 
                     System.Windows.MessageBox.Show(
-                        Resources.LicenseApplicationSuccess,
+                        Resources.ProductActivationKeyApplicationSuccess,
                         Resources.Success,
                         System.Windows.MessageBoxButton.OK,
                         System.Windows.MessageBoxImage.Information,
@@ -96,35 +96,35 @@ namespace Teleopti.Ccc.Win.Main
                 catch (IOException e)
                 {
                     labelExplanation.Text = String.Format(CultureInfo.CurrentCulture,
-                                                         Resources.CannotReadLicenseFile,
+                                                         Resources.CannotReadProductActivationKeyFile,
                                                          licenseFileName, e);
                 }
                 catch (LicenseExpiredException)
                 {
                     labelExplanation.Text = String.Format(CultureInfo.CurrentCulture,
-                                                          Resources.NewLicenseAlreadyExpired,
+                                                          Resources.NewProductActivationKeyAlreadyExpired,
                                                           licenseFileName);
                 }
                 catch (SignatureValidationException)
                 {
-                    labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.NewLicenseCorrupted,
+                    labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.NewProductActivationKeyCorrupted,
                                                           licenseFileName);
                 }
                 catch (TooManyActiveAgentsException e)
                 {
 					if(e.LicenseType.Equals(LicenseType.Seat))
-						labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.NewLicenseDoesNotCoverEnoughSeats,
+						labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.NewProductActivationKeyDoesNotCoverEnoughSeats,
                                                           e.NumberOfLicensed);
 					else
 					{
-						labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.NewLicenseDoesNotCoverEnoughActiveAgents,
+						labelExplanation.Text = String.Format(CultureInfo.CurrentCulture, Resources.NewProductActivationKeyDoesNotCoverEnoughActiveAgents,
 														  e.NumberOfLicensed, e.NumberOfAttemptedActiveAgents);
 					}
                 }
                 catch (System.Xml.XmlException e)
                 {
                     labelExplanation.Text = String.Format(CultureInfo.CurrentCulture,
-                                                          Resources.NewLicenseNotValidFile,
+                                                          Resources.NewProductActivationKeyNotValidFile,
                                                           licenseFileName, e.Message);
                 }
                 catch (DataSourceException e)

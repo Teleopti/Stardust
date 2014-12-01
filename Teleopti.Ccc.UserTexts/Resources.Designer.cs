@@ -2204,33 +2204,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Apply License.
-        /// </summary>
-        public static string ApplyLicense {
-            get {
-                return ResourceManager.GetString("ApplyLicense", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Instructions:
-        ///* Buy a license (contact information here www.teleopti.com)
-        ///* Receive license file (e.g. via mail)
-        ///* Save the license to disk
-        ///* If you have any work pending save in the application, save that before applying license
-        ///* Browse to the license file using browse button below 
-        ///* Apply license
-        ///* Application will shutdown
-        ///* Restart MyTime to get newly licensed options
-        ///* Start application again.
-        /// </summary>
-        public static string ApplyLicenseInstructions {
-            get {
-                return ResourceManager.GetString("ApplyLicenseInstructions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Apply
         ///Longterm.
         /// </summary>
@@ -2246,6 +2219,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ApplyNewTemplateQuestion {
             get {
                 return ResourceManager.GetString("ApplyNewTemplateQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply Product Activation Key.
+        /// </summary>
+        public static string ApplyProductActivationKey {
+            get {
+                return ResourceManager.GetString("ApplyProductActivationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instructions:
+        ///* Buy a product activation key (contact information here www.teleopti.com)
+        ///* Receive product activation key file (e.g. via mail)
+        ///* Save the product activation key to disk
+        ///* If you have any work pending save in the application, save that before applying product activation key
+        ///* Browse to the product activation key file using browse button below 
+        ///* Apply product activation key
+        ///* Application will shutdown
+        ///* Restart MyTime to get newly licensed options
+        ///* Start application again.
+        /// </summary>
+        public static string ApplyProductActivationKeyInstructions {
+            get {
+                return ResourceManager.GetString("ApplyProductActivationKeyInstructions", resourceCulture);
             }
         }
         
@@ -4080,13 +4080,13 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License file &quot;{0}&quot; could not be accessed
+        ///   Looks up a localized string similar to Product Activation Key &quot;{0}&quot; could not be accessed
         ///Error details: 
         ///{1}.
         /// </summary>
-        public static string CannotReadLicenseFile {
+        public static string CannotReadProductActivationKeyFile {
             get {
-                return ResourceManager.GetString("CannotReadLicenseFile", resourceCulture);
+                return ResourceManager.GetString("CannotReadProductActivationKeyFile", resourceCulture);
             }
         }
         
@@ -5806,7 +5806,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was a problem trying to store the license in the database.
+        ///   Looks up a localized string similar to There was a problem trying to store the product activation key in the database.
         ///Error details:
         ///{0}.
         /// </summary>
@@ -11724,21 +11724,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the license key will expire {1}.
-        ///
-        ///The license covers a maximum of {2} active agents.
-        ///
-        ///The license schema is &quot;{3}&quot;.
-        ///These options are activated:
-        ///{4}.
-        /// </summary>
-        public static string License {
-            get {
-                return ResourceManager.GetString("License", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to License Agreement.
         /// </summary>
         public static string LicenseAgreement {
@@ -11748,43 +11733,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License key successfully applied.
-        ///Congratulations! You are now a licensed user of this award winning workforce management solution.
-        ///The application will now exit.
-        ///
-        ///Important:
-        ///In order to get all services and web applications to fully function and to get access to newly licensed options, please ask your IT to run &quot;Restart Teleopti WFM&quot; from the Teleopti folder in the Start Menu on the server..
-        /// </summary>
-        public static string LicenseApplicationSuccess {
-            get {
-                return ResourceManager.GetString("LicenseApplicationSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Licensed to:.
         /// </summary>
         public static string LicensedToColon {
             get {
                 return ResourceManager.GetString("LicensedToColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your license key has expired, please apply a new one.
-        /// </summary>
-        public static string LicenseHasExpiredPleaseApplyANewOne {
-            get {
-                return ResourceManager.GetString("LicenseHasExpiredPleaseApplyANewOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your license key is invalid, possibly modified, please apply a new one.
-        /// </summary>
-        public static string LicenseIsInvalidPerhapsForgedPleaseApplyANewOne {
-            get {
-                return ResourceManager.GetString("LicenseIsInvalidPerhapsForgedPleaseApplyANewOne", resourceCulture);
             }
         }
         
@@ -14526,53 +14479,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The license &quot;{0}&quot; you are attempting to apply is old, it has already expired..
-        /// </summary>
-        public static string NewLicenseAlreadyExpired {
-            get {
-                return ResourceManager.GetString("NewLicenseAlreadyExpired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The license file &quot;{0}&quot; is invalid, it may be forged.
-        /// </summary>
-        public static string NewLicenseCorrupted {
-            get {
-                return ResourceManager.GetString("NewLicenseCorrupted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This license only covers {0} active agents, but you have {1}. You must get a license that covers enough active agents.
-        /// </summary>
-        public static string NewLicenseDoesNotCoverEnoughActiveAgents {
-            get {
-                return ResourceManager.GetString("NewLicenseDoesNotCoverEnoughActiveAgents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This license only covers {0} seats. You must get a license that covers enough seats..
-        /// </summary>
-        public static string NewLicenseDoesNotCoverEnoughSeats {
-            get {
-                return ResourceManager.GetString("NewLicenseDoesNotCoverEnoughSeats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The license file &quot;{0}&quot; is not in a valid (xml) format
-        ///Error details:
-        ///{1}.
-        /// </summary>
-        public static string NewLicenseNotValidFile {
-            get {
-                return ResourceManager.GetString("NewLicenseNotValidFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Limitation.
         /// </summary>
         public static string NewLimitation {
@@ -14713,6 +14619,53 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewPlanningGroupThreeDots {
             get {
                 return ResourceManager.GetString("NewPlanningGroupThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The product activation key &quot;{0}&quot; you are attempting to apply is old, it has already expired..
+        /// </summary>
+        public static string NewProductActivationKeyAlreadyExpired {
+            get {
+                return ResourceManager.GetString("NewProductActivationKeyAlreadyExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The product activation key &quot;{0}&quot; is invalid, it may be forged.
+        /// </summary>
+        public static string NewProductActivationKeyCorrupted {
+            get {
+                return ResourceManager.GetString("NewProductActivationKeyCorrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This product activation key only covers {0} active agents, but you have {1}. You must get a product activation key that covers enough active agents.
+        /// </summary>
+        public static string NewProductActivationKeyDoesNotCoverEnoughActiveAgents {
+            get {
+                return ResourceManager.GetString("NewProductActivationKeyDoesNotCoverEnoughActiveAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This product activation key only covers {0} seats. You must get a product activation key that covers enough seats..
+        /// </summary>
+        public static string NewProductActivationKeyDoesNotCoverEnoughSeats {
+            get {
+                return ResourceManager.GetString("NewProductActivationKeyDoesNotCoverEnoughSeats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The product activation key &quot;{0}&quot; is not in a valid (xml) format
+        ///Error details:
+        ///{1}.
+        /// </summary>
+        public static string NewProductActivationKeyNotValidFile {
+            get {
+                return ResourceManager.GetString("NewProductActivationKeyNotValidFile", resourceCulture);
             }
         }
         
@@ -15276,15 +15229,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not applied a license yet, please do so.
-        /// </summary>
-        public static string NoLicensePleaseApplyANewOne {
-            get {
-                return ResourceManager.GetString("NoLicensePleaseApplyANewOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No meeting is selected!.
         /// </summary>
         public static string NoMeetingIsSelected {
@@ -15407,6 +15351,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPreferenceFor {
             get {
                 return ResourceManager.GetString("NoPreferenceFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not applied a product activation key yet, please do so.
+        /// </summary>
+        public static string NoProductActivationKeyPleaseApplyANewOne {
+            get {
+                return ResourceManager.GetString("NoProductActivationKeyPleaseApplyANewOne", resourceCulture);
             }
         }
         
@@ -16176,15 +16129,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose license file.
-        /// </summary>
-        public static string OpenLicenseFile {
-            get {
-                return ResourceManager.GetString("OpenLicenseFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to My Report.
         /// </summary>
         public static string OpenMyReport {
@@ -16226,6 +16170,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OpenPreferences {
             get {
                 return ResourceManager.GetString("OpenPreferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose product activation key file.
+        /// </summary>
+        public static string OpenProductActivationKeyFile {
+            get {
+                return ResourceManager.GetString("OpenProductActivationKeyFile", resourceCulture);
             }
         }
         
@@ -18410,6 +18363,53 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ProcessingDotDotDot {
             get {
                 return ResourceManager.GetString("ProcessingDotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the product activation key will expire {1}.
+        ///
+        ///The product activation key covers a maximum of {2} active agents.
+        ///
+        ///The product activation key schema is &quot;{3}&quot;.
+        ///These options are activated:
+        ///{4}.
+        /// </summary>
+        public static string ProductActivationKey {
+            get {
+                return ResourceManager.GetString("ProductActivationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product activation key successfully applied.
+        ///Congratulations! You are now a licensed user of this award winning workforce management solution.
+        ///The application will now exit.
+        ///
+        ///Important:
+        ///In order to get all services and web applications to fully function and to get access to newly licensed options, please ask your IT to run &quot;Restart Teleopti WFM&quot; from the Teleopti folder in the Start Menu on the server..
+        /// </summary>
+        public static string ProductActivationKeyApplicationSuccess {
+            get {
+                return ResourceManager.GetString("ProductActivationKeyApplicationSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your product activation key has expired, please apply a new one.
+        /// </summary>
+        public static string ProductActivationKeyHasExpiredPleaseApplyANewOne {
+            get {
+                return ResourceManager.GetString("ProductActivationKeyHasExpiredPleaseApplyANewOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your product activation key is invalid, possibly modified, please apply a new one.
+        /// </summary>
+        public static string ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne {
+            get {
+                return ResourceManager.GetString("ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne", resourceCulture);
             }
         }
         
@@ -21587,17 +21587,17 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the license key will expire {1}.
+        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the product activation key will expire {1}.
         ///
-        ///The license covers a maximum of {2} seats.
+        ///The product activation key covers a maximum of {2} seats.
         ///
-        ///The license schema is &quot;{3}&quot;.
+        ///The product activation key schema is &quot;{3}&quot;.
         ///These options are activated:
         ///{4}.
         /// </summary>
-        public static string SeatLicense {
+        public static string SeatProductActivationKey {
             get {
-                return ResourceManager.GetString("SeatLicense", resourceCulture);
+                return ResourceManager.GetString("SeatProductActivationKey", resourceCulture);
             }
         }
         
@@ -24810,11 +24810,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Teleopti License Exception.
+        ///   Looks up a localized string similar to Teleopti Product Activation Key Exception.
         /// </summary>
-        public static string TeleoptiLicenseException {
+        public static string TeleoptiProductActivationKeyException {
             get {
-                return ResourceManager.GetString("TeleoptiLicenseException", resourceCulture);
+                return ResourceManager.GetString("TeleoptiProductActivationKeyException", resourceCulture);
             }
         }
         
@@ -25630,7 +25630,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a license that covers so many agents..
+        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a product activation key that covers so many agents..
         /// </summary>
         public static string TooManyAgentsIsUsedWarning {
             get {
@@ -26278,11 +26278,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License application failed.
+        ///   Looks up a localized string similar to Product activation key application failed.
         /// </summary>
-        public static string UploadingNewLicenseFailed {
+        public static string UploadingNewProductActivationKeyFailed {
             get {
-                return ResourceManager.GetString("UploadingNewLicenseFailed", resourceCulture);
+                return ResourceManager.GetString("UploadingNewProductActivationKeyFailed", resourceCulture);
             }
         }
         
@@ -28126,7 +28126,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have {0} active agents but you are licensed to have only {1}. Please upgrade your license key soon.
+        ///   Looks up a localized string similar to You have {0} active agents but you are licensed to have only {1}. Please upgrade your product activation key soon.
         /// </summary>
         public static string YouHaveAlmostTooManyActiveAgents {
             get {
@@ -28135,7 +28135,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have almost reached your licensed limit of {0} seats. Please upgrade your license key soon..
+        ///   Looks up a localized string similar to You have almost reached your licensed limit of {0} seats. Please upgrade your product activation key soon..
         /// </summary>
         public static string YouHaveAlmostTooManySeats {
             get {
@@ -28171,7 +28171,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have {0} active agents but you are licensed to have only {1}. You must upgrade your license key before you can continue.
+        ///   Looks up a localized string similar to You have {0} active agents but you are licensed to have only {1}. You must upgrade your product activation key before you can continue.
         /// </summary>
         public static string YouHaveTooManyActiveAgents {
             get {
@@ -28180,7 +28180,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using too many seats, you are licensed to have only {0}. You must upgrade your license key before you can continue.
+        ///   Looks up a localized string similar to You are using too many seats, you are licensed to have only {0}. You must upgrade your product activation key before you can continue.
         /// </summary>
         public static string YouHaveTooManySeats {
             get {
@@ -28252,15 +28252,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your license key is only valid until {0}, do not forget to renew it in time.
-        /// </summary>
-        public static string YourLicensWillExpireDoNotForgetToRenewItInTime {
-            get {
-                return ResourceManager.GetString("YourLicensWillExpireDoNotForgetToRenewItInTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Your password has already expired..
         /// </summary>
         public static string YourPasswordHasAlreadyExpired {
@@ -28311,6 +28302,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YourPreferencesCanResultXToYHours {
             get {
                 return ResourceManager.GetString("YourPreferencesCanResultXToYHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your product activation key is only valid until {0}, do not forget to renew it in time.
+        /// </summary>
+        public static string YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime {
+            get {
+                return ResourceManager.GetString("YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime", resourceCulture);
             }
         }
         

@@ -129,13 +129,13 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void Error(string error)
 		{
-			showApplyLicenseDialogAndExit(error);
+			showApplyProductActivationKeyDialogAndExit(error);
 		}
 
-		private void showApplyLicenseDialogAndExit(string explanation)
+		private void showApplyProductActivationKeyDialogAndExit(string explanation)
 		{
-			var applyLicense = new ApplyLicense(explanation, _model.SelectedDataSourceContainer.DataSource.Application);
-			applyLicense.ShowDialog(this);
+			var applyProductActivationKey = new ApplyProductActivationKey(explanation, _model.SelectedDataSourceContainer.DataSource.Application);
+			applyProductActivationKey.ShowDialog(this);
 			Application.Exit();
 		}
 

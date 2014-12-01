@@ -46,7 +46,7 @@
 			this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonAdvLegalNotice = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonAdvApplyLicense = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvApplyProductActivationKey = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
@@ -284,7 +284,7 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvLegalNotice, 1, 0);
-			this.tableLayoutPanel2.Controls.Add(this.buttonAdvApplyLicense, 2, 0);
+			this.tableLayoutPanel2.Controls.Add(this.buttonAdvApplyProductActivationKey, 2, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvOk, 3, 0);
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 298);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -313,24 +313,24 @@
 			this.buttonAdvLegalNotice.UseVisualStyleBackColor = true;
 			this.buttonAdvLegalNotice.Click += new System.EventHandler(this.buttonAdvLegalNoticeClick);
 			// 
-			// buttonAdvApplyLicense
+			// buttonAdvApplyProductActivationKey
 			// 
-			this.buttonAdvApplyLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvApplyLicense.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvApplyLicense.AutoSize = true;
-			this.buttonAdvApplyLicense.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvApplyLicense.BeforeTouchSize = new System.Drawing.Size(108, 27);
-			this.buttonAdvApplyLicense.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvApplyLicense.IsBackStageButton = false;
-			this.buttonAdvApplyLicense.Location = new System.Drawing.Point(230, 8);
-			this.buttonAdvApplyLicense.Name = "buttonAdvApplyLicense";
-			this.buttonAdvApplyLicense.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvApplyLicense.Size = new System.Drawing.Size(108, 27);
-			this.buttonAdvApplyLicense.TabIndex = 4;
-			this.buttonAdvApplyLicense.Text = "xxApplyLicense";
-			this.buttonAdvApplyLicense.UseVisualStyle = true;
-			this.buttonAdvApplyLicense.UseVisualStyleBackColor = true;
-			this.buttonAdvApplyLicense.Click += new System.EventHandler(this.buttonAdvApplyLicenseClick);
+			this.buttonAdvApplyProductActivationKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvApplyProductActivationKey.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvApplyProductActivationKey.AutoSize = true;
+			this.buttonAdvApplyProductActivationKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvApplyProductActivationKey.BeforeTouchSize = new System.Drawing.Size(108, 27);
+			this.buttonAdvApplyProductActivationKey.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvApplyProductActivationKey.IsBackStageButton = false;
+			this.buttonAdvApplyProductActivationKey.Location = new System.Drawing.Point(230, 8);
+			this.buttonAdvApplyProductActivationKey.Name = "buttonAdvApplyProductActivationKey";
+			this.buttonAdvApplyProductActivationKey.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvApplyProductActivationKey.Size = new System.Drawing.Size(108, 27);
+			this.buttonAdvApplyProductActivationKey.TabIndex = 4;
+			this.buttonAdvApplyProductActivationKey.Text = "xxApplyProductActivationKey";
+			this.buttonAdvApplyProductActivationKey.UseVisualStyle = true;
+			this.buttonAdvApplyProductActivationKey.UseVisualStyleBackColor = true;
+			this.buttonAdvApplyProductActivationKey.Click += new System.EventHandler(this.buttonAdvApplyProductActivationKeyClick);
 			// 
 			// buttonAdvOk
 			// 
@@ -404,7 +404,7 @@
 		private System.Windows.Forms.Label labelActiveAgentsOrSeats;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvViewActive;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvApplyLicense;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvApplyProductActivationKey;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvLegalNotice;
 	}

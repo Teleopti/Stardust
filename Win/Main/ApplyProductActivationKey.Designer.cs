@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Win.Main
 {
-    partial class ApplyLicense
+    partial class ApplyProductActivationKey
     {
         /// <summary>
         /// Required designer variable.
@@ -73,7 +73,7 @@
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(678, 38);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStartmenu";
 			this.ribbonControlAdv1.TabIndex = 0;
-			this.ribbonControlAdv1.Text = "xxApplyLicense";
+			this.ribbonControlAdv1.Text = "xxApplyProductActivationKey";
 			// 
 			// buttonAdvApply
 			// 
@@ -172,7 +172,7 @@
 			this.textBoxIntructions.ReadOnly = true;
 			this.textBoxIntructions.Size = new System.Drawing.Size(673, 361);
 			this.textBoxIntructions.TabIndex = 5;
-			this.textBoxIntructions.Text = "xxApplyLicenseInstructions";
+			this.textBoxIntructions.Text = "xxApplyProductActivationKeyInstructions";
 			// 
 			// tableLayoutPanel1
 			// 
@@ -196,7 +196,7 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(679, 482);
 			this.tableLayoutPanel1.TabIndex = 6;
 			// 
-			// ApplyLicense
+			// ApplyProductActivationKey
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -209,9 +209,9 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(239, 274);
-			this.Name = "ApplyLicense";
+			this.Name = "ApplyProductActivationKey";
 			this.ShowIcon = false;
-			this.Text = "xxApplyLicense";
+			this.Text = "xxApplyProductActivationKey";
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxExtLicenseFilePath)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);

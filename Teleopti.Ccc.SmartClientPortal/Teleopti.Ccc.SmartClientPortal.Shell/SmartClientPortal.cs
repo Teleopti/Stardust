@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			var about = new About();
 			about.ShowDialog();
-			if (about.LicenseWasApplied)
+			if (about.ProductActivationKeyWasApplied)
 			{
 				Close();
 			}

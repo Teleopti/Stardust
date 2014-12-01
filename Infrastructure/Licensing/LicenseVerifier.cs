@@ -39,24 +39,24 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 					if (licenseService.ExpirationDate.Subtract(licenseService.ExpirationGracePeriod) < DateTime.Now)
 					{
 						string warningMessage =
-							String.Format(CultureInfo.CurrentCulture, Resources.YourLicensWillExpireDoNotForgetToRenewItInTime,
+							String.Format(CultureInfo.CurrentCulture, Resources.YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime,
 										  licenseService.ExpirationDate);
                         _licenseFeedback.Warning(warningMessage, Resources.LogOn);
 					}
 				}
 				catch (LicenseMissingException)
 				{
-					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.NoLicensePleaseApplyANewOne);
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.NoProductActivationKeyPleaseApplyANewOne);
 					licenseService = null;
 				}
 				catch (SignatureValidationException)
 				{
-					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.LicenseIsInvalidPerhapsForgedPleaseApplyANewOne);
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne);
 					licenseService = null;
 				}
 				catch (LicenseExpiredException)
 				{
-					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.LicenseHasExpiredPleaseApplyANewOne);
+					_licenseFeedback.Error(_unitOfWorkFactory.Name + "\r\n" + Resources.ProductActivationKeyHasExpiredPleaseApplyANewOne);
 					licenseService = null;
 				}
 				catch (TooManyActiveAgentsException e)
@@ -68,12 +68,12 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				}
 				catch (XmlException)
 				{
-					_licenseFeedback.Error(Resources.LicenseIsInvalidPerhapsForgedPleaseApplyANewOne);
+					_licenseFeedback.Error(Resources.ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne);
 					licenseService = null;
 				}
 				catch (FormatException)
 				{
-					_licenseFeedback.Error(Resources.LicenseIsInvalidPerhapsForgedPleaseApplyANewOne);
+					_licenseFeedback.Error(Resources.ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne);
 					licenseService = null;
 				}
 				return licenseService;

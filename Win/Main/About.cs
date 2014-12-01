@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Win.Main
             {
                 options.AppendLine(option);
             }
-        	var licenseResource = Resources.License;
+        	var licenseResource = Resources.ProductActivationKey;
         	var max = license.MaxActiveAgents;
 
 			if(license.LicenseType == LicenseType.Seat)
 			{
-				licenseResource = Resources.SeatLicense;
+				licenseResource = Resources.SeatProductActivationKey;
 				max = license.MaxSeats;
 				labelActiveAgentsInUse.Text = "";
 				labelActiveAgentsOrSeats.Text = "";
@@ -81,19 +81,19 @@ namespace Teleopti.Ccc.Win.Main
             Close();
         }
 
-        private void buttonAdvApplyLicenseClick(object sender, EventArgs e)
+        private void buttonAdvApplyProductActivationKeyClick(object sender, EventArgs e)
         {
-            using (var applyLicense = new ApplyLicense("", UnitOfWorkFactory.Current))
+            using (var applyProductActivationKey = new ApplyProductActivationKey("", UnitOfWorkFactory.Current))
             {
-                if (applyLicense.ShowDialog(this) == DialogResult.OK)
+                if (applyProductActivationKey.ShowDialog(this) == DialogResult.OK)
                 {
-                    LicenseWasApplied = true;
+                    ProductActivationKeyWasApplied = true;
                 }
                 Close();
             }
         }
 
-        public bool LicenseWasApplied { get; private set; }
+        public bool ProductActivationKeyWasApplied { get; private set; }
 
         private void aboutLoad(object sender, EventArgs e)
         {

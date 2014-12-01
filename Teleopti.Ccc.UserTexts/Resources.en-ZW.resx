@@ -5652,11 +5652,11 @@ Availability</value>
     <value>The RTA state groups must be configured first.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Apply License</value>
     <comment>the license upload dialog window title</comment>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Instructions:
 * Buy a license (contact information here www.teleopti.com)
 * Receive license file (e.g. via mail)
@@ -5669,7 +5669,7 @@ Availability</value>
 * Start application again</value>
     <comment>instructions for applying license in license window</comment>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>License file "{0}" could not be accessed
 Error details: 
 {1}</value>
@@ -5685,36 +5685,36 @@ Error details:
     <value>Enter a valid file name, including path</value>
     <comment>file not found in license window</comment>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>License key successfully applied.
 Congratulations! You are now a licensed user of this award winning solution for workforce management.
 The application will now exit.
 You may then restart it. You may also have to restart MyTime to get access to newly licensed options.</value>
     <comment>license upload success message</comment>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Your license key has expired, please apply a new one</value>
     <comment>explanation for license failure in license window</comment>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Your license key is invalid, possibly modified, please apply a new one</value>
     <comment>explanation for modified license in license window</comment>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>The license "{0}" you are attempting to apply is old, it has already expired.</value>
     <comment>expiration exception for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>The license file "{0}" is invalid, it may be forged</value>
     <comment>SignatureValidationException for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>The license file "{0}" is not in a valid (xml) format
 Error details:
 {1}</value>
     <comment>Xml exception when parcing xml file in LogOnScreen</comment>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>You have not applied a license yet, please do so</value>
     <comment>explanation shown at first startup in license window</comment>
   </data>
@@ -5726,11 +5726,11 @@ Error details:
     <value>Success</value>
     <comment>Success</comment>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>License application failed</value>
     <comment>license application error dialog title</comment>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Your license key is only valid until {0}, do not forget to renew it in time</value>
     <comment>license expiration warning in LogOnScreen</comment>
   </data>
@@ -5749,7 +5749,7 @@ Error details:
     <value>About</value>
     <comment>About</comment>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Choose license file</value>
     <comment>open licese file dialog title</comment>
   </data>
@@ -5785,7 +5785,7 @@ Error details:
     <value>Someone changed the same data before you.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>This product is licensed to "{0}" until {1}.
 
 The license covers a maximum of {2} active employees.
@@ -5811,7 +5811,7 @@ These options are activated:
     <value>You have {0} active employees but you are licensed to have only {1}. You must upgrade your license key before you can continue</value>
     <comment>license error when maximum active agents have been exceeded</comment>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>This license only covers {0} active employees, but you have {1}. You must get a license that covers enough active agents</value>
     <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
@@ -6633,7 +6633,7 @@ These options are activated:
     <value>Interval stdev</value>
     <comment>Skill grid scheduler</comment>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Teleopti License Exception</value>
     <comment>Teleopti License Exception</comment>
   </data>

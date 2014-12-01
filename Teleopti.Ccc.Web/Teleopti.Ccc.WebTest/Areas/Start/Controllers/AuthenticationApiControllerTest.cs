@@ -150,8 +150,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			target.Response.StatusCode.Should().Be(400);
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.TeleoptiLicenseException);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.TeleoptiLicenseException);
+			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.TeleoptiProductActivationKeyException);
+			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.TeleoptiProductActivationKeyException);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

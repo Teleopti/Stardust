@@ -4332,10 +4332,10 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Grupy stanu RTA muszą być zdefiniowane wcześniej.</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Zainstaluj licencję</value>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Instrukcja:
 * Kup licencję (informacja na www.teleopti.com)
 * Odbierz licencję (np wysłaną emailem)
@@ -4347,7 +4347,7 @@
 * Zrestartuj "Mój czas" aby aktywowały się nowo zakupione opcje
 * Wystartu ponownie aplikację, nowe opcje będą dostępne</value>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Plik licencji "{0}" nie daje się otworzyć.
 Szczegóły błędu:
 {1}</value>
@@ -4360,30 +4360,30 @@ Szczegóły błędu:
   <data name="EnterValidFile" xml:space="preserve">
     <value>Podaj poprawną nazwę pliku ze ścieżką</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>Licencja poprawnie zainstalowana.
 Gratulacje! Jesten teraz licencjonowanym użytkownikiem tego wielokrotnie nagradzanego rozwiązania do zarządzania siłą roboczą.
 Nastąpi zamknięcie aplikacji.
 Możesz ją potem ponownie otworzyć. Może być konieczne także restartowanie "Mojego czasu" aby aktywowały się nowe opcje.</value>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Twoja licencja wygasła, zainstaluj nową.</value>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Twój klucz licencyjny jest błędy, możliwe że przerabiany lub uszkodzony. Zainstaluj nową licencję.</value>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>Licencja "{0}", którą próbujesz instalować, jest już nieaktualna i przeterminowana.</value>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>Plik licencyjny "{0}" jest błędny, możliwe że podrobiony.</value>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>Plik licencyjny "{0}" nie jest w poprawnym formacie XML.
 Szczegóły błędu:
 {1}</value>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Licencja nie została jeszcze zainstalowana. Należy to zrobić niezwłocznie</value>
   </data>
   <data name="NoSuchFile" xml:space="preserve">
@@ -4392,10 +4392,10 @@ Szczegóły błędu:
   <data name="Success" xml:space="preserve">
     <value>Sukces</value>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>Instalacja licencji nieudana</value>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Twój klucz licencyjny jest ważny do {0}, nie zapomnij go odnowić zanim wygaśnie</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
@@ -4413,7 +4413,7 @@ Szczegóły błędu:
   <data name="NameAlreadyExists" xml:space="preserve">
     <value>Nazwa już istnieje</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Wybierz plik licencyjny</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
@@ -4440,7 +4440,7 @@ Szczegóły błędu:
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
     <value>Ktoś zmienił te dane wcześniej.</value>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>Ten system jest licencjonowany dla "{0}" zgodnie z warunkami umowy licencyjnej a klucz wygaśnie {1}.
 
 Licencja zezwala na maksimum {2} aktywnych agentów.
@@ -4460,7 +4460,7 @@ Dostępne opcje: {4}</value>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
     <value>Masz {0} aktywnych agentów podczas gdy licencja jest tylko na {1}. Musisz dokupić licencje aby kontynuować</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Ta licencja zezwala tylko na {0} aktywnych agentów a zdefiniowane jest {1}. Musisz dokupić licencje na pełną liczbę aktywnych agentów</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
@@ -5054,7 +5054,7 @@ Dostępne opcje: {4}</value>
   <data name="IntervalStdev" xml:space="preserve">
     <value>Interwałowa standardowa dewiacja</value>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Wyjątek obsługi licencji Teleopti</value>
   </data>
   <data name="AddMeeting" xml:space="preserve">
@@ -7499,10 +7499,10 @@ Długoterminowy</value>
   <data name="SendASM" xml:space="preserve">
     <value>Wyślij wiadomość (ASM)</value>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Ta licencja udostępnia tylko {0} stanowisk. Musisz dokupić uprawnień na odpowiednią liczbę stanowisk.</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>Ten system jest licencjonowany dla "{0}" zgodnie z warunkami umowy licencyjnej a klucz licencji wygaśnie {1}.
 
 Licencja zezwala na {2} stanowisk.

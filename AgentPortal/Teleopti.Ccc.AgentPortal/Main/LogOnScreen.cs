@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     foreach (FaultDto exception in licenseVerificationResultDto.ExceptionCollection)
                     {
-                        MessageBoxHelper.ShowWarningMessage(this, exception.Message, UserTexts.Resources.TeleoptiLicenseException);
+                        MessageBoxHelper.ShowWarningMessage(this, exception.Message, UserTexts.Resources.TeleoptiProductActivationKeyException);
                     }
                 }
             }

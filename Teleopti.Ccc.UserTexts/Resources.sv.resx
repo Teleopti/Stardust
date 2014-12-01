@@ -5321,7 +5321,7 @@ tillgänglighet</value>
     <value>RTA-statusgrupper måste konfigureras före användning.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
     <value>Instruktioner:
 * Köp en licens (kontaktinformation här www.teleopti.se)
 * Ta emot licensfilen (t.ex. via e-post)
@@ -5334,7 +5334,7 @@ tillgänglighet</value>
 * Starta applikationen igen</value>
     <comment>instructions for applying license in license window</comment>
   </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Licensfilen "{0}" kunde inte läsas
 Feldetaljer: 
 {1}</value>
@@ -5350,7 +5350,7 @@ Feldetaljer:
     <value>Skriv in ett korrekt filnamn, inklusive folder</value>
     <comment>file not found in license window</comment>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>Installationen av licensen lyckades.
 Applikationen kommer att stängas. 
 
@@ -5358,29 +5358,29 @@ Viktigt:
 För att alla tjänster och webbapplikationer ska fungera normalt och för att aktivera nylicensierade tillval, var god kör "Restart Teleopti WFM" som du hittar i Teleopti-mappen i Startmenyn.</value>
     <comment>license upload success message</comment>
   </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Din licens gått ut, var god installera en ny</value>
     <comment>explanation for license failure in license window</comment>
   </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
     <value>Din licens är inte giltig, den kan vara olagligt ändrad, var god installera en ny</value>
     <comment>explanation for modified license in license window</comment>
   </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
     <value>Licensen "{0}" är gammal, den har redan gått ut.</value>
     <comment>expiration exception for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
     <value>Licensfilen "{0}" har inte ett giltigt format, den kan vara en förfalskning</value>
     <comment>SignatureValidationException for license file in LogOnScreen</comment>
   </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
     <value>Licensfilen "{0}" har inte ett giltigt (xml) format
 Feldetaljer:
 {1}</value>
     <comment>Xml exception when parcing xml file in LogOnScreen</comment>
   </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
     <value>Du har ingen licens installerad, var god installera en ny</value>
     <comment>explanation shown at first startup in license window</comment>
   </data>
@@ -5392,11 +5392,11 @@ Feldetaljer:
     <value>Lyckades</value>
     <comment>Success</comment>
   </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
     <value>Installation av licens misslyckades</value>
     <comment>license application error dialog title</comment>
   </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>Din licens går ut {0}, glöm inte att förnya i tid</value>
     <comment>license expiration warning in LogOnScreen</comment>
   </data>
@@ -5415,7 +5415,7 @@ Feldetaljer:
     <value>Om</value>
     <comment>About</comment>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Välj licensfil</value>
     <comment>open license file dialog title</comment>
   </data>
@@ -5455,7 +5455,7 @@ Feldetaljer:
     <value>Någon har ändrat samma data före dig.</value>
     <comment>Error message</comment>
   </data>
-  <data name="License" xml:space="preserve">
+  <data name="ProductActivationKey" xml:space="preserve">
     <value>Detta system är licensierat till "{0}" enligt villkoren i licensavtalet och licensnyckeln upphör att gälla {1}.
 
 Licensen täcker maximalt {2} aktiva agenter.
@@ -5476,7 +5476,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Ni har {0} aktiva agenter, men ni har licens för endast {1}. Ni måste utöka er licens innan ni kan fortsätta.</value>
     <comment>license error when maximum active agents have been exceeded</comment>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Denna licens täcker endast {0} aktiva agenter, men ni har {1}. Ni måste köpa en licens som täcker tillräckligt många aktiva agenter</value>
     <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
@@ -5993,7 +5993,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Bytet kunde inte genomföras</value>
     <comment>Swap cannot be performed</comment>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
+  <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Lägg på licens</value>
     <comment>Apply License</comment>
   </data>
@@ -6557,7 +6557,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Intervall standardavvikelse</value>
     <comment>Skill grid scheduler</comment>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
     <value>Fel i licenshanteringen</value>
     <comment>Teleopti License Exception</comment>
   </data>
@@ -9627,10 +9627,10 @@ period</comment>
     <value>Möten skapade av mig</value>
     <comment>Meetings created by me</comment>
   </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Den här licensen täcker endast {0} arbetsplatser. Du måste skaffa en licens som täcker tillräckligt många arbetsplatser.</value>
   </data>
-  <data name="SeatLicense" xml:space="preserve">
+  <data name="SeatProductActivationKey" xml:space="preserve">
     <value>Detta system är licensierat till "{0}" enligt villkoren i licensavtalet och licensnyckeln upphör att gälla {1}.
 
 Licensen täcker maximalt {2} arbetsplatser.
