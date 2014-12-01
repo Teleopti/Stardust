@@ -696,6 +696,7 @@
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValue.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueMapper.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePeriodValues.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGenerator.cs" />
