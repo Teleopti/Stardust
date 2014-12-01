@@ -23,18 +23,20 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 12:00',
-									Minutes: 60
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 12:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
@@ -53,18 +55,20 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 12:00',
-									Minutes: 60
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 12:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 
 					vm.AddingActivity(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
@@ -86,32 +90,34 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 12:00',
-									Minutes: 60
-								}
-							]
-						},
-						{
-							Date: '2014-06-15',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-15 22:00',
-									Minutes: 180
-								},
-								{
-									Start: '2014-06-16 01:00',
-									Minutes: 60
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 12:00',
+										Minutes: 60
+									}
+								]
+							},
+							{
+								Date: '2014-06-15',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-15 22:00',
+										Minutes: 180
+									},
+									{
+										Start: '2014-06-16 01:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
@@ -132,18 +138,20 @@
 						date: '20131118',
 						minutes: 840
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 240
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 240
+									}
+								]
+							}
+						]
+					};
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
@@ -159,19 +167,21 @@
 						groupid: 2,
 						minutes: 840
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 240,
+										ActivityId: "guid"
+									}
+								]
+							}
+						]
+					};
 					vm.MovingActivity(true);
 					vm.UpdateData({ PersonId: 1 });
 					vm.UpdateSchedules(data);
@@ -180,7 +190,7 @@
 					assert.equals(vm.MoveActivityForm.GroupId(), 2);
 					assert.equals(vm.MoveActivityForm.ScheduleDate().format('YYYY-MM-DD HH:mm'),'2013-11-18 00:00');
 					assert.equals(vm.MoveActivityForm.OldStartMinutes(), vm.SelectedStartMinutes());
-					assert.equals(vm.MoveActivityForm.ProjectionLength(), data[0].Projection[0].Minutes);
+					assert.equals(vm.MoveActivityForm.ProjectionLength(), data.Schedules[0].Projection[0].Minutes);
 				},
 
 				"should update starttime when DisplayedStartTime changes": function() {
@@ -192,22 +202,24 @@
 						groupid: 2,
 						minutes: 840
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 60
-								},
-								{
-									Start: '2013-11-18 15:00',
-									Minutes: 420
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 60
+									},
+									{
+										Start: '2013-11-18 15:00',
+										Minutes: 420
+									}
+								]
+							}
+						]
+					};
 					vm.MovingActivity(true);
 					vm.UpdateData({ PersonId: 1, Date: moment('20131118', 'YYYYMMDD'), IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
@@ -226,17 +238,19 @@
 						groupid: 2,
 						minutes: 840
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00'
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00'
+									}
+								]
+							}
+						]
+					};
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
@@ -255,19 +269,21 @@
 						groupid: 2,
 						minutes: 340
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 240,
+										ActivityId: "guid"
+									}
+								]
+							}
+						]
+					};
 
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
@@ -284,24 +300,26 @@
 						groupid: 2,
 						minutes: 840
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								},
-								{
-									Start: '2013-11-18 18:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 240,
+										ActivityId: "guid"
+									},
+									{
+										Start: '2013-11-18 18:00',
+										Minutes: 240,
+										ActivityId: "guid"
+									}
+								]
+							}
+						]
+					};
 					vm.MovingActivity(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
@@ -321,28 +339,30 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 8:00',
-									Minutes: 60
-								}
-							]
-						},
-						{
-							Date: '2014-06-16',
-							PersonId: 2,
-							Projection: [
-								{
-									Start: '2014-06-16 16:00',
-									Minutes: 20
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 8:00',
+										Minutes: 60
+									}
+								]
+							},
+							{
+								Date: '2014-06-16',
+								PersonId: 2,
+								Projection: [
+									{
+										Start: '2014-06-16 16:00',
+										Minutes: 20
+									}
+								]
+							}
+						]
+					};
 					vm.setTimelineWidth(600);
 					vm.AddingActivity(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
@@ -365,18 +385,20 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 8:00',
-									Minutes: 60
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 8:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 					vm.AddingActivity(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
 					vm.UpdateSchedules(data);
@@ -417,18 +439,20 @@
 						id: 1,
 						date: '20140616'
 					});
-					var data = [
-						{
-							Date: '2014-06-16',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2014-06-16 8:00',
-									Minutes: 60
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 8:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 					vm.setTimelineWidth(600);
 					vm.AddingIntradayAbsence(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
@@ -452,24 +476,26 @@
 						minutes: 840
 					});
 
-					var data = [
-						{
-							PersonId: 1,
-							Date: '2013-11-18',
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								},
-								{
-									Start: '2013-11-18 18:00',
-									Minutes: 240,
-									ActivityId: "guid"
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								PersonId: 1,
+								Date: '2013-11-18',
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 240,
+										ActivityId: "guid"
+									},
+									{
+										Start: '2013-11-18 18:00',
+										Minutes: 240,
+										ActivityId: "guid"
+									}
+								]
+							}
+						]
+					};
 
 					vm.MovingActivity(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul' });
@@ -489,18 +515,20 @@
 						groupid: 2,
 						minutes: 840
 					});
-					var data = [
-						{
-							Date: '2013-11-18',
-							PersonId: 1,
-							Projection: [
-								{
-									Start: '2013-11-18 14:00',
-									Minutes: 60
-								}
-							]
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								Date: '2013-11-18',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 14:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 					vm.MovingActivity(true);
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
@@ -526,23 +554,25 @@
 
 					vm.PersonId('1');
 
-					var data = [
-						{
-							PersonId: '2'
-						},
-						{
-							PersonId: '3'
-						},
-						{
-							PersonId: '3'
-						},
-						{
-							PersonId: '3'
-						},
-						{
-							PersonId: '2'
-						}
-					];
+					var data = {
+						Schedules: [
+							{
+								PersonId: '2'
+							},
+							{
+								PersonId: '3'
+							},
+							{
+								PersonId: '3'
+							},
+							{
+								PersonId: '3'
+							},
+							{
+								PersonId: '2'
+							}
+						]
+					};
 
 					vm.UpdateSchedules(data);
 
@@ -558,22 +588,24 @@
 				        groupid: 2,
 				        minutes: 1380
 				    });
-				    var data = [
-						{
-								Date: '2013-11-18',
-						    PersonId: 1,
-						    Projection: [
-								{
-								    Start: '2013-11-18 23:00',
-								    Minutes: 60
-								},
-                                {
-                                    Start: '2013-11-19 00:00',
-                                    Minutes: 60
-                                }
-						    ]
-						}
-				    ];
+				    var data = {
+					    Schedules: [
+						    {
+							    Date: '2013-11-18',
+							    PersonId: 1,
+							    Projection: [
+								    {
+									    Start: '2013-11-18 23:00',
+									    Minutes: 60
+								    },
+								    {
+									    Start: '2013-11-19 00:00',
+									    Minutes: 60
+								    }
+							    ]
+						    }
+					    ]
+				    };
 				    vm.MovingActivity(true);
 				    vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 				    vm.UpdateSchedules(data);
@@ -597,26 +629,28 @@
 				        groupid: 2,
 				        minutes: 0
 				    });
-				    var data = [
-						{
+					var data = {
+						Schedules: [
+							{
 								Date: '2013-11-18',
-						    PersonId: 1,
-						    Projection: [
-								{
-								    Start: '2013-11-18 23:00',
-								    Minutes: 60
-								},
-                                {
-                                    Start: '2013-11-19 00:00',
-                                    Minutes: 60
-                                },
-                                {
-                                    Start: '2013-11-19 01:00',
-                                    Minutes: 60
-                                }
-						    ]
-						}
-				    ];
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2013-11-18 23:00',
+										Minutes: 60
+									},
+									{
+										Start: '2013-11-19 00:00',
+										Minutes: 60
+									},
+									{
+										Start: '2013-11-19 01:00',
+										Minutes: 60
+									}
+								]
+							}
+						]
+					};
 				    vm.MovingActivity(true);
 				    vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 				    vm.UpdateSchedules(data);
