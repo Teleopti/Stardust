@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(OpenIdController));
 
 		public OpenIdController()
 			: this(
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		[ValidateInput(false)]
 		public ActionResult Provider()
 		{
-			_logger.Warn("Start of the OpenIdController.Provider()");
+			logger.Info("Start of the OpenIdController.Provider()");
 			var request = _openIdProvider.GetRequest();
 
 			// handles request from site
@@ -63,51 +63,113 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		[Authorize]
 		public ActionResult TriggerWindowsAuthorization()
 		{
+			logger.Info("Start of the OpenIdController.TriggerWindowsAuthorization()");
+
 			var useLocalhostIdentifierSetting = ConfigurationManager.AppSettings["UseLocalhostIdentifier"];
 			var useLocalhostIdentifier = !string.IsNullOrEmpty(useLocalhostIdentifierSetting) && bool.Parse(useLocalhostIdentifierSetting);
-				var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
-			_providerEndpointWrapper.PendingRequest = null;
-			if (useLocalhostIdentifier && idrequest.ProviderEndpoint != null)
+			if (useLocalhostIdentifier)
 			{
-				idrequest.ProviderEndpoint =
-					new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
-						new Uri(idrequest.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
-							.MakeRelativeUri(idrequest.ProviderEndpoint));
-				var realmUriField = typeof (Realm).GetField("uri", BindingFlags.NonPublic | BindingFlags.Instance);
-				var realmUri = (Uri)realmUriField.GetValue(idrequest.Realm);
-				
-				realmUri = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
-					new Uri(realmUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
-						.MakeRelativeUri(realmUri));
-				realmUriField.SetValue(idrequest.Realm,realmUri);
-			} 
-			if (idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler()) != RelyingPartyDiscoveryResult.Success)
+				return makeWindowsAuthenticationUsingLocalhostIdentifier();
+			}
+
+			return makeWindowsAuthentication();
+		}
+
+		private ActionResult makeWindowsAuthentication()
+		{
+			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
+			_providerEndpointWrapper.PendingRequest = null;
+
+			var relyingPartyDiscoveryResult = idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler());
+			if (relyingPartyDiscoveryResult != RelyingPartyDiscoveryResult.Success)
 			{
 				idrequest.IsAuthenticated = false;
+				logger.WarnFormat("The return url discovery failed with result {0}", relyingPartyDiscoveryResult);
 				return new EmptyResult();
 			}
+
 			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
 			if (windowsAccount != null)
 			{
-				_logger.Warn("Found WindowsAccount");
+				logger.Warn("Found WindowsAccount");
 				var currentHttp = _currentHttpContext.Current();
 				var userIdentifier =
 					currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" +
 					                                          Uri.EscapeDataString(windowsAccount.DomainName + "#" +
 					                                                               windowsAccount.UserName.Replace(".", "$$$")));
-				var identifier = new Uri(currentHttp.Request.Url,userIdentifier);
-				if (useLocalhostIdentifier)
-				{
-					identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"),
-						new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
-				}
+				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
 				_openIdProvider.SendResponse(idrequest);
 			}
 			else
 			{
-				_logger.Warn("NOT Found WindowsAccount");
+				logger.Warn("NOT Found WindowsAccount");
+				idrequest.IsAuthenticated = false;
+			}
+			return new EmptyResult();
+		}
+
+		private ActionResult makeWindowsAuthenticationUsingLocalhostIdentifier()
+		{
+			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
+			_providerEndpointWrapper.PendingRequest = null;
+
+			var requestMessageProperty = idrequest.GetType()
+				.GetProperty("RequestMessage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+			var requestMessage = requestMessageProperty.GetValue(idrequest, null);
+
+			var returnToProperty = requestMessage.GetType()
+				.GetProperty("ReturnTo", BindingFlags.Instance | BindingFlags.NonPublic);
+			var returnToUri = (Uri) returnToProperty.GetValue(requestMessage, null);
+
+			if (idrequest.ProviderEndpoint != null)
+			{
+				idrequest.ProviderEndpoint =
+					new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+						new Uri(idrequest.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+							.MakeRelativeUri(idrequest.ProviderEndpoint));
+				var realmUriField = typeof (Realm).GetField("uri", BindingFlags.NonPublic | BindingFlags.Instance);
+				var realmUri = (Uri) realmUriField.GetValue(idrequest.Realm);
+
+				realmUri = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+					new Uri(realmUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+						.MakeRelativeUri(realmUri));
+				realmUriField.SetValue(idrequest.Realm, realmUri);
+
+				var temporaryReturnToUri =
+					new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+						new Uri(returnToUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+							.MakeRelativeUri(returnToUri));
+				returnToProperty.SetValue(requestMessage, temporaryReturnToUri, null);
+			}
+			var relyingPartyDiscoveryResult = idrequest.IsReturnUrlDiscoverable(_openIdProvider.WebRequestHandler());
+			if (relyingPartyDiscoveryResult != RelyingPartyDiscoveryResult.Success)
+			{
+				idrequest.IsAuthenticated = false;
+				logger.WarnFormat("The return url discovery failed with result {0}", relyingPartyDiscoveryResult);
+				return new EmptyResult();
+			}
+			returnToProperty.SetValue(requestMessage, returnToUri, null);
+			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
+			if (windowsAccount != null)
+			{
+				logger.Warn("Found WindowsAccount");
+				var currentHttp = _currentHttpContext.Current();
+				var userIdentifier =
+					currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" +
+					                                          Uri.EscapeDataString(windowsAccount.DomainName + "#" +
+					                                                               windowsAccount.UserName.Replace(".", "$$$")));
+				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
+				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"),
+					new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
+				idrequest.LocalIdentifier = identifier;
+				idrequest.IsAuthenticated = true;
+				_openIdProvider.SendResponse(idrequest);
+			}
+			else
+			{
+				logger.Warn("NOT Found WindowsAccount");
 				idrequest.IsAuthenticated = false;
 			}
 			return new EmptyResult();

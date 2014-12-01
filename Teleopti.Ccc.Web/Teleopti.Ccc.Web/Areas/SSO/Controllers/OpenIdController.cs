@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
+using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider.Behaviors;
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IFormsAuthentication _formsAuthentication;
-		private static ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(OpenIdController));
 
 		public OpenIdController(IOpenIdProviderWapper openIdProvider, ICurrentHttpContext currentHttpContext,ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication)
 		{
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[ValidateInput(false)]
 		public ActionResult Provider()
 		{
-			_logger.Debug("Start of the OpenIdController.Provider()");
+			logger.Debug("Start of the OpenIdController.Provider()");
 			var request = _openIdProvider.GetRequest();
 			if (request != null)
 			{
@@ -164,21 +166,51 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				if (pending != null)
 				{
 					var useLocalhostIdentifier = ConfigurationManager.AppSettings.GetBoolSetting("UseLocalhostIdentifier");
+					Uri returnToUri = null;
+					object requestMessage = null;
+					PropertyInfo returnToProperty = null;
 					if (useLocalhostIdentifier && pending.ProviderEndpoint != null)
 					{
 						pending.ProviderEndpoint =
 							new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
 								new Uri(pending.ProviderEndpoint.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
 									.MakeRelativeUri(pending.ProviderEndpoint));
-					} 
 
-					if (pendingRequest.IsReturnUrlDiscoverable(_openIdProvider.Channel().WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
+						var realmUriField = typeof(Realm).GetField("uri", BindingFlags.NonPublic | BindingFlags.Instance);
+						var realmUri = (Uri)realmUriField.GetValue(pending.Realm);
+
+						realmUri = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+							new Uri(realmUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+								.MakeRelativeUri(realmUri));
+						realmUriField.SetValue(pending.Realm, realmUri);
+
+						var requestMessageProperty = pending.GetType()
+							.GetProperty("RequestMessage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+						requestMessage = requestMessageProperty.GetValue(pending, null);
+
+						returnToProperty = requestMessage.GetType()
+							.GetProperty("ReturnTo", BindingFlags.Instance | BindingFlags.NonPublic);
+						returnToUri = (Uri)returnToProperty.GetValue(requestMessage, null);
+
+						var temporaryReturnToUri =
+							new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
+								new Uri(returnToUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped))
+									.MakeRelativeUri(returnToUri));
+						returnToProperty.SetValue(requestMessage, temporaryReturnToUri, null);
+					}
+
+					var relyingPartyDiscoveryResult = pendingRequest.IsReturnUrlDiscoverable(_openIdProvider.Channel().WebRequestHandler);
+					if (relyingPartyDiscoveryResult != RelyingPartyDiscoveryResult.Success)
 					{
 						pending.IsAuthenticated = false;
+						logger.WarnFormat("The return url discovery failed with result {0}", relyingPartyDiscoveryResult);
 						response = null;
 						return false;
 					}
-
+					if (useLocalhostIdentifier)
+					{
+						returnToProperty.SetValue(requestMessage, returnToUri, null);
+					}
 					// If this is directed identity, or if the claimed identifier being checked is controlled by the current user...
 					if (pending.IsDirectedIdentity
 						|| UserControlsIdentifier(pending))

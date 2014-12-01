@@ -44,18 +44,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AuthBridge, Version=1.0.0.12, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.19\lib\net40\AuthBridge.dll</HintPath>
+    <Reference Include="AuthBridge">
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.20\lib\net40\AuthBridge.dll</HintPath>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.3.18, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AuthBridge.Web, Version=1.0.3.19, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.19\lib\net40\AuthBridge.Web.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.20\lib\net40\AuthBridge.Web.dll</HintPath>
     </Reference>
     <Reference Include="ClaimsPolicyEngine, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.19\lib\net40\ClaimsPolicyEngine.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.20\lib\net40\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -272,6 +270,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.9.0.min.map" />
+    <Content Include="Views\Web.config" />
     <Content Include="test-certificate.pfx" />
   </ItemGroup>
   <ItemGroup>
