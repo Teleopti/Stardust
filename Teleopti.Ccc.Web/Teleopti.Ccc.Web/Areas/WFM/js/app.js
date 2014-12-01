@@ -2,6 +2,8 @@
 
 var wfm = angular.module('wfm', [
     'ui.router',
+    'ui.bootstrap',
+    'ngMaterial',
     'angularMoment',
     'wfmCtrls'
 ]);
@@ -22,7 +24,7 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
     });
 }]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
     var timeout = Date.now() + 10000;
-	$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+    $rootScope.$on('$stateChangeStart', function (event, next, toParams) {
         if(Date.now() > timeout ) { // TODO : extract it in a service
             event.preventDefault();
             var context = $http.get('../../api/Forecasting/forecast');
@@ -34,11 +36,11 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
                 $state.go(next, toParams);
             });
         }
-	});
-	var ab1 = new ABmetrics();
-	ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
-	$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
-		ab1.sendPageView();
-	});
-	
+    });
+    var ab1 = new ABmetrics();
+    ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
+    $rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+        ab1.sendPageView();
+    });
+    
 }]);

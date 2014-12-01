@@ -2,25 +2,22 @@
     <div class="material-block-header" >
         <h4 class="material-title">Choose a period</h4>
     </div>
-    <div class="material-block-content" >
-        <form class="material-form forecasting-form">
-
-            <div class="group">
-                <input type="date" required ng-model="period.startDate" name="startDate">
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>Start date</label>
-            </div>
-
-            <div class="group">
-							<input type="date" required ng-model="period.endDate" name="endDate">
-                <span class="highlight"></span>
-                <span class="bar"></span>
-                <label>End date</label>
-            </div>
-            <button class="btn btn-primary material-btn material-depth-1 start-forecasting" ng-click="startPeriod(period)">Let's start</button>
-        </form>
-
+  <div class="material-block-content" >
+    
+    <div style="display:inline-block; min-height:290px;">
+      <h5>From {{period.startDate | date : format}}</h5>
+      <datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
     </div>
-    <div class="clearfix"></div>
-</div>
+    
+    <div style="display:inline-block; min-height:290px;">
+      <h5>To  {{period.endDate | date : format}}</h5>
+      <datepicker ng-model="period.endDate" min-date="startDate" show-weeks="true" class="well well-sm"></datepicker>
+    </div>
+    <div>
+      <!--<md-button class="md-raised md-primary  start-forecasting" ng-click="startPeriod(period)">Let's start</md-button>-->
+      <button class="btn btn-primary material-btn material-depth-1 start-forecasting" ng-click="startPeriod(period)">Let's start</button>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  
+  </div>

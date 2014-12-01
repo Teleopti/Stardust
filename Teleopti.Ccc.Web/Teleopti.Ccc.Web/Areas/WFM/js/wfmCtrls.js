@@ -14,9 +14,9 @@ wfmCtrls.controller('ForecastingCtrl', ['$scope', '$state',
             var endDate = moment().add(2, 'months').startOf('month').toDate();
             $scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 
-            $scope.startPeriod = function (period) {
-                $state.go('forecasting.run', {period: period}); //there's probably a better way to do that
-            }
+            $scope.startPeriod = function(period) {
+                $state.go('forecasting.run', { period: period }); //there's probably a better way to do that
+            };
         }]
 );
 
