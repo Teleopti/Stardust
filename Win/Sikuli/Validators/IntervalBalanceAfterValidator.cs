@@ -23,20 +23,15 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 				result.Details.AppendLine("Validator failure");
+				return result;
 			}
-			var checkResult = lowestIntervalBalances != null && checkInternalBalanceRuleBreaks(lowestIntervalBalances, 1);
-			result.Details.AppendLine("Details:");
-			if (checkResult)
-				result.Details.AppendLine("Lowest intra interval balance: OK");
-			else
-			{
-				result.Details.AppendLine("Lowest intra interval balance: Fail");
-				result.Result = SikuliValidationResult.ResultValue.Fail;
-			}
+			var resultValue = checkInternalBalanceRuleBreaks(lowestIntervalBalances, 1);
+			result.Result = resultValue;
+			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", resultValue));
 			return result;
 		}
 
-		private bool checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances, int numberOfAllowedRuleBreaks)
+		private SikuliValidationResult.ResultValue checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances, int numberOfAllowedRuleBreaks)
 		{
 			int numberOfRuleBreaks = 0;
 			const double limit = 0.8; 
@@ -46,9 +41,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				if (intervalBalance < limit)
 					numberOfRuleBreaks++;
 				if(numberOfRuleBreaks > numberOfAllowedRuleBreaks)
-					return false;
+					return SikuliValidationResult.ResultValue.Fail;
 			}
-			return true;
+			if (numberOfRuleBreaks > 0)
+				return SikuliValidationResult.ResultValue.Warn;
+			return SikuliValidationResult.ResultValue.Pass;
 		}
 	}
 }

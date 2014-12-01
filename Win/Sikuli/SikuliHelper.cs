@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 		{
 			if (!TestMode)
 				return;
-			var testView = new SikuliResultView { Header = "Loaded" };
+			var testView = new SikuliResultView {Header = "Loaded"};
 			testView.ShowDialog(owner);
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 		{
 			if (!TestMode)
 				return;
-			var testView = new SikuliResultView { Header = "Task Done" };
+			var testView = new SikuliResultView {Header = "Task Done"};
 			testView.ShowDialog(owner);
 		}
 
@@ -83,16 +83,18 @@ namespace Teleopti.Ccc.Win.Sikuli
 		{
 			if (!TestMode)
 				return;
-			if (_timer != null) 
+			if (_timer != null)
 				_timer.SetEnd();
-			var assertResult = validator.Validate();
+			var validationResult = validator.Validate();
 			if (_timer != null)
 			{
-				assertResult.Details.AppendLine(string.Format("Duration = {0}", _timer.GetDuration().ToString(@"mm\:ss")));
+				validationResult.Details.AppendLine(string.Format("Duration = {0}", _timer.GetDuration().ToString(@"mm\:ss")));
 				_timer = null;
 			}
-			var testView = 
-				new SikuliResultView { Header = "Task Done", Result = assertResult.Result, Details = assertResult.Details.ToString()};
+			var details = validationResult.Details.ToString();
+			if (string.IsNullOrWhiteSpace(details))
+				details = details.Insert(0, "Details:\n");
+			var testView = new SikuliResultView { Header = "Task Done", Result = validationResult.Result, Details = details };
 			testView.ShowDialog(owner);
 			CurrentValidator = SikuliValidatorRegister.None;
 		}

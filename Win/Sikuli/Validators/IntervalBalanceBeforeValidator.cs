@@ -28,16 +28,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 				result.Details.AppendLine("Validator failure");
+				return result;
 			}
-			var checkResult = lowestIntervalBalances != null && lowestIntervalBalances.Any(c => c > 0 && c < 0.8);
-			result.Details.AppendLine("Details:");
-			if (checkResult)
-				result.Details.AppendLine("Lowest intra interva balance: OK");
-			else
-			{
-				result.Details.AppendLine("Lowest intra interva balance: Fail");
+			var checkResult = lowestIntervalBalances.Any(c => c > 0 && c < 0.8);
+			if (!checkResult)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
-			}
+			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
 			return result;
 		}
 	}

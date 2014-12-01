@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -24,14 +21,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
 			var checkResult = checkScheduledHoursPatternForScheduler(scheduledHours);
-			result.Details.AppendLine("Details:");
-			if (checkResult)
-				result.Details.AppendLine("Scheduled hours pattern : OK");
-			else
-			{
-				result.Details.AppendLine("Scheduled hours pattern : Fail");
+			if (!checkResult)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
-			}
+			result.Details.AppendLine(string.Format("Scheduled hours pattern : {0}", result.Result));
 			return result;
 		}
 
