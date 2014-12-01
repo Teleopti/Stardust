@@ -26,6 +26,7 @@
 		<CCNetProject>CCC-Main-MSI</CCNetProject>
 		
 		<CCCVersion>xxx.xxx.xxx</CCCVersion> <!-- must be set from caller of this script! -->
+		<CCCChangeset></CccVersion> <!-- should be set from caller of this script! -->
 		<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
 		<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
 	</PropertyGroup>
@@ -489,6 +490,7 @@
 		<Message Importance="high" Text="make folder ..."/>
 		<Exec Command="if not exist &quot;$(MSIPath)&quot; mkdir &quot;$(MSIPath)&quot;"/>
 		<Message Importance="high" Text="make folderWiki. Done!"/>
+		<CallTarget Targets="CreateHgChangesetFile" />
 	
 		<Copy SourceFiles="@(PreReq)"
 			  DestinationFiles="@(PreReq->'$(MSIPath)\%(RecursiveDir)%(Filename)%(Extension)')"/>
@@ -499,5 +501,9 @@
 			  
 		<Message Text="Copying files to $(DeployPath). Done"/>
 	</Target>
-
+	
+	<Target Name="CreateHgChangesetFile" Condition="'$(CCCChangeset)'!=''">
+		<WriteLinesToFile File="$(MSIPath)\lastchangeset.txt"
+						Lines="$(CCCChangeset)" />
+	</Target>
 </Project>
