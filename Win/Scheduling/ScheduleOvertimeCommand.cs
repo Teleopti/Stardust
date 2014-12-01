@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IProjectionProvider _projectionProvider;
         private BackgroundWorker _backgroundWorker;
-        private IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
+        private readonly IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
 	    private SchedulingServiceBaseEventArgs _progressEvent;
 
         public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
@@ -75,26 +75,31 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
                     var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;
                     //Calculate best length (if any) for overtime
-                    var overtimeLayerLength = _overtimeLengthDecider.Decide(person, dateOnly, scheduleEndTime,
+                    var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleEndTime,
                                                                             overtimePreferences.SkillActivity,
                                                                             new MinMax<TimeSpan>(
                                                                                 overtimePreferences.SelectedTimePeriod.StartTime,
                                                                                 overtimePreferences.SelectedTimePeriod.EndTime));
-                    if (overtimeLayerLength == TimeSpan.Zero)
-                        continue;
 
+					if(overtimeLayerLengthPeriods.Count == 0)
+						continue;
+	                
+					
                     if (overtimePreferences.AvailableAgentsOnly)
                     {
-                        overtimeLayerLength = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), overtimeLayerLength, scheduleEndTime);
-                        if (overtimeLayerLength == TimeSpan.Zero)
-                            continue;
+                        overtimeLayerLengthPeriods = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), overtimeLayerLengthPeriods, scheduleEndTime);
+                        if(overtimeLayerLengthPeriods.Count == 0)
+							continue;
                     }
                     
-                    //extend shift
-                    var overtimeLayerPeriod = new DateTimePeriod(scheduleEndTime, scheduleEndTime.Add(overtimeLayerLength));
-                    scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
-                                                     overtimeLayerPeriod,
-                                                     overtimePreferences.OvertimeType);
+                  
+	                foreach (var overtimeLayerLengthPeriod in overtimeLayerLengthPeriods)
+	                {
+						scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
+													 overtimeLayerLengthPeriod,
+													 overtimePreferences.OvertimeType);
+	                }
+					
                     var rules = NewBusinessRuleCollection.Minimum();
                     if (!overtimePreferences.AllowBreakNightlyRest)
                         rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IAnalyzePersonAccordingToAvailability
     {
-        TimeSpan AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, TimeSpan overtimeLayerLength, DateTime shiftEndTime);
+		IList<DateTimePeriod> AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, IList<DateTimePeriod> overtimeLayerLengthPeriods, DateTime shiftEndTime);
     }
 
     public class AnalyzePersonAccordingToAvailability : IAnalyzePersonAccordingToAvailability
@@ -20,13 +18,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _adjustOvertimeLengthBasedOnAvailability = adjustOvertimeLengthBasedOnAvailability;
         }
 
-        public TimeSpan AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, TimeSpan overtimeLayerLength, DateTime shiftEndTime)
+		public IList<DateTimePeriod> AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, IList<DateTimePeriod> overtimeLayerLengthPeriods, DateTime shiftEndTime)
         {
+			var adjustedList = new List<DateTimePeriod>();
+
             var ovrtimeCollectionForPerson = scheduleDay.OvertimeAvailablityCollection();
-            if (ovrtimeCollectionForPerson.Count == 0) return TimeSpan.Zero;
+            if (ovrtimeCollectionForPerson.Count == 0) return adjustedList;
             var overtimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly.Date.Add(ovrtimeCollectionForPerson[0].StartTime.GetValueOrDefault()),
                                                                 dateOnly.Date.Add(ovrtimeCollectionForPerson[0].EndTime.GetValueOrDefault( )),timeZoneInfo);
-            return  _adjustOvertimeLengthBasedOnAvailability.AdjustOvertimeDuration(overtimePeriod, overtimeLayerLength, shiftEndTime);
+
+
+			foreach (var overtimeLayerLengthPeriod in overtimeLayerLengthPeriods)
+			{
+				var adjustedPeriod = _adjustOvertimeLengthBasedOnAvailability.AdjustOvertimeDuration(overtimePeriod, overtimeLayerLengthPeriod, shiftEndTime);
+				if (adjustedPeriod.HasValue)
+				{
+					adjustedList.Add(adjustedPeriod.Value);
+				}
+			}
+
+			return adjustedList;
         }
     }
 }

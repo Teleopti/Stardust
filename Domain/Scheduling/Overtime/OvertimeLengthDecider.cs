@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IOvertimeLengthDecider
     {
-        TimeSpan Decide(IPerson person, DateOnly dateOnly, DateTime overtimeStartTime, IActivity activity,
+		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, DateTime overtimeStartTime, IActivity activity,
                              MinMax<TimeSpan> duration);
     }
 
@@ -37,13 +37,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _calculateBestOvertime = calculateBestOvertime;
         }
 
-        public TimeSpan Decide(IPerson person, DateOnly dateOnly, DateTime overtimeStartTime, IActivity activity, MinMax<TimeSpan> duration)
+        public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, DateTime overtimeStartTime, IActivity activity, MinMax<TimeSpan> duration)
         {
+	        var result = new List<DateTimePeriod>();
+
             var skills = aggregateSkills(person, dateOnly).Where(x => x.Activity == activity).ToList();
-            if (skills.Count == 0) return TimeSpan.Zero;
+            if (skills.Count == 0) return result;
             var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
-            if (skillDays == null) return TimeSpan.Zero;
+            if (skillDays == null) return result;
             
             IList<IList<IOvertimeSkillIntervalData>> nestedList = new List<IList<IOvertimeSkillIntervalData>>();
             foreach (var personsActiveSkill in skills)
@@ -59,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
             var aggregatedMappedData  = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(nestedList);
 
-            return _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), overtimeStartTime, minimumResolution);
+			result = _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), overtimeStartTime, minimumResolution);
+	        return result;
         }
 
         private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)

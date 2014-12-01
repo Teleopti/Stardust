@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface ICalculateBestOvertime
     {
-        TimeSpan GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, DateTime shiftEndingTime, int minimumResolution);
+        List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, DateTime shiftEndingTime, int minimumResolution);
     }
 
     public class CalculateBestOvertime : ICalculateBestOvertime
     {
 
-        public TimeSpan GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, DateTime shiftEndingTime, int minimumResolution)
+		public List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, DateTime shiftEndingTime, int minimumResolution)
         {
             var possibleOvertimeDurationsToCalculate = new List<TimeSpan>();
             for (int minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
@@ -42,8 +42,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                     lowestValueDuration = duration;
                 }
             }
-            return lowestValueDuration;
 
+			var dateTimePeriod = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(lowestValueDuration));
+			return new List<DateTimePeriod> { dateTimePeriod };
         }
 
         private bool checkIfPeriodExistsInMappedData(IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, DateTimePeriod period)

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -50,123 +48,123 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
                                                 _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder, _calculateBestOvertime, _overtimePeriodValueMapper,_overtimeSkillIntervalDataAggregator  );
         }
 
-        [Test]
-        public void ShouldBeZeroIfPersonHasNoSkillOfOneActivity()
-        {
-            var result = _target.Decide(_person, DateOnly.Today, new DateTime(),
-                                        ActivityFactory.CreateActivity("No Match Acitivity"),
-                                        new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
-            Assert.That(result, Is.EqualTo(TimeSpan.Zero));
-        }
+		[Test]
+		public void ShouldBeZeroIfPersonHasNoSkillOfOneActivity()
+		{
+			var result = _target.Decide(_person, DateOnly.Today, new DateTime(),
+										ActivityFactory.CreateActivity("No Match Acitivity"),
+										new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
+			Assert.That(result.Count, Is.EqualTo(0));
+		}
 
 
-        [Test]
-        public void ShouldNotExtendWhenRelativeDifferenceIsPositive()
-        {
-            var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0, 1);
-            var skillIntervalData2 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30)), 0, 1);
-            var skillIntervalData3 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45)), 0, 2);
-            var skillIntervalData4 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60)), 0, 3);
-            var skillIntervalData5 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), 2, 4);
-            var skillIntervalData6 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)), 1, 5);
-            var skillIntervalData7 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), -3, 6);
-            MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
-            var skillIntervalDataList = new[]
-                {
-                    skillIntervalData1, skillIntervalData2, skillIntervalData3, skillIntervalData4, skillIntervalData5,
-                    skillIntervalData6, skillIntervalData7
-                };
+		[Test]
+		public void ShouldNotExtendWhenRelativeDifferenceIsPositive()
+		{
+			var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0, 1);
+			var skillIntervalData2 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30)), 0, 1);
+			var skillIntervalData3 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45)), 0, 2);
+			var skillIntervalData4 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60)), 0, 3);
+			var skillIntervalData5 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(75)), 2, 4);
+			var skillIntervalData6 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)), 1, 5);
+			var skillIntervalData7 = new OvertimeSkillIntervalData(new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(105)), -3, 6);
+			MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2));
+			var skillIntervalDataList = new[]
+				{
+					skillIntervalData1, skillIntervalData2, skillIntervalData3, skillIntervalData4, skillIntervalData5,
+					skillIntervalData6, skillIntervalData7
+				};
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
-                              Return(new List<ISkillDay> { _skillDay1 });
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+							  Return(new List<ISkillDay> { _skillDay1 });
 
-                Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-                Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
-                     skillIntervalDataList).Repeat.AtLeastOnce();
-                Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
-                         Return(skillIntervalDataList).Repeat.AtLeastOnce();
-                Expect.Call(_skillDay1.Skill).Return(_skill1);
-                Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
-                      .IgnoreArguments()
-                      .Return(TimeSpan.Zero);
-                Expect.Call(
-                    _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
-                        new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-            }
-            using (_mocks.Playback())
-            {
+				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+					 skillIntervalDataList).Repeat.AtLeastOnce();
+				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
+						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
+				Expect.Call(_skillDay1.Skill).Return(_skill1);
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
+					  .IgnoreArguments()
+					  .Return(new List<DateTimePeriod>());
+				Expect.Call(
+					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
+						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
+			}
+			using (_mocks.Playback())
+			{
 
-                var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity,
-                                                                  duration);
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity,
+																  duration);
 
-                Assert.That(resultLength, Is.EqualTo(TimeSpan.Zero));
-            }
-        }
+				Assert.That(resultLength.Count, Is.EqualTo(0));
+			}
+		}
 
-        [Test]
-        public void ShouldNotExtendWhenSpecifiedDurationIsZero()
-        {
+		[Test]
+		public void ShouldNotExtendWhenSpecifiedDurationIsZero()
+		{
 
-            var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0, 1);
-            var skillIntervalDataList = new List<IOvertimeSkillIntervalData>() { skillIntervalData1 };
-            MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
-            using (_mocks.Record())
-            {
-                Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
-                              Return(new List<ISkillDay> { _skillDay1 });
-                Expect.Call(_skillDay1.Skill).Return(_skill1);
-                Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
-                     skillIntervalDataList).Repeat.AtLeastOnce();
-                Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
-                         Return(skillIntervalDataList).Repeat.AtLeastOnce();
-                Expect.Call(
-                    _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
-                        new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-                Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
-                      .IgnoreArguments()
-                      .Return(TimeSpan.Zero);
-                
-                
-            }
-            using (_mocks.Playback())
-            {
-                var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity, duration);
+			var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0, 1);
+			var skillIntervalDataList = new List<IOvertimeSkillIntervalData>() { skillIntervalData1 };
+			MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
+			using (_mocks.Record())
+			{
+				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+							  Return(new List<ISkillDay> { _skillDay1 });
+				Expect.Call(_skillDay1.Skill).Return(_skill1);
+				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+					 skillIntervalDataList).Repeat.AtLeastOnce();
+				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
+						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
+				Expect.Call(
+					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
+						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
+					  .IgnoreArguments()
+					  .Return(new List<DateTimePeriod>());
 
-                Assert.That(resultLength, Is.EqualTo(TimeSpan.Zero));
-            }
-        }
 
-        [Test]
-        public void ShouldReturnZeroIfNoForecastIsAvailable()
-        {
+			}
+			using (_mocks.Playback())
+			{
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity, duration);
 
-            var skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-            MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
-                              Return(new List<ISkillDay> { _skillDay1 });
+				Assert.That(resultLength.Count, Is.EqualTo(0));
+			}
+		}
 
-                Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-                Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
-                     skillIntervalDataList).Repeat.AtLeastOnce();
-                Expect.Call(_skillDay1.Skill).Return(_skill1);
-                Expect.Call(
-                    _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
-                        new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-                Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
-                      .IgnoreArguments()
-                      .Return(TimeSpan.Zero);
-            }
-            using (_mocks.Playback())
-            {
-                var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity, duration);
+		[Test]
+		public void ShouldReturnZeroIfNoForecastIsAvailable()
+		{
 
-                Assert.That(resultLength, Is.EqualTo(TimeSpan.Zero));
-            }
-        }
+			var skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
+			MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+							  Return(new List<ISkillDay> { _skillDay1 });
+
+				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+					 skillIntervalDataList).Repeat.AtLeastOnce();
+				Expect.Call(_skillDay1.Skill).Return(_skill1);
+				Expect.Call(
+					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
+						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
+					  .IgnoreArguments()
+					  .Return(new List<DateTimePeriod>());
+			}
+			using (_mocks.Playback())
+			{
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity, duration);
+
+				Assert.That(resultLength.Count, Is.EqualTo(0));
+			}
+		}
     }
 }

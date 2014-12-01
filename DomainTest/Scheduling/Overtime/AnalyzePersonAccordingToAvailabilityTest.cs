@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -33,38 +32,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _target = new AnalyzePersonAccordingToAvailability(_adjustOvertimeLengthBasedOnAvailability);
         }
 
-        [Test]
-        public void NoOvertimeIfThereIsNoAvailability()
-        {
-            var shiftEndTime = new DateTime(2014,03,05,15,30,0,DateTimeKind.Utc );
-            using (_mock.Record())
-            {
-                Expect.Call(_scheduleDay.OvertimeAvailablityCollection())
-                      .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>()));
-            }
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(TimeSpan.Zero, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, TimeSpan.FromHours(2), shiftEndTime));
-            }
-            
-        }
+		[Test]
+		public void NoOvertimeIfThereIsNoAvailability()
+		{
+			var shiftEndTime = new DateTime(2014, 03, 05, 15, 30, 0, DateTimeKind.Utc);
+			var overtimePeriod = new DateTimePeriod(shiftEndTime, shiftEndTime.Add(TimeSpan.FromHours(2)));
+			var overtimePeriods = new List<DateTimePeriod> {overtimePeriod};
 
-        [Test]
-        public void ShouldReturnAdjustedOvertime()
-        {
-            var shiftEndTime = new DateTime(2014, 03, 05, 15, 30, 0, DateTimeKind.Utc);
-            IOvertimeAvailability overtimeAvailability = new OvertimeAvailability(_person,_today,TimeSpan.FromHours(11),TimeSpan.FromHours(12));
-            using (_mock.Record())
-            {
-                
-                Expect.Call(_scheduleDay.OvertimeAvailablityCollection())
-                      .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>(){overtimeAvailability }));
-            }
-            using (_mock.Playback())
-            {
-                Assert.AreEqual(TimeSpan.Zero, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, TimeSpan.FromHours(2), shiftEndTime));
-            }
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.OvertimeAvailablityCollection())
+					  .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>()));
+			}
+			using (_mock.Playback())
+			{
+				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods, shiftEndTime).Count());
+			}
 
-        }
+		}
+
+		[Test]
+		public void ShouldReturnAdjustedOvertime()
+		{
+			var shiftEndTime = new DateTime(2014, 03, 05, 15, 30, 0, DateTimeKind.Utc);
+			IOvertimeAvailability overtimeAvailability = new OvertimeAvailability(_person, _today, TimeSpan.FromHours(11), TimeSpan.FromHours(12));
+
+			var overtimePeriod = new DateTimePeriod(shiftEndTime, shiftEndTime.Add(TimeSpan.FromHours(2)));
+			var overtimePeriods = new List<DateTimePeriod> { overtimePeriod };
+
+			using (_mock.Record())
+			{
+
+				Expect.Call(_scheduleDay.OvertimeAvailablityCollection())
+					  .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>() { overtimeAvailability }));
+			}
+			using (_mock.Playback())
+			{
+				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods, shiftEndTime).Count);
+			}
+
+		}
     }
 }

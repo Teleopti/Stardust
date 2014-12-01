@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Interfaces.Domain;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var oneHourTimeSpan = new TimeSpan(0, 1, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(oneHourTimeSpan, oneHourTimeSpan);
 
-            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15), oneHourTimeSpan);
+            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15).First().ElapsedTime(), oneHourTimeSpan);
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var oneHourTimeSpan = new TimeSpan(0, 0, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(oneHourTimeSpan, oneHourTimeSpan.Add(TimeSpan.FromHours(1)));
 
-            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15), oneHourTimeSpan.Add(TimeSpan.FromHours(1)));
+            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15).First().ElapsedTime(), oneHourTimeSpan.Add(TimeSpan.FromHours(1)));
         }
 
         [Test]
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 1, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15), overtimeLimitEndTimeSpan);
+            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15).First().ElapsedTime(), overtimeLimitEndTimeSpan);
         }
 
         [Test]
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 3, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(new TimeSpan(0, 1, 30, 0), _target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(new TimeSpan(0, 1, 30, 0), _target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15).First().ElapsedTime());
         }
 
         [Test]
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 3, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15), TimeSpan.Zero);
+            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _mappedData, _shiftEndingTime, 15).First().ElapsedTime(), TimeSpan.Zero);
         }
 
         [Test]
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             mappedData.Add(new OvertimePeriodValue(_period3, 5.98));
             mappedData.Add(new OvertimePeriodValue(_period4, 3.55));
 
-            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15), TimeSpan.Zero);
+            Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime(), TimeSpan.Zero);
         }
 
         [Test]
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             mappedData.Add(new OvertimePeriodValue(_period3, -1));
             mappedData.Add(new OvertimePeriodValue(_period4, -3.55));
 
-            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime());
         }
 
         [Test]
@@ -132,13 +133,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 0, 30, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(TimeSpan.FromMinutes(15), _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(TimeSpan.FromMinutes(15), _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime());
 
             overtimeLimitStartTimeSpan = new TimeSpan(0, 0, 30, 0);
             overtimeLimitEndTimeSpan = new TimeSpan(0, 0, 30, 0);
             overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime());
         }
 
         [Test]
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 1, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime());
         }
 
         [Test]
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 1, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(TimeSpan.FromHours(1), _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(TimeSpan.FromHours(1), _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime());
         }
 
         [Test]
@@ -186,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             var overtimeLimitEndTimeSpan = new TimeSpan(0, 0, 0, 0);
             var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
 
-            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15));
+            Assert.AreEqual(TimeSpan.Zero, _target.GetBestOvertime(overtimeDurantion, mappedData, _shiftEndingTime, 15).First().ElapsedTime());
         }
     }
 
