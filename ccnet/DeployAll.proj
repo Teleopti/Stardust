@@ -26,7 +26,7 @@
 		<CCNetProject>CCC-Main-MSI</CCNetProject>
 		
 		<CCCVersion>xxx.xxx.xxx</CCCVersion> <!-- must be set from caller of this script! -->
-		<CCCChangeset></CccVersion> <!-- should be set from caller of this script! -->
+		<CCCChangeset></CCCChangeset> <!-- should be set from caller of this script! -->
 		<DeployPath>$(DeployShare)\$(CCCVersion)</DeployPath>
 		<MSIPath>$(MSIShare)\$(CCCVersion)</MSIPath>
 	</PropertyGroup>
