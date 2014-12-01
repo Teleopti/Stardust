@@ -118,8 +118,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 								_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, endDayOfWeek
 												, rollbackService, selectedPeriod);
 								endDayOfWeek = endDayOfWeek.AddDays(-1);
-							}
-							
+								if(endDayOfWeek < personWeek.Week.StartDate)
+									break;
+							}						
 						}
 						else
 						{
