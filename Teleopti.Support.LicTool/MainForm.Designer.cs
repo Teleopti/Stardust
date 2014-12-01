@@ -210,11 +210,11 @@
 			// 
 			this.btnLoadLicenseFile.Location = new System.Drawing.Point(19, 39);
 			this.btnLoadLicenseFile.Name = "btnLoadLicenseFile";
-			this.btnLoadLicenseFile.Size = new System.Drawing.Size(97, 26);
+			this.btnLoadLicenseFile.Size = new System.Drawing.Size(150, 26);
 			this.btnLoadLicenseFile.TabIndex = 1;
-			this.btnLoadLicenseFile.Text = "Load license";
+			this.btnLoadLicenseFile.Text = "Load product activation key";
 			this.btnLoadLicenseFile.UseVisualStyleBackColor = true;
-			this.btnLoadLicenseFile.Click += new System.EventHandler(this.LoadLicenseFile_Click);
+			this.btnLoadLicenseFile.Click += new System.EventHandler(this.LoadProductActivationKeyFile_Click);
 			// 
 			// btnClearSettings
 			// 
@@ -228,7 +228,7 @@
 			// 
 			// btnDemoSettings
 			// 
-			this.btnDemoSettings.Location = new System.Drawing.Point(159, 39);
+			this.btnDemoSettings.Location = new System.Drawing.Point(188, 40);
 			this.btnDemoSettings.Name = "btnDemoSettings";
 			this.btnDemoSettings.Size = new System.Drawing.Size(93, 26);
 			this.btnDemoSettings.TabIndex = 2;
@@ -510,7 +510,7 @@
 			this.loadLicenseToolStripMenuItem.Name = "loadLicenseToolStripMenuItem";
 			this.loadLicenseToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.loadLicenseToolStripMenuItem.Text = "Load license";
-			this.loadLicenseToolStripMenuItem.Click += new System.EventHandler(this.loadLicenseToolStripMenuItem_Click);
+			this.loadLicenseToolStripMenuItem.Click += new System.EventHandler(this.loadProductActivationKeyToolStripMenuItem_Click);
 			// 
 			// createAndSaveToolStripMenuItem
 			// 
@@ -676,7 +676,7 @@
 			this.Controls.Add(this.menuTopmenu);
 			this.MainMenuStrip = this.menuTopmenu;
 			this.Name = "MainForm";
-			this.Text = "WFM License Tool";
+			this.Text = "WFM Product Activation Key Tool";
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).EndInit();

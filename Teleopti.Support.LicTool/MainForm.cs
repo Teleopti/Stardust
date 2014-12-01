@@ -122,7 +122,7 @@ namespace Teleopti.Support.LicTool
 
 		private void EnterDemoSettings()
 		{
-			txtbxCustomerName.Text = "Demo license! For internal use only!";
+			txtbxCustomerName.Text = "Demo product activation key! For internal use only!";
 			numExpirationGracePeriodDays.Value = 30;
 			numMaxActiveAgents.Value = 100;
 			numMaxActiveAgentsGrace.Value = 10;
@@ -141,7 +141,7 @@ namespace Teleopti.Support.LicTool
 
 		private void EnterFreemiumSettings()
 		{
-			txtbxCustomerName.Text = "Freemium license";
+			txtbxCustomerName.Text = "Freemium product activation key";
 			numExpirationGracePeriodDays.Value = 30;
 			numMaxActiveAgents.Value = 1;
 			numMaxActiveAgentsGrace.Value = 10;
@@ -159,7 +159,7 @@ namespace Teleopti.Support.LicTool
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-		private void LicenseFileLoad()
+		private void ProductActivationKeyFileLoad()
 		{
 			using (var openFileDialog = new OpenFileDialog())
 			{
@@ -225,8 +225,8 @@ namespace Teleopti.Support.LicTool
 
 						if (xlic.SchemaName != "TeleoptiCCC" && xlic.SchemaName != "TeleoptiCCCFreemium" && xlic.SchemaName != "TeleoptiWFM")
 						{
-							MessageBox.Show("Sorry, this tool can only handle TeleoptiCCC licenses.\nPlease choose another!",
-								"Not a TeleoptiCCC license", MessageBoxButtons.OK);
+							MessageBox.Show("Sorry, this tool can only handle Teleopti WFM product activation keys.\nPlease choose another!",
+								"Not a Teleopti WFM product activation key", MessageBoxButtons.OK);
 							Initialize_form();
 						}
 					}
@@ -242,12 +242,12 @@ namespace Teleopti.Support.LicTool
 			}
 		}
 
-		private void LoadLicenseFile_Click(object sender, EventArgs e)
+		private void LoadProductActivationKeyFile_Click(object sender, EventArgs e)
 		{
-			LicenseFileLoad();
+			ProductActivationKeyFileLoad();
 		}
 
-		private void LicenseFileSaveAndClose()
+		private void ProductActivationKeyFileSaveAndClose()
 		{
 			IFormatProvider invariant = CultureInfo.InvariantCulture;
 			var xdoc = new XmlDocument();
@@ -260,8 +260,8 @@ namespace Teleopti.Support.LicTool
 			rootNode.AppendChild(xdoc.CreateElement("ExpirationGracePeriod")).AppendChild(xdoc.CreateTextNode("P" + numExpirationGracePeriodDays.Value.ToString(invariant) + "D"));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgents")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgents.Value.ToString(invariant)));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgentsGrace")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgentsGrace.Value.ToString(invariant)));
-			
-			//Standard License
+
+			//Standard Product Activation Key
 			if (!chkFreemium.Checked)
 			{
 				rootNode.AppendChild(xdoc.CreateElement("AgentsOrSeats")).AppendChild(xdoc.CreateTextNode(comboBoxAgentsOrSeats.SelectedIndex.ToString(invariant)));
@@ -317,14 +317,14 @@ namespace Teleopti.Support.LicTool
 			}
 			catch (CryptographicException ex)
 			{
-				MessageBox.Show("Oops! There was an error when signing the license. Exception is: " + ex.Message, "Signing error", MessageBoxButtons.OK);
+				MessageBox.Show("Oops! There was an error when signing the product activation key. Exception is: " + ex.Message, "Signing error", MessageBoxButtons.OK);
 			}
 
 
 			using (var sfd = new SaveFileDialog())
 			{
 				sfd.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
-				sfd.Title = "Save the license file";
+				sfd.Title = "Save the product activation key file";
 				//Console.Write(dtpkrExpirationDate.Value.ToString("yyyy-MM-dd"));
 				sfd.RestoreDirectory = true;
 				sfd.FileName = replaceInvalidFileChars(dtpkrExpirationDate.Value.ToString("yyyyMMdd", invariant) + "_" + txtbxCustomerName.Text + ".xml");
@@ -343,7 +343,7 @@ namespace Teleopti.Support.LicTool
 		
 		private void CreateAndSave_Click(object sender, EventArgs e)
 		{
-			LicenseFileSaveAndClose();
+			ProductActivationKeyFileSaveAndClose();
 		}
 			
 		private void btnAdd3Mon_Click(object sender, EventArgs e)
@@ -417,15 +417,15 @@ namespace Teleopti.Support.LicTool
 			}
 		}
 
-		private void loadLicenseToolStripMenuItem_Click(object sender, EventArgs e)
+		private void loadProductActivationKeyToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			LicenseFileLoad();
+			ProductActivationKeyFileLoad();
 
 		}
 
 		private void createAndSaveToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			LicenseFileSaveAndClose();
+			ProductActivationKeyFileSaveAndClose();
 		}
 
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
