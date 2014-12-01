@@ -213,6 +213,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewFunctions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.treeViewFunctions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.treeViewFunctions.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
 			// 
 			// 
 			// 
@@ -224,8 +225,8 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.HelpTextControl.Text = "xxHelpText";
 			this.treeViewFunctions.Location = new System.Drawing.Point(3, 43);
 			this.treeViewFunctions.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
+			this.treeViewFunctions.MetroScrollBars = true;
 			this.treeViewFunctions.Name = "treeViewFunctions";
-			this.treeViewFunctions.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Silver;
 			this.treeViewFunctions.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Silver;
 			this.treeViewFunctions.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewFunctions.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
@@ -655,7 +656,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(-14, 85);
+			this.backStageButton4.Location = new System.Drawing.Point(34, 85);
 			this.backStageButton4.Name = "backStageButton4";
 			this.backStageButton4.Size = new System.Drawing.Size(120, 25);
 			this.backStageButton4.TabIndex = 8;
