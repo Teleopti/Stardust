@@ -512,10 +512,11 @@ namespace Teleopti.Support.Tool.Controls
 				if (IsOnSameServer(clickedNHibDataSource))
 				{
 					string clickedVersion = listViewItem.SubItems[2].Text;
-					if (!string.IsNullOrEmpty(clickedVersion))
+                    string splittedVersion = clickedVersion.Split('-')[0];
+                    if (!string.IsNullOrEmpty(splittedVersion))
 					{
 						Version dbVersion;
-						if (Version.TryParse(clickedVersion, out dbVersion))
+                        if (Version.TryParse(splittedVersion, out dbVersion))
 						{
 							if (dbVersion <= _currentVersion)
 							{
@@ -525,10 +526,10 @@ namespace Teleopti.Support.Tool.Controls
 						}
 					}
 				}
-				else
-				{
-					listViewItem.Selected = false;
-				}
+                else
+                {
+                    listViewItem.Selected = false;
+                }
 			}
 			_lastSelectedItemText = e.Item.Text;
 		}
