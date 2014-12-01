@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Sikuli
@@ -13,7 +14,6 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 		public string Header
 		{
-			get { return labelTestInfoHeader.Text; }
 			set
 			{
 				labelTestInfoHeader.Text = value;

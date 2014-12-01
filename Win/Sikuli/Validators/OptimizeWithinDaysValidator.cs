@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				SikuliValidationResult.ResultValue.Pass :
 				SikuliValidationResult.ResultValue.Fail;
 				
-			result.Details.AppendLine("Details:");
 			result.AppendLimitValueLine("Daily StdDev sum", "4.6", std.ToString());
 			result.Details.AppendLine(contractTimeResult ? "Contract time : OK" : "Contract time : FAIL");
 			result.Details.AppendLine(daysOffResult ? "Day offs : OK" : "Contract time : FAIL");
