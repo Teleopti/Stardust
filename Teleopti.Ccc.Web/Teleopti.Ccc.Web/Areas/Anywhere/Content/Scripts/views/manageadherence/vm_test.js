@@ -1,6 +1,6 @@
 ﻿define(['buster', 'views/manageadherence/vm'], function(buster, viewModel) {
 	return function() {
-		buster.testCase("=>manage adherence viewmodel", {
+		buster.testCase("manage adherence viewmodel", {
 			"should create viewmodel": function() {
 				var vm = new viewModel();
 				assert(vm);
