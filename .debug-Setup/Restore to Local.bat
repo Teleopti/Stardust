@@ -57,7 +57,7 @@ set /p Tfiles=<"%DbBaseline%"
 if not "%CustomPath%"=="" (
 DEL "%CustomPathConfig%" /F /Q
 DEL "%CustomTfiles%" /F /Q
-CALL :SETDATAPATH "%CustomPath%"
+CALL :SETDATAPATH "%CustomPath%" %Silent%
 )
 
 ::Get current Branch
@@ -117,7 +117,7 @@ echo could not create direcroty: %CustomPath%
 goto MakeCustomPath
 )
 
-CALL :SETDATAPATH "%CustomPath%"
+CALL :SETDATAPATH "%CustomPath%" %Silent%
 
 ECHO Note: Database will be restored from "%Tfiles%". Feel free to change this path in "%DbBaseline%" if you want restore from other location!
 ECHO.
@@ -416,7 +416,7 @@ SET /P CustomPath=Please provide a custom path for data storage:
 GOTO :EOF
 
 :SETDATAPATH
-ECHO %~1>"%CustomPathConfig%"
+IF %2 equ 0 ECHO %~1>"%CustomPathConfig%"
 SET DataFolder=%~1\Data
 SET RarFolder=%~1\Baseline
 SET Zip7Folder=%~1\7zip
