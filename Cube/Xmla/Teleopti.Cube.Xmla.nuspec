@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Teleopti.Cube.Xmla</id>
+    <version>1.0.0</version>
+    <authors>teleopti</authors>
+    <owners>teleopti</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>cube xmla</description>
+  </metadata>
+	<files>
+		<file src="CreateDatabase.xmla" target="." />
+	</files>
+</package>
