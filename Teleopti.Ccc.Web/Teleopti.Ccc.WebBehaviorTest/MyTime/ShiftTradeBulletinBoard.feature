@@ -1,4 +1,5 @@
-﻿Feature: Shift trade bulletin board from requests
+﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
+Feature: Shift trade bulletin board from requests
 	In order to make a shift trade with someone who has the same wishs
 	As an agent
 	I want to be able to see and pick a shift trade from bulletin board
@@ -35,7 +36,7 @@ Background:
 	| Night |
 	| Late  |
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
+
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -44,26 +45,26 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 	When I click to shift trade bulletin board
 	Then I cannot navigate to the bulletin previous date	
 
-@ignore
+
 Scenario: Should show my shift and other shift in bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 09:00 |
-	| EndTime               | 2030-01-01 17:00 |
-	| Shift category		| Day	           |
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 09:00 |
+	| EndTime        | 2030-01-01 17:00 |
+	| Shift category | Day              |
 	And OtherAgent has a shift with
 	| Field          | Value            |
 	| StartTime      | 2030-01-01 08:00 |
 	| EndTime        | 2030-01-01 18:00 |
 	| Shift category | Day              |
 	And OtherAgent has a shift exchange for bulletin
-	| Field          | Value      |
-	| Offer end date | 2029-12-31 |
-	| Start time     | 9:00       |
-	| End time       | 17:00      |
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 09:00 |
+	| EndTime   | 2030-01-01 17:00 |
 	And the current time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	Then I should see my schedule with
@@ -72,7 +73,6 @@ Scenario: Should show my shift and other shift in bulletin board
 	| End time		| 17:00 |
 	And I should see a possible schedule trade with 'OtherAgent'
 
-@ignore
 Scenario: Should possible make shift trade in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -88,10 +88,10 @@ Scenario: Should possible make shift trade in Bulletin board
 	| EndTime        | 2030-01-01 18:00 |
 	| Shift category | Day              |
 	And OtherAgent has a shift exchange for bulletin
-	| Field          | Value      |
-	| Offer end date | 2029-12-31 |
-	| Start time     | 9:00       |
-	| End time       | 17:00      |
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 09:00 |
+	| EndTime   | 2030-01-01 17:00 |
 	And the current time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	And I click agent 'OtherAgent'

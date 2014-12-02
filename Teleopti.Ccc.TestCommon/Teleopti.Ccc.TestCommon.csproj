@@ -100,6 +100,7 @@
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
+    <Compile Include="TestData\Setups\Configurable\ShiftExchangeOfferConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\QueueSourceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />
     <Compile Include="ThreadCulture.cs" />

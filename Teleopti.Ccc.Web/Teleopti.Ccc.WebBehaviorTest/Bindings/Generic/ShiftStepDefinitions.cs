@@ -1,7 +1,7 @@
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using ShiftConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.ShiftConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'?(.*)'? has a shift exchange for bulletin")]
 		public void GivenOtherAgentHasAShiftExchangeForBulletin(string person, Table table)
 		{
-			table.CreateInstance<ShiftExchangeOfferFields>();
+			DataMaker.ApplyFromTable<ShiftExchangeOfferConfigurable>(person, table);
 		}
 	}
 }
