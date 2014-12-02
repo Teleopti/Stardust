@@ -6,7 +6,6 @@
 		<WorkingDirectory>C:\stuff\ccc\teleopticcc</WorkingDirectory>
 		<PathToConfuserEx>D:\good2have\confuserex\lib</PathToConfuserEx>
 	</PropertyGroup>
-	<!---------------------------------->
 		
 	<ItemGroup>
 		<SourceFile Include="$(WorkingDirectory)\infrastructure\bin\release\obfuscated\teleopti.ccc.infrastructure.dll" />
