@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoQuickForecaster();
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetInputText("input[name='startDate']"))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetInputText("input[name='endDate']"))));
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
 			Browser.Interactions.Click(".start-forecasting");
 		}
 

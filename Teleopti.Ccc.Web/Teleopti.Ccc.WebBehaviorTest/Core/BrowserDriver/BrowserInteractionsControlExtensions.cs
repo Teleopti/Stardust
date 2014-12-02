@@ -28,5 +28,11 @@
 			interactions.AssertExists(selector);
 			return interactions.Javascript("return document.querySelector(\"{0}\").value;", selector.JSEncode());
 		}
+
+		public static string GetText(this IBrowserInteractions interactions, string selector)
+		{
+			interactions.AssertExists(selector);
+			return interactions.Javascript("return document.querySelector(\"{0}\").innerText;", selector.JSEncode());
+		}
 	}
 }

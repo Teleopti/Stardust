@@ -5,12 +5,14 @@
   <div class="material-block-content" >
     
     <div style="display:inline-block; min-height:290px;">
-      <h5>From {{period.startDate | date : format}}</h5>
+	    <h5>From <span class="startDate">{{period.startDate | date : format}}</span></h5>    
+
       <datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
     </div>
     
     <div style="display:inline-block; min-height:290px;">
-      <h5>To  {{period.endDate | date : format}}</h5>
+	    <h5>To  <span class="endDate">{{period.endDate | date : format}}</span></h5>
+
       <datepicker ng-model="period.endDate" min-date="startDate" show-weeks="true" class="well well-sm"></datepicker>
     </div>
     <div>
