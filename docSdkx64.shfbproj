@@ -1,5 +1,10 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
+		<!-- NOTE: Update the version number in the path to match the package version -->
+		<SHFBROOT Condition=" '$(SHFBROOT)' == '' ">
+			$(MSBuildThisFileDirectory)..\packages\
+			EWSoftware.SHFB.2014.11.22.0\Tools\
+		</SHFBROOT>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
          sources -->
@@ -16,7 +21,7 @@
     <!-- SHFB properties -->
     <OutputPath>\help\</OutputPath>
     <HtmlHelpName>Documentation</HtmlHelpName>
-    <FrameworkVersion>3.5</FrameworkVersion>
+    <FrameworkVersion>4.0</FrameworkVersion>
     <DocumentationSources>
       <DocumentationSource sourceFile="Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\$(Configuration)\Teleopti.Ccc.Sdk.Common.dll" />
       <DocumentationSource sourceFile="Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\$(Configuration)\Teleopti.Ccc.Sdk.Common.XML" />
@@ -26,7 +31,7 @@
     <CopyrightHref>www.teleopti.com</CopyrightHref>
     <HelpFileFormat>HtmlHelp1x</HelpFileFormat>
     <CollectionTocStyle>Hierarchical</CollectionTocStyle>
-    <PresentationStyle>vs2005</PresentationStyle>
+    <PresentationStyle>vs2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="Teleopti.Ccc.Sdk.Common.WcfExtensions" isExposed="False" xmlns="" />
