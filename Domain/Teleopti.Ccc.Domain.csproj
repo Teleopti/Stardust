@@ -201,7 +201,6 @@
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
-    <Compile Include="ApplicationLayer\Rta\OnlyHandleWhenEnabledAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
@@ -1670,6 +1669,7 @@
     <Compile Include="UndoRedo\UndoRedoContainer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UseOnToggle.cs" />
     <Compile Include="WebReport\ReportDataForecastVersusActualWorkload.cs" />
     <Compile Include="WebReport\ReportDataQueueStatAbandoned.cs" />
     <Compile Include="WebReport\ReportDataServiceLevelAgentsReady.cs" />

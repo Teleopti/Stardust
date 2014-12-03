@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-
-
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	[OnlyHandleWhenEnabled(Toggles.ETL_SpeedUpETL_30791)]
+	[UseOnToggle(Toggles.ETL_SpeedUpETL_30791)]
 	public class AnalyticsScheduleChangeUpdater : IHandleEvent<ProjectionChangedEvent>
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;

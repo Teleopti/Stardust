@@ -7,7 +7,6 @@ using System.Web.Http;
 using System.Web.Mvc;
 using AutoMapper;
 using Autofac;
-using Autofac.Core;
 using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -16,15 +15,16 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
@@ -51,41 +51,47 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
+using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ITeamScheduleViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory.ITeamScheduleViewModelFactory;
 
-
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
-
 	[TestFixture]
-	public class MvcModuleTest
+	public class WebAppModuleTest
 	{
 		[SetUp]
 		public void Setup()
 		{
-			var container = new ContainerConfiguration().Configure(string.Empty, new HttpConfiguration());
+			requestContainer = buildContainer();
+		}
 
-			var containerAdder = new ContainerBuilder();
-			containerAdder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
-            HttpContextBase httpContextBase = new FakeHttpContext("");
-            containerAdder.Register(c => httpContextBase);
-            var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-		    currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
-		        .Return(unitOfWorkFactory);
-		    unitOfWorkFactory.Stub(x => x.Name).Return("asdf");
+		private ILifetimeScope buildContainer(Toggles toggle, bool value)
+		{
+			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
+			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
+			return buildContainer(toggleManager);
+		}
 
-		    containerAdder.Register(c => currentUnitOfWorkFactory);
-			containerAdder.Update(container);
+		private ILifetimeScope buildContainer()
+		{
+			return buildContainer(CommonModule.ToggleManagerForIoc());
+		}
 
-			requestContainer = container.BeginLifetimeScope("httpRequest");
+		private ILifetimeScope buildContainer(IToggleManager toggleManager)
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(), toggleManager)));
+			builder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
+			builder.RegisterInstance(new FakeHttpContext("")).As<HttpContextBase>();
+			var container = builder.Build();
+			return container.BeginLifetimeScope("httpRequest");
 		}
 
 		private ILifetimeScope requestContainer;
@@ -639,5 +645,30 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				 .Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldResolveHangfireServerStartupTaskIfToggleEnabled()
+		{
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31593, true))
+			{
+				container.Resolve<IEnumerable<IBootstrapperTask>>()
+					.Select(x => x.GetType())
+					.Should()
+					.Contain(typeof (HangfireServerStartupTask));
+			}
+		}
+
+		[Test]
+		public void ShouldNotResolveHangfireServerStartupTaskIfToggleDisabled()
+		{
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31593, false))
+			{
+				container.Resolve<IEnumerable<IBootstrapperTask>>()
+					.Select(x => x.GetType())
+					.Should()
+					.Not
+					.Contain(typeof (HangfireServerStartupTask));
+			}
+		}
 	}
+
 }

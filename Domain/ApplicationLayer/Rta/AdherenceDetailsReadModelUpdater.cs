@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	[OnlyHandleWhenEnabled(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
+	[UseOnToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	public class AdherenceDetailsReadModelUpdater :
 		IHandleEvent<PersonActivityStartEvent>,
 		IHandleEvent<PersonStateChangedEvent>,

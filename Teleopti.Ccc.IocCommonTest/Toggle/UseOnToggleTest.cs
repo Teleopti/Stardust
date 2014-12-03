@@ -1,14 +1,14 @@
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[TestFixture]
-	public class HandleIfEnabledTest
+	public class UseOnToggleTest
 	{
 		[Test]
 		public void ShouldBeEnabledIfToggleIsEnabledByAttribute()
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
 
-			Assert.That(typeof(targetWithAttrib).FeatureIsEnabled(iocConfig), Is.True);
+			Assert.That(typeof(targetWithAttrib).ToggleEnabled(iocConfig), Is.True);
 		}
 
 		[Test]
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false).Repeat.Any();
 
-			Assert.That(typeof(targetWithoutAttrib).FeatureIsEnabled(iocConfig), Is.True);
+			Assert.That(typeof(targetWithoutAttrib).ToggleEnabled(iocConfig), Is.True);
 		}
 
 		[Test]
@@ -34,10 +34,10 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var iocConfig = MockRepository.GenerateMock<IIocConfiguration>();
 			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
 
-			Assert.That(typeof(targetWithAttrib).FeatureIsEnabled(iocConfig), Is.False);
+			Assert.That(typeof(targetWithAttrib).ToggleEnabled(iocConfig), Is.False);
 		}
 
-		[OnlyHandleWhenEnabled(Toggles.TestToggle)]
+		[UseOnToggle(Toggles.TestToggle)]
 		private class targetWithAttrib
 		{
 			 

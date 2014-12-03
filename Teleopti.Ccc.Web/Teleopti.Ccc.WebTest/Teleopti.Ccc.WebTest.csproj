@@ -504,7 +504,7 @@
     <Compile Include="Core\Authentication\DataProvider\TokenIdentityProviderTest.cs" />
     <Compile Include="Core\IoC\BootstrapperModuleTest.cs" />
     <Compile Include="Core\IoC\ContainerConfigurationTest.cs" />
-    <Compile Include="Core\IoC\MvcModuleTest.cs" />
+    <Compile Include="Core\IoC\WebAppModuleTest.cs" />
     <Compile Include="Core\WeekSchedule\ScheduleHtmlHelperTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\PeriodSelectionViewModelFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\HeaderViewModelFactoryTest.cs" />

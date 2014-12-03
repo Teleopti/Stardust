@@ -539,6 +539,7 @@
     <Compile Include="Core\IIanaTimeZoneProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IoC\AutofacServiceBus.cs" />
+    <Compile Include="Core\IoC\WebAppModule.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />
     <Compile Include="Core\MachineKeySessionSecurityTokenHandler.cs" />
@@ -705,6 +706,7 @@
     <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\GlobalConfigurationWrapper.cs" />
+    <Compile Include="Core\Hangfire\HangfireServerStartupTask.cs" />
     <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\IGlobalConfiguration.cs" />
     <Compile Include="Core\Startup\InitializeApplication\BundleScripts.cs" />
