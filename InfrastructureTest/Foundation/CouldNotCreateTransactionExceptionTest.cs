@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
 	[TestFixture]
-	public class CouldNotCreateConnectionExceptionTest : ExceptionTest<CouldNotCreateConnectionException>
+	public class CouldNotCreateTransactionExceptionTest : ExceptionTest<CouldNotCreateTransactionException>
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), Test]
 		public void VerifyConstructor()
@@ -14,20 +14,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			const string mess = "sdfsdf";
 			var inner = new Exception();
 			const string sql = "sdf";
-			var ex = new CouldNotCreateConnectionException(mess, inner, sql);
+			var ex = new CouldNotCreateTransactionException(mess, inner, sql);
 			StringAssert.StartsWith(mess, ex.Message);
 			Assert.AreSame(inner, ex.InnerException);
 			Assert.AreEqual(sql, ex.Sql);
 		}
 
-		protected override CouldNotCreateConnectionException CreateTestInstance(string message, Exception innerException)
+		protected override CouldNotCreateTransactionException CreateTestInstance(string message, Exception innerException)
 		{
-			return new CouldNotCreateConnectionException(message, innerException);
+			return new CouldNotCreateTransactionException(message, innerException);
 		}
 
-		protected override CouldNotCreateConnectionException CreateTestInstance(string message)
+		protected override CouldNotCreateTransactionException CreateTestInstance(string message)
 		{
-			return new CouldNotCreateConnectionException(message);
+			return new CouldNotCreateTransactionException(message);
 		}
 	}
 }

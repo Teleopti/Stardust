@@ -5,27 +5,27 @@ using System.Security;
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	[Serializable]
-	public class CouldNotCreateConnectionException : DataSourceException
+	public class CouldNotCreateTransactionException : DataSourceException
 	{
-		public CouldNotCreateConnectionException(string message, Exception inner, string sql)
+		public CouldNotCreateTransactionException(string message, Exception inner, string sql)
                                         : base(message, inner)
         {
             Sql = sql;
         }
 
-        public CouldNotCreateConnectionException()
+        public CouldNotCreateTransactionException()
         {
         }
 
-        public CouldNotCreateConnectionException(string message, Exception innerException) : base(message, innerException)
+        public CouldNotCreateTransactionException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        public CouldNotCreateConnectionException(string message) : base(message)
+        public CouldNotCreateTransactionException(string message) : base(message)
         {
         }
 
-		protected CouldNotCreateConnectionException(SerializationInfo info,
+		protected CouldNotCreateTransactionException(SerializationInfo info,
                                       StreamingContext context)
             : base(info, context)
         {

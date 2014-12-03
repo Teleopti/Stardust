@@ -96,7 +96,6 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using DataSourceException = Syncfusion.Windows.Forms.Tools.DataSourceException;
 
 #endregion
 
@@ -470,7 +469,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_currentSchedulingScreenSettings = settingRepository.FindValueByKey("SchedulingScreen", new SchedulingScreenSettings());
 				}
 			}
-			catch (DataSourceException ex)
+			catch (CouldNotCreateTransactionException ex)
 			{
 				Log.Error("An error occurred while trying to load settings.", ex);
 				_currentSchedulingScreenSettings = new SchedulingScreenSettings();
@@ -975,7 +974,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						uow.PersistAll(_schedulerMessageBrokerHandler);
 					}
 				}
-				catch (DataSourceException dataSourceException)
+				catch (CouldNotCreateTransactionException dataSourceException)
 				{
 					Log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
 				}
@@ -2368,7 +2367,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Error != null)
 			{
-				var dataSourceException = e.Error as DataSourceException;
+				var dataSourceException = e.Error as CouldNotCreateTransactionException;
 				if (dataSourceException == null)
 					return false;
 
@@ -2763,7 +2762,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						}
 					}
 				}
-				catch (DataSourceException dataSourceException)
+				catch (CouldNotCreateTransactionException dataSourceException)
 				{
 					using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
 					{
@@ -3663,15 +3662,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				ShowErrorMessage(explanation, Resources.ErrorMessage);
 				return false;
 			}
-			catch (DataSourceException dataSourceException)
-			{
-				//rk - dont like this but cannot easily find "the spot" to catch these exception in current design
-				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-				}
-				return false;
-			}
 		}
 
 		private void doSaveProcess()
@@ -3701,9 +3691,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
 				}
-				_undoRedo.Clear();
+				
 			}
-			catch (CouldNotCreateConnectionException ex)
+			catch (CouldNotCreateTransactionException ex)
 			{
 				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
 				{
@@ -3712,6 +3702,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			finally
 			{
+				_undoRedo.Clear();
 				Cursor = Cursors.Default;
 				updateRequestCommandsAvailability();
 				updateShiftEditor();
@@ -5312,7 +5303,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				settings.Show();
 				settings.BringToFront();
 			}
-			catch (DataSourceException ex)
+			catch (CouldNotCreateTransactionException ex)
 			{
 				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
 			}
@@ -5575,7 +5566,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfContractTimeAndDaysOff());
 				RecalculateResources();
 			}
-			catch (DataSourceException dataSourceException)
+			catch (CouldNotCreateTransactionException dataSourceException)
 			{
 				//rk - dont like this but cannot easily find "the spot" to catch these exception in current design
 				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
@@ -6267,7 +6258,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()){OvertimePreferences = options.Preferences}, true);
 				}
 			}
-			catch (DataSourceException dataSourceException)
+			catch (CouldNotCreateTransactionException dataSourceException)
 			{
 				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
 				{
