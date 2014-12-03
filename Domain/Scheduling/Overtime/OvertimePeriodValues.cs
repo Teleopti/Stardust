@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_periodValues.Add(overtimePeriodValue1);
 		}
 
+		public IList<IOvertimePeriodValue> PeriodValues
+		{
+			get { return _periodValues; }
+		}
+
 		public double TotalValue()
 		{
 			return _periodValues.Sum(overtimePeriodValue => overtimePeriodValue.Value);

@@ -7,13 +7,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface ICalculateBestOvertime
     {
-        List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution);
+        IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility);
     }
 
     public class CalculateBestOvertime : ICalculateBestOvertime
     {
+	    private readonly IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
 
-		public List<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution)
+	    public CalculateBestOvertime(IAnalyzePersonAccordingToAvailability analyzePersonAccordingToAvailability)
+	    {
+		    _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
+	    }
+
+		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
         {
             var possibleOvertimeDurationsToCalculate = new List<TimeSpan>();
             for (int minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
@@ -27,16 +33,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             var calculatedOvertimePeriods = new Dictionary<TimeSpan, double>();
             foreach (var duration in possibleOvertimeDurationsToCalculate)
             {
+				if (duration < overtimeDurantion.Minimum) continue;
                 var period = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(duration));
-                if (!checkIfPeriodExistsInMappedData(overtimePeriodValueMappedData, period)) continue;
+
+	            if (onlyOvertimeAvaialbility)
+				{
+					var timeZoneInfo = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+					var adjustedPeriods = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, new List<DateTimePeriod> { period });
+					if(adjustedPeriods.Count == 0) continue;
+					period = adjustedPeriods.First();
+				}
+
+	            if (!checkIfPeriodExistsInMappedData(overtimePeriodValueMappedData, period) || (calculatedOvertimePeriods.ContainsKey(period.ElapsedTime()))) continue;
                 var sumOfRelativeDifference = calculateSumOfRelativeDifferencesForPeriod(period, overtimePeriodValueMappedData);
-                calculatedOvertimePeriods.Add(duration, sumOfRelativeDifference);
+                calculatedOvertimePeriods.Add(period.ElapsedTime(), sumOfRelativeDifference);
             }
+
             var lowestRelativeDifferenceSum = double.MaxValue;
             var lowestValueDuration = TimeSpan.Zero;
             foreach (var duration in calculatedOvertimePeriods.Keys)
             {
-                if (duration < overtimeDurantion.Minimum) continue;
                 if (calculatedOvertimePeriods[duration] >= 0) continue;
                 if (calculatedOvertimePeriods[duration] < lowestRelativeDifferenceSum)
                 {
@@ -45,8 +61,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 }
             }
 
+			
 			var dateTimePeriod = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(lowestValueDuration));
-			return new List<DateTimePeriod> { dateTimePeriod };
+			if(dateTimePeriod.ElapsedTime() == TimeSpan.Zero) return new List<DateTimePeriod>();
+
+			IList<DateTimePeriod>  periods = new List<DateTimePeriod> { dateTimePeriod };
+			return periods;
         }
 
         private bool checkIfPeriodExistsInMappedData(IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, DateTimePeriod period)
@@ -65,8 +85,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                                                             .Sum(x => x.Value);
 
         }
-
-
-
     }
 }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IAnalyzePersonAccordingToAvailability
     {
-		IList<DateTimePeriod> AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, IList<DateTimePeriod> overtimeLayerLengthPeriods, DateTime shiftEndTime);
+		IList<DateTimePeriod> AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, IList<DateTimePeriod> overtimeLayerLengthPeriods);
     }
 
     public class AnalyzePersonAccordingToAvailability : IAnalyzePersonAccordingToAvailability
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _adjustOvertimeLengthBasedOnAvailability = adjustOvertimeLengthBasedOnAvailability;
         }
 
-		public IList<DateTimePeriod> AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, IList<DateTimePeriod> overtimeLayerLengthPeriods, DateTime shiftEndTime)
+		public IList<DateTimePeriod> AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo, IList<DateTimePeriod> overtimeLayerLengthPeriods)
         {
 			var adjustedList = new List<DateTimePeriod>();
 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			foreach (var overtimeLayerLengthPeriod in overtimeLayerLengthPeriods)
 			{
-				var adjustedPeriod = _adjustOvertimeLengthBasedOnAvailability.AdjustOvertimeDuration(overtimePeriod, overtimeLayerLengthPeriod, shiftEndTime);
+				var adjustedPeriod = _adjustOvertimeLengthBasedOnAvailability.AdjustOvertimeDuration(overtimePeriod, overtimeLayerLengthPeriod, scheduleDay);
 				if (adjustedPeriod.HasValue)
 				{
 					adjustedList.Add(adjustedPeriod.Value);

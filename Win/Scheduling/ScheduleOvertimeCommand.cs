@@ -31,21 +31,19 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IProjectionProvider _projectionProvider;
         private BackgroundWorker _backgroundWorker;
-        private readonly IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
 	    private SchedulingServiceBaseEventArgs _progressEvent;
 
         public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
                                        ISchedulingResultStateHolder schedulingResultStateHolder,
                                        IOvertimeLengthDecider overtimeLengthDecider,
                                        ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                       IProjectionProvider projectionProvider, IAnalyzePersonAccordingToAvailability analyzePersonAccordingToAvailability)
+                                       IProjectionProvider projectionProvider)
         {
             _schedulerState = schedulerState;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _overtimeLengthDecider = overtimeLengthDecider;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _projectionProvider = projectionProvider;
-            _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
         }
 
         public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -57,54 +55,36 @@ namespace Teleopti.Ccc.Win.Scheduling
             var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
             foreach (var dateOnly in selectedDates)
             {
-
                 //Randomly select one of the selected agents that does not end his shift with overtime
                 var persons = orderCandidatesRandomly(selectedPersons, dateOnly);
                 foreach (var person in persons)
                 {
                     var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person);
-                    if (checkIfCancelPressed())
-                        return;
-
-					if (_progressEvent != null && _progressEvent.UserCancel)
-						return;
+                    if (checkIfCancelPressed()) return;
+					if (_progressEvent != null && _progressEvent.UserCancel) return;
 
                     var locks = gridlockManager.Gridlocks(person, dateOnly);
                     if (locks != null && locks.Count != 0) continue;
 
                     var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-                    var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;
+                 
                     //Calculate best length (if any) for overtime
-                    var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay,
-                                                                            overtimePreferences.SkillActivity,
-                                                                            new MinMax<TimeSpan>(
+                    var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay,overtimePreferences.SkillActivity,new MinMax<TimeSpan>(
                                                                                 overtimePreferences.SelectedTimePeriod.StartTime,
-                                                                                overtimePreferences.SelectedTimePeriod.EndTime));
+                                                                                overtimePreferences.SelectedTimePeriod.EndTime),
+																				overtimePreferences.AvailableAgentsOnly);
 
-					if(overtimeLayerLengthPeriods.Count == 0)
-						continue;
-	                
-					
-                    if (overtimePreferences.AvailableAgentsOnly)
-                    {
-                        overtimeLayerLengthPeriods = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), overtimeLayerLengthPeriods, scheduleEndTime);
-                        if(overtimeLayerLengthPeriods.Count == 0)
-							continue;
-                    }
+					if(overtimeLayerLengthPeriods.Count == 0) continue;
                     
                   
 	                foreach (var overtimeLayerLengthPeriod in overtimeLayerLengthPeriods)
 	                {
-						scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
-													 overtimeLayerLengthPeriod,
-													 overtimePreferences.OvertimeType);
+						scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, overtimeLayerLengthPeriod, overtimePreferences.OvertimeType);
 	                }
 					
                     var rules = NewBusinessRuleCollection.Minimum();
-                    if (!overtimePreferences.AllowBreakNightlyRest)
-                        rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
-                    if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
-                        rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+                    if (!overtimePreferences.AllowBreakNightlyRest) rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+                    if (!overtimePreferences.AllowBreakMaxWorkPerWeek) rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
                     if (!overtimePreferences.AllowBreakWeeklyRest)
                     {
                         IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();

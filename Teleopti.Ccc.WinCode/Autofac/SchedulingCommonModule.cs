@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>();
 			builder.RegisterType<OvertimePeriodValueMapper>();
 			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>();
-			builder.RegisterType<CalculateBestOvertime>().As<ICalculateBestOvertime>();
+			
 			builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
 			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
@@ -333,6 +333,15 @@ namespace Teleopti.Ccc.WinCode.Autofac
 				? (IEffectiveRestrictionCreator) c.Resolve<EffectiveRestrictionCreator30393>()
 				: c.Resolve<EffectiveRestrictionCreator>())
 				.As<IEffectiveRestrictionCreator>();
+
+			builder.RegisterType<CalculateBestOvertime>().As<CalculateBestOvertime>();
+			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().As<CalculateBestOvertimeBeforeOrAfter>();
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_OvertimeBeforeShiftStart_30712)
+				? (ICalculateBestOvertime)c.Resolve<CalculateBestOvertimeBeforeOrAfter>()
+				: c.Resolve<CalculateBestOvertime>())
+				.As<ICalculateBestOvertime>();
+
+
 			//IEffectiveRestrictionCreator
 		}
 

@@ -7,8 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IOvertimeLengthDecider
     {
-		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity,
-                             MinMax<TimeSpan> duration);
+		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, bool onlyOvertimeAvailability);
     }
 
     public class OvertimeLengthDecider : IOvertimeLengthDecider
@@ -37,9 +36,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _calculateBestOvertime = calculateBestOvertime;
         }
 
-        public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration)
+		public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, bool onlyOvertimeAvailability)
         {
-	        var result = new List<DateTimePeriod>();
+			IList<DateTimePeriod> result = new List<DateTimePeriod>();
 
             var skills = aggregateSkills(person, dateOnly).Where(x => x.Activity == activity).ToList();
             if (skills.Count == 0) return result;
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
             var aggregatedMappedData  = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(nestedList);
 
-			result = _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), scheduleDay, minimumResolution);
+			result = _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), scheduleDay, minimumResolution, onlyOvertimeAvailability);
 	        return result;
         }
 

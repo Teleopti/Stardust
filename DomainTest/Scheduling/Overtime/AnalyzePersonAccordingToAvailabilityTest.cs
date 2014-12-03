@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         private DateOnly _today;
         private MockRepository _mock;
         private IPerson _person;
+		private IProjectionService _projectionService;
+		private IVisualLayerCollection _visualLayerCollection;
+		private DateTimePeriod _dateTimePeriod;
+		private DateTime _shiftEndingTime;
+		private DateTime _shiftStartTime;
 
         [SetUp]
         public void Setup()
@@ -30,6 +35,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _today = new DateOnly(2014,03,05);
             _adjustOvertimeLengthBasedOnAvailability = new AdjustOvertimeLengthBasedOnAvailability();
             _target = new AnalyzePersonAccordingToAvailability(_adjustOvertimeLengthBasedOnAvailability);
+
+			_projectionService = _mock.StrictMock<IProjectionService>();
+			_visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
+			_shiftStartTime = new DateTime(2014, 03, 05, 14, 30, 0, DateTimeKind.Utc);
+			_shiftEndingTime = new DateTime(2014, 03, 05, 15, 30, 0, DateTimeKind.Utc);
+			_dateTimePeriod = new DateTimePeriod(_shiftStartTime, _shiftEndingTime);
         }
 
 		[Test]
@@ -41,12 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.OvertimeAvailablityCollection())
-					  .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>()));
+				Expect.Call(_scheduleDay.OvertimeAvailablityCollection()).Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>()));
 			}
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods, shiftEndTime).Count());
+				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods).Count());
 			}
 
 		}
@@ -62,13 +72,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
-
-				Expect.Call(_scheduleDay.OvertimeAvailablityCollection())
-					  .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>() { overtimeAvailability }));
+				Expect.Call(_scheduleDay.OvertimeAvailablityCollection()).Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>() { overtimeAvailability }));
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);	
 			}
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods, shiftEndTime).Count);
+				Assert.AreEqual(0, _target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriods).Count);
 			}
 
 		}

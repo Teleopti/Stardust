@@ -1,19 +1,31 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public class AdjustOvertimeLengthBasedOnAvailability
     {
-        public DateTimePeriod? AdjustOvertimeDuration(DateTimePeriod overtimeAvailabilityPeriod, DateTimePeriod overtimeLayerLengthPeriod, DateTime shiftEndTime)
+        public DateTimePeriod? AdjustOvertimeDuration(DateTimePeriod overtimeAvailabilityPeriod, DateTimePeriod overtimeLayerLengthPeriod, IScheduleDay scheduleDay)
         {
-	        if (shiftEndTime < overtimeAvailabilityPeriod.StartDateTime) return null;
-            var possibleAdjustDifference = (overtimeAvailabilityPeriod.EndDateTime - shiftEndTime).TotalMinutes;
-	        if (possibleAdjustDifference <= 0) return null;
-	        if (possibleAdjustDifference <= overtimeLayerLengthPeriod.ElapsedTime().TotalMinutes)
-				return new DateTimePeriod(overtimeLayerLengthPeriod.StartDateTime, overtimeLayerLengthPeriod.StartDateTime.AddMinutes(possibleAdjustDifference));
-              
-	        return overtimeLayerLengthPeriod;
+			var shiftPeriod = scheduleDay.ProjectionService().CreateProjection().Period().GetValueOrDefault();
+			var shiftStart = shiftPeriod.StartDateTime;
+			var shiftEnd = shiftPeriod.EndDateTime;
+
+			var intersection = overtimeAvailabilityPeriod.Intersection(overtimeLayerLengthPeriod);
+	        if (intersection == null) return null;  
+			
+	        if (!overtimeAvailabilityPeriod.Contains(overtimeLayerLengthPeriod) && overtimeLayerLengthPeriod.StartDateTime < shiftStart)
+	        {
+		        if (intersection.Value.EndDateTime < overtimeLayerLengthPeriod.EndDateTime) return null;
+			    return  new DateTimePeriod(intersection.Value.StartDateTime, overtimeLayerLengthPeriod.EndDateTime);     
+	        }
+
+			if (!overtimeAvailabilityPeriod.Contains(overtimeLayerLengthPeriod) && overtimeLayerLengthPeriod.EndDateTime > shiftEnd)
+	        {
+		        if (intersection.Value.StartDateTime > shiftEnd) return null;
+				return new DateTimePeriod(overtimeLayerLengthPeriod.StartDateTime, intersection.Value.EndDateTime);
+	        }
+
+			return overtimeLayerLengthPeriod;
         }
     }
 }
