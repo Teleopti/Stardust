@@ -28,6 +28,7 @@ Background:
 	| Field      | Value      |
 	| Start date | 2022-08-19 |
 
+@ignore
 Scenario: Add shift trade exchange offer for a shift
 	Given I have the role 'Full access to mytime'
 	And I have a shift with
