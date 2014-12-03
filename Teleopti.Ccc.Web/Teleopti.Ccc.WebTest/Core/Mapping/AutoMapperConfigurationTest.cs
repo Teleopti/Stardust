@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.Mapping
 			var container = MockRepository.GenerateMock<IComponentContext>();
 			var target = new AutoMapperConfiguration(new[] { new TestProfile() }, container);
 
-			target.Execute();
+			target.Execute(null);
 
 			Mapper.AssertConfigurationIsValid();
 			Mapper.Map<TestSource, TestTarget>(new TestSource{Prop = "value"});

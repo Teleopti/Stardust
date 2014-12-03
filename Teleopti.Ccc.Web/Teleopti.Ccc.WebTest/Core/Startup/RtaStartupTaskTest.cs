@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var initializor = MockRepository.GenerateMock<IAdherenceAggregatorInitializor>();
 			var target = new RtaStartupTask(initializor);
 
-			target.Execute();
+			target.Execute(null);
 
 			initializor.AssertWasCalled(x => x.Initialize());
 		}

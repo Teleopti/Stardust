@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Owin;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.RtaTool.Controllers;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_identityProviderProvider = identityProviderProvider;
 		}
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			registerGlobalFilters(GlobalFilters.Filters);
 			return null;

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		 public void ShouldAddClientFiles()
 		 {
 			 BundleTable.Bundles.Clear();
-			 new BundleScripts().Execute();
+			 new BundleScripts().Execute(null);
 			 BundleTable.Bundles.Should().Not.Be.Empty();
 		 }
 	}

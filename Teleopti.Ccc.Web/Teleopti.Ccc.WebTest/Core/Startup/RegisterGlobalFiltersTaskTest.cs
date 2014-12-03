@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[Test]
 		public void ShouldBeAdded()
 		{
-			target.Execute();
+			target.Execute(null);
 			GlobalFilters.Filters.Select(item => item.Instance.GetType())
 				.Should().Have.SameValuesAs(new[]
 				               	{

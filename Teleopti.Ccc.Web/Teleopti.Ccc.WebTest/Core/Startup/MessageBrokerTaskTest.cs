@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
-			target.Execute();
+			target.Execute(null);
 
 			messageBroker.ServerUrl.Should().Be("http://my.url.com/app/");
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
-			target.Execute();
+			target.Execute(null);
 
 			messageBroker.ServerUrl.Should().Be(@"http://my.broker.com/path/");
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			settings.Stub(x => x.MessageBrokerLongPolling()).Return(true);
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
-			Task.WaitAll(target.Execute());
+			Task.WaitAll(target.Execute(null));
 
 			messageBroker.AssertWasCalled(x => x.StartBrokerService(true));
 		}

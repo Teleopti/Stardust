@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Autofac;
+using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping
 			_container = container;
 		}
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			Mapper.Initialize(c =>
 			                  	{

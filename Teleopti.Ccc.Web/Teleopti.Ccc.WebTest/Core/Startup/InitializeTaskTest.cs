@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			}
 			using (mocks.Playback())
 			{
-				target.Execute();
+				target.Execute(null);
 			}
 		}
 	}

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Owin;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 
     public class AuthenticationProviderTask : IBootstrapperTask
     {
-        public Task Execute()
+        public Task Execute(IAppBuilder application)
         {
             throw new NotImplementedException();
         }

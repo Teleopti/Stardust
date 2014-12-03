@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			}
 			using(mocks.Playback())
 			{
-				target.Execute();
+				target.Execute(null);
 				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
 					.Should().Not.Be.Null();
 			}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			}
 			using (mocks.Playback())
 			{
-				target.Execute();
+				target.Execute(null);
 				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
 					.Should().Be.Null();
 			}

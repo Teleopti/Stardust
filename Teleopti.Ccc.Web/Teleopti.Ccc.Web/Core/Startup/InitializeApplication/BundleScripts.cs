@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Optimization;
+using Owin;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		public const string SignInCss = "~/Areas/Start/Content/Css/bundle"; 
 		public const string SsoCss = "~/Areas/SSO/Content/Css/bundle"; 
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			BundleTable.Bundles.IgnoreList.Clear();
 			BundleTable.Bundles.IgnoreList.Ignore("*Tests.js");

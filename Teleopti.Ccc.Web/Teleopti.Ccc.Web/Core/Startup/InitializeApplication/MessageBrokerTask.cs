@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Owin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			_settings = settings;
 		}
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			_messageBroker.ServerUrl = ConnectionString();
 			return Task.Factory.StartNew(() => _messageBroker.StartBrokerService(_settings.MessageBrokerLongPolling()));

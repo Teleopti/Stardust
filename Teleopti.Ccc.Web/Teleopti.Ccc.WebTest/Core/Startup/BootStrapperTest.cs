@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Owin;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			Task1.IsExecuted.Should().Be.False();
 			Task2.IsExecuted.Should().Be.False();
-			target.Run(new IBootstrapperTask[]{new Task1(), new Task2()});
+			target.Run(new IBootstrapperTask[]{new Task1(), new Task2()}, null);
 			Task1.IsExecuted.Should().Be.True();
 			Task2.IsExecuted.Should().Be.True();
 		}
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			public static bool IsExecuted { get; private set; }
 
-			public Task Execute()
+			public Task Execute(IAppBuilder application)
 			{
 				IsExecuted = true;
 				return null;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			public static bool IsExecuted { get; private set; }
 
-			public Task Execute()
+			public Task Execute(IAppBuilder application)
 			{
 				IsExecuted = true;
 				return null;

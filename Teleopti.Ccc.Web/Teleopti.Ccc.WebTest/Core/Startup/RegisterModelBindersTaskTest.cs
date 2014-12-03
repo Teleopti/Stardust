@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			// Must be called in Task.Execute 
 			var target = new RegisterModelBindersTask(null,null);
 			target.BindersGetter = () => modelBinderDictionary;
-			target.Execute();
+			target.Execute(null);
 		}
 
 		[Test]

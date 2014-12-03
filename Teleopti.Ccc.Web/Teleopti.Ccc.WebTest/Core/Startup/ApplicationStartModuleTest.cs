@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			target.Configuration(httpApplication);
 			target2.Configuration(httpApplication);
 
-			bootstrapper.AssertWasCalled(x => x.Run(null), o => o.IgnoreArguments().Repeat.Times(1));
+			bootstrapper.AssertWasCalled(x => x.Run(null, null), o => o.IgnoreArguments().Repeat.Times(1));
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var target = new Web.Core.Startup.Startup();
 			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
 			var ex = new Exception();
-			bootstrapper.Stub(x => x.Run(null)).IgnoreArguments().Throw(ex);
+			bootstrapper.Stub(x => x.Run(null, null)).IgnoreArguments().Throw(ex);
 
 			target.Configuration(httpApplication);
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var httpApplication = MockRepository.GenerateMock<IAppBuilder>();
 			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
 			var tasks = new[] {new Task(() => { })};
-			bootstrapper.Stub(x => x.Run(null)).IgnoreArguments().Return(tasks);
+			bootstrapper.Stub(x => x.Run(null, null)).IgnoreArguments().Return(tasks);
 
 			var target = new Web.Core.Startup.Startup();
 			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));

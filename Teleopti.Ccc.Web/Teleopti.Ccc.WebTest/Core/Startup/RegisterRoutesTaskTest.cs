@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var registerAreas = MockRepository.GenerateMock<IRegisterAreas>();
 			var globalConfiguration = MockRepository.GenerateMock<IGlobalConfiguration>();
 			var target = new RegisterRoutesTask(r => r.Clear(), registerAreas, globalConfiguration);
-			target.Execute();
+			target.Execute(null);
 
 			registerAreas.AssertWasCalled(x => x.Execute());
 			globalConfiguration.AssertWasCalled(x => x.Configure(null), o => o.IgnoreArguments());

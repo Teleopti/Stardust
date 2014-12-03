@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Owin;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using log4net;
 using Teleopti.Ccc.Domain.Security;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 			_logger = logger;
 		}
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			foreach (var dataSource in _applicationData.Value.RegisteredDataSourceCollection)
 			{

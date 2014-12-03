@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Owin;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_globalConfiguration = globalConfiguration;
 		}
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			_globalConfiguration.Configure(registerWebApiRoutes);
 			registerRoutes(RouteTable.Routes);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Owin;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Func<ModelBinderDictionary> BindersGetter = () => ModelBinders.Binders;
  
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			RegisterModelBinders(BindersGetter());
 			return null;

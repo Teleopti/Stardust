@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Owin;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			_signalSender = signalSender;
 		}
 
-		public Task Execute()
+		public Task Execute(IAppBuilder application)
 		{
 			return Task.Factory.StartNew(() => _signalSender.StartBrokerService());
 		}
