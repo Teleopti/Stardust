@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpGet]
-		[ActionName("ValidatePreference")]
-		public virtual JsonResult CheckPreferenceValidation(DateOnly date, Guid preferenceId)
+		[ActionName("ValidatePreference")]	//this validates preference (eg.: shift category preference, day off preference), not the preference template created by agent
+		public virtual JsonResult CheckPreferenceValidation(DateOnly date, Guid? preferenceId)
 		{
 			const JsonRequestBehavior requestOption = JsonRequestBehavior.AllowGet;
 
@@ -148,14 +148,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				}, requestOption);
 			}
 
-			var preferenceExisted =
-				preferenceModel.Options.PreferenceOptions.Any(x => x.Options.Any(y => new Guid(y.Value) == preferenceId));
-
-			return Json(new
+			if (preferenceId != null)
 			{
-				isValid = preferenceExisted,
-				message = preferenceExisted ? string.Empty : Resources.CannotAddPreferenceSelectedItemNotAvailable
-			}, requestOption);
+				var preferenceExisted =
+					preferenceModel.Options.PreferenceOptions.Any(x => x.Options.Any(y => new Guid(y.Value) == preferenceId));
+
+				return Json(new
+				{
+					isValid = preferenceExisted,
+					message = preferenceExisted ? string.Empty : Resources.CannotAddPreferenceSelectedItemNotAvailable
+				}, requestOption);
+			}
+			//when user creates or loads preference template without choosing any shift category preference , then preferenceID will be null, 
+			//in this case, nothing to validate, just return empty validation message
+			return Json(new {isValid = true, message = string.Empty}, requestOption);
 		}
 	}
 }
