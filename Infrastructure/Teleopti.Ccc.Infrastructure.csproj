@@ -167,6 +167,7 @@
     <Compile Include="Foundation\AvailableApplicationIdentityDataSources.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
+    <Compile Include="Foundation\CouldNotCreateConnectionException.cs" />
     <Compile Include="Foundation\IAvailableApplicationTokenDataSource.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />

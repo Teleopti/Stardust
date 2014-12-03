@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				}
 				catch (TransactionException transactionException)
 				{
-					throw new DataSourceException("Cannot start transaction", transactionException);
+					throw new CouldNotCreateConnectionException("Cannot start transaction", transactionException);
 				}
 			}
 		}

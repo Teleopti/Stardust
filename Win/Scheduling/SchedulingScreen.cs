@@ -22,6 +22,7 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -95,6 +96,8 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using DataSourceException = Syncfusion.Windows.Forms.Tools.DataSourceException;
+
 #endregion
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -3677,28 +3680,43 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
 
-			IEnumerable<PersistConflict> foundConflicts;
-			if (!_container.Resolve<ISchedulingScreenPersister>().TryPersist(_schedulerState.Schedules,
-																						_schedulerState.Schedules.ModifiedPersonAccounts,
-																						_schedulerState.PersonRequests,
-																						_modifiedWriteProtections,
-																						_schedulerState.CommonStateHolder.ModifiedWorkflowControlSets,
-																						out foundConflicts))
+			IEnumerable<PersistConflict> foundConflicts = null;
+			try
 			{
-				handleConflicts(new List<IPersistableScheduleData>(), foundConflicts);
-				doSaveProcess();
-			}
+				bool success = _container.Resolve<ISchedulingScreenPersister>().TryPersist(_schedulerState.Schedules,
+					_schedulerState.Schedules.ModifiedPersonAccounts,
+					_schedulerState.PersonRequests,
+					_modifiedWriteProtections,
+					_schedulerState.CommonStateHolder.ModifiedWorkflowControlSets,
+					out foundConflicts);
 
-			//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
-			if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
-			{
-				BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
+				if (!success && foundConflicts != null)
+				{
+					handleConflicts(new List<IPersistableScheduleData>(), foundConflicts);
+					doSaveProcess();
+				}
+
+				//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
+				if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+				{
+					BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
+				}
+				_undoRedo.Clear();
 			}
-			_undoRedo.Clear();
-			Cursor = Cursors.Default;
-			updateRequestCommandsAvailability();
-			updateShiftEditor();
-			RecalculateResources();
+			catch (CouldNotCreateConnectionException ex)
+			{
+				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
+			}
+			finally
+			{
+				Cursor = Cursors.Default;
+				updateRequestCommandsAvailability();
+				updateShiftEditor();
+				RecalculateResources();
+			}
 		}
 
 		private void updateRibbon(ControlType controlType)
