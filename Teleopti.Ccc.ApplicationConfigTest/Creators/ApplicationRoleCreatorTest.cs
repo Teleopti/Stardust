@@ -1,20 +1,11 @@
-﻿using System.Globalization;
-using NHibernate;
+﻿using NHibernate;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.ApplicationConfigTest.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfigTest.Creators
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// Created by: peterwe
-    /// Created date: 2008-10-24
-    /// </remarks>
     [TestFixture]
     [Category("LongRunning")]
     public class ApplicationRoleCreatorTest

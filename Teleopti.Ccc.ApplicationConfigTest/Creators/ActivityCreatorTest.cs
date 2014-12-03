@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Interfaces.Domain;
@@ -11,15 +10,10 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
     public class ActivityCreatorTest
     {
         private ActivityCreator _target;
-        private IPerson _person;
-        private ISessionFactory _sessionFactory;
 
         [SetUp]
         public void Setup()
         {
-            _sessionFactory = SetupFixtureForAssembly.SessionFactory;
-            _person = SetupFixtureForAssembly.Person;
-
             _target = new ActivityCreator();
         }
 
