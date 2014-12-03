@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
 
@@ -168,6 +169,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GoToPerformanceTool()
 		{
 			GoToWaitForUrlAssert("PerformanceTool", new ApplicationStartupTimeout());
+		}
+
+		public static void GoToPerformanceTool(string scenarioName)
+		{
+			GoToWaitForUrlAssert("PerformanceTool#" + HttpUtility.UrlEncode(scenarioName), new ApplicationStartupTimeout());
 		}
 
 		public static void GoToMessageBrokerTool()
