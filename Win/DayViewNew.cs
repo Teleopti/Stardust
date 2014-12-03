@@ -191,13 +191,13 @@ namespace Teleopti.Ccc.Win
             foreach (IVisualLayer visualLayer in scheduleDay.ProjectionService().CreateProjection())
             {
                 DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.TimeZone);
-                int startPixel =
-                    (int)Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
-                    e.Bounds.X;
-                int endPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.EndDateTime, IsRightToLeft)) +
-                    e.Bounds.X;
+                int startPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) + e.Bounds.X;
+                int endPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.EndDateTime, IsRightToLeft)) + e.Bounds.X;
 
-                drawRect(e, visualLayer.Payload.ConfidentialDisplayColor(person,dateOnly), startPixel, endPixel);
+				if(visualLayer.DefinitionSet != null && visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
+					drawOvertimeRect(e, visualLayer.Payload.ConfidentialDisplayColor(person, dateOnly), startPixel, endPixel);
+				else
+					drawRect(e, visualLayer.Payload.ConfidentialDisplayColor(person,dateOnly), startPixel, endPixel);
             }
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
@@ -347,6 +347,30 @@ namespace Teleopti.Ccc.Win
                 e.Graphics.FillRectangle(sBrush, lowerRect);
             } 
         }
+
+		private void drawOvertimeRect(GridDrawCellEventArgs e, Color color, int startPixel, int endPixel)
+	    {
+			var rect = new Rectangle(startPixel, e.Bounds.Y + 2, endPixel - startPixel, e.Bounds.Height - 4);
+			var upperRect = new Rectangle(startPixel, e.Bounds.Y + 2, endPixel - startPixel, e.Bounds.Height / 2 - 4);
+			var lowerRect = new Rectangle(rect.X, rect.Y + rect.Height / 2 - 4, rect.Width, rect.Height / 2 + 4);
+			
+			if (rect.Width < 1) return;
+
+			
+
+			using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(upperRect, color))
+			{
+				e.Graphics.FillRectangle(lBrush, upperRect);
+			}
+
+			var foreColor = Color.Orange;
+			if (color.ToArgb() == Color.Orange.ToArgb()) foreColor = Color.DarkOrange;
+
+			using (var brush = new HatchBrush(HatchStyle.WideUpwardDiagonal, foreColor, color))
+			{
+				e.Graphics.FillRectangle(brush, lowerRect);
+			}
+	    }
 
         private void drawDayOffRect(GridDrawCellEventArgs e, Color color, int startPixel, int endPixel, string text, Point startPoint)
         {
