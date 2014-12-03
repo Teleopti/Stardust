@@ -2087,6 +2087,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I want a shift matching the following conditions:.
+        /// </summary>
+        public static string AnnounceShiftConditions {
+            get {
+                return ResourceManager.GetString("AnnounceShiftConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answered.
         /// </summary>
         public static string Answered {

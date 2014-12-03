@@ -12501,4 +12501,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift exchange offer valid to</value>
     <comment>used for shift exchange in MyTime Schedule, a hint for Valid To calander</comment>
   </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>I want a shift matching the following conditions:</value>
+    <comment>use for MyTime Announce Shift view</comment>
+  </data>
 </root>
