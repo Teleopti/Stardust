@@ -10,7 +10,13 @@
 				<table class="table-condensed">
 					<tr class="form-inline">
 						<td colspan="3">
-							<label>I want to trade for <b data-bind="text: DateToFormatted"></b> that matches</label>
+							<label>I want a shift matching the following conditions: &nbsp;</label>
+							<div class="input-group">
+								<input class="form-control" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }" />
+								<span class="input-group-addon" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</span>
+							</div>
 						</td>
 					</tr>
 					<tr class="form-inline">

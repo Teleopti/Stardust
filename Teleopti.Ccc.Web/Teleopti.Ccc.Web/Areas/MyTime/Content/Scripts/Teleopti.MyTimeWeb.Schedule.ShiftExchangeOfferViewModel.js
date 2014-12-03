@@ -15,7 +15,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	this.DateFormat = ko.observable(dateFormat.format());
-	this.OfferValidTo = ko.observable(moment().startOf('day'));
 
 	//Interface....
 	this.DateFrom = function (date) {
@@ -29,7 +28,18 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		return undefined;
 	});
 
+	this.OfferValidTo = ko.observable(moment().startOf('day'));
 	self.OpenPeriodStart = ko.observable(1);
+	self.DateToForPublish = ko.computed({
+		read: function() {
+			return self.DateTo();
+		},
+		write: function (date) {
+			self.DateTo(date);
+			self.OfferValidTo(moment(date).add('days', -self.OpenPeriodStart()));
+		}
+	});
+
 	self.IsSelectedDateInShiftTradePeriod = ko.observable(false);
 	this.SaveEnabled = ko.computed(function () {
 		var today = moment().startOf('day');
@@ -72,7 +82,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
-					self.OfferValidTo(date.clone().add('days', -data.OpenPeriodRelativeStart));
 					self.OpenPeriodStart(data.OpenPeriodRelativeStart);
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					var min = moment(now).add('days', data.OpenPeriodRelativeStart);
