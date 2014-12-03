@@ -8,7 +8,7 @@ namespace Teleopti.Support.Code.Tool
     {
         public IList<SearchReplace> GetSearchReplaceList(string fromSettings)
         {
-            return (from setting in fromSettings.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries) select setting.Split('|') into values where values.GetUpperBound(0).Equals(1) select new SearchReplace {SearchFor = values[0], ReplaceWith = values[1]}).ToList();
+			return (from setting in fromSettings.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) select setting.Split(new[] { '|' }, 2) into values where values.GetUpperBound(0).Equals(1) select new SearchReplace { SearchFor = values[0], ReplaceWith = values[1] }).ToList();
         }
     }
 }
