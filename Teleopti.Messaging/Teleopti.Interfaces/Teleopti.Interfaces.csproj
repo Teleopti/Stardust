@@ -634,6 +634,7 @@
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
+    <Compile Include="Infrastructure\IAnalyticsScheduleRepository.cs" />
     <Compile Include="Infrastructure\IConfigReader.cs" />
     <Compile Include="Infrastructure\ICurrentUnitOfWork.cs" />
     <Compile Include="Infrastructure\IDeleteTag.cs" />
@@ -688,6 +689,7 @@
     <Compile Include="Domain\IRestrictionSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\IIntervalLengthFetcher.cs" />
     <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />

@@ -4,6 +4,7 @@ using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -11,12 +12,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	
-
 	internal class EventHandlersModule : Module
 	{
 		private readonly IIocConfiguration _config;
@@ -47,6 +48,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TrackingMessageSender>().As<ITrackingMessageSender>().SingleInstance();
 			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
 			builder.RegisterType<AdherenceDetailsReadModelPersister>().SingleInstance().As<IAdherenceDetailsReadModelPersister>();
+			builder.RegisterType<IntervalLengthFetcher>().SingleInstance().As<IIntervalLengthFetcher>();
+			builder.RegisterType<AnalyticsFactScheduleTimeHandler>().SingleInstance().As<IAnalyticsFactScheduleTimeHandler>();
+			builder.RegisterType<AnalyticsFactScheduleDateHandler>().SingleInstance().As<IAnalyticsFactScheduleDateHandler>();
+			builder.RegisterType<AnalyticsFactSchedulePersonHandler>().SingleInstance().As<IAnalyticsFactSchedulePersonHandler>();
+			builder.RegisterType<AnalyticsScheduleRepository>().SingleInstance().As<IAnalyticsScheduleRepository>();
+
 		}
 	}
 }

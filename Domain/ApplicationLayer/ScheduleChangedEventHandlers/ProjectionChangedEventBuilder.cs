@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							Date = date.Date,
 							WorkTime = projection.WorkTime(),
 							ContractTime = projection.ContractTime(),
+							PersonPeriodId = personPeriod.Id.GetValueOrDefault()
 						};
 					var layers = new List<ProjectionChangedEventLayer>();
 
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						case SchedulePartView.MainShift:
 							var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
 							eventScheduleDay.IsWorkday = true;
+							eventScheduleDay.ShiftCategoryId = shiftCategory.Id.GetValueOrDefault();
 							eventScheduleDay.ShortName = shiftCategory.Description.ShortName;
 							eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();
 							break;

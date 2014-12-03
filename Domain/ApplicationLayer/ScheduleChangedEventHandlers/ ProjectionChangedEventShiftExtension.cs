@@ -47,11 +47,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							EndDateTime = intersectionPeriod.Value.EndDateTime,
 							WorkTime = layer.WorkTime == TimeSpan.Zero ? TimeSpan.Zero: intersectionPeriod.Value.ElapsedTime(),
 							ContractTime = layer.ContractTime == TimeSpan.Zero ? TimeSpan.Zero : intersectionPeriod.Value.ElapsedTime(),
-							Name = layer.Name,
-							ShortName = layer.ShortName,
+							//Skicka med Ready Time eller själva hämta det från Aktiviteten
+							//Skicka med Paid Time eller själva hämta det från Aktiviteten eller frånvaron
+							Name = layer.Name, //struntar vi i egentligen
+							ShortName = layer.ShortName, //struntar vi i egentligen
 							IsAbsence = layer.IsAbsence,
-							IsAbsenceConfidential = layer.IsAbsenceConfidential,
-							PayloadId = layer.PayloadId
+							//Vi behöver också IsOvertime eller tiden
+							IsAbsenceConfidential = layer.IsAbsenceConfidential, //struntar vi i egentligen
+							PayloadId = layer.PayloadId //activityid eller absenceid
 						};
 						retColl.Add(newLayer);
 						foundIndex = index;

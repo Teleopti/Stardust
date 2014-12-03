@@ -49,5 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public ProjectionChangedEventDayOff DayOff { get; set; }
 
 		public ProjectionChangedEventShift Shift { get; set; }
+		
+		public Guid PersonPeriodId { get; set; }
+
+		public Guid ShiftCategoryId { get; set; }
 	}
 }
