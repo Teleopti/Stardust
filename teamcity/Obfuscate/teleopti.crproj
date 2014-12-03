@@ -1,4 +1,0 @@
-<project outputDir=".\obfuscated" baseDir="..\..\infrastructure\bin\release" xmlns="http://confuser.codeplex.com">
-  <rule pattern="true" preset="aggressive" inherit="false" />
-  <module path="Teleopti.Ccc.Infrastructure.dll" snKey="..\..\..\teleopti.ccc.snk" />
-</project>
