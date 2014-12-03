@@ -18,7 +18,6 @@
 		<DocSrcPath>\\integration\Documentation</DocSrcPath>
 		<MSIShare>D:\Installation\msi</MSIShare>
 		<Dependencies>\\a380\T-Files\RnD\MSI_Dependencies</Dependencies>
-		<ObfuscateCmd>$(CCNetWorkingDirectory)\ccnet\Obfuscate\RunObfuscation.cmd</ObfuscateCmd>
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
 		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
@@ -32,7 +31,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-	<Target Name="DeployAll" DependsOnTargets="Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
+	<Target Name="DeployAll" DependsOnTargets="Compile;CompileExtraApps;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;Kanbox;CallJenkinsForDeployment">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -46,13 +45,6 @@
 	<Target Name="CallJenkinsForDeployment">
 		<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
                 FailOnNon2xxResponse="true" />
-	</Target>
-	
-	<Target Name="Obfuscate">
-		<Message Importance="high" Text="Obfuscate ..."/>
-		<Message Importance="high" Text="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
-		<Exec Command="&quot;$(ObfuscateCmd)&quot; &quot;$(CCNetWorkingDirectory)&quot;"/>
-		<Message Importance="high" Text="Obfuscate. Done!"/>
 	</Target>
 
 	<Target Name="CompileExtraApps">
