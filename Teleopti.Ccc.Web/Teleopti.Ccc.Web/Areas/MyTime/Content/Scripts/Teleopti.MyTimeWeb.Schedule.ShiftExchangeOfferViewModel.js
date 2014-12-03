@@ -20,7 +20,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	//Interface....
 	this.DateFrom = function (date) {
 		self.loadPeriod(date);
-		self.OfferValidTo(date.clone().add('days', -7));
 	};
 
 	this.DateTo = ko.observable();
@@ -30,12 +29,13 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		return undefined;
 	});
 
+	self.OpenPeriodStart = ko.observable(1);
 	self.IsSelectedDateInShiftTradePeriod = ko.observable(false);
 	this.SaveEnabled = ko.computed(function () {
 		var today = moment().startOf('day');
-		var isValideToAfterToday = self.OfferValidTo() > today ? true : false;
-		var isValideToBeforDateTo = self.OfferValidTo() < self.DateTo() ? true : false;
-		var isValidToLegal = isValideToAfterToday && isValideToBeforDateTo;
+		var isValideToLegalStart = self.OfferValidTo() >= today ? true : false;
+		var isValideToLegalEnd = self.OfferValidTo() <= moment(self.DateTo()).add('days', -self.OpenPeriodStart()) ? true : false;
+		var isValidToLegal = isValideToLegalStart && isValideToLegalEnd;
 		return self.IsSelectedDateInShiftTradePeriod() && isValidToLegal;
 	});
 
@@ -72,6 +72,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
+					self.OfferValidTo(date.clone().add('days', -data.OpenPeriodRelativeStart));
+					self.OpenPeriodStart(data.OpenPeriodRelativeStart);
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					var min = moment(now).add('days', data.OpenPeriodRelativeStart);
 					var max = moment(now).add('days', data.OpenPeriodRelativeEnd);

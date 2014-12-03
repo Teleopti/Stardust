@@ -12493,4 +12493,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Planned</value>
     <comment>activity planned</comment>
   </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Announce Shift</value>
+    <comment>used for publish shift trade in MyTime Schedule</comment>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Shift exchange offer valid to</value>
+    <comment>used for shift exchange in MyTime Schedule, a hint for Valid To calander</comment>
+  </data>
 </root>

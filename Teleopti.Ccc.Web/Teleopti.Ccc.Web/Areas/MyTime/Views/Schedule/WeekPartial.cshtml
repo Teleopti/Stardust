@@ -118,7 +118,7 @@
 			<a id="addAbsenceRequest" class="absence-request-add" href="#" data-bind="click: showAddAbsenceRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 		</li>
 		<li data-bind="visible: shiftExchangePermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'shiftOffer' }">
-			<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;Shift Exchange</a>
+			<a class="shift-exchange-offer-add" href="#" data-bind="click: showAddShiftExchangeOfferForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
 		</li>
 		<li data-bind="visible: isAbsenceReportAvailable, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'absenceReport' }">
 			<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
