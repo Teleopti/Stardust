@@ -187,7 +187,6 @@
     <Compile Include="Foundation\AssemblyInfoTest.cs" />
     <Compile Include="Foundation\AvailableApplicationIdentityDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
-    <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkTest.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersisterTest.cs" />
