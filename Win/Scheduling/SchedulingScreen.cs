@@ -3703,6 +3703,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			finally
 			{
 				_undoRedo.Clear();
+			}
+			catch (CouldNotCreateTransactionException ex)
+			{
+				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
+			}
+			finally
+			{
 				Cursor = Cursors.Default;
 				updateRequestCommandsAvailability();
 				updateShiftEditor();
