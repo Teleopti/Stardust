@@ -1,14 +1,4 @@
-<project baseDir="..\..\infrastructure\bin\release" outputDir=".\obfuscated" xmlns="http://confuser.codeplex.com">
-    <rule preset="none" pattern="true">
-        <protection id="anti debug" />
-        <protection id="anti dump" />
-        <protection id="anti ildasm" />
-        <protection id="anti tamper" />
-        <protection id="constants" />
-        <protection id="ctrl flow" />
-        <protection id="invalid metadata" />
-        <protection id="ref proxy" />
-        <protection id="resources" />
-    </rule>
+<project outputDir=".\obfuscated" baseDir="..\..\infrastructure\bin\release" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" preset="aggressive" inherit="false" />
   <module path="Teleopti.Ccc.Infrastructure.dll" snKey="..\..\..\teleopti.ccc.snk" />
 </project>
