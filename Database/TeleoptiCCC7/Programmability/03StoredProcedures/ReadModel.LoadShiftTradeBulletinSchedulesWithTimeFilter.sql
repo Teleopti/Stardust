@@ -86,7 +86,7 @@ AS
 		Person
 	FROM (
 			--Shifts
-  			SELECT
+  			SELECT DISTINCT
 				seo.Person,
 				[Date],
 				MyShiftStartDateTime,
