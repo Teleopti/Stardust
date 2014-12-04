@@ -82,7 +82,7 @@ AS
 			WHERE [Date] = @shiftTradeDate
 			AND @currentScheduleStart between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
 			AND @currentScheduleEnd between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
-			AND ValidTo >= GETUTCDATE()
+			AND ValidTo >= CONVERT(date, GETUTCDATE())
 	)bulletin
 
 	SET ROWCOUNT @take;
