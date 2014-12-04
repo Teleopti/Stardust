@@ -6,60 +6,64 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IMultiplicatorsetForPasteSpecialFilter
 	{
-		IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets, IEnumerable<IScheduleDay> scheduleDays);
+		IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IScheduleDay> scheduleDays);
 	}
 
+	/// <summary>
+	/// Remove items from the give IMultiplicatorDefinitionSet workingSets which are not in ALL scheduleDay
+	/// </summary>
 	public class MultiplicatorsetForPasteSpecialFilter : IMultiplicatorsetForPasteSpecialFilter
 	{
 
-		public IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets, IEnumerable<IScheduleDay> scheduleDays)
+		public IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IScheduleDay> scheduleDays)
 		{
-
-			var workingSets = from set in multiplicatorDefinitionSets
-							  where set.MultiplicatorType == MultiplicatorType.Overtime
-							  select set;
-						
-
-
-			foreach (var scheduleDay in scheduleDays)
-			{
-				var multiplicatorForScheduleDay = multiplicatorDefinitionSetsForScheduleDay(scheduleDay);
-				// remove items from workingSets which are not in ALL multiplicatorForScheduleDay
-				var except = workingSets.Except(multiplicatorForScheduleDay);
-				workingSets = workingSets.Except(except);
-				if (!workingSets.Any())
-					return workingSets;
-			}
-			return workingSets;
+			var contractsInScheduleDays = extractContracts(scheduleDays);
+			var multiplicatorDefinitionSetsInScheduleDays = multiplicatorDefinitionSetsInContracts(contractsInScheduleDays);
+			return multiplicatorDefinitionSetsInScheduleDays;
 		}
 
-		private IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetsForScheduleDay(IScheduleDay scheduleDay)
+		private IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetsInContracts(IEnumerable<IContract> contracts)
 		{
-			// union of all person period's multiplicator definition set within a day
+			//  of all person period's multiplicator definition set within a day
 
-			var result = new List<IMultiplicatorDefinitionSet>();
-			var person = scheduleDay.Person;
-			var personPeriods = person.PersonPeriods(new DateOnlyPeriod(scheduleDay.DateOnlyAsPeriod.DateOnly,
-					scheduleDay.DateOnlyAsPeriod.DateOnly));
-			if (!personPeriods.Any())
+			IEnumerable<IMultiplicatorDefinitionSet> result = new List<IMultiplicatorDefinitionSet>();
+
+			var contractList = contracts.ToList();
+
+			if (!contractList.Any())
 				return result;
-			foreach (var personPeriod in personPeriods)
-			{
-				var personContract = personPeriod.PersonContract;
-				if (personContract == null)
-					continue;
-				var contract = personContract.Contract;
-				if (contract == null)
-					continue;
-				var multiplicatorDefinitionSetCollection = contract.MultiplicatorDefinitionSetCollection;
-				if (multiplicatorDefinitionSetCollection == null
-				    || !multiplicatorDefinitionSetCollection.Any())
-					continue;
-				result.AddRange(multiplicatorDefinitionSetCollection);
-			}
 
+			result = contractList[0].MultiplicatorDefinitionSetCollection.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime && m.IsDeleted == false);
+
+			for (int i = 1; i < contractList.Count; i++)
+			{
+				var current = contractList[i];
+				var multiplicatorDefinitionSetCollection =
+					current.MultiplicatorDefinitionSetCollection.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime && m.IsDeleted == false)
+			;
+				result = result.Intersect(multiplicatorDefinitionSetCollection);
+				if (!result.Any())
+					break;
+			}
 			return result;
 		}
 
+		private IEnumerable<IContract> extractContracts(IEnumerable<IScheduleDay> scheduleDays)
+		{
+			// union of contract in all schedule days
+
+			var result = new HashSet<IContract>();
+			foreach (var scheduleDay in scheduleDays)
+			{
+				var person = scheduleDay.Person;
+				var personPeriod = person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly);
+				if (personPeriod == null)
+					continue;
+				var personContract = personPeriod.PersonContract;
+				var contract = personContract.Contract;
+				result.Add(contract);
+			}
+			return result;
+		}
 	}
 }
