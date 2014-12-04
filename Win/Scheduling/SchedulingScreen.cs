@@ -4816,6 +4816,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlersOff()
 		{
+			//Chart tab
+			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
+			toolStripButtonGridInChart.Click -= toolStripButtonGridInChart_Click;
+			toolStripButtonChartPeriodView.Click -= toolStripButtonChartPeriodViewClick;
+			toolStripButtonChartMonthView.Click -= toolStripButtonChartPeriodViewClick;
+			toolStripButtonChartWeekView.Click -= toolStripButtonChartPeriodViewClick;
+			toolStripButtonChartDayView.Click -= toolStripButtonChartPeriodViewClick;
+			toolStripButtonChartIntradayView.Click -= toolStripButtonChartPeriodViewClick;
+			//
 			toolStripButtonFilterStudentAvailability.Click -= toolStripButtonFilterStudentAvailability_Click;
 			toolStripButtonFilterOvertimeAvailability.Click -= toolStripButtonFilterOvertimeAvailability_Click;
 			toolStripButtonFilterAgents.Click -= toolStripButtonFilterAgents_Click;
