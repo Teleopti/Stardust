@@ -217,6 +217,7 @@
     <Compile Include="ApplicationLayer\Rta\StateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonActivityChangePulseLoop.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTime.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDateHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonHandler.cs" />
