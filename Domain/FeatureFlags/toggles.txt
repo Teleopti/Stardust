@@ -60,3 +60,4 @@ RTA_SeePercentageAdherenceForOneAgent_30783 = RC
 RTA_SeeAdherenceDetailsForOneAgent_31285 = RC
 ETL_SpeedUpETL_30791 = false
 #RTA_HangfireEventProcessing_31593 = RC
+Schedule_OvertimeBeforeShiftStart_30712 = RC
