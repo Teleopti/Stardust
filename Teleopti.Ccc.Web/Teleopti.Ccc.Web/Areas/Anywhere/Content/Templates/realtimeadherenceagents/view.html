@@ -8,12 +8,14 @@
 		<button type="button" class="btn btn-primary navbar-btn select-agents" data-bind="checkbox: SelectAgentsEnabled, if: $root.notifyViaSMSEnabled">
 			<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
 		</button>
-		<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, if: $root.notifyViaSMSEnabled, enable: SendMessageEnabled">
-			Send
+		<!-- ko if: $root.notifyViaSMSEnabled -->
+		<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, enable: SendMessageEnabled, text: $root.Resources.Send">
 		</button>
+		<!-- /ko -->
 		<form class="navbar-form navbar-right" role="search">
 			<div class="form-group">
-				Filter: <input type="text" class="form-control" data-bind="value: filter, valueUpdate: 'input'" />
+				<span data-bind="text: $root.Resources.FilterColon"></span>
+				<input type="text" class="form-control" data-bind="value: filter, valueUpdate: 'input'" />
 			</div>
 		</form>
 	</div>
