@@ -132,6 +132,12 @@
 				}
 			});
 
+			toggleQuerier('RTA_NotifyViaSMS_31567', {
+				enabled: function () {
+					viewModel.notifyViaSMSEnabled(true);
+				}
+			});
+
 		}
 	};
 });

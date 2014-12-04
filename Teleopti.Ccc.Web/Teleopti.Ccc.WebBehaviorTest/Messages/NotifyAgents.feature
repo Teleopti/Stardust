@@ -3,6 +3,7 @@
 	As a team leader
 	I want to send sms to the agents from RTA
 
+@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Send message
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
