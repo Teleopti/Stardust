@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,11 +15,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ImportForecastsFileCommandHandler : IHandleCommand<ImportForecastsFileCommandDto>
     {
-		private readonly IServiceBusEventPopulatingPublisher _busSender;
+		private readonly IMessagePopulatingServiceBusSender _busSender;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJobResultRepository _jobResultRepository;
 
-		public ImportForecastsFileCommandHandler(IServiceBusEventPopulatingPublisher busSender,
+		public ImportForecastsFileCommandHandler(IMessagePopulatingServiceBusSender busSender,
             ICurrentUnitOfWorkFactory unitOfWorkFactory,
             IJobResultRepository jobResultRepository)
         {
@@ -48,10 +47,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 unitOfWork.PersistAll();
             }
             
-            if (!_busSender.EnsureBus())
-            {
-                throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the import forecasts.");
-            }
             var message = new ImportForecastsFileToSkill
             {
                 JobId = jobResultId,
@@ -60,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
-            _busSender.Publish(message);
+			_busSender.Send(message, true);
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }
     }

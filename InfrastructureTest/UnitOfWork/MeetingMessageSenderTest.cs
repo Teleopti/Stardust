@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -16,13 +17,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender target;
 		private MockRepository mocks;
-		private IServiceBusEventPopulatingPublisher serviceBusSender;
+		private IEventPopulatingPublisher serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			serviceBusSender = mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
+			serviceBusSender = mocks.DynamicMock<IEventPopulatingPublisher>();
 			target = new MeetingMessageSender(serviceBusSender);
 		}
 
@@ -38,7 +39,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(serviceBusSender.EnsureBus()).Return(true);
 				Expect.Call(()=>serviceBusSender.Publish(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())

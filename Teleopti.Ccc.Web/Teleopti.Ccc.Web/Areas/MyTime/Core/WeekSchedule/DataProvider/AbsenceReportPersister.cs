@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
 	public class AbsenceReportPersister : IAbsenceReportPersister
 	{
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public AbsenceReportPersister(IServiceBusEventPopulatingPublisher serviceBusSender, ICurrentBusinessUnit businessUnitProvider, ICurrentDataSource currentDataSource, INow now, ICurrentUnitOfWork currentUnitOfWork, ILoggedOnUser loggedOnUser)
+		public AbsenceReportPersister(IMessagePopulatingServiceBusSender serviceBusSender, ICurrentBusinessUnit businessUnitProvider, ICurrentDataSource currentDataSource, INow now, ICurrentUnitOfWork currentUnitOfWork, ILoggedOnUser loggedOnUser)
 		{
 			_serviceBusSender = serviceBusSender;
 			_businessUnitProvider = businessUnitProvider;
@@ -29,19 +29,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public AbsenceReportViewModel Persist(AbsenceReportInput input)
 		{
-			if (_serviceBusSender.EnsureBus())
+			var message = new NewAbsenceReportCreated
 			{
-				var message = new NewAbsenceReportCreated
-				{
-					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-					Datasource = _currentDataSource.Current().DataSourceName,
-					AbsenceId = input.AbsenceId,
-					PersonId = (Guid)_loggedOnUser.CurrentUser().Id,
-					RequestedDate = input.Date.Date,
-					Timestamp = _now.UtcDateTime()
-				};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Publish(message));
-			}
+				BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+				Datasource = _currentDataSource.Current().DataSourceName,
+				AbsenceId = input.AbsenceId,
+				PersonId = (Guid)_loggedOnUser.CurrentUser().Id,
+				RequestedDate = input.Date.Date,
+				Timestamp = _now.UtcDateTime()
+			};
+			_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message, false));
 			return new AbsenceReportViewModel
 			{
 				AbsenceId = input.AbsenceId,

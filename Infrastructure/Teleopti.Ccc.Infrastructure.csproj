@@ -154,13 +154,12 @@
     </Compile>
     <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
+    <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\EventPublisher.cs" />
+    <Compile Include="ApplicationLayer\IMessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
-    <Compile Include="ApplicationLayer\IServiceBusEventPopulatingPublisher.cs" />
-    <Compile Include="ApplicationLayer\IServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
-    <Compile Include="ApplicationLayer\ServiceBusEventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />

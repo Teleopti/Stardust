@@ -1,10 +1,8 @@
 ﻿using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -13,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class DenormalizeNotificationCommandHandlerTest
     {
-		private IServiceBusEventPopulatingPublisher _busSender;
+		private IMessagePopulatingServiceBusSender _busSender;
         private MockRepository _mock;
         private DenormalizeNotificationCommandHandler _target;
         private DenormalizeNotificationCommandDto _denormalizeNotificationCommandDto;
@@ -22,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-			_busSender = _mock.StrictMock<IServiceBusEventPopulatingPublisher>();
+			_busSender = _mock.StrictMock<IMessagePopulatingServiceBusSender>();
             _target = new DenormalizeNotificationCommandHandler(_busSender);
             _denormalizeNotificationCommandDto = new DenormalizeNotificationCommandDto();
         }
@@ -32,8 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             using (_mock.Record())
             {
-                Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(()=>_busSender.Publish(new ProcessDenormalizeQueue())).IgnoreArguments();
+                Expect.Call(()=>_busSender.Send(new ProcessDenormalizeQueue(), true)).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -42,13 +39,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfServiceBusNotEnabled()
         {
             using (_mock.Record())
             {
-                Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(() => _busSender.Publish(new ProcessDenormalizeQueue())).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ProcessDenormalizeQueue(), true)).IgnoreArguments();
             }
             using (_mock.Playback())
             {

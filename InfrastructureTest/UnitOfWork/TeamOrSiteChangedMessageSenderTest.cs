@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -17,13 +18,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender _target;
 		private MockRepository _mocks;
-		private IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private IMessagePopulatingServiceBusSender _serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_serviceBusSender = _mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
+			_serviceBusSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
 			_target = new TeamOrSiteChangedMessageSender(_serviceBusSender);
 		}
 
@@ -37,9 +38,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
-				Expect.Call(() => _serviceBusSender.Publish(message))
-				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonChangedMessage>(m => m.SerializedPeople == Guid.Empty.ToString()));
+				Expect.Call(() => _serviceBusSender.Send(message, false))
+				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonChangedMessage>(m => m.SerializedPeople == Guid.Empty.ToString()),
+					  new Equal(false));
 			}
 			using (_mocks.Playback())
 			{
@@ -57,9 +58,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
-				Expect.Call(() => _serviceBusSender.Publish(message))
-				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonChangedMessage>(m => m.SerializedPeople == Guid.Empty.ToString()));
+				Expect.Call(() => _serviceBusSender.Send(message, false))
+				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonChangedMessage>(m => m.SerializedPeople == Guid.Empty.ToString()),
+					  new Equal(false));
 			}
 			using (_mocks.Playback())
 			{

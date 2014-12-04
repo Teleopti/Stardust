@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -10,17 +10,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class MeetingMessageSender : IMessageSender
 	{
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IEventPopulatingPublisher _serviceBusSender;
 
-		public MeetingMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
+		public MeetingMessageSender(IEventPopulatingPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (!_serviceBusSender.EnsureBus()) return;
-
 			var meetings =
 				modifiedRoots.Select(r => new { ProvideCustomChangeInfo = r.Root as IProvideCustomChangeInfo, UpdateType = r.Status });
 			meetings = meetings.Where(m => m.ProvideCustomChangeInfo != null);

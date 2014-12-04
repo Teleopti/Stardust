@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 		}
 
-		public void Send(object message)
+		public void Send(object message, bool throwOnNoBus)
 		{
 			_serviceBus().Send(message);
 		}
@@ -110,17 +110,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public IList<IMessageSender> Create()
 		{
-			var sender = _serviceBusSender;
-			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(sender), EventContextPopulator.Make());
+			var populator = EventContextPopulator.Make();
+			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
+			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
 			return new List<IMessageSender>
 				{
 					new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 					new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 					new MeetingMessageSender(eventPublisher),
-					new GroupPageChangedMessageSender(eventPublisher),
-					new TeamOrSiteChangedMessageSender(eventPublisher),
-					new PersonChangedMessageSender(eventPublisher),
-					new PersonPeriodChangedMessageSender(eventPublisher)
+					new GroupPageChangedMessageSender(messageSender),
+					new TeamOrSiteChangedMessageSender(messageSender),
+					new PersonChangedMessageSender(messageSender),
+					new PersonPeriodChangedMessageSender(messageSender)
 				};
 		}
 	}

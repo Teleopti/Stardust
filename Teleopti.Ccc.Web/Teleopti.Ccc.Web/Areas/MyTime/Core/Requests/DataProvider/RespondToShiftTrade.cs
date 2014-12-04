@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly INow _nu;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 									ILoggedOnUser loggedOnUser,
 									IMappingEngine mapper,
-									IServiceBusEventPopulatingPublisher serviceBusSender,
+									IMessagePopulatingServiceBusSender serviceBusSender,
 									INow nu)
 		{
 			_personRequestRepository = personRequestRepository;
@@ -71,33 +71,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			personRequest.Request.Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
-			if (_serviceBusSender.EnsureBus())
+			_serviceBusSender.Send(new NewShiftTradeRequestCreated
 			{
-				_serviceBusSender.Publish(new NewShiftTradeRequestCreated
-				{
-					PersonRequestId = personRequest.Id.GetValueOrDefault()
-				});
-			}
+				PersonRequestId = personRequest.Id.GetValueOrDefault()
+			}, false);
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
 		private void persistWithBus(IPersonRequest personRequest)
 		{
-			if (_serviceBusSender.EnsureBus())
+			_serviceBusSender.Send(new AcceptShiftTrade
 			{
-				_serviceBusSender.Publish(new AcceptShiftTrade
-													   {
-														   PersonRequestId = personRequest.Id.GetValueOrDefault(),
-														   AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
-														   Message = personRequest.GetMessage(new NoFormatting())
-													   });
-			}
-			else
-			{
-				var shittrade = (IShiftTradeRequest)personRequest.Request;
-				shittrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
-			}
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
+				Message = personRequest.GetMessage(new NoFormatting())
+			}, false);
 		}
 
 	}

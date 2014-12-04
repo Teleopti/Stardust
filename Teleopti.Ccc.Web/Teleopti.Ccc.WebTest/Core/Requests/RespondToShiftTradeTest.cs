@@ -17,37 +17,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 	public class RespondToShiftTradeTest
 	{
 		[Test]
-		public void OkByMeWhenCalledShouldLoadTheShiftTradeFromTheRepositoryAndAcceptItUsingNoBus()
-		{
-			//setup
-			var shiftTradeId = Guid.NewGuid();
-			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var loggedOnPerson = MockRepository.GenerateStub<IPerson>();
-			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
-			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
-			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var busSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
-			busSender.Expect(x => x.EnsureBus()).Return(false);
-			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, busSender, null);
-			var requestViewModel = new RequestViewModel();
-
-			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personRequest);
-			personRequest.Expect(p => p.Request).Return(shiftTrade);
-			loggedOnUser.Expect(l => l.CurrentUser()).Return(loggedOnPerson);
-			mapper.Expect(m => m.Map<IPersonRequest, RequestViewModel>(personRequest)).Return(requestViewModel);
-
-			//execute
-			var result = target.OkByMe(shiftTradeId, "");
-
-			//verify expectation:
-			shiftTrade.AssertWasCalled(s => s.Accept(loggedOnPerson, shiftTradeRequestCheckSum, personRequestCheckAuthorization));
-			result.Should().Be.SameInstanceAs(requestViewModel);
-		}
-
-		[Test]
 		public void OkByMeWhenCalledShouldLoadTheShiftTradeFromTheRepositoryAndAcceptItUsingBus()
 		{
 			//setup
@@ -60,14 +29,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var busSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
+			var busSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("gegga");
 			unitOfWorkFactoryProvider.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			var bsProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			bsProvider.Expect(x => x.Current()).Return(new BusinessUnit("sdf"));
-			busSender.Expect(x => x.EnsureBus()).Return(true);
 			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, busSender, MockRepository.GenerateMock<INow>());
 			var requestViewModel = new RequestViewModel();
 
@@ -80,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			target.OkByMe(shiftTradeId, "");
 
 			//verify expectation:
-			busSender.AssertWasCalled(s => s.Publish(null), o => o.IgnoreArguments());
+			busSender.AssertWasCalled(s => s.Send(null, false), o => o.IgnoreArguments());
 		}
 
 		[Test]

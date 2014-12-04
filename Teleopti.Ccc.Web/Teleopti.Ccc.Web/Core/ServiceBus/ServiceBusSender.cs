@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.ServiceModel;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using log4net;
@@ -14,11 +15,11 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 {
 	public class ServiceBusSender : IServiceBusSender
 	{
-	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ServiceBusSender));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ServiceBusSender));
 		private IContainer _customHost;
 		private static readonly object LockObject = new object();
 		private bool _isRunning;
-		
+
 		private void MoveThatBus()
 		{
 			lock (LockObject)
@@ -32,10 +33,10 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 
 						Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString =
 							ConfigurationManager.ConnectionStrings["Queue"].ConnectionString;
-						
+
 						new OnewayRhinoServiceBusConfiguration()
 							.UseAutofac(_customHost)
-							.UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Teleopti.Ccc.Web.ServiceBus.Client.config"))
+							.UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Teleopti.Ccc.Web.ServiceBus.Client.config"))
 							.Configure();
 
 						_isRunning = true;
@@ -55,11 +56,18 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			return _customHost.Resolve<T>();
 		}
 
-		public void Send(object message)
+		public void Send(object message, bool throwOnNoBus)
 		{
+			if (!EnsureBus())
+			{
+				if (throwOnNoBus)
+					throw new ApplicationException("The outgoing queue for the service bus is not available. Cannot send the message " + message.GetType().Name);
+				return;
+			}
+
 			var bus = Resolve<IOnewayBus>();
 
-            var raptorDomainMessage = message as ILogOnInfo;
+			var raptorDomainMessage = message as ILogOnInfo;
 
 			if (Logger.IsDebugEnabled)
 			{
@@ -77,7 +85,7 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			bus.Send(message);
 		}
 
-		public bool EnsureBus()
+		protected virtual bool EnsureBus()
 		{
 			if (!_isRunning) MoveThatBus();
 			return _isRunning;
@@ -104,7 +112,7 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 
 		protected virtual void ReleaseManagedResources()
 		{
-			if (_customHost!= null)
+			if (_customHost != null)
 				_customHost.Dispose();
 			_customHost = null;
 			Logger.Info("Transport disposed");

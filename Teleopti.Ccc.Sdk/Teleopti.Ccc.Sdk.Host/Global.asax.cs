@@ -81,7 +81,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             AutofacHostFactory.Container = container;
 	        var messageBroker = container.Resolve<IMessageBrokerComposite>();
 
-			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(busSender), EventContextPopulator.Make());
+			var populator = EventContextPopulator.Make();
+			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
+			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
 			var initializeApplication =
 				new InitializeApplication(
 					new DataSourcesFactory(new EnversConfiguration(),
@@ -90,10 +92,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					                               new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 					                               new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 					                               new MeetingMessageSender(eventPublisher),
-					                               new GroupPageChangedMessageSender(eventPublisher),
-					                               new TeamOrSiteChangedMessageSender(eventPublisher),
-					                               new PersonChangedMessageSender(eventPublisher),
-					                               new PersonPeriodChangedMessageSender(eventPublisher)
+					                               new GroupPageChangedMessageSender(messageSender),
+					                               new TeamOrSiteChangedMessageSender(messageSender),
+					                               new PersonChangedMessageSender(messageSender),
+					                               new PersonPeriodChangedMessageSender(messageSender)
 				                               },
 										   DataSourceConfigurationSetter.ForSdk(), new CurrentHttpContext()),
 					messageBroker) { MessageBrokerDisabled = messageBrokerDisabled() };

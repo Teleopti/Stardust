@@ -12,28 +12,28 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 {
-    public class RequestFactoryModule : Module
-    {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<ServiceBusSender>()
-                .As<IServiceBusSender>()
-                .SingleInstance();
-            builder.RegisterType<RepositoryFactory>()
-                .As<IRepositoryFactory>()
-                .SingleInstance();
-            builder.RegisterType<PersonRequestFactory>()
-                .As<IPersonRequestFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<PersistPersonRequest>()
-                .As<IPersistPersonRequest>().InstancePerLifetimeScope();
+	public class RequestFactoryModule : Module
+	{
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.RegisterType<ServiceBusSender>()
+				.As<IServiceBusSender>()
+				.SingleInstance();
+			builder.RegisterType<RepositoryFactory>()
+				.As<IRepositoryFactory>()
+				.SingleInstance();
+			builder.RegisterType<PersonRequestFactory>()
+				.As<IPersonRequestFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<PersistPersonRequest>()
+				.As<IPersistPersonRequest>().InstancePerLifetimeScope();
 
-            builder.RegisterType<SdkPersonRequestAuthorizationCheck>().As<IPersonRequestCheckAuthorization>().InstancePerLifetimeScope();
-            builder.RegisterType<ShiftTradeRequestStatusChecker>().As<IBatchShiftTradeRequestStatusChecker>().InstancePerLifetimeScope();
-            builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>().InstancePerDependency();
-            builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
-            builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
-            builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
-            builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>().InstancePerDependency();
-        }
-    }
+			builder.RegisterType<SdkPersonRequestAuthorizationCheck>().As<IPersonRequestCheckAuthorization>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftTradeRequestStatusChecker>().As<IBatchShiftTradeRequestStatusChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>().InstancePerDependency();
+			builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
+			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
+			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
+			builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>().InstancePerDependency();
+		}
+	}
 }

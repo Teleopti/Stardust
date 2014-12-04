@@ -3,10 +3,9 @@ using System.Collections.Specialized;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.ServiceModel;
 using Autofac;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
@@ -55,8 +54,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		    }
 	    }
 
-		public void Send(object message)
+		public void Send(object message, bool throwOnNoBus)
 		{
+			if (!EnsureBus())
+			{
+				if (throwOnNoBus)
+					throw new ApplicationException("The outgoing queue for the service bus is not available. Cannot send the message " + message.GetType().Name);
+				return;
+			}
+
             var bus = _customHost.Resolve<IOnewayBus>();
 
             if (Logger.IsDebugEnabled)
@@ -76,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             bus.Send(message);
         }
 
-	    public bool EnsureBus()
+	    private bool EnsureBus()
         {
             if (!_isRunning) MoveThatBus();
             return _isRunning;

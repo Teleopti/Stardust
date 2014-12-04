@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPersistPersonRequest _persistPersonRequest;
         private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IPersonRequestRepository _personRequestRepository;
-        private IServiceBusEventPopulatingPublisher _serviceBusSender;
+        private IMessagePopulatingServiceBusSender _serviceBusSender;
         private MockRepository _mock;
         private SavePersonAbsenceRequestCommandHandler _target;
         private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto()
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _persistPersonRequest = _mock.StrictMock<IPersistPersonRequest>();
             _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
-            _serviceBusSender = _mock.StrictMock<IServiceBusEventPopulatingPublisher>();
+			_serviceBusSender = _mock.StrictMock<IMessagePopulatingServiceBusSender>();
             _target = new SavePersonAbsenceRequestCommandHandler(_persistPersonRequest,_unitOfWorkFactory,_personRequestRepository,_serviceBusSender);
             _requestDto = new AbsenceRequestDto { Id = Guid.NewGuid(), Period = _periodDto };
 
@@ -76,10 +76,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
                 Expect.Call(_persistPersonRequest.Persist(_savePersonAbsenceRequestCommandDto.PersonRequestDto,
                                                           unitOfWork, null)).IgnoreArguments().Return(_personRequest);
-                Expect.Call(()=>_serviceBusSender.Publish(new NewAbsenceRequestCreated())).IgnoreArguments();
+                Expect.Call(()=>_serviceBusSender.Send(new NewAbsenceRequestCreated(), true)).IgnoreArguments();
                 Expect.Call(unitOfWork.Dispose);
             }
             using (_mock.Playback())
@@ -106,30 +105,5 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
         }
 
-        [Test]
-        public void ShouldAddNewRequestToPendingWhenNoBusAvailable()
-        {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-            _personRequest.SetId(null);
-
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(()=>_personRequestRepository.Add(_personRequest));
-                Expect.Call(_serviceBusSender.EnsureBus()).Return(false);
-                Expect.Call(_persistPersonRequest.Persist(_savePersonAbsenceRequestCommandDto.PersonRequestDto,
-                                                          unitOfWork, null)).Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Matching<Action<IPersonRequest>>(r =>
-                                                                                                                                                                                                                                       { r.Invoke(_personRequest);
-                                                                                                                                                                                                                                           return true;
-                                                                                                                                                                                                                                       })).Return(_personRequest);
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
-                _target.Handle(_savePersonAbsenceRequestCommandDto);
-
-                _personRequest.IsPending.Should().Be.True();
-            }
-        }
     }
 }

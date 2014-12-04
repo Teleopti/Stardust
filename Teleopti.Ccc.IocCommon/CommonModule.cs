@@ -1,6 +1,7 @@
 using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -49,6 +50,8 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
+
+			builder.RegisterType<MessagePopulatingServiceBusSender>().As<IMessagePopulatingServiceBusSender>().SingleInstance();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

@@ -28,13 +28,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
+			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
-			builder.RegisterType<ServiceBusEventPopulatingPublisher>()
+			builder.RegisterType<EventPopulatingPublisher>()
 				.As<IEventPopulatingPublisher>()
-				.As<IServiceBusEventPopulatingPublisher>()
+				.As<IPublishEventsFromEventHandlers>()
 				.SingleInstance();
-			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
+			builder.RegisterType<ServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<CannotPublishEventsFromEventHandlers>()
 				.As<IPublishEventsFromEventHandlers>()
 				.SingleInstance();

@@ -1,9 +1,9 @@
-﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class ServiceBusEventPublisher : IServiceBusEventPublisher
+	public class ServiceBusEventPublisher : IEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
 
@@ -12,19 +12,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_sender = sender;
 		}
 
-		public bool EnsureBus()
-		{
-			return _sender.EnsureBus();
-		}
-
 		public void Publish(IEvent @event)
 		{
-			_sender.Send(@event);
-		}
-
-		public void Publish(ILogOnInfo nonEvent)
-		{
-			_sender.Send(nonEvent);
+			_sender.Send(@event, true);
 		}
 	}
 }

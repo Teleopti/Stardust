@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 		{
 			var queueStatsModels = new List<QueueStatsModel> { new QueueStatsModel() };
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
-			var publisher = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
+			var publisher = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 
 			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
 
@@ -35,15 +35,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 		{
 			var queueDataCompleted =  new QueueDataCompleted{DataSentUpUntilInterval = "20"} ;
 			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
-			var publisher = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
+			var publisher = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
-			publisher.Stub(x => x.EnsureBus()).Return(true);
 			controller.PostIntervalsCompleted(queueDataCompleted);
 			
-			publisher.AssertWasCalled(x => x.Publish(Arg<FactQueueUpdatedMessage>.Is.Anything));
+			publisher.AssertWasCalled(x => x.Send(Arg<FactQueueUpdatedMessage>.Is.Anything, Arg<bool>.Is.Anything));
 		}
 
-		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId, IServiceBusEventPopulatingPublisher populatingPublisher)
+		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId, IMessagePopulatingServiceBusSender populatingPublisher)
 		{
 			//other properties could be set if needed later
 			//var config = new HttpConfiguration();

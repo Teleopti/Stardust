@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentDataSource _dataSourceProvider;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
 																		IShiftTradeRequestMapper shiftTradeRequestMapper, 
 																		IMappingEngine autoMapper,
-																		IServiceBusEventPopulatingPublisher serviceBusSender,
+																		IMessagePopulatingServiceBusSender serviceBusSender,
 																		INow now,
 																		ICurrentDataSource dataSourceProvider,
 																		ICurrentBusinessUnit businessUnitProvider,
@@ -57,17 +57,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		private void createMessage(IPersonRequest personRequest)
 		{
-			if (_serviceBusSender.EnsureBus())
+			if (_currentUnitOfWork == null)
+				return;
+
+			var message = new NewShiftTradeRequestCreated
 			{
-				var message = new NewShiftTradeRequestCreated
-					{
-						BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-						Datasource = _dataSourceProvider.Current().DataSourceName,
-						PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
-						Timestamp = _now.UtcDateTime()
-					};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Publish(message));
-			}
+				BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+				Datasource = _dataSourceProvider.Current().DataSourceName,
+				PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
+				Timestamp = _now.UtcDateTime()
+			};
+			_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message, false));
 		}
 	}
 }

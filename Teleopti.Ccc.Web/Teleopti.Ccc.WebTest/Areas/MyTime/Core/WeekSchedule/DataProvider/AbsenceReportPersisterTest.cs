@@ -7,7 +7,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
@@ -23,25 +22,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 			currentUnitOfWork.Expect(c => c.Current()).Return(currUow);
 
 			NewAbsenceReportCreated message;
-			var serviceBusSender = mockPersistAbsenceReport(true, currentUnitOfWork, out message);
+			var serviceBusSender = mockPersistAbsenceReport(currentUnitOfWork, out message);
 
-			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.Publish(message)));
+			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.Send(message, false)));
 		}
 
-		[Test]
-		public void ShouldNotSendMessageToBus()
+		private static IMessagePopulatingServiceBusSender mockPersistAbsenceReport(ICurrentUnitOfWork currentUnitOfWork, out NewAbsenceReportCreated message)
 		{
-			NewAbsenceReportCreated message;
-			var serviceBusSender = mockPersistAbsenceReport(false, null, out message);
-
-			serviceBusSender.AssertWasNotCalled(x => x.Publish(Arg<MessageWithLogOnInfo>.Is.Anything));
-		}
-
-		private static IServiceBusEventPopulatingPublisher mockPersistAbsenceReport(bool shouldEnsureBus,
-			ICurrentUnitOfWork currentUnitOfWork, out NewAbsenceReportCreated message)
-		{
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPopulatingPublisher>();
-			serviceBusSender.Stub(x => x.EnsureBus()).Return(shouldEnsureBus);
+			var serviceBusSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 

@@ -11,22 +11,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class GroupPageChangedMessageSender : IMessageSender
 	{
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 
 		private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
 		                                                        		typeof (IGroupPage)
 		                                                        	};
 
-		public GroupPageChangedMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
+		public GroupPageChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (!_serviceBusSender.EnsureBus()) return;
-
 			var affectedInterfaces = from r in modifiedRoots
 			                         from i in r.Root.GetType().GetInterfaces()
 			                         select i;
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var idsAsString = (from p in groupPageList select p.Id.GetValueOrDefault()).ToArray();
 					var message = new GroupPageChangedMessage();
 					message.SetGroupPageIdCollection(idsAsString);
-					_serviceBusSender.Publish(message);
+					_serviceBusSender.Send(message, false);
 				}
 			}
 		}

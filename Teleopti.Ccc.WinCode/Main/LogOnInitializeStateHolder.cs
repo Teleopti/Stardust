@@ -91,7 +91,9 @@ namespace Teleopti.Ccc.WinCode.Main
             }
         	
 			var sendToServiceBus = new ServiceBusSender();
-			var eventPublisher = new ServiceBusEventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), EventContextPopulator.Make());
+			var populator = EventContextPopulator.Make();
+			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
+			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), populator);
 			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
@@ -100,10 +102,10 @@ namespace Teleopti.Ccc.WinCode.Main
 														  new ScheduleMessageSender(eventPublisher, new ClearEvents()), 
                                                           new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 												          new MeetingMessageSender(eventPublisher),
-                                                          new GroupPageChangedMessageSender(eventPublisher),
-                                                          new TeamOrSiteChangedMessageSender(eventPublisher),
-                                                          new PersonChangedMessageSender(eventPublisher),
-                                                          new PersonPeriodChangedMessageSender(eventPublisher)
+                                                          new GroupPageChangedMessageSender(messageSender),
+                                                          new TeamOrSiteChangedMessageSender(messageSender),
+                                                          new PersonChangedMessageSender(messageSender),
+                                                          new PersonPeriodChangedMessageSender(messageSender)
 												      }, DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext()),
 					messageBroker)
         			{

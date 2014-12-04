@@ -16,24 +16,33 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	public class RecalculateForecastOnSkillCommandHandlerTest
 	{
 		private MockRepository _mocks;
-		private IServiceBusEventPopulatingPublisher _busSender;
+		private IMessagePopulatingServiceBusSender _busSender;
 		private RecalculateForecastOnSkillCommandHandler _target;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_busSender = _mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
+			_busSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
 
 			_target = new RecalculateForecastOnSkillCommandHandler(_busSender);
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldThrowIfBusNotRunning()
 		{
-			Expect.Call(_busSender.EnsureBus()).Return(false);
+			var scenarioId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			var workloadId = Guid.NewGuid();
+			var command = new WorkloadOnSkillSelectionDto { SkillId = skillId, WorkloadId = new List<Guid> { workloadId } };
+			var commands = new RecalculateForecastOnSkillCollectionCommandDto
+			{
+				ScenarioId = scenarioId,
+				WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> { command }
+			};
+			Expect.Call(() => _busSender.Send(Arg<object>.Is.Anything, Arg<bool>.Is.Equal(true)));
 			_mocks.ReplayAll();
-			_target.Handle(null);
+			_target.Handle(commands);
 			_mocks.VerifyAll();
 		}
 
@@ -50,8 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			               		WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> {command}
 			               	};
 			var message = new RecalculateForecastOnSkillMessageCollection();
-			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() =>_busSender.Publish(message)).IgnoreArguments();
+			Expect.Call(() =>_busSender.Send(message, false)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Handle(commands);
 			_mocks.VerifyAll();

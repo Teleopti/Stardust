@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
     public class PersonPeriodChangedMessageSender :IMessageSender
     {
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 
 	    private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
@@ -25,15 +25,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPerson)
 		                                                        	};
 
-		public PersonPeriodChangedMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
+		public PersonPeriodChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
 		{
 	        _serviceBusSender = serviceBusSender;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (!_serviceBusSender.EnsureBus()) return;
-
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
                                      select i;
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                     
                     var message = new PersonPeriodChangedMessage();
 					message.SetPersonIdCollection(idsAsString);
-                    _serviceBusSender.Publish(message);
+                    _serviceBusSender.Send(message, false);
 				}
             }
         }

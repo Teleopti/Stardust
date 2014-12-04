@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class TeamOrSiteChangedMessageSender : IMessageSender
 	{
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 
 		private readonly IEnumerable<Type> _otherTriggerInterfaces = new List<Type>
 			{
@@ -18,15 +18,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				typeof (ISite),
 			};
 
-		public TeamOrSiteChangedMessageSender(IServiceBusEventPopulatingPublisher serviceBusSender)
+		public TeamOrSiteChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (!_serviceBusSender.EnsureBus()) return;
-
 			var affectedInterfaces = from r in modifiedRoots
 			                         let t = r.Root.GetType()
 			                         where _otherTriggerInterfaces.Any(ti => ti.IsAssignableFrom(t))
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (!affectedInterfaces.Any()) return;
 
 			var message = new PersonChangedMessage{SerializedPeople = Guid.Empty.ToString()};
-			_serviceBusSender.Publish(message);
+			_serviceBusSender.Send(message, false);
 		}
 	}
 }

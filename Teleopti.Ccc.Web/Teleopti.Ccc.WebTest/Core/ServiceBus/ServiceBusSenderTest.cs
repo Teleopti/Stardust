@@ -4,17 +4,12 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Core.ServiceBus
@@ -22,17 +17,6 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 	[TestFixture]
 	public class ServiceBusSenderTest
 	{
-		[Test]
-		public void ShouldEnsureBus()
-		{
-			using (var sender = new ServiceBusSender())
-			{
-				sender.EnsureBus();
-				sender.FieldValue<IContainer>("_customHost").Should().Not.Be.Null();
-				sender.FieldValue<bool>("_isRunning").Should().Be.False(); //due to miss config file
-			}
-		}
-		
 		[Test]
 		public void ShouldSend()
 		{
@@ -47,9 +31,8 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 			{
 				var bus = MockRepository.GenerateMock<IOnewayBus>();
 				sender.Resolveable = bus;
-				sender.EnsureBus();
 				var message = new TestMessage();
-				sender.Send(message);
+				sender.Send(message, false);
 				bus.AssertWasCalled(x => x.Send(message));
 			}
 		}
@@ -68,6 +51,11 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 				if (Resolveable is T)
 					return (T)Resolveable;
 				return default(T);
+			}
+
+			protected override bool EnsureBus()
+			{
+				return true;
 			}
 		}
 	}

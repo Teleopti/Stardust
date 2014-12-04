@@ -15,29 +15,23 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ExportMultisiteSkillToSkillCommandHandler : IHandleCommand<ExportMultisiteSkillToSkillCommandDto>
     {
-		private readonly IServiceBusEventPopulatingPublisher _busSender;
+		private readonly IMessagePopulatingServiceBusSender _busSender;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public ExportMultisiteSkillToSkillCommandHandler(IServiceBusEventPopulatingPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public ExportMultisiteSkillToSkillCommandHandler(IMessagePopulatingServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
             _unitOfWorkFactory = unitOfWorkFactory;
             _jobResultRepository = jobResultRepository;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Handle(ExportMultisiteSkillToSkillCommandDto command)
         {
 			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
 			{
 				throw new FaultException("You're not authorized to run this command.");
 			}
-
-            if (!_busSender.EnsureBus())
-            {
-                throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the export.");
-            }
 
             Guid jobId;
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
@@ -74,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					message.MultisiteSkillSelections.Add(selection);
                 }
 
-                _busSender.Publish(message);
+				_busSender.Send(message, true);
             }
 			command.Result = new CommandResultDto { AffectedId = jobId, AffectedItems = 1 };
         }

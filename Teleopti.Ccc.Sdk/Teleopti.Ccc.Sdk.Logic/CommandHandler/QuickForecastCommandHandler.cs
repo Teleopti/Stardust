@@ -14,18 +14,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
     {
-		private readonly IServiceBusEventPopulatingPublisher _busSender;
+		private readonly IMessagePopulatingServiceBusSender _busSender;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public QuickForecastCommandHandler(IServiceBusEventPopulatingPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public QuickForecastCommandHandler(IMessagePopulatingServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(QuickForecastCommandDto command)
 		{
 			if (command == null)
@@ -42,11 +41,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				jobId = jobResult.Id.GetValueOrDefault();
 
 				unitOfWork.PersistAll();
-				if (!_busSender.EnsureBus())
-				{
-					throw new FaultException(
-						"The outgoing queue for the service bus is not available. Cannot continue with the denormalizer.");
-				}
 
 				var message = new QuickForecastWorkloadsMessage
 					{
@@ -61,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         UseDayOfMonth = command.UseDayOfMonth
 					};
 
-				_busSender.Publish(message);
+				_busSender.Send(message, true);
 			}
 
 			command.Result = new CommandResultDto {AffectedId = jobId, AffectedItems = 1};

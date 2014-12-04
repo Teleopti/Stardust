@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IMappingEngine _mapper;
-		private readonly IServiceBusEventPopulatingPublisher _serviceBusSender;
+		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, 
+		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
 											IMappingEngine mapper,
-											IServiceBusEventPopulatingPublisher serviceBusSender, 
-											ICurrentBusinessUnit businessUnitProvider, 
-											ICurrentDataSource currentDataSource, 
+											IMessagePopulatingServiceBusSender serviceBusSender,
+											ICurrentBusinessUnit businessUnitProvider,
+											ICurrentDataSource currentDataSource,
 											INow now,
 											ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -66,20 +66,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				_personRequestRepository.Add(personRequest);
 			}
 
-			if (_serviceBusSender.EnsureBus())
+			if (_currentUnitOfWork != null)
 			{
 				var message = new NewAbsenceRequestCreated
-				              	{
-				              		BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-				              		Datasource = _currentDataSource.Current().DataSourceName,
-				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
-				              		Timestamp = _now.UtcDateTime()
-				              	};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Publish(message));
-			}
-			else
-			{
-				personRequest.Pending();
+				{
+					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+					Datasource = _currentDataSource.Current().DataSourceName,
+					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
+					Timestamp = _now.UtcDateTime()
+				};
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message, false));
 			}
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);

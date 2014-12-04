@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	public class QuickForecastCommandHandlerTest
 	{
 		private MockRepository _mocks;
-		private IServiceBusEventPopulatingPublisher _busSender;
+		private IMessagePopulatingServiceBusSender _busSender;
 		private  ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private  IJobResultRepository _jobResultRepository;
 		private QuickForecastCommandHandler _target;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_busSender = _mocks.DynamicMock<IServiceBusEventPopulatingPublisher>();
+			_busSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
 			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
 			_target = new QuickForecastCommandHandler(_busSender, _unitOfWorkFactory, _jobResultRepository);
@@ -36,14 +36,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		}
 
 		[Test]
-		[ExpectedException(typeof(FaultException))]
 		public void ShouldThrowFaultExceptionIfServiceBusIsNotAvailable()
 		{
 			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
-			Expect.Call(_busSender.EnsureBus()).Return(false);
 			
 			_mocks.ReplayAll();
 			_target.Handle(new QuickForecastCommandDto
@@ -72,8 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
-			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() => _busSender.Publish(new QuickForecastWorkloadsMessage())).IgnoreArguments();
+			Expect.Call(() => _busSender.Send(new QuickForecastWorkloadsMessage(), true)).IgnoreArguments();
 			_mocks.ReplayAll();
 			var period = new DateOnlyPeriodDto
 				{
