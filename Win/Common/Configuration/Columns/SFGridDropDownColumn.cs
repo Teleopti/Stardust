@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             OnQueryComboItems(e);
             e.Style.DisplayMember = _displayMember;
             e.Style.CellValue = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
-
+			e.Style.DropDownStyle = GridDropDownStyle.AutoComplete;
         	if (!UseDisablePropertyCheck) return;
         	if (!_disabledObjectSpecification.IsSatisfiedBy(currentItem)) return;
         	e.Style.Enabled = false;

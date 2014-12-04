@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 				GridHelper.GridStyle(_grid);
             // Overrrides standard behavior.
             _grid.ResizeColsBehavior = GridResizeCellsBehavior.ResizeSingle;
+			_grid.ActivateCurrentCellBehavior = GridCellActivateAction.DblClickOnCell;
 
             for (int index = 0; index <= _grid.ColCount; index++)
             {
