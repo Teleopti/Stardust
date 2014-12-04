@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
 			if (useLocalhostIdentifier)
 			{
-				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"),
+				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
 					new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
 			}
 			

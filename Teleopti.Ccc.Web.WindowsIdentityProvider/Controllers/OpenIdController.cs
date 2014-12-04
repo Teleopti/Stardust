@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 					                                          Uri.EscapeDataString(windowsAccount.DomainName + "#" +
 					                                                               windowsAccount.UserName.Replace(".", "$$$")));
 				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
-				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointIdentifier"] ?? "http://localhost/"),
+				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
 					new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
