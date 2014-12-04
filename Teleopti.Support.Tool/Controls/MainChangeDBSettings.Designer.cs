@@ -40,7 +40,9 @@ namespace Teleopti.Support.Tool.Controls
             // 
             this.BNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BNext.BackColor = System.Drawing.SystemColors.Control;
-            this.BNext.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.BNext.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BNext.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BNext.Location = new System.Drawing.Point(505, 292);
             this.BNext.Margin = new System.Windows.Forms.Padding(5);
             this.BNext.Name = "BNext";
@@ -53,6 +55,9 @@ namespace Teleopti.Support.Tool.Controls
             // BBack
             // 
             this.BBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BBack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BBack.Location = new System.Drawing.Point(420, 292);
             this.BBack.Margin = new System.Windows.Forms.Padding(5);
             this.BBack.Name = "BBack";
@@ -65,6 +70,9 @@ namespace Teleopti.Support.Tool.Controls
             // BInstall
             // 
             this.BInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.BInstall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BInstall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BInstall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BInstall.Location = new System.Drawing.Point(590, 292);
             this.BInstall.Margin = new System.Windows.Forms.Padding(5);
             this.BInstall.Name = "BInstall";

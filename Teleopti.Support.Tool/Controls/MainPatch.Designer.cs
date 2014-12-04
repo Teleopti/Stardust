@@ -35,6 +35,9 @@
             // 
             // BInstall
             // 
+            this.BInstall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BInstall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BInstall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BInstall.Location = new System.Drawing.Point(596, 385);
             this.BInstall.Name = "BInstall";
             this.BInstall.Size = new System.Drawing.Size(75, 23);
@@ -45,6 +48,9 @@
             // 
             // BBack
             // 
+            this.BBack.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BBack.Location = new System.Drawing.Point(418, 385);
             this.BBack.Name = "BBack";
             this.BBack.Size = new System.Drawing.Size(75, 23);
@@ -56,6 +62,9 @@
             // BNext
             // 
             this.BNext.BackColor = System.Drawing.SystemColors.Window;
+            this.BNext.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+            this.BNext.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(205)))), ((int)(((byte)(255)))));
+            this.BNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BNext.Location = new System.Drawing.Point(515, 385);
             this.BNext.Name = "BNext";
             this.BNext.Size = new System.Drawing.Size(75, 23);

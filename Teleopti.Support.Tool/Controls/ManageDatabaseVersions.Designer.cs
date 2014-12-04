@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiAnalytics", 0);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCC7", 2);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCCAgg", 1);
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Demoreg_TeleoptiAnalytics", 3);
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiAnalytics", 0);
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCC7", 2);
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Demo_TeleoptiCCCAgg", 1);
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Demoreg_TeleoptiAnalytics", 3);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageDatabaseVersions));
             this.listViewDatabases = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -71,10 +71,10 @@
             this.listViewDatabases.FullRowSelect = true;
             this.listViewDatabases.HideSelection = false;
             this.listViewDatabases.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4});
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8});
             this.listViewDatabases.Location = new System.Drawing.Point(14, 83);
             this.listViewDatabases.Margin = new System.Windows.Forms.Padding(5);
             this.listViewDatabases.Name = "listViewDatabases";
@@ -246,7 +246,7 @@
             this.smoothLabelCurrentVersionIs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.smoothLabelCurrentVersionIs.AutoSize = true;
             this.smoothLabelCurrentVersionIs.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.smoothLabelCurrentVersionIs.Location = new System.Drawing.Point(475, 10);
+            this.smoothLabelCurrentVersionIs.Location = new System.Drawing.Point(420, 10);
             this.smoothLabelCurrentVersionIs.Name = "smoothLabelCurrentVersionIs";
             this.smoothLabelCurrentVersionIs.Size = new System.Drawing.Size(123, 21);
             this.smoothLabelCurrentVersionIs.TabIndex = 33;
@@ -260,11 +260,11 @@
             this.smoothLabelCurrentVersion.AutoSize = true;
             this.smoothLabelCurrentVersion.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.smoothLabelCurrentVersion.ForeColor = System.Drawing.Color.Blue;
-            this.smoothLabelCurrentVersion.Location = new System.Drawing.Point(604, 10);
+            this.smoothLabelCurrentVersion.Location = new System.Drawing.Point(559, 10);
             this.smoothLabelCurrentVersion.Name = "smoothLabelCurrentVersion";
-            this.smoothLabelCurrentVersion.Size = new System.Drawing.Size(61, 21);
+            this.smoothLabelCurrentVersion.Size = new System.Drawing.Size(109, 21);
             this.smoothLabelCurrentVersion.TabIndex = 32;
-            this.smoothLabelCurrentVersion.Text = "7.2.XXX";
+            this.smoothLabelCurrentVersion.Text = "8.1.417.32156";
             this.smoothLabelCurrentVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.smoothLabelCurrentVersion.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
             // 
