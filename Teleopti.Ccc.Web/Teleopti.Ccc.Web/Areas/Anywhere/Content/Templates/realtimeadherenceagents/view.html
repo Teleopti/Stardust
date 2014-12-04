@@ -2,17 +2,26 @@
 	<ul class="breadcrumb">
 		<li><a data-bind="text: resources.RealTimeAdherence, attr:{href: rootURI}"></a></li>
 		<li><a data-bind="text: siteName, attr:{href: siteURI}"></a></li>
-		<li class="active" data-bind="text: teamName">Red</li>
+		<li class="active" data-bind="text: teamName"></li>
 	</ul>
-	<div align="right">
-		<form class="form-control">
-			Filter: <input type="text" data-bind="value: filter, valueUpdate: 'input'" />
+	<div class="nav navbar">
+		<button type="button" class="btn btn-primary navbar-btn select-agents" data-bind="checkbox: SelectAgentsEnabled">
+			<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+		</button>
+		<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage">
+			Send
+		</button>
+		<form class="navbar-form navbar-right" role="search">
+			<div class="form-group">
+				Filter: <input type="text" class="form-control" data-bind="value: filter, valueUpdate: 'input'" />
+			</div>
 		</form>
 	</div>
 	<div class="panel panel-default">
 		<table class="table table-stripped table-condensed rta-agents-details">
 			<thead>
 				<tr>
+					<th class="selectable-agent" data-bind="if: SelectAgentsEnabled"></th>
 					<th data-bind="text: resources.AgentName"></th>
 					<th data-bind="text: resources.Team"></th>
 					<th data-bind="text: resources.State"></th>
@@ -25,6 +34,7 @@
 			</thead>
 			<tbody data-bind="foreach: filteredAgents">
 				<tr class="agent-state" data-bind="style:  { backgroundColor: AlarmColor, 'transition': 'background-color 2000ms linear', fontWeight: TextWeight, fontColor: TextColor}, click: $root.SelectAgent">
+					<td class="selectable-agent" data-bind="if: $parent.SelectAgentsEnabled"><input type="checkbox" data-bind="checked: SelectedToSendMessage, stopBubble: true"></td>
 					<td class="agent-name" data-bind="text: Name"></td>
 					<td data-bind="text: TeamName"></td>
 					<td data-bind="text: State"></td>

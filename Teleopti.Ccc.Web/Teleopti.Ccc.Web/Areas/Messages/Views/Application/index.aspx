@@ -39,6 +39,8 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h1>Messages</h1>
+				<textarea class="form-control" rows="3" placeholder="Message"></textarea>
+				<button type="button" class="btn btn-primary pull-right">Send</button>
 			</div>
 		</div>
 	</div>

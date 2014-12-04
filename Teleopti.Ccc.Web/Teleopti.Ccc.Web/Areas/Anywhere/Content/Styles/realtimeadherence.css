@@ -80,3 +80,15 @@
 	white-space: nowrap;
 	margin-right: 18px;
 }
+
+.realtimeadherenceagents span.glyphicon-envelope {
+    font-size: 2em;
+}
+.realtimeadherenceagents .select-agents {
+	padding-bottom: 3px;
+	padding-top: 3px;
+}
+
+.realtimeadherenceagents .selectable-agent{
+    width: 1%
+}

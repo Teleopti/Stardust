@@ -8,7 +8,8 @@
 	'resources',
 	'amplify',
 	'toggleQuerier',
-	'permissions'
+	'permissions',
+	'knockoutBindings'
 ], function (
 	ko,
 	view,
@@ -19,7 +20,8 @@
 	resources,
 	amplify,
 	toggleQuerier,
-	permissions
+	permissions,
+	knockoutBindings
 ) {
 	var viewModel;
 	return {

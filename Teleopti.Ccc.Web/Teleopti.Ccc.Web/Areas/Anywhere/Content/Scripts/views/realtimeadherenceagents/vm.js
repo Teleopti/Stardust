@@ -46,9 +46,21 @@
 			that.agentAdherenceDetailsEnabled = ko.observable(false);
 			that.AgentAdherence = ko.observable();
 
+			that.SelectAgentsEnabled = ko.observable(false);
+
 			that.SetViewOptions = function (options) {
 				that.BusinessUnitId(options.buid);
 				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
+			};
+
+			that.SendMessage = function() {
+				var selectedAgentIds = lazy(that.filteredAgents())
+					.filter(function(x) {
+						return x.SelectedToSendMessage();
+					}).map(function(e) {
+						return e.PersonId();
+					}).join(",");
+				window.location.href = "Messages?agents=" + selectedAgentIds;
 			};
 
 			that.filteredAgents = ko.computed(function () {
