@@ -1,6 +1,8 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -36,5 +38,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new StatisticRepository();
         }
 
+		  public static IAnalyticsScheduleRepository CreateAnalytics()
+		  {
+			  ITeleoptiIdentity identity = null;
+			  var principal = TeleoptiPrincipal.Current;
+			  if (principal != null)
+			  {
+				  identity = principal.Identity as ITeleoptiIdentity;
+			  }
+			  if (identity == null || identity.DataSource.Statistic == null)
+				  return null; //have empty here too
+ 
+			  return new AnalyticsScheduleRepository();
+		  }
     }
 }
