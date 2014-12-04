@@ -23,9 +23,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person1;
 		private IPerson _person2;
 		private IPerson _person3;
-		private IPersonPeriod _personPeriod1;
-		private IPersonPeriod _personPeriod2;
-		private IPersonPeriod _personPeriod3;
 		private DateOnly _dateOnly;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 		private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet1;
