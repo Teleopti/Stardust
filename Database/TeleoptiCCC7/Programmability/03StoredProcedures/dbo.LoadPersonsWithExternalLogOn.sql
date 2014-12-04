@@ -35,3 +35,5 @@ FROM
 INNER JOIN dbo.v_ExternalLogon el WITH(NOEXPAND) --force SQL Server to use the clustered View
 	ON el.PersonPeriod = a.PersonPeriod
 WHERE a.is_current=1
+GROUP BY a.Parent
+HAVING COUNT(el.AcdLogOnOriginalId) > 0
