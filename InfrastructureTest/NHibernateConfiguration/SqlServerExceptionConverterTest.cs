@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
 			grabSessionFieldFromUow(tempUow).Connection.Close();
-			Assert.Throws<CouldNotCreateTransactionException>(() =>
+			Assert.Throws<DataSourceException>(() =>
 			                        new PersonRepository(tempUow).Get(Guid.NewGuid()));
 
 		}
