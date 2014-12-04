@@ -209,6 +209,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>License.feature</DependentUpon>
     </Compile>
+    <Compile Include="Messages\NotifyAgents.feature.cs">
+      <DependentUpon>NotifyAgents.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature.cs">
       <DependentUpon>AbsenceReportFromMobileWeekSchedule.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -855,6 +860,10 @@
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Messages\NotifyAgents.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>NotifyAgents.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
