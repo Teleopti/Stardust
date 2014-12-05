@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					new EventsMessageSender(
 						new SyncEventsPublisher(
 							new EventPopulatingPublisher(
-									new EventPublisher(
+									new SyncEventPublisher(
 										new HardCodedResolver()
 										),
 									EventContextPopulator.Make())))
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					new EventsMessageSender(
 						new SyncEventsPublisher(
 							new EventPopulatingPublisher(
-								new EventPublisher(
+								new SyncEventPublisher(
 									new HardCodedResolver()
 									),
 							EventContextPopulator.Make())))

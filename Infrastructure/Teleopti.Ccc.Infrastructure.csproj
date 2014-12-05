@@ -157,9 +157,13 @@
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
+    <Compile Include="ApplicationLayer\IHangfireEventProcessor.cs" />
+    <Compile Include="ApplicationLayer\IHangfireEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\IServiceBusEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\ISyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
-    <Compile Include="ApplicationLayer\EventPublisher.cs" />
+    <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IMessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />

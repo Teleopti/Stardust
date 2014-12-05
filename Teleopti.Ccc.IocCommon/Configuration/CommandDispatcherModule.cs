@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<SyncCommandDispatcher>().As<ICommandDispatcher>().SingleInstance();
 		}
 	}

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder.RegisterModule<LocalInMemoryEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
-			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<SyncEventPublisher>();
 		}
 
 		[Test]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldResolveServiceBusPublisher()
+		public void ShouldResolveServiceBusSender()
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();

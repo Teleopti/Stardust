@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class EventPublisher : IEventPublisher
+	public class SyncEventPublisher : ISyncEventPublisher
 	{
 		private readonly IResolve _resolver;
 
-		public EventPublisher(IResolve resolver)
+		public SyncEventPublisher(IResolve resolver)
 		{
 			_resolver = resolver;
 		}

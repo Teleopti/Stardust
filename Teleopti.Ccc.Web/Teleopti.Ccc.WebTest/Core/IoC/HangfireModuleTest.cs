@@ -1,7 +1,6 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.Hangfire;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			using (var container = buildContainer())
 			{
-				container.Resolve<HangfireEventProcessor>().Should().Not.Be.Null();
+				container.Resolve<HangfireEventServer>().Should().Not.Be.Null();
 			}
 		}
 

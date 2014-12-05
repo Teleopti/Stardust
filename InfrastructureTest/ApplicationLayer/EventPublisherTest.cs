@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var handler = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler });
-			var target = new EventPublisher(resolver);
+			var target = new SyncEventPublisher(resolver);
 			var @event = new TestEvent();
 
 			target.Publish(@event);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var handler2 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler1, handler2 });
-			var target = new EventPublisher(resolver);
+			var target = new SyncEventPublisher(resolver);
 			var @event = new TestEvent();
 
 			target.Publish(@event);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var handler = MockRepository.GenerateMock<ITestHandler>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEventTwo>>))).Return(new[] { handler });
-			var target = new EventPublisher(resolver);
+			var target = new SyncEventPublisher(resolver);
 			var @event = new TestEventTwo();
 
 			target.Publish(@event);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
-			var target = new EventPopulatingPublisher(new EventPublisher(resolver), new EventContextPopulator(new CurrentBusinessUnit(new CurrentIdentity(new CurrentTeleoptiPrincipal())), new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null), new FakeCurrentInitiatorIdentifier()));
+			var target = new EventPopulatingPublisher(new SyncEventPublisher(resolver), new EventContextPopulator(new CurrentBusinessUnit(new CurrentIdentity(new CurrentTeleoptiPrincipal())), new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null), new FakeCurrentInitiatorIdentifier()));
 			var @event = new TestDomainEvent();
 
 			target.Publish(@event);

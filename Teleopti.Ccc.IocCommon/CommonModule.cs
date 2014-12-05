@@ -1,8 +1,6 @@
 using System;
 using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -46,11 +44,13 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new AuthenticationModule { ApplicationData = ApplicationData });
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule(new EventHandlersModule(_configuration));
+			builder.RegisterModule(new EventPublisherModule(_configuration));
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
 
+			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<MessagePopulatingServiceBusSender>().As<IMessagePopulatingServiceBusSender>().SingleInstance();
 		}
 

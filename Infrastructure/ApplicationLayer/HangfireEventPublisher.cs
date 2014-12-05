@@ -1,10 +1,9 @@
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class HangfireEventPublisher : IEventPublisher
+	public class HangfireEventPublisher : IHangfireEventPublisher
 	{
 		private readonly IHangfireEventClient _client;
 		private readonly IJsonSerializer _serializer;

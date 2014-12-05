@@ -1,9 +1,8 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class ServiceBusEventPublisher : IEventPublisher
+	public class ServiceBusEventPublisher : IServiceBusEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
 

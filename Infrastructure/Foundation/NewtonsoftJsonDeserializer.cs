@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+﻿using System;
+using Newtonsoft.Json;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -10,6 +9,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public T DeserializeObject<T>(string value)
 		{
 			return JsonConvert.DeserializeObject<T>(value);
+		}
+
+		public object DeserializeObject(string value, Type type)
+		{
+			return JsonConvert.DeserializeObject(value, type);
 		}
 	}
 }

@@ -553,6 +553,7 @@
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Core\ConfigurationExtensions.cs" />
     <Compile Include="Core\Hangfire\HangfireEventClient.cs" />
+    <Compile Include="Core\Hangfire\HangfireEventServer.cs" />
     <Compile Include="Core\Hangfire\HangfireServerStarter.cs" />
     <Compile Include="Core\Hangfire\IHangfireServerStarter.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
