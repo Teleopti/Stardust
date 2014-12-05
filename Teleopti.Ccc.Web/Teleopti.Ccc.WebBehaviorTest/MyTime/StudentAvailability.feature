@@ -89,3 +89,49 @@ Scenario: Default to first virtual schedule period overlapping open student avai
 	And I have a workflow control set with student availability periods open from '2014-06-01' to '2014-06-30'
 	When I view student availability
 	Then I should see the first virtual schedule period overlapping open student availability period starting at '2014-06-01'
+
+@ignore
+Scenario: Should display message for days not available
+	Given I am a student agent
+	And the current time is '2014-05-02 08:00'
+	When I view student availability
+	Then I should see I am not available for '2014-05-02'
+
+@ignore
+Scenario: Should show message for days have no valid shift for availability setting
+	Given I am a student agent
+	And the current time is '2014-05-02 08:00'
+	And I have a student availability with
+	| Field      | Value      |
+	| Date       | 2014-05-03 |
+	| Start time | 07:00      |
+	| End time   | 07:15      |
+	When I view student availability
+	Then I should see there is no valid shift for my availability on '2014-05-03'
+
+@ignore
+Scenario: Should show valid shift for availability setting
+	Given I am a student agent
+	And 
+	And the current time is '2014-05-02 08:00'
+	And I have a student availability with
+	| Field      | Value      |
+	| Date       | 2014-05-03 |
+	| Start time | 07:00      |
+	| End time   | 07:15      |
+	When I view student availability
+	Then I should see there is no valid shift for my availability on '2014-05-03'
+
+@ignore
+Scenario: Should update summary hours for availability setting
+	Given I am a student agent
+	And the current time is '2014-05-02 08:00'
+	And I have a shift bag with one shift 8 to 17 and Lunch 12 to 13 and one shift 9 to 19 and Lunch 12 to 14
+	When I view student availability for '2014-05-02'
+	And I input a student availability with
+	| Field      | Value      |
+	| Date       | 2014-05-03 |
+	| Start time | 07:00      |
+	| End time   | 18:00      |
+	And I applied the inputted availability
+	Then I should see summary of hours are updated
