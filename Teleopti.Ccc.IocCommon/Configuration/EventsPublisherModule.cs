@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>()
 				.As<IEventPopulatingPublisher>()
 				.As<IPublishEventsFromEventHandlers>()
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>()
 				.As<IEventPopulatingPublisher>()
 				.As<IPublishEventsFromEventHandlers>()

@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
