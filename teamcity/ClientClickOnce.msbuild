@@ -3,21 +3,27 @@
 <Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
 		<MageTool>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\mage.exe</MageTool>
-		<WorkingDirectory>$(teamcity_build_workingDir)</WorkingDirectory>
-		<SourceDirectory>C:\stuff\ccc\teleopticcc\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDirectory>
+		<WorkingDirectory>c:\stuff\ccc\teleopticcc</WorkingDirectory>
+		<SourceDirectory>$(WorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDirectory>
 		<OutputDirectory>d:\temp\output</OutputDirectory>
 		<NameOfClickOnceItem>Teleopti.Ccc.SmartClientPortal.Shell</NameOfClickOnceItem>
-		<ManifestFile>$(OutputDirectory)\$(NameOfClickOnceItem).manifest</ManifestFile>
-		<ApplicationFile>$(OutputDirectory)\$(NameOfClickOnceItem).application</ApplicationFile>
 		<CCCVersion>7.7.7.7</CCCVersion>
+		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 	</PropertyGroup>
+	
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
 	<Target Name="ClientClickOnce" DependsOnTargets="CopyToOutput">
-	  <Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "testet" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
+		<PropertyGroup>
+			<ManifestFile>$(OutputDirectory)\$(NameOfClickOnceItem).manifest</ManifestFile>
+			<ApplicationFile>$(OutputDirectory)\$(NameOfClickOnceItem).application</ApplicationFile>
+		</PropertyGroup>
+	
+		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "testet" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
 	  
-	  <GenerateDeploymentManifest AssemblyName="$(NameOfClickOnceItem)"
+		<GenerateDeploymentManifest AssemblyName="$(NameOfClickOnceItem)"
 												  AssemblyVersion="$(CCCVersion)"
-												  DeploymentUrl="http://johan"
+												  DeploymentUrl="http://shouldbesetwhensigned"
 												  Description="TELEOPTI WFM"
 												  Product="TELEOPTI WFM"
 												  Publisher="Teleopti"
@@ -29,16 +35,38 @@
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
 												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
-												 TrustUrlParameters="false"/>
+												  TrustUrlParameters="false"/>
 												 
 	</Target>
 	
 	<Target Name="CopyToOutput" DependsOnTargets="ClearOutput">
+		<PropertyGroup>
+			<NameOfStartPage>default.htm</NameOfStartPage>
+		</PropertyGroup>
 		<ItemGroup>
 			<SourceFiles Include="$(SourceDirectory)\**\*.*"/>
+			<StartPageImages Include="$(WorkingDirectory)\BuildArtifacts\images\*.*"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(SourceFiles)"
 			 DestinationFiles="@(SourceFiles->'$(OutputDirectory)\%(RecursiveDir)%(Filename)%(Extension).deploy')"/>
+		<Copy SourceFiles="$(WorkingDirectory)\BuildArtifacts\ClickOnceLandingPage.htm"
+				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>
+		<Copy SourceFiles="@(StartPageImages)"
+				 DestinationFiles="@(StartPageImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
+			
+		<FileUpdate
+				  Files="$(OutputDirectory)\$(NameOfStartPage)"
+				  Regex="#APPLICATION_NAME#"
+				  ReplacementText="$(NameOfClickOnceItem)"/>
+		<FileUpdate
+				  Files="$(OutputDirectory)\$(NameOfStartPage)"
+				  Regex="#TITLE#"
+				  ReplacementText="TELEOPTI WFM"/>
+		<FileUpdate
+				  Files="$(OutputDirectory)\$(NameOfStartPage)"
+				  Regex="#VERSION#"
+				  ReplacementText="$(CCCVersion)"/>		
+		
 	</Target>
 	
 	<Target Name="ClearOutput">
