@@ -28,6 +28,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		return undefined;
 	});
 
+	self.OpenPeriodRelativeStart = ko.observable(1);
+	self.OpenPeriodRelativeEnd = ko.observable(10);
 	this.OfferValidTo = ko.observable(moment().startOf('day'));
 	self.DateToForPublish = ko.computed({
 		read: function() {
@@ -39,13 +41,25 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		}
 	});
 
-	self.IsSelectedDateInShiftTradePeriod = ko.observable(false);
-	this.SaveEnabled = ko.computed(function () {
+	self.IsSelectedDateInShiftTradePeriod = ko.computed(function () {
+		var now = moment().startOf('day');
+		var min = moment(now).add('days', self.OpenPeriodRelativeStart());
+		var max = moment(now).add('days', self.OpenPeriodRelativeEnd());
+
+		if (moment(self.DateTo()) >= min && moment(self.DateTo()) <= max) return true;
+		else return false;
+	});
+
+	self.IsValidToLegal = ko.computed(function() {
 		var today = moment().startOf('day');
 		var isValideToLegalStart = self.OfferValidTo() >= today ? true : false;
 		var isValideToLegalEnd = self.OfferValidTo() <= moment(self.DateTo()).add('days', -1) ? true : false;
-		var isValidToLegal = isValideToLegalStart && isValideToLegalEnd;
-		return self.IsSelectedDateInShiftTradePeriod() && isValidToLegal;
+
+		return isValideToLegalStart && isValideToLegalEnd;
+	});
+	
+	this.SaveEnabled = ko.computed(function () {
+		return self.IsSelectedDateInShiftTradePeriod() && self.IsValidToLegal();
 	});
 
 	this.ErrorMessage = ko.observable('');
@@ -81,11 +95,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
-					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
-					var min = moment(now).add('days', data.OpenPeriodRelativeStart);
-					var max = moment(now).add('days', data.OpenPeriodRelativeEnd);
-					if (moment(date) >= min && moment(date) <= max) self.IsSelectedDateInShiftTradePeriod(true);
-					else self.IsSelectedDateInShiftTradePeriod(false);
+					self.OpenPeriodRelativeStart(data.OpenPeriodRelativeStart);
+					self.OpenPeriodRelativeEnd(data.OpenPeriodRelativeEnd);
 				}
 				self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 			}

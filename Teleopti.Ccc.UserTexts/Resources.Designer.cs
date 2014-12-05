@@ -2096,6 +2096,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The date you want to exchange should in open period !.
+        /// </summary>
+        public static string AnnounceShiftDateOutPeriod {
+            get {
+                return ResourceManager.GetString("AnnounceShiftDateOutPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid to date should between today and the day before exchange date !.
+        /// </summary>
+        public static string AnnounceShiftValidToNotLegal {
+            get {
+                return ResourceManager.GetString("AnnounceShiftValidToNotLegal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answered.
         /// </summary>
         public static string Answered {
