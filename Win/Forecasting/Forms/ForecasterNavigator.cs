@@ -12,10 +12,12 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
@@ -66,6 +68,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		public ForecasterNavigator()
 		{
 			InitializeComponent();
+			var license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
+			if (license.EnabledLicenseSchemaName == DefinedLicenseSchemaCodes.TeleoptiWFMForecastsSchema)
+			{
+				skillMenuQuickForecast.Visible = false;
+				workloadMenuQuickForecast.Visible = false;
+				skillTypeMenuQuickForecast.Visible = false;
+				xxQuickForecastToolStripMenuItem.Visible = false;
+				xxQuickForecastToolStripMenuItem1.Visible = false;
+			}
 			if (!DesignMode)
 			{
 				SetTexts();
