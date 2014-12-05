@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Messages.Controllers;
+using Teleopti.Ccc.Web.Areas.Messages.Models;
 
 namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 {

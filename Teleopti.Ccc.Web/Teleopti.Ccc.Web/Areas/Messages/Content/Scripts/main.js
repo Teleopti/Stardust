@@ -5,7 +5,7 @@ require([
         'jquery',
         'modernizr',
         'bootstrap',
-        'view'
+        'layout'
     ], function() {
 	
 });

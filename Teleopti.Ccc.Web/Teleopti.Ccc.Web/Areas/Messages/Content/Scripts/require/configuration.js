@@ -9,7 +9,7 @@
 
 		resourcesr: 'require/resourcesr',
 
-		templates: '../../templates',
+		templates: '../templates',
 
 		text: '../../../../../Content/require/text'
 

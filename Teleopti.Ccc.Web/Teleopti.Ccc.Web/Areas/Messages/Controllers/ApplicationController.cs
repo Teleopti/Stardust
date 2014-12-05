@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.Messages.Models;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			var userTexts = JsonConvert.SerializeObject(new
 			{
 				UserTexts.Resources.Messages,
-				UserTexts.Resources.Receivers
+				UserTexts.Resources.Receivers,
+				UserTexts.Resources.Send
 			}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);
@@ -61,15 +62,4 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			return new ContentResult { Content = template, ContentType = "text/javascript" };
 		}
     }
-
-	public class PersonViewModel
-	{
-		public string Name { get; set; }
-		public Guid Id { get; set; }
-	}
-
-	public class SendMessageViewModel
-	{
-		public IEnumerable<PersonViewModel> People { get; set; }
-	}
 }
