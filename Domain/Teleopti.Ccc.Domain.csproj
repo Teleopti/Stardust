@@ -205,7 +205,6 @@
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\StateEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ThrowOnNotifyRtaToCheckForActivityChange.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherencePercent.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherencePercentageReadModelPersister.cs" />

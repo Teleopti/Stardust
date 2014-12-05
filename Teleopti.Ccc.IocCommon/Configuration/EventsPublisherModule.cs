@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>();
-			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>();
 		}
 	}
 
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IPublishEventsFromEventHandlers>()
 				.SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>();
-			builder.RegisterType<ThrowOnNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>();
 		}
 	}
 }

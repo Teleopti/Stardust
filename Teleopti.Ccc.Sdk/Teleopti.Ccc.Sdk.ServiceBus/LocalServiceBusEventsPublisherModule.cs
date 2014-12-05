@@ -17,9 +17,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				.As<IPublishEventsFromEventHandlers>()
 				.As<ISendDelayedMessages>()
 				.SingleInstance();
-			builder.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>()
-				.As<INotifyRtaToCheckForActivityChange>()
-				.SingleInstance();
+
+			builder.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 		}
 	}
 }

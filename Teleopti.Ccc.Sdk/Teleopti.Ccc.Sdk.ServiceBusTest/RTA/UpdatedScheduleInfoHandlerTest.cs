@@ -357,32 +357,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			personRepository.AssertWasNotCalled(r => r.DoesPersonHaveExternalLogOn(DateOnly.Today, Guid.Empty), a => a.IgnoreArguments());
 		}
 
-		[Test]
-		public void Coverage()
-		{
-			target = new PersonActivityChangePulseLoop(MockRepository.GenerateMock<ISendDelayedMessages>(), MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>(), MockRepository.GenerateMock<INotifyRtaToCheckForActivityChange>(), MockRepository.GenerateMock<IPersonRepository>());
-			target.Handle(new PersonActivityChangePulseEvent());
-
-			var repo = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
-			repo.Stub(x => x.GetNextActivityStartTime(DateTime.MinValue, Guid.Empty)).IgnoreArguments().Return(DateTime.Now);
-			var service = MockRepository.GenerateMock<INotifyRtaToCheckForActivityChange>();
-			service.Stub(x => x.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.MinValue)).IgnoreArguments().Throw(new Exception());
-			var personRepo = MockRepository.GenerateMock<IPersonRepository>();
-			target.Handle(new PersonActivityChangePulseEvent());
-
-			target = new PersonActivityChangePulseLoop(MockRepository.GenerateMock<ISendDelayedMessages>(), repo, service, personRepo);
-			target.Handle(new ScheduleProjectionReadOnlyChanged
-				{
-					ActivityStartDateTime = DateTime.UtcNow.AddHours(-1),
-					ActivityEndDateTime = DateTime.UtcNow.AddHours(1)
-				});
-
-			new DontNotifyRtaToCheckForActivityChange().CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.MinValue);
-			Assert.Throws<NotImplementedException>(() => new ThrowOnNotifyRtaToCheckForActivityChange().CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.MinValue));
-
-			new IgnoreDelayedMessages().DelaySend(DateTime.MinValue, new object());
-			Assert.Throws<NotImplementedException>(() => new CannotSendDelayedMessages().DelaySend(DateTime.MinValue, new object()));
-		}
-
 	}
 }

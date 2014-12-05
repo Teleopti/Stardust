@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
+			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
 
-			builder.RegisterType<SyncEventPublisher>().As<ISyncEventPublisher>();
-			builder.RegisterType<HangfireEventPublisher>().As<IHangfireEventPublisher>();
-			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>();
+			builder.RegisterType<SyncEventPublisher>().As<ISyncEventPublisher>().SingleInstance();
+			builder.RegisterType<HangfireEventPublisher>().As<IHangfireEventPublisher>().SingleInstance();
+			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
 		}
 	}
 }
