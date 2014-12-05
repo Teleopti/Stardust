@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
+			builder.RegisterModule(new SyncEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var applicationData = MockRepository.GenerateMock<IApplicationData>();
 			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config) {ApplicationData = applicationData});
-			builder.RegisterModule(new LocalInMemoryEventsPublisherModule());
+			builder.RegisterModule(new SyncEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}

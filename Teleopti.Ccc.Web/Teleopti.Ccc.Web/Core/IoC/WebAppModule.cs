@@ -90,11 +90,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<ShiftTradeModule>();
 
 			builder.RegisterModule<CommandDispatcherModule>();
-			//builder.RegisterModule<LocalInMemoryEventsPublisherModule>();
-			builder.RegisterModule<ServiceBusEventsPublisherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterType<DoNotUseSmsLink>().As<INotificationValidationCheck>().SingleInstance();
 
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();

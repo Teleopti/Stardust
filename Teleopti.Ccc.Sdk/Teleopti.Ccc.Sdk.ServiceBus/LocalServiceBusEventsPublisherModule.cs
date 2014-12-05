@@ -9,14 +9,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
-			builder.RegisterType<SyncEventPublisher>().As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
-			builder.RegisterType<LocalServiceBusPublisher>()
-				.As<IPublishEventsFromEventHandlers>()
-				.As<ISendDelayedMessages>()
-				.SingleInstance();
-
+			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().As<ISendDelayedMessages>().SingleInstance();
+			builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 		}
 	}
