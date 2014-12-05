@@ -20,12 +20,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 	{
 		private ApplicationController target;
 		private IPersonRepository _personRepository;
+		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private IPrincipalAuthorization _principalAuthorization;
 
 		[SetUp]
 		public void Setup()
 		{
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			target = new ApplicationController(_personRepository);
+			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
+			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_principalAuthorization);
 		}
 
 		[TearDown]
@@ -53,6 +57,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 
 			(result.Data as SendMessageViewModel).People.Count().Should().Be.EqualTo(2);
 			(result.Data as SendMessageViewModel).People.First().Name.Should().Be.EqualTo(person1.Name.ToString());
+		}
+
+		[Test]
+		public void ShouldReturnBasicNavigation()
+		{
+			var principal = (ITeleoptiPrincipal)MockRepository.GenerateStrictMock(typeof(ITeleoptiPrincipal), new[] { typeof(IUnsafePerson) });
+			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
+
+			_principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+			_principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
+			_currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
+			principal.Stub(x => x.Identity).Return(identity);
+			identity.Stub(x => x.Name).Return("fake");
+			var person = PersonFactory.CreatePersonWithId();
+			((IUnsafePerson)principal).Stub(x => x.Person).Return(person);
+
+			var result = target.NavigationContent();
+			dynamic content = result.Data;
+
+			((object)content.UserName).Should().Be.EqualTo("fake");
+			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
+			((object)content.IsAnywhereAvailable).Should().Be.EqualTo(false);
+			((object)content.PersonId).Should().Be.EqualTo(person.Id);
 		}
 
 

@@ -4,6 +4,8 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Messages.Models;
 using Teleopti.Ccc.Web.Filters;
 
@@ -12,13 +14,17 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
     public class ApplicationController : Controller
     {
 	    private readonly IPersonRepository _personRepository;
+	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+	    private readonly IPrincipalAuthorization _principalAuthorization;
 
-	    public ApplicationController(IPersonRepository personRepository)
+	    public ApplicationController(IPersonRepository personRepository, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPrincipalAuthorization principalAuthorization)
 	    {
 		    _personRepository = personRepository;
+		    _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+		    _principalAuthorization = principalAuthorization;
 	    }
 
-		[HttpGet]
+	    [HttpGet]
 	    public ViewResult Index()
 	    {
 			return View();
@@ -44,6 +50,19 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			}
 	    }
 
+		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]
+		public JsonResult NavigationContent()
+		{
+			var principal = _currentTeleoptiPrincipal.Current();
+			return Json(new
+			{
+				UserName = principal.Identity.Name,
+				PersonId = ((IUnsafePerson)principal).Person.Id,
+				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
+				IsAnywhereAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere),
+			}, JsonRequestBehavior.AllowGet);
+		}
+
 		[HttpGet,OutputCache(Duration = 0,NoStore = true)]
 		public ActionResult Resources()
 		{
@@ -54,7 +73,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			{
 				UserTexts.Resources.Messages,
 				UserTexts.Resources.Receivers,
-				UserTexts.Resources.Send
+				UserTexts.Resources.Send,
+				UserTexts.Resources.SignOut
 			}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);
