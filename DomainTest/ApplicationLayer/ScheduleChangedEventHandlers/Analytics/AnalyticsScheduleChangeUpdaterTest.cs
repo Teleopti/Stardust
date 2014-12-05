@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>{scenario});
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>{cat});
-			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(timePart);
+			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66))).Return(timePart);
 			_analyticsFactScheduleDateHandler.Stub(
 				x =>
 					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			{
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
 			};
-
+			var timePart = new AnalyticsFactScheduleTime();
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
 			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(timePart);

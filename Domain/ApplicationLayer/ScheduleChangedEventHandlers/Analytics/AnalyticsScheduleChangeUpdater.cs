@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 				//var dayCount = new AnalyticsFactScheduleDayCount();
 				var shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
-				
+				var shiftStart = scheduleDay.Shift.StartDateTime;
+				var intervalStart = shiftStart;
 				var shiftEnd = scheduleDay.Shift.EndDateTime;
 				while (intervalStart < shiftEnd)
 				{
