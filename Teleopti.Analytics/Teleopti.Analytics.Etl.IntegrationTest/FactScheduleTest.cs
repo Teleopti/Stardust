@@ -78,7 +78,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 
 			const string phone = "Phone";
@@ -142,7 +142,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 
 			// now it should have data on all three dates, 96 interval
@@ -207,7 +207,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 
 			//Run ETL.Intraday first time just to set "LastUpdatedPerStep"
 			StepRunner.RunIntraday(jobParameters);
@@ -308,7 +308,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				Helper = jobHelper, 
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
-			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 
 			var jobRunner = new JobRunner();
 			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);

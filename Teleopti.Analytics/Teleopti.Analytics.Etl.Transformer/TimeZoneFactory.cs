@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +12,6 @@ namespace Teleopti.Analytics.Etl.Transformer
         public static IList<TimeZoneDim> CreateTimeZoneDimList(IEnumerable<TimeZoneInfo> timeZoneCollection, TimeZoneInfo defaultTimeZone)
         {
             IList<TimeZoneDim> retList = new List<TimeZoneDim>();
-            //ReadOnlyCollection<TimeZoneInfo> systemTimeZoneCollection = TimeZoneInfo.GetSystemTimeZones();
 
             foreach (TimeZoneInfo timeZoneInfo in timeZoneCollection)
             {
@@ -20,27 +20,26 @@ namespace Teleopti.Analytics.Etl.Transformer
             return retList;
         }
 
-        public static IList<TimeZoneBridge> CreateTimeZoneBridgeList(DateTimePeriod period, int intervalsPerDay, IEnumerable<TimeZoneInfo> timeZoneInfoList)
+        public static IList<TimeZoneBridge> CreateTimeZoneBridgeList(IList<TimeZonePeriod> timeZonePeriodList, int intervalsPerDay)
         {
             IList<TimeZoneBridge> retList = new List<TimeZoneBridge>();
-            
             int minutesPerInterval = 1440 / intervalsPerDay;
-            DateTime startDate = GetNearestLowerIntervalTime(period.StartDateTime, minutesPerInterval);
-            DateTime endDate = GetNearestLowerIntervalTime(period.EndDateTime, minutesPerInterval);
-            //DateTime endDate = period.EndDateTime.Date.AddDays(1);
-            DateTime currentDateTime = startDate;
 
-            while (currentDateTime <= endDate)
+            foreach (var timeZonePeriod in timeZonePeriodList)
             {
-                foreach (TimeZoneInfo zone in timeZoneInfoList)
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZonePeriod.TimeZoneCode);
+                DateTime start = GetNearestLowerIntervalTime(timeZonePeriod.PeriodToLoad.StartDateTime, minutesPerInterval);
+                DateTime end = GetNearestLowerIntervalTime(timeZonePeriod.PeriodToLoad.EndDateTime, minutesPerInterval);
+                DateTime currDateTime = start;
+
+                while (currDateTime <= end)
                 {
-                    TimeZoneBridge timeZoneBridge =
-                        new TimeZoneBridge(currentDateTime, zone, intervalsPerDay);
+                    var timeZoneBridge = new TimeZoneBridge(currDateTime, timeZone, intervalsPerDay);
                     if (timeZoneBridge.Date > DateTime.MinValue)
                         retList.Add(timeZoneBridge);
-                }
 
-                currentDateTime = currentDateTime.AddMinutes(minutesPerInterval);
+                    currDateTime = currDateTime.AddMinutes(minutesPerInterval);
+                }
             }
 
             return retList;

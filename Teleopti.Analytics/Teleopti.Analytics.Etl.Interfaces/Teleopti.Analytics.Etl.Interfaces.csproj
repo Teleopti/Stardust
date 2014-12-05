@@ -97,6 +97,7 @@
     <Compile Include="Common\IRunController.cs" />
     <Compile Include="Common\IRunControllerRepository.cs" />
     <Compile Include="Common\PmPermissionType.cs" />
+    <Compile Include="Common\TimeZonePeriod.cs" />
     <Compile Include="Transformer\IIntradayAvailabilityTransformer.cs" />
     <Compile Include="Transformer\IIntradaySchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\DayOffEtlLoadSource.cs" />

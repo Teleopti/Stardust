@@ -24,6 +24,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.ReadModel;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -1054,15 +1055,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_time_zone_bridge", _dataMartConnectionString);
 		}
 
-		public int FillTimeZoneBridgeDataMart(DateTimePeriod period)
+		public int FillTimeZoneBridgeDataMart()
 		{
-			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("start_date", period.StartDateTime));
-			parameterList.Add(new SqlParameter("end_date", period.EndDateTime));
-
 			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_time_zone_load", parameterList,
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_time_zone_load", null,
 												_dataMartConnectionString);
 		}
 
@@ -1181,23 +1177,27 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-	    public DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
+        public IList<TimeZonePeriod> GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
 		{
-			DataTable dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
+            DataTable dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
 																 "mart.etl_bridge_time_zone_get_load_period", null,
 																 _dataMartConnectionString).Tables[0];
+            var timeZonePeriodList = new List<TimeZonePeriod>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (row["period_start_date"] == DBNull.Value && row["period_end_date"] == DBNull.Value)
+                    return null;
 
-			if (dataTable.Rows[0]["period_start_date"] == DBNull.Value && dataTable.Rows[0]["period_end_date"] == DBNull.Value)
-			{
-				// No valid period returned
-				return null;
-			}
+                var startDate = DateTime.SpecifyKind((DateTime)row["period_start_date"], DateTimeKind.Utc);
+                var endDate = DateTime.SpecifyKind((DateTime)row["period_end_date"], DateTimeKind.Utc);
+                timeZonePeriodList.Add(new TimeZonePeriod 
+                    { 
+                        TimeZoneCode = row["time_zone_code"].ToString(),
+                        PeriodToLoad = new DateTimePeriod(startDate, endDate.AddDays(1).AddMinutes(-1))
+                    });
+            }
 
-			DateTime startDate = DateTime.SpecifyKind((DateTime)dataTable.Rows[0]["period_start_date"],
-													  DateTimeKind.Utc);
-			DateTime endDate = DateTime.SpecifyKind((DateTime)dataTable.Rows[0]["period_end_date"], DateTimeKind.Utc);
-
-			return new DateTimePeriod(startDate, endDate.AddDays(1).AddMinutes(-1));
+			return timeZonePeriodList;
 		}
 
 		public IList<IWorkload> LoadWorkload()

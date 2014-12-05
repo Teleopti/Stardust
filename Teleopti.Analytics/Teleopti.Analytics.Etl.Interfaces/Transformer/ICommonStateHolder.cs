@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.ReadModel;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IScenario> ScenarioCollection { get; }
         IScenario DefaultScenario { get; }
         IList<TimeZoneInfo> TimeZoneCollection { get; }
-        DateTimePeriod? PeriodToLoadBridgeTimeZone { get; }
+        IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone { get; }
         IScheduleDictionary GetSchedules(DateTimePeriod period, IScenario scenario);
         ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
 		ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck);
@@ -41,6 +42,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 	    void SetThisTime(ILastChangedReadModel lastTime, string step);
 	    void UpdateThisTime(string step, IBusinessUnit businessUnit);
 	    bool PermissionsMustRun();
-		 void SetLoadBridgeTimeZonePeriod(DateTimePeriod period);
+		 void SetLoadBridgeTimeZonePeriod(DateTimePeriod period, string timeZoneCode);
     }
 }

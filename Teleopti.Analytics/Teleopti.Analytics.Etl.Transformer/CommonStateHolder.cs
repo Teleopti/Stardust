@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +20,7 @@ namespace Teleopti.Analytics.Etl.Transformer
         private IScenario _defaultScenario;
         private IList<ISkill> _skillCollection;
         private IList<TimeZoneInfo> _timeZones;
-        private DateTimePeriod? _bridgeTimeZonePeriod;
+        private IList<TimeZonePeriod> _bridgeTimeZonePeriodList;
         private IList<IPerson> _userCollection;
         private IList<IScheduleDay> _schedulePartCollection;
         private IList<IActivity> _activityCollection;
@@ -501,23 +502,30 @@ namespace Teleopti.Analytics.Etl.Transformer
     		}
     	}
 
-    	public DateTimePeriod? PeriodToLoadBridgeTimeZone
+        public IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone
         {
             get
             {
-                if (_bridgeTimeZonePeriod == null)
+                if (_bridgeTimeZonePeriodList == null)
                 {
-                    _bridgeTimeZonePeriod = _jobParameters.Helper.Repository.GetBridgeTimeZoneLoadPeriod(_jobParameters.DefaultTimeZone);
+                    _bridgeTimeZonePeriodList = _jobParameters.Helper.Repository.GetBridgeTimeZoneLoadPeriod(_jobParameters.DefaultTimeZone);
                 }
 
-                return _bridgeTimeZonePeriod;
+                return _bridgeTimeZonePeriodList;
             }
         }
 
 		 //This only to be used in Test to avoid a load of too much data
-	    public void SetLoadBridgeTimeZonePeriod(DateTimePeriod period)
+        public void SetLoadBridgeTimeZonePeriod(DateTimePeriod period, string timeZoneCode)
 	    {
-		    _bridgeTimeZonePeriod = period;
+            _bridgeTimeZonePeriodList = new List<TimeZonePeriod> 
+            { 
+                new TimeZonePeriod 
+                    { 
+                        TimeZoneCode = timeZoneCode, 
+                        PeriodToLoad = period 
+                    } 
+            };
 	    }
 
         private class ScheduleCacheCollection

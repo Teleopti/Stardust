@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
 {
@@ -38,11 +39,15 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             timeZoneCollection.Add(_timeZoneWEuropeStTime);
             timeZoneCollection.Add(_defaultTimeZone);
             _timeZoneDimList = TimeZoneFactory.CreateTimeZoneDimList(timeZoneCollection, _defaultTimeZone);
+            
             var period =
                 new DateTimePeriod(new DateTime(2006, 3, 25, 10, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2006, 3, 26, 14, 0, 0, DateTimeKind.Utc));
+            var timeZonePeriodList = new List<TimeZonePeriod>();
+            timeZonePeriodList.Add(new TimeZonePeriod { TimeZoneCode = _timeZoneWEuropeStTime.Id, PeriodToLoad = period });
+            timeZonePeriodList.Add(new TimeZonePeriod { TimeZoneCode = _defaultTimeZone.Id, PeriodToLoad = period });
 
-            _timeZoneBridgeList = TimeZoneFactory.CreateTimeZoneBridgeList(period, 96, timeZoneCollection);
+            _timeZoneBridgeList = TimeZoneFactory.CreateTimeZoneBridgeList(timeZonePeriodList, 96);
 
             _target = new TimeZoneTransformer(_insertDateTime);
 

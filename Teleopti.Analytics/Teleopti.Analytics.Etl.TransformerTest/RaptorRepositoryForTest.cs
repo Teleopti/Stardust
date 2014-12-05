@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;
 using System.Reflection;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
@@ -296,7 +297,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return dataTable.Rows.Count;
         }
 
-        public int FillTimeZoneBridgeDataMart(DateTimePeriod period)
+        public int FillTimeZoneBridgeDataMart()
         {
             return 0;
         }
@@ -306,9 +307,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return new List<TimeZoneInfo>();
         }
 
-        public DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
+        public IList<TimeZonePeriod> GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone)
         {
-            return new DateTimePeriod();
+            return new List<TimeZonePeriod>();
         }
 
         public IList<IWorkload> LoadWorkload()

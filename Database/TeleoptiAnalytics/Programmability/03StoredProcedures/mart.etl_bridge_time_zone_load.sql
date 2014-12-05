@@ -12,49 +12,33 @@ GO
 -- Description:	Loads time zones from stg_time_zone_bridge 
 --				to bridge_time_zone
 -- =============================================
-CREATE PROCEDURE [mart].[etl_bridge_time_zone_load] 
-	
-@start_date smalldatetime,
-@end_date smalldatetime
-	
+CREATE PROCEDURE [mart].[etl_bridge_time_zone_load] 	
 AS
-----------------------------------------------------------------------------------
-DECLARE @start_date_id	INT
-DECLARE @end_date_id	INT
+SET NOCOUNT ON
+IF (select count(*) from stage.stg_time_zone_bridge)=0
+	return 0
 
-DECLARE @max_date smalldatetime
-DECLARE @min_date smalldatetime
-
-SELECT  
-	@max_date= max(date),
-	@min_date= min(date)
-FROM
-	Stage.stg_time_zone_bridge
- 
-SET	@start_date = CASE WHEN @min_date > @start_date THEN @min_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_date < @end_date	THEN @max_date ELSE @end_date	END
-
-SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
-SET @end_date	= convert(smalldatetime,floor(convert(decimal(18,8),@end_date )))
-
-SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @start_date = date_date)
-SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
-
-IF @end_date_id is null
-BEGIN
-SET @end_date_id = (SELECT max(date_id) FROM mart.dim_date)
-END
-
-
------------------------------------------------------------------------------------
--- Delete rows
-
-DELETE FROM mart.bridge_time_zone  WHERE date_id between @start_date_id AND @end_date_id
+DELETE mart
+FROM  mart.bridge_time_zone mart
+JOIN
+(SELECT d.date_id, stg.interval_id,tz.time_zone_id
+FROM stage.stg_time_zone_bridge stg
+INNER JOIN
+	mart.dim_date d
+ON
+	stg.date = d.date_date
+INNER JOIN
+	mart.dim_time_zone tz
+ON 
+	stg.time_zone_code=tz.time_zone_code)stage
+	ON stage.date_id=mart.date_id 
+	AND stage.interval_id=mart.interval_id 
+	AND stage.time_zone_id=mart.time_zone_id
 
 
 ----------------------------------------------------------------------------
--- insert into bridge_time_zone
-
+/*insert bridge_time_zone*/
+SET NOCOUNT OFF
 INSERT INTO mart.bridge_time_zone
 	(
 	date_id, 
@@ -89,8 +73,6 @@ JOIN
 	mart.dim_time_zone tz
 ON
 	stg.time_zone_code = tz.time_zone_code
-WHERE 
-	d.date_id BETWEEN @start_date_id and @end_date_id
 
 GO
 

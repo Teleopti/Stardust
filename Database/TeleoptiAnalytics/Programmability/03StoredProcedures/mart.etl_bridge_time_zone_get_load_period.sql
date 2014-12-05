@@ -14,22 +14,34 @@ GO
 CREATE PROCEDURE [mart].[etl_bridge_time_zone_get_load_period] 	
 AS
 SET NOCOUNT ON
-DECLARE @new_time_zone_found bit
-DECLARE @period_start_date smalldatetime, @period_end_date smalldatetime, @tz_period_end_date smalldatetime
-DECLARE @intervals_per_day INT, @is_inconsistent BIT
 
-SELECT 
-	@new_time_zone_found = count(time_zone_code )
+DECLARE @period_start_date smalldatetime, @period_end_date smalldatetime
+DECLARE @intervals_per_day INT
+
+CREATE TABLE #bridge_time_zone_period(
+		time_zone_id int, 
+		time_zone_code nvarchar(50),
+		period_start_date smalldatetime,
+		period_end_date smalldatetime
+		)
+
+CREATE TABLE #max_date(
+			time_zone_id int, 
+			max_date smalldatetime)
+
+CREATE TABLE #incons(
+			intervals int, 
+			time_zone_id int, 
+			date_id int)
+
+/*Get all time_zones*/
+INSERT #bridge_time_zone_period(time_zone_id,time_zone_code,period_start_date,period_end_date)
+SELECT dt.time_zone_id, dt.time_zone_code, NULL ,NULL
 FROM 
-	mart.dim_time_zone
-WHERE time_zone_id NOT IN	(
-							SELECT 
-								DISTINCT time_zone_id 
-							FROM 
-								mart.bridge_time_zone
-							)
-AND to_be_deleted = 0
+	mart.dim_time_zone dt
+WHERE dt.to_be_deleted = 0
 
+/*Check min and max in dim_date*/
 SELECT
 	@period_start_date = min(date_date),
 	@period_end_date = max(date_date)
@@ -37,50 +49,52 @@ FROM
 	mart.dim_date
 WHERE
 	date_id > -1
-	
 
+/*Set last date in bridge as start_date and last date in dim_date as end_date*/
+INSERT #max_date(time_zone_id,max_date)
+SELECT btz.time_zone_id as time_zone_id,max(dd.date_date)
+FROM mart.bridge_time_zone btz
+INNER JOIN mart.dim_date dd
+ON btz.date_id = dd.date_id
+GROUP BY btz.time_zone_id
+
+UPDATE #bridge_time_zone_period
+SET period_start_date= #max_date.max_date, period_end_date=@period_end_date
+FROM #bridge_time_zone_period 
+INNER JOIN #max_date 
+ON #max_date.time_zone_id=#bridge_time_zone_period.time_zone_id
+
+/*Check for inconsistent time_zones*/
 SELECT @intervals_per_day = COUNT(*) FROM mart.dim_interval
 
-IF EXISTS (
-			SELECT COUNT(date_id) as Intervals,time_zone_id,date_id
-			FROM mart.bridge_time_zone
-			WHERE date_id <> (SELECT MAX(date_id) FROM mart.bridge_time_zone) --do not care about last day
-			AND date_id <> (SELECT MIN(date_id) FROM mart.bridge_time_zone) --Do not care about first day
-			GROUP BY time_zone_id,date_id
-			HAVING COUNT(date_id) <> @intervals_per_day
-			)
-	SET @is_inconsistent = 1
-ELSE
-	SET @is_inconsistent = 0
+INSERT #incons(intervals,time_zone_id,date_id)
+SELECT COUNT(date_id) as intervals,time_zone_id,date_id
+FROM mart.bridge_time_zone
+WHERE date_id <> (SELECT MAX(date_id) FROM mart.bridge_time_zone) --do not care about last day
+AND date_id <> (SELECT MIN(date_id) FROM mart.bridge_time_zone) --Do not care about first day
+GROUP BY time_zone_id,date_id
+HAVING COUNT(date_id) <> @intervals_per_day
+
+UPDATE #bridge_time_zone_period
+SET period_start_date=NULL,
+	period_end_date=NULL
+FROM #bridge_time_zone_period
+INNER JOIN #incons 
+	ON #incons.time_zone_id=#bridge_time_zone_period.time_zone_id
+
+/*Reload all new and inconsistent time_zones*/
+UPDATE #bridge_time_zone_period
+SET period_start_date=@period_start_date, period_end_date=@period_end_date
+WHERE period_start_date IS NULL
+
+/*Return all timezone with diff on date*/
+SELECT time_zone_code, period_start_date, period_end_date 
+FROM #bridge_time_zone_period
+WHERE period_start_date<>period_end_date
 
 
--- When no new time zone was found and data is consistent we need to adapt the start of the period.
-IF (@new_time_zone_found = 0) AND (@is_inconsistent = 0)
-BEGIN
-	SELECT
-		@tz_period_end_date = max(dd.date_date)
-	FROM
-		mart.bridge_time_zone btz
-	INNER JOIN
-		mart.dim_date dd
-	ON
-		btz.date_id = dd.date_id
 
---select @tz_period_end_date, @period_end_date
 
-	IF @tz_period_end_date IS NOT NULL
-	BEGIN
-		--IF @tz_period_end_date < @period_end_date
-		--	SET @tz_period_end_date = dateadd(d, 1, @tz_period_end_date)
-		SET @period_start_date = @tz_period_end_date
-		IF @period_start_date = @period_end_date
-		BEGIN
-			SELECT @period_start_date = null, @period_end_date = null
-		END
-	END
-END
-
-SELECT @period_start_date as period_start_date, @period_end_date as period_end_date
 
 GO
 

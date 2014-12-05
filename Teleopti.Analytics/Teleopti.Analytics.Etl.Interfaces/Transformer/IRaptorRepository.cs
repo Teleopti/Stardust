@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.ReadModel;
@@ -84,10 +85,10 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int PersistTimeZoneDim(DataTable dataTable);
         int FillTimeZoneDimDataMart(IBusinessUnit businessUnit);
         int PersistTimeZoneBridge(DataTable dataTable, bool doTruncateTable);
-        int FillTimeZoneBridgeDataMart(DateTimePeriod period);
+        int FillTimeZoneBridgeDataMart();
         IEnumerable<TimeZoneInfo> LoadTimeZonesInUse();
         DateTime GetMaxDateInDimDate();
-        DateTimePeriod? GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone);
+        IList<TimeZonePeriod> GetBridgeTimeZoneLoadPeriod(TimeZoneInfo timeZone);
 
         //Forecast data
         IList<IWorkload> LoadWorkload();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
@@ -26,15 +27,14 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             IList<TimeZoneBridge> bulkList = new List<TimeZoneBridge>();
             var transformer = new TimeZoneTransformer(DateTime.Now);
 
-            DateTimePeriod? period = _jobParameters.StateHolder.PeriodToLoadBridgeTimeZone;
-            if (!period.HasValue)
+            IList<TimeZonePeriod> timeZonePeriodList = _jobParameters.StateHolder.PeriodToLoadBridgeTimeZone;
+            if (timeZonePeriodList.Count == 0)
             {
                 // No valid period - truncate table and skip job step
                 return _jobParameters.Helper.Repository.PersistTimeZoneBridge(BulkInsertDataTable1, true);
             }
 
-            IList<TimeZoneBridge> rootList = TimeZoneFactory.CreateTimeZoneBridgeList(period.Value, _jobParameters.IntervalsPerDay,
-                                                                      _jobParameters.StateHolder.TimeZoneCollection);
+            IList<TimeZoneBridge> rootList = TimeZoneFactory.CreateTimeZoneBridgeList(timeZonePeriodList, _jobParameters.IntervalsPerDay);
 
             // Loop through to transform and bulk insert a certain amount of rows
             foreach (TimeZoneBridge timeZoneBridge in rootList)
