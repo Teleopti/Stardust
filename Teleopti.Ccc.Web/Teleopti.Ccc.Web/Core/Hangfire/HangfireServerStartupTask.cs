@@ -1,8 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using Autofac;
-using Hangfire;
-using Hangfire.SqlServer;
 using Owin;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -15,27 +11,20 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	[TaskPriority(100)]
 	public class HangfireServerStartupTask : IBootstrapperTask
 	{
-		private readonly ILifetimeScope _lifetimeScope;
 		private readonly IConfigReader _config;
+		private readonly IHangfireServerStarter _starter;
 
-		public HangfireServerStartupTask(ILifetimeScope lifetimeScope, IConfigReader config)
+		public HangfireServerStartupTask(IConfigReader config, IHangfireServerStarter starter)
 		{
-			_lifetimeScope = lifetimeScope;
 			_config = config;
+			_starter = starter;
 		}
 
 		public Task Execute(IAppBuilder application)
 		{
-			application.UseHangfire(c =>
-			{
-				c.UseSqlServerStorage(
-					_config.ConnectionStrings["Hangfire"].ConnectionString,
-					new SqlServerStorageOptions {QueuePollInterval = TimeSpan.FromSeconds(1)}
-					);
-				c.UseAutofacActivator(_lifetimeScope);
-				c.UseServer();
-			});
+			_starter.Start(application, _config.ConnectionStrings["Hangfire"].ConnectionString);
 			return null;
 		}
+
 	}
 }

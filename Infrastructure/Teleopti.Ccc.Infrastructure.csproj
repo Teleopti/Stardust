@@ -154,6 +154,9 @@
     </Compile>
     <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
+    <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
+    <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\EventPublisher.cs" />

@@ -280,6 +280,7 @@
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
+    <Compile Include="Core\IoC\HangfireModuleTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerControllerTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\PersonNameProviderTest.cs" />
@@ -582,6 +583,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Aop\Core\" />
+    <Folder Include="Core\Hangfire\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
     <Folder Include="Properties\" />
   </ItemGroup>

@@ -670,5 +670,4 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 		}
 	}
-
 }
