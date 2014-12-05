@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
@@ -10,6 +12,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -84,6 +87,33 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var cats = _target.ShiftCategories();
 			cats.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldLoadDates()
+		{
+			//to get dates around today
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), DateTime.Today);
+			var jobParameters = getJobParameters();
+			StepRunner.RunNightly(jobParameters);
+
+			var dates = _target.LoadDimDates();
+			dates.Count.Should().Not.Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldLoadPerson()
+		{
+			var testDate = new DateTime(2013, 06, 15);
+			IPerson person;
+			BasicShiftSetup.SetupBasicForShifts();
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
+			
+			var jobParameters = getJobParameters();
+			StepRunner.RunNightly(jobParameters);
+
+			var pers = _target.PersonAndBusinessUnit(person.PersonPeriodCollection.First().Id.GetValueOrDefault());
+			pers.Should().Not.Be.Null();
 		}
 
 		private static JobParameters getJobParameters()

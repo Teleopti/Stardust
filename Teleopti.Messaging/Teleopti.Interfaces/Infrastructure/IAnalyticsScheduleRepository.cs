@@ -7,15 +7,16 @@ namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IAnalyticsScheduleRepository
 	{
-		void PersistFactScheduleRow(IAnalyticsFactScheduleTime analyticsFactScheduleTime, AnalyticsFactScheduleDate analyticsFactScheduleDate, AnalyticsFactSchedulePerson personPart);
+		void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart, AnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart);
 		void PersistFactScheduleDayCountRow(AnalyticsFactScheduleDayCount dayCount);
 		void DeleteFactSchedule(DateOnly date);
-		IList<KeyValuePair<DateOnly, int>> LoadDimDates(DateTime today);
+		IList<KeyValuePair<DateOnly, int>> LoadDimDates();
 
 		IList<IAnalyticsActivity> Activities();
 		IList<IAnalyticsAbsence> Absences();
 		IList<IAnalyticsGeneric> Scenarios();
 		IList<IAnalyticsGeneric> ShiftCategories();
+		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 	}
 
 	public interface IAnalyticsFactScheduleTime
@@ -56,14 +57,22 @@ namespace Teleopti.Interfaces.Infrastructure
 		bool InPaidTime { get; set; }
 	}
 
+	public interface IAnalyticsPersonBusinessUnit
+	{
+		int PersonId { get; set; }
+		int BusinessUnitId { get; set; }
+	}
+
 	public interface IAnalyticsGeneric
 	{
 		int Id { get; set; }
 		Guid Code { get; set; }
 	}
 
-	public class AnalyticsFactSchedulePerson
+	public interface IAnalyticsFactSchedulePerson
 	{
+		int PersonId { get; set; }
+		int BusinessUnitId { get; set; }
 	}
 
 	public class AnalyticsFactScheduleDate

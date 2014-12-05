@@ -1,17 +1,33 @@
+using System;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	public interface IAnalyticsFactSchedulePersonHandler
 	{
-		AnalyticsFactSchedulePerson Handle(ProjectionChangedEventLayer layer);
+		IAnalyticsFactSchedulePerson Handle(Guid personPeriodCode);
 	}
 
 	public class AnalyticsFactSchedulePersonHandler : IAnalyticsFactSchedulePersonHandler
 	{
-		public AnalyticsFactSchedulePerson Handle(ProjectionChangedEventLayer layer)
+		private readonly IAnalyticsScheduleRepository _repository;
+
+		public AnalyticsFactSchedulePersonHandler(IAnalyticsScheduleRepository repository)
 		{
-			return new AnalyticsFactSchedulePerson();
+			_repository = repository;
+		}
+
+		public IAnalyticsFactSchedulePerson Handle(Guid personPeriodCode)
+		{
+			var ret = new AnalyticsFactSchedulePerson();
+			var person = _repository.PersonAndBusinessUnit(personPeriodCode);
+			if (person != null)
+			{
+				ret.BusinessUnitId = person.BusinessUnitId;
+				ret.PersonId = person.PersonId;
+			}
+
+			return ret;
 		}
 	}
 }

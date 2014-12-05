@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	[TestFixture]
 	public class AnalyticsFactScheduleDateHandlerTest
 	{
-		private TestableNow _now;
 		private IAnalyticsScheduleRepository _repository;
 		private AnalyticsFactScheduleDateHandler _target;
 		private List<KeyValuePair<DateOnly, int>> _dimDateList;
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void Setup()
 		{
 			_scheduleChangeTime = DateTime.Now;
-			_now = new TestableNow(new DateTime(2014, 12, 3, 9, 0, 0, DateTimeKind.Utc));
 			_shiftStartDateUtc = new DateTime(2014, 12, 3, 23, 0, 0, DateTimeKind.Utc);
 			_shiftEndDateUtc = new DateTime(2014, 12, 4, 3, 0, 0, DateTimeKind.Utc);
 			_shiftStartDateLocal = new DateOnly(2014, 12, 4);
@@ -47,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				new KeyValuePair<DateOnly, int>(new DateOnly(new DateOnly(2014, 12, 3)), firstDateId),
 				new KeyValuePair<DateOnly, int>(new DateOnly(new DateOnly(2014, 12, 4)), secondDateId)
 			};
-			_repository.Stub(x => x.LoadDimDates(_now.UtcDateTime())).Return(_dimDateList);
-			_target = new AnalyticsFactScheduleDateHandler(_repository, _now);
+			_repository.Stub(x => x.LoadDimDates()).Return(_dimDateList);
+			_target = new AnalyticsFactScheduleDateHandler(_repository, minutesPerInterval);
 		}
 
 		[Test]

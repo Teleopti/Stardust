@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var start = new DateTime(2014, 12, 01, 8, 0, 0, DateTimeKind.Utc);
 			var list = createLayers(start, new[] { 60, 15, 60 });
 			var shift = new ProjectionChangedEventShift { StartDateTime = start, EndDateTime = start.AddHours(2).AddMinutes(15), Layers = list };
-			var scheduleDay = new ProjectionChangedEventScheduleDay{Shift = shift, ShiftCategoryId = Guid.NewGuid()};
+			var personPeriodId = Guid.NewGuid();
+			var scheduleDay = new ProjectionChangedEventScheduleDay{Shift = shift, ShiftCategoryId = Guid.NewGuid(), PersonPeriodId = personPeriodId};
 			
 
 			var @event = new ProjectionChangedEvent
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				x =>
 					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(datePart);
-			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(personPart);
+			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(personPeriodId)).Return(personPart);
 			_target.Handle(@event);
 			_analyticsFactScheduleTimeHandler.AssertWasCalled(
 				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66)),

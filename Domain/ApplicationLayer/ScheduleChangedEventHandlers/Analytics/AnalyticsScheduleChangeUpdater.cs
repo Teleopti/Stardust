@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 			var minutesPerInterval = 60/intervalLength;
 			var scenarioId = getScenario(@event.ScenarioId);
-
+			
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				_analyticsScheduleRepository.DeleteFactSchedule(new DateOnly(scheduleDay.Date));
@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var shiftStart = scheduleDay.Shift.StartDateTime;
 				var intervalStart = shiftStart;
 				var shiftEnd = scheduleDay.Shift.EndDateTime;
+				var personPart = _analyticsFactSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
 				while (intervalStart < shiftEnd)
 				{
 					var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(intervalLength)));
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
 						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp, minutesPerInterval);
-						var personPart = _analyticsFactSchedulePersonHandler.Handle(intervalLayer);
+						
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);
 					}

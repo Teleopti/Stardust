@@ -9,12 +9,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	public class AnalyticsFactScheduleDateHandler : IAnalyticsFactScheduleDateHandler
 	{
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
-		private readonly INow _now;
+			IAnalyticsScheduleRepository analyticsScheduleRepository,
 
 		public AnalyticsFactScheduleDateHandler(IAnalyticsScheduleRepository analyticsScheduleRepository, INow now)
 		{
 			_analyticsScheduleRepository = analyticsScheduleRepository;
-			_now = now;
 		}
 
 		public AnalyticsFactScheduleDate Handle(
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			int minutesPerInterval)
 
 		{
-			var dimDateList = _analyticsScheduleRepository.LoadDimDates(_now.UtcDateTime());
+			var dimDateList = _analyticsScheduleRepository.LoadDimDates();
 
 			var scheduleStartDateLocal = dimDateList.SingleOrDefault(x => x.Key == shiftStartDateLocal);
 			var activityStartDate = dimDateList.SingleOrDefault(x => x.Key == new DateOnly(layer.StartDateTime));
