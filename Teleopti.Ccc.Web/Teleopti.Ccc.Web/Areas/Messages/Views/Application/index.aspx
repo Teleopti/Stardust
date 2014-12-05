@@ -35,10 +35,24 @@
 	<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
 	<![endif]-->
+	<div class="row" data-bind="if: ErrorMessage().length!=0">
+		<div class="col-md-12">
+			<div class="alert alert-danger error-message">
+				<span data-bind="text: ErrorMessage"></span>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<h1>Messages</h1>
+				<h1 data-bind="text: Resources.Messages"></h1>
+				<h2 data-bind="text: Resources.Receivers"></h2>
+				<ul data-bind="foreach: Receivers">
+					<li>
+						<span data-bind="text: Name"> </span>
+					</li>
+				</ul>
+				<textarea class="form-control" rows="1" placeholder="Subject"></textarea>
 				<textarea class="form-control" rows="3" placeholder="Message"></textarea>
 				<button type="button" class="btn btn-primary pull-right">Send</button>
 			</div>

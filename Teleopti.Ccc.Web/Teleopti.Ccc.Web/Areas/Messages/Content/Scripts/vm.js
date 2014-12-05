@@ -1,11 +1,16 @@
 define([
-		'knockout'
+		'knockout',
+		'resources'
 ], function (
-	ko
+	ko,
+	resources
 	) {
 
 	return function () {
-		
+		var self = this;
+		self.ErrorMessage = ko.observable("");
+		self.Receivers = ko.observableArray();
+		self.Resources = resources;
 	};
 });
 

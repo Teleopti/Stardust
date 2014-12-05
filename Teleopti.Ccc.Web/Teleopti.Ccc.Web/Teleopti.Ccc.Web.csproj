@@ -1096,10 +1096,14 @@
     <Content Include="Areas\HealthCheck\Content\Scripts\Tests.html" />
     <Content Include="Areas\HealthCheck\Content\Scripts\tests.main.js" />
     <Content Include="Areas\HealthCheck\Views\Application\index.aspx" />
+    <Content Include="Areas\Messages\Content\Scripts\http.js" />
     <Content Include="Areas\Messages\Content\Scripts\main.js" />
     <Content Include="Areas\Messages\Content\Scripts\require\configuration.js" />
+    <Content Include="Areas\Messages\Content\Scripts\require\resourcesr.js" />
+    <Content Include="Areas\Messages\Content\Scripts\resources.js" />
     <Content Include="Areas\Messages\Content\Scripts\view.js" />
     <Content Include="Areas\Messages\Content\Scripts\vm.js" />
+    <Content Include="Areas\Messages\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\Messages\Views\Application\index.aspx" />
     <Content Include="Areas\MyTime\Content\Css\BadgeLeaderBoard.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileWeekView.css" />
@@ -1696,6 +1700,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Mart\Views\Shared\" />
+    <Folder Include="Areas\Messages\Models\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />

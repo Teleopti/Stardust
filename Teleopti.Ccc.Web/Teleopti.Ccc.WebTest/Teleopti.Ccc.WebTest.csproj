@@ -226,6 +226,7 @@
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />
+    <Compile Include="Areas\Messages\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TimeFilterHelperTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />

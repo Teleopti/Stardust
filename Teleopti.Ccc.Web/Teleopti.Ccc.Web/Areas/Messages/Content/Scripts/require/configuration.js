@@ -7,6 +7,8 @@
 
 		noext: '../../../../Content/require/noext',
 
+		resourcesr: 'require/resourcesr',
+
 		templates: '../../templates',
 
 		text: '../../../../../Content/require/text'
