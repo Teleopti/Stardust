@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				new KeyValuePair<DateOnly, int>(new DateOnly(new DateOnly(2014, 12, 4)), secondDateId)
 			};
 			_repository.Stub(x => x.LoadDimDates()).Return(_dimDateList);
-			_target = new AnalyticsFactScheduleDateHandler(_repository, minutesPerInterval);
+			_target = new AnalyticsFactScheduleDateHandler(_repository);
 		}
 
 		[Test]

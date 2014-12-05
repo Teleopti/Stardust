@@ -9,9 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	public class AnalyticsFactScheduleDateHandler : IAnalyticsFactScheduleDateHandler
 	{
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
-			IAnalyticsScheduleRepository analyticsScheduleRepository,
-
-		public AnalyticsFactScheduleDateHandler(IAnalyticsScheduleRepository analyticsScheduleRepository, INow now)
+			
+		public AnalyticsFactScheduleDateHandler(IAnalyticsScheduleRepository analyticsScheduleRepository)
 		{
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 		}
