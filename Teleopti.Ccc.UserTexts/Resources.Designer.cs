@@ -2087,7 +2087,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I want a shift matching the following conditions:.
+        ///   Looks up a localized string similar to I want a shift matching the following conditions.
         /// </summary>
         public static string AnnounceShiftConditions {
             get {
