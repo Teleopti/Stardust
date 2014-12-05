@@ -2,11 +2,11 @@
 define([
     'knockout',
     'vm',
-	'http'
+	'ajax'
 ], function (
     ko,
     viewmodel,
-	http
+	ajax
 	) {
 
     var vm = new viewmodel();
@@ -25,9 +25,12 @@ define([
     };
 
 	var loadNavigationContent = function(callback) {
-		http.get('Messages/Application/NavigationContent').done(callback)
-		.fail(function (data) {
-			vm.ErrorMessage(data.statusText);
+		ajax.ajax({
+			url: 'Messages/Application/NavigationContent',
+			success: callback,
+			error: function(data) {
+				vm.ErrorMessage(data.statusText);
+			}
 		});
 	};
 
@@ -38,15 +41,15 @@ define([
 
     });
 
-	http.get('Messages/Application/GetPersons', { ids: getUrlParameter("ids") })
-		.done(function(data) {
+	ajax.ajax({
+		url: 'Messages/Application/GetPersons?ids=' + getUrlParameter("ids"),
+		success: function(data) {
 			vm.Receivers.removeAll();
 			ko.utils.arrayForEach(data.People, function(item) {
 				vm.Receivers.push({ Name: item.Name });
 			});
-		}).fail(function(data) {
-			vm.ErrorMessage(data.statusText);
-		});
-
+		},
+		error: function(data) { vm.ErrorMessage(data.statusText); }
+	});
 });
 
