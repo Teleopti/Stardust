@@ -74,5 +74,23 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			@event.Datasource.Should().Not.Be.Empty();
 			@event.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
 		}
+
+		public class TestEvent : Event
+		{
+		}
+
+		public class TestEventTwo : Event
+		{
+		}
+
+		public class TestDomainEvent : EventWithLogOnAndInitiator
+		{
+		}
+
+		public interface ITestHandler : IHandleEvent<TestEvent>, IHandleEvent<TestEventTwo>
+		{
+		}
+
 	}
+
 }

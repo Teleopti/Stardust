@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_resolver = resolver;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(object command)
 		{
 			var handlerType = typeof(IHandleCommand<>).MakeGenericType(new[] { command.GetType() });

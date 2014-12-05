@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -10,7 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	[TestFixture]
 	public class SyncCommandDispatcherTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldInvokeHandler()
 		{
 			var handler = MockRepository.GenerateMock<IHandleCommand<TestCommand>>();
@@ -24,7 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			handler.AssertWasCalled(x => x.Handle(command));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
 		public class TestCommand
 		{
 		}
