@@ -30,10 +30,9 @@
 	
 	</Target>
 	
-	<Target Name="RunETLTest" DependsOnTargets="PrepareETLTest">
-	
-		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="$(ETLStuff)\ETLNightlyBuild-StartConsoleHost.cmd $(WorkingDirectory) $(debug_release)"/>
-		<Message Text="Make sure the etl service is running..." />
+	<Target Name="RunETLTest" DependsOnTargets="CleanUp;PrepareETLTest">
+		<Message text="start %22$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe%22"/>
+		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="%22$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe%22"/>
 		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
 		<CallTarget Targets="AddSchedule"/>
 		
@@ -42,20 +41,9 @@
 		The SP will Loop until ETL job is finished. If it finds an error Then a RaisError Should make SQLCMD to bail out
 		-->
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="300" ConnectionString="Data Source=$(SqlInstanceName);Initial Catalog=$(ETLAnalyticsDB);Integrated Security=True"/>
- 
-		<!--Sleep for 10 secs then STOP service for clean up later on-->
- 		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
-		<Exec Command ="$(ETLStuff)\ETLNightlyBuild-StopConsoleHost.cmd"/>
-		
-		<CallTarget Targets="CleanUp" />
+
  	</Target>
 	
-  		<!-- 
-	a) Clean out the datamart (exept for Initial load data and sys_datasource)
-	b) Clean out old ETL job history
-	c) Add extra ETL Test SP
-	d) Create one job for the ETL service
-	-->
 	<Target Name="AddSchedule">
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
@@ -79,8 +67,9 @@
 	</Target>
 	
 	<Target Name="CleanUp">
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLCCC7DB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLCCC7DB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="false" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAnalyticsDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAnalyticsDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="false" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAggDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAggDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="false" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLCCC7DB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLCCC7DB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAnalyticsDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAnalyticsDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAggDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAggDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
+		<exec command="taskkill /IM Teleopti.Analytics.Etl.ServiceConsoleHost.exe /F /FI %22memusage gt 2%22" Timeout="10" ContinueOnError="true" />
 	</Target>	
 </Project>
