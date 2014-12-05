@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsFactScheduleDateHandler.Stub(
 				x =>
 					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
-						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything)).Return(datePart);
+						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(datePart);
 			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(personPart);
 			_target.Handle(@event);
 			_analyticsFactScheduleTimeHandler.AssertWasCalled(
@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
 			};
 			var timePart = new AnalyticsFactScheduleTime();
+			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
 			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(timePart);

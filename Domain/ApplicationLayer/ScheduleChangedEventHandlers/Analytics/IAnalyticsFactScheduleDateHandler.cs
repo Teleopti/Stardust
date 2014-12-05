@@ -6,6 +6,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 {
 	public interface IAnalyticsFactScheduleDateHandler
 	{
-		AnalyticsFactScheduleDate Handle(DateTime shiftStartDateUtc, DateTime shiftEndDateUtc, DateOnly shiftStartDateLocal, ProjectionChangedEventLayer layer, DateTime scheduleChangeTime);
+		AnalyticsFactScheduleDate Handle(
+			DateTime shiftStartDateUtc, 
+			DateTime shiftEndDateUtc, 
+			DateOnly shiftStartDateLocal,
+			ProjectionChangedEventLayer layer, 
+			DateTime scheduleChangeTime, 
+			int minutesPerInterval);
 	}
 }

@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
+			var minutesPerInterval = 60/intervalLength;
 			var scenarioId = getScenario(@event.ScenarioId);
 
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					foreach (var intervalLayer in intervalLayers)
 					{
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
-						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp);
+						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp, minutesPerInterval);
 						var personPart = _analyticsFactSchedulePersonHandler.Handle(intervalLayer);
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);

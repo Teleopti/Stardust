@@ -10,17 +10,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	{
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private readonly INow _now;
-		private readonly int _minutesPerInterval;
 
-		public AnalyticsFactScheduleDateHandler(
-			IAnalyticsScheduleRepository analyticsScheduleRepository, 
-			INow now, 
-			int minutesPerInterval)
-
+		public AnalyticsFactScheduleDateHandler(IAnalyticsScheduleRepository analyticsScheduleRepository, INow now)
 		{
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 			_now = now;
-			_minutesPerInterval = minutesPerInterval;
 		}
 
 		public AnalyticsFactScheduleDate Handle(
@@ -28,7 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			DateTime shiftEndDateUtc, 
 			DateOnly shiftStartDateLocal, 
 			ProjectionChangedEventLayer layer, 
-			DateTime scheduleChangeTime)
+			DateTime scheduleChangeTime,
+			int minutesPerInterval)
 
 		{
 			var dimDateList = _analyticsScheduleRepository.LoadDimDates(_now.UtcDateTime());
@@ -61,17 +56,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				ShiftStartDateId = shiftStartDate.Value,
 				ShiftEndTime = shiftEndDateUtc,
 				ShiftEndDateId = shiftEndDate.Value,
-				IntervalId = getIdFromDateTime(layer.StartDateTime),
-				ShiftStartIntervalId = getIdFromDateTime(shiftStartDateUtc),
-				ShiftEndIntervalId = getIdFromDateTime(shiftEndDateUtc.AddSeconds(-1)),
+				IntervalId = getIdFromDateTime(layer.StartDateTime, minutesPerInterval),
+				ShiftStartIntervalId = getIdFromDateTime(shiftStartDateUtc, minutesPerInterval),
+				ShiftEndIntervalId = getIdFromDateTime(shiftEndDateUtc.AddSeconds(-1), minutesPerInterval),
 				DatasourceUpdateDate = scheduleChangeTime
 			};
 		}
 
-		private int getIdFromDateTime(DateTime date)
+		private int getIdFromDateTime(DateTime date, int minutesPerInterval)
 		{
 			double minutesElapsedOfDay = date.TimeOfDay.TotalMinutes;
-			int id = (int)minutesElapsedOfDay / _minutesPerInterval;
+			int id = (int)minutesElapsedOfDay / minutesPerInterval;
 
 			return id;
 		}
