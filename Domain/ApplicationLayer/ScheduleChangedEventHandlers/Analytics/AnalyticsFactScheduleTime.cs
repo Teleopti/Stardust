@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			ActivityId = -1;
 		}
 
+		public int ShiftCategoryId { get; set; }
+		public int ScenarioId { get; set; }
 		public int ActivityId { get; set; }
 		public int AbsenceId { get; set; }
 		public int OverTimeId { get; set; }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -57,11 +55,41 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public IList<IAnalyticsGeneric> Scenarios()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select scenario_id Id, scenario_code Code from mart.dim_scenario")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
+					.SetReadOnly(true)
+					.List<IAnalyticsGeneric>();
+			}
+		}
+
+		public IList<IAnalyticsGeneric> ShiftCategories()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select shift_category_id Id, shift_category_code Code from mart.dim_shift_category")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
+					.SetReadOnly(true)
+					.List<IAnalyticsGeneric>();
+			}
+		}
+
 		private IUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
 			return identity.DataSource.Statistic;
 		}
+	}
+
+	public class AnalyticsGeneric :IAnalyticsGeneric
+	{
+		public int Id { get; set; }
+		public Guid Code { get; set; }
 	}
 
 	public class AnalyticsActivity: IAnalyticsActivity

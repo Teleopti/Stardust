@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -58,10 +57,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				PayloadId = _guidActInPaid,
 				WorkTime = TimeSpan.FromMinutes(10),
 				StartDateTime = start,
-				EndDateTime = start.AddMinutes(10)
+				EndDateTime = start.AddMinutes(10),
 			};
 			_rep.Stub(x => x.Activities()).Return(_activities);
-			var result = _target.Handle(layer);
+			var result = _target.Handle(layer, 12, 22);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(1);
@@ -76,6 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.ContractTimeAbsenceMinutes.Should().Be.EqualTo(0);
 			result.ReadyTimeMinues.Should().Be.EqualTo(0);
 			result.OverTimeId.Should().Be.EqualTo(-1);
+			result.ScenarioId.Should().Be.EqualTo(22);
+			result.ShiftCategoryId.Should().Be.EqualTo(12);
 		}
 
 		[Test]
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = start.AddMinutes(12)
 			};
 			_rep.Stub(x => x.Activities()).Return(_activities);
-			var result = _target.Handle(layer);
+			var result = _target.Handle(layer, 12, 22);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(3);
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = start.AddMinutes(10)
 			};
 			_rep.Stub(x => x.Absences()).Return(_absences);
-			var result = _target.Handle(layer);
+			var result = _target.Handle(layer, 12, 22);
 
 			result.AbsenceId.Should().Be.EqualTo(1);
 			result.ActivityId.Should().Be.EqualTo(-1);

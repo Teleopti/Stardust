@@ -14,11 +14,14 @@ namespace Teleopti.Interfaces.Infrastructure
 
 		IList<IAnalyticsActivity> Activities();
 		IList<IAnalyticsAbsence> Absences();
-
+		IList<IAnalyticsGeneric> Scenarios();
+		IList<IAnalyticsGeneric> ShiftCategories();
 	}
 
 	public interface IAnalyticsFactScheduleTime
 	{
+		int ShiftCategoryId { get; set; } 
+		int ScenarioId { get; set; }
 		int ActivityId { get; set; } 
 		int AbsenceId  { get; set; } 
 		int OverTimeId  { get; set; } 
@@ -51,6 +54,12 @@ namespace Teleopti.Interfaces.Infrastructure
 		int AbsenceId { get; set; }
 		Guid AbsenceCode { get; set; }
 		bool InPaidTime { get; set; }
+	}
+
+	public interface IAnalyticsGeneric
+	{
+		int Id { get; set; }
+		Guid Code { get; set; }
 	}
 
 	public class AnalyticsFactSchedulePerson

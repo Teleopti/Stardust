@@ -42,8 +42,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void ShouldKnowIntervalLength()
 		{
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
+			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_target.Handle(new ProjectionChangedEvent { ScheduleDays = new Collection<ProjectionChangedEventScheduleDay>() });
 			_intervalLengthFetcher.AssertWasCalled(x => x.IntervalLength);
+			
 		}
 
 		[Test]
@@ -52,16 +55,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var start = new DateTime(2014, 12, 01, 8, 0, 0, DateTimeKind.Utc);
 			var list = createLayers(start, new[] { 60, 15, 60 });
 			var shift = new ProjectionChangedEventShift { StartDateTime = start, EndDateTime = start.AddHours(2).AddMinutes(15), Layers = list };
-			var scheduleDay = new ProjectionChangedEventScheduleDay { Shift = shift };
+			var scheduleDay = new ProjectionChangedEventScheduleDay{Shift = shift, ShiftCategoryId = Guid.NewGuid()};
+			
+
 			var @event = new ProjectionChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				ScenarioId = Guid.NewGuid()
 			};
+			var cat = new AnalyticsGeneric { Id = 55, Code = scheduleDay.ShiftCategoryId };
+			var scenario = new AnalyticsGeneric { Id = 66, Code = @event.ScenarioId };
 			var timePart = new AnalyticsFactScheduleTime();
 			var datePart = new AnalyticsFactScheduleDate();
 			var personPart = new AnalyticsFactSchedulePerson();
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>{scenario});
+			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>{cat});
 			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(timePart);
 			_analyticsFactScheduleDateHandler.Stub(
 				x =>
@@ -69,10 +79,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything)).Return(datePart);
 			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(personPart);
 			_target.Handle(@event);
+			_analyticsFactScheduleTimeHandler.AssertWasCalled(
+				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66)),
+				y => y.Repeat.Times(9));
 
-			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(new DateOnly(scheduleDay.Date)));
-			_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleRow(timePart, datePart, personPart), y => y.Repeat.Times(9));
-
+			_analyticsScheduleRepository.AssertWasCalled(
+				x => x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
+						Arg<AnalyticsFactSchedulePerson>.Is.Anything), y => y.Repeat.Times(9));
+			//_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(Arg<AnalyticsFactScheduleDayCount>.Is.Anything), y => y.Repeat.Times(1));
 		}
 
 		[Test]
@@ -88,6 +102,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
 			};
 
+			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
+			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(timePart);
 			_target.Handle(@event);
 
 			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(new DateOnly(scheduleDay.Date)));

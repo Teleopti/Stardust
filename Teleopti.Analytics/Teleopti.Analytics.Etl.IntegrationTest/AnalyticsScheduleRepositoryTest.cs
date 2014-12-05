@@ -68,6 +68,24 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			acts.Count.Should().Be.EqualTo(3); //one undefined too
 		}
 
+		[Test]
+		public void ShouldLoadScenariosAndCategories()
+		{
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var scen = new ScenarioConfigurable {BusinessUnit = "BusinessUnit", EnableReporting = true,Name = "Default"};
+			Data.Apply(cat);
+			Data.Apply(scen);
+
+			var jobParameters = getJobParameters();
+			StepRunner.RunNightly(jobParameters);
+
+			var scens = _target.Scenarios();
+			scens.Count.Should().Be.EqualTo(2); //one undefined too
+
+			var cats = _target.ShiftCategories();
+			cats.Count.Should().Be.EqualTo(2);
+		}
+
 		private static JobParameters getJobParameters()
 		{
 			const string timeZoneId = "W. Europe Standard Time";

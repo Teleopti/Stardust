@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 {
 	public interface IAnalyticsFactScheduleTimeHandler
 	{
-		IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer);
+		IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId);
 	}
 
 	public class AnalyticsFactScheduleTimeHandler : IAnalyticsFactScheduleTimeHandler
@@ -17,12 +17,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_repository = repository;
 		}
 
-		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer)
+		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId)
 		{
 			var ret = new AnalyticsFactScheduleTime
 			{
 				ContractTimeMinutes = (int) layer.ContractTime.TotalMinutes,
-				WorkTimeMinutes = (int) layer.WorkTime.TotalMinutes
+				WorkTimeMinutes = (int) layer.WorkTime.TotalMinutes,
+				ShiftCategoryId = shiftCategoryId,
+				ScenarioId = scenarioId
+				
 			};
 			var layerMinutes = (int)(layer.EndDateTime - layer.StartDateTime).TotalMinutes;
 			if (!layer.IsAbsence)

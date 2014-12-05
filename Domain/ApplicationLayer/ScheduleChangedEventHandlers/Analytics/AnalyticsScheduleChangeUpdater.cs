@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
+			var scenarioId = getScenario(@event.ScenarioId);
 
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
@@ -40,15 +43,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					break;
 
 				//var dayCount = new AnalyticsFactScheduleDayCount();
-				var shiftStart = scheduleDay.Shift.StartDateTime;
-				var intervalStart = shiftStart;
+				var shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
+				
 				var shiftEnd = scheduleDay.Shift.EndDateTime;
 				while (intervalStart < shiftEnd)
 				{
 					var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(intervalLength)));
 					foreach (var intervalLayer in intervalLayers)
 					{
-						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer);
+						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
 						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp);
 						var personPart = _analyticsFactSchedulePersonHandler.Handle(intervalLayer);
 
@@ -60,6 +63,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				
 				//_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 			}
+		}
+
+		private int getScenario(Guid scenarioCode)
+		{
+			var scenarios = _analyticsScheduleRepository.Scenarios();
+			var scen = scenarios.FirstOrDefault(x => x.Code.Equals(scenarioCode));
+			if (scen == null)
+				return -1;
+			return scen.Id;
+		}
+
+		private int getCategory(Guid shiftCategoryCode)
+		{
+			var cats = _analyticsScheduleRepository.ShiftCategories();
+			var cat = cats.FirstOrDefault(x => x.Code.Equals(shiftCategoryCode));
+			if (cat == null)
+				return -1;
+			return cat.Id;
 		}
 	}
 
