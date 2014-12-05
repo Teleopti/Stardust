@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -20,6 +21,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void PersistFactScheduleDayCountRow(AnalyticsFactScheduleDayCount dayCount)
 		{
 			
+		}
+
+		public void DeleteFactSchedule(DateOnly date)
+		{
+			
+		}
+
+		public IList<KeyValuePair<DateOnly, int>> LoadDimDates(DateTime today)
+		{
+			return new List<KeyValuePair<DateOnly, int>>();
 		}
 
 		public IList<IAnalyticsActivity> Activities()

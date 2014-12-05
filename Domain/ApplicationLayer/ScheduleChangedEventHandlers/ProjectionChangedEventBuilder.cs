@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						IsDefaultScenario = range.Scenario.DefaultScenario,
 						Datasource = message.Datasource,
 						BusinessUnitId = message.BusinessUnitId,
-						Timestamp = DateTime.UtcNow,
+						Timestamp = message.Timestamp,
 						ScenarioId = message.ScenarioId,
 						PersonId = message.PersonId,
 						ScheduleDays = scheduleDays,

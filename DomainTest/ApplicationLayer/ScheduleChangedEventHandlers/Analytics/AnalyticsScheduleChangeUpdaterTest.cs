@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -30,10 +31,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsFactSchedulePersonHandler = MockRepository.GenerateMock<IAnalyticsFactSchedulePersonHandler>();
 			_analyticsScheduleRepository = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
 			_target = new AnalyticsScheduleChangeUpdater(
-				_intervalLengthFetcher, 
+				_intervalLengthFetcher,
 				_analyticsFactScheduleTimeHandler,
-				_analyticsFactScheduleDateHandler, 
-				_analyticsFactSchedulePersonHandler, 
+				_analyticsFactScheduleDateHandler,
+				_analyticsFactSchedulePersonHandler,
 				_analyticsScheduleRepository);
 		}
 
@@ -41,28 +42,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void ShouldKnowIntervalLength()
 		{
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
-			_target.Handle(new ProjectionChangedEvent{ScheduleDays = new Collection<ProjectionChangedEventScheduleDay>()});
+			_target.Handle(new ProjectionChangedEvent { ScheduleDays = new Collection<ProjectionChangedEventScheduleDay>() });
 			_intervalLengthFetcher.AssertWasCalled(x => x.IntervalLength);
-		}
-
-		[Test]
-		public void ShouldCallPersistOnRepository()
-		{
-			var start = new DateTime(2014, 12, 01, 8, 0, 0, DateTimeKind.Utc);
-			var list = createLayers(start, new[] { 60, 15, 60 });
-			var shift = new ProjectionChangedEventShift{StartDateTime = start, EndDateTime = start.AddHours(2).AddMinutes(15),Layers = list};
-			var scheduleDay = new ProjectionChangedEventScheduleDay{Shift = shift};
-			var @event = new ProjectionChangedEvent
-			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay}
-			};
-			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
-			
-			_target.Handle(@event);
-			_analyticsScheduleRepository.AssertWasCalled(
-				x => x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
-						Arg<AnalyticsFactSchedulePerson>.Is.Anything), y => y.Repeat.Times(9));
-			//_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(Arg<AnalyticsFactScheduleDayCount>.Is.Anything), y => y.Repeat.Times(1));
 		}
 
 		[Test]
@@ -82,14 +63,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(timePart);
-			_analyticsFactScheduleDateHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(datePart);
+			_analyticsFactScheduleDateHandler.Stub(
+				x =>
+					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything)).Return(datePart);
 			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything)).Return(personPart);
 			_target.Handle(@event);
 
+			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(new DateOnly(scheduleDay.Date)));
 			_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleRow(timePart, datePart, personPart), y => y.Repeat.Times(9));
-			//_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(retLayer), y => y.Repeat.Times(9));
-			
+
 		}
+
+		[Test]
+		public void ShouldOnlyDeleteScheduleIfNotScheduled()
+		{
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				Date = new DateTime(2014, 12, 03),
+				NotScheduled = true
+			};
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
+			};
+
+			_target.Handle(@event);
+
+			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(new DateOnly(scheduleDay.Date)));
+			_analyticsScheduleRepository.AssertWasNotCalled(
+				x =>
+					x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
+						Arg<AnalyticsFactSchedulePerson>.Is.Anything));
+		}
+
 		private IEnumerable<ProjectionChangedEventLayer> createLayers(DateTime startOfShift, IEnumerable<int> lengthCollection)
 		{
 			int accStart = 0;
@@ -118,5 +125,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 	}
 
-	
+
 }
