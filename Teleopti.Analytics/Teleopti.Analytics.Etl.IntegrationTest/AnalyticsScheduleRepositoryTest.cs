@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, timeZoneId);
 			return jobParameters;
 		}
 	}
