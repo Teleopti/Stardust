@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
 	public interface INotifier
 	{
-		void Notify(INotificationMessage messages, NotificationHeader notificationHeader);
+		void Notify(INotificationMessage messages, IPerson person);
+		void Notify(INotificationMessage messages, IPerson[] persons);
 	}
 }

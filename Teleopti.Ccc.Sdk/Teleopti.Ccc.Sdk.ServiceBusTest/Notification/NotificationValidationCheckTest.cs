@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 	{
 		private NotificationValidationCheck _target;
 		private ISignificantChangeChecker _significantChangeChecker;
-		private INotificationChecker _notificationChecker;
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private INotifier _notifier;
 
@@ -28,13 +26,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		public void Setup()
 		{
 			_significantChangeChecker = MockRepository.GenerateMock<ISignificantChangeChecker>();
-			_notificationChecker = MockRepository.GenerateMock<INotificationChecker>();
 			_notifier = MockRepository.GenerateMock<INotifier>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 
 			_currentUnitOfWorkFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
 
-			_target = new NotificationValidationCheck(_significantChangeChecker, _notificationChecker, _notifier, _currentUnitOfWorkFactory);
+			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier, _currentUnitOfWorkFactory);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 																			  LicenseType.Agent, new Percent(.10), null, null));
@@ -66,12 +63,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var message = new NotificationMessage { Subject = "" };
 			_significantChangeChecker.Stub(x => x.SignificantChangeNotificationMessage(date, person, readModel)).Return(message);
 			_target.InitiateNotify(readModel, date, person);
-			_notifier.AssertWasNotCalled(x => x.Notify(Arg<INotificationMessage>.Is.Same(message), Arg<NotificationHeader>.Is.Anything));
+			_notifier.AssertWasNotCalled(x => x.Notify(message, person));
 		}
 
 
 		[Test]
-		public void ShouldNotifyWithCorrectHeader()
+		public void ShouldNotify()
 		{
 			setValidLicense();
 			var date = new DateOnly();
@@ -79,26 +76,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			person.Email = "john@doe.org";
 			var readModel = new ScheduleDayReadModel();
 			var message = new NotificationMessage { Subject = "This is the message subject" };
-			const string emailSender = "sender@me.com";
-			const string mobileNumber = "928347";
 
 			_significantChangeChecker.Stub(x => x.SignificantChangeNotificationMessage(date, person, readModel)).Return(message);
 			
-			_notificationChecker.Stub(x => x.EmailSender).Return(emailSender);
-			
-			_notificationChecker.Stub(x => x.SmsMobileNumber(person)).Return(mobileNumber);
-
 			_target.InitiateNotify(readModel, date, person);
 
-			_notifier.AssertWasCalled(
-				x =>
-					x.Notify(Arg<INotificationMessage>.Is.Same(message),
-						Arg<NotificationHeader>.Matches(
-							a => 
-							a.EmailReceiver == person.Email && 
-							a.EmailSender == emailSender && 
-							a.MobileNumber == mobileNumber &&
-							a.PersonName == person.Name.ToString())));
+			_notifier.AssertWasCalled(x => x.Notify(message, person));
 		}
 	}
 }

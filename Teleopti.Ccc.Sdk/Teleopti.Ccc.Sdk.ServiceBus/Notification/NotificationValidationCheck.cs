@@ -11,16 +11,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	public class NotificationValidationCheck : INotificationValidationCheck
 	{
 		private readonly ISignificantChangeChecker _significantChangeChecker;
-		private readonly INotificationChecker _notificationChecker;
 		private readonly INotifier _notifier;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(NotificationValidationCheck));
 
-		public NotificationValidationCheck(ISignificantChangeChecker significantChangeChecker, INotificationChecker notificationChecker, INotifier notifier, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public NotificationValidationCheck(ISignificantChangeChecker significantChangeChecker, INotifier notifier, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_significantChangeChecker = significantChangeChecker;
-			_notificationChecker = notificationChecker;
 			_notifier = notifier;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
@@ -46,14 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				{
 					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " for " + person.Name);
 
-					_notifier.Notify(changeNotificationMessage,
-						new NotificationHeader
-						{
-							EmailSender = _notificationChecker.EmailSender,
-							MobileNumber = _notificationChecker.SmsMobileNumber(person),
-							EmailReceiver = person.Email,
-							PersonName = person.Name.ToString()
-						});
+					_notifier.Notify(changeNotificationMessage, person);
 				}
 				else
 				{
