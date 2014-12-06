@@ -29,17 +29,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 			conflictingPersonAccounts.ForEach(paa =>
 			{
 				var foundAccount = _personAbsenceAccountRepository.Get(paa.Id.GetValueOrDefault());
-				if(foundAccount != null)
+				var removedAccounts = paa.AccountCollection().Except(foundAccount.AccountCollection()).ToList();
+				foreach (var removedAccount in removedAccounts)
 				{
-					var removedAccounts = paa.AccountCollection().Except(foundAccount.AccountCollection()).ToList();
-					foreach (var removedAccount in removedAccounts)
-					{
 						paa.Remove(removedAccount);
-					}
-					uow.Remove(foundAccount);
-					uow.Refresh(paa);
-					paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
 				}
+				uow.Remove(foundAccount);
+				uow.Refresh(paa);
+				paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
 			});
 		}
 	}
