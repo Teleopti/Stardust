@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -11,7 +10,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().As<ISendDelayedMessages>().SingleInstance();
 			builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 		}
 	}
 }

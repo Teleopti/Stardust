@@ -1,14 +1,11 @@
 ﻿using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
-using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 {
@@ -50,8 +47,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
-			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
+
+			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
+			build.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 
 			build.Update(_container);
 		}
