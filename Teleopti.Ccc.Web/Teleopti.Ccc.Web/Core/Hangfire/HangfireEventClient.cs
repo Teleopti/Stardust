@@ -1,8 +1,10 @@
+using System;
 using Hangfire;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
+	[CLSCompliant(false)]
 	public class HangfireEventClient : IHangfireEventClient
 	{
 		private readonly IBackgroundJobClient _jobClient;
