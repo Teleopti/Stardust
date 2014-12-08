@@ -4816,6 +4816,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlersOff()
 		{
+			//Request tab
+			toolStripTabItem1.Click -= toolStripTabItem1_Click;
+			toolStripButtonRequestBack.Click -= toolStripButtonRequestBackClick;
+			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgents_Click;
+			ToolStripMenuItemViewDetails.Click -= ToolStripMenuItemViewDetails_Click;
+			toolStripButtonViewAllowance.Click -= toolStripItemViewAllowanceClick;
+			toolStripButtonViewRequestHistory.Click -= toolStripViewRequestHistory_Click;
+			toolStripButtonApproveRequest.Click -= toolStripButtonApproveRequestClick;
+			toolStripButtonDenyRequest.Click -= toolStripButtonDenyRequestClick;
+			toolStripButtonEditNote.Click -= toolStripButtonEditNote_Click;
+			toolStripButtonReplyAndApprove.Click -= toolStripButtonReplyAndApprove_Click;
+			toolStripButtonReplyAndDeny.Click -= toolStripButtonReplyAndDeny_Click;
 			//Chart tab
 			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
 			toolStripButtonGridInChart.Click -= toolStripButtonGridInChart_Click;
