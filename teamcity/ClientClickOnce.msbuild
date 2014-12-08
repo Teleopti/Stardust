@@ -15,13 +15,15 @@
 
 	<Target Name="ClientClickOnce" DependsOnTargets="CopyToOutput">
 		<PropertyGroup>
-			<ManifestFile>$(OutputDirectory)\$(NameOfClickOnceItem).manifest</ManifestFile>
-			<ApplicationFile>$(OutputDirectory)\$(NameOfClickOnceItem).application</ApplicationFile>
+			<ManifestFile>$(NameOfClickOnceItem).exe.manifest</ManifestFile>
+			<ApplicationFile>$(NameOfClickOnceItem).application</ApplicationFile>
 		</PropertyGroup>
 	
-		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "testet" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
+		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(OutputDirectory)\$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
+		
+		
 	  
-		<GenerateDeploymentManifest AssemblyName="$(NameOfClickOnceItem)"
+		<GenerateDeploymentManifest AssemblyName="$(ApplicationFile)"
 												  AssemblyVersion="$(CCCVersion)"
 												  DeploymentUrl="http://shouldbesetwhensigned"
 												  Description="TELEOPTI WFM"
@@ -31,7 +33,7 @@
 												  Install="true"
 												  UpdateEnabled="true"
 												  UpdateMode="Foreground"
-												  OutputManifest="$(ApplicationFile)"
+												  OutputManifest="$(OutputDirectory)\$(ApplicationFile)"
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
 												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
@@ -53,7 +55,8 @@
 				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>
 		<Copy SourceFiles="@(StartPageImages)"
 				 DestinationFiles="@(StartPageImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
-			
+		
+	
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"
 				  Regex="#APPLICATION_NAME#"
