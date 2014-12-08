@@ -9,6 +9,7 @@
 		<NameOfClickOnceItem>Teleopti.Ccc.SmartClientPortal.Shell</NameOfClickOnceItem>
 		<CCCVersion>7.7.7.7</CCCVersion>
 		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
+		<IconFile>Teleopti.Ccc.SmartClientPortal.Shell.ico</IconFile>
 	</PropertyGroup>
 	
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -19,8 +20,11 @@
 			<ApplicationName>$(NameOfClickOnceItem).application</ApplicationName>
 			<ApplicationFile>$(OutputDirectory)\$(ApplicationName)</ApplicationFile>
 		</PropertyGroup>
+
+		<Copy SourceFiles="$(WorkingDirectory)\BuildArtifacts\$(IconFile)"
+			 DestinationFiles="$(SourceDirectory)\$(IconFile)"/>
 	
-		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
+		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)" -IconFile "$(IconFile)"'/>
 		
 		<GenerateDeploymentManifest AssemblyName="$(ApplicationName)"
 												  AssemblyVersion="$(CCCVersion)"
@@ -44,15 +48,15 @@
 			<NameOfStartPage>default.htm</NameOfStartPage>
 		</PropertyGroup>
 		<ItemGroup>
-			<SourceFiles Include="$(SourceDirectory)\**\*.*"/>
-			<StartPageImages Include="$(WorkingDirectory)\BuildArtifacts\images\*.*"/>
+			<SourceFiles Include="$(SourceDirectory)\**\*.*" />
+			<WebImages Include="$(WorkingDirectory)\BuildArtifacts\images\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(SourceFiles)"
 			 DestinationFiles="@(SourceFiles->'$(OutputDirectory)\%(RecursiveDir)%(Filename)%(Extension).deploy')"/>
 		<Copy SourceFiles="$(WorkingDirectory)\BuildArtifacts\ClickOnceLandingPage.htm"
-				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>
-		<Copy SourceFiles="@(StartPageImages)"
-				 DestinationFiles="@(StartPageImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
+				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>			 
+		<Copy SourceFiles="@(WebImages)"
+				 DestinationFiles="@(WebImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
 	
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"
