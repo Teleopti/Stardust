@@ -2,7 +2,6 @@ using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -50,12 +49,8 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterModule<WebModule>();
+			builder.RegisterModule<ServiceBusModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
-
-			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
-			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
-			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
-			builder.RegisterType<MessagePopulatingServiceBusSender>().As<IMessagePopulatingServiceBusSender>().SingleInstance();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

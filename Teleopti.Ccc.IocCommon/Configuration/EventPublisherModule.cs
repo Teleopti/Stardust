@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
+
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>().SingleInstance();
