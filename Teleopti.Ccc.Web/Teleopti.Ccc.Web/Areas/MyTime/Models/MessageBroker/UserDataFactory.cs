@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Configuration;
-using System.Web;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public UserData CreateViewModel(HttpRequestBase context)
+		public UserData CreateViewModel()
 		{
 			var currentBu = _businessUnitProvider.Current();
 			var appSettings = _configReader.AppSettings;
@@ -39,21 +37,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 				userData.BusinessUnitId = currentBu.Id.Value;
 			userData.DataSourceName = _dataSource().DataSourceName;
 			if (appSettings != null)
-				userData.Url = EnableMyTimeMessageBroker ? replaceDummyHostName(context, appSettings) : "http://disabledmessagebroker/";
+				userData.Url = EnableMyTimeMessageBroker ? replaceDummyHostName(appSettings) : "http://disabledmessagebroker/";
 			if (loggedOnUser != null)
 				userData.AgentId = loggedOnUser.Id.Value;
 			return userData;
 		}
 
-		private static string replaceDummyHostName(HttpRequestBase context, NameValueCollection appSettings)
+		private static string replaceDummyHostName(NameValueCollection appSettings)
 		{
 			var url = appSettings[MessageBrokerUrlKey];
 			if (!appSettings.GetBoolSetting("UseRelativeConfiguration")) return url;
 
 			var uri = new Uri(url);
-			var site = new Uri(context.Url.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped));
-			return new Uri(site,
-				new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)).ToString();
+			return "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri);
 		}
 	}
 }

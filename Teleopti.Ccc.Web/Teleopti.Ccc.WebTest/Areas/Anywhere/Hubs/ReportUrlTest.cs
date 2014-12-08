@@ -1,9 +1,9 @@
 using System;
-using System.Configuration;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -25,44 +25,55 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			_currentBusinessUnit.Stub(x => x.Current().Id).Return(_guid);
 		}
 
-		[TearDown]
-		public void Teardown()
-		{
-			ConfigurationManager.AppSettings.Set("MatrixWebSiteUrl", "");
-		}
-
 		[Test]
 		public void ShouldGetReportUrlWithoutMatrixUrl()
 		{
-			var target = new ReportUrl(_currentBusinessUnit);
+			var configReader = new FakeConfigReader();
+			
+			var target = new ReportUrl(_currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
-			result.Should().Be(urlPart1 + foreignId + urlPart2 + _guid);
+			result.Should().Be("/" + urlPart1 + foreignId + urlPart2 + _guid);
 		}
 
 		[Test]
 		public void ShouldGetReportUrlWithMatrixUrl()
 		{
-			var matrixUrl = "MatrixUrl";
-			ConfigurationManager.AppSettings.Set("MatrixWebSiteUrl", matrixUrl);
+			var configReader = new FakeConfigReader();
+			const string matrixUrl = "MatrixUrl";
+			configReader.AppSettings.Add("MatrixWebSiteUrl", matrixUrl);
 
-			var target = new ReportUrl(_currentBusinessUnit);
+			var target = new ReportUrl(_currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
 			result.Should().Be(matrixUrl + "/" + urlPart1 + foreignId + urlPart2 + _guid);
+		}
+
+		[Test]
+		public void ShouldGetRelativeReportUrlWhenRunningWithRelativeConfiguration()
+		{
+			var configReader = new FakeConfigReader();
+			const string matrixUrl = "http://myserver/TeleoptiWFM/Analytics";
+			configReader.AppSettings.Add("MatrixWebSiteUrl", matrixUrl);
+			configReader.AppSettings.Add("UseRelativeConfiguration", "true");
+
+			var target = new ReportUrl(_currentBusinessUnit, configReader);
+			var result = target.Build(foreignId);
+
+			result.Should().Be("/TeleoptiWFM/Analytics/" + urlPart1 + foreignId + urlPart2 + _guid);
 		}		
 		
 		[Test]
 		public void ShouldGetReportUrlWithMatrixUrlEndWithSlash()
 		{
-			var matrixUrl = "MatrixUrl/";
-			ConfigurationManager.AppSettings.Set("MatrixWebSiteUrl", matrixUrl);
+			var configReader = new FakeConfigReader();
+			const string matrixUrl = "MatrixUrl/";
+			configReader.AppSettings.Add("MatrixWebSiteUrl", matrixUrl);
 
-			var target = new ReportUrl(_currentBusinessUnit);
+			var target = new ReportUrl(_currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
 			result.Should().Be(matrixUrl + urlPart1 + foreignId + urlPart2 + _guid);
 		}
-
 	}
 }

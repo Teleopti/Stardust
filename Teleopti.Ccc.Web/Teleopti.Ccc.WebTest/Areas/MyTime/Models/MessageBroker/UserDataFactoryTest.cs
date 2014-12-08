@@ -4,9 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			var bu = new BusinessUnit("dd");
 			bu.SetId(expected);
 			buProvider.Expect(mock => mock.Current()).Return(bu);
-			var result = target.CreateViewModel(null);
+			var result = target.CreateViewModel();
 			result.BusinessUnitId.Should().Be.EqualTo(expected);
 		}
 
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			const string expected = "stoj och lek";
 			dataSource.Expect(mock => mock.DataSourceName).Return(expected);
 
-			var result = target.CreateViewModel(null);
+			var result = target.CreateViewModel();
 			result.DataSourceName.Should().Be.EqualTo(expected);
 		}
 
@@ -60,22 +58,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, expected);
 			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
 
-			var result = target.CreateViewModel(null);
+			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo(expected);
 		}
 
 		[Test]
 		public void ShouldSetMessageBrokerUrlFromContextWhenSetToReplace()
 		{
-			const string configured = "http://-replace-";
+			const string configured = "http://myserver/broker/signalr/";
 			var nameValue = new NameValueCollection();
 			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, configured);
 			nameValue.Add("UseRelativeConfiguration", "true");
 			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
 
-			var request = new FakeHttpRequest("/asdf", new Uri("http://asdf/asdf/"),new Uri("http://asdf"));
-			var result = target.CreateViewModel(request);
-			result.Url.Should().Be.EqualTo("http://asdf/");
+			var result = target.CreateViewModel();
+			result.Url.Should().Be.EqualTo("broker/signalr/");
 		}
 
 		[Test]
@@ -86,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			person.SetId(expected);
 			loggedOnUser.Expect(mock => mock.CurrentUser()).Return(person);
 
-			var result = target.CreateViewModel(null);
+			var result = target.CreateViewModel();
 			result.AgentId.Should().Be.EqualTo(expected);
 		}
 	}
