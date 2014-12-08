@@ -27,7 +27,13 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				result.Details.AppendLine("Validator failure");
 				return result;
 			}
-			var ruleBreaks = checkInternalBalanceRuleBreaks(lowestIntervalBalances, 1);
+			var ruleBreaks = checkInternalBalanceRuleBreaks(lowestIntervalBalances);
+			assertRuleBreaks(result, ruleBreaks);
+			return result;
+		}
+
+		private static void assertRuleBreaks(SikuliValidationResult result, int ruleBreaks)
+		{
 			if (ruleBreaks > 0)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Warn;
@@ -37,10 +43,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			if (ruleBreaks > maxRuleBreaks)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
-			return result;
 		}
 
-		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances, int numberOfAllowedRuleBreaks)
+		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances)
 		{
 			const double limit = 0.8;
 			int numberOfRuleBreaks = intervalBalances.Count(intervalBalance => intervalBalance < limit);
