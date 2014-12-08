@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--EXTERNAL_PROPERTIES: CCNetProject;CCNetWorkingDirectory-->
+<Project DefaultTargets="BuildXMLA" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
+		<ASCompile>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe</ASCompile>
+		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
+	</PropertyGroup>
+	
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+    <Target Name="BuildXMLA">
+
+		<Exec Command='"$(ASCompile)" "$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln" /rebuild CreateDatabase2005 /Log "c:\Temp\devenv_log.txt"'/>
+		<Exec Command='"$(AsDBDeploy)" "$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\bin\TeleoptiAnalytics.asdatabase" /d /o:"$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.Xmla"'/>
+		
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.Xmla"
+			Regex="&lt;ConnectionString&gt;.*&lt;/ConnectionString&gt;"
+			ReplacementText="&lt;ConnectionString&gt;#(SQL_CONN_STRING)&lt;/ConnectionString&gt;"/>
+			
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.Xmla"
+			Regex="&lt;DatabaseID&gt;.*&lt;/DatabaseID&gt;"
+			ReplacementText="&lt;DatabaseID&gt;#(SQL_DATABASE_NAME)&lt;/DatabaseID&gt;"/>			
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.Xmla"
+			Regex="(?m:^        )&lt;ID&gt;.*&lt;/ID&gt;"
+			ReplacementText="        &lt;ID&gt;#(SQL_DATABASE_NAME)&lt;/ID&gt;"/>
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.xmla"
+			Regex="(?m:^        )&lt;Name&gt;.*&lt;/Name&gt;"
+			ReplacementText="        &lt;Name&gt;#(SQL_DATABASE_NAME)&lt;/Name&gt;"/>
+    </Target>
+</Project>

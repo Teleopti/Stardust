@@ -1,1 +1,0 @@
-..\.nuget\nuget pack Xmla\Teleopti.Cube.Xmla.nuspec
