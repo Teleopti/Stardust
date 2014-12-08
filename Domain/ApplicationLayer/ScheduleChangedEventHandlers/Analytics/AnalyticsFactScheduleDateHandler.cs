@@ -15,6 +15,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 		}
 
+		public bool MapDateId(DateOnly date, out int dateId)
+		{
+			var dimDateList = _analyticsScheduleRepository.LoadDimDates(_now.UtcDateTime());
+			var datePair = dimDateList.SingleOrDefault(x => x.Key == date);
+			var noDateIdFound = new KeyValuePair<DateOnly, int>();
+			if (datePair.Key == noDateIdFound.Key)
+			{
+				dateId = -1;
+				return false;
+			}
+
+			dateId = datePair.Value;
+			return true;
+		}
+
 		public AnalyticsFactScheduleDate Handle(
 			DateTime shiftStartDateUtc, 
 			DateTime shiftEndDateUtc, 
@@ -24,36 +39,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			int minutesPerInterval)
 
 		{
-			var dimDateList = _analyticsScheduleRepository.LoadDimDates();
+			int scheduleStartDateLocalId;
+			int activityStartDateId;
+			int activityEndDateId;
+			int shiftStartDateId;
+			int shiftEndDateId;
 
-			var scheduleStartDateLocal = dimDateList.SingleOrDefault(x => x.Key == shiftStartDateLocal);
-			var activityStartDate = dimDateList.SingleOrDefault(x => x.Key == new DateOnly(layer.StartDateTime));
-			var activityEndDate = dimDateList.SingleOrDefault(x => x.Key == new DateOnly(layer.EndDateTime));
-			var shiftStartDate = dimDateList.SingleOrDefault(x => x.Key == new DateOnly(shiftStartDateUtc));
-			var shiftEndDate = dimDateList.SingleOrDefault(x => x.Key == new DateOnly(shiftEndDateUtc));
-
-			var noDateIdFound = new KeyValuePair<DateOnly, int>();
-			if (scheduleStartDateLocal.Key == noDateIdFound.Key
-			    || activityStartDate.Key == noDateIdFound.Key
-			    || activityEndDate.Key == noDateIdFound.Key
-					|| shiftStartDate.Key == noDateIdFound.Key
-					|| shiftEndDate.Key == noDateIdFound.Key)
-			{
-				return null;
-			}
+			if (!MapDateId(shiftStartDateLocal, out scheduleStartDateLocalId)) return null;
+			if (!MapDateId(new DateOnly(layer.StartDateTime), out activityStartDateId)) return null;
+			if (!MapDateId(new DateOnly(layer.EndDateTime), out activityEndDateId)) return null;
+			if (!MapDateId(new DateOnly(shiftStartDateUtc), out shiftStartDateId)) return null;
+			if (!MapDateId(new DateOnly(shiftEndDateUtc), out shiftEndDateId)) return null;
 
 			return new AnalyticsFactScheduleDate
 			{
-				ScheduleDateId = activityStartDate.Value, 
-				ScheduleStartDateLocalId = scheduleStartDateLocal.Value,
+				ScheduleDateId = activityStartDateId, 
+				ScheduleStartDateLocalId = scheduleStartDateLocalId,
 				ActivityStartTime = layer.StartDateTime,
-				ActivityStartDateId = activityStartDate.Value,
+				ActivityStartDateId = activityStartDateId,
 				ActivityEndTime = layer.EndDateTime,
-				ActivityEndDateId = activityEndDate.Value,
+				ActivityEndDateId = activityEndDateId,
 				ShiftStartTime = shiftStartDateUtc,
-				ShiftStartDateId = shiftStartDate.Value,
+				ShiftStartDateId = shiftStartDateId,
 				ShiftEndTime = shiftEndDateUtc,
-				ShiftEndDateId = shiftEndDate.Value,
+				ShiftEndDateId = shiftEndDateId,
 				IntervalId = getIdFromDateTime(layer.StartDateTime, minutesPerInterval),
 				ShiftStartIntervalId = getIdFromDateTime(shiftStartDateUtc, minutesPerInterval),
 				ShiftEndIntervalId = getIdFromDateTime(shiftEndDateUtc.AddSeconds(-1), minutesPerInterval),
