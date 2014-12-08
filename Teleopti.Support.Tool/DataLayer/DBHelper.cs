@@ -71,14 +71,31 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// <returns>The databse version</returns>
         public string GetDatabaseVersion(String database)
         {
-           
-
             using (DataSet ds = Execute("select MAX(SystemVersion) from DatabaseVersion where SystemVersion <> 'Not defined'", database))
             {
                 return Convert.ToString(ds.Tables[0].Rows[0].ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
+        public int GetDatabaseBuildNumber()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString);
+            return GetDatabaseBuildNumber(builder.InitialCatalog);
+        }
+
+        /// <summary>
+        /// Get what database build number this database is on
+        /// </summary>
+        /// <param name="database">The database name</param>
+        /// <returns>The database build number</returns>
+        private int GetDatabaseBuildNumber(String database)
+        {
+            using (DataSet ds = Execute("select MAX(BuildNumber) from DatabaseVersion where SystemVersion <> 'Not defined'", database))
+            {
+                int buildNumber = Convert.ToInt32(ds.Tables[0].Rows[0].ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
+                return buildNumber;
+            }
+        }
 
         public string GetAggDatabaseName()
         {
@@ -390,5 +407,6 @@ namespace  Teleopti.Support.Tool.DataLayer
             return dbFolder.FirstOrDefault().Replace(@"\master.mdf", "");
             // ReSharper restore PossibleNullReferenceException
         }
+
     }
 }

@@ -30,7 +30,8 @@ namespace Teleopti.Support.Tool.Controls
 		private readonly DBHelper _dbHelper;
 		private string _teleoptiCccBaseInstallFolder;
 		private string _lastSelectedItemText;
-		private IList<NotepadStarter> _notepadStarters;
+        private string _dbManagerHomeFolder;
+        private IList<NotepadStarter> _notepadStarters;
 
 
 		public ManageDatabaseVersions(MainForm mainForm, Version currentVersion, DBHelper dbHelper)
@@ -48,7 +49,16 @@ namespace Teleopti.Support.Tool.Controls
 			_teleoptiCccBaseInstallFolder = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"C:\");
 			textBoxNHibFolder.Text = Directory.GetCurrentDirectory() + @"\..\TeleoptiCCC\SDK\";
 			RefreshDatabaseList();
-		}
+            _dbManagerHomeFolder = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
+
+#if (DEBUG)
+			{
+                //c:\Projects\Teleopti\ccc\teleopticcc\Database\
+                _dbManagerHomeFolder = @"c:\Projects\Teleopti\ccc\teleopticcc\Database\";
+            }
+#endif
+
+        }
 
 		private void buttonBack_Click(object sender, EventArgs e)
 		{
@@ -605,19 +615,38 @@ namespace Teleopti.Support.Tool.Controls
 
 
 
+        private int getLatestScriptFileBuildNumber(NHibDataSource nHibDataSource)
+        {
+            string dbTypeText = getCccDbType(nHibDataSource.CccDatabaseType);
+            string scriptFileFolder = _dbManagerHomeFolder + dbTypeText + @"\Releases\";
+            DirectoryInfo releasesDirectoryInfo = new DirectoryInfo(scriptFileFolder);
+            FileInfo[] files = releasesDirectoryInfo.GetFiles("0*.sql", SearchOption.TopDirectoryOnly);
+            List<string> listOfFileNames = new List<string>();
+            foreach (var fileInfo in files)
+            {
+                listOfFileNames.Add(fileInfo.Name);
+            }
+            listOfFileNames.Sort();
+            string lastScriptFile = listOfFileNames.Last<string>();
+            lastScriptFile = lastScriptFile.Replace(".sql", string.Empty);
+            return Convert.ToInt32(lastScriptFile);
+        }
+
 
 		private void SetListviewIcon(NHibDataSource nHibDataSource, ListViewItem listViewItem)
 		{
 			SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
 			builder.InitialCatalog = nHibDataSource.DatabaseName;
+            int latestScriptFileBuildNumber = getLatestScriptFileBuildNumber(nHibDataSource);
 			DBHelper dbHelper = new DBHelper(builder.ConnectionString);
 			if (dbHelper.TestConnection())
 			{
+                int databaseBuildNumber = dbHelper.GetDatabaseBuildNumber();
 				nHibDataSource.Version = dbHelper.GetDatabaseVersion();
 
                 string[] s = nHibDataSource.Version.Split('-');
 				Version dbVersion = new Version(s[0]);
-			    CallSetListViewIcon(dbVersion < _currentVersion ? ImageIndexDatabaseVersionNotOk : ImageIndexDatabaseVersionOk,
+                CallSetListViewIcon(databaseBuildNumber < latestScriptFileBuildNumber ? ImageIndexDatabaseVersionNotOk : ImageIndexDatabaseVersionOk,
 			        listViewItem.Index);
 			}
 			else
