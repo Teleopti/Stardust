@@ -31,6 +31,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<Import moduleName="RemoteForwarder" />
     </Imports>
     <Startup>
+	  <Task commandLine="PatchDatabases.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="simple" />
       <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="simple" />
