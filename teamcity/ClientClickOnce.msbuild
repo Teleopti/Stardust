@@ -50,6 +50,7 @@
 		<ItemGroup>
 			<SourceFiles Include="$(SourceDirectory)\**\*.*" />
 			<WebImages Include="$(WorkingDirectory)\BuildArtifacts\images\*.*" />
+			<HowToMultiSDK Include="$(WorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\HowToMultiSDK\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(SourceFiles)"
 			 DestinationFiles="@(SourceFiles->'$(OutputDirectory)\%(RecursiveDir)%(Filename)%(Extension).deploy')"/>
@@ -57,6 +58,9 @@
 				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>			 
 		<Copy SourceFiles="@(WebImages)"
 				 DestinationFiles="@(WebImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
+		<Copy SourceFiles="@(HowToMultiSDK)"
+				 DestinationFiles="@(HowToMultiSDK->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
+
 	
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"
