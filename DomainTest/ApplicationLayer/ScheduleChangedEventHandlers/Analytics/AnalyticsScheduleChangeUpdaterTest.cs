@@ -104,13 +104,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
 			};
 			var timePart = new AnalyticsFactScheduleTime();
+			int dateId = -1;
+
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
-			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(timePart);
+			_analyticsFactScheduleDateHandler.Stub(
+				x => x.MapDateId(Arg.Is(new DateOnly(scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_analyticsFactScheduleTimeHandler.Stub(
+				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything))
+				.Return(timePart);
 			_target.Handle(@event);
 
-			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(new DateOnly(scheduleDay.Date)));
+			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(dateId));
 			_analyticsScheduleRepository.AssertWasNotCalled(
 				x =>
 					x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,

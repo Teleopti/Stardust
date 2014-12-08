@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 {
 	public interface IAnalyticsFactScheduleDateHandler
 	{
+		bool MapDateId(DateOnly date, out int dateId);
+
 		AnalyticsFactScheduleDate Handle(
 			DateTime shiftStartDateUtc, 
 			DateTime shiftEndDateUtc, 

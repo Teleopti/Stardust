@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			
 		}
 
-		public void DeleteFactSchedule(DateOnly date)
+		public void DeleteFactSchedule(int date)
 		{
 			
 		}

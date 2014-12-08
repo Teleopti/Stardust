@@ -38,7 +38,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
-				_analyticsScheduleRepository.DeleteFactSchedule(new DateOnly(scheduleDay.Date));
+				int dateId;
+				if (!_analyticsFactScheduleDateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId))
+				{
+					//Log that schedule id could not be mapped = Schedule changes is not saved in analytics db.
+				}
+				_analyticsScheduleRepository.DeleteFactSchedule(dateId);
 
 				if (scheduleDay.NotScheduled)
 					break;
