@@ -1,7 +1,7 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
-/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
-/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -23,6 +23,8 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 	this.IsLoading = ko.observable(false);
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');
+	this.HasAvailibility = ko.observable(false);
+	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(false);
 
 	this.EditableIsInOpenPeriod = ko.observable(false);
 	this.EditableHasNoSchedule = ko.computed(function () {
@@ -46,7 +48,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 			type: 'POST',
 			data: JSON.stringify(value),
 			date: self.Date,
-			success: function(data) {
+			success: function (data) {
 				if (typeof data.Errors != 'undefined') {
 					editFormViewModel.ValidationError(data.Errors.join('</br>') || '');
 					return;
@@ -77,10 +79,14 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 		return deferred.promise();
 	};
 
-	this.ReadStudentAvailability = function (data) {
-		if (!data) return;
-
-		self.AvailableTimeSpan(data.AvailableTimeSpan);
+	this.ReadStudentAvailability = function (data, toggleAvailabilityVerifyHours31654Enabled) {
+		self.ToggleAvailabilityVerifyHours31654Enabled(toggleAvailabilityVerifyHours31654Enabled);
+		if (!data) {
+			self.HasAvailibility(false);
+		} else {
+			self.HasAvailibility(true);
+			self.AvailableTimeSpan(data.AvailableTimeSpan);
+		}
 	};
 };
 
