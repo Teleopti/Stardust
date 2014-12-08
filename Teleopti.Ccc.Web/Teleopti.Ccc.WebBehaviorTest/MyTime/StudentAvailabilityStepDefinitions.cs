@@ -87,6 +87,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			calendarShouldDisplayPeriod(displayedPeriod);
 		}
 
+		[Then(@"I should see I am not available for '(.*)'")]
+		public void ThenIShouldSeeIAmNotAvailableFor(string date)
+		{
+			var seletor = string.Format("li[data-mytime-date='{0}']  .canAddAvailibility",date);
+			Browser.Interactions.AssertExists(seletor);
+		}
+
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{
 			calendarShouldRangeBetween(displayedPeriod.StartDate, displayedPeriod.EndDate);

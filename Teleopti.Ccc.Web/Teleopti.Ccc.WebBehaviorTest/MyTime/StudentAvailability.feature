@@ -90,7 +90,7 @@ Scenario: Default to first virtual schedule period overlapping open student avai
 	When I view student availability
 	Then I should see the first virtual schedule period overlapping open student availability period starting at '2014-06-01'
 
-@ignore
+@OnlyRunIfEnable('MyTimeWeb_AvailabilityVerifyHours_31654')
 Scenario: Should display message for days not available
 	Given I am a student agent
 	And the current time is '2014-05-02 08:00'
