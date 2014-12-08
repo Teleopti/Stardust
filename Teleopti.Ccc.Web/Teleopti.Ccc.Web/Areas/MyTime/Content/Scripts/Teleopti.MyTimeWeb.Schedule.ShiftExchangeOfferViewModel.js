@@ -12,6 +12,10 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	this.StartTime = ko.observable(dateFormat.defaultTimes.defaultStartTime);
 	this.EndTime = ko.observable(dateFormat.defaultTimes.defaultEndTime);
 	this.EndTimeNextDay = ko.observable(false);
+	self.IsTimeLegal = ko.computed(function() {
+		if (self.EndTime() < self.StartTime()) return false;
+		return true;
+	});
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	this.DateFormat = ko.observable(dateFormat.format());
@@ -47,7 +51,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		var max = moment(now).add('days', self.OpenPeriodRelativeEnd());
 
 		if (moment(self.DateTo()) >= min && moment(self.DateTo()) <= max) return true;
-		else return false;
+		return false;
 	});
 
 	self.IsValidToLegal = ko.computed(function() {
@@ -59,7 +63,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 	
 	this.SaveEnabled = ko.computed(function () {
-		return self.IsSelectedDateInShiftTradePeriod() && self.IsValidToLegal();
+		return self.IsSelectedDateInShiftTradePeriod() && self.IsValidToLegal() && self.IsTimeLegal();
 	});
 
 	this.ErrorMessage = ko.observable('');

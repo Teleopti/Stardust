@@ -28,7 +28,6 @@ Background:
 	| Field      | Value      |
 	| Start date | 2022-08-19 |
 
-@ignore
 Scenario: Add shift trade exchange offer for a shift
 	Given I have the role 'Full access to mytime'
 	And I have a shift with
@@ -42,7 +41,7 @@ Scenario: Add shift trade exchange offer for a shift
 	And I click add new shift exchange offer
 	Then I should see add shift exchange offer form with
 	| Field          | Value      |
-	| Offer end date | 2022-08-13 |
+	| Offer end date | 2022-08-19 |
 	| Start time     | 8:00       |
 	| End time       | 17:00      |
 

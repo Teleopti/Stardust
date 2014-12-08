@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				PhoneStateStepDefinitions.CheckForActivityChange();
 		}
 
+		[Given(@"the current browser time is '(.*)'")]
 		[When(@"the current browser time is '(.*)'")]
 		public void GivenTheCurrentBrowserTimeIs(DateTime time)
 		{

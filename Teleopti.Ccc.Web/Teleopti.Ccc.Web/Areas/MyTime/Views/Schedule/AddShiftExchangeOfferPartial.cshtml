@@ -6,7 +6,7 @@
 <div data-bind="if: !missingWorkflowControlSet()">
 	<table class="table-condensed">
 		<tr>
-			<td colspan="4">
+			<td>
 				<label>@Resources.AnnounceShiftConditions</label>
 			</td>
 		</tr>
@@ -49,12 +49,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4">
+			<td>
 				<label>@Resources.ShiftExchangeOfferValidTo</label>
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4">
+			<td>
 				<div class="input-group">
 					<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }" />
 					<span class="input-group-addon" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }">
@@ -74,6 +74,7 @@
 	<div class="pull-left shift-exchange-out-of-open-period alert alert-danger" data-bind="visible: !SaveEnabled()">
 		<div data-bind="visible: !IsSelectedDateInShiftTradePeriod()">@Resources.AnnounceShiftDateOutPeriod</div>
 		<div data-bind="visible: !IsValidToLegal()">@Resources.AnnounceShiftValidToNotLegal</div>
+		<div data-bind="visible: !IsTimeLegal()">@Resources.EndTimeMustBeGreaterOrEqualToStartTime</div>
 	</div>
 </div>
 
