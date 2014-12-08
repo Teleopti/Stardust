@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -62,12 +63,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		public string EventType { get; set; }
 		public string DisplayName { get; set; }
 
+		public IList<string> Events = new List<string>();
+
 		public void Enqueue(string displayName, string eventType, string serializedEvent)
 		{
 			WasEnqueued = true;
 			DisplayName = displayName;
 			EventType = eventType;
 			SerializedEvent = serializedEvent;
+			Events.Add(serializedEvent);
 		}
 	}
 }

@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonStateChangedEvent : IEvent, ILogOnInfo
+	public class PersonStateChangedEvent : IEvent, ILogOnInfo, IGoToHangfire
 	{
 		public Guid PersonId { get; set; }
 		public DateTime Timestamp { get; set; }

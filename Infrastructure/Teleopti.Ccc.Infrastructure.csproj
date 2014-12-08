@@ -156,6 +156,7 @@
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\HangfireOrBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventPublisher.cs" />
