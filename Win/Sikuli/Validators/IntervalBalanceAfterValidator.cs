@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using System.Linq;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -25,27 +27,24 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				result.Details.AppendLine("Validator failure");
 				return result;
 			}
-			var resultValue = checkInternalBalanceRuleBreaks(lowestIntervalBalances, 1);
-			result.Result = resultValue;
-			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", resultValue));
+			var ruleBreaks = checkInternalBalanceRuleBreaks(lowestIntervalBalances, 1);
+			if (ruleBreaks > 0)
+			{
+				result.Result = SikuliValidationResult.ResultValue.Warn;
+				result.Details.AppendLine(string.Format("Broken rules: {0}", ruleBreaks));
+			}
+			const int maxRuleBreaks = 1;
+			if (ruleBreaks > maxRuleBreaks)
+				result.Result = SikuliValidationResult.ResultValue.Fail;
+			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
 			return result;
 		}
 
-		private SikuliValidationResult.ResultValue checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances, int numberOfAllowedRuleBreaks)
+		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances, int numberOfAllowedRuleBreaks)
 		{
-			int numberOfRuleBreaks = 0;
-			const double limit = 0.8; 
-
-			foreach (var intervalBalance in intervalBalances)
-			{
-				if (intervalBalance < limit)
-					numberOfRuleBreaks++;
-				if(numberOfRuleBreaks > numberOfAllowedRuleBreaks)
-					return SikuliValidationResult.ResultValue.Fail;
-			}
-			if (numberOfRuleBreaks > 0)
-				return SikuliValidationResult.ResultValue.Warn;
-			return SikuliValidationResult.ResultValue.Pass;
+			const double limit = 0.8;
+			int numberOfRuleBreaks = intervalBalances.Count(intervalBalance => intervalBalance < limit);
+			return numberOfRuleBreaks;
 		}
 	}
 }
