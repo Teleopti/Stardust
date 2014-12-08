@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
 
 			var result = target.CreateViewModel();
-			result.Url.Should().Be.EqualTo("broker/signalr/");
+			result.Url.Should().Be.EqualTo("/broker/signalr/");
 		}
 
 		[Test]
