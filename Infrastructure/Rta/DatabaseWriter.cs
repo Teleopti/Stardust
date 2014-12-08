@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
                 }
                 reader.Close();
 
-                if (!string.IsNullOrEmpty(insertStatement))
+                if (!string.IsNullOrEmpty(insertStatement) && !string.IsNullOrEmpty(stateCode))
                 {
                     command = connection.CreateCommand();
                     command.CommandText = insertStatement;
