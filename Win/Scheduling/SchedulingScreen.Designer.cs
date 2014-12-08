@@ -311,14 +311,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemQuickAccessUndo = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemQuickAccessUndoAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripButtonShowTexts = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonMainMenuSave = new System.Windows.Forms.ToolStripButton();
-			this.officeDropDownButtonMainMenuExportTo = new Syncfusion.Windows.Forms.Tools.OfficeDropDownButton();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButtonMainMenuHelp = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButtonMainMenuClose = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonSystemExit = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonOptions = new System.Windows.Forms.ToolStripButton();
 			this.btnFilter = new System.Windows.Forms.ToolStripButton();
 			this.btnRightLeft = new System.Windows.Forms.ToolStripButton();
 			this.imageListSkillTypeIcons = new System.Windows.Forms.ImageList(this.components);
@@ -1396,24 +1388,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			this.ribbonControlAdv1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			// 
-			// ribbonControlAdv1.OfficeMenu
-			// 
-			this.ribbonControlAdv1.OfficeMenu.AutoSize = false;
-			this.ribbonControlAdv1.OfficeMenu.AuxPanel.MinimumSize = new System.Drawing.Size(150, 0);
-			this.ribbonControlAdv1.OfficeMenu.MainPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonMainMenuSave,
-            this.officeDropDownButtonMainMenuExportTo,
-            this.toolStripSeparator4,
-            this.toolStripButtonMainMenuHelp,
-            this.toolStripSeparator3,
-            this.toolStripButtonMainMenuClose});
-			this.ribbonControlAdv1.OfficeMenu.MainPanel.MinimumSize = new System.Drawing.Size(150, 0);
-			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(314, 250);
-			this.ribbonControlAdv1.OfficeMenu.SystemPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSystemExit,
-            this.toolStripButtonOptions});
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
@@ -3267,106 +3241,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonShowTexts, false);
 			this.toolStripButtonShowTexts.Click += new System.EventHandler(this.toolStripButtonShowTexts_Click);
 			// 
-			// toolStripButtonMainMenuSave
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMainMenuSave, "");
-			this.toolStripButtonMainMenuSave.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Save;
-			this.toolStripButtonMainMenuSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonMainMenuSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonMainMenuSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonMainMenuSave.Name = "toolStripButtonMainMenuSave";
-			this.SetShortcut(this.toolStripButtonMainMenuSave, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainMenuSave.Size = new System.Drawing.Size(150, 36);
-			this.toolStripButtonMainMenuSave.Text = "xxSave";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainMenuSave, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMainMenuSave, false);
-			this.toolStripButtonMainMenuSave.Click += new System.EventHandler(this.toolStripButtonMainMenuSave_Click);
-			// 
-			// officeDropDownButtonMainMenuExportTo
-			// 
-			this.officeDropDownButtonMainMenuExportTo.AutoSize = false;
-			this.ribbonControlAdv1.SetDescription(this.officeDropDownButtonMainMenuExportTo, "");
-			this.officeDropDownButtonMainMenuExportTo.DropDownFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
-			this.officeDropDownButtonMainMenuExportTo.DropDownText = "xxExportToScenario";
-			this.officeDropDownButtonMainMenuExportTo.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Export2;
-			this.officeDropDownButtonMainMenuExportTo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.officeDropDownButtonMainMenuExportTo.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.officeDropDownButtonMainMenuExportTo.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.officeDropDownButtonMainMenuExportTo.Name = "officeDropDownButtonMainMenuExportTo";
-			this.SetShortcut(this.officeDropDownButtonMainMenuExportTo, System.Windows.Forms.Keys.None);
-			this.officeDropDownButtonMainMenuExportTo.Size = new System.Drawing.Size(150, 36);
-			this.officeDropDownButtonMainMenuExportTo.Text = "xxExportTo";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.officeDropDownButtonMainMenuExportTo, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.officeDropDownButtonMainMenuExportTo, false);
-			// 
-			// toolStripSeparator4
-			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.SetShortcut(this.toolStripSeparator4, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator4.Size = new System.Drawing.Size(134, 2);
-			// 
-			// toolStripButtonMainMenuHelp
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMainMenuHelp, "");
-			this.toolStripButtonMainMenuHelp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMainMenuHelp.Image")));
-			this.toolStripButtonMainMenuHelp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonMainMenuHelp.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonMainMenuHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonMainMenuHelp.Name = "toolStripButtonMainMenuHelp";
-			this.SetShortcut(this.toolStripButtonMainMenuHelp, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainMenuHelp.Size = new System.Drawing.Size(150, 36);
-			this.toolStripButtonMainMenuHelp.Text = "xxHelp";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainMenuHelp, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMainMenuHelp, false);
-			// 
-			// toolStripSeparator3
-			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.SetShortcut(this.toolStripSeparator3, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator3.Size = new System.Drawing.Size(134, 2);
-			// 
-			// toolStripButtonMainMenuClose
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonMainMenuClose, "");
-			this.toolStripButtonMainMenuClose.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Close;
-			this.toolStripButtonMainMenuClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripButtonMainMenuClose.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonMainMenuClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonMainMenuClose.Name = "toolStripButtonMainMenuClose";
-			this.SetShortcut(this.toolStripButtonMainMenuClose, System.Windows.Forms.Keys.None);
-			this.toolStripButtonMainMenuClose.Size = new System.Drawing.Size(150, 36);
-			this.toolStripButtonMainMenuClose.Text = "xxClose";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainMenuClose, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonMainMenuClose, false);
-			this.toolStripButtonMainMenuClose.Click += new System.EventHandler(this.toolStripButtonMainMenuClose_Click);
-			// 
-			// toolStripButtonSystemExit
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonSystemExit, "");
-			this.toolStripButtonSystemExit.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Exit;
-			this.toolStripButtonSystemExit.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonSystemExit.Name = "toolStripButtonSystemExit";
-			this.SetShortcut(this.toolStripButtonSystemExit, System.Windows.Forms.Keys.None);
-			this.toolStripButtonSystemExit.Size = new System.Drawing.Size(130, 20);
-			this.toolStripButtonSystemExit.Text = "xxExitTELEOPTICCC";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSystemExit, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSystemExit, false);
-			this.toolStripButtonSystemExit.Click += new System.EventHandler(this.toolStripButtonSystemExit_Click);
-			// 
-			// toolStripButtonOptions
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonOptions, "");
-			this.toolStripButtonOptions.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Options_32x32;
-			this.toolStripButtonOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonOptions.Name = "toolStripButtonOptions";
-			this.SetShortcut(this.toolStripButtonOptions, System.Windows.Forms.Keys.None);
-			this.toolStripButtonOptions.Size = new System.Drawing.Size(79, 20);
-			this.toolStripButtonOptions.Text = "xxOptions";
-			this.toolStripButtonOptions.ToolTipText = "xxOptions";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonOptions, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonOptions, false);
-			this.toolStripButtonOptions.Click += new System.EventHandler(this.toolStripButtonOptions_Click);
-			// 
 			// btnFilter
 			// 
 			this.btnFilter.AutoSize = false;
@@ -3678,8 +3552,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLockShiftCategoriesRM;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUnlockAllRM;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUnlockSelectionRM;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainMenuSave;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainMenuClose;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExClipboard;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExScheduleViews;
         private System.Windows.Forms.ToolStripButton toolStripButtonDayView;
@@ -3726,8 +3598,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndApprove;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndDeny;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOptimize;
-        private System.Windows.Forms.ToolStripButton toolStripButtonOptions;
-        private System.Windows.Forms.ToolStripButton toolStripButtonSystemExit;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemScheduleHourlyEmployees;
         private Teleopti.Ccc.WpfControls.Controls.Notes.NotesEditor notesEditor;
         //private Teleopti.Ccc.WpfControls.Common.Interop.MultipleHostControl hostedComponent1;
@@ -3751,10 +3621,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemQuickAccessUndo;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemQuickAccessUndoAll;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripRestrictionView;
-        private System.Windows.Forms.ToolStripButton toolStripButtonMainMenuHelp;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private Syncfusion.Windows.Forms.Tools.OfficeDropDownButton officeDropDownButtonMainMenuExportTo;
         private System.Windows.Forms.ToolStripButton toolStripButtonFindAgents;
         private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;

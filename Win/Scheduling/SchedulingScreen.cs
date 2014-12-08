@@ -3606,13 +3606,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void disableSave()
 		{
-			toolStripButtonMainMenuSave.Enabled = false;
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessSave, false);
 		}
 
 		private void enableSave()
 		{
-			toolStripButtonMainMenuSave.Enabled = true;
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessSave, true);
 			enableUndoRedoButtons();
 		}
@@ -3733,15 +3731,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_uIEnabled = false;
 			using (PerformanceOutput.ForOperation("disableAllExceptCancelInRibbon"))
 			{
-				toolStripButtonSystemExit.Enabled = false;
 				toolStripTabItemHome.Panel.Enabled = false;
 				toolStripTabItemChart.Panel.Enabled = false;
 				toolStripTabItem1.Panel.Enabled = false;
 				toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.None;
 				ControlBox = false;
 				toggleQuickButtonEnabledState(false);
-				toolStripButtonMainMenuClose.Enabled = false;
-				toolStripButtonMainMenuSave.Enabled = false;
 				contextMenuViews.Enabled = false;
 				toolStripButtonShrinkage.Enabled = false;
 				toolStripButtonValidation.Enabled = false;
@@ -3764,7 +3759,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void enableAllExceptCancelInRibbon()
 		{
 			_uIEnabled = true;
-			toolStripButtonSystemExit.Enabled = true;
 			toolStripTabItemHome.Panel.Enabled = true;
 			toolStripTabItemChart.Panel.Enabled = true;
 			toolStripTabItem1.Panel.Enabled = true;
@@ -3776,7 +3770,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			contextMenuViews.Enabled = true;
 			toggleQuickButtonEnabledState(true);
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, false);
-			toolStripButtonMainMenuClose.Enabled = true;
 			enableUndoRedoButtons();
 			ribbonControlAdv1.Cursor = Cursors.Default;
 			updateRibbon(ControlType.SchedulerGridMain);
@@ -4289,9 +4282,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					scenarios.RemoveAt(i);
 			}
 
-			officeDropDownButtonMainMenuExportTo.DropDownItems.Clear();
-			officeDropDownButtonMainMenuExportTo.DropDownText = Resources.ExportToScenario;
-
             if (RightToLeftLayout) flowLayoutExportToScenario.ReverseRows = true;
 
 			foreach (var scenario in scenarios)
@@ -4310,11 +4300,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				button.Font.ChangeToBold();
 				button.Click += menuItemClick;
 				flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
-
-				var scenarioMenuItem = new ToolStripMenuItem(scenario.Description.Name) {TextAlign = ContentAlignment.MiddleLeft};
-				scenarioMenuItem.Click += menuItemClick;
-				scenarioMenuItem.Tag = scenario;
-				officeDropDownButtonMainMenuExportTo.DropDownItems.Insert(0, scenarioMenuItem);
 			}
 		}
 
@@ -4865,7 +4850,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemQuickAccessUndo.Click -= toolStripSplitButtonQuickAccessUndo_ButtonClick;
 			toolStripMenuItemQuickAccessUndoAll.Click -= toolStripMenuItemQuickAccessUndoAll_Click_1;
 			toolStripButtonShowTexts.Click -= toolStripButtonShowTexts_Click;
-			toolStripButtonMainMenuSave.Click -= toolStripButtonMainMenuSave_Click;
 
 			if (_permissionHelper != null)
 				_permissionHelper = null;
