@@ -4,6 +4,7 @@ define([
 		'addfulldayabsence/personscheduledayreadmodel',
 		'addfulldayabsence/scheduledresourcesreadmodel',
 		'rta/scenario',
+		'manageadherence/scenario',
 		'template/scenario',
 		'jqueryajax'
 ], function (
@@ -12,6 +13,7 @@ define([
 	AddFullDayAbsencePersonScheduleDayReadModelScenario,
 	AddFullDayAbsenceScheduledResourcesReadModelScenario,
 	rtaScenario,
+	adherenceScenario,
 	TemplateScenario,
 	JqueryAjax
 	) {
@@ -24,6 +26,7 @@ define([
 			new AddFullDayAbsencePersonScheduleDayReadModelScenario(),
 			new AddFullDayAbsenceScheduledResourcesReadModelScenario(),
 			new rtaScenario(),
+			new adherenceScenario(),
 			new TemplateScenario()
 		];
 

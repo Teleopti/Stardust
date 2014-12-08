@@ -1144,6 +1144,8 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\personscheduledayreadmodel.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scenariobase.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\jqueryajax.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\manageadherence\iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\manageadherence\scenario.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\result.js" />
