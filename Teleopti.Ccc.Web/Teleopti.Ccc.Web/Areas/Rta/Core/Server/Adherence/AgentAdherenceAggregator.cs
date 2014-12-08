@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -19,11 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			_aggregationState = aggregationState;
 		}
 
-		public Notification CreateNotification(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
+		public IEnumerable<Notification> CreateNotification(PersonOrganizationData personOrganizationData, IActualAgentState actualAgentState)
 		{
 			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(personOrganizationData.TeamId);
 			var agentStates = actualAgentStateForTeam.Select(mapFrom);
-			return createAgentsNotification(agentStates, actualAgentState.BusinessUnitId, personOrganizationData.TeamId);
+			return
+				agentStates.Batch(40)
+					.Select(s => createAgentsNotification(s, actualAgentState.BusinessUnitId, personOrganizationData.TeamId));
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)

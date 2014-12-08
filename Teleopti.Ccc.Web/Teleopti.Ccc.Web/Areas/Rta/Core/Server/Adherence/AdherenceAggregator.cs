@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
@@ -50,9 +51,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			if (!sendMessages)
 				return;
 
-			var agentsAdherence = _agentAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
-			if (agentsAdherence != null)
-				_messageSender.Send(agentsAdherence);
+			var agentsAdherences = _agentAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
+			if (agentsAdherences != null)
+				agentsAdherences.ForEach(_messageSender.Send);
 
 			if (!adherenceChanged)
 				return;
