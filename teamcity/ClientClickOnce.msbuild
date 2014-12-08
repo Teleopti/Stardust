@@ -15,15 +15,14 @@
 
 	<Target Name="ClientClickOnce" DependsOnTargets="CopyToOutput">
 		<PropertyGroup>
-			<ManifestFile>$(NameOfClickOnceItem).exe.manifest</ManifestFile>
-			<ApplicationFile>$(NameOfClickOnceItem).application</ApplicationFile>
+			<ManifestFile>$(OutputDirectory)\$(NameOfClickOnceItem).exe.manifest</ManifestFile>
+			<ApplicationName>$(NameOfClickOnceItem).application</ApplicationName>
+			<ApplicationFile>$(OutputDirectory)\$(ApplicationName)</ApplicationFile>
 		</PropertyGroup>
 	
-		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(OutputDirectory)\$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
+		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)"'/>
 		
-		
-	  
-		<GenerateDeploymentManifest AssemblyName="$(ApplicationFile)"
+		<GenerateDeploymentManifest AssemblyName="$(ApplicationName)"
 												  AssemblyVersion="$(CCCVersion)"
 												  DeploymentUrl="http://shouldbesetwhensigned"
 												  Description="TELEOPTI WFM"
@@ -33,12 +32,11 @@
 												  Install="true"
 												  UpdateEnabled="true"
 												  UpdateMode="Foreground"
-												  OutputManifest="$(OutputDirectory)\$(ApplicationFile)"
+												  OutputManifest="$(ApplicationFile)"
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
 												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
-												  TrustUrlParameters="false"/>
-												 
+												  TrustUrlParameters="false"/>			 
 	</Target>
 	
 	<Target Name="CopyToOutput" DependsOnTargets="ClearOutput">
@@ -55,7 +53,6 @@
 				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>
 		<Copy SourceFiles="@(StartPageImages)"
 				 DestinationFiles="@(StartPageImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
-		
 	
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"
@@ -68,8 +65,7 @@
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"
 				  Regex="#VERSION#"
-				  ReplacementText="$(CCCVersion)"/>		
-		
+				  ReplacementText="$(CCCVersion)"/>
 	</Target>
 	
 	<Target Name="ClearOutput">
