@@ -10,7 +10,7 @@
 		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
-		<ETLServiceBinDir>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)</ETLServiceBinDir>
+		<ETLServiceBinDir>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETLServiceBinDir>
 		<ETLCCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</ETLCCC7DB>
 		<ETLAnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</ETLAnalyticsDB>
 		<ETLAggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</ETLAggDB>
@@ -21,6 +21,7 @@
 		<LogObjectId>1</LogObjectId>
 		<RestoreToLocal>"$(WorkingDirectory)\.debug-Setup\Restore to Local.bat"</RestoreToLocal>
 		<RestoreToLocalWorkDir>$(WorkingDirectory)\ETL_R2L</RestoreToLocalWorkDir>
+		<Configuration Condition="'$(Configuration)'!=''">Release</Configuration>
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
@@ -31,8 +32,7 @@
 	</Target>
 	
 	<Target Name="RunETLTest" DependsOnTargets="CleanUp;PrepareETLTest">
-		<Message text="start %22$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe%22"/>
-		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="%22$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(debug_release)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe%22"/>
+		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="%22$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe%22"/>
 		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
 		<CallTarget Targets="AddSchedule"/>
 		
@@ -45,13 +45,11 @@
  	</Target>
 	
 	<Target Name="AddSchedule">
-		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
+		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(ETLAnalyticsDB)" />
 	</Target>
   
 	<Target Name="RestoreToLocal">
-		<Exec Command ="$(RestoreToLocal) DemoSales $(debug_release) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(WorkingDirectory)\ETL_R2L"/>
+		<Exec Command ="$(RestoreToLocal) DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(RestoreToLocalWorkDir)"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
@@ -62,8 +60,7 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
-		<Message text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(WorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(debug_release) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(WorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(debug_release) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(WorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
 	</Target>
 	
 	<Target Name="CleanUp">
