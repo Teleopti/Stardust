@@ -198,7 +198,6 @@
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\DatabaseWriterTest.cs" />
     <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
-    <Compile Include="Rta\ReadModelUnitOfWorkAspectTest.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\RtaRepositoryTest.cs" />
