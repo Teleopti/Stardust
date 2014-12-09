@@ -90,8 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(), toggleManager)));
 			builder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
 			builder.RegisterInstance(new FakeHttpContext("")).As<HttpContextBase>();
-			var container = builder.Build();
-			return container.BeginLifetimeScope("httpRequest");
+			return builder.Build();
 		}
 
 		private ILifetimeScope requestContainer;
