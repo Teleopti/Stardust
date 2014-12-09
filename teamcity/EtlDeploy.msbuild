@@ -7,25 +7,29 @@
 		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>	
 		<ETLStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
 		<ETLDBNamePrefix>ETLTest</ETLDBNamePrefix>
-		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
-		<FixMyConfig>"$(WorkingDirectory)\.debug-Setup\FixMyConfig.bat"</FixMyConfig>
+		<ETLNightlyBuild-PrepareETL>$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql</ETLNightlyBuild-PrepareETL>
+		<ETLTestConfig>$(WorkingDirectory)\.debug-Setup\ETLTestConfig.bat</ETLTestConfig>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
-		<ETLServiceBinDir>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETLServiceBinDir>
 		<ETLCCC7DB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCC7</ETLCCC7DB>
 		<ETLAnalyticsDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiAnalytics</ETLAnalyticsDB>
 		<ETLAggDB>$(ETLDBNamePrefix)_DemoSales_TeleoptiCCCAgg</ETLAggDB>
 		<AppSqlLogin>TeleoptiDemoUser</AppSqlLogin>
 		<AppSqlPwd>TeleoptiDemoPwd2</AppSqlPwd>
-		<LoadDimensionSQL>"$(WorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
-		<moveDataSQL>"$(WorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
+		<LoadDimensionSQL>$(WorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql</LoadDimensionSQL>
+		<moveDataSQL>$(WorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql</moveDataSQL>
 		<LogObjectId>1</LogObjectId>
-		<RestoreToLocal>"$(WorkingDirectory)\.debug-Setup\Restore to Local.bat"</RestoreToLocal>
+		<RestoreToLocal>$(WorkingDirectory)\.debug-Setup\Restore to Local.bat</RestoreToLocal>
 		<RestoreToLocalWorkDir>$(WorkingDirectory)\ETL_R2L</RestoreToLocalWorkDir>
+		<AS_SERVER_NAME>PONTUS\WFM2014</AS_SERVER_NAME>
+		<AS_DATABASE>$(ETLAnalyticsDB)_$(Computername)</AS_DATABASE>
+		<SQL_AUTH_STRING>Data Source=$(Computername);Integrated Security=SSPI</SQL_AUTH_STRING>
+		<ETL_SERVICE_nhibConfPath>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETL_SERVICE_nhibConfPath>		
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.AsyncExec"/>
+	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.CommandLine"/>
 
 	<Target Name="PrepareETLTest" DependsOnTargets="RestoreToLocal;MoveOneLogObject;PrepareFiles">
 	
@@ -49,8 +53,18 @@
 	</Target>
   
 	<Target Name="RestoreToLocal">
-		<Exec Command ="$(RestoreToLocal) DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(RestoreToLocalWorkDir)"/>
+		<Exec Command ='"$(RestoreToLocal)" DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(RestoreToLocalWorkDir)'/>
 	</Target>
+	
+	<Target Name="ReCreateStandardCube" DependsOnTargets="RunETLTest">
+			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPDropDatabase.xmla"/>
+			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
+	</Target>
+	
+	<Target Name="ProcessCube" DependsOnTargets="ReCreateStandardCube">
+			<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPProcessDatabase.xmla"/>
+	</Target>
+	
 
 	<Target Name="MoveOneLogObject">
 		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
@@ -60,7 +74,7 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
-		<Exec Command ="$(FixMyConfig) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration)"/>
+		<Exec Command ='"$(ETLTestConfig)" "$(ETLCCC7DB)" "$(ETLAnalyticsDB)" "$(Configuration)" "$(AS_SERVER_NAME)" "$(AS_DATABASE)" "$(SQL_AUTH_STRING)" "$(ETL_SERVICE_nhibConfPath)"'/>
 	</Target>
 	
 	<Target Name="CleanUp">
