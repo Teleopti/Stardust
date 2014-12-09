@@ -46,7 +46,7 @@ define([
 		success: function(data) {
 			vm.Receivers.removeAll();
 			ko.utils.arrayForEach(data.People, function(item) {
-				vm.Receivers.push({ Name: item.Name });
+				vm.Receivers.push({ Name: item.Name, Id: item.Id });
 			});
 		},
 		error: function(data) { vm.ErrorMessage(data.statusText); }

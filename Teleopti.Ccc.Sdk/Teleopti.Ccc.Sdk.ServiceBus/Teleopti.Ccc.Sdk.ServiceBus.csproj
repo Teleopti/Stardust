@@ -283,6 +283,10 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="NotificationConfig.xml.notinuse">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

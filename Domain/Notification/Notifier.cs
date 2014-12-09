@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 			}
 			else
-				Logger.Warn("No notification sender was found. Review the configuration and try to restart the service bus.");
+				Logger.Warn("No notification sender was found. Review the configuration.");
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -6,6 +7,7 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,6 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Messages.Controllers;
 using Teleopti.Ccc.Web.Areas.Messages.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 {
@@ -22,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 		private IPersonRepository _personRepository;
 		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private IPrincipalAuthorization _principalAuthorization;
+		private INotifier _notifier;
 
 		[SetUp]
 		public void Setup()
@@ -29,7 +33,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_principalAuthorization);
+			_notifier = MockRepository.GenerateMock<INotifier>();
+			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_principalAuthorization, _notifier);
 		}
 
 		[TearDown]
@@ -57,6 +62,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 
 			(result.Data as SendMessageViewModel).People.Count().Should().Be.EqualTo(2);
 			(result.Data as SendMessageViewModel).People.First().Name.Should().Be.EqualTo(person1.Name.ToString());
+		}
+
+		[Test]
+		public void ShouldSendMessage()
+		{
+			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
+			var person2 = PersonFactory.CreatePersonWithGuid("b", "b");
+			var persons = new[] { person1, person2 };
+			_personRepository.Stub(x => x.FindPeople(new[] { person1.Id.Value, person2.Id.Value })).IgnoreArguments()
+				.Return(persons);
+
+			const string subject = "test";
+			const string testBody = "test body";
+			target.SendMessage(new[] {person1.Id.Value, person2.Id.Value}, subject, testBody);
+
+			_notifier.AssertWasCalled(
+				x => x.Notify(Arg<INotificationMessage>.Matches(s => s.Subject == subject && s.Messages.First() == testBody), Arg<IPerson[]>.Is.Equal(persons)));
 		}
 
 		[Test]

@@ -5,10 +5,10 @@
 		<li class="active" data-bind="text: teamName"></li>
 	</ul>
 	<div class="nav navbar">
+		<!-- ko if: $root.notifyViaSMSEnabled -->
 		<button type="button" class="btn btn-primary navbar-btn select-agents" data-bind="checkbox: SelectAgentsEnabled, if: $root.notifyViaSMSEnabled">
 			<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
 		</button>
-		<!-- ko if: $root.notifyViaSMSEnabled -->
 		<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, enable: SendMessageEnabled, text: $root.Resources.Send">
 		</button>
 		<!-- /ko -->

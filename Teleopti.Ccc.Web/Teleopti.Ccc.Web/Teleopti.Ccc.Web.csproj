@@ -411,6 +411,7 @@
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\HealthCheck\HealthCheckAreaRegistration.cs" />
     <Compile Include="Areas\Messages\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\Messages\Core\Ioc\NotificationModule.cs" />
     <Compile Include="Areas\Messages\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Messages\Models\SendMessageViewModel.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistration.cs" />
@@ -1604,6 +1605,10 @@
     <Content Include="Areas\WFM\vendor\hammerjs\LICENSE.md" />
     <Content Include="Areas\WFM\vendor\hammerjs\package.json" />
     <Content Include="Areas\WFM\vendor\hammerjs\README.md" />
+    <Content Include="NotificationConfig.xml.notinuse">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

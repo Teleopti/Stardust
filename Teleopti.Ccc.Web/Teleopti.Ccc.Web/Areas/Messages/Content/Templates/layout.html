@@ -44,9 +44,9 @@
 					<span data-bind="text: Name"> </span>
 				</li>
 			</ul>
-			<textarea class="form-control" rows="1" placeholder="Subject"></textarea>
-			<textarea class="form-control" rows="3" placeholder="Message"></textarea>
-			<button type="button" class="btn btn-primary pull-right" data-bind="text: Resources.Send"></button>
+			<textarea class="form-control" rows="1" placeholder="Subject" data-bind="value: Subject"></textarea>
+			<textarea class="form-control" rows="3" placeholder="Message" data-bind="value: Message"></textarea>
+			<button type="button" class="btn btn-primary pull-right" data-bind="text: Resources.Send, click:SendMessage"></button>
 		</div>
 	</div>
 </div>
