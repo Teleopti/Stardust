@@ -154,6 +154,7 @@
     </Compile>
     <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
+    <Compile Include="ApplicationLayer\CannotPublishToHangfire.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisher.cs" />

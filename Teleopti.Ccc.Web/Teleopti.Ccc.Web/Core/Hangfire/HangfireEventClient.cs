@@ -7,16 +7,16 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	[CLSCompliant(false)]
 	public class HangfireEventClient : IHangfireEventClient
 	{
-		private readonly IBackgroundJobClient _jobClient;
+		private readonly Lazy<IBackgroundJobClient> _jobClient;
 
-		public HangfireEventClient(IBackgroundJobClient jobClient)
+		public HangfireEventClient(Lazy<IBackgroundJobClient> jobClient)
 		{
 			_jobClient = jobClient;
 		}
 
 		public void Enqueue(string displayName, string eventType, string serializedEvent)
 		{
-			_jobClient.Enqueue<HangfireEventServer>(x => x.Process(displayName, eventType, serializedEvent));
+			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, eventType, serializedEvent));
 		}
 	}
 }

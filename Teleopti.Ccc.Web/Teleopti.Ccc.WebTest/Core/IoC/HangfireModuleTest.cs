@@ -1,6 +1,9 @@
 using Autofac;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.Hangfire;
@@ -11,11 +14,20 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 	public class HangfireModuleTest
 	{
 		[Test]
-		public void ShouldResolveHangfireEventProcessor()
+		public void ShouldResolveHangfireEventServer()
 		{
 			using (var container = buildContainer())
 			{
 				container.Resolve<HangfireEventServer>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveHangfireEventClient()
+		{
+			using (var container = buildContainer())
+			{
+				container.Resolve<IHangfireEventClient>().Should().Be.OfType<HangfireEventClient>();
 			}
 		}
 
