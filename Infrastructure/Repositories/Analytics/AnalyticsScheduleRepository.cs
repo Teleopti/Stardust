@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	{
 		
 		public void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart,
-			AnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart)
+			IAnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{

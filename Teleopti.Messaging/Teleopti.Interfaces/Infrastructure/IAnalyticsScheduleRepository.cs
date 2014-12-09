@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -7,7 +6,7 @@ namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IAnalyticsScheduleRepository
 	{
-		void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart, AnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart);
+		void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart, IAnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart);
 		void PersistFactScheduleDayCountRow(AnalyticsFactScheduleDayCount dayCount);
 		void DeleteFactSchedule(int date, int personId);
 		IList<KeyValuePair<DateOnly, int>> LoadDimDates();
@@ -43,6 +42,24 @@ namespace Teleopti.Interfaces.Infrastructure
 		int ShiftLength { get; set; }
 	}
 
+	public interface IAnalyticsFactScheduleDate
+	{
+		int ScheduleDateId { get; set; }
+		int ScheduleStartDateLocalId { get; set; }
+		DateTime ActivityStartTime { get; set; }
+		int ActivityStartDateId { get; set; }
+		DateTime ActivityEndTime { get; set; }
+		int ActivityEndDateId { get; set; }
+		DateTime ShiftStartTime { get; set; }
+		int ShiftStartDateId { get; set; }
+		DateTime ShiftEndTime { get; set; }
+		int ShiftEndDateId { get; set; }
+		int IntervalId { get; set; }
+		int ShiftStartIntervalId { get; set; }
+		int ShiftEndIntervalId { get; set; }
+		DateTime DatasourceUpdateDate { get; set; }
+	}
+
 	public interface IAnalyticsActivity
 	{
 		int ActivityId { get; set; }
@@ -74,24 +91,6 @@ namespace Teleopti.Interfaces.Infrastructure
 	{
 		int PersonId { get; set; }
 		int BusinessUnitId { get; set; }
-	}
-
-	public class AnalyticsFactScheduleDate
-	{
-		public int ScheduleDateId { get; set; }
-		public int ScheduleStartDateLocalId { get; set; }
-		public DateTime ActivityStartTime { get; set; }
-		public int ActivityStartDateId { get; set; }
-		public DateTime ActivityEndTime { get; set; }
-		public int ActivityEndDateId { get; set; }
-		public DateTime ShiftStartTime { get; set; }
-		public int ShiftStartDateId { get; set; }
-		public DateTime ShiftEndTime { get; set; }
-		public int ShiftEndDateId { get; set; }
-		public int IntervalId { get; set; }
-		public int ShiftStartIntervalId { get; set; }
-		public int ShiftEndIntervalId { get; set; }
-		public DateTime DatasourceUpdateDate { get; set; }
 	}
 
 

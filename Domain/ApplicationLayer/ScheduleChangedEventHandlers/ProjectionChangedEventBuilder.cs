@@ -72,14 +72,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 							break;
 						case SchedulePartView.DayOff:
-							eventScheduleDay.DayOff = new ProjectionChangedEventDayOff
-								{
-									StartDateTime = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime,
-									EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime
-								};
 							var dayOff = scheduleDay.PersonAssignment().DayOff();
 							eventScheduleDay.ShortName = dayOff.Description.ShortName;
 							eventScheduleDay.Name = dayOff.Description.Name;
+							eventScheduleDay.DayOff = new ProjectionChangedEventDayOff
+								{
+									StartDateTime = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime,
+									EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime,
+									Anchor = dayOff.Anchor
+								};
 							if (projection.HasLayers)
 								eventScheduleDay.IsFullDayAbsence = true;
 							break;
