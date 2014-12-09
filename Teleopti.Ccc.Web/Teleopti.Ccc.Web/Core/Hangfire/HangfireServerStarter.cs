@@ -1,7 +1,5 @@
-using System;
 using Autofac;
 using Hangfire;
-using Hangfire.SqlServer;
 using Owin;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
@@ -9,20 +7,23 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	public class HangfireServerStarter : IHangfireServerStarter
 	{
 		private readonly ILifetimeScope _lifetimeScope;
+		private readonly IHangfireServerStorageConfiguration _storageConfiguration;
 
-		public HangfireServerStarter(ILifetimeScope lifetimeScope)
+		public HangfireServerStarter(ILifetimeScope lifetimeScope, IHangfireServerStorageConfiguration storageConfiguration)
 		{
 			_lifetimeScope = lifetimeScope;
+			_storageConfiguration = storageConfiguration;
 		}
 
-		public void Start(IAppBuilder application, string connectionString)
+		public void Start(IAppBuilder application)
 		{
 			application.UseHangfire(c =>
 			{
-				c.UseSqlServerStorage(connectionString, new SqlServerStorageOptions {QueuePollInterval = TimeSpan.FromSeconds(1)});
+				_storageConfiguration.ConfigureStorage(c);
 				c.UseAutofacActivator(_lifetimeScope);
 				c.UseServer();
 			});
 		}
 	}
+
 }

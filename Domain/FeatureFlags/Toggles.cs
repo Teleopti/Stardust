@@ -39,6 +39,7 @@
 		RTA_SeePercentageAdherenceForOneAgent_30783,
 		RTA_SeeAdherenceDetailsForOneAgent_31285,
 		RTA_HangfireEventProcessing_31593,
+		RTA_HangfireEventProcessinUsingMsmq_31593,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,

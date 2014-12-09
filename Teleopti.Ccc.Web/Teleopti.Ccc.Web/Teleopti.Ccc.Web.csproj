@@ -181,6 +181,9 @@
     <Reference Include="Hangfire.SqlServer">
       <HintPath>..\..\packages\Hangfire.SqlServer.1.2.2\lib\net45\Hangfire.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Hangfire.SqlServer.Msmq">
+      <HintPath>..\..\packages\Hangfire.SqlServer.MSMQ.1.2.2\lib\net45\Hangfire.SqlServer.Msmq.dll</HintPath>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -555,6 +558,9 @@
     <Compile Include="Core\Hangfire\HangfireEventClient.cs" />
     <Compile Include="Core\Hangfire\HangfireEventServer.cs" />
     <Compile Include="Core\Hangfire\HangfireServerStarter.cs" />
+    <Compile Include="Core\Hangfire\IHangfireServerStorageConfiguration.cs" />
+    <Compile Include="Core\Hangfire\MsmqStorageConfiguration.cs" />
+    <Compile Include="Core\Hangfire\SqlStorageConfiguration.cs" />
     <Compile Include="Core\Hangfire\IHangfireServerStarter.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
