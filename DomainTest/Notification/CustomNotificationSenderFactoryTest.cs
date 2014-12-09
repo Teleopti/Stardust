@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				public void ShouldReturnClickatell()
 				{
 						Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(true);
-						Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Sdk.Notification");
+						Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Domain");
 						Expect.Call(_notificationConfigReader.ClassName)
-									.Return("Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender");
+									.Return("Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender");
 						_mocks.ReplayAll();
 						var sender = _target.GetSender();
 						Assert.That(sender, Is.Not.Null);
@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				public void ShouldNotThrowIfClassIsWrong()
 				{
 						Expect.Call(_notificationConfigReader.HasLoadedConfig).Return(true);
-						Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Sdk.Notification").Repeat.Twice();
+						Expect.Call(_notificationConfigReader.Assembly).Return("Teleopti.Ccc.Domain").Repeat.Twice();
 						Expect.Call(_notificationConfigReader.ClassName)
-									.Return("Teleopti.Ccc.Sdk.Notification.ClickAndTellNotificationSender")
+									.Return("Teleopti.Ccc.Domain.Notification.ClickAndTellNotificationSender")
 									.Repeat.Twice();
 						_mocks.ReplayAll();
 						Assert.DoesNotThrow(() => _target.GetSender());

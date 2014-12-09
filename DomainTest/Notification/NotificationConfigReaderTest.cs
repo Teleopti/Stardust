@@ -93,13 +93,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public void ShouldHaveAnAssemblyProperty()
 		{
-			Assert.That(_target.Assembly, Is.EqualTo("Teleopti.Ccc.Sdk.Notification"));
+			Assert.That(_target.Assembly, Is.EqualTo("Teleopti.Ccc.Domain"));
 		}
 
 		[Test]
 		public void ShouldHaveAClassProperty()
 		{
-			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender"));
+			Assert.That(_target.ClassName, Is.EqualTo("Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender"));
 		}
 
 		[Test]

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
-	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
 	<password>cadadi02</password>
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		{
 			const string xmlWithNoCheck = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
-	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
 	<password>cadadi02</password>
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		{
 			const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
-	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
 	<password>cadadi02</password>
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		{
 			const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
-	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>ola.hakansson@teleopti.com</user>
 	<password>cadadi02</password>

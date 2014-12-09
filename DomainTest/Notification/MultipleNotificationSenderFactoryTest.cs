@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var defaultNotificationSender = MockRepository.GenerateMock<INotificationSender>();
 			notificationChecker.Stub(x => x.NotificationType()).Return(NotificationType.Sms);
 			notificationConfigReader.Stub(x => x.HasLoadedConfig).Return(true);
-			notificationConfigReader.Stub(x => x.Assembly).Return("Teleopti.Ccc.Sdk.Notification");
-			notificationConfigReader.Stub(x => x.ClassName).Return("Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender");
+			notificationConfigReader.Stub(x => x.Assembly).Return("Teleopti.Ccc.Domain");
+			notificationConfigReader.Stub(x => x.ClassName).Return("Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender");
 
 			var target = new MultipleNotificationSenderFactory(notificationChecker, notificationConfigReader, defaultNotificationSender);
 			var result = target.GetSender();

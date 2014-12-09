@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Config>
-	<assembly>Teleopti.Ccc.Sdk.Notification</assembly>
-	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<assembly>Teleopti.Ccc.Domain</assembly>
+	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
 	<url>http://api.clickatell.com/xml/xml?data=</url>
 	<user>username</user>
 	<password>pwd</password>

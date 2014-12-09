@@ -1757,6 +1757,10 @@
     <None Include="Forecasting\SkillStaffStuff.cd" />
     <None Include="Forecasting\TemplateOwners.cd" />
     <None Include="Forecasting\WorkloadDayTemplates.cd" />
+    <None Include="NotificationConfig.xml.notinuse">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
