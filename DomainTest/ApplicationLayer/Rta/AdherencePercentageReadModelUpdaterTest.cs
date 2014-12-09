@@ -2,11 +2,13 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -316,6 +318,97 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.Zero);
 			persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
+		}
+
+		[Test]
+		public void ShouldSendMessageWhenEventIsHandledSuccessfully()
+		{
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var eventSyncronization = new ControllableEventSyncronization();
+			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
+			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var @event = new PersonInAdherenceEvent
+			{
+				Datasource = "datasource",
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			};
+			
+			target.Handle(@event);
+
+			eventSyncronization.RunNow();
+			messageBroker.AssertWasCalled(
+				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.Timestamp, @event.Timestamp, Guid.Empty, Guid.Empty,
+						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
+		}
+
+		[Test]
+		public void ShouldNotSendMessageWhenEventIsHandledFailed()
+		{
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var eventSyncronization = new ControllableEventSyncronization();
+			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
+			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var @event = new PersonInAdherenceEvent
+			{
+				Datasource = "datasource",
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			};
+			
+			target.Handle(@event);
+
+			messageBroker.AssertWasNotCalled(
+				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.Timestamp, @event.Timestamp, Guid.Empty, Guid.Empty,
+						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
+		}
+
+		[Test]
+		public void ShouldSendMessageWhenOutOfAdherenceEventIsHandledSuccessfully()
+		{
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var eventSyncronization = new ControllableEventSyncronization();
+			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
+			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var @event = new PersonOutOfAdherenceEvent
+			{
+				Datasource = "datasource",
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
+			};
+
+			target.Handle(@event);
+
+			eventSyncronization.RunNow();
+			messageBroker.AssertWasCalled(
+				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.Timestamp, @event.Timestamp, Guid.Empty, Guid.Empty,
+						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
+		}
+
+		[Test]
+		public void ShouldSendMessageWhenShiftEndEventIsHandledSuccessfully()
+		{
+			var persister = new FakeAdherencePercentageReadModelPersister();
+			var eventSyncronization = new ControllableEventSyncronization();
+			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
+			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var @event = new PersonShiftEndEvent
+			{
+				Datasource = "datasource",
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				ShiftEndTime = new DateTime(2014, 10, 13, 17, 0, 0),
+			};
+
+			target.Handle(@event);
+
+			eventSyncronization.RunNow();
+			messageBroker.AssertWasCalled(
+				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.ShiftEndTime, @event.ShiftEndTime, Guid.Empty, Guid.Empty,
+						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
 		}
 
 	}

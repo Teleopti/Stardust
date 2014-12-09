@@ -25,8 +25,4 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 			factory.EndUnitOfWork(exception);
 		}
 	}
-
-	public class ReadModelUpdatedMessage
-	{
-	}
 }
