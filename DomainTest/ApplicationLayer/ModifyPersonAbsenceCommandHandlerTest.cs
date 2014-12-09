@@ -49,20 +49,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRaiseModifyPersonAbsenceEvent()
 		{
 			var currentScenario = new FakeCurrentScenario();
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), currentScenario.Current(), MockRepository.GenerateMock<IAbsenceLayer>());
-			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository() { personAbsence };
-			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone());
+			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
+				{
+					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),
+						new DateTimePeriod(2013, 11, 27, 8, 2013, 11, 27, 16))
+				};
 
+			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone());
 			var command = new ModifyPersonAbsenceCommand
 			{
 				PersonAbsenceId = personAbsenceRepository.Single().Id.Value,
-				StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
+				PersonId = Guid.NewGuid(),
+				StartTime = new DateTime(2013, 11, 27, 8, 00, 00, DateTimeKind.Utc),
 				EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = Guid.NewGuid()
+
 				}
 			};
+
 			target.Handle(command);
 
 			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as PersonAbsenceModifiedEvent;
@@ -78,12 +84,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 
 			var currentScenario = new FakeCurrentScenario();
-			var absence = AbsenceFactory.CreateAbsenceWithId();
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(new DateTime(2013, 11, 27, 11, 00, 00, DateTimeKind.Utc), new DateTime(2013, 11, 27, 16, 00, 00, DateTimeKind.Utc)));
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), currentScenario.Current(), absenceLayer);
-			
-			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository() { personAbsence };
-			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone());
+			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
+				{
+					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),
+						new DateTimePeriod(2013, 11, 27, 11, 2013, 11, 27, 16))
+				};var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone());
 
 			var command = new ModifyPersonAbsenceCommand
 			{
@@ -98,8 +103,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(command);
 
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartTime);
-			absenceLayer.Period.EndDateTime.Should().Be(command.EndTime);
+			var absence = personAbsenceRepository.Single();
+
+			absence.Layer.Period.StartDateTime.Should().Be(command.StartTime);
+			absence.Layer.Period.EndDateTime.Should().Be(command.EndTime);
 
 		}
 	}
