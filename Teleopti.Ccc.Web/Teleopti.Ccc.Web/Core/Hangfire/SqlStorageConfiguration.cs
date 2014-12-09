@@ -5,6 +5,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
+	[CLSCompliant(false)]
 	public class SqlStorageConfiguration : IHangfireServerStorageConfiguration
 	{
 		private readonly IConfigReader _config;

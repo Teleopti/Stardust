@@ -1,3 +1,4 @@
+using System;
 using Hangfire;
 using Hangfire.SqlServer;
 using Hangfire.SqlServer.Msmq;
@@ -5,6 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
+	[CLSCompliant(false)]
 	public class MsmqStorageConfiguration : IHangfireServerStorageConfiguration
 	{
 		private readonly IConfigReader _config;
