@@ -1,7 +1,9 @@
 using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -11,10 +13,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		IHandleEvent<PersonShiftEndEvent>
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
+		private readonly IEventSyncronization _eventSyncronization;
+		private readonly IMessageCreator _messageSender;
 
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister)
+		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, IEventSyncronization eventSyncronization, IMessageCreator messageSender)
 		{
 			_persister = persister;
+			_eventSyncronization = eventSyncronization;
+			_messageSender = messageSender;
 		}
 
 		[ReadModelUnitOfWork]
