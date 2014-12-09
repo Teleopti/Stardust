@@ -18,6 +18,13 @@
 # MyFeature = RC
 #######################################
 #
+#
+############################# Default value ################################
+## Toggles not specified in this file will only be enabled if togglemode=all
+## If you want to be explicit, you can add this line during development
+# MyFeature = DEV
+## This will be exactly the same as not specifying MyFeature at all in this file
+############################################################################
 
 Scheduler_WeeklyRestRuleSolver_27108 = true
 Scheduler_Seniority_11111 = true

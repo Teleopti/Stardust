@@ -120,10 +120,37 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			}
 		}
 
+		[Test]
+		public void DevFeatureInFile()
+		{
+			var tempFile = Path.GetTempFileName();
+			try
+			{
+				File.WriteAllLines(tempFile, new[] { "TestToggle= Dev " });
+				var containerBuilder = new ContainerBuilder();
+				containerBuilder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs { FeatureToggle = tempFile, ToggleMode = ToggleMode }, null)));
+				using (var container = containerBuilder.Build())
+				{
+					var toggleChecker = container.Resolve<IToggleManager>();
+					toggleChecker.IsEnabled(Toggles.TestToggle)
+						.Should().Be.EqualTo(devFeatureShouldBe);
+				}
+			}
+			finally
+			{
+				File.Delete(tempFile);
+			}
+		}
+
 		protected abstract bool UndefinedFeatureShouldBe { get; }
 		protected abstract bool EnabledFeatureShouldBe { get; }
 		protected abstract bool DisabledFeatureShouldBe { get; }
 		protected abstract bool RcFeatureShouldBe { get; }
+
+		private bool devFeatureShouldBe
+		{
+			get { return UndefinedFeatureShouldBe; }
+		}
 
 		protected abstract string ToggleMode { get; }
 	}
