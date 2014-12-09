@@ -39,7 +39,8 @@ namespace Teleopti.Interfaces.Infrastructure
 		int ReadyTimeMinues { get; set; }  
 		int PaidTimeMinutes { get; set; }  
 		int PaidTimeActivityMinutes { get; set; }
-		int PaidTimeAbsenceMinutes { get; set; } 
+		int PaidTimeAbsenceMinutes { get; set; }
+		int ShiftLength { get; set; }
 	}
 
 	public interface IAnalyticsActivity

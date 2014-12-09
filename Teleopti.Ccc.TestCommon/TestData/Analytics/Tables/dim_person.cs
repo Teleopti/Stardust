@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			string businessUnitName,
 			int datasourceId,
 			bool toBeDeleted,
-			int timeZoneId)
+			int timeZoneId,
+			Guid? personPeriodCode)
 		{
 			var row = dataTable.NewRow();
 
@@ -90,6 +91,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["valid_from_interval_id"] = validFromIntervalId;
 			row["valid_to_date_id"] = validToDateId;
 			row["valid_to_interval_id"] = validToIntervalId;
+			if(personPeriodCode != null) row["person_period_code"] = personPeriodCode;
 			row["person_name"] = firstName + lastName;
 			row["first_name"] = firstName;
 			row["last_name"] = lastName ;

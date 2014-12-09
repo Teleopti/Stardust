@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -42,97 +34,196 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldLoadActivities()
 		{
+			var timeZones = new UtcAndCetTimeZones();
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var datasource = new ExistingDatasources(timeZones);
+			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) { BusinessUnitId = 12 };
 			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
-			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red", InWorkTime = false };
-
+			
 			Data.Apply(activityPhone);
-			Data.Apply(activityLunch);
 
-			var jobParameters = getJobParameters();
-			StepRunner.RunNightly(jobParameters);
+			var act = new Activity(activityPhone.Activity, datasource, businessUnit.BusinessUnitId) { ActivityId = 22 };
+
+			analyticsDataFactory.Setup(act);
+			analyticsDataFactory.Persist();
 
 			var acts = _target.Activities();
-			acts.Count.Should().Be.EqualTo(3); //one undefined too
+			acts.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldLoadAbsences()
 		{
-			var absenceFree = new AbsenceConfigurable { Name = "Free", Color = "LightGreen" };
-			var absenceNelson = new AbsenceConfigurable { Name = "Nelson Mandela", Color = "Red" };
+			var timeZones = new UtcAndCetTimeZones();
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var datasource = new ExistingDatasources(timeZones);
+			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) { BusinessUnitId = 12 };
+			var absenceFree = new AbsenceConfigurable { Name = "Freee", Color = "LightGreen" };
 
 			Data.Apply(absenceFree);
-			Data.Apply(absenceNelson);
 
-			var jobParameters = getJobParameters();
-			StepRunner.RunNightly(jobParameters);
+			var abs = new Absence(absenceFree.Absence, datasource, businessUnit.BusinessUnitId) { AbsenceId = 22 };
+
+			analyticsDataFactory.Setup(abs);
+			analyticsDataFactory.Persist();
 
 			var acts = _target.Absences();
-			acts.Count.Should().Be.EqualTo(3); //one undefined too
+			acts.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldLoadScenariosAndCategories()
 		{
+			var timeZones = new UtcAndCetTimeZones();
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var datasource = new ExistingDatasources(timeZones);
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var scen = new ScenarioConfigurable {BusinessUnit = "BusinessUnit", EnableReporting = true,Name = "Default"};
 			Data.Apply(cat);
 			Data.Apply(scen);
 
-			var jobParameters = getJobParameters();
-			StepRunner.RunNightly(jobParameters);
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(12,TestState.BusinessUnit.Id.GetValueOrDefault()));
+			analyticsDataFactory.Setup(new ShiftCategory(cat.ShiftCategory, datasource,12));
+			analyticsDataFactory.Persist();
 
 			var scens = _target.Scenarios();
-			scens.Count.Should().Be.EqualTo(2); //one undefined too
+			scens.Count.Should().Be.EqualTo(1); 
 
 			var cats = _target.ShiftCategories();
-			cats.Count.Should().Be.EqualTo(2);
+			cats.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldLoadDates()
 		{
-			//to get dates around today
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), DateTime.Today);
-			var jobParameters = getJobParameters();
-			StepRunner.RunNightly(jobParameters);
-
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var weekDates = new CurrentWeekDates();
+			analyticsDataFactory.Setup(weekDates);
+			analyticsDataFactory.Persist();
 			var dates = _target.LoadDimDates();
-			dates.Count.Should().Not.Be.EqualTo(0);
+			dates.Count.Should().Be.EqualTo(7);
 		}
 
 		[Test]
 		public void ShouldLoadPerson()
 		{
-			var testDate = new DateTime(2013, 06, 15);
-			IPerson person;
-			BasicShiftSetup.SetupBasicForShifts();
-			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
-			
-			var jobParameters = getJobParameters();
-			StepRunner.RunNightly(jobParameters);
+			var timeZones = new UtcAndCetTimeZones();
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var datasource = new ExistingDatasources(timeZones);
+			var personPeriod = Guid.NewGuid();
+			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) { BusinessUnitId = 12 };
+			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 
-			var pers = _target.PersonAndBusinessUnit(person.PersonPeriodCollection.First().Id.GetValueOrDefault());
+			analyticsDataFactory.Setup(businessUnit);
+			analyticsDataFactory.Setup(new Person(person, datasource, 10, new DateTime(2010, 1, 1),
+										new DateTime(2059, 12, 31), 0, -2, 20, TestState.BusinessUnit.Id.GetValueOrDefault(),
+										false, timeZones.UtcTimeZoneId, personPeriod));
+			analyticsDataFactory.Persist();
+			var pers = _target.PersonAndBusinessUnit(personPeriod);
 			pers.Should().Not.Be.Null();
+			pers.PersonId.Should().Be.EqualTo(10);
+			pers.BusinessUnitId.Should().Be.EqualTo(20);
 		}
 
-		private static JobParameters getJobParameters()
+		[Test]
+		public void ShouldInsertFactSchedule()
 		{
-			const string timeZoneId = "W. Europe Standard Time";
-			var testDate = new DateTime(2013, 06, 15);
-			var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(1).ToUniversalTime());
-			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-			dateList.Add(testDate.AddDays(-1), testDate.AddDays(1), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture,
-				new EtlToggleManager())
+			var timeZones = new UtcAndCetTimeZones();
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var dates = new CurrentWeekDates();
+			var intervals = new QuarterOfAnHourInterval();
+			var datasource = new ExistingDatasources(timeZones);
+			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
+			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
+										new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
+										false, timeZones.UtcTimeZoneId));
+			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) {BusinessUnitId = 12};
+			var activityEmpty = new ActivityConfigurable { Name = "Empty" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var scenario = new ScenarioConfigurable() { BusinessUnit = TestState.BusinessUnit.Name, Name = "Deff" };
+			Data.Apply(scenario);
+			var martScenario = Scenario.DefaultScenarioFor(10, TestState.BusinessUnit.Id.GetValueOrDefault());
+			analyticsDataFactory.Setup(martScenario);
+			Data.Apply(activityEmpty);
+			Data.Apply(activityPhone);
+
+			var actEmpty = new Activity(activityEmpty.Activity, datasource,businessUnit.BusinessUnitId) {ActivityId = -1};
+			var act = new Activity(activityPhone.Activity, datasource,businessUnit.BusinessUnitId){ActivityId = 22};
+
+			var absenceEmpty = new AbsenceConfigurable { Name = "Empty" };
+			var absenceFree = new AbsenceConfigurable { Name = "Free", Color = "LightGreen" };
+			Data.Apply(absenceEmpty);
+			Data.Apply(absenceFree);
+
+			var absEmpty = new Absence(absenceEmpty.Absence, datasource, businessUnit.BusinessUnitId) {AbsenceId = -1};
+			var abs = new Absence(absenceFree.Absence, datasource, businessUnit.BusinessUnitId);
+
+			 
+			analyticsDataFactory.Setup(act);
+			analyticsDataFactory.Setup(actEmpty);
+			analyticsDataFactory.Setup(abs);
+			analyticsDataFactory.Setup(absEmpty);
+			analyticsDataFactory.Setup(dates);
+			analyticsDataFactory.Setup(intervals);
+			analyticsDataFactory.Setup(businessUnit);
+
+			analyticsDataFactory.Persist();
+			var datePart = new AnalyticsFactScheduleDate
 			{
-				Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null),
-				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
+				ScheduleStartDateLocalId = 1,
+				ScheduleDateId = 1,
+				IntervalId = 32,
+				ActivityStartTime = DateTime.Today.AddHours(8),
+				ActivityStartDateId = 1,
+				ActivityEndDateId = 1,
+				ActivityEndTime = DateTime.Today.AddHours(8).AddMinutes(15),
+				ShiftStartIntervalId = 32,
+				ShiftEndIntervalId = 68,
+				DatasourceUpdateDate = DateTime.Now,
+				ShiftStartTime = DateTime.Today.AddHours(8),
+				ShiftEndTime = DateTime.Today.AddHours(17),
+				ShiftStartDateId = 1,
+				ShiftEndDateId = 1
+			};
+			var timePart = new AnalyticsFactScheduleTime
+			{
+				AbsenceId = -1,
+				ActivityId = 22,
+				ContractTimeAbsenceMinutes = 0,
+				ContractTimeActivityMinutes = 15,
+				ContractTimeMinutes = 15,
+				OverTimeId = -1,
+				OverTimeMinutes = 0,
+				PaidTimeMinutes = 15,
+				PaidTimeAbsenceMinutes = 0,
+				PaidTimeActivityMinutes = 15,
+				ReadyTimeMinues = 15,
+				ScheduledMinutes = 15,
+				ScheduledAbsenceMinutes = 0,
+				ScheduledActivityMinutes = 15,
+				ScenarioId = 10,
+				ShiftLength = (int) TimeSpan.FromHours(8).TotalMinutes,
+				WorkTimeMinutes = 15,
+				WorkTimeAbsenceMinutes = 0,
+				WorkTimeActivityMinutes = 15
 			};
 
-            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, timeZoneId);
-			return jobParameters;
+			var personPart = new AnalyticsFactSchedulePerson
+			{
+				BusinessUnitId = 12,
+				PersonId = 0
+			};
+
+
+			_target.PersistFactScheduleRow(timePart,datePart,personPart);
+
 		}
+
+		[Test]
+		public void ScholdBeAbleToDeleteADay()
+		{
+			_target.DeleteFactSchedule(1);
+		}
+
 	}
 }

@@ -42,7 +42,7 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_insert]
 	@scheduled_paid_time_activity_m int,
 	@scheduled_paid_time_absence_m int,
 	@business_unit_id int,
-	@datasource_update_date int,
+	@datasource_update_date smalldatetime,
 	@overtime_id int
 AS
 BEGIN

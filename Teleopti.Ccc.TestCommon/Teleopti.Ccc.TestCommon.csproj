@@ -100,6 +100,15 @@
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
+    <Compile Include="TestData\Analytics\Absence.cs" />
+    <Compile Include="TestData\Analytics\ShiftCategory.cs" />
+    <Compile Include="TestData\Analytics\Activity.cs" />
+    <Compile Include="TestData\Analytics\IAbsenceData.cs" />
+    <Compile Include="TestData\Analytics\IShiftCategoryData.cs" />
+    <Compile Include="TestData\Analytics\IActivityData.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_absence.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_shift_category.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_activity.cs" />
     <Compile Include="TestData\Setups\Configurable\ShiftExchangeOfferConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\QueueSourceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />
