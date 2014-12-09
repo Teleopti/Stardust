@@ -4,10 +4,11 @@
 <Project DefaultTargets="RunETLTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 
 	<PropertyGroup>
+		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>	
 		<ETLStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
 		<ETLDBNamePrefix>ETLTest</ETLDBNamePrefix>
 		<ETLNightlyBuild-PrepareETL>"$(ETLStuff)\ETLNightlyBuild-PrepareETL.sql"</ETLNightlyBuild-PrepareETL>
-		<ETLNightlyBuild-PrepareFilesCmd>"$(ETLStuff)\ETLNightlyBuild-PrepareFiles.cmd"</ETLNightlyBuild-PrepareFilesCmd>
+		<FixMyConfig>"$(WorkingDirectory)\.debug-Setup\FixMyConfig.bat"</FixMyConfig>
 		<SqlInstanceName>$(Computername)</SqlInstanceName>
 		<SQLCmdConn>SQLCMD -S$(SqlInstanceName) -E</SQLCmdConn>
 		<ETLServiceBinDir>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETLServiceBinDir>
@@ -21,13 +22,12 @@
 		<LogObjectId>1</LogObjectId>
 		<RestoreToLocal>"$(WorkingDirectory)\.debug-Setup\Restore to Local.bat"</RestoreToLocal>
 		<RestoreToLocalWorkDir>$(WorkingDirectory)\ETL_R2L</RestoreToLocalWorkDir>
-		<Configuration Condition="'$(Configuration)'!=''">Release</Configuration>
 	</PropertyGroup>
 	
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.AsyncExec"/>
 
-	<Target Name="PrepareETLTest" DependsOnTargets="PrepareFiles;RestoreToLocal;MoveOneLogObject">
+	<Target Name="PrepareETLTest" DependsOnTargets="RestoreToLocal;MoveOneLogObject;PrepareFiles">
 	
 	</Target>
 	
@@ -60,7 +60,7 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(WorkingDirectory)%22 $(ETLServiceBinDir) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd) $(SqlInstanceName)"/>
+		<Exec Command ="$(FixMyConfig) $(ETLCCC7DB) $(ETLAnalyticsDB) $(Configuration)"/>
 	</Target>
 	
 	<Target Name="CleanUp">
