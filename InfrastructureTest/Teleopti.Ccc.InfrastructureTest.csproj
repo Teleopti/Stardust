@@ -199,7 +199,6 @@
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\RtaRepositoryTest.cs" />
-    <Compile Include="Rta\StateGroupFactory.cs" />
     <Compile Include="Rta\StateGroupTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
