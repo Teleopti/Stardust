@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[StateGroupTest]
 	public class StateGroupTest 
 	{
-		[Test]
+		[Test, Ignore]
 		public void ShouldAddStateCodeToDefaultStateGroup()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			}
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldNotAddEmptyStateCode()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
