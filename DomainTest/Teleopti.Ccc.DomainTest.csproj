@@ -1384,6 +1384,10 @@
     </None>
     <None Include="DayOffPlanning\FreeWeekendValidatorTestCases.xls" />
     <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
+    <Content Include="NotificationConfig.xml.notinuse">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Optimization\RelativeBoostedDailyDifferencesAndPeriodValue.xlsm" />
     <None Include="Optimization\ScheduleDayEquatorTest.doc" />
     <None Include="packages.config" />

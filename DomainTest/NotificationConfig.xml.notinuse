@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+	<assembly>Teleopti.Ccc.Domain</assembly>
+	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
+	<url>http://api.clickatell.com/xml/xml?data=</url>
+	<user>username</user>
+	<password>pwd</password>
+	<api_id>3388822</api_id>
+	<from>SmsSenderName</from>
+	<!--use these to config what to look for in the answer from the web service used to send sms
+	if no check at all set SkipSearch to true-->
+	<FindSuccessOrError>Error</FindSuccessOrError>
+	<ErrorCode>fault</ErrorCode>
+	<SuccessCode>success</SuccessCode>
+	<SkipSearch>false</SkipSearch>
+	<data>
+		<![CDATA[ <clickAPI><sendMsg>
+		<api_id>3388822</api_id>
+		<user>{0}</user>
+		<password>{1}</password>
+		<to>{2}</to>
+		<from>{3}</from>
+		<text>{4}</text>
+		<unicode>{5}</unicode>
+		</sendMsg></clickAPI>]]>
+	</data>
+	<SmtpHost>smtp.domain.com</SmtpHost>
+	<SmtpPort>25</SmtpPort>
+	<SmtpUseSsl>false</SmtpUseSsl>
+	<SmtpUseRelay>false</SmtpUseRelay>
+	<SmtpUser>user@domain.com</SmtpUser>
+	<SmtpPassword>pwd</SmtpPassword>
+</Config>
+
