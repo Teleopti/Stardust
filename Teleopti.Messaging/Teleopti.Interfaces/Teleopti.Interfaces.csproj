@@ -136,6 +136,10 @@
     <Compile Include="Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeTransactionRepository.cs" />
     <Compile Include="Domain\IEtlToggleManager.cs" />
+    <Compile Include="Domain\INotificationClient.cs" />
+    <Compile Include="Domain\INotificationConfigReader.cs" />
+    <Compile Include="Domain\INotificationMessage.cs" />
+    <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
     <Compile Include="Domain\IStaffingCalculatorServiceFacade.cs" />
     <Compile Include="Domain\ITeleoptiDiagnosticsInformation.cs" />
@@ -603,6 +607,7 @@
     <Compile Include="Domain\ScheduleVisibleReasons.cs" />
     <Compile Include="Domain\SchedulingServiceBaseEventArgs.cs" />
     <Compile Include="Domain\ReportLevelDetail.cs" />
+    <Compile Include="Domain\SendNotificationException.cs" />
     <Compile Include="Domain\SettingsExtensions.cs" />
     <Compile Include="Domain\ShiftTradeRequestStatusException.cs" />
     <Compile Include="Domain\ShiftExchangeOfferStatus.cs" />

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.Contracts;
-using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Rta;

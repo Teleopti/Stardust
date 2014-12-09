@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -123,9 +123,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus.Host", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\Teleopti.Ccc.Sdk.ServiceBus.Host.csproj", "{B37A5C3F-C1EE-4BCF-AF07-767E52E7C34D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{87ADCA35-6114-4499-8233-6011611BF8AA} = {87ADCA35-6114-4499-8233-6011611BF8AA}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.IocCommon", "Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj", "{DB42D973-9889-4D51-9FC5-BE66AA7F117C}"
 EndProject
@@ -171,8 +168,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.ReportTexts", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj", "{7C7067A8-C9FF-462E-8469-78E886C2E002}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DBManager.Library", "Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj", "{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Notification", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj", "{87ADCA35-6114-4499-8233-6011611BF8AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Startpage", "Teleopti.Ccc.Startpage\Teleopti.Ccc.Startpage.csproj", "{BF7E4697-98E5-47B1-8C2E-DA24E308453F}"
 EndProject
@@ -1093,18 +1088,6 @@ Global
 		{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}.Release|x86.ActiveCfg = Release|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|.NET.ActiveCfg = Release|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{87ADCA35-6114-4499-8233-6011611BF8AA}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Debug|Any CPU.Build.0 = Debug|Any CPU

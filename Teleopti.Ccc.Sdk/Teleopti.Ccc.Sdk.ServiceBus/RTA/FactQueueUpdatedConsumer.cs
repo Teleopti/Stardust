@@ -1,7 +1,7 @@
 ﻿using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.Contracts;
-using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Rta;
 

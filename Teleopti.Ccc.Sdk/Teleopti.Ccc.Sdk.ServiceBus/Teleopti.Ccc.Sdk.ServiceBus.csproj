@@ -176,15 +176,6 @@
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="NewAbsenceReportConsumer.cs" />
-    <Compile Include="Notification\EmailConfiguration.cs" />
-    <Compile Include="Notification\EmailSender.cs" />
-    <Compile Include="Notification\IEmailConfiguration.cs" />
-    <Compile Include="Notification\INotificationChecker.cs" />
-    <Compile Include="Notification\INotificationSenderFactory.cs" />
-    <Compile Include="Notification\INotifier.cs" />
-    <Compile Include="Notification\MultipleNotificationSenderFactory.cs" />
-    <Compile Include="Notification\NotificationValidationCheck.cs" />
-    <Compile Include="Notification\Notifier.cs" />
     <Compile Include="NotificationModule.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
@@ -199,9 +190,7 @@
     <Compile Include="GeneralBusBootStrapper.cs" />
     <Compile Include="NotifyTeleoptiRtaServiceToCheckForActivityChange.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
-    <Compile Include="Notification\ISignificantChangeChecker.cs" />
     <Compile Include="LocalServiceBusEventsPublisherModule.cs" />
-    <Compile Include="Notification\NotificationWebClient.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />
@@ -212,11 +201,6 @@
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="Notification\NotificationMessage.cs" />
-    <Compile Include="Notification\SignificantChangeChecker.cs" />
-    <Compile Include="Notification\NotificationConfigReader.cs" />
-    <Compile Include="Notification\NotificationChecker.cs" />
-    <Compile Include="Notification\CustomNotificationSenderFactory.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />

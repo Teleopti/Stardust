@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Sdk.Common.Contracts;
-using Teleopti.Ccc.Sdk.ServiceBus.Notification;
+using Teleopti.Interfaces.Domain;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus

@@ -125,13 +125,8 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Contracts\INotificationClient.cs" />
-    <Compile Include="Contracts\INotificationConfigReader.cs" />
-    <Compile Include="Contracts\INotificationMessage.cs" />
-    <Compile Include="Contracts\INotificationSender.cs" />
     <Compile Include="Contracts\ITeleoptiCccLogOnService.cs" />
     <Compile Include="Contracts\ITeleoptiCccSdkInternal.cs" />
-    <Compile Include="Contracts\SendNotificationException.cs" />
     <Compile Include="DataTransferObject\AbsenceDto.cs" />
     <Compile Include="DataTransferObject\AbsenceLayerDto.cs" />
     <Compile Include="DataTransferObject\AbsenceLoadOptionDto.cs" />

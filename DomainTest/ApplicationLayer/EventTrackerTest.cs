@@ -1,14 +1,10 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -35,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			});
 
 			messageBrokerSender.AssertWasCalled(x => x.Send(
-				Arg<Notification>.Matches(e =>
+				Arg<Interfaces.MessageBroker.Notification>.Matches(e =>
 					e.DataSource == "datasource" &&
 					e.BusinessUnitId == @event.BusinessUnitId.ToString() &&
 					e.ModuleId == @event.InitiatorId.ToString() &&

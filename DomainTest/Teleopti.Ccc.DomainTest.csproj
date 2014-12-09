@@ -363,6 +363,15 @@
     <Compile Include="Infrastructure\EventMessageArgsTest.cs" />
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
+    <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
+    <Compile Include="Notification\CustomNotificationSenderFactoryTest.cs" />
+    <Compile Include="Notification\MultipleNotificationSenderFactoryTest.cs" />
+    <Compile Include="Notification\NotificationCheckerTest.cs" />
+    <Compile Include="Notification\NotificationConfigReaderTest.cs" />
+    <Compile Include="Notification\NotificationValidationCheckTest.cs" />
+    <Compile Include="Notification\NotifierTest.cs" />
+    <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
+    <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
     <Compile Include="Optimization\DayOffRulesValidatorTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 	[TestFixture]
 	public class NotificationTest
 	{
-		private Notification target;
+		private Interfaces.MessageBroker.Notification target;
 		private Guid moduleId;
 		private Guid domainId;
 		private Guid domainReferenceId;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			businessUnitId = Guid.NewGuid();
 			startDate = DateTime.Today.AddDays(-5);
 			endDate = startDate.AddDays(1);
-			target = new Notification
+			target = new Interfaces.MessageBroker.Notification
 			         	{
 			         		BinaryData = "test",
 			         		DomainId = Subscription.IdToString(domainId),

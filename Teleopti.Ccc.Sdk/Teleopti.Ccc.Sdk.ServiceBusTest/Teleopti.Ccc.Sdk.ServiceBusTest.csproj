@@ -161,10 +161,6 @@
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceReportConsumerTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
-    <Compile Include="Notification\MultipleNotificationSenderFactoryTest.cs" />
-    <Compile Include="Notification\NotificationValidationCheckTest.cs" />
-    <Compile Include="Notification\NotifierTest.cs" />
-    <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
@@ -177,11 +173,6 @@
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
-    <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
-    <Compile Include="Notification\SignificantChangeCheckerTest.cs" />
-    <Compile Include="Notification\NotificationConfigReaderTest.cs" />
-    <Compile Include="Notification\NotificationCheckerTest.cs" />
-    <Compile Include="Notification\CustomNotificationSenderFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
@@ -231,10 +222,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Notification\Teleopti.Ccc.Sdk.Notification.csproj">
-      <Project>{87ADCA35-6114-4499-8233-6011611BF8AA}</Project>
-      <Name>Teleopti.Ccc.Sdk.Notification</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
       <Project>{9DF2D12C-4895-42D9-A365-6B9F97E787B5}</Project>
