@@ -184,7 +184,9 @@
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
     <Compile Include="LiteUnitOfWork\ICurrentReadModelUnitOfWork.cs" />
+    <Compile Include="LiteUnitOfWork\ILiteTransactionSyncronization.cs" />
     <Compile Include="LiteUnitOfWork\ILiteUnitOfWork.cs" />
+    <Compile Include="LiteUnitOfWork\LiteTransactionSyncronization.cs" />
     <Compile Include="LiteUnitOfWork\LiteUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />

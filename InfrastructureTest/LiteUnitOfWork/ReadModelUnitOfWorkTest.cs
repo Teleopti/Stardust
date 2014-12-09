@@ -252,6 +252,39 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			}
 		}
 
+		[Test]
+		public void ShouldExecuteCodeAfterSuccessfulCommit()
+		{
+			using (var c = buildContainer())
+			{
+				string result = null;
+				c.Resolve<Inner1>().ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
+
+				c.Resolve<Outer>().ExecuteInners();
+
+				result.Should().Be("success");
+			}
+		}
+
+
+		[Test]
+		public void ShouldNotExecuteCodeAfterFailedCommit()
+		{
+			using (var c = buildContainer())
+			{
+				var result = "failed";
+				c.Resolve<Inner1>().ActionWSync = (uow, sync) =>
+				{
+					sync.OnSuccessfulTransaction(() => result = "success");
+					throw new TestException();
+				};
+
+				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
+
+				result.Should().Be("failed");
+			}
+		}
+
 		private static Thread onAnotherThread(Action action)
 		{
 			var thread = new Thread(() => action());
@@ -360,16 +393,16 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 	public class Inner1 : ReadModelUnitOfWorkInnerTester
 	{
-		public Inner1(ICurrentReadModelUnitOfWork uow)
-			: base(uow)
+		public Inner1(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
+			: base(uow, syncronization)
 		{
 		}
 	}
 
 	public class Inner2 : ReadModelUnitOfWorkInnerTester
 	{
-		public Inner2(ICurrentReadModelUnitOfWork uow)
-			: base(uow)
+		public Inner2(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
+			: base(uow, syncronization)
 		{
 		}
 	}
@@ -377,17 +410,21 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	public class ReadModelUnitOfWorkInnerTester
 	{
 		private readonly ICurrentReadModelUnitOfWork _uow;
+		private readonly ILiteTransactionSyncronization _syncronization;
 
-		public ReadModelUnitOfWorkInnerTester(ICurrentReadModelUnitOfWork uow)
+		public ReadModelUnitOfWorkInnerTester(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
 		{
 			_uow = uow;
+			_syncronization = syncronization;
 		}
 
-		public Action<ILiteUnitOfWork> Action = s => { };
+		public Action<ILiteUnitOfWork> Action = u => { };
+		public Action<ILiteUnitOfWork, ILiteTransactionSyncronization> ActionWSync = (u, s) => { };
 
 		public void ExecuteAction()
 		{
 			Action.Invoke(_uow.Current());
+			ActionWSync.Invoke(_uow.Current(), _syncronization);
 		}
 	}
 

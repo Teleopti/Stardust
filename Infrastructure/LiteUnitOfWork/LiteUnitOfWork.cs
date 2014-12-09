@@ -1,5 +1,6 @@
 ﻿using System;
 using NHibernate;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
@@ -17,6 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 		public ISQLQuery CreateSqlQuery(string queryString)
 		{
 			return _session.CreateSQLQuery(queryString);
+		}
+
+		public void OnSuccessfulTransaction(Action action)
+		{
+			_transaction.RegisterSynchronization(new TransactionCallback(action));
 		}
 
 		public void Commit()
