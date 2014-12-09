@@ -142,7 +142,7 @@ define([
 			startPromise.done(function () {
 
 				manageAdherenceSubscription = messagebroker.subscribe({
-					domainType: 'ReadModelUpdatedMessage',
+					domainType: 'AdherencePercentageReadModelUpdatedMessage',
 					callback: function () {
 						for (var i = 0; i < iterations.length; i++) {
 							var iteration = iterations[i];

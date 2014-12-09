@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					DataSource = datasource,
 					BusinessUnitId = businessUnitId.ToString(),
-					DomainType = "ReadModelUpdatedMessage"
+					DomainType = typeof(AdherencePercentageReadModelUpdatedMessage).Name
 				}));
 		}
 

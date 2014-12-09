@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class ReadModelUpdatedMessage
+	public class AdherencePercentageReadModelUpdatedMessage
 	{
 	}
 }
