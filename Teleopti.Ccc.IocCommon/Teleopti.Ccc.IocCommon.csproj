@@ -130,9 +130,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Toggle.Net, Version=0.5.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
+    <Reference Include="Toggle.Net, Version=0.6.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Toggle.Net.0.5.0\lib\net40\Toggle.Net.dll</HintPath>
+      <HintPath>..\packages\Toggle.Net.0.6.0\lib\net40\Toggle.Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +200,7 @@
     </CodeAnalysisDictionary>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

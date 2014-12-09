@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					var specMappings = new DefaultSpecificationMappings();
 					specMappings.AddMapping("rc", rcSpecification);
 					specMappings.AddMapping("dev", defaultSpecification);
-					var toggleConfiguration = new ToggleConfiguration(new FileProviderFactory(new FileReader(pathToToggle), specMappings));
+					var toggleConfiguration = new ToggleConfiguration(new FileParser(new FileReader(pathToToggle), specMappings));
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
 					return new toggleCheckerWrapper(toggleConfiguration.Create());
 				})
