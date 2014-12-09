@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void PersistFactScheduleDayCountRow(AnalyticsFactScheduleDayCount dayCount)
+		public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
 		{
 			
 		}

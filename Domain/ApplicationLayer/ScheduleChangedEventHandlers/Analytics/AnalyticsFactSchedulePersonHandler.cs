@@ -3,11 +3,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public interface IAnalyticsFactSchedulePersonHandler
-	{
-		IAnalyticsFactSchedulePerson Handle(Guid personPeriodCode);
-	}
-
 	public class AnalyticsFactSchedulePersonHandler : IAnalyticsFactSchedulePersonHandler
 	{
 		private readonly IAnalyticsScheduleRepository _repository;

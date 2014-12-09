@@ -232,6 +232,7 @@
     <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCount.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePerson.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTime.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdater.cs" />
@@ -239,6 +240,9 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTimeHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactScheduleDateHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactScheduleDayCountHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactSchedulePersonHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsFactScheduleTimeHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CanNotPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ISendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelPersister.cs" />

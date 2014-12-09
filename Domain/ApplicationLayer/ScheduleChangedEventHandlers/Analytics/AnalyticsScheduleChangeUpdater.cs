@@ -14,19 +14,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsFactScheduleTimeHandler _analyticsFactScheduleTimeHandler;
 		private readonly IAnalyticsFactScheduleDateHandler _analyticsFactScheduleDateHandler;
 		private readonly IAnalyticsFactSchedulePersonHandler _analyticsFactSchedulePersonHandler;
+		private readonly IAnalyticsFactScheduleDayCountHandler _analyticsFactScheduleDayCountHandler;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 
 		public AnalyticsScheduleChangeUpdater(
-			IIntervalLengthFetcher intervalLengthFetcher,
-			IAnalyticsFactScheduleTimeHandler analyticsFactScheduleTimeHandler,
-			IAnalyticsFactScheduleDateHandler analyticsFactScheduleDateHandler,
-			IAnalyticsFactSchedulePersonHandler analyticsFactSchedulePersonHandler,
+			IIntervalLengthFetcher intervalLengthFetcher, 
+			IAnalyticsFactScheduleTimeHandler analyticsFactScheduleTimeHandler, 
+			IAnalyticsFactScheduleDateHandler analyticsFactScheduleDateHandler, 
+			IAnalyticsFactSchedulePersonHandler analyticsFactSchedulePersonHandler, 
+			IAnalyticsFactScheduleDayCountHandler analyticsFactScheduleDayCountHandler, 
 			IAnalyticsScheduleRepository analyticsScheduleRepository)
+
 		{
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_analyticsFactScheduleTimeHandler = analyticsFactScheduleTimeHandler;
 			_analyticsFactScheduleDateHandler = analyticsFactScheduleDateHandler;
 			_analyticsFactSchedulePersonHandler = analyticsFactSchedulePersonHandler;
+			_analyticsFactScheduleDayCountHandler = analyticsFactScheduleDayCountHandler;
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 		}
 
@@ -51,12 +55,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				if (scheduleDay.NotScheduled)
 					break;
 
-				//var dayCount = new AnalyticsFactScheduleDayCount();
+				
 				var shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
 				var shiftStart = scheduleDay.Shift.StartDateTime;
 				var intervalStart = shiftStart;
 				var shiftEnd = scheduleDay.Shift.EndDateTime;
 				
+				var localStartDate = new DateOnly(scheduleDay.Date);
+
 				while (intervalStart < shiftEnd)
 				{
 					var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(intervalLength)));
@@ -64,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
 						timePart.ShiftLength = (int)(shiftEnd - shiftStart).TotalMinutes;
-						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp, intervalLength);
+						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, localStartDate, intervalLayer, @event.Timestamp, minutesPerInterval);
 						
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);
@@ -72,8 +78,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					
 					intervalStart = intervalStart.AddMinutes(intervalLength);
 				}
-				
-				//_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
+
+				var dayCount = _analyticsFactScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
+				_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 			}
 		}
 

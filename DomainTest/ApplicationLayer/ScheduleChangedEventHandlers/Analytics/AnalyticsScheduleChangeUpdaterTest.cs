@@ -18,24 +18,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	{
 		private IIntervalLengthFetcher _intervalLengthFetcher;
 		private AnalyticsScheduleChangeUpdater _target;
-		private IAnalyticsFactScheduleTimeHandler _analyticsFactScheduleTimeHandler;
+		private IAnalyticsFactScheduleTimeHandler _timeHandler;
 		private IAnalyticsScheduleRepository _analyticsScheduleRepository;
-		private IAnalyticsFactScheduleDateHandler _analyticsFactScheduleDateHandler;
-		private IAnalyticsFactSchedulePersonHandler _analyticsFactSchedulePersonHandler;
+		private IAnalyticsFactScheduleDateHandler _dateHandler;
+		private IAnalyticsFactSchedulePersonHandler _personHandler;
+		private IAnalyticsFactScheduleDayCountHandler _scheduleDayCountHandler;
 
 		[SetUp]
 		public void Setup()
 		{
 			_intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			_analyticsFactScheduleTimeHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleTimeHandler>();
-			_analyticsFactScheduleDateHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDateHandler>();
-			_analyticsFactSchedulePersonHandler = MockRepository.GenerateMock<IAnalyticsFactSchedulePersonHandler>();
+			_timeHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleTimeHandler>();
+			_dateHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDateHandler>();
+			_personHandler = MockRepository.GenerateMock<IAnalyticsFactSchedulePersonHandler>();
+			_scheduleDayCountHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDayCountHandler>();
 			_analyticsScheduleRepository = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
 			_target = new AnalyticsScheduleChangeUpdater(
 				_intervalLengthFetcher,
-				_analyticsFactScheduleTimeHandler,
-				_analyticsFactScheduleDateHandler,
-				_analyticsFactSchedulePersonHandler,
+				_timeHandler,
+				_dateHandler,
+				_personHandler,
+				_scheduleDayCountHandler,
 				_analyticsScheduleRepository);
 		}
 
@@ -70,25 +73,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var timePart = new AnalyticsFactScheduleTime();
 			var datePart = new AnalyticsFactScheduleDate();
 			var personPart = new AnalyticsFactSchedulePerson();
+			var scheduleDayCountPart = new AnalyticsFactScheduleDayCount();
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>{scenario});
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>{cat});
-			_analyticsFactScheduleTimeHandler.Stub(x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66))).Return(timePart);
-			_analyticsFactScheduleDateHandler.Stub(
+			_timeHandler.Stub(
+				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66)))
+				.Return(timePart);
+			_dateHandler.Stub(
 				x =>
 					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(datePart);
-			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(personPeriodId)).Return(personPart);
+			_personHandler.Stub(x => x.Handle(personPeriodId)).Return(personPart);
+			_scheduleDayCountHandler.Stub(
+				x =>
+					x.Handle(Arg<ProjectionChangedEventScheduleDay>.Is.Anything, Arg<IAnalyticsFactSchedulePerson>.Is.Anything,
+						Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(scheduleDayCountPart);
 			_target.Handle(@event);
-			_analyticsFactScheduleTimeHandler.AssertWasCalled(
-				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66)),
-				y => y.Repeat.Times(9));
 
-			_analyticsScheduleRepository.AssertWasCalled(
-				x => x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
-						Arg<AnalyticsFactSchedulePerson>.Is.Anything), y => y.Repeat.Times(9));
-			//_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(Arg<AnalyticsFactScheduleDayCount>.Is.Anything), y => y.Repeat.Times(1));
+			
+			_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleRow(timePart, datePart, personPart), y => y.Repeat.Times(9));
+			_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(scheduleDayCountPart), y => y.Repeat.Times(1));
 		}
 
 		[Test]
@@ -104,15 +110,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
 			};
 			var timePart = new AnalyticsFactScheduleTime();
-			int dateId = -1;
+			const int dateId = -1;
 			var personPart = new AnalyticsFactSchedulePerson {PersonId = 55};
 			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<Guid>.Is.Anything)).Return(personPart);
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
-			_analyticsFactScheduleDateHandler.Stub(
+			_dateHandler.Stub(
 				x => x.MapDateId(Arg.Is(new DateOnly(scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
-			_analyticsFactScheduleTimeHandler.Stub(
+			_timeHandler.Stub(
 				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything))
 				.Return(timePart);
 			_target.Handle(@event);
@@ -123,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 					x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
 						Arg<AnalyticsFactSchedulePerson>.Is.Anything));
 		}
-
+		
 		private IEnumerable<ProjectionChangedEventLayer> createLayers(DateTime startOfShift, IEnumerable<int> lengthCollection)
 		{
 			int accStart = 0;
@@ -151,6 +157,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			return layerList;
 		}
 	}
-
-
 }
