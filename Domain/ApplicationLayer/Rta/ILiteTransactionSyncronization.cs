@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface ILiteTransactionSyncronization
 	{

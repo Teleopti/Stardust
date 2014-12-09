@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {

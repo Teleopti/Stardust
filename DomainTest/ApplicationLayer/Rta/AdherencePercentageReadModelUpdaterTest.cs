@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldPersist()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister,eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 
 			target.Handle(new PersonInAdherenceEvent
 			{
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTimeInAdherenceWhenPersonOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonInAdherenceEvent
@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTimeOutOfAdherenceWhenPersonInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonOutOfAdherenceEvent
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTimeInAdherenceWhenPersonInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonInAdherenceEvent
@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTimeOutOfAdherenceWhenPersonOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonOutOfAdherenceEvent
@@ -128,9 +128,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTimeOutOfAdherenceWhenPersonInAndOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonInAdherenceEvent
@@ -156,9 +156,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTimeInAdherenceWhenPersonOutAndInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonOutOfAdherenceEvent
@@ -184,9 +184,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void TimeInAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsInAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 			var startTime = new DateTime(2014, 10, 13, 8, 0, 0);
 
@@ -225,9 +225,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void TimeOutOfAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsOutOfAdherence()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 			var startTime = new DateTime(2014, 10, 13, 8, 0, 0);
 
@@ -266,9 +266,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateAdherenceTimesWhenShiftEnds()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonInAdherenceEvent
@@ -295,9 +295,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldStopUpdatingAdherenceTimesWhenShiftEnded()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonInAdherenceEvent
@@ -324,9 +324,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldSendMessageWhenEventIsHandledSuccessfully()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = new ControllableLiteTransactionSyncronization();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var @event = new PersonInAdherenceEvent
 			{
 				Datasource = "datasource",
@@ -336,31 +336,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			};
 			
 			target.Handle(@event);
-
-			eventSyncronization.RunNow();
+			transactionSync.RunNow();
 			messageBroker.AssertWasCalled(
-				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.Timestamp, @event.Timestamp, Guid.Empty, Guid.Empty,
-						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
-		}
-
-		[Test]
-		public void ShouldNotSendMessageWhenEventIsHandledFailed()
-		{
-			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
-			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
-			var @event = new PersonInAdherenceEvent
-			{
-				Datasource = "datasource",
-				BusinessUnitId = Guid.NewGuid(),
-				PersonId = Guid.NewGuid(),
-				Timestamp = new DateTime(2014, 10, 13, 8, 0, 0)
-			};
-			
-			target.Handle(@event);
-
-			messageBroker.AssertWasNotCalled(
 				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.Timestamp, @event.Timestamp, Guid.Empty, Guid.Empty,
 						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
 		}
@@ -369,9 +346,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldSendMessageWhenOutOfAdherenceEventIsHandledSuccessfully()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = new ControllableLiteTransactionSyncronization();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var @event = new PersonOutOfAdherenceEvent
 			{
 				Datasource = "datasource",
@@ -381,8 +358,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			};
 
 			target.Handle(@event);
-
-			eventSyncronization.RunNow();
+			transactionSync.RunNow();
 			messageBroker.AssertWasCalled(
 				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.Timestamp, @event.Timestamp, Guid.Empty, Guid.Empty,
 						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
@@ -392,9 +368,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldSendMessageWhenShiftEndEventIsHandledSuccessfully()
 		{
 			var persister = new FakeAdherencePercentageReadModelPersister();
-			var eventSyncronization = new ControllableEventSyncronization();
+			var transactionSync = new ControllableLiteTransactionSyncronization();
 			var messageBroker = MockRepository.GenerateMock<IMessageCreator>();
-			var target = new AdherencePercentageReadModelUpdater(persister, eventSyncronization, messageBroker);
+			var target = new AdherencePercentageReadModelUpdater(persister, transactionSync, messageBroker);
 			var @event = new PersonShiftEndEvent
 			{
 				Datasource = "datasource",
@@ -404,8 +380,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			};
 
 			target.Handle(@event);
-
-			eventSyncronization.RunNow();
+			transactionSync.RunNow();
 			messageBroker.AssertWasCalled(
 				x => x.Send(@event.Datasource, @event.BusinessUnitId, @event.ShiftEndTime, @event.ShiftEndTime, Guid.Empty, Guid.Empty,
 						typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));

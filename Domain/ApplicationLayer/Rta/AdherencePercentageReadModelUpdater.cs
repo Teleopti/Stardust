@@ -1,7 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -14,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		IHandleEvent<PersonShiftEndEvent>
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
-		private readonly IEventSyncronization _eventSyncronization;
+		private readonly ILiteTransactionSyncronization _transactionSync;
 		private readonly IMessageCreator _messageSender;
 
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, IEventSyncronization eventSyncronization, IMessageCreator messageSender)
+		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, ILiteTransactionSyncronization transactionSync, IMessageCreator messageSender)
 		{
 			_persister = persister;
-			_eventSyncronization = eventSyncronization;
+			_transactionSync = transactionSync;
 			_messageSender = messageSender;
 		}
 
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		
 		private void sendMessageAfterReadModelUpdated(string datasource, Guid businessUnitId, DateTime timestamp)
 		{
-			_eventSyncronization.WhenDone(
+			_transactionSync.OnSuccessfulTransaction(
 				() => _messageSender.Send(datasource, businessUnitId, timestamp, timestamp, Guid.Empty,
 					Guid.Empty, typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
 		}

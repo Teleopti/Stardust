@@ -198,10 +198,12 @@
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetails.cs" />
     <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeWebModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\ControllableLiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IActualAgentAssembler.cs" />
+    <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
