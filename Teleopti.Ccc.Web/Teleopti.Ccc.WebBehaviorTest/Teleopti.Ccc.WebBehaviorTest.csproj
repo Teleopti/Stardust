@@ -100,6 +100,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Anywhere\ModifyAbsence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModifyAbsence.feature</DependentUpon>
+    </Compile>
     <Compile Include="Anywhere\RealTimeAdherenceAgentsMultiTeams.feature.cs">
       <DependentUpon>RealTimeAdherenceAgentsMultiTeams.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -762,6 +767,10 @@
     <None Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ManageAgentScheduleInOtherTimeZone.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ModifyAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ModifyAbsence.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RealTimeAdherenceAgentsMultiTeams.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

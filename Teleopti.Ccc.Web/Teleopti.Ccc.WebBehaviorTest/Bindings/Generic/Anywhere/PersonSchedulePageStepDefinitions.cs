@@ -289,11 +289,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
+		[Then(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
 		{
 			Browser.Interactions.ClickUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 		}
 
+		[Then(@"I should see the back to work form with")]
+		public void ThenIShouldSeeTheBackToWorkFormWith(Table table)
+		{
+			var absenceBackToWorkFormInfo = table.CreateInstance<AbsenceBackToWorkFormInfo>();
+			Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .end-date ", absenceBackToWorkFormInfo.EndTime.ToShortDateString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .end-time ", absenceBackToWorkFormInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+
+		[When(@"I change the end time to '(.*)'")]
+		public void WhenIChangeTheEndTimeTo(DateTime endTime)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".back-to-work-form .end-date", endTime.ToShortDateString(DataMaker.Me().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".back-to-work-form .end-time", endTime.ToShortTimeString(DataMaker.Me().Culture));
+		}
+		
 		[When(@"I select the activity with")]
 		public void WhenISelectTheActivityWith(Table table)
 		{
@@ -433,6 +449,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			public string Absence { get; set; }
 			public DateTime StartTime { get; set; }
+			public DateTime EndTime { get; set; }
+		}
+
+		public class AbsenceBackToWorkFormInfo
+		{
 			public DateTime EndTime { get; set; }
 		}
 

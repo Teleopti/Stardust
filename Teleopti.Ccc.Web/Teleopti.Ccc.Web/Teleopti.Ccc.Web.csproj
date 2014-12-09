@@ -1003,6 +1003,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\manageadherence\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\manageadherence\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\manageadherence\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />

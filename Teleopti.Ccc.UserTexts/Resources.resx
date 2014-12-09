@@ -8266,7 +8266,7 @@ Period</value>
     <value>[{0}] has no layers</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
-    <value>One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a person account.</value>
+    <value>DA</value>
     <comment>One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a person account.</comment>
   </data>
   <data name="TrackerType" xml:space="preserve">
@@ -12486,12 +12486,28 @@ Reduce the complexity to use these shifts.</value>
     <value>Filter on open hours</value>
     <comment>Scheduling error message</comment>
   </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Back to Work</value>
+    <comment>Shorten the duration of an Absence when an agent returns to work early</comment>
+  </data>
   <data name="ApplyTo" xml:space="preserve">
     <value>Apply to</value>
   </data>
   <data name="Planned" xml:space="preserve">
     <value>Planned</value>
     <comment>activity planned</comment>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Updating absence for</value>
+    <comment>Notification message displayed when the team leader returns an agent back to work early from absence.</comment>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>Back to work time cannot be greater than the absence end time</value>
+    <comment>Used to display an error on the delete absence form where the team leader tries to return an agent back to work later than the absence time</comment>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>returned from absence early at :</value>
+    <comment>Text prompt on the back to work form on the delete absence form</comment>
   </data>
   <data name="AnnounceShift" xml:space="preserve">
     <value>Announce Shift</value>

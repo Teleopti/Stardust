@@ -55,7 +55,7 @@ define(
 		}
 		if (status === 5) {
 			msg = match.OriginalMessage + " " + resources.PleaseRefreshThePageWithExclamation;
-			cssClazz = "alert alert-warning alert-dismissible";
+			cssClazz = "alert alert-success alert-dismissible";
 		}
 		match.Message(msg);
 		match.Css(cssClazz);

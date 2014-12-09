@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 		
         <%
-	        var version = DateTime.UtcNow.Ticks;
+	        var version =123;
         %>
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.js?bust=<%=version%>"></script>
@@ -27,8 +27,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.DayViewModel.js?bust=<%=version%>"></script>
-        <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.js?bust=<%=version%>"></script>
-        <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js?bust=<%=version%>"></script>
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.Prefererence.PeriodFeedbackViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.SelectionViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Portal.js?bust=<%=version%>"></script>

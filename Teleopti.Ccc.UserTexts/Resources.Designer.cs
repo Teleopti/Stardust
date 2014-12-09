@@ -160,6 +160,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to Work.
+        /// </summary>
+        public static string AbsenceBackToWork {
+            get {
+                return ResourceManager.GetString("AbsenceBackToWork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence can not be reported..
         /// </summary>
         public static string AbsenceCanNotBeReported {
@@ -304,7 +313,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a person account..
+        ///   Looks up a localized string similar to DA.
         /// </summary>
         public static string AbsenceSaveWasInvalid {
             get {
@@ -3095,6 +3104,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BackToLegalState {
             get {
                 return ResourceManager.GetString("BackToLegalState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to work time cannot be greater than the absence end time.
+        /// </summary>
+        public static string BackToWorkCannotBeGreaterThanAbsenceEnd {
+            get {
+                return ResourceManager.GetString("BackToWorkCannotBeGreaterThanAbsenceEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to returned from absence early at :.
+        /// </summary>
+        public static string BackToWorkTextPrompt {
+            get {
+                return ResourceManager.GetString("BackToWorkTextPrompt", resourceCulture);
             }
         }
         
@@ -26319,6 +26346,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UpdateStatistics {
             get {
                 return ResourceManager.GetString("UpdateStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating absence for.
+        /// </summary>
+        public static string UpdatingAbsence {
+            get {
+                return ResourceManager.GetString("UpdatingAbsence", resourceCulture);
             }
         }
         

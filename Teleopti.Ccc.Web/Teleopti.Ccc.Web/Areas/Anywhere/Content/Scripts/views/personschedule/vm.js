@@ -179,7 +179,7 @@ timezoneCurrent,
 
 			var person = self.SelectedPerson();
 			person.AddData(data, self.TimeLine);
-
+			
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.PersonId();
@@ -201,6 +201,7 @@ timezoneCurrent,
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
 			self.MoveActivityForm.SetData(data);
+			
 		};
 
 		this.UpdateSchedules = function (data) {

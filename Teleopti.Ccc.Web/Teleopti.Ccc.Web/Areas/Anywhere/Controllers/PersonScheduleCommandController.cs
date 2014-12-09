@@ -69,6 +69,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWork]
+		[RemoveAbsencePermission]
+		public virtual JsonResult ModifyPersonAbsence(ModifyPersonAbsenceCommand command)
+		{
+			if (command.TrackedCommandInfo != null)
+				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
+			try
+			{
+				_commandDispatcher.Execute(command);
+			}
+			catch (TargetInvocationException e)
+			{
+				if (e.InnerException is ArgumentException)
+					throw new HttpException(501, e.InnerException.Message);
+			}
+			return Json(new object(), JsonRequestBehavior.DenyGet);
+		}
+
+		[HttpPost]
+		[UnitOfWork]
 		[AddActivityPermission]
 		public virtual JsonResult AddActivity(AddActivityCommand command)
 		{

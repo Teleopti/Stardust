@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<PersonAbsenceRemovedEvent>,
 		IHandleEvent<PersonAbsenceAddedEvent>,
 		IHandleEvent<ActivityAddedEvent>,
-		IHandleEvent<ActivityMovedEvent>
-
+		IHandleEvent<ActivityMovedEvent>,
+		IHandleEvent<PersonAbsenceModifiedEvent>
 
 	{
 		private readonly IPublishEventsFromEventHandlers _publisher;
@@ -83,6 +83,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		public void Handle(ActivityMovedEvent @event)
+		{
+			_publisher.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				Datasource = @event.Datasource,
+				BusinessUnitId = @event.BusinessUnitId,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+				InitiatorId = @event.InitiatorId,
+				TrackId = @event.TrackId
+			});
+		}
+
+		public void Handle (PersonAbsenceModifiedEvent @event)
 		{
 			_publisher.Publish(new ScheduleChangedEvent
 			{

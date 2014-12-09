@@ -59,6 +59,7 @@
     <CodeAnalysisRules>
     </CodeAnalysisRules>
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -153,6 +154,8 @@
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\FakePersonAbsenceWriteSideRepository.cs" />
+    <Compile Include="ApplicationLayer\ModifyPersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandTest.cs" />
     <Compile Include="ApplicationLayer\EventTrackerTest.cs" />
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />

@@ -15,7 +15,8 @@ define([
 		groupsubscriptions,
 		helpers,
 		view,
-		resize
+		resize,
+		jqueryui
 	) {
 
 	var viewModel;
@@ -33,8 +34,8 @@ define([
 		},
 
 		display: function (options) {
-			viewModel.Loading(true);
 
+			viewModel.Loading(true);
 			viewModel.SetViewOptions(options);
 			
 			var personScheduleDeferred = $.Deferred();

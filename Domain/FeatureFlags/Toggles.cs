@@ -43,6 +43,7 @@
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
 		MyTeam_Reports_31070,
+		MyTeam_AbsenceBackToWork_31478,
 		
 		RTA_ViewAgentsForMultipleTeams_28967,
 

@@ -127,6 +127,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScenarioId = _scenario.Id.GetValueOrDefault()
 				});
 		}
+
+	    public virtual void ModifyPersonAbsence(DateTime startDateTime, DateTime endDateTime, TrackedCommandInfo trackedCommandInfo)
+	    {
+			var absence = _layer.Payload as Absence;
+			_layer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			LastChange = DateTime.UtcNow;
+
+		    var personAbsenceModifiedEvent = new PersonAbsenceModifiedEvent
+		    {
+				AbsenceId = Id.GetValueOrDefault(),
+				PersonId = Person.Id.GetValueOrDefault(),
+				ScenarioId = Scenario.Id.GetValueOrDefault(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+			};
+			if (trackedCommandInfo != null)
+			{
+				personAbsenceModifiedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+				personAbsenceModifiedEvent.TrackId = trackedCommandInfo.TrackId;
+			}
+
+			AddEvent(personAbsenceModifiedEvent);
+		}
 		
         /// <summary>
         /// Constructor for NHibernate

@@ -146,12 +146,15 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\ModifyPersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ITrackableCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\ModifyPersonAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />

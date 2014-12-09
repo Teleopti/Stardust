@@ -356,13 +356,13 @@
 									</td>
 									<td class="absence-item">
 										<i class="glyphicon glyphicon-step-backward"></i>
-										<span data-bind="text: StartTime"></span>
+										<span data-bind="text: StartDateTime"></span>
 									</td>
 									<td class="absence-item">
 										<i class="glyphicon glyphicon-minus"></i>
 									</td>
 									<td class="absence-item">
-										<span data-bind="text: EndTime"></span>
+										<span data-bind="text: EndDateTime"></span>
 										<i class="glyphicon glyphicon-step-forward"></i>
 									</td>
 									<td class="absence-item" rowspan="2">
@@ -372,6 +372,9 @@
 										<!-- ko if: AboutToRemove -->
 										<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
 										<!-- /ko -->
+									</td>
+									<td class="absence-item" rowspan="2">
+										<button class="btn back-to-work" data-bind="click: ShowBackToWorkSection, text: $root.Resources.AbsenceBackToWork, visible: IsBackToWorkFormFeatureEnabled" />
 									</td>
 								</tr>
 								<tr class="absence-other-timezone" data-bind="visible:IsOtherTimezone">
@@ -393,6 +396,61 @@
 									</td>
 								</tr>
 							</table>
+							<div class="back-to-work-form" data-bind="visible:IsBackToWorkFormVisible">
+								<div class="row form-group">
+									<div class="col-xs-8">
+										<div data-bind="text: BackToWorkTextPrompt"></div>
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-xs-4">
+										<div class="input-group">
+											<span class="input-group-btn">
+												<button class="btn btn-sm">
+													<i class="glyphicon glyphicon-step-forward"></i>
+												</button>
+											</span>
+											<input type="text" class="input-sm end-date form-control" readonly="readonly" data-bind="value : EndDate" />
+											<span class="input-group-btn">
+												<button class="btn btn-sm" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+										</div>
+									</div>
+									<div class="col-xs-3">
+										<div class="input-group bootstrap-timepicker">
+											<input type="text" class="input-sm end-time form-control" data-bind="value: EndTime" />
+											<span class="input-group-btn">
+												<button class="btn btn-sm" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }">
+													<i class=" glyphicon glyphicon-time"></i>
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="row form-group" data-bind="visible:IsOtherTimezone">
+									<div class="col-xs-4 timeZoneText">
+										<i class="glyphicon glyphicon-globe"></i>
+										<span data-bind="text: TimeZoneNameShort"></span>
+									</div>
+									<div class="col-xs-4 timeZoneText">
+										<span data-bind="text: ModifiedEndTimeOtherTimeZone"></span>
+										<i class="glyphicon glyphicon-step-forward"></i>
+									</div>
+								</div>
+									<!-- ko if: ErrorMessage -->
+								<div class="alert">
+									<span data-bind="text: ErrorMessage"></span>
+								</div>
+								<!-- /ko -->
+								<div class="row form-group">
+									<div class="col-xs-8">
+										<button class="btn btn-default cancel" data-bind="click: Cancel, text: $root.Resources.Cancel" />
+										<button class="btn btn-primary save-absence" data-bind="click: Save, text: $root.Resources.Save, enable: IsAbsenceValid" />
+									</div>
+								</div>
+							</div>
 						</td>
 					</tr>
 				</tbody>
