@@ -1,9 +1,11 @@
+using System;
 using Autofac;
 using Hangfire;
 using Owin;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
+	[CLSCompliant(false)]
 	public class HangfireServerStarter : IHangfireServerStarter
 	{
 		private readonly ILifetimeScope _lifetimeScope;
