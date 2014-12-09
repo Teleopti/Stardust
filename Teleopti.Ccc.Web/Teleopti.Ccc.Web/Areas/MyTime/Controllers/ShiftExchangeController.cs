@@ -1,11 +1,7 @@
 using System;
 using System.Web.Mvc;
-using Rhino.ServiceBus.DataStructures;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -31,10 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Response.StatusCode = 400;
 				return ModelState.ToJson();
 			}
-			return Json(_shiftExchangeOfferPersister.Persist(form));
+			return Json(_shiftExchangeOfferPersister.Persist(form, ShiftExchangeOfferStatus.Pending));
 		}
 	}
-
+	
 	public class ShiftExchangeOfferForm
 	{
 		public DateTime Date { get; set; }

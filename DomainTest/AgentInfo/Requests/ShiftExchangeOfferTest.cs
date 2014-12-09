@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				period.ChangeEndTime(TimeSpan.FromHours(3)),
 				ShiftCategoryFactory.CreateShiftCategory("Early")));
 
-			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria());
+			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 
 			target.MyShiftPeriod.Value.Should()
 				.Be.EqualTo(new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.SetId(new Guid("CB3396E0-5B4D-47CD-9D93-ED4A10725A53"));
 			currentShift.CreateAndAddDayOff(new DayOffTemplate());
-			
-			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria());
+
+			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 
 			target.MyShiftPeriod.HasValue.Should().Be.False();
 			target.Date.Should().Be.EqualTo(currentShift.DateOnlyAsPeriod.DateOnly);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				period.ChangeEndTime(TimeSpan.FromHours(3)),
 				ShiftCategoryFactory.CreateShiftCategory("Early")));
 
-			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria());
+			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
 
 			var scheduleToTrade = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
 			scheduleToTrade.AddMainShift(EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("Phone"),
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 			var criteria = new ShiftExchangeCriteria(validTo: new DateOnly(2026,12,25), shiftWithin: period);
 
-			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria);
+			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria, ShiftExchangeOfferStatus.Pending);
 			
 			var scheduleToCheck = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
 			scheduleToCheck.AddMainShift(EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("Phone"),
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			var criteria = new ShiftExchangeCriteria(validTo: new DateOnly(2026, 12, 25), shiftWithin: null);
 
-			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria);
+			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria, ShiftExchangeOfferStatus.Pending);
 
 			var scheduleToCheck = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
 			scheduleToCheck.CreateAndAddDayOff(new DayOffTemplate());
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 			var criteria = new ShiftExchangeCriteria(validTo: new DateOnly(2026, 12, 25), shiftWithin: period);
 
-			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria);
+			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria, ShiftExchangeOfferStatus.Pending);
 
 			var scheduleToCheck = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
 			scheduleToCheck.AddMainShift(EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("Phone"),
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 			var criteria = new ShiftExchangeCriteria(validTo: new DateOnly(2026, 12, 25), shiftWithin: period);
 
-			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria);
+			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria, ShiftExchangeOfferStatus.Pending);
 
 			var scheduleToCheck = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
 			scheduleToCheck.CreateAndAddDayOff(new DayOffTemplate());
@@ -144,13 +144,29 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 			var criteria = new ShiftExchangeCriteria(validTo: new DateOnly(2006, 12, 25), shiftWithin: period);
 
-			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria);
+			var target = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2007, 1, 1)), criteria, ShiftExchangeOfferStatus.Pending);
 
 			var scheduleToCheck = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
 			scheduleToCheck.AddMainShift(EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("Phone"),
 				period.ChangeEndTime(TimeSpan.FromHours(-3)),
 				ShiftCategoryFactory.CreateShiftCategory("Early")));
 			target.IsWantedSchedule(scheduleToCheck).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldChangeShiftExchangeOfferStatus()
+		{
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc), new DateTime(2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
+			var currentShift = ScheduleDayFactory.Create(new DateOnly(2007, 1, 1));
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.SetId(new Guid("CB3396E0-5B4D-47CD-9D93-ED4A10725A53"));
+			currentShift.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, period.ChangeEndTime(TimeSpan.FromHours(3)),
+												ShiftCategoryFactory.CreateShiftCategory("Early")));
+
+			var target = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);
+			target.Status = ShiftExchangeOfferStatus.Completed;
+
+			target.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Completed);
 		}
 	}
 }

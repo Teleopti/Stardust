@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_currentScenario = currentScenario;
 		}
 
-		public Guid Persist(ShiftExchangeOfferForm form)
+		public Guid Persist(ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
 		{
 			var person = _principal.Current().GetPerson(_personRepository);
 			var date = new DateOnly(form.Date);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					new ScheduleDictionaryLoadOptions(false,false) {LoadDaysAfterLeft = false, LoadNotes = false, LoadRestrictions = false},
 					new DateOnlyPeriod(date, date), _currentScenario.Current());
 			var offer = new ShiftExchangeOffer(schedule[person].ScheduledDay(date),
-				new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), createOptionalDateTimePeriod(form, date)));
+				new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), createOptionalDateTimePeriod(form, date)), status);
 
 			_shiftExchangeOfferRepository.Add(offer);
 			return offer.Id.GetValueOrDefault();

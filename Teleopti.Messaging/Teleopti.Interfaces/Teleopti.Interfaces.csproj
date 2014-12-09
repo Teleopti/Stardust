@@ -605,6 +605,7 @@
     <Compile Include="Domain\ReportLevelDetail.cs" />
     <Compile Include="Domain\SettingsExtensions.cs" />
     <Compile Include="Domain\ShiftTradeRequestStatusException.cs" />
+    <Compile Include="Domain\ShiftExchangeOfferStatus.cs" />
     <Compile Include="Domain\ShiftTradeStatus.cs" />
     <Compile Include="Domain\StaffingThreshold.cs" />
     <Compile Include="Domain\StaffingThresholds.cs" />

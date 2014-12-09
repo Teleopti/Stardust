@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override ShiftExchangeOffer CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new ShiftExchangeOffer(schedule,
-				new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)));
+				new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)), ShiftExchangeOfferStatus.Pending);
 		}
 
 		protected override void VerifyAggregateGraphProperties(ShiftExchangeOffer loadedAggregateFromDatabase)

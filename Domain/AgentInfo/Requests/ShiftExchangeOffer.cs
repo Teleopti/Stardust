@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private DateTimePeriod? _myShiftPeriod;
 		private IPerson _person;
 		private long _checksum;
+		private ShiftExchangeOfferStatus _status;
 
-		public ShiftExchangeOffer(IScheduleDay scheduleDay, ShiftExchangeCriteria criteria)
+		public ShiftExchangeOffer(IScheduleDay scheduleDay, ShiftExchangeCriteria criteria, ShiftExchangeOfferStatus status)
 			: this()
 		{
 			_criteria = criteria;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			_person = scheduleDay.Person;
 			_checksum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum();
+			_status = status;
 		}
 
 		protected ShiftExchangeOffer()
@@ -45,6 +47,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual long Checksum
 		{
 			get { return _checksum; }
+		}
+
+		public virtual ShiftExchangeOfferStatus Status
+		{ 
+			get { return _status; }
+			set { _status = value; }
 		}
 
 		public virtual bool IsWantedSchedule(IScheduleDay scheduleToCheck)

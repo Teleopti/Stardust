@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scheduleDay = ScheduleDayFactory.Create(date);
 			scheduleDay.Person.SetId(user.Id);
 
-			var shiftExchangeOffer = new ShiftExchangeOffer(scheduleDay, shiftExchangeCrie);
+			var shiftExchangeOffer = new ShiftExchangeOffer(scheduleDay, shiftExchangeCrie, ShiftExchangeOfferStatus.Pending);
 			var shiftExchangeOfferRepository = new ShiftExchangeOfferRepository(uow);
 
 			shiftExchangeOfferRepository.Add(shiftExchangeOffer);
