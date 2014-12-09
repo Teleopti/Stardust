@@ -2,8 +2,8 @@ using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
 		private readonly ILiteTransactionSyncronization _transactionSync;
-		private readonly IMessageCreator _messageSender;
+		private readonly IMessageSender _messageSender;
 
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, ILiteTransactionSyncronization transactionSync, IMessageCreator messageSender)
+		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, ILiteTransactionSyncronization transactionSync, IMessageSender messageSender)
 		{
 			_persister = persister;
 			_transactionSync = transactionSync;
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.Timestamp, m => m.IsLastTimeInAdherence = true);
-			sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId, @event.Timestamp);
+			sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handleEvent(@event.PersonId, @event.Timestamp, m => m.IsLastTimeInAdherence = false);
-			sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId, @event.Timestamp);
+			sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId);
 		}
 
 		[ReadModelUnitOfWork]
@@ -46,16 +46,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				m.LastTimestamp = null;
 				m.IsLastTimeInAdherence = null;
 			});
-			sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId, @event.ShiftEndTime);
+			sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId);
 		}
-		
-		private void sendMessageAfterReadModelUpdated(string datasource, Guid businessUnitId, DateTime timestamp)
+
+		private void sendMessageAfterReadModelUpdated(string datasource, Guid businessUnitId)
 		{
 			_transactionSync.OnSuccessfulTransaction(
-				() => _messageSender.Send(datasource, businessUnitId, timestamp, timestamp, Guid.Empty,
-					Guid.Empty, typeof(ReadModelUpdatedMessage), DomainUpdateType.NotApplicable, null));
+				() => _messageSender.Send(new Notification
+				{
+					DataSource = datasource,
+					BusinessUnitId = businessUnitId.ToString(),
+					DomainType = "ReadModelUpdatedMessage"
+				}));
 		}
-		
+
 		private void handleEvent(Guid personId, DateTime time, Action<AdherencePercentageReadModel> mutate)
 		{
 			var model = _persister.Get(new DateOnly(time), personId);
