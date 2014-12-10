@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetInt32("PaidTimeActivity", timePart.PaidTimeActivityMinutes)
 					.SetInt32("PaidTimeAbsence", timePart.PaidTimeAbsenceMinutes)
 					.SetInt32("BusinessUnitId", personPart.BusinessUnitId)
-					.SetDateTime("UpdateDate", datePart.DatasourceUpdateDate)
+					.SetDateTime("UpdateDate", DateTime.Now)
 					.SetInt32("OvertimeId", timePart.OverTimeId)
 
 					.ExecuteUpdate();
@@ -75,12 +75,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			
 		}
 
-		public void DeleteFactSchedule(int date)
+		public void DeleteFactSchedule(int date, int personId)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				uow.Session().CreateSQLQuery(@"mart.etl_fact_schedule_delete @shift_startdate_id=:DateId")
+				uow.Session().CreateSQLQuery(@"mart.etl_fact_schedule_delete @shift_startdate_id=:DateId, @personId=:PersonId")
 					.SetInt32("DateId", date)
+					.SetInt32("PersonId", personId)
 					.ExecuteUpdate();
 			}
 		}

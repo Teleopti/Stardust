@@ -57,6 +57,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
+
+			_config.Args().CacheBuilder
+				.For<AnalyticsScheduleRepository>()
+				.CacheMethod(x => x.Absences())
+				.CacheMethod(x => x.Activities())
+				.CacheMethod(x => x.LoadDimDates())
+				.CacheMethod(x => x.Scenarios())
+				.CacheMethod(x => x.ShiftCategories())
+				.As<IAnalyticsScheduleRepository>();
+			builder.RegisterMbCacheComponent<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
 		}
 	}
 }

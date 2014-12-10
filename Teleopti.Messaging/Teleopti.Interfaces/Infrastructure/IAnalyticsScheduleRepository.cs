@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Infrastructure
 	{
 		void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart, AnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart);
 		void PersistFactScheduleDayCountRow(AnalyticsFactScheduleDayCount dayCount);
-		void DeleteFactSchedule(int date);
+		void DeleteFactSchedule(int date, int personId);
 		IList<KeyValuePair<DateOnly, int>> LoadDimDates();
 
 		IList<IAnalyticsActivity> Activities();

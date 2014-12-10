@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				
 			};
 			var layerMinutes = (int)(layer.EndDateTime - layer.StartDateTime).TotalMinutes;
+			ret.ScheduledMinutes = layerMinutes;
 			if (!layer.IsAbsence)
 			{
 				var activities = _repository.Activities();
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				ret.ActivityId = act.ActivityId;
 				ret.ContractTimeActivityMinutes = (int)layer.ContractTime.TotalMinutes;
 				ret.WorkTimeActivityMinutes = (int)layer.WorkTime.TotalMinutes;
+				ret.ScheduledActivityMinutes = layerMinutes;
 				if (act.InPaidTime)
 				{
 					ret.PaidTimeMinutes = layerMinutes;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				ret.AbsenceId = abs.AbsenceId;
 				ret.ContractTimeAbsenceMinutes = (int)layer.ContractTime.TotalMinutes;
 				ret.WorkTimeAbsenceMinutes = (int)layer.WorkTime.TotalMinutes;
+				ret.ScheduledAbsenceMinutes = layerMinutes;
 				if (abs.InPaidTime)
 				{
 					ret.PaidTimeMinutes = layerMinutes;

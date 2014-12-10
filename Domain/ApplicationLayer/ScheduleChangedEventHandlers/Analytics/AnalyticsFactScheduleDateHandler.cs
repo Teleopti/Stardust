@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				IntervalId = getIdFromDateTime(layer.StartDateTime, minutesPerInterval),
 				ShiftStartIntervalId = getIdFromDateTime(shiftStartDateUtc, minutesPerInterval),
 				ShiftEndIntervalId = getIdFromDateTime(shiftEndDateUtc.AddSeconds(-1), minutesPerInterval),
-				DatasourceUpdateDate = scheduleChangeTime
+				DatasourceUpdateDate = DateTime.Now
 			};
 		}
 

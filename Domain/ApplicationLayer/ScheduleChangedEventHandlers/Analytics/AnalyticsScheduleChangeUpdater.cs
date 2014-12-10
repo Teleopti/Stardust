@@ -32,8 +32,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public void Handle(ProjectionChangedEvent @event)
 		{
+			if(!@event.IsDefaultScenario) return;
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
-			var minutesPerInterval = 60/intervalLength;
+			//var minutesPerInterval = 60/intervalLength;
 			var scenarioId = getScenario(@event.ScenarioId);
 			
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -43,7 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				{
 					//Log that schedule id could not be mapped = Schedule changes is not saved in analytics db.
 				}
-				_analyticsScheduleRepository.DeleteFactSchedule(dateId);
+
+				var personPart = _analyticsFactSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
+				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId);
 
 				if (scheduleDay.NotScheduled)
 					break;
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var shiftStart = scheduleDay.Shift.StartDateTime;
 				var intervalStart = shiftStart;
 				var shiftEnd = scheduleDay.Shift.EndDateTime;
-				var personPart = _analyticsFactSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
+				
 				while (intervalStart < shiftEnd)
 				{
 					var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(intervalLength)));
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
 						timePart.ShiftLength = (int)(shiftEnd - shiftStart).TotalMinutes;
-						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp, minutesPerInterval);
+						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, new DateOnly(scheduleDay.Date), intervalLayer, @event.Timestamp, intervalLength);
 						
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);
