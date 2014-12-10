@@ -27,12 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				.ForMember(d => d.DayHeaders,
 				           c =>
 				           c.MapFrom(
-					           s =>
-					           DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture)
-					                     .Select(
-						                     w =>
-											 new Description(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(w),
-															 CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(w)))));
+					           s => DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture)
+							           .Select(
+								           w =>
+									           new Description(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(w),
+										           CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(w)))
+								   
+					           ));
 
 
 			CreateMap<MonthScheduleDayDomainData, MonthDayViewModel>()

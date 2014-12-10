@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 		[Test]
 		[SetUICulture("de-DE")]
+		[SetCulture("en-GB")]
 		public void ShouldMapDayHeaderOfWeek()
 		{
 			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
