@@ -116,6 +116,7 @@ define([
 			],
 			States: ["Ready", "OFF"],
 			ExpectedUpdates: 1,
+			ReadModel: "AdherenceDetailsReadModel"
 		}, null, 4));
 
 
@@ -142,7 +143,7 @@ define([
 			startPromise.done(function () {
 
 				manageAdherenceSubscription = messagebroker.subscribe({
-					domainType: 'AdherencePercentageReadModelUpdatedMessage',
+					domainType: self.ConfigurationObject().ReadModel + 'UpdatedMessage',
 					callback: function () {
 						for (var i = 0; i < iterations.length; i++) {
 							var iteration = iterations[i];
