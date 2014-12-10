@@ -49,10 +49,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRaiseModifyPersonAbsenceEvent()
 		{
 			var currentScenario = new FakeCurrentScenario();
+			var originalDateTimePeriod = new DateTimePeriod (2013, 11, 27, 8, 2013, 11, 27, 16);
 			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
 				{
 					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),
-						new DateTimePeriod(2013, 11, 27, 8, 2013, 11, 27, 16))
+						originalDateTimePeriod)
 				};
 
 			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone());
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.PersonId.Should().Be(personAbsenceRepository.Single().Person.Id.Value);
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
 			@event.StartDateTime.Should().Be(command.StartTime);
-			@event.EndDateTime.Should().Be(command.EndTime);
+			@event.EndDateTime.Should().Be(originalDateTimePeriod.EndDateTime);
 		}
 
 		[Test]
