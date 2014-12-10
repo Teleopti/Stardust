@@ -1,0 +1,20 @@
+.message-separator1 {
+	margin-top: 5px;
+	margin-bottom: 1px;
+}
+
+.message-separator2 {
+	margin-top: 1px;
+	margin-bottom: 5px;
+}
+
+.request-caption {
+	color: #B0B0B0;
+	font-style: italic;
+	font-size: xx-small;
+}
+
+.label-status {
+	font-size: 75%;
+	margin: 1px;
+}

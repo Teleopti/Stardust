@@ -19,6 +19,8 @@
 	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap.css") %>" />
 	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap-theme.css") %>" />	
 	
+	<link rel="stylesheet" href="Areas/Messages/Content/Styles/main.css" />
+	
 	<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
 	<script type="text/javascript">
 		Teleopti = {

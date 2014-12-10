@@ -1107,6 +1107,7 @@
     <Content Include="Areas\Messages\Content\Scripts\resources.js" />
     <Content Include="Areas\Messages\Content\Scripts\view.js" />
     <Content Include="Areas\Messages\Content\Scripts\vm.js" />
+    <Content Include="Areas\Messages\Content\Styles\main.css" />
     <Content Include="Areas\Messages\Content\Templates\layout.html" />
     <Content Include="Areas\Messages\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\Messages\Views\Application\index.aspx" />

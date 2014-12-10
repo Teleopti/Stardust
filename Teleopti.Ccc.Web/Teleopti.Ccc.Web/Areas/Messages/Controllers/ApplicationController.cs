@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 		    };
 		    msg.Messages.Add(body);
 			_notifier.Notify(msg, persons);
-		    return null;
+		    return Json("");
 	    }
 
 		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]
@@ -93,7 +93,14 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				UserTexts.Resources.Messages,
 				UserTexts.Resources.Receivers,
 				UserTexts.Resources.Send,
-				UserTexts.Resources.SignOut
+				UserTexts.Resources.SignOut,
+				UserTexts.Resources.Close,
+				UserTexts.Resources.Subject,
+				UserTexts.Resources.Message,
+				UserTexts.Resources.StatusColon,
+				UserTexts.Resources.Sent,
+				UserTexts.Resources.Pending
+
 			}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);
@@ -101,11 +108,4 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			return new ContentResult { Content = template, ContentType = "text/javascript" };
 		}
     }
-
-	public class MessageForm
-	{
-		public IEnumerable<Guid> Receivers;
-		public string Subject { get; set; }
-		public string Body { get; set; }
-	}
 }

@@ -44,9 +44,23 @@
 					<span data-bind="text: Name"> </span>
 				</li>
 			</ul>
-			<textarea class="form-control" rows="1" placeholder="Subject" data-bind="value: Subject"></textarea>
-			<textarea class="form-control" rows="3" placeholder="Message" data-bind="value: Message"></textarea>
-			<button type="button" class="btn btn-primary pull-right" data-bind="text: Resources.Send, click:SendMessage"></button>
+			<div data-bind="visible: DisplaySendMessage">
+				<textarea class="form-control" rows="1" data-bind="attr: {placeholder: Resources.Subject}, value: Subject"></textarea>
+				<textarea class="form-control" rows="3" data-bind="attr: {placeholder: Resources.Message}, value: Message"></textarea>
+				<button type="button" class="btn btn-primary pull-right" data-bind="text: Resources.Send, click:SendMessage, enable: !IsMessageEmpty()"></button>
+			</div>
+			<div data-bind="visible: !DisplaySendMessage()">
+				<div class="well">
+					<strong data-bind="text: Subject">
+					</strong>
+					<hr class="message-separator1"/>
+					<span data-bind="text: Resources.StatusColon" class="request-caption"></span><span class="label label-status" data-bind="text: StatusText(), css: StatusClass"></span>
+					<hr class="message-separator2"/>
+					<div data-bind="text: Message">
+					</div>
+				</div>
+				<button type="button" class="btn btn-primary pull-right" data-bind="text: Resources.Close, click:CloseSendMessage"></button>
+			</div>
 		</div>
 	</div>
 </div>
