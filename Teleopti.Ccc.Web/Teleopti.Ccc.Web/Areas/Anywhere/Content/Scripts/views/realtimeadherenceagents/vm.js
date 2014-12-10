@@ -75,6 +75,20 @@
 				}
 			});
 
+			that.AllChecked = ko.computed({
+				read: function () {
+					var firstUnchecked = ko.utils.arrayFirst(that.filteredAgents(), function (item) {
+						return item.SelectedToSendMessage() == false;
+					});
+					return firstUnchecked == null;
+				},
+				write: function (value) {
+					ko.utils.arrayForEach(that.filteredAgents(), function (item) {
+						item.SelectedToSendMessage(value);
+					});
+				}
+			});
+
 			that.SendMessage = function () {
 				var selectedAgentIds = lazy(that.filteredAgents())
 					.filter(function (x) {

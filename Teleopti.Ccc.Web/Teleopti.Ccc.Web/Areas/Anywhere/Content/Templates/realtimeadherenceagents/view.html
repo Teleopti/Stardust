@@ -23,7 +23,7 @@
 		<table class="table table-stripped table-condensed rta-agents-details">
 			<thead>
 				<tr>
-					<th class="selectable-agent" data-bind="if: SelectAgentsEnabled"></th>
+					<th class="selectable-agent" data-bind="if: SelectAgentsEnabled"><input type="checkbox" data-bind="checked: AllChecked"></th>
 					<th data-bind="text: resources.AgentName"></th>
 					<th data-bind="text: resources.Team"></th>
 					<th data-bind="text: resources.State"></th>
