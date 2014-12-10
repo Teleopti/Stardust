@@ -139,6 +139,7 @@
     <Compile Include="Analytics\BaseConfiguration.cs" />
     <Compile Include="Analytics\EtlToggle.cs" />
     <Compile Include="Analytics\EtlToggleManager.cs" />
+    <Compile Include="ApplicationLayer\AdherenceDetailsReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
@@ -204,10 +205,12 @@
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IActualAgentAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
+    <Compile Include="ApplicationLayer\Rta\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
+    <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />

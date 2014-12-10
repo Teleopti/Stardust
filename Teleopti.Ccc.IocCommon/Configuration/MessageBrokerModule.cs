@@ -1,5 +1,6 @@
 using System.Configuration;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
+			builder.RegisterType<NotificationCreator>().As<INotificationCreator>().SingleInstance();
 
 			builder.RegisterType<MessageBrokerCompositeClient>()
 				.As<IMessageBrokerComposite>()

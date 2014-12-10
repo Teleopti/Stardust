@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersist()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistEachActivityStarted()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistActivitiesStartTime()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonStateChangedEvent
 			{
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -117,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
@@ -131,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
@@ -148,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
@@ -160,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
@@ -176,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
@@ -190,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
