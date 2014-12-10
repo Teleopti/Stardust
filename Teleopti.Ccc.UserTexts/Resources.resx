@@ -12343,7 +12343,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>use for confirm reset badges button clicking in admin client system setting agent badge</comment>
   </data>
   <data name="ShiftBackToLegal" xml:space="preserve">
-    <value>Ajust shifts to match shift bag</value>
+    <value>Adjust shifts to match shift bag</value>
     <comment>Adjust shifts to match shift bag</comment>
   </data>
   <data name="BadgeTypeEnabled" xml:space="preserve">
