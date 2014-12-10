@@ -222,7 +222,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ScholdBeAbleToDeleteADay()
 		{
-			_target.DeleteFactSchedule(1);
+			_target.DeleteFactSchedule(1, 1);
 		}
 
 	}

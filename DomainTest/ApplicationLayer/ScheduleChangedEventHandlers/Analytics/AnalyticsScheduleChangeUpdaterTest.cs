@@ -105,7 +105,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			var timePart = new AnalyticsFactScheduleTime();
 			int dateId = -1;
-
+			var personPart = new AnalyticsFactSchedulePerson {PersonId = 55};
+			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<Guid>.Is.Anything)).Return(personPart);
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				.Return(timePart);
 			_target.Handle(@event);
 
-			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(dateId));
+			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(dateId, 55));
 			_analyticsScheduleRepository.AssertWasNotCalled(
 				x =>
 					x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
