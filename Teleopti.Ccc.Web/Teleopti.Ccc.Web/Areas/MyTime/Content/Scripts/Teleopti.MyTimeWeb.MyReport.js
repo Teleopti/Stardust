@@ -68,23 +68,15 @@
 		});
 	}
 
-	function setWeekStart() {
-		$.ajax({
-			url: 'UserInfo/Culture',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
-				ko.applyBindings(vm, $('div.navbar')[1]);
-			}
-		});
-	};
-
 	function bindData() {
-		vm = new MyReportViewModel(fillData, getDate());
-		var elementToBind = $('.myreport-daily-metrics')[0];
-		ko.applyBindings(vm, elementToBind);
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+			vm = new MyReportViewModel(fillData, getDate());
+			var elementToBind = $('.myreport-daily-metrics')[0];
+			ko.applyBindings(vm, elementToBind);
+		});
 	}
+
 	
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
@@ -107,7 +99,6 @@
 			}
 
 			bindData();
-			setWeekStart();
 		},
 		MyReportPartialDispose: function () {
 			$('#page').addClass('fixed-non-responsive');
