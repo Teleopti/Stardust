@@ -2,7 +2,6 @@ using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private void sendMessageAfterReadModelUpdated(string datasource, Guid businessUnitId)
 		{
 			_transactionSync.OnSuccessfulTransaction(
-				() => _messageSender.Send(new Notification
+				() => _messageSender.Send(new Interfaces.MessageBroker.Notification
 				{
 					DataSource = datasource,
 					BusinessUnitId = businessUnitId.ToString(),
