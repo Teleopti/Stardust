@@ -47,17 +47,13 @@ SET CreateAgg=
 SET CreateAnalytics=
 SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
 
+CALL :DoHaveAccess "%Tfiles%" DoHaveAccess
+
 if not "%CustomPath%"=="" (
 DEL "%CustomPathConfig%" /F /Q
 DEL "%CustomTfiles%" /F /Q
 CALL :SETDATAPATH "%CustomPath%" %Silent%
-)
-
-CALL :DoHaveAccess "%Tfiles%" DoHaveAccess
-if %DoHaveAccess% neq 0 (
-	if not %CustomPath%=="" (
-		SET /A ERRORLEV=19 & GOTO :error
-	)
+if %DoHaveAccess% neq 0 SET /A ERRORLEV=19 & GOTO :error
 )
 
 ::Read/set config file
