@@ -47,18 +47,25 @@ SET CreateAgg=
 SET CreateAnalytics=
 SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
 
+if not "%CustomPath%"=="" (
+DEL "%CustomPathConfig%" /F /Q
+DEL "%CustomTfiles%" /F /Q
+CALL :SETDATAPATH "%CustomPath%" %Silent%
+)
+
+CALL :DoHaveAccess "%Tfiles%" DoHaveAccess
+if %DoHaveAccess% neq 0 (
+	if not %CustomPath%=="" (
+		SET /A ERRORLEV=19 & GOTO :error
+	)
+)
+
 ::Read/set config file
 SET DbBaseline=C:\DbBaseline.txt
 if not exist "%DbBaseline%" (
 echo %Tfiles%> "%DbBaseline%"
 )
 set /p Tfiles=<"%DbBaseline%"
-
-if not "%CustomPath%"=="" (
-DEL "%CustomPathConfig%" /F /Q
-DEL "%CustomTfiles%" /F /Q
-CALL :SETDATAPATH "%CustomPath%" %Silent%
-)
 
 ::Get current Branch
 CD "%ROOTDIR%\.."
@@ -380,6 +387,8 @@ IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%LogFolder%\build.log"
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
+IF %ERRORLEV% EQU 19 ECHO %UsERDOMAIN%\%USERNAME% ^(teamcity agent^) and lack permission to "%Tfiles%" & exit /b %ERRORLEV%
+
 ECHO.
 ECHO --------
 PAUSE
@@ -406,6 +415,17 @@ ENDLOCAL
 set "%~3=%localTfiles%"
 )
 goto:eof
+
+:DoHaveAccess
+SETLOCAL
+DIR "%~1" > NUL
+SET DoHaveAccess=%ERRORLEVEL%
+(
+ENDLOCAL
+set "%~2=%DoHaveAccess%"
+)
+goto:eof
+IF  NEQ 0
 
 :GETDATAPATH
 IF %Silent% equ 1 (
