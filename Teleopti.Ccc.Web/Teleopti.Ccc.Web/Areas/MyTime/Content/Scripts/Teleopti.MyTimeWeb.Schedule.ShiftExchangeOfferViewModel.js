@@ -13,7 +13,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	this.EndTime = ko.observable(dateFormat.defaultTimes.defaultEndTime);
 	this.EndTimeNextDay = ko.observable(false);
 	self.IsTimeLegal = ko.computed(function() {
-		if (self.EndTime() < self.StartTime()) return false;
+		if (self.EndTime() < self.StartTime() && !self.EndTimeNextDay()) return false;
 		return true;
 	});
 
