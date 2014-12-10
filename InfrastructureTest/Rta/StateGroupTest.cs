@@ -15,13 +15,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[TestFixture]
 	public class StateGroupTest : DatabaseTestWithoutTransaction
 	{
-		private void createDefaultStateGroup()
+
+		[Test]
+		public void ShouldAddStateCodeToDefaultStateGroup()
 		{
-			var stateGroup = new RtaStateGroup("default", true, true);
-			PersistAndRemoveFromUnitOfWork(stateGroup);
+			using (new DefaultStateGroupCreator(PersistAndRemoveFromUnitOfWork))
+			{
+				var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+
+				var defaultStateGroup = target.AddAndGetNewRtaState("phone", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+
+				new RtaStateGroupRepository(UnitOfWork).Get(defaultStateGroup.StateGroupId)
+					.StateCollection.Single()
+					.Name
+					.Should().Be.EqualTo("phone");
+			}
 		}
 
-		private static void removeDefaultStateGroup()
+		[Test]
+		public void ShouldNotAddEmptyStateCode()
+		{
+			using (new DefaultStateGroupCreator(PersistAndRemoveFromUnitOfWork))
+			{
+				var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+
+				var defaultStateGroup = target.AddAndGetNewRtaState("", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+
+				new RtaStateGroupRepository(UnitOfWork).Get(defaultStateGroup.StateGroupId)
+					.StateCollection
+					.Should().Be.Empty();
+			}
+
+		}
+	}
+
+	public class DefaultStateGroupCreator : IDisposable
+	{
+		public DefaultStateGroupCreator(Action<RtaStateGroup> persistAction)
+		{
+			var stateGroup = new RtaStateGroup("default", true, true);
+			persistAction(stateGroup);
+		}
+
+		public void Dispose()
 		{
 			applySql("DELETE FROM dbo.RtaState");
 			applySql("DELETE FROM dbo.RtaStateGroup");
@@ -37,37 +73,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					command.ExecuteNonQuery();
 				}
 			}
-		}
-
-		[Test]
-		public void ShouldAddStateCodeToDefaultStateGroup()
-		{
-			createDefaultStateGroup();
-			var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
-
-			var defaultStateGroup = target.AddAndGetNewRtaState("phone", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
-
-			new RtaStateGroupRepository(UnitOfWork).Get(defaultStateGroup.StateGroupId)
-				.StateCollection.Single()
-				.Name
-				.Should().Be.EqualTo("phone");
-
-			removeDefaultStateGroup();
-		}
-
-		[Test]
-		public void ShouldNotAddEmptyStateCode()
-		{
-			createDefaultStateGroup();
-			var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
-
-			var defaultStateGroup = target.AddAndGetNewRtaState("", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
-
-			new RtaStateGroupRepository(UnitOfWork).Get(defaultStateGroup.StateGroupId)
-				.StateCollection
-				.Should().Be.Empty();
-
-			removeDefaultStateGroup();
 		}
 	}
 }
