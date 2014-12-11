@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBus>()).As<IServiceBus>();
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<PayrollContainerInstaller>();

@@ -1,11 +1,8 @@
 ﻿using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.WinCode.Main;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Main
 {
@@ -15,13 +12,13 @@ namespace Teleopti.Ccc.WinCodeTest.Main
          [Test]
          public void ShouldResolve()
          {
-             var containerBuilder = new ContainerBuilder();
-             containerBuilder.RegisterModule(new CommonModule());
-             containerBuilder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();
-             containerBuilder.RegisterType<EnvironmentWindowsUserProvider>()
+             var builder = new ContainerBuilder();
+             builder.RegisterModule(CommonModule.ForTest());
+             builder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();
+             builder.RegisterType<EnvironmentWindowsUserProvider>()
                    .As<IWindowsUserProvider>()
                    .SingleInstance();
-             var container = containerBuilder.Build();
+             var container = builder.Build();
              var target = container.Resolve<IDataSourceHandler>();
              var res = target.AvailableDataSourcesProvider();
              Assert.That(res,Is.Not.Null);

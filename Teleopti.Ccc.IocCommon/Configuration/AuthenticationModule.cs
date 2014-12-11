@@ -16,12 +16,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class AuthenticationModule : Module
 	{
-		public IApplicationData ApplicationData { get; set; }
-
-		public AuthenticationModule()
-		{
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<WindowsAppDomainPrincipalContext>()
@@ -89,18 +83,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
 
 			builder.RegisterType<CurrentApplicationData>().As<ICurrentApplicationData>().SingleInstance();
-			if (ApplicationData != null)
-			{
-				builder.Register(c => ApplicationData)
-					.As<IApplicationData>()
-					.ExternallyOwned();
-			}
-			else
-			{
-				builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
-					.As<IApplicationData>().SingleInstance()
-					.ExternallyOwned();
-			}
+
+			builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
+				.As<IApplicationData>().SingleInstance()
+				.ExternallyOwned();
 
 			builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService).As<ILoadPasswordPolicyService>().SingleInstance();
 			builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();

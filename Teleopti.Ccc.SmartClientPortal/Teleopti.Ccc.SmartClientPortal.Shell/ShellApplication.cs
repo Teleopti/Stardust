@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
 	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule<CommonModule>();
+			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), CommonModule.ToggleManagerForIoc())));
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 	        {

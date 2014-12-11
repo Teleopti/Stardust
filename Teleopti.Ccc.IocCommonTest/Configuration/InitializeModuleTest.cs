@@ -13,14 +13,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class InitializeModuleTest
 	{
 		private ContainerBuilder containerBuilder;
-		private IDataSourceConfigurationSetter dataSourceConfigurationSetter;
 
 		[SetUp]
 		public void Setup()
 		{
-			dataSourceConfigurationSetter = MockRepository.GenerateStub<IDataSourceConfigurationSetter>();
 			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule(new CommonModule(new IocArgs { DataSourceConfigurationSetter = dataSourceConfigurationSetter }));
+			containerBuilder.RegisterModule(CommonModule.ForTest());
 		}
 
 		[Test]
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IDataSourceConfigurationSetter>()
-					.Should().Be.SameInstanceAs(dataSourceConfigurationSetter);
+					.Should().Not.Be.Null();
 			}
 		}
 

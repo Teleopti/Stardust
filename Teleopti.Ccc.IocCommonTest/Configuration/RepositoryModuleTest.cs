@@ -2,27 +2,28 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	public class RepositoryModuleTest
 	{
-		private ContainerBuilder containerBuilder;
+		private ContainerBuilder builder;
 
 		[SetUp]
 		public void Setup()
 		{
-			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<CommonModule>();
+			builder = new ContainerBuilder();
+			builder.RegisterModule(CommonModule.ForTest());
 		}
 
 		[Test]
 		public void AllRepositoriesWithCorrectCtorAreWired()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				var personRep = container.Resolve<IPersonRepository>();
 				var skillRep = container.Resolve<ISkillRepository>();
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void PushMessageRepositoryShouldBeWired()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IPushMessageRepository>()
 					.Should().Not.Be.Null();
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveTheStatisticRepository()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IStatisticRepository>().Should().Not.Be.Null();
 			}
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveTheAgentBadgeSettingRepository()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IAgentBadgeSettingsRepository>().Should().Not.Be.Null();
 			}
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveEtlLogObjectRepository()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IEtlLogObjectRepository>().Should().Not.Be.Null();
 			}
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveEtlJobStatusRepository()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IEtlJobStatusRepository>().Should().Not.Be.Null();
 			}
@@ -82,10 +83,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void RepositoriesWithIncorrectCtorAreNotWired()
 		{
 			var typeThatNoRepoAcceptAsArgument = GetType();
-			var testContainerBuild = new ContainerBuilder();
-			testContainerBuild.RegisterModule(new CommonModule { RepositoryConstructorType = typeThatNoRepoAcceptAsArgument });
+			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, new TrueToggleManager());
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(config) { RepositoryConstructorType = typeThatNoRepoAcceptAsArgument });
 
-			using (var container = testContainerBuild.Build())
+			using (var container = builder.Build())
 			{
 				container.IsRegistered(typeof(IPersonRepository))
 					.Should().Be.False();

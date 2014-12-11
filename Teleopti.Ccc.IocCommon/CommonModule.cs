@@ -1,11 +1,9 @@
 using System;
 using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon
@@ -14,16 +12,23 @@ namespace Teleopti.Ccc.IocCommon
 	{
 		private readonly IIocConfiguration _configuration;
 		public Type RepositoryConstructorType { get; set; }
-		public IApplicationData ApplicationData { get; set; }
 
-		public CommonModule()
-			: this(new IocConfiguration(new IocArgs(), ToggleManagerForIoc()))
+		public static CommonModule ForTest()
 		{
+			return ForTest(new FalseToggleManager());
 		}
 
-		public CommonModule(IocArgs args)
-			: this(new IocConfiguration(args, ToggleManagerForIoc()))
+		public static CommonModule ForTest(IToggleManager toggleManager)
 		{
+			return new CommonModule(
+				new IocConfiguration(
+					new IocArgs
+					{
+						DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()
+					},
+					toggleManager
+					)
+				);
 		}
 
 		public CommonModule(IIocConfiguration configuration)
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
-			builder.RegisterModule(new AuthenticationModule { ApplicationData = ApplicationData });
+			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<ForecasterModule>();
 			builder.RegisterModule(new EventHandlersModule(_configuration));
 			builder.RegisterModule(new EventPublisherModule(_configuration));

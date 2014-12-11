@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		private static IContainer buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }));
+			builder.RegisterModule(CommonModule.ForTest());
 
 			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();

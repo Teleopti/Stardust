@@ -130,9 +130,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var builder = new ContainerBuilder();
 			var applicationData = MockRepository.GenerateMock<IApplicationData>();
 			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, ToggleManager(toggle, value));
-			builder.RegisterModule(new CommonModule(config) {ApplicationData = applicationData});
+			builder.RegisterModule(new CommonModule(config));
 			builder.RegisterModule(new SyncEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
+			builder.RegisterInstance(applicationData);
 			return builder.Build();
 		}
 

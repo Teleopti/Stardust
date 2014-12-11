@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ProcessDenormalizeQueueConsumer>().As<ConsumerOf<ProcessDenormalizeQueue>>();
 
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();

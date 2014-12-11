@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class LogModuleTest
 	{
-		private ContainerBuilder containerBuilder;
+		private ContainerBuilder builder;
 		private testAppender appender;
 
 		[SetUp]
@@ -23,16 +23,16 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			appender = new testAppender();
 			configureLog4Net();
-			containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<CommonModule>();
-			containerBuilder.RegisterType<DummyService>().As<IDummyService>();
-			containerBuilder.RegisterType<DummyService2>().As<IDummyService2>();
+			builder = new ContainerBuilder();
+			builder.RegisterModule(CommonModule.ForTest());
+			builder.RegisterType<DummyService>().As<IDummyService>();
+			builder.RegisterType<DummyService2>().As<IDummyService2>();
 		}
 
 		[Test]
 		public void LogMessageShouldBeWritten()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				var svc = container.Resolve<IDummyService>();
 				svc.DoIt();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InjectedLoggersShouldHaveTheirOwnManager()
 		{
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				var svc = container.Resolve<IDummyService>();
 				var svc2 = container.Resolve<IDummyService2>();

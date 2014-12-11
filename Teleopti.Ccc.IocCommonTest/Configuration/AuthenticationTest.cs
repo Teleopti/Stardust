@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,15 +13,16 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class AuthenticationTest
 	{
-		private ContainerBuilder containerBuilder;
+		private ContainerBuilder builder;
 		private IApplicationData applicationData;
 
 		[SetUp]
 		public void Setup()
 		{
-			containerBuilder = new ContainerBuilder();
+			builder = new ContainerBuilder();
 			applicationData = MockRepository.GenerateMock<IApplicationData>();
-			containerBuilder.RegisterModule(new CommonModule(){ApplicationData = applicationData}); 
+			builder.RegisterModule(CommonModule.ForTest());
+			builder.RegisterInstance(applicationData);
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var passwordPolicyService = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			applicationData.Expect(ad => ad.LoadPasswordPolicyService).Return(passwordPolicyService);
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				var logOnOff = container.Resolve<ILogOnOff>();
 				Assert.IsNotNull(logOnOff);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			applicationData.Expect(ad => ad.LoadPasswordPolicyService).Return(null);
 
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IPasswordPolicy>()
 					.Should().Be.InstanceOf<DummyPasswordPolicy>();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var policy = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			applicationData.Expect(ad => ad.LoadPasswordPolicyService).Return(policy);
 
-			using (var container = containerBuilder.Build())
+			using (var container = builder.Build())
 			{
 				container.Resolve<IPasswordPolicy>()
 					.Should().Not.Be.InstanceOf<DummyPasswordPolicy>();

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveQuickForecaster()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<CommonModule>();
+			containerBuilder.RegisterModule(CommonModule.ForTest());
 
 			using (var container = containerBuilder.Build())
 			{

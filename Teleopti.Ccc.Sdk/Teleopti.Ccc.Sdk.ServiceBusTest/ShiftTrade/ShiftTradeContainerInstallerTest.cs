@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			var builder = new ContainerBuilder();
 			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<NewShiftTradeRequestCreated>>();
 
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			var builder = new ContainerBuilder();
 			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<AcceptShiftTrade>>();
 
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();

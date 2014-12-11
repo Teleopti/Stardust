@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var builder = new ContainerBuilder();
             builder.RegisterType<UpdateGroupingReadModelConsumer>().As<ConsumerOf<PersonChangedMessage>>();
 
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();

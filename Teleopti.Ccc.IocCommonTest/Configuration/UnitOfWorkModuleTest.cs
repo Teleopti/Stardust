@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveLicenseActivatorProvider()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<CommonModule>();
+			builder.RegisterModule(CommonModule.ForTest());
 			using (var container = builder.Build())
 			{
 				container.Resolve<ILicenseActivatorProvider>().Should().Be.OfType<LicenseActivatorProvider>();
