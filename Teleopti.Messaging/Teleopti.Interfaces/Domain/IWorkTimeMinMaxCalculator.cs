@@ -30,6 +30,16 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
 		WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay);
-	}
 
+		/// <summary>
+		/// Calculate the min/max work times for a day using an alread loaded schedule day
+		/// </summary>
+		/// <param name="date"></param>
+		/// <param name="person"></param>
+		/// <param name="scheduleDay"></param>
+		/// <param name="option"></param>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
+		WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option);
+	}
 }

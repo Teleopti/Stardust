@@ -43,6 +43,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 							effectiveRestriction);
 				}
 
+				if (effectiveRestrictionOptions.UseStudentAvailability)
+				{
+					if (restrictions != null)
+						effectiveRestriction = _restrictionCombiner.CombineStudentAvailabilityRestrictions(
+							_retrievalOperation.GetStudentAvailabilityRestrictions(restrictions),
+							effectiveRestriction);
+				}
+
 			}
 
 			return effectiveRestriction;

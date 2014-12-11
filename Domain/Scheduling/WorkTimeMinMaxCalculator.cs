@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
 		{
+			return WorkTimeMinMax(date, person, scheduleDay, EffectiveRestrictionOptions.UseAll());
+		}
+
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option)
+		{
 			if (person == null) throw new ArgumentNullException("person");
 			var result = new WorkTimeMinMaxCalculationResult();
 
@@ -29,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (ruleSetBag == null)
 				return null;
 
-			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll());
+			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, option);
 			if (createdRestriction.Restriction != null)
 				result.RestrictionNeverHadThePossibilityToMatchWithShifts = !createdRestriction.Restriction.MayMatchWithShifts();
 			if (createdRestriction.IsAbsenceInContractTime)

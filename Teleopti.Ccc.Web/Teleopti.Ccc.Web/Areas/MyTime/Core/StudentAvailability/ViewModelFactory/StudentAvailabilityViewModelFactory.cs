@@ -23,7 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 		{
 			return _mapper.Map<DateOnly, StudentAvailabilityViewModel>(dateInPeriod);
 		}
-		
+
+		public StudentAvailabilityDayFeedbackViewModel CreateDayFeedbackViewModel(DateOnly date)
+		{
+			return _mapper.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(date);
+		}
+
 		public StudentAvailabilityDayViewModel CreateDayViewModel(DateOnly date)
 		{
 			var studentAvailability = _studentAvailabilityProvider.GetStudentAvailabilityDayForDate(date);

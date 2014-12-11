@@ -39,5 +39,14 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="effectiveRestriction"></param>
 		/// <returns></returns>
 		IEffectiveRestriction CombineRotationRestrictions(IEnumerable<IRotationRestriction> rotationRestrictions, IEffectiveRestriction effectiveRestriction);
+
+		/// <summary>
+		/// Combines student availability restrictions into the given effective restriction
+		/// </summary>
+		/// <param name="studentAvailabilityRestrictions"></param>
+		/// <param name="effectiveRestriction"></param>
+		/// <returns></returns>
+		IEffectiveRestriction CombineStudentAvailabilityRestrictions(IEnumerable<IStudentAvailabilityRestriction> studentAvailabilityRestrictions, IEffectiveRestriction effectiveRestriction);
+		
 	}
 }

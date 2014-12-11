@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	{
 		IEnumerable<IRotationRestriction> GetRotationRestrictions(IEnumerable<IRestrictionBase> restrictions);
 		IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions);
+		IEnumerable<IStudentAvailabilityRestriction> GetStudentAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions);
 		IEnumerable<IPreferenceRestriction> GetPreferenceRestrictions(IEnumerable<IRestrictionBase> restrictions);
 		IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDays(IScheduleDay scheduleDay);
 	}
@@ -24,6 +25,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IEnumerable<IAvailabilityRestriction> GetAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions)
 		{
 			return restrictions.FilterBySpecification(RestrictionMustBe.Availability).Cast<IAvailabilityRestriction>().ToArray();
+		}
+
+		public IEnumerable<IStudentAvailabilityRestriction> GetStudentAvailabilityRestrictions(IEnumerable<IRestrictionBase> restrictions)
+		{
+			return restrictions.FilterBySpecification(RestrictionMustBe.StudentAvailability).Cast<IStudentAvailabilityRestriction>().ToArray();
 		}
 
 		public IEnumerable<IPreferenceRestriction> GetPreferenceRestrictions(IEnumerable<IRestrictionBase> restrictions)

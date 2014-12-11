@@ -122,7 +122,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 
 	this.LoadFeedback = function () {
 		ajaxForDate(self, {
-			url: "PreferenceFeedback/Feedback",
+			url: "StudentAvailabilityFeedback/Feedback",
 			type: 'GET',
 			data: { Date: self.Date },
 			date: self.Date,

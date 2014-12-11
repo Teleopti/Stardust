@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					UseAvailability = true,
 					UsePreference = true,
+					//UseStudentAvailability = true
 				};
 		}
 
 		public bool UsePreference { get; set; }
 		public bool UseAvailability { get; set; }
+		public bool UseStudentAvailability { get; set; }
 
 
 		public bool Equals(EffectiveRestrictionOptions other)

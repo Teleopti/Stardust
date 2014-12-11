@@ -167,9 +167,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<StudentAvailabilityViewModelFactory>().As<IStudentAvailabilityViewModelFactory>();
-			
+			builder.RegisterType<StudentAvailabilityViewModelFactory>().As<IStudentAvailabilityViewModelFactory>();		
 			builder.RegisterType<StudentAvailabilityPersister>().As<IStudentAvailabilityPersister>();
+			builder.RegisterType<StudentAvailabilityFeedbackProvider>().As<IStudentAvailabilityFeedbackProvider>();
+			builder.RegisterType<StudentAvailabilityPeriodFeedbackProvider>().As<IStudentAvailabilityPeriodFeedbackProvider>();
+			builder.RegisterType<StudentAvailabilityPeriodFeedbackViewModelFactory>().As<IStudentAvailabilityPeriodFeedbackViewModelFactory>();
 		}
 
 		private static void registerScheduleTypes(ContainerBuilder builder)

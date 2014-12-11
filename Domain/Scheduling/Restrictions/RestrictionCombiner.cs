@@ -51,6 +51,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}
 
+		public IEffectiveRestriction CombineStudentAvailabilityRestrictions(IEnumerable<IStudentAvailabilityRestriction> studentAvailabilityRestrictions, IEffectiveRestriction effectiveRestriction)
+		{
+			studentAvailabilityRestrictions = from r in studentAvailabilityRestrictions where r.IsRestriction() select r;
+
+			var asEffectiveRestrictions = from r in studentAvailabilityRestrictions
+										  select (IEffectiveRestriction)new EffectiveRestriction(
+																			r.StartTimeLimitation,
+																			r.EndTimeLimitation,
+																			r.WorkTimeLimitation,
+																			null,
+																			null,
+																			null,
+																			new List<IActivityRestriction>()
+																			)
+										  {
+											  IsAvailabilityDay = true,
+										  };
+			return CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IEffectiveRestriction CombineStudentAvailabilityDays(IEnumerable<IStudentAvailabilityDay> studentAvailabilityDays, IEffectiveRestriction effectiveRestriction)
 		{

@@ -416,6 +416,7 @@
     <Compile Include="Areas\Messages\Models\SendMessageViewModel.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ITimeFilterHelper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TimeFilterHelper.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
@@ -481,6 +482,13 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\IPrincipalAuthorizationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\PrincipalAuthorizationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityFeedbackProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\IStudentAvailabilityPeriodFeedbackProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityFeedbackProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPeriodFeedbackProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityeDayFeedbackViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityPeriodFeedbackViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityPeriodFeedbackViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeAddPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeAddScheduleLayerViewModelMapper.cs" />
@@ -508,6 +516,8 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestReplyForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelDataForAllTeams.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFeedbackViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityPeriodFeedbackViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\AbsenceReportInput.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />

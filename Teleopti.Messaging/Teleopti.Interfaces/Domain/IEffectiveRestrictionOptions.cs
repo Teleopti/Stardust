@@ -14,5 +14,10 @@ namespace Teleopti.Interfaces.Domain
 		/// If availability should be considered
 		/// </summary>
 		bool UseAvailability { get; set; }
+
+		/// <summary>
+		/// If student availability should be considered
+		/// </summary>
+		bool UseStudentAvailability { get; set; }
 	}
 }
