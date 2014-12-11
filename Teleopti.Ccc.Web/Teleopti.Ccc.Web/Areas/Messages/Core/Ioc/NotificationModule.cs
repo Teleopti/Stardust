@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Core.Ioc
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
+
 			builder.RegisterType<EmailSender>().As<INotificationSender>();
 			builder.RegisterType<NotificationValidationCheck>().As<INotificationValidationCheck>();
 			builder.RegisterType<EmailConfiguration>().As<IEmailConfiguration>();

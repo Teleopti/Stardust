@@ -2,19 +2,13 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
@@ -26,21 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private INotifier _notifier;
 
-		[TestFixtureSetUp]
-		public void Init()
-		{
-			var mocks = new MockRepository();
-			var state = mocks.StrictMock<IState>();
-			var messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
-			IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker);
-			IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-
-			IPerson per = new Person { Name = new Name("Maria", "Stein") };
-			per.SetId(Guid.NewGuid());
-
-			StateHolderProxyHelper.ClearAndSetStateHolder(mocks, per, businessUnit, applicationData, state);
-		}
-
 		[SetUp]
 		public void Setup()
 		{
@@ -48,7 +27,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_notifier = MockRepository.GenerateMock<INotifier>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 
-			_currentUnitOfWorkFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
+			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
+				.Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.Name).Return("for test");
 
 			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier, _currentUnitOfWorkFactory);
 
