@@ -309,7 +309,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
 			var toggleManager = _container.Resolve<IToggleManager>();
-			loadSchedulingScreenSettings();
 			_skillDayGridControl = new SkillDayGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
 			_skillWeekGridControl = new SkillWeekGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
 			_skillMonthGridControl = new SkillMonthGridControl { ContextMenu = contextMenuStripResultView.ContextMenu, ToggleManager = toggleManager };
@@ -352,7 +351,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _schedulerState.SchedulingResultState.UseMinWeekWorkTime = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
 			_teamLeaderMode = teamLeaderMode;
 			_schedulerState.SchedulingResultState.TeamLeaderMode = teamLeaderMode;
-			_skillResultViewSetting = _currentSchedulingScreenSettings.SkillResultViewSetting;
+
 			toolStripProgressBar1.Visible = true;
 			toolStripProgressBar1.Maximum = loadingPeriod.DayCount() + 5;
 			toolStripProgressBar1.Step = 1;
@@ -379,7 +378,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			AddControlHelpContext(_skillMonthGridControl);
 			AddControlHelpContext(_skillFullPeriodGridControl);
 
-			displayOptionsFromSetting();
 			_dateNavigateControl.SetAvailableTimeSpan(loadingPeriod);
 			_dateNavigateControl.SetSelectedDateNoInvoke(loadingPeriod.StartDate);
 			_dateNavigateControl.SelectedDateChanged += dateNavigateControlSelectedDateChanged;
@@ -459,20 +457,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updater.Update(componentRegistry);
 		}
 
-		private void loadSchedulingScreenSettings()
+		private SchedulingScreenSettings loadSchedulingScreenSettings()
 		{
 			try
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					var settingRepository = new PersonalSettingDataRepository(uow);
-					_currentSchedulingScreenSettings = settingRepository.FindValueByKey("SchedulingScreen", new SchedulingScreenSettings());
+					return settingRepository.FindValueByKey("SchedulingScreen", new SchedulingScreenSettings());
 				}
 			}
 			catch (CouldNotCreateTransactionException ex)
 			{
 				Log.Error("An error occurred while trying to load settings.", ex);
-				_currentSchedulingScreenSettings = new SchedulingScreenSettings();
+				return new SchedulingScreenSettings();
 			}
 		}
 
@@ -856,6 +854,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			Cursor = Cursors.WaitCursor;
 			Application.DoEvents();
+
+			_currentSchedulingScreenSettings = loadSchedulingScreenSettings();
+			_skillResultViewSetting = _currentSchedulingScreenSettings.SkillResultViewSetting;
+			displayOptionsFromSetting(_currentSchedulingScreenSettings);
 
 			//leave this at the top of this method
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
@@ -2383,22 +2385,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return false;
 		}
 
-		private void displayOptionsFromSetting()
+		private void displayOptionsFromSetting(SchedulingScreenSettings settings)
 		{
-			SplitterManager.ShowResult = !_currentSchedulingScreenSettings.HideResult;
-			toolStripButtonShowResult.Checked = !_currentSchedulingScreenSettings.HideResult;
-			_showResult = !_currentSchedulingScreenSettings.HideResult;
-			SplitterManager.ShowGraph = !_currentSchedulingScreenSettings.HideGraph;
-			toolStripButtonShowGraph.Checked = !_currentSchedulingScreenSettings.HideGraph;
-			_showGraph = !_currentSchedulingScreenSettings.HideGraph;
-			SplitterManager.ShowEditor = !_currentSchedulingScreenSettings.HideEditor;
-			toolStripButtonShowEditor.Checked = !_currentSchedulingScreenSettings.HideEditor;
-			_showEditor = !_currentSchedulingScreenSettings.HideEditor;
-			_showInfoPanel = !_currentSchedulingScreenSettings.HideInfoPanel;
+			SplitterManager.ShowResult = !settings.HideResult;
+			toolStripButtonShowResult.Checked = !settings.HideResult;
+			_showResult = !settings.HideResult;
+			SplitterManager.ShowGraph = !settings.HideGraph;
+			toolStripButtonShowGraph.Checked = !settings.HideGraph;
+			_showGraph = !settings.HideGraph;
+			SplitterManager.ShowEditor = !settings.HideEditor;
+			toolStripButtonShowEditor.Checked = !settings.HideEditor;
+			_showEditor = !settings.HideEditor;
+			_showInfoPanel = !settings.HideInfoPanel;
 			toolStripButtonShowPropertyPanel.Checked = _showInfoPanel;
 
-			toolStripButtonShowTexts.Checked = !_currentSchedulingScreenSettings.HideRibbonTexts;
-			_showRibbonTexts = !_currentSchedulingScreenSettings.HideRibbonTexts;
+			toolStripButtonShowTexts.Checked = !settings.HideRibbonTexts;
+			_showRibbonTexts = !settings.HideRibbonTexts;
 			if (_teamLeaderMode)
 			{
 				SplitterManager.ShowGraph = false;
@@ -4803,6 +4805,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			//Request tab
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
+
 			toolStripButtonRequestBack.Click -= toolStripButtonRequestBackClick;
 			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgents_Click;
 			ToolStripMenuItemViewDetails.Click -= ToolStripMenuItemViewDetails_Click;
@@ -4828,10 +4831,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripTabItemHome.Click -= toolStripTabItemHome_Click;
 			toolStripTabItemChart.Click -= toolStripTabItemChart_Click;
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
-			_schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
-			_tmpTimer.Tick -= _tmpTimer_Tick;
-			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
-			_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
+			if(_schedulerMeetingHelper != null)
+				_schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
+			if(_tmpTimer != null)
+				_tmpTimer.Tick -= _tmpTimer_Tick;
+			if (_dateNavigateControl != null)
+			{
+				_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
+				_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
+			}
 			backStageButtonMainMenuSave.Click -= toolStripButtonMainMenuSave_Click;
 			backStageButtonMainMenuHelp.Click -= toolStripButtonMainMenuHelp_Click;
 			backStageButtonMainMenuClose.Click -= toolStripButtonMainMenuClose_Click;
