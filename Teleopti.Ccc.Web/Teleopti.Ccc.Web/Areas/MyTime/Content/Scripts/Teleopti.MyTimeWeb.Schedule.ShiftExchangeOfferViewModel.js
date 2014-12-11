@@ -20,9 +20,11 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	this.DateFormat = ko.observable(dateFormat.format());
 
+	self.Absence = ko.observable();
 	//Interface....
 	this.DateFrom = function (date) {
 		self.loadPeriod(date);
+
 	};
 
 	this.DateTo = ko.observable();
@@ -41,6 +43,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		},
 		write: function (date) {
 			self.DateTo(date);
+			self.getAbsence(date.format(self.DateFormat()));
 			self.OfferValidTo(moment(date).add('days', -1));
 		}
 	});
@@ -61,9 +64,16 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 
 		return isValideToLegalStart && isValideToLegalEnd;
 	});
+
+	self.IsNotAbsence = ko.computed(function () {
+		var absenceCount = 0;
+		if (self.Absence() != null) absenceCount = self.Absence().length;
+
+		return (self.Absence() == null) || absenceCount == 0;
+	});
 	
 	this.SaveEnabled = ko.computed(function () {
-		return self.IsSelectedDateInShiftTradePeriod() && self.IsValidToLegal() && self.IsTimeLegal();
+		return self.IsSelectedDateInShiftTradePeriod() && self.IsValidToLegal() && self.IsTimeLegal() && self.IsNotAbsence();
 	});
 
 	this.ErrorMessage = ko.observable('');
@@ -103,6 +113,21 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 					self.OpenPeriodRelativeEnd(data.OpenPeriodRelativeEnd);
 				}
 				self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
+			}
+		});
+	};
+
+	self.getAbsence = function (date) {
+		ajax.Ajax({
+			url: "ShiftExchange/GetAbsence",
+			dataType: "json",
+			type: 'GET',
+			data: {
+				Date: date
+			},
+			success: function (data, textStatus, jqXHR) {
+				self.Absence(null);
+				self.Absence(data.PersonAbsences);
 			}
 		});
 	};

@@ -2278,7 +2278,7 @@ namespace Teleopti.Ccc.UserTexts {
         
         /// <summary>
         ///   Looks up a localized string similar to Instructions:
-        ///* Buy a product activation key (contact information here www.teleopti.com)
+        ///* Buy a license (contact information here www.teleopti.com)
         ///* Receive product activation key file (e.g. via mail)
         ///* Save the product activation key to disk
         ///* If you have any work pending save in the application, save that before applying product activation key
@@ -18549,6 +18549,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot publish an announcement on an absence day!.
+        /// </summary>
+        public static string PublishAnnouncementNoAbsence {
+            get {
+                return ResourceManager.GetString("PublishAnnouncementNoAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Published:.
         /// </summary>
         public static string PublishedColon {
@@ -22592,7 +22601,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Correct shifts not according to shift bag.
+        ///   Looks up a localized string similar to Adjust shifts to match shift bag.
         /// </summary>
         public static string ShiftBackToLegal {
             get {
@@ -25702,7 +25711,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allow ({1}). You now have {2} days left to reduce the agents or apply a product activation key that covers so many agents..
+        ///   Looks up a localized string similar to You are using more agents ({0}) than your license allows ({1}). You now have {2} days left to reduce the agents or apply a product activation key that covers so many agents..
         /// </summary>
         public static string TooManyAgentsIsUsedWarning {
             get {

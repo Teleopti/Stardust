@@ -12529,4 +12529,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Valid to date should between today and the day before exchange date !</value>
     <comment>use as a warning in MyTime AnnounceShift when valid to date is not legal</comment>
   </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>Cannot publish an announcement on an absence day!</value>
+    <comment>use for MyTime/Schedule/ publish announcement, a warning message for making an shift exchange offer on an absence day</comment>
+  </data>
 </root>

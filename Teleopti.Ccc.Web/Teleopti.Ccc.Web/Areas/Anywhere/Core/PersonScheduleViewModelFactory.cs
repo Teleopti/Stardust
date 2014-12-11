@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 													IPersonScheduleDayReadModel personScheduleDayReadModel)
 		{
 			var previousDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date).AddDays(-1), person.Id.Value);
-			var start = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
-			var end = TimeZoneInfo.ConvertTimeToUtc(date.AddHours(24), person.PermissionInformation.DefaultTimeZone());
+			var start = TimeZoneHelper.ConvertToUtc(date, person.PermissionInformation.DefaultTimeZone());
+			var end = TimeZoneHelper.ConvertToUtc(date.AddHours(24), person.PermissionInformation.DefaultTimeZone());
 
 			if (personScheduleDayReadModel != null && personScheduleDayReadModel.Start.HasValue)
 				start = DateTime.SpecifyKind(personScheduleDayReadModel.Start.Value, DateTimeKind.Utc);

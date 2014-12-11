@@ -75,6 +75,7 @@
 		<div data-bind="visible: !IsSelectedDateInShiftTradePeriod()">@Resources.AnnounceShiftDateOutPeriod</div>
 		<div data-bind="visible: !IsValidToLegal()">@Resources.AnnounceShiftValidToNotLegal</div>
 		<div data-bind="visible: !IsTimeLegal()">@Resources.EndTimeMustBeGreaterOrEqualToStartTime</div>
+		<div data-bind="visible: !IsNotAbsence()">@Resources.PublishAnnouncementNoAbsence</div>
 	</div>
 </div>
 
