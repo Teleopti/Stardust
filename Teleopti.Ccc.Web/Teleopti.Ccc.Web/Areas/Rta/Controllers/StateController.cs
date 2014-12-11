@@ -15,25 +15,26 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[HttpPost]
-		public JsonResult Change(ExternalUserStateWebModel state)
+		public JsonResult Change(ExternalUserStateWebModel input)
 		{
+			DateTime batchId;
+			DateTime.TryParse(input.BatchId, out batchId);
+
 			var result = _rta.SaveState(
 				new ExternalUserStateInputModel
 				{
-					AuthenticationKey = state.AuthenticationKey,
-					PlatformTypeId = state.PlatformTypeId,
-					SourceId = state.SourceId,
-					UserCode = state.UserCode,
-					StateCode = state.StateCode,
-					StateDescription = state.StateDescription,
-					IsLoggedOn = state.IsLoggedOn,
-					SecondsInState = state.SecondsInState,
-					Timestamp = DateTime.Parse(state.Timestamp),
-					BatchId = DateTime.Parse(state.BatchId ?? state.Timestamp),
-					IsSnapshot = state.IsSnapshot,
+					AuthenticationKey = input.AuthenticationKey,
+					PlatformTypeId = input.PlatformTypeId,
+					SourceId = input.SourceId,
+					UserCode = input.UserCode,
+					StateCode = input.StateCode,
+					StateDescription = input.StateDescription,
+					IsLoggedOn = input.IsLoggedOn,
+					BatchId = batchId,
+					IsSnapshot = input.IsSnapshot,
 				});
 
-			// apparently 1 = state accepted, 0 = something was missing, anything else == error
+			// apparently 1 = input accepted, 0 = something was missing, anything else == error
 			if (result == 1 || result == 0)
 				return Json(result);
 			throw new HttpException("Result from TeleoptiRtaService was " + result);

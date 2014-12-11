@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public ExternalUserStateForSnapshot(DateTime time)
 		{
-			Timestamp = time;
 			BatchId = time;
 			IsSnapshot = true;
 		}

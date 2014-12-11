@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "statecode"
 			};
 			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", Guid.NewGuid(), null, teamId, null)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 
@@ -83,8 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "statecode"
 			};
 			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
@@ -93,10 +91,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
-				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", phone, 1)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 			target.SaveState(state);
@@ -106,19 +104,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldSendAgentAdhereneMesasgeIfStateGroupHasChanged()
+		public void ShouldSendAgentAdhereneMessageIfStateGroupHasChanged()
 		{
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "ready",
-				Timestamp = "2014-10-20 9:00".Utc()
+				StateCode = "ready"
 			};
 			var state2 = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 9:01".Utc()
+				StateCode = "phone"
 			};
 			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
@@ -127,11 +123,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
-				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 1)
 				.WithAlarm("phone", phone, 1)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 			target.SaveState(state2);
@@ -145,14 +141,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "ready",
-				Timestamp = "2014-10-20 9:00".Utc()
+				StateCode = "ready"
 			};
 			var state2 = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 9:01".Utc()
+				StateCode = "phone"
 			};
 			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
@@ -161,11 +155,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
-				.WithSchedule(personId, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, "my first state")
 				.WithAlarm("phone", phone, "my second state")
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 			target.SaveState(state2);
@@ -179,8 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest
 			{
-				UserCode = "usercode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				UserCode = "usercode"
 			};
 			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
@@ -189,7 +182,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 
@@ -201,8 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest
 			{
-				UserCode = "usercode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				UserCode = "usercode"
 			};
 			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
@@ -211,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 
@@ -223,8 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest
 			{
-				UserCode = "usercode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				UserCode = "usercode"
 			};
 			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
@@ -233,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 
@@ -245,8 +236,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var state = new ExternalUserStateForTest
 			{
-				UserCode = "usercode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				UserCode = "usercode"
 			};
 			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
@@ -255,7 +245,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 
@@ -268,13 +258,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
 			};
 			var sender = new FakeMessageSender();
 			var database = new FakeRtaDatabase()
 				.WithSource(state.SourceId)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(state);
 

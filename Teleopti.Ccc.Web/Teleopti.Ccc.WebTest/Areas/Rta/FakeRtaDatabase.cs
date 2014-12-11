@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithSource(string sourceId);
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
-		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateTime start, DateTime end);
+		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, string start, string end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState);
 		FakeRtaDatabase Make();
 	}
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateTime start, DateTime end)
+		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, string start, string end)
 		{
 			_schedules.Add(new scheduleLayer2
 			{
@@ -113,9 +114,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				{
 					PayloadId = activityId,
 					Name = name,
-					StartDateTime = start,
-					EndDateTime = end,
-					BelongsToDate = new DateOnly(start.Date)
+					StartDateTime = start.Utc(),
+					EndDateTime = end.Utc(),
+					BelongsToDate = new DateOnly(start.Utc().Date)
 				}
 			});
 			return this;
@@ -268,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return fakeDataBuilder.WithUser(userCode, personId, businessUnitId, null, null);
 		}
 
-		public static IFakeDataBuilder WithSchedule(this IFakeDataBuilder fakeDataBuilder, Guid personId, Guid activityId, DateTime start, DateTime end)
+		public static IFakeDataBuilder WithSchedule(this IFakeDataBuilder fakeDataBuilder, Guid personId, Guid activityId, string start, string end)
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, null, start, end);
 		}

@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state1 = new ExternalUserStateForTest
 			{
 				UserCode = "usercode1",
-				StateCode = "statecode1",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "statecode1"
 			};
 			var state2 = new ExternalUserStateForTest
 			{
 				UserCode = "usercode2",
-				StateCode = "statecode2",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "statecode2"
 			};
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
@@ -33,13 +31,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state1)
 				.WithUser("usercode1", personId1)
 				.WithUser("usercode2", personId2)
-				.WithSchedule(personId1, activityId, state1.Timestamp.AddHours(-1), state1.Timestamp.AddHours(1))
-				.WithSchedule(personId2, activityId, state2.Timestamp.AddHours(-1), state2.Timestamp.AddHours(1))
+				.WithSchedule(personId1, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
+				.WithSchedule(personId2, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode1", activityId, 0)
 				.WithAlarm("statecode2", activityId, 1)
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow(state1.Timestamp), publisher);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), publisher);
 
 			target.SaveState(state1);
 			target.SaveState(state2);

@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".Utc()
+				StateCode = "statecode"
 			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithAlarm("statecode", activityId, alarmId)
 				.Make();
 			var sender = new FakeMessageSender();

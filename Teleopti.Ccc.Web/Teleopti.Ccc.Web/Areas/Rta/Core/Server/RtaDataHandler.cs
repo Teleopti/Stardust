@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_now = now;
 		}
 
-		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
 			process(
-				new ExternalUserStateInputModel {Timestamp = timestamp},
+				new ExternalUserStateInputModel(),
 				new PersonWithBusinessUnit {BusinessUnitId = businessUnitId, PersonId = personId}
 				);
 		}
@@ -89,7 +89,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			foreach (var agent in missingAgents)
 			{
 				input.StateCode = "CCC Logged out";
-				input.SecondsInState = 0;
 				input.PlatformTypeId = Guid.Empty.ToString();
 				process(input, new PersonWithBusinessUnit {BusinessUnitId = agent.BusinessUnitId, PersonId = agent.PersonId});
 			}

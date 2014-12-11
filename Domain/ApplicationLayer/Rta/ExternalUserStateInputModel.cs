@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
 		public bool IsLoggedOn { get; set; }
-		public int SecondsInState { get; set; }
-		public DateTime Timestamp { get; set; }
 		public DateTime BatchId { get; set; }
 		public bool IsSnapshot { get; set; }
 	}

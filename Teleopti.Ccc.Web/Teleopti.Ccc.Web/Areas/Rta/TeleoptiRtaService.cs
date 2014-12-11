@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					StateCode = stateCode,
 					StateDescription = stateDescription,
 					IsLoggedOn = isLoggedOn,
-					SecondsInState = secondsInState,
-					Timestamp = timestamp,
 					PlatformTypeId = platformTypeId,
 					SourceId = sourceId,
 					BatchId = batchId,
@@ -59,8 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					StateCode = s.StateCode,
 					StateDescription = s.StateDescription,
 					IsLoggedOn = s.IsLoggedOn,
-					SecondsInState = s.SecondsInState,
-					Timestamp = s.Timestamp,
 					PlatformTypeId = platformTypeId,
 					SourceId = sourceId,
 					BatchId = s.BatchId,
@@ -74,8 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			_rta.CheckForActivityChange(new CheckForActivityChangeInputModel
 			{
 				PersonId = personId,
-				BusinessUnitId = businessUnitId,
-				Timestamp = timestamp
+				BusinessUnitId = businessUnitId
 			});
 		}
 	}

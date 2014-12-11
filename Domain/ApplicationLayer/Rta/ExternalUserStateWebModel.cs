@@ -1,14 +1,7 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
+﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class ExternalUserStateWebModel
 	{
-		public ExternalUserStateWebModel()
-		{
-			Timestamp = DateTime.Now.ToString();
-		}
-
 		public string AuthenticationKey { get; set; }
 		public string PlatformTypeId { get; set; }
 		public string SourceId { get; set; }
@@ -17,8 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
 		public bool IsLoggedOn { get; set; }
-		public int SecondsInState { get; set; }
-		public string Timestamp { get; set; }
 		public string BatchId { get; set; }
 		public bool IsSnapshot { get; set; }
 	}

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".Utc()
+				StateCode = "statecode"
 			});
 
 			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single());
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
@@ -50,8 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = "2014-10-20 10:00".Utc()
+				StateCode = "statecode"
 			});
 
 			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithAlarm("phone", activityId, 1)
 				.Make();
 			var publisher = new FakeEventPublisher();
@@ -76,8 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 10:00".Utc()
+				StateCode = "phone"
 			});
 
 			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single());

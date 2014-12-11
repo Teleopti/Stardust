@@ -242,7 +242,6 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
-    <Compile Include="Areas\Rta\UseSystemClockTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
     <Compile Include="Areas\Rta\PersonEventsOrderTest.cs" />

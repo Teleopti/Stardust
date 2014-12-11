@@ -1,11 +1,7 @@
-using System;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -21,32 +17,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var result = target.SaveState(state);
 
 			result.Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldNotProcessStatesThatsToOld()
-		{
-			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
-			var state = new ExternalUserStateForTest() { Timestamp = christmas.AddHours(1) };
-			var target = RtaForTest.MakeBasedOnState(state, new ThisIsNow(christmas));
-
-			var result = target.SaveState(state);
-
-			result.Should().Not.Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldNotProcessStatesWithTimeStampNewerThanNow()
-		{
-			var christmas = new DateTime(2001, 12, 24, 15, 0, 0);
-			var now = MockRepository.GenerateStub<INow>();
-			now.Expect(n => n.UtcDateTime()).Return(christmas);
-			var state = new ExternalUserStateForTest { Timestamp = christmas.Subtract(TimeSpan.FromHours(1)) };
-			var target = RtaForTest.MakeBasedOnState(state, now);
-
-			var result = target.SaveState(state);
-
-			result.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]

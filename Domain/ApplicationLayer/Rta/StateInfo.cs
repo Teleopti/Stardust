@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IActualAgentAssembler _actualAgentStateAssembler;
 		private Guid? _platformTypeId;
 		private PersonWithBusinessUnit _person;
+		private DateTime _currentTime;
 
 		public StateInfo(
 			IDatabaseReader databaseReader,
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_input = input;
 			_person = person;
 			_actualAgentStateAssembler = actualAgentStateAssembler;
+			_currentTime = currentTime;
 
 			_platformTypeId = null;
 			if (input.PlatformTypeId != null)
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			});
 			_inAdherenceWithPreviousActivity = new Lazy<bool>(() =>
 			{
-				var previousActivity = (from l in ScheduleLayers where l.EndDateTime < _input.Timestamp select l).LastOrDefault();
+				var previousActivity = (from l in ScheduleLayers where l.EndDateTime < currentTime select l).LastOrDefault();
 				return AdherenceFor(_input.StateCode, previousActivity);
 			});
 
@@ -181,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private ScheduleLayer nextAdjecentActivityToCurrent()
 		{
-			var nextActivity = (from l in ScheduleLayers where l.StartDateTime > _input.Timestamp select l).FirstOrDefault();
+			var nextActivity = (from l in ScheduleLayers where l.StartDateTime > _currentTime select l).FirstOrDefault();
 			if (nextActivity == null)
 				return null;
 			if (CurrentActivity == null)

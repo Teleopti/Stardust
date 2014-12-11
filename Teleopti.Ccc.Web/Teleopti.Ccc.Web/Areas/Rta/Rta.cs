@@ -75,8 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				SourceId = state.SourceId,
 				UserCode = "",
 				IsSnapshot = true,
-				BatchId = state.BatchId,
-				Timestamp = state.Timestamp
+				BatchId = state.BatchId
 			});
 		}
 
@@ -104,9 +103,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			verifyAuthenticationKey(input.AuthenticationKey, messageId);
 
 			Log.InfoFormat(System.Globalization.CultureInfo.InvariantCulture,
-						   "Incoming message: MessageId = {10}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, SecondsInState = {4}, TimeStamp = {5}, PlatformTypeId = {6}, SourceId = {7}, BatchId = {8}, IsSnapshot = {9}.",
-						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.SecondsInState, input.Timestamp,
-						   input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot, messageId);
+						   "Incoming message: MessageId = {10}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, PlatformTypeId = {4}, SourceId = {5}, BatchId = {6}, IsSnapshot = {7}.",
+						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot);
 
 			if (string.IsNullOrEmpty(input.SourceId))
 			{
@@ -127,14 +125,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				input.StateCode = LogOutStateCode;
 			}
 
-			//The DateTimeKind.Utc is not set automatically when deserialising from soap message
-			input.Timestamp = DateTime.SpecifyKind(input.Timestamp, DateTimeKind.Utc);
-			if (Math.Abs(input.Timestamp.Subtract(_now.UtcDateTime()).TotalMinutes) > 30)
-			{
-				Log.ErrorFormat("The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})", _now.UtcDateTime(), input.Timestamp, messageId);
-				return -400;
-			}
-			
 			const int stateCodeMaxLength = 25;
 			input.StateCode = input.StateCode.Trim();
 			if (input.StateCode.Length > stateCodeMaxLength)
@@ -186,9 +176,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
-			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", input.PersonId, input.BusinessUnitId, input.Timestamp);
+			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Time: {2}", input.PersonId, input.BusinessUnitId, _now.UtcDateTime());
 
-			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId, input.Timestamp);
+			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId);
 		}
 
 		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)

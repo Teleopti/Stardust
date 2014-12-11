@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				UserCode = personName,
 				StateCode = stateCode,
 				IsLoggedOn = true,
-				Timestamp = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
 				PlatformTypeId = Guid.Empty.ToString(),
 				SourceId = datasource.ToString(CultureInfo.InvariantCulture),
 				BatchId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),

@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -26,10 +25,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 10:00".Utc()
+				StateCode = "phone"
 			});
-			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			target.CheckForActivityChange(personId, businessUnitId);
 
 			var sent = sender.NotificationsOfType<IActualAgentState>().Last().DeseralizeActualAgentState();
 			sent.StateCode.Should().Be("phone");
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 9:00".Utc(), "2014-10-20 11:00".Utc())
+				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00")
 				.WithAlarm("phone", activityId, "alarm")
 				.Make();
 			var sender = new FakeMessageSender();
@@ -53,10 +51,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 10:00".Utc()
+				StateCode = "phone"
 			});
-			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			target.CheckForActivityChange(personId, businessUnitId);
 
 			var sent = sender.NotificationsOfType<IActualAgentState>().Last().DeseralizeActualAgentState();
 			sent.State.Should().Be("alarm");

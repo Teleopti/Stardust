@@ -14,14 +14,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var inAdherence = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "ready",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "ready"
 			};
 			var outOfAdherence = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "loggedoff"
 			};
 			var sender = new FakeMessageSender();
 			var personId = Guid.NewGuid();
@@ -29,11 +27,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(inAdherence)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, phone, inAdherence.Timestamp.AddHours(-1), inAdherence.Timestamp.AddHours(1))
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, 1)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 			
 			target.SaveState(inAdherence);
 			target.SaveState(outOfAdherence);
@@ -47,14 +45,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var inAdherence = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "ready",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "ready"
 			};
 			var outOfAdherence = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "loggedoff"
 			};
 			var sender = new FakeMessageSender();
 			var personId = Guid.NewGuid();
@@ -62,11 +58,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(inAdherence)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, phone, inAdherence.Timestamp.AddHours(-1), inAdherence.Timestamp.AddHours(1))
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(inAdherence.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(inAdherence);
 			target.SaveState(outOfAdherence);
@@ -80,14 +76,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var outOfAdherence1 = new ExternalUserStateForTest
 			{
 				UserCode = "one",
-				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "loggedoff"
 			};
 			var outOfAdherence2 = new ExternalUserStateForTest
 			{
 				UserCode = "two",
-				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "loggedoff"
 			};
 			var sender = new FakeMessageSender();
 			var personId1 = Guid.NewGuid();
@@ -98,12 +92,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(outOfAdherence1)
 				.WithUser("one", personId1, null, null, siteId)
 				.WithUser("two", personId2, null, null, siteId)
-				.WithSchedule(personId1, phone, outOfAdherence1.Timestamp.AddHours(-1), outOfAdherence1.Timestamp.AddHours(1))
-				.WithSchedule(personId2, phone, outOfAdherence2.Timestamp.AddHours(-1), outOfAdherence2.Timestamp.AddHours(1))
+				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(outOfAdherence1);
 			target.SaveState(outOfAdherence2);
@@ -118,14 +112,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var outOfAdherence1 = new ExternalUserStateForTest
 			{
 				UserCode = "one",
-				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "loggedoff"
 			};
 			var outOfAdherence2 = new ExternalUserStateForTest
 			{
 				UserCode = "two",
-				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "loggedoff"
 			};
 			var sender = new FakeMessageSender();
 			var personId1 = Guid.NewGuid();
@@ -135,12 +127,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(outOfAdherence1)
 				.WithUser("one", personId1, null, null, Guid.NewGuid())
 				.WithUser("two", personId2, null, null, Guid.NewGuid())
-				.WithSchedule(personId1, phone, outOfAdherence1.Timestamp.AddHours(-1), outOfAdherence1.Timestamp.AddHours(1))
-				.WithSchedule(personId2, phone, outOfAdherence2.Timestamp.AddHours(-1), outOfAdherence2.Timestamp.AddHours(1))
+				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow(outOfAdherence1.Timestamp), sender);
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			target.SaveState(outOfAdherence1);
 			target.SaveState(outOfAdherence2);

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var target = RtaForTest.MakeBasedOnState(state, database);
 
-			target.CheckForActivityChange(personId, businessUnitId, state.Timestamp);
+			target.CheckForActivityChange(personId, businessUnitId);
 
 			database.PersistedActualAgentState.PersonId.Should().Be(personId);
 		}

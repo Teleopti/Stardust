@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.Change(new ExternalUserStateWebModelForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = "2014-11-14 10:00"
+				StateCode = "statecode"
 			});
 
 			fakeMessageSender.NotificationOfType<IActualAgentState>()

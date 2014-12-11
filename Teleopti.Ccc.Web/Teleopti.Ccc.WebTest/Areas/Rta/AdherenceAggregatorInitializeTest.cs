@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			{
 				UserCode = "user2",
 				StateCode = "loggedoff",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
 			};
 			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
@@ -28,8 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state)
 				.WithUser("user1", person1, null, teamId, null)
 				.WithUser("user2", person2, null, teamId, null)
-				.WithSchedule(person1, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
-				.WithSchedule(person2, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(person1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+				.WithSchedule(person2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
 			database.PersistActualAgentState(new ActualAgentState
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				PersonId = person1,
 				StaffingEffect = -1
 			});
-			var service = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var service = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			service.Initialize();
 			service.SaveState(state);
@@ -51,8 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode",
-				Timestamp = new DateTime(2014, 10, 20, 9, 0, 0, DateTimeKind.Utc)
+				StateCode = "statecode"
 			};
 			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
@@ -61,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(state)
 				.WithUser("usercode", person1, null, teamId, null)
-				.WithSchedule(person1, phone, state.Timestamp.AddHours(-1), state.Timestamp.AddHours(1))
+				.WithSchedule(person1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", phone, -1)
 				.Make();
 			database.PersistActualAgentState(new ActualAgentState
@@ -69,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				PersonId = person1,
 				StaffingEffect = -1
 			});
-			var service = new RtaForTest(database, new ThisIsNow(state.Timestamp), sender);
+			var service = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
 
 			service.Initialize();
 

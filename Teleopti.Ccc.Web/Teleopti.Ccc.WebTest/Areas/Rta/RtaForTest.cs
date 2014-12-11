@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public static RtaForTest MakeBasedOnState(ExternalUserStateForTest state)
 		{
-			return new RtaForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), new ThisIsNow(state.Timestamp));
+			return new RtaForTest(new FakeRtaDatabase().WithDataFromState(state).Make(), new ThisIsNow("2014-10-20 8:00"));
 		}
 
 		public static RtaForTest MakeBasedOnState(ExternalUserStateForTest state, INow now)
@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public static RtaForTest MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database)
 		{
-			return new RtaForTest(database, new ThisIsNow(state.Timestamp));
+			return new RtaForTest(database, new ThisIsNow("2014-10-20 8:00"));
 		}
 
-		public static RtaForTest MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
-		{
-			return new RtaForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
-		}
+		//public static RtaForTest MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
+		//{
+		//	return new RtaForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
+		//}
 
 		public int SaveState(ExternalUserStateInputModel input)
 		{
@@ -123,13 +123,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			_rta.CheckForActivityChange(input);
 		}
 
-		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
 		{
 			_rta.CheckForActivityChange(new CheckForActivityChangeInputModel
 			{
 				PersonId = personId,
-				BusinessUnitId = businessUnitId,
-				Timestamp = timestamp
+				BusinessUnitId = businessUnitId
 			});
 		}
 

@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var database = new FakeRtaDatabase()
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, phone, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
-				.WithSchedule(personId, brejk, "2014-10-20 10:00".Utc(), "2014-10-20 10:15".Utc())
+				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithSchedule(personId, brejk, "2014-10-20 10:00", "2014-10-20 10:15")
 				.WithAlarm("phone", phone, 0)
 				.WithAlarm("phone", brejk, 1)
 				.WithAlarm("break", brejk, 0)
@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 9:00".Utc()
+				StateCode = "phone"
 			});
 			publisher.PublishedEvents.Clear();
 
@@ -43,8 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "break",
-				Timestamp = "2014-10-20 10:02".Utc()
+				StateCode = "break"
 			});
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 10:00".Utc());
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, phone, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
+				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
 				.WithAlarm("admin", phone, 1)
 				.WithAlarm("admin", admin, 0)
 				.Make();
@@ -77,56 +75,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "admin",
-				Timestamp = "2014-10-20 9:15".Utc()
+				StateCode = "admin"
 			});
 			publisher.PublishedEvents.Clear();
 
 			now.Mutate("2014-10-20 9:30");
 			database.ClearSchedule(personId);
-			database.WithSchedule(personId, admin, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc());
-			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 9:31".Utc());
+			database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
+			target.CheckForActivityChange(personId, businessUnitId);
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be.True();
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
 		}
 
-		[Test]
-		public void ShouldSwitchToNextActivityOnceEvenThoughTimeDifferenceBetweenSourceStreams()
-		{
-			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			var admin = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, phone, "2014-10-20 9:00".Utc(), "2014-10-20 10:00".Utc())
-				.WithSchedule(personId, admin, "2014-10-20 10:00".Utc(), "2014-10-20 11:00".Utc())
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var now = new MutableNow("2014-10-20 9:00");
-			var target = new RtaForTest(database, now, publisher);
-			target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone",
-				Timestamp = "2014-10-20 9:00".Utc()
-			});
-			publisher.PublishedEvents.Clear();
-
-			now.Mutate("2014-10-20 10:00");
-			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
-			target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "admin",
-				Timestamp = "2014-10-20 9:59".Utc()
-			});
-
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(1);
-		}
 	}
 }
