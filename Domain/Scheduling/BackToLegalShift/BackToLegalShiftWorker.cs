@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 			}
 
+			rollbackService.ClearModificationCollection();
+
 			return success;
 		}
 	}

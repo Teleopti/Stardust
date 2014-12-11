@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_teamBlockSingleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions,
 					new DateOnly(2014, 9, 22), _roleModelShift, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, null, true)).Return(true);
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 
 			using (_mocks.Playback())
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					new DateOnly(2014, 9, 22), _roleModelShift, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, null, true)).Return(false);
 				Expect.Call(() => _safeRollBackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 
 			using (_mocks.Playback())
