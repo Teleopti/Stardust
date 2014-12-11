@@ -5740,72 +5740,6 @@ osoby</value>
     <value>Nejdříve musí být konfigurovány RTA stavové skupiny.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Použít licenci</value>
-    <comment>the license upload dialog window title</comment>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Pokyny:
-* Kupte si licenci (kontaktní informace naleznete na www.teleopti.com)
-* Získejte licenční soubor (např. prostřednictvím e-mailu)
-* Uložte licenci na disk
-* Před použitím licence uložte rozdělanou práci v aplikaci
-* Vyhledejte licenční soubor pomocí spodního tlačítka 
-*  Zaveďte licenci
-* Aplikace se ukončí
-* Restartujte MyTime pro obdržení nových licencovaných možností
-* Spusťte znovu aplikaci</value>
-    <comment>instructions for applying license in license window</comment>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Nelze přistoupit k licenčnímu souboru "{0}" 
-Detaily chyby: 
-{1}</value>
-    <comment>IOException for license file in LogOnScreen</comment>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Při ukládání licence do databáze se vyskytl problém.
-Detaily chyby:
-{0}</value>
-    <comment>Database error when storing license</comment>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Vložte platné jméno souboru včetně cesty</value>
-    <comment>file not found in license window</comment>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Licence byla úspěšně zavedena.
-Gratulujeme! Nyní jste licencovaným uživatelem tohoto oceněného řešení pro management zaměstnanců.
-Aplikace bude nyní ukončena.
-Aplikaci restartujte. Chcete-li získat přístup k novým licencovaným možnostem, restartujte rovněž MyTime.</value>
-    <comment>license upload success message</comment>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Skončila platnost vaší licence, použijte prosím novou licenci.</value>
-    <comment>explanation for license failure in license window</comment>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Vaše licence je neplatná, pravděpodobně byla neoprávněně modifikována. Použijte prosím novou licenci.</value>
-    <comment>explanation for modified license in license window</comment>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>Snažíte se zavést licenci "{0}", které již vypršela platnost.</value>
-    <comment>expiration exception for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Licenční soubor "{0}" je neplatný.</value>
-    <comment>SignatureValidationException for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>Licenční soubor "{0}" nemá platný (xlm) formát
-Detaily chyby:
-{1}</value>
-    <comment>Xml exception when parcing xml file in LogOnScreen</comment>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Dosud jste nepoužili licenci, prosím použijte ji.</value>
-    <comment>explanation shown at first startup in license window</comment>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Neexistující soubor</value>
     <comment>file not found title</comment>
@@ -5813,14 +5747,6 @@ Detaily chyby:
   <data name="Success" xml:space="preserve">
     <value>Úspěšný</value>
     <comment>Success</comment>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Zavedení licence se nezdařilo</value>
-    <comment>license application error dialog title</comment>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Vaše licence je platná pouze do {0}, nezapomeňte ji obnovit.</value>
-    <comment>license expiration warning in LogOnScreen</comment>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Vyhledat</value>
@@ -5836,10 +5762,6 @@ Detaily chyby:
   <data name="About" xml:space="preserve">
     <value>Kolem</value>
     <comment>About</comment>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Zvolte licenční soubor</value>
-    <comment>open licese file dialog title</comment>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Doba týdenního odpočinku nemůže být delší než 168 hodin</value>
@@ -5873,16 +5795,6 @@ Detaily chyby:
     <value>Někdo změnil tytéž údaje před vámi.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Tento produkt je licencován "{0}" do {1}.
-
-Licence platí pro maximálně {2} aktivních agentů.
-
-Licenční schéma je "{3}".
-Jsou aktivovány tyto volby:
-{4}</value>
-    <comment>license text shown in about box</comment>
-  </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>Pracovní den</value>
     <comment>Working day, the default description for a new instance of a dayofftemplate.</comment>
@@ -5890,18 +5802,6 @@ Jsou aktivovány tyto volby:
   <data name="UndoAll" xml:space="preserve">
     <value>Zpět vše</value>
     <comment>Undo All</comment>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Máte {0} aktivních agentů, licencovaných máte pouze {1} agentů. Proveďte prosím co nejdříve aktualizaci vaší licence.</value>
-    <comment>license warning when you are close to maximum active agents</comment>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Máte {0} aktivních agentů, licencovaných máte pouze {1} agentů. Před pokračováním musíte provést aktualizaci vaší licence.</value>
-    <comment>license error when maximum active agents have been exceeded</comment>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Tato licence platí pro {0} aktivních agentů, vy máte však {1} agentů. Musíte zakoupit licenci pro příslušný počet aktivních agentů.</value>
-    <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>dny</value>
@@ -6720,10 +6620,6 @@ Jsou aktivovány tyto volby:
   <data name="IntervalStdev" xml:space="preserve">
     <value>Interval směrodatné odchylky</value>
     <comment>Skill grid scheduler</comment>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Licenční výjimka Teleopti</value>
-    <comment>Teleopti License Exception</comment>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>Přidat schůzku</value>
@@ -9245,9 +9141,6 @@ Chybová zpráva: {0}</value>
   <data name="SendASM" xml:space="preserve">
     <value>Odeslat zprávu (ASM)</value>
   </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Licence pokrývá pouze {0} míst. Musíte zajistit licenci pokrývající dostatek míst.</value>
-  </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>Všechny absence</value>
   </data>
@@ -9481,21 +9374,6 @@ Chybová zpráva: {0}</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
     <value>Plánovaní a aktuální agenti</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Systém je licencován na "{0}" v souladu se smluvními podmínkami a licenční klíč vyprší {1}
-
-Licence pokrývá maximum {2} míst.
-
-Licenční schéma je "{3}".
-Tyto volitelné funkce jsou používány:
-{4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Již jste téměř dosáhli limitu {0} v počtu licencí. Prosím navyšte své licence v nebližší době.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Využíváte příliš mnoho licencí, máte pouze {0} licencí. Musíte navýšit počet licencní, abyste mohli pokračovat.</value>
   </data>
   <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
     <value>Vaše emailová adresa musí být nastavena v modulu Lidé, aby bylo možné používat tuto službu.</value>
@@ -9872,9 +9750,6 @@ zkrácených úvazků</value>
   </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Zákaznické reporty</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Používáte více agentů ({0}) než povoluje vaše licence({1}). Nyní zbývají{2} dny pro snížení počtu agentů nebo přidání nové licence, který pokryje tolik agentů.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Implicitní prohlížeč</value>

@@ -1797,63 +1797,8 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Kelompok status RTA harus dikonfigurasi dulu.</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Install Lisensi</value>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Instruksi:
-* Beli lisensi (informasi kontak www,teleopti.com)
-* Menerima lisensi (misal via email)
-* Simpan lisensi pada disk
-* Simpan pekerjaan anda sebelum memasang lisensi
-* Install lisensi
-* Aplikasi akan mati
-* Jalankan kembali MyTime untuk menggunakan lisensi baru
-* Jalankan aplikasi kembali</value>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>File lisensi "{0}" tidak bisa diakses. Detil kesalahan: {1}</value>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Ada masalah ketika mencoba menyimpan lisensi pada database. 
-Detil kesalahan: 
-{0}</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Masukkan nama file yang valid, termasuk path</value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Lisensi diterapkan dengan sukes. 
-Selamat! Anda saat ini pengguna solusi workforce management pemenang penghargaan. 
-Sekarang aplikasi akan keluar. 
-Anda bisa menjalankannya kembali. Anda juga harus menjalankan kembali My Time untuk mendapatkan akses pada lisensi baru.</value>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Lisensi anda telah berakhir, silakan install lisensi baru</value>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Lisensi anda tidak valid, kemungkinan dimodifikasi, silakan install lisensi baru</value>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>Lisensi "{0}" yang akan anda install adalah lisensi lama dan telah berakhir.</value>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>File lisensi "{0}" bukan format (xml) yang valid. Detil kesalahan: {1}</value>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Anda belum menginstall lisensi</value>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Lisensi aplikasi gagal</value>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Lisensi anda valid sampai dengan {0}, jangan lupa untuk memperbaruinya tepat waktu</value>
-  </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
     <value>Akun orang tidak bisa dikeluarkan. Harus ada sedikitnya satu absen yang ditentukan di dalam Options.</value>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Pilih file lisensi</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Waktu istirahat minggu tidak boleh lebih dari 168 jam</value>
@@ -1870,26 +1815,8 @@ Anda bisa menjalankannya kembali. Anda juga harus menjalankan kembali My Time un
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
     <value>Sesorang mengubah data yang sama sebelum anda.</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Sistem ini dilisensi untuk "{0}" terkait syarat dan kondisi dalam kesepakatan lisensi dan lisensi akan berakhir {1}.
-
-Lisensi meliputi maksimal {2} agent aktif.
-
-Skema lisensi adalah "{3}".
-Opsi berikut diaktifkan:
-{4}</value>
-  </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>Hari kerja</value>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Anda memiliki {0} agent aktif tetapi anda hanya terlisensi untuk {1}. Silakan upgrade lisensi anda segera</value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Anda memiliki {0} agent aktif tetapi anda hanya terlisensi untuk {1}. Anda harus mengupgrade lisensi sebelum melanjutkan.</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Lisensi ini hanya meliputi {0} agent aktif, tetapi anda memiliki {1}. Anda harus mempunyai lisensi yang cukup</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>hari</value>
@@ -2127,9 +2054,6 @@ Opsi berikut diaktifkan:
   </data>
   <data name="DeletePartTimePercentage" xml:space="preserve">
     <value>Menghapus persentase paruh waktu</value>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Pengecualian Lisensi Teleopti</value>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>Tambah Pertemuan</value>
@@ -2733,24 +2657,6 @@ Opsi berikut diaktifkan:
   </data>
   <data name="MeetingsCreatedByMe" xml:space="preserve">
     <value>Pertemuan yang saya buat</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Lisensi ini hanya meliputi {0} seat. Anda harus mempunyai lisensi yang cukup.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Sistem dilisensi untuk "{0}" terkait syarat dan kondisi dalam kesepkatan lisensi dan lisensi akan berakhir {1}.
-
-Lisensi meliputi maksimal {2} seat.
-
-Skema lisensi adalah "{3}".
-Opsi berikut diaktfikan:
-{4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Anda hampir mencapai batas lisensi {0} seat. Silakan upgrade lisensi segera.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Anda menggunakan seat terlalu banyak, anda hanya terlisensi untuk {0}. Anda harus mengupgrade lisensi sebelum melanjutkan</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Set kendali workflow hilang</value>
@@ -6116,9 +6022,6 @@ R&amp;D Teleopti</value>
   </data>
   <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
     <value>Penyusutan (%)</value>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>File lisensi "{0}" tidak valid, kemungkinan file berubah</value>
   </data>
   <data name="ForecasterWillBeClosedDot" xml:space="preserve">
     <value>Pemrakira akan ditutup.</value>

@@ -4230,17 +4230,8 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Daha önce RTA durum grupları konfigüre edilmelidir</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Lisansı yükle</value>
-  </data>
   <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
     <value>Lisans dosyası "{0}" ulaşılamaz durumda. Hata detayları {1}</value>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Lisansı veritabanında saklamak ile ilgili problem var. Hata detayları {0}</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>İz bilgisi içeren geçerli dosya ismi gir. </value>
   </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Lisansınızın süresi dolmuştur, lğtfen yenisini yükleyiniz. </value>
@@ -4316,12 +4307,6 @@
   </data>
   <data name="UndoAll" xml:space="preserve">
     <value>Tamamını geri çek</value>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen lisanslarınızı güncelleyin.</value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen devam edebilmek için lisanslarınızı güncelleyin.</value>
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>{0} aktif müşteri temsilciniz var ancak sadece {1} adeti lisanslanmış durumda. Lütfen tüm müşteri temsilcilerinizi kapsayacak sayıda lisana tedarik ediniz. </value>
@@ -7967,9 +7952,6 @@
   </data>
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>En az bir işyükü seçmek zorundasınız.</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>An itibariyle lisansınızda tanımlı olan maksimum ({1}) temsilciden ({0}) daha fazla lisanslı kullanıcı gözüküyor. Lütfen {2} gün içerisinde lisanslı kullanıcı sayınızı azaltın ya da yeni bir lisans başvurusu yapın.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Tarayıcı varsayılan ayarları</value>

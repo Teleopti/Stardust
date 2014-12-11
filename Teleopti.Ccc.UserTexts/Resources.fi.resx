@@ -5730,74 +5730,6 @@ työmäärää</value>
     <value>RTA-ryhmät on konfiguroitava ensin.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Liitä lisenssi</value>
-    <comment>the license upload dialog window title</comment>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Ohjeet:
-- Osta lisenssi (yhteystiedot osoitteesta www.teleopti.com).
-- Vastaanota lisenssitiedosto (esim. sähköpostitse).
-- Tallenna lisenssi sopivaan paikkaan (esim. työpöydällesi).
-- Jos sinulla on sovelluksessa kesken tallentamattomia töitä, tallenna ne ennen lisenssin käyttöönottoa.
-- Hae lisenssitiedosto esiin alla olevalla selauspainikkeella. 
-- Liitä ja ota lisenssi käyttöön.
-- Sovellus suljetaan.
-- Käynnistä MyTime uudelleen, jolloin uudet lisensoidut valinnat tulevat näkyviin.
-- Käynnistä sovellus uudelleen.</value>
-    <comment>instructions for applying license in license window</comment>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Lisenssitiedostoa "{0}" ei voitu käyttää.
-Virhetiedot: 
-{1}</value>
-    <comment>IOException for license file in LogOnScreen</comment>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Lisenssin tallennuksessa tietokantaan oli ongelmia.
-Virhetiedot:
-{0}</value>
-    <comment>Database error when storing license</comment>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Syötä hyväksyttävä tiedoston nimi</value>
-    <comment>file not found in license window</comment>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Lisenssin käyttöönotto onnistui.
-
-Onnittelut! Olet nyt tämän palkitun työvoimanhallintaratkaisun lisensoitu käyttäjä.
-Sovellus suljetaan nyt.
-
-Sen jälkeen voit käynnistää sen uudelleen. MyTimen uudelleenkäynnistys voi olla tarpeen, jotta pääset käsiksi uusiin lisensoituihin ominaisuuksiin.</value>
-    <comment>license upload success message</comment>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Lisenssisi on vanhentunut, ota uusi lisenssi käyttöön.</value>
-    <comment>explanation for license failure in license window</comment>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Lisenssi ei kelpaa, sitä on mahdollisesti muokattu luvatta, ota toinen lisenssi käyttöön.</value>
-    <comment>explanation for modified license in license window</comment>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>Lisenssi "{0}", jota yrität käyttää, on vanha ja sen käyttöaika on jo umpeutunut.</value>
-    <comment>expiration exception for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Lisenssitiedosto "{0}" ei kelpaa, se voi olla väärennetty.</value>
-    <comment>SignatureValidationException for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>Lisenssitiedosto "{0}" ei ole oikeassa muodossa (xml).
-Virhetiedot:
-{1}</value>
-    <comment>Xml exception when parcing xml file in LogOnScreen</comment>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Et ole ottanut lisenssiä vielä käyttöön, tee se nyt.</value>
-    <comment>explanation shown at first startup in license window</comment>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Tiedostoa ei ole.</value>
     <comment>file not found title</comment>
@@ -5805,14 +5737,6 @@ Virhetiedot:
   <data name="Success" xml:space="preserve">
     <value>Onnistui</value>
     <comment>Success</comment>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Lisenssin käyttöönotto epäonnistui.</value>
-    <comment>license application error dialog title</comment>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Lisenssi on voimassa vain {0} asti, älä unohda uusia sitä ajoissa.</value>
-    <comment>license expiration warning in LogOnScreen</comment>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Selaa</value>
@@ -5828,10 +5752,6 @@ Virhetiedot:
   <data name="About" xml:space="preserve">
     <value>Tietoja</value>
     <comment>About</comment>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Valitse lisenssitiedosto.</value>
-    <comment>open licese file dialog title</comment>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Viikkolepoaika ei voi olla enemmänpää kuin 168 tuntia.</value>
@@ -5865,16 +5785,6 @@ Virhetiedot:
     <value>Joku toinen käyttäjä muutti samaa tietoa ennen sinua.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Tämä tuote on lisensoitu "{0}" käyttäjälle sopimuksen mukaan. Lisenssi vanhenee {1}.
-
-Lisenssi kattaa enintään {2} aktiivista agenttia.
-
-Lisenssi on tuotteelle "{3}".
-Seuraavat moduulit sisältyvät lisenssiin:
-{4}</value>
-    <comment>license text shown in about box</comment>
-  </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>Työpäivä</value>
     <comment>Working day, the default description for a new instance of a dayofftemplate.</comment>
@@ -5882,18 +5792,6 @@ Seuraavat moduulit sisältyvät lisenssiin:
   <data name="UndoAll" xml:space="preserve">
     <value>Kumoa kaikki</value>
     <comment>Undo All</comment>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Sinulla on {0} aktiivista agenttia, mutta lisenssin mukaan voi olla vain {1}. Päivitä lisenssi mahdollisimman pian.</value>
-    <comment>license warning when you are close to maximum active agents</comment>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Sinulla on {0} aktiivista agenttia, mutta lisenssin mukaan voi olla vain {1}. Sinun on päivitettävä lisenssi ennen kuin voit jatkaa.</value>
-    <comment>license error when maximum active agents have been exceeded</comment>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Tämä lisenssi kattaa vain {0} aktiivista agenttia, mutta sinulla on {1}. Sinun on hankittava lisenssi, joka kattaa tarvittavan määrän aktiivisia agentteja.</value>
-    <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>päivää</value>
@@ -6716,10 +6614,6 @@ Seuraavat moduulit sisältyvät lisenssiin:
   <data name="IntervalStdev" xml:space="preserve">
     <value>Intervallin standardipoikkeama</value>
     <comment>Skill grid scheduler</comment>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Virhe Teleopti-lisenssin käsittelyssä</value>
-    <comment>Teleopti License Exception</comment>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>Lisää kokous</value>
@@ -9798,12 +9692,6 @@ Jakso: {3}</value>
   <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
     <value>Alataidolla näyttää olevan sama nimi, kuin päätaidolla tai useammalla alataidolla on sama nimi. Ole ystävällinen ja muokkaa asetuksia Multisite taidolle. Ennusteet tullaan sulkemaan. </value>
   </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Sinulla on käytössä useampia agentteja ({0}) kuin mitä lisenssi oikeuttaa ({1}). Sinulla on {2} päivää aikaa vähentää agenttien määrää työvuoroista tai hankkia uusi lisenssi tarpeisiisi.</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Nykyinen lisenssi riittää {0} paikkaan. Sinun tulee hankkia lisenssi, mikä riittää tarpeeseesi. </value>
-  </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
     <value>Työvuoron maksimi pituus on {0} tuntia. Nykyinen työvuoron pituus on {1} tuntia.</value>
   </data>
@@ -9816,23 +9704,8 @@ Jakso: {3}</value>
   <data name="NoSkillMatchingPropertiesForCurrentSkillFound" xml:space="preserve">
     <value>Mikään taito ei vastaa ominaisuuksiltaan kyseistä taitoa. </value>
   </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Tämä järjestelmä on lisenssioitu {0} käyttäjälle sopimuksen mukaan. Lisenssi vanhenee {1}. 
-
-Lisenssi riittää maksimissaan {2} käyttäjälle. 
-
-Lisenssin on tuotteelle "{3}".
-Seuraavat moduulit sisältyvät lisenssiin: 
-{4}</value>
-  </data>
   <data name="ScheduleAuditTrailReport" xml:space="preserve">
     <value>Muutoksia työvuoroissa.</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Olet käyttänyt lähes kaikki lisenssisi {0}. Ole ystävällinen ja päivitä lisenssi -tiedosto pikaisesti.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Käytät liian montaa paikkaa, sinulla on lisenssi ainoastaan {0} paikkaan. Sinun tulee päivittää lisenssi jatkaaksesi työskentelyä.</value>
   </data>
   <data name="ScheduleAuditTrailIsNotRunning" xml:space="preserve">
     <value>Työvuorohistorian tallennus ei ole käynnissä.</value>

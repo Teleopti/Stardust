@@ -3407,34 +3407,11 @@ Teleopti R&amp;D</value>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Prima è necessario configurare i Gruppi di stati RTA</value>
   </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Si è verificato un problema nel tentativo di memorizzare la licenza nel database.
-Dettaglio errore:
-{0}</value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Chiave di licenza inserita correttamente.
-Complimenti! Ora sei un utente autorizzato di questa premiata soluzione di Workforce Management.
-Questa applicazione sarà ora terminata.
-Potresti doverla riavviare. Inoltre, potresti dover riavviare MyTime per accedere alle nuove opzione della licenza.</value>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>La tua licenza è scaduta, sostituiscila con una nuova per favore.</value>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>La tua licenza non è valida, magari è stata modificata. Inseriscine una nuova per favore.</value>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Non hai ancora inserito una licenza, fallo ora per favore.</value>
-  </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
     <value>Impossibile caricare i Contatori. Deve essere definita almeno un'assenza con tracciamento nelle opzioni.</value>
   </data>
   <data name="ForecasterWillBeClosedDot" xml:space="preserve">
     <value>Il Forecaster sarà chiuso.</value>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Hai {0} agenti attivi ma la tua licenza ne prevede solo {1}. Aggiorna la tua licenza persto per favore.</value>
   </data>
   <data name="ManageJusticeValues" xml:space="preserve">
     <value>Gestione valori di equità</value>
@@ -4224,9 +4201,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   </data>
   <data name="MeetingsCreatedByMe" xml:space="preserve">
     <value>Meeting creato da me</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Hai quasi raggiunto il numero limite di {0} postazioni indicato nella licenza. Aggiorna la tua licenza presto per favore.</value>
   </data>
   <data name="AllFulFilledAbsences" xml:space="preserve">
     <value>Tutte le assenze rispettate</value>
@@ -5701,14 +5675,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="UseForLogOut" xml:space="preserve">
     <value>Usa per Logout</value>
   </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Impossibile accedere al file di licenza "{0}". 
-Dettagli errore: 
-{1}</value>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>La licenza "{0}" che stai cercando di usare è vecchia e già scaduta.</value>
-  </data>
   <data name="NameAlreadyExists" xml:space="preserve">
     <value>Il nome esiste già</value>
   </data>
@@ -6661,12 +6627,6 @@ Messaggio errore: {0}</value>
   <data name="SendASM" xml:space="preserve">
     <value>Invia messaggio (ASM)</value>
   </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Questa licenza può coprire {0} postazioni. Devi procurarti una licenza che copra abbastanza postazioni.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Stai usando troppe postazioni, la tua licenza ne precede solo {0}. Devi aggiornare la tua chiave di liicenza prima di continuare.</value>
-  </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>Tutte le assenze</value>
   </data>
@@ -6825,9 +6785,6 @@ Messaggio errore: {0}</value>
   </data>
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>Il minimo è {0} ore.</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Stai usando più agenti ({0}) di quanto concesso dalla tua licenza ({1}). Hai ancora {2} giorni per ridurre gli agenti o inserire una nuova licenza che copra sitanti agenti.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Browser prefefinito</value>
@@ -7537,52 +7494,17 @@ Messaggio errore: {0}</value>
   <data name="MinimumOccupancyParenthesisPercentSign" xml:space="preserve">
     <value>Occupazione minima (%)</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Applica licenza</value>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Istruzioni:
-* Compra una licenza (informazioni e contatti qui www.teleopti.com)
-* Ricevi il file di licenza (per es. via e-mail)
-* Salva la licenza su disco
-* Se hai un lavoro in corso nell'applicazione, salvalo prima di applicare la licenza
-* Naviga il file di licenza usando il bottone di navigazione sottostante
-* Applica la licenza
-* L'applicazione si arresterà
-* Riavvia MyTime per ottenere le opzioni previste dalla nuova licenza
-* Avvia nuovamente l'applicazione</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Inserisci un nome di file valido, includendo il percorso</value>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Il file di licenza "{0}" non è valido, potrebbe essere contraffatto.</value>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>Il file di licenza "{0}" non è (xml) di formato valido
-Dettagli errore:
-{1}</value>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Nessun file</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Successo</value>
   </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Applicazione licenza fallita</value>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>La tua chiave di licenza è valida solo fino al {0}, non dimenticare di rinnovarla per tempo</value>
-  </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Naviga</value>
   </data>
   <data name="About" xml:space="preserve">
     <value>Informazioni</value>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Scegli file licenza</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Il riposo settimanale non può essere maggiore di 168 ore</value>
@@ -7605,23 +7527,8 @@ Dettagli errore:
   <data name="ActivityTime" xml:space="preserve">
     <value>Ore attività</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Questo sistema è dato in licenza a "{0}" in accordo ai termini e alle condizioni previste dal contratto e la relativa chiave di licenza scadrà il {1}.
-
-La licenza copre un massimo di {2} agenti attivi.
-
-Lo schema di licenza è "{3}".
-Le seguenti opzioni sono attivate:
-{4}</value>
-  </data>
   <data name="UndoAll" xml:space="preserve">
     <value>Annulla tutto</value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Hai {0} agenti attivi ma la tua licenza ne prevede solo {1}- Devi aggiornare la tua chiave di licenza prima di continuare</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Questa licenza copre solo {0} agenti attivi ma tu ne hai {1}. Devi procurarti una licenza che copra abbastanza agenti attivi</value>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>giorni</value>
@@ -7772,9 +7679,6 @@ Le seguenti opzioni sono attivate:
   </data>
   <data name="IntervalStdev" xml:space="preserve">
     <value>Intervallo stdev</value>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Errore licenza software Teleopti</value>
   </data>
   <data name="EmploymentType" xml:space="preserve">
     <value>Tipo impiego</value>
@@ -8403,15 +8307,6 @@ Aggiornato il: {1}</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>Produttività (%)</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Questo sistema è dato in licenza a "{0}" in accordo ai termini e alle condizioni previste dal contratto e la relativa chiave di licenza scadrà il {1}.
-
-La licenza copre un massimo di {2} postazioni.
-
-Lo schema di licenza è "{3}".
-Le seguenti opzioni sono attivate:
-{4}</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
     <value>Timestamp</value>

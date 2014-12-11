@@ -5637,71 +5637,11 @@ Bijgewerkt Op:{1}</value>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>De RTA staat groepen moeten eerst geconfigureerd worden.</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Apply Licentie</value>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Instructies:
-* Koop een licentie (contract informatie hier www.telepoti.com)
-* Ontvang licentiebestand (bijv. via mail)
-* Sla het licentie op een disk
-* Als U nog hangende werk heeft in de applicatie, sla het op voor het aanbrengen van licentie.
-* Browse naar het licentiebestand met behulp van de Browse knop  hieronder
-* Apply licentie
-* De applicatie zal afsluiten
-* Herstart MyTime om de nieuwe licentie opties te krijgen
-* Start applicatie opnieuw</value>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Licentie bestand "{0}" kan niet geopend worden
-Error details: 
-{1}</value>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Er was een probleem om de licentie in de database op te slaan. 
-Error details: 
-{0}</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Voer een geldige bestandsnaam, inclusief pad</value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Licentie met succes toegepast. 
-Gefeliciteerd! U bent een gelicentieerde user van deze bekroonde oplossing voor workforce management. 
-De applicatie zal nu sluiten. 
-U kunt opnieuw starten. U moet ook MyTime herstarten om toegang tot de nieuwe licentie opties te hebben.</value>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Uw licentie is verlopen, Aub en nieuwe toepassen.</value>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Uw licentie is ongeldig, mogelijk gewijzigd,  Aub en nieuwe toepassen.</value>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>De licentie "{0}" u probeert te solliciteren is oud, het is al verlopen.</value>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Het licentiebestand "{0}" is ongeldig, het kan gesmede worden</value>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>"Het licentiebestand" "{0}" "is niet de juiste (xml) formaat 
-Error details: 
-{1} "</value>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>U heeft nog geen licentie toegepast, kunt U het aub doen?</value>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Geen dergelijke bestand</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Succes</value>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>De toepassing van het licentie is mislukt</value>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Uw licenties is slechts geldig tot {0}, vergeet niet om het op tijd te vernieuwen</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Browse</value>
@@ -5711,9 +5651,6 @@ Error details:
   </data>
   <data name="About" xml:space="preserve">
     <value>Over</value>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Kies licentiebestand</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Wekelijkse rusttijd mag niet meer dan 168 uur zijn</value>
@@ -5739,26 +5676,8 @@ Error details:
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
     <value>Iemand heeft dezelfde data verandert voor je</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Dit systeem is gelicentieerd tot "{0}" volgens de voorwaarden van de licentieovereenkomst en de licentie verloopt {1}.
-
-De licentie gelds een maximum van {2} actieve agenten.
-
-De licentie schema is "{3}".
-Deze opties worden geactiveerd:
-{4} "</value>
-  </data>
   <data name="UndoAll" xml:space="preserve">
     <value>Undo alles</value>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>U heeft {0} actieve agente, maar U bent alleen gelicentieerd om {1} te hebben. Upgrade Uw licentie binnenkort</value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>U heeft {0} actieve agente, maar U bent alleen gelicentieerd om {1} te hebben. U moet Uw licentie upgraden voordat u verder kunt gaan</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Deze licentie covers allen {0} actieve agenten, maar U heeft {1}. U moet een licentie krijgen die voldoende actieve agenten dekt</value>
   </data>
   <data name="TimeTypeHours" xml:space="preserve">
     <value>Uren</value>
@@ -6137,9 +6056,6 @@ Nieuwe Multiplicator</value>
   </data>
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>Er ging iets mis. Sluit het bestand als het open is.</value>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti License Exception</value>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
     <value>Multiplicator Definitie Sets</value>
@@ -8110,24 +8026,6 @@ Periode</value>
   <data name="SendASM" xml:space="preserve">
     <value>Stuur bericht (ASM)</value>
   </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Deze licentie dekt alleen {0} seats. U moet een licentie krijgen die voldoende seats dekt.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Dit systeem heeft een vergunning voor "{0}" volgens de voorwaarden van de licentieovereenkomst en de licentie verloopt {1}.
-
-De licentie dekt een maximum van {2} seats.
-
-De licentie schema is "{3}".
-Deze opties worden geactiveerd:
-{4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>U heeft bijna Uw gelicentieerde limiet van {0} seats bereikt. Upgrade Uw licentie binnenkort.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>U gebruikt te veel seats, U heeft alleen een licentie verleend voor {0}. U moet Uw licentie upgraden voordat U kunt doorgaan</value>
-  </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>Alle Afwezigheden</value>
   </data>
@@ -8454,9 +8352,6 @@ Deze opties worden geactiveerd:
   </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Custom Rapporten</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>U maakt gebruik van meerdere agenten ({0}) dan uw licentie toestaat ({1}). U heeft nu {2} dagen over om de agenten te verminderen of een licentie die zo veel agenten dekt toepassen.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Browser Stansaard</value>

@@ -5124,9 +5124,6 @@
   <data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
     <value>Aucune période de planification trouvée pour cet utilisateur</value>
   </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Vous utilisez trop de sièges, vous avez l'autorisation d'avoir {0}. Vous devez augmenter votre clé de licence avant de continuer. </value>
-  </data>
   <data name="AllFulFilledAbsences" xml:space="preserve">
     <value>Toutes Absences accomplies</value>
   </data>
@@ -7098,69 +7095,8 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Les groupes de statuts RTA doivent être configurés d'abord.</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Appliquer licence</value>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Instructions:
-* Achetez une licence (contact info sur www.teleopti.com)
-* Recevez le fichier licence (e.g par mail)
-* Enregistrez la licence sur le disque
-* Si vous avez du travail en cours dans l'application, sauvegardez avant d'appliquer la licence
-* Recherchez le fichier de licence en utilisant le bouton parcourir ci-dessous
-* Appliquez la licence
-* L'application va se fermer
-* Redémarrez MyTime pour avoir les nouvelles options sous licence
-* Redémarrez l'application</value>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Le fichier de licence "{0}" n'a pas pu être accédé.
-Détails d'erreur:
-{1}</value>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Il y a eu un problème pendant le stockage de la licence dans la base de données:
-détails d'erreur:
-{0}</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Entrez un nom de fichier valide, incluant le chemin</value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Licence appliquée avec succès.
-Félicitations! Vous êtes un utilisateur licencié de cette solution récompensée de gestion de ressources humaines.
-L'application va maintenant se fermer.
-Vous pourrez ensuite la redémarrer.
-Vous devrez peut-être aussi redémarrer Mytime pour avoir accès aux nouvelles options sous licence.</value>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Votre clé de licence a expiré, merci d'en appliquer une nouvelle.</value>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Votre clé de licence est invalide, peut-être modifiée, merci d'en appliquer une nouvelle.</value>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>La licence "{0}" que vous tentez d'utiliser est ancienne et a expiré.</value>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Le fichier de licence "{0}" est invalide, il a peut-être été altéré.</value>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>Le fichier licence "{0}" n'a pas un format (xml) valide.
-Détails d'erreur:
-{1}</value>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Vous n'avez pas encore appliqué de licence. Merci de le faire.</value>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Pas de tel fichier</value>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Echec d'application de la licence</value>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Votre clé de licence est uniquement valide jusqu'au {0}, n'oubliez pas de la renouveler à temps</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Parcourir</value>
@@ -7174,9 +7110,6 @@ Détails d'erreur:
   <data name="About" xml:space="preserve">
     <value>A Propos</value>
   </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Choisir le fichier de licence</value>
-  </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Le temps de repos hebdomadaire ne peut excéder 168 heures</value>
   </data>
@@ -7185,27 +7118,6 @@ Détails d'erreur:
   </data>
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
     <value>Quelqu'un a changé les même données avant vous</value>
-  </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Le système est licencié pour "{0}" d'après les termes et conditions de l'accord de licence et la clé de licence va expirer le {1}.
-
-La licence couvre un maximum de {2} agents actifs.
-
-Le schéma de licence est "{3}".
-Ces options sont activées:
-{4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Vous avez {0} agents actifs mais vous êtes uniquement licencié pour {1}.
-Merci de mettre à niveau votre clé de licence</value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Vous avez {0} agents actifs mais vous êtes uniquement licencié pour {1}.
-Vous devez augmenter votre licence avant de pouvoir continuer</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Cette licence couvre seulement {0} agents actifs mais vous en avez {1}.
-Vous devez obtenir une licence qui couvre suffisamment d'agents.</value>
   </data>
   <data name="MeetingCanNotCreate" xml:space="preserve">
     <value>Impossible de créer une réunion. Le système ne contient peut-ëtre pas d'activités.</value>
@@ -7300,21 +7212,6 @@ Message d'erreur: {0}</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
     <value>{0} a empêché l'application de se fermer. Voulez-vous forcer la fermeture de l'application?</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>La licence couvre uniquement {0} sièges. Vous devez obtenir une licence qui couvre assez de sièges.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Le système est licencié pour "{0}" d'après les termes et conditions de l'accord de licence et la clé de licence va expirer {1}.
-
-La licence couvre un maximum de {2} sièges.
-
-Le schéma de licence est "{3}".
-Ces options sont activés:
-{4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Vous avez presque atteint votre limite de licence de {0} sièges. Merci d'augmenter votre licence prochaînement.</value>
   </data>
   <data name="EmployeeNoDot" xml:space="preserve">
     <value>Employé #</value>
@@ -7447,9 +7344,6 @@ Ces options sont activés:
   </data>
   <data name="HighestStdev" xml:space="preserve">
     <value>Plus grand écart type</value>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Exception de licence Teleopti</value>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
     <value>Sets de définition multiplicateurs</value>
@@ -7977,9 +7871,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Rapports personnalisés</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Vous utilisez plus d'agents ({0}) que votre licence le permet ({1}). Vous avez à présent ({2}) jours pour réduire les agents ou appliquez une licence qui couvre autant d'agents.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Navigateur défaut</value>
@@ -9545,9 +9436,6 @@ Réduisez la complexité pour utiliser ces quarts.</value>
   </data>
   <data name="ResetBadgesConfirm" xml:space="preserve">
     <value>Ceci supprimera tous les badges pour tous les agents! Voulez-vous continuer?</value>
-  </data>
-  <data name="ShiftBackToLegal" xml:space="preserve">
-    <value>Corriger quarts selon banques de quarts</value>
   </data>
   <data name="BadgeTypeChecked" xml:space="preserve">
     <value>Utiliser</value>

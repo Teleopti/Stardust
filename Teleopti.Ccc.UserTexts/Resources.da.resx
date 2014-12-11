@@ -5659,72 +5659,6 @@ Tilgængelighed</value>
     <value>Grupperne for RTA-tilstand skal konfigureres først.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Anvend Licens</value>
-    <comment>the license upload dialog window title</comment>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Instruktioner:
-* Køb en licens (kontaktoplysninger her www.teleopti.com)
-* Modtag licensfil (f.eks. via mail)
-* Gem licensen på din harddisk
-* Hvis du er i gang med andre jobs, som ikke er gemt endnu, skal du gemme disse, før du tager licensen i brug
-* Find frem til licensfilen ved at bruge knappen gennemse nedenfor 
-* Tag licensen i brug
-* Applikationen lukker ned
-* Genstart MyTime for at hente de nye muligheder fra licensen
-* Start applikationen igen</value>
-    <comment>instructions for applying license in license window</comment>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Licensfilen "{0}" kunne ikke indlæses
-Oplysninger om fejl: 
-{1}</value>
-    <comment>IOException for license file in LogOnScreen</comment>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>Der var et problem, da licensen blev forsøgt gemt i databasen.
-Oplysninger om fejl:
-{0}</value>
-    <comment>Database error when storing license</comment>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Indtast et gyldigt filnavn, inklusive sti</value>
-    <comment>file not found in license window</comment>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Anvendelse af licensnøglen lykkedes.
-Tillykke! Du er nu licenseret bruger af denne prisvindende løsning til personaleadministration.
-Applikationen vil nu blive afsluttet.
-Du kan så genstarte den. Du skal muligvis også genstarte MyTime for at få adgang til de nye muligheder under licensen.</value>
-    <comment>license upload success message</comment>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Din licensnøgle er udløbet, venligst brug en ny en</value>
-    <comment>explanation for license failure in license window</comment>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Din licensnøgle er ugyldig, muligvis ændret, venligst brug en ny en</value>
-    <comment>explanation for modified license in license window</comment>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>Licensen "{0}", som du forsøger at anvende, er gammel, den er allerede udløbet.</value>
-    <comment>expiration exception for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Licensfilen "{0}" er ugyldig, den er muligvis forfalsket</value>
-    <comment>SignatureValidationException for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>Licensfilen "{0}" er ikke et gyldigt (xml) format
-Oplysninger om fejl:
-{1}</value>
-    <comment>Xml exception when parcing xml file in LogOnScreen</comment>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Du har endnu ikke taget en licens i brug, venligst gør dette</value>
-    <comment>explanation shown at first startup in license window</comment>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>En sådan fil findes ikke</value>
     <comment>file not found title</comment>
@@ -5732,14 +5666,6 @@ Oplysninger om fejl:
   <data name="Success" xml:space="preserve">
     <value>Succes</value>
     <comment>Success</comment>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Anvendelsen af licensen mislykkedes</value>
-    <comment>license application error dialog title</comment>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Din licensnøgle er kun gyldig indtil {0}, glem ikke at forny den til tiden</value>
-    <comment>license expiration warning in LogOnScreen</comment>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Gennemse</value>
@@ -5755,10 +5681,6 @@ Oplysninger om fejl:
   <data name="About" xml:space="preserve">
     <value>Om</value>
     <comment>About</comment>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Vælg licensfil</value>
-    <comment>open licese file dialog title</comment>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Ugentlig hviletid kan ikke være mere end 168 Timer</value>
@@ -5792,16 +5714,6 @@ Oplysninger om fejl:
     <value>Nogen har ændret de samme data før dig.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Dette produkt er licenseret til "{0}" indtil {1}.
-
-Licensen dækker maksimalt {2} aktive medarbejdere.
-
-Licensskemaet er "{3}".
-Disse muligheder er aktiveret:
-{4}</value>
-    <comment>license text shown in about box</comment>
-  </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>Arbejdsdag</value>
     <comment>Working day, the default description for a new instance of a dayofftemplate.</comment>
@@ -5809,18 +5721,6 @@ Disse muligheder er aktiveret:
   <data name="UndoAll" xml:space="preserve">
     <value>Fortryd Alle</value>
     <comment>Undo All</comment>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>Du har {0} aktive medarbejdere, men du er kun licenseret til at have {1}. Venligst opgrader din licensnøgle snart</value>
-    <comment>license warning when you are close to maximum active agents</comment>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>Du har {0} aktive medarbejdere, men du er kun licenseret til at have {1}. Du skal opgradere din licensnøgle, før du kan fortsætte</value>
-    <comment>license error when maximum active agents have been exceeded</comment>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Denne licens dækker kun {0} aktive medarbejdere, men du har {1}. Du skal anskaffe en licens, som dækker tilstrækkeligt mange aktive medarbejdere</value>
-    <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>dage</value>
@@ -6635,10 +6535,6 @@ Disse muligheder er aktiveret:
   <data name="IntervalStdev" xml:space="preserve">
     <value>Interval stafv</value>
     <comment>Skill grid scheduler</comment>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti Licensundtagelse</value>
-    <comment>Teleopti License Exception</comment>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>Tilføj Møde</value>
@@ -9759,24 +9655,6 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
   <data name="SendASM" xml:space="preserve">
     <value>Send besked (ASM)</value>
   </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Licensen dækker kun {0} arbejdspladser. Du skal have en licens der dækker nok arbejdspladser.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Dette system er licenseret til "{0}" i henhold til vilkår og betingelser formuleret i licens aftalen. Licens nøglen udløber den {1}.
-
-Licensen dækker maksimalt {2} arbejdspladser.
-
-Licens skemaet er "{3}".
-Disse moduler er aktiveret:
-{4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Du har næsten nået grænsen for dine licenser på {0} arbejdspladser. Venligst opgrader snart din licens nøgle.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Du bruger for mange arbejdspladser, din licens aftale omfatter {0} arbejdspladser. Du skal opgradere din licens nøgle, før du kan fortsætte.</value>
-  </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>Alle Fravær</value>
   </data>
@@ -10144,10 +10022,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Brugerdefineret Rapport</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Du har flere medarbejder ({0}) end din licens tillader ({1}).
-du har nu ({2}) dage tilbage til at reducere antallet af medarbejder eller indsætte en licens der dækker alle medarbejdere.</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Browser Standard</value>

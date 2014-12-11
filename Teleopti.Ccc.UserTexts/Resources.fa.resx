@@ -3361,41 +3361,17 @@
   <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
     <value>نقصان (%)</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>اعمال مجوز</value>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>فایل مجوز{0} نمی تواند در دسترس باشد.
-جزئیات خطا: 
-{1}
-</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>یک نام فایل معتبر وارد کنید. شامل مسیر</value>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>مجوز {0} که شما برای اعمال آن تلاش میکنید قبلا منقضی شده است.</value>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>فایل مجوز {0} نامعتبر است و احتمالا جعلی می باشد.</value>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>چنین فایلی موجود نیست</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>موفقیت</value>
   </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>درخواست مجوز با خطا مواجه شد</value>
-  </data>
   <data name="NameAlreadyExists" xml:space="preserve">
     <value>نام از قبل موجود است</value>
   </data>
   <data name="About" xml:space="preserve">
     <value>درباره</value>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>انتخاب فایل مجوز</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>زمان استراحت هفتگی نمی تواند بیش از 168 ساعت باشد</value>
@@ -5802,9 +5778,6 @@
   <data name="SendASM" xml:space="preserve">
     <value>فرستادن پیام (ASM)</value>
   </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value> این مجوز فقط {0} صندلی را پوشش می دهد. شما باید برای پوشش کافی صندلی ها مجوز بگیرید.</value>
-  </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>همه غیبتها</value>
   </data>
@@ -7224,9 +7197,6 @@
   <data name="RemoveWriteProtection" xml:space="preserve">
     <value>غیر فعال کردن محافظت از نوشتن</value>
   </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>دستورالعمل ها: * یک  مجوز بخرید(اطلاعات تماس در این سایت است www.teleopti.com) .               * فایل مجوز را دریافت کنید (از طریق ایمیل ).                                  * مجوز را ذخیره کنید.                    * ا گر کار معوقی دارید آنرا  قبل از اعمال مجوز ذخیره کنید.              * از دکمه مرورگر زیر برای دسترسی به فایل مجوز استفاده کنید.                                              * مجوز را اعمال کنید.                    * برنامه shut down میشود.            * با ری ست کردن گزینه "زمان من" آیتم های جدید دارای مجوز را بدست می آورید.                             * برنامه را دوباره راه اندازی کنید.</value>
-  </data>
   <data name="MoveMaxDays" xml:space="preserve">
     <value>انتقال حداکثر روزها</value>
   </data>
@@ -7235,9 +7205,6 @@
   </data>
   <data name="TeleoptiLicenseAgreementProgram" xml:space="preserve">
     <value>توافق نامه مجوز Teleopti برای نرم افزار</value>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>هنگام ذخیره مجوز در بانک اطلاعاتی مشکلی وجود داشت . جزئیات خطا:{0}</value>
   </data>
   <data name="KeepWeekEndsTogether" xml:space="preserve">
     <value>تعطیلات آخر هفته را در نظر داشته باشید</value>
@@ -7266,9 +7233,6 @@
   <data name="MaximumOccupancyColon" xml:space="preserve">
     <value>حداکثر اشغالی</value>
   </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>فایل مجوز "{0} در فرمت صحیح xml نیست  . جزئیات خطا: {1}</value>
-  </data>
   <data name="MinimumOccupancyColon" xml:space="preserve">
     <value>حداقل اشغالی </value>
   </data>
@@ -7280,9 +7244,6 @@
   </data>
   <data name="IncludeExclude" xml:space="preserve">
     <value>شامل استثنا</value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>رمز مجوز با موفقیت  اعمال شد.                تبریک ! شما دارای مجوز هستید.                 کاربر این جایزه برنده راه حل مدیریت نیروی کار می شود.از برنامه خارج می شوید.شما ممکن است برنامه را ری ست کنید.                      همچنین شما ممکن است برای بدست آوردن دسترسی به امکانات مجوز جدید مجبور به    ری ست   "زمان من" شوید </value>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
     <value>باید تکمیل شود</value>
@@ -7503,9 +7464,6 @@
   <data name="MeetingErrorMessageB" xml:space="preserve">
     <value>از  جلسه تاکنون شما مجوز کافی ندارید.</value>
   </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>این سیستم مجوز داده شده است برای {0} که بر اساس مدت و شرایط  مورد توافق مجوز بوده است و در زمان  {1} منقضی می شود.  مجوز حداکثر {2} صندلی را پوشش می دهد. الگوی مجوز "{3}" است.این انتخاب ها فعال شده اند {4}</value>
-  </data>
   <data name="OriginalOfferedEmails" xml:space="preserve">
     <value>ایمیل های پیشنهادی اصلی </value>
   </data>
@@ -7616,9 +7574,6 @@
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
     <value>شرایط بحرانی کمبود کارمند  :{0} در</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>شما از حداکثر  مجوز های تعیین شده برای  {0} صندلی استفاده  کرده اید.لطفا سریعا جهت ارتقاء مجوز اقدام نمایید.</value>
   </data>
   <data name="label7" xml:space="preserve">
     <value>برچسب 7</value>
@@ -7757,9 +7712,6 @@
   </data>
   <data name="IndexChats" xml:space="preserve">
     <value>چت های شاخص </value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>شما صندلی های زیادی استفاده می کنید ،  شما فقط برای {0} تعداد مجوز دارید.برای ادامه باید مجوز خود را ارتقاء دهید</value>
   </data>
   <data name="OfferedTasks" xml:space="preserve">
     <value>وظایف  پیشنهاد شده</value>
@@ -8754,9 +8706,6 @@
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
     <value>لطفا  این موارد را اضافه کنید : قراردادها ،زمان بندیهای قرارداد ، درصد کارهای  پاره وقت ، تیم ها را از صفحه تنظیمات به بارگذاری نظرات دوره زمانی هر شخص </value>
   </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>کلید مجوز شما منقضی شده است ، لطفا یک مجوز جدید درخواست کنید</value>
-  </data>
   <data name="AddToBags" xml:space="preserve">
     <value>اضافه شدن به  شیفت</value>
   </data>
@@ -8943,9 +8892,6 @@
   <data name="UseDayOfMonthSeasonality" xml:space="preserve">
     <value>یکی از روز ماه های فصل</value>
   </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>کلید مجوز شما فقط تا {0} معتبر است ،فراموش نکنید که مجوز را به موقع تمدید کنید</value>
-  </data>
   <data name="ScheduleDate" xml:space="preserve">
     <value> تاریخ زمان بندی</value>
   </data>
@@ -8964,9 +8910,6 @@
   <data name="MultiplicatorValue" xml:space="preserve">
     <value>مقدار افزایشگر</value>
   </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>شما هنوز مجوزی درخواست نکرده اید.لطفا  آنرا انجام دهید</value>
-  </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
     <value>مهارت های پاسخگو </value>
   </data>
@@ -8979,9 +8922,6 @@
   <data name="AddMultiplicator" xml:space="preserve">
     <value>افزودن افزایشگر</value>
   </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>کلید مجوز شما غیر معتبر است، امکان تغییر نیست لطفا یک مجوز جدید درخواست کنید</value>
-  </data>
   <data name="RecurrentTextMonthly" xml:space="preserve">
     <value>رویداد {0} {1} هر {2} ماه رخ می دهد اثر بخشی {3} تا {4} {7} {8} {6} </value>
   </data>
@@ -8990,9 +8930,6 @@
   </data>
   <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
     <value>شیفت با  زمان قرارداد مابین</value>
-  </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>این سیستم به "{0}" اعمال مجوز شده است بر اساس ضوابط و شرایط  توافقنامه ، کلید مجوز در {1} منقضی می شود. این مجوز حد اکثر {2} پاسخگوی فعال را پوشش می دهد. الگوی مجوز {3} است.                           این گزینه ها فعال شده اند :{4}</value>
   </data>
   <data name="TaskTime" xml:space="preserve">
     <value>زمان وظیفه</value>
@@ -9027,14 +8964,8 @@
   <data name="Multiplicator" xml:space="preserve">
     <value>افزایشگر</value>
   </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>تعداد پاسخگو های مورد استفاده  ({0}) از تعداد مجاز مجوز شما بیشتر است ({1}) .{2} روز گذشته است از زمانی که باید تعداد پاسخگوها کاهش یابند و یا برای پاسخگوهای  بیشتری درخواست مجوز کنید.                                   </value>
-  </data>
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>موارد اشتباهی رخ داده است.لطفا اگر این فایل باز است آنرا ببندید  </value>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>موارد استثناء مجوز Teleopti</value>
   </data>
   <data name="AddIntradayAbsence" xml:space="preserve">
     <value>افزودن مرخصی  بین روز</value>
@@ -9054,17 +8985,8 @@
   <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
     <value>نقطه نظر پاسخگوی منتخب را بررسی کنید</value>
   </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>شما {0} پاسخگوی فعال دارید ولی فقط مجوز انتخاب {1} را دارید.  لطفا  تعداد کلید مجوز خود را به زودی ارتقاء دهید </value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>شما {0} پاسخگوی فعال دارید ولی مجوز استفاده از {1} تعداد را دارید.قبل از ادامه باید تعداد مجوز خود را ارتقاء دهید</value>
-  </data>
   <data name="TeamToCompareWith" xml:space="preserve">
     <value>تیم مقایسه شود با </value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value> این مجوز فقط {0} پاسخگوی فعال را پوشش می دهد. شما باید برای پوشش کافی پاسخگوهای فعال مجوز بگیرید.</value>
   </data>
   <data name="ActiveAgents" xml:space="preserve">
     <value>پاسخگوهای فعال</value>

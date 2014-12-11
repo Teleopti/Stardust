@@ -5643,50 +5643,11 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>يجب برمجة مجموعات حالة الالتزام بالوقت الحقيقي اولاً</value>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>يرجى تطبيق الرخصة</value>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>لا يمكن دخول ملف الرخصة "{0}" تفاصيل الخطأ {1}</value>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>يوجد خطأ في محاولة تخزين الرخصة في قاعدة المعلومات. تفاصيل الخطأ {0}</value>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>ادخل اسم و طريق الملف الصحيح </value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>نجاح تطبيق الرخصة. مبروك! أنت مستخدم مُرَخص لاستخدام برنلمج ادارة القوى الحائز على عدة جوائز. سيغلق التطبيق الان. لاستخدام التطبيق يمكنك اعادة تشغيل جهازك الان و اعادة تشغيل تطبيق My Time.</value>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>انتهت صلاحية الرخصة, يرجى طلب رخصة جديدة</value>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>رخصتك غير صالحة, و قد تكون مُعَدلة قانونياً. يرجى طلب رخصة جديدة</value>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>الرخصة {0} التي تحاول تطبيقها قديمة و منتهية الصلاحية</value>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>ملف الرخصة {0} غير صحيح و قد يكون مزور</value>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>ملف الرخصة {0} هو ملف (xml) غير صحيح. تفاصيل الخطأ {1}</value>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>لم يتم تطبيق الرخصة بعد. يرجى فعل ذلك</value>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>هذا الملف غير موجود</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>نجاح</value>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>فشل تطبيق الرخصة</value>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>الرخصة صالحة حتى {0}. لا تنسى تجديدها</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;الاطلاع السريع</value>
@@ -5699,9 +5660,6 @@
   </data>
   <data name="About" xml:space="preserve">
     <value>عن</value>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>اختر ملف الرخصة</value>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>وقت الراحة الاسبوعي لا يمكن ان يتجاوز 168 ساعة</value>
@@ -6135,21 +6093,6 @@
   <data name="NoSchedulePeriodIsSelected" xml:space="preserve">
     <value>لم يتم اختيار فترة للجدول</value>
   </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>تعليمات: *اشتري الرخصة (معلومات العقد هنا www.teleopti.com) *استقبل ملف الرخصة(عبر الايميل على سبيل المثال) *احفظ الرخصة على الجهاز *احفظ الاعمال المعلقة قبل تطبيق الرخصة *حدد مكان ملف الرخصة عن طريق البحث السريع *طَبق الرخصة *سيغلق التطبيق ذاته *اعد تشغيل My time لتحصل على اختيارات الرخصة الجديدة *شغل التطبيق مرة أخرى</value>
-  </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>هذا التطبيق مُرَخص الأجل "{0}" حتى {1}     الرخصة تشمل {2} مكيل نشيط كحد أقصى      نهج الرخصة هو {3}     هذه الاختيارات هي {4}</value>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>عندك {0} وكيل نشيط لكن الرخصة تشمل {1} فقط. يرجى تحديث الرخص</value>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>عندك {0} وكيل نشيط لكن الرخصة تشمل {1} فقط. يرجى تحديث الرخص لتشمل العدد المناسب لتستطيع أن تكمل العمل</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>عندك {0} وكيل نشيط لكن الرخصة تشمل {1} فقط. يرجى تحديث الرخص لتشمل العدد المناسب</value>
-  </data>
   <data name="StartWithMoveTime" xml:space="preserve">
     <value>ابدأ بتحريك الوقت</value>
   </data>
@@ -6194,9 +6137,6 @@
   </data>
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>حدث خطأ. يرجى اغلاق الملف ان كان مفتوحاً</value>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>استثناء رخصة Teleopti</value>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>اضافة اجتماع</value>
@@ -9452,18 +9392,6 @@
   <data name="SeveralValues" xml:space="preserve">
     <value>قيم متعددة </value>
   </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>هذه الرخصة تغطى فقط (0)</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>النظام مرخص ل(0) وفقا للشروط والاحكام الخاصة باتفاقية الترخيص ومفتاح الترخيص سينتهى فى (1) </value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>لقد وصلت إلى الحد الاقصى من ترخيصك (0). فضلا قم بترقية مفتاح الترخيص الخاص بك</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>انت تستخدم عدد اكثر من اللازم من المقاعد، مرخص لك فقط (0) يجب أن تقوم بترقية مفتاح الترخيص الخاص بك كى تستطيع الاستمرار</value>
-  </data>
   <data name="InvalidTimeValue" xml:space="preserve">
     <value>قيمة وقت خاطئة (0)</value>
   </data>
@@ -9481,9 +9409,6 @@
   </data>
   <data name="MinimumIsParameterHoursDot" xml:space="preserve">
     <value>الحد الادني هو (0) س</value>
-  </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>انت تستخدم عدد من الممثلين {0} أكثر مما تسمح به رخصتك</value>
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} أيام الممثلين لا يمكن أن يتم جدولتهم بها</value>

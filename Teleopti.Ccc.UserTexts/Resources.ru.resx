@@ -5744,72 +5744,6 @@ Periods</comment>
     <value>Сначала необходимо настроить группы состояния RTA.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Применить лицензию</value>
-    <comment>the license upload dialog window title</comment>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Инструкции:
-* Приобретите лицензию (контактные данные см. на www.teleopti.com)
-* Получите файл лицензии (например, по эл. почте)
-* Сохраните лицензию на диске
-* Если в приложении работа ожидает сохранения, то сохраните ее перед применением лицензии
-* Найдите файл лицензии с помощью кнопки обзора внизу 
-* Примените лицензию
-* Приложение закроется
-* Перезапустите MyTime, чтобы получить новые лицензированные опции
-* Снова запустите приложение</value>
-    <comment>instructions for applying license in license window</comment>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>Файл лицензии "{0}" недоступен
-Подробности ошибки: 
-{1}</value>
-    <comment>IOException for license file in LogOnScreen</comment>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>При сохранении лицензии в базе данных возникла ошибка.
-Подробности ошибки:
-{0}</value>
-    <comment>Database error when storing license</comment>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Введите допустимое имя файла, включая путь</value>
-    <comment>file not found in license window</comment>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Лицензия успешно применена.
-Поздравляем! Теперь в Вашем распоряжении лицензионная версия этого признанного решения по управлению трудовыми ресурсами.
-Приложение закроется.
-Затем его можно перезапустить. Для получения доступа к новым лицензионным опциям также может потребоваться перезапуск MyTime.</value>
-    <comment>license upload success message</comment>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Лицензия устарела, примените новую</value>
-    <comment>explanation for license failure in license window</comment>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Лицензия недействительна, возможно, изменена, примените новую</value>
-    <comment>explanation for modified license in license window</comment>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>Применяемая лицензия "{0}" устарела и уже не действует.</value>
-    <comment>expiration exception for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>Лицензионный файл "{0}" недействительный, он может быть фальшивым</value>
-    <comment>SignatureValidationException for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>Формат лицензионного файла "{0}" не является правильным (xml)
-Подробности ошибки:
-{1}</value>
-    <comment>Xml exception when parcing xml file in LogOnScreen</comment>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>Лицензия не была применена, примените ее</value>
-    <comment>explanation shown at first startup in license window</comment>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Такой файл отсутствует</value>
     <comment>file not found title</comment>
@@ -5817,14 +5751,6 @@ Periods</comment>
   <data name="Success" xml:space="preserve">
     <value>Успешно</value>
     <comment>Success</comment>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>Сбой применения лицензии</value>
-    <comment>license application error dialog title</comment>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Лицензия действует только до {0}, не забудьте ее обновить</value>
-    <comment>license expiration warning in LogOnScreen</comment>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Просмотр</value>
@@ -5840,10 +5766,6 @@ Periods</comment>
   <data name="About" xml:space="preserve">
     <value>Информация</value>
     <comment>About</comment>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Выбор файла лицензии</value>
-    <comment>open licese file dialog title</comment>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Недельное время отдыха не может превышать 168 часов</value>
@@ -5877,16 +5799,6 @@ Periods</comment>
     <value>Кто-то уже изменил эти данные до Вас.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Лицензия на продукт выдана "{0}" до {1}.
-
-Лицензия распространяется на максимум {2} активных оператора.
-
-Схема лицензии – "{3}".
-Активированнные опции:
-{4}</value>
-    <comment>license text shown in about box</comment>
-  </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>Рабочий день</value>
     <comment>Working day, the default description for a new instance of a dayofftemplate.</comment>
@@ -5894,18 +5806,6 @@ Periods</comment>
   <data name="UndoAll" xml:space="preserve">
     <value>Отменить все</value>
     <comment>Undo All</comment>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>У Вас {0} активных операторов, но лицензия дана только для {1}. Обновите лицензию</value>
-    <comment>license warning when you are close to maximum active agents</comment>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>У Вас {0} активных операторов, но лицензия дана только для {1}. Необходимо обновить лицензию перед продолжением</value>
-    <comment>license error when maximum active agents have been exceeded</comment>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Эта лицензия распространяется только на {0} активных операторов, но у Вас {1}. Необходима лицензия с достаточным количеством активных операторов</value>
-    <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>дни</value>
@@ -6725,10 +6625,6 @@ Periods</comment>
   <data name="IntervalStdev" xml:space="preserve">
     <value>Интервальное stdev</value>
     <comment>Skill grid scheduler</comment>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Исключение лицензии Teleopti</value>
-    <comment>Teleopti License Exception</comment>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>Добавить мероприятие</value>
@@ -9297,9 +9193,6 @@ Teleopti R&amp;D</value>
   <data name="CustomReports" xml:space="preserve">
     <value>Настраиваемые отчеты</value>
   </data>
-  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>Используется больше операторов ({0}), чем позволяет лицензия ({1}). Осталось {2} день/дня/дней для того, чтобы уменьшить кол-во операторов или применить новую лицензию.</value>
-  </data>
   <data name="BrowserDefault" xml:space="preserve">
     <value>Браузер по умолчанию</value>
   </data>
@@ -9554,15 +9447,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
     <value>Также показать мероприятия, созданные мной, но, в которых я не участвую.</value>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>Лицензия позволяет только {0} рабочих мест. Необходимо обновить лицензию на большее кол-во рабочих мест.</value>
-  </data>
-  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
-    <value>Почти достигнут лимит по рабочим местам {0}. Обновите лицензию.</value>
-  </data>
-  <data name="YouHaveTooManySeats" xml:space="preserve">
-    <value>Используется слишком много рабочих мест, лицензия допускает использовать {0}. Необходимо обновить лицензию, чтобы продолжить.</value>
   </data>
   <data name="AllFulFilledAbsences" xml:space="preserve">
     <value>Все выполненные отсутствия</value>
@@ -9830,12 +9714,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="TeleoptiLicenseAgreementProgram" xml:space="preserve">
     <value>Лицензионное соглашение Teleopti для программного обеспечения</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Система имеет лицензию "{0}" согласно лицензионному соглашению. Срок истечения {1}. Лицензия позволяет максимум {2} рабочих мест. 
-Схема лицензии "{3}":
-Данные опции активированы:
-{4}</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Войти на сайт поддержки клиентов</value>

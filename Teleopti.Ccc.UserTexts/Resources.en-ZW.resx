@@ -5652,72 +5652,6 @@ Availability</value>
     <value>The RTA state groups must be configured first.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
-  <data name="ApplyProductActivationKey" xml:space="preserve">
-    <value>Apply License</value>
-    <comment>the license upload dialog window title</comment>
-  </data>
-  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
-    <value>Instructions:
-* Buy a license (contact information here www.teleopti.com)
-* Receive license file (e.g. via mail)
-* Save the license to disk
-* If you have any work pending save in the application, save that before applying license
-* Browse to the license file using browse button below 
-* Apply license
-* Application will shutdown
-* Restart MyTime to get newly licensed options
-* Start application again</value>
-    <comment>instructions for applying license in license window</comment>
-  </data>
-  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>License file "{0}" could not be accessed
-Error details: 
-{1}</value>
-    <comment>IOException for license file in LogOnScreen</comment>
-  </data>
-  <data name="DatabaseProblem" xml:space="preserve">
-    <value>There was a problem trying to store the license in the database.
-Error details:
-{0}</value>
-    <comment>Database error when storing license</comment>
-  </data>
-  <data name="EnterValidFile" xml:space="preserve">
-    <value>Enter a valid file name, including path</value>
-    <comment>file not found in license window</comment>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>License key successfully applied.
-Congratulations! You are now a licensed user of this award winning solution for workforce management.
-The application will now exit.
-You may then restart it. You may also have to restart MyTime to get access to newly licensed options.</value>
-    <comment>license upload success message</comment>
-  </data>
-  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Your license key has expired, please apply a new one</value>
-    <comment>explanation for license failure in license window</comment>
-  </data>
-  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Your license key is invalid, possibly modified, please apply a new one</value>
-    <comment>explanation for modified license in license window</comment>
-  </data>
-  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>The license "{0}" you are attempting to apply is old, it has already expired.</value>
-    <comment>expiration exception for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>The license file "{0}" is invalid, it may be forged</value>
-    <comment>SignatureValidationException for license file in LogOnScreen</comment>
-  </data>
-  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>The license file "{0}" is not in a valid (xml) format
-Error details:
-{1}</value>
-    <comment>Xml exception when parcing xml file in LogOnScreen</comment>
-  </data>
-  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>You have not applied a license yet, please do so</value>
-    <comment>explanation shown at first startup in license window</comment>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>No such file</value>
     <comment>file not found title</comment>
@@ -5725,14 +5659,6 @@ Error details:
   <data name="Success" xml:space="preserve">
     <value>Success</value>
     <comment>Success</comment>
-  </data>
-  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
-    <value>License application failed</value>
-    <comment>license application error dialog title</comment>
-  </data>
-  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Your license key is only valid until {0}, do not forget to renew it in time</value>
-    <comment>license expiration warning in LogOnScreen</comment>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Browse</value>
@@ -5748,10 +5674,6 @@ Error details:
   <data name="About" xml:space="preserve">
     <value>About</value>
     <comment>About</comment>
-  </data>
-  <data name="OpenProductActivationKeyFile" xml:space="preserve">
-    <value>Choose license file</value>
-    <comment>open licese file dialog title</comment>
   </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Weekly rest time cannot be more than 168 hours</value>
@@ -5785,16 +5707,6 @@ Error details:
     <value>Someone changed the same data before you.</value>
     <comment>Error messag</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>This product is licensed to "{0}" until {1}.
-
-The license covers a maximum of {2} active employees.
-
-The license schema is "{3}".
-These options are activated:
-{4}</value>
-    <comment>license text shown in about box</comment>
-  </data>
   <data name="DayOffTemplateDefaultDescription" xml:space="preserve">
     <value>Working day</value>
     <comment>Working day, the default description for a new instance of a dayofftemplate.</comment>
@@ -5802,18 +5714,6 @@ These options are activated:
   <data name="UndoAll" xml:space="preserve">
     <value>Undo All</value>
     <comment>Undo All</comment>
-  </data>
-  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>You have {0} active employees but you are licensed to have only {1}. Please upgrade your license key soon</value>
-    <comment>license warning when you are close to maximum active agents</comment>
-  </data>
-  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
-    <value>You have {0} active employees but you are licensed to have only {1}. You must upgrade your license key before you can continue</value>
-    <comment>license error when maximum active agents have been exceeded</comment>
-  </data>
-  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>This license only covers {0} active employees, but you have {1}. You must get a license that covers enough active agents</value>
-    <comment>Message when attempting to apply a license with too few active agents</comment>
   </data>
   <data name="TimeTypeDays" xml:space="preserve">
     <value>days</value>
@@ -6632,10 +6532,6 @@ These options are activated:
   <data name="IntervalStdev" xml:space="preserve">
     <value>Interval stdev</value>
     <comment>Skill grid scheduler</comment>
-  </data>
-  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti License Exception</value>
-    <comment>Teleopti License Exception</comment>
   </data>
   <data name="AddMeeting" xml:space="preserve">
     <value>Add Meeting</value>
