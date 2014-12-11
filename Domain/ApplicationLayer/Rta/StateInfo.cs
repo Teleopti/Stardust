@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<bool> _inAdherenceWithPreviousActivity;
 
 		private readonly IActualAgentAssembler _actualAgentStateAssembler;
-		private Guid? _platformTypeId;
 		private PersonWithBusinessUnit _person;
 		private readonly DateTime _currentTime;
 
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			var stateGroup = _actualAgentStateAssembler.GetStateGroup(
 				stateCode,
-				_platformTypeId.HasValue ? _platformTypeId.Value : Guid.Empty,
+				_input.ParsedPlatformTypeId(),
 				_person.BusinessUnitId);
 			var alarm = _actualAgentStateAssembler.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
 			return alarm == null || AdherenceFor(alarm);

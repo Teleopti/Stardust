@@ -37,10 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public IActualAgentState GetAgentState(ExternalUserStateInputModel input, PersonWithBusinessUnit person, ScheduleLayer currentLayer, ScheduleLayer nextLayer, IActualAgentState previousState, DateTime currentTime)
 		{
-			Guid? platformTypeId = null;
-			if (input.PlatformTypeId != null)
-				platformTypeId = Guid.Parse(input.PlatformTypeId);
-
 			var batchId = input.IsSnapshot
 				? input.BatchId
 				: (DateTime?)null;
@@ -52,8 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			if (!batchId.HasValue)
 				batchId = previousState.BatchId;
-			if (!platformTypeId.HasValue)
-				platformTypeId = previousState.PlatformTypeId;
+			if (string.IsNullOrEmpty(input.PlatformTypeId))
+				input.PlatformTypeId = previousState.PlatformTypeId.ToString();
 			if (stateCode == null)
 				stateCode = previousState.StateCode;
 			if (originalSourceId == null)
@@ -66,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				PersonId = personId,
 				StateCode = stateCode,
 				AlarmStart = currentTime,
-				PlatformTypeId = platformTypeId.Value,
+				PlatformTypeId = input.ParsedPlatformTypeId(),
 				ReceivedTime = currentTime,
 				OriginalDataSourceId = originalSourceId,
 				BusinessUnitId = businessUnitId
@@ -75,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
-			var state = GetStateGroup(stateCode, platformTypeId.Value, businessUnitId);
+			var state = GetStateGroup(stateCode, input.ParsedPlatformTypeId(), businessUnitId);
 			var foundAlarm = GetAlarm(activityId, state.StateGroupId, businessUnitId);
 
 			newState.StateId = state.StateGroupId;

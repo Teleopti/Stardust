@@ -14,4 +14,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime BatchId { get; set; }
 		public bool IsSnapshot { get; set; }
 	}
+
+	public static class ExternalUserStateInputModelExtensions
+	{
+		public static Guid ParsedPlatformTypeId(this ExternalUserStateInputModel input)
+		{
+			return input.PlatformTypeId != null ? Guid.Parse(input.PlatformTypeId) : Guid.Empty;
+		}
+	}
 }
