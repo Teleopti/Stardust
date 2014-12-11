@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				adherenceAggregator,
 				shiftEventPublisher,
 				activityEventPublisher,
-				stateEventPublisher);
+				stateEventPublisher,
+				now);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				Log.ErrorFormat("The supplied time stamp should be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})", _now.UtcDateTime(), input.Timestamp, messageId);
 				return -400;
 			}
-
+			
 			const int stateCodeMaxLength = 25;
 			input.StateCode = input.StateCode.Trim();
 			if (input.StateCode.Length > stateCodeMaxLength)

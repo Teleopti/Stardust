@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
+		private readonly INow _now;
 
 		private readonly ActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IAdherenceAggregator adherenceAggregator,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
-			IStateEventPublisher stateEventPublisher)
+			IStateEventPublisher stateEventPublisher,
+			INow now)
 		{
 			_messageSender = messageSender;
 			_databaseReader = databaseReader;
@@ -46,14 +49,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
+			_now = now;
 		}
 
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
 			process(
-				new ExternalUserStateInputModel{Timestamp = timestamp}, 
-				new PersonWithBusinessUnit{BusinessUnitId = businessUnitId, PersonId = personId} 
+				new ExternalUserStateInputModel {Timestamp = timestamp},
+				new PersonWithBusinessUnit {BusinessUnitId = businessUnitId, PersonId = personId}
 				);
 		}
 
@@ -101,7 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				_databaseReader,
 				_agentAssembler,
 				person,
-				input
+				input,
+				_now.UtcDateTime()
 				);
 
 			_databaseWriter.PersistActualAgentState(info.NewState);

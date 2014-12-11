@@ -242,7 +242,8 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
-    <Compile Include="Areas\Rta\SendAlarmMappingTest.cs" />
+    <Compile Include="Areas\Rta\UseSystemClockTest.cs" />
+    <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
     <Compile Include="Areas\Rta\PersonEventsOrderTest.cs" />
     <Compile Include="Areas\Rta\EventsTest.cs" />
@@ -267,7 +268,7 @@
     <Compile Include="Areas\Rta\SendAdherenceMessagesTest.cs" />
     <Compile Include="Areas\Rta\SnapshotTests.cs" />
     <Compile Include="Areas\Rta\StateControllerTest.cs" />
-    <Compile Include="Areas\Rta\SendStateGroupTest.cs" />
+    <Compile Include="Areas\Rta\SendAgentStateWithStateTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />

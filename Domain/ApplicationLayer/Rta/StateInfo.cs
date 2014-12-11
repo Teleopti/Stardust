@@ -22,15 +22,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<IActualAgentState> _newState;
 		private readonly Lazy<bool> _inAdherence;
 		private readonly Lazy<bool> _inAdherenceWithPreviousActivity;
+
+		private readonly IActualAgentAssembler _actualAgentStateAssembler;
 		private Guid? _platformTypeId;
 		private PersonWithBusinessUnit _person;
-		private IActualAgentAssembler _actualAgentStateAssembler;
 
 		public StateInfo(
 			IDatabaseReader databaseReader,
 			IActualAgentAssembler actualAgentStateAssembler,
 			PersonWithBusinessUnit person,
-			ExternalUserStateInputModel input)
+			ExternalUserStateInputModel input,
+			DateTime currentTime)
 		{
 
 			_input = input;
@@ -53,8 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				person.BusinessUnitId,
 				_platformTypeId,
 				input.StateCode,
-				input.Timestamp,
-				TimeSpan.FromSeconds(input.SecondsInState),
+				currentTime,
 				batchId,
 				input.SourceId));
 
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 															   });
 			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(person.PersonId));
 			_activityForPreviousState = new Lazy<ScheduleLayer>(() => activityForTime(PreviousState.ReceivedTime));
-			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(_input.Timestamp));
+			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(CurrentActivity));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(CurrentActivity));

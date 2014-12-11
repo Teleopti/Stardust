@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			Guid businessUnitId,
 			Guid? platformTypeId,
 			string stateCode,
-			DateTime timestamp,
-			TimeSpan timeInState,
+			DateTime currentTime,
 			DateTime? batchId,
 			string originalSourceId)
 		{
@@ -63,9 +62,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			{
 				PersonId = personId,
 				StateCode = stateCode,
-				AlarmStart = timestamp,
+				AlarmStart = currentTime,
 				PlatformTypeId = platformTypeId.Value,
-				ReceivedTime = timestamp,
+				ReceivedTime = currentTime,
 				OriginalDataSourceId = originalSourceId,
 				BusinessUnitId = businessUnitId
 			};
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				newState.AlarmStart = newState.AlarmStart.AddTicks(foundAlarm.ThresholdTime);
 				newState.Color = foundAlarm.DisplayColor;
 				newState.StaffingEffect = foundAlarm.StaffingEffect;
-				newState.StateStart = timestamp.Add(timeInState.Negate());
+				newState.StateStart = currentTime;
 			}
 
 			if (previousState.AlarmId == newState.AlarmId)

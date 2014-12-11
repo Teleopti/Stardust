@@ -47,10 +47,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(personId, activityId2, "2014-10-20 10:15".Utc(), "2014-10-20 11:00".Utc())
 				.Make();
 			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
+			var now = new MutableNow();
+			now.Mutate("2014-10-20 10:00");
+			var target = new RtaForTest(database, now, publisher);
 
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:00".Utc());
+			now.Mutate("2014-10-20 10:05");
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:05".Utc());
+			now.Mutate("2014-10-20 10:15");
 			target.CheckForActivityChange(personId, businessUnitId, "2014-10-20 10:15".Utc());
 
 			var events = publisher.PublishedEvents.OfType<PersonActivityStartEvent>();

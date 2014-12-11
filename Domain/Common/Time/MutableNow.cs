@@ -7,6 +7,20 @@ namespace Teleopti.Ccc.Domain.Common.Time
 	{
 		private DateTime? _mutatedUtc;
 
+		public MutableNow()
+		{
+		}
+
+		public MutableNow(DateTime utc)
+		{
+			Mutate(utc);
+		}
+
+		public MutableNow(string utc)
+		{
+			Mutate(utc);
+		}
+
 		public DateTime UtcDateTime()
 		{
 			return _mutatedUtc.HasValue ? _mutatedUtc.Value : DateTime.UtcNow;

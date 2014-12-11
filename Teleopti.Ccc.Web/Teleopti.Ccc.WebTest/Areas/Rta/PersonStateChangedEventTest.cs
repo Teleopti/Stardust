@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldPublishWithTime()
+		public void ShouldPublishWithSystemTime()
 		{
 			var personId = Guid.NewGuid();
 			var database = new FakeRtaDatabase()
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.Timestamp.Should().Be("2014-10-20 10:02".Utc());
+			@event.Timestamp.Should().Be("2014-10-20 10:00".Utc());
 		}
 
 		[Test]

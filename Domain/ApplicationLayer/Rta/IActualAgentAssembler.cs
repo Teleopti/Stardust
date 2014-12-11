@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			Guid businessUnitId,
 			Guid? platformTypeId,
 			string stateCode,
-			DateTime timestamp,
-			TimeSpan timeInState,
+			DateTime currentTime,
 			DateTime? batchId,
 			string originalSourceId);
 
