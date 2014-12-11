@@ -12,8 +12,7 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-SET MySettings=%ROOTDIR%\..\Teleopti.Support.Code\settings.txt
-SET MySettingsCompiled=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
+SET MySettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
 SET DATASOURCE_NAME=ETLTest
 SET PM_INSTALL=False
 SET WEB_BROKER=http://localhost:54903/
@@ -21,8 +20,6 @@ SET PM_SERVICE=http://localhost:53396/PMService.svc
 SET ETLPM_BINDING_NAME=Etl_Pm_Http_Binding
 
 ::get a fresh Settings.txt
-IF EXIST "%MySettings%" DEL "%MySettings%" /F /Q
-
 ECHO $^(DB_CCC7^)^|%DB_CCC7%>"%MySettings%"
 ECHO $^(DB_ANALYTICS^)^|%DB_ANALYTICS%>>"%MySettings%"
 ECHO $^(AS_DATABASE^)^|%AS_DATABASE%>>"%MySettings%"
@@ -42,7 +39,6 @@ IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Su
 )
 
 ::Deploy new -MODEBUG input for Support.Tool
-COPY "%MySettings%" "%MySettingsCompiled%"
 SET ConfigFiles=%ROOTDIR%\..\Teleopti.Support.Tool\bin\Release\ConfigFiles\ConfigFiles.txt
 ECHO ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Configuration%\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>"%ConfigFiles%"
 ECHO ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Configuration%\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,BuildArtifacts\AppETLService.config>>"%ConfigFiles%"
