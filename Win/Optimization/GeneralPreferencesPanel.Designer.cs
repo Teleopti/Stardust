@@ -54,14 +54,14 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBoxAdvIntraIntervalOptimization = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxFairness = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxShiftsWithinDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxFairness = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxDaysOffFromFlexibleWorkTime = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxShiftsForFlexibleWorkTime = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxTimeBetweenDays = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxDaysOff = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.labelOptimizationSteps = new System.Windows.Forms.Label();
+			this.checkBoxAdvIntraIntervalOptimization = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelTagChangesWith = new System.Windows.Forms.Label();
@@ -81,13 +81,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownAvailabilities)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownStudentAvailabilities)).BeginInit();
 			this.tableLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIntraIntervalOptimization)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxFairness)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxShiftsWithinDay)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxFairness)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxDaysOffFromFlexibleWorkTime)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxShiftsForFlexibleWorkTime)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxTimeBetweenDays)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxDaysOff)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIntraIntervalOptimization)).BeginInit();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).BeginInit();
 			this.SuspendLayout();
@@ -523,34 +523,6 @@
 			this.tableLayoutPanel6.Size = new System.Drawing.Size(455, 245);
 			this.tableLayoutPanel6.TabIndex = 22;
 			// 
-			// checkBoxAdvIntraIntervalOptimization
-			// 
-			this.checkBoxAdvIntraIntervalOptimization.BeforeTouchSize = new System.Drawing.Size(442, 24);
-			this.checkBoxAdvIntraIntervalOptimization.DrawFocusRectangle = false;
-			this.checkBoxAdvIntraIntervalOptimization.Location = new System.Drawing.Point(10, 183);
-			this.checkBoxAdvIntraIntervalOptimization.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBoxAdvIntraIntervalOptimization.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAdvIntraIntervalOptimization.Name = "checkBoxAdvIntraIntervalOptimization";
-			this.checkBoxAdvIntraIntervalOptimization.Size = new System.Drawing.Size(442, 24);
-			this.checkBoxAdvIntraIntervalOptimization.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAdvIntraIntervalOptimization.TabIndex = 13;
-			this.checkBoxAdvIntraIntervalOptimization.Text = "xxIntraIntervalOptimization";
-			this.checkBoxAdvIntraIntervalOptimization.ThemesEnabled = false;
-			// 
-			// checkBoxFairness
-			// 
-			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(442, 24);
-			this.checkBoxFairness.DrawFocusRectangle = false;
-			this.checkBoxFairness.Location = new System.Drawing.Point(10, 213);
-			this.checkBoxFairness.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBoxFairness.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxFairness.Name = "checkBoxFairness";
-			this.checkBoxFairness.Size = new System.Drawing.Size(442, 24);
-			this.checkBoxFairness.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxFairness.TabIndex = 12;
-			this.checkBoxFairness.Text = "xxFairness";
-			this.checkBoxFairness.ThemesEnabled = false;
-			// 
 			// checkBoxShiftsWithinDay
 			// 
 			this.checkBoxShiftsWithinDay.BeforeTouchSize = new System.Drawing.Size(442, 24);
@@ -565,6 +537,20 @@
 			this.checkBoxShiftsWithinDay.TabIndex = 11;
 			this.checkBoxShiftsWithinDay.Text = "xxShiftsWithinDay";
 			this.checkBoxShiftsWithinDay.ThemesEnabled = false;
+			// 
+			// checkBoxFairness
+			// 
+			this.checkBoxFairness.BeforeTouchSize = new System.Drawing.Size(442, 24);
+			this.checkBoxFairness.DrawFocusRectangle = false;
+			this.checkBoxFairness.Location = new System.Drawing.Point(10, 213);
+			this.checkBoxFairness.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBoxFairness.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxFairness.Name = "checkBoxFairness";
+			this.checkBoxFairness.Size = new System.Drawing.Size(442, 24);
+			this.checkBoxFairness.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxFairness.TabIndex = 12;
+			this.checkBoxFairness.Text = "xxFairness";
+			this.checkBoxFairness.ThemesEnabled = false;
 			// 
 			// checkBoxDaysOffFromFlexibleWorkTime
 			// 
@@ -638,6 +624,20 @@
 			this.labelOptimizationSteps.TabIndex = 8;
 			this.labelOptimizationSteps.Text = "xxOptimizationSteps";
 			this.labelOptimizationSteps.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// checkBoxAdvIntraIntervalOptimization
+			// 
+			this.checkBoxAdvIntraIntervalOptimization.BeforeTouchSize = new System.Drawing.Size(442, 24);
+			this.checkBoxAdvIntraIntervalOptimization.DrawFocusRectangle = false;
+			this.checkBoxAdvIntraIntervalOptimization.Location = new System.Drawing.Point(10, 183);
+			this.checkBoxAdvIntraIntervalOptimization.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+			this.checkBoxAdvIntraIntervalOptimization.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvIntraIntervalOptimization.Name = "checkBoxAdvIntraIntervalOptimization";
+			this.checkBoxAdvIntraIntervalOptimization.Size = new System.Drawing.Size(442, 24);
+			this.checkBoxAdvIntraIntervalOptimization.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAdvIntraIntervalOptimization.TabIndex = 13;
+			this.checkBoxAdvIntraIntervalOptimization.Text = "xxIntraIntervalOptimization";
+			this.checkBoxAdvIntraIntervalOptimization.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel5
 			// 
@@ -720,13 +720,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownStudentAvailabilities)).EndInit();
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.tableLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIntraIntervalOptimization)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxFairness)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxShiftsWithinDay)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxFairness)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxDaysOffFromFlexibleWorkTime)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxShiftsForFlexibleWorkTime)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxTimeBetweenDays)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxDaysOff)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIntraIntervalOptimization)).EndInit();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).EndInit();

@@ -24,31 +24,31 @@ namespace Teleopti.Ccc.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-        public void Initialize(
-            IGeneralPreferences generalPreferences, 
-            IEnumerable<IScheduleTag> scheduleTags,
-			IEventAggregator eventAggregator,
-			IToggleManager toggleManager)
-        {
-            _generalPreferences = generalPreferences;
-	        _scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
-        	_eventAggregator = eventAggregator;
-	        _toggleManager = toggleManager;
+	    public void Initialize(
+		    IGeneralPreferences generalPreferences,
+		    IEnumerable<IScheduleTag> scheduleTags,
+		    IEventAggregator eventAggregator,
+		    IToggleManager toggleManager)
+	    {
+		    _generalPreferences = generalPreferences;
+		    _scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
+		    _eventAggregator = eventAggregator;
+		    _toggleManager = toggleManager;
 
-			if(_eventAggregator != null)
-			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(enableDisableShiftCategoryLimitations);
+		    if (_eventAggregator != null)
+			    _eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>()
+				    .Subscribe(enableDisableShiftCategoryLimitations);
 
-			if (!_toggleManager.IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846))
-			{
-				checkBoxAdvIntraIntervalOptimization.Visible = false;
-				tableLayoutPanel6.RowStyles[7].Height = 0;
-			}
+			var intraIntervalOptimizer = _toggleManager.IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846);
+		    checkBoxAdvIntraIntervalOptimization.Visible = intraIntervalOptimizer;
+			if(!intraIntervalOptimizer)
+				tableLayoutPanel6.RowStyles[6].Height = 0;
 
-            ExchangeData(ExchangeDataOption.DataSourceToControls);
-            setInitialControlStatus();
-        }
+		    ExchangeData(ExchangeDataOption.DataSourceToControls);
+		    setInitialControlStatus();
+	    }
 
-        #region IDataExchange Members
+	    #region IDataExchange Members
 
 		public void UnsubscribeEvents()
 		{

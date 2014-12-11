@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
 		{
-			_webViewLoaded = true;
+			//_webViewLoaded = true;
 		}
 
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -689,13 +689,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
 			{
-				//DateTime start = DateTime.Now;
+				DateTime start = DateTime.Now;
 				while (!_webViewLoaded)
 				{
 					Application.DoEvents();
+					Thread.Sleep(0);
 					////temp ? fix for bug 31541 (an issue in eo.webbrowser after a windows update)
-					//if ((DateTime.Now - start).TotalSeconds >= 10)
-					//	break;
+					if ((DateTime.Now - start).TotalSeconds >= 10)
+						break;
 				}
 			}
 

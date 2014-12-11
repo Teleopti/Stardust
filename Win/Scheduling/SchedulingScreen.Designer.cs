@@ -383,14 +383,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 7;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 2;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -1388,6 +1388,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			this.ribbonControlAdv1.Office2013ColorScheme = Syncfusion.Windows.Forms.Tools.Office2013ColorScheme.White;
 			this.ribbonControlAdv1.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
+			// 
+			// ribbonControlAdv1.OfficeMenu
+			// 
+			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
+			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.ribbonControlAdv1.OverFlowButtonToolTip = "Show DropDown";
 			this.ribbonControlAdv1.QuickPanelImageLayout = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.ribbonControlAdv1.RibbonHeaderImage = Syncfusion.Windows.Forms.Tools.RibbonHeaderImage.None;
