@@ -1571,7 +1571,6 @@
     <Content Include="Areas\MyTime\Views\MyReport\DailyQueueMetricsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Availability\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\BadgeLeaderBoardReport\BadgeLeaderBoardReportPartial.cshtml" />
-    <Content Include="Areas\Mart\Views\Web.config" />
     <Content Include="package.json" />
     <Content Include="Areas\WFM\README.md" />
     <Content Include="App_Build\node.targets" />
