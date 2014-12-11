@@ -1,8 +1,13 @@
-﻿using Autofac;
+﻿using System.Linq;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -10,32 +15,45 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class EventHandlersModuleTest
 	{
-		//[Test]
-		//public void ShouldResolveAllEventHandlers()
-		//{
-		//	var handlers = (
-		//		from type in typeof (IHandleEvent<>).Assembly.GetTypes()
-		//		let handlerInterfaces =
-		//			from i in type.GetInterfaces()
-		//			let isHandlerInterface = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
-		//			where isHandlerInterface
-		//			select i
-		//		where handlerInterfaces.Any()
-		//		select new
-		//		{
-		//			type,
-		//			handlerInterfaces = handlerInterfaces.ToArray()
-		//		}
-		//		).ToArray();
-		//	handlers.Should().Have.Count.GreaterThan(10);
-		//	var builder = new ContainerBuilder();
-		//	builder.RegisterModule(CommonModule.ForTest());
-		//	var container = builder.Build();
-		//	handlers.ForEach(x =>
-		//	{
-		//		container.Resolve(x.handlerInterfaces.First()).Should().Not.Be.Null();
-		//	});
-		//}
+		[Test]
+		public void ShouldResolveAllEventHandlersWhenTogglesEnabled()
+		{
+			testResolveAllEventHandlers(new TrueToggleManager());
+		}
+
+		[Test]
+		public void ShouldResolveAllEventHandlersWhenTogglesDisabled()
+		{
+			testResolveAllEventHandlers(new FalseToggleManager());
+		}
+
+		private static void testResolveAllEventHandlers(IToggleManager toggleManager)
+		{
+			var handlers = (
+				from type in typeof(IHandleEvent<>).Assembly.GetTypes()
+				where type.EnabledByToggle(toggleManager)
+				let handlerInterfaces =
+					from i in type.GetInterfaces()
+					let isHandlerInterface = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
+					where isHandlerInterface
+					select i
+				where handlerInterfaces.Any()
+				select new
+				{
+					type,
+					handlerInterfaces = handlerInterfaces.ToArray()
+				}
+				).ToArray();
+
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(CommonModule.ForTest(toggleManager));
+			var container = builder.Build();
+
+			handlers.Should().Have.Count.GreaterThan(10);
+			handlers.ForEach(x => container.Resolve(x.handlerInterfaces.First()).Should().Not.Be.Null());
+		}
+
+
 
 		[Test]
 		public void ShouldRegisterAnalytics()

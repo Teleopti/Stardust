@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof (IHandleEvent<>).Assembly)
 				.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
 				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.Where(t => t.ToggleEnabled(_config))
+				.Where(t => t.EnabledByToggle(_config))
 				.EnableClassInterceptors().InterceptedBy(typeof (AspectInterceptor));
 			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();

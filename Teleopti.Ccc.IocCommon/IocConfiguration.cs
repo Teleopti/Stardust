@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.IocCommon
 	public class IocConfiguration : IIocConfiguration
 	{
 		private readonly IocArgs _args;
-		private IToggleManager _toggleManager;
+		private readonly IToggleManager _toggleManager;
 
 		public IocConfiguration(IocArgs args, IToggleManager toggleManager)
 		{
