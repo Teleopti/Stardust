@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -43,8 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			}
 			else
 			{
-				var absences = _repository.Absences();
-				var abs = absences.FirstOrDefault(a => a.AbsenceCode.Equals(layer.PayloadId));
+				var abs = MapAbsenceId(layer.PayloadId);
 				if (abs == null) return ret;
 				ret.AbsenceId = abs.AbsenceId;
 				ret.ContractTimeAbsenceMinutes = (int)layer.ContractTime.TotalMinutes;
@@ -57,6 +57,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				}
 			}
 			return ret;
+		}
+
+		public IAnalyticsAbsence MapAbsenceId(Guid absenceCode)
+		{
+			var absences = _repository.Absences();
+			var abs = absences.FirstOrDefault(a => a.AbsenceCode.Equals(absenceCode));
+			if (abs == null) return null;
+			return abs;
 		}
 	}
 }

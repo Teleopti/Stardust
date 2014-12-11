@@ -47,13 +47,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				if (!_analyticsFactScheduleDateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId))
 				{
 					//Log that schedule id could not be mapped = Schedule changes is not saved in analytics db.
+					continue;
 				}
 
 				var personPart = _analyticsFactSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
 				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId);
 
 				if (scheduleDay.NotScheduled)
-					break;
+					continue;
 
 				
 				var shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);

@@ -137,5 +137,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.OverTimeId.Should().Be.EqualTo(-1);
 			result.OverTimeMinutes.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldMapAbsenceId()
+		{
+			_rep.Stub(x => x.Absences()).Return(_absences);
+			var absence =_target.MapAbsenceId(_absences[0].AbsenceCode);
+			absence.AbsenceId.Should().Be.EqualTo(_absences[0].AbsenceId);
+		}
+
+		[Test]
+		public void ShouldFailToMapAbsenceId()
+		{
+			_rep.Stub(x => x.Absences()).Return(_absences);
+			var absence = _target.MapAbsenceId(Guid.NewGuid());
+			absence.Should().Be.Null();
+		}
 	}
 }

@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AnalyticsFactScheduleTimeHandler>().SingleInstance().As<IAnalyticsFactScheduleTimeHandler>();
 			builder.RegisterType<AnalyticsFactScheduleDateHandler>().SingleInstance().As<IAnalyticsFactScheduleDateHandler>();
 			builder.RegisterType<AnalyticsFactSchedulePersonHandler>().SingleInstance().As<IAnalyticsFactSchedulePersonHandler>();
+			builder.RegisterType<AnalyticsFactScheduleDayCountHandler>().SingleInstance().As<IAnalyticsFactScheduleDayCountHandler>();
 			builder.RegisterType<AnalyticsScheduleRepository>().SingleInstance().As<IAnalyticsScheduleRepository>();
 
 			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
