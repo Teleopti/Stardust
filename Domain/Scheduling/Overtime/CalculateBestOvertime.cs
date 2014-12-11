@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface ICalculateBestOvertime
     {
-        IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility);
+        IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod,  IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility);
     }
 
     public class CalculateBestOvertime : ICalculateBestOvertime
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		    _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
 	    }
 
-		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
+		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
         {
             var possibleOvertimeDurationsToCalculate = new List<TimeSpan>();
             for (int minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
@@ -29,12 +29,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             }
 
 			var shiftEndingTime = scheduleDay.ProjectionService().CreateProjection().Period().GetValueOrDefault().EndDateTime;
+			var max = scheduleDay.Period.StartDateTime.AddMinutes(overtimeSpecifiedPeriod.Maximum.TotalMinutes);
 
             var calculatedOvertimePeriods = new Dictionary<TimeSpan, double>();
             foreach (var duration in possibleOvertimeDurationsToCalculate)
             {
 				if (duration < overtimeDurantion.Minimum) continue;
                 var period = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(duration));
+				if(period.EndDateTime > max) continue;
 
 	            if (onlyOvertimeAvaialbility)
 				{

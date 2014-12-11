@@ -135,4 +135,22 @@
         aW1lU3BhbgIAAAAIX21pbmltdW0IX21heGltdW0AAAwMAgAAAAAAAAAAAAAAAIDTVJIBAAAL
 </value>
   </data>
+  <data name="fromToTimePickerSpecifiedPeriod.MinMaxEndTime" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAKUBbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1u
+        ZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0sIFRlbGVvcHRpLkludGVyZmFj
+        ZXMsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj05ZTc5MzJj
+        ZGJiMzljNDVmBQEAAAA0VGVsZW9wdGkuSW50ZXJmYWNlcy5Eb21haW4uTWluTWF4YDFbW1N5c3RlbS5U
+        aW1lU3BhbgIAAAAIX21pbmltdW0IX21heGltdW0AAAwMAgAAAAAAAAAAAAAAAIDTVJIBAAAL
+</value>
+  </data>
+  <data name="fromToTimePickerSpecifiedPeriod.MinMaxStartTime" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAKUBbXNjb3JsaWIsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1u
+        ZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5XV0sIFRlbGVvcHRpLkludGVyZmFj
+        ZXMsIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj05ZTc5MzJj
+        ZGJiMzljNDVmBQEAAAA0VGVsZW9wdGkuSW50ZXJmYWNlcy5Eb21haW4uTWluTWF4YDFbW1N5c3RlbS5U
+        aW1lU3BhbgIAAAAIX21pbmltdW0IX21heGltdW0AAAwMAgAAAAAAAAAAAAAAAIDTVJIBAAAL
+</value>
+  </data>
 </root>

@@ -3,7 +3,14 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public class OvertimePeriodValues
+	public interface IOvertimePeriodValues
+	{
+		void Add(IOvertimePeriodValue overtimePeriodValue1);
+		IList<IOvertimePeriodValue> PeriodValues { get; }
+		double TotalValue();
+	}
+
+	public class OvertimePeriodValues : IOvertimePeriodValues
 	{
 		private readonly IList<IOvertimePeriodValue> _periodValues;
 

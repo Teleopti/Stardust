@@ -341,8 +341,11 @@ namespace Teleopti.Ccc.WinCode.Autofac
 				: c.Resolve<CalculateBestOvertime>())
 				.As<ICalculateBestOvertime>();
 
+			builder.RegisterType<OvertimeDateTimePeriodExtractor>().As<IOvertimeDateTimePeriodExtractor>();
+			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().As<IOvertimeRelativeDifferenceCalculator>();
 
-			//IEffectiveRestrictionCreator
+
+			//IOvertimeRelativeDifferenceCalculator
 		}
 
 		private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

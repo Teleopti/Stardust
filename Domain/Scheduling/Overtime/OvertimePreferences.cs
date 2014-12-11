@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public IActivity SkillActivity { get; set; }
         public IMultiplicatorDefinitionSet OvertimeType { get; set; }
         public TimePeriod SelectedTimePeriod { get; set; }
+		public TimePeriod SelectedSpecificTimePeriod { get; set; }
         public bool AllowBreakMaxWorkPerWeek { get; set; }
         public bool AllowBreakNightlyRest { get; set; }
         public bool AllowBreakWeeklyRest { get; set; }

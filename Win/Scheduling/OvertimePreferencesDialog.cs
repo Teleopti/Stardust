@@ -36,7 +36,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			initActivityList();
 			initOvertimeTypes();
 			setDefaultTimePeriod();
+			setDefaultSpecificPeriod();
 			setInitialValues();
+		}
+
+		public void UseSpecifiedPeriod(bool use)
+		{
+			if (!use)
+			{
+				labelSpecifiedPeriod.Visible = false;
+				fromToTimePickerSpecifiedPeriod.Visible = false;
+				fromToTimePickerSpecifiedPeriod.EndTime.SetTimeValue(TimeSpan.FromDays(2));
+			}
 		}
 
 		public IOvertimePreferences Preferences
@@ -92,6 +103,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			fromToTimeDurationPicker1.EndTime.TextChanged += endTimeTextChanged;
 		}
 
+		private void setDefaultSpecificPeriod()
+		{
+
+			fromToTimePickerSpecifiedPeriod.StartTime.DefaultResolution = _resolution;
+			fromToTimePickerSpecifiedPeriod.EndTime.DefaultResolution = _resolution;
+
+			fromToTimePickerSpecifiedPeriod.StartTime.TimeIntervalInDropDown = _resolution;
+			fromToTimePickerSpecifiedPeriod.EndTime.TimeIntervalInDropDown = _resolution;
+
+			var start = TimeSpan.Zero;
+			var end = start.Add(TimeSpan.FromDays(1)).Add(TimeSpan.FromHours(6));
+
+			fromToTimePickerSpecifiedPeriod.StartTime.CreateAndBindList(start, end);
+			fromToTimePickerSpecifiedPeriod.EndTime.CreateAndBindList(start, end);
+
+			fromToTimePickerSpecifiedPeriod.StartTime.SetTimeValue(start);
+			fromToTimePickerSpecifiedPeriod.EndTime.SetTimeValue(end);
+
+			fromToTimePickerSpecifiedPeriod.StartTime.TextChanged += startTimeTextChangedSpecific;
+			fromToTimePickerSpecifiedPeriod.EndTime.TextChanged += endTimeTextChangedSpecific;
+		}
+
 		private void endTimeTextChanged(object sender, EventArgs e)
 		{
 			var startTime = fromToTimeDurationPicker1.StartTime.TimeValue();
@@ -108,10 +141,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 				fromToTimeDurationPicker1.EndTime.SetTimeValue(startTime);
 		}
 
+		private void startTimeTextChangedSpecific(object sender, EventArgs e)
+		{
+			var startTime = fromToTimePickerSpecifiedPeriod.StartTime.TimeValue();
+			var endTime = fromToTimePickerSpecifiedPeriod.EndTime.TimeValue();
+			if (startTime > endTime)
+				fromToTimePickerSpecifiedPeriod.EndTime.SetTimeValue(startTime);
+		}
+
+		private void endTimeTextChangedSpecific(object sender, EventArgs e)
+		{
+			var startTime = fromToTimePickerSpecifiedPeriod.StartTime.TimeValue();
+			var endTime = fromToTimePickerSpecifiedPeriod.EndTime.TimeValue();
+			if (startTime > endTime)
+				fromToTimePickerSpecifiedPeriod.StartTime.SetTimeValue(endTime);
+		}
+
 		private void setInitialValues()
 		{
 
 			fromToTimeDurationPicker1.WholeDay.Visible = false;
+			fromToTimePickerSpecifiedPeriod.WholeDay.Visible = false;
 
 		}
 
@@ -199,6 +249,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_overtimePreferences.OvertimeType = (IMultiplicatorDefinitionSet) comboBoxAdvOvertimeType.SelectedItem;
 			var selectedPeriod =new TimePeriod(fromToTimeDurationPicker1.StartTime.TimeValue(), fromToTimeDurationPicker1.EndTime.TimeValue());
 			_overtimePreferences.SelectedTimePeriod = selectedPeriod;
+
+			var selectedSpecificPeriod = new TimePeriod(fromToTimePickerSpecifiedPeriod.StartTime.TimeValue(), fromToTimePickerSpecifiedPeriod.EndTime.TimeValue());
+			_overtimePreferences.SelectedSpecificTimePeriod = selectedSpecificPeriod;
+
 			_overtimePreferences.AvailableAgentsOnly = checkBoxOnAvailableAgentsOnly.Checked;
 		}
 	}

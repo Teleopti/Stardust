@@ -34,16 +34,18 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBoxOnAvailableAgentsOnly = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAllowBreakingNightlyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAllowBreakingWeeklyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAllowBreakingMaxTimePerWeek = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.comboBoxAdvOvertimeType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.fromToTimeDurationPicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimeDurationPicker();
+			this.checkBoxOnAvailableAgentsOnly = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAllowBreakingWeeklyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAllowBreakingNightlyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAllowBreakingMaxTimePerWeek = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.labelSpecifiedPeriod = new System.Windows.Forms.Label();
+			this.fromToTimePickerSpecifiedPeriod = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
 			this.tableLayoutPanelButtons = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -51,13 +53,13 @@
 			this.tabPageGenaral = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelMain.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingMaxTimePerWeek)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingMaxTimePerWeek)).BeginInit();
 			this.tableLayoutPanelButtons.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).BeginInit();
 			this.tabControlTopLevel.SuspendLayout();
@@ -105,10 +107,6 @@
 			this.tableLayoutPanelMain.ColumnCount = 2;
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 212F));
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxOnAvailableAgentsOnly, 0, 9);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingNightlyRest, 0, 7);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingWeeklyRest, 0, 8);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingMaxTimePerWeek, 0, 6);
 			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvOvertimeType, 1, 3);
 			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvActivity, 1, 2);
 			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvTag, 1, 0);
@@ -118,12 +116,18 @@
 			this.tableLayoutPanelMain.Controls.Add(this.label3, 0, 1);
 			this.tableLayoutPanelMain.Controls.Add(this.label5, 0, 4);
 			this.tableLayoutPanelMain.Controls.Add(this.fromToTimeDurationPicker1, 0, 5);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxOnAvailableAgentsOnly, 0, 11);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingWeeklyRest, 0, 10);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingNightlyRest, 0, 9);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingMaxTimePerWeek, 0, 8);
+			this.tableLayoutPanelMain.Controls.Add(this.labelSpecifiedPeriod, 0, 6);
+			this.tableLayoutPanelMain.Controls.Add(this.fromToTimePickerSpecifiedPeriod, 0, 7);
 			this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelMain.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(7);
 			this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
 			this.tableLayoutPanelMain.Padding = new System.Windows.Forms.Padding(3);
-			this.tableLayoutPanelMain.RowCount = 11;
+			this.tableLayoutPanelMain.RowCount = 12;
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
@@ -131,76 +135,13 @@
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
 			this.tableLayoutPanelMain.Size = new System.Drawing.Size(518, 567);
 			this.tableLayoutPanelMain.TabIndex = 11;
-			// 
-			// checkBoxOnAvailableAgentsOnly
-			// 
-			this.checkBoxOnAvailableAgentsOnly.BeforeTouchSize = new System.Drawing.Size(506, 27);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxOnAvailableAgentsOnly, 2);
-			this.checkBoxOnAvailableAgentsOnly.Dock = System.Windows.Forms.DockStyle.Top;
-			this.checkBoxOnAvailableAgentsOnly.DrawFocusRectangle = false;
-			this.checkBoxOnAvailableAgentsOnly.Location = new System.Drawing.Point(6, 283);
-			this.checkBoxOnAvailableAgentsOnly.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxOnAvailableAgentsOnly.Name = "checkBoxOnAvailableAgentsOnly";
-			this.checkBoxOnAvailableAgentsOnly.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxOnAvailableAgentsOnly.Size = new System.Drawing.Size(506, 27);
-			this.checkBoxOnAvailableAgentsOnly.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxOnAvailableAgentsOnly.TabIndex = 22;
-			this.checkBoxOnAvailableAgentsOnly.Text = "xxOnAvailableAgentsOnly";
-			this.checkBoxOnAvailableAgentsOnly.ThemesEnabled = false;
-			// 
-			// checkBoxAllowBreakingNightlyRest
-			// 
-			this.checkBoxAllowBreakingNightlyRest.BeforeTouchSize = new System.Drawing.Size(506, 22);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingNightlyRest, 2);
-			this.checkBoxAllowBreakingNightlyRest.Dock = System.Windows.Forms.DockStyle.Top;
-			this.checkBoxAllowBreakingNightlyRest.DrawFocusRectangle = false;
-			this.checkBoxAllowBreakingNightlyRest.Location = new System.Drawing.Point(6, 225);
-			this.checkBoxAllowBreakingNightlyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAllowBreakingNightlyRest.Name = "checkBoxAllowBreakingNightlyRest";
-			this.checkBoxAllowBreakingNightlyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxAllowBreakingNightlyRest.Size = new System.Drawing.Size(506, 22);
-			this.checkBoxAllowBreakingNightlyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAllowBreakingNightlyRest.TabIndex = 21;
-			this.checkBoxAllowBreakingNightlyRest.Text = "xxAllowBreakContractNightlyRest";
-			this.checkBoxAllowBreakingNightlyRest.ThemesEnabled = false;
-			// 
-			// checkBoxAllowBreakingWeeklyRest
-			// 
-			this.checkBoxAllowBreakingWeeklyRest.BeforeTouchSize = new System.Drawing.Size(506, 22);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingWeeklyRest, 2);
-			this.checkBoxAllowBreakingWeeklyRest.Dock = System.Windows.Forms.DockStyle.Top;
-			this.checkBoxAllowBreakingWeeklyRest.DrawFocusRectangle = false;
-			this.checkBoxAllowBreakingWeeklyRest.Location = new System.Drawing.Point(6, 254);
-			this.checkBoxAllowBreakingWeeklyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAllowBreakingWeeklyRest.Name = "checkBoxAllowBreakingWeeklyRest";
-			this.checkBoxAllowBreakingWeeklyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxAllowBreakingWeeklyRest.Size = new System.Drawing.Size(506, 22);
-			this.checkBoxAllowBreakingWeeklyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAllowBreakingWeeklyRest.TabIndex = 20;
-			this.checkBoxAllowBreakingWeeklyRest.Text = "xxAllowBreakContractWeeklyRest";
-			this.checkBoxAllowBreakingWeeklyRest.ThemesEnabled = false;
-			// 
-			// checkBoxAllowBreakingMaxTimePerWeek
-			// 
-			this.checkBoxAllowBreakingMaxTimePerWeek.BeforeTouchSize = new System.Drawing.Size(506, 23);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingMaxTimePerWeek, 2);
-			this.checkBoxAllowBreakingMaxTimePerWeek.Dock = System.Windows.Forms.DockStyle.Top;
-			this.checkBoxAllowBreakingMaxTimePerWeek.DrawFocusRectangle = false;
-			this.checkBoxAllowBreakingMaxTimePerWeek.Location = new System.Drawing.Point(6, 195);
-			this.checkBoxAllowBreakingMaxTimePerWeek.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAllowBreakingMaxTimePerWeek.Name = "checkBoxAllowBreakingMaxTimePerWeek";
-			this.checkBoxAllowBreakingMaxTimePerWeek.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxAllowBreakingMaxTimePerWeek.Size = new System.Drawing.Size(506, 23);
-			this.checkBoxAllowBreakingMaxTimePerWeek.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAllowBreakingMaxTimePerWeek.TabIndex = 19;
-			this.checkBoxAllowBreakingMaxTimePerWeek.Text = "xxAllowBreakContractMaxWorkTimePerWeek";
-			this.checkBoxAllowBreakingMaxTimePerWeek.ThemesEnabled = false;
 			// 
 			// comboBoxAdvOvertimeType
 			// 
@@ -273,6 +214,89 @@
 			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(289, 31);
 			this.fromToTimeDurationPicker1.TabIndex = 18;
 			this.fromToTimeDurationPicker1.WholeDayText = "xxNextDay";
+			// 
+			// checkBoxOnAvailableAgentsOnly
+			// 
+			this.checkBoxOnAvailableAgentsOnly.BeforeTouchSize = new System.Drawing.Size(506, 27);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxOnAvailableAgentsOnly, 2);
+			this.checkBoxOnAvailableAgentsOnly.DrawFocusRectangle = false;
+			this.checkBoxOnAvailableAgentsOnly.Location = new System.Drawing.Point(6, 383);
+			this.checkBoxOnAvailableAgentsOnly.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxOnAvailableAgentsOnly.Name = "checkBoxOnAvailableAgentsOnly";
+			this.checkBoxOnAvailableAgentsOnly.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxOnAvailableAgentsOnly.Size = new System.Drawing.Size(506, 27);
+			this.checkBoxOnAvailableAgentsOnly.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxOnAvailableAgentsOnly.TabIndex = 22;
+			this.checkBoxOnAvailableAgentsOnly.Text = "xxOnAvailableAgentsOnly";
+			this.checkBoxOnAvailableAgentsOnly.ThemesEnabled = false;
+			// 
+			// checkBoxAllowBreakingWeeklyRest
+			// 
+			this.checkBoxAllowBreakingWeeklyRest.BeforeTouchSize = new System.Drawing.Size(506, 22);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingWeeklyRest, 2);
+			this.checkBoxAllowBreakingWeeklyRest.DrawFocusRectangle = false;
+			this.checkBoxAllowBreakingWeeklyRest.Location = new System.Drawing.Point(6, 346);
+			this.checkBoxAllowBreakingWeeklyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAllowBreakingWeeklyRest.Name = "checkBoxAllowBreakingWeeklyRest";
+			this.checkBoxAllowBreakingWeeklyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxAllowBreakingWeeklyRest.Size = new System.Drawing.Size(506, 22);
+			this.checkBoxAllowBreakingWeeklyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAllowBreakingWeeklyRest.TabIndex = 20;
+			this.checkBoxAllowBreakingWeeklyRest.Text = "xxAllowBreakContractWeeklyRest";
+			this.checkBoxAllowBreakingWeeklyRest.ThemesEnabled = false;
+			// 
+			// checkBoxAllowBreakingNightlyRest
+			// 
+			this.checkBoxAllowBreakingNightlyRest.BeforeTouchSize = new System.Drawing.Size(506, 22);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingNightlyRest, 2);
+			this.checkBoxAllowBreakingNightlyRest.DrawFocusRectangle = false;
+			this.checkBoxAllowBreakingNightlyRest.Location = new System.Drawing.Point(6, 309);
+			this.checkBoxAllowBreakingNightlyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAllowBreakingNightlyRest.Name = "checkBoxAllowBreakingNightlyRest";
+			this.checkBoxAllowBreakingNightlyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxAllowBreakingNightlyRest.Size = new System.Drawing.Size(506, 22);
+			this.checkBoxAllowBreakingNightlyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAllowBreakingNightlyRest.TabIndex = 21;
+			this.checkBoxAllowBreakingNightlyRest.Text = "xxAllowBreakContractNightlyRest";
+			this.checkBoxAllowBreakingNightlyRest.ThemesEnabled = false;
+			// 
+			// checkBoxAllowBreakingMaxTimePerWeek
+			// 
+			this.checkBoxAllowBreakingMaxTimePerWeek.BeforeTouchSize = new System.Drawing.Size(506, 23);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingMaxTimePerWeek, 2);
+			this.checkBoxAllowBreakingMaxTimePerWeek.DrawFocusRectangle = false;
+			this.checkBoxAllowBreakingMaxTimePerWeek.Location = new System.Drawing.Point(6, 272);
+			this.checkBoxAllowBreakingMaxTimePerWeek.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAllowBreakingMaxTimePerWeek.Name = "checkBoxAllowBreakingMaxTimePerWeek";
+			this.checkBoxAllowBreakingMaxTimePerWeek.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxAllowBreakingMaxTimePerWeek.Size = new System.Drawing.Size(506, 23);
+			this.checkBoxAllowBreakingMaxTimePerWeek.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAllowBreakingMaxTimePerWeek.TabIndex = 19;
+			this.checkBoxAllowBreakingMaxTimePerWeek.Text = "xxAllowBreakContractMaxWorkTimePerWeek";
+			this.checkBoxAllowBreakingMaxTimePerWeek.ThemesEnabled = false;
+			// 
+			// labelSpecifiedPeriod
+			// 
+			this.labelSpecifiedPeriod.AutoSize = true;
+			this.labelSpecifiedPeriod.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.labelSpecifiedPeriod.Location = new System.Drawing.Point(6, 207);
+			this.labelSpecifiedPeriod.Name = "labelSpecifiedPeriod";
+			this.labelSpecifiedPeriod.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.labelSpecifiedPeriod.Size = new System.Drawing.Size(294, 15);
+			this.labelSpecifiedPeriod.TabIndex = 23;
+			this.labelSpecifiedPeriod.Text = "xxBetweenColon";
+			// 
+			// fromToTimePickerSpecifiedPeriod
+			// 
+			this.tableLayoutPanelMain.SetColumnSpan(this.fromToTimePickerSpecifiedPeriod, 2);
+			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(15, 232);
+			this.fromToTimePickerSpecifiedPeriod.Margin = new System.Windows.Forms.Padding(12, 10, 10, 10);
+			this.fromToTimePickerSpecifiedPeriod.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxEndTime")));
+			this.fromToTimePickerSpecifiedPeriod.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxStartTime")));
+			this.fromToTimePickerSpecifiedPeriod.Name = "fromToTimePickerSpecifiedPeriod";
+			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(288, 27);
+			this.fromToTimePickerSpecifiedPeriod.TabIndex = 24;
+			this.fromToTimePickerSpecifiedPeriod.WholeDayText = "xxNextDay";
 			// 
 			// tableLayoutPanelButtons
 			// 
@@ -394,13 +418,13 @@
 			this.Load += new System.EventHandler(this.overtimePreferencesDialogLoad);
 			this.tableLayoutPanelMain.ResumeLayout(false);
 			this.tableLayoutPanelMain.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingMaxTimePerWeek)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingMaxTimePerWeek)).EndInit();
 			this.tableLayoutPanelButtons.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).EndInit();
 			this.tabControlTopLevel.ResumeLayout(false);
@@ -432,5 +456,7 @@
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAllowBreakingWeeklyRest;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAllowBreakingMaxTimePerWeek;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxOnAvailableAgentsOnly;
+		  private System.Windows.Forms.Label labelSpecifiedPeriod;
+		  private Common.Controls.FromToTimePicker fromToTimePickerSpecifiedPeriod;
 	}
 }

@@ -67,12 +67,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (locks != null && locks.Count != 0) continue;
 
                     var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+	                var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);
+					var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
                  
                     //Calculate best length (if any) for overtime
-                    var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay,overtimePreferences.SkillActivity,new MinMax<TimeSpan>(
-                                                                                overtimePreferences.SelectedTimePeriod.StartTime,
-                                                                                overtimePreferences.SelectedTimePeriod.EndTime),
-																				overtimePreferences.AvailableAgentsOnly);
+					var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 
 					if(overtimeLayerLengthPeriods.Count == 0) continue;
                     
@@ -100,11 +99,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly, null);
                     var newRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person);
-                    if (newRmsValue > oldRmsValue)
-                    {
-                        _schedulePartModifyAndRollbackService.Rollback();
-                        resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly, null);
-                    }
+					if (newRmsValue > oldRmsValue)
+					{
+						_schedulePartModifyAndRollbackService.Rollback();
+						resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly, null);
+					}
 
                     OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
                 }

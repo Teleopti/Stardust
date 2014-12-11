@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         private OvertimePeriodValueMapper _overtimePeriodValueMapper;
         private IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 	    private IScheduleDay _scheduleDay;
-
-        [SetUp]
+	    private MinMax<TimeSpan> _overtimeSpecifiedPeriod;
+		
+		[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -40,14 +41,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _skillDay1 = _mocks.StrictMock<ISkillDay>();
             _skill1 = SkillFactory.CreateSkill("1");
             _skill2 = SkillFactory.CreateSkill("2");
-            _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue,
-                                                                                    new List<ISkill> { _skill1, _skill2 });
+            _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _skill1, _skill2 });
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _overtimeSkillIntervalDataAggregator = _mocks.StrictMock<IOvertimeSkillIntervalDataAggregator>();
             _calculateBestOvertime = _mocks.StrictMock<ICalculateBestOvertime>();
             _overtimePeriodValueMapper = new OvertimePeriodValueMapper();
+			_overtimeSpecifiedPeriod = new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
             _target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
-                                                _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder, _calculateBestOvertime, _overtimePeriodValueMapper,_overtimeSkillIntervalDataAggregator  );
+                                                _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder, 
+												_calculateBestOvertime, _overtimePeriodValueMapper,_overtimeSkillIntervalDataAggregator  );
         }
 
 		[Test]
@@ -56,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var result = _target.Decide(_person, DateOnly.Today, _scheduleDay,
 										ActivityFactory.CreateActivity("No Match Acitivity"),
 										new MinMax<TimeSpan>(TimeSpan.FromHours(1), TimeSpan.FromHours(2)),
+										_overtimeSpecifiedPeriod,
 										false);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
@@ -89,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
 						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
 				Expect.Call(_skillDay1.Skill).Return(_skill1);
-				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
 				Expect.Call(
@@ -99,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mocks.Playback())
 			{
 
-				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity,duration, false);
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity,duration,_overtimeSpecifiedPeriod, false);
 
 				Assert.That(resultLength.Count, Is.EqualTo(0));
 			}
@@ -125,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(
 					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
 						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
 
@@ -133,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			}
 			using (_mocks.Playback())
 			{
-				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration, false);
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration,_overtimeSpecifiedPeriod, false);
 
 				Assert.That(resultLength.Count, Is.EqualTo(0));
 			}
@@ -157,13 +160,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(
 					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
 						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
 			}
 			using (_mocks.Playback())
 			{
-				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration, false);
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _scheduleDay, _skill1.Activity, duration, _overtimeSpecifiedPeriod, false);
 
 				Assert.That(resultLength.Count, Is.EqualTo(0));
 			}

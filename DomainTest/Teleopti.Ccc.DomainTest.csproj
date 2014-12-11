@@ -554,12 +554,15 @@
     <Compile Include="Scheduling\Overtime\CalculateBestOvertimeBeforeOrAfterTest.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertimeTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeDateTimePeriodExtractorTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeDateTimePeriodHolderTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueMapperTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValuesTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeRelativeDifferenceCalculatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
