@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
 				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
 				.Where(t => t.EnabledByToggle(_config))
+				.SingleInstance()
 				.EnableClassInterceptors().InterceptedBy(typeof (AspectInterceptor));
 			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();

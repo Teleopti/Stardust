@@ -50,7 +50,13 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var container = builder.Build();
 
 			handlers.Should().Have.Count.GreaterThan(10);
-			handlers.ForEach(x => container.Resolve(x.handlerInterfaces.First()).Should().Not.Be.Null());
+			handlers.ForEach(x =>
+			{
+				var instance1 = container.Resolve(x.handlerInterfaces.First());
+				var instance2 = container.Resolve(x.handlerInterfaces.First());
+				instance1.Should().Not.Be.Null();
+				instance1.Should().Be.SameInstanceAs(instance2);
+			});
 		}
 
 
