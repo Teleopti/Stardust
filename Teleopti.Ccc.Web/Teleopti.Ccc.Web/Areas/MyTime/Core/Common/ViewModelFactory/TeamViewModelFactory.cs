@@ -60,8 +60,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 
 		private IEnumerable<ISelectOption> createGroupPagesOptions(DateOnly date)
 		{
-			var groupPages = _groupingReadOnlyRepository.AvailableGroupPages().Select(
-				p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).OrderBy(x => x.text).ToArray();
+			var pages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
+			var groupPages = pages
+							.Where(p => p.PageId.ToString().ToUpperInvariant() != pageMain)
+							.Select(p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId })
+							.OrderBy(x => x.text).ToList();
+			if (pages.Any(p => p.PageId.ToString().ToUpperInvariant() == pageMain))
+			{
+				groupPages.Insert(0, pages
+							.Where(p => p.PageId.ToString().ToUpperInvariant() == pageMain)
+							.Select(p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).Single());
+			}
 
 			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
 
