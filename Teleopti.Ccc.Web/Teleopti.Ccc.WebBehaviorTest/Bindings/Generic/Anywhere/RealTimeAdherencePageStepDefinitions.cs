@@ -4,8 +4,6 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -96,12 +94,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click(".agent-state");
 		}
 
+		[When(@"I choose to send a message")]
+		public void WhenIChooseToSendAMessage()
+		{
+			Browser.Interactions.Click(".select-agents");
+		}
+
+		[When(@"I select")]
+		public void WhenISelect(Table table)
+		{
+			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
+			foreach (var person in persons)
+			{
+				Browser.Interactions.ClickUsingJQuery(".agent-state:has(.agent-name:contains('" + person.Name + "')) .selectable-agent input");
+			}
+		}
+
+		[When(@"I choose to continue")]
+		public void WhenIChooseToContinue()
+		{
+			Browser.Interactions.Click(".send-message");
+		}
+
+		[Then(@"The message tool should be opened in a new window")]
+		public void ThenTheMessageToolShouldBeOpenedInANewWindow()
+		{
+			Browser.Interactions.AssertUrlNotContains("Anywhere", "ids");
+			Browser.Interactions.CloseWindow("Messages");
+		}
+
+
 		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
 		public void WhenIClickInAgentMenu(CssClass cssClass)
 		{
 			Browser.Interactions.Click(string.Format(".agent-menu a.{0}", cssClass.Name));
 		}
-
 
 		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
 		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string person, int adherence)

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		{
 		}
 
-		public void CloseWindow()
+		public void CloseWindow(string name)
 		{
 		}
 

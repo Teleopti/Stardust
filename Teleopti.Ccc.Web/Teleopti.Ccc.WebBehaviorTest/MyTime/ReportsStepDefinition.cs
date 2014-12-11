@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenTheReportShouldNotBeOpenedInTheSameWindow()
 		{
 			Browser.Interactions.AssertUrlNotContains("MyTime", "Selection.aspx");
-		    Browser.Interactions.CloseWindow();
+		    Browser.Interactions.CloseWindow("http://localhost");
 		}
 
 		[When(@"I click one report in drop down list")]
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenTheReportShouldBeOpenedInANewWindow()
 		{
 			Browser.Interactions.AssertUrlNotContains("Anywhere", "Selection.aspx");
-			Browser.Interactions.CloseWindow();
+			Browser.Interactions.CloseWindow("http://localhost");
 		}
 	}
 }

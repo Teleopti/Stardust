@@ -1,13 +1,12 @@
 using System;
-using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class NotificationCreator : INotificationCreator
 	{
-		public Notification Create(string datasource, Guid businessUnitId, string domainType)
+		public Interfaces.MessageBroker.Notification Create(string datasource, Guid businessUnitId, string domainType)
 		{
-			return new Notification
+			return new Interfaces.MessageBroker.Notification
 			{
 				DataSource = datasource,
 				BusinessUnitId = businessUnitId.ToString(),

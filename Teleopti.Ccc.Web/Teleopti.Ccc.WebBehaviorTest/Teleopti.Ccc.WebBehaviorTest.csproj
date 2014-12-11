@@ -179,6 +179,7 @@
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />

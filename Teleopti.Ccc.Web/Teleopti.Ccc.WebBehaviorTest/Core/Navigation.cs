@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -397,6 +398,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoQuickForecaster()
 		{
 			GoToWaitForCompleted("areas/wfm", new ApplicationStartupTimeout());
+		}
+
+		public static void GotoMessageTool(IEnumerable<Guid> ids)
+		{
+			GoToWaitForCompleted(string.Format("Messages?ids={0}",
+				String.Join(",", ids.Select(x => x.ToString()).ToArray())),
+				new ApplicationStartupTimeout());
 		}
 	}
 

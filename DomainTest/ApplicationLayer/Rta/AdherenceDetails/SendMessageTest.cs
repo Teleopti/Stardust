@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				Datasource = "datasource",
 				BusinessUnitId = Guid.NewGuid()
 			};
-			var notification = new Notification
+			var notification = new Interfaces.MessageBroker.Notification
 			{
 				DataSource = @event.Datasource,
 				BusinessUnitId = @event.BusinessUnitId.ToString(),
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				Datasource = "datasource",
 				BusinessUnitId = Guid.NewGuid()
 			};
-			var notification = new Notification
+			var notification = new Interfaces.MessageBroker.Notification
 			{
 				DataSource = @event.Datasource,
 				BusinessUnitId = @event.BusinessUnitId.ToString(),

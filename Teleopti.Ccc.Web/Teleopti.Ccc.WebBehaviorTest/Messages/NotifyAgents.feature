@@ -4,7 +4,7 @@
 	I want to send sms to the agents from RTA
 
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
-Scenario: Send message
+Scenario: Access from RTA
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with
@@ -23,14 +23,39 @@ Scenario: Send message
 	When I view real time adherence for team 'Red'
 	And I choose to send a message
 	And I select 
-	| Person Name   |
+	| Name          |
 	| Pierre Baldi  |
 	| Ashley Andeen |
 	And I choose to continue
-	Then I should see receivers as
-	| Person Name   |
-	| Pierre Baldi  |
-	| Ashley Andeen |
-	When I input the message
+	Then The message tool should be opened in a new window
+
+@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
+Scenario: Send message
+	Given there is a site named 'Paris'
+	And there is a team named 'Red' on site 'Paris'
+	And I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team                         | Red         |
+	 | Access to real time adherence overview | True        |
+	And Pierre Baldi has a person period with
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-01-21   |
+	And Ashley Andeen has a person period with
+	 | Field          | Value         |
+	 | Team           | Red           |
+	 | Start Date     | 2014-01-21    |
+	When I send message for 
+	 | Name          |
+	 | Pierre Baldi  |
+	 | Ashley Andeen |
+	And I input the message
+	 | Subject         | Body         |
+	 | message subject | message body |
 	And I confirm to send the message
 	Then I should see send message succeeded
+	And I should see receivers as
+	 | Name          |
+	 | Pierre Baldi  |
+	 | Ashley Andeen |

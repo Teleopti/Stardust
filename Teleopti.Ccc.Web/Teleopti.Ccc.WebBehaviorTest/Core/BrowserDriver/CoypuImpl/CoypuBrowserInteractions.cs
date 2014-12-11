@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			eventualAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains), "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
-	    public void CloseWindow()
+	    public void CloseWindow(string name)
 	    {
-	        _browser.FindWindow("http://localhost").ExecuteScript("window.close();");
+	        _browser.FindWindow(name).ExecuteScript("window.close();");
 	    }
 
 		public void AssertJavascriptResultContains(string javascript, string text)
