@@ -35,18 +35,21 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			return agentsNotAlreadyLoggedOut;
 		}
 
-		public IActualAgentState GetAgentState(
-			ScheduleLayer currentLayer,
-			ScheduleLayer nextLayer,
-			IActualAgentState previousState,
-			Guid personId,
-			Guid businessUnitId,
-			Guid? platformTypeId,
-			string stateCode,
-			DateTime currentTime,
-			DateTime? batchId,
-			string originalSourceId)
+		public IActualAgentState GetAgentState(ExternalUserStateInputModel input, PersonWithBusinessUnit person, ScheduleLayer currentLayer, ScheduleLayer nextLayer, IActualAgentState previousState, DateTime currentTime)
 		{
+			Guid? platformTypeId = null;
+			if (input.PlatformTypeId != null)
+				platformTypeId = Guid.Parse(input.PlatformTypeId);
+
+			var batchId = input.IsSnapshot
+				? input.BatchId
+				: (DateTime?)null;
+
+			var stateCode = input.StateCode;
+			var originalSourceId = input.SourceId;
+			var personId = person.PersonId;
+			var businessUnitId = person.BusinessUnitId;
+
 			if (!batchId.HasValue)
 				batchId = previousState.BatchId;
 			if (!platformTypeId.HasValue)

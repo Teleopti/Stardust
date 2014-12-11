@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IActualAgentAssembler _actualAgentStateAssembler;
 		private Guid? _platformTypeId;
 		private PersonWithBusinessUnit _person;
-		private DateTime _currentTime;
+		private readonly DateTime _currentTime;
 
 		public StateInfo(
 			IDatabaseReader databaseReader,
@@ -41,25 +41,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_actualAgentStateAssembler = actualAgentStateAssembler;
 			_currentTime = currentTime;
 
-			_platformTypeId = null;
-			if (input.PlatformTypeId != null)
-				_platformTypeId = Guid.Parse(input.PlatformTypeId);
-
-			var batchId = input.IsSnapshot
-				? input.BatchId
-				: (DateTime?)null;
-
 			_newState = new Lazy<IActualAgentState>(() => actualAgentStateAssembler.GetAgentState(
+				input,
+				person,
 				CurrentActivity,
 				NextActivityInShift,
 				PreviousState,
-				person.PersonId,
-				person.BusinessUnitId,
-				_platformTypeId,
-				input.StateCode,
-				currentTime,
-				batchId,
-				input.SourceId));
+				currentTime));
 
 			_previousState = new Lazy<IActualAgentState>(() => databaseReader.GetCurrentActualAgentState(person.PersonId) ??
 															   new ActualAgentState
