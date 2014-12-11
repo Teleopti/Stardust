@@ -49,7 +49,7 @@
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(341, 35);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(341, 36);
 			this.tableLayoutPanel1.TabIndex = 31;
 			// 
 			// tableLayoutPanel2
@@ -65,7 +65,7 @@
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(335, 29);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(335, 30);
 			this.tableLayoutPanel2.TabIndex = 32;
 			// 
 			// buttonOk
@@ -101,7 +101,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(341, 35);
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ClientSize = new System.Drawing.Size(341, 36);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
