@@ -81,6 +81,6 @@
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLCCC7DB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLCCC7DB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAnalyticsDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAnalyticsDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAggDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAggDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
-		<exec command="taskkill /IM Teleopti.Analytics.Etl.ServiceConsoleHost.exe /F /FI %22memusage gt 2%22" Timeout="10" ContinueOnError="true" />
+		<exec command="taskkill /IM Teleopti.Analytics.Etl.ServiceConsoleHost.exe /F /FI %22memusage gt 2%22" Timeout="1000" ContinueOnError="true" />
 	</Target>	
 </Project>
