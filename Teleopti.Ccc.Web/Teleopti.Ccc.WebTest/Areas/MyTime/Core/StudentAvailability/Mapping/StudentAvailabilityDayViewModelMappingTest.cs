@@ -4,6 +4,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -17,12 +18,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 	public class StudentAvailabilityDayViewModelMappingTest
 	{
 		private IStudentAvailabilityProvider _studentAvailabilityProvider;
+		private Person _person;
 
 		[SetUp]
 		public void Setup()
 		{
 			_studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
-
+			_person = new Person();
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new StudentAvailabilityDayViewModelMappingProfile(() => _studentAvailabilityProvider)));
 		}
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
+			var studentAvailabilityDay = new StudentAvailabilityDay(_person, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
 
 			var result = Mapper.Map<StudentAvailabilityDay, StudentAvailabilityDayViewModel>(studentAvailabilityDay);
 
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 			                                     		StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(7), null),
 			                                     		EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(18))
 			                                     	};
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
+			var studentAvailabilityDay = new StudentAvailabilityDay(_person, DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
 
 			_studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(studentAvailabilityRestriction);
 
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapAvailableTimeSpanWhenNoRestriction()
 		{
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
+			var studentAvailabilityDay = new StudentAvailabilityDay(_person, DateOnly.Today, new List<IStudentAvailabilityRestriction>());
 
 			_studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityForDay(studentAvailabilityDay)).Return(null);
 

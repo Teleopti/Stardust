@@ -3,6 +3,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 			var studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
 			var target = new StudentAvailabilityViewModelFactory(mapper, studentAvailabilityProvider, null);
 			var date = DateOnly.Today;
-			var studentAvailabilityDay = new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>());
+			var studentAvailabilityDay = new StudentAvailabilityDay(new Person(), date, new List<IStudentAvailabilityRestriction>());
 			var viewModel = new StudentAvailabilityDayViewModel();
 
 			studentAvailabilityProvider.Stub(x => x.GetStudentAvailabilityDayForDate(date)).Return(studentAvailabilityDay);
