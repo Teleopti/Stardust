@@ -120,8 +120,9 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _initViewModels() {
 		dayViewModels = {};
 		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate);
+			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate, toggleAvailabilityVerifyHours31654Enabled);
 			dayViewModel.ReadElement(element);
+			dayViewModel.LoadFeedback();
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
 		});
@@ -153,7 +154,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				data = data || [];
 				$.each(data, function (index, element) {
 					var dayViewModel = dayViewModels[element.Date];
-					dayViewModel.ReadStudentAvailability(element.StudentAvailability, toggleAvailabilityVerifyHours31654Enabled);
+					dayViewModel.ReadStudentAvailability(element.StudentAvailability);
 					dayViewModel.IsLoading(false);
 				});
 				deferred.resolve();

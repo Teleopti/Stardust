@@ -117,9 +117,30 @@
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
 									<div class="fullwidth day-content-text" data-bind="visible: HasAvailibility(), text: AvailableTimeSpan"></div>
-									<div class="fullwidth day-content-text" data-bind="visible: !HasAvailibility() && ToggleAvailabilityVerifyHours31654Enabled()" style="padding-top:15px;">
+									<!-- ko if: Feedback() && ToggleAvailabilityVerifyHours31654Enabled() -->
+									<div class="fullwidth day-content-text" data-bind="visible: !HasAvailibility()" style="padding-top: 15px">
 										<i class="glyphicon glyphicon-plus canAddAvailibility"></i>
 									</div>
+									<!-- ko if: HasFeedbackError -->
+									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+									<!-- /ko -->
+									<!-- ko if: !HasFeedbackError() -->
+									<div data-bind="visible: HasAvailibility()">
+										<div class="possible-start-times time-limitation clearleftfloat">
+											<span class="glyphicon glyphicon-step-backward"></span>
+											<span data-bind="text: PossibleStartTimes"></span>
+										</div>
+										<div class="possible-end-times time-limitation clearleftfloat">
+											<span class="glyphicon glyphicon-step-forward"></span>
+											<span data-bind="text: PossibleEndTimes"></span>
+										</div>
+										<div class="possible-contract-times time-limitation clearleftfloat">
+											<span class="glyphicon glyphicon-resize-horizontal"></span>
+											<span data-bind="text: PossibleContractTimes"></span>
+										</div>
+									</div>
+									<!-- /ko -->
+									<!-- /ko -->
 								</div>
 							</div>
 						</li>

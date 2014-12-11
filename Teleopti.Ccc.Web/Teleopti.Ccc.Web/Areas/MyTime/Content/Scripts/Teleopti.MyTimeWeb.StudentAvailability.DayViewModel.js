@@ -15,7 +15,7 @@ if (typeof (Teleopti.MyTimeWeb.StudentAvailability) === 'undefined') {
 }
 
 
-Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
+Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, toggleAvailabilityVerifyHours31654Enabled) {
 	var self = this;
 
 	this.Date = "";
@@ -24,9 +24,39 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');
 	this.HasAvailibility = ko.observable(false);
-	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(false);
+	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(toggleAvailabilityVerifyHours31654Enabled);
+
+	this.FeedbackError = ko.observable();
+	this.PossibleStartTimes = ko.observable();
+	this.PossibleEndTimes = ko.observable();
+	this.PossibleContractTimeMinutesLower = ko.observable();
+	this.PossibleContractTimeMinutesUpper = ko.observable();
+	this.Feedback = ko.observable(true);
+	this.HasFeedbackError = ko.observable(false);
 
 	this.EditableIsInOpenPeriod = ko.observable(false);
+
+	this.PossibleContractTimeLower = ko.computed(function () {
+		var value = self.PossibleContractTimeMinutesLower();
+		if (!value)
+			return "";
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(value);
+	});
+
+	this.PossibleContractTimeUpper = ko.computed(function () {
+		var value = self.PossibleContractTimeMinutesUpper();
+		if (!value)
+			return "";
+		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(value);
+	});
+	this.PossibleContractTimes = ko.computed(function () {
+		var lower = self.PossibleContractTimeLower();
+		var upper = self.PossibleContractTimeUpper();
+		if (lower != "")
+			return lower + "-" + upper;
+		return "";
+	});
+
 	this.EditableHasNoSchedule = ko.computed(function () {
 		// for future use
 		return true;
@@ -57,7 +87,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 			},
 			complete: function() {
 				deferred.resolve();
-				//				self.LoadFeedback();
+				self.LoadFeedback();
 			}
 		});
 		return deferred.promise();
@@ -73,20 +103,38 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 			success: this.ReadStudentAvailability,
 			complete: function () {
 				deferred.resolve();
-				//				self.LoadFeedback();
+				self.LoadFeedback();
 			}
 		});
 		return deferred.promise();
 	};
 
-	this.ReadStudentAvailability = function (data, toggleAvailabilityVerifyHours31654Enabled) {
-		self.ToggleAvailabilityVerifyHours31654Enabled(toggleAvailabilityVerifyHours31654Enabled);
-		if (!data) {
+	this.ReadStudentAvailability = function (data) {
+		if (!data || !data.AvailableTimeSpan) {
 			self.HasAvailibility(false);
+			self.AvailableTimeSpan(null);
 		} else {
 			self.HasAvailibility(true);
 			self.AvailableTimeSpan(data.AvailableTimeSpan);
 		}
+
+	};
+
+	this.LoadFeedback = function () {
+		ajaxForDate(self, {
+			url: "PreferenceFeedback/Feedback",
+			type: 'GET',
+			data: { Date: self.Date },
+			date: self.Date,
+			success: function (data) {
+				self.HasFeedbackError(data.FeedbackError != null);
+				self.FeedbackError(data.FeedbackError);
+				self.PossibleStartTimes(data.PossibleStartTimes);
+				self.PossibleEndTimes(data.PossibleEndTimes);
+				self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
+				self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
+			}
+		});
 	};
 };
 
