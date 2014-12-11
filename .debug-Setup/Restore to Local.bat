@@ -248,13 +248,17 @@ ECHO ------
 ECHO Restoring baselines databases from backup. This will take a few minutes...
 ECHO    %TELEOPTICCC% ...
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%TELEOPTICCC_BAKFILE%" -v DATAFOLDER="%DataFolder%" -v DATABASENAME="%TELEOPTICCC%" > "%ROOTDIR%\restoreDB.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=20 & GOTO :error
+
 IF %LOADSTAT% EQU 1 (
 ECHO    %TELEOPTIANALYTICS% ...
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\RestoreAnalytics.sql" -v BAKFILE="%TELEOPTIANALYTICS_BAKFILE%" -v DATAFOLDER="%DataFolder%" -v DATABASENAME="%TELEOPTIANALYTICS%" >> "%ROOTDIR%\restoreDB.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=20 & GOTO :error
 ECHO    %TELEOPTIAGG% ...
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%TELEOPTIAGG_BAKFILE%" -v DATAFOLDER="%DataFolder%" -v DATABASENAME="%TELEOPTIAGG%"  >> "%ROOTDIR%\restoreDB.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=20 & GOTO :error
 )
-SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\CreateLoginDropUsers.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" -v SQLLogin="%SQLLogin%" -v SQLPwd="%SQLPwd%"  >> "%ROOTDIR%\restoreDB.log"
+SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\CreateLoginDropUsers.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" -v SQLLogin="%SQLLogin%" -v SQLPwd="%SQLPwd%"  > "%ROOTDIR%\CreateLoginDropUsers.log"
 
 ECHO Restoring baselines. Done!
 ECHO ------
@@ -383,7 +387,9 @@ IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%LogFolder%\build.log"
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
-IF %ERRORLEV% EQU 19 ECHO %UsERDOMAIN%\%USERNAME% ^(teamcity agent^) and lack permission to "%Tfiles%" & exit /b %ERRORLEV%
+IF %ERRORLEV% EQU 19 ECHO %UsERDOMAIN%\%USERNAME% ^(teamcity agent^) lack permission to read directory "%Tfiles%" & exit /b %ERRORLEV%
+IF %ERRORLEV% EQU 20 ECHO Database restore failed! & MORE "%ROOTDIR%\restoreDB.log" & exit /b %ERRORLEV%
+IF %ERRORLEV% EQU 21 ECHO Create SQL login and drop users failed! & MORE "%ROOTDIR%\CreateLoginDropUsers.log" & exit /b %ERRORLEV%
 
 ECHO.
 ECHO --------

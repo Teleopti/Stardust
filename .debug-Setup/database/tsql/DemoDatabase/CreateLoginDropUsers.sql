@@ -1,3 +1,7 @@
+SET XACT_ABORT ON
+GO
+:on error exit
+GO
 /*
 :SETVAR TELEOPTICCC Training_TeleoptiCCC7
 :SETVAR TELEOPTIANALYTICS Training_TeleoptiAnalytics

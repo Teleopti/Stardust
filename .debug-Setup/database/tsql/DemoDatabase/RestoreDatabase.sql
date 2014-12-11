@@ -1,3 +1,7 @@
+SET XACT_ABORT ON
+GO
+:on error exit
+GO
 USE master
 GO
 
