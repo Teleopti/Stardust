@@ -13,20 +13,37 @@ namespace Teleopti.Analytics.Etl.Transformer
 		{
 			var uniqueDays = new HashSet<IStudentAvailabilityDay>();
 			uniqueDays.UnionWith(rootList);
+			
+			var dictionary = stateHolder.GetSchedules(uniqueDays, scenario);
 			foreach (var availDay in uniqueDays)
 			{
 				var availRestriction = availDay.RestrictionCollection.FirstOrDefault();
 				if(availRestriction == null)
 					continue;
 				var persons = stateHolder.PersonsWithIds(new List<Guid> { availDay.Person.Id.GetValueOrDefault() });
-				var schedulePart = stateHolder.GetSchedulePartOnPersonAndDate(persons[0], availDay.RestrictionDate, scenario);
+				if(!persons.Any())
+					continue;
+				var schedulePart = getScheduleDay(dictionary, availDay.RestrictionDate, persons[0]);
+				if(schedulePart == null)
+					continue;
 				var newDataRow = table.NewRow();
 				newDataRow = fillDataRow(newDataRow, availRestriction, schedulePart);
 				table.Rows.Add(newDataRow);
-				
 			}
 		}
 
+		private IScheduleDay getScheduleDay(IDictionary<DateOnly, IScheduleDictionary> dictionary, DateOnly dateOnly,
+			IPerson person)
+		{
+			if (dictionary.ContainsKey(dateOnly))
+			{
+				var days = dictionary[dateOnly];
+				if (days.ContainsKey(person))
+					return days[person].ScheduledDay(dateOnly);
+			}
+
+			return null;
+		}
 		private DataRow fillDataRow(DataRow dataRow, IStudentAvailabilityRestriction availRestriction, IScheduleDay schedulePart)
 		{
 			var availDay = (IStudentAvailabilityDay)availRestriction.Parent;

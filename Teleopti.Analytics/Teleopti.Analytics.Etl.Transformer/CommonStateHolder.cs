@@ -369,6 +369,26 @@ namespace Teleopti.Analytics.Etl.Transformer
 			return _dictionaryCashe;
 		}
 
+		public IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days, IScenario scenario)
+		{
+			var dictionary = new Dictionary<DateOnly, IScheduleDictionary>();
+
+			var groupedDays = days.GroupBy(c => c.RestrictionDate);
+			foreach (var availabilityDay in groupedDays)
+			{
+				var theDate = availabilityDay.Key;
+				// detta måste fixas med tidszon, eller???
+				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
+				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1).AddMilliseconds(-1));
+				var personsIds = availabilityDay.Select(d => d.Person.Id.GetValueOrDefault()).ToList();
+				var persons = PersonsWithIds(personsIds);
+				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
+				dictionary.Add(theDate, scheduleDictionary);
+			}
+
+			return dictionary;
+		}
+
 		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe()
 		{
 			if(_dictionaryCashe == null)

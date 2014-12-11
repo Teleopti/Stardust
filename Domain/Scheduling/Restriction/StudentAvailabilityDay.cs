@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -7,124 +8,134 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class StudentAvailabilityDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay
-    {
-        private  IList<IStudentAvailabilityRestriction> _restrictionCollection;
-        private readonly IPerson _person;
-        private readonly DateOnly _restrictionDate;
-        private bool _notAvailable;
+	public class StudentAvailabilityDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay
+	{
+		private IList<IStudentAvailabilityRestriction> _restrictionCollection;
+		private readonly IPerson _person;
+		private readonly DateOnly _restrictionDate;
+		private bool _notAvailable;
 
-        
-        public StudentAvailabilityDay(IPerson person, DateOnly restrictionDate, IList<IStudentAvailabilityRestriction> restrictionCollection)
-        {
-            _person = person;
-            _restrictionDate = restrictionDate;
-            foreach (var studentAvailabilityRestriction in restrictionCollection)
-            {
-                ((StudentAvailabilityRestriction)studentAvailabilityRestriction).SetParent(this);
-            }
-            _restrictionCollection = restrictionCollection;
-        }
 
-        public virtual int IndexInCollection( IStudentAvailabilityRestriction restriction)
-        {
-            return _restrictionCollection.IndexOf(restriction);
-        }
+		public StudentAvailabilityDay(IPerson person, DateOnly restrictionDate, IList<IStudentAvailabilityRestriction> restrictionCollection)
+		{
+			_person = person;
+			_restrictionDate = restrictionDate;
+			foreach (var studentAvailabilityRestriction in restrictionCollection)
+			{
+				((StudentAvailabilityRestriction)studentAvailabilityRestriction).SetParent(this);
+			}
+			_restrictionCollection = restrictionCollection;
+		}
 
-        public virtual bool NotAvailable
-        {
-            get { return _notAvailable; }
-            set { _notAvailable = value; }
-        }
+		public virtual int IndexInCollection(IStudentAvailabilityRestriction restriction)
+		{
+			return _restrictionCollection.IndexOf(restriction);
+		}
 
-        protected StudentAvailabilityDay(){}
+		public virtual bool NotAvailable
+		{
+			get { return _notAvailable; }
+			set { _notAvailable = value; }
+		}
 
-        public virtual ReadOnlyCollection<IStudentAvailabilityRestriction> RestrictionCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<IStudentAvailabilityRestriction>(_restrictionCollection);
-            }
-        }
+		protected StudentAvailabilityDay() { }
 
-        public virtual IEnumerable<IRestrictionBase> RestrictionBaseCollection
-        {
-            get
-            {
-                var ret = new List<IRestrictionBase>();
-                _restrictionCollection.ForEach(ret.Add);
-                return ret;
-            }
-        }
+		public virtual ReadOnlyCollection<IStudentAvailabilityRestriction> RestrictionCollection
+		{
+			get
+			{
+				return new ReadOnlyCollection<IStudentAvailabilityRestriction>(_restrictionCollection);
+			}
+		}
 
-        public virtual IPerson Person
-        {
-            get { return _person; }
-        }
+		public virtual IEnumerable<IRestrictionBase> RestrictionBaseCollection
+		{
+			get
+			{
+				var ret = new List<IRestrictionBase>();
+				_restrictionCollection.ForEach(ret.Add);
+				return ret;
+			}
+		}
 
-        public virtual IScenario Scenario
-        {
-            get { return null; }
-        }
+		public virtual IPerson Person
+		{
+			get { return _person; }
+		}
 
-        public virtual DateOnly RestrictionDate
-        {
-            get { return _restrictionDate; }
-        }
+		public virtual IScenario Scenario
+		{
+			get { return null; }
+		}
 
-        public virtual DateTimePeriod Period
-        {
-            get { return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_restrictionDate.Date, _restrictionDate.Date.AddDays(1), _person.PermissionInformation.DefaultTimeZone()); }
-        }
+		public virtual DateOnly RestrictionDate
+		{
+			get { return _restrictionDate; }
+		}
 
-        public virtual object Clone()
-        {
-            StudentAvailabilityDay clone = (StudentAvailabilityDay)MemberwiseClone();
+		public virtual DateTimePeriod Period
+		{
+			get { return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_restrictionDate.Date, _restrictionDate.Date.AddDays(1), _person.PermissionInformation.DefaultTimeZone()); }
+		}
 
-            clone._restrictionCollection = new List<IStudentAvailabilityRestriction>();
-            foreach (StudentAvailabilityRestriction studentAvailabilityRestriction in _restrictionCollection)
-            {
-                IStudentAvailabilityRestriction cloneRestriction = (IStudentAvailabilityRestriction)studentAvailabilityRestriction.Clone();
-                cloneRestriction.SetParent(clone);
-                clone._restrictionCollection.Add(cloneRestriction);
-            }
-            return clone;
-        }
+		public virtual object Clone()
+		{
+			StudentAvailabilityDay clone = (StudentAvailabilityDay)MemberwiseClone();
 
-        public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
-        {
-            return dateAndPeriod.DateOnly == _restrictionDate;
-        }
+			clone._restrictionCollection = new List<IStudentAvailabilityRestriction>();
+			foreach (StudentAvailabilityRestriction studentAvailabilityRestriction in _restrictionCollection)
+			{
+				IStudentAvailabilityRestriction cloneRestriction = (IStudentAvailabilityRestriction)studentAvailabilityRestriction.Clone();
+				cloneRestriction.SetParent(clone);
+				clone._restrictionCollection.Add(cloneRestriction);
+			}
+			return clone;
+		}
 
-        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
-        {
-            return dateOnlyPeriod.Contains(_restrictionDate);
-        }
+		public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
+		{
+			return dateAndPeriod.DateOnly == _restrictionDate;
+		}
 
-        public virtual bool BelongsToScenario(IScenario scenario)
-        {
-            return true;
-        }
+		public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
+		{
+			return dateOnlyPeriod.Contains(_restrictionDate);
+		}
 
-        public virtual IAggregateRoot MainRoot
-        {
-            get { return Person; }
-        }
+		public virtual bool BelongsToScenario(IScenario scenario)
+		{
+			return true;
+		}
 
-        public virtual string FunctionPath
-        {
-            get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
-        }
+		public virtual IAggregateRoot MainRoot
+		{
+			get { return Person; }
+		}
 
-        public virtual IPersistableScheduleData CreateTransient()
-        {
-            var ret = (IStudentAvailabilityDay) Clone();
-            ret.SetId(null);
-            foreach (var restriction in ret.RestrictionCollection)
-            {
-                restriction.SetId(null);
-            }
-            return ret;
-        }
-    }
+		public virtual string FunctionPath
+		{
+			get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
+		}
+
+		public virtual IPersistableScheduleData CreateTransient()
+		{
+			var ret = (IStudentAvailabilityDay)Clone();
+			ret.SetId(null);
+			foreach (var restriction in ret.RestrictionCollection)
+			{
+				restriction.SetId(null);
+			}
+			return ret;
+		}
+
+		public override int GetHashCode()
+		{
+			return Person.GetHashCode() ^ RestrictionDate.GetHashCode();
+		}
+
+		public override bool Equals(IEntity other)
+		{
+			return GetHashCode().Equals(other.GetHashCode());
+		}
+	}
 }
