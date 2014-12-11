@@ -2,7 +2,7 @@
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-27%
 
-set Configuration=Debug
+set Configuration=Release
 SET WorkingDirectory=%ROOTDIR%
 CD "%WorkingDirectory%"
 
@@ -21,6 +21,8 @@ SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 
 ::exucute MSBuild target
 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:ProcessCube "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
-"%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:CleanUp "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
 
+::CleanUp?
+CHOICE /C yn /M "CleanUp?"
+IF ERRORLEVEL 1 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:CleanUp "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
 PAUSE
