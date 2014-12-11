@@ -259,6 +259,7 @@ SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\RestoreD
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=20 & GOTO :error
 )
 SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\DemoDatabase\CreateLoginDropUsers.sql" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%" -v SQLLogin="%SQLLogin%" -v SQLPwd="%SQLPwd%"  > "%ROOTDIR%\CreateLoginDropUsers.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=21 & GOTO :error
 
 ECHO Restoring baselines. Done!
 ECHO ------
