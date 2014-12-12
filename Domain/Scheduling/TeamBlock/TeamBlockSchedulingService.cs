@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Interfaces.Domain;
@@ -71,9 +72,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
+			    var filteredList = new List<ITeamInfo>();
+				foreach (var teamInfo in allTeamInfoListOnStartDate)
+				{
+					bool invalidFound = false;
+				    foreach (var member in teamInfo.GroupMembers)
+				    {
+					    if (!teamInfo.MatrixesForMemberAndPeriod(member, selectedPeriod).Any())
+					    {
+						    invalidFound = true;
+						    break;
+					    }
+						    
+				    }
+					if (!invalidFound)
+						filteredList.Add(teamInfo);
+				}
+
 			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons, selectedPeriod,
 			                                           schedulePartModifyAndRollbackService,
-			                                           allTeamInfoListOnStartDate, datePointer, dateOnlySkipList,
+													   filteredList, datePointer, dateOnlySkipList,
 			                                           resourceCalculateDelayer, schedulingResultStateHolder);
 		    }
 
@@ -84,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                     HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
+                                     IList<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
 										IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder)
         {
