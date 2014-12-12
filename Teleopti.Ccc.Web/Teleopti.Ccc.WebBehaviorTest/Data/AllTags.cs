@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("ConfigPath", Paths.WebBinPath());
 			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
 			Add("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
+			Add("WEB_DEPLOY", bool.FalseString.ToLowerInvariant());
 			Add("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
 			Add("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");

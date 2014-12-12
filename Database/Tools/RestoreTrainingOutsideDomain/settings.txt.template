@@ -30,3 +30,4 @@ $(SDK_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK
 $(AGENTPORTALWEB_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\Web
 $(DATASOURCE_NAME)|Teleopti CCC
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
+$(WEB_DEPLOY)|true

@@ -328,11 +328,11 @@ item: Set Variable
 end
 item: Set Variable
   Variable=TELEOPTI_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Teleopti" displayName="Teleopti" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/Web/sso" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Teleopti" displayName="Teleopti" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/Web/sso" protocolHandler="RelativeOpenIdHandler" />
 end
 item: Set Variable
   Variable=WINDOWS_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/WindowsIdentityProvider/" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/WindowsIdentityProvider/" protocolHandler="RelativeOpenIdHandler" />
 end
 item: If/While Statement
   Variable=IDENTITY_PROVIDERS_TMP
@@ -569,6 +569,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(ETLPM_BINDING_NAME)|%ETLPM_BINDING_NAME%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_DEPLOY)|true
   Line Number=0
 end
 item: Remark
