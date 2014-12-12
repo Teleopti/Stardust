@@ -1369,6 +1369,7 @@
     <Content Include="Areas\WFM\vendor\hammerjs\.gitignore" />
     <Content Include="Areas\WFM\vendor\hammerjs\hammer.js" />
     <Content Include="Areas\WFM\vendor\hammerjs\hammer.min.js" />
+    <Content Include="Areas\WFM\vendor\ui-bootstrap.min.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
