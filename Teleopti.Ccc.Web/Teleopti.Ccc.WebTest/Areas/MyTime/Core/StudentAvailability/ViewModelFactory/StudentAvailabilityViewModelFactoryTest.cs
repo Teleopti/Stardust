@@ -66,5 +66,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 
 			result.Should().Be.SameInstanceAs(models);
 		}
+
+		[Test]
+		public void ShouldCreateFeedbackDayViewModelByMapping()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var target = new StudentAvailabilityViewModelFactory(mapper, null, null);
+			var viewModel = new StudentAvailabilityDayFeedbackViewModel();
+
+			mapper.Stub(x => x.Map<DateOnly, StudentAvailabilityDayFeedbackViewModel>(DateOnly.Today))
+				.Return(viewModel);
+
+			var result = target.CreateDayFeedbackViewModel(DateOnly.Today);
+			result.Should().Be.SameInstanceAs(viewModel);
+		}
 	}
 }
