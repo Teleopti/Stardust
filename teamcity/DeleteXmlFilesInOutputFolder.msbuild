@@ -4,7 +4,7 @@
 	<Target Name="DeleteFiles">
 		<ItemGroup>
 			<XmlFiles Include="$(WorkingDirectory)\**\bin\**\*.xml" 
-					Exclude="$(WorkingDirectory)\**\*Test\**\*.xml;$(WorkingDirectory)\**\config.xml"/>
+					Exclude="$(WorkingDirectory)\**\*Test\**\*.xml;$(WorkingDirectory)\**\config.xml;$(WorkingDirectory)\**\BuildArtifacts\**\*.*"/>
 		</ItemGroup>
 		<Delete Files="@(XmlFiles)" />
 	</Target>	
