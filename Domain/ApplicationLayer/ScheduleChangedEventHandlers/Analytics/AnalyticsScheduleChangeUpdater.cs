@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
 						timePart.ShiftLength = (int)(shiftEnd - shiftStart).TotalMinutes;
-						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, localStartDate, intervalLayer, @event.Timestamp, minutesPerInterval);
+						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, localStartDate, intervalLayer, @event.Timestamp, intervalLength);
 						
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);

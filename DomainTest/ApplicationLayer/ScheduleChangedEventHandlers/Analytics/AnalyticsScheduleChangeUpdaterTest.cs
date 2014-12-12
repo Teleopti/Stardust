@@ -56,13 +56,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldNotTryToSaveScheduleChangeWhenDateIdMappingFails()
 		{
-			var scheduleDay = new ProjectionChangedEventScheduleDay { Date = DateTime.Now };
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				Date = DateTime.Now,
+				PersonPeriodId = Guid.NewGuid()
+			};
 			var @event = new ProjectionChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay }
 			};
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
+			var personPart = new AnalyticsFactSchedulePerson();
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			const int dateId = 0;
@@ -70,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_target.Handle(@event);
 			
-			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(dateId));
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(dateId, personPart.PersonId));
 		}
 
 		[Test]
@@ -84,12 +90,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = start.AddHours(2).AddMinutes(15),
 				Layers = list
 			};
-			var personPeriodId = Guid.NewGuid();
 			var scheduleDay = new ProjectionChangedEventScheduleDay
 			{
 				Shift = shift,
 				ShiftCategoryId = Guid.NewGuid(),
-				PersonPeriodId = personPeriodId
+				PersonPeriodId = Guid.NewGuid()
 			};
 
 
@@ -117,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				x =>
 					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
 						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(datePart);
-			_personHandler.Stub(x => x.Handle(personPeriodId)).Return(personPart);
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
 			_scheduleDayCountHandler.Stub(
 				x =>
 					x.Handle(Arg<ProjectionChangedEventScheduleDay>.Is.Anything, Arg<IAnalyticsFactSchedulePerson>.Is.Anything,
@@ -144,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var timePart = new AnalyticsFactScheduleTime();
 			const int dateId = -1;
 			var personPart = new AnalyticsFactSchedulePerson {PersonId = 55};
-			_analyticsFactSchedulePersonHandler.Stub(x => x.Handle(Arg<Guid>.Is.Anything)).Return(personPart);
+			_personHandler.Stub(x => x.Handle(Arg<Guid>.Is.Anything)).Return(personPart);
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric>());
