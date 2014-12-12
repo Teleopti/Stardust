@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see I am not available for '(.*)'")]
 		public void ThenIShouldSeeIAmNotAvailableFor(string date)
 		{
-			var seletor = string.Format("li[data-mytime-date='{0}']  .canAddAvailibility",date);
+			var seletor = string.Format("li[data-mytime-date='{0}'] .canAddAvailibility", date);
 			Browser.Interactions.AssertExists(seletor);
 		}
 
@@ -101,6 +101,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var seletor = string.Format("li[data-mytime-date='{0}'] .feedback-error:contains('{1}')", date,
 				Resources.NoAvailableShifts);
 			Browser.Interactions.AssertExistsUsingJQuery(seletor);
+		}
+
+		[Then(@"I should see valid shift for my availability on '(.*)'")]
+		public void ThenIShouldSeeValidShiftForMyAvailabilityOn(string date)
+		{
+			var startTimeSeletor = string.Format("li[data-mytime-date='{0}'] .possible-start-times", date);
+			Browser.Interactions.AssertExists(startTimeSeletor);
+
+			var endTimeSeletor = string.Format("li[data-mytime-date='{0}'] .possible-end-times", date);
+			Browser.Interactions.AssertExists(endTimeSeletor);
+
+			var contractTimeSeletor = string.Format("li[data-mytime-date='{0}'] .possible-contract-times", date);
+			Browser.Interactions.AssertExists(contractTimeSeletor);
 		}
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
