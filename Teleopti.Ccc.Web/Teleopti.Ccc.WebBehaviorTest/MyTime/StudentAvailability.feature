@@ -90,14 +90,14 @@ Scenario: Default to first virtual schedule period overlapping open student avai
 	When I view student availability
 	Then I should see the first virtual schedule period overlapping open student availability period starting at '2014-06-01'
 
-@OnlyRunIfEnable('MyTimeWeb_AvailabilityVerifyHours_31654')
+@OnlyRunIfEnabled('MyTimeWeb_AvailabilityVerifyHours_31654')
 Scenario: Should indicate days not available
 	Given I am a student agent
 	And the current time is '2014-05-02 08:00'
 	When I view student availability
 	Then I should see I am not available for '2014-05-02'
 
-@OnlyRunIfEnable('MyTimeWeb_AvailabilityVerifyHours_31654')
+@OnlyRunIfEnabled('MyTimeWeb_AvailabilityVerifyHours_31654')
 Scenario: Should indicate days have no valid shift for availability setting
 	Given I am a student agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
@@ -110,7 +110,7 @@ Scenario: Should indicate days have no valid shift for availability setting
 	When I view student availability
 	Then I should see there is no valid shift for my availability on '2014-05-03'
 
-@OnlyRunIfEnable('MyTimeWeb_AvailabilityVerifyHours_31654')
+@OnlyRunIfEnabled('MyTimeWeb_AvailabilityVerifyHours_31654')
 Scenario: Should show valid shift for days with availability setting
 	Given I am a student agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
