@@ -1,5 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -92,6 +93,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var seletor = string.Format("li[data-mytime-date='{0}']  .canAddAvailibility",date);
 			Browser.Interactions.AssertExists(seletor);
+		}
+
+		[Then(@"I should see there is no valid shift for my availability on '(.*)'")]
+		public void ThenIShouldSeeThereIsNoValidShiftForMyAvailabilityOn(string date)
+		{
+			var seletor = string.Format("li[data-mytime-date='{0}'] .feedback-error:contains('{1}')", date,
+				Resources.NoAvailableShifts);
+			Browser.Interactions.AssertExistsUsingJQuery(seletor);
 		}
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
