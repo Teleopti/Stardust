@@ -23,7 +23,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 	this.IsLoading = ko.observable(false);
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');
-	this.HasAvailibility = ko.observable(false);
+	this.HasAvailability = ko.observable(false);
 	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(toggleAvailabilityVerifyHours31654Enabled);
 
 	this.FeedbackError = ko.observable();
@@ -111,13 +111,12 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 
 	this.ReadStudentAvailability = function (data) {
 		if (!data || !data.AvailableTimeSpan) {
-			self.HasAvailibility(false);
+			self.HasAvailability(false);
 			self.AvailableTimeSpan(null);
 		} else {
-			self.HasAvailibility(true);
+			self.HasAvailability(true);
 			self.AvailableTimeSpan(data.AvailableTimeSpan);
 		}
-
 	};
 
 	this.LoadFeedback = function () {

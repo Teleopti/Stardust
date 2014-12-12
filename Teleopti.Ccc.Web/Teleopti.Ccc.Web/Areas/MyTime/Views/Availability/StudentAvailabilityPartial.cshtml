@@ -97,15 +97,15 @@
 	}
 			</ul>
 			@foreach (var week in Model.Weeks)
-   {
+			{
 				<ul class="calendarview-week" onselectstart="return false;">
 					<li style="height: 0">
 						<div>
-							
+
 						</div>
 					</li>
 					@foreach (var day in week.Days)
-	 {
+					{
 						<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: { editable: Editable, 'non-editable': !Editable() }">
 							<div>
 								<div class="day-header">
@@ -116,16 +116,19 @@
 									<!-- ko if: AjaxError().length > 0 -->
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
-									<div class="fullwidth day-content-text" data-bind="visible: HasAvailibility(), text: AvailableTimeSpan"></div>
-									<!-- ko if: Feedback() && ToggleAvailabilityVerifyHours31654Enabled() -->
-									<div class="fullwidth day-content-text" data-bind="visible: !HasAvailibility()" style="padding-top: 15px">
+									<div class="fullwidth day-content-text" data-bind="visible: HasAvailability(), text: AvailableTimeSpan"></div>
+									<!-- ko if: ToggleAvailabilityVerifyHours31654Enabled() -->
+									<!-- ko if: !HasAvailability() -->
+									<div class="fullwidth day-content-text" style="padding-top: 15px">
 										<i class="glyphicon glyphicon-plus canAddAvailibility"></i>
 									</div>
-									<!-- ko if: HasFeedbackError -->
+									<!-- /ko -->
+									<!-- ko if: HasAvailability() -->
+									<!-- ko if: HasFeedbackError() -->
 									<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
 									<!-- /ko -->
 									<!-- ko if: !HasFeedbackError() -->
-									<div data-bind="visible: HasAvailibility()">
+									<div>
 										<div class="possible-start-times time-limitation clearleftfloat">
 											<span class="glyphicon glyphicon-step-backward"></span>
 											<span data-bind="text: PossibleStartTimes"></span>
@@ -141,12 +144,13 @@
 									</div>
 									<!-- /ko -->
 									<!-- /ko -->
+									<!-- /ko -->
 								</div>
 							</div>
 						</li>
-	 }
+					}
 				</ul>
-   }
+			}
 		</div>
 	</div>
 </div>
