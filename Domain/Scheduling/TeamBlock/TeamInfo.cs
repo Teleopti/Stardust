@@ -21,6 +21,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		IEnumerable<IScheduleMatrixPro> MatrixesForMemberAndPeriod(IPerson groupMember, DateOnlyPeriod period);
 		void ClearLocks();
 		IEnumerable<IScheduleMatrixPro> MatrixesForUnlockedMembersAndPeriod(DateOnlyPeriod dateOnlyPeriod);
+		/// <summary>
+		/// All members have loaded matrix for the given period
+		/// </summary>
+		bool AllMembersHaveMatrixForPeriod(DateOnlyPeriod period);
 	}
 
 	public class TeamInfo : ITeamInfo
@@ -47,6 +51,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				return _groupMembers;
 			}
+		}
+
+		public bool AllMembersHaveMatrixForPeriod(DateOnlyPeriod period)
+		{
+			foreach (var member in GroupMembers)
+			{
+				if (!MatrixesForMemberAndPeriod(member, period).Any())
+					return false;
+			}
+			return true;
 		}
 
 		public void LockMember(IPerson member)
