@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="xrds.aspx.cs" Inherits="AuthBridge.Web.xrds" %>
+﻿<%@ Page Language="C#" Inherits="AuthBridge.Web.xrds, Authbridge.Web" %>
 <%
 	var uri = new Uri(Request.Url, Response.ApplyAppPathModifier("~/response"));
 	var baseuri = new Uri(Request.Url, Response.ApplyAppPathModifier("~/"));
