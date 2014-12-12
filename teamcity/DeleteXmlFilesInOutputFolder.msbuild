@@ -5,7 +5,6 @@
 		<ItemGroup>
 			<XmlFiles Include="$(WorkingDirectory)\**\bin\**\*.xml" />
 		</ItemGroup>
-		
-		<Delete Files="@(FilesToDelete)" />
+		<Delete Files="@(XmlFiles)" />
 	</Target>	
 </Project>
