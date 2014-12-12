@@ -241,6 +241,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceWeeklyWorkTimeSettingProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\NameFormatSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsViewModelFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />
