@@ -296,14 +296,14 @@ function Add-CccLicenseToDemo
     if($global:Server -ne '')
     {
         
-		if ($global:branch -ne 'main')
-					{
-						$LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
-					}
-		else
-					{
-						$LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
-					}
+		$LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
+		if ($global:branch -eq 'main')
+			{
+				if ($global:version.StartsWith("8"))
+				{
+					$LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
+				}
+			}
 		
 		It "should insert a new license" {
             #$LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
