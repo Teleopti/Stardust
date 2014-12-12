@@ -167,6 +167,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 						Arg<AnalyticsFactSchedulePerson>.Is.Anything));
 		}
 
+		[Test]
+		public void ShouldDeleteShiftIfLayerStartDateFailToMap()
+		{
+			var start = new DateTime(2014, 12, 01, 23, 30, 0, DateTimeKind.Utc);
+			var list = createLayers(start, new[] { 60 });
+			var shift = new ProjectionChangedEventShift
+			{
+				StartDateTime = start,
+				EndDateTime = start.AddHours(1),
+				Layers = list
+			};
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				Shift = shift,
+				ShiftCategoryId = Guid.NewGuid(),
+				PersonPeriodId = Guid.NewGuid()
+			};
+
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = Guid.NewGuid()
+			};
+			var cat = new AnalyticsGeneric { Id = 55, Code = scheduleDay.ShiftCategoryId };
+			var scenario = new AnalyticsGeneric { Id = 66, Code = @event.ScenarioId };
+			var personPart = new AnalyticsFactSchedulePerson{ PersonId = 2};
+			var scheduleDayCountPart = new AnalyticsFactScheduleDayCount();
+			const int dateId = 0;
+
+			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric> { scenario });
+			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
+			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric> { cat });
+			_dateHandler.Stub(
+				x =>
+					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+						Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(null);
+			_scheduleDayCountHandler.Stub(
+				x =>
+					x.Handle(Arg<ProjectionChangedEventScheduleDay>.Is.Anything, Arg<IAnalyticsFactSchedulePerson>.Is.Anything,
+						Arg<int>.Is.Anything, Arg<int>.Is.Anything)).Return(scheduleDayCountPart);
+
+			_target.Handle(@event);
+
+			_analyticsScheduleRepository.AssertWasCalled(x => x.DeleteFactSchedule(dateId, personPart.PersonId), y => y.Repeat.Times(2));
+			_analyticsScheduleRepository.AssertWasNotCalled(
+				x =>
+					x.PersistFactScheduleRow(Arg<AnalyticsFactScheduleTime>.Is.Anything, Arg<AnalyticsFactScheduleDate>.Is.Anything,
+						Arg<AnalyticsFactSchedulePerson>.Is.Anything));
+			_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(scheduleDayCountPart), y => y.Repeat.Times(1));
+		}
+
 		private IEnumerable<ProjectionChangedEventLayer> createLayers(DateTime startOfShift, IEnumerable<int> lengthCollection)
 		{
 			int accStart = 0;

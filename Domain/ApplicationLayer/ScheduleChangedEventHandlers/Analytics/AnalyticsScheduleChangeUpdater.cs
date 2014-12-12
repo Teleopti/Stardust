@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 				if (scheduleDay.NotScheduled)
 					continue;
-
 				
 				var shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
 				var shiftStart = scheduleDay.Shift.StartDateTime;
@@ -69,10 +68,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(intervalLength)));
 					foreach (var intervalLayer in intervalLayers)
 					{
+						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, localStartDate, intervalLayer, @event.Timestamp, intervalLength);
+						if (datePart == null)
+						{
+							intervalStart = shiftEnd;
+							_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId);
+							break;
+						}
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
 						timePart.ShiftLength = (int)(shiftEnd - shiftStart).TotalMinutes;
-						var datePart = _analyticsFactScheduleDateHandler.Handle(shiftStart, shiftEnd, localStartDate, intervalLayer, @event.Timestamp, intervalLength);
-						
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);
 					}
