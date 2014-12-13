@@ -128,11 +128,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				});
 		}
 
-	    public virtual void ModifyPersonAbsence(DateTime startDateTime, DateTime endDateTime, TrackedCommandInfo trackedCommandInfo)
+	    public virtual void ModifyPersonAbsencePeriod(DateTimePeriod newAbsencePeriod, TrackedCommandInfo trackedCommandInfo)
 	    {
 			var absence = _layer.Payload as Absence;
 		    var existingEndDateTime = _layer.Period.EndDateTime;
-			_layer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			_layer = new AbsenceLayer(absence, newAbsencePeriod);
 			LastChange = DateTime.UtcNow;
 
 		    var personAbsenceModifiedEvent = new PersonAbsenceModifiedEvent
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				AbsenceId = Id.GetValueOrDefault(),
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
-				StartDateTime = startDateTime,
+				StartDateTime = newAbsencePeriod.StartDateTime,
 				EndDateTime = existingEndDateTime, // use existingEndDateTime so the entire existing period schedule is updated.
 				BusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 			};
