@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Interfaces.Domain;
@@ -71,9 +72,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
+			    var filteredTeamInfoList = allTeamInfoListOnStartDate
+					.Where(teamInfo => teamInfo.AllMembersHaveMatrixForPeriod(selectedPeriod));
+
 			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons, selectedPeriod,
 			                                           schedulePartModifyAndRollbackService,
-			                                           allTeamInfoListOnStartDate, datePointer, dateOnlySkipList,
+													   filteredTeamInfoList, datePointer, dateOnlySkipList,
 			                                           resourceCalculateDelayer, schedulingResultStateHolder);
 		    }
 
@@ -82,13 +86,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    return true;
 	    }
 
-		private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
+	    private static IList<ITeamInfo> filterOutTeamsWhereNotAllMembersLoaded(DateOnlyPeriod selectedPeriod,
+		    IEnumerable<ITeamInfo> allTeamInfoListOnStartDate)
+	    {
+		    var filteredList = new List<ITeamInfo>();
+		    foreach (var teamInfo in allTeamInfoListOnStartDate)
+		    {
+			    var invalidFound = false;
+			    foreach (var member in teamInfo.GroupMembers)
+			    {
+				    if (!teamInfo.MatrixesForMemberAndPeriod(member, selectedPeriod).Any())
+				    {
+					    invalidFound = true;
+					    break;
+				    }
+			    }
+			    if (!invalidFound)
+				    filteredList.Add(teamInfo);
+		    }
+		    return filteredList;
+	    }
+
+	    private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                     HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
-										IResourceCalculateDelayer resourceCalculateDelayer,
-										ISchedulingResultStateHolder schedulingResultStateHolder)
+                                     IEnumerable<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
+									 IResourceCalculateDelayer resourceCalculateDelayer,
+									 ISchedulingResultStateHolder schedulingResultStateHolder)
         {
-            foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
+            foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
             {
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, _schedulingOptions, selectedPeriod);
                 if (teamBlockInfo == null) continue;
@@ -97,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
 	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
-		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
+		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo);
 				else
 				{
@@ -112,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
         }
 
-        private void verfiyScheduledTeamBlock(IList<IPerson> selectedPersons,
+        private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                               DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo)
         {
