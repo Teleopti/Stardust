@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
-			    var filteredTeamInfoList = allTeamInfoListOnStartDate
+				var filteredTeamInfoList = allTeamInfoListOnStartDate
 					.Where(teamInfo => teamInfo.AllMembersHaveMatrixForPeriod(selectedPeriod));
-
+					
 			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons, selectedPeriod,
 			                                           schedulePartModifyAndRollbackService,
 													   filteredTeamInfoList, datePointer, dateOnlySkipList,
@@ -84,27 +84,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _progressEvent = null;
 		    _teamBlockScheduler.DayScheduled -= dayScheduled;
 		    return true;
-	    }
-
-	    private static IList<ITeamInfo> filterOutTeamsWhereNotAllMembersLoaded(DateOnlyPeriod selectedPeriod,
-		    IEnumerable<ITeamInfo> allTeamInfoListOnStartDate)
-	    {
-		    var filteredList = new List<ITeamInfo>();
-		    foreach (var teamInfo in allTeamInfoListOnStartDate)
-		    {
-			    var invalidFound = false;
-			    foreach (var member in teamInfo.GroupMembers)
-			    {
-				    if (!teamInfo.MatrixesForMemberAndPeriod(member, selectedPeriod).Any())
-				    {
-					    invalidFound = true;
-					    break;
-				    }
-			    }
-			    if (!invalidFound)
-				    filteredList.Add(teamInfo);
-		    }
-		    return filteredList;
 	    }
 
 	    private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
