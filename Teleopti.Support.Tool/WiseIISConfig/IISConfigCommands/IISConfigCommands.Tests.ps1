@@ -96,11 +96,6 @@ function Config-Load {
                 }
                 
             }
-			Write-Host '--------config----------'
-			Write-Host 'BaseURL:: ' $global:BaseURL
-            Write-Host 'branch: ' $global:branch
-            Write-Host 'restToBaseline: '$global:resetToBaseline
-			Write-Host '------------------------'
         }
     }
 }
@@ -167,14 +162,7 @@ function Setup-PreReqs {
 		}
 		
 		It "should copy latest .zip-file from build server"{
-			if([string]::IsNullOrEmpty($global:version))
-			{
-				$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -branch "$global:branch"
-			}
-			else
-			{
-				$global:zipFile = Copy-VersionZippedMsi -workingFolder "$workingFolder" -version "$global:version"
-			}
+			$global:zipFile = Copy-VersionZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			Test-Path $global:zipFile | Should Be $True
 		}
 
@@ -328,6 +316,15 @@ function Add-CccLicenseToDemo
 
 #Main
 Config-Load
+			Write-Host '--------config----------'
+			Write-Host 'global:branch = ' $global:branch
+            Write-Host 'global:version = ' $global:version
+            Write-Host 'global:batName = ' $global:batName
+            Write-Host 'global:Server = ' $global:Server
+            Write-Host 'global:Db = ' $global:Db
+            Write-Host 'global:resetToBaseline = ' $global:resetToBaseline
+            Write-Host 'global:ToggleMode = ' $global:ToggleMode
+			Write-Host '------------------------'
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin

@@ -213,31 +213,14 @@ function UnZip-File(){
     }
 } 
 
-function Copy-ZippedMsi{
-    param(
-        $workingFolder,
-        $branch
-    )
-	#"\\HEBE\Installation\PBImsi\Kanbox\CCC-7.5.390-MSI"
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\CCC-' + $branch + '-MSI'
-    $destFolder=$workingFolder
-    Write-Host 'source: ' $scrFolder
-    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
-    
-    if (!(Test-Path "$destFolder\$zipFileName")) {
-        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
-    }
-    return @("$destFolder\$zipFileName")
-}
-
 function Copy-VersionZippedMsi{
     param(
         $workingFolder,
         $version
     )
 	# "\\hebe\Installation\msi\8.1.415.31945\Teleopti WFM 8.1.415.31945.zip"
-    $Folder=Get-ChildItem -Path \\HEBE\Installation\Msi –Directory -Filter $version*.* | sort name –Descending | Select-Object -First 1
-    $scrFolder = '\\HEBE\Installation\Msi\' + $Folder
+    $Folder=Get-ChildItem -Path \\HEBE\Installation\Msi -Filter $version*.* | sort name –Descending | Select-Object -First 1
+    $scrFolder = '\\HEBE\Installation\Msi\' + $Folder.Name
     $destFolder=$workingFolder
     Write-Host 'source: ' $scrFolder
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
