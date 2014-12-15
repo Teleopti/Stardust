@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AutoMapper;
@@ -19,16 +20,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 	public class StudentAvailabilityAndScheduleDayViewModelMappingTest
 	{
 		private IStudentAvailabilityProvider _studentAvailabilityProvider;
+		private IProjectionProvider _projectionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			_studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
+			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 				{
-					c.AddProfile(new StudentAvailabilityAndScheduleDayViewModelMappingProfile());
+					c.AddProfile(new StudentAvailabilityAndScheduleDayViewModelMappingProfile( _projectionProvider));
 					c.AddProfile(new StudentAvailabilityDayViewModelMappingProfile(() => _studentAvailabilityProvider));
 				});
 		}
@@ -49,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapPreferenceViewModel()
 		{
+			
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
 			var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
 			var studentAvailabilityDay=new StudentAvailabilityDay(new Person(), DateOnly.Today, new List<IStudentAvailabilityRestriction> {studentAvailabilityRestriction});
@@ -56,10 +60,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 				new ReadOnlyObservableCollection<IScheduleData>(new ObservableCollection<IScheduleData>(new[] { studentAvailabilityDay }));
 
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(personRestrictionCollection);
-
+			_projectionProvider
+				.Stub(s => _projectionProvider.Projection(scheduleDay).ContractTime())
+				.IgnoreArguments()
+				.Return(new TimeSpan(5, 0, 0));
+			
 			var result = Mapper.Map<IScheduleDay, StudentAvailabilityAndScheduleDayViewModel>(scheduleDay);
 
 			result.StudentAvailability.Should().Not.Be.Null();
+			result.ContractTimeMinutes.Should().Be(5 * 60);
 		}
 
 		[Test]
