@@ -56,12 +56,11 @@
 		<Exec Command ='"$(RestoreToLocal)" DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(RestoreToLocalWorkDir)'/>
 	</Target>
 	
-	<Target Name="ReCreateStandardCube" DependsOnTargets="RunETLTest">
-			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPDropDatabase.xmla" ContinueOnError="true"/>
+	<Target Name="CreateStandardCube" DependsOnTargets="RunETLTest">
 			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
 	</Target>
 	
-	<Target Name="ProcessCube" DependsOnTargets="ReCreateStandardCube">
+	<Target Name="ProcessCube" DependsOnTargets="CreateStandardCube">
 			<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPProcessDatabase.xmla"/>
 	</Target>
 	
@@ -78,6 +77,7 @@
 	</Target>
 	
 	<Target Name="CleanUp">
+		<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPDropDatabase.xmla" ContinueOnError="true"/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLCCC7DB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLCCC7DB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAnalyticsDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAnalyticsDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="30" sql="ALTER DATABASE [$(ETLAggDB)] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE $(ETLAggDB)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=master;Integrated Security=True" ContinueOnError="true" />
