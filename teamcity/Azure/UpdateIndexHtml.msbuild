@@ -12,6 +12,6 @@
 		<FileUpdate
 			  Files="$(File2Update)"
 			  Regex="\/TeleoptiWFM\/"
-			  ReplacementText=""/>
+			  ReplacementText="/"/>
 	</Target>
 </Project>
