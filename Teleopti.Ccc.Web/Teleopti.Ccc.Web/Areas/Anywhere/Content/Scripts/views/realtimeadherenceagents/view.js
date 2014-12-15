@@ -9,21 +9,35 @@
 	'amplify',
 	'toggleQuerier',
 	'permissions',
-	'knockoutBindings'
+	'knockoutBindings',
+	'syncToggleQuerier',
+	'polling/adherencetagents'
 ], function (
 	ko,
 	view,
 	realTimeAdherenceViewModel,
-	subscriptions,
+	broker,
 	errorview,
 	ajax,
 	resources,
 	amplify,
 	toggleQuerier,
 	permissions,
-	knockoutBindings
+	knockoutBindings,
+	syncToggleQuerier,
+	poller
 ) {
 	var viewModel;
+
+	var toggledStateGetter = function () {
+		var subscription;
+		syncToggleQuerier('RTA_NoBroker_31237', {
+			enabled: function () { subscription = poller; },
+			disabled: function () { subscription = broker; }
+		});
+		return subscription;
+	}
+
 	return {
 		initialize: function (options) {
 			errorview.remove();
@@ -31,6 +45,7 @@
 		},
 
 		display: function (options) {
+			var subscriptions = toggledStateGetter();
 			viewModel = realTimeAdherenceViewModel();
 			viewModel.SetViewOptions(options);
 			ko.cleanNode(options.bindingElement);
@@ -65,13 +80,13 @@
 
 				ajax.ajax({
 					url: "Teams/GetBusinessUnitId?teamId=" + teamId,
-					success: function(businessUnitId) {
-						subscriptions.subscribeAdherence(function(notification) {
-								viewModel.updateFromNotification(notification);
-							},
+					success: function (businessUnitId) {
+						subscriptions.subscribeAdherence(function (notification) {
+							viewModel.updateFromNotification(notification);
+						},
 							businessUnitId,
 							teamId,
-							function() {
+							function () {
 								$('.realtimeadherenceagents').attr("data-subscription-done", " ");
 							},
 							true);
@@ -82,7 +97,7 @@
 			if (options.id === 'MultipleTeams') {
 				subscriptions.unsubscribeAdherence();
 				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', {
-					enabled: function() {
+					enabled: function () {
 						var teams = amplify.store('MultipleTeams');
 						for (var i = 0; i < teams.length; i++) {
 							populateViewModel(teams[i]);
@@ -96,7 +111,7 @@
 						for (var site = 0; site < sites.length; site++) {
 							ajax.ajax({
 								url: "Teams/ForSite?siteId=" + sites[site],
-								success: function(data) {
+								success: function (data) {
 									for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
 										populateViewModel(data[teamInSite].Id);
 									}
@@ -115,19 +130,19 @@
 			});
 
 			toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
-				enabled: function() {
+				enabled: function () {
 					viewModel.changeScheduleAvailable(true);
 				}
 			});
 
 			toggleQuerier('RTA_SeePercentageAdherenceForOneAgent_30783', {
-				enabled: function() {
+				enabled: function () {
 					viewModel.agentAdherenceEnabled(true);
 				}
 			});
 
 			toggleQuerier('RTA_SeeAdherenceDetailsForOneAgent_31285', {
-				enabled: function() {
+				enabled: function () {
 					viewModel.agentAdherenceDetailsEnabled(true);
 				}
 			});
