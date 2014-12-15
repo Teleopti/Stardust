@@ -10,7 +10,7 @@
 	<Target Name="UpdateFile">
 		<FileUpdate
 			  Files="$(File2Update)"
-			  Regex="#APPLICATION_NAME#"
+			  Regex="\/TeleoptiWFM\/"
 			  ReplacementText=""/>
 	</Target>
 </Project>
