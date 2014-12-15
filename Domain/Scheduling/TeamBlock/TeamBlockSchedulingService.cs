@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -12,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-	    bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+		IWorkShiftFinderResultHolder ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 	                          IList<IPerson> selectedPersons,
 	                          ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 	                          IResourceCalculateDelayer resourceCalculateDelayer,
@@ -29,33 +31,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
-		private SchedulingServiceBaseEventArgs _progressEvent;
+	    private readonly ITeamMatrixChecker _teamMatrixChecker;
+	    private SchedulingServiceBaseEventArgs _progressEvent;
 
-        public TeamBlockSchedulingService
-		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,  ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat, IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor)
+	    public TeamBlockSchedulingService
+		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
+			    ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat,
+			    IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,
+			ITeamMatrixChecker teamMatrixChecker)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
-            _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
-            _teamBlockMaxSeat = teamBlockMaxSeat;
-            _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
-            _schedulingOptions = schedulingOptions;
+		    _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
+		    _teamBlockMaxSeat = teamBlockMaxSeat;
+		    _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
+		    _teamMatrixChecker = teamMatrixChecker;
+		    _schedulingOptions = schedulingOptions;
 	    }
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-	    public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+		public IWorkShiftFinderResultHolder ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 	                                 IList<IPerson> selectedPersons,
 	                                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 	                                 IResourceCalculateDelayer resourceCalculateDelayer,
 										ISchedulingResultStateHolder schedulingResultStateHolder)
-	    {
+		{
+			var workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
 		    _teamBlockScheduler.DayScheduled += dayScheduled;
 		    if (schedulePartModifyAndRollbackService == null)
 		    {
 				_progressEvent = null;
-			    return false;    
+				return workShiftFinderResultHolder;    
 		    }
 
 		    var dateOnlySkipList = new List<DateOnly>();
@@ -72,18 +81,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
-				var filteredTeamInfoList = allTeamInfoListOnStartDate
-					.Where(teamInfo => teamInfo.AllMembersHaveMatrixForPeriod(selectedPeriod));
-					
+			    var checkedTeams = _teamMatrixChecker.CheckTeamList(allTeamInfoListOnStartDate, selectedPeriod);
+
+			    foreach (var teamInfo in checkedTeams.BannedList)
+			    {
+				    foreach (var member in teamInfo.GroupMembers)
+				    {
+						workShiftFinderResultHolder.AddFilterToResult(member, datePointer, Resources.AllTeamMembersMustBeLoaded);
+				    }
+				    
+			    }
+	
 			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons, selectedPeriod,
 			                                           schedulePartModifyAndRollbackService,
-													   filteredTeamInfoList, datePointer, dateOnlySkipList,
+													   checkedTeams.OkList, datePointer, dateOnlySkipList,
 			                                           resourceCalculateDelayer, schedulingResultStateHolder);
 		    }
 
 		    _progressEvent = null;
 		    _teamBlockScheduler.DayScheduled -= dayScheduled;
-		    return true;
+			return workShiftFinderResultHolder;
 	    }
 
 	    private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,

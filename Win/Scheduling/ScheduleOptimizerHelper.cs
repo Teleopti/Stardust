@@ -460,6 +460,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
 		{
 			get { return _allResults; }
+			set { _allResults = value; }
 		}
 
 		public void ResetWorkShiftFinderResults()

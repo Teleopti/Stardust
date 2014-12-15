@@ -11884,4 +11884,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
 * Applikationen kommer att stängas ner
 * Starta om för att få tillgång till nylicensierade funktioner</value>
   </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>Alla gruppmedlemmar måste vara upplästa</value>
+    <comment>All team members must be loaded</comment>
+  </data>
 </root>

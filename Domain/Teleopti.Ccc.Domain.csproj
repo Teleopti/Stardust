@@ -1269,6 +1269,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamMatrixChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamScheduling.cs" />
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractor.cs" />

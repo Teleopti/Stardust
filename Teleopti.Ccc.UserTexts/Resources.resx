@@ -12537,4 +12537,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Cannot publish an announcement on an absence day!</value>
     <comment>use for MyTime/Schedule/ publish announcement, a warning message for making an shift exchange offer on an absence day</comment>
   </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>All team members must be loaded</value>
+    <comment>All team members must be loaded</comment>
+  </data>
 </root>

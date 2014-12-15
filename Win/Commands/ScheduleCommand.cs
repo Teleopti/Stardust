@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Commands
 						new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 						                                         _scheduleDayChangeCallback,
 						                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-
+					scheduleOptimizerHelper.WorkShiftFinderResultHolder =
 					_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
 					                                  rollbackService, resourceCalculateDelayer);
 				}
