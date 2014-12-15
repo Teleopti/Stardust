@@ -782,79 +782,6 @@
                 <TablixCell />
               </TablixCells>
             </TablixRow>
-            <TablixRow>
-              <Height>0.5cm</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox51">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!ResTimeZoneColon.Value</Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Left</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox51</rd:DefaultName>
-                      <ZIndex>13</ZIndex>
-                      <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox52">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!time_zone_id.Value</Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Left</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox52</rd:DefaultName>
-                      <ZIndex>12</ZIndex>
-                      <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                    <ColSpan>2</ColSpan>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell />
-              </TablixCells>
-            </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
@@ -924,19 +851,12 @@
               </Visibility>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
-            <TablixMember>
-              <Visibility>
-                <Hidden>=IIf(IsNothing(Fields!hide_time_zone.Value) , True, IIf(Fields!hide_time_zone.Value = True, True, False))</Hidden>
-                <ToggleItem>textbox22</ToggleItem>
-              </Visibility>
-              <KeepTogether>true</KeepTogether>
-            </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>5.6cm</Height>
+        <Height>5.1cm</Height>
         <Width>26.91218cm</Width>
         <Style />
       </Tablix>
@@ -1372,7 +1292,7 @@
         <FixedRowHeaders>true</FixedRowHeaders>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
-        <Top>6.30913cm</Top>
+        <Top>5.77996cm</Top>
         <Left>0.25cm</Left>
         <Height>2.85001cm</Height>
         <Width>7.81554cm</Width>
@@ -1382,7 +1302,7 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>9.7233cm</Height>
+    <Height>9.19413cm</Height>
     <Style>
       <Border>
         <Style>None</Style>
@@ -1590,9 +1510,6 @@
           <QueryParameter Name="@skill_set">
             <Value>=Parameters!skill_set.Value</Value>
           </QueryParameter>
-          <QueryParameter Name="@time_zone_id">
-            <Value>=Parameters!time_zone_id.Value</Value>
-          </QueryParameter>
           <QueryParameter Name="@person_code">
             <Value>=Parameters!person_code.Value</Value>
           </QueryParameter>
@@ -1631,10 +1548,6 @@
           <DataField>active</DataField>
           <rd:TypeName>System.Bool</rd:TypeName>
         </Field>
-        <Field Name="hide_time_zone">
-          <DataField>hide_time_zone</DataField>
-          <rd:TypeName>System.Bool</rd:TypeName>
-        </Field>
       </Fields>
     </DataSet>
   </DataSets>
@@ -1663,11 +1576,6 @@
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>agent_person_code</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="time_zone_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>time_zone_id</Prompt>
     </ReportParameter>
     <ReportParameter Name="person_code">
       <DataType>String</DataType>
