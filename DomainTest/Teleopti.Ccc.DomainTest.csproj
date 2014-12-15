@@ -972,6 +972,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamDayOffSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamMatrixCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamScheduleSameStartTimeTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamSchedulingTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />

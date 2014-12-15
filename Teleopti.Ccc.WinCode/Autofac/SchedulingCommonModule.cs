@@ -459,6 +459,8 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
 			builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
+			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>();
+			//ITeamMatrixChecker
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>();
 			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
