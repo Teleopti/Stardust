@@ -59,6 +59,7 @@ AS
 		[Start] [datetime] NULL,
 		[End] [datetime] NULL,
 		[Model] [nvarchar](max) NOT NULL,
+		[ShiftExchangeOffer] [uniqueidentifier] NUll,
 		[MinStart] [datetime] NULL,
 		[Total] [int] NULL,
 		[RowNumber] [bigint] NULL
@@ -78,19 +79,23 @@ AS
 
 	DECLARE @BulletinResult table
 	(
-		Person uniqueidentifier
+		Person uniqueidentifier,
+		ShiftExchangeOffer uniqueidentifier
 	)
 
 	INSERT INTO @BulletinResult
 	SELECT
-		Person
+		Person,
+		Id
 	FROM (
 			--Shifts
   			SELECT DISTINCT
+				Id,
 				seo.Person,
 				[Date],
 				MyShiftStartDateTime,
-				MyShiftEndDateTime
+				MyShiftEndDateTime,
+				[Status]
 			FROM dbo.ShiftExchangeOffer seo
 			INNER JOIN @TempList t
 				ON t.Person = seo.Person
@@ -98,6 +103,7 @@ AS
 			AND @currentScheduleStart between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
 			AND @currentScheduleEnd between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
 			AND ValidTo >= CONVERT(date, GETUTCDATE())
+			AND [Status] = 0
 	)bulletin
 
 	SET ROWCOUNT @take;
@@ -115,15 +121,15 @@ AS
 				BelongsToDate,
 				Start,
 				[End],
-				Model
-			FROM ReadModel.PersonScheduleDay sd
-			INNER JOIN @BulletinResult br
-				ON br.Person = sd.PersonId
+				Model,
+				br.ShiftExchangeOffer
+			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br
 			INNER JOIN @filterStartTimeList fs
 				ON sd.Start between fs.startTimeStart and fs.startTimeEnd
 			INNER JOIN @filterEndTimeList fe
 				ON sd.[End] between fe.endTimeStart and fe.endTimeEnd
-			WHERE [BelongsToDate] = @shiftTradeDate
+			WHERE  br.Person = sd.PersonId
+			AND [BelongsToDate] = @shiftTradeDate
 			AND IsDayOff = 0
 						
 			UNION ALL
@@ -137,11 +143,11 @@ AS
 				BelongsToDate,
 				Start,
 				[End],
-				Model
-			FROM ReadModel.PersonScheduleDay sd
-			INNER JOIN @BulletinResult br
-				ON br.Person = sd.PersonId
-			WHERE [BelongsToDate] = @shiftTradeDate
+				Model,
+				br.ShiftExchangeOffer
+			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br
+			WHERE br.Person = sd.PersonId
+			AND [BelongsToDate] = @shiftTradeDate
 			AND IsDayOff = 1
 			AND IsDayOff = @isDayOff
 			) a
@@ -156,6 +162,7 @@ AS
 		Start,
 		[End],
 		Model,
+		ShiftExchangeOffer,
 		(SELECT MIN(Start) FROM Ass)  As 'MinStart',
 		(SELECT COUNT(*) FROM Ass)  As 'Total',
 		RowNumber

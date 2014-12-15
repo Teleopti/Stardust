@@ -2,6 +2,7 @@
 using AutoMapper;
 using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -122,6 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftTradeAddScheduleLayerViewModelMapper>().As<IShiftTradeAddScheduleLayerViewModelMapper>();
 			builder.RegisterType<RequestsShiftTradeScheduleFilterViewModelFactory>().As<IRequestsShiftTradeScheduleFilterViewModelFactory>().SingleInstance();
 			builder.RegisterType<RequestsShiftTradebulletinViewModelFactory>().As<IRequestsShiftTradebulletinViewModelFactory>().SingleInstance();
+			builder.RegisterType<ShiftExchangeOffer>().As<IShiftExchangeOffer>().SingleInstance();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)

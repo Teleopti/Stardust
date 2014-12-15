@@ -350,7 +350,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(laye
     };
 };
 
-Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff) {
+Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff, offerId) {
 	var self = this;
 
 	self.scheduleStartTime = ko.observable(scheduleStartTime);
@@ -360,6 +360,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	self.agentName = agentName;
 	self.layers = layers;
 	self.isDayOff = isDayOff;
+	self.ShiftExchangeOfferId = offerId;
 };
 
 ShiftTradeRequestDetailedDayViewModel = function(data) {

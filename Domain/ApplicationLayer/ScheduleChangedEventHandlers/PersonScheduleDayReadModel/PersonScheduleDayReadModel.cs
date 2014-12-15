@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public DateTime? End { get; set; }
 		public bool IsDayOff { get; set; }
 		public string Model { get; set; }
+		public Guid? ShiftExchangeOffer { get; set; }
 		public DateTime? MinStart { get; set; }
 		public bool IsLastPage { get; set; }
 		public int Total { get; set; }

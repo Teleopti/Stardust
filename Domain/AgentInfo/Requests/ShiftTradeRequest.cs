@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private ShiftTradeStatus shiftTradeStatus = ShiftTradeStatus.OkByMe;
         private string _typeDescription = string.Empty;
         private IList<IPerson> _receiverOfNotification = new List<IPerson>();
+	    private IShiftExchangeOffer _offer;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="ShiftTradeRequest"/> class.
@@ -399,8 +400,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
 						new List<IPerson>(InvolvedPeople()));
                 }
+
+	            if (Offer != null)
+	            {
+						Offer.Status = ShiftExchangeOfferStatus.Completed;
+	            }
             }
-            return approveResult;
+	        return approveResult;
         }
 
         /// <summary>
@@ -417,7 +423,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     		get { return RequestType.ShiftTradeRequest; }
     	}
 
-    	/// <summary>
+
+	    public virtual IShiftExchangeOffer Offer
+	    {
+		    get { return _offer; }
+		    set { _offer = value; }
+	    }
+
+
+	    /// <summary>
         /// Payload description
         /// </summary>
         public override Description RequestPayloadDescription

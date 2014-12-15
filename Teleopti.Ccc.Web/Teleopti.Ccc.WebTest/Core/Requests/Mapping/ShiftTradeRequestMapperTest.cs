@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPersonRepository personRepository;
 		private ShiftTradeRequestForm form;
 		private IPerson loggedOnUser;
+		private IShiftExchangeOfferRepository _shiftExchangeOfferRepository;
 
 		[SetUp]
 		public void Setup()
@@ -27,7 +29,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			loggedOnUser = new Person();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var loggedOnUserSvc = MockRepository.GenerateMock<ILoggedOnUser>();
-			target = new ShiftTradeRequestMapper(personRepository, loggedOnUserSvc);
+			_shiftExchangeOfferRepository = MockRepository.GenerateMock<IShiftExchangeOfferRepository>();
+			target = new ShiftTradeRequestMapper(personRepository, loggedOnUserSvc, _shiftExchangeOfferRepository);
 			form = new ShiftTradeRequestForm
 				{
 					Message = "sdfsdfsdf",

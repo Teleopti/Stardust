@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTime? MinStart { get; set; }
 		public bool IsDayOff { get; set; }
 		public int Total { get; set; }
+		public Guid? ShiftExchangeOfferId { get; set; }
 	}
 }

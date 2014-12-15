@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				PersonId = scheduleReadModel.PersonId,
 				Total = scheduleReadModel.Total,
-				IsDayOff = false
+				IsDayOff = false,
+				ShiftExchangeOfferId = scheduleReadModel.ShiftExchangeOffer
 			};
 			
 			//for agents with empty schedule, retrieve name from person repository, for those haveing normal schedule, all infor. is included in shiftReadModel

@@ -118,6 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .AddScalar("Start", NHibernateUtil.DateTime)
 							  .AddScalar("End", NHibernateUtil.DateTime)
 							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+							  .AddScalar("ShiftExchangeOffer", NHibernateUtil.Guid)
 							  .AddScalar("MinStart", NHibernateUtil.DateTime)
 							  .AddScalar("Total", NHibernateUtil.Int16)
 							  .AddScalar("IsLastPage", NHibernateUtil.Boolean)

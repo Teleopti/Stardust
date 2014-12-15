@@ -39,6 +39,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			_shiftExchangeOfferRepository.Add(offer);
 			return offer.Id.GetValueOrDefault();
+		}		
+		
+		public Guid Persist(ShiftExchangeOffer offer)
+		{
+			_shiftExchangeOfferRepository.Add(offer);
+			return offer.Id.GetValueOrDefault();
 		}
 
 		private DateTimePeriod? createOptionalDateTimePeriod(ShiftExchangeOfferForm form, DateOnly date)

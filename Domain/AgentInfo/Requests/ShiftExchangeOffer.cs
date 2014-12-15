@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public class ShiftExchangeOffer : NonversionedAggregateRootWithBusinessUnit
+	public class ShiftExchangeOffer : NonversionedAggregateRootWithBusinessUnit, IShiftExchangeOffer
 	{
 		private readonly ShiftExchangeCriteria _criteria;
 		private DateOnly _date;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					ChecksumFrom = new ShiftTradeChecksumCalculator(scheduleToTrade).CalculateChecksum(),
 					ChecksumTo = _checksum
 				}
-			}));
+			}) { Offer = this });
 		}
 	}
 }
