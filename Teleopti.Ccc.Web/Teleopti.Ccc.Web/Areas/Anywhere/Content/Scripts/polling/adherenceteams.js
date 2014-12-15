@@ -13,7 +13,7 @@ define([
 		siteAdherencePoller = null;
 	};
 
-	var mapAsNotification = function(data) {
+	var mapToNotificationStyle = function(data) {
 		return {
 			DomainId: data.Id,
 			BinaryData: JSON.stringify(data)
@@ -25,16 +25,16 @@ define([
 			return $.Deferred().resolve();
 		},
 
-		subscribeAdherence: function (callback, businessUnitId, subscriptionDone) {
+		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
 			unsubscribeAdherence();
 
 			siteAdherencePoller = setInterval(function() {
 				ajax.ajax({
 					headers: { 'X-Business-Unit-Filter': businessUnitId },
-					url: "Sites/GetOutOfAdherenceForAllSites",
+					url: "Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,
 					success: function (data) {
 						for (var i = 0; i < data.length; i++) {
-							callback(mapAsNotification(data[i]));
+							callback(mapToNotificationStyle(data[i]));
 						}
 					}
 				});
