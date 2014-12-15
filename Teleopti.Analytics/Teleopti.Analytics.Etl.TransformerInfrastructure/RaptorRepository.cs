@@ -1361,9 +1361,14 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
             var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
 
-            return
-                HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_business_unit_load", parameterList,
+			//note: This step is BU-less, so businessUnit.Id could be removed
+
+			int rows = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_business_unit_load", parameterList,
 												_dataMartConnectionString);
+
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load_deviation", parameterList,
+												_dataMartConnectionString);
+			return rows;
 		}
 
 		public int FillSiteDataMart(IBusinessUnit businessUnit)
