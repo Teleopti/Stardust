@@ -57,7 +57,7 @@
 	</Target>
 	
 	<Target Name="ReCreateStandardCube" DependsOnTargets="RunETLTest">
-			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPDropDatabase.xmla"/>
+			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPDropDatabase.xmla" ContinueOnError="true"/>
 			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
 	</Target>
 	
