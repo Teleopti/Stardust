@@ -3,17 +3,16 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 
   <WebRole name="TeleoptiCCC" vmsize="Medium">
     <Sites>
-      <Site name="TeleoptiCCC" physicalDirectory="../Azure/Temp/AzureContent/TeleoptiCCC">
-        <VirtualApplication name="SDK" physicalDirectory="../Azure/Temp/AzureContent/SDK" />
-        <VirtualApplication name="Analytics" physicalDirectory="../Azure/Temp/AzureContent/Analytics" />
-        <VirtualApplication name="Web" physicalDirectory="../Azure/Temp/AzureContent/Web" />
-        <VirtualApplication name="MyTime" physicalDirectory="../Azure/Temp/AzureContent/MyTime" />
-        <VirtualApplication name="Client" physicalDirectory="../Azure/Temp/AzureContent/Client" />
-        <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/Web" />
-		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
-		<VirtualApplication name="Broker.backplane" physicalDirectory="../Azure/Temp/AzureContent/BrokerBackplane" />
-		<VirtualApplication name="AuthenticationBridge" physicalDirectory="../Azure/Temp/AzureContent/AuthenticationBridge" />
-		<VirtualApplication name="WindowsIdentityProvider" physicalDirectory="../Azure/Temp/AzureContent/WindowsIdentityProvider" />
+      <Site name="TeleoptiCCC" physicalDirectory="../../TeleoptiCCC">
+        <VirtualApplication name="SDK" physicalDirectory="../../SDK" />
+        <VirtualApplication name="Analytics" physicalDirectory="../../Analytics" />
+        <VirtualApplication name="Web" physicalDirectory="../../Web" />
+        <VirtualApplication name="Client" physicalDirectory="../../Client" />
+        <VirtualApplication name="RTA" physicalDirectory="../../Web" />
+		<VirtualApplication name="Broker" physicalDirectory="../../Broker" />
+		<VirtualApplication name="Broker.backplane" physicalDirectory="../../BrokerBackplane" />
+		<VirtualApplication name="AuthenticationBridge" physicalDirectory="../../AuthenticationBridge" />
+		<VirtualApplication name="WindowsIdentityProvider" physicalDirectory="../../WindowsIdentityProvider" />
         <Bindings>
           <Binding name="HttpsIn" endpointName="HttpsIn" />
         </Bindings>
