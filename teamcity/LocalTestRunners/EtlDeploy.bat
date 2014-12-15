@@ -23,6 +23,7 @@ SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:ProcessCube "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
 
 ::CleanUp?
-CHOICE /C yn /M "CleanUp?"
-IF ERRORLEVEL 1 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:CleanUp "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
+CHOICE /M "CleanUp?"
+IF %ERRORLEVEL% EQU 1 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:CleanUp "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
+
 PAUSE

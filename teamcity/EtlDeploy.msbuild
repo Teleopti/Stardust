@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--EXTERNAL_PROPERTIES: WorkingDirectory-->
 
-<Project DefaultTargets="RunETLTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="ProcessCube" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 
 	<PropertyGroup>
 		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>	
@@ -21,7 +21,7 @@
 		<LogObjectId>1</LogObjectId>
 		<RestoreToLocal>$(WorkingDirectory)\.debug-Setup\Restore to Local.bat</RestoreToLocal>
 		<RestoreToLocalWorkDir>$(WorkingDirectory)\ETL_R2L</RestoreToLocalWorkDir>
-		<AS_SERVER_NAME>PONTUS\WFM2014</AS_SERVER_NAME>
+		<AS_SERVER_NAME>$(computername)</AS_SERVER_NAME>
 		<AS_DATABASE>$(ETLAnalyticsDB)_$(Computername)</AS_DATABASE>
 		<SQL_AUTH_STRING>Data Source=$(Computername);Integrated Security=SSPI</SQL_AUTH_STRING>
 		<ETL_SERVICE_nhibConfPath>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETL_SERVICE_nhibConfPath>		
