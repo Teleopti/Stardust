@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IOvertimeDateTimePeriodExtractor
 	{
-		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDurantion, DateTimePeriod shiftPeriod, DateTimePeriod specificPeriod);
+		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDurantion, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod);
 	}
 
 	public class OvertimeDateTimePeriodExtractor : IOvertimeDateTimePeriodExtractor
 	{
-		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDurantion, DateTimePeriod shiftPeriod, DateTimePeriod specificPeriod)
+		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDurantion, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod)
 		{
 			IList<IOvertimeDateTimePeriodHolder>  dateTimePeriodHolders = new List<IOvertimeDateTimePeriodHolder>();
+			var shiftPeriod = visualLayerCollection.Period().GetValueOrDefault();
 			var shiftStart = shiftPeriod.StartDateTime;
 			var shiftEnd = shiftPeriod.EndDateTime;
 
@@ -29,17 +32,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 				if (specificPeriod.Contains(periodBefore))
 				{
-					var dateTimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-					dateTimePeriodHolderBefore.Add(periodBefore);
-					dateTimePeriodHolders.Add(dateTimePeriodHolderBefore);
+					var firstLayer = visualLayerCollection.First();
+					var firstLayerDefinitionSet = firstLayer.DefinitionSet;
+					var firstLayerIsAbsence = ((VisualLayer) firstLayer).HighestPriorityAbsence != null;
+
+					if (!firstLayerIsAbsence && (firstLayerDefinitionSet == null || firstLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+					{
+						var dateTimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
+						dateTimePeriodHolderBefore.Add(periodBefore);
+						dateTimePeriodHolders.Add(dateTimePeriodHolderBefore);
+					}
 				}
 
 				var periodAfter = new DateTimePeriod(shiftEnd, shiftEnd.Add(duration));
 				if (specificPeriod.Contains(periodAfter))
 				{
-					var dateTimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
-					dateTimePeriodHolderAfter.Add(periodAfter);
-					dateTimePeriodHolders.Add(dateTimePeriodHolderAfter);
+					var lastLayer = visualLayerCollection.Last();
+					var lastLayerDefinitionSet = lastLayer.DefinitionSet;
+					var lastLayerIsAbsence = ((VisualLayer)lastLayer).HighestPriorityAbsence != null;
+
+					if (!lastLayerIsAbsence && (lastLayerDefinitionSet == null || lastLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+					{
+						var dateTimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
+						dateTimePeriodHolderAfter.Add(periodAfter);
+						dateTimePeriodHolders.Add(dateTimePeriodHolderAfter);
+					}
 				}	
 			}
 

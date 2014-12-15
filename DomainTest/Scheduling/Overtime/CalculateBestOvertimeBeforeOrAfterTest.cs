@@ -81,9 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(_shiftDateTimePeriod);
 
-				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _shiftDateTimePeriod, _specifiedPeriod)).Return(_overtimePeriodHolders);
+				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _visualLayerCollection, _specifiedPeriod)).Return(_overtimePeriodHolders);
 				Expect.Call(_overtimeRelativeDifferenceCalculator.Calculate(_overtimePeriodHolders, _mappedData, false, _scheduleDay)).Return(_overtimePeriodValues);
 			}
 
@@ -113,9 +112,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(_shiftDateTimePeriod);
 
-				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _shiftDateTimePeriod, _specifiedPeriod)).Return(_overtimePeriodHolders);
+				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _visualLayerCollection, _specifiedPeriod)).Return(_overtimePeriodHolders);
 				Expect.Call(_overtimeRelativeDifferenceCalculator.Calculate(_overtimePeriodHolders, _mappedData, false, _scheduleDay)).Return(_overtimePeriodValues);
 			}
 

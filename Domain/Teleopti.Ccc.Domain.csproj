@@ -840,6 +840,7 @@
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeRelativeDifferenceCalculator.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregator.cs" />
+    <Compile Include="Scheduling\Overtime\ScheduleOvertimeService.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceFullDayLayerCreator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />

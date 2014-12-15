@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -21,6 +22,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
         {
+			var periods = new List<DateTimePeriod>();
+
+			if (scheduleDay.SignificantPart() != SchedulePartView.MainShift) return periods;
+			var projection = scheduleDay.ProjectionService().CreateProjection();
+			var lastLayer = projection.Last();
+			var definitionSet = lastLayer.DefinitionSet;
+			if (definitionSet != null && definitionSet.MultiplicatorType == MultiplicatorType.Overtime) return periods;
+			if (((VisualLayer)lastLayer).HighestPriorityAbsence != null) return periods;
+
             var possibleOvertimeDurationsToCalculate = new List<TimeSpan>();
             for (int minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
             {
@@ -28,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 possibleOvertimeDurationsToCalculate.Add(duration);
             }
 
-			var shiftEndingTime = scheduleDay.ProjectionService().CreateProjection().Period().GetValueOrDefault().EndDateTime;
+			var shiftEndingTime = projection.Period().GetValueOrDefault().EndDateTime;
 			var max = scheduleDay.Period.StartDateTime.AddMinutes(overtimeSpecifiedPeriod.Maximum.TotalMinutes);
 
             var calculatedOvertimePeriods = new Dictionary<TimeSpan, double>();
@@ -65,9 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			
 			var dateTimePeriod = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(lowestValueDuration));
-			if(dateTimePeriod.ElapsedTime() == TimeSpan.Zero) return new List<DateTimePeriod>();
+			if(dateTimePeriod.ElapsedTime() == TimeSpan.Zero) return periods;
 
-			IList<DateTimePeriod>  periods = new List<DateTimePeriod> { dateTimePeriod };
+			periods.Add(dateTimePeriod);
 			return periods;
         }
 

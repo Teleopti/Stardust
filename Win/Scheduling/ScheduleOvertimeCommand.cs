@@ -29,21 +29,20 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IOvertimeLengthDecider _overtimeLengthDecider;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-        private readonly IProjectionProvider _projectionProvider;
+        //private readonly IProjectionProvider _projectionProvider;
         private BackgroundWorker _backgroundWorker;
 	    private SchedulingServiceBaseEventArgs _progressEvent;
 
         public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
                                        ISchedulingResultStateHolder schedulingResultStateHolder,
                                        IOvertimeLengthDecider overtimeLengthDecider,
-                                       ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                       IProjectionProvider projectionProvider)
+                                       ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             _schedulerState = schedulerState;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _overtimeLengthDecider = overtimeLengthDecider;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
-            _projectionProvider = projectionProvider;
+            //_projectionProvider = projectionProvider;
         }
 
         public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -56,7 +55,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             foreach (var dateOnly in selectedDates)
             {
                 //Randomly select one of the selected agents that does not end his shift with overtime
-                var persons = orderCandidatesRandomly(selectedPersons, dateOnly);
+                //var persons = orderCandidatesRandomly(selectedPersons, dateOnly);
+
+				var persons = selectedPersons.Randomize();
                 foreach (var person in persons)
                 {
                     var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person);
@@ -187,24 +188,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_progressEvent = e;
         }
 
-        private IEnumerable<IPerson> orderCandidatesRandomly(IEnumerable<IPerson> persons, DateOnly dateOnly)
-        {
-            var personsHaveNoOvertime = new List<IPerson>();
-            var randomizedPersons = persons.Randomize();
-            foreach (var person in randomizedPersons)
-            {
-                var schedule = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-                if (schedule.SignificantPart() != SchedulePartView.MainShift) continue;
-                var projection = _projectionProvider.Projection(schedule);
-                var lastLayer = projection.Last();
-                if (lastLayer.DefinitionSet != null && lastLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
-                    continue;
-                if (((VisualLayer)lastLayer).HighestPriorityAbsence != null)
-                    continue;
-                personsHaveNoOvertime.Add(person);
-            }
-            return personsHaveNoOvertime;
-        }
+		//private IEnumerable<IPerson> orderCandidatesRandomly(IEnumerable<IPerson> persons, DateOnly dateOnly)
+		//{
+		//	var personsHaveNoOvertime = new List<IPerson>();
+		//	var randomizedPersons = persons.Randomize();
+		//	foreach (var person in randomizedPersons)
+		//	{
+		//		var schedule = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+		//		if (schedule.SignificantPart() != SchedulePartView.MainShift) continue;
+		//		var projection = _projectionProvider.Projection(schedule);
+		//		var lastLayer = projection.Last();
+		//		if (lastLayer.DefinitionSet != null && lastLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
+		//			continue;
+
+		//		if (((VisualLayer)lastLayer).HighestPriorityAbsence != null)
+		//			continue;
+		//		personsHaveNoOvertime.Add(person);
+		//	}
+		//	return personsHaveNoOvertime;
+		//}
 
 
         private bool checkIfCancelPressed()
