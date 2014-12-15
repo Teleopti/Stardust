@@ -19,13 +19,16 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var dayViewModels = {};
 	var editFormViewModel = null;
 	var vm = null;
-	var toggleAvailabilityVerifyHours31654Enabled = false;
-
-	ajax.Ajax({
-		url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AvailabilityVerifyHours_31654",
-		success: function (data) {
-			toggleAvailabilityVerifyHours31654Enabled = data.IsEnabled;
-		}
+	var toggleAvailabilityVerifyHours31654Enabled = (function () {
+		return ajax.Ajax({
+			url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AvailabilityVerifyHours_31654",
+			success: function (data) {
+				return data.IsEnabled;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				return false;
+			}
+		});
 	});
     
     var selectionViewModel = function() {
@@ -119,8 +122,9 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
     
 	function _initViewModels() {
 		dayViewModels = {};
+		var toggleEnabled = toggleAvailabilityVerifyHours31654Enabled();
 		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate, toggleAvailabilityVerifyHours31654Enabled);
+			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate, toggleEnabled);
 			dayViewModel.ReadElement(element);
 			dayViewModel.LoadFeedback();
 			dayViewModels[dayViewModel.Date] = dayViewModel;
