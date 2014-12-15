@@ -36,18 +36,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					NumberOfAgents = 0
 				}, JsonRequestBehavior.AllowGet);
 			}
-			else
-			{
-				var numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
+			var numberOfAgents = _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites);
 
-				return Json(sites.Select(site =>
-					new SiteViewModel
-					{
-						Id = site.Id.Value.ToString(),
-						Name = site.Description.Name,
-						NumberOfAgents = numberOfAgents[site.Id.Value]
-					}), JsonRequestBehavior.AllowGet);
-			}
+			return Json(sites.Select(site =>
+				new SiteViewModel
+				{
+					Id = site.Id.Value.ToString(),
+					Name = site.Description.Name,
+					NumberOfAgents = numberOfAgents[site.Id.Value]
+				}), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -61,6 +58,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			}, JsonRequestBehavior.AllowGet);
 		}
 
+
+		[UnitOfWorkAction, HttpGet]
+		public virtual JsonResult GetOutOfAdherenceForAllSites()
+		{
+			var sites = _siteRepository.LoadAll();
+			return Json(sites.Select(site =>
+				new SiteOutOfAdherence
+				{
+					Id = site.Id.Value.ToString(),
+					OutOfAdherence = _siteAdherenceAggregator.Aggregate(site.Id.Value)
+				}), JsonRequestBehavior.AllowGet);
+		}
+		
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult GetOutOfAdherence(string siteId)
 		{
