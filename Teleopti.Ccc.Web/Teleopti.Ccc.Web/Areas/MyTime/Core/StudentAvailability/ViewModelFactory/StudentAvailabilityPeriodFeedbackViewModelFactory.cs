@@ -18,12 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 			var feedback = _studentAvailabilityPeriodFeedbackProvider.PeriodFeedback(date);
 			return new StudentAvailabilityPeriodFeedbackViewModel
 				{
-					PossibleResultDaysOff = feedback.PossibleResultDaysOff,
-					TargetDaysOff = new TargetDaysOffViewModel
-						{
-							Lower = feedback.TargetDaysOff.Minimum,
-							Upper = feedback.TargetDaysOff.Maximum
-						},
 					TargetContractTime = new TargetContractTimeViewModel
 						{
 							LowerMinutes = feedback.TargetTime.Minimum.TotalMinutes,

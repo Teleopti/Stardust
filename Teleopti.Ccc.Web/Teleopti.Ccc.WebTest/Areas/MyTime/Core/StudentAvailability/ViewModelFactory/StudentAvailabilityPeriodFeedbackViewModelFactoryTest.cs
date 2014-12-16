@@ -13,48 +13,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 	public class StudentAvailabilityPeriodFeedbackViewModelFactoryTest
 	{
 		[Test]
-		public void ShouldGetViewModelWithPossibleResultDaysOff()
-		{
-			var studentAvailabilityPeriodFeedbackProvider =
-				MockRepository.GenerateMock<IStudentAvailabilityPeriodFeedbackProvider>();
-			studentAvailabilityPeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {PossibleResultDaysOff = 8});
-			var target = new StudentAvailabilityPeriodFeedbackViewModelFactory(studentAvailabilityPeriodFeedbackProvider);
-
-			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
-
-			result.PossibleResultDaysOff.Should().Be.EqualTo(8);
-		}
-
-		[Test]
-		public void ShouldGetViewModelWithLowerTargetDaysOff()
-		{
-			var studentAvailabilityPeriodFeedbackProvider =
-				MockRepository.GenerateMock<IStudentAvailabilityPeriodFeedbackProvider>();
-			studentAvailabilityPeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {TargetDaysOff = new MinMax<int>(3, 4)});
-			var target = new StudentAvailabilityPeriodFeedbackViewModelFactory(studentAvailabilityPeriodFeedbackProvider);
-
-			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
-
-			result.TargetDaysOff.Lower.Should().Be.EqualTo(3);
-		}
-
-		[Test]
-		public void ShouldGetViewModelWithUpperTargetDaysOff()
-		{
-			var studentAvailabilityPeriodFeedbackProvider =
-				MockRepository.GenerateMock<IStudentAvailabilityPeriodFeedbackProvider>();
-			studentAvailabilityPeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {TargetDaysOff = new MinMax<int>(3, 4)});
-			var target = new StudentAvailabilityPeriodFeedbackViewModelFactory(studentAvailabilityPeriodFeedbackProvider);
-
-			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
-
-			result.TargetDaysOff.Upper.Should().Be.EqualTo(4);
-		}
-
-		[Test]
 		public void ShouldGetViewModelWithTargetContractTimeLowerMinutes()
 		{
 			var studentAvailabilityPeriodFeedbackProvider =
