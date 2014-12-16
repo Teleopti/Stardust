@@ -12526,11 +12526,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>use for MyTime Announce Shift view</comment>
   </data>
   <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
-    <value>The date you want to exchange should in open period !</value>
+    <value>The date for the exchange must be in the open period!</value>
     <comment>use as a warning in MyTime AnnounceShift when exchange date is out of open period</comment>
   </data>
   <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
-    <value>Valid to date should between today and the day before exchange date !</value>
+    <value>Valid to date must be between today and the day before exchange date!</value>
     <comment>use as a warning in MyTime AnnounceShift when valid to date is not legal</comment>
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
