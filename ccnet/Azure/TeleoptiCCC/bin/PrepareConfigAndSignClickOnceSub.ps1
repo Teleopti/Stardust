@@ -162,6 +162,9 @@ Try
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
+	#Remove *.nhib.xml files that still resides in public facing directories
+	$WebRootFolder="$directory\..\..\sitesroot\*"
+	get-childitem $WebRootFolder -include *.nhib.xml -recurse | foreach ($_) {remove-item $_.fullname}
 	
 	Remove-Item "$fullPathsettingsFile"
 	if (Test-Path "$fullPathsettingsFile") {

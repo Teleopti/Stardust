@@ -257,6 +257,18 @@ end
 item: Delete File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
 end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\ETL\Service\TeleoptiCCC7.nhib.xml
+end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\ETL\Tools\TeleoptiCCC7.nhib.xml
+end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml
+end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\Web\TeleoptiCCC7.nhib.xml
+end
 item: Remark
   Text===============================================
 end
