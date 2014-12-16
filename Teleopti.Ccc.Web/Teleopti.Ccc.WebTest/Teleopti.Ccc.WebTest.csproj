@@ -246,6 +246,9 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityPeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
+    <Compile Include="Areas\Rta\FakeMbCacheFactory.cs" />
+    <Compile Include="Areas\Rta\FakeToggleManager.cs" />
+    <Compile Include="Areas\Rta\NoBrokerTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
     <Compile Include="Areas\Rta\PersonEventsOrderTest.cs" />

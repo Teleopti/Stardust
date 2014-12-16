@@ -16,6 +16,10 @@
             inverse="true">
       <key column="Parent" foreign-key="FK_ShiftTradeSwapDetail_ShiftTradeRequest"/>
       <one-to-many  class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftTradeSwapDetail"/>
-    </bag>
+    </bag>    
+
+	  <many-to-one name="Offer"
+				 class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftExchangeOffer"
+				 not-null="false" foreign-key="FK_ShiftExchangeOffer_Id" lazy="false" cascade="save-update"/>
   </joined-subclass>
 </hibernate-mapping>

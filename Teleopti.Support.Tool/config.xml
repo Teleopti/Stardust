@@ -22,7 +22,7 @@
 	</File>
 
 		<!--\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\test.nhib.xml IS Copied to debug folder-->
-	<File ipath="\TeleoptiCCC\ETL\Service\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\test.nhib.xml">
+	<File ipath="\Datasources\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\test.nhib.xml">
 		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
 		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
 		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
@@ -37,7 +37,7 @@
 	</File>
 
 	<!--\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\test.nhib.xml IS Copied to debug folder-->
-	<File ipath="\TeleoptiCCC\ETL\Tools\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\test.nhib.xml">
+	<File ipath="\Datasources\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\test.nhib.xml">
 		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
 		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
 		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
@@ -59,7 +59,7 @@
 	<File ipath="\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config" dpath="\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\app.config"></File>
 
 	<!-- Doesent \Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug\V7Config.nhib.xml exists then copy a new one-->
-	<File ipath="\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug\V7Config.nhib.xml">
+	<File ipath="\Datasources\TeleoptiCCC7.nhib.xml" dpath="\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug\V7Config.nhib.xml">
 		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
 		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
 		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>

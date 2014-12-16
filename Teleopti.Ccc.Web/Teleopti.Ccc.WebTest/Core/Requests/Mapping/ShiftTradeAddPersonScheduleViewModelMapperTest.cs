@@ -127,5 +127,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			result.MinStart.Should().Be.EqualTo(new DateTime(2013, 11, 28, 7, 0, 0));
 		}
+
+		[Test]
+		public void ShouldMapOfferId()
+		{
+			var shift = new Shift
+			{
+				Projection = new List<SimpleLayer> { new SimpleLayer() }
+			};
+			var model = new Model
+			{
+				FirstName = "Arne",
+				LastName = "Anka",
+				Shift = shift
+			};
+			var expectedId = new Guid();
+			var readModel = new PersonScheduleDayReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Start = DateTime.Now,
+				Model = JsonConvert.SerializeObject(model),
+				IsLastPage = false,
+				MinStart = new DateTime(2013, 11, 28, 7, 0, 0),
+				ShiftExchangeOffer = expectedId
+			};
+			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
+
+			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
+
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider, _personRepo);
+
+			var result = target.Map(readModel);
+			result.ShiftExchangeOfferId.Should().Be.EqualTo(expectedId);
+		}
 	}
 }

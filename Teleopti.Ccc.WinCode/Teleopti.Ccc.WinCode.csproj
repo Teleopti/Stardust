@@ -226,6 +226,7 @@
     <Compile Include="Autofac\EqualNumberOfCategoryFairnessModule.cs" />
     <Compile Include="Autofac\IntraIntervalOptimizationServiceModule.cs" />
     <Compile Include="Autofac\IntraIntervalSolverServiceModule.cs" />
+    <Compile Include="Autofac\ScheduleOvertimeModule.cs" />
     <Compile Include="Autofac\SchedulingCommonModule.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModule.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />

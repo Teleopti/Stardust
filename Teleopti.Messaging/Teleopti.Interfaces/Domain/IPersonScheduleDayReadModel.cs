@@ -44,6 +44,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
 		string Model { get; set; }
+		/// <summary>
+		/// when request come from a bulletin board, it reference the offer id
+		/// </summary>
+		Guid? ShiftExchangeOffer { get; set; }
 
 		DateTime? MinStart { get; set; }
 		bool IsLastPage { get; set; }

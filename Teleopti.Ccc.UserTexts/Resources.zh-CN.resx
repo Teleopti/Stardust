@@ -237,7 +237,7 @@
     <comment>Actual handling time</comment>
   </data>
   <data name="ActualTalkTime" xml:space="preserve">
-    <value>实际通话时间</value>
+    <value>实际通话时长</value>
     <comment>Actual talk time</comment>
   </data>
   <data name="Add" xml:space="preserve">
@@ -707,7 +707,7 @@
     <comment>Average speed of answer</comment>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
-    <value>平均通话时间</value>
+    <value>平均通话时长</value>
     <comment>Average talk time</comment>
   </data>
   <data name="AverageTasks" xml:space="preserve">
@@ -723,7 +723,7 @@
     <comment>Contract setting page average work time field shouldnt be containing values more than 24 hours</comment>
   </data>
   <data name="AverageWorkTimePerDayColon" xml:space="preserve">
-    <value>每天的平均工作时间：</value>
+    <value>每日平均工作时间：</value>
     <comment>Average Work Time Per Day:</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -739,14 +739,14 @@
     <comment>Back To Legal State</comment>
   </data>
   <data name="Balance" xml:space="preserve">
-    <value>账户余额</value>
+    <value>剩余时间</value>
     <comment>Balance</comment>
   </data>
   <data name="BalanceIn" xml:space="preserve">
-    <value>账户余额之内</value>
+    <value>扣除小时数</value>
   </data>
   <data name="BalanceOut" xml:space="preserve">
-    <value>账户余额之外</value>
+    <value>计入小时数</value>
   </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
     <value>你的班表已经改动。点击这里查看更新的班表。</value>
@@ -885,7 +885,7 @@
     <comment>Campaign facsimiles %</comment>
   </data>
   <data name="CampaignTalkTimePercentSign" xml:space="preserve">
-    <value>营销活动的通话时间 (%)</value>
+    <value>营销活动的通话时长 (%)</value>
     <comment>Campaign talk time %</comment>
   </data>
   <data name="CampaignTaskPercent" xml:space="preserve">
@@ -1197,7 +1197,7 @@
     <comment>CreateMeeting</comment>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
-    <value>调班申请</value>
+    <value>调换班申请</value>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
@@ -1547,7 +1547,7 @@
     <comment>Deviations</comment>
   </data>
   <data name="DeviationTalkTimeColon" xml:space="preserve">
-    <value>通话时间偏差：</value>
+    <value>通话时长偏差：</value>
     <comment>Deviation talk time:</comment>
   </data>
   <data name="DomainName" xml:space="preserve">
@@ -1757,7 +1757,7 @@
     <comment>Enter property values for grouping activities</comment>
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
-    <value>请为每个小组输入公布日期</value>
+    <value>请为每个小组输入发布日期</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
   <data name="EnterReply" xml:space="preserve">
@@ -1956,7 +1956,7 @@
     <comment>Forecasted average after call work</comment>
   </data>
   <data name="ForecastedAverageTalkTime" xml:space="preserve">
-    <value>预测的平均通话时间</value>
+    <value>预测的平均通话时长</value>
     <comment>Forecasted average talk time</comment>
   </data>
   <data name="ForecastedCalls" xml:space="preserve">
@@ -1984,11 +1984,11 @@
     <comment>Forecasted handling time</comment>
   </data>
   <data name="ForecastedTalkTime" xml:space="preserve">
-    <value>预测的通话时间</value>
+    <value>预测的通话时长</value>
     <comment>Forecasted talk time</comment>
   </data>
   <data name="ForecastedTalkTimeColon" xml:space="preserve">
-    <value>预测的通话时间：</value>
+    <value>预测的通话时长：</value>
     <comment>Forecasted talk time</comment>
   </data>
   <data name="ForecastedTasks" xml:space="preserve">
@@ -2036,7 +2036,7 @@
     <comment>From:</comment>
   </data>
   <data name="FromDate" xml:space="preserve">
-    <value>起始</value>
+    <value>从</value>
     <comment>From date column header</comment>
   </data>
   <data name="FullName" xml:space="preserve">
@@ -2100,7 +2100,7 @@
     <comment>Period part time percentage</comment>
   </data>
   <data name="GroupByPersonPeriodRulesetBag" xml:space="preserve">
-    <value>班次规则包</value>
+    <value>班次包</value>
     <comment>Person period ruleset bag</comment>
   </data>
   <data name="GroupingAbsences" xml:space="preserve">
@@ -2276,7 +2276,7 @@
     <comment>Index handling time</comment>
   </data>
   <data name="IndexTalkTime" xml:space="preserve">
-    <value>通话时间索引</value>
+    <value>通话时长索引</value>
     <comment>Index talk time</comment>
   </data>
   <data name="IndexTasks" xml:space="preserve">
@@ -2398,7 +2398,7 @@
     <comment>Average handle time (s)</comment>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>平均通话时间 (秒)</value>
+    <value>平均通话时长 (秒)</value>
     <comment>Average talk time (s)</comment>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
@@ -2696,7 +2696,7 @@
     <comment>Maximum occupancy %:</comment>
   </data>
   <data name="MaximumTimePerWeekColon" xml:space="preserve">
-    <value>每周最大时间量：</value>
+    <value>每周最大工作时间：</value>
     <comment>Maximum Time Per Week:</comment>
   </data>
   <data name="MaxTime" xml:space="preserve">
@@ -2920,7 +2920,7 @@
     <comment>My language</comment>
   </data>
   <data name="MyReport" xml:space="preserve">
-    <value>我的报告</value>
+    <value>我的报表</value>
     <comment>My Report</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -3059,7 +3059,7 @@
     <comment>New Rule Set ribbon menu</comment>
   </data>
   <data name="NewRuleSetBag" xml:space="preserve">
-    <value>新建班次规则包</value>
+    <value>新建班次包</value>
     <comment>New Rule Set Bag</comment>
   </data>
   <data name="NewScenario" xml:space="preserve">
@@ -3087,7 +3087,7 @@
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>新建调班申请</value>
+    <value>新建调换班申请</value>
     <comment>text of context menu item "New Shift trade request"in Agent portal Schedule</comment>
   </data>
   <data name="NewSkillThreeDots" xml:space="preserve">
@@ -3295,7 +3295,7 @@
     <comment>Open hours</comment>
   </data>
   <data name="OpenMyReport" xml:space="preserve">
-    <value>我的报告</value>
+    <value>我的报表</value>
     <comment>Permission: Function description for - My Report</comment>
   </data>
   <data name="OpenPeople" xml:space="preserve">
@@ -3311,7 +3311,7 @@
     <comment>People</comment>
   </data>
   <data name="OpenReports" xml:space="preserve">
-    <value>报告</value>
+    <value>报表</value>
     <comment>Function name Reports</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
@@ -3428,7 +3428,7 @@
     <comment>Original offered tasks</comment>
   </data>
   <data name="OriginalTalkTime" xml:space="preserve">
-    <value>原始的通话时间</value>
+    <value>原始的通话时长</value>
     <comment>Original talk time</comment>
   </data>
   <data name="OriginalTasks" xml:space="preserve">
@@ -3947,7 +3947,7 @@ Periods</comment>
     <comment>Reply and deny button on ribbon for requests</comment>
   </data>
   <data name="Reports" xml:space="preserve">
-    <value>报告</value>
+    <value>报表</value>
     <comment>Reports</comment>
   </data>
   <data name="Request" xml:space="preserve">
@@ -4095,7 +4095,7 @@ Periods</comment>
     <comment>1 rule set available</comment>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>班次规则包</value>
+    <value>班次包</value>
     <comment>Rule Set Bag</comment>
   </data>
   <data name="RuleSets" xml:space="preserve">
@@ -4264,7 +4264,7 @@ Periods</comment>
     <comment>Search up</comment>
   </data>
   <data name="Segment" xml:space="preserve">
-    <value>区段</value>
+    <value>分段</value>
     <comment>Segment</comment>
   </data>
   <data name="Select" xml:space="preserve">
@@ -4400,7 +4400,7 @@ Periods</comment>
     <comment>Set password</comment>
   </data>
   <data name="SetSchedulePublishingDates" xml:space="preserve">
-    <value>设定班表公布日期</value>
+    <value>设定班表发布日期</value>
     <comment>Set Schedule Publishing Dates</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -4416,7 +4416,7 @@ Periods</comment>
     <comment>Shift</comment>
   </data>
   <data name="ShiftBags" xml:space="preserve">
-    <value>班次规则包</value>
+    <value>班次包</value>
     <comment>Shift bags</comment>
   </data>
   <data name="ShiftCategory" xml:space="preserve">
@@ -4444,7 +4444,7 @@ Periods</comment>
     <comment>Shifts</comment>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>调班申请</value>
+    <value>调换班申请</value>
     <comment>Shift Trade Request text in Agent portal</comment>
   </data>
   <data name="ShortName" xml:space="preserve">
@@ -4708,7 +4708,7 @@ Periods</comment>
     <comment>Start period</comment>
   </data>
   <data name="StartSegment" xml:space="preserve">
-    <value>开始区段</value>
+    <value>起始分段</value>
     <comment>Start segment</comment>
   </data>
   <data name="StartTime" xml:space="preserve">
@@ -4797,7 +4797,7 @@ Periods</comment>
     <comment>System Settings</comment>
   </data>
   <data name="TalkTime" xml:space="preserve">
-    <value>通话时间</value>
+    <value>通话时长</value>
     <comment>Talk time</comment>
   </data>
   <data name="Target" xml:space="preserve">
@@ -4988,59 +4988,59 @@ Periods</comment>
     <comment>Total</comment>
   </data>
   <data name="TotalACW" xml:space="preserve">
-    <value>总话后处理时长</value>
+    <value>合计平均后处理时长</value>
     <comment>Total ACW</comment>
   </data>
   <data name="TotalAEW" xml:space="preserve">
-    <value>总的Email后工作时长</value>
+    <value>合计Email后工作时长</value>
     <comment>Total AEW</comment>
   </data>
   <data name="TotalAfterWorkTime" xml:space="preserve">
-    <value>总话后处理时长</value>
+    <value>合计话后处理时长</value>
     <comment>Total after work time</comment>
   </data>
   <data name="TotalAFW" xml:space="preserve">
-    <value>总的传真后工作时长</value>
+    <value>合计传真后工作时长</value>
     <comment>Total AFW</comment>
   </data>
   <data name="TotalATW" xml:space="preserve">
-    <value>总的ATW</value>
+    <value>合计ATW</value>
     <comment>Total ATW</comment>
   </data>
   <data name="TotalCalls" xml:space="preserve">
-    <value>总电话量</value>
+    <value>合计电话量</value>
     <comment>Total calls</comment>
   </data>
   <data name="TotalEmails" xml:space="preserve">
-    <value>总的电子邮件数量</value>
+    <value>合计电子邮件数量</value>
     <comment>Total emails</comment>
   </data>
   <data name="TotalFacsimiles" xml:space="preserve">
-    <value>总的传真数量</value>
+    <value>合计传真数量</value>
     <comment>Total facsimiles</comment>
   </data>
   <data name="TotalHandledWithin" xml:space="preserve">
-    <value>总的处理时间不超过</value>
+    <value>合计处理时间不超过</value>
     <comment>Total handled within</comment>
   </data>
   <data name="TotalHandlingTime" xml:space="preserve">
-    <value>总的处理时间</value>
+    <value>合计处理时间</value>
     <comment>Total handling time</comment>
   </data>
   <data name="TotalTalkTime" xml:space="preserve">
-    <value>总通话时间</value>
+    <value>合计通话时长</value>
     <comment>Total talk time</comment>
   </data>
   <data name="TotalTasks" xml:space="preserve">
-    <value>总的任务量</value>
+    <value>合计任务量</value>
     <comment>Total tasks</comment>
   </data>
   <data name="TotalTime" xml:space="preserve">
-    <value>总时间</value>
+    <value>合计时长</value>
     <comment>Used in column header</comment>
   </data>
   <data name="TradeWith" xml:space="preserve">
-    <value>交换与</value>
+    <value>交换方</value>
     <comment>column header for the counterpart in a shift trade in request view</comment>
   </data>
   <data name="Trend" xml:space="preserve">
@@ -5183,7 +5183,7 @@ Periods</comment>
     <comment>Value Type</comment>
   </data>
   <data name="UseShiftCategory" xml:space="preserve">
-    <value>使用班次类别</value>
+    <value>仅使用班次类别</value>
     <comment>Use Shiftcategory</comment>
   </data>
   <data name="UseTemplatesForLongtermForecasting" xml:space="preserve">
@@ -5235,7 +5235,7 @@ Periods</comment>
     <comment>Validated handlinf time</comment>
   </data>
   <data name="ValidatedTalkTime" xml:space="preserve">
-    <value>经验证的通话时间</value>
+    <value>经验证的通话时长</value>
     <comment>Validated talk time</comment>
   </data>
   <data name="ValidatedTasks" xml:space="preserve">
@@ -5315,7 +5315,7 @@ Periods</comment>
     <comment>Weekly view</comment>
   </data>
   <data name="WeekOfMonth" xml:space="preserve">
-    <value>月份中的星期</value>
+    <value>月中周</value>
     <comment>Week of month</comment>
   </data>
   <data name="Weeks" xml:space="preserve">
@@ -5489,7 +5489,7 @@ Periods</comment>
     <comment>sorting in Z to A order</comment>
   </data>
   <data name="NewReport" xml:space="preserve">
-    <value>新建报告</value>
+    <value>新建报表</value>
     <comment>New Report</comment>
   </data>
   <data name="PerformanceManager" xml:space="preserve">
@@ -5521,7 +5521,7 @@ Periods</comment>
     <value>技能已创建 {0}</value>
   </data>
   <data name="ViewUnpublishedSchedules" xml:space="preserve">
-    <value>查看未公布的班表</value>
+    <value>查看未发布的班表</value>
   </data>
   <data name="GlobalFunctions" xml:space="preserve">
     <value>全局功能</value>
@@ -5860,7 +5860,7 @@ Periods</comment>
     <value>约会的时间</value>
   </data>
   <data name="AppointmentRecurrence" xml:space="preserve">
-    <value>约会的重复</value>
+    <value>重复的预约</value>
   </data>
   <data name="DurationColon" xml:space="preserve">
     <value>持续时间：</value>
@@ -6196,7 +6196,7 @@ Periods</comment>
     <value>逗号分隔的文本文件</value>
   </data>
   <data name="AverageWorkTimePerDay" xml:space="preserve">
-    <value>每天的平均工作时间</value>
+    <value>每日平均工作时间</value>
   </data>
   <data name="AverageWorkTimePerSlot" xml:space="preserve">
     <value>每个位置的平均工作时间</value>
@@ -6244,7 +6244,7 @@ Periods</comment>
     <value>删除兼职时间百分比</value>
   </data>
   <data name="ViewReports" xml:space="preserve">
-    <value>查看报告</value>
+    <value>查看报表</value>
   </data>
   <data name="SomethingWentWrongPleaseCloseTheFileIfItIsOpen" xml:space="preserve">
     <value>出错。请关闭打开的文件。</value>
@@ -6386,7 +6386,7 @@ Periods</comment>
     <value>更新人：{0} 更新于：{1}</value>
   </data>
   <data name="AddToBags" xml:space="preserve">
-    <value>添加到班次规则包</value>
+    <value>添加到班次包</value>
   </data>
   <data name="SelectBags" xml:space="preserve">
     <value>选择(班次)规则包</value>
@@ -6551,7 +6551,7 @@ Periods</comment>
     <value>管理警报类型</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
-    <value>座席代表改进报告</value>
+    <value>座席代表改进报表</value>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
     <value>座席代表记分卡</value>
@@ -6869,7 +6869,7 @@ Periods</comment>
     <value>展开所有节点</value>
   </data>
   <data name="CreatePerformanceManagerReport" xml:space="preserve">
-    <value>创建绩效管理报告</value>
+    <value>创建绩效管理报表</value>
   </data>
   <data name="ModifyWriteProtectedSchedule" xml:space="preserve">
     <value>修改写保护班表</value>
@@ -6920,10 +6920,10 @@ Periods</comment>
     <value>系统正在处理另外的后台申请。请稍候再试</value>
   </data>
   <data name="ReportLevel" xml:space="preserve">
-    <value>报告级别为</value>
+    <value>报告类型为</value>
   </data>
   <data name="DefaultSegment" xml:space="preserve">
-    <value>默认区段长度</value>
+    <value>默认分段长度</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
     <value>就绪时间 vs 合同班表时间</value>
@@ -7154,7 +7154,7 @@ Teleopti R&amp;D</value>
     <value>启用报告：</value>
   </data>
   <data name="Maximum5Scenarios" xml:space="preserve">
-    <value>*最多只能在报告中使用 5 种情景</value>
+    <value>*最多只能在报表中使用 5 种情景</value>
   </data>
   <data name="Daily" xml:space="preserve">
     <value>每日</value>
@@ -7223,16 +7223,16 @@ Teleopti R&amp;D</value>
     <value>详情</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>调班申请 {0} - {1} 被对方接受。</value>
+    <value>调换班申请 {0} - {1} 被对方接受。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>调班申请 {0} - {1} 被批准。</value>
+    <value>调换班申请 {0} - {1} 被批准。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>调班申请 {0} - {1} 被拒绝。</value>
+    <value>调换班申请 {0} - {1} 被拒绝。</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>调班申请 {0} - {1} 由于班表修改必须重新确认接受。</value>
+    <value>调换班申请 {0} - {1} 由于班表修改必须重新确认接受。</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
     <value>一条文字申请被批准。</value>
@@ -7244,7 +7244,7 @@ Teleopti R&amp;D</value>
     <value>删除会议</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>在您的请求列表中有新的调班申请 {0} - {1}，请批准或拒绝。</value>
+    <value>在您的请求列表中有新的调换班申请 {0} - {1}，请批准或拒绝。</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
     <value>已批准</value>
@@ -7289,7 +7289,7 @@ Teleopti R&amp;D</value>
     <value>移除天</value>
   </data>
   <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
-    <value>调班申请中至少包含1个日期。</value>
+    <value>调换班申请中至少包含1个日期。</value>
   </data>
   <data name="FilterDays" xml:space="preserve">
     <value>过滤天数</value>
@@ -7492,7 +7492,7 @@ Teleopti R&amp;D</value>
     <value>名称太长</value>
   </data>
   <data name="ConsiderWeekAfter" xml:space="preserve">
-    <value>考虑后续周</value>
+    <value>考虑后一周</value>
   </data>
   <data name="ConsiderWeekBefore" xml:space="preserve">
     <value>考虑前一周</value>
@@ -7522,7 +7522,7 @@ Teleopti R&amp;D</value>
     <value>查看保密</value>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>您的调班申请被另一方拒绝。</value>
+    <value>您的调换班申请被另一方拒绝。</value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
     <value>您的缺勤申请已被自动拒绝。您的个人账户没有足够的剩余时间。</value>
@@ -7723,7 +7723,7 @@ Teleopti R&amp;D</value>
     <value>使用自由周末</value>
   </data>
   <data name="MinTimeSchedulePeriodColon" xml:space="preserve">
-    <value>每个班表周期最短时间</value>
+    <value>每个班表周期最短工作时间</value>
   </data>
   <data name="DoNotColon" xml:space="preserve">
     <value>不要：</value>
@@ -7858,7 +7858,7 @@ Teleopti R&amp;D</value>
     <value>预测性能</value>
   </data>
   <data name="HistoricalReports" xml:space="preserve">
-    <value>历史报告</value>
+    <value>历史报表</value>
   </data>
   <data name="Improve" xml:space="preserve">
     <value>改进</value>
@@ -7903,7 +7903,7 @@ Teleopti R&amp;D</value>
     <value>排班结果</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>在线报告</value>
+    <value>实时报表</value>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
     <value>每个活动的已排定时间</value>
@@ -7933,16 +7933,16 @@ Teleopti R&amp;D</value>
     <value>基础</value>
   </data>
   <data name="SchedulerReportsViewer" xml:space="preserve">
-    <value>班表报告查看器</value>
+    <value>班表模块报表查看器</value>
   </data>
   <data name="RealTime" xml:space="preserve">
-    <value>实时报告</value>
+    <value>实时报表</value>
   </data>
   <data name="NotPublished" xml:space="preserve">
     <value>未发布</value>
   </data>
   <data name="PublishSchedulesToColon" xml:space="preserve">
-    <value>发布班表到(包括偏好周期)：</value>
+    <value>发布班表至(包括偏好周期)：</value>
   </data>
   <data name="WriteProtectScheduledOlderThanDaysColon" xml:space="preserve">
     <value>写保护早于几天前的班表：</value>
@@ -7963,22 +7963,22 @@ Teleopti R&amp;D</value>
     <value>开始日期必须小于结束日期</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>由于选定日期不允许申请，调班申请被拒绝</value>
+    <value>由于选定日期不允许申请，调换班申请被拒绝</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
-    <value>由于技能不匹配，调班申请被拒绝。</value>
+    <value>由于技能不匹配，调换班申请被拒绝。</value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>由于工作流控制集与其他人不匹配，调班申请被拒绝。</value>
+    <value>由于工作流控制集与其他人不匹配，调换班申请被拒绝。</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
-    <value>由于班次合同时间差异超限，调班申请被拒绝。</value>
+    <value>由于班次合同时间差异超限，调换班申请被拒绝。</value>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
-    <value>由于未定义工作流控制集，调班申请被拒绝。</value>
+    <value>由于未定义工作流控制集，调换班申请被拒绝。</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
-    <value>调班申请</value>
+    <value>调换班申请</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
     <value>偏好的可用班次类别</value>
@@ -7996,7 +7996,7 @@ Teleopti R&amp;D</value>
     <value>h:mm</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>打开调班申请</value>
+    <value>为调换班申请打开</value>
   </data>
   <data name="PosNeg" xml:space="preserve">
     <value>+/-</value>
@@ -8095,7 +8095,7 @@ Teleopti R&amp;D</value>
     <value>使用增强计算</value>
   </data>
   <data name="Abandoned" xml:space="preserve">
-    <value>放弃</value>
+    <value>已放弃</value>
   </data>
   <data name="AbandonedAfterServiceLevel" xml:space="preserve">
     <value>服务目标时间外放弃</value>
@@ -8134,7 +8134,7 @@ Teleopti R&amp;D</value>
     <value>不成功</value>
   </data>
   <data name="AlterBetween" xml:space="preserve">
-    <value>修改</value>
+    <value>调整时间范围在</value>
   </data>
   <data name="DoNotMove" xml:space="preserve">
     <value>不允许移动</value>
@@ -8223,7 +8223,7 @@ Teleopti R&amp;D</value>
     <value>正在班次长度优化</value>
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
-    <value>发生错误，调班申请未被接受。
+    <value>发生错误，调换班申请未被接受。
 错误信息：{0}。</value>
   </data>
   <data name="SaveOrCancel" xml:space="preserve">
@@ -8532,11 +8532,11 @@ Teleopti R&amp;D</value>
     <value>查看自定义小组班表</value>
   </data>
   <data name="AbsenceExtra" xml:space="preserve">
-    <value>额外的</value>
+    <value>额外的缺勤</value>
     <comment>extra for budgeted allowance</comment>
   </data>
   <data name="AbsenceOverride" xml:space="preserve">
-    <value>重设</value>
+    <value>重设缺勤</value>
     <comment>override for budgeted allowance</comment>
   </data>
   <data name="AbsenceThreshold" xml:space="preserve">
@@ -8569,7 +8569,7 @@ Teleopti R&amp;D</value>
     <value>输入内容不能为空</value>
   </data>
   <data name="TotalAllowance" xml:space="preserve">
-    <value>总配额</value>
+    <value>合计配额</value>
     <comment>total allowance</comment>
   </data>
   <data name="NoGoodSlotsFound" xml:space="preserve">
@@ -8588,7 +8588,7 @@ Teleopti R&amp;D</value>
     <value>已占用的席位</value>
   </data>
   <data name="DoNotBreakMaxSeats" xml:space="preserve">
-    <value>不要超过最大座席数</value>
+    <value>不要超过最大席位数</value>
   </data>
   <data name="MaxSeatLimitBroken" xml:space="preserve">
     <value>已超过最大席位限制</value>
@@ -8645,7 +8645,7 @@ Teleopti R&amp;D</value>
     <value>正在关闭前一个周期...</value>
   </data>
   <data name="PreferenceViewCalculationInfo" xml:space="preserve">
-    <value>{0} (Normal) {1} (Seasonality) {2} (Balance In) {3} (Extra) {4} (Balance Out) = {5}</value>
+    <value>{0} (普通) {1} (季节性) {2} (扣除小时数) {3} (额外的) {4} (计入小时数) = {5}</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
     <value>一个拥有主活动的班次不能在班表中使用</value>
@@ -8690,7 +8690,7 @@ Teleopti R&amp;D</value>
     <value>您想删除{0}会议么？</value>
   </data>
   <data name="MeetingOverview" xml:space="preserve">
-    <value>会议概观</value>
+    <value>会议概览</value>
   </data>
   <data name="NoMeetingIsSelected" xml:space="preserve">
     <value>未选择会议！</value>
@@ -9032,10 +9032,10 @@ Teleopti R&amp;D</value>
     <value>查看班表历史</value>
   </data>
   <data name="ShiftsWithinDay" xml:space="preserve">
-    <value>一天内的班次</value>
+    <value>每日班次（开始时间及班次中活动）</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
-    <value>天与天的时间间隔</value>
+    <value>每日班次长度</value>
   </data>
   <data name="ScheduleTagColon" xml:space="preserve">
     <value>班表标签：</value>
@@ -9077,16 +9077,16 @@ Teleopti R&amp;D</value>
     <value>计划时间储备</value>
   </data>
   <data name="PlanningTimeBankLimitError" xml:space="preserve">
-    <value>余额结转超出限制！</value>
+    <value>计入小时数超出限制！</value>
   </data>
   <data name="PlanningTimeBankMax" xml:space="preserve">
-    <value>最大计划时间储备：</value>
+    <value>最大计划时间储备偏差：</value>
   </data>
   <data name="PlanningTimeBankMin" xml:space="preserve">
-    <value>最小计划时间储备：</value>
+    <value>最小计划时间储备偏差：</value>
   </data>
   <data name="SetBalanceOut" xml:space="preserve">
-    <value>设置余额结转</value>
+    <value>设置计入小时数</value>
   </data>
   <data name="SetPlanningTimeBank" xml:space="preserve">
     <value>设定计划时间储备</value>
@@ -9119,13 +9119,13 @@ Teleopti R&amp;D</value>
     <value>分配的最大长度是 {0} 小时。当前分配长度是 {1} 小时。</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
-    <value>由于班次中存在缺勤导致无法调班。</value>
+    <value>由于班次中存在缺勤导致无法调换班。</value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
-    <value>由于个人活动结束于班次之外使得调班被拒绝。</value>
+    <value>由于个人活动结束于班次之外使得调换班被拒绝。</value>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>由于某个会议在班次外结束使得调班被拒绝。</value>
+    <value>由于某个会议在班次外结束使得调换班被拒绝。</value>
   </data>
   <data name="ConflictingShiftCategories" xml:space="preserve">
     <value>在限制条件中的班次类别和选项中的班次类别冲突。</value>
@@ -9154,7 +9154,7 @@ Teleopti R&amp;D</value>
     <comment>import forecast from file</comment>
   </data>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
-    <value>只显示可调班的人</value>
+    <value>只显示可调换班的人</value>
   </data>
   <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
     <value>开始时间 {0} 必须早于结束时间 {1}。</value>
@@ -9263,10 +9263,10 @@ Teleopti R&amp;D</value>
     <value>导入工作量和人员配备</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
-    <value>在您的申请列表里有新的调班申请 {0}，请批准或拒绝。</value>
+    <value>在您的请求列表里有新的调换班申请 {0}，请批准或拒绝。</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
-    <value>计量每个资源：</value>
+    <value>资源计算每…班表</value>
   </data>
   <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
     <value>您的偏好共有 {0} 到 {1} 个小时。</value>
@@ -9302,13 +9302,13 @@ Teleopti R&amp;D</value>
     <value>必须有</value>
   </data>
   <data name="MinimumStaffing" xml:space="preserve">
-    <value>最少人员配备</value>
+    <value>使用最少人员配备限制</value>
   </data>
   <data name="JobHistoryView" xml:space="preserve">
     <value>查看工作历史记录</value>
   </data>
   <data name="MaximumStaffing" xml:space="preserve">
-    <value>最大员工配备</value>
+    <value>使用最大人员配备限制</value>
   </data>
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
     <value>导出每天班次到PDF文件</value>
@@ -9332,7 +9332,7 @@ Teleopti R&amp;D</value>
     <value>调整灵活工作时间</value>
   </data>
   <data name="MaximumSeats" xml:space="preserve">
-    <value>最大席位数量</value>
+    <value>使用最大席位限制</value>
   </data>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>您应该有 {0} 个休息日。</value>
@@ -9344,22 +9344,22 @@ Teleopti R&amp;D</value>
     <value>选择一个活动！</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>调班申请 {0} 已被对方接受。</value>
+    <value>调换班申请 {0} 已被对方接受。</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>调班申请 {0} 已被批准。</value>
+    <value>调换班申请 {0} 已被批准。</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>调班申请 {0} 已被拒绝。</value>
+    <value>调换班申请 {0} 已被拒绝。</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>调班申请 {0} 由于班表变更必须再次被接受。</value>
+    <value>调换班申请 {0} 由于班表变更必须再次被接受。</value>
   </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
     <value>外部资源被使用</value>
   </data>
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
-    <value>灵活工作时间的班次</value>
+    <value>灵活工作时间的班次（使用目标容差）</value>
   </data>
   <data name="KeepShifts" xml:space="preserve">
     <value>保持班次</value>
@@ -9458,7 +9458,7 @@ Teleopti R&amp;D</value>
     <value>连续工作日</value>
   </data>
   <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
-    <value>灵活工作时间的休息日</value>
+    <value>灵活工作时间的休息日（使用休息日容差）</value>
   </data>
   <data name="CustomReports" xml:space="preserve">
     <value>自定义报表</value>
@@ -9470,7 +9470,7 @@ Teleopti R&amp;D</value>
     <value>在指定周期中的班表已经包含缺席</value>
   </data>
   <data name="PersonFinderFieldShiftBag" xml:space="preserve">
-    <value>班次规则包</value>
+    <value>班次包</value>
   </data>
   <data name="ThisIsTheDefaultScenario" xml:space="preserve">
     <value>这是默认情景</value>
@@ -9482,7 +9482,7 @@ Teleopti R&amp;D</value>
     <value>全天</value>
   </data>
   <data name="ShiftSelection" xml:space="preserve">
-    <value>选中班次</value>
+    <value>班次选择</value>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
     <value>小时工可用性</value>
@@ -9632,7 +9632,7 @@ Teleopti R&amp;D</value>
     <value>已排定的员工数</value>
   </data>
   <data name="TotalCustomers" xml:space="preserve">
-    <value>总的客户数</value>
+    <value>合计客户数</value>
   </data>
   <data name="ValidatedCustomers" xml:space="preserve">
     <value>已验证的客户数</value>
@@ -9683,7 +9683,7 @@ Teleopti R&amp;D</value>
     <value>不工作</value>
   </data>
   <data name="MobileReports" xml:space="preserve">
-    <value>移动端报告</value>
+    <value>移动端报表</value>
   </data>
   <data name="SchedulePeriodTypeDay" xml:space="preserve">
     <value>天</value>
@@ -9695,7 +9695,7 @@ Teleopti R&amp;D</value>
     <value>周</value>
   </data>
   <data name="PleaseChooseAReportType" xml:space="preserve">
-    <value>请选择一个报告类型。</value>
+    <value>请选择一个报表类型。</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
     <value>按座席的遵时度</value>
@@ -9806,7 +9806,7 @@ Teleopti R&amp;D</value>
     <value>日期 (班次开始)：</value>
   </data>
   <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
-    <value>无可用座席进行调班</value>
+    <value>无可用座席代表进行调换班</value>
   </data>
   <data name="ResShiftStartDateFromColon" xml:space="preserve">
     <value>开始日期 (班次开始)：</value>
@@ -9869,7 +9869,7 @@ Teleopti R&amp;D</value>
     <value>重设每日小时数</value>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
-    <value>重设周期</value>
+    <value>重设周期小时数</value>
   </data>
   <data name="PeopleCap" xml:space="preserve">
     <value>人员</value>
@@ -9977,7 +9977,7 @@ Teleopti R&amp;D</value>
     <value>快速预测会在向导完成后作为一个后台工作运行。你可以通过任务历史查看进度。</value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>当换班请求是新建，拒绝，或者批准的状态时，不会显示班表</value>
+    <value>仅当调换班状态为待定或等待您的批准时班表才会显示</value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>新建模板名称</value>
@@ -10106,7 +10106,7 @@ Teleopti R&amp;D</value>
     <value>接受者已经答复了你早些时候的信息。刷新窗口查看回复。你的信息将不会发送。</value>
   </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
-    <value>每个坐席代表的可用性</value>
+    <value>每个座席代表的可用性</value>
   </data>
   <data name="TeamBlockNotInLegalState" xml:space="preserve">
     <value>小组批次时段不在合法状态</value>
@@ -10175,7 +10175,7 @@ Teleopti R&amp;D</value>
     <value>原始的Chat数量</value>
   </data>
   <data name="TotalChats" xml:space="preserve">
-    <value>总的Chat数量</value>
+    <value>合计Chat数量</value>
   </data>
   <data name="ValidatedChats" xml:space="preserve">
     <value>已验证的Chat数量</value>
@@ -10187,7 +10187,7 @@ Teleopti R&amp;D</value>
     <value>Chat数量</value>
   </data>
   <data name="TotalChatTime" xml:space="preserve">
-    <value>总的Chat时间</value>
+    <value>合计Chat时间</value>
   </data>
   <data name="FilterOvertimeAvailability" xml:space="preserve">
     <value>过滤加班可用性</value>
@@ -10247,7 +10247,7 @@ Teleopti R&amp;D</value>
     <value>查找下一个</value>
   </data>
   <data name="RepViewerFindText" xml:space="preserve">
-    <value>在报告里查找文本</value>
+    <value>在报表里查找文本</value>
   </data>
   <data name="RepViewerFirstPage" xml:space="preserve">
     <value>首页</value>
@@ -10346,7 +10346,7 @@ Teleopti R&amp;D</value>
     <value>兼职时间百分比</value>
   </data>
   <data name="RuleSetBagLower" xml:space="preserve">
-    <value>班次规则包</value>
+    <value>班次包</value>
   </data>
   <data name="TrackerTypeHeader" xml:space="preserve">
     <value>追踪类型</value>
@@ -10397,7 +10397,7 @@ Teleopti R&amp;D</value>
     <value>这里</value>
   </data>
   <data name="LengthOfActivity" xml:space="preserve">
-    <value>被选活动总的时长</value>
+    <value>所选活动的总时长</value>
   </data>
   <data name="PleaseChooseSDK" xml:space="preserve">
     <value>请选择SDK</value>
@@ -10424,7 +10424,7 @@ Teleopti R&amp;D</value>
     <value>正在尝试解决没有被排班的日期</value>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
-    <value>因为两个班次在不同日期，该调班申请被拒绝。</value>
+    <value>因为两个班次在不同日期，该调换班申请被拒绝。</value>
   </data>
   <data name="AddIntradayAbsence" xml:space="preserve">
     <value>添加当天缺勤</value>
@@ -10439,7 +10439,7 @@ Teleopti R&amp;D</value>
     <value>可对比的小组</value>
   </data>
   <data name="MyReportWeb" xml:space="preserve">
-    <value>我的报告</value>
+    <value>我的报表</value>
   </data>
   <data name="ActiveAgents" xml:space="preserve">
     <value>激活的座席代表</value>
@@ -10520,7 +10520,7 @@ Teleopti R&amp;D</value>
     <value>计算合法状态</value>
   </data>
   <data name="ChatTime" xml:space="preserve">
-    <value>Chat时间</value>
+    <value>Chat时长</value>
   </data>
   <data name="CompactView" xml:space="preserve">
     <value>紧凑视图</value>
@@ -10580,7 +10580,7 @@ Teleopti R&amp;D</value>
     <value>测量值</value>
   </data>
   <data name="MinimumTimePerWeekColon" xml:space="preserve">
-    <value>每周最少时间</value>
+    <value>每周最少工作时间：</value>
   </data>
   <data name="Mobile" xml:space="preserve">
     <value>移动端</value>
@@ -10598,7 +10598,7 @@ Teleopti R&amp;D</value>
     <value>移动活动为</value>
   </data>
   <data name="MyTradeCart" xml:space="preserve">
-    <value>我的调换小车</value>
+    <value>我的调换班小车：</value>
   </data>
   <data name="Navigate" xml:space="preserve">
     <value>导航</value>
@@ -10754,7 +10754,7 @@ Teleopti R&amp;D</value>
     <value>每个座席代表的状态时间</value>
   </data>
   <data name="TotalTaskTime" xml:space="preserve">
-    <value>总任务时间</value>
+    <value>合计任务处理时长</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>数值</value>
@@ -10797,5 +10797,279 @@ Teleopti R&amp;D</value>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">
     <value>您超出了每周工作时间限制</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>由缺勤返回工作</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>缺勤无法被提报</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>缺勤提报</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>可允许提报的缺勤</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>座席代表描述</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[名] [姓]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[姓] [名]</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>公告班次</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>我想要一个满足以下条件的班次</value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>您想要交换的日期需在开放周期内</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>有效的“到”日期应介于今天和交换日期之前</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>应用产品计划密钥</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>说明：　　　　　　　　　　　　　　　　  * 购买一个授权（联系信息请参见www.teleopti.com）                                                * 收到产品激活密钥文件（如通过Email）         * 保存产品计划密钥到本地磁盘                         * 在应用产品密钥前保存您当前的工作             * 使用下方的“浏览”找到残品密钥文件               * 应用残品密钥                                                     * 应用程序将会关闭                                             * 重新启动MyTime以得到新授权的on功能选项* 再次开启应用程序</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>应用到</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>返回工作的时间不能大于缺勤的结束时间</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>提前从缺勤返回工作在：</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>排行榜</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>使用</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>偏好无法被添加由于选定项已不可用</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} 不能早于 {1} </value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>无法获取偏好设定．</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>产品激活密钥 "{0}" 无法被访问
+错误详细信息: 
+{1}</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>班次包中无法找到有效的班次</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>尝试保存产品激活密钥到数据库中遇到一个问题.
+错误详细信息:
+{0}</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>电子邮件设定</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>请输入一个有效的文件名，并包含路径</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>根据当日时段筛选</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>根据开放小时筛选</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>结束时间</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>开始时间</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>全天缺勤设定</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>当日时段剩余时间问题</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>当日时段剩余时间</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>当日时段最低剩余时间</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>管理通知设定</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>多个</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>请启用至少一个徽章类型</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>您试图应用的产品激活密钥 "{0}" 已过期.</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>产品激活密钥 "{0}" 是无效的，它可能是伪造的</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>此产品激活密钥仅包含{0}个激活的座席代表，但当前有 {1}。 您必须获得一个产品密钥以包含足够激活的座席代表</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>此产品激活密钥仅包含{0} 席位。但当前有 {1}. 您必须获得一个产品密钥以包含足够席位。</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>产品激活密钥 "{0}" 是一个无效的 (xml) 格式
+错误详细信息:
+{1}</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>公告板中无可用座席代表</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>您还未应用产品激活密钥．请应用</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>通知设定</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>通知类型</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>选择产品激活密钥文件</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>已计划的</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>根据授权协议条款当前系统的授权到 "{0}" ，产品激活密钥将在{1}过期.
+
+产品激活密钥包含了 {2} 个激活的座席代表.
+
+产品激活密钥概要为 "{3}".
+这些选项已被激活:
+{4}</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>恭喜您！产品激活密钥已被应用．您现在是这个屡获殊荣的WFM解决方案的授权使用者。
+当前应用程序将被关闭。
+
+重要：
+为了获得全部的服务及Web应用程序功能，请让您的IT部门在服务器上执行“Restart Teleopti WFM” （开始菜单--&gt;Teleopti文件夹）</value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>您的产品激活密钥已经过期，请申请新的</value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>您的产品激活密钥是无效的，或已被更改，请申请一个新的</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>发布...</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>不能在一个缺勤日期发布一个公告</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>发布班表</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>发布班表为：</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>发布班表至：</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>级别</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>提报缺勤为</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>重置徽章</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>这将移除所有哦座席代表的所有徽章！如果您点击确定，徽章将被移除并不可恢复。您想要继续吗？</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>重置徽章失败，请稍后重试！</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>根据授权协议条款此系统授权到 "{0}" ，产品激活密钥将在{1}过期。
+
+产品激活密钥包含最多{2}席位。
+
+产品激活密钥概要为"{3}".
+这些选项已被激活:
+{4}</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>发送e-mail自：</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>设定从哪个栏位获取SMS电话号码：</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>调整班次以匹配班次包</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>班次交换申请有效至</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>调换班公告板</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>单个</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>开始时间应早于结束时间</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Teleopti产品激活密钥免责条款</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>测试发送到：</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>您当前使用的座席代表数 ({0}) 大于授权数 ({1}). 您现在有 {2} 天时间来减少座席代表或应用能够包含足够座席代表的产品激活密钥。</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>当批次排班及相同班次被选择时，优化步骤 "每日班次长度" 将不被执行。</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>正在更新缺勤为</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>产品激活密钥应用失败</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>查看徽章</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>查看徽章排行榜</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>您当前有{0}个激活的座席代表，但您所授权的座席代表数为{1}. 请尽快更新您的产品激活密钥</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>您即将到达您所授权的席位上限{0} 。请尽快更新您的产品密钥</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>您当前有{0}个激活的座席代表，但您所授权的座席代表数为{1}. 您必须升级您的产品激活密钥以继续</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>您使用了过多的席位，您所授权的席位数仅为{0}. 您必须升级您的产品激活密钥以继续</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>您的产品激活密钥有效期至{0}，请勿忘记及时更新</value>
   </data>
 </root>

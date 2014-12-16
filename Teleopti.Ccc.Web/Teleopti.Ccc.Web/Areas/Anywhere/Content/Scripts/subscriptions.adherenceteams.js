@@ -1,43 +1,46 @@
 define([
 				'jquery',
-				'messagebroker'
+				'ajax'
 ], function (
 			$,
-			messagebroker
+			ajax
 	) {
-
-	var startPromise;
-
-	var teamAdherenceSubscription = null;
-
+	var teamAdherencePoller = null;
 	var unsubscribeAdherence = function () {
-		if (!teamAdherenceSubscription)
+		if (!teamAdherencePoller)
 			return;
-		startPromise.done(function () {
-			messagebroker.unsubscribe(teamAdherenceSubscription);
-			teamAdherenceSubscription = null;
-		});
+		clearInterval(teamAdherencePoller);
+		teamAdherencePoller = null;
 	};
+
+	var mapAsNotification = function (data) {
+		return {
+			DomainId: data.Id,
+			BinaryData: JSON.stringify(data)
+		}
+	}
 
 	return {
 		start: function () {
-			startPromise = messagebroker.start();
-			return startPromise;
+			return $.Deferred().resolve();
 		},
 
-		subscribeAdherence: function (callback,businessUnitId, siteId, subscriptionDone) {
+		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
 			unsubscribeAdherence();
-			startPromise.done(function () {
-				teamAdherenceSubscription = messagebroker.subscribe({
-					domainType: 'TeamAdherenceMessage',
-					businessUnitId: businessUnitId,
-					domainReferenceId: siteId,
-					callback: callback
+
+			teamAdherencePoller = setInterval(function () {
+				ajax.ajax({
+					headers: { 'X-Business-Unit-Filter': businessUnitId },
+					url: "Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,
+					success: function (data) {
+						for (var i = 0; i < data.length; i++) {
+							callback(mapAsNotification(data[i]));
+						}
+					}
 				});
-				teamAdherenceSubscription.promise.done(function () {
-					subscriptionDone();
-				});
-			});
+			}, 5000);
+
+			subscriptionDone();
 		},
 
 		unsubscribeAdherence: unsubscribeAdherence

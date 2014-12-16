@@ -28,5 +28,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			result.Data.Should().Be(model);
 		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnPeriodFeedback()
+		{
+			var studentAvailabilityPeriodViewModelFactory =
+				MockRepository.GenerateMock<IStudentAvailabilityPeriodFeedbackViewModelFactory>();
+			var target = new StudentAvailabilityFeedbackController(null, studentAvailabilityPeriodViewModelFactory);
+			var model = new StudentAvailabilityPeriodFeedbackViewModel();
+
+			studentAvailabilityPeriodViewModelFactory.Stub(x => x.CreatePeriodFeedbackViewModel(DateOnly.Today)).Return(model);
+
+			target.PeriodFeedbackTask(DateOnly.Today);
+			var result = target.PeriodFeedbackCompleted(
+				target.AsyncManager.Parameters["model"] as StudentAvailabilityPeriodFeedbackViewModel,
+				Task.Factory.StartNew(() => { })
+				);
+
+			result.Data.Should().Be(model);
+		}
 	}
 }

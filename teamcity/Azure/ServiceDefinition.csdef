@@ -1,0 +1,49 @@
+<ServiceDefinition name="TeleoptiCCC"
+xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+
+  <WebRole name="TeleoptiCCC" vmsize="Medium">
+    <Sites>
+      <Site name="TeleoptiCCC" physicalDirectory="../../TeleoptiCCC">
+        <VirtualApplication name="SDK" physicalDirectory="../../SDK" />
+        <VirtualApplication name="Analytics" physicalDirectory="../../Analytics" />
+        <VirtualApplication name="Web" physicalDirectory="../../Web" />
+        <VirtualApplication name="Client" physicalDirectory="../../Client" />
+        <VirtualApplication name="RTA" physicalDirectory="../../Web" />
+		<VirtualApplication name="Broker" physicalDirectory="../../Broker" />
+		<VirtualApplication name="Broker.backplane" physicalDirectory="../../BrokerBackplane" />
+		<VirtualApplication name="AuthenticationBridge" physicalDirectory="../../AuthenticationBridge" />
+		<VirtualApplication name="WindowsIdentityProvider" physicalDirectory="../../WindowsIdentityProvider" />
+        <Bindings>
+          <Binding name="HttpsIn" endpointName="HttpsIn" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Certificates>
+      <Certificate name="fakedress.teleopticloud.com" storeLocation="LocalMachine" storeName="My"/>
+    </Certificates>
+    <Endpoints>
+  		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="fakedress.teleopticloud.com" />
+    </Endpoints>
+    <Imports>
+		<Import moduleName="Diagnostics" />
+		<Import moduleName="RemoteAccess" />
+		<Import moduleName="RemoteForwarder" />
+    </Imports>
+    <Startup>
+	  <Task commandLine="PatchDatabases.cmd" executionContext="elevated" taskType="simple" />
+	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="simple" />
+      <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="simple" />
+	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="simple" />
+	  <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
+	  <Task commandLine="RestartTeleopti.cmd" executionContext="elevated" taskType="background" />
+	</Startup>
+	<ConfigurationSettings>
+		<Setting name="TeleoptiDriveMap.BlobPath" />
+		<Setting name="TeleoptiDriveMap.AccountName" />
+		<Setting name="TeleoptiDriveMap.AccountKey" />
+		<Setting name="TeleoptiDriveMap.ContainerName" />
+		<Setting name="TeleoptiDriveMap.DataSourceName" />
+	</ConfigurationSettings>
+
+  </WebRole>
+</ServiceDefinition>

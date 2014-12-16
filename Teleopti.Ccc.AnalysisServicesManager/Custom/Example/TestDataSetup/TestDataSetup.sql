@@ -1,6 +1,7 @@
 --Only works for DEMO!
---USE TeleoptiAnalytics_Demo
+--Make it posssible to run it multiple times for testing
 --create custom schema
+SET NOCOUNT ON
 if not exists(select * from sys.schemas where Name = N'Custom')
 begin 
 exec('CREATE SCHEMA [Custom] AUTHORIZATION [dbo]')
@@ -9,22 +10,23 @@ GO
 
 --load agg data into mart
 TRUNCATE TABLE mart.fact_quality
-TRUNCATE TABLE mart.fact_agent_queue
-exec mart.etl_fact_agent_queue_load '2001-01-01','2014-12-31',6
-exec mart.etl_fact_quality_load '2001-01-01','2014-12-31',8
+TRUNCATE TABLE mart.fact_agent
+exec mart.etl_fact_agent_load '2014-02-01','2014-03-01',-2
+exec mart.etl_fact_quality_load '2014-02-01','2014-03-01',-2
 
 --fake some sales data
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[custom].[fact_sales]'))
 DROP VIEW [custom].[fact_sales]
 GO
+
 CREATE VIEW [custom].[fact_sales]
 AS
 SELECT
 	f.acd_login_id,
 	f.date_id,
-	sum(f.talk_time_s) as 'sales_value',
-	sum(f.answered_calls) as 'HITS'
-FROM mart.fact_agent_queue f
+	sum(f.ready_time_s) as 'sales_value',
+	sum(f.direct_incoming_calls) as 'HITS'
+FROM mart.fact_agent f
 GROUP BY f.acd_login_id,f.date_id
 GO
 
@@ -32,6 +34,7 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[custom].[WeightedMeasure]') AND type in (N'U'))
 DROP TABLE [custom].[WeightedMeasure]
 GO
+
 CREATE TABLE [custom].[WeightedMeasure](
 	[factor_name] nvarchar(200) NOT NULL,
 	[measure_name] nvarchar(200) NOT NULL,
@@ -44,12 +47,11 @@ ALTER TABLE [custom].[WeightedMeasure] ADD  CONSTRAINT [PK_WeightedMeasure] PRIM
 )
 GO
 
-
-
 --Custom QM "fact table" as a PIVOT view over specific Questionaries
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[custom].[v_fact_QM]'))
 DROP VIEW [custom].[v_fact_QM]
 GO
+
 CREATE VIEW [custom].[v_fact_QM]
 AS
 
@@ -201,9 +203,3 @@ SELECT
 		--maybe 3-10 fixed Measures/formulas were the formulas are stored in DB, only to be touched by the partner
 FROM custom.v_fact_measureGroup
 GO
-
-GO
-
-
-SELECT * FROM [custom].[fact_Sales]
-SELECT * FROM [custom].[v_fact_calculated_measures]

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -39,14 +38,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void ExportToScenarioResultView_Load(object sender, EventArgs e)
+		private void exportToScenarioResultViewLoad(object sender, EventArgs e)
 		{
 			_presenter.Initialize();
-			BackColor = ColorHelper.OfficeBlue;
-			// All this bloody blue I hate it
-			//groupBoxWarnings.BackColor = ColorHelper.OfficeBlue;
-			//groupBoxInfo.BackColor = ColorHelper.OfficeBlue;
-
 			Text = Resources.ExportToOtherScenario;
 			gridControl1.RightToLeft = RightToLeft;
 		}

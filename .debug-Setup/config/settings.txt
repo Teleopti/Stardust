@@ -39,4 +39,5 @@ $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 $(SDK_nhibConfPath)|c:\nhib
 $(DATASOURCE_NAME)|Teleopti WFM
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
+$(WEB_DEPLOY)|false
 _replace_|c:\InfraTest.ini

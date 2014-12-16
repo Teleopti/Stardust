@@ -1,4 +1,6 @@
 @ECHO OFF
+SET ROOTDIR=%~dp0
+SET ROOTDIR=%ROOTDIR:~0,-1%
  
 ::Get user input
 SET /P SQLServerInstance=name of SQL Server instance: 
@@ -24,17 +26,17 @@ SET Conn=-SU%SQLLogin% -SP%SQLPwd%
 GOTO Execute
 
 :Execute
-AnalysisServicesManager.exe -AS%ASServerInstance% -AD%DatabaseName% -SS%SQLServerInstance% -SD%DatabaseName% %Conn% -FPDropDatabase.xmla
+"%ROOTDIR%\AnalysisServicesManager.exe" -AS%ASServerInstance% -AD%DatabaseName% -SS%SQLServerInstance% -SD%DatabaseName% %Conn% -FPDropDatabase.xmla
 IF %ERRORLEVEL% NEQ 0 GOTO errorExucute
 ECHO.
 
-AnalysisServicesManager.exe -AS%ASServerInstance% -AD%DatabaseName% -SS%SQLServerInstance% -SD%DatabaseName% %Conn% -FPCreateDatabase.xmla
+"%ROOTDIR%\AnalysisServicesManager.exe" -AS%ASServerInstance% -AD%DatabaseName% -SS%SQLServerInstance% -SD%DatabaseName% %Conn% -FPCreateDatabase.xmla
 IF %ERRORLEVEL% NEQ 0 GOTO errorExucute
 ECHO.
 
 ::Wait for Cube to wake up
 ping 127.0.0.1 -n 3 -w 1000 > nul
-AnalysisServicesManager.exe -AS%ASServerInstance% -AD%DatabaseName% -SS%SQLServerInstance% -SD%DatabaseName% %Conn% -FPProcessDatabase.xmla
+"%ROOTDIR%\AnalysisServicesManager.exe" -AS%ASServerInstance% -AD%DatabaseName% -SS%SQLServerInstance% -SD%DatabaseName% %Conn% -FPProcessDatabase.xmla
 IF %ERRORLEVEL% NEQ 0 GOTO errorExucute
 ECHO.
 GOTO finished

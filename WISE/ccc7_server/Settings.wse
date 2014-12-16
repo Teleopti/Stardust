@@ -257,6 +257,18 @@ end
 item: Delete File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
 end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\ETL\Service\TeleoptiCCC7.nhib.xml
+end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\ETL\Tools\TeleoptiCCC7.nhib.xml
+end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml
+end
+item: Delete File
+  Pathname=%INSTALLDIR_TMP%TeleoptiCCC\Web\TeleoptiCCC7.nhib.xml
+end
 item: Remark
   Text===============================================
 end
@@ -328,11 +340,11 @@ item: Set Variable
 end
 item: Set Variable
   Variable=TELEOPTI_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Teleopti" displayName="Teleopti" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/Web/sso" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Teleopti" displayName="Teleopti" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/Web/sso" protocolHandler="RelativeOpenIdHandler" />
 end
 item: Set Variable
   Variable=WINDOWS_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/WindowsIdentityProvider/" protocolHandler="OpenIdHandler" />
+  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/WindowsIdentityProvider/" protocolHandler="RelativeOpenIdHandler" />
 end
 item: If/While Statement
   Variable=IDENTITY_PROVIDERS_TMP
@@ -543,22 +555,22 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(ETL_SERVICE_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\ETL\Service
+  New Text=$(ETL_SERVICE_nhibConfPath)|%INSTALLDIR_TMP%Datasources
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(ETL_TOOL_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\ETL\Tools
+  New Text=$(ETL_TOOL_nhibConfPath)|%INSTALLDIR_TMP%Datasources
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(SDK_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\SDK
+  New Text=$(SDK_nhibConfPath)|%INSTALLDIR_TMP%Datasources
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(AGENTPORTALWEB_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\Web
+  New Text=$(AGENTPORTALWEB_nhibConfPath)|%INSTALLDIR_TMP%Datasources
   Line Number=0
 end
 item: Insert Line into Text File
@@ -569,6 +581,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(ETLPM_BINDING_NAME)|%ETLPM_BINDING_NAME%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_DEPLOY)|true
   Line Number=0
 end
 item: Remark

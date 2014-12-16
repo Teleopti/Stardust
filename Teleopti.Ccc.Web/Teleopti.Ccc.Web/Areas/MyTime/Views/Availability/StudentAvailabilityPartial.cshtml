@@ -71,16 +71,23 @@
 	<div id="Student-availability-edit-form" class="well well-sm clearfix" data-bind="visible: AddAvailabilityFormVisible">
 		@Html.Partial("AddStudentAvailabilityPartial")
 	</div>
-	<div id="StudentAvailability-period" class="alert alert-info alert-student-availability">
+	<div id="StudentAvailability-period" class="alert alert-student-availability" data-bind="css : StudentAvailabilityFeedbackClass()">
 		@if (Model.StudentAvailabilityPeriod == null)
-  {
+		{
 			@String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
-  }
-  else
-  {
+		}
+		else
+		{
+			<!-- ko if: ToggleAvailabilityVerifyHours31654Enabled() -->
+			@Html.Raw(string.Format(Resources.YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot,
+					 "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>",
+					 "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>",
+					 "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+			@Html.Raw("</br>")
+			<!-- /ko -->
 			@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
 			@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
-  }
+		}
 	</div>
 	<div id="StudentAvailability-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 		<style>

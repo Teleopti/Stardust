@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()),
 													   TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
-			personAbsence.ModifyPersonAbsence(absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime, command.TrackedCommandInfo);
+			personAbsence.ModifyPersonAbsencePeriod(absenceTimePeriod, command.TrackedCommandInfo);
 			
 			
 		}

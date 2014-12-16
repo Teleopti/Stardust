@@ -19,6 +19,7 @@ namespace AnalysisServicesManager
 
 		public string SQLconnectionString {set; get; }
 		public string CustomFilePath { set; get; }
+		public string CurrentDir { set; get; }
 
         public CommandLineArgument(string[] argumentCollection)
         {
@@ -42,6 +43,9 @@ namespace AnalysisServicesManager
 
         private void readArguments(string[] argumentCollection)
         {
+			CurrentDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+	        CustomFilePath = CurrentDir + @"\Custom";
+
             foreach (string s in argumentCollection)
             {
                 string switchType = s.Substring(0, 3).ToUpper(CultureInfo.CurrentCulture);

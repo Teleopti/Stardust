@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Data.OleDb;
+using System.IO;
+using System.Linq;
 using Microsoft.AnalysisServices;
 using System.Data;
 using System.Data.SqlClient;
@@ -30,7 +32,7 @@ namespace AnalysisServicesManager
 		private string _ASconnectionString;
 		private string _databaseName;
 		private string _SQLconnectionString;
-		private const string CubeName = "Teleopti Analytics";
+		private const string _cubeName = "Teleopti Analytics";
 		private const string DataSourceViewName = "Teleopti Analytics";
 
         public CustomizeServerObject(CommandLineArgument argument)
@@ -42,17 +44,72 @@ namespace AnalysisServicesManager
 
 		public void ApplyCustomization(CommandLineArgument argument)
 		{
-			var folderName = argument.FilePath;
+			var folderOrFilePath = argument.CustomFilePath;
+			if(Directory.Exists(folderOrFilePath))
+			{
+				Console.WriteLine("Running custom scripts from folder : " + argument.CustomFilePath);
 
-			var parser = new ParseDataViewInfoFromXml();
-			var tableDefinitionList = parser.ExtractDataViewInfo(folderName + "\\01 Datasource\\DatasourceViewDefinition.xml");
-			CreateDataSourceView(tableDefinitionList);
+				var parser = new ParseDataViewInfoFromXml();
+				var tableDefinitionList = parser.ExtractDataViewInfo(folderOrFilePath + "\\01 Datasource\\DatasourceViewDefinition.xml");
+				CreateDataSourceView(tableDefinitionList);
 
-			var repository = new Repository(argument);
-			argument.CustomFilePath = folderName + "\\02 MeasureGroups\\MeasureGroup.xmla";
-			repository.ExecuteAnyXmla(argument);
-			argument.CustomFilePath = folderName + "\\02 MeasureGroups\\MeasureGroup2.xmla";
-			repository.ExecuteAnyXmla(argument);
+				ForEachFileInSubFolder(argument, folderOrFilePath + "\\02 Dimensions",true);
+				ForEachFileInSubFolder(argument, folderOrFilePath + "\\03 Measures",false);
+				ForEachFileInSubFolder(argument, folderOrFilePath + "\\04 Other",false);
+			}
+			else if (File.Exists(folderOrFilePath))
+			{
+				Console.WriteLine("Running single custom script : " + argument.CustomFilePath);
+				var repository = new Repository(argument);
+				repository.ExecuteAnyXmla(argument, folderOrFilePath);
+			}
+			else
+				Console.WriteLine("No custom action");
+
+		}
+
+		public string NameOfFile(FileInfo file)
+		{
+			var name = file.Name.Replace(".xmla", "");
+			var fileName = Convert.ToString(name);
+			return fileName;
+		}
+
+		public void ForEachFileInSubFolder(CommandLineArgument argument, string folder, bool isDimension)
+		{
+			var scriptsDirectoryInfo = new DirectoryInfo(folder);
+
+			var scriptFiles = scriptsDirectoryInfo.GetFiles("*.xmla", SearchOption.TopDirectoryOnly);
+
+			var applicableScriptFiles = from f in scriptFiles
+										let name = NameOfFile(f)
+										orderby name
+										select new { file = f };
+
+			foreach (var scriptFile in applicableScriptFiles)
+			{
+				var repository = new Repository(argument);
+				repository.ExecuteAnyXmla(argument, scriptFile.file.FullName);
+				if (isDimension)
+				{
+					AddCubeDimensionByFileName(Path.GetFileNameWithoutExtension(scriptFile.file.Name));
+				}
+			}
+		}
+
+		public void AddCubeDimensionByFileName(string dimensionName)
+		{
+			using (Server server = new Server())
+			{
+				server.Connect(_ASconnectionString);
+				Database targetDb = server.Databases.GetByName(_databaseName);
+				Cube cube = targetDb.Cubes.FindByName(_cubeName);
+
+				Dimension dim;
+				dim = targetDb.Dimensions.GetByName(dimensionName);
+				cube.Dimensions.Add(dim.Name, dim.Name, dim.Name);
+				cube.Update(UpdateOptions.ExpandFull);
+			}
 		}
 
 		public void CreateDataSourceView(IEnumerable<RelationalTable> tableDefinitionList)
@@ -85,9 +142,12 @@ namespace AnalysisServicesManager
 				dataTable.ExtendedProperties.Add("DbTableName", table.DbTableName );
 				dataTable.ExtendedProperties["DataSourceID"] = datasourceView.DataSourceID ;
 				dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
-				foreach(var con in table.ListOfConstraints )
+				if (table.ListOfConstraints!=null)
 				{
-					AddRelation(tempDataSourceView, con.FkTableName , con.FkColumName , con.PkTableName , con.PkColumName );
+					foreach (var con in table.ListOfConstraints)
+					{
+						AddRelation(tempDataSourceView, con.FkTableName, con.FkColumName, con.PkTableName, con.PkColumName);
+					}
 				}
 				tempDataSourceView.Update();
 			}

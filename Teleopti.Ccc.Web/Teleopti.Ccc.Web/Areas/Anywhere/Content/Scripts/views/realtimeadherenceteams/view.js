@@ -5,17 +5,30 @@
 		'views/realtimeadherenceteams/vm',
 		'subscriptions.adherenceteams',
 		'ajax',
-		'toggleQuerier'
+		'toggleQuerier',
+		'syncToggleQuerier',
+		'polling/adherenceteams'
 ], function (
 		ko,
 		justGageBinding,
 		view,
 		realTimeAdherenceViewModel,
-		subscriptions,
+		broker,
 		ajax,
-		toggleQuerier
+		toggleQuerier,
+		syncToggleQuerier,
+		poller
 	) {
 	var viewModel;
+
+	var toggledStateGetter = function() {
+		var subscription;
+		syncToggleQuerier('RTA_NoBroker_31237', {
+			enabled: function() { subscription = poller; },
+			disabled: function() { subscription = broker; }
+		});
+		return subscription;
+	}
 
 	return {
 		initialize: function (options) {
@@ -49,7 +62,7 @@
 			ajax.ajax({
 				url: "Sites/GetBusinessUnitId?siteId=" + siteId,
 				success: function (businessUnitId) {
-					subscriptions.subscribeAdherence(function (notification) {
+					toggledStateGetter().subscribeAdherence(function (notification) {
 						viewModel.updateFromNotification(notification);
 					},
 					businessUnitId,
@@ -93,6 +106,9 @@
 				}
 			};
 		},
+		dispose : function(options) {
+			toggledStateGetter().unsubscribeAdherence();
+		}
 	};
 });
 

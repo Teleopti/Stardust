@@ -37,7 +37,10 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.js?bust=<%=version%>"></script>
-		
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.js?bust=<%=version%>"></script>
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js?bust=<%=version%>"></script>
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.js?bust=<%=version%>"></script>
+
 		
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js?bust=<%=version%>"></script>
@@ -50,6 +53,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.DayViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.SelectionViewModel.Tests.js?bust=<%=version%>"></script>
+        <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.Tests.js?bust=<%=version%>"></script>
 
 	</head>
 	<body>

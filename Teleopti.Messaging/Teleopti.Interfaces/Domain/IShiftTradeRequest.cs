@@ -22,7 +22,12 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ReadOnlyCollection<IShiftTradeSwapDetail> ShiftTradeSwapDetails { get; }
 
-        /// <summary>
+		 /// <summary>
+		 /// reference this offer to shift trade request when it come from bulletin board
+		 /// </summary>
+	    IShiftExchangeOffer Offer { get; set; }
+
+	    /// <summary>
         /// Adds the shift trade swap detail.
         /// </summary>
         /// <param name="shiftTradeSwapDetail">The shift trade swap detail.</param>

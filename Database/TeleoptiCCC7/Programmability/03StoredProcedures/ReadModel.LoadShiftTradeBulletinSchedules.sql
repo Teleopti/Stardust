@@ -19,10 +19,10 @@ GO
 -- =============================================
 /*
 ReadModel.LoadShiftTradeBulletinSchedules
-'2014-11-28',
+'2014-12-12',
 '11610FE4-0130-4568-97DE-9B5E015B2564,b46a2588-8861-42e3-ab03-9b5e015b257c,47a3d4aa-3cd8-4235-a7eb-9b5e015b2560,88be31b0-9c70-4076-9743-9b5e015b2577,9d42c9bf-f766-473f-970c-9b5e015b2564,94329a0e-b3c5-4b1f-beb9-9b5e015b2564',
-'2014-11-28 10:00',
-'2014-11-28 17:00',
+'2014-12-12 10:00',
+'2014-12-12 17:00',
 0,20
 */
 CREATE PROCEDURE [ReadModel].[LoadShiftTradeBulletinSchedules]
@@ -52,6 +52,7 @@ AS
 		[Start] [datetime] NULL,
 		[End] [datetime] NULL,
 		[Model] [nvarchar](max) NOT NULL,
+		[ShiftExchangeOffer] [uniqueidentifier] NUll,
 		[MinStart] [datetime] NULL,
 		[Total] [int] NULL,
 		[RowNumber] [bigint] NULL
@@ -63,23 +64,28 @@ AS
 
 	DECLARE @BulletinResult table
 	(
-		Person uniqueidentifier
+		Person uniqueidentifier,
+		ShiftExchangeOffer uniqueidentifier
 	)
 
 	INSERT INTO @BulletinResult
 	SELECT
-		Person
+		Person,
+		Id
 	FROM (
 			--Shifts
   			SELECT DISTINCT
+				Id,
 				seo.Person,
 				[Date],
 				MyShiftStartDateTime,
-				MyShiftEndDateTime
+				MyShiftEndDateTime,
+				[Status]
 			FROM dbo.ShiftExchangeOffer seo
 			INNER JOIN @TempList t
 				ON t.Person = seo.Person
 			WHERE [Date] = @shiftTradeDate
+			AND [Status] = 0
 			AND @currentScheduleStart between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
 			AND @currentScheduleEnd between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
 			AND ValidTo >= CONVERT(date, GETUTCDATE())
@@ -100,11 +106,11 @@ AS
 				BelongsToDate,
 				Start,
 				[End],
-				Model
-			FROM ReadModel.PersonScheduleDay sd
-			INNER JOIN @BulletinResult br
-				ON br.Person = sd.PersonId
-			WHERE [BelongsToDate] = @shiftTradeDate
+				Model,
+				br.ShiftExchangeOffer
+			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br
+			WHERE br.Person = sd.PersonId
+			AND [BelongsToDate] = @shiftTradeDate
 			) a
 	)
 	INSERT INTO @output
@@ -117,6 +123,7 @@ AS
 		Start,
 		[End],
 		Model,
+		ShiftExchangeOffer,
 		(SELECT MIN(Start) FROM Ass)  As 'MinStart',
 		(SELECT COUNT(*) FROM Ass)  As 'Total',
 		RowNumber

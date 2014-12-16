@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
+			builder.RegisterModule<ScheduleOvertimeModule>();
 
 			//fattar inte fråga Roger
 			builder.RegisterModule(new RuleSetModule(_configuration, true));
@@ -334,17 +335,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 				: c.Resolve<EffectiveRestrictionCreator>())
 				.As<IEffectiveRestrictionCreator>();
 
-			builder.RegisterType<CalculateBestOvertime>().As<CalculateBestOvertime>();
-			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().As<CalculateBestOvertimeBeforeOrAfter>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_OvertimeBeforeShiftStart_30712)
-				? (ICalculateBestOvertime)c.Resolve<CalculateBestOvertimeBeforeOrAfter>()
-				: c.Resolve<CalculateBestOvertime>())
-				.As<ICalculateBestOvertime>();
-
-			builder.RegisterType<OvertimeDateTimePeriodExtractor>().As<IOvertimeDateTimePeriodExtractor>();
-			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().As<IOvertimeRelativeDifferenceCalculator>();
-
-
 			//IOvertimeRelativeDifferenceCalculator
 		}
 
@@ -459,6 +449,8 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
 			builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
+			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>();
+			//ITeamMatrixChecker
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>();
 			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();

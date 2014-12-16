@@ -5145,6 +5145,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddPersonalShift(new List<IScheduleDay> { e.SchedulePart }, e.Period);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_AddOvertime(object sender, ShiftEditorEventArgs e)

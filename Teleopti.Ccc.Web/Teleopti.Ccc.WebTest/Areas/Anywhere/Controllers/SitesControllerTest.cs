@@ -109,5 +109,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var result = target.GetBusinessUnitId(site.Id.ToString());
 			result.Data.Should().Be(bu.Id.GetValueOrDefault());
 		}
+
+		[Test]
+		public void ShouldGetAdherenceForAllSites()
+		{
+			var site1 = new Site("1");
+			site1.SetId(Guid.NewGuid());
+			var site2 = new Site("2");
+			site2.SetId(Guid.NewGuid());
+			var siteAdherenceAggregator = MockRepository.GenerateMock<ISiteAdherenceAggregator>();
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var target = new SitesController(siteRepository, null, siteAdherenceAggregator);
+			siteRepository.Stub(x => x.LoadAll()).Return(new[] {site1, site2});
+			siteAdherenceAggregator.Stub(x => x.Aggregate(site1.Id.Value)).Return(1);
+			siteAdherenceAggregator.Stub(x => x.Aggregate(site2.Id.Value)).Return(2);
+
+			var result = target.GetOutOfAdherenceForAllSites().Data as IEnumerable<SiteOutOfAdherence>;
+
+			result.Single(x => x.Id == site1.Id.Value.ToString()).OutOfAdherence.Should().Be(1);
+			result.Single(x => x.Id == site2.Id.Value.ToString()).OutOfAdherence.Should().Be(2);
+		}
 	}
 }

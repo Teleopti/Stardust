@@ -162,6 +162,9 @@ Try
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
+	#Remove *.nhib.xml files that still resides in public facing directories
+	$WebRootFolder="$directory\..\..\sitesroot\*"
+	get-childitem $WebRootFolder -include *.nhib.xml -recurse | foreach ($_) {remove-item $_.fullname}
 	
 	Remove-Item "$fullPathsettingsFile"
 	if (Test-Path "$fullPathsettingsFile") {
@@ -170,6 +173,8 @@ Try
 
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
+
+	$DatasourcesPath="$directory\..\Services\ETL\Service"
 
     #Set static config for all other params
     Add-Content "$fullPathsettingsFile" ""
@@ -186,10 +191,10 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(HTTPSGETENABLED)|true"
     Add-Content "$fullPathsettingsFile" "`$(SDK_SSL_MEX_BINDING)|mexHttpsBinding"
     Add-Content "$fullPathsettingsFile" "`$(RTA_SERVICE)|https://$DataSourceName.teleopticloud.com/RTA/TeleoptiRtaService.svc"
-    Add-Content "$fullPathsettingsFile" "`$(ETL_SERVICE_nhibConfPath)|"
-    Add-Content "$fullPathsettingsFile" "`$(ETL_TOOL_nhibConfPath)|"
-    Add-Content "$fullPathsettingsFile" "`$(SDK_nhibConfPath)| "
-    Add-Content "$fullPathsettingsFile" "`$(AGENTPORTALWEB_nhibConfPath)| "
+    Add-Content "$fullPathsettingsFile" "`$(ETL_SERVICE_nhibConfPath)|$DatasourcesPath"
+    Add-Content "$fullPathsettingsFile" "`$(ETL_TOOL_nhibConfPath)|$DatasourcesPath"
+    Add-Content "$fullPathsettingsFile" "`$(SDK_nhibConfPath)|$DatasourcesPath"
+    Add-Content "$fullPathsettingsFile" "`$(AGENTPORTALWEB_nhibConfPath)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
     Add-Content "$fullPathsettingsFile" "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
     Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
@@ -205,8 +210,10 @@ Try
 	Add-Content "$fullPathsettingsFile" "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
     Add-Content "$fullPathsettingsFile" "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
     Add-Content "$fullPathsettingsFile" "`$(WindowsClaimProvider)|"
-    Add-Content "$fullPathsettingsFile" "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"OpenIdHandler`" />"
+    Add-Content "$fullPathsettingsFile" "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"RelativeOpenIdHandler`" />"
     Add-Content "$fullPathsettingsFile" "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/AuthenticationBridge/"
+    Add-Content "$fullPathsettingsFile" "`$(WEB_DEPLOY)|true"
+	Add-Content "$fullPathsettingsFile" "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"
 
     $SupportTool = $SupportToolFolder + "\Teleopti.Support.Tool.exe"
     Set-Location $SupportToolFolder
@@ -239,8 +246,7 @@ Try
     Set-Location $ClickOnceSignPath
     $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
 
-    $ClientPath="$directory\..\..\sitesroot\5"
-    $MyTimePath="$directory\..\..\sitesroot\4"
+    $ClientPath="$directory\..\..\sitesroot\4"
     $pwd ="`"`""
 	
     $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $ClientPath","-p $pwd")
@@ -249,13 +255,6 @@ Try
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "CD $ClickOnceSignPath"
     Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
     &"$ClickOnceSignPath\SignAdminClient.bat"
-    
-    $cmdArgs = @("-s","-a Teleopti.Ccc.AgentPortal.application","-m Teleopti.Ccc.AgentPortal.exe.manifest","-u https://$DataSourceName.teleopticloud.com/MyTime/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $MyTimePath","-p $pwd")
-    Remove-Item "$ClickOnceSignPath\SignMyTime.bat"
-	Add-Content "$ClickOnceSignPath\SignMyTime.bat" "E:"
-	Add-Content "$ClickOnceSignPath\SignMyTime.bat" "CD $ClickOnceSignPath"
-    Add-Content "$ClickOnceSignPath\SignMyTime.bat" "$ClickOnceTool $cmdArgs"
-    &"$ClickOnceSignPath\SignMyTime.bat"
  
 }
 Catch [Exception]

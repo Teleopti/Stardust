@@ -382,10 +382,10 @@ IF %ERRORLEV% EQU 2 ECHO Analytics DB have a bad trunk or the database is out of
 IF %ERRORLEV% EQU 3 ECHO CCC7 DB have a bad trunk or the database is out of version sync
 IF %ERRORLEV% EQU 4 ECHO Agg DB have a bad trunk or the database is out of version sync
 IF %ERRORLEV% EQU 5 ECHO Could not create views in Mart: EXEC %TELEOPTIANALYTICS%.mart.sys_crossDatabaseView_load
-IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%LogFolder%\build.log"
+IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & MORE "%LogFolder%\build.log"
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
-IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%LogFolder%\build.log"
+IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & MORE "%LogFolder%\build.log"
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
 IF %ERRORLEV% EQU 19 ECHO %UsERDOMAIN%\%USERNAME% ^(teamcity agent^) lack permission to read directory "%Tfiles%" & exit /b %ERRORLEV%

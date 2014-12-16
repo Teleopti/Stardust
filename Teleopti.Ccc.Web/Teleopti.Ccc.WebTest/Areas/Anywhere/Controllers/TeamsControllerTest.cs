@@ -19,22 +19,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	[TestFixture]
 	public class TeamsControllerTest
 	{
+		private static Guid addNewTeamOnSite(ISite site, string teamName)
+		{
+			var teamId = Guid.NewGuid();
+			var team = new Team { Description = new Description(teamName) };
+			site.AddTeam(team);
+			team.SetId(teamId);
+			return teamId;
+		}
+
+		private static Guid addNewTeamOnSite(ISite site)
+		{
+			return addNewTeamOnSite(site, RandomName.Make());
+		}
+
+		private static Site addNewSiteToRepository(ISiteRepository siteRepository)
+		{
+			var site = new Site(" ");
+			site.SetId(Guid.NewGuid());
+			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
+			return site;
+		}
 		[Test]
 		public void ShouldGetTeamsForSite()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new TeamsController(siteRepository, null,null,null);
-			var site = new Site(" ");
-			site.SetId(Guid.NewGuid());
-			var team = new Team {Description = new Description("team1")};
-			team.SetId(Guid.NewGuid());
-			site.AddTeam(team);
-			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
-
+			var site = addNewSiteToRepository(siteRepository);
+			var team = addNewTeamOnSite(site, "team1");
+			var target = new TeamsController(siteRepository, null, null, null);
+			
 			var result = target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
 
 			result.Single().Name.Should().Be("team1");
-			result.Single().Id.Should().Be(team.Id.Value.ToString());
+			result.Single().Id.Should().Be(team.ToString());
 		}
 
 		[Test]
@@ -71,6 +88,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			result.Id.Should().Be(teamId.ToString());
 			result.OutOfAdherence.Should().Be(expected);
+		}
+
+		[Test]
+		public void ShouldGetOutOfAdherencerForAllTeams()
+		{
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var site = addNewSiteToRepository(siteRepository);
+			var teamId1 = addNewTeamOnSite(site);
+			var teamId2 = addNewTeamOnSite(site);
+			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();			
+			var target = new TeamsController(siteRepository, null, teamAdherenceAggregator, null);
+			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId1)).Return(1);
+			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId2)).Return(2);
+
+			var result = target.GetOutOfAdherenceForTeamsOnSite(site.Id.Value.ToString()).Data as IEnumerable<TeamOutOfAdherence>;
+
+			result.Single(x => x.Id == teamId1.ToString()).OutOfAdherence.Should().Be(1);
+			result.Single(x => x.Id == teamId2.ToString()).OutOfAdherence.Should().Be(2);
 		}
 
 

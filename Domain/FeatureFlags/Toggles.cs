@@ -61,6 +61,7 @@
 
 		Messaging_HttpSender_29205,
 
-		ETL_SpeedUpETL_30791
+		ETL_SpeedUpETL_30791,
+		RTA_NoBroker_31237
 	}
 }

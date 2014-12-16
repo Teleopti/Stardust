@@ -20,6 +20,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 
 	this.Date = "";
 
+	this.ContractTimeMinutes = ko.observable(0);
 	this.IsLoading = ko.observable(false);
 	this.AjaxError = ko.observable('');
 	this.AvailableTimeSpan = ko.observable('');

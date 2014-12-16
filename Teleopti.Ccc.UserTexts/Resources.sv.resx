@@ -11838,7 +11838,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Kan inte hämta önskemålsinställning.</value>
   </data>
   <data name="AbsenceReport" xml:space="preserve">
-    <value>Frånvarorapport</value>
+    <value>Frånvarorapportering</value>
   </data>
   <data name="AbsencesAvailableForReport" xml:space="preserve">
     <value>Frånvarotyper tillgängliga för rapportering</value>
@@ -11883,5 +11883,45 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
 * Lägg på produktaktiveringsnyckeln
 * Applikationen kommer att stängas ner
 * Starta om för att få tillgång till nylicensierade funktioner</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>Alla gruppmedlemmar måste vara upplästa</value>
+    <comment>All team members must be loaded</comment>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Frånvarotypen kan inte användas för rapportering. </value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Inga agenter är tillgängliga för anslagstavlan.</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Åter i arbete</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Uppdaterar frånvaro för</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>Tiden satt för åter i arbete kan inte vara senare än frånvarons sluttid</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>kom åter från frånvaron i förtid:</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Annonsera skift</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Erbjudandet om skiftbyte giltigt till</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>Jag söker ett skift som uppfyller följande villkor</value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>Datumet för skiftbytet måste vara i en öppen period!</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>Datumet skiftbyteserbjudandet är giltigt till måste vara mellan idag och dagen före bytesdagen!</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>Kan inte publicera ett erbjudande om skiftbyte för en dag med frånvaro.</value>
   </data>
 </root>

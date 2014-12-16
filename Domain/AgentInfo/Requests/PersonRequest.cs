@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
         }
 
-        public PersonRequest(IPerson person, IRequest request)
+		  public PersonRequest(IPerson person, IRequest request)
             : this()
         {
             InParameter.NotNull("person", person);
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             notifyOnStatusChange();
         }
 
-        private void moveToPending()
+	    private void moveToPending()
         {
             RequestState = new pendingPersonRequest(this);
         }

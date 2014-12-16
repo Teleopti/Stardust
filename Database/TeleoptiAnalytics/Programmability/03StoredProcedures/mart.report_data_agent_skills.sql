@@ -19,7 +19,6 @@ CREATE PROCEDURE [mart].[report_data_agent_skills]
 @agent_person_code uniqueidentifier,
 @skill_set nvarchar(max),
 @active bit,
-@time_zone_id int,
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
@@ -38,8 +37,7 @@ SET NOCOUNT ON;
 	skill_id int, 
 	skill_name nvarchar(50), 
 	has_skill int,
-	active int,
-	hide_time_zone bit
+	active int
 	)
 
 	CREATE TABLE #rights_agents (right_id int)
@@ -52,15 +50,6 @@ SET NOCOUNT ON;
 	/*Split string of skill id:s*/
 	INSERT INTO #skills
 	SELECT * FROM mart.SplitStringInt(@skill_set)
-
-	/* Check if time zone will be hidden (if only one exist then hide) */
-	DECLARE @hide_time_zone bit
-	IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC' AND to_be_deleted <> 1 ) < 2
-		SET @hide_time_zone = 1
-	ELSE
-		SET @hide_time_zone = 0
-
-
 
 	INSERT INTO #rights_agents
 	SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code)
@@ -80,6 +69,7 @@ SET NOCOUNT ON;
 		ON dp.team_id = t.right_id
 	INNER JOIN #rights_agents a
 		ON a.right_id = dp.person_id
+	WHERE @date_from between dp.valid_from_date_local and dp.valid_to_date_local
 
 	/*INCLUDE ALL SELECTED AGENTS AND SKILLS*/
 	INSERT #RESULT(person_id, skill_id)
@@ -90,8 +80,7 @@ SET NOCOUNT ON;
 
 	UPDATE #RESULT
 	SET person_name =dp.person_name,
-		skill_name  =ds.skill_name, 
-		hide_time_zone = @hide_time_zone
+		skill_name  =ds.skill_name
 	FROM #RESULT r
 	INNER JOIN  mart.dim_person dp
 		ON dp.person_id=r.person_id

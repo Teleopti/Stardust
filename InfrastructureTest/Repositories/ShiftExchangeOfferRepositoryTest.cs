@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class ShiftExchangeOfferRepositoryTest : RepositoryTest<ShiftExchangeOffer>
+	public class ShiftExchangeOfferRepositoryTest : RepositoryTest<IShiftExchangeOffer>
 	{
 		private IScheduleDay schedule;
 
@@ -23,18 +23,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(schedule.Scenario);
 		}
 
-		protected override ShiftExchangeOffer CreateAggregateWithCorrectBusinessUnit()
+		protected override IShiftExchangeOffer CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new ShiftExchangeOffer(schedule,
 				new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)), ShiftExchangeOfferStatus.Pending);
 		}
 
-		protected override void VerifyAggregateGraphProperties(ShiftExchangeOffer loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(IShiftExchangeOffer loadedAggregateFromDatabase)
 		{
 			loadedAggregateFromDatabase.Date.Should().Be.EqualTo(new DateOnly(2014, 10, 28));
 		}
 
-		protected override Repository<ShiftExchangeOffer> TestRepository(IUnitOfWork unitOfWork)
+		protected override Repository<IShiftExchangeOffer> TestRepository(IUnitOfWork unitOfWork)
 		{
 			return new ShiftExchangeOfferRepository(unitOfWork);
 		}

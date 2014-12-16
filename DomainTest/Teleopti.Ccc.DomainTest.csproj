@@ -576,6 +576,7 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
+    <Compile Include="Scheduling\Overtime\ScheduleOvertimeServiceTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\AllTeamMembersInSelectionSpecificationTest.cs" />
@@ -971,6 +972,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamDayOffSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamMatrixCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamScheduleSameStartTimeTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamSchedulingTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />

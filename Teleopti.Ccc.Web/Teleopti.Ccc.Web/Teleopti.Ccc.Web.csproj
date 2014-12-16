@@ -1003,6 +1003,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\polling\adherencetagents.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\polling\adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
@@ -1015,6 +1017,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\permissions.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\syncToggleQuerier.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\toggleQuerier.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
@@ -1027,6 +1030,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\polling\adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agentstate.js" />
@@ -1142,6 +1146,8 @@
     <Content Include="Areas\MyTime\Content\Images\silver.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeLeaderBoardReport.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js" />
@@ -1369,6 +1375,7 @@
     <Content Include="Areas\WFM\vendor\hammerjs\.gitignore" />
     <Content Include="Areas\WFM\vendor\hammerjs\hammer.js" />
     <Content Include="Areas\WFM\vendor\hammerjs\hammer.min.js" />
+    <Content Include="Areas\WFM\vendor\ui-bootstrap.min.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />

@@ -24,9 +24,10 @@ $(WEB_BROKER)|http://REPLACEME/TeleoptiCCC/Broker/
 $(WEB_BROKER_BACKPLANE)|http://REPLACEME/TeleoptiCCC/Broker.backplane/backplane
 $(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB
 $(RTA_SERVICE)|http://REPLACEME/TeleoptiCCC/RTA/TeleoptiRtaService.svc
-$(ETL_SERVICE_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\ETL\Service
-$(ETL_TOOL_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\ETL\Tools
-$(SDK_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK
-$(AGENTPORTALWEB_nhibConfPath)|c:\Program Files (x86)\Teleopti\TeleoptiCCC\Web
+$(ETL_SERVICE_nhibConfPath)|c:\Program Files (x86)\Teleopti\Datasources
+$(ETL_TOOL_nhibConfPath)|c:\Program Files (x86)\Teleopti\Datasources
+$(SDK_nhibConfPath)|c:\Program Files (x86)\Teleopti\Datasources
+$(AGENTPORTALWEB_nhibConfPath)|c:\Program Files (x86)\Teleopti\Datasources
 $(DATASOURCE_NAME)|Teleopti CCC
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
+$(WEB_DEPLOY)|true

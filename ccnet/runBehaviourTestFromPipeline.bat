@@ -63,6 +63,7 @@ ECHO $(MATRIX_WEB_SITE_URL)^|http://localhost:52500>>"%MySettings%"
 ECHO $(LocalWiki)^|http://localhost/TeleoptiCCC/LocalWiki/>>"%MySettings%"
 ECHO $(WEB_BROKER_FOR_WEB)^|http://localhost:52858>>"%MySettings%"
 ECHO $(WEB_BROKER)^|http://localhost:54903/>>"%MySettings%"
+ECHO $(WEB_DEPLOY)^|false>>"%MySettings%"
 ECHO $(WEB_BROKER_BACKPLANE)^|>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
 

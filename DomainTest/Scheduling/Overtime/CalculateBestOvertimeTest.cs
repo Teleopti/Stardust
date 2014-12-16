@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -30,8 +33,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	    private IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
 		private MinMax<TimeSpan> _overtimeSpecifiedPeriod;
 	    private DateTimePeriod _scheduleDayPeriod;
-
-        [SetUp]
+	    private IVisualLayer _visualLayer;
+	    private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
+	    private IList<IVisualLayer> _visualLayers;
+	    private IPerson _person;
+		
+		[SetUp]
         public void Setup()
         {
 			_mock = new MockRepository();
@@ -60,6 +67,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	        var scheduleDayStart = new DateTime(2014, 02, 26, 0, 0, 0, DateTimeKind.Utc);
 	        var scheduleDayEnd = scheduleDayStart.AddDays(1);
 			_scheduleDayPeriod = new DateTimePeriod(scheduleDayStart, scheduleDayEnd);
+	       
+	        _multiplicatorDefinitionSet = _mock.StrictMock<IMultiplicatorDefinitionSet>();
+			_person = PersonFactory.CreatePerson("name");
+			var activity = ActivityFactory.CreateActivity("activity");
+			_visualLayer = new VisualLayer(activity, new DateTimePeriod(_shiftEndingTime.AddMinutes(-15), _shiftEndingTime), activity, _person);
+			_visualLayers = new List<IVisualLayer> { _visualLayer };
+			
         }
 
         [Test]
@@ -70,6 +84,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 	        using (_mock.Record())
 	        {
+		        Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 		        Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 		        Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 		        Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -82,6 +99,55 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	        }   
         }
 
+		[Test]
+	    public void ShouldReturnEmptyListWhenLastLayerIsOvertime()
+	    {
+			var oneHourTimeSpan = new TimeSpan(0, 1, 0, 0);
+			var overtimeDurantion = new MinMax<TimeSpan>(oneHourTimeSpan, oneHourTimeSpan);
+			((VisualLayer) _visualLayer).DefinitionSet = _multiplicatorDefinitionSet;
+			_visualLayers = new List<IVisualLayer>{_visualLayer};
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+				Expect.Call(_multiplicatorDefinitionSet.MultiplicatorType).Return(MultiplicatorType.Overtime);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false);
+				Assert.AreEqual(0, result.Count);
+			}
+	    }
+
+		[Test]
+	    public void ShouldReturnEmptyListWhenLastLayerIsAbsence()
+	    {
+			var oneHourTimeSpan = new TimeSpan(0, 1, 0, 0);
+			var overtimeDurantion = new MinMax<TimeSpan>(oneHourTimeSpan, oneHourTimeSpan);
+		    var absence = AbsenceFactory.CreateAbsence("absence");
+			_visualLayer = new VisualLayer(absence, new DateTimePeriod(_shiftEndingTime.AddMinutes(-15), _shiftEndingTime), ActivityFactory.CreateActivity("activity"), _person);
+		    ((VisualLayer) _visualLayer).HighestPriorityAbsence = absence; 
+			_visualLayers = new List<IVisualLayer> { _visualLayer };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false);
+				Assert.AreEqual(0, result.Count);
+			}    
+	    }
+
         [Test]
         public void TestForOvertimeFrom0To1Hour()
         {
@@ -90,6 +156,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -111,6 +180,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -132,6 +204,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -153,6 +228,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -180,6 +258,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -207,6 +288,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -234,23 +318,50 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod).Repeat.AtLeastOnce();
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
-				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
 			}
 
 			using (_mock.Playback())
 			{
 				Assert.AreEqual(TimeSpan.FromMinutes(15), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).First().ElapsedTime());
-
-				overtimeLimitStartTimeSpan = new TimeSpan(0, 0, 30, 0);
-				overtimeLimitEndTimeSpan = new TimeSpan(0, 0, 30, 0);
-				overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
-
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
 			}  
         }
+
+		[Test]
+	    public void ShouldReturnEmptyListWhenNoDuration()
+	    {
+			var mappedData = new List<OvertimePeriodValue>();
+			mappedData.Add(new OvertimePeriodValue(_period1, -1));
+			mappedData.Add(new OvertimePeriodValue(_period2, 2));
+			mappedData.Add(new OvertimePeriodValue(_period3, -5.98));
+			mappedData.Add(new OvertimePeriodValue(_period4, -3.55));
+
+			var overtimeLimitStartTimeSpan = new TimeSpan(0, 0, 30, 0);
+			var overtimeLimitEndTimeSpan = new TimeSpan(0, 0, 30, 0);
+			var overtimeDurantion = new MinMax<TimeSpan>(overtimeLimitStartTimeSpan, overtimeLimitEndTimeSpan);
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
+			}      
+	    }
 
         [Test]
         public void ShouldOnlyPutOvertimeIfSumOfRelativeDifferencesIsNegative()
@@ -267,6 +378,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -294,6 +408,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -321,6 +438,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -346,6 +466,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
@@ -373,6 +496,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
+
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);

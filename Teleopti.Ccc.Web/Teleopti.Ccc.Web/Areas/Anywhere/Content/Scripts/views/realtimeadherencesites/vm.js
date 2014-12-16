@@ -5,9 +5,9 @@
 		'resources',
 		'amplify',
 		'navigation',
-		'subscriptions.adherencesites',
 		'ajax',
-		'toggleQuerier'
+		'toggleQuerier',
+		'subscriptions.adherencesites'
 ],
 	function (
 		ko,
@@ -16,16 +16,17 @@
 		resources,
 		amplify,
 		navigation,
-		subscriptions,
 		ajax,
-		toggleQuerier
+		toggleQuerier,
+		subscriptions
 	) {
-		return function () {
+		return function (toggledSubscription) {
 
 			var that = {};
 
-			that.resources = resources;
+			subscriptions = toggledSubscription || subscriptions;
 
+			that.resources = resources;
 			that.sites = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
 			that.agentStatesForMultipleSites = ko.observable();

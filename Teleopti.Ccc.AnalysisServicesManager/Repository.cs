@@ -19,19 +19,12 @@ namespace AnalysisServicesManager
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Xmla"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public void ExecuteAnyXmla(CommandLineArgument argument)
+		public void ExecuteAnyXmla(CommandLineArgument argument, string filePath)
         {
 			if (argument != null)
 			{
 				string preScript = "";
-				if (argument.CustomFilePath != null)
-				{
-					preScript = new FileHandler(argument.CustomFilePath).FileAsString;
-				}
-				else
-				{
-					preScript = new FileHandler(argument.FilePath).FileAsString;
-				}
+				preScript = new FileHandler(filePath).FileAsString;
 
 				string postScript = new CubeSourceFormat(preScript).FindAndReplace(argument);
 

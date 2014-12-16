@@ -96,11 +96,6 @@ function Config-Load {
                 }
                 
             }
-			Write-Host '--------config----------'
-			Write-Host 'BaseURL:: ' $global:BaseURL
-            Write-Host 'branch: ' $global:branch
-            Write-Host 'restToBaseline: '$global:resetToBaseline
-			Write-Host '------------------------'
         }
     }
 }
@@ -167,14 +162,7 @@ function Setup-PreReqs {
 		}
 		
 		It "should copy latest .zip-file from build server"{
-			if([string]::IsNullOrEmpty($global:version))
-			{
-				$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -branch "$global:branch"
-			}
-			else
-			{
-				$global:zipFile = Copy-VersionZippedMsi -workingFolder "$workingFolder" -version "$global:version"
-			}
+			$global:zipFile = Copy-VersionZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			Test-Path $global:zipFile | Should Be $True
 		}
 
@@ -270,7 +258,7 @@ function Test-SitesAndServicesOk {
 		# }
 
 		#It "Nhib file should exist and contain SQL Auth connection string" {
-		#	$nhibFile = "C:\Program Files (x86)\Teleopti\" + $global:PhysicalSubPath + "\SDK\TeleoptiCCC7.nhib.xml"
+		#	$nhibFile = "C:\Program Files (x86)\Teleopti\Datasources\TeleoptiCCC7.nhib.xml"
 		#	$computerName=(get-childitem -path env:computername).Value
 		#	$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
 		#	$nhibFile | Should Exist
@@ -296,14 +284,14 @@ function Add-CccLicenseToDemo
     if($global:Server -ne '')
     {
         
-		if ($global:branch -ne 'main')
-					{
-						$LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
-					}
-		else
-					{
-						$LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
-					}
+		$LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
+		if ($global:branch -eq 'main')
+			{
+				if ($global:version.StartsWith("8"))
+				{
+					$LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
+				}
+			}
 		
 		It "should insert a new license" {
             #$LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
@@ -328,6 +316,15 @@ function Add-CccLicenseToDemo
 
 #Main
 Config-Load
+			Write-Host '--------config----------'
+			Write-Host 'global:branch = ' $global:branch
+            Write-Host 'global:version = ' $global:version
+            Write-Host 'global:batName = ' $global:batName
+            Write-Host 'global:Server = ' $global:Server
+            Write-Host 'global:Db = ' $global:Db
+            Write-Host 'global:resetToBaseline = ' $global:resetToBaseline
+            Write-Host 'global:ToggleMode = ' $global:ToggleMode
+			Write-Host '------------------------'
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin

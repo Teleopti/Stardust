@@ -6,7 +6,9 @@
 		'subscriptions.adherencesites',
 		'errorview',
 		'ajax',
-		'resources'
+		'resources',
+		'syncToggleQuerier',
+		'polling/adherencesites'
 ], function (
 		ko,
 		justGageBinding,
@@ -15,13 +17,22 @@
 		subscriptions,
 		errorview,
 		ajax,
-		resources
+		resources,
+		syncToggleQuerier,
+		poller
 	) {
 
 	var viewModel;
-
+	var toggledStateGetter = function() {
+		var subscription;
+		syncToggleQuerier('RTA_NoBroker_31237', {
+			enabled: function () { subscription = poller; },
+			disabled: function () { subscription = subscriptions; }
+		});
+		return subscription;
+	}
 	return {
-		initialize: function (options) {
+		initialize: function(options) {
 			errorview.remove();
 
 			var menu = ko.contextFor($('nav')[0]).$data;
@@ -33,14 +44,16 @@
 			options.renderHtml(view);
 		},
 
-		display: function (options) {
-
-			viewModel = realTimeAdherenceViewModel();
+		display: function(options) {
+			viewModel = realTimeAdherenceViewModel(toggledStateGetter());
 			viewModel.BusinessUnitId(options.buid);
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			viewModel.load();
+		},
+		dispose: function (options) {
+			toggledStateGetter().unsubscribeAdherence();
 		}
 	};
 });

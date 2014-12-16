@@ -66,14 +66,14 @@
 			this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.btnOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.btnOk.BeforeTouchSize = new System.Drawing.Size(85, 24);
+			this.btnOk.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.btnOk.ForeColor = System.Drawing.Color.White;
 			this.btnOk.IsBackStageButton = false;
-			this.btnOk.Location = new System.Drawing.Point(604, 530);
+			this.btnOk.Location = new System.Drawing.Point(602, 527);
 			this.btnOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.btnOk.Size = new System.Drawing.Size(85, 24);
+			this.btnOk.Size = new System.Drawing.Size(87, 27);
 			this.btnOk.TabIndex = 6;
 			this.btnOk.Text = "xxOk";
 			this.btnOk.UseVisualStyle = true;
@@ -84,14 +84,14 @@
 			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.btnCancel.BeforeTouchSize = new System.Drawing.Size(85, 24);
+			this.btnCancel.BeforeTouchSize = new System.Drawing.Size(87, 27);
 			this.btnCancel.ForeColor = System.Drawing.Color.White;
 			this.btnCancel.IsBackStageButton = false;
-			this.btnCancel.Location = new System.Drawing.Point(724, 530);
+			this.btnCancel.Location = new System.Drawing.Point(722, 527);
 			this.btnCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.btnCancel.Size = new System.Drawing.Size(85, 24);
+			this.btnCancel.Size = new System.Drawing.Size(87, 27);
 			this.btnCancel.TabIndex = 2;
 			this.btnCancel.Text = "xxCancel";
 			this.btnCancel.UseVisualStyle = true;
@@ -334,21 +334,22 @@
 			// 
 			// spinningProgressControl1
 			// 
+			this.spinningProgressControl1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.spinningProgressControl1.AutoIncrementFrequency = 100D;
-			this.spinningProgressControl1.BehindTransitionSegmentIsActive = false;
-			this.spinningProgressControl1.Location = new System.Drawing.Point(5, 514);
-			this.spinningProgressControl1.Margin = new System.Windows.Forms.Padding(0);
+			this.spinningProgressControl1.Location = new System.Drawing.Point(15, 529);
+			this.spinningProgressControl1.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.spinningProgressControl1.MinimumSize = new System.Drawing.Size(20, 20);
 			this.spinningProgressControl1.Name = "spinningProgressControl1";
 			this.spinningProgressControl1.Size = new System.Drawing.Size(20, 20);
 			this.spinningProgressControl1.TabIndex = 25;
-			this.spinningProgressControl1.TransitionSegment = 8;
+			this.spinningProgressControl1.TransitionSegment = 4;
 			// 
 			// ExportToScenarioResultView
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BorderColor = System.Drawing.Color.Blue;
 			this.ClientSize = new System.Drawing.Size(819, 564);
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -360,8 +361,9 @@
 			this.Name = "ExportToScenarioResultView";
 			this.ShowIcon = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxExportToOtherScenario";
-			this.Load += new System.EventHandler(this.ExportToScenarioResultView_Load);
+			this.Load += new System.EventHandler(this.exportToScenarioResultViewLoad);
 			this.groupBoxInfo.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();

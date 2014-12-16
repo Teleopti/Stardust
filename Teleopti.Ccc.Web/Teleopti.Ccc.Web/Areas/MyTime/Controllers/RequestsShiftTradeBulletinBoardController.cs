@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private IRequestsShiftTradebulletinViewModelFactory _requestsShiftTradebulletinViewModelFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
+		//private IShiftExchangeOffer _shiftExchangeOffer;
 
-		public RequestsShiftTradeBulletinBoardController(IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory, ITimeFilterHelper timeFilterHelper)
+		public RequestsShiftTradeBulletinBoardController(IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory, ITimeFilterHelper timeFilterHelper)//, IShiftExchangeOffer shiftExchangeOffer)
 		{
 			_requestsShiftTradebulletinViewModelFactory = requestsShiftTradebulletinViewModelFactory;
 			_timeFilterHelper = timeFilterHelper;
+			//_shiftExchangeOffer = shiftExchangeOffer;
 		}
 
 		[UnitOfWorkAction]
@@ -41,6 +43,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			 return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
+		//[UnitOfWorkAction]
+		//[HttpPostOrPut]
+		//public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
+		//{
+		//	if (!ModelState.IsValid)
+		//	{
+		//		Response.TrySkipIisCustomErrors = true;
+		//		Response.StatusCode = 400;
+		//		return ModelState.ToJson();
+		//	}
+
+		//	form.PersonToId
+		//	return Json(_shiftExchangeOffer.MakeShiftTradeRequest(form));
+		//}
     }
 
 }

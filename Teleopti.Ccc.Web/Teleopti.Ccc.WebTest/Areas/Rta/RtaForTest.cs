@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using Autofac;
 using MbCache.Core;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Rta;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
@@ -20,62 +24,64 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public RtaForTest(FakeRtaDatabase database)
 		{
-			buildLikeAnIoC(null, database, null, null, null);
+			buildLikeAnIoC(null, database, null, null, null, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now)
 		{
-			buildLikeAnIoC(null, database, null, now, null);
+			buildLikeAnIoC(null, database, null, now, null, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher)
 		{
-			buildLikeAnIoC(null, database, eventPublisher, now, null);
+			buildLikeAnIoC(null, database, eventPublisher, now, null, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
 		{
-			buildLikeAnIoC(messageSender, database, null, now, null);
+			buildLikeAnIoC(messageSender, database, null, now, null, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
 		{
-			buildLikeAnIoC(null, database, eventPublisher, now, dataSource);
+			buildLikeAnIoC(null, database, eventPublisher, now, dataSource, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender, IEventPublisher eventPublisher)
 		{
-			buildLikeAnIoC(messageSender, database, eventPublisher, now, null);
+			buildLikeAnIoC(messageSender, database, eventPublisher, now, null, null);
 		}
 
-		private Web.Areas.Rta.Rta _rta;
-		private AdherenceAggregator _adherenceAggregator;
-		private FakeRtaDatabase _database;
-
-		private void buildLikeAnIoC(IMessageSender messageSender, FakeRtaDatabase database, IEventPublisher eventPublisher, INow now, ICurrentDataSource dataSource)
+		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender, IToggleManager toggles)
 		{
-			messageSender = messageSender ?? MockRepository.GenerateMock<IMessageSender>();
-			dataSource = dataSource ?? new FakeCurrentDatasource();
-			eventPublisher = eventPublisher ?? new FakeEventPublisher();
-			now = now ?? new Now();
+			buildLikeAnIoC(messageSender, database, null, now, null, toggles);
+		}
 
-			var eventPopulatingPublisher = new EventPopulatingPublisher(eventPublisher, new EventContextPopulator(null, dataSource, null));
-			var adherenceEventPublisher = new AdherenceEventPublisher(eventPopulatingPublisher);
+		private IRta _rta;
+		private IAdherenceAggregatorInitializor _initializor;
 
-			_adherenceAggregator = new AdherenceAggregator(messageSender, new OrganizationForPerson(new PersonOrganizationProvider(database)));
-			_database = database;
+		private void buildLikeAnIoC(IMessageSender messageSender, FakeRtaDatabase database, IEventPublisher eventPublisher, INow now, ICurrentDataSource dataSource, IToggleManager toggles)
+		{
+			toggles = toggles ?? new FakeToggleManager();
+			var builder = new ContainerBuilder();
+			var iocConfiguration = new IocConfiguration(new IocArgs(), toggles);
+			builder.RegisterModule(new CommonModule(iocConfiguration));
+			builder.RegisterModule(new RtaModule(iocConfiguration));
+			builder.RegisterInstance(messageSender ?? MockRepository.GenerateMock<IMessageSender>());
+			builder.RegisterInstance(dataSource ?? new FakeCurrentDatasource());
+			builder.RegisterInstance(eventPublisher ?? new FakeEventPublisher());
+			builder.RegisterInstance(now ?? new Now());
+			builder.RegisterInstance(database)
+				.As<IDatabaseReader>()
+				.As<IDatabaseWriter>()
+				.As<IPersonOrganizationReader>()
+				.As<IReadActualAgentStates>()
+				;
+			builder.RegisterInstance(new FakeMbCacheFactory()).As<IMbCacheFactory>();
+			var container = builder.Build();
 
-			_rta = new Web.Areas.Rta.Rta(
-				messageSender,
-				database,
-				database,
-				MockRepository.GenerateMock<IMbCacheFactory>(),
-				_adherenceAggregator,
-				new ShiftEventPublisher(eventPopulatingPublisher),
-				new ActivityEventPublisher(eventPopulatingPublisher, adherenceEventPublisher),
-				new StateEventPublisher(eventPopulatingPublisher, adherenceEventPublisher),
-				now,
-				new FakeConfigReader());
+			_rta = container.Resolve<IRta>();
+			_initializor = container.Resolve<IAdherenceAggregatorInitializor>();
 		}
 
 		public static RtaForTest Make()
@@ -97,11 +103,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			return new RtaForTest(database, new ThisIsNow("2014-10-20 8:00"));
 		}
-
-		//public static RtaForTest MakeBasedOnState(ExternalUserStateForTest state, FakeRtaDatabase database, IEventPublisher eventPublisher)
-		//{
-		//	return new RtaForTest(database, new ThisIsNow(state.Timestamp), eventPublisher);
-		//}
 
 		public int SaveState(ExternalUserStateInputModel input)
 		{
@@ -134,12 +135,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public void Initialize()
 		{
-			new AdherenceAggregatorInitializor(
-				_adherenceAggregator,
-				_database
-				).Initialize();
+			_initializor.Initialize();
 		}
 
 	}
-
 }

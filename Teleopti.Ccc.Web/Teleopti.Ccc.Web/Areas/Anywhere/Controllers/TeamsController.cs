@@ -62,6 +62,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWorkAction, HttpGet]
+		public virtual JsonResult GetOutOfAdherenceForTeamsOnSite(string siteId)
+		{
+			var teams = _siteRepository.Get(new Guid(siteId)).TeamCollection;
+			return Json(teams.Select(team =>
+				new TeamOutOfAdherence
+				{
+					Id = team.Id.Value.ToString(),
+					OutOfAdherence = _teamAdherenceAggregator.Aggregate(team.Id.Value)
+				}
+				), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
 		public JsonResult GetBusinessUnitId(string teamId)
 		{
 			var team = _teamRepository.Get(new Guid(teamId));
