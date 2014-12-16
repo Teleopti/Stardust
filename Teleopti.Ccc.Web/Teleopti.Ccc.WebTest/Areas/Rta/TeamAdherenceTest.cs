@@ -6,6 +6,7 @@ using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
+	[TestFixture]
 	public class TeamAdherenceTest
 	{
 		[Test]
