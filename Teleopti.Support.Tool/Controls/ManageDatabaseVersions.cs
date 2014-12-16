@@ -46,7 +46,7 @@ namespace Teleopti.Support.Tool.Controls
 		{
 			smoothLabelCurrentVersion.Text = _currentVersion.ToString();
 			_teleoptiCccBaseInstallFolder = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"C:\");
-			textBoxNHibFolder.Text = Directory.GetCurrentDirectory() + @"\..\TeleoptiCCC\SDK\";
+			textBoxNHibFolder.Text = Directory.GetCurrentDirectory() + @"\..\Datasources\";
 			RefreshDatabaseList();
 		}
 
