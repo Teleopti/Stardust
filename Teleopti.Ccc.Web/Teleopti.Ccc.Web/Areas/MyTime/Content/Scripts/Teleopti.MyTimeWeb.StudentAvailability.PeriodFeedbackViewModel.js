@@ -15,12 +15,11 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, weekViewModels) {
+Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
 	var self = this;
 
 	this.DayViewModels = dayViewModels;
-	this.WeekViewModels = weekViewModels;
-
+	
 	this.LoadFeedback = function () {
 		ajax.Ajax({
 			url: "StudentAvailabilityFeedback/PeriodFeedback",

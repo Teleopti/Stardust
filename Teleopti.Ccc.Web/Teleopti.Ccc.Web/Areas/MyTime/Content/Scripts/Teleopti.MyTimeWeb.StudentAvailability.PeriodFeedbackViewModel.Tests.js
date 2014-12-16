@@ -1,25 +1,11 @@
 ﻿$(document).ready(function () {
-
-	function mockToggle () {
-		var ajax = {
-			Ajax: function (options) {
-				if (options.url == "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AvailabilityVerifyHours_31654") {
-					options.success({
-						IsEnabled: true
-					});
-				}
-			}
-		}
-		return ajax;
-	}
-
 	module("Teleopti.MyTimeWeb.StudentAvailability period feedback view model");
 
 	test("should summarize possible contract time", function () {
 		var viewModelDay1 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
 		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(
-			null, [viewModelDay1, viewModelDay2], null, []);
+			null, [viewModelDay1, viewModelDay2], null);
 		viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
 		viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
@@ -32,7 +18,7 @@
 
 	test("should format possible contract time", function () {
 		var viewModelDay = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
-		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(null, [viewModelDay], null, []);
+		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(null, [viewModelDay], null);
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
 
@@ -54,7 +40,7 @@
 			}
 		};
 
-		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(ajax, [], "2012-06-11", []);
+		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(ajax, [], "2012-06-11");
 
 		viewModel.LoadFeedback();
 
