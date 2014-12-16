@@ -123,16 +123,9 @@ Scenario: Should show valid shift for days with availability setting
 	When I view student availability
 	Then I should see valid shift for my availability on '2014-05-03'
 
-@ignore
-Scenario: Should update summary hours for availability setting
+@OnlyRunIfEnabled('MyTimeWeb_AvailabilityVerifyHours_31654')
+Scenario:  Should display period feedback 
 	Given I am a student agent
 	And the current time is '2014-05-02 08:00'
-	And I have a shift bag with one shift 8 to 17 and Lunch 12 to 13 and one shift 9 to 19 and Lunch 12 to 14
-	When I view student availability for '2014-05-02'
-	And I input a student availability with
-	| Field      | Value      |
-	| Date       | 2014-05-03 |
-	| Start time | 07:00      |
-	| End time   | 18:00      |
-	And I applied the inputted availability
-	Then I should see summary of hours are updated
+	When I view student availability
+	Then I should see the period feedback

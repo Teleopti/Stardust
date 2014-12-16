@@ -116,6 +116,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists(contractTimeSeletor);
 		}
 
+		[Then(@"I should see the period feedback")]
+		public void ThenIShouldSeeThePeriodFeedback()
+		{
+			const string periodfeedback = ".alert-student-availability:contains('Du borde arbeta minst')";
+			Browser.Interactions.AssertExistsUsingJQuery(periodfeedback);
+		}
+
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{
 			calendarShouldRangeBetween(displayedPeriod.StartDate, displayedPeriod.EndDate);
