@@ -117,6 +117,9 @@
     </Compile>
     <Compile Include="Sign.cs" />
     <None Include="Teleopti.Ccc.snk" />
+    <None Include="TemporaryKey.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
