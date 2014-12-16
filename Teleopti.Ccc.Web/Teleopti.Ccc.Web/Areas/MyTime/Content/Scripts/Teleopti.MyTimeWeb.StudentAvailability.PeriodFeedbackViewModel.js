@@ -82,7 +82,8 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	});
 
 	this.StudentAvailabilityFeedbackClass = ko.computed(function () {
-		return self.StudentAvailabilityTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
+		return self.ToggleAvailabilityVerifyHours31654Enabled() && self.StudentAvailabilityTimeIsOutOfRange()
+			? 'alert-danger' : 'alert-info';
 	}).extend({ throttle: 1 });
 
 };
