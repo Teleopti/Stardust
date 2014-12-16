@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -16,16 +15,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		IHandleEvent<PersonShiftEndEvent>
 	{
 		private readonly IAdherenceDetailsReadModelPersister _persister;
-		private readonly ILiteTransactionSyncronization _transactionSync;
-		private readonly IMessageSender _messageSender;
-		private readonly INotificationCreator _notificationCreator;
 
-		public AdherenceDetailsReadModelUpdater(IAdherenceDetailsReadModelPersister persister, ILiteTransactionSyncronization transactionSync, IMessageSender messageSender, INotificationCreator notificationCreator)
+		public AdherenceDetailsReadModelUpdater(IAdherenceDetailsReadModelPersister persister)
 		{
 			_persister = persister;
-			_transactionSync = transactionSync;
-			_messageSender = messageSender;
-			_notificationCreator = notificationCreator;
 		}
 
 		[ReadModelUnitOfWork]
@@ -93,7 +86,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					}
 				};
 				_persister.Add(model);
-				sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId);
 				return;
 			}
 
@@ -125,16 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					readModel.Model.ActualEndTime = calculateActualEndTimeBeforeActivityEnds(readModel, @event);
 				}
 				_persister.Update(readModel);
-				sendMessageAfterReadModelUpdated(@event.Datasource, @event.BusinessUnitId);
 			}
-		}
-
-		private void sendMessageAfterReadModelUpdated(string datasource, Guid businessUnitId)
-		{
-			if (_transactionSync != null)
-				_transactionSync.OnSuccessfulTransaction(() =>
-					_messageSender.Send(_notificationCreator.Create(datasource, businessUnitId,
-						typeof (AdherenceDetailsReadModelUpdatedMessage).Name)));
 		}
 
 		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,

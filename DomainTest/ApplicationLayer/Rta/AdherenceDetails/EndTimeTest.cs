@@ -1,11 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistFirstOutOfAdherenceStateChangeInLastActivity()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistFirstOutOfAdherenceStateChangeInLastActivity_WhenOnlyOutOfAdherenceStates()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistLastStateChangeThatCausedOutOfAdherence()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -130,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldNotSetActualEndTimeIfActualStartNeverOccured()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonActivityStartEvent
@@ -175,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistLastStateChangeAfterShiftEnds()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonStateChangedEvent
 			{
@@ -224,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistShiftEndTime()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{

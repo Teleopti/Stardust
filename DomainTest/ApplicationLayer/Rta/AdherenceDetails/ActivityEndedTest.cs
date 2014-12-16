@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 7:00".Utc(), InAdherence = true });
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
 			target.Handle(new PersonShiftEndEvent { PersonId = personId, ShiftStartTime = "2014-11-17 8:00".Utc(), ShiftEndTime = "2014-11-17 9:00".Utc() });
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc(), InAdherence = true });
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, null, null);
+			var target = new AdherenceDetailsReadModelUpdater(persister);
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = true });
 			target.Handle(new PersonShiftEndEvent { PersonId = personId,ShiftStartTime = "2014-11-17 8:00".Utc(), ShiftEndTime = "2014-11-17 9:00".Utc() });
 			persister.Details.First().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
