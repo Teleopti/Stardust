@@ -27,6 +27,10 @@
 		<SQL_AUTH_STRING>Data Source=$(Computername);Integrated Security=SSPI</SQL_AUTH_STRING>
 		<ETL_SERVICE_nhibConfPath>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETL_SERVICE_nhibConfPath>		
 	</PropertyGroup>
+
+	<ItemGroup>
+		<CustomCubeCustomers Include="$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\Custom\$(Customer)\**\*.*"/>
+	</ItemGroup>
 	
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.AsyncExec"/>
@@ -65,10 +69,7 @@
 	</Target>
 
 	<Target Name="ProcessCustomCube">
-		<ItemGroup>
-			<CustomCubeCustomers Include="$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\Custom\$(Customer)\**\*.*"/>
-		</ItemGroup>
-		
+
         <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
 		<Copy
             SourceFiles="@(CustomCubeCustomers)"

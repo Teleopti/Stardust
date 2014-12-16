@@ -23,14 +23,16 @@ SET MSBUILD=C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:ProcessStandardCube "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
 
 CHOICE /M "Test Custom cube?"
-IF %ERRORLEVEL% EQU 1 (
-	SET /P Customer=Customer: 
-	"%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration%;Customer=%Customer% /target:ProcessCustomCube "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
-	)
-)
+IF %ERRORLEVEL% EQU 1 call :Custom
 
 ::CleanUp?
 CHOICE /M "CleanUp?"
 IF %ERRORLEVEL% EQU 1 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration% /target:CleanUp "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
 
 PAUSE
+goto :eof
+
+:Custom
+SET /P Customer=Customer: 
+"%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration%;Customer=%Customer% /target:ProcessCustomCube "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
+exit /b
