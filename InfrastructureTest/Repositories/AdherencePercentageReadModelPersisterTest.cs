@@ -1,14 +1,9 @@
 ﻿using System;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -155,66 +150,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		T Target { get; set; }
 	}
 
-	// several attributes would be nice for reuse but nunit cant guarantee exection order
-	public class ReadModelReadWriteTestAttribute : Attribute, ITestAction
+	public class ReadModelReadWriteTestAttribute : IoCTestAttribute
 	{
-		private IContainer _container;
-
-		public void BeforeTest(TestDetails testDetails)
+		protected override void BeforeTest2()
 		{
-			buildContainer();
-			startReadModelUnitOfWork();
-			resolveAndSetTarget(testDetails);
+			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvokation();
 		}
 
-		public void AfterTest(TestDetails testDetails)
+		protected override void AfterTest2()
 		{
-			endReadModelUnitOfWork();
-			disposeContainer();
+			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvokation(null);
 		}
-
-		public ActionTargets Targets { get { return ActionTargets.Test; } }
-
-
-		private void buildContainer()
-		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-
-			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
-
-			_container = builder.Build();
-
-			var dataSource = _container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-			_container.Resolve<MutableFakeCurrentTeleoptiPrincipal>()
-				.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("_", dataSource, null, null), null));
-		}
-
-		private void disposeContainer()
-		{
-			_container.Dispose();
-		}
-
-		private void startReadModelUnitOfWork()
-		{
-			var aspect = _container.Resolve<IReadModelUnitOfWorkAspect>();
-			aspect.OnBeforeInvokation();
-		}
-
-		private void endReadModelUnitOfWork()
-		{
-			var aspect = _container.Resolve<IReadModelUnitOfWorkAspect>();
-			aspect.OnAfterInvokation(null);
-		}
-
-		private void resolveAndSetTarget(TestDetails testDetails)
-		{
-			dynamic fixture = testDetails.Fixture;
-			var targetType = testDetails.Fixture.GetType().GetProperty("Target").PropertyType;
-			// "as dynamic" is actually required, even though resharper says differently
-			fixture.Target = _container.Resolve(targetType) as dynamic;
-		}
-
 	}
+
 }
 
