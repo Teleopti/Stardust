@@ -15,9 +15,10 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
+Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, toggleEnabled) {
 	var self = this;
 
+	this.ToggleAvailabilityVerifyHours31654Enabled = ko.observable(toggleEnabled);
 	this.DayViewModels = dayViewModels;
 	
 	this.LoadFeedback = function () {
@@ -45,10 +46,12 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
 		$.each(self.DayViewModels, function (index, day) {
-			var value = day.PossibleContractTimeMinutesLower();
-			if (value)
-			    sum += parseInt(value);
-			sum += day.ContractTimeMinutes();
+			if (day.HasAvailability()) {
+				var value = day.PossibleContractTimeMinutesLower();
+				if (value)
+					sum += parseInt(value);
+				sum += day.ContractTimeMinutes();
+			}
 		});
 		return sum;
 	});
@@ -56,10 +59,12 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
 		var sum = 0;
 		$.each(self.DayViewModels, function (index, day) {
-			var value = day.PossibleContractTimeMinutesUpper();
-			if (value)
-			    sum += parseInt(value);
-			sum += day.ContractTimeMinutes();
+			if (day.HasAvailability()) {
+				var value = day.PossibleContractTimeMinutesUpper();
+				if (value)
+					sum += parseInt(value);
+				sum += day.ContractTimeMinutes();
+			}
 		});
 		return sum;
 	});
@@ -73,12 +78,11 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	});
 
 	this.StudentAvailabilityTimeIsOutOfRange = ko.computed(function () {
-		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes()
-			|| self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
+		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes();
 	});
 
 	this.StudentAvailabilityFeedbackClass = ko.computed(function () {
-	    return self.StudentAvailabilityTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
+		return self.StudentAvailabilityTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
 	}).extend({ throttle: 1 });
 
 };

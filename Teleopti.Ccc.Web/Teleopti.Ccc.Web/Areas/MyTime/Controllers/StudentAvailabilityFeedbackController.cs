@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_studentAvailabilityPeriodFeedbackViewModelFactory = studentAvailabilityPeriodFeedbackViewModelFactory;
 		}
 
-
 		[HttpGet]
 		[AsyncTask]
 		public void FeedbackAsync(DateOnly date) { }
@@ -37,26 +36,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
+		[HttpGet]
+		[AsyncTask]
+		public void PeriodFeedbackAsync(DateOnly date) { }
 
+		[UnitOfWork]
+		public virtual void PeriodFeedbackTask(DateOnly date)
+		{
+			AsyncManager.Parameters["model"] = _studentAvailabilityPeriodFeedbackViewModelFactory.CreatePeriodFeedbackViewModel(date);
+		}
 
-
-		//[HttpGet]
-		//[AsyncTask]
-		//public void PeriodFeedbackAsync(DateOnly date) { }
-
-		//[UnitOfWork]
-		//public virtual void PeriodFeedbackTask(DateOnly date)
-		//{
-		//	AsyncManager.Parameters["model"] = _studentAvailabilityPeriodFeedbackViewModelFactory.CreatePeriodFeedbackViewModel(date);
-		//}
-
-		//public JsonResult PeriodFeedbackCompleted(StudentAvailabilityPeriodFeedbackViewModel model, Task task)
-		//{
-		//	task.Wait();
-		//	return Json(model, JsonRequestBehavior.AllowGet);
-		//}
-
-
+		public JsonResult PeriodFeedbackCompleted(StudentAvailabilityPeriodFeedbackViewModel model, Task task)
+		{
+			task.Wait();
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
 	}
-
 }
