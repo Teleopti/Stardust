@@ -219,6 +219,7 @@
     <Compile Include="Autofac\EqualNumberOfCategoryFairnessModuleTest.cs" />
     <Compile Include="Autofac\IntraIntervalOptimizationServiceModuleTest.cs" />
     <Compile Include="Autofac\IntraIntervalSolverServiceModuleTest.cs" />
+    <Compile Include="Autofac\ScheduleOvertimeModuleTest.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModuleTest.cs" />
     <Compile Include="Budgeting\BudgetPermissionServiceTest.cs" />
     <Compile Include="Budgeting\BudgetDayGapFillerTest.cs" />
