@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
@@ -6,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytic
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -16,13 +16,22 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	public class AnalyticsScheduleRepositoryTest //: DatabaseTest
 	{
 		private IAnalyticsScheduleRepository _target;
-		private const string datasourceName = "Teleopti CCC Agg: Default log object";
+		private AnalyticsDataFactory analyticsDataFactory;
+		private UtcAndCetTimeZones _timeZones;
+		private ExistingDatasources _datasource;
+		private const int businessUnitId = 12;
+
 		[SetUp]
 		public void Setup()
 		{
+			
 			_target = StatisticRepositoryFactory.CreateAnalytics();
 			SetupFixtureForAssembly.BeginTest();
 			AnalyticsRunner.DropAndCreateTestProcedures();
+
+			analyticsDataFactory = new AnalyticsDataFactory();
+			_timeZones = new UtcAndCetTimeZones();
+			_datasource = new ExistingDatasources(_timeZones);
 		}
 
 		[TearDown]
@@ -34,15 +43,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldLoadActivities()
 		{
-			var timeZones = new UtcAndCetTimeZones();
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) { BusinessUnitId = 12 };
-			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
-			
-			Data.Apply(activityPhone);
-
-			var act = new Activity(activityPhone.Activity, datasource, businessUnit.BusinessUnitId) { ActivityId = 22 };
+			var act = new Activity(22, Guid.NewGuid(), "Phone", Color.LightGreen, _datasource, businessUnitId);
 
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Persist();
@@ -54,15 +55,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldLoadAbsences()
 		{
-			var timeZones = new UtcAndCetTimeZones();
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) { BusinessUnitId = 12 };
-			var absenceFree = new AbsenceConfigurable { Name = "Freee", Color = "LightGreen" };
-
-			Data.Apply(absenceFree);
-
-			var abs = new Absence(absenceFree.Absence, datasource, businessUnit.BusinessUnitId) { AbsenceId = 22 };
+			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
 
 			analyticsDataFactory.Setup(abs);
 			analyticsDataFactory.Persist();
@@ -74,16 +67,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldLoadScenariosAndCategories()
 		{
-			var timeZones = new UtcAndCetTimeZones();
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			var datasource = new ExistingDatasources(timeZones);
-			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
-			var scen = new ScenarioConfigurable {BusinessUnit = "BusinessUnit", EnableReporting = true,Name = "Default"};
-			Data.Apply(cat);
-			Data.Apply(scen);
-
-			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(12,TestState.BusinessUnit.Id.GetValueOrDefault()));
-			analyticsDataFactory.Setup(new ShiftCategory(cat.ShiftCategory, datasource,12));
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(1, Guid.NewGuid()));
+			analyticsDataFactory.Setup(new ShiftCategory(1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
 			analyticsDataFactory.Persist();
 
 			var scens = _target.Scenarios();
@@ -96,68 +81,42 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldLoadDates()
 		{
-			var analyticsDataFactory = new AnalyticsDataFactory();
 			var weekDates = new CurrentWeekDates();
 			analyticsDataFactory.Setup(weekDates);
 			analyticsDataFactory.Persist();
-			var dates = _target.LoadDimDates();
+			var dates = _target.Dates();
 			dates.Count.Should().Be.EqualTo(7);
 		}
 
 		[Test]
 		public void ShouldLoadPerson()
 		{
-			var timeZones = new UtcAndCetTimeZones();
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			var datasource = new ExistingDatasources(timeZones);
-			var personPeriod = Guid.NewGuid();
-			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) { BusinessUnitId = 12 };
-			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
+			var personPeriodCode = Guid.NewGuid();
+			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), personPeriodCode, "Ashley", "Andeen", new DateTime(2010, 1, 1),
+										new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
-			analyticsDataFactory.Setup(businessUnit);
-			analyticsDataFactory.Setup(new Person(person, datasource, 10, new DateTime(2010, 1, 1),
-										new DateTime(2059, 12, 31), 0, -2, 20, TestState.BusinessUnit.Id.GetValueOrDefault(),
-										false, timeZones.UtcTimeZoneId, personPeriod));
 			analyticsDataFactory.Persist();
-			var pers = _target.PersonAndBusinessUnit(personPeriod);
+			var pers = _target.PersonAndBusinessUnit(personPeriodCode);
 			pers.Should().Not.Be.Null();
 			pers.PersonId.Should().Be.EqualTo(10);
-			pers.BusinessUnitId.Should().Be.EqualTo(20);
+			pers.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
 		}
 
 		[Test]
 		public void ShouldInsertFactSchedule()
 		{
-			var timeZones = new UtcAndCetTimeZones();
-			var analyticsDataFactory = new AnalyticsDataFactory();
 			var dates = new CurrentWeekDates();
 			var intervals = new QuarterOfAnHourInterval();
-			var datasource = new ExistingDatasources(timeZones);
-			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
-			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
-										new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
-										false, timeZones.UtcTimeZoneId));
-			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource) {BusinessUnitId = 12};
-			var activityEmpty = new ActivityConfigurable { Name = "Empty" };
-			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
-			var scenario = new ScenarioConfigurable() { BusinessUnit = TestState.BusinessUnit.Name, Name = "Deff" };
-			Data.Apply(scenario);
-			var martScenario = Scenario.DefaultScenarioFor(10, TestState.BusinessUnit.Id.GetValueOrDefault());
-			analyticsDataFactory.Setup(martScenario);
-			Data.Apply(activityEmpty);
-			Data.Apply(activityPhone);
 
-			var actEmpty = new Activity(activityEmpty.Activity, datasource,businessUnit.BusinessUnitId) {ActivityId = -1};
-			var act = new Activity(activityPhone.Activity, datasource,businessUnit.BusinessUnitId){ActivityId = 22};
+			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
+										new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
 
-			var absenceEmpty = new AbsenceConfigurable { Name = "Empty" };
-			var absenceFree = new AbsenceConfigurable { Name = "Free", Color = "LightGreen" };
-			Data.Apply(absenceEmpty);
-			Data.Apply(absenceFree);
-
-			var absEmpty = new Absence(absenceEmpty.Absence, datasource, businessUnit.BusinessUnitId) {AbsenceId = -1};
-			var abs = new Absence(absenceFree.Absence, datasource, businessUnit.BusinessUnitId);
-
+			var actEmpty = new Activity(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
+			var act = new Activity(22, Guid.NewGuid(), "Phone", Color.LightGreen, _datasource, businessUnitId);
+			
+			var absEmpty = new Absence(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
+			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
 			 
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Setup(actEmpty);
@@ -165,7 +124,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(absEmpty);
 			analyticsDataFactory.Setup(dates);
 			analyticsDataFactory.Setup(intervals);
-			analyticsDataFactory.Setup(businessUnit);
 
 			analyticsDataFactory.Persist();
 			var datePart = new AnalyticsFactScheduleDate
@@ -210,8 +168,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var personPart = new AnalyticsFactSchedulePerson
 			{
-				BusinessUnitId = 12,
-				PersonId = 0
+				BusinessUnitId = businessUnitId,
+				PersonId = 10
 			};
 
 
@@ -220,9 +178,31 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 
 		[Test]
+		public void ShouldInsertFactScheduleDayCount()
+		{
+			analyticsDataFactory.Setup(new CurrentWeekDates());
+			analyticsDataFactory.Setup(new Person(5, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
+										new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
+
+			
+
+			var dayCount = new AnalyticsFactScheduleDayCount
+			{
+				ShiftStartDateLocalId = 1,
+				PersonId = 5,
+				ScenarioId = 10,
+				StartTime = DateTime.Now,
+				ShiftCategoryId = -1,
+				DayOffName = 
+			};
+			_target.PersistFactScheduleDayCountRow(dayCount);
+		}
+
+		[Test]
 		public void ScholdBeAbleToDeleteADay()
 		{
-			_target.DeleteFactSchedule(1, 1);
+			_target.DeleteFactSchedule(1, 1, 1);
 		}
 
 	}

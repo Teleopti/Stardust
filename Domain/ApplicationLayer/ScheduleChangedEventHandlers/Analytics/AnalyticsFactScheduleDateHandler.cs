@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public bool MapDateId(DateOnly date, out int dateId)
 		{
-			var dimDateList = _analyticsScheduleRepository.LoadDimDates();
+			var dimDateList = _analyticsScheduleRepository.Dates();
 			var datePair = dimDateList.SingleOrDefault(x => x.Key == date);
 			var noDateIdFound = new KeyValuePair<DateOnly, int>();
 			if (datePair.Key == noDateIdFound.Key)

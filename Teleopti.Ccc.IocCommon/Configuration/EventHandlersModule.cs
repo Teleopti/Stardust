@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.For<AnalyticsScheduleRepository>()
 				.CacheMethod(x => x.Absences())
 				.CacheMethod(x => x.Activities())
-				.CacheMethod(x => x.LoadDimDates())
+				.CacheMethod(x => x.Dates())
 				.CacheMethod(x => x.Scenarios())
 				.CacheMethod(x => x.ShiftCategories())
 				.As<IAnalyticsScheduleRepository>();

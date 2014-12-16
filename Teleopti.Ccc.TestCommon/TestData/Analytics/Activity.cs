@@ -2,25 +2,35 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class Activity : IAnalyticsDataSetup, IActivityData
 	{
-		private readonly IActivity _activity;
+		private readonly int _id;
+		private readonly string _name;
+		private readonly Guid _code;
+		private readonly Color _displayColor;
 		private readonly IDatasourceData _datasource;
 		private readonly int _businessUnitId;
 
-		public Activity(IActivity activity,
+		public Activity(
+			int id,
+			Guid code,
+			string name,
+			Color displayColor,
 			IDatasourceData datasource,
 			int businessUnitId)
 		{
-			_activity = activity;
+			_id = id;
+			_code = code;
+			_name = name;
+			_displayColor = displayColor;
 			_datasource = datasource;
 			_businessUnitId = businessUnitId;
 		}
@@ -29,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = dim_activity.CreateTable())
 			{
-				table.AddActivity(ActivityId, _activity.Id.GetValueOrDefault(), _activity.Name, _activity.DisplayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId,false);
+				table.AddActivity(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
 
 				Bulk.Insert(connection, table);
 
@@ -38,7 +48,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		public IEnumerable<DataRow> Rows { get; private set; }
-		public int ActivityId { get; set; }
-
 	}
 }

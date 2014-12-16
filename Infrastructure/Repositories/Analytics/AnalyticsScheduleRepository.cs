@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
-		
+
 		public void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart,
 			IAnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart)
 		{
@@ -72,21 +72,47 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
 		{
-			
-		}
-
-		public void DeleteFactSchedule(int date, int personId)
-		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				uow.Session().CreateSQLQuery(@"mart.etl_fact_schedule_delete @shift_startdate_id=:DateId, @personId=:PersonId")
-					.SetInt32("DateId", date)
-					.SetInt32("PersonId", personId)
+				uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_fact_schedule_day_count_insert] 
+						@shift_startdate_local_id=:LocalId,
+						@person_id=:PersonId, 
+						@business_unit_id=:BusinessUnitId,
+						@scenario_id=:ScenarioId,
+						@starttime=:Starttime, 
+						@shift_category_id=:ShiftCategoryId, 
+						@absence_id=:AbsenceId, 
+						@day_off_name=:DayOffName, 
+						@day_off_short_name=:DayOffShortName")
+					.SetInt32("LocalId", dayCount.ShiftStartDateLocalId)
+					.SetInt32("PersonId", dayCount.PersonId)
+					.SetInt32("BusinessUnitId", dayCount.BusinessUnitId)
+					.SetInt32("ScenarioId", dayCount.ScenarioId)
+					.SetDateTime("Starttime", dayCount.StartTime)
+					.SetInt32("ShiftCategoryId", dayCount.ShiftCategoryId)
+					.SetInt32("AbsenceId", dayCount.AbsenceId)
+					.SetString("DayOffName", dayCount.DayOffName)
+					.SetString("DayOffShortName", dayCount.DayOffShortName)
+
+
 					.ExecuteUpdate();
 			}
 		}
 
-		public IList<KeyValuePair<DateOnly, int>> LoadDimDates()
+		public void DeleteFactSchedule(int date, int personId, int scenarioId)
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				uow.Session().CreateSQLQuery(@"mart.etl_fact_schedule_delete @shift_startdate_local_id=:DateId, @person_id=:PersonId, @scenario_id=:ScenarioId")
+					.SetInt32("DateId", date)
+					.SetInt32("PersonId", personId)
+					.SetInt32("ScenarioId", scenarioId)
+					.ExecuteUpdate();
+			}
+		}
+
+		public IList<KeyValuePair<DateOnly, int>> Dates()
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -102,7 +128,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			{
 				return uow.Session().CreateSQLQuery(
 					"select activity_id ActivityId, activity_code ActivityCode, in_paid_time InPaidTime, in_ready_time InReadyTime from mart.dim_activity")
-					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsActivity)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
 					.SetReadOnly(true)
 					.List<IAnalyticsActivity>();
 			}
@@ -170,13 +196,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public int BusinessUnitId { get; set; }
 	}
 
-	public class AnalyticsGeneric :IAnalyticsGeneric
+	public class AnalyticsGeneric : IAnalyticsGeneric
 	{
 		public int Id { get; set; }
 		public Guid Code { get; set; }
 	}
 
-	public class AnalyticsActivity: IAnalyticsActivity
+	public class AnalyticsActivity : IAnalyticsActivity
 	{
 		public int ActivityId { get; set; }
 		public Guid ActivityCode { get; set; }
@@ -200,8 +226,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			for (int i = 0; i < tuple.Length; i++)
 			{
 				string alias = aliases[i];
-				if (alias == "date_date") key = new DateOnly((DateTime) tuple[i]);
-				else id = (int) tuple[i];
+				if (alias == "date_date") key = new DateOnly((DateTime)tuple[i]);
+				else id = (int)tuple[i];
 			}
 
 			return new KeyValuePair<DateOnly, int>(key, id);

@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	public interface IShiftCategoryData
 	{
 		IEnumerable<DataRow> Rows { get; }
-		int ShiftCategoryId { get;  } 
 	}
 }

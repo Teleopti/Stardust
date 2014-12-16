@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
@@ -12,15 +13,25 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class Absence : IAnalyticsDataSetup, IAbsenceData
 	{
-		private readonly IAbsence _absence;
+		private readonly int _id;
+		private readonly Guid _code;
+		private readonly string _name;
+		private readonly Color _displayColor;
 		private readonly IDatasourceData _datasource;
 		private readonly int _businessUnitId;
 
-		public Absence(IAbsence absence,
+		public Absence(
+			int id,
+			Guid code,
+			string name,
+			Color displayColor,
 			IDatasourceData datasource,
 			int businessUnitId)
 		{
-			_absence = absence;
+			_id = id;
+			_code = code;
+			_name = name;
+			_displayColor = displayColor;
 			_datasource = datasource;
 			_businessUnitId = businessUnitId;
 		}
@@ -29,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = dim_absence.CreateTable())
 			{
-				table.AddAbsence(AbsenceId, _absence.Id.GetValueOrDefault(), _absence.Name, _absence.DisplayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
+				table.AddAbsence(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
 
 				Bulk.Insert(connection, table);
 
@@ -38,7 +49,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		public IEnumerable<DataRow> Rows { get; private set; }
-		public int AbsenceId { get; set; }
 
 	}
 }

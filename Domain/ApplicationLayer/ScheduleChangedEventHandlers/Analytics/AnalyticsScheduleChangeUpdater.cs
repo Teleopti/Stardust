@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				}
 
 				var personPart = _analyticsFactSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
-				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId);
+				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 
 				if (scheduleDay.NotScheduled)
 					continue;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						if (datePart == null)
 						{
 							intervalStart = shiftEnd;
-							_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId);
+							_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 							break;
 						}
 						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );

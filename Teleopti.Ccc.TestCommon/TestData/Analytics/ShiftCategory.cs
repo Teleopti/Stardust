@@ -2,25 +2,35 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class ShiftCategory : IAnalyticsDataSetup, IShiftCategoryData
 	{
-		private readonly IShiftCategory _shiftCategory;
+		private readonly int _id;
+		private readonly Guid _code;
+		private readonly string _name;
+		private readonly Color _displayColor;
 		private readonly IDatasourceData _datasource;
 		private readonly int _businessUnitId;
 
-		public ShiftCategory(IShiftCategory shiftCategory,
+		public ShiftCategory(
+			int id,
+			Guid code,
+			string name,
+			Color displayColor,
 			IDatasourceData datasource,
 			int businessUnitId)
 		{
-			_shiftCategory = shiftCategory;
+			_id = id;
+			_code = code;
+			_name = name;
+			_displayColor = displayColor;
 			_datasource = datasource;
 			_businessUnitId = businessUnitId;
 		}
@@ -29,7 +39,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = dim_shift_category.CreateTable())
 			{
-				table.AddShiftCategory(ShiftCategoryId, _shiftCategory.Id.GetValueOrDefault(), _shiftCategory.Description.Name, _shiftCategory.Description.ShortName, _shiftCategory.DisplayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
+				table.AddShiftCategory(_id, _code, _name, _name, _displayColor.ToArgb(), _businessUnitId,
+					_datasource.RaptorDefaultDatasourceId, false);
 
 				Bulk.Insert(connection, table);
 
@@ -38,6 +49,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		public IEnumerable<DataRow> Rows { get; private set; }
-		public int ShiftCategoryId { get; set; }
 	}
 }

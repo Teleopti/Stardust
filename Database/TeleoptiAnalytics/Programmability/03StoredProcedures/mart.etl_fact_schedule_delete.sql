@@ -9,15 +9,22 @@ GO
 -- Ola 2014-12-10 And on just one person ;)
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_delete]
-	@shift_startdate_id int,
-	@personId int
+	@shift_startdate_local_id int,
+	@person_id int,
+	@scenario_id int
 AS
 BEGIN
 	SET NOCOUNT ON;
 	
 	DELETE FROM mart.fact_schedule
-	WHERE shift_startdate_id = @shift_startdate_id
-	AND person_id = @personId
+	WHERE shift_startdate_local_id = @shift_startdate_local_id
+	AND person_id = @person_id
+	AND scenario_id = @scenario_id
+
+	DELETE FROM mart.fact_schedule_day_count
+	WHERE shift_startdate_local_id = @shift_startdate_local_id
+	AND person_id = @person_id
+	AND scenario_id = @scenario_id
 END
 
 GO
