@@ -5,13 +5,22 @@ define([
 	$,
 	ajax
 	) {
-	var siteAdherencePoller = null;
+	var agentAdherencePollers = [];
 	var unsubscribeAdherence = function () {
-		if (!siteAdherencePoller)
+		if (!agentAdherencePollers)
 			return;
-		clearInterval(siteAdherencePoller);
-		siteAdherencePoller = null;
+		for (var i = 0; i < agentAdherencePollers.length; i++) {
+			clearInterval(agentAdherencePollers[i]);
+		}
+
+		clearPollers();
 	};
+
+	var clearPollers = function() {
+		while (agentAdherencePollers.length > 0) {
+			agentAdherencePollers.pop();
+		};
+	}
 
 	var mapAsNotification = function (data) {
 		return {
@@ -25,7 +34,7 @@ define([
 		},
 
 		subscribeAdherence: function (callback, businessUnitId, teamId, subscriptionDone) {
-			siteAdherencePoller = setInterval(function () {
+			var agentPoller = setInterval(function () {
 				ajax.ajax({
 					headers: { 'X-Business-Unit-Filter': businessUnitId },
 					url: "Agents/GetStates?teamId=" + teamId,
@@ -33,8 +42,9 @@ define([
 						callback(mapAsNotification(data));
 					}
 				});
-			}, 1000);
+			}, 2000);
 
+			agentAdherencePollers.push(agentPoller);
 			subscriptionDone();
 		},
 

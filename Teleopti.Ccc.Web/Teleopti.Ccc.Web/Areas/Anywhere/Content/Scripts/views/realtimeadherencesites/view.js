@@ -51,6 +51,9 @@
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			viewModel.load();
+		},
+		dispose: function (options) {
+			toggledStateGetter().unsubscribeAdherence();
 		}
 	};
 });

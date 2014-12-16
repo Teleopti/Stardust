@@ -5,12 +5,12 @@ define([
 	$,
 	ajax
 	) {
-	var siteAdherencePoller = null;
+	var teamAdherencePoller = null;
 	var unsubscribeAdherence = function () {
-		if (!siteAdherencePoller)
+		if (!teamAdherencePoller)
 			return;
-		clearInterval(siteAdherencePoller);
-		siteAdherencePoller = null;
+		clearInterval(teamAdherencePoller);
+		teamAdherencePoller = null;
 	};
 
 	var mapAsNotification = function (data) {
@@ -28,7 +28,7 @@ define([
 		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
 			unsubscribeAdherence();
 
-			siteAdherencePoller = setInterval(function() {
+			teamAdherencePoller = setInterval(function() {
 				ajax.ajax({
 					headers: { 'X-Business-Unit-Filter': businessUnitId },
 					url: "Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,

@@ -153,6 +153,9 @@
 				}
 			});
 
+		},
+		dispose: function (options) {
+			toggledStateGetter().unsubscribeAdherence();
 		}
 	};
 });
