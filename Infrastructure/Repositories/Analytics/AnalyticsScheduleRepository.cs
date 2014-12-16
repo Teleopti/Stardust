@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						@shift_category_id=:ShiftCategoryId, 
 						@absence_id=:AbsenceId, 
 						@day_off_name=:DayOffName, 
-						@day_off_short_name=:DayOffShortName")
+						@day_off_shortname=:DayOffShortName")
 					.SetInt32("LocalId", dayCount.ShiftStartDateLocalId)
 					.SetInt32("PersonId", dayCount.PersonId)
 					.SetInt32("BusinessUnitId", dayCount.BusinessUnitId)
@@ -94,7 +95,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetInt32("AbsenceId", dayCount.AbsenceId)
 					.SetString("DayOffName", dayCount.DayOffName)
 					.SetString("DayOffShortName", dayCount.DayOffShortName)
-
 
 					.ExecuteUpdate();
 			}

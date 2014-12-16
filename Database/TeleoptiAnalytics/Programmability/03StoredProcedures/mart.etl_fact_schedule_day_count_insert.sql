@@ -40,14 +40,12 @@ BEGIN
 			   ([day_off_name]
 			   ,[display_color]
 			   ,[business_unit_id]
-			   ,[datasource_update_date]
 			   ,[display_color_html]
 			   ,[day_off_shortname])
 		 VALUES
 			   (@day_off_name
 			   ,-8355712
 			   ,@business_unit_id
-			   ,GETDATE()
 			   ,'#808080'
 			   ,@day_off_shortname)
 

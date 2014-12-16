@@ -27,7 +27,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			
 			_target = StatisticRepositoryFactory.CreateAnalytics();
 			SetupFixtureForAssembly.BeginTest();
-			AnalyticsRunner.DropAndCreateTestProcedures();
 
 			analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
@@ -105,9 +104,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldInsertFactSchedule()
 		{
-			var dates = new CurrentWeekDates();
-			var intervals = new QuarterOfAnHourInterval();
-
 			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
 										new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
@@ -122,8 +118,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(actEmpty);
 			analyticsDataFactory.Setup(abs);
 			analyticsDataFactory.Setup(absEmpty);
-			analyticsDataFactory.Setup(dates);
-			analyticsDataFactory.Setup(intervals);
+			analyticsDataFactory.Setup(new CurrentWeekDates());
+			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
 
 			analyticsDataFactory.Persist();
 			var datePart = new AnalyticsFactScheduleDate
@@ -184,8 +180,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(new Person(5, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
 										new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(10, Guid.NewGuid()));
-
-			
+			analyticsDataFactory.Setup(new ShiftCategory(-1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId));
+			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.NewGuid(), "DayOff", _datasource, businessUnitId));
+			analyticsDataFactory.Persist();
 
 			var dayCount = new AnalyticsFactScheduleDayCount
 			{
@@ -194,7 +192,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ScenarioId = 10,
 				StartTime = DateTime.Now,
 				ShiftCategoryId = -1,
-				DayOffName = 
+				DayOffName = null,
+				DayOffShortName = null,
+				AbsenceId = 22,
+				BusinessUnitId = businessUnitId
 			};
 			_target.PersistFactScheduleDayCountRow(dayCount);
 		}
