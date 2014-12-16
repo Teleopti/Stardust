@@ -1,16 +1,13 @@
 ﻿..\..\..\sitesroot\1\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
-..\..\..\sitesroot\1\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\sitesroot\1\web.config,BuildArtifacts\SDKWeb.config
 ..\..\..\sitesroot\2\web.config,BuildArtifacts\AnalyticsWeb.config
 ..\..\..\sitesroot\3\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\..\..\sitesroot\3\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
-..\..\..\sitesroot\3\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\sitesroot\3\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\sitesroot\4\Teleopti.Ccc.AgentPortal.exe.config.deploy,BuildArtifacts\AppMytime.config
 ..\..\..\sitesroot\5\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
 ..\..\..\sitesroot\6\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\..\..\sitesroot\6\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
-..\..\..\sitesroot\6\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\sitesroot\6\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\sitesroot\7\web.config,BuildArtifacts\BrokerWeb.config
 ..\..\..\sitesroot\8\web.config,BuildArtifacts\BrokerBackplaneWeb.config
