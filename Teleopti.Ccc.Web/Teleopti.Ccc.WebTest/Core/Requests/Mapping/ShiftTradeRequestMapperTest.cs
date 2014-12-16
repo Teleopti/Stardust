@@ -4,10 +4,12 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -21,16 +23,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPersonRepository personRepository;
 		private ShiftTradeRequestForm form;
 		private IPerson loggedOnUser;
+		private ILoggedOnUser _loggedOnUserSvc;
 		private IShiftExchangeOfferRepository _shiftExchangeOfferRepository;
 
 		[SetUp]
 		public void Setup()
 		{
-			loggedOnUser = new Person();
+			loggedOnUser = PersonFactory.CreatePerson();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			var loggedOnUserSvc = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnUserSvc = MockRepository.GenerateMock<ILoggedOnUser>();
 			_shiftExchangeOfferRepository = MockRepository.GenerateMock<IShiftExchangeOfferRepository>();
-			target = new ShiftTradeRequestMapper(personRepository, loggedOnUserSvc, _shiftExchangeOfferRepository);
+			target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _shiftExchangeOfferRepository);
 			form = new ShiftTradeRequestForm
 				{
 					Message = "sdfsdfsdf",
@@ -38,8 +41,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 					PersonToId = Guid.NewGuid(),
 					Dates = new List<DateOnly> { new DateOnly(2000, 1, 1) }
 				};
-			personRepository.Expect(x => x.Get(form.PersonToId)).Return(new Person());
-			loggedOnUserSvc.Expect(x => x.CurrentUser()).Return(loggedOnUser);
+			personRepository.Stub(x => x.Get(form.PersonToId)).Return(new Person());
+			_loggedOnUserSvc.Stub(x => x.CurrentUser()).Return(loggedOnUser);
 		}
 
 		[Test]
@@ -50,6 +53,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			var res = target.Map(form);
 			res.GetSubject(new NoFormatting()).Should().Be.EqualTo(expected);
+		}		
+		
+		[Test]
+		public void ShouldMapOffer()
+		{
+			var offerId = new Guid();
+			form.ShiftExchangeOfferId = offerId;
+			var expected = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			_shiftExchangeOfferRepository.Stub(x => x.Get(offerId)).Return(expected);
+			
+			var res = target.Map(form);
+			((ShiftTradeRequest)res.Request).Offer.Should().Be.SameInstanceAs(expected);
 		}
 
 		[Test]

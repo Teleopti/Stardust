@@ -114,22 +114,20 @@ AS
 		FROM (
 			--Shifts
   			SELECT
-				PersonId,
-				TeamId,
-				SiteId,
-				BusinessUnitId,
-				BelongsToDate,
-				Start,
-				[End],
-				Model,
+				sd.PersonId,
+				sd.TeamId,
+				sd.SiteId,
+				sd.BusinessUnitId,
+				sd.BelongsToDate,
+				sd.Start,
+				sd.[End],
+				sd.Model,
 				br.ShiftExchangeOffer
-			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br
-			INNER JOIN @filterStartTimeList fs
-				ON sd.Start between fs.startTimeStart and fs.startTimeEnd
-			INNER JOIN @filterEndTimeList fe
-				ON sd.[End] between fe.endTimeStart and fe.endTimeEnd
+			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br, @filterStartTimeList fs, @filterEndTimeList fe
 			WHERE  br.Person = sd.PersonId
 			AND [BelongsToDate] = @shiftTradeDate
+			AND sd.Start between fs.startTimeStart and fs.startTimeEnd
+			AND sd.[End] between fe.endTimeStart and fe.endTimeEnd
 			AND IsDayOff = 0
 						
 			UNION ALL

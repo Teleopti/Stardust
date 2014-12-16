@@ -1,14 +1,13 @@
-﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public interface IShiftExchangeOfferRepository : IRepository<ShiftExchangeOffer>
+	public interface IShiftExchangeOfferRepository : IRepository<IShiftExchangeOffer>
 	{
 	}
 
-	public class ShiftExchangeOfferRepository : Repository<ShiftExchangeOffer>, IShiftExchangeOfferRepository
+	public class ShiftExchangeOfferRepository : Repository<IShiftExchangeOffer>, IShiftExchangeOfferRepository
 	{
 		public ShiftExchangeOfferRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
