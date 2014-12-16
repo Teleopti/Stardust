@@ -267,7 +267,6 @@
     <Compile Include="Areas\Rta\PersonShiftStartEventTest.cs" />
     <Compile Include="Areas\Rta\PersonStateChangedEventTest.cs" />
     <Compile Include="Areas\Rta\ReturnCodeTest.cs" />
-    <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\AgentsAdherenceTest.cs" />
     <Compile Include="Areas\Rta\FakeMessageSender.cs" />
     <Compile Include="Areas\Rta\NotificationExtension.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\OrganizationForPersonTest.cs" />
@@ -276,7 +275,6 @@
     <Compile Include="Areas\Rta\StateControllerTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithStateTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
-    <Compile Include="Areas\Rta\ImplementationDetailsTests\Adherence\ThreadingIssuesTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\RtaModuleTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\DataSourceResolverTest.cs" />

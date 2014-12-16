@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.Register<IReadActualAgentStates>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 
-			builder.RegisterType<AdherenceAggregatorInitializor>().AsSelf().As<IAdherenceAggregatorInitializor>();
-
 			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 			builder.RegisterType<CalculateAdherenceDetails>().SingleInstance().As<ICalculateAdherenceDetails>();
 
@@ -52,11 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void registerAdherenceComponents(ContainerBuilder builder)
 		{
-			builder.RegisterType<AdherenceAggregator>()
-				.As<IAdherenceAggregator>()
-				.SingleInstance()
-				;
-
 			if (
 				_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
 				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)

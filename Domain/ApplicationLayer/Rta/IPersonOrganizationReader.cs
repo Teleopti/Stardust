@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Infrastructure.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IPersonOrganizationReader
 	{

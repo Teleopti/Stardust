@@ -1,72 +1,61 @@
-﻿using Teleopti.Ccc.Domain.Collection;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
-	public interface IAdherenceAggregator
-	{
-		void Aggregate(IActualAgentState actualAgentState);
-		void Initialize(IActualAgentState actualAgentState);
-	}
-
-	public class AdherenceAggregator : IAdherenceAggregator
+	public class AdherenceAggregator
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
-		private readonly IOrganizationForPerson _organizationForPerson;
 		private readonly AggregationState _aggregationState;
 
-		public AdherenceAggregator(IMessageSender messageSender, IOrganizationForPerson organizationForPerson)
+		public AdherenceAggregator(IMessageSender messageSender)
 		{
 			_messageSender = messageSender;
-			_organizationForPerson = organizationForPerson;
 			_aggregationState = new AggregationState();
 			_teamAdherenceAggregator = new TeamAdherenceAggregator(_aggregationState);
 			_siteAdherenceAggregator = new SiteAdherenceAggregator(_aggregationState);
 			_agentAdherenceAggregator = new AgentAdherenceAggregator(_aggregationState);
 		}
 
-		public void Aggregate(IActualAgentState actualAgentState)
+		public void Aggregate(IAdherenceAggregatorInfo state)
 		{
-			aggregate(actualAgentState, true);
+			aggregate(state, true);
 		}
 
-		public void Initialize(IActualAgentState actualAgentState)
+		public void Initialize(IAdherenceAggregatorInfo state)
 		{
-			aggregate(actualAgentState, false);
+			aggregate(state, false);
 		}
 
-		private void aggregate(IActualAgentState actualAgentState, bool sendMessages)
+		private void aggregate(IAdherenceAggregatorInfo state, bool sendMessages)
 		{
-			var personOrganizationData = _organizationForPerson.GetOrganization(actualAgentState.PersonId);
-
-			if (personOrganizationData == null)
-				return;
-
-			var adherenceChanged = _aggregationState.Update(personOrganizationData, actualAgentState);
+			var adherenceChanged = _aggregationState.Update(state);
 
 			if (!sendMessages)
 				return;
 
-			var agentsAdherences = _agentAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
+			var agentsAdherences = _agentAdherenceAggregator.CreateNotification(state);
 			if (agentsAdherences != null)
 				agentsAdherences.ForEach(_messageSender.Send);
 
 			if (!adherenceChanged)
 				return;
-			
-			var siteAdherence = _siteAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
+
+			var siteAdherence = _siteAdherenceAggregator.CreateNotification(state);
 			if (siteAdherence != null)
 				_messageSender.Send(siteAdherence);
 
-			var teamAdherence = _teamAdherenceAggregator.CreateNotification(personOrganizationData, actualAgentState);
+			var teamAdherence = _teamAdherenceAggregator.CreateNotification(state);
 			if (teamAdherence != null)
 				_messageSender.Send(teamAdherence);
 
 		}
 
 	}
+
 }

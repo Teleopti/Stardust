@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Rta;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
+	public interface IPersonOrganizationProvider
+	{
+		IDictionary<Guid, PersonOrganizationData> PersonOrganizationData();
+	}
+
 	public class PersonOrganizationProvider : IPersonOrganizationProvider
 	{
 		private readonly IPersonOrganizationReader _personOrganizationReader;

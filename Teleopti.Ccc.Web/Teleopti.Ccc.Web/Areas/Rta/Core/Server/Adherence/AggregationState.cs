@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
@@ -12,23 +12,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 	{
 		private readonly ConcurrentDictionary<Guid, rtaAggregationData> _aggregationDatas = new ConcurrentDictionary<Guid, rtaAggregationData>();
 
-		public bool Update(PersonOrganizationData personOrganizationData, IActualAgentState state)
+		public bool Update(IAdherenceAggregatorInfo state)
 		{
 			var adherenceChanged = false;
-			_aggregationDatas.AddOrUpdate(personOrganizationData.PersonId, guid =>
+			_aggregationDatas.AddOrUpdate(state.PersonOrganizationData.PersonId, guid =>
 			{
 				adherenceChanged = true;
 				return new rtaAggregationData
 				{
-					ActualAgentState = state,
-					OrganizationData = personOrganizationData
+					ActualAgentState = state.NewState,
+					OrganizationData = state.PersonOrganizationData
 				};
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !StateInfo.AdherenceFor(data.ActualAgentState).Equals(StateInfo.AdherenceFor(state));
-				data.ActualAgentState = state;
-				data.OrganizationData = personOrganizationData;
+				adherenceChanged = !StateInfo.AdherenceFor(data.ActualAgentState).Equals(state.InAdherence);
+				data.ActualAgentState = state.NewState;
+				data.OrganizationData = state.PersonOrganizationData;
 				return data;
 			});
 			return adherenceChanged;

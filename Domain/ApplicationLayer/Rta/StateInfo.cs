@@ -6,7 +6,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public class StateInfo
+	public interface IAdherenceAggregatorInfo
+	{
+		PersonOrganizationData PersonOrganizationData { get; }
+		IActualAgentState NewState { get; }
+		bool InAdherence { get; }
+	}
+
+	public class AdherenceAggregatorInfo : IAdherenceAggregatorInfo
+	{
+		public PersonOrganizationData PersonOrganizationData { get; set; }
+		public IActualAgentState NewState { get; set; }
+		public bool InAdherence { get; set; }
+	}
+
+	public class StateInfo : IAdherenceAggregatorInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly Lazy<IEnumerable<ScheduleLayer>> _scheduleLayers;
@@ -22,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<IActualAgentState> _newState;
 		private readonly Lazy<bool> _inAdherence;
 		private readonly Lazy<bool> _inAdherenceWithPreviousActivity;
+		private readonly Lazy<PersonOrganizationData> _personOrganizationData;
 
 		private readonly IActualAgentAssembler _actualAgentStateAssembler;
 		private PersonWithBusinessUnit _person;
@@ -32,7 +47,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			IActualAgentAssembler actualAgentStateAssembler,
 			PersonWithBusinessUnit person,
 			ExternalUserStateInputModel input,
-			DateTime currentTime)
+			DateTime currentTime,
+			IPersonOrganizationProvider personOrganizationProvider)
 		{
 
 			_input = input;
@@ -76,6 +92,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return AdherenceFor(_input.StateCode, previousActivity);
 			});
 
+			_personOrganizationData = new Lazy<PersonOrganizationData>(() => personOrganizationProvider.PersonOrganizationData()[NewState.PersonId]);
+
 		}
 
 		public IEnumerable<ScheduleLayer> ScheduleLayers { get { return _scheduleLayers.Value; } }
@@ -111,6 +129,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					;
 			}
 		}
+
+		public PersonOrganizationData PersonOrganizationData { get { return _personOrganizationData.Value; } }
 
 		public bool AdherenceFor(string stateCode, ScheduleLayer activity)
 		{

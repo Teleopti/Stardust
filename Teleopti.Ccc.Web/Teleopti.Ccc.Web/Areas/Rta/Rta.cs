@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using log4net;
@@ -7,7 +8,6 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states);
 		int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states);
 		void CheckForActivityChange(CheckForActivityChangeInputModel input);
+		void Initialize();
 	}
 
 	public class Rta : IRta
@@ -39,23 +40,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IDatabaseReader databaseReader, 
 			IDatabaseWriter databaseWriter, 
 			IMbCacheFactory cacheFactory, 
-			IAdherenceAggregator adherenceAggregator, 
 			IShiftEventPublisher shiftEventPublisher, 
 			IActivityEventPublisher activityEventPublisher, 
 			IStateEventPublisher stateEventPublisher,
 			INow now, 
-			IConfigReader configReader)
+			IConfigReader configReader,
+			IPersonOrganizationProvider personOrganizationProvider)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_rtaDataHandler = new RtaDataHandler(messageSender,
 				databaseReader,
 				databaseWriter,
 				cacheFactory,
-				adherenceAggregator,
 				shiftEventPublisher,
 				activityEventPublisher,
 				stateEventPublisher,
-				now);
+				now,
+				personOrganizationProvider);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			verifyAuthenticationKey(input.AuthenticationKey, messageId);
 
-			Log.InfoFormat(System.Globalization.CultureInfo.InvariantCulture,
+			Log.InfoFormat(CultureInfo.InvariantCulture,
 						   "Incoming message: MessageId = {10}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, PlatformTypeId = {4}, SourceId = {5}, BatchId = {6}, IsSnapshot = {7}.",
 						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot);
 
@@ -189,5 +190,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				"Incoming batch too large. Please lower the number of user states in a batch to below 50.");
 		}
 
+		public void Initialize()
+		{
+			_rtaDataHandler.Init();
+		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -15,11 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class RtaDataHandler
 	{
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
-		private readonly IAdherenceAggregator _adherenceAggregator;
+		private readonly AdherenceAggregator _adherenceAggregator;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
 		private readonly INow _now;
+		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 
 		private readonly ActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory mbCacheFactory,
-			IAdherenceAggregator adherenceAggregator,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
 			IStateEventPublisher stateEventPublisher,
-			INow now)
+			INow now,
+			IPersonOrganizationProvider personOrganizationProvider)
 		{
 			_messageSender = messageSender;
 			_databaseReader = databaseReader;
@@ -45,11 +45,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_agentAssembler = new ActualAgentAssembler(databaseReader, databaseWriter, mbCacheFactory);
 			_databaseWriter = databaseWriter;
 			_mbCacheFactory = mbCacheFactory;
-			_adherenceAggregator = adherenceAggregator;
+			_adherenceAggregator = new AdherenceAggregator(_messageSender);
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
 			_now = now;
+			_personOrganizationProvider = personOrganizationProvider;
 		}
 
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
@@ -105,7 +106,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				_agentAssembler,
 				person,
 				input,
-				_now.UtcDateTime()
+				_now.UtcDateTime(),
+				_personOrganizationProvider
 				);
 
 			_databaseWriter.PersistActualAgentState(info.NewState);
@@ -113,11 +115,25 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (info.Send)
 				_messageSender.Send(NotificationFactory.CreateNotification(info.NewState));
 
-			_adherenceAggregator.Aggregate(info.NewState);
+			_adherenceAggregator.Aggregate(info);
 
 			_shiftEventPublisher.Publish(info);
 			_activityEventPublisher.Publish(info);
 			_stateEventPublisher.Publish(info);
+		}
+
+		public void Init()
+		{
+			foreach (var actualAgentState in _databaseReader.GetActualAgentStates())
+			{
+				var adherenceAggregatorInfo = new AdherenceAggregatorInfo
+				{
+					NewState = actualAgentState,
+					PersonOrganizationData = _personOrganizationProvider.PersonOrganizationData()[actualAgentState.PersonId],
+					InAdherence = StateInfo.AdherenceFor(actualAgentState)
+				};
+				_adherenceAggregator.Initialize(adherenceAggregatorInfo);
+			}
 		}
 	}
 }

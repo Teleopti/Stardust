@@ -533,13 +533,10 @@
     <Compile Include="Areas\Rta\Controllers\StateController.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregatorInitializor.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\IOrganizationForPerson.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Adherence\IPersonOrganizationProvider.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\OrganizationForPerson.cs" />
-    <Compile Include="Areas\Rta\Core\Server\Adherence\PersonOrganizationProvider.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AggregationState.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\SiteAdherenceMessage.cs" />

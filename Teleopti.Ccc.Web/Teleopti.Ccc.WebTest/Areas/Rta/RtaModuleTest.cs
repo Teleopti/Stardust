@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -28,16 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			using (var container = BuildContainer())
 			{
 				container.Resolve<TeleoptiRtaService>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveAdherenceAggregatorInitializor()
-		{
-			using (var container = BuildContainer())
-			{
-				container.Resolve<AdherenceAggregatorInitializor>()
 					.Should().Not.Be.Null();
 			}
 		}

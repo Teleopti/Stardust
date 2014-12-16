@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using MbCache.Core;
 using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Rta;

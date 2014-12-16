@@ -144,5 +144,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			@event.BusinessUnitId.Should().Be(businessUnitId);
 			@event.Datasource.Should().Be("datasource");
 		}
+
+		[Test]
+		public void ShouldPublishTheTeam()
+		{
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			};
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithDefaultsFromState(state)
+				.WithUser("usercode", personId, null, teamId, null)
+				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 10:00")
+				.WithAlarm("statecode", activityId, -1)
+				.Make();
+			var publisher = new FakeEventPublisher();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), publisher);
+
+			target.SaveState(state);
+
+			var @event = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
+			@event.TeamId.Should().Be(teamId);
+		}
 	}
 }

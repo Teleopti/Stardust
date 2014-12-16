@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Teleopti.Ccc.Infrastructure.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class PersonOrganizationData
 	{

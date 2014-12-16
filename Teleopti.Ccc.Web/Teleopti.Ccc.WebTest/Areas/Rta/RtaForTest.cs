@@ -8,15 +8,13 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
-using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		private IRta _rta;
-		private IAdherenceAggregatorInitializor _initializor;
 
 		private void buildLikeAnIoC(IMessageSender messageSender, FakeRtaDatabase database, IEventPublisher eventPublisher, INow now, ICurrentDataSource dataSource, IToggleManager toggles)
 		{
@@ -81,7 +78,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var container = builder.Build();
 
 			_rta = container.Resolve<IRta>();
-			_initializor = container.Resolve<IAdherenceAggregatorInitializor>();
 		}
 
 		public static RtaForTest Make()
@@ -135,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public void Initialize()
 		{
-			_initializor.Initialize();
+			_rta.Initialize();
 		}
 
 	}

@@ -206,11 +206,13 @@
     <Compile Include="ApplicationLayer\Rta\IActualAgentAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\INotificationCreator.cs" />
+    <Compile Include="ApplicationLayer\Rta\IPersonOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
@@ -711,6 +713,7 @@
     <Compile Include="Rta\IDatabaseReader.cs" />
     <Compile Include="Rta\IDatabaseWriter.cs" />
     <Compile Include="Rta\IRtaRepository.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonOrganizationProvider.cs" />
     <Compile Include="Rta\PersonWithBusinessUnit.cs" />
     <Compile Include="Rta\RtaAlarmLight.cs" />
     <Compile Include="Rta\RtaStateGroupLight.cs" />

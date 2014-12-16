@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[Test]
 		public void ShouldInitializeTheAdherenceAggregatorInitializor()
 		{
-			var initializor = MockRepository.GenerateMock<IAdherenceAggregatorInitializor>();
+			var initializor = MockRepository.GenerateMock<IRta>();
 			var target = new RtaStartupTask(initializor);
 
 			target.Execute(null);
