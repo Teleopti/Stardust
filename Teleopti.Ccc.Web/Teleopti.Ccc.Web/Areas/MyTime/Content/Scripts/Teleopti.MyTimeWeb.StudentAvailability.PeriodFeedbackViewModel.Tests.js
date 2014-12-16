@@ -6,8 +6,10 @@
 		var viewModelDay2 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
 		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(
 			null, [viewModelDay1, viewModelDay2], null);
+		viewModelDay1.HasAvailability(true);
 		viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
+		viewModelDay2.HasAvailability(true);
 		viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay2.PossibleContractTimeMinutesUpper(10 * 60);
 
@@ -18,6 +20,7 @@
 
 	test("should format possible contract time", function () {
 		var viewModelDay = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
+		viewModelDay.HasAvailability(true);
 		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(null, [viewModelDay], null);
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
