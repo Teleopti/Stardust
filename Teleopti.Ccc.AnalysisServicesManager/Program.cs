@@ -35,11 +35,7 @@ namespace AnalysisServicesManager
 
 					case Create:
 						Console.WriteLine("Create Cube ...");
-						repository.ExecuteAnyXmla(argument);
-						break;
-
-					default:
-						Console.WriteLine("Running custom scripts from folder : " + argument.FilePath);
+						repository.ExecuteAnyXmla(argument, argument.CurrentDir + "\\" + Create);
 						var foo = new CustomizeServerObject(argument);
 						foo.ApplyCustomization(argument);
 						break;
@@ -51,7 +47,7 @@ namespace AnalysisServicesManager
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error message:");
+                 Console.WriteLine("Error message:");
                 Console.Error.WriteLine(e.Message);
                 Console.WriteLine("");
 

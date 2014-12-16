@@ -1,0 +1,14 @@
+<Project ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<PropertyGroup>
+     <RootFolder>C:\Data\main\Teleopti.Ccc.AnalysisServicesManager\Custom</RootFolder>
+</PropertyGroup>
+<ItemGroup>
+    <AllFiles Include="$(RootFolder)\**\*"/>
+    <OnlyDirs Include="@(AllFiles->'%(RootDir)%(Directory)'->Distinct())"/>
+</ItemGroup>  <Target Name="Demo">
+    <!-- Not batched, i.e. Files is flattened and sent to the Message task -->
+    <Message Text="================" Importance="high" />
+
+	<Message Text="Filename: %(OnlyDirs.Identity)" Importance="high" />
+  </Target>
+</Project>

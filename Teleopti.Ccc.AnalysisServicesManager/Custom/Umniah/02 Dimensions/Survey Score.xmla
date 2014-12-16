@@ -1,0 +1,59 @@
+﻿<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
+		<Object>
+			<DatabaseID>#(SQL_DATABASE_NAME)</DatabaseID>
+			<DimensionID>Survey Score</DimensionID>
+		</Object>		
+	<ObjectDefinition>
+		<Dimension
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+			<ID>Survey Score</ID>
+			<Name>Survey Score</Name>
+			<Source xsi:type="DataSourceViewBinding">
+				<DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+			</Source>
+			<UnknownMember>Visible</UnknownMember>
+			<ErrorConfiguration>
+				<KeyNotFound>ReportAndStop</KeyNotFound>
+				<KeyDuplicate>ReportAndStop</KeyDuplicate>
+				<NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+			</ErrorConfiguration>
+			<UnknownMemberName>Unknown</UnknownMemberName>
+			<Attributes>
+				<Attribute>
+					<ID>Score</ID>
+					<Name>Score</Name>
+					<Usage>Key</Usage>
+					<KeyColumns>
+						<KeyColumn>
+							<DataType>Integer</DataType>
+							<NullProcessing>UnknownMember</NullProcessing>
+							<Source xsi:type="ColumnBinding">
+								<TableID>dim_survey_score</TableID>
+								<ColumnID>score</ColumnID>
+							</Source>
+						</KeyColumn>
+					</KeyColumns>
+					<NameColumn>
+						<DataType>WChar</DataType>
+						<NullProcessing>ZeroOrBlank</NullProcessing>
+						<Source xsi:type="ColumnBinding">
+							<TableID>dim_survey_score</TableID>
+							<ColumnID>score</ColumnID>
+						</Source>
+					</NameColumn>
+					<OrderBy>Key</OrderBy>
+				</Attribute>
+			</Attributes>
+			<ProactiveCaching>
+				<SilenceInterval>-PT1S</SilenceInterval>
+				<Latency>-PT1S</Latency>
+				<SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+				<ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+				<Source xsi:type="ProactiveCachingInheritedBinding" />
+			</ProactiveCaching>
+		</Dimension>
+	</ObjectDefinition>
+	</Alter>
+</Batch>
