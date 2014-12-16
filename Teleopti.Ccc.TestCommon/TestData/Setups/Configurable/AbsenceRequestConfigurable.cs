@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(DateTime.SpecifyKind(StartTime, DateTimeKind.Utc), DateTime.SpecifyKind(EndTime, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(user, absenceRequest, null) { Subject = "I need some vacation" };
+			var personRequest = new PersonRequest(user, absenceRequest) { Subject = "I need some vacation" };
 			personRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
 
 			var requestRepository = new PersonRequestRepository(uow);

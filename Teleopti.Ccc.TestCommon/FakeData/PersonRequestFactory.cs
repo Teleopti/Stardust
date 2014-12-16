@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public IPersonRequest CreateNewPersonRequest()
         {
-            var request = new PersonRequest(Person, Request, null);
+            var request = new PersonRequest(Person, Request);
             return request;
         }
 

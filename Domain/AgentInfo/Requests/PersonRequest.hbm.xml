@@ -56,11 +56,6 @@
 		not-null="false"
 		type="string"
 		length="300"/>
-	  
-
-	  <many-to-one name="Offer"
-				 class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftExchangeOffer"
-				 not-null="false" foreign-key="FK_ShiftExchangeOffer_Id"/>
     
     <set name="requests"
             cascade="all-delete-orphan"

@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private bool _isDeleted;
         private string _denyReason = string.Empty;
         private DateTime _updatedOnServerUtc;
-	    private IShiftExchangeOffer _offer;
 
         protected PersonRequest()
         {
@@ -41,13 +40,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
         }
 
-		  public PersonRequest(IPerson person, IRequest request, ShiftExchangeOffer offerId = null)
+		  public PersonRequest(IPerson person, IRequest request)
             : this()
         {
             InParameter.NotNull("person", person);
             _person = person;
             setRequest(request);
-				_offer = offerId;
         }
 
         private void setRequest(IRequest request)
@@ -424,12 +422,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	    public virtual bool IsAutoAproved
 	    {
 			get { return RequestState.IsAutoApproved; }
-	    }
-
-		 public virtual IShiftExchangeOffer Offer
-	    {
-			 get { return _offer; }
-			 set { _offer = value; }
 	    }
 
 	    private personRequestState PersistedRequestState

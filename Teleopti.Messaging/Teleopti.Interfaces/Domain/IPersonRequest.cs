@@ -180,10 +180,5 @@ namespace Teleopti.Interfaces.Domain
         /// Set the status to new to be able to perform validation after edits.
         ///</summary>
         void SetNew();
-
-		 /// <summary>
-		 /// when the request come from a bulletin board, reference its request offer
-		 /// </summary>
-		  IShiftExchangeOffer Offer { get; set; }
     }
 }
