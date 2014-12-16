@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public DateTime Timestamp { get; set; }
 		public string Datasource { get; set; }
 		public Guid BusinessUnitId { get; set; }
+		public Guid TeamId { get; set; }
 	}
 }
