@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             absence.Tracker = Tracker.CreateTimeTracker();
             _personTime = new AccountTime(new DateOnly(2000, 1, 1));
             _personTime.Accrued = TimeSpan.FromHours(2.34);
-            _personTime.BalanceIn = TimeSpan.FromHours(3);
+            _personTime.BalanceIn = TimeSpan.FromHours(100);
             _person = PersonFactory.CreatePerson("First", "Last");
             _person.PermissionInformation.SetDefaultTimeZone(
                 StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
@@ -85,6 +86,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsFalse(_personRequestViewModel.CausesBrokenBusinessRule);
             _personRequestViewModel.CausesBrokenBusinessRule = true;
             Assert.IsTrue(_personRequestViewModel.CausesBrokenBusinessRule);
+			var balance = string.Concat(TimeHelper.GetLongHourMinuteTimeString(_personTime.BalanceIn.Add(_personTime.Accrued), CultureInfo.CurrentCulture), " ",
+					Resources.Hours);
+			Assert.AreEqual(balance, _personRequestViewModel.Left);
         }
 
         [Test]
