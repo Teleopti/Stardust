@@ -59,5 +59,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			sent.State.Should().Be("alarm");
 		}
 
+		[Test]
+		public void ShouldHandleUnrecognizedPersonId()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.Make();
+			var target = new RtaForTest(database, new Now());
+
+			Assert.DoesNotThrow(() => target.CheckForActivityChange(Guid.NewGuid(), businessUnitId));
+		}
 	}
 }

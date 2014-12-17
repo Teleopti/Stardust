@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -58,13 +59,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
 			process(
 				new ExternalUserStateInputModel(),
-				new PersonWithBusinessUnit {BusinessUnitId = businessUnitId, PersonId = personId}
+				personId,
+				businessUnitId
 				);
 		}
 
 		public int ProcessStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
-			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
+			IEnumerable<ResolvedPerson> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
 			{
 				loggingSvc.InfoFormat("No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.", dataSourceId, input.UserCode);
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			foreach (var p in personWithBusinessUnits)
 			{
 				loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
-				process(input, p);
+				process(input, p.PersonId, p.BusinessUnitId);
 			}
 			return 1;
 		}
@@ -91,23 +93,29 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			{
 				input.StateCode = "CCC Logged out";
 				input.PlatformTypeId = Guid.Empty.ToString();
-				process(input, new PersonWithBusinessUnit {BusinessUnitId = agent.BusinessUnitId, PersonId = agent.PersonId});
+				process(input, agent.PersonId, agent.BusinessUnitId);
 			}
 			return 1;
 		}
 
 		private void process(
 			ExternalUserStateInputModel input,
-			PersonWithBusinessUnit person
+			Guid personId,
+			Guid businessUnitId
 			)
 		{
+
+			if (!_personOrganizationProvider.PersonOrganizationData().ContainsKey(personId))
+				return;
+			var person = _personOrganizationProvider.PersonOrganizationData()[personId];
+			person.BusinessUnitId = businessUnitId;
+
 			var info = new StateInfo(
 				_databaseReader,
 				_agentAssembler,
 				person,
 				input,
-				_now.UtcDateTime(),
-				_personOrganizationProvider
+				_now.UtcDateTime()
 				);
 
 			_databaseWriter.PersistActualAgentState(info.NewState);
@@ -122,14 +130,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_stateEventPublisher.Publish(info);
 		}
 
-		public void Init()
+		public void Initialize()
 		{
 			foreach (var actualAgentState in _databaseReader.GetActualAgentStates())
 			{
+				var person = _personOrganizationProvider.PersonOrganizationData()[actualAgentState.PersonId];
 				var adherenceAggregatorInfo = new AdherenceAggregatorInfo
 				{
 					NewState = actualAgentState,
-					PersonOrganizationData = _personOrganizationProvider.PersonOrganizationData()[actualAgentState.PersonId],
+					TeamId = person.TeamId,
+					SiteId = person.SiteId,
 					InAdherence = StateInfo.AdherenceFor(actualAgentState)
 				};
 				_adherenceAggregator.Initialize(adherenceAggregatorInfo);

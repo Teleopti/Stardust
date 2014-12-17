@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public void Initialize()
 		{
-			_rtaDataHandler.Init();
+			_rtaDataHandler.Initialize();
 		}
 	}
 }

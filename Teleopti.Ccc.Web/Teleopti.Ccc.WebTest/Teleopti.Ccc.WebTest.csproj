@@ -278,7 +278,6 @@
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\RtaModuleTest.cs" />
     <Compile Include="Areas\Rta\ImplementationDetailsTests\DataSourceResolverTest.cs" />
-    <Compile Include="Areas\Rta\ImplementationDetailsTests\PersonResolverTest.cs" />
     <Compile Include="Areas\Rta\SiteAdherenceTest.cs" />
     <Compile Include="Areas\Rta\RtaForTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateTest.cs" />

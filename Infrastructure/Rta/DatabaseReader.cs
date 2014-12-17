@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -260,9 +261,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 																				 .ToDictionary(k => k.Key, v => v.ToList()));
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> ExternalLogOns()
+		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
-			var dictionary = new ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>();
+			var dictionary = new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
@@ -279,20 +280,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					Guid businessUnitId = reader.GetGuid(reader.GetOrdinal("business_unit_code"));
 
 					var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", loadedDataSourceId, originalLogOn).ToUpper(CultureInfo.InvariantCulture);
-					var personWithBusinessUnit = new PersonWithBusinessUnit
+					var personWithBusinessUnit = new ResolvedPerson
 					{
 						PersonId = personId,
 						BusinessUnitId = businessUnitId
 					};
 
-					IEnumerable<PersonWithBusinessUnit> list;
+					IEnumerable<ResolvedPerson> list;
 					if (dictionary.TryGetValue(lookupKey, out list))
 					{
-						((ICollection<PersonWithBusinessUnit>)list).Add(personWithBusinessUnit);
+						((ICollection<ResolvedPerson>)list).Add(personWithBusinessUnit);
 					}
 					else
 					{
-						var newCollection = new Collection<PersonWithBusinessUnit> { personWithBusinessUnit };
+						var newCollection = new Collection<ResolvedPerson> { personWithBusinessUnit };
 						dictionary.AddOrUpdate(lookupKey, newCollection, (s, units) => newCollection);
 					}
 				}

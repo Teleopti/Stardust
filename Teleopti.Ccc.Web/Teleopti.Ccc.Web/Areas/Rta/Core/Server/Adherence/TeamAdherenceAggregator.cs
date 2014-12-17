@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 
 		public Notification CreateNotification(IAdherenceAggregatorInfo state)
 		{
-			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForTeam(state.PersonOrganizationData.TeamId);
+			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForTeam(state.TeamId);
 			return createTeamNotification(numberOfOutOfAdherence, 
 				state.NewState.BusinessUnitId, 
-				state.PersonOrganizationData.TeamId, 
-				state.PersonOrganizationData.SiteId);
+				state.TeamId, 
+				state.SiteId);
 		}
 
 		private static Notification createTeamNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid teamId, Guid siteId)
