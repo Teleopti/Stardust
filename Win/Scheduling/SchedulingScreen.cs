@@ -2508,16 +2508,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView != null)
 			{
-				int rowIndex = _scheduleView.ViewGrid.CurrentCell.RowIndex;
-				int colIndex = _scheduleView.ViewGrid.CurrentCell.ColIndex;
-				var dest = _scheduleView.ViewGrid[rowIndex, colIndex].CellValue as IScheduleDay;
+				var selectedPersonMeetings = GridHelper.MeetingsFromSelection(_scheduleView.ViewGrid);
 
-				if (dest != null)
+				IList<IMeeting> meetings = new List<IMeeting>();
+
+				foreach (var selectedPersonMeeting in selectedPersonMeetings)
 				{
-					_scheduleView.Presenter.LastUnsavedSchedulePart = dest;
-					IMeeting meeting = _schedulerMeetingHelper.MeetingFromList(dest.Person, dest.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo), dest.PersonMeetingCollection());
-					if (meeting != null)
-						_schedulerMeetingHelper.MeetingRemove(meeting, _scheduleView);
+					var meeting = selectedPersonMeeting.BelongsToMeeting;
+
+					if (!meetings.Contains(meeting))
+						meetings.Add(meeting);
+				}
+
+				foreach (var meeting in meetings)
+				{
+					_schedulerMeetingHelper.MeetingRemove(meeting, _scheduleView);
 				}
 			}
 		}
