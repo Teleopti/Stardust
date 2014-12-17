@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 	public class StudentAvailabilityAndScheduleDayViewModelMappingTest
 	{
 		private IStudentAvailabilityProvider _studentAvailabilityProvider;
-		private IProjectionProvider _projectionProvider;
 
 		[SetUp]
 		public void Setup()
