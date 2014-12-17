@@ -185,5 +185,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public ICollection<IPerson> FindAllWithRolesSortByName()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

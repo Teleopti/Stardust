@@ -7,42 +7,38 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.Matrix
 {
-    public class MatrixPermissionsResolver
-    {
-        private readonly IList<IPersonRoleResolver> _personRoleResolvers;
+	public class MatrixPermissionsResolver
+	{
+		private readonly IList<IPersonRoleResolver> _personRoleResolvers;
 
-        protected MatrixPermissionsResolver(IList<IPersonRoleResolver> personRoleResolvers)
-        {
-            _personRoleResolvers = personRoleResolvers;
-        }
+		protected MatrixPermissionsResolver(IList<IPersonRoleResolver> personRoleResolvers)
+		{
+			_personRoleResolvers = personRoleResolvers;
+		}
 
-        public MatrixPermissionsResolver(IPersonRepository personRepository, IFunctionsForRoleProvider functionsForRoleProvider, ISiteRepository siteRepository)
-        {
-            _personRoleResolvers = new List<IPersonRoleResolver>();
-            foreach (IPerson person in personRepository.FindAllSortByName(true))
-            {
-                ITeamResolver teamResolver = new TeamResolver(person,siteRepository);
-                IApplicationFunctionResolver functionResolver = new ApplicationFunctionResolver(functionsForRoleProvider);
-                _personRoleResolvers.Add(new PersonRoleResolver(person, teamResolver, functionResolver));
-            }
-        }
+		public MatrixPermissionsResolver(IPersonRepository personRepository, IFunctionsForRoleProvider functionsForRoleProvider, ISiteRepository siteRepository)
+		{
+			_personRoleResolvers = new List<IPersonRoleResolver>();
+			var sites = siteRepository.LoadAll();
+			foreach (IPerson person in personRepository.FindAllWithRolesSortByName())
+			{
+				ITeamResolver teamResolver = new TeamResolver(person, sites);
+				IApplicationFunctionResolver functionResolver = new ApplicationFunctionResolver(functionsForRoleProvider);
+				_personRoleResolvers.Add(new PersonRoleResolver(person, teamResolver, functionResolver));
+			}
+		}
 
-        public IList<MatrixPermissionHolder> ResolvePermission(DateOnly queryDate, IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            using (PerformanceOutput.ForOperation("MatrixPermissionWithoutLoading"))
-            {
-                IList<MatrixPermissionHolder> result = new List<MatrixPermissionHolder>();
-                foreach (IPersonRoleResolver resolver in _personRoleResolvers)
-                {
-
-                    HashSet<MatrixPermissionHolder> resolverResult = resolver.Resolve(queryDate,unitOfWorkFactory);
-                    foreach (MatrixPermissionHolder holder in resolverResult)
-                    {
-                        result.Add(holder);
-                    }
-                }
-                return result;
-            }
-        }
-    }
+		public IList<MatrixPermissionHolder> ResolvePermission(DateOnly queryDate, IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			using (PerformanceOutput.ForOperation("MatrixPermissionWithoutLoading"))
+			{
+				var result = new List<MatrixPermissionHolder>();
+				foreach (IPersonRoleResolver resolver in _personRoleResolvers)
+				{
+					result.AddRange(resolver.Resolve(queryDate, unitOfWorkFactory));
+				}
+				return result;
+			}
+		}
+	}
 }

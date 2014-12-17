@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.DomainTest.Helper;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.TestCommon;
