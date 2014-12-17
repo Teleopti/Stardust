@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<IActualAgentState> _newState;
 		private readonly Lazy<bool> _inAdherence;
 		private readonly Lazy<bool> _inAdherenceWithPreviousActivity;
-		private readonly Lazy<PersonOrganizationData> _personOrganizationData;
 
 		private readonly IActualAgentAssembler _actualAgentStateAssembler;
 		private readonly PersonOrganizationData _person;
