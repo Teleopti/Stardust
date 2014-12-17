@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			}
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
+			builder.RegisterType<Emptypersister>().SingleInstance().As<ITeamAdherencepersister>();
 
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
