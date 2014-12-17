@@ -1,6 +1,7 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
@@ -41,14 +42,14 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 		var value = self.PossibleContractTimeMinutesLower();
 		if (!value)
 			return "";
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(value);
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(value);
 	});
 
 	this.PossibleContractTimeUpper = ko.computed(function () {
 		var value = self.PossibleContractTimeMinutesUpper();
 		if (!value)
 			return "";
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(value);
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(value);
 	});
 	this.PossibleContractTimes = ko.computed(function () {
 		var lower = self.PossibleContractTimeLower();
@@ -114,9 +115,11 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 		if (!data || !data.AvailableTimeSpan) {
 			self.HasAvailability(false);
 			self.AvailableTimeSpan(null);
+			self.ContractTimeMinutes(0);
 		} else {
 			self.HasAvailability(true);
 			self.AvailableTimeSpan(data.AvailableTimeSpan);
+			self.ContractTimeMinutes(data.ContractTimeMinutes);
 		}
 	};
 

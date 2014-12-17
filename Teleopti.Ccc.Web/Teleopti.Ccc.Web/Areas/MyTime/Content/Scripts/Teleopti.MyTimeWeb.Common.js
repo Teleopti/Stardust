@@ -45,6 +45,13 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		return brightness < 100 ? 'white' : 'black';
 	}
 
+	function _rightPadNumber(number, padding) {
+		var formattedNumber = padding + number;
+		var start = formattedNumber.length - padding.length;
+		formattedNumber = formattedNumber.substring(start);
+		return formattedNumber;
+	};
+
 	return {
 		Init: function (settings) {
 			_settings = settings;
@@ -73,6 +80,17 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		ParseToDate: function (dateString) {
 			return _parseFixedDateStringToDate(dateString);
 		},
+
+		FormatTimeSpan: function (totalMinutes) {
+			if (!totalMinutes)
+				return "0:00";
+			var minutes = totalMinutes % 60;
+			var hours = Math.floor(totalMinutes / 60);
+			var roundedMinutes = Math.round(minutes);
+
+			return hours + ":" + _rightPadNumber(roundedMinutes, "00");
+		},
+
 		FixedDateToPartsUrl: function (fixedDate) {
 			return _fixedDateToPartsUrl(fixedDate);
 		},

@@ -1,5 +1,6 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
@@ -476,19 +477,3 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 Teleopti.MyTimeWeb.Preference = Teleopti.MyTimeWeb.PreferenceInitializer(new Teleopti.MyTimeWeb.Ajax(), Teleopti.MyTimeWeb.Portal);
 
-Teleopti.MyTimeWeb.Preference.formatTimeSpan = function (totalMinutes) {
-	if (!totalMinutes)
-		return "0:00";
-	var minutes = totalMinutes % 60;
-	var hours = Math.floor(totalMinutes / 60);
-	var roundedMinutes = Math.round(minutes);
-
-	return hours + ":" + Teleopti.MyTimeWeb.Preference.rightPadNumber(roundedMinutes, "00");
-};
-
-Teleopti.MyTimeWeb.Preference.rightPadNumber = function (number, padding) {
-	var formattedNumber = padding + number;
-	var start = formattedNumber.length - padding.length;
-	formattedNumber = formattedNumber.substring(start);
-	return formattedNumber;
-};

@@ -1,6 +1,7 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
@@ -37,10 +38,10 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	this.TargetContractTimeLowerMinutes = ko.observable();
 	this.TargetContractTimeUpperMinutes = ko.observable();
 	this.TargetContractTimeLower = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.TargetContractTimeLowerMinutes());
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.TargetContractTimeLowerMinutes());
 	});
 	this.TargetContractTimeUpper = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.TargetContractTimeUpperMinutes());
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.TargetContractTimeUpperMinutes());
 	});
 
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
@@ -70,11 +71,11 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	});
 
 	this.PossibleResultContractTimeLower = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesLower());
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.PossibleResultContractTimeMinutesLower());
 	});
 
 	this.PossibleResultContractTimeUpper = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
 
 	this.StudentAvailabilityTimeIsOutOfRange = ko.computed(function () {

@@ -1,7 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -288,14 +287,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		var value = self.PossibleContractTimeMinutesLower();
 		if (!value)
 			return "";
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(value);
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(value);
 	});
 
 	this.PossibleContractTimeUpper = ko.computed(function () {
 		var value = self.PossibleContractTimeMinutesUpper();
 		if (!value)
 			return "";
-		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(value);
+		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(value);
 	});
 
 	this.PossibleContractTimes = ko.computed(function () {
