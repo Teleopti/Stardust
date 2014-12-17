@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -16,6 +15,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[TestFixture]
 	public class WorkTimeMinMaxCalculatorTest
 	{
+		readonly EffectiveRestrictionOptions effectiveRestrictionOptions = new EffectiveRestrictionOptions
+		{
+			UseAvailability = true,
+			UsePreference = true
+		};
+
 		[Test]
 		public void ShouldReturnMinMaxWorkTimeFromRuleSetBag()
 		{
@@ -32,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			person.Stub(x => x.Period(DateOnly.Today)).Return(personPeriod);
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
-			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll()))
+			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions))
 				.Return(effectiveRestriction);
 			ruleSetBag.Stub(x => x.MinMaxWorkTime(workShiftWorkTime, DateOnly.Today, effectiveRestriction))
 				.Return(workTimeMineMax);
@@ -44,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public static void ShouldReturnIfRestrictionCouldNeverMatchWithAnyShifts()
+		public void ShouldReturnIfRestrictionCouldNeverMatchWithAnyShifts()
 		{
 			var ruleSetBag = MockRepository.GenerateMock<IRuleSetBag>();
 			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
@@ -61,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.Stub(x => x.RuleSetBag).Return(ruleSetBag);
 			effectiveRestriction.Stub(x => x.ShiftCategory).Return(new ShiftCategory("Kategori"));
 			effectiveRestriction.Stub(x => x.MayMatchWithShifts()).Return(false);
-			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll()))
+			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions))
 				.Return(effectiveRestriction);
 			ruleSetBag.Stub(x => x.MinMaxWorkTime(workShiftWorkTime, DateOnly.Today, effectiveRestriction))
 				.Return(workTimeMineMax);
@@ -119,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			person.AddPersonPeriod(personPeriod);
 			scheduleDay.Stub(x => x.Person).Return(person);
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012,01,02), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
+			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions)).Return(effectiveRestriction);
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence {InContractTime = true});
 
 			var averageWorkTime = new TimeSpan((long) (personContract.Contract.WorkTime.AvgWorkTimePerDay.Ticks*personContract.PartTimePercentage.Percentage.Value));
@@ -149,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             person.AddSchedulePeriod(schedulePeriod);
             scheduleDay.Stub(x => x.Person).Return(person);
             scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-            effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
+            effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions)).Return(effectiveRestriction);
             effectiveRestriction.Stub(x => x.Absence).Return(new Absence { InContractTime = true });
 
             var averageWorkTime = new TimeSpan((long)(TimeSpan.FromHours(6).Ticks * personContract.PartTimePercentage.Percentage.Value));
@@ -175,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			person.AddPersonPeriod(personPeriod);
 			scheduleDay.Stub(x => x.Person).Return(person);
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 07), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
+			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions)).Return(effectiveRestriction);
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence { InContractTime = true });
 
 			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(effectiveRestrictionForDisplayCreator));
@@ -198,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			person.AddPersonPeriod(personPeriod);
 			scheduleDay.Stub(x => x.Person).Return(person);
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2012, 01, 02), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
+			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, effectiveRestrictionOptions)).Return(effectiveRestriction);
 			effectiveRestriction.Stub(x => x.Absence).Return(new Absence { InContractTime = false });
 
 			var target = new WorkTimeMinMaxCalculator(null, new WorkTimeMinMaxRestrictionCreator(effectiveRestrictionForDisplayCreator));
@@ -208,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flag"), Test]
-		public static void ShouldReturnFlagIfRestrictionNeverHadThePossibilityToMatchAShift()
+		public void ShouldReturnFlagIfRestrictionNeverHadThePossibilityToMatchAShift()
 		{
 			var workTimeMinMaxRestrictionCreator = MockRepository.GenerateMock<IWorkTimeMinMaxRestrictionCreator>();
 			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
@@ -219,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var target = new WorkTimeMinMaxCalculator(null, workTimeMinMaxRestrictionCreator);
 
 			effectiveRestriction.Stub(x => x.MayMatchWithShifts()).Return(false);
-			workTimeMinMaxRestrictionCreator.Stub(x => x.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(new WorkTimeMinMaxRestrictionCreationResult { Restriction = effectiveRestriction});
+			workTimeMinMaxRestrictionCreator.Stub(x => x.MakeWorkTimeMinMaxRestriction(scheduleDay, effectiveRestrictionOptions)).Return(new WorkTimeMinMaxRestrictionCreationResult { Restriction = effectiveRestriction });
 
 			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
 

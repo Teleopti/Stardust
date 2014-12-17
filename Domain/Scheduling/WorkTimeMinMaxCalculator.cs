@@ -18,7 +18,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
 		{
-			return WorkTimeMinMax(date, person, scheduleDay, EffectiveRestrictionOptions.UseAll());
+			return WorkTimeMinMax(date, person, scheduleDay, new EffectiveRestrictionOptions
+			{
+				UseAvailability = true,
+				UsePreference = true
+			});
 		}
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option)

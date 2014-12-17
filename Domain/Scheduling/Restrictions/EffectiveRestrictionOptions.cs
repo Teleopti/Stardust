@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					UseAvailability = true,
 					UsePreference = true,
-					//UseStudentAvailability = true
+					UseStudentAvailability = true
 				};
 		}
 
