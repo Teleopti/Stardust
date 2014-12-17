@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
@@ -16,13 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private IRequestsShiftTradebulletinViewModelFactory _requestsShiftTradebulletinViewModelFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
-		//private IShiftExchangeOffer _shiftExchangeOffer;
 
-		public RequestsShiftTradeBulletinBoardController(IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory, ITimeFilterHelper timeFilterHelper)//, IShiftExchangeOffer shiftExchangeOffer)
+		public RequestsShiftTradeBulletinBoardController(IRequestsShiftTradebulletinViewModelFactory requestsShiftTradebulletinViewModelFactory, ITimeFilterHelper timeFilterHelper)
 		{
 			_requestsShiftTradebulletinViewModelFactory = requestsShiftTradebulletinViewModelFactory;
 			_timeFilterHelper = timeFilterHelper;
-			//_shiftExchangeOffer = shiftExchangeOffer;
 		}
 
 		[UnitOfWorkAction]
@@ -42,21 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			 var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate, TeamIds = allTeamIds, Paging = paging, TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff) };
 			 return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data), JsonRequestBehavior.AllowGet);
 		}
-
-		//[UnitOfWorkAction]
-		//[HttpPostOrPut]
-		//public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
-		//{
-		//	if (!ModelState.IsValid)
-		//	{
-		//		Response.TrySkipIisCustomErrors = true;
-		//		Response.StatusCode = 400;
-		//		return ModelState.ToJson();
-		//	}
-
-		//	form.PersonToId
-		//	return Json(_shiftExchangeOffer.MakeShiftTradeRequest(form));
-		//}
     }
 
 }

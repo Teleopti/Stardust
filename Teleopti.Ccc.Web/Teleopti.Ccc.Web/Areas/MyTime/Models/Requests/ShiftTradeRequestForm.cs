@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public Guid PersonToId { get; set; }
 
-		public Guid ShiftExchangeOfferId { get; set; }
+		public Guid? ShiftExchangeOfferId { get; set; }
 
 		[StringLength(80, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "TheNameIsTooLong")]
 		public string Subject { get; set; }
