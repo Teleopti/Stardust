@@ -57,8 +57,6 @@
 				 DestinationFiles="@(WebImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
 		<Copy SourceFiles="@(HowToMultiSDK)"
 				 DestinationFiles="@(HowToMultiSDK->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
-		<Copy SourceFiles="$(WorkingDirectory)\BuildArtifacts\$(IconFile)"
-			 DestinationFiles="$(OutputDirectory)\$(IconFile).deploy"/>
 	
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"
