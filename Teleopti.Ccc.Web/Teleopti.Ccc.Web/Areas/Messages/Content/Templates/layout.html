@@ -45,8 +45,8 @@
 				</li>
 			</ul>
 			<div data-bind="visible: DisplaySendMessage">
-				<textarea class="form-control message-subject" rows="1" data-bind="attr: {placeholder: Resources.Subject}, value: Subject"></textarea>
-				<textarea class="form-control message-body" rows="3" data-bind="attr: {placeholder: Resources.Message}, value: Message"></textarea>
+				<textarea class="form-control message-subject" rows="1" data-bind="attr: {placeholder: Resources.Subject}, value: Subject, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"></textarea>
+				<textarea class="form-control message-body" rows="3" data-bind="attr: {placeholder: Resources.Message}, value: Message, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"></textarea>
 				<button type="button" class="btn btn-primary pull-right send-message" data-bind="text: Resources.Send, click:SendMessage, enable: !IsMessageEmpty()"></button>
 			</div>
 			<div data-bind="visible: !DisplaySendMessage()">
