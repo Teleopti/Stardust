@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win
             if (grid == null) throw new ArgumentNullException("grid");
 
             _presenter = new DayPresenterNew(this, schedulerState, lockManager, clipHandler, schedulePartFilter, overriddenBusinessRulesHolder,
-                scheduleDayChangeCallback, new DayPresenterScaleCalculator(new EditableShiftMapper()), defaultScheduleTag);
+                scheduleDayChangeCallback, new DayPresenterScaleCalculator(), defaultScheduleTag);
             Presenter = _presenter;
             grid.Name = "DayView";
         }
