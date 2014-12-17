@@ -33,9 +33,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			get
 			{
 				var newPersonInApplicationRole = new List<IApplicationRole>();
-				var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
-				var businessUnit = identity != null ? identity.BusinessUnit : null;
-				if (!StateHolderReader.IsInitialized || businessUnit == null) return newPersonInApplicationRole;
 				foreach (IApplicationRole applicationRole in personInApplicationRole)
 				{
 					// here the person have all the application role to all business units whereas we only need
@@ -43,7 +40,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 					// consideration that the business unit can be null to those application roles that are valid
 					// to all business units like super roles.
 
-					if (applicationRole.BusinessUnit != null && !applicationRole.BusinessUnit.Equals(businessUnit))
+					var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
+                    var businessUnit = identity != null ? identity.BusinessUnit : null;
+                    if (!StateHolderReader.IsInitialized
+                        && businessUnit != null
+                        && (applicationRole.BusinessUnit != null && !applicationRole.BusinessUnit.Equals(businessUnit)))
 						continue;
 					newPersonInApplicationRole.Add(applicationRole);
 				}
