@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -24,15 +22,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay1;
-	    private IEditableShiftMapper _editableShiftMapper;
+	    private IVisualLayerCollection _visualLayerCollection1;
+	    private IVisualLayerCollection _visualLayerCollection2;
+	    private IProjectionService _projectionService1;
+	    private IProjectionService _projectionService2;
+	    private IScheduleDay _scheduleDay2;
+
 
     	[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-    		_editableShiftMapper = _mocks.StrictMock<IEditableShiftMapper>();
-            _target = new DayPresenterScaleCalculator(_editableShiftMapper);
+            _target = new DayPresenterScaleCalculator();
             _person = PersonFactory.CreatePerson();
             _persons = new Dictionary<Guid, IPerson>();
             _persons.Add(Guid.NewGuid(), _person);
@@ -40,27 +42,38 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _range = _mocks.StrictMock<IScheduleRange>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+
+    		_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+    		_visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
+    		_visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
+    		_projectionService1 = _mocks.StrictMock<IProjectionService>();
+    		_projectionService2 = _mocks.StrictMock<IProjectionService>();
         }
 
         [Test]
         public void ScalePeriodShouldAddOneHourToBeginningAndEnd()
         {
-            DateTimePeriod assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod1);
-            DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod2);
+            var assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
+            var assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
+        
             using (_mocks.Record())
             {
                 Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass2);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass2)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
-            }
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1); 
+	            Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
+	            Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+	            Expect.Call(_visualLayerCollection1.HasLayers).Return(true);
+	            Expect.Call(_visualLayerCollection1.Period()).Return(assPeriod1);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.ProjectionService()).Return(_projectionService2);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+	            Expect.Call(_visualLayerCollection2.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection2.Period()).Return(assPeriod2);
+			}
 
             DateTimePeriod result;
 
@@ -69,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
             }
 
-            DateTimePeriod expected =
+            var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 7, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 17, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(expected.StartDateTime, result.StartDateTime);
@@ -79,21 +92,26 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ScalePeriodShouldStartAtZeroIfNightshiftDayBefore()
         {
-            DateTimePeriod assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 22, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod1);
-            DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod2);
+            var assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 22, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc));
+            var assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
+           
             using (_mocks.Record())
             {
                 Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
+
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
-	            Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass2);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass2)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
+				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_visualLayerCollection1.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection1.Period()).Return(assPeriod1);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.ProjectionService()).Return(_projectionService2);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection2.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection2.Period()).Return(assPeriod2);
             }
 
             DateTimePeriod result;
@@ -103,7 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
             }
 
-            DateTimePeriod expected =
+            var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 17, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), result.StartDateTime);
@@ -113,18 +131,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ScalePeriodShouldReturnDefaultForDayWithNoAssignmentAndNightshiftDayBefore()
         {
-            DateTimePeriod assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 22, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod1);
+            var assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 22, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc));
+          
             using (_mocks.Record())
             {
                 Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
+
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
-	            Expect.Call(_scheduleDay1.PersonAssignment()).Return(null);
+				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_visualLayerCollection1.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection1.Period()).Return(assPeriod1);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.ProjectionService()).Return(_projectionService2);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection2.HasLayers).Return(false);
             }
 
             DateTimePeriod result;
@@ -134,7 +158,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
             }
 
-            DateTimePeriod expected =
+            var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 7, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), result.StartDateTime);
@@ -144,18 +168,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ScalePeriodShouldReturnDefaultForDayWithNoAssignmentAndNoNightshiftDayBefore()
         {
-            DateTimePeriod assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod1);
+            var assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
+           
             using (_mocks.Record())
             {
                 Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
+
                 Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
-	            Expect.Call(_scheduleDay1.PersonAssignment()).Return(null);
+				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_visualLayerCollection1.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection1.Period()).Return(assPeriod1);
+				
+                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.ProjectionService()).Return(_projectionService2);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection2.HasLayers).Return(false);
+	           
             }
 
             DateTimePeriod result;
@@ -165,7 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
             }
 
-            DateTimePeriod expected =
+            var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(expected.LocalStartDateTime, result.StartDateTime);
@@ -175,22 +206,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ScalePeriodShouldReturnDefaultForDayWithOnlyNightshift()
         {
-            DateTimePeriod assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod1);
-            DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 22, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 6, 0, 0, 0, DateTimeKind.Utc));
-            IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assPeriod2);
+            var assPeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
+            var assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 22, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 6, 0, 0, 0, DateTimeKind.Utc));
+           
             using (_mocks.Record())
             {
                 Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass1);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass1)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod1, new ShiftCategory("hopp")));
-                Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.PersonAssignment()).Return(ass2);
-				Expect.Call(_editableShiftMapper.CreateEditorShift(ass2)).Return(EditableShiftFactory.CreateEditorShift(new Activity("hej"), assPeriod2, new ShiftCategory("hopp")));
-            }
+				
+				Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_visualLayerCollection1.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection1.Period()).Return(assPeriod1);
+
+				Expect.Call(_range.ScheduledDay(new DateOnly(2011, 01, 02))).Return(_scheduleDay2);
+				Expect.Call(_scheduleDay2.ProjectionService()).Return(_projectionService2);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection2.HasLayers).Return(true);
+				Expect.Call(_visualLayerCollection2.Period()).Return(assPeriod2);
+			
+			
+			}
 
             DateTimePeriod result;
 
@@ -199,7 +237,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 result = _target.CalculateScalePeriod(_stateHolder, new DateOnly(2011, 01, 02));
             }
 
-            DateTimePeriod expected =
+            var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 8, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 3, 7, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(expected.StartDateTime, result.StartDateTime);
