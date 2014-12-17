@@ -1,7 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -13,61 +11,50 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     }
     public class DayPresenterScaleCalculator : IDayPresenterScaleCalculator
     {
-	    private readonly IEditableShiftMapper _editableShiftMapper;
-
-	    public DayPresenterScaleCalculator(IEditableShiftMapper editableShiftMapper)
-		{
-			_editableShiftMapper = editableShiftMapper;
-		}
-
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public DateTimePeriod CalculateScalePeriod(ISchedulerStateHolder schedulerState, DateOnly selectedDate)
         {
-            DateTime min = DateTime.MaxValue;
-            DateTime max = DateTime.MinValue;
-            TimeZoneInfo timeZone = TimeZoneGuard.Instance.TimeZone;
+            var min = DateTime.MaxValue;
+            var max = DateTime.MinValue;
+            var timeZone = TimeZoneGuard.Instance.TimeZone;
             foreach (var person in schedulerState.FilteredPersonDictionary.Values)
             {
-                IScheduleRange range = schedulerState.Schedules[person];
-	            IPersonAssignment personAssignment;
-				
+                var range = schedulerState.Schedules[person];
+	           
                 if (min.TimeOfDay != TimeSpan.Zero)
                 {
-                    IScheduleDay yesterDay = range.ScheduledDay(selectedDate.AddDays(-1));
-	                personAssignment = yesterDay.PersonAssignment();
-                    if (personAssignment != null)
-                    {
-	                    var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
-                        if (shift != null && shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
-                        {
-                            DateTime maxTemp =
-																shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone);
-                            min = selectedDate.Date;
-                            if(maxTemp > max)
-                                max = maxTemp;
-                        }
-                            
-                    }
+                    var yesterDay = range.ScheduledDay(selectedDate.AddDays(-1));
+	                var projectionYesterday = yesterDay.ProjectionService().CreateProjection();
+
+	                if (projectionYesterday.HasLayers)
+	                {
+		                var periodYesterday = projectionYesterday.Period();
+		                if (periodYesterday != null)
+		                {
+			                if (periodYesterday.Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
+			                {
+								var maxTemp = periodYesterday.Value.EndDateTimeLocal(timeZone);
+								min = selectedDate.Date;
+								if (maxTemp > max) max = maxTemp;   
+			                }
+		                }
+	                }
+
                 }
 
-				IScheduleDay today = range.ScheduledDay(selectedDate);
-				personAssignment = today.PersonAssignment();
-				if (personAssignment != null)
-                {
-					var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
-					if (shift != null)
-                    {
-											if (max < shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone))
-												max = shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone);
-											if (min > shift.LayerCollection.OuterPeriod().Value.StartDateTimeLocal(timeZone))
-												min = shift.LayerCollection.OuterPeriod().Value.StartDateTimeLocal(timeZone);
-                    }
-                }
+				var today = range.ScheduledDay(selectedDate);
+	            var projectionToday = today.ProjectionService().CreateProjection();
+
+				if (!projectionToday.HasLayers) continue;
+				var periodToday = projectionToday.Period();
+	            if (periodToday == null) continue;
+	            if (max < periodToday.Value.EndDateTimeLocal(timeZone)) max = periodToday.Value.EndDateTimeLocal(timeZone);
+	            if (min > periodToday.Value.StartDateTimeLocal(timeZone)) min = periodToday.Value.StartDateTimeLocal(timeZone);
             }
 
             if (min == DateTime.MaxValue && max == DateTime.MinValue)
             {
-                DateTime baseDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 0, 0, 0, 0,
+                var baseDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 0, 0, 0, 0,
                                                  DateTimeKind.Utc);
                 return new DateTimePeriod(baseDate.AddHours(7), baseDate.AddHours(17));
             }
