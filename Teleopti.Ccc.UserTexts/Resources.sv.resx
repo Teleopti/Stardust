@@ -11458,7 +11458,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Endast på tillgängliga agenter</value>
   </data>
   <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
-    <value>Tid före byte av aktivitet att varna agenten (sekunder)</value>
+    <value>Tid före aktivitetsbyte som agenten ska notifieras (sekunder)</value>
     <comment>Label used in System setting</comment>
   </data>
   <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
