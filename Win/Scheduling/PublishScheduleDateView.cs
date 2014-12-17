@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public PublishScheduleDateView(IList<IScheduleDay> selectedSchedules)
 		{
 			InitializeComponent();
+			datePicker.Culture = TeleoptiPrincipal.Current.Regional.Culture;
 			_presenter = new PublishScheduleDatePresenter(this, selectedSchedules);
 			_presenter.Initialize();
 			if (!DesignMode) SetTexts();
