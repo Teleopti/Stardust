@@ -5,20 +5,26 @@
 		<li class="active" data-bind="text: teamName"></li>
 	</ul>
 	<div class="nav navbar">
-		<!-- ko if: $root.notifyViaSMSEnabled -->
-		<button type="button" class="btn btn-primary navbar-btn select-agents" data-bind="checkbox: SelectAgentsEnabled, if: $root.notifyViaSMSEnabled">
-			<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-		</button>
-		<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, enable: SendMessageEnabled, text: $root.Resources.Send">
-		</button>
-		<!-- /ko -->
-		<form class="navbar-form navbar-right" role="search">
-			<div class="form-group">
-				<span data-bind="text: $root.Resources.FilterColon"></span>
-				<input type="text" class="form-control" data-bind="value: filter, valueUpdate: 'input'" />
+		<div class="row">
+			<div class="col-xs-8 col-sm-6">
+				<!-- ko if: $root.notifyViaSMSEnabled -->
+				<button type="button" class="btn btn-primary navbar-btn select-agents" data-bind="checkbox: SelectAgentsEnabled, if: $root.notifyViaSMSEnabled">
+					<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+				</button>
+				<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, enable: SendMessageEnabled, text: $root.Resources.Send"></button>
+				<!-- /ko -->
 			</div>
-		</form>
+			<div class="col-xs-4 col-sm-6">
+				<form class="navbar-form navbar-right" role="search">
+					<div class="form-group">
+						<span data-bind="text: $root.Resources.FilterColon"></span>
+						<input type="text" class="form-control" data-bind="value: filter, valueUpdate: 'input'" />
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
+
 	<div class="panel panel-default">
 		<table class="table table-stripped table-condensed rta-agents-details">
 			<thead>
@@ -86,9 +92,9 @@
 	</div>
 </div>
 
-<script id="layerTemplate" type="text/html">
-	<!-- ko if: OverlapsTimeLine -->
-	<div class="layer absolute floatleft" data-bind="
+		<script id="layerTemplate" type="text/html">
+			<!-- ko if: OverlapsTimeLine -->
+			<div class="layer absolute floatleft" data-bind="
     style: {
         left: StartPixels() + 'px',
         width: LengthPixels() + 'px',
@@ -103,11 +109,11 @@
     },
     clickBubble: false
 	">
-		<!-- ko if: IsFullDayAbsence && $parent.Layers().length == 1 -->
-		<!-- ko if: $root.DisplayDescriptions -->
-		<span class="label label-default layer-description" data-bind="text: Description"></span>
-		<!-- /ko -->
-		<!-- /ko -->
-	</div>
-	<!-- /ko -->
-</script>
+				<!-- ko if: IsFullDayAbsence && $parent.Layers().length == 1 -->
+				<!-- ko if: $root.DisplayDescriptions -->
+				<span class="label label-default layer-description" data-bind="text: Description"></span>
+				<!-- /ko -->
+				<!-- /ko -->
+			</div>
+			<!-- /ko -->
+		</script>
