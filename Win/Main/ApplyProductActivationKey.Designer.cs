@@ -134,7 +134,7 @@
 			// openFileDialog
 			// 
 			this.openFileDialog.Filter = "XML Files|*.xml|All Files|*.*";
-			this.openFileDialog.Title = "xxOpenLicenseFile";
+			this.openFileDialog.Title = "xxOpenProductActivationKeyFile";
 			// 
 			// textBoxExtLicenseFilePath
 			// 
