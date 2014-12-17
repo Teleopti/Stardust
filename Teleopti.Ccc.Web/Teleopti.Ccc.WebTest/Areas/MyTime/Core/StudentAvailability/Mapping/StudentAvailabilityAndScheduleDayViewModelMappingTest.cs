@@ -26,12 +26,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		public void Setup()
 		{
 			_studentAvailabilityProvider = MockRepository.GenerateMock<IStudentAvailabilityProvider>();
-			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 				{
-					c.AddProfile(new StudentAvailabilityAndScheduleDayViewModelMappingProfile( _projectionProvider));
+					c.AddProfile(new StudentAvailabilityAndScheduleDayViewModelMappingProfile());
 					c.AddProfile(new StudentAvailabilityDayViewModelMappingProfile(() => _studentAvailabilityProvider));
 				});
 		}
@@ -60,15 +59,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 				new ReadOnlyObservableCollection<IScheduleData>(new ObservableCollection<IScheduleData>(new[] { studentAvailabilityDay }));
 
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(personRestrictionCollection);
-			_projectionProvider
-				.Stub(s => _projectionProvider.Projection(scheduleDay).ContractTime())
-				.IgnoreArguments()
-				.Return(new TimeSpan(5, 0, 0));
 			
 			var result = Mapper.Map<IScheduleDay, StudentAvailabilityAndScheduleDayViewModel>(scheduleDay);
 
 			result.StudentAvailability.Should().Not.Be.Null();
-			result.ContractTimeMinutes.Should().Be(5 * 60);
 		}
 
 		[Test]

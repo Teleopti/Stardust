@@ -16,6 +16,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 	{
 		public string Date { get; set; }
 		public StudentAvailabilityDayViewModel StudentAvailability { get; set; }
-		public int ContractTimeMinutes { get; set; }
 	}	
 }
