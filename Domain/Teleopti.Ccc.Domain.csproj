@@ -717,7 +717,6 @@
     <Compile Include="Rta\IDatabaseWriter.cs" />
     <Compile Include="Rta\IRtaRepository.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationProvider.cs" />
-    <Compile Include="ApplicationLayer\Rta\PersonWithBusinessUnit.cs" />
     <Compile Include="Rta\RtaAlarmLight.cs" />
     <Compile Include="Rta\RtaStateGroupLight.cs" />
     <Compile Include="Rta\ScheduleLayer.cs" />
