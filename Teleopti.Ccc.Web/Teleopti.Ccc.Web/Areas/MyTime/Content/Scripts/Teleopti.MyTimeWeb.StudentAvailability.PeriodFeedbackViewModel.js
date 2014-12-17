@@ -51,7 +51,6 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 				var value = day.PossibleContractTimeMinutesLower();
 				if (value)
 					sum += parseInt(value);
-				sum += day.ContractTimeMinutes();
 			}
 		});
 		return sum;
@@ -64,7 +63,6 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 				var value = day.PossibleContractTimeMinutesUpper();
 				if (value)
 					sum += parseInt(value);
-				sum += day.ContractTimeMinutes();
 			}
 		});
 		return sum;
