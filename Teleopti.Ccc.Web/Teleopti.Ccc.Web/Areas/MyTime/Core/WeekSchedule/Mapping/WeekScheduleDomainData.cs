@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public bool AbsenceRequestPermission { get; set; }
 		public bool AbsenceReportPermission { get; set; }
 		public bool ShiftExchangePermission { get; set; }
+		public bool PersonAccountPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }
 		public bool ShiftTradeBulletinBoardPermission { get; set; }	
 	}

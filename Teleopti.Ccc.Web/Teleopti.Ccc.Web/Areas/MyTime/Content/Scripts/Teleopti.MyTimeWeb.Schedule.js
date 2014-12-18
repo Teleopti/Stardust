@@ -72,6 +72,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.absenceReportPermission = ko.observable();
 		self.overtimeAvailabilityPermission = ko.observable();
 		self.shiftExchangePermission = ko.observable();
+		self.personAccountPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -263,16 +264,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		function createRequestViewModel() {
 			var datePickerFormat = self.datePickerFormat();
 			var model = addRequestViewModel();
-
-			ajax.Ajax({
-				url: 'Requests/PersonalAccountPermission',
-				dataType: "json",
-				type: 'GET',
-
-				success: function(data) {
-					model.readPersonalAccountPermission(data);
-				}
-			});
+			model.readPersonalAccountPermission(self.personAccountPermission());
 
 			model.DateFormat(datePickerFormat);
 
@@ -292,6 +284,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
 			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
 			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
+			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));

@@ -216,6 +216,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 										_permissionProvider.HasApplicationFunctionPermission(
 											DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard) &&
 										_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeExchangeBulletin_31296);
+									var personalAccountPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
@@ -230,8 +233,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												AbsenceRequestPermission = absenceRequestPermission,
 												AbsenceReportPermission = absenceReportPermission,
 												ShiftExchangePermission = shiftExchangePermission,
-												IsCurrentWeek = isCurrentWeek,
 												ShiftTradeBulletinBoardPermission = shiftTradeBulletinBoardPermission,
+												PersonAccountPermission = personalAccountPermission,
+												IsCurrentWeek = isCurrentWeek,
 											};
 								});
 		}
