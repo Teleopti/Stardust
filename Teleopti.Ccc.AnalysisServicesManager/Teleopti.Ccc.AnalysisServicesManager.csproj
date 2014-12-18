@@ -102,21 +102,6 @@
     <Compile Include="CubeSourceFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Custom\01 Datasource\DatasourceViewDefinition.xml.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Custom\02 Dimensions\Survey Score.xmla.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Custom\03 Measures\CSAT Agent Survey.xmla.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Custom\03 Measures\QA Agent Evaluation.xmla.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Custom\04 Calculated Members\Members1and2.xml.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="drop, create, process.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
