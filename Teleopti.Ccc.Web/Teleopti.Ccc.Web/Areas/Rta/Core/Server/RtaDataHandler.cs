@@ -134,7 +134,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			foreach (var actualAgentState in _databaseReader.GetActualAgentStates())
 			{
-				var person = _personOrganizationProvider.PersonOrganizationData()[actualAgentState.PersonId];
+				PersonOrganizationData person;
+				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))
+					continue;
 				var adherenceAggregatorInfo = new AdherenceAggregatorInfo
 				{
 					NewState = actualAgentState,
