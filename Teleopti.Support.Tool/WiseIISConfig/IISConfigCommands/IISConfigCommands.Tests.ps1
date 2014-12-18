@@ -91,18 +91,14 @@ function Config-Load {
 						$global:BaseURL = $testServer.BaseURL
 					}
 					
-					if ($global:branch -ne 'main')
-					{
-						$global:SubSite = 'TeleoptiCCC'
-						$global:displayName = 'Teleopti CCC Server, version 7'
-					}
-					
 					if ($global:branch -eq 'main')
 					{
 						if ($global:version.StartsWith("7"))
 						{
 							$global:LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
 							$global:PoolName = "Teleopti ASP.NET v4.0"
+							$global:SubSite = 'TeleoptiCCC'
+							$global:displayName = 'Teleopti CCC Server, version 7'
 						}
 					}
                 }
