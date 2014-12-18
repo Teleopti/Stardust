@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
-	public class AdherencePercentageReadModelPersisterTest : IReadModelReadWriteTest<IAdherencePercentageReadModelPersister>
+	public class AdherencePercentageReadModelPersisterTest : IReadModelReadWriteTest
 	{
 		public IAdherencePercentageReadModelPersister Target { get; set; }
 
@@ -145,19 +145,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	}
 
 	[ReadModelReadWriteTest]
-	public interface IReadModelReadWriteTest<T>
+	public interface IReadModelReadWriteTest
 	{
-		T Target { get; set; }
 	}
 
 	public class ReadModelReadWriteTestAttribute : IoCTestAttribute
 	{
-		protected override void BeforeTest2()
+		protected override void BeforeTest()
 		{
 			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvokation();
 		}
 
-		protected override void AfterTest2()
+		protected override void AfterTest()
 		{
 			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvokation(null);
 		}

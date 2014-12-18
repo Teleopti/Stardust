@@ -105,8 +105,8 @@
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
-    <Compile Include="IoC\IIoCTest.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
+    <Compile Include="IoC\ToggleAttribute.cs" />
     <Compile Include="TestData\Analytics\Absence.cs" />
     <Compile Include="TestData\Analytics\ShiftCategory.cs" />
     <Compile Include="TestData\Analytics\Activity.cs" />

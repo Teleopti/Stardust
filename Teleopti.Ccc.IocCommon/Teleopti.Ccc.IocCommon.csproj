@@ -169,6 +169,7 @@
     <Compile Include="CommonModule.cs" />
     <Compile Include="Configuration\JsonSerializationModule.cs" />
     <Compile Include="Configuration\ServiceBusModule.cs" />
+    <Compile Include="Toggle\FakeToggleManager.cs" />
     <Compile Include="Toggle\FalseToggleManager.cs" />
     <Compile Include="Toggle\ToggleNetModule.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />

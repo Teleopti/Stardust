@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
-	public class AdherenceDetailsReadModelPersisterTest : IReadModelReadWriteTest<IAdherenceDetailsReadModelPersister>
+	public class AdherenceDetailsReadModelPersisterTest : IReadModelReadWriteTest
 	{
 		public IAdherenceDetailsReadModelPersister Target { get; set; }
 

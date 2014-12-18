@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
@@ -22,46 +23,40 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public RtaForTest(FakeRtaDatabase database)
 		{
-			buildLikeAnIoC(null, database, null, null, null, null);
+			buildByIoC(null, database, null, null, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now)
 		{
-			buildLikeAnIoC(null, database, null, now, null, null);
+			buildByIoC(null, database, null, now, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher)
 		{
-			buildLikeAnIoC(null, database, eventPublisher, now, null, null);
+			buildByIoC(null, database, eventPublisher, now, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender)
 		{
-			buildLikeAnIoC(messageSender, database, null, now, null, null);
+			buildByIoC(messageSender, database, null, now, null);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IEventPublisher eventPublisher, ICurrentDataSource dataSource)
 		{
-			buildLikeAnIoC(null, database, eventPublisher, now, dataSource, null);
+			buildByIoC(null, database, eventPublisher, now, dataSource);
 		}
 
 		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender, IEventPublisher eventPublisher)
 		{
-			buildLikeAnIoC(messageSender, database, eventPublisher, now, null, null);
-		}
-
-		public RtaForTest(FakeRtaDatabase database, INow now, IMessageSender messageSender, IToggleManager toggles)
-		{
-			buildLikeAnIoC(messageSender, database, null, now, null, toggles);
+			buildByIoC(messageSender, database, eventPublisher, now, null);
 		}
 
 		private IRta _rta;
 
-		private void buildLikeAnIoC(IMessageSender messageSender, FakeRtaDatabase database, IEventPublisher eventPublisher, INow now, ICurrentDataSource dataSource, IToggleManager toggles)
+		private void buildByIoC(IMessageSender messageSender, FakeRtaDatabase database, IEventPublisher eventPublisher, INow now, ICurrentDataSource dataSource)
 		{
-			toggles = toggles ?? new FakeToggleManager();
 			var builder = new ContainerBuilder();
-			var iocConfiguration = new IocConfiguration(new IocArgs(), toggles);
+			var iocConfiguration = new IocConfiguration(new IocArgs(), new TrueToggleManager());
 			builder.RegisterModule(new CommonModule(iocConfiguration));
 			builder.RegisterModule(new RtaModule(iocConfiguration));
 			builder.RegisterInstance(messageSender ?? MockRepository.GenerateMock<IMessageSender>());
