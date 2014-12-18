@@ -128,7 +128,7 @@ function TearDown {
 		}
         
 		It "should stop the SDK" {
-			stop-AppPool -PoolName $global:PoolName
+			stop-AppPool -PoolName "$global:PoolName"
 			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
@@ -248,7 +248,7 @@ function Test-SitesAndServicesOk {
 
         #start system
 		It "should start SDK" {
-			start-AppPool -PoolName $global:PoolName
+			start-AppPool -PoolName "$global:PoolName"
 			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			$temp = Check-HttpStatus -url $SDKUrl -credentials $cred
 			$temp | Should be $True
