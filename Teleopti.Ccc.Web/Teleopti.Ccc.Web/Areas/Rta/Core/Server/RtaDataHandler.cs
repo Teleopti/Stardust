@@ -105,9 +105,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			)
 		{
 
-			if (!_personOrganizationProvider.PersonOrganizationData().ContainsKey(personId))
+			PersonOrganizationData person;
+			if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out person))
 				return;
-			var person = _personOrganizationProvider.PersonOrganizationData()[personId];
 			person.BusinessUnitId = businessUnitId;
 
 			var info = new StateInfo(
