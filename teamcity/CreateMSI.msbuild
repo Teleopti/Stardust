@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="DoIt" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+	<!-- to be continued... -->
+
+	<PropertyGroup>
+		<SourceDir>D:\Installation\PreviousBuilds</SourceDir>
+		<TargetDir>D:\Installation\msi</TargetDir>
+		<WorkingDir>SetFromOutside</WorkingDir>
+		<CCCVersion>SetFromOutside</CCCVersion>
+	</PropertyGroup>
+	
+	<Target Name="DoIt">
+		<CallTarget Targets="BuildMSI;CopyExtraFiles;MalwareScan;CallJenkinsForDeployment" />
+	</Target>
+	
+	<Target Name="BuildMSI">
+		<Exec Command='"$(SourceDir)\$(CCCVersion)\WISE\CompileAll.bat" $(CCCVersion) 0 $(TargetDir) $(SourceDir)'/>
+	</Target>
+	
+	<Target Name="CopyExtraFiles">
+	</Target>
+	
+	<Target Name="MalwareScan">
+		<Exec Command='"$(WorkingDir)\ccnet\MalwareScan.bat" $(CCCVersion) $(TargetDir)'/>
+	</Target>
+	
+	<Target Name="CallJenkinsForDeployment">
+		<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
+                FailOnNon2xxResponse="true" />
+	</Target>
+</Project>
