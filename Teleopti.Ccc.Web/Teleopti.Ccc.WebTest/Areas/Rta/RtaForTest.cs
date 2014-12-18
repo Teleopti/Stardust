@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private void buildByIoC(IMessageSender messageSender, FakeRtaDatabase database, IEventPublisher eventPublisher, INow now, ICurrentDataSource dataSource)
 		{
 			var builder = new ContainerBuilder();
-			var iocConfiguration = new IocConfiguration(new IocArgs(), new TrueToggleManager());
+			var iocConfiguration = new IocConfiguration(new IocArgs(), new FalseToggleManager());
 			builder.RegisterModule(new CommonModule(iocConfiguration));
 			builder.RegisterModule(new RtaModule(iocConfiguration));
 			builder.RegisterInstance(messageSender ?? MockRepository.GenerateMock<IMessageSender>());
