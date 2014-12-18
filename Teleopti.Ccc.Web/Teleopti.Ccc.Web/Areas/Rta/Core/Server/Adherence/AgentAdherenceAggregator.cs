@@ -24,11 +24,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 
 		public IEnumerable<Notification> CreateNotification(IAdherenceAggregatorInfo state)
 		{
-			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(state.PersonOrganizationData.TeamId);
+			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(state.TeamId);
 			var agentStates = actualAgentStateForTeam.Select(mapFrom);
 			return
 				agentStates.Batch(40)
-					.Select(s => createAgentsNotification(s, state.NewState.BusinessUnitId, state.PersonOrganizationData.TeamId));
+					.Select(s => createAgentsNotification(s, state.NewState.BusinessUnitId, state.TeamId));
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)

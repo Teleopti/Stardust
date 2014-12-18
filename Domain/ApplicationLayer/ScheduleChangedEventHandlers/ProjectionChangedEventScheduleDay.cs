@@ -53,5 +53,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public Guid PersonPeriodId { get; set; }
 
 		public Guid ShiftCategoryId { get; set; }
+		public long CheckSum { get; set; }
 	}
 }

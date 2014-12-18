@@ -8,14 +8,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IAdherenceAggregatorInfo
 	{
-		PersonOrganizationData PersonOrganizationData { get; }
+		Guid TeamId { get; }
+		Guid SiteId { get; }
 		IActualAgentState NewState { get; }
 		bool InAdherence { get; }
 	}
 
 	public class AdherenceAggregatorInfo : IAdherenceAggregatorInfo
 	{
-		public PersonOrganizationData PersonOrganizationData { get; set; }
+		public Guid TeamId { get; set; }
+		public Guid SiteId { get; set; }
 		public IActualAgentState NewState { get; set; }
 		public bool InAdherence { get; set; }
 	}
@@ -36,19 +38,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<IActualAgentState> _newState;
 		private readonly Lazy<bool> _inAdherence;
 		private readonly Lazy<bool> _inAdherenceWithPreviousActivity;
-		private readonly Lazy<PersonOrganizationData> _personOrganizationData;
 
 		private readonly IActualAgentAssembler _actualAgentStateAssembler;
-		private PersonWithBusinessUnit _person;
+		private readonly PersonOrganizationData _person;
 		private readonly DateTime _currentTime;
 
 		public StateInfo(
 			IDatabaseReader databaseReader,
 			IActualAgentAssembler actualAgentStateAssembler,
-			PersonWithBusinessUnit person,
+			PersonOrganizationData person,
 			ExternalUserStateInputModel input,
-			DateTime currentTime,
-			IPersonOrganizationProvider personOrganizationProvider)
+			DateTime currentTime)
 		{
 
 			_input = input;
@@ -91,9 +91,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				var previousActivity = (from l in ScheduleLayers where l.EndDateTime < currentTime select l).LastOrDefault();
 				return AdherenceFor(_input.StateCode, previousActivity);
 			});
-
-			_personOrganizationData = new Lazy<PersonOrganizationData>(() => personOrganizationProvider.PersonOrganizationData()[NewState.PersonId]);
-
 		}
 
 		public IEnumerable<ScheduleLayer> ScheduleLayers { get { return _scheduleLayers.Value; } }
@@ -116,6 +113,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool InAdherenceWithNewActivity { get { return _inAdherenceWithNewActivity.Value; } }
 		public bool InAdherenceWithPreviousActivity { get { return _inAdherenceWithPreviousActivity.Value; } }
 
+		public Guid TeamId { get { return _person.TeamId; }}
+		public Guid SiteId { get { return _person.SiteId; } }
+
 		public bool Send
 		{
 			get
@@ -129,8 +129,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					;
 			}
 		}
-
-		public PersonOrganizationData PersonOrganizationData { get { return _personOrganizationData.Value; } }
 
 		public bool AdherenceFor(string stateCode, ScheduleLayer activity)
 		{

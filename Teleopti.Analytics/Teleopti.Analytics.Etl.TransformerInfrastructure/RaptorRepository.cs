@@ -1494,16 +1494,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IPersonRepository personRepository = new PersonRepository(uow);
+				new ApplicationRoleRepository(uow).LoadAll();
+				var permissionsResolver = new MatrixPermissionsResolver(personRepository,
+																		new FunctionsForRoleProvider(
+																			new LicensedFunctionsProvider(
+																				new DefinedRaptorApplicationFunctionFactory
+																					()),
+																			new ExternalFunctionsProvider(
+																				new RepositoryFactory())), new SiteRepository(uow));
 
-				MatrixPermissionsResolver permissionsResolver = new MatrixPermissionsResolver(personRepository,
-																							  new FunctionsForRoleProvider(
-																								  new LicensedFunctionsProvider(
-																									  new DefinedRaptorApplicationFunctionFactory
-																										  ()),
-																								  new ExternalFunctionsProvider(
-																									  new RepositoryFactory())), new SiteRepository(uow));
-
-				IList<MatrixPermissionHolder> permissionHolders = permissionsResolver.ResolvePermission(DateOnly.Today, UnitOfWorkFactory.Current);
+				var permissionHolders = permissionsResolver.ResolvePermission(DateOnly.Today, UnitOfWorkFactory.Current);
 
 				foreach (MatrixPermissionHolder permissionHolder in permissionHolders)
 				{

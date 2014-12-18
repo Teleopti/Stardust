@@ -210,6 +210,7 @@
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\ITeamAdherencepersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
@@ -227,6 +228,8 @@
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChanged.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonActivityChangePulseLoop.cs" />
+    <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePerson.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTime.cs" />
@@ -272,6 +275,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelComparer.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelsCreator.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ShiftExchangeOfferHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IUpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\ScheduleProjectionReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEvent.cs" />
@@ -681,6 +685,7 @@
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
+    <Compile Include="Repositories\IShiftExchangeOfferRepository.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
@@ -714,7 +719,6 @@
     <Compile Include="Rta\IDatabaseWriter.cs" />
     <Compile Include="Rta\IRtaRepository.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationProvider.cs" />
-    <Compile Include="Rta\PersonWithBusinessUnit.cs" />
     <Compile Include="Rta\RtaAlarmLight.cs" />
     <Compile Include="Rta\RtaStateGroupLight.cs" />
     <Compile Include="Rta\ScheduleLayer.cs" />
@@ -1757,6 +1761,7 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="AgentInfo\Requests\PersonRequest.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Forecasting\Forecast.cd" />
     <None Include="Forecasting\SkillDayDiagram.cd" />
     <None Include="Forecasting\SkillStaffStuff.cd" />

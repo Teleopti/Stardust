@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		private readonly List<IActualAgentState> _actualAgentStates = new List<IActualAgentState>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
-		private readonly List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>>();
+		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		//private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> _stateGroups = new Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			var lookupKey = string.Format("{0}|{1}", _datasources.Last().Value, userCode).ToUpper(); //putting this logic here is just WRONG
 			_externalLogOns.Add(
-				new KeyValuePair<string, IEnumerable<PersonWithBusinessUnit>>(
+				new KeyValuePair<string, IEnumerable<ResolvedPerson>>(
 					lookupKey, new[]
 					{
-						new PersonWithBusinessUnit
+						new ResolvedPerson
 						{
 							PersonId = personId,
 							BusinessUnitId = businessUnitId.Value
@@ -223,9 +223,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				select s;
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> ExternalLogOns()
+		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
-			return new ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>(_externalLogOns);
+			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);
 		}
 
 		public ConcurrentDictionary<string, int> Datasources()

@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
@@ -68,6 +69,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				StaffingEffect = -1
 			});
 			var service = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+
+			service.Initialize();
+
+			sender.AllNotifications.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotSendMessageWhenSomeoneHasLeftTheOrganization()
+		{
+			var database = new FakeRtaDatabase();
+			database.PersistActualAgentState(new ActualAgentState {PersonId = Guid.NewGuid()});
+			var sender = new FakeMessageSender();
+			var service = new RtaForTest(database, new Now(), sender);
 
 			service.Initialize();
 

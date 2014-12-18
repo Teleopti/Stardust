@@ -5317,11 +5317,11 @@ Tilgængelighed</value>
     <comment>Compensation time for trackingdescription</comment>
   </data>
   <data name="HolidayDays" xml:space="preserve">
-    <value>Helligdage hele Dage</value>
+    <value>Dage</value>
     <comment>Holiday days for trackingdescription</comment>
   </data>
   <data name="HolidayTime" xml:space="preserve">
-    <value>HelligdagsTid</value>
+    <value>Tid</value>
     <comment>Holiday time for trackingdescription</comment>
   </data>
   <data name="EarlyWarning" xml:space="preserve">

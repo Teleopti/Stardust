@@ -114,5 +114,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int SaveLoginAttempt(LoginAttemptModel model);
 	    bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId);
 	    ICollection<IPerson> FindAllSortByName(bool includeSuperUserThatAlsoIsAgent);
+		ICollection<IPerson> FindAllWithRolesSortByName();
 	}
 }

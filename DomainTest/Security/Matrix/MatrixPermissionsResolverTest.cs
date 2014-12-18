@@ -11,87 +11,78 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Security.Matrix
 {
-    [TestFixture]
-    public class MatrixPermissionsResolverTest
-    {
-        private MatrixPermissionsResolverTestClass _target;
-        private MockRepository _mockRepository;
-        private IPerson _person1;
-        private IPerson _person2;
-        private IPersonRoleResolver _personRoleResolver1;
-        private IPersonRoleResolver _personRoleResolver2;
-        private DateOnly _queryDate;
-        private ITeam _team;
-        private IApplicationFunction _applicationFunction;
+	[TestFixture]
+	public class MatrixPermissionsResolverTest
+	{
+		private MatrixPermissionsResolverTestClass _target;
+		private IPerson _person1;
+		private IPerson _person2;
+		private IPersonRoleResolver _personRoleResolver1;
+		private IPersonRoleResolver _personRoleResolver2;
+		private DateOnly _queryDate;
+		private ITeam _team;
+		private IApplicationFunction _applicationFunction;
 
-        [SetUp]
-        public void Setup()
-        {
+		[SetUp]
+		public void Setup()
+		{
+			_person1 = PersonFactory.CreatePerson("AA");
+			_person2 = PersonFactory.CreatePerson("BB");
+			_queryDate = new DateOnly(2008, 01, 01);
+			_team = TeamFactory.CreateSimpleTeam("Team");
+			_applicationFunction = ApplicationFunctionFactory.CreateApplicationFunction("APP");
 
-            _mockRepository = new MockRepository();
-            _person1 = PersonFactory.CreatePerson("AA");
-            _person2 = PersonFactory.CreatePerson("BB");
-            _queryDate = new DateOnly(2008, 01, 01);
-            _team = TeamFactory.CreateSimpleTeam("Team");
-            _applicationFunction = ApplicationFunctionFactory.CreateApplicationFunction("APP");
+			_personRoleResolver1 = MockRepository.GenerateMock<IPersonRoleResolver>();
+			_personRoleResolver2 = MockRepository.GenerateMock<IPersonRoleResolver>();
 
-            _personRoleResolver1 = _mockRepository.StrictMock<IPersonRoleResolver>();
-            _personRoleResolver2 = _mockRepository.StrictMock<IPersonRoleResolver>();
+			_target = new MatrixPermissionsResolverTestClass(new List<IPersonRoleResolver> { _personRoleResolver1, _personRoleResolver2 });
 
-            _target = new MatrixPermissionsResolverTestClass(new List<IPersonRoleResolver> { _personRoleResolver1, _personRoleResolver2 });
+		}
 
-        }
+		[Test]
+		public void VerifyConstructor1()
+		{
+			var personProvider = MockRepository.GenerateMock<IPersonRepository>();
+			var siteRep = MockRepository.GenerateMock<ISiteRepository>();
 
-        [Test]
-        public void VerifyConstructor1()
-        {
-            var personProvider = _mockRepository.StrictMock<IPersonRepository>();
-            
-            using(_mockRepository.Record())
-            {
-                Expect.Call(personProvider.FindAllSortByName(true)).Return(new List<IPerson> { _person1, _person2 });
-            }
-            using(_mockRepository.Playback())
-            {
-                MatrixPermissionsResolver target = new MatrixPermissionsResolver(personProvider,
-                                                                                 new FunctionsForRoleProvider(
-                                                                                     new LicensedFunctionsProvider(
-                                                                                         new DefinedRaptorApplicationFunctionFactory
-                                                                                             ()),
-                                                                                     new ExternalFunctionsProvider(
-                                                                                         new RepositoryFactory())),null);
-                Assert.IsNotNull(target);
-            }
-        }
+			personProvider.Stub(x => x.FindAllWithRolesSortByName()).Return(new List<IPerson> { _person1, _person2 });
+			siteRep.Stub(x => x.LoadAll()).Return(new List<ISite>());
 
-        [Test]
-        public void VerifyResolve()
-        {
+			var target = new MatrixPermissionsResolver(personProvider,
+																 new FunctionsForRoleProvider(
+																	 new LicensedFunctionsProvider(
+																			 new DefinedRaptorApplicationFunctionFactory
+																				 ()),
+																	 new ExternalFunctionsProvider(
+																			 new RepositoryFactory())), siteRep);
+			Assert.IsNotNull(target);
 
-            MatrixPermissionHolder itemInResolver1 = new MatrixPermissionHolder(_person1, _team, false, _applicationFunction);
-            MatrixPermissionHolder itemInResolver2 = new MatrixPermissionHolder(_person2, _team, false, _applicationFunction);
+		}
 
-            HashSet<MatrixPermissionHolder> resultFromResolver1 = new HashSet<MatrixPermissionHolder> { itemInResolver1 };
-            HashSet<MatrixPermissionHolder> resultFromResolver2 = new HashSet<MatrixPermissionHolder> { itemInResolver2 };
+		[Test]
+		public void VerifyResolve()
+		{
+			var itemInResolver1 = new MatrixPermissionHolder(_person1, _team, false, _applicationFunction);
+			var itemInResolver2 = new MatrixPermissionHolder(_person2, _team, false, _applicationFunction);
 
-            using (_mockRepository.Record())
-            {
-                Expect.Call(_personRoleResolver1.Resolve(_queryDate,null)).Return(resultFromResolver1).Repeat.Once();
-                Expect.Call(_personRoleResolver2.Resolve(_queryDate,null)).Return(resultFromResolver2).Repeat.Once();
-            }
+			var resultFromResolver1 = new HashSet<MatrixPermissionHolder> { itemInResolver1 };
+			var resultFromResolver2 = new HashSet<MatrixPermissionHolder> { itemInResolver2 };
 
-            IList<MatrixPermissionHolder> result = _target.ResolvePermission(_queryDate,null);
+			_personRoleResolver1.Stub(x => x.Resolve(_queryDate, null)).Return(resultFromResolver1).Repeat.Once();
+			_personRoleResolver2.Stub(x => x.Resolve(_queryDate, null)).Return(resultFromResolver2).Repeat.Once();
 
-            Assert.AreEqual(2, result.Count);
-        }
-    }
+			IList<MatrixPermissionHolder> result = _target.ResolvePermission(_queryDate, null);
 
-    public class MatrixPermissionsResolverTestClass : MatrixPermissionsResolver
-    {
-        public MatrixPermissionsResolverTestClass(IList<IPersonRoleResolver> personRoleResolvers)
-            : base(personRoleResolvers)
-        {
-            //
-        }
-    }
+			Assert.AreEqual(2, result.Count);
+		}
+	}
+
+	public class MatrixPermissionsResolverTestClass : MatrixPermissionsResolver
+	{
+		public MatrixPermissionsResolverTestClass(IList<IPersonRoleResolver> personRoleResolvers)
+			: base(personRoleResolvers)
+		{
+			//
+		}
+	}
 }

@@ -20,9 +20,6 @@
 			<ApplicationName>$(NameOfClickOnceItem).application</ApplicationName>
 			<ApplicationFile>$(OutputDirectory)\$(ApplicationName)</ApplicationFile>
 		</PropertyGroup>
-
-		<Copy SourceFiles="$(WorkingDirectory)\BuildArtifacts\$(IconFile)"
-			 DestinationFiles="$(SourceDirectory)\$(IconFile)"/>
 	
 		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)" -IconFile "$(IconFile)"'/>
 		
@@ -59,8 +56,7 @@
 		<Copy SourceFiles="@(WebImages)"
 				 DestinationFiles="@(WebImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
 		<Copy SourceFiles="@(HowToMultiSDK)"
-				 DestinationFiles="@(HowToMultiSDK->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
-
+				 DestinationFiles="@(HowToMultiSDK->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
 	
 		<FileUpdate
 				  Files="$(OutputDirectory)\$(NameOfStartPage)"

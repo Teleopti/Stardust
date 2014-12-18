@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							Date = date.Date,
 							WorkTime = projection.WorkTime(),
 							ContractTime = projection.ContractTime(),
-							PersonPeriodId = personPeriod.Id.GetValueOrDefault()
+							PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
+							CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
 						};
 					var layers = new List<ProjectionChangedEventLayer>();
 

@@ -43,13 +43,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IPersonRequest ret;
 			if (offer == null)
 			{
-				ret = new PersonRequest(loggedOnUser) { Request = shiftTradeRequest, Subject = form.Subject };
+				ret = new PersonRequest(loggedOnUser) {Request = shiftTradeRequest};
 			}
 			else
 			{
 				var scheduleDays = _scheduleProvider.GetScheduleForPersons(form.Dates.SingleOrDefault(), new[] { loggedOnUser });
 				ret = offer.MakeShiftTradeRequest(scheduleDays.SingleOrDefault());
 			}
+			ret.Subject = form.Subject;
 			ret.TrySetMessage(form.Message);
 			return ret;
 		}

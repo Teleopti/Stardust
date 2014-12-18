@@ -37,8 +37,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _person.SetId(Guid.NewGuid());
             IList<IApplicationFunction> reportCollection = ApplicationFunctionFactory.CreateApplicationFunctionWithMatrixReports();
             _permissionHolder1 = new MatrixPermissionHolder(_person, _team1, false, reportCollection[3]);
-            _permissionHolder2 = new MatrixPermissionHolder(_person, _team2, true, reportCollection[6]);
-            _permissionHolder3 = new MatrixPermissionHolder(_person, _team2, false, reportCollection[2]);   //Invalid report, will be ignored.
+            _permissionHolder2 = new MatrixPermissionHolder(_person, _team2, true, reportCollection[5]);
+            _permissionHolder3 = new MatrixPermissionHolder(_person, _team2, true, reportCollection[6]);
             _permissionCollection = new List<MatrixPermissionHolder> {_permissionHolder1, _permissionHolder2, _permissionHolder3};
             _target = new PermissionReportTransformer();
         }
@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 row2 = table.Rows[1];
 
                 Assert.IsNotNull(table);
-                Assert.AreEqual(2, table.Rows.Count);    
+                Assert.AreEqual(3, table.Rows.Count);    
             }
 
             Assert.AreEqual(_permissionHolder1.Person.Id, row1["person_code"]);

@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
@@ -15,20 +14,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		public bool Update(IAdherenceAggregatorInfo state)
 		{
 			var adherenceChanged = false;
-			_aggregationDatas.AddOrUpdate(state.PersonOrganizationData.PersonId, guid =>
+			_aggregationDatas.AddOrUpdate(state.NewState.PersonId, guid =>
 			{
 				adherenceChanged = true;
 				return new rtaAggregationData
 				{
 					ActualAgentState = state.NewState,
-					OrganizationData = state.PersonOrganizationData
+					SiteId = state.SiteId,
+					TeamId = state.TeamId
 				};
 			}
 			, (guid, data) =>
 			{
 				adherenceChanged = !StateInfo.AdherenceFor(data.ActualAgentState).Equals(state.InAdherence);
 				data.ActualAgentState = state.NewState;
-				data.OrganizationData = state.PersonOrganizationData;
+				data.TeamId = state.TeamId;
+				data.SiteId = state.SiteId;
 				return data;
 			});
 			return adherenceChanged;
@@ -37,27 +38,28 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		public int GetOutOfAdherenceForTeam(Guid teamId)
 		{
 			return _aggregationDatas
-					.Where(k => k.Value.OrganizationData.TeamId == teamId)
+					.Where(k => k.Value.TeamId == teamId)
 					.Count(x => !StateInfo.AdherenceFor(x.Value.ActualAgentState));
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)
 		{
 			return _aggregationDatas
-				.Where(k => k.Value.OrganizationData.SiteId == siteId)
+				.Where(k => k.Value.SiteId == siteId)
 				.Count(x => !StateInfo.AdherenceFor(x.Value.ActualAgentState));
 		}
 
 		public IEnumerable<IActualAgentState> GetActualAgentStateForTeam(Guid teamId)
 		{
 			return _aggregationDatas
-				.Where(k => k.Value.OrganizationData.TeamId == teamId)
+				.Where(k => k.Value.TeamId == teamId)
 				.Select(k => k.Value.ActualAgentState);
 		}
 
 		private class rtaAggregationData
 		{
-			public PersonOrganizationData OrganizationData { get; set; }
+			public Guid SiteId { get; set; }
+			public Guid TeamId { get; set; }
 			public IActualAgentState ActualAgentState { get; set; }
 		}
 

@@ -8,47 +8,31 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
-    public class PermissionReportTransformer : IEtlTransformer<MatrixPermissionHolder>
-    {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Transform(IEnumerable<MatrixPermissionHolder> rootList, DataTable table)
-        {
-            InParameter.NotNull("rootList", rootList);
-            InParameter.NotNull("table", table);
+	public class PermissionReportTransformer : IEtlTransformer<MatrixPermissionHolder>
+	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void Transform(IEnumerable<MatrixPermissionHolder> rootList, DataTable table)
+		{
+			InParameter.NotNull("rootList", rootList);
+			InParameter.NotNull("table", table);
+			var list = rootList.ToList();
+			table.MinimumCapacity = list.Count();
 
-            table.MinimumCapacity = rootList.Count();
-            
-            foreach (MatrixPermissionHolder permissionHolder in rootList)
-            {
-                Guid reportId;
-                if (!isGuid(permissionHolder.ApplicationFunction.ForeignId, out reportId))
-                    continue;
+			foreach (var permissionHolder in list)
+			{
+				var reportId = new Guid(permissionHolder.ApplicationFunction.ForeignId);
 
-                DataRow row = table.NewRow();
-                row["person_code"] = permissionHolder.Person.Id;
-                row["ReportId"] = reportId;
-                row["team_id"] = permissionHolder.Team.Id;
-                row["business_unit_code"] = permissionHolder.Team.BusinessUnitExplicit.Id;
-                row["business_unit_name"] = permissionHolder.Team.BusinessUnitExplicit.Name;
-                row["my_own"] = permissionHolder.IsMy;
-                row["datasource_id"] = 1;
-                table.Rows.Add(row);
-            }
-        }
+				var row = table.NewRow();
+				row["person_code"] = permissionHolder.Person.Id;
+				row["ReportId"] = reportId;
+				row["team_id"] = permissionHolder.Team.Id;
+				row["business_unit_code"] = permissionHolder.Team.BusinessUnitExplicit.Id;
+				row["business_unit_name"] = permissionHolder.Team.BusinessUnitExplicit.Name;
+				row["my_own"] = permissionHolder.IsMy;
+				row["datasource_id"] = 1;
+				table.Rows.Add(row);
+			}
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private static bool isGuid(string hopefullyGuid, out Guid guid)
-       {
-           try
-            {
-                guid = new Guid(hopefullyGuid);
-            }
-            catch (Exception)
-            {
-                guid = new Guid();
-                return false;
-            }
-            return true;
-        }
-    }
+	}
 }

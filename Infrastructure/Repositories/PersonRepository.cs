@@ -377,6 +377,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
         }
 
+			public ICollection<IPerson> FindAllWithRolesSortByName()
+			{
+				try
+				{
+					var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+					var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
+						.CreateAlias("Team", "team", JoinType.InnerJoin)
+						.CreateAlias("team.Site", "site", JoinType.InnerJoin)
+						.Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+						.SetProjection(Projections.Property("personPeriod.Parent"));
+
+					var criterias = Session.CreateMultiCriteria()
+													.Add(DetachedCriteria.For<Person>("users")
+																				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+																				.Add(Restrictions.IsEmpty("PersonPeriodCollection"))
+						)
+													.Add(DetachedCriteria.For<Person>("per")
+																				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+																				.Add(Subqueries.PropertyIn("per.Id", personsubQuery))
+																				.SetResultTransformer(Transformers.DistinctRootEntity));
+
+					criterias.Add(DetachedCriteria.For<Person>()
+						.SetFetchMode("PermissionInformation", FetchMode.Join)
+						.SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join));
+						//.CreateAlias("PermissionInformation.personInApplicationRole", "ApplicationRoleCollection", JoinType.InnerJoin));
+
+					var list = criterias.List();
+
+					var result = new List<IPerson>();
+					result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[0]));
+					result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[1]));
+
+					result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[2]));
+
+
+					return new HashSet<IPerson>(result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName));
+				}
+				catch (SqlException sqlException)
+				{
+					throw new DataSourceException(sqlException.Message, sqlException);
+				}
+			}
 
     	/// <summary>
         /// Loads the permission data to the person.

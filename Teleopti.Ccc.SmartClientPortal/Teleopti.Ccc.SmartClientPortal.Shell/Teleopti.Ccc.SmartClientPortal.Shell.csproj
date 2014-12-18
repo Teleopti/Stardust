@@ -354,6 +354,10 @@
     <None Include="Resources\PeopleWFM.ico" />
     <None Include="Resources\Forecasts2_filled_32x32.png" />
     <None Include="Resources\Forecasts2_filled_16x16.png" />
+    <Content Include="..\..\BuildArtifacts\Teleopti.Ccc.SmartClientPortal.Shell.ico">
+      <Link>Teleopti.Ccc.SmartClientPortal.Shell.ico</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StaticPage.min.html">
       <DependentUpon>StaticPage.html</DependentUpon>
     </Content>
