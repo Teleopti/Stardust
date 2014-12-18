@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList(Table preferences)
 		{
 			var items = preferences.CreateSet<PreferenceListItem>();
-			items.ForEach(i => Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button", i.Preference));
+			items.ForEach(i => Browser.Interactions.AssertFirstContains(".submenu .preference-split-button", i.Preference));
 		}
 
 		public class PreferenceListItem
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the selected standard preference '(.*)' in the split-button")]
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button(string shiftCategory)
 		{
-			Browser.Interactions.AssertFirstContains(".hidden-sm .preference-split-button button", shiftCategory);
+			Browser.Interactions.AssertFirstContains(".submenu .preference-split-button button", shiftCategory);
 		}
 
 		[Then(@"I should see the standard preference '(.*)' in the calendar")]

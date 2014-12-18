@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/moment-datepicker/datepicker.css",
 					"~/Content/Scripts/jquery.qtip.css",
 					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.css",
-					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
+					"~/Content/Scripts/pinify/content/jquery.pinify.min.css",
+					"~/Content/jasny-bootstrap/css/jasny-bootstrap.min.css"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css");
 			var jsBundle = new ScriptBundle(MyTimeJs)
@@ -68,7 +69,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/signalr/broker-hubs.js",
 					"~/Content/select2/select2.js",
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
-					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js"
+					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js",
+					"~/Content/jasny-bootstrap/js/jasny-bootstrap.min.js"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
 			jsBundle.Orderer = new teleoptiScriptsOrderedByNumberOfDots();

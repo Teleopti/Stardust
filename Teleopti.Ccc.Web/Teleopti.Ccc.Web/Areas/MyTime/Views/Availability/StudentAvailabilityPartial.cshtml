@@ -5,69 +5,36 @@
 @{
 	Layout = null;
 }
-<div class="hidden-lg hidden-md topbarparent">
-	<div class="navbar navbar-teleopti collapse navbar-collapse subnavbar">
-		<div class="container">
-			<ul class="nav navbar-nav">
-				<li>
-					<div class="input-group collapse-sub-navbar" style="max-width: 390px;">
-						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-left"></i>
-							</button>
-						</span>
-						<input class="form-control text-center" style="width: 100%;  font-size: 13px;" data-bind="value: displayDate" type="text" readonly="readonly" />
-						<span class="input-group-btn">
-							<button class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-right"></i>
-							</button>
-						</span>
-					</div>
-				</li>
-			</ul>
-			<ul class="nav navbar-nav">
-				<li><a href="#" id="Availability-edit-button-narrow"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability</a></li>
-				<li><a href="#" id="Availability-delete-button-narrow"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
-			</ul>
-		</div>
+
+<div class="navbar navbar-teleopti subnavbar">
+	<div class="container">
+		<ul class="nav navbar-nav navbar-teleopti row submenu">
+			<li class="col-xs-12 col-sm-4">
+				<span class="input-group" style="width: 329px;">
+					<span class="input-group-btn">
+						<button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'" type="button">
+							<i class="glyphicon glyphicon-chevron-left"></i>
+						</button>
+					</span>
+					<input class="form-control text-center" style="width: 100%;  font-size: 13px;" data-bind="value: displayDate" type="text" readonly="readonly" />
+					<span class="input-group-btn">
+						<button class="btn btn-default moment-datepicker" type="button">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+						<button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'" type="button">
+							<i class="glyphicon glyphicon-chevron-right"></i>
+						</button>
+					</span>
+				</span>
+			</li>
+			<li class="col-xs-12 col-sm-4"><a href="#" id="Availability-edit-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability</a></li>
+			<li class="col-xs-12 col-sm-4"><a href="#" id="Availability-delete-button"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
+		</ul>
 	</div>
 </div>
 
-<div class="container" style="padding-top: 10px;">
-	<div class="navbar navbar-teleopti hidden-sm hidden-xs">
-		<div class="container">
-			<div class="navbar-left">
-				<div class="navbar-form">
-					<div class="input-group" style="max-width: 390px;">
-						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-left"></i>
-							</button>
-						</span>
-						<input class="form-control text-center" style="width: 100%;  font-size: 13px;" data-bind="value: displayDate" type="text" readonly="readonly" />
-						<span class="input-group-btn">
-							<button class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-right"></i>
-							</button>
-						</span>
-					</div>
-				</div>
-			</div>
-			<ul class="nav navbar-nav">
-				<li><a href="#" id="Availability-edit-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability</a></li>
-				<li><a href="#" id="Availability-delete-button"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
 
-<div class="container fixed-non-responsive">
+<div class="container fixed-non-responsive pagebody">
 	<div id="Student-availability-edit-form" class="well well-sm clearfix" data-bind="visible: AddAvailabilityFormVisible">
 		@Html.Partial("AddStudentAvailabilityPartial")
 	</div>
@@ -99,9 +66,9 @@
 		<div id="StudentAvailability-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
 				@foreach (var weekDayName in Model.WeekDayHeaders)
-	{
+				{
 					<li>@weekDayName.Title</li>
-	}
+				}
 			</ul>
 			@foreach (var week in Model.Weeks)
 			{

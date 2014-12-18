@@ -7,114 +7,82 @@
 	Layout = null;
 }
 <script>
-    $(function () {
-        Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(
+	$(function () {
+		Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(
             {
-                defaultStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))',
-                defaultEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))',
-                defaultFulldayStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))',
-                defaultFulldayEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))',
-                todayYear: '@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)',
-                todayMonth: '@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)',
-                todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
+            	defaultStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))',
+            	defaultEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))',
+            	defaultFulldayStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))',
+            	defaultFulldayEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))',
+            	todayYear: '@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)',
+            	todayMonth: '@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)',
+            	todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
             }
         );
-    });
+	});
 </script>
 <script type="text/html" id="request-detail-not-set">
 	<div></div>
 </script>
 
-<script type="text/html" id="text-request-detail-template">  
+<script type="text/html" id="text-request-detail-template">
 	@Html.Partial("TextRequestDetailView")
 </script>
 
-<script type="text/html" id="shifttrade-request-detail-template">  
+<script type="text/html" id="shifttrade-request-detail-template">
 	@Html.Partial("ShiftTradeRequestDetailView")
 </script>
 
-<script type="text/html" id="absence-request-detail-template">  
+<script type="text/html" id="absence-request-detail-template">
 	@Html.Partial("AbsenceRequestDetailView")
 </script>
 
-<script type="text/html" id="add-new-request-detail-template">  
+<script type="text/html" id="add-new-request-detail-template">
 	@Html.Partial("AddNewRequestDetailView")
 </script>
 
-<script type="text/html" id="shift-trade-bulletin-board-template">  
+<script type="text/html" id="shift-trade-bulletin-board-template">
 	@Html.Partial("ShiftTradeBulletinBoardView")
 </script>
 
-<input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat"/>
+<input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat" />
 
-<div class="hidden-lg hidden-md topbarparent">
-	<div class="navbar navbar-teleopti collapse navbar-collapse subnavbar">
-		<div class="container">
-			<ul class="nav navbar-nav">
-				@if (Model.RequestPermission.TextRequestPermission)
-				{
-					<li data-bind="css: { active: addTextRequestActive }">
-						<a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-					</li>
-				}
-				@if (Model.RequestPermission.AbsenceRequestPermission)
-				{
-					<li data-bind="css: { active: addAbsenceRequestActive }">
-						<a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-					</li>
-				}
-				@if (Model.RequestPermission.ShiftTradeRequestPermission)
-				{
-					<li data-bind="css: { active: addShiftTradeRequestActive }">
-						<a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-					</li>
-				}
-				<!-- ko if: isShiftTradeBulletinBoardEnabled-->
-				@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
-				{
-					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }">
-						<a href="#" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-					</li>
-				}
-				<!--/ko-->
-			</ul>
-		</div>
+<div class="navbar navbar-teleopti subnavbar">
+	<div class="container">
+		<ul class="nav navbar-nav navbar-teleopti row submenu">
+			@if (Model.RequestPermission.TextRequestPermission)
+			{
+				<li data-bind="css: { active: addTextRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addTextRequest" href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+				</li>
+			}
+			@if (Model.RequestPermission.AbsenceRequestPermission)
+			{
+				<li data-bind="css: { active: addAbsenceRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addAbsenceRequest" href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+				</li>
+			}
+			@if (Model.RequestPermission.ShiftTradeRequestPermission)
+			{
+				<li data-bind="css: { active: addShiftTradeRequestActive }" class="col-xs-12 col-sm-4">
+					<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				</li>
+			}
+			<!-- ko if: isShiftTradeBulletinBoardEnabled-->
+			@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
+			{
+				<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
+					<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+				</li>
+			}
+			<!--/ko-->
+		</ul>
 	</div>
 </div>
 
-<div class="container " style="padding-top: 10px;">
-	<div class="navbar navbar-teleopti hidden-sm hidden-xs">
-		<div class="container">
-			<ul class="nav navbar-nav">
-				@if (Model.RequestPermission.TextRequestPermission)
-				{
-					<li data-bind="css: { active: addTextRequestActive }">
-						<a href="#" id="addTextRequest" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-					</li>
-				}
-				@if (Model.RequestPermission.AbsenceRequestPermission)
-				{
-					<li data-bind="css: { active: addAbsenceRequestActive }">
-						<a href="#" id="addAbsenceRequest" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-					</li>
-				}
-				@if (Model.RequestPermission.ShiftTradeRequestPermission)
-				{
-					<li data-bind="css: { active: addShiftTradeRequestActive }">
-						<a href="#" id="addShiftTradeRequest" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-					</li>
-				}
-				<!-- ko if: isShiftTradeBulletinBoardEnabled-->
-				@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
-				{
-					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }">
-						<a href="#" id="addShiftTradeRequestFromBulletinBoard" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-					</li>
-				}
-				<!--/ko-->
-			</ul>
-		</div>
-	</div>
+
+<div class="container pagebody">
+
 	<div id="Requests-body-inner" class="request-body-inner relative">
 		@Html.Partial("NewShiftTradeRequest")
 		@Html.Partial("ShiftTradeBulletinBoardView")
@@ -137,7 +105,7 @@
 			</div>
 			<div class="request-list" data-bind="foreach: ColumnRequests">
 				<div class="row" data-bind="foreach: Items">
-					<div class="request col-xs-6">
+					<div class="request col-xxs-12 col-md-6">
 						<div class="well well-small">
 							<div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
 								<div data-bind="if: CanDelete">

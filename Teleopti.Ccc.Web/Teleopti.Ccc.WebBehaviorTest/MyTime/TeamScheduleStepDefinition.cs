@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I initialize a shift trade")]
 		public void WhenIInitializeAShiftTrade()
 		{
-			Browser.Interactions.Click(".hidden-sm .initialize-shift-trade");
+			Browser.Interactions.Click(".submenu .initialize-shift-trade");
 		}
 
 		[Then(@"I should not be able to initialize a shift trade")]

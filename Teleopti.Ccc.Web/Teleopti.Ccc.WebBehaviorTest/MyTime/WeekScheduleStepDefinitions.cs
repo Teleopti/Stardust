@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the current week button")]
 		public void WhenIClickTheCurrentWeekButton()
 		{
-			Browser.Interactions.Click(".hidden-sm #week-schedule-today");
+			Browser.Interactions.Click(".submenu #week-schedule-today");
 		}
 		
 		[Scope(Feature = "View week schedule")]

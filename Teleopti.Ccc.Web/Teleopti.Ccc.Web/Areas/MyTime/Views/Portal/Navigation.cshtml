@@ -6,110 +6,65 @@
 @using Teleopti.Interfaces.Domain
 @model PortalViewModel
 
-<div id="autocollapse" class="navbar navbar-inverse navbar-fixed-top bdd-mytime-top-menu topbarparent">
-	<div class="container">
+<div id="autocollapse" class="navbar navbar-default navbar-inverse bdd-mytime-top-menu">
+
+	<div id="innerNavBar" class="container">
 		<div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
 
-		<div class="navbar-header">
-			<button id="mainNavbarToggler" type="button" class="navbar-toggle topToggler" data-toggle="collapse" data-parent=".topbarparent" data-target=".topnav">
+		<div class="navbar-header pull-left">
+			<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<button id="subNavbarToggler" style="font-size: 10px;" type="button" class="navbar-toggle topToggler" data-toggle="collapse" data-parent=".topbarparent" data-target=".subnavbar">
-				<span class="glyphicon glyphicon-chevron-down"></span>
-			</button>
+
 			<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
 		</div>
 
-		<div class="collapse navbar-collapse transition-fix topnav" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				@foreach (var navSection in Model.NavigationItems)
-	{
-					<li>
-						@if (navSection.UnreadMessageCount > 0)
-	  {
-							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
-					}
-	  else
-	  {
-							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge hide"></span></a>
-					}
-					</li>
-			}
-				@if (Model.ReportNavigationItems.Count() > 0)
-	{
-		  
-					<li class="dropdown">
-						<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
-						<ul id="report-list" class="dropdown-menu">
-							@foreach (var reportNavSection in Model.ReportNavigationItems)
-	   {
-		   if (reportNavSection.IsDivider)
-		   {
-								<li class="divider"></li>
-								continue;
-							}
-								<li>
-									@if (reportNavSection.IsWebReport)
-		 {
-										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
-								}
-									
-									@if (!reportNavSection.IsWebReport)
-		 {
-										<a href="@reportNavSection.Url" target="_blank">@reportNavSection.Title</a>
-								}
-								</li>
-						}
-						</ul>
-					</li>
-			}
+		<!-- Non Collapsing Right Menu-->
 
-			</ul>
-
-			<div class="navbar-right">
-				<ul class="nav navbar-nav">
-					@if (Model.ShowBadge)
-					{
-						<li id="BadgePanel" class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<div>
-									<span class="gold-badge">
-										<i class="glyphicon glyphicon-star" style="color: gold"></i>
-										@Model.Badges.Sum(x => x.GoldBadge)
-									</span>
-									<span class="silver-badge">
-										<i class="glyphicon glyphicon-star" style="color: silver"></i>
-										@Model.Badges.Sum(x => x.SilverBadge)
-									</span>
-									<span class="bronze-badge">
-										<i class="glyphicon glyphicon-star" style="color: brown"></i>
-										@Model.Badges.Sum(x => x.BronzeBadge)
-									</span>
-								</div>
-							</a>
-							@if (Model.Badges != null && Model.Badges.Count() > 0)
-							{ 
-							<ul class="dropdown-menu">
+		<div class="navbar-header pull-right navbar-right" style="margin-right: 10px;">
+			<ul class="nav navbar-nav pull-left">
+				@if (Model.ShowBadge)
+				{
+					<li id="BadgePanel" class="dropdown pull-left">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<div>
+								<span class="gold-badge">
+									<i class="glyphicon glyphicon-star" style="color: gold"></i>
+									@Model.Badges.Sum(x => x.GoldBadge)
+								</span>
+								<span class="silver-badge">
+									<i class="glyphicon glyphicon-star" style="color: silver"></i>
+									@Model.Badges.Sum(x => x.SilverBadge)
+								</span>
+								<span class="bronze-badge">
+									<i class="glyphicon glyphicon-star" style="color: brown"></i>
+									@Model.Badges.Sum(x => x.BronzeBadge)
+								</span>
+							</div>
+						</a>
+						@if (Model.Badges != null && Model.Badges.Count() > 0)
+						{
+							<ul class="dropdown-menu show-outside-toolbar">
 								@foreach (var badge in Model.Badges)
 								{
 									<li>
 										<div class="badge-detail">
 											@{
-												var badgeTypeName = string.Empty;
-												switch (badge.BadgeType)
-												{
-													case BadgeType.AnsweredCalls:
-														badgeTypeName = Resources.AnsweredCalls;
-														break;
-													case BadgeType.AverageHandlingTime:
-														badgeTypeName = Resources.AverageHandlingTime;
-														break;
-													case BadgeType.Adherence:
-														badgeTypeName = Resources.Adherence;
-														break;
-												}
+									var badgeTypeName = string.Empty;
+									switch (badge.BadgeType)
+									{
+										case BadgeType.AnsweredCalls:
+											badgeTypeName = Resources.AnsweredCalls;
+											break;
+										case BadgeType.AverageHandlingTime:
+											badgeTypeName = Resources.AverageHandlingTime;
+											break;
+										case BadgeType.Adherence:
+											badgeTypeName = Resources.Adherence;
+											break;
+									}
 											}
 											<div class="badge-type">@badgeTypeName</div>
 											<span class="gold-badge">
@@ -128,28 +83,78 @@
 									</li>
 								}
 							</ul>
-							}
-						</li>
-					}
-					<li class="dropdown" id="user-settings">
-						<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><span class="user-name" title=@Model.CurrentLogonAgentName><small>@Model.CurrentLogonAgentName</small></span> <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
-							@if (Model.ShowChangePassword)
-							{
-								<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
-							}
-							@if (Model.HasAsmPermission)
-							{
-								<li class="divider"></li>
-								<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
-							}
+						}
+					</li>
+				}
+				<li class="dropdown pull-left" id="user-settings">
+					<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">
+						<i class="glyphicon glyphicon-user"></i>
+						<span class="user-name" title=@Model.CurrentLogonAgentName><small> @Model.CurrentLogonAgentName</small></span> <b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu show-outside-toolbar">
+						<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
+						@if (Model.ShowChangePassword)
+						{
+							<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
+						}
+						@if (Model.HasAsmPermission)
+						{
 							<li class="divider"></li>
-							<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+							<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
+						}
+						<li class="divider"></li>
+						<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Collapsing Menu-->
+		<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				@foreach (var navSection in Model.NavigationItems)
+				{
+					<li>
+						@if (navSection.UnreadMessageCount > 0)
+						{
+							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)" @(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
+						}
+						else
+						{
+							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge hide"></span></a>
+						}
+					</li>
+				}
+				@if (Model.ReportNavigationItems.Count() > 0)
+				{
+
+					<li class="dropdown">
+						<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
+						<ul id="report-list" class="dropdown-menu">
+							@foreach (var reportNavSection in Model.ReportNavigationItems)
+							{
+								if (reportNavSection.IsDivider)
+								{
+									<li class="divider"></li>
+									continue;
+								}
+								<li>
+									@if (reportNavSection.IsWebReport)
+									{
+										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
+									}
+
+									@if (!reportNavSection.IsWebReport)
+									{
+										<a href="@reportNavSection.Url" target="_blank">@reportNavSection.Title</a>
+									}
+								</li>
+							}
 						</ul>
 					</li>
-				</ul>
-			</div>
+				}
+
+			</ul>
 		</div>
 	</div>
 </div>

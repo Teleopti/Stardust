@@ -41,12 +41,12 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     };
 
     self.addMustHave = function() {
-        setMustHaveMethod(true);
+	    setMustHaveMethod(true);
     };
 
-    self.removeMustHave = function () {
-        setMustHaveMethod(false);
-    };
+	self.removeMustHave = function() {
+		setMustHaveMethod(false);
+	}
 
     self.mustHaveEnabled = function() {
         return self.maxMustHave() > 0;
@@ -61,8 +61,8 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         });
         return total;
     });
-    
-    self.selectedPreference = ko.observable();
+
+	self.selectedPreference = ko.observable();
     self.availablePreferences = ko.observableArray();
 
     self.selectAndapplyPreference = function (item) {

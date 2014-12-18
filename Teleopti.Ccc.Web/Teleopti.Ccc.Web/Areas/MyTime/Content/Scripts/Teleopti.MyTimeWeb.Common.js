@@ -115,27 +115,19 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 		Init: function() {
 		    function autocollapse() {
-		        var navbar = $('#autocollapse');
-		        var button = $('ul.navbar-nav li');
-		        navbar.removeClass('custom-collapsed'); // set standart view
+		    	var navbar = $('#autocollapse');
+		    	var innerNavbar = $('#innerNavBar');
+		    	var button = $('ul.navbar-nav li');
+			    
+			    navbar.removeClass('custom-collapsed'); // set standart view
+			    innerNavbar.addClass('container');  //size according to bootstrap
+			    
 		        if (Math.floor(navbar.innerHeight()) > button.height() + 1) // check if we've got 2 lines
 		        {
-		            navbar.addClass('custom-collapsed'); // force collapse mode
-		        }
-
-				var navbarToggle = $('#mainNavbarToggler');
-				if (navbarToggle.length == 0 || (navbarToggle.length > 0 && navbarToggle.is(':visible'))) {
-					$('body').css('padding-top', '0');
-		            navbar.removeClass('navbar-fixed-top');
-		        } else {
-					$('body').css('padding-top', '60px');
-		            navbar.addClass('navbar-fixed-top');
+			        innerNavbar.removeClass('container');
+			        navbar.addClass('custom-collapsed'); // force collapse mode
 		        }
 		    }
-		    
-		    $('.navbar-collapse li:not(.dropdown)').click(function () {
-		        $('.navbar-collapse').collapse('hide');
-		    });
 		    
 		    $(document).on('ready', autocollapse);
 		    $(window).on('resize', autocollapse);

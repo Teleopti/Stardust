@@ -23,7 +23,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	var currentViewId = null;
 	var currentFixedDate = null;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-
+	
 	function _layout() {
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateHorizontalScroll();
 	}
@@ -62,7 +62,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initNavigation() {
-		initNavBarCollapsToggle();
 
 		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
@@ -101,29 +100,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			}
 		});
 
-	}
-
-	function initNavBarCollapsToggle() {
-		$('.topToggler').click(function () {
-			var $this = $(this);
-			var target = $this.attr('data-target');
-			var $target = $(target);
-			var parent = $this.attr('data-parent');
-			var $parent = $(parent);
-
-			$this[$target.hasClass('in') ? 'addClass' : 'removeClass']('collapsed');
-
-			$target.collapse('toggle');
-			$parent.find('.topToggler').not($this).addClass('collapsed');
-
-			var actives = $parent.find('.in');
-			if (actives && actives.length) {
-				actives.collapse('hide');
-			}
-
-		});
-		//hide sub-menu first, check its visibility according to partial content later.
-		$('#subNavbarToggler').css({ "visibility": "hidden" });
 	}
 
 	function pareseUrlDate(str) {
@@ -280,8 +256,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _adjustTabs(hashInfo) {
 		var tabHref = '#' + hashInfo.controller + 'Tab';
-		$('.bdd-mytime-top-menu .nav li').removeClass('active');
+		$('#bs-example-navbar-collapse-1 .nav li').removeClass('active');
 		$('a[href="' + tabHref + '"]').parent().addClass('active');
+
+		// hide off canvas menu when it has been clicked
+		var offCanvasMenu = $(".navbar-offcanvas");
+		if ( offCanvasMenu.hasClass('in')){
+			offCanvasMenu.offcanvas('hide');
+		}
 	}
 
 	function _loadContent(hashInfo, secondAction) {
@@ -326,19 +308,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _completelyLoaded() {
 		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
-		_subMenuVisibilityCheck();
 	}
-	function _subMenuVisibilityCheck() {
-		var subnavbar = $('.subnavbar');
-		if (subnavbar.length == 0) {
-			$('#subNavbarToggler').css({ "visibility": "hidden" });
-		}
-		else if (subnavbar.length > 0) {
-			$('#subNavbarToggler').css({ "visibility": "visible" });
-		}
-		
-	}
-
+	
 	return {
 		Init: function (settings) {
 			Teleopti.MyTimeWeb.AjaxSettings = settings;

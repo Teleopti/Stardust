@@ -3,13 +3,14 @@
 	Layout = null;
 }
 
-<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat"/>
-<div class="myreport-daily-metrics container">
-	<div class="navbar navbar-teleopti">
+<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat" />
+
+<div class="myreport-daily-metrics">
+	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container">
-			<div class="navbar-left">
-				<div class="navbar-btn">
-					<div class="input-group" style="max-width: 294px;">
+			<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<li class="col-xs-12">
+					<span class="input-group" style="max-width: 294px;">
 						<span class="input-group-btn">
 							<button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
@@ -24,84 +25,86 @@
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
+					</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="container pagebody">
+		<div data-bind="ifnot: dataAvailable">
+			<div id="friendly-message" class="alert alert-info alert-myreport">
+				@Resources.NoDataAvailable
+			</div>
+		</div>
+
+		<div data-bind="if: dataAvailable">
+			<div class="row">
+				<div class="col-md-4 col-sm-6">
+					<div class="dashboard dashboard-blue dashboard-clickable" data-bind="click: goToAdherence">
+						<div class="row">
+							<div class="text-center col-xs-12">
+								<h1 data-bind="text: adherence() + '%'"></h1>
+								<p class="adherenceValue">@Resources.Adherence</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-6">
+					<div class="dashboard dashboard-purple">
+						<div class="row">
+							<div class="text-center col-xs-12">
+								<h1 data-bind="text: readyTimePerScheduledReadyTime() + '%'"></h1>
+								<p class="readyTimePerScheduledReadyTimeValue">@Resources.ReadyTimePerScheduledReadyTime</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-6">
+					<div class="dashboard dashboard-avgHandlingTime" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
+						<div class="row">
+							<div class="text-center col-xs-12">
+								<h1 data-bind="text: averageHandlingTime() + '@Resources.SecondShort	'"></h1>
+								<p class="queue-metrics-value handlingTimeValue">@Resources.AverageHandlingTime</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				@*</div>
+
+					<div class="row">*@
+				<div class="col-md-4 col-sm-6">
+					<div class="dashboard dashboard-avgTalkTime" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
+						<div class="row">
+							<div class="text-center col-xs-12">
+								<h1 data-bind="text: averageTalkTime() + '@Resources.SecondShort'"></h1>
+								<p class="queue-metrics-value talkTimeValue">@Resources.AverageTalkTime</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-6">
+					<div class="dashboard dashboard-avgAfterCallWork" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
+						<div class="row">
+							<div class="text-center col-xs-12">
+								<h1 data-bind="text: averageAfterCallWork() + '@Resources.SecondShort'"></h1>
+								<p class="queue-metrics-value afterWorkValue">@Resources.AverageAfterCallWork</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-6">
+					<div class="dashboard dashboard-answeredCalls" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
+						<div class="row">
+							<div class="text-center col-xs-12">
+								<h1 data-bind="text: answeredCalls()"></h1>
+								<p class="queue-metrics-value answeredCallsValue">@Resources.AnsweredCalls</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
-	<div data-bind="ifnot: dataAvailable">
-		<div id="friendly-message" class="alert alert-info alert-myreport">
-			@Resources.NoDataAvailable
-		</div>
-	</div>
-
-	<div data-bind="if: dataAvailable">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="dashboard dashboard-blue dashboard-clickable" data-bind="click: goToAdherence">
-					<div class="row">
-						<div class="text-center col-xs-12">
-							<h1 data-bind="text: adherence() + '%'"></h1>
-							<p class="adherenceValue">@Resources.Adherence</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="dashboard dashboard-purple">
-					<div class="row">
-						<div class="text-center col-xs-12">
-							<h1 data-bind="text: readyTimePerScheduledReadyTime() + '%'"></h1>
-							<p class="readyTimePerScheduledReadyTimeValue">@Resources.ReadyTimePerScheduledReadyTime</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="dashboard dashboard-avgHandlingTime" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
-					<div class="row">
-						<div class="text-center col-xs-12">
-							<h1 data-bind="text: averageHandlingTime() + '@Resources.SecondShort	'"></h1>
-							<p class="queue-metrics-value handlingTimeValue">@Resources.AverageHandlingTime</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-4">
-				<div class="dashboard dashboard-avgTalkTime" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
-					<div class="row">
-						<div class="text-center col-xs-12">
-							<h1 data-bind="text: averageTalkTime() + '@Resources.SecondShort'"></h1>
-							<p class="queue-metrics-value talkTimeValue">@Resources.AverageTalkTime</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="dashboard dashboard-avgAfterCallWork" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
-					<div class="row">
-						<div class="text-center col-xs-12">
-							<h1 data-bind="text: averageAfterCallWork() + '@Resources.SecondShort'"></h1>
-							<p class="queue-metrics-value afterWorkValue">@Resources.AverageAfterCallWork</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="dashboard dashboard-answeredCalls" data-bind="css:{'dashboard-clickable': queueMetricsEnabled()}, click: goToQueueMetrics">
-					<div class="row">
-						<div class="text-center col-xs-12">
-							<h1 data-bind="text: answeredCalls()"></h1>
-							<p class="queue-metrics-value answeredCallsValue">@Resources.AnsweredCalls</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>

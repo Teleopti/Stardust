@@ -16,7 +16,7 @@ using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 {
-	
+
 	[Binding]
 	public class PreferencesPageStepDefinitions
 	{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			Browser.Interactions.Click(".hidden-sm .Preference-add-extended-button");
+			Browser.Interactions.Click(".submenu .Preference-add-extended-button");
 		}
 
 		[When(@"I click the apply extended preferences button")]
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeThePreferenceLateOn(string preference, DateTime date)
 		{
 			var cell = CalendarCells.DateSelector(date);
-			Browser.Interactions.AssertFirstContains(cell,preference);
+			Browser.Interactions.AssertFirstContains(cell, preference);
 		}
 
 		[Then(@"I should see preference")]
@@ -142,13 +142,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-            Browser.Interactions.AssertFirstContains(".hidden-sm .musthave-max",mustHave.ToString());
+			Browser.Interactions.AssertFirstContains(".submenu .musthave-max", mustHave.ToString());
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-            Browser.Interactions.AssertFirstContains(".hidden-sm .musthave-current", mustHave.ToString());
+			Browser.Interactions.AssertFirstContains(".submenu .musthave-current", mustHave.ToString());
 		}
 
 		[Then(@"I should not see the extended preference button")]
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				Select2Box.OpenWhenOptionsAreLoaded("Preference-extended-activity-Picker");
 				Select2Box.SelectItemByText("Preference-extended-activity-Picker", fields.Activity);
 			}
-				
+
 			if (fields.ActivityStartTimeMinimum != null)
 				Browser.Interactions.Javascript(string.Format("$('.preference-activity-start-time-min').timepicker('setTime', '{0}');", fields.ActivityStartTimeMinimum));
 			if (fields.ActivityStartTimeMaximum != null)
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var inputs = table.CreateInstance<ExtendedPreferenceInput>();
 			if (inputs.PreferenceId != null)
 				Select2Box.AssertSelectedOptionText("Preference-Picker", inputs.PreferenceId);
-			
+
 			if (inputs.EarliestStartTime != null)
 				Browser.Interactions.AssertInputValueUsingJQuery(".preference-start-time-min", inputs.EarliestStartTime);
 		}
@@ -320,6 +320,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		private static void OpenExtendedTooltip(DateTime date)
 		{
+			//ROBTODO: I must do something
 			var extendedIndication = ExtendedIndication(date);
 			Browser.Interactions.AssertVisibleUsingJQuery(extendedIndication);
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());
@@ -368,13 +369,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click set must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
-			Browser.Interactions.Click(".hidden-sm .add-musthave");
+			Browser.Interactions.ClickUsingJQuery(".submenu .add-musthave");
 		}
 
 		[When(@"I click remove must have button")]
 		public void WhenIClickOnRemoveMustHaveButton()
 		{
-            Browser.Interactions.Click(".hidden-sm .glyphicon-minus");
+			Browser.Interactions.ClickUsingJQuery(".submenu .remove-musthave");
 		}
 
 		[When(@"I select preference template with '(.*)'")]
@@ -431,7 +432,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				string.Format("return $('.preference-template-list option:contains(\"{0}\")').length === 0;", name), "True");
 		}
 
-		
+
 
 
 		private class ExtendedPreferenceFields
@@ -481,7 +482,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var cell = CalendarCells.DateSelector(fields.Date);
 			if (fields.StartTimeBoundry != null)
-				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-start-times"),fields.StartTimeBoundry);
+				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-start-times"), fields.StartTimeBoundry);
 			if (fields.EndTimeBoundry != null)
 				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-end-times"), fields.EndTimeBoundry);
 			if (fields.ContractTimeBoundry != null)

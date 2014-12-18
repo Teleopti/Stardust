@@ -33,10 +33,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
             Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
             Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 
-            var subnavbar = $('.subnavbar');
+            /*var subnavbar = $('.subnavbar');
 			if(subnavbar != undefined && subnavbar.hasClass('in')) {
 		        $('.subnavbar').collapse('toggle');
-	        }
+	        }*/
         };
         self.addAbsenceRequest = function () {
             self.resetToolbarActiveButtons();
@@ -44,10 +44,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
             Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
             Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 
-            var subnavbar = $('.subnavbar');
+            /*var subnavbar = $('.subnavbar');
             if (subnavbar != undefined && subnavbar.hasClass('in')) {
             	$('.subnavbar').collapse('toggle');
-            }
+            }*/
         };
         self.addShiftTradeRequest = function (date) {
 
@@ -71,10 +71,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	        Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeBulletinWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 
-			var subnavbar = $('.subnavbar');
+			/*var subnavbar = $('.subnavbar');
 			if (subnavbar != undefined && subnavbar.hasClass('in')) {
 				$('.subnavbar').collapse('toggle');
-			}
+			}*/
         };
 
         self.resetToolbarActiveButtons = function() {
@@ -97,7 +97,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
     		        }
     	    });
 		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
-		ko.applyBindings(requestNavigationViewModel, $('div.navbar.hidden-sm')[0]);
+		//ko.applyBindings(requestNavigationViewModel, $('div.navbar.hidden-sm')[0]);
 	}
 
 	return {

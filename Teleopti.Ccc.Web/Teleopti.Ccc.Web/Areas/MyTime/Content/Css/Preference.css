@@ -1,14 +1,13 @@
 ﻿
 .alert-preference {
 	max-width: 1024px;
-	margin: 20px auto;
+	margin: auto;
 }
 
 .form-preference {
 	max-width: 954px;
 	margin: auto;
 }
-
 
 .preference 
 {
@@ -171,6 +170,7 @@
 #Preference-add-extended-form {
 	min-width: 268px;
 	padding-bottom: 0;
+	margin-bottom: 10px;
 }
 
 .ie9 .preference-ui-tooltip {

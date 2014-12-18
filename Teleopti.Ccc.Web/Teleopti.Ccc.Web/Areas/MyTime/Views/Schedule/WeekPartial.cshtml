@@ -7,37 +7,37 @@
 	Layout = null;
 }
 <script>
-    $(function () {
-        Teleopti.MyTimeWeb.Schedule.SetupViewModel(
+	$(function () {
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
             {
-                xRequests: '@Resources.XRequests',
-                subjectColon: '@Resources.SubjectColon',
-                locationColon: '@Resources.LocationColon',
-                descriptionColon: '@Resources.DescriptionColon',
-                chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
-                fair: '@Resources.Fair',
-                poor: '@Resources.Poor',
-                good: '@Resources.Good'
+            	xRequests: '@Resources.XRequests',
+            	subjectColon: '@Resources.SubjectColon',
+            	locationColon: '@Resources.LocationColon',
+            	descriptionColon: '@Resources.DescriptionColon',
+            	chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
+            	fair: '@Resources.Fair',
+            	poor: '@Resources.Poor',
+            	good: '@Resources.Good'
             },
             {
-                defaultStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))',
-                defaultEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))',
-                defaultFulldayStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))',
-                defaultFulldayEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))',
-                todayYear: '@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)',
-                todayMonth: '@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)',
-                todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
+            	defaultStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))',
+            	defaultEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))',
+            	defaultFulldayStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))',
+            	defaultFulldayEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))',
+            	todayYear: '@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)',
+            	todayMonth: '@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)',
+            	todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
             }
         );
-        Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
-    });
+		Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
+	});
 </script>
 
-<script type="text/html" id="add-new-request-detail-template">  
+<script type="text/html" id="add-new-request-detail-template">
 	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewRequestDetailView.cshtml")
 </script>
 <script type="text/html" id="add-overtime-availability-template">
-    @Html.Partial("AddOvertimeAvailabilityPartial")
+	@Html.Partial("AddOvertimeAvailabilityPartial")
 </script>
 <script type="text/html" id="add-absence-report-detail-template">
 	@Html.Partial("AddAbsenceReportPartial")
@@ -46,67 +46,38 @@
 	@Html.Partial("AddShiftExchangeOfferPartial")
 </script>
 
-<input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
+<input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />
 
-<div class="hidden-lg hidden-md topbarparent">
-	<div class="navbar navbar-teleopti collapse navbar-collapse subnavbar">
-		<div class="container">
-			<ul class="nav navbar-nav">
-				<li>
-					<div class="input-group collapse-sub-navbar" style="max-width: 390px;">
-						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-left"></i>
-							</button>
-						</span>
-						<input class="form-control text-center" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
-						<span class="input-group-btn">
-							<button class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-right"></i>
-							</button>
-						</span>
-					</div>
-				</li>
-				<li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-				<li class="active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-				<li><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.Month</a></li>
-			</ul>
-		</div>
+<div class="navbar navbar-teleopti subnavbar">
+	<div class="container">
+		<ul class="nav navbar-nav navbar-teleopti row submenu">
+			<li class="col-xs-12 col-sm-4">
+				<span class="input-group " style="width: 329px;">
+					<span class="input-group-btn">
+						<button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
+							<i class="glyphicon glyphicon-chevron-left"></i>
+						</button>
+					</span>
+					<input class="form-control text-center" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
+					<span class="input-group-btn">
+						<button class="btn btn-default moment-datepicker" type="button">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+						<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
+							<i class="glyphicon glyphicon-chevron-right"></i>
+						</button>
+					</span>
+				</span>
+			</li>
+			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+			<li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
+			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+		</ul>
 	</div>
 </div>
-<div class="container">
-	<div class="navbar navbar-teleopti hidden-sm hidden-xs">
-		<div class="container">
-			<div class="navbar-left">
-				<div class="navbar-form">
-					<div class="input-group" style="max-width: 390px;">
-						<span class="input-group-btn">
-							<button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-left"></i>
-							</button>
-						</span>
-						<input class="form-control text-center" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
-						<span class="input-group-btn">
-							<button class="btn btn-default moment-datepicker" type="button">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
-								<i class="glyphicon glyphicon-chevron-right"></i>
-							</button>
-						</span>
-					</div>
-				</div>
-			</div>
-			<ul class="nav navbar-nav">
-				<li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-				<li class="active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-				<li><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.Month</a></li>
-			</ul>
-		</div>
-	</div>
+
+<div class="container pagebody">
+
 	<ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
 		<li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel()!=undefined && requestViewModel().type() == 'overtime' }">
 			<a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>

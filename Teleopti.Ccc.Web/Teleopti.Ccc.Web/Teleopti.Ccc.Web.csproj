@@ -1123,6 +1123,7 @@
     <Content Include="Areas\Messages\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\Messages\Views\Application\index.aspx" />
     <Content Include="Areas\MyTime\Content\Css\BadgeLeaderBoard.css" />
+    <Content Include="Areas\MyTime\Content\Css\Toolbar.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileWeekView.css" />
     <Content Include="Areas\MyTime\Content\Css\Rtl4Bootstrap.css" />
     <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
@@ -1391,6 +1392,10 @@
     <Content Include="Content\favicon.ico" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
+    <Content Include="Content\jasny-bootstrap\css\jasny-bootstrap.css" />
+    <Content Include="Content\jasny-bootstrap\css\jasny-bootstrap.min.css" />
+    <Content Include="Content\jasny-bootstrap\js\jasny-bootstrap.js" />
+    <Content Include="Content\jasny-bootstrap\js\jasny-bootstrap.min.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
     <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />

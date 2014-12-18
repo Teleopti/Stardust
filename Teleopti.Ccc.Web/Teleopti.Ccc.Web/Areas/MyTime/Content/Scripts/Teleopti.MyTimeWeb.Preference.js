@@ -58,10 +58,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			selectionViewModel.selectedPreference(availablePreferences[0]);
 		}
 
-		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ', calendarPlacement: "left" }');
 			ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
-			ko.applyBindings(selectionViewModel, $('div.navbar')[2]);
+			//ko.applyBindings(selectionViewModel, $('div.navbar')[2]);
 		});
 	}
 
@@ -69,13 +69,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		_hideExtendedPanels();
 		var promises = [];
 		$('#Preference-body-inner .ui-selected')
-			.each(function(index, cell) {
+			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
 				var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
 				promises.push(promise);
 			});
 		$.when.apply(null, promises)
-			.done(function() { periodFeedbackViewModel.LoadFeedback(); });
+			.done(function () { periodFeedbackViewModel.LoadFeedback(); });
 	}
 
 	function _deletePreferenceTemplate(templateId) {
@@ -177,10 +177,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			addExtendedPreferenceFormViewModel.ToggleAddPreferenceFormVisible();
 			e.preventDefault();
 		});
-		
+
 		button.removeAttr('disabled');
 	}
-	
+
 	function _loadAvailableTemplates() {
 		ajax.Ajax({
 			url: "Preference/GetPreferenceTemplates",
@@ -188,7 +188,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
-				data.unshift({Text: '', Value: ''});
+				data.unshift({ Text: '', Value: '' });
 				addExtendedPreferenceFormViewModel.AvailableTemplates(data);
 				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function (l, r) {
 					return l.Text > r.Text ? 1 : -1;
@@ -196,7 +196,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
-	
+
 	function _isShiftCategorySelectedAsStandardPreference() {
 		return $('#Preference-Picker option:selected').data('preference-extended');
 	}
@@ -289,7 +289,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		var dayViewModelsInPeriod = {};
 
-				
+
 		$('li[data-mytime-week]').each(function (index, element) {
 			weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(ajax);
 			ko.applyBindings(weekViewModels[index], element);
@@ -310,7 +310,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 
 		});
-		
+
 
 		var from = $('li[data-mytime-date]').first().data('mytime-date');
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
@@ -324,33 +324,33 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
 
 		}
-			
+
 		loader = loader || function (call) { call(); };
 		loader(function () {
 
 			if (preferencesAndScheduleViewModel) {
 
-			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
-				.done(function () {
-					loadingStarted = true;
-					_activateSelectable();
-					_activateMeetingTooltip();
-					readyForInteraction();
-					loader(function () {
-						periodFeedbackViewModel.LoadFeedback();
-						if ($('li[data-mytime-week]').length > 0) {
-							$.each(weekViewModels, function(index, week) {
-								week.LoadWeeklyWorkTimeSettings();
+				preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
+					.done(function () {
+						loadingStarted = true;
+						_activateSelectable();
+						_activateMeetingTooltip();
+						readyForInteraction();
+						loader(function () {
+							periodFeedbackViewModel.LoadFeedback();
+							if ($('li[data-mytime-week]').length > 0) {
+								$.each(weekViewModels, function (index, week) {
+									week.LoadWeeklyWorkTimeSettings();
+								});
+							}
+							$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
+								day.LoadFeedback();
 							});
-						}
-						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
-							day.LoadFeedback();
-						});
 
-						selectionViewModel.enableDateSelection();
-						callWhenAjaxIsCompleted(completelyLoaded);
+							selectionViewModel.enableDateSelection();
+							callWhenAjaxIsCompleted(completelyLoaded);
+						});
 					});
-				});
 			}
 		});
 	}
@@ -401,7 +401,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('.preference .extended-indication')
 			.qtip('toggle', false);
 	}
-	
+
 	function _cleanBindings() {
 		$('li[data-mytime-date]').each(function (index, element) {
 			ko.cleanNode(element);
@@ -409,7 +409,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('li[data-mytime-week]').each(function (index, element) {
 			ko.cleanNode(element);
 		});
-		
+
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)
 			ko.cleanNode(periodFeedbackElement);
@@ -447,7 +447,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
-			
+
 			if (!$('#Preference-body').length) {
 				readyForInteraction();
 				completelyLoaded();
@@ -459,7 +459,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initViewModels(_soon);
 			_initPeriodSelection();
 			_initExtendedPanels();
-			
+
 		},
 		InitViewModels: function () {
 			_initViewModels();
@@ -468,7 +468,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			ajax.AbortAll();
 			_cleanBindings();
 		},
-		DeletePreferenceTemplate: function(templateId) {
+		DeletePreferenceTemplate: function (templateId) {
 			_deletePreferenceTemplate(templateId);
 		}
 	};

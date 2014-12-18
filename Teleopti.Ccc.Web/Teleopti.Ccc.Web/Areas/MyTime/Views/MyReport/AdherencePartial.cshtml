@@ -3,13 +3,12 @@
 	Layout = null;
 }
 
-
-<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat"/>
+<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat" />
 <div class="myadherence">
-	<div class="navbar navbar-teleopti">
+	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container">
-			<div class="navbar-left">
-				<div class="navbar-btn">
+			<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<li class="col-xs-12 col-sm-4">
 					<div class="input-group" style="max-width: 294px;">
 						<span class="input-group-btn">
 							<button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
@@ -26,10 +25,10 @@
 							</button>
 						</span>
 					</div>
-				</div>
-			</div>
-			<ul class="nav navbar-nav">
-				<li>
+
+				</li>
+
+				<li class="col-xs-12 col-sm-4">
 					<a href="#" id="report-overview" data-bind="click: goToOverview">@Resources.OverView</a>
 				</li>
 			</ul>
@@ -68,7 +67,7 @@
 						<div data-bind="foreach: timeLines">
 							<div class="absolute" data-bind="style: { left: Position }">
 								<div class="ruler"></div>
-								<div class="label label-primary" style="margin-left: -13px" data-bind="text: Time" ></div>
+								<div class="label label-primary" style="margin-left: -13px" data-bind="text: Time"></div>
 							</div>
 						</div>
 					</div>
@@ -81,12 +80,12 @@
 					<div data-bind="foreach: timeLines" style="margin-top: -59px">
 						<div class="" style="margin-top: 59px">
 							<div class="ruler"></div>
-							<div class="label label-primary absolute" style="margin-top: -8px; z-index: 50" data-bind="text: Time" ></div>
+							<div class="label label-primary absolute" style="margin-top: -8px; z-index: 50" data-bind="text: Time"></div>
 						</div>
 					</div>
 				</div>
 			</div>
-						
+
 			<div class="no-padding floatleft schedule-margin" data-bind="foreach: schedules">
 				<div class="schedule-interval absolute" data-bind="style: { backgroundColor: Color, marginTop: Position }"></div>
 			</div>
