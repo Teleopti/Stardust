@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -195,6 +195,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.WindowsIdentityProviderTest", "Teleopti.Ccc.Web.WindowsIdentityProviderTest\Teleopti.Ccc.Web.WindowsIdentityProviderTest.csproj", "{65310D16-4278-4F19-BDF2-9AE8B842C0FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Stats.TestApplication", "Teleopti.Analytics.Stats.TestApplication\Teleopti.Analytics.Stats.TestApplication.csproj", "{7A7F9875-C14B-456D-8DC2-5A88939C18FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Runtime.Environment", "Teleopti.Runtime.Environment\Teleopti.Runtime.Environment\Teleopti.Runtime.Environment.csproj", "{83D40812-9E6A-4EF1-B84F-11BC203283EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1232,6 +1234,18 @@ Global
 		{7A7F9875-C14B-456D-8DC2-5A88939C18FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7A7F9875-C14B-456D-8DC2-5A88939C18FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7A7F9875-C14B-456D-8DC2-5A88939C18FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Release|.NET.ActiveCfg = Release|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{83D40812-9E6A-4EF1-B84F-11BC203283EF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

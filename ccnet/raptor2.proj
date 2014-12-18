@@ -48,7 +48,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln;$(CCNetWorkingDirectory)\Teleopti.Runtime.Environment.sln" />
+		<SolutionFile Include="$(CCNetWorkingDirectory)\cruisecontrol.sln" />
 		<SQLFiles Include="$(CCNetWorkingDirectory)\Database\Tools\PK-namingStandard.sql"/>
 		<SQLFiles Include="$(CCNetWorkingDirectory)\Database\Tools\NoHeapsCheck.sql"/>
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
