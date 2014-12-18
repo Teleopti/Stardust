@@ -61,6 +61,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			database.PersistedActualAgentState.PersonId.Should().Be(personId);
 		}
-
 	}
 }

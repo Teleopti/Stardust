@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						yield return new ActualAgentState
 						{
 							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-							//BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit")),
+							BusinessUnitId = !reader.IsDBNull(reader.GetOrdinal("BusinessUnitId"))
+								? reader.GetGuid(reader.GetOrdinal("BusinessUnitId"))
+								: Guid.Empty,
 							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
 							StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
 							State = reader.GetString(reader.GetOrdinal("State")),

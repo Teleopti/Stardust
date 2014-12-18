@@ -28,18 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = target.LoadActualAgentState(new List<IPerson> {person});
 			Assert.IsNotNull(result);
 		}
-
-		[Test]
-		public void VerifyLoadOneActualAgentState()
-		{
-			var agentState = new ActualAgentState
-			{
-				ReceivedTime = new DateTime(1900, 1, 1)
-			};
-			target.AddOrUpdateActualAgentState(agentState);
-			Assert.IsNotNull(target.LoadOneActualAgentState(Guid.Empty));
-		}
-
+		
 	    [Test]
 	    public void ShouldLoadLastAgentState()
 	    {

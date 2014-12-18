@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -31,6 +32,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var result = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now()).GetCurrentActualAgentState(state.PersonId);
 			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldPersistActualAgentStateWithBusinessUnit()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var state = new ActualAgentStateForTest {BusinessUnitId = businessUnitId};
+			var target = createDatabaseWriter();
+
+			target.PersistActualAgentState(state);
+
+			createReader().GetCurrentActualAgentState(state.PersonId)
+				.BusinessUnitId.Should().Be(businessUnitId);
+		}
+
+		private static DatabaseWriter createDatabaseWriter()
+		{
+			return new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+		}
+
+		private static DatabaseReader createReader()
+		{
+			return new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
 		}
 
 	}
