@@ -195,8 +195,6 @@ BEGIN
 			ELSE NULL --Fail fast
 		END
 		+ ' WHERE date_from between '''+ CAST(@start_date as nvarchar(20))+''' and '''+ CAST(@end_date as nvarchar(20))+'''
-		AND EXISTS (SELECT 1 FROM #agg_queue_ids tmp WHERE agg.queue=tmp.queue_agg_id)
-		AND EXISTS (SELECT 1 FROM #agg_acdlogin_ids tmp WHERE agg.agent_id=tmp.acd_login_agg_id)
 		) stg
 	INNER JOIN
 		mart.dim_date		d
