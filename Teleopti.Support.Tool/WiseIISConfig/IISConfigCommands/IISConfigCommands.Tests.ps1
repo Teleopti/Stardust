@@ -49,6 +49,10 @@ $global:PhysicalSubPath = 'TeleoptiCCC'
 $global:ToggleMode = ''
 $global:Baseline = ''
 
+$global:LicFile = "$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
+$global:PoolName = "Teleopti SDK"
+
+		
 
 
 function Config-Load {
@@ -93,6 +97,14 @@ function Config-Load {
 						$global:displayName = 'Teleopti CCC Server, version 7'
 					}
 					
+					if ($global:branch -eq 'main')
+					{
+						if ($global:version.StartsWith("7"))
+						{
+							$global:LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
+							$global:PoolName = "Teleopti ASP.NET v4.0"
+						}
+					}
                 }
                 
             }
@@ -120,7 +132,7 @@ function TearDown {
 		}
         
 		It "should stop the SDK" {
-			stop-AppPool -PoolName "Teleopti SDK"
+			stop-AppPool -PoolName $global:PoolName
 			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
@@ -240,7 +252,7 @@ function Test-SitesAndServicesOk {
 
         #start system
 		It "should start SDK" {
-			start-AppPool -PoolName "Teleopti SDK"
+			start-AppPool -PoolName $global:PoolName
 			$SDKUrl = $global:BaseURL + $global:SubSite + "/SDK/TeleoptiCCCSdkService.svc"
 			$temp = Check-HttpStatus -url $SDKUrl -credentials $cred
 			$temp | Should be $True
@@ -284,19 +296,10 @@ function Add-CccLicenseToDemo
     if($global:Server -ne '')
     {
         
-		$LicFile="$here\..\..\..\LicenseFiles\LicenseCCC.xml"
-		if ($global:branch -eq 'main')
-			{
-				if ($global:version.StartsWith("8"))
-				{
-					$LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
-				}
-			}
-		
 		It "should insert a new license" {
-            #$LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-            #$LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
-            $xmlString = [IO.File]::ReadAllText($LicFile)
+            #$global:LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+            #$global:LicFile="$here\..\..\..\LicenseFiles\Teleopti_RD.xml"
+            $xmlString = [IO.File]::ReadAllText($global:LicFile)
             $InsertedLicense = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
             $global:insertedLicense | Should Be 1
         }
