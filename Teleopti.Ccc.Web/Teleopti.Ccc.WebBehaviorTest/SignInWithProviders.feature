@@ -21,7 +21,6 @@ Background:
 	| Business Unit        | Business Unit 2          |
 	| Access to mytime web | true                     |
 
-@ignore
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Sign in without being a windows user in CCC
 	Given I have the role 'Role for business unit 1'
