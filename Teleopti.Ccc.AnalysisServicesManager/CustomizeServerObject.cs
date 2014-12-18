@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using Microsoft.AnalysisServices;
@@ -57,13 +56,17 @@ namespace AnalysisServicesManager
 		public void ApplyCustomization(CommandLineArgument argument)
 		{
 			var folderOrFilePath = argument.CustomFilePath;
+			string dataSourceFile = folderOrFilePath + "\\01 Datasource\\DatasourceViewDefinition.xml";
+
 			if(Directory.Exists(folderOrFilePath))
 			{
-				Console.WriteLine("Running custom scripts from folder : " + argument.CustomFilePath);
-
-				var parser = new ParseDataViewInfoFromXml();
-				var tableDefinitionList = parser.ExtractDataViewInfo(folderOrFilePath + "\\01 Datasource\\DatasourceViewDefinition.xml");
-				CreateDataSourceView(tableDefinitionList);
+				if (File.Exists(dataSourceFile))
+				{
+					Console.WriteLine("\tAdding custom data source view  ...");
+					var parser = new ParseDataViewInfoFromXml();
+					var tableDefinitionList = parser.ExtractDataViewInfo(dataSourceFile);
+					CreateDataSourceView(tableDefinitionList);
+				}
 
 				ForEachFileInSubFolder(argument, folderOrFilePath + "\\" + dimensions);
 				ForEachFileInSubFolder(argument, folderOrFilePath + "\\" + measures);
@@ -72,12 +75,12 @@ namespace AnalysisServicesManager
 			}
 			else if (File.Exists(folderOrFilePath))
 			{
-				Console.WriteLine("Running single custom script : " + argument.CustomFilePath);
+				Console.WriteLine("\tRunning single custom script : " + argument.CustomFilePath);
 				var repository = new Repository(argument);
 				repository.ExecuteAnyXmla(argument, folderOrFilePath);
 			}
 			else
-				Console.WriteLine("No custom action");
+				Console.WriteLine("\tNo custom action");
 
 		}
 
@@ -90,6 +93,9 @@ namespace AnalysisServicesManager
 
 		public void ForEachFileInSubFolder(CommandLineArgument argument, string folder)
 		{
+			if (!Directory.Exists(folder))
+				return;
+
 			var scriptsDirectoryInfo = new DirectoryInfo(folder);
 
 			const string extension = "xmla";
@@ -102,6 +108,7 @@ namespace AnalysisServicesManager
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
+				Console.WriteLine("\t" + scriptFile.file.Name);
 				var repository = new Repository(argument);
 				repository.ExecuteAnyXmla(argument, scriptFile.file.FullName);
 				if (folder.EndsWith(dimensions))
@@ -113,6 +120,9 @@ namespace AnalysisServicesManager
 
 		public void ForEachFileInCalculatedMembers(CommandLineArgument argument, string folder)
 		{
+			if(!Directory.Exists(folder))
+				return;
+
 			var scriptsDirectoryInfo = new DirectoryInfo(folder);
 
 			const string extension = "xml";
@@ -125,6 +135,7 @@ namespace AnalysisServicesManager
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
+				Console.WriteLine("\t" + scriptFile.file.Name);
 				var parser = new ParseCalculatedMemberInfoFromXml();
 				var calculatedMemberList = parser.ExtractCalculatedMemberInfo(scriptFile.file.FullName);
 
@@ -235,7 +246,6 @@ namespace AnalysisServicesManager
 				server.Connect(_ASconnectionString);
 				Database targetDb = server.Databases.GetByName(_databaseName);
 
-				DataSourceView datasourceView = new DataSourceView();
 				if (targetDb.DataSourceViews.Contains(DataSourceViewName))
 				{
 					return true;
