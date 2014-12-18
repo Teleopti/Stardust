@@ -12542,7 +12542,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>use for message title when agent's shift has been changed, the announcement for shift exchange will become invalid.</comment>
   </data>
   <data name="AnnouncementInvalidMessage" xml:space="preserve">
-    <value>Your announcement becomes invalid due to your shift has been changed.\nThe announcement was on {0}.</value>
+    <value>Your announcement becomes invalid due to your shift has been changed. The announcement was on {0}.</value>
     <comment>message body for "AnnouncementInvalid"</comment>
   </data>
 </root>

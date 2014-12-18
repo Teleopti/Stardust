@@ -17,9 +17,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldSetOfferInvalid()
 		{
+			const int checksum = 12345678;
 			var offerRepository = MockRepository.GenerateMock<IShiftExchangeOfferRepository>();
 			var shiftExchangeOffer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			shiftExchangeOffer.Stub(x => x.Status).PropertyBehavior();
+			shiftExchangeOffer.Stub(x => x.Checksum).Return(checksum);
 			var personId = Guid.NewGuid();
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personId);
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 					new ProjectionChangedEventScheduleDay(), 
 					new ProjectionChangedEventScheduleDay
 				{
-					Date = dateTime
+					Date = dateTime,
+					CheckSum = checksum
 				} }
 			});
 

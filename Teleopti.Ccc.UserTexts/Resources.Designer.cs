@@ -2105,7 +2105,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your announcement becomes invalid due to your shift has been changed.\nThe announcement was on {0}..
+        ///   Looks up a localized string similar to Your announcement becomes invalid due to your shift has been changed. The announcement was on {0}..
         /// </summary>
         public static string AnnouncementInvalidMessage {
             get {
