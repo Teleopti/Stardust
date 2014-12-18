@@ -4,24 +4,33 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	[TestFixture]
+	[RtaTest]
+	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
+	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	public class PersonEventsOrderTest
 	{
+		public FakeRtaDatabase database;
+		public FakeEventPublisher publisher;
+		public MutableNow now;
+		public IRta target;
+
 		[Test]
 		public void ShouldPublishShiftStartBeforeActivityStart()
 		{
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00");
+			now.Is("2014-10-20 10:00");
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -38,13 +47,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldPublishActivityStartBeforeAdherence()
 		{
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
+				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00");
+			now.Is("2014-10-20 10:00");
 
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -62,14 +69,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithAlarm("phone", activityId, 1)
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), publisher);
+				.WithAlarm("phone", activityId, 1);
+			now.Is("2014-10-20 10:00");
 
 			target.SaveState(new ExternalUserStateForTest
 			{

@@ -115,19 +115,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			_rta.CheckForActivityChange(input);
 		}
 
-		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
-		{
-			_rta.CheckForActivityChange(new CheckForActivityChangeInputModel
-			{
-				PersonId = personId,
-				BusinessUnitId = businessUnitId
-			});
-		}
-
 		public void Initialize()
 		{
 			_rta.Initialize();
 		}
 
+	}
+
+	public static class RtaExtensions
+	{
+		public static void CheckForActivityChange(this IRta rta, Guid personId, Guid businessUnitId)
+		{
+			rta.CheckForActivityChange(new CheckForActivityChangeInputModel
+			{
+				PersonId = personId,
+				BusinessUnitId = businessUnitId
+			});
+		}
 	}
 }
