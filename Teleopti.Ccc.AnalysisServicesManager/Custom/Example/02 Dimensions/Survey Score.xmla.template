@@ -1,45 +1,40 @@
 ﻿<!--
 The purpose of the file(s) in this folder is to create the as database dimension.
-You can use SSMS to script your dimension when your are done. Or copy paste from your full custom XMLA deployment file
+You can use SSMS to script your dimension when your are done. Or copy needed section  from your full custom XMLA deployment file
 
 NOTE 1
-Dimensions are create at two levels in AS
-- AS Database
-- AS Cube
-
-The Database.Dimension(s) are handle via .xmla files in this folder
-BUT - The Cube.Dimension lack that kind of xmla-support!
-Instead AMO is used to add the Cube.Dimension.
-The name used for the Cube.Dimension will be equal to the dimension file name, without extension.
-
-eg. "02 Dimensions\Account.xmla" will describe the Database.Dimension
-<DimensionID>Account</DimensionID>
-<Name>Account</Name> 
-
-The "Name" will be used for the Cube.Dimension as "CubeDimensionID":
-<CubeDimensionID>Survey Score</CubeDimensionID>
-And that ID will be referenced later by *.xmla files in "03 Measures"
-
-NOTE 2
 In the <Object> tag:
 Be sure to replace you local database name with the parameter
 <DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
 This value is later replaced by ASManager upon deployment
 
+
+NOTE 2
+Dimensions are create at two levels in Analysis Services
+- Database
+- Cube
+
+The Database.Dimension(s) are handle via .xmla files in this folder
+BUT - The Cube.Dimension lack that kind of xmla-support!
+Instead AMO is used to add the Cube.Dimension.
+
+This file = "Survey Score.xml", we will use it as CubeDimensionId for the Cube Dimension
+<CubeDimensionID>Survey Score</CubeDimensionID>
+And that the object Id that will be referenced later by your cube measures
 -->
 
 <Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
 	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
 		<Object>
 			<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
-			<DimensionID>Account</DimensionID>
+			<DimensionID>Survey Score</DimensionID>
 		</Object>		
 	<ObjectDefinition>
 		<Dimension
 			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-			<ID>Account</ID>
-			<Name>Account</Name>
+			<ID>Survey Score</ID>
+			<Name>Survey Score</Name>
 			<Source xsi:type="DataSourceViewBinding">
 				<DataSourceViewID>Teleopti Analytics</DataSourceViewID>
 			</Source>
@@ -52,16 +47,16 @@ This value is later replaced by ASManager upon deployment
 			<UnknownMemberName>Unknown</UnknownMemberName>
 			<Attributes>
 				<Attribute>
-					<ID>Account_id</ID>
-					<Name>Account_id</Name>
+					<ID>Score</ID>
+					<Name>Score</Name>
 					<Usage>Key</Usage>
 					<KeyColumns>
 						<KeyColumn>
 							<DataType>Integer</DataType>
 							<NullProcessing>UnknownMember</NullProcessing>
 							<Source xsi:type="ColumnBinding">
-								<TableID>dim_Account</TableID>
-								<ColumnID>Account_Id</ColumnID>
+								<TableID>dim_survey_score</TableID>
+								<ColumnID>score</ColumnID>
 							</Source>
 						</KeyColumn>
 					</KeyColumns>
@@ -69,8 +64,8 @@ This value is later replaced by ASManager upon deployment
 						<DataType>WChar</DataType>
 						<NullProcessing>ZeroOrBlank</NullProcessing>
 						<Source xsi:type="ColumnBinding">
-							<TableID>dim_Account</TableID>
-							<ColumnID>Account_Name</ColumnID>
+							<TableID>dim_survey_score</TableID>
+							<ColumnID>score</ColumnID>
 						</Source>
 					</NameColumn>
 					<OrderBy>Key</OrderBy>
