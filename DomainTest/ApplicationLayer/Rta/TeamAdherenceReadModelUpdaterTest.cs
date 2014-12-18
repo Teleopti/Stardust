@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTeamAdherence()
 		{
 			var teamId = Guid.NewGuid();
-			var persister = new FakeTeamAdherencepersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent() {TeamId = teamId});
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateTeamAdherenceForOutOfAdherence()
 		{
 			var teamId = Guid.NewGuid();
-			var persister = new FakeTeamAdherencepersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId });
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
 
-			var persister = new FakeTeamAdherencepersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId1 });
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldSummarizeAdherenceForTeamInAndOut()
 		{
 			var teamId1 = Guid.NewGuid();
-			var persister = new FakeTeamAdherencepersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent {TeamId = teamId1});
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldNeverSetNegativeAdherence()
 		{
 			var teamId1 = Guid.NewGuid();
-			var persister = new FakeTeamAdherencepersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent { TeamId = teamId1 });
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 	}
 
-	public class FakeTeamAdherencepersister : ITeamAdherencepersister
+	public class FakeTeamAdherencePersister : ITeamAdherencePersister
 	{
 
 		private readonly List<TeamAdherenceReadModel> _models = new List<TeamAdherenceReadModel>();  

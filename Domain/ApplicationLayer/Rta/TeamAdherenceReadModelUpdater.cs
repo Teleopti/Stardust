@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	[UseOnToggle(Toggles.RTA_NoBroker_31237)]
 	public class TeamAdherenceReadModelUpdater : IHandleEvent<PersonInAdherenceEvent>, IHandleEvent<PersonOutOfAdherenceEvent>
 	{
-		private readonly ITeamAdherencepersister _persister;
+		private readonly ITeamAdherencePersister _persister;
 
-		public TeamAdherenceReadModelUpdater(ITeamAdherencepersister persister)
+		public TeamAdherenceReadModelUpdater(ITeamAdherencePersister persister)
 		{
 			_persister = persister;
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 	}
 
-	public class Emptypersister : ITeamAdherencepersister
+	public class Emptypersister : ITeamAdherencePersister
 	{
 		public void Persist(TeamAdherenceReadModel model)
 		{
