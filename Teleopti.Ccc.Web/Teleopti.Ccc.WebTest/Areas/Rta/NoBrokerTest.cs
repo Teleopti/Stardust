@@ -16,12 +16,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IRta target;
 		public FakeMessageSender sender;
 		public FakeRtaDatabase database;
-		public MutableNow now;
 
 		[Test, Ignore]
 		public void ShouldNotSendAnyMessages()
 		{
-			now.Mutate("2014-10-20 9:00");
 			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", Guid.NewGuid())

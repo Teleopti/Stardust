@@ -4,12 +4,15 @@ using System.Reflection;
 using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
 	public class IoCTestAttribute : Attribute, ITestAction
 	{
 		public ActionTargets Targets
@@ -66,6 +69,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(), Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			RegisterInContainer(builder, configuration);
 			_container = builder.Build();
 		}

@@ -3,13 +3,11 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -20,7 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			builder.RegisterModule(new RtaModule(configuration));
 
-			builder.RegisterInstance(new MutableNow()).As<INow>().AsSelf();
 			builder.RegisterInstance(new FakeMessageSender()).As<IMessageSender>().AsSelf();
 			builder.RegisterInstance(new FakeCurrentDatasource()).As<ICurrentDataSource>().AsSelf();
 			builder.RegisterInstance(new FakeEventPublisher()).As<IEventPublisher>().AsSelf();
