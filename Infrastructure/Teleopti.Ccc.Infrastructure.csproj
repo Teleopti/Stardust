@@ -207,6 +207,7 @@
     <Compile Include="Repositories\IEtlLogObjectRepository.cs" />
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
+    <Compile Include="Repositories\TeamAdherencePersister.cs" />
     <Compile Include="Rta\ActualAgentStateExtension.cs" />
     <Compile Include="Repositories\ShiftExchangeOfferRepository.cs" />
     <Compile Include="Rta\DatabaseConnectionFactory.cs" />

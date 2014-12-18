@@ -47,17 +47,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 	}
 
-	public class Emptypersister : ITeamAdherencePersister
-	{
-		public void Persist(TeamAdherenceReadModel model)
-		{
-			//Nothing
-		}
-
-		public TeamAdherenceReadModel Get(Guid teamId)
-		{
-			return new TeamAdherenceReadModel() { TeamId = teamId };
-		}
-	}
-	
 }
