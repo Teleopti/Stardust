@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCurrentDatasource : ICurrentDataSource
 	{
-		private readonly string _name;
+		private string _name;
 
 		public FakeCurrentDatasource()
 		{
@@ -24,6 +24,11 @@ namespace Teleopti.Ccc.TestCommon
 		public string CurrentName()
 		{
 			return _name;
+		}
+
+		public void FakeName(string name)
+		{
+			_name = name;
 		}
 	}
 }

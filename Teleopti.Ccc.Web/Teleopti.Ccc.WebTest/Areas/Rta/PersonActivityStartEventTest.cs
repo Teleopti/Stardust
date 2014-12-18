@@ -4,28 +4,36 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	[TestFixture]
+	[RtaTest]
+	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	public class PersonActivityStartEventTest
 	{
+		public FakeRtaDatabase database;
+		public FakeEventPublisher publisher;
+		public FakeCurrentDatasource dataSource;
+		public MutableNow now;
+		public IRta target;
+
 		[Test]
 		public void ShouldPublishEvent()
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher);
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
+			now.Is("2014-10-20 10:00");
 			
 			target.CheckForActivityChange(personId, businessUnitId);
 
@@ -40,16 +48,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var activityId1 = Guid.NewGuid();
 			var activityId2 = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId1, "2014-10-20 10:00", "2014-10-20 10:15")
-				.WithSchedule(personId, activityId2, "2014-10-20 10:15", "2014-10-20 11:00")
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var now = new MutableNow();
+				.WithSchedule(personId, activityId2, "2014-10-20 10:15", "2014-10-20 11:00");
 			now.Is("2014-10-20 10:00");
-			var target = new RtaForTest(database, now, publisher);
 
 			target.CheckForActivityChange(personId, businessUnitId);
 			now.Is("2014-10-20 10:05");
@@ -67,13 +71,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:02".Utc()), publisher);
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00");
+			now.Is("2014-10-20 10:02");
 
 			target.CheckForActivityChange(personId, businessUnitId);
 
@@ -88,14 +90,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var dataSource = new FakeCurrentDatasource("datasource");
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00".Utc()), publisher, dataSource);
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
+			dataSource.FakeName("datasource");
+			now.Is("2014-10-20 10:00");
 
 			target.CheckForActivityChange(personId, businessUnitId);
 
@@ -110,23 +110,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, phone, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithAlarm("phone", phone, 0)
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var mutableNow = new MutableNow();
-			mutableNow.Is("2014-10-20 09:50");
-			var target = new RtaForTest(database, mutableNow, publisher);
+				.WithAlarm("phone", phone, 0);
+			now.Is("2014-10-20 09:50");
 
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			mutableNow.Is("2014-10-20 10:02");
+			now.Is("2014-10-20 10:02");
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
@@ -139,23 +135,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithAlarm("statecode", activityId, 1d)
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var mutableNow = new MutableNow();
-			mutableNow.Is("2014-10-20 09:50");
-			var target = new RtaForTest(database, mutableNow, publisher);
+				.WithAlarm("statecode", activityId, 1d);
+			now.Is("2014-10-20 09:50");
 
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
 			});
-			mutableNow.Is("2014-10-20 10:02");
+			now.Is("2014-10-20 10:02");
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
