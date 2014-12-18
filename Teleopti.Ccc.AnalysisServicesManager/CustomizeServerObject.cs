@@ -19,6 +19,13 @@ namespace AnalysisServicesManager
 		public List<TeleoptiContraints> ListOfConstraints { get; set; }
 	}
 
+	public class CalculatedMember
+	{
+		public string MdxString { get; set; }
+		public string AssociatedMeasureGroupID { get; set; }
+		public string CalculationReference { get; set; }
+	}
+
 	public class TeleoptiContraints
 	{
 		public string FkTableName { get; set; }
@@ -34,6 +41,11 @@ namespace AnalysisServicesManager
 		private string _SQLconnectionString;
 		private const string _cubeName = "Teleopti Analytics";
 		private const string DataSourceViewName = "Teleopti Analytics";
+
+		private const string dimensions = "02 Dimensions";
+		private const string measures = "03 Measures";
+		private const string calculatedMembers = "04 Calculated Members";
+
 
         public CustomizeServerObject(CommandLineArgument argument)
         {
@@ -53,9 +65,10 @@ namespace AnalysisServicesManager
 				var tableDefinitionList = parser.ExtractDataViewInfo(folderOrFilePath + "\\01 Datasource\\DatasourceViewDefinition.xml");
 				CreateDataSourceView(tableDefinitionList);
 
-				ForEachFileInSubFolder(argument, folderOrFilePath + "\\02 Dimensions",true);
-				ForEachFileInSubFolder(argument, folderOrFilePath + "\\03 Measures",false);
-				ForEachFileInSubFolder(argument, folderOrFilePath + "\\04 Other",false);
+				ForEachFileInSubFolder(argument, folderOrFilePath + "\\" + dimensions);
+				ForEachFileInSubFolder(argument, folderOrFilePath + "\\" + measures);
+				ForEachFileInCalculatedMembers(argument, folderOrFilePath + "\\" + calculatedMembers);
+
 			}
 			else if (File.Exists(folderOrFilePath))
 			{
@@ -68,21 +81,22 @@ namespace AnalysisServicesManager
 
 		}
 
-		public string NameOfFile(FileInfo file)
+		public string NameOfFile(FileInfo file, string extension)
 		{
-			var name = file.Name.Replace(".xmla", "");
+			var name = file.Name.Replace("."+extension, "");
 			var fileName = Convert.ToString(name);
 			return fileName;
 		}
 
-		public void ForEachFileInSubFolder(CommandLineArgument argument, string folder, bool isDimension)
+		public void ForEachFileInSubFolder(CommandLineArgument argument, string folder)
 		{
 			var scriptsDirectoryInfo = new DirectoryInfo(folder);
 
-			var scriptFiles = scriptsDirectoryInfo.GetFiles("*.xmla", SearchOption.TopDirectoryOnly);
+			const string extension = "xmla";
+			var scriptFiles = scriptsDirectoryInfo.GetFiles("*." + extension, SearchOption.TopDirectoryOnly);
 
 			var applicableScriptFiles = from f in scriptFiles
-										let name = NameOfFile(f)
+										let name = NameOfFile(f, extension)
 										orderby name
 										select new { file = f };
 
@@ -90,9 +104,60 @@ namespace AnalysisServicesManager
 			{
 				var repository = new Repository(argument);
 				repository.ExecuteAnyXmla(argument, scriptFile.file.FullName);
-				if (isDimension)
+				if (folder.EndsWith(dimensions))
 				{
 					AddCubeDimensionByFileName(Path.GetFileNameWithoutExtension(scriptFile.file.Name));
+				}
+			}
+		}
+
+		public void ForEachFileInCalculatedMembers(CommandLineArgument argument, string folder)
+		{
+			var scriptsDirectoryInfo = new DirectoryInfo(folder);
+
+			const string extension = "xml";
+			var scriptFiles = scriptsDirectoryInfo.GetFiles("*." + extension, SearchOption.TopDirectoryOnly);
+
+			var applicableScriptFiles = from f in scriptFiles
+										let name = NameOfFile(f, extension)
+										orderby name
+										select new { file = f };
+
+			foreach (var scriptFile in applicableScriptFiles)
+			{
+				var parser = new ParseCalculatedMemberInfoFromXml();
+				var calculatedMemberList = parser.ExtractCalculatedMemberInfo(scriptFile.file.FullName);
+
+				foreach (var calculatedMember in calculatedMemberList)
+				{
+					addCalculatedMeasure(argument.AnalysisServer,argument.AnalysisDatabase, calculatedMember);
+				}
+			}
+		}
+
+		public void addCalculatedMeasure(string AsServer, string AsDatabase, CalculatedMember calculatedMember)
+		{
+			//add the member
+			MdxScriptUpdater updater = new MdxScriptUpdater(AsServer);
+			updater.MdxCommands.Add(calculatedMember.MdxString);
+			updater.Update(AsDatabase, _cubeName);
+
+			//move the calculated member to correct Measure Group
+			using (Server server = new Server())
+			{
+				server.Connect(_ASconnectionString);
+				Database targetDb = server.Databases.GetByName(_databaseName);
+				Cube cube = targetDb.Cubes.FindByName(_cubeName);
+				MdxScript mdxScript = cube.MdxScripts["MdxScript"];
+
+				if (!mdxScript.CalculationProperties.Contains(calculatedMember.CalculationReference))
+				{
+					CalculationProperty cp = new CalculationProperty(calculatedMember.CalculationReference, CalculationType.Member);
+					cp.AssociatedMeasureGroupID = calculatedMember.AssociatedMeasureGroupID;
+					cp.FormatString = "";
+					cp.Visible = true;
+					mdxScript.CalculationProperties.Add(cp);
+					cube.Update(UpdateOptions.ExpandFull);
 				}
 			}
 		}

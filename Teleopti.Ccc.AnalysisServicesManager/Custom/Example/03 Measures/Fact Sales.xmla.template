@@ -1,7 +1,18 @@
-﻿<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+﻿<!--
+The purpose of the file(s) in this folder is to create the as database measure group(s).
+You can use SSMS to script your measure group when your are done or cut the relevant section from your full custom XMLA deployment file.
+
+NOTE 1
+In the <Object> tag:
+Be sure to replace you local database name with the parameter
+<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+This value is later replaced by ASManager upon deployment
+
+-->
+<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
 	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
 		<Object>
-		<DatabaseID>#(SQL_DATABASE_NAME)</DatabaseID>
+		<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
 		<CubeID>Teleopti Analytics 1</CubeID>
 		<MeasureGroupID>Fact Sales</MeasureGroupID>
 	</Object>
@@ -144,33 +155,20 @@
 					</Attributes>
 				</Dimension>
 				<Dimension xsi:type="RegularMeasureGroupDimension">
-					<CubeDimensionID>ACD Login</CubeDimensionID>
+					<CubeDimensionID>Account</CubeDimensionID>
 					<Attributes>
 						<Attribute>
-							<AttributeID>Dim Acd Login</AttributeID>
+							<AttributeID>Account_id</AttributeID>
 							<KeyColumns>
 								<KeyColumn>
 									<DataType>Integer</DataType>
 									<Source xsi:type="ColumnBinding">
-										<TableID>fact_sales</TableID>
-										<ColumnID>acd_login_id</ColumnID>
+										<TableID>fact_Sales</TableID>
+										<ColumnID>Account_id</ColumnID>
 									</Source>
 								</KeyColumn>
 							</KeyColumns>
 							<Type>Granularity</Type>
-						</Attribute>
-						<Attribute>
-							<AttributeID>Acd Login Name</AttributeID>
-							<KeyColumns>
-								<KeyColumn>
-									<DataType>WChar</DataType>
-									<DataSize>100</DataSize>
-									<Source xsi:type="ColumnBinding">
-										<TableID>dbo_dim_acd_login</TableID>
-										<ColumnID>acd_login_name</ColumnID>
-									</Source>
-								</KeyColumn>
-							</KeyColumns>
 						</Attribute>
 					</Attributes>
 				</Dimension>
