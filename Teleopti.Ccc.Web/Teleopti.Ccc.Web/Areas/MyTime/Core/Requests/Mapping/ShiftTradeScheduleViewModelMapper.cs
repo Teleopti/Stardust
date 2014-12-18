@@ -14,18 +14,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IShiftTradeAddPersonScheduleViewModelMapper _shiftTradePersonScheduleViewModelMapper;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
-		private readonly IUserTimeZone _userTimeZone;
 
 		public ShiftTradeScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider, 
 													IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
 													IShiftTradeAddPersonScheduleViewModelMapper shiftTradePersonScheduleViewModelMapper,
-													IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper, IUserTimeZone userTimeZone)
+													IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_shiftTradePersonScheduleViewModelMapper = shiftTradePersonScheduleViewModelMapper;
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
-			_userTimeZone = userTimeZone;
 		}
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
@@ -111,8 +109,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 	
 			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
-			var startUtc = DateTime.SpecifyKind((DateTime) myScheduleDayReadModel.Start, DateTimeKind.Utc);
-			var endUtc = DateTime.SpecifyKind((DateTime) myScheduleDayReadModel.End, DateTimeKind.Utc);
+			var startUtc = DateTime.SpecifyKind(myScheduleDayReadModel.Start.Value, DateTimeKind.Utc);
+			var endUtc = DateTime.SpecifyKind(myScheduleDayReadModel.End.Value, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startUtc, endUtc);
 			
 			if (data.TimeFilter == null)

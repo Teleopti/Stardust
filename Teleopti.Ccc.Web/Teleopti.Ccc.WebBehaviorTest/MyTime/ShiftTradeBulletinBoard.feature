@@ -73,7 +73,6 @@ Scenario: Should show my shift and other shift in bulletin board
 	| End time		| 17:00 |
 	And I should see a possible schedule trade with 'OtherAgent'
 
-@ignore
 Scenario: Should possible make shift trade in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

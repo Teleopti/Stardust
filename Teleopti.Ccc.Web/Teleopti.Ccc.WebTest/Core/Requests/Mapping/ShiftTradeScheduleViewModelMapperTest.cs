@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IShiftTradeAddPersonScheduleViewModelMapper _shiftTradePersonScheduleViewModelMapper;
 		private IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 		private ShiftTradeScheduleViewModelMapper _target;
-		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
 		public void Setup()
@@ -30,12 +29,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_possibleShiftTradePersonsProvider = MockRepository.GenerateMock<IPossibleShiftTradePersonsProvider>();
 			_shiftTradePersonScheduleViewModelMapper = MockRepository.GenerateMock<IShiftTradeAddPersonScheduleViewModelMapper>();
 			_shiftTradeTimeLineHoursViewModelMapper = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelMapper>();
-			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 			                                                _shiftTradePersonScheduleViewModelMapper,
-																			_shiftTradeTimeLineHoursViewModelMapper, _userTimeZone);
+																			_shiftTradeTimeLineHoursViewModelMapper);
 		}
 
 		[Test]

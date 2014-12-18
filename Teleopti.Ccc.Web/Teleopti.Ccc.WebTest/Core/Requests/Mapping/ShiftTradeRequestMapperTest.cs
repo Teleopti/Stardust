@@ -5,11 +5,9 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -65,6 +63,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPersonRequestFromOffer()
 		{
+			const string expected = "hejhej";
+			form.Subject = expected;
 			var offerId = new Guid();
 			form.ShiftExchangeOfferId = offerId;
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			var res = target.Map(form);
 			res.Should().Be.SameInstanceAs(personRequest);
+			personRequest.AssertWasCalled(x => x.Subject = expected);
 		}
 
 		[Test]
