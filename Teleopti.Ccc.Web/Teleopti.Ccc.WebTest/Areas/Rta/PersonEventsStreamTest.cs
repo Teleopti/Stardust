@@ -4,20 +4,31 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	[TestFixture]
+	[RtaTest]
+	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
+	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	public class PersonEventsStreamTest
 	{
+		public FakeRtaDatabase database;
+		public FakeEventPublisher publisher;
+		public MutableNow now;
+		public IRta target;
+
 		[Test]
 		public void ShouldPublishAdherenceEventsForBothCausesInASingleTrigger()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var brejk = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
@@ -25,11 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithAlarm("phone", phone, 0)
 				.WithAlarm("phone", brejk, 1)
 				.WithAlarm("break", brejk, 0)
-				.WithAlarm("break", phone, 1)
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var now = new MutableNow();
-			var target = new RtaForTest(database, now, publisher);
+				.WithAlarm("break", phone, 1);
 			now.Is("2014-10-20 9:00");
 			target.SaveState(new ExternalUserStateForTest
 			{
@@ -60,17 +67,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
 				.WithAlarm("admin", phone, 1)
-				.WithAlarm("admin", admin, 0)
-				.Make();
-			var publisher = new FakeEventPublisher();
-			var now = new MutableNow();
-			var target = new RtaForTest(database, now, publisher);
+				.WithAlarm("admin", admin, 0);
 			now.Is("2014-10-20 9:15");
 			target.SaveState(new ExternalUserStateForTest
 			{
