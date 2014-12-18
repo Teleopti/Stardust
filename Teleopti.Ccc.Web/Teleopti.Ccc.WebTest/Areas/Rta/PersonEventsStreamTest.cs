@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var publisher = new FakeEventPublisher();
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher);
-			now.Mutate("2014-10-20 9:00");
+			now.Is("2014-10-20 9:00");
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 			publisher.PublishedEvents.Clear();
 
-			now.Mutate("2014-10-20 10:02");
+			now.Is("2014-10-20 10:02");
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var publisher = new FakeEventPublisher();
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher);
-			now.Mutate("2014-10-20 9:15");
+			now.Is("2014-10-20 9:15");
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 			publisher.PublishedEvents.Clear();
 
-			now.Mutate("2014-10-20 9:30");
+			now.Is("2014-10-20 9:30");
 			database.ClearSchedule(personId);
 			database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
 			target.CheckForActivityChange(personId, businessUnitId);

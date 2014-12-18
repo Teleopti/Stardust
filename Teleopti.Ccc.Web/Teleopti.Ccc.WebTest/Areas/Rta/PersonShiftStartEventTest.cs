@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher);
 
-			now.Mutate("2014-10-19 17:02".Utc());
+			now.Is("2014-10-19 17:02".Utc());
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "logout"
 			});
-			now.Mutate("2014-10-20 10:00".Utc());
+			now.Is("2014-10-20 10:00".Utc());
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
@@ -76,15 +76,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher);
 
-			now.Mutate("2014-10-19 10:59");
+			now.Is("2014-10-19 10:59");
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "logout"
 			});
-			now.Mutate("2014-10-19 11:01");
+			now.Is("2014-10-19 11:01");
 			target.CheckForActivityChange(personId, businessUnitId);
-			now.Mutate("2014-10-20 10:00");
+			now.Is("2014-10-20 10:00");
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Last();
@@ -149,13 +149,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var now = new MutableNow();
 			var target = new RtaForTest(database, now, publisher, dataSource);
 
-			now.Mutate("2014-10-19 17:02".Utc());
+			now.Is("2014-10-19 17:02".Utc());
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "logout"
 			});
-			now.Mutate("2014-10-20 10:00".Utc());
+			now.Is("2014-10-20 10:00".Utc());
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = (ILogOnInfo)publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();

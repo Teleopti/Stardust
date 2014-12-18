@@ -354,6 +354,7 @@
     <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
     <Compile Include="Common\Time\MutableNow.cs" />
+    <Compile Include="Common\Time\MutateNowExtensions.cs" />
     <Compile Include="Common\Time\StringExtensions.cs" />
     <Compile Include="Common\Time\ThisIsNow.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />

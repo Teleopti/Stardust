@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public interface IMutateNow
 	{
-		void Mutate(DateTime? utc);
+		void Is(DateTime? utc);
 		bool IsMutated();
 	}
 }

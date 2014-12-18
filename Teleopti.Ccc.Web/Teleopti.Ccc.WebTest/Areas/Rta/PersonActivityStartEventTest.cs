@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var now = new MutableNow();
-			now.Mutate("2014-10-20 10:00");
+			now.Is("2014-10-20 10:00");
 			var target = new RtaForTest(database, now, publisher);
 
 			target.CheckForActivityChange(personId, businessUnitId);
-			now.Mutate("2014-10-20 10:05");
+			now.Is("2014-10-20 10:05");
 			target.CheckForActivityChange(personId, businessUnitId);
-			now.Mutate("2014-10-20 10:15");
+			now.Is("2014-10-20 10:15");
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var events = publisher.PublishedEvents.OfType<PersonActivityStartEvent>();
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var mutableNow = new MutableNow();
-			mutableNow.Mutate("2014-10-20 09:50");
+			mutableNow.Is("2014-10-20 09:50");
 			var target = new RtaForTest(database, mutableNow, publisher);
 
 			target.SaveState(new ExternalUserStateForTest
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			mutableNow.Mutate("2014-10-20 10:02");
+			mutableNow.Is("2014-10-20 10:02");
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.Make();
 			var publisher = new FakeEventPublisher();
 			var mutableNow = new MutableNow();
-			mutableNow.Mutate("2014-10-20 09:50");
+			mutableNow.Is("2014-10-20 09:50");
 			var target = new RtaForTest(database, mutableNow, publisher);
 
 			target.SaveState(new ExternalUserStateForTest
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				UserCode = "usercode",
 				StateCode = "statecode"
 			});
-			mutableNow.Mutate("2014-10-20 10:02");
+			mutableNow.Is("2014-10-20 10:02");
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();

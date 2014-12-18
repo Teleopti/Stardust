@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var dateSet = new DateTime(2000, 1, 2, 3, 4, 5);
 
 			var modifyNow = MockRepository.GenerateStrictMock<IMutateNow>();
-			modifyNow.Expect(mock => mock.Mutate(dateSet));
+			modifyNow.Expect(mock => mock.Is(dateSet));
 
 			using (var target = new TestController(modifyNow, null, null, null, null, null, null, null,null, null, null, null, null))
 			{

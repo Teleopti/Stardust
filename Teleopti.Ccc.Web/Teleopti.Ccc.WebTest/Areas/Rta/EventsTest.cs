@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		[Test]
 		public void ShouldPublishEventsForEachPerson()
 		{
-			now.Mutate("2014-10-20 9:00");
+			now.Is("2014-10-20 9:00");
 			var state1 = new ExternalUserStateForTest
 			{
 				UserCode = "usercode1",
