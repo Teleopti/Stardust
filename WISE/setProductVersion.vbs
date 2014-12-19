@@ -11,8 +11,10 @@ WScript.Sleep 5000
 On Error Resume Next
 Do
 	if IsWriteAccessible(ProjectFile) then Exit Do
-	WScript.Echo ProjectFile & "  is still locked! Sleep for 10 secs ..."
-	WScript.Sleep 10000
+	WScript.Echo ProjectFile & "  is locked! Try kill ..."
+	Dim oShell : Set oShell = CreateObject("WScript.Shell")
+	oShell.Run "taskkill /im WfWI.exe", , True
+	WScript.Sleep 1000
 Loop
 On Error Goto 0
 WScript.Echo "The file is now unlocked"

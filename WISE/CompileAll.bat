@@ -206,7 +206,7 @@ ECHO Remember to mark: Exlude all, for assembly referencies that WISE finds
 ECHO --------------------------------------------------------------------
 
 ::Set ProductVersion inside WSI file
-::cscript "%WISEDIR%\setProductVersion.vbs" "%WISESOURCEFILE%\Wise\ccc7_server\ccc7_server.wsi" %Version%
+cscript "%WISEDIR%\setProductVersion.vbs" "%WISESOURCEFILE%\Wise\ccc7_server\ccc7_server.wsi" %Version%
 cscript "%WISEDIR%\setProductVersion.vbs" "%WISESOURCEFILE%\Wise\ccc7_mytime\ccc7_mytime.wsi" %Version%
 cscript "%WISEDIR%\setProductVersion.vbs" "%WISESOURCEFILE%\Wise\ccc7_forecast\ccc7_forecast.wsi" %Version%
 cscript "%WISEDIR%\setProductVersion.vbs" "%WISESOURCEFILE%\Wise\ccc7_client\ccc7_client.wsi" %Version%
@@ -259,5 +259,8 @@ CD "%WISEDIR%"
 GOTO :EOF
 
 :EOF
+::clean up WfWI.exe
+taskkill /IM WfWI.exe /F /FI "memusage gt 2"
+
 IF %Silent%==0 PAUSE
 EXIT /b %ERRORLEV%
