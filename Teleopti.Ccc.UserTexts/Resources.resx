@@ -11924,4 +11924,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
     <value>Schedule Period</value>
   </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>Person {0} has personal activity, overtime activity or meeting in the shift on date {1}.</value>
+    <comment>Error message when there is personal activity or overtime activity or meeting in the shift.</comment>
+  </data>
 </root>
