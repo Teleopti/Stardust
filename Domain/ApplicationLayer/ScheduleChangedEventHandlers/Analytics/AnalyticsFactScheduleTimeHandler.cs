@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			{
 				ContractTimeMinutes = (int) layer.ContractTime.TotalMinutes,
 				WorkTimeMinutes = (int) layer.WorkTime.TotalMinutes,
+				OverTimeMinutes = (int) layer.Overtime.TotalMinutes,
+				OverTimeId = MapOvertimeId(layer.MultiplicatorDefinitionSetId),
 				ShiftCategoryId = shiftCategoryId,
 				ScenarioId = scenarioId
 				
@@ -63,8 +65,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		{
 			var absences = _repository.Absences();
 			var abs = absences.FirstOrDefault(a => a.AbsenceCode.Equals(absenceCode));
-			if (abs == null) return null;
-			return abs;
+			return abs ?? null;
+		}
+
+		public int MapOvertimeId(Guid overtimeCode)
+		{
+			var overtimes = _repository.Overtimes();
+			var overtime = overtimes.FirstOrDefault(a => a.Code.Equals(overtimeCode));
+			return overtime != null ? overtime.Id : -1;
 		}
 	}
 }

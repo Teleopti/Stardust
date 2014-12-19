@@ -183,6 +183,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public IList<IAnalyticsGeneric> Overtimes()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select overtime_id Id, overtime_code Code from mart.dim_overtime")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
+					.SetReadOnly(true)
+					.List<IAnalyticsGeneric>();
+			}
+		}
+
 		private IUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);

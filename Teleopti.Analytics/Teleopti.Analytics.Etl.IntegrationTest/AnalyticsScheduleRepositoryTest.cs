@@ -2,7 +2,6 @@
 using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -49,6 +48,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var acts = _target.Activities();
 			acts.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldLoadOvertimes()
+		{
+			var overtime = new DimOvertime(22, Guid.NewGuid(), "Overtime1", _datasource, businessUnitId);
+
+			analyticsDataFactory.Setup(overtime);
+			analyticsDataFactory.Persist();
+
+			var overtimes = _target.Overtimes();
+			overtimes.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]

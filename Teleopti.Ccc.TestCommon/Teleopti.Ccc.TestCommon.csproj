@@ -109,6 +109,7 @@
     <Compile Include="TestData\Analytics\DimDayOff.cs" />
     <Compile Include="IoC\ToggleAttribute.cs" />
     <Compile Include="TestData\Analytics\Absence.cs" />
+    <Compile Include="TestData\Analytics\DimOvertime.cs" />
     <Compile Include="TestData\Analytics\ShiftCategory.cs" />
     <Compile Include="TestData\Analytics\Activity.cs" />
     <Compile Include="TestData\Analytics\IAbsenceData.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="TestData\Analytics\IActivityData.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_day_off.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_absence.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_overtime.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_shift_category.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_activity.cs" />
     <Compile Include="TestData\Setups\Configurable\ShiftExchangeOfferConfigurable.cs" />

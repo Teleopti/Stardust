@@ -16,6 +16,7 @@ namespace Teleopti.Interfaces.Infrastructure
 		IList<IAnalyticsGeneric> Scenarios();
 		IList<IAnalyticsGeneric> ShiftCategories();
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
+		IList<IAnalyticsGeneric> Overtimes();
 	}
 
 	public interface IAnalyticsFactScheduleDayCount

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private readonly Guid _guidAbsInPaid = Guid.NewGuid();
 		private readonly Guid _guidAbsNotPaid = Guid.NewGuid();
 		private List<IAnalyticsAbsence> _absences;
+		private List<IAnalyticsGeneric> _overtimes;
 
 		[SetUp]
 		public void Setup()
@@ -44,6 +45,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				new AnalyticsAbsence {AbsenceCode = _guidAbsInPaid, AbsenceId = 1, InPaidTime = true},
 				new AnalyticsAbsence {AbsenceCode = _guidAbsNotPaid, AbsenceId = 2, InPaidTime = false}
 			};
+			_overtimes = new List<IAnalyticsGeneric>
+			{
+				new AnalyticsGeneric { Id = 3, 
+					Code = Guid.NewGuid() }
+			};
 		}
 
 		[Test]
@@ -59,6 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10),
 			};
+			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Activities()).Return(_activities);
 			var result = _target.Handle(layer, 12, 22);
 
@@ -92,6 +99,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(12)
 			};
+
+			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Activities()).Return(_activities);
 			var result = _target.Handle(layer, 12, 22);
 
@@ -119,6 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10)
 			};
+			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Absences()).Return(_absences);
 			var result = _target.Handle(layer, 12, 22);
 
@@ -139,6 +149,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
+		public void ShouldSetOvertime()
+		{
+			
+			var start = new DateTime(2014, 12, 4, 8, 0, 0);
+			var layer = new ProjectionChangedEventLayer
+			{
+				Overtime = TimeSpan.FromMinutes(10),
+				MultiplicatorDefinitionSetId = _overtimes[0].Code,
+				StartDateTime = start,
+				EndDateTime = start.AddMinutes(10)
+			};
+			
+			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
+			_rep.Stub(x => x.Activities()).Return(_activities);
+
+			var result = _target.Handle(layer, 12, 22);
+
+			result.OverTimeMinutes.Should().Be.EqualTo(10);
+			result.OverTimeId.Should().Be.EqualTo(_overtimes[0].Id);
+		}
+
+		[Test]
 		public void ShouldMapAbsenceId()
 		{
 			_rep.Stub(x => x.Absences()).Return(_absences);
@@ -152,6 +184,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_rep.Stub(x => x.Absences()).Return(_absences);
 			var absence = _target.MapAbsenceId(Guid.NewGuid());
 			absence.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldMapOvertimeId()
+		{
+			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
+			var overtimeId = _target.MapOvertimeId(_overtimes[0].Code);
+			overtimeId.Should().Be.EqualTo(_overtimes[0].Id);
+		}
+
+		[Test]
+		public void ShouldFailToMapOvertimeId()
+		{
+			var overtimes = new List<IAnalyticsGeneric>();
+			_rep.Stub(x => x.Overtimes()).Return(overtimes);
+			var overtimeId = _target.MapOvertimeId(Guid.NewGuid());
+			overtimeId.Should().Be.EqualTo(-1);
 		}
 	}
 }

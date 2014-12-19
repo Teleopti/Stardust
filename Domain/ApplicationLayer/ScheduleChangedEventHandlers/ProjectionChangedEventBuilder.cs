@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
@@ -97,6 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							                  ? (layer.Payload as IAbsence).Description
 							                  : layer.DisplayDescription();
 						var contractTime = projection.ContractTime(layer.Period);
+						var overTime = projection.Overtime(layer.Period);
 						var requiresSeat = false;
 						var activity = layer.Payload.UnderlyingPayload as IActivity;
 						if (activity != null)
@@ -109,6 +111,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								Name = description.Name,
 								ShortName = description.ShortName,
 								ContractTime = contractTime,
+								Overtime = overTime,
+								MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.Value : new Guid(),
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
 								DisplayColor =

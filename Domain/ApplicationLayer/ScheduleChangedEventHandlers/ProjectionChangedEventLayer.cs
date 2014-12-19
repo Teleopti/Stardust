@@ -22,5 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public bool IsAbsence { get; set; }
 		public bool RequiresSeat { get; set; }
 		public bool IsAbsenceConfidential { get; set; }
+		public TimeSpan Overtime { get; set; }
+		public Guid MultiplicatorDefinitionSetId { get; set; }
 	}
 }

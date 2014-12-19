@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	{
 		IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId);
 		IAnalyticsAbsence MapAbsenceId(Guid absenceCode);
+		int MapOvertimeId(Guid overtimeCode);
 	}
 }

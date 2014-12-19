@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(x => x.Dates())
 				.CacheMethod(x => x.Scenarios())
 				.CacheMethod(x => x.ShiftCategories())
+				.CacheMethod(x => x.Overtimes())
 				.As<IAnalyticsScheduleRepository>();
 			builder.RegisterMbCacheComponent<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
 		}
