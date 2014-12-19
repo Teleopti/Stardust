@@ -189,8 +189,10 @@ th {
 @media print {
   * {
     text-shadow: none !important;
-    color: #000 !important;
-    background: transparent !important;
+
+    /* cannot print color with following two lines
+	color: #000 !important;
+    background: transparent !important;*/
     box-shadow: none !important;
   }
   a,
