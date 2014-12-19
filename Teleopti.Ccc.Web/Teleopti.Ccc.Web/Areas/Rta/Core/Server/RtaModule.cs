@@ -82,10 +82,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				builder.RegisterType<NoEvents>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<NoEvents>().SingleInstance().As<IActivityEventPublisher>();
 			}
-			if (_config.Toggle(Toggles.RTA_NoBroker_31237))
-			{
-				builder.RegisterType<EmptyMessageSender>().As<IMessageSender>();
-			}
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
@@ -98,17 +94,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			//messy for now
 			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
 				.SingleInstance().As<IPersonOrganizationReader>();
-		}
-	}
-
-	public class EmptyMessageSender : IMessageSender
-	{
-		public void Send(Notification notification)
-		{
-		}
-
-		public void SendMultiple(IEnumerable<Notification> notifications)
-		{
 		}
 	}
 }
