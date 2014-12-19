@@ -873,8 +873,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 			_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 
-			Show();
-			Application.DoEvents();
+			
 			loadQuickAccessState();
 			disableAllExceptCancelInRibbon();
 			
@@ -908,6 +907,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             schedulerSplitters1.MultipleHostControl3.GotFocus += MultipleHostControl3OnGotFocus;
 
 			//releaseEvents(this);
+
+			Show();
+			Application.DoEvents();
 
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
@@ -4872,11 +4874,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			backStageButtonOptions.Click -= toolStripButtonOptions_Click;
 			backStageButtonSystemExit.Click -= toolStripButtonSystemExit_Click;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
-			foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls)
+
+			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
 			{
-				ButtonAdv button = control as ButtonAdv;
-				if(button != null)
-					button.Click -= menuItemClick;
+				foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls)
+				{
+					ButtonAdv button = control as ButtonAdv;
+					if(button != null)
+						button.Click -= menuItemClick;
+				}
 			}
 			toolStripButtonQuickAccessSave.Click -= toolStripButtonQuickAccessSaveClick;
 			toolStripButtonQuickAccessCancel.Click -= toolStripButtonQuickAccessCancel_Click;
@@ -5390,13 +5396,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (schedulerSplitters1 != null) schedulerSplitters1.Dispose();
 
 			
-
-			backStageView.BackStage = null;
-			backStage1.Parent = null;
-			backStageView.HostControl = null;
-			backStageView.HostForm = null;
+			if(backStageView != null)
+			{
+				backStageView.BackStage = null;
+				backStageView.HostControl = null;
+				backStageView.HostForm = null;
+			}
 			backStageView = null;
 			ribbonControlAdv1.BackStageView = null;
+			backStage1.Parent = null;
 					
 			if (!Disposing)
 			{
