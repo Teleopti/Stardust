@@ -1,6 +1,5 @@
 <!--
 This is where you define your calculated members.
-
 The tag:
 <AssociatedMeasureGroupID>
 Sets what Measure Group you'll like the member to show up in.
