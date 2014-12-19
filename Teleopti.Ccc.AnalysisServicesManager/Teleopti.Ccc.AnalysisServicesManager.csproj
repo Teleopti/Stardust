@@ -102,24 +102,8 @@
     <Compile Include="CubeSourceFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Custom\Example\01 Datasource\DatasourceViewDefinition.xml.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Custom\Example\02 Dimensions\Survey Score.xmla.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Custom\Example\03 Measures\CSAT Agent Survey.xmla.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Custom\Example\03 Measures\QA Agent Evaluation.xmla.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Custom\Example\04 Calculated Members\Members1and2.xml.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Custom\Example\TestDataSetup\TestDataSetup.sql.template">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Custom\Example\03 Measures\Fact Sales.xmla" />
+    <None Include="Custom\Example\03 Measures\v Fact Calculated Measures.xmla" />
     <None Include="drop, create, process.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -160,6 +144,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Custom\Example\01 Datasource\DatasourceViewDefinition.xml" />
+    <Content Include="Custom\Example\02 Dimensions\Dummy.txt" />
+    <Content Include="Custom\Example\TestDataSetup\TestDataSetup.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

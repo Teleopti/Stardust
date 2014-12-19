@@ -5,9 +5,9 @@ The tag:
 <AssociatedMeasureGroupID>
 Sets what Measure Group you'll like the member to show up in.
 
-Please note that the value of <CalculationReference> tag:
+Please note that the value of:
 <CalculationReference>[Measures].[ThisIs My first Calculated Member]</CalculationReference>
-must match the name of our created member:
+and the name of the created member must match!
 <MdxString>CREATE MEMBER CURRENTCUBE.[Measures].[ThisIs My first Calculated Member]  .....
 </MdxString>
 
