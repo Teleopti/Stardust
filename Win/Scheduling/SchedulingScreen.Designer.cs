@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemDeleteSpecial = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.ToolStripMenuItemAddActivity = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemNotifyAgent = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemAddPersonalActivity = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemAddOverTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemInsertAbsence = new System.Windows.Forms.ToolStripMenuItem();
@@ -535,7 +536,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemViewReport,
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM,
-            this.toolStripMenuItemPublish});
+            this.toolStripMenuItemPublish,
+			this.toolStripMenuItemNotifyAgent});
 			this.contextMenuViews.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuViews.Name = "contextMenuStrip1";
 			this.contextMenuViews.Size = new System.Drawing.Size(306, 644);
@@ -638,6 +640,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ToolStripMenuItemAddActivity.Size = new System.Drawing.Size(305, 22);
 			this.ToolStripMenuItemAddActivity.Text = "xxAddActivityThreeDots";
 			this.ToolStripMenuItemAddActivity.Click += new System.EventHandler(this.toolStripMenuItemAddActivityClick);
+			// 
+			// toolStripMenuItemNotifyAgent
+			// 
+			this.toolStripMenuItemNotifyAgent.Name = "toolStripMenuItemNotifyAgent";
+			this.SetShortcut(this.toolStripMenuItemNotifyAgent, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemNotifyAgent.Size = new System.Drawing.Size(305, 22);
+			this.toolStripMenuItemNotifyAgent.Text = "xxNotifyAgent";
+			this.toolStripMenuItemNotifyAgent.Click += new System.EventHandler(this.toolStripMenuItemNotifyAgentClick);
 			// 
 			// ToolStripMenuItemAddPersonalActivity
 			// 
@@ -3599,6 +3609,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx3;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCreateMeeting;
 		private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddActivity;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNotifyAgent;
         private System.Windows.Forms.ToolStripButton toolStripButtonEditNote;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndApprove;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndDeny;

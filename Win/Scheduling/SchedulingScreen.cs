@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -355,6 +357,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripProgressBar1.Visible = true;
 			toolStripProgressBar1.Maximum = loadingPeriod.DayCount() + 5;
 			toolStripProgressBar1.Step = 1;
+
+			toolStripMenuItemNotifyAgent.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.RTA_NotifyViaSMS_31567);
 
 			GridHelper.GridStyle(_grid);
 
@@ -1510,6 +1514,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Refresh();
 			RefreshSelection();
 			Cursor = Cursors.Default;
+		}
+
+		private void toolStripMenuItemNotifyAgentClick(object sender, EventArgs e)
+		{
+			var builder = new StringBuilder();
+			var selectedPersons = _scheduleView.AllSelectedPersons();
+			var agents = _scheduleView.AllSelectedPersons() as IList<IPerson> ?? selectedPersons.ToList();
+
+			foreach (var agent in agents)
+			{
+				builder.Append(agent.Id);
+				if (agent != agents.Last())
+					builder.Append(",");
+			}
+
+			var url = ConfigurationManager.AppSettings["FeatureToggle"] + "Messages?ids=" + builder;
+			Process.Start(url);
 		}
 
 		private void toolStripMenuItemLockAllRestrictionsMouseUp(object sender, MouseEventArgs e)
