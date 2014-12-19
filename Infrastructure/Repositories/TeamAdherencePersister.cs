@@ -47,12 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("TeamId", NHibernateUtil.Guid)
 				.AddScalar("AgentsOutOfAdherence", NHibernateUtil.Int16)
 				.SetGuid("TeamId", teamId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamAdherenceReadModel))).List();
-
-			if (result == null)
-			{
-				return null;
-			}
+				.SetResultTransformer(Transformers.AliasToBean(typeof (TeamAdherenceReadModel))).List();
 			return (TeamAdherenceReadModel)result.FirstOrNull();
 		}
 
