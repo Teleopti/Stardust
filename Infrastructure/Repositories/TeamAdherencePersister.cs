@@ -3,6 +3,7 @@ using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Persist(TeamAdherenceReadModel model)
 		{
-			var existingReadModel = Get(model.TeamId);
+			var existingReadModel = getModel(model.TeamId);
 			if (existingReadModel == null)
 			{
 				saveReadModel(model);
@@ -30,6 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public TeamAdherenceReadModel Get(Guid teamId)
+		{
+			var ret = getModel(teamId);
+			return ret ?? new TeamAdherenceReadModel(){TeamId = teamId};
+		}
+
+		private TeamAdherenceReadModel getModel(Guid teamId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +

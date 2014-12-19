@@ -37,5 +37,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var savedModel = Target.Get(teamId);
 			savedModel.AgentsOutOfAdherence.Should().Be.EqualTo(5);
 		}
+
+		[Test]
+		public void AgentsOutOfAdherenceShouldBeZeroIfReadModelDoesNotExist()
+		{
+			var teamId = Guid.NewGuid();
+			var model = Target.Get(teamId);
+
+			model.AgentsOutOfAdherence.Should().Be.EqualTo(0);
+			model.TeamId.Should().Be.EqualTo(teamId);
+		}
 	}
 }
