@@ -13,11 +13,9 @@ namespace AnalysisServicesManager
 			var reader = XmlReader.Create(filePath);
 			XmlDocument doc = new XmlDocument();
 			doc.Load(reader);
-
-			XmlNode datasourceViewDefinition = doc.GetElementsByTagName("DatasourceViewDefinition")[0];
-
+			XmlNode entries = doc.ChildNodes[0];
 			var listOfExtracted = new List<RelationalTable>();
-			foreach (XmlNode node in datasourceViewDefinition)
+			foreach (XmlNode node in entries.ChildNodes)
 			{
 
 				if (node.Name == "DataTable")

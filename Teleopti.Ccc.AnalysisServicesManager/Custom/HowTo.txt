@@ -1,22 +1,37 @@
 Create you scripts according to the Folder Structure here:
-Teleopti.Ccc.AnalysisServicesManager\Custom\Example
-
-===========
-TestDataSetup
-===========
-You must first create you SQL Server relational tables in the mart in order to deploy the corresponding AS datasource view
+Teleopti.Ccc.AnalysisServicesManager\Custom\Umniah
 
 ============
 01 Datasource
 ============
 Hardcoded filename!
 01 Datasource\DatasourceViewDefinition.xml
-Follow the xml structure in the Example example
+Follow the xml structure in the Umniah example
+
+Note, you must first create you SQL Server relational tables in order to deploy the corresponding AS datasource view
 
 ============
 02 Dimensions
 ============
 All *.xmla files will be added to the ASDatabase
+
+Important!
+Dimensions are create at two levels in AS
+- AS Database
+- AS Cube
+
+The Database.Dimension(s) are handle via .xmla files in the folder;
+BUT - The Cube.Dimension lack that kind of xmla-support!
+Instead AMO is used to add the Cube.Dimension.
+The name used for the Cube.Dimension will be equal to the dimension filename, without extension.
+
+eg. "02 Dimensions\Survey Score.xmla" will describe the Database.Dimension
+<DimensionID>Survey Score</DimensionID>
+<Name>Survey Score</Name> 
+
+The "Name" will be used for the Cube.Dimension as "CubeDimensionID":
+<CubeDimensionID>Survey Score</CubeDimensionID>
+And that ID will be referenced later by *.xmla files in "03 Measures"
 
 ============
 03 Measures
@@ -26,5 +41,4 @@ All *.xmla files will be added to the ASDatabase
 ============
 04 Other
 ============
-http://www.sqlbi.com/tools/mdxscriptupdater/
 All *.xmla files will be added to the ASDatabase

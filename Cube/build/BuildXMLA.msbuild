@@ -20,14 +20,14 @@
 			
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.Xmla"
 			Regex="&lt;DatabaseID&gt;.*&lt;/DatabaseID&gt;"
-			ReplacementText="&lt;DatabaseID&gt;#(AS_DATABASE_NAME)&lt;/DatabaseID&gt;"/>			
+			ReplacementText="&lt;DatabaseID&gt;#(SQL_DATABASE_NAME)&lt;/DatabaseID&gt;"/>			
 
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.Xmla"
 			Regex="(?m:^        )&lt;ID&gt;.*&lt;/ID&gt;"
-			ReplacementText="        &lt;ID&gt;#(AS_DATABASE_NAME)&lt;/ID&gt;"/>
+			ReplacementText="        &lt;ID&gt;#(SQL_DATABASE_NAME)&lt;/ID&gt;"/>
 
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Build\CreateDatabase.xmla"
 			Regex="(?m:^        )&lt;Name&gt;.*&lt;/Name&gt;"
-			ReplacementText="        &lt;Name&gt;#(AS_DATABASE_NAME)&lt;/Name&gt;"/>
+			ReplacementText="        &lt;Name&gt;#(SQL_DATABASE_NAME)&lt;/Name&gt;"/>
     </Target>
 </Project>

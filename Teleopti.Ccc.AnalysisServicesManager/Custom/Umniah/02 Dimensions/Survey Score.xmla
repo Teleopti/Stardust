@@ -1,7 +1,7 @@
 ﻿<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
 	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
 		<Object>
-			<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+			<DatabaseID>#(SQL_DATABASE_NAME)</DatabaseID>
 			<DimensionID>Survey Score</DimensionID>
 		</Object>		
 	<ObjectDefinition>

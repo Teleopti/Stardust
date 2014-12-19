@@ -73,7 +73,7 @@
         <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
 		<Copy
             SourceFiles="@(CustomCubeCustomers)"
-            DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)')"
+            DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
         />
 
 		
