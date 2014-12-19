@@ -29,14 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dateTimeInUtc = TimeZoneHelper.ConvertToUtc(dateInUserTimeZone, userTimeZone);
-			var keepTogetherId = Guid.NewGuid();
-
-			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone);
+			
+			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone).ToArray();
 			var results = schedules.Batch(30).Select(s => new
 			{
 				BaseDate = dateTimeInUtc,
 				Schedules = s.ToArray(),
-				KeepTogether = keepTogetherId
+				TotalCount = schedules.Count()
 			});
 
 			results.ForEach(r => Clients.Caller.incomingGroupSchedule(r));

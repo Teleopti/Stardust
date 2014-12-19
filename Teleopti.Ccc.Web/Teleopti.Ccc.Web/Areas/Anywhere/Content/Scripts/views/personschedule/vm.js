@@ -214,12 +214,7 @@ timezoneCurrent,
 					.toArray();
 			}
 			// data might include the same person more than once, with schedule for more than one day
-			var firstInBatch = false;
-			if (currentServerRun != data.KeepTogether) {
-				self.Persons([]);
-				currentServerRun = data.KeepTogether;
-				firstInBatch = true;
-			}
+			self.Persons([]);
 			var people = self.Persons();
 
 			// add schedule data. a person might get more than 1 schedule added
@@ -233,7 +228,6 @@ timezoneCurrent,
 				person.AddData(schedule, self.TimeLine);
 			}
 			self.Persons(people);
-			if (!firstInBatch) return;
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());

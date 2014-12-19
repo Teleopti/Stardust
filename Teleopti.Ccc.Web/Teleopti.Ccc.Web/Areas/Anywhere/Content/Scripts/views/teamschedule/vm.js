@@ -109,12 +109,7 @@ define([
 
 		this.UpdateSchedules = function (data) {
 			// data might include the same person more than once, with data for more than one day
-			var firstInBatch = false;
-			if (currentServerRun != data.KeepTogether) {
-				self.Persons([]);
-				currentServerRun = data.KeepTogether;
-				firstInBatch = true;
-			}
+			self.Persons([]);
 			var people = self.Persons();
 
 			// add schedule data. a person might get more than 1 schedule added
@@ -134,8 +129,6 @@ define([
 			if (self.PreSelectedPersonId()) {
 				self.SelectPerson(personForId(self.PreSelectedPersonId(), people));
 			}
-
-			if (!firstInBatch) return;
 
 			this.TimeLine.BaseDate(data.BaseDate);
 		};

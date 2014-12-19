@@ -51,6 +51,7 @@ define([
 			);
 
 			var groupScheduleDeferred = $.Deferred();
+			var receivedSchedules = [];
 			groupsubscriptions.subscribeGroupSchedule(
 				viewModel.BusinessUnitId(),
 				viewModel.GroupId(),
@@ -59,9 +60,12 @@ define([
 					return personId == viewModel.PersonId();
 				},
 				function (data) {
-					viewModel.UpdateSchedules(data);
-					resize.notify();
-					groupScheduleDeferred.resolve();
+					receivedSchedules.push.apply(receivedSchedules, data.Schedules);
+					if (receivedSchedules.length == data.TotalCount) {
+						viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
+						resize.notify();
+						groupScheduleDeferred.resolve();
+					}
 				}
 			);
 

@@ -126,6 +126,7 @@ define([
 
 			var groupScheduleDeferred = $.Deferred();
 			groupPagesDeferred.done(function () {
+				var receivedSchedules = [];
 				groupschedulesubscriptions.subscribeGroupSchedule(
 					viewModel.BusinessUnitId(),
 					viewModel.GroupId(),
@@ -141,8 +142,11 @@ define([
 						return found;
 					},
 					function (data) {
-						viewModel.UpdateSchedules(data);
-						groupScheduleDeferred.resolve();
+						receivedSchedules.push.apply(receivedSchedules, data.Schedules);
+						if (receivedSchedules.length == data.TotalCount) {
+							viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
+							groupScheduleDeferred.resolve();
+						}
 					}
 				);
 			});
