@@ -4,14 +4,14 @@
 --Desc: Add new table for team adherence 
 ---------------- 
 
-DROP TABLE [ReadModel].[TeamAdherence];
+DROP TABLE [ReadModel].[TeamAdherence]
 GO
 CREATE TABLE [ReadModel].[TeamAdherence](
          [TeamId] [uniqueidentifier] NOT NULL,
          [AgentsOutOfAdherence] [int] NOT NULL,
 CONSTRAINT [PK_TeamAdherence] PRIMARY KEY CLUSTERED 
 (
-         [TeamId] ASC,   
+         [TeamId] ASC   
 )
 )
 GO
