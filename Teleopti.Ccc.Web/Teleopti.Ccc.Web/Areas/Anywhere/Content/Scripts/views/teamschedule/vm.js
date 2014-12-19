@@ -25,6 +25,7 @@ define([
 	return function () {
 
 		var self = this;
+		var currentServerRun = undefined;
 
 		this.permissionAddFullDayAbsence = ko.observable();
 		this.permissionAddIntradayAbsence = ko.observable();
@@ -108,9 +109,13 @@ define([
 
 		this.UpdateSchedules = function (data) {
 			// data might include the same person more than once, with data for more than one day
-			
-			self.Persons([]);
-			var personArray = [];
+			var firstInBatch = false;
+			if (currentServerRun != data.KeepTogether) {
+				self.Persons([]);
+				currentServerRun = data.KeepTogether;
+				firstInBatch = true;
+			}
+			var people = self.Persons();
 
 			// add schedule data. a person might get more than 1 schedule added
 			var schedules = data.Schedules;
@@ -121,14 +126,16 @@ define([
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.Date();
 				schedule.Date = moment.tz(schedule.Date, timezoneCurrent.IanaTimeZone());
-				var personvm = personForId(schedule.PersonId, personArray);
+				var personvm = personForId(schedule.PersonId, people);
 				personvm.AddData(schedule, self.TimeLine);
 			}
 
-			self.Persons.push.apply(self.Persons, personArray);
+			self.Persons(people);
 			if (self.PreSelectedPersonId()) {
-				self.SelectPerson(personForId(self.PreSelectedPersonId(), personArray));
+				self.SelectPerson(personForId(self.PreSelectedPersonId(), people));
 			}
+
+			if (!firstInBatch) return;
 
 			this.TimeLine.BaseDate(data.BaseDate);
 		};

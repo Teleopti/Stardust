@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
@@ -26,16 +28,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public virtual void SubscribeGroupSchedule(Guid groupId, DateTime dateInUserTimeZone)
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
+			var dateTimeInUtc = TimeZoneHelper.ConvertToUtc(dateInUserTimeZone, userTimeZone);
+			var keepTogetherId = Guid.NewGuid();
 
 			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone);
-			var result = new
+			var results = schedules.Batch(30).Select(s => new
 			{
 				BaseDate = dateTimeInUtc,
-				Schedules = schedules
-			};
+				Schedules = s.ToArray(),
+				KeepTogether = keepTogetherId
+			});
 
-			Clients.Caller.incomingGroupSchedule(result);
+			results.ForEach(r => Clients.Caller.incomingGroupSchedule(r));
 		}
 	}
 }

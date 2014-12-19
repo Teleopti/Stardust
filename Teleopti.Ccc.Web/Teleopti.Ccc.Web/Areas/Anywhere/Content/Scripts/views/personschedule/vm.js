@@ -39,9 +39,10 @@ timezoneCurrent,
 	return function () {
 
 		var self = this;
-		
-		this.Loading = ko.observable(false);
+		var currentServerRun = undefined;
 
+		this.Loading = ko.observable(false);
+		
 		this.Persons = ko.observableArray();
 
 		this.SortedPersons = ko.computed(function () {
@@ -213,10 +214,15 @@ timezoneCurrent,
 					.toArray();
 			}
 			// data might include the same person more than once, with schedule for more than one day
-			self.Persons([]);
+			var firstInBatch = false;
+			if (currentServerRun != data.KeepTogether) {
+				self.Persons([]);
+				currentServerRun = data.KeepTogether;
+				firstInBatch = true;
+			}
+			var people = self.Persons();
 
 			// add schedule data. a person might get more than 1 schedule added
-			var people = [];
 			for (var i = 0; i < schedules.length; i++) {
 				var schedule = schedules[i];
 				schedule.GroupId = self.GroupId();
@@ -227,6 +233,7 @@ timezoneCurrent,
 				person.AddData(schedule, self.TimeLine);
 			}
 			self.Persons(people);
+			if (!firstInBatch) return;
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
