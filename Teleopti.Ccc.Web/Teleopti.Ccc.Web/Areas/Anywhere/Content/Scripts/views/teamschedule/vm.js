@@ -25,8 +25,7 @@ define([
 	return function () {
 
 		var self = this;
-		var currentServerRun = undefined;
-
+		
 		this.permissionAddFullDayAbsence = ko.observable();
 		this.permissionAddIntradayAbsence = ko.observable();
 		this.permissionRemoveAbsence = ko.observable();

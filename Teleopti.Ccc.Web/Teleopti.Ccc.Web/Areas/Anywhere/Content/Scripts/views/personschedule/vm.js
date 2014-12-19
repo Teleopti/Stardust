@@ -39,8 +39,7 @@ timezoneCurrent,
 	return function () {
 
 		var self = this;
-		var currentServerRun = undefined;
-
+		
 		this.Loading = ko.observable(false);
 		
 		this.Persons = ko.observableArray();
