@@ -10211,6 +10211,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Person {0} has personal activity, overtime activity or meeting in the shift on date {1}..
+        /// </summary>
+        public static string HasNonMainShiftActivityErrorMessage {
+            get {
+                return ResourceManager.GetString("HasNonMainShiftActivityErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have general permission to view restricted scenarios but not for the selected teams and dates..
         /// </summary>
         public static string HavePermissionToRestrictedScenariosButNotForSelectedTeams {

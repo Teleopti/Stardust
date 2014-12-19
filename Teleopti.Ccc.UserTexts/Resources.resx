@@ -12545,4 +12545,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Your announcement becomes invalid due to your shift has been changed. The announcement was on {0}.</value>
     <comment>message body for "AnnouncementInvalid"</comment>
   </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>Person {0} has personal activity, overtime activity or meeting in the shift on date {1}.</value>
+    <comment>Error message when there is personal activity or overtime activity or meeting in the shift.</comment>
+  </data>
 </root>
