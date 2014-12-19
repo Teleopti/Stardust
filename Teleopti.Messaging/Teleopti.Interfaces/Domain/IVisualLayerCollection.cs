@@ -176,6 +176,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="filterPeriod">The period of interest.</param>
 		/// <returns></returns>
 		TimeSpan ContractTime(DateTimePeriod filterPeriod);
+
+		/// <summary>
+		/// Gets the overtime for the visual layers intersecting the given date time period.
+		/// </summary>
+		/// <param name="filterPeriod">The period of interest.</param>
+		/// <returns></returns>
+		TimeSpan Overtime(DateTimePeriod filterPeriod);
 	}
 
 	///<summary>

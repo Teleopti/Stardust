@@ -345,6 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 		#endregion
 
+		#region Overtime tests
 		[Test]
 		public void VerifyOvertime()
 		{
@@ -372,6 +373,25 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			Assert.AreEqual(TimeSpan.FromDays(1), ret["ob"]);
 			Assert.AreEqual(TimeSpan.FromDays(1), ret["overtime1"]);
 		}
+
+		[Test]
+		public void ShouldCalculateOverTimeForPartOfDay()
+		{
+			var activityPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 5, 0, 0, DateTimeKind.Utc),
+																						 new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc));
+			var overTimePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc),
+																						 new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc));
+			var set = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var activity = ActivityFactory.CreateActivity("Phone");
+
+			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(activity, activityPeriod, dummyPerson));
+			internalCollection.Add(createLayerWithOvertime(set, overTimePeriod));
+
+			Assert.AreEqual(TimeSpan.FromMinutes(30), target.Overtime(overTimePeriod.MovePeriod(TimeSpan.FromMinutes(-30))));
+			Assert.AreEqual(TimeSpan.FromMinutes(15), target.Overtime(activityPeriod.MovePeriod(TimeSpan.FromMinutes(15))));
+			Assert.AreEqual(TimeSpan.FromMinutes(0), target.Overtime(activityPeriod));
+		}
+		#endregion
 
 		#region PaidTime tests
 		[Test]
