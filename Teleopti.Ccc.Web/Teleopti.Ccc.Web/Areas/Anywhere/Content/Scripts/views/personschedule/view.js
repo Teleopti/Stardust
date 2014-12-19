@@ -61,10 +61,11 @@ define([
 				},
 				function (data) {
 					receivedSchedules.push.apply(receivedSchedules, data.Schedules);
-					if (receivedSchedules.length == data.TotalCount) {
+					if (receivedSchedules.length === data.TotalCount) {
 						viewModel.UpdateSchedules({ BaseDate: data.BaseDate, Schedules: receivedSchedules });
 						resize.notify();
 						groupScheduleDeferred.resolve();
+						receivedSchedules = [];
 					}
 				}
 			);
