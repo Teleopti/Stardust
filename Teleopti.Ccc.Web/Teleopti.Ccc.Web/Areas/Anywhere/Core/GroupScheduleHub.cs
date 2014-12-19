@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public virtual void SubscribeGroupSchedule(Guid groupId, DateTime dateInUserTimeZone)
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var dateTimeInUtc = TimeZoneHelper.ConvertToUtc(dateInUserTimeZone, userTimeZone);
+			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
 			
 			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone).ToArray();
 			var results = schedules.Batch(30).Select(s => new
