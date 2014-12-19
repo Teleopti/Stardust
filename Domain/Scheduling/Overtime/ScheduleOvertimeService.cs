@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
 			var person = scheduleDay.Person;
 			var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
-
+			
 			if (overtimeLayerLengthPeriods.Count == 0) return false;
 
 			var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
@@ -59,11 +60,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_schedulePartModifyAndRollbackService.ClearModificationCollection();
 			_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules);
 			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null);
 
 			var newRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
+			
 			if (!(newRmsValue > oldRmsValue)) return true;
+
 			_schedulePartModifyAndRollbackService.Rollback();
 			resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+			resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null);
 			return false;
 		}
 

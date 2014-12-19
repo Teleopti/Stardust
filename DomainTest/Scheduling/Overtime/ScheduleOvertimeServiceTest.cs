@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
 				Expect.Call((()=>_schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)));
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null)).Return(true);
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods).Repeat.AtLeastOnce().IgnoreArguments();
 			}
@@ -119,6 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
 				Expect.Call((() => _schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)));
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true).Repeat.Twice();
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null)).Return(true).Repeat.Twice();
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods1).Repeat.Twice().IgnoreArguments();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods2).Repeat.Twice().IgnoreArguments();
