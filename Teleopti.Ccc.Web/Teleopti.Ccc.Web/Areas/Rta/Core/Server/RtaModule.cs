@@ -45,18 +45,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.Register<IReadActualAgentStates>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 
+			if (_config.Toggle(Toggles.RTA_NoBroker_31237))
+			{
+				builder.RegisterType<NoMessagge>().As<IAgentStateMessageSender>().SingleInstance();
+				builder.RegisterType<NoAggregation>().As<IAdherenceAggregator>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AgentStateMessageSender>().As<IAgentStateMessageSender>().SingleInstance();
+				builder.RegisterType<AdherenceAggregator>().As<IAdherenceAggregator>().SingleInstance();
+			}
+
 			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 			builder.RegisterType<CalculateAdherenceDetails>().SingleInstance().As<ICalculateAdherenceDetails>();
 
-			registerAdherenceComponents(builder);
-		}
-
-		private void registerAdherenceComponents(ContainerBuilder builder)
-		{
-			if (
-				_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
-				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)
-				)
+			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
+				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
 			{
 				builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
 				builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
@@ -66,10 +70,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				builder.RegisterType<NoEvents>().SingleInstance().As<IShiftEventPublisher>();
 				builder.RegisterType<NoEvents>().SingleInstance().As<IAdherenceEventPublisher>();
 			}
-			if (
-				_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
-				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)
-				)
+
+			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
+				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
 			{
 				builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();

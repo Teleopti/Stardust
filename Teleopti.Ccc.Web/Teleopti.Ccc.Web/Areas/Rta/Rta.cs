@@ -8,6 +8,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		private readonly DataSourceResolver _dataSourceResolver;
 
 		public Rta(
-			IMessageSender messageSender, 
+			IAgentStateMessageSender messageSender, 
+			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader, 
 			IDatabaseWriter databaseWriter, 
 			IMbCacheFactory cacheFactory, 
@@ -48,7 +50,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IPersonOrganizationProvider personOrganizationProvider)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
-			_rtaDataHandler = new RtaDataHandler(messageSender,
+			_rtaDataHandler = new RtaDataHandler(
+				messageSender,
+				adherenceAggregator,
 				databaseReader,
 				databaseWriter,
 				cacheFactory,

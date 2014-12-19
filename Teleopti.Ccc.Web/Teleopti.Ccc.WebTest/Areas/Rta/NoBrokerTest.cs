@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public FakeMessageSender sender;
 		public FakeRtaDatabase database;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotSendAnyMessages()
 		{
 			database

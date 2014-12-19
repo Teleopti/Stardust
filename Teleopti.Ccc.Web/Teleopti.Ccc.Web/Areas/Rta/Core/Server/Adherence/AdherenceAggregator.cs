@@ -1,21 +1,42 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 {
-	public class AdherenceAggregator
+	public interface IAdherenceAggregator
+	{
+		void Aggregate(IAdherenceAggregatorInfo state);
+		void Initialize();
+	}
+
+	public class NoAggregation : IAdherenceAggregator
+	{
+		public void Aggregate(IAdherenceAggregatorInfo state)
+		{
+		}
+
+		public void Initialize()
+		{
+		}
+	}
+
+	public class AdherenceAggregator : IAdherenceAggregator
 	{
 		private readonly IMessageSender _messageSender;
+		private readonly IDatabaseReader _databaseReader;
+		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
 		private readonly AggregationState _aggregationState;
 
-		public AdherenceAggregator(IMessageSender messageSender)
+		public AdherenceAggregator(IMessageSender messageSender, IDatabaseReader databaseReader, IPersonOrganizationProvider personOrganizationProvider)
 		{
 			_messageSender = messageSender;
+			_databaseReader = databaseReader;
+			_personOrganizationProvider = personOrganizationProvider;
 			_aggregationState = new AggregationState();
 			_teamAdherenceAggregator = new TeamAdherenceAggregator(_aggregationState);
 			_siteAdherenceAggregator = new SiteAdherenceAggregator(_aggregationState);
@@ -27,9 +48,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			aggregate(state, true);
 		}
 
-		public void Initialize(IAdherenceAggregatorInfo state)
+		public void Initialize()
 		{
-			aggregate(state, false);
+			foreach (var actualAgentState in _databaseReader.GetActualAgentStates())
+			{
+				PersonOrganizationData person;
+				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))
+					continue;
+				var adherenceAggregatorInfo = new AdherenceAggregatorInfo
+				{
+					NewState = actualAgentState,
+					TeamId = person.TeamId,
+					SiteId = person.SiteId,
+					InAdherence = StateInfo.AdherenceFor(actualAgentState)
+				};
+				aggregate(adherenceAggregatorInfo, false);
+			}
 		}
 
 		private void aggregate(IAdherenceAggregatorInfo state, bool sendMessages)

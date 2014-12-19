@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -8,14 +7,13 @@ using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
 	public class RtaDataHandler
 	{
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
-		private readonly AdherenceAggregator _adherenceAggregator;
+		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
@@ -25,12 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly ActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IMbCacheFactory _mbCacheFactory;
-		private readonly IMessageSender _messageSender;
+		private readonly IAgentStateMessageSender _messageSender;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly PersonResolver _personResolver;
 		
 		public RtaDataHandler(
-			IMessageSender messageSender,
+			IAgentStateMessageSender messageSender,
+			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
 			IMbCacheFactory mbCacheFactory,
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_agentAssembler = new ActualAgentAssembler(databaseReader, databaseWriter, mbCacheFactory);
 			_databaseWriter = databaseWriter;
 			_mbCacheFactory = mbCacheFactory;
-			_adherenceAggregator = new AdherenceAggregator(_messageSender);
+			_adherenceAggregator = adherenceAggregator;
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_databaseWriter.PersistActualAgentState(info.NewState);
 
 			if (info.Send)
-				_messageSender.Send(NotificationFactory.CreateNotification(info.NewState));
+				_messageSender.Send(info);
 
 			_adherenceAggregator.Aggregate(info);
 
@@ -132,20 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public void Initialize()
 		{
-			foreach (var actualAgentState in _databaseReader.GetActualAgentStates())
-			{
-				PersonOrganizationData person;
-				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))
-					continue;
-				var adherenceAggregatorInfo = new AdherenceAggregatorInfo
-				{
-					NewState = actualAgentState,
-					TeamId = person.TeamId,
-					SiteId = person.SiteId,
-					InAdherence = StateInfo.AdherenceFor(actualAgentState)
-				};
-				_adherenceAggregator.Initialize(adherenceAggregatorInfo);
-			}
+			_adherenceAggregator.Initialize();
 		}
 	}
 }
