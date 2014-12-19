@@ -16,7 +16,8 @@ namespace AnalysisServicesManager
 
         public string FindAndReplace(CommandLineArgument argument)
         {
-            var SqlDatabaseName = argument.AnalysisDatabase;
+			var SqlDatabaseName = argument.SqlDatabase;
+			var AnalysisDatabaseName = argument.AnalysisDatabase;
             string sqlConnectionString;
 			string sqlConnectionStringWithProvide;
 			sqlConnectionString = ExtractConnectionString.sqlConnectionStringSet(argument);
@@ -25,7 +26,7 @@ namespace AnalysisServicesManager
 			sqlConnectionStringWithProvide = AddSQLProvider(dbVersion, sqlConnectionString);
 
             string post = _pre;
-            post = post.Replace(@"#(AS_DATABASE)", SqlDatabaseName);
+			post = post.Replace(@"#(AS_DATABASE_NAME)", AnalysisDatabaseName);
             post = post.Replace(@"#(SQL_DATABASE_NAME)", SqlDatabaseName);
 			post = post.Replace(@"#(SQL_CONN_STRING)", sqlConnectionStringWithProvide);
 

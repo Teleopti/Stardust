@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Xml;
 
 namespace AnalysisServicesManager
@@ -13,9 +10,11 @@ namespace AnalysisServicesManager
 			var reader = XmlReader.Create(filePath);
 			XmlDocument doc = new XmlDocument();
 			doc.Load(reader);
-			XmlNode entries = doc.ChildNodes[0];
+
+			XmlNode datasourceViewDefinition = doc.GetElementsByTagName("DatasourceViewDefinition")[0];
+
 			var listOfExtracted = new List<RelationalTable>();
-			foreach (XmlNode node in entries.ChildNodes)
+			foreach (XmlNode node in datasourceViewDefinition)
 			{
 
 				if (node.Name == "DataTable")

@@ -1,34 +1,43 @@
-﻿<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+﻿<!--
+The purpose of the file(s) in this folder is to create measures groups.
+You can use SSMS to script your measures groups when your are done in VS Data Tools. Or copy needed section  from your full custom XMLA deployment file
+
+NOTE 1
+In the <Object> tag:
+Be sure to replace you local database name with the parameter
+<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+-->
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
     <ParentObject>
 		<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
         <CubeID>Teleopti Analytics 1</CubeID>
     </ParentObject>
     <ObjectDefinition>
         <MeasureGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">
-            <ID>Fact Agent Evaluation</ID>
-            <Name>QA Agent Evaluation</Name>
+            <ID>Fact Agent Customer Survey</ID>
+            <Name>CSAT Agent Survey</Name>
             <Measures>
                 <Measure>
-                    <ID>Number Of Evaluations</ID>
-                    <Name>QA Number Of Evaluations</Name>
+                    <ID>Number Of Calls</ID>
+                    <Name>CSAT Number Of Calls</Name>
                     <DataType>Integer</DataType>
                     <Source>
                         <DataType>Integer</DataType>
                         <Source xsi:type="ColumnBinding">
-                            <TableID>fact_agent_evaluation</TableID>
-                            <ColumnID>number_of_evaluations</ColumnID>
+                            <TableID>fact_agent_customer_survey</TableID>
+                            <ColumnID>number_of_calls</ColumnID>
                         </Source>
                     </Source>
                 </Measure>
                 <Measure>
-                    <ID>Quality Score Sum</ID>
-                    <Name>Quality Score Sum</Name>
+                    <ID>Score 2</ID>
+                    <Name>Score</Name>
                     <DataType>Integer</DataType>
                     <Source>
                         <DataType>Integer</DataType>
                         <Source xsi:type="ColumnBinding">
-                            <TableID>fact_agent_evaluation</TableID>
-                            <ColumnID>quality_score_sum</ColumnID>
+                            <TableID>fact_agent_customer_survey</TableID>
+                            <ColumnID>score</ColumnID>
                         </Source>
                     </Source>
                     <Visible>false</Visible>
@@ -46,7 +55,7 @@
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_evaluation</TableID>
+                                        <TableID>fact_agent_customer_survey</TableID>
                                         <ColumnID>acd_login_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
@@ -69,19 +78,19 @@
                     </Attributes>
                 </Dimension>
                 <Dimension xsi:type="ManyToManyMeasureGroupDimension">
-                    <CubeDimensionID>Person</CubeDimensionID>
-                    <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
-                </Dimension>
-                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
-                    <CubeDimensionID>Team</CubeDimensionID>
-                    <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
-                </Dimension>
-                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
                     <CubeDimensionID>Skill 1</CubeDimensionID>
                     <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
                 </Dimension>
                 <Dimension xsi:type="ManyToManyMeasureGroupDimension">
+                    <CubeDimensionID>Person</CubeDimensionID>
+                    <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
+                </Dimension>
+                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
                     <CubeDimensionID>Business Unit</CubeDimensionID>
+                    <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
+                </Dimension>
+                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
+                    <CubeDimensionID>Team</CubeDimensionID>
                     <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
                 </Dimension>
                 <Dimension xsi:type="ManyToManyMeasureGroupDimension">
@@ -97,7 +106,7 @@
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_evaluation</TableID>
+                                        <TableID>fact_agent_customer_survey</TableID>
                                         <ColumnID>local_date_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
@@ -202,7 +211,7 @@
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_evaluation</TableID>
+                                        <TableID>fact_agent_customer_survey</TableID>
                                         <ColumnID>local_date_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
@@ -298,14 +307,33 @@
                         </Attribute>
                     </Attributes>
                 </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                    <CubeDimensionID>Survey Score</CubeDimensionID>
+                    <Attributes>
+                        <Attribute>
+                            <AttributeID>Score</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Integer</DataType>
+                                    <NullProcessing>UnknownMember</NullProcessing>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>fact_agent_customer_survey</TableID>
+                                        <ColumnID>score</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                            <Type>Granularity</Type>
+                        </Attribute>
+                    </Attributes>
+                </Dimension>
             </Dimensions>
             <Partitions>
                 <Partition>
-                    <ID>Fact Agent Evaluation</ID>
-                    <Name>Fact Agent Evaluation</Name>
+                    <ID>Fact Agent Customer Survey</ID>
+                    <Name>Fact Agent Customer Survey</Name>
                     <Source xsi:type="DsvTableBinding">
                         <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
-                        <TableID>fact_agent_evaluation</TableID>
+                        <TableID>fact_agent_customer_survey</TableID>
                     </Source>
                     <StorageMode>Molap</StorageMode>
                     <ProcessingMode>Regular</ProcessingMode>

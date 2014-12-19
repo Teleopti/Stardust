@@ -1,6 +1,6 @@
 ﻿<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
     <ParentObject>
-		<DatabaseID>#(SQL_DATABASE_NAME)</DatabaseID>
+		<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
         <CubeID>Teleopti Analytics 1</CubeID>
     </ParentObject>
     <ObjectDefinition>

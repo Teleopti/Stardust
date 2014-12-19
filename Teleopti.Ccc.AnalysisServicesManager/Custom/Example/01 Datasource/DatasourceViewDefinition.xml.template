@@ -1,9 +1,9 @@
-﻿<!-- Purpose,
+﻿<!--
 The purpose of this file is to map relational objects in SQL Server to the AS data source view.
 This XML document is parsed in ASManager, so don't change nodes it without changing the ASManager code as well
 
 The <Constraints> tag is optional - all other tags mandatory
---->
+-->
 
 <DatasourceViewDefinition>
         <DataTable>

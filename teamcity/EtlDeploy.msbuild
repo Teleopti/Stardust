@@ -69,13 +69,15 @@
 	</Target>
 
 	<Target Name="ProcessCustomCube">
-
         <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
+		<Copy
+            SourceFiles="@(CustomCubeCustomers)"
+            DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)')"
+        />
 		<Copy
             SourceFiles="@(CustomCubeCustomers)"
             DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
         />
-
 		
 		<Exec Command ='$(SQLCmdConn) -E -d$(ETLAnalyticsDB) -i"$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\TestDataSetup\TestDataSetup.sql" '/>
 		

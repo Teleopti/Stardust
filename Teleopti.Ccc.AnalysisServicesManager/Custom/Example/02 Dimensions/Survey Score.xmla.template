@@ -1,4 +1,29 @@
-﻿<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+﻿<!--
+The purpose of the file(s) in this folder is to create the as database dimension.
+You can use SSMS to script your dimension when your are done. Or copy needed section  from your full custom XMLA deployment file
+
+NOTE 1
+In the <Object> tag:
+Be sure to replace you local database name with the parameter
+<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+This value is later replaced by ASManager upon deployment
+
+
+NOTE 2
+Dimensions are create at two levels in Analysis Services
+- Database
+- Cube
+
+The Database.Dimension(s) are handle via .xmla files in this folder
+BUT - The Cube.Dimension lack that kind of xmla-support!
+Instead AMO is used to add the Cube.Dimension.
+
+This file = "Survey Score.xml", we will use it as CubeDimensionId for the Cube Dimension
+<CubeDimensionID>Survey Score</CubeDimensionID>
+And that the object Id that will be referenced later by your cube measures
+-->
+
+<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
 	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
 		<Object>
 			<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
