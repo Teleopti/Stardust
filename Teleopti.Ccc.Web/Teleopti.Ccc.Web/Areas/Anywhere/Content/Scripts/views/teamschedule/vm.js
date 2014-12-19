@@ -110,7 +110,7 @@ define([
 		this.UpdateSchedules = function (data) {
 			// data might include the same person more than once, with data for more than one day
 			self.Persons([]);
-			var people = self.Persons();
+			var people = [];
 
 			// add schedule data. a person might get more than 1 schedule added
 			var schedules = data.Schedules;
