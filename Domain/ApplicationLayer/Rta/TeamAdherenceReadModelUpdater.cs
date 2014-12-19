@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonInAdherenceEvent @event)
+		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			var current = _persister.Get(@event.TeamId);
 			if (current != null)
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonOutOfAdherenceEvent @event)
+		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			var current = _persister.Get(@event.TeamId);
 			if (current != null)
