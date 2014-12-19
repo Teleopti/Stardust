@@ -17,12 +17,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[Category("LongRunning")]
 	public class DatabaseReaderTest : IActualAgentStateReadWriteTest
 	{
+		private static DatabaseReader createReader()
+		{
+			return new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+		}
+
+		private static DatabaseWriter createWriter()
+		{
+			return new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+		}
+
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
 			var state = new ActualAgentStateForTest { PersonId = Guid.NewGuid() };
-			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler()).PersistActualAgentState(state);
-			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+			createWriter().PersistActualAgentState(state);
+			var target = createReader();
 
 			var result = target.GetCurrentActualAgentState(state.PersonId);
 
@@ -32,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetNullCurrentActualAgentStateIfNotFound()
 		{
-			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+			var target = createReader();
 
 			var result = target.GetCurrentActualAgentState(Guid.NewGuid());
 
@@ -42,12 +52,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentStates()
 		{
-			var writer = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+			var writer = createWriter();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			writer.PersistActualAgentState(new ActualAgentStateForTest { PersonId = personId1 });
 			writer.PersistActualAgentState(new ActualAgentStateForTest { PersonId = personId2 });
-			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+			var target = createReader();
 
 			var result = target.GetActualAgentStates();
 
@@ -58,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentStatesWithAllData()
 		{
-			var writer = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+			var writer = createWriter();
 			var state = new ActualAgentStateForTest
 			{
 				PersonId = Guid.NewGuid(),
@@ -83,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateStart = "2014-11-11 10:37".Utc(),
 			};
 			writer.PersistActualAgentState(state);
-			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
+			var target = createReader();
 
 			var result = target.GetActualAgentStates().Single();
 
@@ -92,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.AlarmName.Should().Be(state.AlarmName);
 			result.AlarmStart.Should().Be(state.AlarmStart);
 			result.BatchId.Should().Be(state.BatchId);
-			//result.BusinessUnit.Should().Be(state.BusinessUnit);
+			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
 			result.Color.Should().Be(state.Color);
 			result.NextStart.Should().Be(state.NextStart);
 			result.OriginalDataSourceId.Should().Be(state.OriginalDataSourceId);
@@ -108,6 +118,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.StateId.Should().Be(state.StateId);
 			result.StateStart.Should().Be(state.StateStart);
 		}
+
+		[Test]
+		public void ShouldReadActualAgentStateWithoutBusinessUnit()
+		{
+			var writer = createWriter();
+			writer.PersistActualAgentState(new ActualAgentStateForTest());
+			setBusinessUnitInDbToNull();
+			var reader = createReader();
+
+			reader.GetActualAgentStates().Single()
+				.BusinessUnitId
+				.Should().Be(Guid.Empty);
+		}
+		private static void setBusinessUnitInDbToNull()
+		{
+			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("UPDATE Rta.ActualAgentState SET BusinessUnitId=NULL", connection))
+					command.ExecuteNonQuery();
+			}
+		}
+		
 
 		[Test]
 		public void ShouldReadBelongsToDate()

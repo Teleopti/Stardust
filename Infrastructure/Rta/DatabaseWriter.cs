@@ -194,6 +194,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		            Direction = ParameterDirection.Input,
 		            Value = actualAgentState.ReceivedTime
 	            });
+	            command.Parameters.Add(new SqlParameter
+	            {
+		            ParameterName = "@BusinessUnitId",
+		            SqlDbType = SqlDbType.UniqueIdentifier,
+		            Direction = ParameterDirection.Input,
+		            Value = actualAgentState.BusinessUnitId
+	            });
 	            if (actualAgentState.BatchId != null)
 	            {
 		            command.Parameters.Add(new SqlParameter

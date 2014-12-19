@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -9,6 +10,8 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
@@ -76,9 +79,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				builder.RegisterType<NoEvents>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<NoEvents>().SingleInstance().As<IActivityEventPublisher>();
 			}
+			if (_config.Toggle(Toggles.RTA_NoBroker_31237))
+			{
+				builder.RegisterType<EmptyMessageSender>().As<IMessageSender>();
+			}
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
-			builder.RegisterType<Emptypersister>().SingleInstance().As<ITeamAdherencepersister>();
 
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
@@ -89,6 +95,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			//messy for now
 			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
 				.SingleInstance().As<IPersonOrganizationReader>();
+		}
+	}
+
+	public class EmptyMessageSender : IMessageSender
+	{
+		public void Send(Notification notification)
+		{
+		}
+
+		public void SendMultiple(IEnumerable<Notification> notifications)
+		{
 		}
 	}
 }

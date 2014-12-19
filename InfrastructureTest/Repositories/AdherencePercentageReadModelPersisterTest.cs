@@ -161,6 +161,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvokation(null);
 		}
 	}
-
 }
 

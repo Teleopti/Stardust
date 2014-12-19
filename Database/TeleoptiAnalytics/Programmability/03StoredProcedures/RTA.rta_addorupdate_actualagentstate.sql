@@ -27,7 +27,8 @@ CREATE  PROCEDURE [RTA].[rta_addorupdate_actualagentstate]
 @StaffingEffect float,
 @ReceivedTime datetime,
 @BatchId datetime,
-@OriginalDataSourceId nvarchar(50)
+@OriginalDataSourceId nvarchar(50),
+@BusinessUnitId uniqueidentifier
 AS
 BEGIN
            SET NOCOUNT ON;
@@ -50,17 +51,18 @@ BEGIN
                       StaffingEffect = @StaffingEffect,
                       ReceivedTime = @ReceivedTime,
                       BatchId = @BatchId,
-                      OriginalDataSourceId = @OriginalDataSourceId
+                      OriginalDataSourceId = @OriginalDataSourceId,
+					  BusinessUnitId = @BusinessUnitId
                       WHERE PersonId = @PersonId
            
            If @@ROWCOUNT = 0     
            insert into [RTA].[ActualAgentState]
 		   (PersonId, StateCode, PlatformTypeId, State, StateId, Scheduled, ScheduledId, StateStart,
 			ScheduledNext, ScheduledNextId, NextStart, AlarmName, AlarmId, Color, AlarmStart, StaffingEffect, 
-			ReceivedTime, BatchId, OriginalDataSourceId)
+			ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId)
            values(@PersonId, @StateCode, @PlatformTypeId, @State, @StateId, @Scheduled, @ScheduledId, @StateStart,
 			@ScheduledNext, @ScheduledNextId, @NextStart, @AlarmName, @AlarmId, @Color, @AlarmStart, @StaffingEffect, 
-			@ReceivedTime, @BatchId, @OriginalDataSourceId)
+			@ReceivedTime, @BatchId, @OriginalDataSourceId, @BusinessUnitId)
 END
 
 GO
