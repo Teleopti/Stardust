@@ -45,7 +45,7 @@ Scenario: Measure ScheduledResourcesReadModel by adding full day absences
 	And I should see total time to send commands
 	And I should see scenarios per second
 
-
+@OnlyRunIfDisabled('RTA_NoBroker_31237')
 Scenario: Measure real time adherence by sending in external user state
 	Given the current time is '2014-06-19 12:00'
 	And there is a datasouce with id 6
