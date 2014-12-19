@@ -4,7 +4,7 @@
 --Desc: Add new table for team adherence 
 ---------------- 
 
-DROP TABLE [ReadModel].[ TeamAdherence];
+DROP TABLE [ReadModel].[TeamAdherence];
 GO
 CREATE TABLE [ReadModel].[TeamAdherence](
          [TeamId] [uniqueidentifier] NOT NULL,
