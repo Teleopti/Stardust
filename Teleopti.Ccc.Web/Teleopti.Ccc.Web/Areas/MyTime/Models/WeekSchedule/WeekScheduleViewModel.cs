@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public bool AbsenceReportPermission { get; set; }
 	    public bool ShiftExchangePermission { get; set; }
 	    public bool ShiftTradeBulletinBoardPermission { get; set; }
+		public bool PersonAccountPermission { get; set; }
 	}
 
 	public class AbsenceTypeViewModel
