@@ -47,12 +47,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void updateReadModel(TeamAdherenceReadModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.TeamAdherence (TeamId, AgentsOutOfAdherence) VALUES (:TeamId, :AgentsOutOfAdherence)")
-				.SetGuid("TeamId", model.TeamId)
-				.SetParameter("AgentsOutOfAdherence", model.AgentsOutOfAdherence)
-				.ExecuteUpdate();
-
-			_unitOfWork.Current().CreateSqlQuery(
 				"UPDATE ReadModel.TeamAdherence SET" +
 				"			AgentsOutOfAdherence = :AgentsOutOfAdherence " +
 				"WHERE " +

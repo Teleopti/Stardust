@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldRUpdateReadModelIfExists()
+		public void ShouldUpdateReadModelIfExists()
 		{
 			var teamId = Guid.NewGuid();
 			var model = new TeamAdherenceReadModel() { AgentsOutOfAdherence = 3, TeamId = teamId };
