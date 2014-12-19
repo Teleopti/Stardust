@@ -148,10 +148,6 @@
   <PropertyGroup>
     <PreBuildEvent>if exist "$(ProjectDir)..\packages\Teleopti.Cube.Xmla.8.1.420\CreateDatabase.xmla" XCOPY "$(ProjectDir)..\packages\Teleopti.Cube.Xmla.8.1.420\CreateDatabase.xmla" "$(ProjectDir)bin\$(Configuration)\" /Y</PreBuildEvent>
   </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>MKDIR "$(ProjectDir)bin\$(Configuration)\Custom"
-XCOPY "$(ProjectDir)Custom\Example" "$(ProjectDir)bin\$(Configuration)\Custom"  /S /E /Y</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
