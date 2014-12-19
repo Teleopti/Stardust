@@ -20,6 +20,9 @@ CREATE PROCEDURE [mart].[report_control_group_page_get]
 @business_hierarchy_code uniqueidentifier
 AS
 
+DECLARE @empty_guid uniqueidentifier
+SET @empty_guid = '00000000-0000-0000-0000-000000000000'
+
 CREATE TABLE #group_page
 (
 	id uniqueidentifier,
@@ -49,6 +52,7 @@ SELECT DISTINCT
 	WHERE
 		business_unit_code = @bu_id AND
 		group_page_name_resource_key IS NOT NULL
+		AND group_code <> @empty_guid
 
 
 -- Translate group page name
