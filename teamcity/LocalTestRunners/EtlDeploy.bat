@@ -33,9 +33,6 @@ PAUSE
 goto :eof
 
 :Custom
-ECHO --------------
-DIR /B /AD "%WorkingDirectory%\Teleopti.Ccc.AnalysisServicesManager\Custom"
-ECHO --------------
 SET /P Customer=Customer: 
 "%MSBUILD%" /property:WorkingDirectory=%WorkingDirectory%;Configuration=%Configuration%;Customer=%Customer% /target:ProcessCustomCube "%ROOTDIR%\teamcity\EtlDeploy.msbuild"
 
