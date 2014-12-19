@@ -1,0 +1,31 @@
+<!--
+This is where you define your calculated members.
+The tag:
+<AssociatedMeasureGroupID>
+Sets what Measure Group you'll like the member to show up in.
+
+Please note that the value of <CalculationReference> tag:
+<CalculationReference>[Measures].[ThisIs My first Calculated Member]</CalculationReference>
+must match the name of our created member:
+<MdxString>CREATE MEMBER CURRENTCUBE.[Measures].[ThisIs My first Calculated Member]  .....
+</MdxString>
+
+-->
+<CalculatedMemberDefinition>
+	<CalculatedMember>
+		<CalculationReference>[Measures].[ThisIs My first Calculated Member]</CalculationReference>
+		<AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
+		<MdxString>CREATE MEMBER CURRENTCUBE.[Measures].[ThisIs My first Calculated Member]
+		 AS [Measures].[Deviation Schedule s]/60, 
+		FORMAT_STRING = "Standard", 
+		VISIBLE = 1;</MdxString>
+	</CalculatedMember>
+	<CalculatedMember>
+		<CalculationReference>[Measures].[ThisIs My second Calculated Member]</CalculationReference>
+		<AssociatedMeasureGroupID>Fact Schedule</AssociatedMeasureGroupID>
+		<MdxString>CREATE MEMBER CURRENTCUBE.[Measures].[ThisIs My second Calculated Member]
+		 AS [Measures].[Deviation Schedule s]/60, 
+		FORMAT_STRING = "Standard", 
+		VISIBLE = 1;</MdxString>
+	</CalculatedMember>
+</CalculatedMemberDefinition>
