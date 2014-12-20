@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             double shrinkage = target.Shrinkage.Value;
             double expectedDemandWithShrinkage = demand / (1 - shrinkage);
             target.UseShrinkage = true;
-
+			Assert.AreEqual(demand, Math.Round(target.ForecastedIncomingDemandWithoutShrinkage, 2));
             Assert.AreEqual(Math.Round(expectedDemandWithShrinkage, 2), Math.Round(target.ForecastedIncomingDemand, 2));
 
             target.UseShrinkage = false;

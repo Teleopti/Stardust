@@ -80,6 +80,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         double ForecastedIncomingDemand { get; }
 
+		double ForecastedIncomingDemandWithoutShrinkage { get; }
 
         /// <summary>
         /// Gets the booked against incoming demand65.

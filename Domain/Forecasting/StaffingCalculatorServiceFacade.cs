@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_occEsl = occEsl;
 		}
 
-		public double TeleoptiAgents(double obj0, int obj1, double obj2, double obj3, TimeSpan obj4)
+		public double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
 		{
-			return _secretService.TeleoptiAgents(obj0, obj1, obj2, obj3, obj4);
+			return _secretService.TeleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
 		}
 
 		public double AgentsFromUtilization(double obj0, double obj1, double obj2, TimeSpan obj3)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents)
 		{
 			if (!_occEsl)
-				return _secretService.ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)sla*100);
+				return _secretService.ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)(sla*100));
 
 			return _serviceLevelAchivedOcc.ServiceLevelAchived(forecastedAgents, agents, sla, (int) serviceTime, calls,
 				TimeSpan.FromSeconds(aht), intervalLength);

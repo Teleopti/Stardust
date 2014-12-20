@@ -376,21 +376,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     ScheduledAgentsIncoming * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
                     Payload.TaskData.Tasks,
-                    Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
+					Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
                     Payload.ServiceAgreementData.ServiceLevel.Percent.Value, 
-					Payload.ForecastedIncomingDemand));
+					Payload.ForecastedIncomingDemandWithoutShrinkage));
 
-                var shrinkage = Payload.UseShrinkage ? 1 - Payload.Shrinkage.Value : 1;
-                var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming * shrinkage;
+                var shrinkage = Payload.UseShrinkage ? 1 + Payload.Shrinkage.Value : 1;
+                var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming / shrinkage;
                 _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
                     scheduledAgentsIncomingWithShrinkage * SkillDay.Skill.MaxParallelTasks * Payload.Efficiency.Value,
                     Payload.ServiceAgreementData.ServiceLevel.Seconds,
                     Payload.TaskData.Tasks,
-                    Payload.TaskData.AverageTaskTime.TotalSeconds + Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
+					Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
                     Period.ElapsedTime(),
-					Payload.ServiceAgreementData.ServiceLevel.Percent.Value, 
-					Payload.ForecastedIncomingDemand));
+					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
+					Payload.ForecastedIncomingDemandWithoutShrinkage));
 
             }
         }

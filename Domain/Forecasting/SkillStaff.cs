@@ -127,6 +127,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			internal set { _calculatedResource = value; }
 		}
 
+		public double ForecastedIncomingDemandWithoutShrinkage
+		{
+			get { return _forecastedIncomingDemand; }
+		}
+
 		/// <summary>
 		/// Gets the booked against incoming demand65.
 		/// </summary>

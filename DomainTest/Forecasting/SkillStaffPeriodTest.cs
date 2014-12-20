@@ -118,6 +118,64 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
         }
 
+
+	    [Test]
+	    public void Bug31872WrongEslCalculationWithShrinkage()
+	    {
+			var payload = _target.Payload;
+		    payload.Efficiency = new Percent(1);
+		    double demand = new StaffingCalculatorServiceFacade().TeleoptiAgents(payload.ServiceAgreementData.ServiceLevel.
+			    Percent.Value, (int)payload.ServiceAgreementData.ServiceLevel.Seconds, payload.TaskData.Tasks, payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
+			    _target.Period.ElapsedTime());
+			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
+
+			payload.Shrinkage = new Percent(0.3);
+
+			ISkillDay skillDayPhone =
+				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+			_target.SetSkillDay(skillDayPhone);
+
+			//without shrinkage, shrinkage toggle off
+			_target.SetCalculatedResource65(demand);
+			_target.PickResources65();
+			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+				Percent.Value, _target.EstimatedServiceLevel.Value, 0.001);
+
+			//with shrinkage 30%, shrinkage toggle on
+			
+		    payload.UseShrinkage = true;			
+			_target.SetCalculatedResource65(demand * (1 + payload.Shrinkage.Value));
+			_target.PickResources65();
+			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
+
+			//without shrinkage,  shrinkage toggle on
+			payload.UseShrinkage = false;
+			_target.SetCalculatedResource65(demand);
+			_target.PickResources65();
+			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
+
+			//skillDayPhone =
+			//	SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+			//_target.SetSkillDay(skillDayPhone);
+
+			////with shrinkage 30%, shrinkage toggle on, occ toggle on
+			//payload.UseShrinkage = true;
+			//_target.SetCalculatedResource65(demand * (1 + payload.Shrinkage.Value));
+			//_target.PickResources65();
+			//Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+			//	Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
+
+			////without shrinkage,  shrinkage toggle on, occ toggle on
+			//payload.UseShrinkage = false;
+			//_target.SetCalculatedResource65(demand);
+			//_target.PickResources65();
+			//Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+			//	Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
+	    }
+
+
         /// <summary>
         /// Verifies the estimated service level.
         /// </summary>
