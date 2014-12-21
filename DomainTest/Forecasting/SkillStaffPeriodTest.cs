@@ -156,23 +156,28 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
 				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
 
-			//skillDayPhone =
-			//	SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
-			//_target.SetSkillDay(skillDayPhone);
+			//setup for occ toggle
+			_target = new SkillStaffPeriod(_tp, _task, _sa, new StaffingCalculatorServiceFacade(true));
+			payload = _target.Payload;
+			payload.Efficiency = new Percent(1);
+			_target.IsAvailable = true;
+			_target.SetSkillDay(skillDayPhone);
+			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(_target.Payload, demand);
+			payload.Shrinkage = new Percent(0.3);
 
-			////with shrinkage 30%, shrinkage toggle on, occ toggle on
-			//payload.UseShrinkage = true;
-			//_target.SetCalculatedResource65(demand * (1 + payload.Shrinkage.Value));
-			//_target.PickResources65();
-			//Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-			//	Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
+			//with shrinkage 30%, shrinkage toggle on, occ toggle on
+			payload.UseShrinkage = true;
+			_target.SetCalculatedResource65(demand * (1 + payload.Shrinkage.Value));
+			_target.PickResources65();
+			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
 
-			////without shrinkage,  shrinkage toggle on, occ toggle on
-			//payload.UseShrinkage = false;
-			//_target.SetCalculatedResource65(demand);
-			//_target.PickResources65();
-			//Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
-			//	Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
+			//without shrinkage,  shrinkage toggle on, occ toggle on
+			payload.UseShrinkage = false;
+			_target.SetCalculatedResource65(demand);
+			_target.PickResources65();
+			Assert.AreEqual(payload.ServiceAgreementData.ServiceLevel.
+				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
 	    }
 
 
