@@ -1,3 +1,16 @@
+<!--
+This is where you define your calculated members.
+The tag:
+<AssociatedMeasureGroupID>
+Sets what Measure Group you'll like the member to show up in.
+
+Please note that the value of <CalculationReference> tag:
+<CalculationReference>[Measures].[ThisIs My first Calculated Member]</CalculationReference>
+must match the name of our created member:
+<MdxString>CREATE MEMBER CURRENTCUBE.[Measures].[ThisIs My first Calculated Member]  .....
+</MdxString>
+
+-->
 <CalculatedMemberDefinition>
 	<CalculatedMember>
 		<CalculationReference>[Measures].[ThisIs My first Calculated Member]</CalculationReference>
