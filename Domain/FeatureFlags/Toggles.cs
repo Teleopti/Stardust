@@ -58,6 +58,7 @@
 		MyTimeWeb_AbsenceReport_31011,
 		MyTimeWeb_ShiftTradeExchangeBulletin_31296,
 		MyTimeWeb_AvailabilityVerifyHours_31654,
+		MyTimeWeb_OrganisationalBasedLeaderboard_31184,
 
 		Messaging_HttpSender_29205,
 
