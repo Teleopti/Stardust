@@ -1,5 +1,11 @@
 Create you scripts according to the Folder Structure here:
 Teleopti.Ccc.AnalysisServicesManager\Custom\Example
+To test different customisations Run:
+teamcity\LocalTestRunners\EtlDeploy.bat
+
+
+For minor customisations, the folder "04 Calculated Members" can be used to deploy calculated measure separatly (based on existing measure groups)
+See folder "ExampleCalcMemberOnly"
 
 ===========
 TestDataSetup
@@ -9,22 +15,25 @@ You must first create you SQL Server relational tables in the mart in order to d
 ============
 01 Datasource
 ============
-Hardcoded filename!
-01 Datasource\DatasourceViewDefinition.xml
-Follow the xml structure in the Example example
+Hardcoded filename! => "DatasourceViewDefinition.xml"
+There must be only one file!
+See notes in .template file
 
 ============
 02 Dimensions
 ============
-All *.xmla files will be added to the ASDatabase
+All *.xmla files in this folder will be added to the ASDatabase
+See notes in .template file
 
 ============
 03 Measures
 ============
 All *.xmla files will be added to the ASDatabase
+See notes in .template file
 
 ============
-04 Other
+04 Calculated Members
 ============
 http://www.sqlbi.com/tools/mdxscriptupdater/
-All *.xmla files will be added to the ASDatabase
+All custom <MdxScript> files will be added to the ASDatabase
+See notes in .template file
