@@ -30,11 +30,11 @@
 	</Target>
 	
 	<Target Name="CompileWseFiles" DependsOnTargets="MountK"> 
-		<Exec Command='"$(WseCompiler)" /c /s "%(WseFiles.FullPath)"' />
+		<Exec Command='"$(WseCompiler)" /c "%(WseFiles.FullPath)"' />
 	</Target>
 	
 	<Target Name="CompileWsiFiles" DependsOnTargets="MountK;SetVersionOnWsis">
-		<Exec Command='"$(WsiCompiler)" /c /s "%(WsiFiles.FullPath)"' />
+		<Exec Command='"$(WsiCompiler)" /c "%(WsiFiles.FullPath)"' />
 	</Target>
 	
 	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiFiles;" AfterTargets="UnmountK">
