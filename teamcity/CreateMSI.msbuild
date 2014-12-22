@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Project DefaultTargets="DoIt" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
-	<!-- to be continued... -->
-
+<Project DefaultTargets="BuildMSI" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
-		<SourceDir>D:\Installation\PreviousBuilds</SourceDir>
-		<TargetDir>D:\Installation\msi</TargetDir>
-		<WorkingDir>SetFromOutside</WorkingDir>
+		<SourceDir>SetFromOutside</SourceDir>
 		<CCCVersion>SetFromOutside</CCCVersion>
+		
+		<WseCompiler>C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe</WseCompiler>
+		<WsiCompiler>C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe</WsiCompiler>
 	</PropertyGroup>
 	
-	<Target Name="DoIt">
-		<CallTarget Targets="BuildMSI;CopyExtraFiles;MalwareScan;CallJenkinsForDeployment" />
+	<ItemGroup>
+		<WsiFiles Include="$(SourceDir)\Wise\**\*.wsi" />
+		<WseFiles Include="$(SourceDir)\Wise\**\*.wse" />
+	</ItemGroup>
+
+	
+	<Target Name="MountK">
+		<Exec Command="subst K: /D" ContinueOnError="true" />
+		<Exec Command="subst K: $(SourceDir)" />
 	</Target>
 	
-	<Target Name="BuildMSI">
-		<Exec Command='"$(SourceDir)\$(CCCVersion)\WISE\CompileAll.bat" $(CCCVersion) 0 $(TargetDir) $(SourceDir)'/>
+	<Target Name="UnmountK">
+		<Exec Command="subst K: /D" ContinueOnError="WarnAndContinue" />
 	</Target>
 	
-	<Target Name="CopyExtraFiles">
+	<Target Name="SetVersionOnWsis">
+		<Exec Command="cscript $(SourceDir)\Wise\setProductVersion.vbs %(WsiFiles.FullPath) $(CCCVersion)" />
 	</Target>
 	
-	<Target Name="MalwareScan">
-		<Exec Command='"$(WorkingDir)\ccnet\MalwareScan.bat" $(CCCVersion) $(TargetDir)'/>
+	<Target Name="CompileWseFiles" DependsOnTargets="MountK;CreateEmptyStubFile"> 
+		<Exec Command="$(WseCompiler) %(WseFiles.FullPath) /c /s" />
 	</Target>
 	
-	<Target Name="CallJenkinsForDeployment">
-		<HttpRequest Url="http://neptune:8080/job/CCCMain-AutoDeploy/build" 
-                FailOnNon2xxResponse="true" />
+	<Target Name="CompileWsiFiles" DependsOnTargets="MountK;CreateEmptyStubFile;SetVersionOnWsis">
+		<Exec Command="$(WsiCompiler) %(WsiFiles.FullPath) /c /s" />
+	</Target>
+	
+	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiFiles;" AfterTargets="UnmountK">
+		<!--<CallTargets="MalwareScan;CallJenkinsForDeployment" />-->
 	</Target>
 </Project>
