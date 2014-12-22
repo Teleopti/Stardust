@@ -1,4 +1,13 @@
-﻿<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+﻿<!--
+The purpose of the file(s) in this folder is to create measures groups.
+You can use SSMS to script your measures groups when your are done in VS Data Tools. Or copy needed section  from your full custom XMLA deployment file
+
+NOTE 1
+In the <Object> tag:
+Be sure to replace you local database name with the parameter
+<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+-->
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
     <ParentObject>
 		<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
         <CubeID>Teleopti Analytics 1</CubeID>

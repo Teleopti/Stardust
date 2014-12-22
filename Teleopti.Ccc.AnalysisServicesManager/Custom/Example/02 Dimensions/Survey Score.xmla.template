@@ -29,7 +29,6 @@ This file Name = "Survey Score.xml", will be used as CubeDimensionId for the Cub
 And that's the object Id that will be referenced later by your cube measures
 
 -->
-
 <Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
 	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
 		<Object>

@@ -49,31 +49,31 @@ SELECT	distinct
 FROM custom.fact_agent_customer_survey
 GO
 
---Data
-/*
-INSERT INTO [custom].[fact_agent_evaluation]
+--Add test data
+TRUNCATE TABLE [custom].[fact_agent_customer_survey]
+INSERT INTO [custom].[fact_agent_customer_survey](survey_id, local_date_id, acd_login_id, number_of_calls, score)
 SELECT
-	[evaluation_id]			= ROW_NUMBER()
+	[survey_id]				= ROW_NUMBER() OVER (ORDER BY d.date_id,acd.acd_login_id),
 	[local_date_id]			= d.date_id,
 	[acd_login_id]			= acd.acd_login_id,
-	[number_of_evaluations]	= d.date_id % 7 / 3,
-	[quality_score_sum]		= d.date_id % 6 * 3
+	[number_of_calls]		= d.date_id % 19 / 3,
+	[score]					= d.date_id % 10
 FROM mart.dim_date d
 CROSS JOIN mart.dim_acd_login acd
 WHERE d.date_id > 0
 AND acd.acd_login_id > 0
 AND d.date_date between '2014-02-01' and '2014-03-01'
 
-INSERT INTO [custom].[fact_agent_evaluation]
+TRUNCATE TABLE [custom].[fact_agent_evaluation]
+INSERT INTO [custom].[fact_agent_evaluation](evaluation_id, local_date_id, acd_login_id, number_of_evaluations, quality_score_sum)
 SELECT 
-	[evaluation_id]			= d.date_id,
+	[evaluation_id]			= ROW_NUMBER() OVER (ORDER BY d.date_id,acd.acd_login_id),
 	[local_date_id]			= d.date_id,
 	[acd_login_id]			= acd.acd_login_id,
 	[number_of_evaluations]	= d.date_id % 7 / 3,
-	[quality_score_sum]		= d.date_id % 6 * 3
+	[quality_score_sum]		= d.date_id % 11 * 3
 FROM mart.dim_date d
 CROSS JOIN mart.dim_acd_login acd
 WHERE d.date_id > 0
 AND acd.acd_login_id > 0
 AND d.date_date between '2014-02-01' and '2014-03-01'
-*/

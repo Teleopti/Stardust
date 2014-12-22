@@ -7,7 +7,6 @@ In the <Object> tag:
 Be sure to replace you local database name with the parameter
 <DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
 -->
-
 <Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
     <ParentObject>
 		<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>

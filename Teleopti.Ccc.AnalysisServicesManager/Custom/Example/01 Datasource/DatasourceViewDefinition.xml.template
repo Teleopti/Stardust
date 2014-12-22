@@ -4,7 +4,6 @@ This XML document is parsed in ASManager, so don't change nodes it without chang
 
 The <Constraints> tag is optional - all other tags mandatory
 -->
-
 <DatasourceViewDefinition>
         <DataTable>
             <DbSchemaName>custom</DbSchemaName>
