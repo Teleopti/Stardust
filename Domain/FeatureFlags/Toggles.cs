@@ -14,7 +14,7 @@
 		Scheduler_TeamBlockAdhereWithMaxSeatRule_23419,
 		Scheduler_ShowIntadayESLWithShrinkage_21874,
 		Scheduler_OccupancyESL_11724,
-		Scheduler_HidePointsFairnessSystem_28317, 
+		Scheduler_HidePointsFairnessSystem_28317,
 		Scheduler_SudentAvailabilityForFixedStaff_30393,
 		Scheduler_BackToLegalShift_29831,
 		Scheduler_IntraIntervalSolver_29845,
@@ -45,7 +45,7 @@
 		MyTeam_StaffingMetrics_25562,
 		MyTeam_Reports_31070,
 		MyTeam_AbsenceBackToWork_31478,
-		
+
 		RTA_ViewAgentsForMultipleTeams_28967,
 		RTA_NotifyViaSMS_31567,
 
@@ -62,6 +62,7 @@
 		Messaging_HttpSender_29205,
 
 		ETL_SpeedUpETL_30791,
-		RTA_NoBroker_31237
+		RTA_NoBroker_31237,
+		Gamification_NewBadgeCalculation_31185
 	}
 }

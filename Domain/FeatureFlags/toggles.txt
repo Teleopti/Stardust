@@ -74,3 +74,4 @@ MyTimeWeb_ShiftTradeExchangeBulletin_31296 = RC
 Schedule_OvertimeBeforeShiftStart_30712 = RC
 MyTimeWeb_AvailabilityVerifyHours_31654 = false
 MyTeam_AbsenceBackToWork_31478 = RC
+Gamification_NewBadgeCalculation_31185 = false
