@@ -70,11 +70,11 @@
 
 	<Target Name="ProcessCustomCube">
         <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
-		<Copy
+		<Copy Condition="'$(Customer.ToUpper())'=='EXAMPLE'"
             SourceFiles="@(CustomCubeCustomers)"
             DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)')"
         />
-		<Copy
+		<Copy Condition="'$(Customer.ToUpper())'!='EXAMPLE'"
             SourceFiles="@(CustomCubeCustomers)"
             DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
         />
