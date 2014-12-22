@@ -28,11 +28,11 @@
 		<Exec Command="cscript $(SourceDir)\Wise\setProductVersion.vbs %(WsiFiles.FullPath) $(CCCVersion)" />
 	</Target>
 	
-	<Target Name="CompileWseFiles" DependsOnTargets="MountK;CreateEmptyStubFile"> 
+	<Target Name="CompileWseFiles" DependsOnTargets="MountK"> 
 		<Exec Command="$(WseCompiler) %(WseFiles.FullPath) /c /s" />
 	</Target>
 	
-	<Target Name="CompileWsiFiles" DependsOnTargets="MountK;CreateEmptyStubFile;SetVersionOnWsis">
+	<Target Name="CompileWsiFiles" DependsOnTargets="MountK;SetVersionOnWsis">
 		<Exec Command="$(WsiCompiler) %(WsiFiles.FullPath) /c /s" />
 	</Target>
 	
