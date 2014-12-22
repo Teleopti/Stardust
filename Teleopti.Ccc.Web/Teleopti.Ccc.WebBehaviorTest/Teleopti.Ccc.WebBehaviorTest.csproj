@@ -1210,9 +1210,9 @@ if not exist "$(ProjectDir)license.xml" copy "$(ProjectDir)..\..\LicenseFiles\Te
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\..\packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Import Project="..\..\packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.targets" />
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
