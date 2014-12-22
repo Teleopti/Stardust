@@ -1207,11 +1207,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"
+"$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"
 if not exist "$(ProjectDir)license.xml" copy "$(ProjectDir)..\..\LicenseFiles\Teleopti_RD.xml" "$(ProjectDir)license.xml"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
-  <Import Project="..\..\packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
