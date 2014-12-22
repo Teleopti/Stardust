@@ -7,10 +7,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		void Persist(TeamAdherenceReadModel model);
 		TeamAdherenceReadModel Get(Guid teamId);
 	}
-
-	public interface ISiteAdherencePersister
-	{
-		void Persist(SiteAdherenceReadModel model);
-		SiteAdherenceReadModel Get(Guid siteId);
-	}
 }

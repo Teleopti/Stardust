@@ -3,7 +3,6 @@ using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories

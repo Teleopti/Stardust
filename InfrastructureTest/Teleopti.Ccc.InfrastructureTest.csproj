@@ -199,6 +199,7 @@
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Repositories\ShiftExchangeOfferRepositoryTest.cs" />
+    <Compile Include="Repositories\SiteAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Rta\ActualAgentStateForTest.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />
