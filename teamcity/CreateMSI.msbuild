@@ -4,7 +4,8 @@
 
 <Project DefaultTargets="BuildMSI" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
-		<SourceDir>SetFromOutside</SourceDir>
+		<MountKDirectory>SetFromOutside</MountKDirectory>
+		<SourceDir>$(MountKDirectory)\src</SourceDir>
 		<CCCVersion>SetFromOutside</CCCVersion>
 		
 		<WseCompiler>C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe</WseCompiler>
@@ -19,7 +20,7 @@
 	
 	<Target Name="MountK">
 		<Exec Command="subst K: /D" ContinueOnError="true" />
-		<Exec Command="subst K: $(SourceDir)" />
+		<Exec Command="subst K: $(MountKDirectory)" />
 	</Target>
 	
 	<Target Name="UnmountK">
