@@ -12,7 +12,7 @@
 		</tr>
 		<tr>
 			<td>
-				<div class="col-md-3 col-xs-12">
+				<div class="col-md-3 col-xs-12 annouonce-shift-matching-date" >
 					<div class="input-group">
 						<input class="form-control" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }" />
 						<span class="input-group-addon" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }">
@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				
-				<div class="col-md-3 col-xs-12">
+				<div class="col-md-3 col-xs-12 annouonce-shift-matching-date">
 					<div class="bootstrap-timepicker">
 						<div class="input-group" title="@Resources.StartTime">
 							<input type="text" class="shift-exchange-offer-start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3 col-xs-12">
+				<div class="col-md-3 col-xs-12 annouonce-shift-matching-date">
 					<div class="bootstrap-timepicker">
 						<div class="input-group" title="@Resources.EndTime">
 							<input type="text" class="shift-exchange-offer-end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
@@ -43,7 +43,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-3 col-xs-12">
+				<div class="col-md-3 col-xs-12 annouonce-shift-next-date">
 					<input type="checkbox" class="shift-exchange-offer-next-day" data-bind="checked: EndTimeNextDay" /> @Resources.NextDay
 				</div>
 			</td>
@@ -55,11 +55,13 @@
 		</tr>
 		<tr>
 			<td>
-				<div class="input-group">
-					<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }" />
-					<span class="input-group-addon" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }">
-						<i class="glyphicon glyphicon-calendar"></i>
-					</span>
+				<div class="col-md-3 col-xs-12">
+					<div class="input-group">
+						<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }" />
+						<span class="input-group-addon" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</span>
+					</div>
 				</div>
 			</td>
 		</tr>

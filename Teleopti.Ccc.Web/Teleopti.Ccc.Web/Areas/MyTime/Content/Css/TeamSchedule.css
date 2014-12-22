@@ -222,3 +222,12 @@
 	height: 10px;
 	padding-left: 5px
 }
+
+.annouonce-shift-matching-date {
+	padding-bottom: 5px;
+}
+
+.annouonce-shift-next-date {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
