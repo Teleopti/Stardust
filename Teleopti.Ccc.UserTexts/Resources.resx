@@ -12140,17 +12140,69 @@ Reduce the complexity to use these shifts.</value>
     <value>Agent Badge</value>
     <comment>Treeview node for agent badge setting</comment>
   </data>
+  <data name="EnableDifferentLevelBadgesCalculation" xml:space="preserve">
+    <value>Enable different level badges calculation</value>
+    <comment>Text for checkbox of enable different level badges calculation</comment>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Use Badge for Answered Calls</value>
+    <comment>Text for checkbox of enable Badge for Answered Calls</comment>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Use Badge for AHT</value>
+    <comment>Text for checkbox of enable Badge for AHT</comment>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Use Badge for Adherence</value>
+    <comment>Text for checkbox of enable Badge for Adherence</comment>
+  </data>
   <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
-    <value>Answered Calls Threshold:</value>
+    <value>Threshold:</value>
     <comment>Label for Badge Threshold for Answered Calls setting</comment>
   </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Threshold for Bronze Badge:</value>
+    <comment>Label for Badge bronze threshold for Answered Calls setting</comment>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Threshold for Silver Badge:</value>
+    <comment>Label for Badge silver threshold for Answered Calls setting</comment>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Threshold for Gold Badge:</value>
+    <comment>Label for Badge gold threshold for Answered Calls setting</comment>
+  </data>
   <data name="SetBadgeThresholdForAHT" xml:space="preserve">
-    <value>Average Handle Time Threshold (HH:mm:ss): </value>
+    <value>Threshold (HH:mm:ss): </value>
     <comment>Label for Badge Threshold for AHT setting</comment>
   </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Threshold for Bronze Badge (HH:mm:ss): </value>
+    <comment>Label for Badge bronze threshold for AHT setting</comment>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Threshold for Silver Badge (HH:mm:ss): </value>
+    <comment>Label for Badge silver threshold for AHT setting</comment>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Threshold for Gold Badge (HH:mm:ss): </value>
+    <comment>Label for Badge gold threshold for AHT setting</comment>
+  </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
-    <value>Adherence Threshold (%): </value>
+    <value>Threshold (%): </value>
     <comment>Label for Badge Threshold for Adherence setting</comment>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Threshold for Bronze Badge (%): </value>
+    <comment>Label for Badge bronze threshold for Adherence setting</comment>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Threshold for Silver Badge (%): </value>
+    <comment>Label for Badge silver threshold for Adherence setting</comment>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Threshold for Gold Badge (%): </value>
+    <comment>Label for Badge gold threshold for Adherence setting</comment>
   </data>
   <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
     <value>A silver badge equals bronze badge count: </value>
@@ -12163,6 +12215,30 @@ Reduce the complexity to use these shifts.</value>
   <data name="EnableBadge" xml:space="preserve">
     <value>Enable agent badge</value>
     <comment>Label for badge setting in admin client</comment>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Bronze badge threshold of Answered Calls should less than silver badge threshold.</value>
+    <comment>Error message for badge setting in admin client</comment>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Silver badge threshold of Answered Calls should less than gold badge threshold.</value>
+    <comment>Error message for badge setting in admin client</comment>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Bronze badge threshold of AHT should less than silver badge threshold.</value>
+    <comment>Error message for badge setting in admin client</comment>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Silver badge threshold of AHT should less than gold badge threshold.</value>
+    <comment>Error message for badge setting in admin client</comment>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>Bronze badge threshold of Adherence should greater than silver badge threshold.</value>
+    <comment>Error message for badge setting in admin client</comment>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>Silver badge threshold of Adherence should greater than gold badge threshold.</value>
+    <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AddingActivityFor" xml:space="preserve">
     <value>Adding activity for</value>

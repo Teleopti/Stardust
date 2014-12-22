@@ -1259,6 +1259,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bronze badge threshold of Adherence should greater than silver badge threshold..
+        /// </summary>
+        public static string AdherenceBronzeThresholdShouldGreaterThanSilverThreshold {
+            get {
+                return ResourceManager.GetString("AdherenceBronzeThresholdShouldGreaterThanSilverThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adherence calculation.
         /// </summary>
         public static string AdherenceReportCalculation {
@@ -1291,6 +1300,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime {
             get {
                 return ResourceManager.GetString("AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver badge threshold of Adherence should greater than gold badge threshold..
+        /// </summary>
+        public static string AdherenceSilverThresholdShouldGreaterThanGoldThreshold {
+            get {
+                return ResourceManager.GetString("AdherenceSilverThresholdShouldGreaterThanGoldThreshold", resourceCulture);
             }
         }
         
@@ -1660,6 +1678,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AgentTeam {
             get {
                 return ResourceManager.GetString("AgentTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bronze badge threshold of AHT should less than silver badge threshold..
+        /// </summary>
+        public static string AHTBronzeThresholdShouldLessThanSilverThreshold {
+            get {
+                return ResourceManager.GetString("AHTBronzeThresholdShouldLessThanSilverThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver badge threshold of AHT should less than gold badge threshold..
+        /// </summary>
+        public static string AHTSilverThresholdShouldLessThanGoldThreshold {
+            get {
+                return ResourceManager.GetString("AHTSilverThresholdShouldLessThanGoldThreshold", resourceCulture);
             }
         }
         
@@ -2164,6 +2200,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AnsweredCalls {
             get {
                 return ResourceManager.GetString("AnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bronze badge threshold of Answered Calls should less than silver badge threshold..
+        /// </summary>
+        public static string AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold {
+            get {
+                return ResourceManager.GetString("AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver badge threshold of Answered Calls should less than gold badge threshold..
+        /// </summary>
+        public static string AnsweredCallsSilverThresholdShouldLessThanGoldThreshold {
+            get {
+                return ResourceManager.GetString("AnsweredCallsSilverThresholdShouldLessThanGoldThreshold", resourceCulture);
             }
         }
         
@@ -7794,6 +7848,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Enabled {
             get {
                 return ResourceManager.GetString("Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable different level badges calculation.
+        /// </summary>
+        public static string EnableDifferentLevelBadgesCalculation {
+            get {
+                return ResourceManager.GetString("EnableDifferentLevelBadgesCalculation", resourceCulture);
             }
         }
         
@@ -22439,7 +22502,88 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adherence Threshold (%): .
+        ///   Looks up a localized string similar to Threshold for Bronze Badge (%): .
+        /// </summary>
+        public static string SetBadgeBronzeThresholdForAdherence {
+            get {
+                return ResourceManager.GetString("SetBadgeBronzeThresholdForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Bronze Badge (HH:mm:ss): .
+        /// </summary>
+        public static string SetBadgeBronzeThresholdForAHT {
+            get {
+                return ResourceManager.GetString("SetBadgeBronzeThresholdForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Bronze Badge:.
+        /// </summary>
+        public static string SetBadgeBronzeThresholdForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("SetBadgeBronzeThresholdForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Gold Badge (%): .
+        /// </summary>
+        public static string SetBadgeGoldThresholdForAdherence {
+            get {
+                return ResourceManager.GetString("SetBadgeGoldThresholdForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Gold Badge (HH:mm:ss): .
+        /// </summary>
+        public static string SetBadgeGoldThresholdForAHT {
+            get {
+                return ResourceManager.GetString("SetBadgeGoldThresholdForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Gold Badge:.
+        /// </summary>
+        public static string SetBadgeGoldThresholdForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("SetBadgeGoldThresholdForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Silver Badge (%): .
+        /// </summary>
+        public static string SetBadgeSilverThresholdForAdherence {
+            get {
+                return ResourceManager.GetString("SetBadgeSilverThresholdForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Silver Badge (HH:mm:ss): .
+        /// </summary>
+        public static string SetBadgeSilverThresholdForAHT {
+            get {
+                return ResourceManager.GetString("SetBadgeSilverThresholdForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold for Silver Badge:.
+        /// </summary>
+        public static string SetBadgeSilverThresholdForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("SetBadgeSilverThresholdForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold (%): .
         /// </summary>
         public static string SetBadgeThresholdForAdherence {
             get {
@@ -22448,7 +22592,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average Handle Time Threshold (HH:mm:ss): .
+        ///   Looks up a localized string similar to Threshold (HH:mm:ss): .
         /// </summary>
         public static string SetBadgeThresholdForAHT {
             get {
@@ -22457,7 +22601,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answered Calls Threshold:.
+        ///   Looks up a localized string similar to Threshold:.
         /// </summary>
         public static string SetBadgeThresholdForAnsweredCalls {
             get {
@@ -26449,6 +26593,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Badge for Adherence.
+        /// </summary>
+        public static string UseBadgeforAdherence {
+            get {
+                return ResourceManager.GetString("UseBadgeforAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Badge for AHT.
+        /// </summary>
+        public static string UseBadgeforAHT {
+            get {
+                return ResourceManager.GetString("UseBadgeforAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Badge for Answered Calls.
+        /// </summary>
+        public static string UseBadgeForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("UseBadgeForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Block Scheduling.
         /// </summary>
         public static string UseBlockScheduling {
@@ -28495,7 +28666,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should work at least {0}h. You are now available for between {1}h and {2}h..
+        ///   Looks up a localized string similar to You should work at least {0} hours. You are now available for between {1} and {2} hours..
         /// </summary>
         public static string YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot {
             get {
@@ -28514,7 +28685,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should work {0}h. Your preferences can now result in {1}h to {2}h..
+        ///   Looks up a localized string similar to You should work {0} hours. Your preferences can now result in {1} to {2} hours..
         /// </summary>
         public static string YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot {
             get {
