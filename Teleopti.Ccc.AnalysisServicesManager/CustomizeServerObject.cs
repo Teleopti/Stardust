@@ -21,8 +21,6 @@ namespace AnalysisServicesManager
 	public class CalculatedMember
 	{
 		public string MdxString { get; set; }
-		public string AssociatedMeasureGroupID { get; set; }
-		public string CalculationReference { get; set; }
 	}
 
 	public class TeleoptiContraints
@@ -152,25 +150,6 @@ namespace AnalysisServicesManager
 			MdxScriptUpdater updater = new MdxScriptUpdater(AsServer);
 			updater.MdxCommands.Add(calculatedMember.MdxString);
 			updater.Update(AsDatabase, _cubeName);
-
-			//move the calculated member to correct Measure Group
-			using (Server server = new Server())
-			{
-				server.Connect(_ASconnectionString);
-				Database targetDb = server.Databases.GetByName(_databaseName);
-				Cube cube = targetDb.Cubes.FindByName(_cubeName);
-				MdxScript mdxScript = cube.MdxScripts["MdxScript"];
-
-				if (!mdxScript.CalculationProperties.Contains(calculatedMember.CalculationReference))
-				{
-					CalculationProperty cp = new CalculationProperty(calculatedMember.CalculationReference, CalculationType.Member);
-					cp.AssociatedMeasureGroupID = calculatedMember.AssociatedMeasureGroupID;
-					cp.FormatString = "";
-					cp.Visible = true;
-					mdxScript.CalculationProperties.Add(cp);
-					cube.Update(UpdateOptions.ExpandFull);
-				}
-			}
 		}
 
 		public void AddCubeDimensionByFileName(string dimensionName)

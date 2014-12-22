@@ -13,18 +13,13 @@ must match the name of our created member:
 -->
 <CalculatedMemberDefinition>
 	<CalculatedMember>
-		<CalculationReference>[Measures].[CSAT Survey Score AVG]</CalculationReference>
-		<AssociatedMeasureGroupID>Fact Agent Customer Survey</AssociatedMeasureGroupID>
 		<MdxString>
-		CREATE MEMBER CURRENTCUBE.[Measures].[CSAT Survey Score AVG]  AS [Measures].[Score]/[Measures].[CSAT Number Of Calls], FORMAT_STRING = "0", VISIBLE = 1  ;
+		CREATE MEMBER CURRENTCUBE.[Measures].[CSAT Survey Score AVG]  AS [Measures].[Score]/[Measures].[CSAT Number Of Calls], FORMAT_STRING = "0", VISIBLE = 1 ,  ASSOCIATED_MEASURE_GROUP = 'CSAT Agent Survey'  ;
 		</MdxString>
 	</CalculatedMember>
 	<CalculatedMember>
-		<CalculationReference>[Measures].[QA Quality Score AVG]</CalculationReference>
-		<AssociatedMeasureGroupID>Fact Agent Evaluation</AssociatedMeasureGroupID>
 		<MdxString>
-		CREATE MEMBER CURRENTCUBE.[Measures].[QA Quality Score AVG]  AS ([Measures].[Quality Score Sum]/100)/[Measures].[QA Number Of Evaluations], FORMAT_STRING = "0%", VISIBLE = 1  ;
+		CREATE MEMBER CURRENTCUBE.[Measures].[QA Quality Score AVG]  AS ([Measures].[Quality Score Sum]/100)/[Measures].[QA Number Of Evaluations], FORMAT_STRING = "0%", VISIBLE = 1 ,  ASSOCIATED_MEASURE_GROUP = 'QA Agent Evaluation' ;
 		</MdxString>
 	</CalculatedMember>
-	
 </CalculatedMemberDefinition>

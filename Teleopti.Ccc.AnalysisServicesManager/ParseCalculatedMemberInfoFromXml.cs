@@ -29,10 +29,6 @@ namespace AnalysisServicesManager
 			{
 				if (node.Name == "MdxString")
 					extractedValue.MdxString = node.InnerText;
-				if (node.Name == "AssociatedMeasureGroupID")
-					extractedValue.AssociatedMeasureGroupID = node.InnerText;
-				if (node.Name == "CalculationReference")
-					extractedValue.CalculationReference = node.InnerText;
 			}
 
 			return extractedValue;
