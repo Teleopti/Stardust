@@ -25,15 +25,15 @@
 	</Target>
 	
 	<Target Name="SetVersionOnWsis">
-		<Exec Command="cscript $(SourceDir)\Wise\setProductVersion.vbs %(WsiFiles.FullPath) $(CCCVersion)" />
+		<Exec Command='cscript "$(SourceDir)\Wise\setProductVersion.vbs" "%(WsiFiles.FullPath)" $(CCCVersion)' />
 	</Target>
 	
 	<Target Name="CompileWseFiles" DependsOnTargets="MountK"> 
-		<Exec Command="$(WseCompiler) %(WseFiles.FullPath) /c /s" />
+		<Exec Command='"$(WseCompiler)" "%(WseFiles.FullPath)" /c /s' />
 	</Target>
 	
 	<Target Name="CompileWsiFiles" DependsOnTargets="MountK;SetVersionOnWsis">
-		<Exec Command="$(WsiCompiler) %(WsiFiles.FullPath) /c /s" />
+		<Exec Command='"$(WsiCompiler)" "%(WsiFiles.FullPath)" /c /s' />
 	</Target>
 	
 	<Target Name="BuildMSI" DependsOnTargets="CompileWseFiles;CompileWsiFiles;" AfterTargets="UnmountK">
