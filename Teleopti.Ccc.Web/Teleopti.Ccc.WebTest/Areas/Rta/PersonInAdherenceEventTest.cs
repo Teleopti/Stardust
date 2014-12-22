@@ -170,5 +170,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.TeamId.Should().Be(teamId);
 		}
 
+		[Test]
+		public void ShouldPublishWithsiteId()
+		{
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+			};
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			database
+				.WithDefaultsFromState(state)
+				.WithUser("usercode", personId, null, null, siteId)
+				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
+				.WithAlarm("statecode", activityId, 0);
+			now.Is("2014-10-20 9:00");
+
+			target.SaveState(state);
+
+			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single()
+				.SiteId.Should().Be(siteId);
+		}
+
 	}
 }

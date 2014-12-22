@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_siteAdherencePersister = siteAdherencePersister;
 		}
 
+		[ReadModelUnitOfWork]
 		public void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			var model = getModel(@event.SiteId);
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_siteAdherencePersister.Persist(model);
 		}
 
+		[ReadModelUnitOfWork]
 		public void Handle(PersonInAdherenceEvent @event)
 		{
 			var model = getModel(@event.SiteId);

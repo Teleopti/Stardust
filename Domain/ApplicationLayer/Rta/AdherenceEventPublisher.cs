@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = agentState.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.NewState.BusinessUnitId,
-					TeamId = info.TeamId
+					TeamId = info.TeamId,
+					SiteId = info.SiteId,
 				};
 			else
 			{
@@ -35,7 +36,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = agentState.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.NewState.BusinessUnitId,
-					TeamId = info.TeamId
+					TeamId = info.TeamId,
+					SiteId = info.SiteId,
+
 				};
 			}
 
