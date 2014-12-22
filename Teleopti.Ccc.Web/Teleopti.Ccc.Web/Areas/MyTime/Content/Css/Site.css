@@ -1551,18 +1551,20 @@ End personal drop down menu
 	}
 }
 
-
-}
 @media print {
-  .cal-month-day .visible-lg {
-    display: block !important;
-  }
-  .cal-month-day .hidden-xs {
-    display: block !important;
-  } 
-  .cal-month-day .hidden-sm {
-    display: block !important;
-  }
-  .cal-month-day .hidden-md {
-    display: none !important;
-  }
+	.cal-month-day .visible-lg {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-xs {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-sm {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-md {
+		display: none !important;
+	}
+}
