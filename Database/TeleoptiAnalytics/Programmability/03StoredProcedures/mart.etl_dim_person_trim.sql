@@ -2,7 +2,6 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_dim_person_trim]
 GO
 
-
 -- =============================================
 -- Author:		Jonas Nordh
 -- Create date: 200-09-25
@@ -79,8 +78,8 @@ BEGIN
 	FROM mart.dim_person p
 	INNER JOIN mart.fact_schedule_deviation sd
 		ON p.person_id = sd.person_id
-	WHERE ((p.valid_to_date_id < sd.date_id)
-		OR (p.valid_to_date_id = sd.date_id AND p.valid_to_interval_id < sd.interval_id))
+	WHERE ((p.valid_to_date_id < sd.shift_startdate_id)
+		OR (p.valid_to_date_id = sd.shift_startdate_id AND p.valid_to_interval_id < sd.shift_startinterval_id))
 		AND p.valid_to_date_id <> -2
 
 	--/* mart.fact_schedule_deviation: Trim invalid fact data before period start */
@@ -89,8 +88,8 @@ BEGIN
 	FROM mart.dim_person p
 	INNER JOIN mart.fact_schedule_deviation sd
 		ON p.person_id = sd.person_id
-	WHERE (p.valid_from_date_id > sd.date_id)
-		OR (p.valid_from_date_id = sd.date_id AND p.valid_from_interval_id > sd.interval_id)
+	WHERE (p.valid_from_date_id > sd.shift_startdate_id)
+		OR (p.valid_from_date_id = sd.shift_startdate_id AND p.valid_from_interval_id > sd.shift_startinterval_id)
 END
 
 GO
