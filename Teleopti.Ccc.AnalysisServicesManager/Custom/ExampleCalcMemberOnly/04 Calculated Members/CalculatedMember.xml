@@ -1,0 +1,32 @@
+<!--
+This is where you define your calculated members.
+
+In the MdxString, Please note that the value of:
+ASSOCIATED_MEASURE_GROUP
+must match the measure group <Name> tag for the measure group (not the Id tag)
+e.g In the .\03 Measures\ you define your measure as:
+    <ObjectDefinition>
+        <MeasureGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">
+            <ID>Fact Agent Evaluation</ID>
+            <Name>QA Agent Evaluation</Name>
+
+Then in the <MdxString>
+To associate Measures].[QA Quality Score AVG] to that measure group use:
+ASSOCIATED_MEASURE_GROUP = 'QA Agent Evaluation';
+
+-->
+<CalculatedMemberDefinition>
+	<CalculatedMember>
+		<MdxString>
+		CREATE MEMBER CURRENTCUBE.[MEASURES].[Forecast Accuracy After Call Work Special]
+
+		AS [Measures].[Forecasted After Call Work S]/[Measures].[After Call Work s],
+		
+FORMAT_STRING = "Percent",
+		
+NON_EMPTY_BEHAVIOR = { [After Call Work s] }, 
+		VISIBLE = 1,
+		ASSOCIATED_MEASURE_GROUP = 'Forecast';
+		</MdxString>
+	</CalculatedMember>
+</CalculatedMemberDefinition>

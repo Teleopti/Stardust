@@ -79,7 +79,8 @@
             DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
         />
 		
-		<Exec Command ='$(SQLCmdConn) -E -d$(ETLAnalyticsDB) -i"$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\TestDataSetup\TestDataSetup.sql" '/>
+		<Exec Condition="Exists('$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\TestDataSetup\TestDataSetup.sql')"
+			Command ='$(SQLCmdConn) -E -d$(ETLAnalyticsDB) -i"$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\TestDataSetup\TestDataSetup.sql" '/>
 		
 		<CallTarget Targets="DropCube"/>
 		<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
