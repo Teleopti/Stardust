@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string Datasource { get; set; }
 		public Guid BusinessUnitId { get; set; }
 		public Guid TeamId { get; set; }
+		public Guid SiteId { get; set; }
 	}
 }

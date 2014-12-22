@@ -217,6 +217,8 @@
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherencePercent.cs" />
