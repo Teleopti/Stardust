@@ -3,7 +3,6 @@ using Autofac;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Autofac")]
 	public class AutofacResolve : IResolve
 	{
 		private readonly IComponentContext _componentContext;

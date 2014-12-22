@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -15,62 +14,64 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	[TestFixture]
 	public class EventPublisherTest
 	{
+
+		public IResolve ResolverWith(Type type, object instance)
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterInstance(instance).As(type);
+			return new AutofacResolve(builder.Build());
+		}
+
 		[Test]
 		public void ShouldInvokeHandler()
 		{
-			var handler = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
-			var resolver = MockRepository.GenerateMock<IResolve>();
-			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler });
-			var target = new SyncEventPublisher(resolver);
+			var handler = new FakeHandler();
+			var target = new SyncEventPublisher(ResolverWith(typeof(IHandleEvent<TestEvent>), handler));
 			var @event = new TestEvent();
 
 			target.Publish(@event);
 
-			handler.AssertWasCalled(x => x.Handle(@event));
+			handler.CalledWithEvent.Should().Be(@event);
 		}
 
 		[Test]
 		public void ShouldInvokeMultipleHandlers()
 		{
-			var handler1 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
-			var handler2 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
-			var resolver = MockRepository.GenerateMock<IResolve>();
-			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler1, handler2 });
-			var target = new SyncEventPublisher(resolver);
+			var handler1 = new FakeHandler();
+			var handler2 = new FakeHandler();
+			var builder = new ContainerBuilder();
+			builder.RegisterInstance(handler1).As<IHandleEvent<TestEvent>>();
+			builder.RegisterInstance(handler2).As<IHandleEvent<TestEvent>>();
+			var target = new SyncEventPublisher(new AutofacResolve(builder.Build()));
 			var @event = new TestEvent();
 
 			target.Publish(@event);
 
-			handler1.AssertWasCalled(x => x.Handle(@event));
-			handler2.AssertWasCalled(x => x.Handle(@event));
+			handler1.CalledWithEvent.Should().Be(@event);
+			handler2.CalledWithEvent.Should().Be(@event);
 		}
 
 		[Test]
 		public void ShouldCallCorrectHandleMethod()
 		{
-			var handler = MockRepository.GenerateMock<ITestHandler>();
-			var resolver = MockRepository.GenerateMock<IResolve>();
-			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEventTwo>>))).Return(new[] { handler });
-			var target = new SyncEventPublisher(resolver);
+			var handler = new FakeHandler();
+			var target = new SyncEventPublisher(ResolverWith(typeof(IHandleEvent<TestEventTwo>), handler));
 			var @event = new TestEventTwo();
 
 			target.Publish(@event);
 
-			handler.AssertWasCalled(x => x.Handle(@event));
+			handler.CalledWithEventTwo.Should().Be(@event);
 		}
 
 		[Test]
 		public void ShouldSetContextDetails()
 		{
-			var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
-			var resolver = MockRepository.GenerateMock<IResolve>();
-			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
-			var target = new EventPopulatingPublisher(new SyncEventPublisher(resolver), new EventContextPopulator(new CurrentBusinessUnit(new CurrentIdentity(new CurrentTeleoptiPrincipal())), new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null), new FakeCurrentInitiatorIdentifier()));
+			var handler = new FakeHandler();
+			var target = new EventPopulatingPublisher(new SyncEventPublisher(ResolverWith(typeof(IHandleEvent<TestDomainEvent>), handler)), new EventContextPopulator(new CurrentBusinessUnit(new CurrentIdentity(new CurrentTeleoptiPrincipal())), new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null), new FakeCurrentInitiatorIdentifier()));
 			var @event = new TestDomainEvent();
 
 			target.Publish(@event);
 
-			handler.AssertWasCalled(x => x.Handle(@event));
 			@event.Datasource.Should().Not.Be.Empty();
 			@event.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
 		}
@@ -91,6 +92,25 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		{
 		}
 
+		public class FakeHandler : IHandleEvent<TestEvent>, IHandleEvent<TestEventTwo>, IHandleEvent<TestDomainEvent>
+		{
+			public Event CalledWithEvent;
+			public Event CalledWithEventTwo;
+
+			public void Handle(TestEvent @event)
+			{
+				CalledWithEvent = @event;
+			}
+
+			public void Handle(TestEventTwo @event)
+			{
+				CalledWithEventTwo = @event;
+			}
+
+			public void Handle(TestDomainEvent @event)
+			{
+			}
+		}
 	}
 
 }
