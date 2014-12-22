@@ -221,6 +221,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="MyTime\AbsenceReportFromMobileWeekScheduleStepDefinitions.cs" />
+    <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboard.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GamificationOrganisationalBasedLeaderboard.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\ShiftTradeBulletinBoard.feature.cs">
       <DependentUpon>ShiftTradeBulletinBoard.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -869,6 +874,10 @@
     <None Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceReportFromMobileWeekSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\GamificationOrganisationalBasedLeaderboard.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GamificationOrganisationalBasedLeaderboard.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftTradeBulletinBoard.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
