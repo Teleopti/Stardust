@@ -36,5 +36,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
 					JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction]
+		public JsonResult OptionsForLeaderboard(DateOnly? date)
+		{
+			if (!date.HasValue)
+				date = _now.LocalDateOnly();
+			return
+				Json(
+					_teamViewModelFactory.CreateLeaderboardOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard),
+					JsonRequestBehavior.AllowGet);
+		}
 	}
 }

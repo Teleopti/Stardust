@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 	{
 		IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date);
 		IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath);
+		IEnumerable<ISelectOption> CreateLeaderboardOptionsViewModel(DateOnly date, string applicationFunctionPath);
 	}
 }

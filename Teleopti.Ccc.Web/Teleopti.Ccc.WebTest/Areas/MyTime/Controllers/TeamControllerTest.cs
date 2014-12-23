@@ -66,5 +66,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as IEnumerable<SelectGroup>;
 			data.Should().Have.SameValuesAs(teams);
 		}
+
+		[Test]
+		public void ShouldReturnLeaderboardOptionsAsJson()
+		{
+			var teams = new[] { new SelectGroup() };
+			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
+			viewModelFactory.Stub(
+				x => x.CreateLeaderboardOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
+			                .Return(teams);
+
+			var target = new TeamController(viewModelFactory, new Now());
+
+			var result = target.OptionsForLeaderboard(DateOnly.Today);
+
+			var data = result.Data as IEnumerable<SelectGroup>;
+			data.Should().Have.SameValuesAs(teams);
+		}
 	}
 }
