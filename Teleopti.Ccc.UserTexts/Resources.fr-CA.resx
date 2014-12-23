@@ -9464,9 +9464,6 @@ Réduisez la complexité pour utiliser ces quarts.</value>
   <data name="IntraIntervalIssue" xml:space="preserve">
     <value>Problème d'équilibre intra-intervalle</value>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Utiliser</value>
-  </data>
   <data name="FullDayAbsenceSettings" xml:space="preserve">
     <value>Paramètres d'absence journée entière</value>
   </data>

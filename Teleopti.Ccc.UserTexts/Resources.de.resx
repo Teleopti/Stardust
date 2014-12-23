@@ -11129,9 +11129,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="ShiftBackToLegal" xml:space="preserve">
     <value>Schichten an Schichtsammlung anpassen</value>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>nutzen</value>
-  </data>
   <data name="FullDayAbsenceSettings" xml:space="preserve">
     <value>Einstellungen der Ganztags-Abwesenheiten</value>
   </data>

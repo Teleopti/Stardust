@@ -12422,10 +12422,6 @@ Reduce the complexity to use these shifts.</value>
     <value>Adjust shifts to match shift bag</value>
     <comment>Adjust shifts to match shift bag</comment>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Use</value>
-    <comment>Enable a specified badge type in Admin client agent badge setting</comment>
-  </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>Could not find any valid shifts in shift bag</value>
     <comment>Could not find any valid shifts in shift bag</comment>

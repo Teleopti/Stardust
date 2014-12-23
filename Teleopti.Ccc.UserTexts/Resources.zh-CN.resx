@@ -10849,9 +10849,6 @@ Teleopti R&amp;D</value>
   <data name="BadgeLeaderBoardReport" xml:space="preserve">
     <value>排行榜</value>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>使用</value>
-  </data>
   <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
     <value>偏好无法被添加由于选定项已不可用</value>
   </data>

@@ -3216,15 +3216,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use.
-        /// </summary>
-        public static string BadgeTypeEnabled {
-            get {
-                return ResourceManager.GetString("BadgeTypeEnabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Bags.
         /// </summary>
         public static string Bags {

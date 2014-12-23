@@ -9449,9 +9449,6 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   <data name="ViewBadgeLeaderBoard" xml:space="preserve">
     <value>Voir le classement des badges</value>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Utiliser</value>
-  </data>
   <data name="CannotBeBeforeTime" xml:space="preserve">
     <value>{0} ne peut pas être plus tôt que {1}</value>
   </data>

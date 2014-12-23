@@ -8696,9 +8696,6 @@ Teleopti研究開発グループ</value>
   <data name="EnableBadge" xml:space="preserve">
     <value>エージェントバッジを有効化</value>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>利用</value>
-  </data>
   <data name="FilterOnIntraIntervals" xml:space="preserve">
     <value>インターバル内のフィルター</value>
   </data>

@@ -11792,9 +11792,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="FilterOnIntraIntervals" xml:space="preserve">
     <value>Filtrera på aktiviteter inom intervall</value>
   </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Använd</value>
-  </data>
   <data name="EmailSettings" xml:space="preserve">
     <value>E-postinställningar</value>
   </data>
