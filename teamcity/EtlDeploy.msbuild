@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--EXTERNAL_PROPERTIES: WorkingDirectory-->
 
-<Project DefaultTargets="ProcessStandardCube" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project DefaultTargets="RunTests" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 
 	<PropertyGroup>
 		<Customer Condition="'$(Customer)'==''">Umniah</Customer>
@@ -36,11 +36,10 @@
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.AsyncExec"/>
 	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.CommandLine"/>
 
-	<Target Name="PrepareETLTest" DependsOnTargets="RestoreToLocal;PrepareFiles">
-	
+	<Target Name="RunTests" DependsOnTargets="ProcessStandardCube;ProcessCustomCube">
 	</Target>
-	
-	<Target Name="RunETLTest" DependsOnTargets="CleanUp;PrepareETLTest">
+
+	<Target Name="RunETLTest" DependsOnTargets="CleanUp;RestoreToLocal;PrepareFiles">
 		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="%22$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)\Teleopti.Analytics.Etl.ServiceConsoleHost.exe%22"/>
 		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
 		<CallTarget Targets="AddSchedule"/>
@@ -59,18 +58,17 @@
 	<Target Name="RestoreToLocal">
 		<Exec Command ='"$(RestoreToLocal)" DemoSales $(Configuration) 1 $(ETLDBNamePrefix) $(SqlInstanceName) $(RestoreToLocalWorkDir)'/>
 	</Target>
-
+	
 	<Target Name="CreateStandardCube">
-			<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
+		<Exec Command="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
 	</Target>
 	
 	<Target Name="ProcessStandardCube" DependsOnTargets="RunETLTest;CreateStandardCube">
-			<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPProcessDatabase.xmla"/>
+		<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPProcessDatabase.xmla"/>
 	</Target>
 
-	<Target Name="ProcessCustomCube">
+	<Target Name="ProcessCustomCube" DependsOnTargets="ProcessStandardCube">
         <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
-
 		<Copy
             SourceFiles="@(CustomCubeCustomers)"
             DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
@@ -83,6 +81,22 @@
 		<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
 		<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPProcessDatabase.xmla"/>
 	</Target>
+
+	<Target Name="ManuallyProcessCustomCube">
+        <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
+		<Copy
+            SourceFiles="@(CustomCubeCustomers)"
+            DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
+		
+		<Exec Condition="Exists('$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\TestDataSetup\TestDataSetup.sql')"
+			Command ='$(SQLCmdConn) -E -d$(ETLAnalyticsDB) -i"$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\TestDataSetup\TestDataSetup.sql" '/>
+		
+		<CallTarget Targets="DropCube"/>
+		<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPCreateDatabase.xmla"/>
+		<Exec Command ="&quot;$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe&quot; -AS$(AS_SERVER_NAME) -AD$(AS_DATABASE) -SS$(SqlInstanceName) -SD$(ETLAnalyticsDB) -SU$(AppSqlLogin) -SP$(AppSqlPwd) -FPProcessDatabase.xmla"/>
+	</Target>
+	
 	
 	<Target Name="MoveOneLogObject">
 		<Exec Command ="$(SQLCmdConn) -d$(ETLAnalyticsDB) -i$(LoadDimensionSQL) -v SourceAgg=$(ETLAggDB) -v logobjectid=$(LogObjectId)"/>
