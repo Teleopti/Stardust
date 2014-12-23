@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Filters;
 
@@ -7,10 +10,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class TeamsController : Controller
 	{
 		private readonly IGetAdherence _getAdherence;
+		private readonly ITeamAdherencePersister _teamAdherencePersister;
+		private readonly ISiteAdherencePersister _siteAdherencePersister;
 
-		public TeamsController(IGetAdherence getAdherence)
+		public TeamsController(IGetAdherence getAdherence, ITeamAdherencePersister teamAdherencePersister, ISiteAdherencePersister siteAdherencePersister)
 		{
 			_getAdherence = getAdherence;
+			_teamAdherencePersister = teamAdherencePersister;
+			_siteAdherencePersister = siteAdherencePersister;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -36,6 +43,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public JsonResult GetBusinessUnitId(string teamId)
 		{
 			return Json(_getAdherence.GetBusinessUnitId(teamId), JsonRequestBehavior.AllowGet);
+		}
+
+		[ReadModelUnitOfWork, HttpGet]
+		public virtual int PollAdherenceForTeam(Guid teamId)
+		{
+			return _teamAdherencePersister.Get(teamId).AgentsOutOfAdherence;
+		}
+
+		[ReadModelUnitOfWork, HttpGet]
+		public virtual int PollAdherenceForSite(Guid siteId)
+		{
+			return _siteAdherencePersister.Get(siteId).AgentsOutOfAdherence;
 		}
 	}
 }
