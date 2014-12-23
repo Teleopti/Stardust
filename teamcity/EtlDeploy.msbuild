@@ -4,7 +4,7 @@
 <Project DefaultTargets="ProcessStandardCube" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 
 	<PropertyGroup>
-		<Customer>$(Customer)</Customer>
+		<Customer Condition="'$(Customer)'==''">Umniah</Customer>
 		<Configuration Condition="'$(Configuration)'==''">Release</Configuration>	
 		<ETLStuff>$(WorkingDirectory)\teamcity\ETLNightlyBuild</ETLStuff>
 		<ETLDBNamePrefix>ETLTest</ETLDBNamePrefix>
@@ -70,11 +70,8 @@
 
 	<Target Name="ProcessCustomCube">
         <Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
-		<Copy Condition="'$(Customer.ToUpper())'=='EXAMPLE'"
-            SourceFiles="@(CustomCubeCustomers)"
-            DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)')"
-        />
-		<Copy Condition="'$(Customer.ToUpper())'!='EXAMPLE'"
+
+		<Copy
             SourceFiles="@(CustomCubeCustomers)"
             DestinationFiles="@(CustomCubeCustomers->'$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom\%(RecursiveDir)%(Filename)%(Extension)')"
         />
