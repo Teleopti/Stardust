@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Filters;
 
@@ -10,14 +9,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class TeamsController : Controller
 	{
 		private readonly IGetAdherence _getAdherence;
-		private readonly ITeamAdherencePersister _teamAdherencePersister;
-		private readonly ISiteAdherencePersister _siteAdherencePersister;
 
-		public TeamsController(IGetAdherence getAdherence, ITeamAdherencePersister teamAdherencePersister, ISiteAdherencePersister siteAdherencePersister)
+		public TeamsController(IGetAdherence getAdherence)
 		{
 			_getAdherence = getAdherence;
-			_teamAdherencePersister = teamAdherencePersister;
-			_siteAdherencePersister = siteAdherencePersister;
 		}
 
 		[UnitOfWorkAction, HttpGet]
@@ -48,13 +43,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, HttpGet]
 		public virtual int PollAdherenceForTeam(Guid teamId)
 		{
-			return _teamAdherencePersister.Get(teamId).AgentsOutOfAdherence;
+			return _getAdherence.PollAdherenceForTeam(teamId);
 		}
 
 		[ReadModelUnitOfWork, HttpGet]
 		public virtual int PollAdherenceForSite(Guid siteId)
 		{
-			return _siteAdherencePersister.Get(siteId).AgentsOutOfAdherence;
+			return _getAdherence.PollAdherenceForSite(siteId);
 		}
 	}
 }

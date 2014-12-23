@@ -207,8 +207,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			public TeamsController CreateController()
 			{
 				var logic = new GetAdherence(SiteRepository, NumberOfAgentsInTeamReader, TeamAdherenceAggregator,
-				TeamRepository);
-				return new TeamsController(logic, TeamAdherencePersister, SiteAdherencePersister);
+				TeamRepository, TeamAdherencePersister, SiteAdherencePersister);
+				return new TeamsController(logic);
 			}
 		} 
 	}

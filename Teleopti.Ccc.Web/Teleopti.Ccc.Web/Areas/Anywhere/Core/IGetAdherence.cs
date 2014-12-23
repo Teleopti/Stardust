@@ -12,5 +12,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId);
 
 		Guid GetBusinessUnitId(string teamId);
+
+		int PollAdherenceForTeam(Guid teamId);
+
+		int PollAdherenceForSite(Guid siteId);
 	}
 }
