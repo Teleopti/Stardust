@@ -46,9 +46,33 @@ Scenario: Should view correct leader board when selecting another group from dif
 		| Field                 | Value |
 		| Access to Leaderboard | true  |
 		| Access to my site     | true  |
-	And I am viewing leaderboard report
+	And  There is an agent badge settings with
+		| Field                 | Value |
+		| BadgeEnabled          | True  |
+		| AnsweredCallsUsed     | True  |
+		| AHTUsed               | True  |
+		| AdherenceUsed         | True  |
+		| Silver to bronze rate | 5     |
+		| Gold to silver rate   | 2     |
+	And I have badges with
+		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
+	And 'Pierre Baldi' has badges with
+		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 0    | 2014-08-11         |
+	When I am viewing leaderboard report
+	Then I should see the ranks are
+		| Field        | value |
+		| I            | 1     |
+		| Pierre Baldi | 2     |
 	When I select 'The site/Team red' in the hierarchy-picker
-	Then I should see only 'Pierre Baldi' on the leaderboard
+	Then I should see the ranks are
+		| Field        | value |
+		| Pierre Baldi | 1     |
 
 
 Scenario: Default leader board should be based on relative Everyone
