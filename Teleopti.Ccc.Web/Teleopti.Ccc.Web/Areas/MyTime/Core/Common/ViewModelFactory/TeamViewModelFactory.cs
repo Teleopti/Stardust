@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -18,14 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IUserTextTranslator _userTextTranslator;
+		private readonly IPrincipalAuthorization _principalAuthorization;
 		private const string pageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
-		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator)
+		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator, IPrincipalAuthorization principalAuthorization)
 		{
 			_teamProvider = teamProvider;
 			_permissionProvider = permissionProvider;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
+			_principalAuthorization = principalAuthorization;
 		}
 
 		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
@@ -51,6 +54,39 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 								  {
 									  id = t.Id.ToString(),
 									  text = s.Description.Name + "/" + t.Description.Name
+								  };
+				options.AddRange(teamOptions);
+			});
+
+			return options;
+		}
+
+		public IEnumerable<ISelectOption> CreateLeaderboardOptionsViewModel(DateOnly date, string applicationFunctionPath)
+		{
+			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
+			var sites = teams
+				.Select(t => t.Site)
+				.Distinct()
+				.OrderBy(s => s.Description.Name);
+
+			var options = new List<ISelectOption>();
+			sites.ForEach(s =>
+			{
+				if (_principalAuthorization.IsPermitted(applicationFunctionPath, date, s))
+				{
+					options.Add(new SelectOptionItem()
+					{
+						id = s.Id.ToString(),
+						text = s.Description.Name
+					});
+				}
+				
+				var teamOptions = from t in teams
+								  where t.Site == s
+								  select new SelectOptionItem
+								  {
+									  id = t.Id.ToString(),
+									  text = t.Description.Name
 								  };
 				options.AddRange(teamOptions);
 			});

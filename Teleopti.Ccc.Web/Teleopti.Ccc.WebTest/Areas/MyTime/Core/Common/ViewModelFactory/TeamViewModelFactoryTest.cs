@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(teams);
 
-			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator());
+			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
@@ -48,11 +49,57 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(teams);
 
-			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator());
+			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 
 			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
+		}
+
+		[Test]
+		public void ShouldCreateLeaderboardOptionsViewModel()
+		{
+			var teams = new[] { new Team() };
+			teams[0].SetId(Guid.NewGuid());
+			teams[0].Description = new Description("team");
+			teams[0].Site = new Site("site");
+			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+			const string viewbadgeleaderboard = DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard;
+			var dateOnly = DateOnly.Today;
+
+			teamProvider.Stub(x => x.GetPermittedTeams(dateOnly, viewbadgeleaderboard)).Return(teams);
+
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(viewbadgeleaderboard, dateOnly, teams[0].Site)).Return(true);
+			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator(), principalAuthorization);
+
+			var result = target.CreateLeaderboardOptionsViewModel(dateOnly, viewbadgeleaderboard).ToArray();
+
+			result[0].text.Should().Be.EqualTo("site");
+			result[1].text.Should().Be.EqualTo("team");
+		}
+
+		[Test]
+		public void ShouldCreateLeaderboardOptionsViewModelIfHaveDataAvailableAsMyTeam()
+		{
+			var teams = new[] { new Team() };
+			teams[0].SetId(Guid.NewGuid());
+			teams[0].Description = new Description("team");
+			var site = new Site("site");
+			teams[0].Site = site;
+			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+			const string viewbadgeleaderboard = DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard;
+			var dateOnly = DateOnly.Today;
+
+			teamProvider.Stub(x => x.GetPermittedTeams(dateOnly, viewbadgeleaderboard)).Return(teams);
+
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(viewbadgeleaderboard, dateOnly, site)).Return(false);
+			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator(), principalAuthorization);
+
+			var result = target.CreateLeaderboardOptionsViewModel(dateOnly, viewbadgeleaderboard).ToArray();
+
+			result[0].text.Should().Be.EqualTo("team");
 		}
 
 		[Test]
@@ -66,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(teams);
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages)).Return(false);
-			var target = new TeamViewModelFactory(teamProvider, permissionProvider, null, new UserTextTranslator());
+			var target = new TeamViewModelFactory(teamProvider, permissionProvider, null, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today);
 
@@ -85,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxMain" };
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "team", GroupId = teamId } });
-			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator());
+			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
@@ -105,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxContract" };
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "full time", GroupId = teamId } });
-			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator());
+			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
