@@ -9,27 +9,30 @@
 
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />
 
-<div class="container weekview-mobile">
-	<div class="navbar navbar-teleopti">
-		<div class="container">
-			<div class="navbar-left datepicker-style">
-				<div class="input-group collapse-sub-navbar" style="max-width: 390px;">
+<div class="navbar navbar-teleopti subnavbar">
+	<div class="container">
+		<ul class="nav navbar-nav navbar-teleopti row submenu">
+			<li class="col-xs-12 col-sm-3">
+				<div class="input-group" style="max-width: 390px;">
 					<span class="input-group-btn">
 						<button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
 							<i class="glyphicon glyphicon-chevron-left"></i>
 						</button>
 					</span>
-					<input class="form-control text-center" style="width: 100%; font-size: 11px" data-bind="value: displayDate" type="text" readonly="readonly" />
+					<input class="form-control text-center" style="width: 100%; font-size: 13px" data-bind="value: displayDate" type="text" readonly="readonly" />
 					<span class="input-group-btn">
 						<button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
 							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 					</span>
 				</div>
-			</div>
-		</div>
+			</li>
+		</ul>
 	</div>
-	
+</div>
+
+<div class="container weekview-mobile">
+
 	<div class="body">
 		<!-- ko foreach: dayViewModels-->
 		<div class="day panel panel-default" data-bind="attr: { 'data-mytime-date': fixedDate }">
