@@ -1,11 +1,40 @@
 ﻿Teleopti.MyTimeWeb.BadgeLeaderBoardReport = (function () {
 	var vm;
-	function BadgeLeaderBoardReportViewModel(loadDataMethod, date) {
+	function BadgeLeaderBoardReportViewModel() {
 		var self = this;
-
+		self.currentDate = ko.observable(getDate());
 		self.agentBadges = ko.observableArray();
+		self.availableOptions = ko.observableArray();
+		self.selectedOption = ko.observable();
 
-		loadDataMethod(date);
+		self.loadData = function() {
+
+			$.ajax({
+				url: 'MyTime/BadgeLeaderBoardReport/Overview',
+				dataType: 'json',
+				data: { date: self.currentDate().clone().utc().toDate().toJSON(), selectedOption: self.selectedOption() },
+				success: function (data) {
+					$.each(data.Agents, function (index, item) {
+						var badgeViewModel = new BadgeViewModel(index, item);
+						self.agentBadges.push(badgeViewModel);
+					});
+				}
+			});
+		}
+
+		self.loadOptions = function() {
+			$.ajax({
+				url: 'MyTime/Team/OptionsForLeaderboard',
+				dataType: 'json',
+				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
+				success: function (data) {
+					self.availableOptions(data);
+					self.loadData();
+				}
+			});
+		}
+
+
 	}
 
 	function BadgeViewModel(index, data) {
@@ -18,24 +47,8 @@
 		self.rank = ++index;
 	}
 
-	function loadData(date) {
-		
-		$.ajax({
-			url: 'MyTime/BadgeLeaderBoardReport/Overview',
-			dataType: 'json',
-			data: { date: date.clone().utc().toDate().toJSON() },
-			success: function (data) {
-				$.each(data.Agents, function (index, item) {
-					var badgeViewModel = new BadgeViewModel(index, item);
-					vm.agentBadges.push(badgeViewModel);
-				});
-			}
-
-		});
-	}
-
 	function bindData() {
-		vm = new BadgeLeaderBoardReportViewModel(loadData, getDate());
+		vm = new BadgeLeaderBoardReportViewModel();
 		var elementToBind = $('.BadgeLeaderBoardReport')[0];
 		ko.applyBindings(vm, elementToBind);
 	}
@@ -58,13 +71,12 @@
 			if (!$('.BadgeLeaderBoardReport').length) {
 				return;
 			}
-
 			bindData();
+			vm.loadOptions();
+			
 		},
 		BadgeLeaderBoardReportPartialDispose: function () {			
-		},
-		ForDay: function(date) {
-			loadData(date);
-		}		
+
+		}
 	};
 })(jQuery);
