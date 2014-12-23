@@ -226,6 +226,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GamificationOrganisationalBasedLeaderboard.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboardStepDefinitions.cs" />
     <Compile Include="MyTime\ShiftTradeBulletinBoard.feature.cs">
       <DependentUpon>ShiftTradeBulletinBoard.feature</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -97,6 +97,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoWeekSchedulePage();
 		}
 
+		[When(@"I am viewing leaderboard report")]
+		[Given(@"I am viewing leaderboard report")]
+		public void WhenIAmViewingLeaderboardReport()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToLeaderboardReport();
+		}
+
 		[When(@"I go to mytime web")]
 		public void WhenIGoToMytimeWeb()
 		{

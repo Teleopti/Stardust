@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToMatrixReports { get; set; }
 		public bool AccessToPersonalAbsenceAccount { get; set; }
 		public bool AccessToMyReportQueueMetrics { get; set; }
+		public bool AccessToLeaderboard { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -90,6 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;
 			AccessToMyReportQueueMetrics = true;
+			AccessToLeaderboard = true;
 			AddFullDayAbsence = true;
 			AddIntradayAbsence = true;
 			RemoveAbsence = true;
@@ -241,6 +243,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToMyReportQueueMetrics)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics
+									   select f;
+			if(!AccessToLeaderboard)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard
 									   select f;
 
 			if(!AddFullDayAbsence)

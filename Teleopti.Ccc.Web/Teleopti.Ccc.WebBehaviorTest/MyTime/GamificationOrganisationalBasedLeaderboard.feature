@@ -12,11 +12,29 @@ Background:
 	And Pierre Baldi has a person period with
 		| Field      | Value      |
 		| Team       | Team red   |
-		| Start Date | 2014-10-06 |
+		| Start Date | 2014-01-06 |
 	And I have a person period with
 		| Field      | Value      |
 		| Team       | Team green |
-		| Start Date | 2014-10-06 |
+		| Start Date | 2014-01-06 |
+	And  There is an agent badge settings with
+		| Field                 | Value |
+		| BadgeEnabled          | True  |
+		| AnsweredCallsUsed     | True  |
+		| AHTUsed               | True  |
+		| AdherenceUsed         | True  |
+		| Silver to bronze rate | 5     |
+		| Gold to silver rate   | 2     |
+	And I have badges with
+		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
+	And Pierre Baldi has badges with
+		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 0    | 2014-08-11         |
 	And I am american
 
 Scenario: View available business hierarchy when data available is set to Site
@@ -41,29 +59,20 @@ Scenario: Should only see myself on the leader board when has data available onl
 	When I am viewing leaderboard report
 	Then I should see only myself on the leaderboard
 
+Scenario: Default leader board should be based on relative Everyone
+	Given I have a role with
+		| Field                 | Value |
+		| Access to my own      | true  |
+		| Access to Leaderboard | true  |
+	When I am viewing leaderboard report
+	Then I should see only myself on the leaderboard
+	And The hierarchy-picker should have 'Everyone' selected 
+
 Scenario: Should view correct leader board when selecting another group from different business hierarchy level
 	Given I have a role with
 		| Field                 | Value |
 		| Access to Leaderboard | true  |
 		| Access to my site     | true  |
-	And  There is an agent badge settings with
-		| Field                 | Value |
-		| BadgeEnabled          | True  |
-		| AnsweredCallsUsed     | True  |
-		| AHTUsed               | True  |
-		| AdherenceUsed         | True  |
-		| Silver to bronze rate | 5     |
-		| Gold to silver rate   | 2     |
-	And I have badges with
-		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
-		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
-		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
-	And 'Pierre Baldi' has badges with
-		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
-		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
-		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 0    | 2014-08-11         |
 	When I am viewing leaderboard report
 	Then I should see the ranks are
 		| Field        | value |
@@ -74,12 +83,3 @@ Scenario: Should view correct leader board when selecting another group from dif
 		| Field        | value |
 		| Pierre Baldi | 1     |
 
-
-Scenario: Default leader board should be based on relative Everyone
-	Given I have a role with
-		| Field                 | Value |
-		| Access to my own      | true  |
-		| Access to Leaderboard | true  |
-	When I am viewing leaderboard report
-	Then I should see only myself on the leaderboard
-	And The hierarchy-picker should have 'Everyone' selected 

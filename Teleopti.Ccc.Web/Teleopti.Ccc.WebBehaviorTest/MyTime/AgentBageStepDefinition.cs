@@ -21,12 +21,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var badgeSetting = table.CreateInstance<BadgeSettingsConfigurable>();
 			DataMaker.Data().Apply(badgeSetting);
 		}
-
-		[Given(@"I have badges with")]
-		public void GivenIHaveBadges(Table table)
+		[Given(@"(.*) (has|have) badges with")]
+		public void GivenHasBadgesWith(string userName, string hasHave, Table table)
 		{
 			var agentBadges = table.CreateSet<BadgeConfigurable>();
-			agentBadges.ForEach(a => DataMaker.Data().Apply(a));
+			agentBadges.ForEach(a => DataMaker.Person(userName).Apply(a));
 		}
 
 		[Then(@"I should see I have (\d*) bronze badge, (\d*) silver badge and (\d*) gold badge")]

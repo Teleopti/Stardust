@@ -406,6 +406,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				String.Join(",", ids.Select(x => x.ToString()).ToArray())),
 				new ApplicationStartupTimeout());
 		}
+
+		public static void GoToLeaderboardReport()
+		{
+			GoToWaitForCompleted("MyTime#BadgeLeaderBoardReport/Index", new ApplicationStartupTimeout());
+		}
 	}
 
 	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor
