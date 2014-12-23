@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var site = addNewSiteToRepository(siteRepository);
 			var team = addNewTeamOnSite(site, "team1");
-			var target = new TeamsController(siteRepository, null, null, null);
+			var target = createTarget(siteRepository, null, null, null);
 			
 			var result = target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
-			var target = new TeamsController(siteRepository, numberOfAgentsQuery,null,null);
+			var target = createTarget(siteRepository, numberOfAgentsQuery,null,null);
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team { Description = new Description(" ") };
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var teamId = Guid.NewGuid();
 			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();
 			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId)).Return(expected);
-			var target = new TeamsController(null, null, teamAdherenceAggregator,null);
+			var target = createTarget(null, null, teamAdherenceAggregator,null);
 
 			var result = target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var teamId1 = addNewTeamOnSite(site);
 			var teamId2 = addNewTeamOnSite(site);
 			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();			
-			var target = new TeamsController(siteRepository, null, teamAdherenceAggregator, null);
+			var target = createTarget(siteRepository, null, teamAdherenceAggregator, null);
 			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId1)).Return(1);
 			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId2)).Return(2);
 
@@ -119,10 +119,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			team.Site = site;
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			teamRepository.Stub(x => x.Get(team.Id.GetValueOrDefault())).Return(team);
-			var target = new TeamsController(null, null, null, teamRepository);
+			var target = createTarget(null, null, null, teamRepository);
 
 			var result = target.GetBusinessUnitId(team.Id.ToString());
 			result.Data.Should().Be(bu.Id.GetValueOrDefault());
+		}
+
+		private static TeamsController createTarget(ISiteRepository siteRepository,
+			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader, ITeamAdherenceAggregator teamAdherenceAggregator,
+			ITeamRepository teamRepository)
+		{
+			var logic = new GetAdherence(siteRepository, numberOfAgentsInTeamReader, teamAdherenceAggregator,
+				teamRepository);
+			return new TeamsController(logic);
 		}
 	}
 }
