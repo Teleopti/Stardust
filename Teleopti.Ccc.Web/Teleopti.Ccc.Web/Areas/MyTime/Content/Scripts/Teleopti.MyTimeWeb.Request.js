@@ -32,37 +32,20 @@ Teleopti.MyTimeWeb.Request = (function ($) {
             self.addTextRequestActive(true);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
             Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
-
-            /*var subnavbar = $('.subnavbar');
-			if(subnavbar != undefined && subnavbar.hasClass('in')) {
-		        $('.subnavbar').collapse('toggle');
-	        }*/
         };
+
         self.addAbsenceRequest = function () {
             self.resetToolbarActiveButtons();
             self.addAbsenceRequestActive(true);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
             Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
-
-            /*var subnavbar = $('.subnavbar');
-            if (subnavbar != undefined && subnavbar.hasClass('in')) {
-            	$('.subnavbar').collapse('toggle');
-            }*/
         };
-        self.addShiftTradeRequest = function (date) {
 
-        	//var rightNow = new Date();
-	        //var res = rightNow.toISOString().slice(0, 10).replace(/-/g, "");
-        	//portal.NavigateTo("Requests/Index/ShiftTrade/", res);
+        self.addShiftTradeRequest = function (date) {
 	        self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
-
-			var subnavbar = $('.subnavbar');
-			if (subnavbar != undefined && subnavbar.hasClass('in')) {
-				$('.subnavbar').collapse('toggle');
-			}
         };
 
         self.addShiftTradeBulletinBoardRequest = function (date) {
@@ -70,11 +53,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	        self.addShiftTradeBulletinBoardActive(true);
 	        Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeBulletinWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
-
-			/*var subnavbar = $('.subnavbar');
-			if (subnavbar != undefined && subnavbar.hasClass('in')) {
-				$('.subnavbar').collapse('toggle');
-			}*/
         };
 
         self.resetToolbarActiveButtons = function() {
@@ -97,7 +75,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
     		        }
     	    });
 		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
-		//ko.applyBindings(requestNavigationViewModel, $('div.navbar.hidden-sm')[0]);
 	}
 
 	return {
