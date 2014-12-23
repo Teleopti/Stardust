@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonOutOfAdherenceEvent @event)
+		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			var model = getModel(@event.SiteId);
 			model.AgentsOutOfAdherence++;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonInAdherenceEvent @event)
+		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			var model = getModel(@event.SiteId);
 			if (model.AgentsOutOfAdherence > 0)
