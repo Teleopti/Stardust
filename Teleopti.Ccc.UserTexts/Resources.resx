@@ -12621,4 +12621,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Person {0} has personal activity, overtime activity or meeting in the shift on date {1}.</value>
     <comment>Error message when there is personal activity or overtime activity or meeting in the shift.</comment>
   </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Notify Agent</value>
+    <comment>Notify Agent </comment>
+  </data>
 </root>
