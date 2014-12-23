@@ -7919,8 +7919,8 @@ Period</value>
     <comment>Preference view</comment>
   </data>
   <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
-    <value>You should work {0}h. Your preferences can now result in {1}h to {2}h.</value>
-    <comment>You should work 160:00h. Your preferences  can now result in 145:05h to 167:15h.</comment>
+    <value>You should work {0} hours. Your preferences can now result in {1} to {2} hours.</value>
+    <comment>You should work 160:00 hours. Your preferences can now result in 145:05 to 167:15 hours.</comment>
   </data>
   <data name="ShowLastNumberOfDaysColon" xml:space="preserve">
     <value>Show last number of days:</value>
@@ -9665,8 +9665,8 @@ Period</comment>
     <comment>Student availability period</comment>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
-    <value>You should work at least {0}h. You are now available for between {1}h and {2}h.</value>
-    <comment>You should work at least 30:00h. You are now available for between 20:00h and 40:00h.</comment>
+    <value>You should work at least {0} hours. You are now available for between {1} and {2} hours.</value>
+    <comment>You should work at least 30:00 hours. You are now available for between 20:00 and 40:00 hours.</comment>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Agent Queue Metrics</value>
