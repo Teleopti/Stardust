@@ -354,8 +354,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 
 	self._createTimeLine = function (hours) {
 		var firstTimeLineHour = moment(hours[0].StartTime);
-		//modify for daylight save close day
-		var mins = (hours.length - 1) * 60 + (moment(hours[hours.length - 1].EndTime).get('minutes') - moment(hours[1].StartTime).get('minutes'));
+		var mins = hours[0].LengthInMinutesToDisplay + (hours.length - 1) * 60 + (moment(hours[hours.length - 1].EndTime).get('minutes') - moment(hours[1].StartTime).get('minutes'));
 		self.setTimeLineLengthInMinutes(firstTimeLineHour, mins);
 		self.hours([]);
 		var start = moment(hours[1].StartTime);
