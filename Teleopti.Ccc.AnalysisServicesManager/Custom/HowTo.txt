@@ -1,11 +1,14 @@
+"Umniah" folder is our first customisation and will work as our template
+
 Create you scripts according to the Folder Structure here:
-Teleopti.Ccc.AnalysisServicesManager\Custom\Example
+Teleopti.Ccc.AnalysisServicesManager\Custom\Umniah
+
 To test different customisations Run:
 teamcity\LocalTestRunners\EtlDeploy.bat
 
-
+Note:
 For minor customisations, the folder "04 Calculated Members" can be used to deploy calculated measure separatly (based on existing measure groups)
-See folder "ExampleCalcMemberOnly"
+See folder "CalcMemberOnly"
 
 ===========
 TestDataSetup
