@@ -4,8 +4,14 @@
 }
 
 <div class="container BadgeLeaderBoardReport">
-	<div class="navbar navbar-teleopti">
-		<div class="leader-board-header">@Resources.BadgeLeaderBoardReport</div>
+	<div class="navbar navbar-teleopti subnavbar">
+		<ul class="nav navbar-nav navbar-teleopti row submenu">
+			<li class="ie8style col-xs-12 col-sm-3 ">
+				<select id="Hierarchy-Picker" data-bind="foreach: availableOptions, select2: { value: selectedOption } ">
+					<option data-bind="text: text, value: id"></option>
+				</select>
+			</li>
+		</ul>
 	</div>
 	<div class="relative well">
 		<table style="width: 100%;">
@@ -22,8 +28,8 @@
 			<tbody class="badge-leader-board-report">
 				<!-- ko foreach:agentBadges() -->
 				<tr class="agent-badge">
-					<td data-bind="text:rank"></td>
-					<td data-bind="text:name"></td>
+					<td data-bind="text:rank" class="agent-rank"></td>
+					<td data-bind="text:name" class="agent-name"></td>
 					<td class="agent-badge-num" data-bind="text: gold"></td>
 					<td class="agent-badge-num" data-bind="text: silver"></td>
 					<td class="agent-badge-num" data-bind="text: bronze"></td>
