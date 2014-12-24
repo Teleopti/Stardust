@@ -195,6 +195,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkTest.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersisterTest.cs" />
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
+    <Compile Include="Repositories\AgentBadgeWithRankTransactionRepositoryTest.cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Repositories\ShiftExchangeOfferRepositoryTest.cs" />

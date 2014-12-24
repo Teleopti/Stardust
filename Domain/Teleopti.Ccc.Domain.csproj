@@ -2227,6 +2227,9 @@
     <EmbeddedResource Include="AgentInfo\Requests\ShiftExchangeOffer.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Common\AgentBadgeWithRankTransaction.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
