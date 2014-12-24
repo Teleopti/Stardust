@@ -14,6 +14,13 @@ namespace Teleopti.Interfaces.Domain
 		ICollection<IAgentBadge> Find(IEnumerable<Guid> personIdList, BadgeType badgeType);
 
 		/// <summary>
+		/// Find badge of specific persons
+		/// </summary>
+		/// <param name="personIdList"></param>
+		/// <returns></returns>
+		ICollection<IAgentBadge> Find(IEnumerable<Guid> personIdList);
+
+		/// <summary>
 		/// Find badges for the agent.
 		/// </summary>
 		/// <param name="person">The agent to get badge.</param>
@@ -39,5 +46,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <returns></returns>
 		ICollection<IAgentBadge> GetAllAgentBadges(BadgeType badgeType);
+
 	}
 }
