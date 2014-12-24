@@ -5,15 +5,20 @@
 		self.currentDate = ko.observable(getDate());
 		self.agentBadges = ko.observableArray();
 		self.availableOptions = ko.observableArray();
-		self.selectedOption = ko.observable();
+		self.selectedOptionId = ko.observable();
+		self.selectedOptionType = -1;
 		self.showOptions = ko.observable(false);
 
 		self.loadData = function() {
-
+			self.agentBadges([]);
 			$.ajax({
 				url: 'MyTime/BadgeLeaderBoardReport/Overview',
 				dataType: 'json',
-				data: { date: self.currentDate().clone().utc().toDate().toJSON(), selectedOption: self.selectedOption() },
+				data: {
+					Date: self.currentDate().clone().utc().toDate().toJSON(),
+					Type: self.selectedOptionType,
+					SelectedId: self.selectedOptionId()
+				},
 				success: function (data) {
 					$.each(data.Agents, function (index, item) {
 						var badgeViewModel = new BadgeViewModel(index, item);
@@ -29,19 +34,25 @@
 				dataType: 'json',
 				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
 				success: function (data) {
-					if (data.length == 0) {
+					if (data.length === 1) {
 						self.showOptions(false);
 					} else {
 						self.showOptions(true);
 						self.availableOptions(data);
-						self.selectedOption(data[0].id);
-						self.loadData();
+						self.selectedOptionId(data[0].id);
 					}
 				}
 			});
 		}
 
-
+		self.selectedOptionId.subscribe(function (value) {
+			ko.utils.arrayForEach(self.availableOptions(), function(option) {
+				if (option.id === value)
+					self.selectedOptionType = option.type;
+			});
+			if (value)
+				self.loadData();
+		});
 	}
 
 	function BadgeViewModel(index, data) {
