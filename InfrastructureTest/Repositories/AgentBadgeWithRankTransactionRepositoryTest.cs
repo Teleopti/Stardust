@@ -9,9 +9,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	///<summary>
-	/// Tests AvailabilityRepository
-	///</summary>
 	[TestFixture]
 	[Category("LongRunning")]
 	public class AgentBadgeWithRankTransactionRepositoryTest : RepositoryTest<IAgentBadgeWithRankTransaction>
