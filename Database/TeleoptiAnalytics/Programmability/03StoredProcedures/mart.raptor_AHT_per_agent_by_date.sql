@@ -15,9 +15,9 @@ CREATE PROCEDURE [mart].[raptor_AHT_per_agent_by_date]
 @local_date smalldatetime
 AS
 Begin
-select convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) as AHT,
-       p.person_code,
-       d.date_date
+select p.person_code,
+       d.date_date,
+       convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) as AHT
   from mart.fact_agent_queue f
  inner join mart.bridge_acd_login_person b
     on f.acd_login_id = b.acd_login_id
@@ -29,7 +29,7 @@ select convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case w
    and f.interval_id = tz.interval_id 
  inner join mart.dim_date d
     on tz.local_date_id = d.date_id
-inner join mart.dim_time_zone t
+ inner join mart.dim_time_zone t
 	on p.time_zone_id = t.time_zone_id
  where d.date_date = @local_date
    and t.time_zone_code = @time_zone_code

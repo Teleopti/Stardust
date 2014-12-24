@@ -115,7 +115,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var agentsList =
 				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold);
 
-			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+			var agents = new List<Guid>();
+			if (agentsList.Count > 0)
+			{
+				agents.AddRange(from object[] data in agentsList select (Guid) agentsList[0]);
+			}
+
 			if (agents.Any())
 			{
 				if (Logger.IsDebugEnabled)
@@ -157,7 +162,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
-			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+
+			var agents = new List<Guid>();
+			if (agentsList.Count > 0)
+			{
+				agents.AddRange(from object[] data in agentsList select (Guid)agentsList[0]);
+			}
 
 			if (agents.Any())
 			{
@@ -199,7 +209,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold);
-			var agents = agentsList == null ? new List<Guid>() : agentsList.ToList();
+
+			var agents = new List<Guid>();
+			if (agentsList.Count > 0)
+			{
+				agents.AddRange(from object[] data in agentsList select (Guid)agentsList[0]);
+			}
 
 			if (agents.Any())
 			{

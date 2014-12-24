@@ -16,9 +16,9 @@ CREATE PROCEDURE [mart].[raptor_number_of_calls_per_agent_by_date]
 AS
 Begin
 select
-	sum(answered_calls) as 'answered_call',
 	p.person_code,
-	d.date_date
+	d.date_date,
+	sum(answered_calls) as 'answered_call'
 from mart.fact_agent_queue f
 inner join mart.bridge_acd_login_person b
 	on f.acd_login_id = b.acd_login_id
