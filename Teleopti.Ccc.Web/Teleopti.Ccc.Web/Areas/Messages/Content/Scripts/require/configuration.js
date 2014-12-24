@@ -11,7 +11,7 @@
 
 		templates: '../templates',
 
-		text: '../../../../../Content/require/text'
+		text: '../../../../Content/require/text'
 
 	},
 
