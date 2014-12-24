@@ -3,17 +3,19 @@
 	Layout = null;
 }
 
-<div class="container BadgeLeaderBoardReport">
+<div class="BadgeLeaderBoardReport">
+	<!-- ko if: showOptions -->
 	<div class="navbar navbar-teleopti subnavbar">
 		<ul class="nav navbar-nav navbar-teleopti row submenu">
-			<li class="ie8style col-xs-12 col-sm-3 ">
+			<li class="ie8style col-xs-12 col-sm-3" data-bind="if: showOptions">
 				<select id="Hierarchy-Picker" data-bind="foreach: availableOptions, select2: { value: selectedOption } ">
 					<option data-bind="text: text, value: id"></option>
 				</select>
 			</li>
 		</ul>
 	</div>
-	<div class="relative well">
+	<!-- /ko -->
+	<div class="container relative well">
 		<table style="width: 100%;">
 			<thead>
 				<tr>

@@ -18,3 +18,7 @@
 .agent-badge-num {
 	text-align: center
 }
+#s2id_Hierarchy-Picker {
+	min-width: 255px;
+	max-width: 350px;
+}

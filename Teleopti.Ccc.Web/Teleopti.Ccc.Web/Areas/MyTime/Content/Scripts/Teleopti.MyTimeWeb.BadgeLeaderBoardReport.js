@@ -6,6 +6,7 @@
 		self.agentBadges = ko.observableArray();
 		self.availableOptions = ko.observableArray();
 		self.selectedOption = ko.observable();
+		self.showOptions = ko.observable(false);
 
 		self.loadData = function() {
 
@@ -28,8 +29,14 @@
 				dataType: 'json',
 				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
 				success: function (data) {
-					self.availableOptions(data);
-					self.loadData();
+					if (data.length == 0) {
+						self.showOptions(false);
+					} else {
+						self.showOptions(true);
+						self.availableOptions(data);
+						self.selectedOption(data[0].id);
+						self.loadData();
+					}
 				}
 			});
 		}
