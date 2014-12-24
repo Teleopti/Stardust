@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxAHTBadgeEnabled = new System.Windows.Forms.CheckBox();
 			this.checkBoxAnsweredCallsBadgeEnabled = new System.Windows.Forms.CheckBox();
 			this.checkBoxAdherenceBadgeEnabled = new System.Windows.Forms.CheckBox();
-			this.checkBoxEnableDifferentLevelBadgesCalculation = new System.Windows.Forms.CheckBox();
+			this.checkBoxCalculateBadgeWithRank = new System.Windows.Forms.CheckBox();
 			this.labelSplitter2 = new System.Windows.Forms.Label();
 			this.labelSplitter3 = new System.Windows.Forms.Label();
 			this.labelSetSilverThresholdForAnsweredCalls = new System.Windows.Forms.Label();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.Controls.Add(this.checkBoxAHTBadgeEnabled, 0, 9);
 			this.tableLayoutPanelBody.Controls.Add(this.checkBoxAnsweredCallsBadgeEnabled, 0, 3);
 			this.tableLayoutPanelBody.Controls.Add(this.checkBoxAdherenceBadgeEnabled, 0, 15);
-			this.tableLayoutPanelBody.Controls.Add(this.checkBoxEnableDifferentLevelBadgesCalculation, 1, 1);
+			this.tableLayoutPanelBody.Controls.Add(this.checkBoxCalculateBadgeWithRank, 1, 1);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter2, 0, 8);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSplitter3, 0, 14);
 			this.tableLayoutPanelBody.Controls.Add(this.labelSetSilverThresholdForAnsweredCalls, 0, 6);
@@ -443,17 +443,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxAdherenceBadgeEnabled.UseVisualStyleBackColor = true;
 			this.checkBoxAdherenceBadgeEnabled.CheckedChanged += new System.EventHandler(this.checkBoxAdherenceBadgeEnabled_CheckedChanged);
 			// 
-			// checkBoxEnableDifferentLevelBadgesCalculation
+			// checkBoxCalculateBadgeWithRank
 			// 
-			this.checkBoxEnableDifferentLevelBadgesCalculation.AutoSize = true;
-			this.tableLayoutPanelBody.SetColumnSpan(this.checkBoxEnableDifferentLevelBadgesCalculation, 2);
-			this.checkBoxEnableDifferentLevelBadgesCalculation.Location = new System.Drawing.Point(299, 43);
-			this.checkBoxEnableDifferentLevelBadgesCalculation.Name = "checkBoxEnableDifferentLevelBadgesCalculation";
-			this.checkBoxEnableDifferentLevelBadgesCalculation.Size = new System.Drawing.Size(242, 19);
-			this.checkBoxEnableDifferentLevelBadgesCalculation.TabIndex = 25;
-			this.checkBoxEnableDifferentLevelBadgesCalculation.Text = "xxEnableDifferentLevelBadgesCalculation";
-			this.checkBoxEnableDifferentLevelBadgesCalculation.UseVisualStyleBackColor = true;
-			this.checkBoxEnableDifferentLevelBadgesCalculation.CheckedChanged += new System.EventHandler(this.checkBoxEnableDifferentLevelBadges_CheckedChanged);
+			this.checkBoxCalculateBadgeWithRank.AutoSize = true;
+			this.tableLayoutPanelBody.SetColumnSpan(this.checkBoxCalculateBadgeWithRank, 2);
+			this.checkBoxCalculateBadgeWithRank.Location = new System.Drawing.Point(299, 43);
+			this.checkBoxCalculateBadgeWithRank.Name = "checkBoxCalculateBadgeWithRank";
+			this.checkBoxCalculateBadgeWithRank.Size = new System.Drawing.Size(242, 19);
+			this.checkBoxCalculateBadgeWithRank.TabIndex = 25;
+			this.checkBoxCalculateBadgeWithRank.Text = "xxCalculateBadgeWithRank";
+			this.checkBoxCalculateBadgeWithRank.UseVisualStyleBackColor = true;
+			this.checkBoxCalculateBadgeWithRank.CheckedChanged += new System.EventHandler(this.checkBoxEnableDifferentLevelBadges_CheckedChanged);
 			// 
 			// labelSplitter2
 			// 
@@ -856,7 +856,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private System.Windows.Forms.CheckBox checkBoxAHTBadgeEnabled;
 		private System.Windows.Forms.CheckBox checkBoxAdherenceBadgeEnabled;
 		private System.Windows.Forms.Button reset;
-		private System.Windows.Forms.CheckBox checkBoxEnableDifferentLevelBadgesCalculation;
+		private System.Windows.Forms.CheckBox checkBoxCalculateBadgeWithRank;
 		private System.Windows.Forms.Label labelSplitter2;
 		private System.Windows.Forms.Label labelSplitter3;
 		private System.Windows.Forms.Label labelSetSilverThresholdForAnsweredCalls;

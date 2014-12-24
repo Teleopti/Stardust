@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AnsweredCallsBadgeEnabled = true,
 				AHTBadgeEnabled = true,
 				AdherenceBadgeEnabled = true,
-				EnableDifferentLevelBadgeCalculation = true,
+				CalculateBadgeWithRank = true,
 
 				AnsweredCallsBronzeThreshold = 10,
 				AnsweredCallsSilverThreshold = 20,

@@ -12140,8 +12140,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Agent Badge</value>
     <comment>Treeview node for agent badge setting</comment>
   </data>
-  <data name="EnableDifferentLevelBadgesCalculation" xml:space="preserve">
-    <value>Enable different level badges calculation</value>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Calculate badge with rank</value>
     <comment>Text for checkbox of enable different level badges calculation</comment>
   </data>
   <data name="UseBadgeForAnsweredCalls" xml:space="preserve">

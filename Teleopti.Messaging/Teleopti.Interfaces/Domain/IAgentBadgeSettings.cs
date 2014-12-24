@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
 		bool AHTBadgeEnabled { get; set; }
 		bool AdherenceBadgeEnabled { get; set; }
 
-		bool EnableDifferentLevelBadgeCalculation { get; set; }
+		bool CalculateBadgeWithRank { get; set; }
 
 		int AnsweredCallsThreshold { get; set; }
 		int AnsweredCallsBronzeThreshold { get; set; }

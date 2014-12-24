@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 
 		public virtual bool BadgeEnabled { get; set; }
 
-		public bool EnableDifferentLevelBadgeCalculation { get; set; }
+		public bool CalculateBadgeWithRank { get; set; }
 
 		public virtual int AnsweredCallsThreshold
 		{

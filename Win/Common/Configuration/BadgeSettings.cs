@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			if (!_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
 			{
-				checkBoxEnableDifferentLevelBadgesCalculation.Hide();
+				checkBoxCalculateBadgeWithRank.Hide();
 				toggleDifferentLevelBadges(false);
 			}
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var settings = _repository.GetSettings();
 
 			checkBoxEnableBadge.Checked = settings.BadgeEnabled;
-			checkBoxEnableDifferentLevelBadgesCalculation.Checked = settings.EnableDifferentLevelBadgeCalculation;
+			checkBoxCalculateBadgeWithRank.Checked = settings.CalculateBadgeWithRank;
 
 			checkBoxAdherenceBadgeEnabled.Checked = settings.AdherenceBadgeEnabled;
 			doubleTextBoxThresholdForAdherence.DoubleValue = settings.AdherenceThreshold.Value*100;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			numericUpDownGoldToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
 			setControlsEnabled(settings.BadgeEnabled);
-			toggleDifferentLevelBadges(settings.EnableDifferentLevelBadgeCalculation);
+			toggleDifferentLevelBadges(settings.CalculateBadgeWithRank);
 			timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
 			timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 115;
 			timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 115;
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var settings = _repository.GetSettings();
 			settings.BadgeEnabled = checkBoxEnableBadge.Checked;
 
-			settings.EnableDifferentLevelBadgeCalculation = checkBoxEnableDifferentLevelBadgesCalculation.Checked;
+			settings.CalculateBadgeWithRank = checkBoxCalculateBadgeWithRank.Checked;
 
 			settings.AdherenceBadgeEnabled = checkBoxAdherenceBadgeEnabled.Checked;
 			settings.AdherenceThreshold = new Percent(doubleTextBoxThresholdForAdherence.DoubleValue / 100);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				return false;
 			}
 
-			if (checkBoxEnableDifferentLevelBadgesCalculation.Checked)
+			if (checkBoxCalculateBadgeWithRank.Checked)
 			{
 				if (checkBoxAnsweredCallsBadgeEnabled.Checked)
 				{
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setControlsEnabled(bool enabled)
 		{
-			checkBoxEnableDifferentLevelBadgesCalculation.Enabled = enabled;
+			checkBoxCalculateBadgeWithRank.Enabled = enabled;
 
 			checkBoxAdherenceBadgeEnabled.Enabled = enabled;
 			checkBoxAHTBadgeEnabled.Enabled = enabled;

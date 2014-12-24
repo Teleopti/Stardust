@@ -3738,6 +3738,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculate badge with rank.
+        /// </summary>
+        public static string CalculateBadgeWithRank {
+            get {
+                return ResourceManager.GetString("CalculateBadgeWithRank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculated calls.
         /// </summary>
         public static string CalculatedCalls {
@@ -7839,15 +7848,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Enabled {
             get {
                 return ResourceManager.GetString("Enabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enable different level badges calculation.
-        /// </summary>
-        public static string EnableDifferentLevelBadgesCalculation {
-            get {
-                return ResourceManager.GetString("EnableDifferentLevelBadgesCalculation", resourceCulture);
             }
         }
         
