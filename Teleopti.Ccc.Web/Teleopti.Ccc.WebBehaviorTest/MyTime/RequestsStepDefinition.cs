@@ -48,6 +48,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertVisibleUsingJQuery(".request");
 		}
 
+		[Then(@"I should see the request of type '(.*)' in the list")]
+		public void ThenIShouldSeeTheRequestOfTypeInTheList(string type)
+		{
+			Browser.Interactions.AssertExists(".request-body");
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", type);
+		}
+
 		[Then(@"I should see my existing text request")]
 		public void ThenIShouldSeeMyExistingTextRequest()
 		{

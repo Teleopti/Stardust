@@ -194,7 +194,7 @@ Scenario: Add absence request
 	When I click to add a new absence request
 	And I input absence request values with Vacation
 	And I click the send button
-	Then I should see the absence request containing 'Vacation' in the list
+	Then I should see the request of type 'Vacation' in the list
 
 Scenario: Add absence request when multiple absences exist
 	Given I am an agent
@@ -204,7 +204,7 @@ Scenario: Add absence request when multiple absences exist
 	When I click to add a new absence request
 	And I input absence request values with Holiday
 	And I click the send button
-	Then I should see the absence request containing 'Holiday' in the list
+	Then I should see the request of type 'Holiday' in the list
 
 Scenario: Can not add absence request from request view if no permission
 	Given I have a role with

@@ -1,4 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
+﻿
 Feature: Shift trade bulletin board from requests
 	In order to make a shift trade with someone who has the same wishs
 	As an agent
@@ -36,7 +36,7 @@ Background:
 	| Night |
 	| Late  |
 
-
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -45,7 +45,7 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 	When I click to shift trade bulletin board
 	Then I cannot navigate to the bulletin previous date	
 
-
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should show my shift and other shift in bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -73,6 +73,7 @@ Scenario: Should show my shift and other shift in bulletin board
 	| End time		| 17:00 |
 	And I should see a possible schedule trade with 'OtherAgent'
 
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Should possible make shift trade in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -100,3 +101,21 @@ Scenario: Should possible make shift trade in Bulletin board
 	And I click send button in bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
+
+@ignore
+@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+Scenario: Should list announced shift
+	Given  I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 09:00 |
+	| EndTime               | 2030-01-01 17:00 |
+	| Shift category		| Day	           |
+	And I have a shift exchange for bulletin
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 06:00 |
+	| EndTime   | 2030-01-01 14:00 |
+	When I am viewing requests
+	Then I should see the request of type 'Announcement' in the list

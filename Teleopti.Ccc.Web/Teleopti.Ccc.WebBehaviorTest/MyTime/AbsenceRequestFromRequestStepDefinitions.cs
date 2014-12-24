@@ -57,13 +57,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists(".request .request-edit-fullday:not(:enabled)");
 		}
 
-		[Then(@"I should see the absence request containing '(.*)' in the list")]
-		public void ThenIShouldSeeTheAbsenceRequestContainingInTheList(string absence)
-		{
-			Browser.Interactions.AssertExists(".request-body");
-			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", absence);
-		}
-
 		[Then(@"I should see the values of the absence request")]
 		public void ThenIShouldSeeTheValuesOfTheAbsenceRequest()
 		{
