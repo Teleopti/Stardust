@@ -135,6 +135,7 @@
     <Compile Include="Domain\IAgentBadgeSettings.cs" />
     <Compile Include="Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeTransactionRepository.cs" />
+    <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IEtlToggleManager.cs" />
     <Compile Include="Domain\INotificationClient.cs" />
     <Compile Include="Domain\INotificationConfigReader.cs" />

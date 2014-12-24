@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+				   assembly="Teleopti.Ccc.Domain"
+				   namespace="Teleopti.Ccc.Domain.Common"
+				   default-access="field.camelcase-underscore">
+
+  <class name="AgentBadgeWithRankTransaction">
+	<cache usage ="read-write"/>
+
+	<id name="Id"
+		type="guid"
+		access="nosetter.camelcase-underscore"
+		unsaved-value="null">
+	  <generator class="guid.comb" />
+	</id>
+	
+	<many-to-one name ="Person"
+				 class="Teleopti.Ccc.Domain.Common.Person"
+				 column="Person"
+				 not-null="true"
+				 foreign-key="FK_AgentBadgeWithRankTransaction_Person_Person"/>
+
+	<property name="BadgeType"
+			  type="int"
+			  not-null="true" />
+
+	<property name="BronzeBadgeAmount"
+			  type="int"
+			  not-null="true" />
+
+	<property name="SilverBadgeAmount"
+			  type="int"
+			  not-null="true" />
+
+	<property name="GoldBadgeAmount"
+			  type="int"
+			  not-null="true" />
+	
+	<property name="Description"
+			  type="string"
+			  not-null="true" />
+
+	<property name="CalculatedDate"
+			  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+			  not-null="true" />
+
+	<property name="InsertedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+  </class>
+</hibernate-mapping>
