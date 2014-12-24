@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
 			{
-				agents.AddRange(from object[] data in agentsList select (Guid) agentsList[0]);
+				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
 			}
 
 			if (agents.Any())
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
 			{
-				agents.AddRange(from object[] data in agentsList select (Guid)agentsList[0]);
+				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
 			}
 
 			if (agents.Any())
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
 			{
-				agents.AddRange(from object[] data in agentsList select (Guid)agentsList[0]);
+				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
 			}
 
 			if (agents.Any())

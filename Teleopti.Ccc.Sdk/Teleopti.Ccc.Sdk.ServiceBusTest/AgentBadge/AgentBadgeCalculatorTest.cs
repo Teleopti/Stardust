@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
 using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
@@ -72,19 +73,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
-				.IgnoreArguments().Return(new List<Guid> {_lastPersonId});
+				.IgnoreArguments().Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 0.01 } });
 
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
 				.IgnoreArguments()
-				.Return(new List<Guid> {_lastPersonId});
+				.Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 100 } });
 
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
 				.IgnoreArguments()
-				.Return(new List<Guid> {_lastPersonId});
+				.Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 120 } });
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
 			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
