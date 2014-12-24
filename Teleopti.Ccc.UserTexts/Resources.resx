@@ -12625,4 +12625,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Notify Agent</value>
     <comment>Notify Agent </comment>
   </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Everyone</value>
+    <comment>Everyone option in business hierarchy picker in leaderboard</comment>
+  </data>
 </root>
