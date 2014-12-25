@@ -22,3 +22,7 @@
 	min-width: 255px;
 	max-width: 350px;
 }
+
+.site-option {font-weight: bold}
+
+li.team-option {padding-left: 25px;}
