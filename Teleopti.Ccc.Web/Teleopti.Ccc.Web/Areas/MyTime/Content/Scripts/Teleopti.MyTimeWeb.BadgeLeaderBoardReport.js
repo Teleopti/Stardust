@@ -1,18 +1,21 @@
 ﻿Teleopti.MyTimeWeb.BadgeLeaderBoardReport = (function () {
 	var vm;
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+
 	function BadgeLeaderBoardReportViewModel() {
 		var self = this;
+		
 		self.currentDate = ko.observable(getDate());
 		self.agentBadges = ko.observableArray();
 		self.availableOptions = ko.observableArray();
 		self.selectedOptionId = ko.observable();
 		self.selectedOptionType = -1;
 		self.showOptions = ko.observable(false);
-
+		
 		self.loadData = function() {
 			self.agentBadges([]);
-			$.ajax({
-				url: 'MyTime/BadgeLeaderBoardReport/Overview',
+			ajax.Ajax({
+				url: 'BadgeLeaderBoardReport/Overview',
 				dataType: 'json',
 				data: {
 					Date: self.currentDate().clone().utc().toDate().toJSON(),
@@ -29,8 +32,8 @@
 		}
 
 		self.loadOptions = function() {
-			$.ajax({
-				url: 'MyTime/Team/OptionsForLeaderboard',
+			ajax.Ajax({
+				url: 'Team/OptionsForLeaderboard',
 				dataType: 'json',
 				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
 				success: function (data) {
@@ -56,6 +59,7 @@
 			if (value)
 				self.loadData();
 		});
+
 	}
 
 	function BadgeViewModel(index, data) {
@@ -83,6 +87,23 @@
 		}
 	}
 
+	function featureCheck() {
+		ajax.Ajax({
+			url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_OrganisationalBasedLeaderboard_31184",
+			success: function (data) {
+				if (data.IsEnabled) {
+					vm.showOptions(true);
+					vm.loadOptions();
+				} else {
+					vm.showOptions(false);
+					vm.selectedOptionType = 3;
+					vm.loadData();
+				}
+			}
+		});
+	}
+
+
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('BadgeLeaderBoardReport/Index',
@@ -93,10 +114,11 @@
 				return;
 			}
 			bindData();
-			vm.loadOptions();
-			
+			featureCheck();
+
 		},
-		BadgeLeaderBoardReportPartialDispose: function () {			
+		BadgeLeaderBoardReportPartialDispose: function () {
+			ajax.AbortAll();
 
 		}
 	};
