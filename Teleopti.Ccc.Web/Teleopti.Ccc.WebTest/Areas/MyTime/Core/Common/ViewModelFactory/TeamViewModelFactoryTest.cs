@@ -75,8 +75,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			var result = target.CreateLeaderboardOptionsViewModel(dateOnly, viewbadgeleaderboard).ToArray();
 
-			result[0].text.Should().Be.EqualTo("site");
-			result[1].text.Should().Be.EqualTo("team");
+			(result[0].text as string).Should().Be.EqualTo("Everyone");
+			(result[1].text as string).Should().Be.EqualTo("site");
+			(result[2].text as string).Should().Be.EqualTo("team");
 		}
 
 		[Test]
@@ -99,7 +100,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			var result = target.CreateLeaderboardOptionsViewModel(dateOnly, viewbadgeleaderboard).ToArray();
 
-			result[0].text.Should().Be.EqualTo("team");
+			(result[0].text as string).Should().Be.EqualTo("Everyone");
+			(result[1].text as string).Should().Be.EqualTo("team");
 		}
 
 		[Test]

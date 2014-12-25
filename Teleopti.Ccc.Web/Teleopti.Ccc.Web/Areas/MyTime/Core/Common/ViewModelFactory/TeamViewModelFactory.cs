@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			return options;
 		}
 
-		public IEnumerable<ISelectOption> CreateLeaderboardOptionsViewModel(DateOnly date, string applicationFunctionPath)
+		public IEnumerable<dynamic> CreateLeaderboardOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
 			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
 			var sites = teams
@@ -69,28 +70,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 				.Distinct()
 				.OrderBy(s => s.Description.Name);
 
-			var options = new List<ISelectOption>();
+			var options = new List<dynamic>();
+			options.Add( new
+			{
+				id = Guid.Empty,
+				text = UserTexts.Resources.Everyone,
+				type = LeadboardQueryType.Everyone
+			});
 			sites.ForEach(s =>
 			{
 				if (_principalAuthorization.IsPermitted(applicationFunctionPath, date, s))
 				{
-					options.Add(new SelectOptionItem()
+					options.Add(new 
 					{
 						id = s.Id.ToString(),
-						text = s.Description.Name
+						text = s.Description.Name,
+						type = LeadboardQueryType.Site
 					});
 				}
 				
 				var teamOptions = from t in teams
 								  where t.Site == s
-								  select new SelectOptionItem
+								  select new
 								  {
 									  id = t.Id.ToString(),
-									  text = t.Description.Name
+									  text = t.Description.Name,
+									  type = LeadboardQueryType.Team
 								  };
 				options.AddRange(teamOptions);
 			});
-
 			return options;
 		}
 
