@@ -48,11 +48,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Select2Box.AssertSelectedOptionText("Hierarchy-Picker", option);
 		}
 
+		[Then(@"I should see the ranks are")]
+		public void ThenIShouldSeeTheRanksAre(Table table)
+		{
+			var ranks = table.CreateSet<RankInfo>();
+			foreach (var rankInfo in ranks)
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(
+					string.Format(".badge-leader-board-report :nth-child({0}) .agent-name:contains('{1}')", rankInfo.Rank,
+						rankInfo.Agent));
+			}
+		}
+
+		[When(@"I select '(.*)' in the hierarchy-picker")]
+		public void WhenISelectInTheHierarchy_Picker(string optionText)
+		{
+			WhenIOpenTheHierarchy_Picker();
+
+			Select2Box.SelectItemByText("Hierarchy-Picker", optionText);
+		}
+
+
 		private class SingleValue
 		{
 			public string Value { get; set; }
 		}
-	
+		private class RankInfo
+		{
+			public string Rank { get; set; }
+			public string Agent { get; set; }
+		}
 
 	}
+
+	
 }

@@ -67,6 +67,7 @@ Scenario: Default leader board should be based on relative Everyone
 		| Access to Leaderboard | true  |
 	When I am viewing leaderboard report
 	Then The hierarchy-picker should have 'Everyone' selected 
+	And I should see only myself on the leaderboard
 
 Scenario: Should view correct leader board when selecting another group from different business hierarchy level
 	Given I have a role with
@@ -75,11 +76,11 @@ Scenario: Should view correct leader board when selecting another group from dif
 		| Access to my site     | true  |
 	When I am viewing leaderboard report
 	Then I should see the ranks are
-		| Field        | value |
-		| I            | 1     |
-		| Pierre Baldi | 2     |
-	When I select 'The site/Team red' in the hierarchy-picker
+		| Rank | Agent        |
+		| 1    | I            |
+		| 2    | Pierre Baldi |
+	When I select 'Team red' in the hierarchy-picker
 	Then I should see the ranks are
-		| Field        | value |
-		| Pierre Baldi | 1     |
+		| Rank | Agent        |
+		| 1    | Pierre Baldi |
 
