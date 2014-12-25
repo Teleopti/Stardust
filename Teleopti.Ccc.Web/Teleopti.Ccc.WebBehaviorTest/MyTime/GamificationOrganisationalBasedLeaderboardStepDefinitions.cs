@@ -18,6 +18,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExistsUsingJQuery(".badge-leader-board-report", ".agent-badge .agent-rank:contains('2')");
 		}
 
+		[Then(@"I should not see hierarchy-picker")]
+		public void ThenIShouldNotSeeHierarchy_Picker()
+		{
+			Browser.Interactions.AssertNotExists(".BadgeLeaderBoardReport", "#Hierarchy-Picker");
+		}
+
+
 		[When(@"I open the hierarchy-picker")]
 		public void WhenIOpenTheHierarchy_Picker()
 		{
@@ -34,9 +41,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				Select2Box.AssertOptionExist("Hierarchy-Picker", option.Value);
 			}
 		}
+
+		[Then(@"The hierarchy-picker should have '(.*)' selected")]
+		public void ThenTheHierarchy_PickerShouldHaveSelected(string option)
+		{
+			Select2Box.AssertSelectedOptionText("Hierarchy-Picker", option);
+		}
+
 		private class SingleValue
 		{
 			public string Value { get; set; }
 		}
+	
+
 	}
 }

@@ -35,7 +35,10 @@
 				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
 				success: function (data) {
 					if (data.length === 1) {
+						//MyOwn
 						self.showOptions(false);
+						self.selectedOptionType = 0;
+						self.loadData();
 					} else {
 						self.showOptions(true);
 						self.availableOptions(data);

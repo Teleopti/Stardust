@@ -45,11 +45,11 @@ Scenario: View available business hierarchy when data available is set to Site
 	And I am viewing leaderboard report
 	When I open the hierarchy-picker
 	Then I should see available business hierarchy
-		| Value               |
-		| Everyone            |
-		| The site            |
-		| The site/Team green |
-		| The site/Team red   |
+		| Value      |
+		| Everyone   |
+		| The site   |
+		| Team green |
+		| Team red   |
 
 Scenario: Should only see myself on the leader board when has data available only for my own
 	Given I have a role with
@@ -58,15 +58,15 @@ Scenario: Should only see myself on the leader board when has data available onl
 		| Access to Leaderboard | true  |
 	When I am viewing leaderboard report
 	Then I should see only myself on the leaderboard
+	And I should not see hierarchy-picker
 
 Scenario: Default leader board should be based on relative Everyone
 	Given I have a role with
 		| Field                 | Value |
-		| Access to my own      | true  |
+		| Access to my team     | true  |
 		| Access to Leaderboard | true  |
 	When I am viewing leaderboard report
-	Then I should see only myself on the leaderboard
-	And The hierarchy-picker should have 'Everyone' selected 
+	Then The hierarchy-picker should have 'Everyone' selected 
 
 Scenario: Should view correct leader board when selecting another group from different business hierarchy level
 	Given I have a role with
