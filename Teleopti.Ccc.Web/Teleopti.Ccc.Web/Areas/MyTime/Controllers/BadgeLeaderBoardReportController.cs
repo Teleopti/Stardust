@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -10,13 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
     public class BadgeLeaderBoardReportController : Controller
     {
-		private readonly IToggleManager _toggleManager;
-		private readonly IBadgeLeaderBoardReportViewModelFactory _badgeLeaderBoardReportViewModelFactory;
+	    private readonly IBadgeLeaderBoardReportViewModelFactory _badgeLeaderBoardReportViewModelFactory;
 		private readonly IUserCulture _userCulture;
 
-	    public BadgeLeaderBoardReportController(IBadgeLeaderBoardReportViewModelFactory badgeLeaderBoardReportViewModelFactory , IUserCulture userCulture, IToggleManager toggleManager)
+	    public BadgeLeaderBoardReportController(IBadgeLeaderBoardReportViewModelFactory badgeLeaderBoardReportViewModelFactory , IUserCulture userCulture)
 	    {
-		    _toggleManager = toggleManager;
 		    _userCulture = userCulture;
 		    _badgeLeaderBoardReportViewModelFactory = badgeLeaderBoardReportViewModelFactory;
 	    }
@@ -34,9 +33,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[HttpGet]
 		[UnitOfWorkAction]
-		public JsonResult Overview(DateOnly date)
+		public JsonResult Overview(LeaderboardQuery query)
 		{
-			return Json(_badgeLeaderBoardReportViewModelFactory.CreateBadgeLeaderBoardReportViewModel(date), JsonRequestBehavior.AllowGet);
+			return Json(_badgeLeaderBoardReportViewModelFactory.CreateBadgeLeaderBoardReportViewModel(query), JsonRequestBehavior.AllowGet);
 		}
     }
 }

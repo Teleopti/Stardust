@@ -419,6 +419,7 @@
     <Compile Include="Areas\Messages\Models\SendMessageViewModel.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportController.cs" />
+    <Compile Include="Areas\MyTime\Models\BadgeLeaderBoardReport\LeaderboardQuery.cs" />
     <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ITimeFilterHelper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TimeFilterHelper.cs" />
