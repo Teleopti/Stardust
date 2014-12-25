@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule(SchedulePersistModule.ForOtherModules());
 
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
+			build.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
 			build.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 
 			build.Update(_container);
