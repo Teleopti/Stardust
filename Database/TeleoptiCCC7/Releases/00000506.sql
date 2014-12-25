@@ -1,9 +1,8 @@
 ----------------  
 --Name: Xinfeng Li
 --Date: 2014-12-24
---Desc: Add new table for agent badge with level
+--Desc: Add new table for agent badges with rank
 ---------------- 
-
 CREATE TABLE [dbo].[AgentBadgeWithRankTransaction](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Person] [uniqueidentifier] NOT NULL,
@@ -35,6 +34,24 @@ CREATE UNIQUE CLUSTERED INDEX [CIX_AgentBadgeWithRankTransaction] ON [dbo].[Agen
 	[BadgeType] ASC,
 	[CalculatedDate] ASC
 )
+GO
+
+----------------  
+--Name: Xinfeng Li
+--Date: 2014-12-25
+--Desc: Add new view to get total badges with rank
+---------------- 
+CREATE VIEW [dbo].[AgentBadgeWithRank]
+AS
+SELECT Person,
+       BadgeType,
+       sum(BronzeBadgeAmount) AS 'BronzeBadgeAmount',
+       sum(SilverBadgeAmount) AS 'SilverBadgeAmount',
+       sum(GoldBadgeAmount) AS 'GoldBadgeAmount',
+       max(CalculatedDate) AS 'LastCalculatedDate'
+  FROM dbo.AgentBadgeWithRankTransaction
+GROUP BY person, BadgeType
+
 GO
 
 -- =============================================

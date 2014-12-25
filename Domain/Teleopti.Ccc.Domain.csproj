@@ -340,6 +340,7 @@
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\AgentBadgeTransaction.cs" />
+    <Compile Include="Common\AgentBadgeWithRank.cs" />
     <Compile Include="Common\AgentBadgeWithRankTransaction.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
