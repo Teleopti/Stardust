@@ -6,8 +6,10 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -24,20 +26,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IPushMessagePersister _msgPersister;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IAgentBadgeCalculator _calculator;
+		private readonly IAgentBadgeWithRankCalculator _badgeWithRankCalculator;
 		private readonly INow _now;
 		private readonly IAgentBadgeRepository _badgeRepository;
+		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
+		private readonly IToggleManager _toggleManager;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 
 		public CalculateBadgeConsumer(
-									IServiceBus serviceBus, 
-									IAgentBadgeSettingsRepository settingsRepository,
-									IPersonRepository personRepository, 
-									IGlobalSettingDataRepository globalSettingRep,
-									IPushMessagePersister msgPersister, 
-									ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-									IAgentBadgeCalculator calculator,
-									IAgentBadgeRepository badgeRepository,
-									INow now)
+			IServiceBus serviceBus, 
+			IAgentBadgeSettingsRepository settingsRepository,
+			IPersonRepository personRepository, 
+			IGlobalSettingDataRepository globalSettingRep,
+			IPushMessagePersister msgPersister, 
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+			IAgentBadgeCalculator calculator,
+			IAgentBadgeWithRankCalculator badgeWithRankCalculator,
+			IAgentBadgeRepository badgeRepository,
+			IAgentBadgeWithRankRepository badgeWithRankRepository,
+			INow now,
+			IToggleManager toggleManager)
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
@@ -46,8 +54,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_msgPersister = msgPersister;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_calculator = calculator;
+			_badgeWithRankCalculator = badgeWithRankCalculator;
 			_now = now;
 			_badgeRepository = badgeRepository;
+			_badgeWithRankRepository = badgeWithRankRepository;
+			_toggleManager = toggleManager;
 		}
 
 		/// <summary>
@@ -58,6 +69,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// <param name="message"></param>
 		public void Consume(CalculateBadgeMessage message)
 		{
+			var toggleCalculateBadgeWithRankEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
+
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
@@ -96,37 +109,80 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				if (setting.AdherenceBadgeEnabled)
 				{
-					var newAwardedBadgesForAdherence =
-						_calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
-							adherenceReportSetting.CalculationMethod, setting).ToList();
-					if (Logger.IsDebugEnabled)
+					if (toggleCalculateBadgeWithRankEnabled && setting.CalculateBadgeWithRank)
 					{
-						Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+						var newAwardedBadgesWithRankForAdherence =
+							_badgeWithRankCalculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
+								adherenceReportSetting.CalculationMethod, setting).ToList();
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesWithRankForAdherence.Count());
+						}
+						sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAdherence, setting, calculateDate, BadgeType.Adherence);
 					}
-					sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
+					else
+					{
+						var newAwardedBadgesForAdherence =
+							_calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
+								adherenceReportSetting.CalculationMethod, setting).ToList();
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+						}
+						sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
+					}
 				}
 
 				if (setting.AHTBadgeEnabled)
 				{
-					var newAwardedBadgesForAHT =
-						_calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
-					if (Logger.IsDebugEnabled)
+					if (toggleCalculateBadgeWithRankEnabled && setting.CalculateBadgeWithRank)
 					{
-						Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+						var newAwardedBadgesWithRankForAHT =
+							_badgeWithRankCalculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAHT.Count());
+						}
+						sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
 					}
-					sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
+					else
+					{
+						var newAwardedBadgesForAHT =
+							_calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+						}
+						sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
+					}
 				}
 
 				if (setting.AnsweredCallsBadgeEnabled)
 				{
-					var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
-						calculateDate, setting).ToList();
-					if (Logger.IsDebugEnabled)
+					if (toggleCalculateBadgeWithRankEnabled && setting.CalculateBadgeWithRank)
 					{
-						Logger.DebugFormat("Total {0} agents will get new badge for answered calls",
-							newAwardedBadgesForAnsweredCalls.Count());
+						var newAwardedBadgesWithRankForAnsweredCalls =
+							_badgeWithRankCalculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode, calculateDate, setting)
+								.ToList();
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat("Total {0} agents will get new badge for answered calls",
+								newAwardedBadgesWithRankForAnsweredCalls.Count());
+						}
+						sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAnsweredCalls, setting, calculateDate,
+							BadgeType.AnsweredCalls);
 					}
-					sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
+					else
+					{
+						var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
+							calculateDate, setting).ToList();
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat("Total {0} agents will get new badge for answered calls",
+								newAwardedBadgesForAnsweredCalls.Count());
+						}
+						sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
+					}
 				}
 
 				uow.PersistAll();
@@ -225,6 +281,78 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				}
 
 				if (existedBadge.IsGoldBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
+				{
+					var message = string.Format(goldBadgeMessageTemplate, threshold,
+						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
+					sendGoldBadgeMessage(person, badgeType, message);
+				}
+			}
+		}
+
+		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeWithRankTransaction> newAwardedBadges,
+			IAgentBadgeSettings setting, DateOnly calculateDate, BadgeType badgeType)
+		{
+			var agentBadgeWithRankTransactions = newAwardedBadges as IList<IAgentBadgeWithRankTransaction> ?? newAwardedBadges.ToList();
+
+			var existedBadges = _badgeWithRankRepository.Find(agentBadgeWithRankTransactions.Select(
+				x => x.Person.Id != null ? (Guid)x.Person.Id : new Guid()), badgeType);
+			foreach (var badgeTransaction in agentBadgeWithRankTransactions)
+			{
+				var person = badgeTransaction.Person;
+
+				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadgeWithRank
+				{
+					Person = (Guid)person.Id,
+					BronzeBadgeAmount = 0,
+					SilverBadgeAmount = 0,
+					GoldBadgeAmount = 0,
+					BadgeType = badgeType
+				};
+
+				existedBadge.BronzeBadgeAmount += badgeTransaction.BronzeBadgeAmount;
+				existedBadge.SilverBadgeAmount += badgeTransaction.SilverBadgeAmount;				
+				existedBadge.GoldBadgeAmount += badgeTransaction.GoldBadgeAmount;
+
+				var bronzeBadgeMessageTemplate = string.Empty;
+				var silverBadgeMessageTemplate = string.Empty;
+				var goldBadgeMessageTemplate = string.Empty;
+				var threshold = string.Empty;
+
+				switch (badgeType)
+				{
+					case BadgeType.AverageHandlingTime:
+						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAHT;
+						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAHT;
+						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAHT;
+						threshold = setting.AHTThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+						break;
+					case BadgeType.AnsweredCalls:
+						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAnsweredCalls;
+						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAnsweredCalls;
+						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAnsweredCalls;
+						threshold = setting.AnsweredCallsThreshold.ToString(CultureInfo.InvariantCulture);
+						break;
+					case BadgeType.Adherence:
+						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAdherence;
+						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAdherence;
+						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAdherence;
+						threshold = setting.AdherenceThreshold.ToString();
+						break;
+				}
+
+				if (existedBadge.IsBronzeBadgeAdded)
+				{
+					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
+					sendBronzeBadgeMessage(person, badgeType, message);
+				}
+
+				if (existedBadge.IsSilverBadgeAdded)
+				{
+					var message = string.Format(silverBadgeMessageTemplate, threshold, setting.SilverToBronzeBadgeRate);
+					sendSilverBadgeMessage(person, badgeType, message);
+				}
+
+				if (existedBadge.IsGoldBadgeAdded)
 				{
 					var message = string.Format(goldBadgeMessageTemplate, threshold,
 						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
