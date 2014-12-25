@@ -81,6 +81,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var bronzeBadgeAmount = 0;
 				var silverBadgeAmount = 0;
 				var goldBadgeAmount = 0;
+				if (logger.IsDebugEnabled)
+				{
+					logger.DebugFormat(
+						"largerIsBetter: {0}, value: {1}, bronzeBadgeThreshold: {2}, silverBadgeThreshold: {3}, goldBadgeThreshold: {4}",
+						largerIsBetter, value, bronzeBadgeThreshold, silverBadgeThreshold, goldBadgeThreshold);
+				}
 				if (largerIsBetter)
 				{
 					if (value.CompareTo(bronzeBadgeThreshold) >= 0 && value.CompareTo(silverBadgeThreshold) < 0)
@@ -151,7 +157,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				logger.DebugFormat(
 					"Calculate adherence badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss}, AdherenceReportSettingCalculationMethod: {2},"
-					+ "bronze badge threshold: {3}, bronze badge threshold: {4}, bronze badge threshold: {5}", timezoneCode, date.Date,
+					+ "bronze badge threshold: {3}, silver badge threshold: {4}, gold badge threshold: {5}", timezoneCode, date.Date,
 					adherenceCalculationMethod, setting.AdherenceBronzeThreshold, setting.AdherenceSilverThreshold,
 					setting.AdherenceGoldThreshold);
 			}
@@ -200,13 +206,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				logger.DebugFormat(
 					"Calculate AHT badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss},"
-					+ "bronze badge threshold: {2}, bronze badge threshold: {3}, bronze badge threshold: {4}", timezoneCode, date.Date,
+					+ "bronze badge threshold: {2}, silver badge threshold: {3}, gold badge threshold: {4}", timezoneCode, date.Date,
 					setting.AHTBronzeThreshold, setting.AHTSilverThreshold, setting.AHTGoldThreshold);
 			}
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTGoldThreshold);
+			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTBronzeThreshold);
 
 			if (agentsList.Count > 0)
 			{
@@ -245,7 +251,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			{
 				logger.DebugFormat(
 					"Calculate answered calls badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss},"
-					+ "bronze badge threshold: {2}, bronze badge threshold: {3}, bronze badge threshold: {4}", timezoneCode, date.Date,
+					+ "bronze badge threshold: {2}, silver badge threshold: {3}, gold badge threshold: {4}", timezoneCode, date.Date,
 					setting.AnsweredCallsBronzeThreshold, setting.AnsweredCallsSilverThreshold, setting.AnsweredCallsGoldThreshold);
 			}
 
