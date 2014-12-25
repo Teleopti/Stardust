@@ -6,7 +6,7 @@ GO
 -- Author:      Xinfeng
 -- Create date: 2014-07-18
 -- Description: Gets the agent whose AHT under @threshold during @Date for specify @time_zone_id
--- Example: EXEC [mart].[raptor_AHT_per_agent_by_date] @time_zone_id=1, @threshold=120, @local_date='2014-07-10'
+-- Example: EXEC [mart].[raptor_AHT_per_agent_by_date] @time_zone_code='W. Europe Standard Time', @threshold=1800, @local_date='2014-02-10'
 -- ======================================================================================================
 
 CREATE PROCEDURE [mart].[raptor_AHT_per_agent_by_date] 
