@@ -145,8 +145,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
-			string timezoneCode,
-			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IAgentBadgeSettings setting)
+			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IAgentBadgeSettings setting)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -161,7 +160,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
 			var agentsList =
 				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date,
-					setting.AdherenceThreshold);
+					setting.AdherenceBronzeThreshold);
 
 			if (agentsList.Count > 0)
 			{
@@ -195,8 +194,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons,
-			string timezoneCode,
-			DateOnly date, IAgentBadgeSettings setting)
+			string timezoneCode, DateOnly date, IAgentBadgeSettings setting)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -208,7 +206,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
+			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTGoldThreshold);
 
 			if (agentsList.Count > 0)
 			{
@@ -219,14 +217,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				var agentsWithAHT = agentsList.Cast<object[]>()
 					.ToDictionary(data => (Guid)data[0], data => double.Parse(data[2].ToString()));
-
-				/*
-				var agentsWithAHT = new Dictionary<Guid, double>();
-				foreach (object[] data in agentsList)
-				{
-					agentsWithAHT[(Guid) data[0]] =double.Parse(data[2].ToString());
-				}
-				*/
 
 				var newAwardedAhtBadges = AddBadge(personList, agentsWithAHT, BadgeType.AverageHandlingTime,
 					setting.AHTBronzeThreshold.TotalSeconds,
@@ -249,8 +239,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(
-			IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, IAgentBadgeSettings setting)
+			IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IAgentBadgeSettings setting)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -263,7 +252,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
 			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date,
-				setting.AnsweredCallsThreshold);
+				setting.AnsweredCallsBronzeThreshold);
 
 
 			if (agentsList.Count > 0)
