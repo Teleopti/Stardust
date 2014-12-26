@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -66,6 +67,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		    return request;
 	    }
+		
+		
+		private IPersonRequest createShiftExchangeOffer(DateTime startDate)
+	    {
+		    IPersonRequest request = new PersonRequest(_person);
+			var currentShift = ScheduleDayFactory.Create(new DateOnly(2008, 5, 1), _person);
+
+			IShiftExchangeOffer offer = new ShiftExchangeOffer (currentShift, new ShiftExchangeCriteria(new DateOnly(2008,7, 9),
+																new DateTimePeriod( startDate, startDate.AddDays (1))),
+																ShiftExchangeOfferStatus.Pending);
+
+			request.Request = offer;
+		    request.Pending();
+
+		    return request;
+	    }
 
 
 	    /// <summary>
@@ -120,6 +137,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return new PersonRequestRepository(unitOfWork);
         }
 
+
+		
+
+
 		[Test]
 		public void FindNonExistingShouldReturnNull()
 		{
@@ -127,7 +148,88 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.Should().Be.Null();
 		}
 
-        [Test]
+	    [Test]
+	    public void CanCreateShiftExchangeOffer()
+	    {
+			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			IPersonRequest offerRequest = createShiftExchangeOffer(startDate);
+			PersistAndRemoveFromUnitOfWork (offerRequest);
+
+			DateTimePeriod period = new DateTimePeriod(2008, 04, 1, 2008, 07, 20);
+			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(offerRequest));
+	    }
+
+	    [Test]
+	    public void FindPersonRequestByRequestType()
+	    {
+			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
+		    var shiftTradePersonRequest = CreateShiftTradeRequest ("Test");
+
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
+			PersistAndRemoveFromUnitOfWork (shiftTradePersonRequest);
+
+			var period = new DateTimePeriod(2000, 04, 1, 2014, 08, 20);
+			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftExchangeOffer>(_person, period);
+			var foundShiftTradeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftTradeRequest>(_person, period);
+			
+			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0].Request));
+			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferPersonRequest));
+			
+			Assert.AreEqual(1, foundShiftTradeRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftTradeRequests[0].Request));
+			Assert.IsTrue(foundShiftTradeRequests.Contains(shiftTradePersonRequest));
+			
+	    }	    
+		
+		[Test]
+	    public void FindPersonRequestByRequestTypeAndStartDate()
+		{
+			var startDate = new DateTime (2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+			var startDate2 = startDate.AddDays (1);
+
+			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
+			var shiftExchangeOfferPersonRequest2 = createShiftExchangeOffer(startDate2);
+
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest2);
+
+			
+			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftExchangeOffer>(_person, startDate);
+
+			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0].Request));
+			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferPersonRequest));
+	    }		
+		
+		[Test]
+		public void FindPendingPersonRequestByRequestTypeAndStartDate()
+		{
+			var startDate = new DateTime (2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+			var startDate2 = startDate.AddDays (1);
+
+			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
+			var shiftExchangeOfferPersonRequest2 = createShiftExchangeOffer(startDate2);
+
+			shiftExchangeOfferPersonRequest2.Deny (null, "bla", new PersonRequestCheckAuthorization());
+
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest2);
+			
+			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).FindByStatus<ShiftExchangeOffer>(_person, startDate, 0);
+
+			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0].Request));
+			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferPersonRequest));
+	    }
+
+		[Test]
         public void VerifyCanFindRequestsForPeriodForPerson()
         {
             IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");

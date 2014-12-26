@@ -3,8 +3,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IShiftExchangeOfferRepository : IRepository<IShiftExchangeOffer>
-	{
-		IEnumerable<IShiftExchangeOffer> FindPendingOffer(IPerson person, DateOnly date);
-	}
+	//RobToDo should be replaced by PersonRequestRepository
+	//public interface IShiftExchangeOfferRepository : IRepository<IShiftExchangeOffer>
+	//{
+	//	IEnumerable<IShiftExchangeOffer> FindPendingOffer(IPerson person, DateOnly date);
+	//}
 }

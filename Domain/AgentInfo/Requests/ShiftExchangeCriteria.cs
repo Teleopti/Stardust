@@ -8,6 +8,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly DateOnly _validTo;
 		private readonly DateTimePeriod? _shiftWithin;
 
+		public DateTimePeriod? ShiftWithin
+		{
+			get { return _shiftWithin; }
+		}
+
 		public ShiftExchangeCriteria(DateOnly validTo, DateTimePeriod? shiftWithin)
 		{
 			_validTo = validTo;

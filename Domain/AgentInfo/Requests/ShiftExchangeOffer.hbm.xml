@@ -4,23 +4,12 @@
                    namespace="Teleopti.Ccc.Domain.AgentInfo.Requests"
                    default-access="field.camelcase-underscore">
 
-  <class name="ShiftExchangeOffer">
-    <!--IEntity-->
-    <id name="Id"
-            type="guid"
-		  				access="nosetter.camelcase-underscore"
-            unsaved-value="null">
-      <generator class="guid.comb" />
-    </id>
-    <many-to-one name="UpdatedBy"
-                 class="Teleopti.Ccc.Domain.Common.Person"
-                 not-null="true"
-                 foreign-key="FK_ShiftExchangeOffer_Person_UpdatedBy"/>
-    <property name="UpdatedOn"
-              type="UtcDateTime"
-              not-null="true"/>
-		
-    <many-to-one name="Person"
+
+	<joined-subclass name="ShiftExchangeOffer"
+					 extends="Request">
+		<key column="Request" foreign-key="FK_ShiftExchangeOffer_Request"/>
+
+		<many-to-one name="Person"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true" foreign-key="FK_ShiftExchangeOffer_Person"/>
 
@@ -52,16 +41,11 @@
 				<column name="ShiftWithinEndDateTime" />
 			</property>
 		</component>
-	  
+
 		<property name="Status"
          not-null="true"
          type="int"/>
-	  
-		<many-to-one name="BusinessUnit"
-      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-      access="nosetter.camelcase-underscore"
-      not-null="true" foreign-key="FK_ShiftExchangeOffer_BusinessUnit"/>
-    <filter name="businessUnitFilter"
-            condition=":businessUnitParameter = BusinessUnit" />
-  </class>
+
+
+	</joined-subclass>
 </hibernate-mapping>

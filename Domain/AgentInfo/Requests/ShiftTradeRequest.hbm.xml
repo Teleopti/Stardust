@@ -20,6 +20,6 @@
 
 	  <many-to-one name="Offer"
 				 class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftExchangeOffer"
-				 not-null="false" foreign-key="FK_ShiftExchangeOffer_Id" lazy="false" cascade="save-update"/>
+				 not-null="false" foreign-key="FK_ShiftExchangeOffer_Request" lazy="false" cascade="save-update"/>
   </joined-subclass>
 </hibernate-mapping>

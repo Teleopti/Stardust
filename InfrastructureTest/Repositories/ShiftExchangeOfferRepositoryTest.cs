@@ -11,55 +11,56 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture]
-	[Category("LongRunning")]
-	public class ShiftExchangeOfferRepositoryTest : RepositoryTest<IShiftExchangeOffer>
-	{
-		private IScheduleDay schedule;
+	//RobTODO - Examine these tests and reimplment elsewhere?
+	//[TestFixture]
+	//[Category("LongRunning")]
+	//public class ShiftExchangeOfferRepositoryTest : RepositoryTest<IShiftExchangeOffer>
+	//{
+	//	private IScheduleDay schedule;
 
-		protected override void ConcreteSetup()
-		{
-			schedule = ScheduleDayFactory.Create(new DateOnly(2014, 10, 28));
-			schedule.Person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			PersistAndRemoveFromUnitOfWork(schedule.Person);
-			PersistAndRemoveFromUnitOfWork(schedule.Scenario);
-		}
+	//	protected override void ConcreteSetup()
+	//	{
+	//		schedule = ScheduleDayFactory.Create(new DateOnly(2014, 10, 28));
+	//		schedule.Person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+	//		PersistAndRemoveFromUnitOfWork(schedule.Person);
+	//		PersistAndRemoveFromUnitOfWork(schedule.Scenario);
+	//	}
 
-		protected override IShiftExchangeOffer CreateAggregateWithCorrectBusinessUnit()
-		{
-			return new ShiftExchangeOffer(schedule,
-				new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)),
-				ShiftExchangeOfferStatus.Pending);
-		}
+	//	protected override IShiftExchangeOffer CreateAggregateWithCorrectBusinessUnit()
+	//	{
+	//		return new ShiftExchangeOffer(schedule,
+	//			new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)),
+	//			ShiftExchangeOfferStatus.Pending);
+	//	}
 
-		protected override void VerifyAggregateGraphProperties(IShiftExchangeOffer loadedAggregateFromDatabase)
-		{
-			loadedAggregateFromDatabase.Date.Should().Be.EqualTo(new DateOnly(2014, 10, 28));
-		}
+	//	protected override void VerifyAggregateGraphProperties(IShiftExchangeOffer loadedAggregateFromDatabase)
+	//	{
+	//		loadedAggregateFromDatabase.Date.Should().Be.EqualTo(new DateOnly(2014, 10, 28));
+	//	}
 
-		protected override Repository<IShiftExchangeOffer> TestRepository(IUnitOfWork unitOfWork)
-		{
-			return new ShiftExchangeOfferRepository(unitOfWork);
-		}
+	//	protected override Repository<IShiftExchangeOffer> TestRepository(IUnitOfWork unitOfWork)
+	//	{
+	//		return new ShiftExchangeOfferRepository(unitOfWork);
+	//	}
 
-		[Test]
-		public void ShouldFindPendingOffer()
-		{
-			var expected = new ShiftExchangeOffer(schedule,
-				new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)),
-				ShiftExchangeOfferStatus.Pending);
-			var offer2 = new ShiftExchangeOffer(schedule,
-				new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)),
-				ShiftExchangeOfferStatus.Completed);
-			PersistAndRemoveFromUnitOfWork(expected);
-			PersistAndRemoveFromUnitOfWork(offer2);
+	//	[Test]
+	//	public void ShouldFindPendingOffer()
+	//	{
+	//		var expected = new ShiftExchangeOffer(schedule,
+	//			new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)),
+	//			ShiftExchangeOfferStatus.Pending);
+	//		var offer2 = new ShiftExchangeOffer(schedule,
+	//			new ShiftExchangeCriteria(new DateOnly(2026, 3, 4), new DateTimePeriod(2014, 10, 28, 2014, 10, 29)),
+	//			ShiftExchangeOfferStatus.Completed);
+	//		PersistAndRemoveFromUnitOfWork(expected);
+	//		PersistAndRemoveFromUnitOfWork(offer2);
 
-			var target = (ShiftExchangeOfferRepository)TestRepository(UnitOfWork);
-			var date = new DateOnly(2014, 10, 28);
-			var result = target.FindPendingOffer(schedule.Person, date);
+	//		var target = (ShiftExchangeOfferRepository)TestRepository(UnitOfWork);
+	//		var date = new DateOnly(2014, 10, 28);
+	//		var result = target.FindPendingOffer(schedule.Person, date);
 
-			result.Count().Should().Be.EqualTo(1);
-			result.First().Should().Be.EqualTo(expected);
-		}
-	}
+	//		result.Count().Should().Be.EqualTo(1);
+	//		result.First().Should().Be.EqualTo(expected);
+	//	}
+	//}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -90,5 +92,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		IPersonRequest Find(Guid id);
 
+		IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T: Request;
 	}
 }

@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'?(.*)'? have a shift exchange for bulletin")]
 		public void GivenAgentHasAShiftExchangeForBulletin(string person, Table table)
 		{
-			DataMaker.ApplyFromTable<ShiftExchangeOfferConfigurable>(person, table);
+			//RobTODO - Examine and think about refactoring this.
+			//DataMaker.ApplyFromTable<ShiftExchangeOfferConfigurable>(person, table);
 		}
 
 		[Then(@"I should see an announcement in request list")]

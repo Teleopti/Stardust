@@ -43,31 +43,58 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			
 		}
 
-		/// <summary>
-		/// Finds the specified person's request for given period.
-		/// </summary>
-		/// <param name="person">The person.</param>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: Sumedah
-		/// Created date: 2008-11-19
-		/// </remarks>
+		public IList<IPersonRequest> Find<T>(IPerson person, DateTimePeriod period ) where T :  Request
+		{
+			var requestForPeriod = createRequestForPeriodCriteria(period).Add(Restrictions.Eq("class", typeof(T)));
+			return findRequestsByRequestPeriod(person, requestForPeriod);
+		}		
+		
+		public IList<IPersonRequest> Find<T>(IPerson person, DateTime startDateTime ) where T :  Request
+		{
+			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
+			return findRequestsByRequestPeriod(person, requestForPeriod);
+		}		
+		
+		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T :  Request
+		{
+			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
+			return findRequestsByRequestPeriod(person, requestForPeriod, status);
+		}
+
 		public IList<IPersonRequest> Find(IPerson person, DateTimePeriod period)
+		{
+			var requestForPeriod = createRequestForPeriodCriteria(period);
+			return findRequestsByRequestPeriod(person, requestForPeriod);
+		}
+
+		private static DetachedCriteria createRequestForPeriodCriteria(DateTimePeriod period)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Restrictions.Ge("Period.period.Maximum", period.StartDateTime))
-				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime))
-				;
-
-			return Session.CreateCriteria<IPersonRequest>("req")
-					.Add(Restrictions.Eq("Person", person))
-					.SetFetchMode("requests", FetchMode.Join)
-					.Add(Subqueries.PropertyIn("Id",requestForPeriod))
-					.List<IPersonRequest>();
+				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
+			return requestForPeriod;
 		}
-
+				
+		
+		private static DetachedCriteria createRequestForPeriodCriteria(DateTime startDateTime)
+		{
+			var requestForPeriod = DetachedCriteria.For<Request>()
+				.SetProjection (Projections.Property ("Parent"))
+				.Add(Restrictions.Eq("Period.period.Minimum", startDateTime));
+			return requestForPeriod;
+		}
+		
+		private IList<IPersonRequest> findRequestsByRequestPeriod (IPerson person, DetachedCriteria requestForPeriod, int status = 0)
+		{
+			return Session.CreateCriteria<IPersonRequest> ("req")
+				.Add (Restrictions.Eq ("Person", person))
+				.Add(Restrictions.Eq("requestStatus", status))
+				.SetFetchMode ("requests", FetchMode.Join)
+				.Add (Subqueries.PropertyIn ("Id", requestForPeriod))
+				.List<IPersonRequest>();
+		}		
+		
 		public IPersonRequest Find(Guid id)
 		{
 			var returnPersonRequest = Session.CreateCriteria(typeof(PersonRequest), "req")

@@ -6,25 +6,27 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class ShiftExchangeOfferRepository : Repository<IShiftExchangeOffer>, IShiftExchangeOfferRepository
-	{
-		public ShiftExchangeOfferRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
-		{
-		}
 
-		public ShiftExchangeOfferRepository(IUnitOfWork unitOfWork)
-			: base(unitOfWork)
-		{
-		}
+	//RobTODO - Examine and think about refactoring this.
+	//public class ShiftExchangeOfferRepository : Repository<IShiftExchangeOffer>, IShiftExchangeOfferRepository
+	//{
+	//	public ShiftExchangeOfferRepository(ICurrentUnitOfWork currentUnitOfWork)
+	//		: base(currentUnitOfWork)
+	//	{
+	//	}
 
-		public IEnumerable<IShiftExchangeOffer> FindPendingOffer(IPerson person, DateOnly date)
-		{
-			return Session.CreateCriteria(typeof(IShiftExchangeOffer))
-					 .Add(Restrictions.Eq("Person", person))
-					 .Add(Restrictions.Eq("Date", date))
-					 .Add(Restrictions.Eq("Status", 0))
-					 .List<IShiftExchangeOffer>();
-		}
-	}
+	//	public ShiftExchangeOfferRepository(IUnitOfWork unitOfWork)
+	//		: base(unitOfWork)
+	//	{
+	//	}
+
+	//	public IEnumerable<IShiftExchangeOffer> FindPendingOffer(IPerson person, DateOnly date)
+	//	{
+	//		return Session.CreateCriteria(typeof(IShiftExchangeOffer))
+	//				 .Add(Restrictions.Eq("Person", person))
+	//				 .Add(Restrictions.Eq("Date", date))
+	//				 .Add(Restrictions.Eq("Status", 0))
+	//				 .List<IShiftExchangeOffer>();
+	//	}
+	//}
 }

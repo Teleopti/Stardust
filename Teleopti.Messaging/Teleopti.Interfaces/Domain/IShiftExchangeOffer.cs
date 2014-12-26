@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
 	/// Created by: mingdi
 	/// Created date: 2014-12-12
 	/// </remarks>
-	public interface IShiftExchangeOffer : IAggregateRoot, IChangeInfo
+	public interface IShiftExchangeOffer : IRequest //, IChangeInfo
 	{
 		DateOnly Date { get; }
 

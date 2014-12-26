@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public class ShiftExchangeOffer : NonversionedAggregateRootWithBusinessUnit, IShiftExchangeOffer
+	public class ShiftExchangeOffer : Request, IShiftExchangeOffer
 	{
 		private readonly ShiftExchangeCriteria _criteria;
 		private DateOnly _date;
@@ -12,6 +15,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private IPerson _person;
 		private long _checksum;
 		private ShiftExchangeOfferStatus _status;
+		private string _typeDescription;
 
 		public ShiftExchangeOffer(IScheduleDay scheduleDay, ShiftExchangeCriteria criteria, ShiftExchangeOfferStatus status)
 			: this()
@@ -23,10 +27,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_person = scheduleDay.Person;
 			_checksum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum();
 			_status = status;
+
+			// RobTODO - What request period should we use?		
+			SetPeriod(criteria.ShiftWithin ?? new DateTimePeriod(_date, _date.AddDays(1)));
 		}
 
 		protected ShiftExchangeOffer()
 		{
+			_typeDescription = UserTexts.Resources.AnnounceShift;
 		}
 
 		public virtual DateOnly Date
@@ -39,9 +47,51 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get { return _myShiftPeriod; }
 		}
 
+		protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
+		{
+			throw new NotImplementedException();
+		}
+
 		public virtual IPerson Person
 		{
 			get { return _person; }
+		}
+
+		public override string RequestTypeDescription
+		{
+			get { return _typeDescription; }
+			set { _typeDescription = value; }
+		}
+
+		public override RequestType RequestType
+		{
+			get { return RequestType.ShiftExchangeOffer; }
+		}
+
+		public override Description RequestPayloadDescription
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override void Deny(IPerson denyPerson)
+		{
+			TextForNotification = string.Format(UserTexts.Resources.AnnouncementInvalidMessage, _date.ToShortDateString());
+		}
+
+		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
+			IPersonRequestCheckAuthorization authorization)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Refer(IPersonRequestCheckAuthorization authorization)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override string GetDetails(CultureInfo cultureInfo)
+		{
+			throw new NotImplementedException();
 		}
 
 		public virtual long Checksum
@@ -50,7 +100,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 
 		public virtual ShiftExchangeOfferStatus Status
-		{ 
+		{
 			get { return _status; }
 			set { _status = value; }
 		}

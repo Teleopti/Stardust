@@ -86,11 +86,11 @@ AS
 	INSERT INTO @BulletinResult
 	SELECT
 		Person,
-		Id
+		Request
 	FROM (
 			--Shifts
   			SELECT DISTINCT
-				Id,
+				Request,
 				seo.Person,
 				[Date],
 				MyShiftStartDateTime,

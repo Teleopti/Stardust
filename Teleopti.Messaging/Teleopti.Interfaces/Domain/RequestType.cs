@@ -16,6 +16,8 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// shift trade request
 		/// </summary>
-		ShiftTradeRequest
+		ShiftTradeRequest,
+
+		ShiftExchangeOffer
 	}
 }
