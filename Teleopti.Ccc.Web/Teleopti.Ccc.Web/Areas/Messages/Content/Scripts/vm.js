@@ -16,6 +16,9 @@ define([
 		self.UserName = ko.observable();
 
 		self.ErrorMessage = ko.observable("");
+		self.DisplayErrorMessage = ko.computed(function() {
+			return self.ErrorMessage() && self.ErrorMessage().length != 0;
+		});
 
 		self.Receivers = ko.observableArray();
 		self.Subject = ko.observable("");
@@ -45,6 +48,7 @@ define([
 				success: function (data) {
 					self.StatusText(self.Resources.Sent);
 					self.StatusClass("label-success");
+					self.ErrorMessage("");
 				},
 				error: function (data) {
 					self.ErrorMessage(data.statusText);

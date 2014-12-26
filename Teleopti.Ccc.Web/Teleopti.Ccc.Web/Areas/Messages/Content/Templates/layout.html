@@ -26,7 +26,7 @@
 		</ul>
 	</div>
 </nav>
-<div class="container" data-bind="if: ErrorMessage().length!=0">
+<div class="container" data-bind="visible: DisplayErrorMessage()" style="display: none">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="alert alert-danger error-message">
@@ -45,17 +45,23 @@
 				</li>
 			</ul>
 			<div data-bind="visible: DisplaySendMessage">
-				<textarea class="form-control message-subject" rows="1" data-bind="attr: {placeholder: Resources.Subject}, value: Subject, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"></textarea>
-				<textarea class="form-control message-body" rows="3" data-bind="attr: {placeholder: Resources.Message}, value: Message, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"></textarea>
-				<button type="button" class="btn btn-primary pull-right send-message" data-bind="text: Resources.Send, click:SendMessage, enable: !IsMessageEmpty()"></button>
+				<div class="form-group">
+					<textarea class="form-control message-subject" rows="1" data-bind="attr: {placeholder: Resources.Subject}, value: Subject, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"></textarea>
+				</div>
+				<div class="form-group">
+					<textarea class="form-control message-body" rows="3" data-bind="attr: {placeholder: Resources.Message}, value: Message, valueUpdate: ['afterkeydown', 'afterpaste', 'change']"></textarea>
+				</div>
+				<div class="pull-right">
+					<button type="button" class="btn btn-primary send-message" data-bind="text: Resources.Send, click:SendMessage, enable: !IsMessageEmpty()"></button>
+				</div>
 			</div>
 			<div data-bind="visible: !DisplaySendMessage()">
 				<div class="well message-send-feedback">
 					<strong data-bind="text: Subject">
 					</strong>
-					<hr class="message-separator1"/>
+					<hr class="message-separator1" />
 					<span data-bind="text: Resources.StatusColon" class="request-caption"></span><span class="label label-status" data-bind="text: StatusText(), css: StatusClass"></span>
-					<hr class="message-separator2"/>
+					<hr class="message-separator2" />
 					<div data-bind="text: Message">
 					</div>
 				</div>
