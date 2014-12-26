@@ -69,6 +69,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var settings = _repository.GetSettings();
 
+			if (!_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
+			{
+				settings.CalculateBadgeWithRank = false;
+			}
+
 			checkBoxEnableBadge.Checked = settings.BadgeEnabled;
 			checkBoxCalculateBadgeWithRank.Checked = settings.CalculateBadgeWithRank;
 
