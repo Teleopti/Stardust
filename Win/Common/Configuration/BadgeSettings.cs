@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			toggleRowDisplay(labelOneGoldBadgeEqualsSilverBadgeCount, !differentLevelBadgesEnabled);
 		}
 
-		private void checkBoxEnableDifferentLevelBadges_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxCalculateBadgeWithRank_CheckedChanged(object sender, EventArgs e)
 		{
 			var differentLevelBadgesEnabled = ((CheckBox) sender).Checked;
 			toggleDifferentLevelBadges(differentLevelBadgesEnabled);

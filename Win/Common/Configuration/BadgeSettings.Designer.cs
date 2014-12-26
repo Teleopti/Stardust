@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxCalculateBadgeWithRank.TabIndex = 25;
 			this.checkBoxCalculateBadgeWithRank.Text = "xxCalculateBadgeWithRank";
 			this.checkBoxCalculateBadgeWithRank.UseVisualStyleBackColor = true;
-			this.checkBoxCalculateBadgeWithRank.CheckedChanged += new System.EventHandler(this.checkBoxEnableDifferentLevelBadges_CheckedChanged);
+			this.checkBoxCalculateBadgeWithRank.CheckedChanged += new System.EventHandler(this.checkBoxCalculateBadgeWithRank_CheckedChanged);
 			// 
 			// labelSplitter2
 			// 
