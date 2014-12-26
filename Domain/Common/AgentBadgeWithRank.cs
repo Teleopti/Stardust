@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				if (!_bronzeBadgeInitialized)
 				{
-					_previousBronzeBadgeAmount = value;
 					_bronzeBadgeInitialized = true;
+					_previousBronzeBadgeAmount = value;
 				}
 				else
 				{
 					_previousBronzeBadgeAmount = _bronzeBadgeAmount;
-					_bronzeBadgeAmount = value;
 				}
+				_bronzeBadgeAmount = value;
 			}
 		}
 
@@ -57,14 +57,14 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				if (!_silverBadgeInitialized)
 				{
-					_previousSilverBadgeAmount = value;
 					_silverBadgeInitialized = true;
+					_previousSilverBadgeAmount = value;
 				}
 				else
 				{
 					_previousSilverBadgeAmount = _silverBadgeAmount;
-					_silverBadgeAmount = value;
 				}
+				_silverBadgeAmount = value;
 			}
 		}
 
@@ -75,14 +75,14 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				if (!_goldBadgeInitialized)
 				{
-					_previousGoldBadgeAmount = value;
 					_goldBadgeInitialized = true;
+					_previousGoldBadgeAmount = value;
 				}
 				else
 				{
 					_previousGoldBadgeAmount = _goldBadgeAmount;
-					_goldBadgeAmount = value;
 				}
+				_goldBadgeAmount = value;
 			}
 		}
 
