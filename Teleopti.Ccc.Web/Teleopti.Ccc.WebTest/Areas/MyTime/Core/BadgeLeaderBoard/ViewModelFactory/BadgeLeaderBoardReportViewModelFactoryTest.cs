@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		[Test]
 		public void ShouldReturnBadgeLeaderBoardViewModel()
 		{
-			var badgesProvider = MockRepository.GenerateMock<IAgentBadgeProvider>();
+			var badgesProvider = MockRepository.GenerateMock<ILeaderboardAgentBadgeProvider>();
 			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider);
 			var list = new List<AgentBadgeOverview>();
 			var option = new LeaderboardQuery
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		[Test]
 		public void ShouldReturnSortedAgents()
 		{
-			var badgesProvider = MockRepository.GenerateMock<IAgentBadgeProvider>();
+			var badgesProvider = MockRepository.GenerateMock<ILeaderboardAgentBadgeProvider>();
 			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider);
 			var overview_original = new[]
 			{

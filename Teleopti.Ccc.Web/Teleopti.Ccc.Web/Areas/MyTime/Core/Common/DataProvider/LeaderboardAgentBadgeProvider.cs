@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
@@ -13,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
-	public class AgentBadgeProvider: IAgentBadgeProvider
+	public class LeaderboardAgentBadgeProvider: ILeaderboardAgentBadgeProvider
 	{
 		private readonly IAgentBadgeRepository _agentBadgeRepository;
 		private readonly IPermissionProvider _permissionProvider;
@@ -23,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 
-		public AgentBadgeProvider(IAgentBadgeRepository agentBadgeRepository, IPermissionProvider permissionProvider, IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider, IPersonNameProvider personNameProvider, ISiteRepository siteRepository, ITeamRepository teamRepository)
+		public LeaderboardAgentBadgeProvider(IAgentBadgeRepository agentBadgeRepository, IPermissionProvider permissionProvider, IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider, IPersonNameProvider personNameProvider, ISiteRepository siteRepository, ITeamRepository teamRepository)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
 			_permissionProvider = permissionProvider;

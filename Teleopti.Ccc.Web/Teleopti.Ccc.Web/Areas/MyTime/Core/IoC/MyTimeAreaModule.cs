@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
-			builder.RegisterType<AgentBadgeProvider>().As<IAgentBadgeProvider>();			
+			builder.RegisterType<LeaderboardAgentBadgeProvider>().As<ILeaderboardAgentBadgeProvider>();			
 			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();			
 		}
 	}

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private IAgentBadgeRepository agentBadgeRepository;
 		private IPersonRepository personRepository;
 		private IBadgeSettingProvider settingProvider;
-		private AgentBadgeProvider target;
+		private LeaderboardAgentBadgeProvider target;
 		private IPermissionProvider permissionProvider;
 		private IPersonNameProvider personNameProvider;
 		private ISiteRepository siteRepository;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			personNameProvider.Stub(x => x.BuildNameFromSetting(person2.Name)).Return(personName2);
 			settingProvider.Stub(x => x.GetBadgeSettings()).Return(setting);
 
-			target = new AgentBadgeProvider(agentBadgeRepository, permissionProvider, personRepository, settingProvider,
+			target = new LeaderboardAgentBadgeProvider(agentBadgeRepository, permissionProvider, personRepository, settingProvider,
 				personNameProvider, siteRepository, teamRepository);
 		}
 

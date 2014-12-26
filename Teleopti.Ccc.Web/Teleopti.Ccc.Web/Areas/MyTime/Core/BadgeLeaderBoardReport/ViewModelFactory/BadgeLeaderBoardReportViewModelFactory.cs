@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 {
 	public class BadgeLeaderBoardReportViewModelFactory : IBadgeLeaderBoardReportViewModelFactory
 	{
-		private readonly IAgentBadgeProvider _agentBadgeProvider;
+		private readonly ILeaderboardAgentBadgeProvider _leaderboardAgentBadgeProvider;
 
-		public BadgeLeaderBoardReportViewModelFactory( IAgentBadgeProvider agentBadgeProvider)
+		public BadgeLeaderBoardReportViewModelFactory( ILeaderboardAgentBadgeProvider leaderboardAgentBadgeProvider)
 		{
-			_agentBadgeProvider = agentBadgeProvider;
+			_leaderboardAgentBadgeProvider = leaderboardAgentBadgeProvider;
 		}
 
 		public BadgeLeaderBoardReportViewModel CreateBadgeLeaderBoardReportViewModel(LeaderboardQuery query)
 		{
-			var personList = (_agentBadgeProvider.GetPermittedAgents(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query));
+			var personList = (_leaderboardAgentBadgeProvider.GetPermittedAgents(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query));
 
 			var sortedList = personList.OrderByDescending(x => x.Gold).ThenByDescending(x => x.Silver).ThenByDescending(x => x.Bronze).ToList();
 

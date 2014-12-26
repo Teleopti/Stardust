@@ -431,8 +431,8 @@
     <Compile Include="Areas\MyTime\Controllers\ShiftExchangeController.cs" />
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\BadgeLeaderBoardReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAgentBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardAgentBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILeaderboardAgentBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\EnumerationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
