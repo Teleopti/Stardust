@@ -11,9 +11,11 @@
 		self.selectedOptionId = ko.observable();
 		self.selectedOptionType = -1;
 		self.showOptions = ko.observable(false);
+		self.isLoading = ko.observable(false);
 		
 		self.loadData = function() {
 			self.agentBadges([]);
+			self.isLoading(true);
 			ajax.Ajax({
 				url: 'BadgeLeaderBoardReport/Overview',
 				dataType: 'json',
@@ -23,6 +25,7 @@
 					SelectedId: self.selectedOptionId()
 				},
 				success: function (data) {
+					self.isLoading(false);
 					$.each(data.Agents, function (index, item) {
 						var badgeViewModel = new BadgeViewModel(index, item);
 						self.agentBadges.push(badgeViewModel);
@@ -32,11 +35,13 @@
 		}
 
 		self.loadOptions = function() {
+			self.isLoading(true);
 			ajax.Ajax({
 				url: 'Team/OptionsForLeaderboard',
 				dataType: 'json',
 				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
 				success: function (data) {
+					self.isLoading(false);
 					if (data.length === 1) {
 						//MyOwn
 						self.showOptions(false);

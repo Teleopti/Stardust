@@ -17,6 +17,7 @@
 		</div>
 	</div>
 	<!-- /ko -->
+
 	<div class="container relative well">
 		<table style="width: 100%;">
 			<thead>
@@ -41,5 +42,9 @@
 				<!-- /ko -->
 			</tbody>
 		</table>
+	</div>
+	<div class="container" data-bind="visible: isLoading">
+		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+		@Resources.LoadingThreeDots
 	</div>
 </div>
