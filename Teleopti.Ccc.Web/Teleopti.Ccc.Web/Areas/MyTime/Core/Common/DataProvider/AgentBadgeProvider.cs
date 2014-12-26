@@ -84,20 +84,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<IPerson> permittedPersonList, IAgentBadge[] permittedAgentBadgeList)
 		{
-			var agentBadgeList = new List<AgentBadgeOverview>();
+			
 			var setting = _agentBadgeSettingsProvider.GetBadgeSettings();
-			foreach (var p in permittedPersonList)
+
+			var dic = new Dictionary<Guid, AgentBadgeOverview>();
+			foreach (var agentBadge in permittedAgentBadgeList)
 			{
-				var agentOverviewItem = new AgentBadgeOverview {AgentName = _personNameProvider.BuildNameFromSetting(p.Name)};
-				foreach (var agentBadge in permittedAgentBadgeList.Where(agentBadge => p.Id == agentBadge.Person))
+				if (!dic.ContainsKey(agentBadge.Person))
 				{
-					agentOverviewItem.Gold += agentBadge.GetGoldBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
-					agentOverviewItem.Silver += agentBadge.GetSilverBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
-					agentOverviewItem.Bronze += agentBadge.GetBronzeBadge(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+					dic[agentBadge.Person] = new AgentBadgeOverview { AgentName = _personNameProvider.BuildNameFromSetting(permittedPersonList.Single(p => p.Id == agentBadge.Person).Name) };
 				}
-				agentBadgeList.Add(agentOverviewItem);
+
+				dic[agentBadge.Person].Gold += agentBadge.GetGoldBadge(setting.SilverToBronzeBadgeRate,
+						setting.GoldToSilverBadgeRate);
+				dic[agentBadge.Person].Silver += agentBadge.GetSilverBadge(setting.SilverToBronzeBadgeRate,
+					setting.GoldToSilverBadgeRate);
+				dic[agentBadge.Person].Bronze += agentBadge.GetBronzeBadge(setting.SilverToBronzeBadgeRate,
+					setting.GoldToSilverBadgeRate);
 			}
-			return agentBadgeList;
+			return dic.Values;
+
+			
 		}
 
 		private IPerson[] getPermittedAgents(string functionPath, IEnumerable<IPerson> personList, DateOnly date)
