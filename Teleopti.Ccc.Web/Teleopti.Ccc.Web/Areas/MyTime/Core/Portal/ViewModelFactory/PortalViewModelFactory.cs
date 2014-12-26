@@ -23,13 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 		private readonly IBadgeProvider _badgeProvider;
+		private readonly IBadgeWithRankProvider _badgeWithRankProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IBadgeSettingProvider _badgeSettingProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider,
-			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider, IBadgeProvider badgeProvider,
-			IBadgeSettingProvider badgeSettingProvider, IToggleManager toggleManager, IPersonNameProvider personNameProvider)
+			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider,
+			IBadgeProvider badgeProvider, IBadgeWithRankProvider badgeWithRankProvider, IBadgeSettingProvider badgeSettingProvider,
+			IToggleManager toggleManager, IPersonNameProvider personNameProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_badgeProvider = badgeProvider;
+			_badgeWithRankProvider = badgeWithRankProvider;
 			_toggleManager = toggleManager;
 			_personNameProvider = personNameProvider;
 			_badgeSettingProvider = badgeSettingProvider;
@@ -86,7 +89,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var badgeFeatureEnabled = badgeSettings != null && badgeSettings.BadgeEnabled;
 
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
-			var badges = showBadge ? _badgeProvider.GetBadges(badgeSettings) : null;
+
+			IEnumerable<BadgeViewModel> badgeVM = null;
+
+			if (!_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
+			{
+				var badges = showBadge ? _badgeProvider.GetBadges(badgeSettings) : null;
+				badgeVM = badges == null
+					? null
+					: badges.Select(x => new BadgeViewModel
+					{
+						BadgeType = x.BadgeType,
+						BronzeBadge = x.GetBronzeBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
+						SilverBadge = x.GetSilverBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
+						GoldBadge = x.GetGoldBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate)
+					});
+			}
+			else
+			{
+				var badges = showBadge ? _badgeWithRankProvider.GetBadges(badgeSettings) : null;
+				badgeVM = badges == null
+					? null
+					: badges.Select(x => new BadgeViewModel
+					{
+						BadgeType = x.BadgeType,
+						BronzeBadge = x.BronzeBadgeAmount,
+						SilverBadge = x.SilverBadgeAmount,
+						GoldBadge = x.GoldBadgeAmount
+					});
+			}
 
 			return new PortalViewModel
 			{
@@ -98,15 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				Badges = badges == null
-					? null
-					: badges.Select(x => new BadgeViewModel
-					{
-						BadgeType = x.BadgeType,
-						BronzeBadge = x.GetBronzeBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
-						SilverBadge = x.GetSilverBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate),
-						GoldBadge = x.GetGoldBadge(badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate)
-					}),
+				Badges = badgeVM,
 				ShowBadge = showBadge
 			};
 		}
