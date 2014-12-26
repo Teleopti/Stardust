@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
 	[TestFixture]
-	public class AgentBadgeProviderTest
+	public class LeaderboardAgentBadgeProviderTest
 	{
 		private IAgentBadgeRepository agentBadgeRepository;
 		private IPersonRepository personRepository;
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private IPerson person2;
 		private IAgentBadgeSettings setting;
 		private IList<IAgentBadge> agentBadges;
-		private string personName1 = "first1 last1";
-		private string personName2 = "first2 last2";
+		private const string personName1 = "first1 last1";
+		private const string personName2 = "first2 last2";
 		private DateOnly date;
 		private Team team0;
 		private Team team1;
@@ -95,8 +95,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			target = new LeaderboardAgentBadgeProvider(agentBadgeRepository, permissionProvider, personRepository, settingProvider,
 				personNameProvider, siteRepository, teamRepository);
 		}
-
-
 
 		[Test]
 		public void ShouldQueryForEveryone()
@@ -226,8 +224,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.Single().Gold.Should().Be(6);
 			result.Single().Silver.Should().Be(2);
 			result.Single().Bronze.Should().Be(3);
-
 		}
-
 	}
 }
