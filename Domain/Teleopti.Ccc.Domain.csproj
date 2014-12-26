@@ -1774,7 +1774,6 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="AgentInfo\Requests\PersonRequest.cd" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Forecasting\Forecast.cd" />
     <None Include="Forecasting\SkillDayDiagram.cd" />
     <None Include="Forecasting\SkillStaffStuff.cd" />
