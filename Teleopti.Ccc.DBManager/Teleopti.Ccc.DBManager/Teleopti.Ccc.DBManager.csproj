@@ -23,11 +23,11 @@
     <ManifestCertificateThumbprint>57F54CEBF5302376792A510E275B5FDE4E7E2495</ManifestCertificateThumbprint>
     <ManifestKeyFile>Teleopti.Ccc.DBManager_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>false</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetZone>LocalIntranet</TargetZone>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -91,9 +91,6 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Teleopti.Ccc.snk">
-      <Link>Teleopti.Ccc.snk</Link>
-    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Teleopti.Ccc.DBManager_TemporaryKey.pfx" />
   </ItemGroup>

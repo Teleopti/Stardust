@@ -20,7 +20,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -910,9 +910,6 @@
     <EmbeddedResource Include="licenses.licx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Teleopti.Ccc.snk">
-      <Link>Teleopti.Ccc.snk</Link>
-    </None>
     <None Include="Migrated rules for Teleopti.Ccc.WinCodeTest.ruleset" />
     <None Include="packages.config">
       <SubType>Designer</SubType>

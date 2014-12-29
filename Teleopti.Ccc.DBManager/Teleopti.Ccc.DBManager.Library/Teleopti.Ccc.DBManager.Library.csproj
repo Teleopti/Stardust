@@ -36,7 +36,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
@@ -70,11 +70,6 @@
     <Compile Include="SchemaVersionInformation.cs" />
     <Compile Include="SqlBatchExecutor.cs" />
     <Compile Include="Timeouts.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Teleopti.Ccc.snk">
-      <Link>Teleopti.Ccc.snk</Link>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
