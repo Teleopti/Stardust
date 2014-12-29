@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Framework;
@@ -134,13 +136,26 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         }
 
         [Test]
-        public void ShouldGetAllExceptionsIfSqlExceptionException()
+        public void ShouldGetProductVersionFromCurrentAssembly()
         {
             var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
             var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter,null);
             var expectedString = model.CompleteStackAndAssemblyText();
-            expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\nSystem.Data.SqlClient.SqlError: Timeout");
+	        var customAttribute =
+		        Attribute.GetCustomAttribute(typeof (ExceptionHandlerModel).Assembly,
+			        typeof (AssemblyInformationalVersionAttribute), false) as AssemblyInformationalVersionAttribute;
+
+	        expectedString.Should().Contain("Product Version: " + (customAttribute==null ? "" : customAttribute.InformationalVersion));
         }
+
+		[Test]
+		public void ShouldGetAllExceptionsIfSqlExceptionException()
+		{
+			var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
+			var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter, null);
+			var expectedString = model.CompleteStackAndAssemblyText();
+			expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\r\nSystem.Data.SqlClient.SqlError: Timeout");
+		}
 
 		[Test]
 		public void CompleteStackAndAssemblyText_Always_ShouldIncludeEnabledToggleFeatures()
@@ -183,7 +198,6 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 
 			expectedString.Should().StartWith(exceptionInfo);
 		    expectedString.Should().Contain(ExceptionHandlerModel.ToggleFeaturesUnknown);
-
 	    }
 
 		public class ActiveTogglesStub : ITogglesActive

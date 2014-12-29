@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -16,7 +11,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 {
-
     public class ExceptionHandlerModel
     {
         private Exception _exception;
@@ -98,33 +92,48 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
        
         public string CompleteStackAndAssemblyText()
         {
-            string asseblyString = string.Empty;
-	        string exceptionInfoText;
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                asseblyString += assembly.ToString();
-            }
+	        var text = new StringBuilder();
 
-            //Note: SQL exceptions are different, we need to loop the Error collection
-            //to get all the information.
-            var sqlException = _exception as SqlException;
-
+			//Note: SQL exceptions are different, we need to loop the Error collection
+			//to get all the information.
+			var sqlException = _exception as SqlException;
 	        if (sqlException == null)
 	        {
-				exceptionInfoText = string.Concat(_exception.ToString(), asseblyString);   
+		        text.Append(_exception);
 	        }
 	        else
 	        {
-		        exceptionInfoText = extractSqlException(asseblyString, sqlException);
+		        appendSqlException(text, sqlException);
 	        }
 
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                text.AppendLine(assembly.ToString());
+            }
 
-			return extractFeatureInfo(exceptionInfoText, _allToggles);
+	        appendVersionInfo(text);
+			appendFeatureInfo(text, _allToggles);
+
+	        return text.ToString();
         }
 
-		private static string extractFeatureInfo(string exceptionText, ITogglesActive allToggles)
+	    private static void appendVersionInfo(StringBuilder text)
 	    {
-			var text = new StringBuilder(exceptionText);
+			var customAttribute =
+				Attribute.GetCustomAttribute(typeof(ExceptionHandlerModel).Assembly,
+					typeof(AssemblyInformationalVersionAttribute), false) as AssemblyInformationalVersionAttribute;
+		    if (customAttribute != null)
+		    {
+			    text.AppendLine();
+			    text.Append("Product Version: ");
+			    text.Append(customAttribute.InformationalVersion);
+			    text.AppendLine();
+			    text.AppendLine();
+		    }
+	    }
+
+	    private static void appendFeatureInfo(StringBuilder text, ITogglesActive allToggles)
+	    {
 			text.AppendLine();
 			text.AppendLine();
 			try
@@ -139,20 +148,14 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 		    {
 				text.AppendLine(ToggleFeaturesUnknown);
 		    }
-			return text.ToString();
-
 	    }
 
-        private static string extractSqlException(string asseblyString, SqlException sqlException)
+        private static void appendSqlException(StringBuilder text, SqlException sqlException)
         {
-            var errString = string.Empty;
-            
-            foreach (SqlError err in sqlException.Errors)
-            {
-                errString += err + "\n";
-            }
-            
-            return string.Concat(errString, asseblyString);
+	        foreach (SqlError error in sqlException.Errors)
+	        {
+		        text.AppendLine(error.ToString());
+	        }
         }
     }
 }

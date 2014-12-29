@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 
 namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 {
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
             }
             catch (Exception)
             {
-                MessageBoxAdv.Show("Clipboard error", "Could not copy to clipboard", MessageBoxButtons.OK,
+                MessageBox.Show("Clipboard error", "Could not copy to clipboard", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
         }
@@ -80,17 +79,15 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
             _view.SetDialogResult(DialogResult.OK);
         }
 
-        public string CreateScreenshot(string filePath)
-        {
-                //_view.SendToBack();
-            var bmpScreenshot = new Bitmap(_view.ScreenRectangle().Width, _view.ScreenRectangle().Height,
-                                           PixelFormat.Format32bppArgb);
-            
-                _view.ScreenshotFromImage(bmpScreenshot);
-                var screenshotPath = string.Concat(filePath, "TeleoptiScreenshot", ".png");
-                bmpScreenshot.Save(screenshotPath, ImageFormat.Png);
-                //_view.BringToFront();
-                return screenshotPath;
-        }
+	    public string CreateScreenshot(string filePath)
+	    {
+		    var bmpScreenshot = new Bitmap(_view.ScreenRectangle().Width, _view.ScreenRectangle().Height,
+			    PixelFormat.Format32bppArgb);
+
+		    _view.ScreenshotFromImage(bmpScreenshot);
+		    var screenshotPath = string.Concat(filePath, "TeleoptiScreenshot", ".png");
+		    bmpScreenshot.Save(screenshotPath, ImageFormat.Png);
+		    return screenshotPath;
+	    }
     }
 }
