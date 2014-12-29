@@ -7,7 +7,7 @@ SET DBServerInstance=%COMPUTERNAME%.toptinet.teleopti.com
 SET AppServer=%COMPUTERNAME%.toptinet.teleopti.com
 SET DB_WINGROUP=%COMPUTERNAME%\TeleoptiCCC_Users
 SET /A SSL=1
-SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo,PM
+SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo,PM
 SET /A SQLSSL=0
 
 SET DB_AdminAccess=WINAUTH

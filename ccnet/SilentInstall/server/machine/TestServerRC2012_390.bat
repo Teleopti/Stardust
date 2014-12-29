@@ -10,7 +10,7 @@ SET DB_CCC7=%COMPUTERNAME%_TeleoptiCCC7
 SET DB_CCCAGG=%COMPUTERNAME%_TeleoptiCCCAgg
 SET DB_WINGROUP=TOPTINET\#secDevelopCCC
 SET /A SSL=0
-SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,PM
+SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,PM
 SET /A SQLSSL=0
 
 SET DB_AdminAccess=WINAUTH

@@ -7,7 +7,7 @@ SET DBServerInstance=ATLANTIS
 SET AppServer=ATLANTIS
 SET DB_WINGROUP=ATLANTIS\TeleoptiCCC_Users
 SET /A SSL=0
-SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker
+SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker
 SET /A SQLSSL=0
 
 SET DB_AdminAccess=WINAUTH

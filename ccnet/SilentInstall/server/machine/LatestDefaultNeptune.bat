@@ -7,7 +7,7 @@ SET DBServerInstance=neptune.toptinet.teleopti.com
 SET AppServer=silentcccinstall.teleopti.com
 SET DB_WINGROUP=NEPTUNE\EverybodyAtTeleopti
 SET /A SSL=1
-SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo
+SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo
 SET /A SQLSSL=1
 
 SET DB_AdminAccess=WINAUTH
