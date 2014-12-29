@@ -31,14 +31,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
 			
 			var schedules = _groupScheduleViewModelFactory.CreateViewModel(groupId, dateInUserTimeZone).ToArray();
-			var results = schedules.Batch(30).Select(s => new
+			if (schedules.IsEmpty())
 			{
-				BaseDate = dateTimeInUtc,
-				Schedules = s.ToArray(),
-				TotalCount = schedules.Count()
-			});
-
-			results.ForEach(r => Clients.Caller.incomingGroupSchedule(r));
+				Clients.Caller.incomingGroupSchedule(new
+				{
+					BaseDate = dateTimeInUtc,
+					Schedules = new GroupScheduleShiftViewModel[] {},
+					TotalCount = 0
+				});
+			}
+			else
+			{
+				foreach (var s in schedules.Batch(30))
+				{
+					Clients.Caller.incomingGroupSchedule(new
+					{
+						BaseDate = dateTimeInUtc,
+						Schedules = s.ToArray(),
+						TotalCount = schedules.Count()
+					});
+				}
+			}
 		}
 	}
 }

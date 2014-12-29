@@ -148,7 +148,6 @@ Scenario: Add to day
 	| End time   | 12:00 |
 	| Color      | Green |
 
-@ignore
 Scenario: Back to viewing schedule after adding an activity
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
