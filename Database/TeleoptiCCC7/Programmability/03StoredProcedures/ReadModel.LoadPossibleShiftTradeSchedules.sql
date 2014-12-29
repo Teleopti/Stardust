@@ -48,15 +48,11 @@ AS
 	         *,
 		     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
         FROM (SELECT *,
-		             CASE DATEDIFF(MINUTE, sd.Start, sd.[End])
-					   WHEN 1440 THEN 1
-					   ELSE 0
-					 END AS DayOffFlag
+		             sd.IsDayOff AS DayOffFlag
 		        FROM ReadModel.PersonScheduleDay sd
 		       INNER JOIN @TempList t ON t.Person = sd.PersonId
 		       WHERE [BelongsToDate] = @shiftTradeDate
-		         AND sd.Start IS NOT NULL
-		         AND DATEDIFF(MINUTE,Start, [End] ) <= 1440) as s
+		         AND sd.Start IS NOT NULL) as s
 		ORDER BY DayOffFlag, Start
 	) 
 	
