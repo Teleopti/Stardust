@@ -143,8 +143,9 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiCCC7\Programmability\03StoredProcedures\*" /Y
+XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiAnalytics\Programmability\03StoredProcedures\*" /Y
+XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiCCCAgg\Programmability\03StoredProcedures\*" /Y</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>

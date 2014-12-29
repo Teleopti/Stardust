@@ -81,3 +81,5 @@ Cube/Xmla/CreateDatabase.xmla
 [lL]icense.xml
 ETL_R2L/*
 Cube/build/*Xmla*
+*/03StoredProcedures/dbo.OlaHallengren*.sql
+*/03StoredProcedures/dbo.IndexMaintenance*.sql
