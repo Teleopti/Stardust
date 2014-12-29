@@ -78,6 +78,7 @@
     <Compile Include="DatabaseVersionInformation.cs" />
     <Compile Include="DbManagerFolder.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="HangfireSchemaCreator.cs" />
     <Compile Include="ILog.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="NotExecutableScriptException.cs" />

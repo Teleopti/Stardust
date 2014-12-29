@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			applyReleases(databaseType);
 			applyProgrammability(databaseType);
+			if (databaseType == DatabaseType.TeleoptiAnalytics)
+				new HangfireSchemaCreator().ApplyHangfire(_sqlConnection);
 			addInstallLogRow();
 		}
 
