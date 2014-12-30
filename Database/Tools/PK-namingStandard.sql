@@ -1,5 +1,24 @@
 SET NOCOUNT ON
 
+CREATE TABLE #badPkName(
+	[tablename] [sysname] NOT NULL,
+	[PKname] [sysname] NOT NULL,
+	[schemaName] [sysname] NOT NULL
+)
+
+INSERT INTO #badPkName
+	SELECT 
+	s2.name AS tablename, 
+	s1.name AS PKname,
+	s3.name AS schemaName
+	FROM sys.objects s1
+	INNER JOIN sys.objects s2 ON s2.object_id = s1.parent_object_id
+	inner join sys.schemas s3
+	on s1.schema_id = s3.schema_id
+	WHERE OBJECTPROPERTY(s1.object_id, N'IsPrimaryKey') = 1
+	AND s1.name <> 'PK_'+s2.name
+	AND s3.name <> N'HangFire' --Exclude 'Hangfire'-schema
+
 DECLARE @tablename sysname
 DECLARE @pkname sysname
 DECLARE @schema sysname
@@ -7,17 +26,12 @@ DECLARE @schema sysname
 	SET @ErrorMessage = '----------------'
 	
 	DECLARE cur CURSOR FOR
-	SELECT 
-	s2.name AS tablename, 
-	s1.name AS PKname,
-	s3.name
-	FROM sys.objects s1
-	INNER JOIN sys.objects s2 ON s2.object_id = s1.parent_object_id
-	inner join sys.schemas s3
-	on s1.schema_id = s3.schema_id
-	WHERE OBJECTPROPERTY(s1.object_id, N'IsPrimaryKey') = 1
-	AND s1.name <> 'PK_'+s2.name
-	ORDER BY s1.name;
+	SELECT
+		tablename,
+		PKname,
+		schemaName		
+	FROM #badPkName
+	ORDER BY tablename;
 	OPEN cur;
 		FETCH NEXT FROM cur INTO @tablename, @pkname, @schema;
 		WHILE @@FETCH_STATUS = 0
@@ -33,13 +47,7 @@ DECLARE @schema sysname
 
 	--Check if we have PKs with wrong name
 	IF EXISTS (
-		SELECT 1
-		FROM sys.objects s1
-		INNER JOIN sys.objects s2 ON s2.object_id = s1.parent_object_id
-		inner join sys.schemas s3
-		on s1.schema_id = s3.schema_id
-		WHERE OBJECTPROPERTY(s1.object_id, N'IsPrimaryKey') = 1
-		AND s1.name <> 'PK_'+s2.name
+		SELECT 1 FROM #badPkName
 	)
 	BEGIN
 		-- Return an error with state 127 since it will abort SQLCMD
