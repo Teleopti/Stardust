@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
