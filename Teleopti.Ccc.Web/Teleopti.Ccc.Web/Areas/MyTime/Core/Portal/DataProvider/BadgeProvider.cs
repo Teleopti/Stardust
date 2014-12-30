@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		public IEnumerable<BadgeViewModel> GetBadges()
 		{
-			var _settings = _settingsRepository.GetSettings();
+			_settings = _settingsRepository.GetSettings();
 			var badgeVmList = new List<BadgeViewModel>();
 			var currentUser = _loggedOnUser.CurrentUser();
 			if (currentUser == null) return badgeVmList;
