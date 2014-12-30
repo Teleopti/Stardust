@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 
+		private IPerson[] permittedPersonList;
+
 		public LeaderboardAgentBadgeProvider(IAgentBadgeRepository agentBadgeRepository,
 			IPermissionProvider permissionProvider,
 			IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider,
@@ -47,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			var setting = _agentBadgeSettingsProvider.GetBadgeSettings();
 			var date = query.Date;
-			var permittedPersonList = new IPerson[] {};
 			IEnumerable<AgentWithBadge> permittedAgentBadgeList = new List<AgentWithBadge>();
 
 			switch (query.Type)
@@ -75,25 +76,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					var agentsInSite = new List<IPerson>();
 					teamsInSite.ForEach(
 						x => agentsInSite.AddRange(_personRepository.FindPeopleBelongTeam(x, new DateOnlyPeriod(date.AddDays(-1), date))));
-					permittedPersonList = getPermittedAgents(functionPath, agentsInSite, date);
-					var agentBadges = _agentBadgeRepository.Find(permittedPersonList.Select(x => x.Id.Value)).ToArray();
-					permittedAgentBadgeList = getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate,
-						setting.GoldToSilverBadgeRate);
+
+					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInSite, date, setting);
 					break;
 				}
 				case LeadboardQueryType.Team:
 				{
 					var team = _teamRepository.Get(query.SelectedId);
 					var agentsInTeam = _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(date.AddDays(-1), date));
-					permittedPersonList = getPermittedAgents(functionPath, agentsInTeam, date);
-					var agentBadges = _agentBadgeRepository.Find(permittedPersonList.Select(x => x.Id.Value)).ToArray();
-					permittedAgentBadgeList = getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate,
-						setting.GoldToSilverBadgeRate);
+
+					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInTeam, date, setting);
 					break;
 				}
 			}
 
-			return getPermittedAgentOverviews(permittedPersonList, permittedAgentBadgeList);
+			return getPermittedAgentOverviews(permittedAgentBadgeList);
+		}
+
+		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeList(string functionPath, IEnumerable<IPerson> agentsInSite, DateOnly date, IAgentBadgeSettings setting)
+		{
+			permittedPersonList = getPermittedAgents(functionPath, agentsInSite, date);
+			var agentBadges = _agentBadgeRepository.Find(permittedPersonList.Select(x => x.Id.Value)).ToArray();
+			return getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 		}
 
 		private static IEnumerable<AgentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadge> agentBadges,
@@ -108,8 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			});
 		}
 
-		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<IPerson> permittedPersonList,
-			IEnumerable<AgentWithBadge> permittedAgentBadgeList)
+		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<AgentWithBadge> permittedAgentBadgeList)
 		{
 			var permittedPersons = permittedPersonList.ToList();
 			var dic = new Dictionary<Guid, AgentBadgeOverview>();
