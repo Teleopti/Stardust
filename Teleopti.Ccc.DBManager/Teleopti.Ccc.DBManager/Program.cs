@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DBManager
             catch (Exception e)
             {
                 logWrite("An error occurred:");
-                logWrite(e.Message);
+                logWrite(e.ToString());
                 return -1;
             }
             finally
