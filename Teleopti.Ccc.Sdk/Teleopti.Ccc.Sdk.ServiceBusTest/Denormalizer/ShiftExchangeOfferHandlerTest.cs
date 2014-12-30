@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldSetOfferInvalid()
 		{
 			const int checksum = 12345678;
-			var offerRepository = MockRepository.GenerateMock<IShiftExchangeOfferRepository>();
+			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var shiftExchangeOffer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			shiftExchangeOffer.Stub(x => x.Status).PropertyBehavior();
 			shiftExchangeOffer.Stub(x => x.Checksum).Return(checksum);
@@ -26,20 +27,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personId);
 			var dateTime = new DateTime();
-			offerRepository.Stub(x => x.FindPendingOffer(person, new DateOnly(dateTime))).Return(new[] { shiftExchangeOffer });
+			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
+			personRequest.Stub(x => x.Request).Return(shiftExchangeOffer);
+			personRequestRepository.Stub(x => x.FindByStatus<ShiftExchangeOffer>(person, dateTime, 0)).Return(new[] { personRequest });
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
 			var target = new ShiftExchangeOfferHandler(personRepository,
-								offerRepository, MockRepository.GenerateMock<IPushMessagePersister>());
+								 MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
 			target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = personId,
 				ScheduleDays = new[] {
-					new ProjectionChangedEventScheduleDay(), 
+					new ProjectionChangedEventScheduleDay{CheckSum = checksum}, 
 					new ProjectionChangedEventScheduleDay
 				{
-					Date = dateTime,
-					CheckSum = checksum
+					Date = dateTime
 				} }
 			});
 

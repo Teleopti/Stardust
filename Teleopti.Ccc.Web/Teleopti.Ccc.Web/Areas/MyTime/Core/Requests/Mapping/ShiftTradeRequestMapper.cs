@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -15,15 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IShiftExchangeOfferRepository _shiftExchangeOfferRepository;
+		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IScheduleProvider _scheduleProvider;
 
-		public ShiftTradeRequestMapper(IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IShiftExchangeOfferRepository shiftExchangeOfferRepository, IScheduleProvider scheduleProvider)
+		public ShiftTradeRequestMapper(IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IPersonRequestRepository personRequestRepository, IScheduleProvider scheduleProvider)
 		{
 			_personRepository = personRepository;
 			_loggedOnUser = loggedOnUser;
-			_shiftExchangeOfferRepository = shiftExchangeOfferRepository;
 			_scheduleProvider = scheduleProvider;
+			_personRequestRepository = personRequestRepository;
 		}
 
 		public IPersonRequest Map(ShiftTradeRequestForm form)
@@ -31,7 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var personTo = _personRepository.Get(form.PersonToId);
 			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
-			var offer = form.ShiftExchangeOfferId != null ? _shiftExchangeOfferRepository.Get(form.ShiftExchangeOfferId.Value) : null;
+			ShiftExchangeOffer offer = null;
+			if (form.ShiftExchangeOfferId != null)
+			{
+				var personRequest = _personRequestRepository.FindPersonRequestByRequestId(form.ShiftExchangeOfferId.Value);
+				offer = personRequest.Request as ShiftExchangeOffer;
+			}
 			foreach (var date in form.Dates)
 			{
 				var calendarDate = new DateOnly(new DateTime(date.Year, date.Month, date.Day, CultureInfo.CurrentCulture.Calendar));

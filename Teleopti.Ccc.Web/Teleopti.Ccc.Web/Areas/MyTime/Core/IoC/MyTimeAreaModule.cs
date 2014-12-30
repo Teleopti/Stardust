@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using AutoMapper;
-using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.WebReports;
-using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
@@ -124,6 +122,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<RequestsShiftTradeScheduleFilterViewModelFactory>().As<IRequestsShiftTradeScheduleFilterViewModelFactory>().SingleInstance();
 			builder.RegisterType<RequestsShiftTradebulletinViewModelFactory>().As<IRequestsShiftTradebulletinViewModelFactory>().SingleInstance();
 			builder.RegisterType<ShiftExchangeOffer>().As<IShiftExchangeOffer>().SingleInstance();
+			builder.RegisterType<ShiftExchangeOfferMapper>().As<IShiftExchangeOfferMapper>().SingleInstance();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)

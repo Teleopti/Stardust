@@ -697,7 +697,6 @@
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
-    <Compile Include="Repositories\IShiftExchangeOfferRepository.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />

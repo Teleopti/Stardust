@@ -97,4 +97,13 @@ where pr.Person = :person and
 order by pr.UpdatedOn desc		
 		]]>
 	</query>
+
+	<query name="findPersonRequestByRequestId">
+		<![CDATA[
+    select pr from PersonRequest pr
+          left join fetch pr.requests r
+      where r.Id = :Id
+    ]]>
+		<query-param name="Id" type="Guid"/>
+	</query>
 </hibernate-mapping>

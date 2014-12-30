@@ -93,5 +93,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IPersonRequest Find(Guid id);
 
 		IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T: Request;
+		IPersonRequest FindPersonRequestByRequestId(Guid value);
 	}
 }

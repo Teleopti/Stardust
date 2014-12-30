@@ -213,7 +213,6 @@
     <Compile Include="Repositories\SiteAdherencePersister.cs" />
     <Compile Include="Repositories\TeamAdherencePersister.cs" />
     <Compile Include="Rta\ActualAgentStateExtension.cs" />
-    <Compile Include="Repositories\ShiftExchangeOfferRepository.cs" />
     <Compile Include="Rta\DatabaseConnectionFactory.cs" />
     <Compile Include="Rta\DatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\DatabaseReader.cs" />

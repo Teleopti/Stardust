@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private ShiftTradeRequestForm form;
 		private IPerson loggedOnUser;
 		private ILoggedOnUser _loggedOnUserSvc;
-		private IShiftExchangeOfferRepository _shiftExchangeOfferRepository;
+		private IPersonRequestRepository _personRequestRepository;
 		private IScheduleProvider _scheduleProvider;
 		private IScheduleDay _scheduleToTrade;
 
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			loggedOnUser = PersonFactory.CreatePerson();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_loggedOnUserSvc = MockRepository.GenerateMock<ILoggedOnUser>();
-			_shiftExchangeOfferRepository = MockRepository.GenerateMock<IShiftExchangeOfferRepository>();
+			_personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			_scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _shiftExchangeOfferRepository, _scheduleProvider);
+			target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _personRequestRepository, _scheduleProvider);
 			form = new ShiftTradeRequestForm
 				{
 					Message = "sdfsdfsdf",
@@ -68,9 +68,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var offerId = new Guid();
 			form.ShiftExchangeOfferId = offerId;
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			var offerRequest = MockRepository.GenerateMock<IPersonRequest>();
+			offerRequest.SetId(new Guid());
+			offerRequest.Stub(x => x.Request).Return(offer);
+			_personRequestRepository.Stub(x => x.FindPersonRequestByRequestId(offerId)).Return(offerRequest);
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			offer.Stub(x => x.MakeShiftTradeRequest(_scheduleToTrade)).Return(personRequest);
-			_shiftExchangeOfferRepository.Stub(x => x.Get(offerId)).Return(offer);
+			
 			
 			var res = target.Map(form);
 			res.Should().Be.SameInstanceAs(personRequest);

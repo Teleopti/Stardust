@@ -61,6 +61,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return findRequestsByRequestPeriod(person, requestForPeriod, status);
 		}
 
+		public IPersonRequest FindPersonRequestByRequestId(Guid id)
+		{
+			return Session.GetNamedQuery("findPersonRequestByRequestId")
+						.SetGuid("Id", id)
+						.UniqueResult<IPersonRequest>();
+			}
+
 		public IList<IPersonRequest> Find(IPerson person, DateTimePeriod period)
 		{
 			var requestForPeriod = createRequestForPeriodCriteria(period);

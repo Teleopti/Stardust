@@ -1,7 +1,5 @@
-using System;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -11,7 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	public class ShiftExchangeOfferHandler : IHandleEvent<ProjectionChangedEvent>
 	{
 		private readonly IPersonRepository _personRepository;
-		//private readonly IShiftExchangeOfferRepository _shiftExchangeOfferRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IPushMessagePersister _msgPersister;
 
@@ -29,24 +26,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			{
 				if (!projectionChangedEventScheduleDay.NotScheduled)
 				{
-
 					var offerPersonRequests = _personRequestRepository.FindByStatus<ShiftExchangeOffer>(person, projectionChangedEventScheduleDay.Date, 0);
-
 					foreach (var offerPersonRequest in offerPersonRequests)
 					{
-						var offer = (ShiftExchangeOffer)offerPersonRequest.Request;
+						//var offer = (ShiftExchangeOffer)offerPersonRequest.Request;
+						var offer = offerPersonRequest.Request as ShiftExchangeOffer;
 						if (projectionChangedEventScheduleDay.CheckSum != offer.Checksum)
 						{
+							offer.Status = ShiftExchangeOfferStatus.Invalid;
 							//RobToDo: PersonRequestCheckAuthorization?
-							offerPersonRequest.Deny(null, 
-								string.Format(UserTexts.Resources.AnnouncementInvalidMessage,
-								offer.Date.ToShortDateString()),
-								new PersonRequestCheckAuthorization());
+							//offerPersonRequest.Deny(null, 
+							//	string.Format(UserTexts.Resources.AnnouncementInvalidMessage,
+							//	offer.Date.ToShortDateString()),
+							//	new PersonRequestCheckAuthorization());
 
-							//RobTodo: required?
-							//		SendPushMessageService.CreateConversation(UserTexts.Resources.AnnouncementInvalid,
-							//		string.Format(UserTexts.Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)
-							//		.To(new[] { person }).TranslateMessage().AddReplyOption("OK").SendConversation(_msgPersister);
+							SendPushMessageService.CreateConversation(UserTexts.Resources.AnnouncementInvalid,
+							string.Format(UserTexts.Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)
+							.To(new[] { person }).TranslateMessage().AddReplyOption("OK").SendConversation(_msgPersister);
 						}
 					}
 				}
