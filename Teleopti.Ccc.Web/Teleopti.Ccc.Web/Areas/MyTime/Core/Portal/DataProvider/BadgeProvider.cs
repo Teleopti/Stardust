@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IAgentBadgeRepository _badgeRepository;
 		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
-		private readonly IAgentBadgeSettings _settings;
+		private readonly IAgentBadgeSettingsRepository _settingsRepository;
 		private readonly IToggleManager _toggleManager;
+		private IAgentBadgeSettings _settings;
 
 		public BadgeProvider(ILoggedOnUser loggedOnUser, IAgentBadgeRepository badgeRepository,
 			IAgentBadgeWithRankRepository badgeWithRankRepository, IAgentBadgeSettingsRepository settingsRepository,
@@ -24,13 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_loggedOnUser = loggedOnUser;
 			_badgeRepository = badgeRepository;
 			_badgeWithRankRepository = badgeWithRankRepository;
+			_settingsRepository = settingsRepository;
 			_toggleManager = toggleManager;
-
-			_settings = settingsRepository.GetSettings() ?? new AgentBadgeSettings();
 		}
 
 		public IEnumerable<BadgeViewModel> GetBadges()
 		{
+			var _settings = _settingsRepository.GetSettings();
 			var badgeVmList = new List<BadgeViewModel>();
 			var currentUser = _loggedOnUser.CurrentUser();
 			if (currentUser == null) return badgeVmList;
