@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	[RtaTest]
 	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
-	public class PersonEventsStreamTest
+	public class EventsStreamTest
 	{
 		public FakeRtaDatabase database;
 		public FakeEventPublisher publisher;

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	[TestFixture]
 	[RtaTest]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
-	public class EventsTest
+	public class PersonAdherenceEventsTest
 	{
 		public FakeRtaDatabase database;
 		public MutableNow now;

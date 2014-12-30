@@ -252,8 +252,8 @@
     <Compile Include="Areas\Rta\RtaTestAttribute.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />
     <Compile Include="Areas\Rta\AuthenticationKeyTest.cs" />
-    <Compile Include="Areas\Rta\PersonEventsOrderTest.cs" />
-    <Compile Include="Areas\Rta\EventsTest.cs" />
+    <Compile Include="Areas\Rta\EventsOrderTest.cs" />
+    <Compile Include="Areas\Rta\PersonAdherenceEventsTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateForTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateWebModelForTest.cs" />
@@ -262,7 +262,7 @@
     <Compile Include="Areas\Rta\CheckForActivityChangeTest.cs" />
     <Compile Include="Areas\Rta\PersistStateTest.cs" />
     <Compile Include="Areas\Rta\PersonActivityStartEventTest.cs" />
-    <Compile Include="Areas\Rta\PersonEventsStreamTest.cs" />
+    <Compile Include="Areas\Rta\EventsStreamTest.cs" />
     <Compile Include="Areas\Rta\PersonOutOfAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\PersonShiftEndEventTest.cs" />
     <Compile Include="Areas\Rta\PersonShiftStartEventTest.cs" />
