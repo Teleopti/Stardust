@@ -24,14 +24,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 		private readonly IBadgeProvider _badgeProvider;
-		private readonly IBadgeWithRankProvider _badgeWithRankProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IBadgeSettingProvider _badgeSettingProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 
-		public PortalViewModelFactory(IPermissionProvider permissionProvider, ILicenseActivatorProvider licenseActivatorProviderProvider,
-			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider,
-			IBadgeProvider badgeProvider, IBadgeWithRankProvider badgeWithRankProvider, IBadgeSettingProvider badgeSettingProvider,
+		public PortalViewModelFactory(IPermissionProvider permissionProvider,
+			ILicenseActivatorProvider licenseActivatorProviderProvider,
+			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser,
+			IReportsNavigationProvider reportsNavigationProvider,
+			IBadgeProvider badgeProvider, IBadgeSettingProvider badgeSettingProvider,
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider)
 		{
 			_permissionProvider = permissionProvider;
@@ -40,7 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_badgeProvider = badgeProvider;
-			_badgeWithRankProvider = badgeWithRankProvider;
 			_toggleManager = toggleManager;
 			_personNameProvider = personNameProvider;
 			_badgeSettingProvider = badgeSettingProvider;
@@ -90,17 +90,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var badgeFeatureEnabled = badgeSettings.BadgeEnabled;
 
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
-			
-			var allBadges = showBadge ? _badgeProvider.GetBadges(badgeSettings) : null;
-
-			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
-			var allBadgesWithRank
-				= showBadge && toggleEnabled && badgeSettings.CalculateBadgeWithRank
-				? _badgeWithRankProvider.GetBadges(badgeSettings)
-				: null;
-
-			var totalBadgeVm = mergeBadges(allBadges, allBadgesWithRank,
-				badgeSettings.SilverToBronzeBadgeRate, badgeSettings.GoldToSilverBadgeRate);
 
 			return new PortalViewModel
 			{
@@ -112,81 +101,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				Badges = totalBadgeVm,
+				Badges = showBadge ? _badgeProvider.GetBadges() : null,
 				ShowBadge = showBadge
 			};
-		}
-
-		/// <summary>
-		/// Merge total amount of badges.
-		/// To handle the scenario that switch from old badge calculation 
-		/// </summary>
-		/// <param name="allBadges"></param>
-		/// <param name="allBadgesWithRank"></param>
-		/// <param name="silverToBronzeBadgeRate"></param>
-		/// <param name="goldToSilverBadgeRate"></param>
-		/// <returns></returns>
-		private static IEnumerable<BadgeViewModel> mergeBadges(IEnumerable<IAgentBadge> allBadges,
-			IEnumerable<IAgentBadgeWithRank> allBadgesWithRank,
-			int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
-		{
-			// Get badges calculated with old method.
-			var agentWithBadgeList = allBadges == null
-				? null
-				: allBadges.ToDictionary(x => new {x.Person, x.BadgeType}, x => new
-				{
-					BronzeBadge = x.GetBronzeBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
-					SilverBadge = x.GetSilverBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
-					GoldBadge = x.GetGoldBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate)
-				});
-			var badgeWithRankList = allBadgesWithRank == null
-				? null
-				: allBadgesWithRank.ToDictionary(x => new {x.Person, x.BadgeType}, x => new
-				{
-					BronzeBadge = x.BronzeBadgeAmount,
-					SilverBadge = x.SilverBadgeAmount,
-					GoldBadge = x.GoldBadgeAmount
-				});
-
-			if (agentWithBadgeList == null || agentWithBadgeList.Any())
-			{
-				// If there is no badges calculated with old method, then return badges with rank.
-				agentWithBadgeList = badgeWithRankList;
-			}
-			else if (badgeWithRankList != null && badgeWithRankList.Any())
-			{
-				// Else merge the 2 badges together.
-				var personHasBadge = badgeWithRankList.Keys;
-				foreach (var personAndBadgeType in personHasBadge)
-				{
-					if (agentWithBadgeList.ContainsKey(personAndBadgeType))
-					{
-						var agentWithBadgeVm = agentWithBadgeList[personAndBadgeType];
-						var badgeWithRank = badgeWithRankList[personAndBadgeType];
-						agentWithBadgeList[personAndBadgeType] = new
-						{
-							BronzeBadge = agentWithBadgeVm.BronzeBadge + badgeWithRank.BronzeBadge,
-							SilverBadge = agentWithBadgeVm.SilverBadge + badgeWithRank.SilverBadge,
-							GoldBadge = agentWithBadgeVm.GoldBadge + badgeWithRank.GoldBadge
-						};
-					}
-					else
-					{
-						agentWithBadgeList[personAndBadgeType] = badgeWithRankList[personAndBadgeType];
-					}
-				}
-			}
-
-			var totalBadgeVm = agentWithBadgeList == null
-				? null
-				: agentWithBadgeList.Select(x => new BadgeViewModel
-				{
-					BadgeType = x.Key.BadgeType,
-					BronzeBadge = x.Value.BronzeBadge,
-					SilverBadge = x.Value.SilverBadge,
-					GoldBadge = x.Value.GoldBadge
-				});
-			return totalBadgeVm;
 		}
 
 		private bool showChangePassword()

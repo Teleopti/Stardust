@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var result = target.CreatePortalViewModel();
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var licenseActivatorProvider = MockRepository.GenerateMock<ILicenseActivatorProvider>();
 			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), licenseActivatorProvider,
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(), MockRepository.GenerateMock<IBadgeWithRankProvider>(),
+				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		{
 			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(), MockRepository.GenerateMock<IBadgeWithRankProvider>(),
+				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var result = target.CreatePortalViewModel();
@@ -109,7 +108,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
 				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
 				loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
@@ -124,7 +122,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
 				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
 				loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
@@ -141,7 +138,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
 				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
 				loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
@@ -209,7 +205,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			return new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 		}
 	}

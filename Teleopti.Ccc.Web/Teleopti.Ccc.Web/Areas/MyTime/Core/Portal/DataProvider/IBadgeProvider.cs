@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 {
 	public interface IBadgeProvider
 	{
-		IEnumerable<IAgentBadge> GetBadges(IAgentBadgeSettings settings);
+		IEnumerable<BadgeViewModel> GetBadges();
 	}
 }

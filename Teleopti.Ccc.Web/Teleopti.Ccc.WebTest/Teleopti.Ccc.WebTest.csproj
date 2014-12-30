@@ -285,6 +285,7 @@
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
+    <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\IoC\HangfireModuleTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerControllerTest.cs" />

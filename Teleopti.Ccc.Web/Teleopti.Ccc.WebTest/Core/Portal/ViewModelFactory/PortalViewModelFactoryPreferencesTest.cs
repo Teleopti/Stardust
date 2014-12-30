@@ -1,8 +1,8 @@
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
 using SharpTestsEx;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var result = target.CreatePortalViewModel();
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var result = target.CreatePortalViewModel();
@@ -70,7 +68,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeWithRankProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider);
 
 			var result = target.CreatePortalViewModel();
