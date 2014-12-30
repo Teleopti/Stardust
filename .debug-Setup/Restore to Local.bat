@@ -14,7 +14,7 @@ SET SqlInstanceName=%5
 SET CustomPath=%~6
 
 ::Instance were the Baseline will  be restored
-SET INSTANCE=%SqlInstanceName%
+SET INSTANCE=Teleopti729\SQL2008R2
 IF "%INSTANCE%"=="" SET INSTANCE=%COMPUTERNAME%
 
 IF "%Silent%"=="" SET /A Silent=0

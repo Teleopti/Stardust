@@ -17,6 +17,8 @@ DECLARE @DatabaseMessage nvarchar(max)
 DECLARE @ErrorMessage nvarchar(max)
 DECLARE @CurrentExtendedInfo xml
 DECLARE @db_id int
+DECLARE @object_id int
+DECLARE @indexName sysname
 
 SET @DatabaseName = db_name()
 SET @db_id = db_id()
@@ -53,42 +55,46 @@ CREATE TABLE #dm_db_index_physical_stats_tmp(
 	[compressed_page_count] [bigint] NULL
 )
 
---get frag figures for all indexes
+--get frag figures for all indexes we are interested in
 INSERT INTO #dm_db_index_physical_stats_tmp
 SELECT database_id, object_id, index_id, partition_number, index_type_desc, alloc_unit_type_desc, index_depth, index_level, avg_fragmentation_in_percent, fragment_count, avg_fragment_size_in_pages, page_count, avg_page_space_used_in_percent, record_count, ghost_record_count, version_ghost_record_count, min_record_size_in_bytes, max_record_size_in_bytes, avg_record_size_in_bytes, forwarded_record_count, compressed_page_count
 FROM sys.dm_db_index_physical_stats(@db_id, null, null, null, 'LIMITED') ips
-WHERE avg_fragmentation_in_percent > 10
+WHERE avg_fragmentation_in_percent > @avg_fragmentation_in_percent --threshold
 AND alloc_unit_type_desc = 'IN_ROW_DATA'
-AND index_level = 0
+AND index_level = 0 --leaf level
+AND index_id <> 0 --no heaps
+AND page_count > 100 --at least 100 x 8kb in size
 
 --Get tables with fragmentation on table or its index worse than 10%
 DECLARE TableCursor CURSOR FOR
 (
-	SELECT DISTINCT
+	SELECT 
 		sc.name AS SchemaName,
-		OBJECT_NAME(ps.object_id) AS TableName
+		OBJECT_NAME(ps.object_id) AS TableName,
+		i.name
 	 FROM sys.dm_db_partition_stats ps
 	 INNER JOIN sys.objects so
 		ON so.object_id = ps.object_id
 	 INNER JOIN sys.schemas sc
 		on so.schema_id = sc.schema_id
 	 INNER JOIN sys.indexes i
-	 ON ps.object_id = i.object_id
-	 AND ps.index_id = i.index_id
-	 CROSS APPLY #dm_db_index_physical_stats_tmp ips
-	 GROUP BY
-		sc.name,
-		OBJECT_NAME(ps.object_id)
+		ON ps.object_id = i.object_id
+		AND ps.index_id = i.index_id
+	 INNER JOIN #dm_db_index_physical_stats_tmp ips
+		ON ips.object_id = so.object_id
+		AND ips.index_id = i.index_id
+		AND ips.object_id = i.object_id
 )
 
 --Rebuild
 OPEN TableCursor
-FETCH NEXT FROM TableCursor INTO @SchemaName,@TableName
+FETCH NEXT FROM TableCursor INTO @SchemaName,@TableName,@indexName
 WHILE @@FETCH_STATUS = 0
  
 BEGIN
-	SET @CurrentCommand = 'ALTER INDEX ALL ON [' + @SchemaName + '].[' + @TableName + '] REBUILD'
-	SET @CurrentComment = 'ALTER INDEX ALL ON [' + @SchemaName + '].[' + @TableName + '] REBUILD'
+	SET @CurrentCommand = 'ALTER INDEX ' + @indexName +' ON [' + @SchemaName + '].[' + @TableName + '] REBUILD'
+	SET @CurrentComment = 'ALTER INDEX ' + @indexName +' ON [' + @SchemaName + '].[' + @TableName + '] REBUILD'
+	
 
     EXECUTE @CurrentCommandOutput = [dbo].[CommandExecute]
 			@Command = @CurrentCommand,
@@ -110,7 +116,7 @@ BEGIN
     IF @Error <> 0 SET @CurrentCommandOutput = @Error
     IF @CurrentCommandOutput <> 0 SET @ReturnCode = @CurrentCommandOutput + @ReturnCode
 
-	FETCH NEXT FROM TableCursor INTO @SchemaName,@TableName
+	FETCH NEXT FROM TableCursor INTO  @SchemaName,@TableName,@indexName
 END
  
 CLOSE TableCursor
@@ -129,5 +135,5 @@ DEALLOCATE TableCursor
   BEGIN
     RETURN @ReturnCode
   END
-
   ----------------------------------------------------------------------------------------------------
+  GO
