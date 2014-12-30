@@ -20,25 +20,69 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
+	public class ReadModelUnitOfWorkTestAttribute : IoCTestAttribute
+	{
+		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		{
+			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
+			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+
+			var httpContext = new MutableFakeCurrentHttpContext();
+			builder.RegisterInstance(httpContext).AsSelf().As<ICurrentHttpContext>().SingleInstance();
+
+			builder.Register(c =>
+			{
+				var dataSourcesProvider = new FakeDataSourcesProvider();
+				var dataSource = c.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+				dataSourcesProvider.SetAvailableDataSources(new[] { dataSource });
+				return dataSourcesProvider;
+			}).AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
+
+			var currentPrincipal = new MutableFakeCurrentTeleoptiPrincipal();
+			currentPrincipal.SetPrincipal(null);
+			builder.RegisterInstance(currentPrincipal).AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
+
+			var configReader = new FakeConfigReader
+			{
+				ConnectionStrings = new ConnectionStringSettingsCollection
+				{
+					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
+				}
+			};
+			builder.RegisterInstance(configReader).As<IConfigReader>().AsSelf().SingleInstance();
+		}
+	}
+
 	[TestFixture]
+	[ReadModelUnitOfWorkTest]
 	public class ReadModelUnitOfWorkTest
 	{
+		public Outer Outer;
+		public Inner1 Inner1;
+		public Inner2 Inner2;
+		public MutableFakeCurrentHttpContext HttpContext;
+		public ICurrentReadModelUnitOfWork UnitOfWork;
+		public MutableFakeCurrentTeleoptiPrincipal Principal;
+		public IDataSourcesFactory DataSourcesFactory;
+		public FakeDataSourcesProvider DataSourcesProvider;
+		public FakeConfigReader ConfigReader;
+
 		[Test]
 		public void ShouldProduceWorkingUnitOfWork()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = buildContainer())
 			{
-				var target = c.Resolve<Outer>();
 				var value = new Random().Next(-10000, -2).ToString();
 
-				target.DoUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
+				Outer.DoUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
 
 				TestTable.Values("TestTable").Single().Should().Be(value);
 			}
@@ -48,11 +92,10 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldRollbackTransaction()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = buildContainer())
 			{
 				Assert.Throws<TestException>(() =>
 				{
-					c.Resolve<Outer>().DoAction(uow =>
+					Outer.DoAction(uow =>
 					{
 						uow.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
 						throw new TestException();
@@ -66,30 +109,26 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[Test]
 		public void ShouldProduceUnitOfWorkToInnerObjects()
 		{
-			using (var c = buildContainer())
-			{
-				string result = null;
-				c.Resolve<Inner1>().Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
+			string result = null;
+			Inner1.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
 
-				c.Resolve<Outer>().ExecuteInners();
+			Outer.ExecuteInners();
 
-				result.Should().Contain("SQL");
-			}
+			result.Should().Contain("SQL");
 		}
 
 		[Test]
 		public void ShouldRollbackTransactionForInnerObject()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = buildContainer())
 			{
-				c.Resolve<Inner1>().Action = s =>
+				Inner1.Action = s =>
 				{
 					s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
 					throw new TestException();
 				};
 
-				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
+				Assert.Throws<TestException>(Outer.ExecuteInners);
 
 				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 			}
@@ -99,15 +138,14 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldSpanTransactionOverAllInnerObjects()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = buildContainer())
 			{
-				c.Resolve<Inner1>().Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
-				c.Resolve<Inner2>().Action = s =>
+				Inner1.Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+				Inner2.Action = s =>
 				{
 					s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
 					throw new TestException();
 				};
-				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
+				Assert.Throws<TestException>(Outer.ExecuteInners);
 
 				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 			}
@@ -118,15 +156,14 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (new TestTable("TestTable1"))
 			using (new TestTable("TestTable2"))
-			using (var c = buildContainer())
 			{
 				var thread1 = onAnotherThread(() =>
 				{
-					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					Outer.DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 				});
 				var thread2 = onAnotherThread(() =>
 				{
-					c.Resolve<Outer>().DoAction(uow =>
+					Outer.DoAction(uow =>
 					{
 						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
 						throw new TestException();
@@ -144,15 +181,13 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldProduceUnitOfWorkForWebRequestSpanning2Threads()
 		{
 			using (new TestTable("TestTable"))
-			using (var c = buildContainer())
 			{
-				c.Resolve<MutableFakeCurrentHttpContext>().SetContext(new FakeHttpContext());
-				c.Resolve<Outer>().DoAction(uow =>
+				HttpContext.SetContext(new FakeHttpContext());
+				Outer.DoAction(uow =>
 				{
 					onAnotherThread(() =>
 					{
-						var current = c.Resolve<ICurrentReadModelUnitOfWork>();
-						current.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+						UnitOfWork.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
 					}).Join();
 				});
 
@@ -165,17 +200,16 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (new TestTable("TestTable1"))
 			using (new TestTable("TestTable2"))
-			using (var c = buildContainer())
 			{
 				var thread1 = onAnotherThread(() =>
 				{
-					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
-					c.Resolve<Outer>().DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					HttpContext.SetContextOnThread(new FakeHttpContext());
+					Outer.DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 				});
 				var thread2 = onAnotherThread(() =>
 				{
-					c.Resolve<MutableFakeCurrentHttpContext>().SetContextOnThread(new FakeHttpContext());
-					c.Resolve<Outer>().DoAction(uow =>
+					HttpContext.SetContextOnThread(new FakeHttpContext());
+					Outer.DoAction(uow =>
 					{
 						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
 						throw new TestException();
@@ -192,14 +226,11 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[Test]
 		public void ShouldReturnNullWhenNoCurrentUnitOfWork()
 		{
-			using (var c = buildContainer())
-			{
-				var target = c.Resolve<Outer>();
+			var target = Outer;
 
-				target.DoAction(uow => { });
+			target.DoAction(uow => { });
 
-				c.Resolve<ICurrentReadModelUnitOfWork>().Current().Should().Be.Null();
-			}
+			UnitOfWork.Current().Should().Be.Null();
 		}
 
 		[Test]
@@ -207,17 +238,16 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests))
 			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
-			using (var c = buildContainer())
 			{
-				var factory = c.Resolve<IDataSourcesFactory>();
+				var factory = DataSourcesFactory;
 				var dataSource1 = factory.Create("One", ConnectionStringHelper.ConnectionStringUsedInTests, null);
 				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 
-				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
-				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
+				Outer.DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
-				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
-				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
+				Outer.DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1);
@@ -229,24 +259,23 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			// ConfigurationManager.ConnectionStrings["RtaApplication"]
 			using (new TestTable("TestTable"))
-			using (var c = buildContainer())
 			{
 				var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
 				rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
-				c.Resolve<FakeConfigReader>().ConnectionStrings = new ConnectionStringSettingsCollection
+				ConfigReader.ConnectionStrings = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix),
 					new ConnectionStringSettings("RtaApplication", rtaConnectionString)
 				};
 
-				var factory = c.Resolve<IDataSourcesFactory>();
+				var factory = DataSourcesFactory;
 				var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 				var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				c.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] { dataSource1, dataSource2 }.Randomize());
+				DataSourcesProvider.SetAvailableDataSources(new[] { dataSource1, dataSource2 }.Randomize());
 
-				c.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(null);
+				Principal.SetPrincipal(null);
 
-				c.Resolve<Outer>().DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+				Outer.DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 				TestTable.Values("TestTable").Count().Should().Be(1);
 			}
@@ -255,34 +284,27 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[Test]
 		public void ShouldExecuteCodeAfterSuccessfulCommit()
 		{
-			using (var c = buildContainer())
-			{
-				string result = null;
-				c.Resolve<Inner1>().ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
+			string result = null;
+			Inner1.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
 
-				c.Resolve<Outer>().ExecuteInners();
+			Outer.ExecuteInners();
 
-				result.Should().Be("success");
-			}
+			result.Should().Be("success");
 		}
-
 
 		[Test]
 		public void ShouldNotExecuteCodeAfterFailedCommit()
 		{
-			using (var c = buildContainer())
+			var result = "failed";
+			Inner1.ActionWSync = (uow, sync) =>
 			{
-				var result = "failed";
-				c.Resolve<Inner1>().ActionWSync = (uow, sync) =>
-				{
-					sync.OnSuccessfulTransaction(() => result = "success");
-					throw new TestException();
-				};
+				sync.OnSuccessfulTransaction(() => result = "success");
+				throw new TestException();
+			};
 
-				Assert.Throws<TestException>(c.Resolve<Outer>().ExecuteInners);
+			Assert.Throws<TestException>(Outer.ExecuteInners);
 
-				result.Should().Be("failed");
-			}
+			result.Should().Be("failed");
 		}
 
 		private static Thread onAnotherThread(Action action)
@@ -292,32 +314,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			return thread;
 		}
 
-		private static IContainer buildContainer()
-		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-
-			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
-			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
-			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
-
-			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
-			builder.RegisterType<FakeDataSourcesProvider>().AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
-			builder.RegisterType<MutableFakeCurrentTeleoptiPrincipal>().AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
-			builder.RegisterType<FakeConfigReader>().As<IConfigReader>().AsSelf().SingleInstance();
-
-			var container = builder.Build();
-
-			var dataSource = container.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-			container.Resolve<FakeDataSourcesProvider>().SetAvailableDataSources(new[] { dataSource });
-			container.Resolve<FakeConfigReader>().ConnectionStrings = new ConnectionStringSettingsCollection
-			{
-				new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
-			};
-			container.Resolve<MutableFakeCurrentTeleoptiPrincipal>().SetPrincipal(null);
-
-			return container;
-		}
 	}
 
 	public class FakeDataSourcesProvider : IAvailableDataSourcesProvider
