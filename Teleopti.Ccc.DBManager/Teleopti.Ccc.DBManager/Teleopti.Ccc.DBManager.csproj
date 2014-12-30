@@ -143,14 +143,10 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
-    <PreBuildEvent>
-XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiCCC7\Programmability\03StoredProcedures\*" /Y
+    <PreBuildEvent>XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiCCC7\Programmability\03StoredProcedures\*" /Y
 XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiAnalytics\Programmability\03StoredProcedures\*" /Y
 XCOPY "$(ProjectDir)..\..\Database\Create\IndexMaintenance\*.*" "$(ProjectDir)..\..\Database\TeleoptiCCCAgg\Programmability\03StoredProcedures\*" /Y
-del "$(TargetDir)Hangfire.*"
-xcopy  /y "$(SolutionDir)packages\Hangfire.SqlServer.1.3.0\lib\net45\*.*" "$(TargetDir)"
-xcopy  /y "$(SolutionDir)packages\Hangfire.Core.1.3.0\lib\net45\*.*" "$(TargetDir)"
-    </PreBuildEvent>
+</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
