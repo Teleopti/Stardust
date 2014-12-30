@@ -43,6 +43,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
+		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList)
+		{
+			var idList = personIdList as Guid[] ?? personIdList.ToArray();
+			if (!idList.Any())
+			{
+				return new List<IAgentBadgeWithRank>();
+			}
+
+			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
+				+ "from AgentBadgeWithRank where Person in (:personIdList)";
+			var result = Session.CreateSQLQuery(query)
+				.SetParameterList("personIdList", idList)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
+				.SetReadOnly(true)
+				.List<IAgentBadgeWithRank>();
+
+			return result;
+		}
+
 		public ICollection<IAgentBadgeWithRank> Find(IPerson person)
 		{
 			InParameter.NotNull("person", person);

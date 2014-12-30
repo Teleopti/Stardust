@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		private readonly IAgentBadgeRepository _agentBadgeRepository;
+		private readonly IAgentBadgeWithRankRepository _agentBadgeWithRankRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly IBadgeSettingProvider _agentBadgeSettingsProvider;
@@ -31,12 +32,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private IPerson[] permittedPersonList;
 
 		public LeaderboardAgentBadgeProvider(IAgentBadgeRepository agentBadgeRepository,
+			IAgentBadgeWithRankRepository agentBadgeWithRankRepository,
 			IPermissionProvider permissionProvider,
 			IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider,
 			IPersonNameProvider personNameProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
+			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
 			_permissionProvider = permissionProvider;
 			_personRepository = personRepository;
 			_agentBadgeSettingsProvider = agentBadgeSettingsProvider;
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<AgentBadgeOverview> GetPermittedAgents(string functionPath, LeaderboardQuery query)
 		{
 			var setting = _agentBadgeSettingsProvider.GetBadgeSettings();
-			var date = query.Date;
+			var queryDate = query.Date;
 			IEnumerable<AgentWithBadge> permittedAgentBadgeList = new List<AgentWithBadge>();
 
 			switch (query.Type)
@@ -56,17 +59,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				case LeadboardQueryType.Everyone:
 				case LeadboardQueryType.MyOwn:
 				{
-					var agentBadges = _agentBadgeRepository.GetAllAgentBadges() ?? new IAgentBadge[] {};
-					var agentWithBadges =
-						getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
-					var personGuidList = agentWithBadges.Select(item => item.Person).ToList();
-
-					var personList = _personRepository.FindPeople(personGuidList);
-					permittedPersonList = getPermittedAgents(functionPath, personList, date);
-
-					permittedAgentBadgeList = (from a in agentWithBadges
-						join p in permittedPersonList on a.Person equals p.Id
-						select a).ToArray();
+					// Handling of Everyone and MyOwn is different with Site or Team, this is to get best performance.
+					permittedAgentBadgeList = getAllPermittedAgentBadgeList(functionPath, setting, queryDate);
 					break;
 				}
 				case LeadboardQueryType.Site:
@@ -75,17 +69,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					var teamsInSite = site.TeamCollection;
 					var agentsInSite = new List<IPerson>();
 					teamsInSite.ForEach(
-						x => agentsInSite.AddRange(_personRepository.FindPeopleBelongTeam(x, new DateOnlyPeriod(date.AddDays(-1), date))));
+						x => agentsInSite.AddRange(_personRepository.FindPeopleBelongTeam(x, new DateOnlyPeriod(queryDate.AddDays(-1), queryDate))));
 
-					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInSite, date, setting);
+					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInSite, queryDate, setting);
 					break;
 				}
 				case LeadboardQueryType.Team:
 				{
 					var team = _teamRepository.Get(query.SelectedId);
-					var agentsInTeam = _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(date.AddDays(-1), date));
+					var agentsInTeam = _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(queryDate.AddDays(-1), queryDate));
 
-					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInTeam, date, setting);
+					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInTeam, queryDate, setting);
 					break;
 				}
 			}
@@ -93,23 +87,96 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
-		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeList(string functionPath, IEnumerable<IPerson> agentsInSite, DateOnly date, IAgentBadgeSettings setting)
+		private IEnumerable<AgentWithBadge> getAllPermittedAgentBadgeList(string functionPath, IAgentBadgeSettings setting, DateOnly date)
 		{
-			permittedPersonList = getPermittedAgents(functionPath, agentsInSite, date);
-			var agentBadges = _agentBadgeRepository.Find(permittedPersonList.Select(x => x.Id.Value)).ToArray();
-			return getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+			var agentBadges = _agentBadgeRepository.GetAllAgentBadges() ?? new IAgentBadge[] {};
+			var agentWithBadges =
+				getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
+
+			var agentWithRankedBadges = new List<AgentWithBadge>();
+			if (setting.CalculateBadgeWithRank)
+			{
+				var agentBadgeWithRank = _agentBadgeWithRankRepository.GetAllAgentBadges() ?? new IAgentBadgeWithRank[] {};
+				agentWithRankedBadges = getAgentWithBadges(agentBadgeWithRank).ToList();
+			}
+
+			agentWithBadges = mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges).ToList();
+
+			var personGuidList = agentWithBadges.Select(item => item.Person).ToList();
+			var personList = _personRepository.FindPeople(personGuidList);
+			permittedPersonList = getPermittedAgents(functionPath, personList, date);
+
+			var result = from a in agentWithBadges
+				join p in permittedPersonList on a.Person equals p.Id
+				select a;
+			return result;
+		}
+
+		private IEnumerable<AgentWithBadge> mergeAgentWithBadges(IEnumerable<AgentWithBadge> agentWithBadges1,
+			IEnumerable<AgentWithBadge> agentWithBadges2)
+		{
+			var list1 = agentWithBadges1.ToList();
+			var list2 = agentWithBadges2.ToList();
+			var result = list1.Concat(list2)
+				.GroupBy(badge => badge.Person)
+				.Select(group => new AgentWithBadge
+				{
+					Person = group.Key,
+					BronzeBadgeAmount = group.Sum(x => x.BronzeBadgeAmount),
+					SilverBadgeAmount = group.Sum(x => x.SilverBadgeAmount),
+					GoldBadgeAmount = group.Sum(x => x.GoldBadgeAmount)
+				});
+
+			return result;
+		}
+
+		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeList(string functionPath, IEnumerable<IPerson> allAgents,
+			DateOnly date, IAgentBadgeSettings setting)
+		{
+			permittedPersonList = getPermittedAgents(functionPath, allAgents, date);
+			var permittedPersonIdList = permittedPersonList.Select(x => x.Id.Value).ToList();
+
+			var agentBadges = _agentBadgeRepository.Find(permittedPersonIdList) ?? new List<IAgentBadge>();
+			var agentWithBadges = getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
+			
+			var agentWithRankedBadges = new List<AgentWithBadge>();
+			if (setting.CalculateBadgeWithRank)
+			{
+				var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(permittedPersonIdList) ??
+				                          new List<IAgentBadgeWithRank>();
+				agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
+			}
+
+			return mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges);
 		}
 
 		private static IEnumerable<AgentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadge> agentBadges,
 			int silverToBronzeRate, int goldToSilverRate)
 		{
-			return agentBadges.Select(x => new AgentWithBadge
-			{
-				Person = x.Person,
-				BronzeBadgeAmount = x.GetBronzeBadge(silverToBronzeRate, goldToSilverRate),
-				SilverBadgeAmount = x.GetSilverBadge(silverToBronzeRate, goldToSilverRate),
-				GoldBadgeAmount = x.GetGoldBadge(silverToBronzeRate, goldToSilverRate)
-			});
+			var result = agentBadges.GroupBy(x => x.Person)
+				.Select(group => new AgentWithBadge
+					{
+						Person = group.Key,
+						GoldBadgeAmount = group.Sum(x => x.GetGoldBadge(silverToBronzeRate, goldToSilverRate)),
+						SilverBadgeAmount = group.Sum(x => x.GetSilverBadge(silverToBronzeRate, goldToSilverRate)),
+						BronzeBadgeAmount = group.Sum(x => x.GetBronzeBadge(silverToBronzeRate, goldToSilverRate))
+					});
+
+			return result;
+		}
+
+		private static IEnumerable<AgentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadgeWithRank> agentBadges)
+		{
+			var result = agentBadges.GroupBy(x => x.Person)
+				.Select(group => new AgentWithBadge
+					{
+						Person = group.Key,
+						GoldBadgeAmount = group.Sum(x => x.GoldBadgeAmount),
+						SilverBadgeAmount = group.Sum(x => x.SilverBadgeAmount),
+						BronzeBadgeAmount = group.Sum(x => x.BronzeBadgeAmount)
+					});
+
+			return result;
 		}
 
 		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<AgentWithBadge> permittedAgentBadgeList)
