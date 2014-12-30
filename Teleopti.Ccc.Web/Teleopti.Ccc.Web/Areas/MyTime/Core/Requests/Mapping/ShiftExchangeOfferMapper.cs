@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var date = new DateOnly(form.Date);
-			var schedule =
-				_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(loggedOnUser,
+			var schedule = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(loggedOnUser,
 					new ScheduleDictionaryLoadOptions(false, false) { LoadDaysAfterLeft = false, LoadNotes = false, LoadRestrictions = false },
 					new DateOnlyPeriod(date, date), _currentScenario.Current());
 			var offer = new ShiftExchangeOffer(schedule[loggedOnUser].ScheduledDay(date),
@@ -36,7 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			IPersonRequest ret = new PersonRequest(loggedOnUser) {Request = offer};
 
+			//RobTodo: add resouces instead hard code
 			ret.Subject = "Shift Exchange Announcement";
+			ret.TrySetMessage("");
 			return ret;
 		}
 

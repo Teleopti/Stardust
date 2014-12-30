@@ -1,6 +1,7 @@
 using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Filters;
@@ -42,14 +43,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_viewModelFactory.CreateViewModel((Guid)_loggedOnUser.CurrentUser().Id, date), JsonRequestBehavior.AllowGet);
 		}
-	}
-	
-	public class ShiftExchangeOfferForm
-	{
-		public DateTime Date { get; set; }
-		public TimeSpan? StartTime { get; set; } 
-		public TimeSpan? EndTime { get; set; } 
-		public DateTime OfferValidTo { get; set; }
-		public bool EndTimeNextDay { get; set; }
 	}
 }

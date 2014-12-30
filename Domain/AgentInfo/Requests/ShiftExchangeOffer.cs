@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override Description RequestPayloadDescription
 		{
-			get { throw new NotImplementedException(); }
+			get { return new Description(); }
 		}
 
 		public override void Deny(IPerson denyPerson)
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override string GetDetails(CultureInfo cultureInfo)
 		{
-			throw new NotImplementedException();
+			return string.Format(cultureInfo, "{0}", _date);
 		}
 
 		public virtual long Checksum

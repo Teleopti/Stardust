@@ -299,6 +299,7 @@
     <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftExchangeOfferMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\RequestsShiftTradebulletinViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\AuthenticationProviderTaskTest.cs" />

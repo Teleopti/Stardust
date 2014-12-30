@@ -520,6 +520,7 @@
     <Compile Include="Areas\MyTime\Models\Requests\RequestsShiftTradeScheduleFilterViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShifExchangeOfferForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestReplyForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelDataForAllTeams.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFeedbackViewModel.cs" />

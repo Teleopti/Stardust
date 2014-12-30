@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (form.ShiftExchangeOfferId != null)
 			{
 				var personRequest = _personRequestRepository.FindPersonRequestByRequestId(form.ShiftExchangeOfferId.Value);
-				offer = personRequest.Request as ShiftExchangeOffer;
+				offer = (ShiftExchangeOffer) personRequest.Request;
 			}
 			foreach (var date in form.Dates)
 			{
