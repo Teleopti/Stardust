@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -119,17 +120,11 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 
 	    private static void appendVersionInfo(StringBuilder text)
 	    {
-			var customAttribute =
-				Attribute.GetCustomAttribute(typeof(ExceptionHandlerModel).Assembly,
-					typeof(AssemblyInformationalVersionAttribute), false) as AssemblyInformationalVersionAttribute;
-		    if (customAttribute != null)
-		    {
-			    text.AppendLine();
-			    text.Append("Product Version: ");
-			    text.Append(customAttribute.InformationalVersion);
-			    text.AppendLine();
-			    text.AppendLine();
-		    }
+		    text.AppendLine();
+		    text.Append("Product Version: ");
+		    text.Append(Application.ProductVersion);
+		    text.AppendLine();
+		    text.AppendLine();
 	    }
 
 	    private static void appendFeatureInfo(StringBuilder text, ITogglesActive allToggles)

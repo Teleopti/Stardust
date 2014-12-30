@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Framework;
@@ -141,11 +139,8 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
             var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
             var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter,null);
             var expectedString = model.CompleteStackAndAssemblyText();
-	        var customAttribute =
-		        Attribute.GetCustomAttribute(typeof (ExceptionHandlerModel).Assembly,
-			        typeof (AssemblyInformationalVersionAttribute), false) as AssemblyInformationalVersionAttribute;
 
-	        expectedString.Should().Contain("Product Version: " + (customAttribute==null ? "" : customAttribute.InformationalVersion));
+			expectedString.Should().Contain("Product Version: " + Application.ProductVersion);
         }
 
 		[Test]
