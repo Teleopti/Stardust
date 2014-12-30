@@ -18,7 +18,10 @@ DECLARE @ErrorMessage nvarchar(max)
 DECLARE @CurrentExtendedInfo xml
 DECLARE @db_id int
 DECLARE @object_id int
-DECLARE @indexName sysname
+DECLARE @IndexName sysname
+DECLARE @PageCount bigint
+DECLARE @Fragmentation float
+DECLARE @ExtendedInfo xml
 
 SET @DatabaseName = db_name()
 SET @db_id = db_id()
@@ -71,7 +74,9 @@ DECLARE TableCursor CURSOR FOR
 	SELECT 
 		sc.name AS SchemaName,
 		OBJECT_NAME(ps.object_id) AS TableName,
-		i.name
+		i.name as IndexName,
+		CAST(ips.page_count AS nvarchar) AS [PageCount],
+		CAST(ips.avg_fragmentation_in_percent AS nvarchar) AS Fragmentation
 	 FROM sys.dm_db_partition_stats ps
 	 INNER JOIN sys.objects so
 		ON so.object_id = ps.object_id
@@ -88,14 +93,16 @@ DECLARE TableCursor CURSOR FOR
 
 --Rebuild
 OPEN TableCursor
-FETCH NEXT FROM TableCursor INTO @SchemaName,@TableName,@indexName
+FETCH NEXT FROM TableCursor INTO @SchemaName,@TableName,@IndexName,@PageCount,@Fragmentation
 WHILE @@FETCH_STATUS = 0
  
 BEGIN
 	SET @CurrentCommand = 'ALTER INDEX ' + @indexName +' ON [' + @SchemaName + '].[' + @TableName + '] REBUILD'
 	SET @CurrentComment = 'ALTER INDEX ' + @indexName +' ON [' + @SchemaName + '].[' + @TableName + '] REBUILD'
 	
-
+	SET @ExtendedInfo = (
+	(SELECT * FROM (SELECT @PageCount AS [PageCount] ,@Fragmentation AS [Fragmentation]) ExtendedInfo FOR XML AUTO, ELEMENTS)
+	)
     EXECUTE @CurrentCommandOutput = [dbo].[CommandExecute]
 			@Command = @CurrentCommand,
 			@CommandType = 'ALTER_INDEX',
@@ -105,10 +112,10 @@ BEGIN
 			@SchemaName = @SchemaName,
 			@ObjectName = @TableName,
 			@ObjectType = null,
-			@IndexName = null,
+			@IndexName = @IndexName,
 			@IndexType = null,
 			@PartitionNumber = null,
-			@ExtendedInfo = null,
+			@ExtendedInfo = @ExtendedInfo,
 			@LogToTable = 'Y',
 			@Execute = 'Y'
 
@@ -116,7 +123,7 @@ BEGIN
     IF @Error <> 0 SET @CurrentCommandOutput = @Error
     IF @CurrentCommandOutput <> 0 SET @ReturnCode = @CurrentCommandOutput + @ReturnCode
 
-	FETCH NEXT FROM TableCursor INTO  @SchemaName,@TableName,@indexName
+	FETCH NEXT FROM TableCursor INTO @SchemaName,@TableName,@IndexName,@PageCount,@Fragmentation
 END
  
 CLOSE TableCursor
@@ -136,4 +143,3 @@ DEALLOCATE TableCursor
     RETURN @ReturnCode
   END
   ----------------------------------------------------------------------------------------------------
-  GO
