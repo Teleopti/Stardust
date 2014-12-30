@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 
 			var totalBadgeVm = agentWithBadgeList == null
-				? null
+				? new List<BadgeViewModel>()
 				: agentWithBadgeList.Select(x => new BadgeViewModel
 				{
 					BadgeType = x.Key.BadgeType,
