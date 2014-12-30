@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using log4net;
 using Microsoft.AnalysisServices;
 using System.Data;
 using System.Data.SqlClient;
@@ -33,6 +34,8 @@ namespace AnalysisServicesManager
 
 	public class CustomizeServerObject
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (CustomizeServerObject));
+
 		private string _ASconnectionString;
 		private string _databaseName;
 		private string _SQLconnectionString;
@@ -60,7 +63,7 @@ namespace AnalysisServicesManager
 			{
 				if (File.Exists(dataSourceFile))
 				{
-					Console.WriteLine("\tAdding custom data source view  ...");
+					Logger.Info("\tAdding custom data source view  ...");
 					var parser = new ParseDataViewInfoFromXml();
 					var tableDefinitionList = parser.ExtractDataViewInfo(dataSourceFile);
 					CreateDataSourceView(tableDefinitionList);
@@ -73,12 +76,12 @@ namespace AnalysisServicesManager
 			}
 			else if (File.Exists(folderOrFilePath))
 			{
-				Console.WriteLine("\tRunning single custom script : " + argument.CustomFilePath);
+				Logger.Info("\tRunning single custom script : " + argument.CustomFilePath);
 				var repository = new Repository(argument);
 				repository.ExecuteAnyXmla(argument, folderOrFilePath);
 			}
 			else
-				Console.WriteLine("\tNo custom action");
+				Logger.Info("\tNo custom action");
 
 		}
 
@@ -106,7 +109,7 @@ namespace AnalysisServicesManager
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
-				Console.WriteLine("\t" + scriptFile.file.Name);
+				Logger.Info("\t" + scriptFile.file.Name);
 				var repository = new Repository(argument);
 				repository.ExecuteAnyXmla(argument, scriptFile.file.FullName);
 				if (folder.EndsWith(dimensions))
@@ -133,7 +136,7 @@ namespace AnalysisServicesManager
 
 			foreach (var scriptFile in applicableScriptFiles)
 			{
-				Console.WriteLine("\t" + scriptFile.file.Name);
+				Logger.Info("\t" + scriptFile.file.Name);
 				var parser = new ParseCalculatedMemberInfoFromXml();
 				var calculatedMemberList = parser.ExtractCalculatedMemberInfo(scriptFile.file.FullName);
 
@@ -154,16 +157,17 @@ namespace AnalysisServicesManager
 
 		public void AddCubeDimensionByFileName(string dimensionName)
 		{
-			using (Server server = new Server())
+			using (var server = new Server())
 			{
 				server.Connect(_ASconnectionString);
-				Database targetDb = server.Databases.GetByName(_databaseName);
-				Cube cube = targetDb.Cubes.FindByName(_cubeName);
+				using (var targetDb = server.Databases.GetByName(_databaseName))
+				{
+					Cube cube = targetDb.Cubes.FindByName(_cubeName);
 
-				Dimension dim;
-				dim = targetDb.Dimensions.GetByName(dimensionName);
-				cube.Dimensions.Add(dim.Name, dim.Name, dim.Name);
-				cube.Update(UpdateOptions.ExpandFull);
+					Dimension dim = targetDb.Dimensions.GetByName(dimensionName);
+					cube.Dimensions.Add(dim.Name, dim.Name, dim.Name);
+					cube.Update(UpdateOptions.ExpandFull);
+				}
 			}
 		}
 
@@ -184,27 +188,29 @@ namespace AnalysisServicesManager
 		{
 			var adapter = new SqlDataAdapter(table.CommandText, _SQLconnectionString);
 
-			using (Server server = new Server())
+			using (var server = new Server())
 			{
 				server.Connect(_ASconnectionString);
-				Database targetDb = server.Databases.GetByName(_databaseName);
-				DataSourceView datasourceView = new DataSourceView();
-				var tempDataSourceView = targetDb.DataSourceViews.FindByName(DataSourceViewName);
-				DataTable[] dataTables = adapter.FillSchema(tempDataSourceView.Schema, SchemaType.Mapped, table.DbTableName);
-				DataTable dataTable = dataTables[0];
-				dataTable.ExtendedProperties.Add("TableType", table.TableType );
-				dataTable.ExtendedProperties.Add("DbSchemaName", table.DbSchemaName );
-				dataTable.ExtendedProperties.Add("DbTableName", table.DbTableName );
-				dataTable.ExtendedProperties["DataSourceID"] = datasourceView.DataSourceID ;
-				dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
-				if (table.ListOfConstraints!=null)
+				using (var targetDb = server.Databases.GetByName(_databaseName))
 				{
-					foreach (var con in table.ListOfConstraints)
+					DataSourceView datasourceView = new DataSourceView();
+					var tempDataSourceView = targetDb.DataSourceViews.FindByName(DataSourceViewName);
+					DataTable[] dataTables = adapter.FillSchema(tempDataSourceView.Schema, SchemaType.Mapped, table.DbTableName);
+					DataTable dataTable = dataTables[0];
+					dataTable.ExtendedProperties.Add("TableType", table.TableType);
+					dataTable.ExtendedProperties.Add("DbSchemaName", table.DbSchemaName);
+					dataTable.ExtendedProperties.Add("DbTableName", table.DbTableName);
+					dataTable.ExtendedProperties["DataSourceID"] = datasourceView.DataSourceID;
+					dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
+					if (table.ListOfConstraints != null)
 					{
-						AddRelation(tempDataSourceView, con.FkTableName, con.FkColumName, con.PkTableName, con.PkColumName);
+						foreach (var con in table.ListOfConstraints)
+						{
+							AddRelation(tempDataSourceView, con.FkTableName, con.FkColumName, con.PkTableName, con.PkColumName);
+						}
 					}
+					tempDataSourceView.Update();
 				}
-				tempDataSourceView.Update();
 			}
 		}
 
@@ -220,16 +226,13 @@ namespace AnalysisServicesManager
 
 		public bool verifyDatasourceView()
         {
-			using (Server server = new Server())
+			using (var server = new Server())
 			{
 				server.Connect(_ASconnectionString);
-				Database targetDb = server.Databases.GetByName(_databaseName);
-
-				if (targetDb.DataSourceViews.Contains(DataSourceViewName))
+				using (var targetDb = server.Databases.GetByName(_databaseName))
 				{
-					return true;
+					return targetDb.DataSourceViews.Contains(DataSourceViewName);
 				}
-				else { return false; }
 			}
         }
 	}

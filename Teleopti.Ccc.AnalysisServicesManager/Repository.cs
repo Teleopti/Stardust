@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using log4net;
 using Microsoft.AnalysisServices.AdomdClient;
 using Microsoft.AnalysisServices;
 
@@ -10,6 +13,8 @@ namespace AnalysisServicesManager
 		private string _connectionString;
 		private string _databaseName;
 		private const string CubeName = "Teleopti Analytics";
+
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(Repository));
 
         public Repository(CommandLineArgument connectionString)
         {
@@ -23,9 +28,7 @@ namespace AnalysisServicesManager
         {
 			if (argument != null)
 			{
-				string preScript = "";
-				preScript = new FileHandler(filePath).FileAsString;
-
+				string preScript = File.ReadAllText(filePath, Encoding.Unicode);
 				string postScript = new CubeSourceFormat(preScript).FindAndReplace(argument);
 
 				using (AdomdConnection connection = new AdomdConnection(_connectionString))
@@ -51,7 +54,7 @@ namespace AnalysisServicesManager
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Logger.Info(System.String)")]
 		public void DropDatabase()
 		{
 			using (Server server = new Server())
@@ -66,7 +69,7 @@ namespace AnalysisServicesManager
 				}
 				else
 				{
-					Console.WriteLine("   Can't drop database, database does not yet exist.");
+					Logger.Info("   Can't drop database, database does not yet exist.");
 				}
 			}
 		}

@@ -1,14 +1,24 @@
 using System;
 using System.Threading;
+using log4net;
+using log4net.Config;
 
 namespace AnalysisServicesManager
 {
     class Program
     {
+	    private static ILog Logger;
+
+	    private const int Success = 0;
+	    private const int Failure = -1;
+
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DropDatabase"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xmla")]
 		static int Main(string[] args)
-        {
-			
+		{
+			XmlConfigurator.Configure();
+			Logger = LogManager.GetLogger(typeof(Program));
+
             try
             {
 				//Avoid changing WISE, instead: use xmla scriptname as an "argument"
@@ -23,38 +33,33 @@ namespace AnalysisServicesManager
 				switch (argument.FilePath)
 				{
 					case Drop:
-						Console.WriteLine("Drop cube database ...");
+						Logger.Info("Drop cube database ...");
 						repository.DropDatabase();
 						break;
 
 					case Process:
-						Console.WriteLine("Process Cube ...");
+						Logger.Info("Process Cube ...");
 						repository.ProcessCube();
 						break;
 
 					case Create:
-						Console.WriteLine("Create Cube ...");
+						Logger.Info("Create Cube ...");
 						repository.ExecuteAnyXmla(argument, argument.CurrentDir + "\\" + Create);
 						var foo = new CustomizeServerObject(argument);
 						foo.ApplyCustomization(argument);
 						break;
 				}
 
-				Console.WriteLine("action completed successfully");
-				Thread.Sleep(2000);
-				return 0; //success
+				Logger.Info("action completed successfully");
+				return Success;
             }
             catch (Exception e)
             {
-                 Console.WriteLine("Error message:");
-                Console.Error.WriteLine(e.Message);
-                Console.WriteLine("");
-
-                FileHandler.LogError(e.Message, e.StackTrace);
+                Logger.Error("Error message:");
+				Logger.Error(e);
 				Thread.Sleep(4000);
-				return -1; //failed
+				return Failure;
             }
-            
         }
     }
 }
