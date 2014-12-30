@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 				_config.ConnectionStrings["Hangfire"].ConnectionString,
 				new SqlServerStorageOptions
 				{
+					PrepareSchemaIfNecessary = false,
 					QueuePollInterval = TimeSpan.FromSeconds(1)
 				}
 				);

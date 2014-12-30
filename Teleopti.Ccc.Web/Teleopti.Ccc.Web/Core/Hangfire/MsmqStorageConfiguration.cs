@@ -19,7 +19,11 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		public void ConfigureStorage(IBootstrapperConfiguration configuration)
 		{
 			configuration.UseSqlServerStorage(
-				_config.ConnectionStrings["Hangfire"].ConnectionString
+				_config.ConnectionStrings["Hangfire"].ConnectionString,
+				new SqlServerStorageOptions
+				{
+					PrepareSchemaIfNecessary = false
+				}
 				).UseMsmqQueues(_config.AppSettings["Hangfire.MSMQ"])
 				;
 		}
