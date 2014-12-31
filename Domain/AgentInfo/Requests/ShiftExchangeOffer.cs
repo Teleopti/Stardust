@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_checksum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum();
 			_status = status;
 
-			// RobTODO - What request period should we use?		
-			SetPeriod(criteria.ShiftWithin ?? new DateTimePeriod(_date, _date.AddDays(1)));
+			// RobTODO - What request period should we use?
+			var start = new DateTime(_date.Year, _date.Month, _date.Day, 0, 0, 0, DateTimeKind.Utc);
+			SetPeriod(criteria.ShiftWithin ?? new DateTimePeriod(start, start.AddDays(1)));
 		}
 
 		protected ShiftExchangeOffer()
 		{
-			_typeDescription = UserTexts.Resources.AnnounceShift;
+			_typeDescription = UserTexts.Resources.Announcement;
 		}
 
 		public virtual DateOnly Date

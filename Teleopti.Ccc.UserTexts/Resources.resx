@@ -12629,4 +12629,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Everyone</value>
     <comment>Everyone option in business hierarchy picker in leaderboard</comment>
   </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Announcement</value>
+    <comment>use in MyTimeWeb in request list the string for request type</comment>
+  </data>
 </root>
