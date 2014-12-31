@@ -7,13 +7,11 @@ namespace Teleopti.Interfaces.Domain
 	/// Created by: mingdi
 	/// Created date: 2014-12-12
 	/// </remarks>
-	public interface IShiftExchangeOffer : IRequest //, IChangeInfo
+	public interface IShiftExchangeOffer : IRequest
 	{
 		DateOnly Date { get; }
 
 		DateTimePeriod? MyShiftPeriod { get; }
-
-		IPerson Person { get; }
 
 		long Checksum { get; }
 
