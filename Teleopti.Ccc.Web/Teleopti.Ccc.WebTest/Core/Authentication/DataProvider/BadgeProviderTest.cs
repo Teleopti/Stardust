@@ -44,15 +44,16 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		}
 
 		#region Mock badge repositories
+
 		private void mockAgentBadgeRepository(Person currentUser)
 		{
 			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.Adherence)).Return(
-						 new AgentBadge
-						 {
-							 Person = currentUserId,
-							 BadgeType = BadgeType.Adherence,
-							 TotalAmount = 12 // 1 gold, 0 silver, 2 bronze
-						 });
+				new AgentBadge
+				{
+					Person = currentUserId,
+					BadgeType = BadgeType.Adherence,
+					TotalAmount = 12 // 1 gold, 0 silver, 2 bronze
+				});
 			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.AnsweredCalls)).Return(
 				new AgentBadge
 				{
@@ -72,14 +73,14 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		private void mockAgentBadgeWithRankRepository(Person currentUser)
 		{
 			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.Adherence)).Return(
-						 new AgentBadgeWithRank
-						 {
-							 Person = currentUserId,
-							 BadgeType = BadgeType.Adherence,
-							 GoldBadgeAmount = 3,
-							 SilverBadgeAmount = 1,
-							 BronzeBadgeAmount = 7
-						 });
+				new AgentBadgeWithRank
+				{
+					Person = currentUserId,
+					BadgeType = BadgeType.Adherence,
+					GoldBadgeAmount = 3,
+					SilverBadgeAmount = 1,
+					BronzeBadgeAmount = 7
+				});
 			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.AnsweredCalls)).Return(
 				new AgentBadgeWithRank
 				{
@@ -99,6 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					BronzeBadgeAmount = 3
 				});
 		}
+
 		#endregion
 
 		[Test]

@@ -38,17 +38,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 
 			var allBadges = getBadgesWithoutRank(currentUser);
-			var allBadgesWithRank = (toggleEnabled && _settings.CalculateBadgeWithRank) ? getBadgesWithRank(currentUser) : null;
+			var allBadgesWithRank = (toggleEnabled && _settings.CalculateBadgeWithRank)
+				? getBadgesWithRank(currentUser)
+				: new List<BadgeViewModel>();
 
-			return mergeBadges(allBadges, allBadgesWithRank,
-				_settings.SilverToBronzeBadgeRate, _settings.GoldToSilverBadgeRate);
+			return mergeBadges(allBadges, allBadgesWithRank);
 		}
 
-		private IEnumerable<IAgentBadgeWithRank> getBadgesWithRank(IPerson person)
+		private IEnumerable<BadgeViewModel> getBadgesWithRank(IPerson person)
 		{
-			var badges = new List<IAgentBadgeWithRank>();
-			if (person == null) return badges;
+			if (person == null)
+			{
+				return new List<BadgeViewModel>();
+			}
 
+			var badges = new List<IAgentBadgeWithRank>();
 			if (_settings.AdherenceBadgeEnabled)
 			{
 				retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
@@ -64,25 +68,50 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
 			}
 
-			return badges;
+			var badgeVmList = badges.Select(x => new BadgeViewModel
+			{
+				BadgeType = x.BadgeType,
+				BronzeBadge = x.BronzeBadgeAmount,
+				SilverBadge = x.SilverBadgeAmount,
+				GoldBadge = x.GoldBadgeAmount
+			});
+			return badgeVmList;
 		}
 
-		private IEnumerable<IAgentBadge> getBadgesWithoutRank(IPerson person)
+		private IEnumerable<BadgeViewModel> getBadgesWithoutRank(IPerson person)
 		{
+			if (person == null)
+			{
+				return new List<BadgeViewModel>();
+			}
+
 			var badges = new List<IAgentBadge>();
 			if (_settings.AdherenceBadgeEnabled)
 			{
 				retrieveBadgeWithoutRank(person, BadgeType.Adherence, badges);
 			}
+
 			if (_settings.AHTBadgeEnabled)
 			{
 				retrieveBadgeWithoutRank(person, BadgeType.AverageHandlingTime, badges);
 			}
+
 			if (_settings.AnsweredCallsBadgeEnabled)
 			{
 				retrieveBadgeWithoutRank(person, BadgeType.AnsweredCalls, badges);
 			}
-			return badges;
+
+			var silverToBronzeBadgeRate = _settings.SilverToBronzeBadgeRate;
+			var goldToSilverBadgeRate = _settings.GoldToSilverBadgeRate;
+
+			var badgeVmList = badges.Select(x => new BadgeViewModel
+			{
+				BadgeType = x.BadgeType,
+				BronzeBadge = x.GetBronzeBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
+				SilverBadge = x.GetSilverBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
+				GoldBadge = x.GetGoldBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate)
+			});
+			return badgeVmList;
 		}
 
 		private void retrieveBadgeWithoutRank(IPerson person, BadgeType badgeType, ICollection<IAgentBadge> badges)
@@ -103,72 +132,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		/// Merge total amount of badges.
 		/// To handle the scenario that switch from old badge calculation 
 		/// </summary>
-		/// <param name="allBadges">Badges calculated with old method</param>
-		/// <param name="allBadgesWithRank">Badges calculated with rank</param>
-		/// <param name="silverToBronzeBadgeRate"></param>
-		/// <param name="goldToSilverBadgeRate"></param>
+		/// <param name="badgeVmList1"></param>
+		/// <param name="badgeVmList2"></param>
 		/// <returns></returns>
-		private IEnumerable<BadgeViewModel> mergeBadges(IEnumerable<IAgentBadge> allBadges,
-			IEnumerable<IAgentBadgeWithRank> allBadgesWithRank,
-			int silverToBronzeBadgeRate, int goldToSilverBadgeRate)
+		private IEnumerable<BadgeViewModel> mergeBadges(IEnumerable<BadgeViewModel> badgeVmList1,
+			IEnumerable<BadgeViewModel> badgeVmList2)
 		{
-			var agentWithBadgeList = allBadges == null
-				? null
-				: allBadges.ToDictionary(x => new {x.Person, x.BadgeType}, x => new
+			var totalBadgeVm = badgeVmList1.Concat(badgeVmList2)
+				.GroupBy(x => x.BadgeType)
+				.Select(group => new BadgeViewModel
 				{
-					BronzeBadge = x.GetBronzeBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
-					SilverBadge = x.GetSilverBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
-					GoldBadge = x.GetGoldBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate)
+					BadgeType = group.Key,
+					BronzeBadge = group.Sum(x => x.BronzeBadge),
+					SilverBadge = group.Sum(x => x.SilverBadge),
+					GoldBadge = group.Sum(x => x.GoldBadge)
 				});
 
-
-			var badgeWithRankList = allBadgesWithRank == null
-				? null
-				: allBadgesWithRank.ToDictionary(x => new {x.Person, x.BadgeType}, x => new
-				{
-					BronzeBadge = x.BronzeBadgeAmount,
-					SilverBadge = x.SilverBadgeAmount,
-					GoldBadge = x.GoldBadgeAmount
-				});
-
-			if (agentWithBadgeList == null || !agentWithBadgeList.Any())
-			{
-				// If there is no badges calculated with old method, then return badges with rank.
-				agentWithBadgeList = badgeWithRankList;
-			}
-			else if (badgeWithRankList != null && badgeWithRankList.Any())
-			{
-				// Else merge the 2 kind of badges together.
-				var personHasBadge = badgeWithRankList.Keys;
-				foreach (var personAndBadgeType in personHasBadge)
-				{
-					var badgeWithRank = badgeWithRankList[personAndBadgeType];
-					if (agentWithBadgeList.ContainsKey(personAndBadgeType))
-					{
-						var agentWithBadgeVm = agentWithBadgeList[personAndBadgeType];
-						agentWithBadgeList[personAndBadgeType] = new
-						{
-							BronzeBadge = agentWithBadgeVm.BronzeBadge + badgeWithRank.BronzeBadge,
-							SilverBadge = agentWithBadgeVm.SilverBadge + badgeWithRank.SilverBadge,
-							GoldBadge = agentWithBadgeVm.GoldBadge + badgeWithRank.GoldBadge
-						};
-					}
-					else
-					{
-						agentWithBadgeList[personAndBadgeType] = badgeWithRank;
-					}
-				}
-			}
-
-			var totalBadgeVm = agentWithBadgeList == null
-				? new List<BadgeViewModel>()
-				: agentWithBadgeList.Select(x => new BadgeViewModel
-				{
-					BadgeType = x.Key.BadgeType,
-					BronzeBadge = x.Value.BronzeBadge,
-					SilverBadge = x.Value.SilverBadge,
-					GoldBadge = x.Value.GoldBadge
-				});
 			return totalBadgeVm;
 		}
 	}
