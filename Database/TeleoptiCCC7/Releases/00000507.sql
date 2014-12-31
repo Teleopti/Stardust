@@ -4,8 +4,9 @@
 --Desc: Add new column for table ShiftExchangeOffer to reference request
 ---------------- 
 
-drop table dbo.ShiftExchangeOffer
-
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[ShiftExchangeOffer]'))
+   DROP TABLE [dbo].[ShiftExchangeOffer]
+GO
 
 CREATE TABLE [dbo].[ShiftExchangeOffer](
 	[Request] [uniqueidentifier] NOT NULL,
@@ -21,7 +22,7 @@ CREATE TABLE [dbo].[ShiftExchangeOffer](
  CONSTRAINT [PK_ShiftExchangeOffer] PRIMARY KEY CLUSTERED 
 (
 	[Request] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+)
 ) ON [PRIMARY]
 
 GO
