@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				.Be.EqualTo(new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 1, 1, 18, 0, 0, DateTimeKind.Utc)));
 			target.Date.Should().Be.EqualTo(currentShift.DateOnlyAsPeriod.DateOnly);
-			target.Person.Should().Be.SameInstanceAs(currentShift.Person);
+			//target.Person.Should().Be.SameInstanceAs(currentShift.Person);
 			target.Checksum.Should().Be.EqualTo(-1866394854L);
 		}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			target.MyShiftPeriod.HasValue.Should().Be.False();
 			target.Date.Should().Be.EqualTo(currentShift.DateOnlyAsPeriod.DateOnly);
-			target.Person.Should().Be.SameInstanceAs(currentShift.Person);
+			//target.Person.Should().Be.SameInstanceAs(currentShift.Person);
 			target.Checksum.Should().Be.EqualTo(650221517L);
 		}
 
