@@ -53,11 +53,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			throw new NotImplementedException();
 		}
 
-		public virtual IPerson Person
-		{
-			get { return _person; }
-		}
-
 		public override string RequestTypeDescription
 		{
 			get { return _typeDescription; }
