@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
@@ -28,6 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
+		private readonly IToggleManager _toggleManager;
+		private bool toggleEnabled;
 
 		private IPerson[] permittedPersonList;
 
@@ -36,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			IPermissionProvider permissionProvider,
 			IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider,
 			IPersonNameProvider personNameProvider,
-			ISiteRepository siteRepository, ITeamRepository teamRepository)
+			ISiteRepository siteRepository, ITeamRepository teamRepository,
+			IToggleManager toggleManager)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
 			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
@@ -46,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_personNameProvider = personNameProvider;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
+			_toggleManager = toggleManager;
 		}
 
 		public IEnumerable<AgentBadgeOverview> GetPermittedAgents(string functionPath, LeaderboardQuery query)
@@ -53,6 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var setting = _agentBadgeSettingsProvider.GetBadgeSettings();
 			var queryDate = query.Date;
 			IEnumerable<AgentWithBadge> permittedAgentBadgeList = new List<AgentWithBadge>();
+			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 
 			switch (query.Type)
 			{
@@ -87,20 +94,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
+		//this is only used for handling cases of Everyone and MyOwn to get best performance, to be confirmed for why
+		//returns total gold/silver/bronze badge number for each agent.
 		private IEnumerable<AgentWithBadge> getAllPermittedAgentBadgeList(string functionPath, IAgentBadgeSettings setting, DateOnly date)
 		{
+			//get agents' bronze badges and convert to silver/gold badges based on conversion rate
+			//this is for the case of badge calculation method1: accumulative awarding
 			var agentBadges = _agentBadgeRepository.GetAllAgentBadges() ?? new IAgentBadge[] {};
 			var agentWithBadges =
 				getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
-
-			var agentWithRankedBadges = new List<AgentWithBadge>();
-			if (setting.CalculateBadgeWithRank)
+		
+			//get agents' bronze/silver/gold badges that are directly awarded without converion from bronze badge
+			//this is for the case of badge calcualtion method2: direct awarding
+			if (toggleEnabled)
 			{
 				var agentBadgeWithRank = _agentBadgeWithRankRepository.GetAllAgentBadges() ?? new IAgentBadgeWithRank[] {};
-				agentWithRankedBadges = getAgentWithBadges(agentBadgeWithRank).ToList();
+				var agentWithRankedBadges = getAgentWithBadges(agentBadgeWithRank).ToList();
+				agentWithBadges = mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges).ToList();
 			}
-
-			agentWithBadges = mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges).ToList();
 
 			var personGuidList = agentWithBadges.Select(item => item.Person).ToList();
 			var personList = _personRepository.FindPeople(personGuidList);
@@ -112,6 +123,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return result;
 		}
 
+		//combine badge number by gold/silver/bronze regardless of badge types£¨call, adherence, AHT)
+		//from using method1 and method2 for each specific agent to include total badges
 		private IEnumerable<AgentWithBadge> mergeAgentWithBadges(IEnumerable<AgentWithBadge> agentWithBadges1,
 			IEnumerable<AgentWithBadge> agentWithBadges2)
 		{
@@ -126,10 +139,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					SilverBadgeAmount = group.Sum(x => x.SilverBadgeAmount),
 					GoldBadgeAmount = group.Sum(x => x.GoldBadgeAmount)
 				});
-
 			return result;
 		}
 
+		//gets all badges (gold/silver/bronze) for each agent by aggregating all types of badges
+ 		//returns total gold/silver/bronze badge number for each agent.
 		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeList(string functionPath, IEnumerable<IPerson> allAgents,
 			DateOnly date, IAgentBadgeSettings setting)
 		{
@@ -139,15 +153,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var agentBadges = _agentBadgeRepository.Find(permittedPersonIdList) ?? new List<IAgentBadge>();
 			var agentWithBadges = getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 			
-			var agentWithRankedBadges = new List<AgentWithBadge>();
-			if (setting.CalculateBadgeWithRank)
-			{
+			if (toggleEnabled)
+			{				
 				var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(permittedPersonIdList) ??
 				                          new List<IAgentBadgeWithRank>();
-				agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
+				var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
+				return mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges);
 			}
-
-			return mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges);
+			return agentWithBadges;		
 		}
 
 		private static IEnumerable<AgentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadge> agentBadges,

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private Team team0;
 		private Team team1;
 		private ISite site;
+		private  IToggleManager _toggleManager;
 
 		[SetUp]
 		public void SetUp()
@@ -53,6 +56,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(date, team1);
 			person1.Name = new Name("first1", "last1");
 			person2.Name = new Name("first2", "last2");
+			_toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
 			setting = new AgentBadgeSettings
 			{
 				BadgeEnabled = true,
@@ -115,6 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			};
 			agentBadgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
 
+
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			settingProvider = MockRepository.GenerateMock<IBadgeSettingProvider>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
@@ -127,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			settingProvider.Stub(x => x.GetBadgeSettings()).Return(setting);
 
 			target = new LeaderboardAgentBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository, permissionProvider,
-				personRepository, settingProvider, personNameProvider, siteRepository, teamRepository);
+				personRepository, settingProvider, personNameProvider, siteRepository, teamRepository, _toggleManager);
 		}
 
 		[Test]
@@ -214,92 +220,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			result.First().AgentName.Should().Be(personName1);
 			result.Last().AgentName.Should().Be(personName2);
-		}
+		}		
 
 		[Test]
-		public void ShouldReturnBadgeCountWhenNotCalculateBadgeWithRank()
-		{
-			var personId = Guid.NewGuid();
-			var person = new Person();
-			person.SetId(personId);
-			var persons = new IPerson[] { person };
-			
-			var option = new LeaderboardQuery
-			{
-				Date = DateOnly.Today,
-				SelectedId = Guid.Empty,
-				Type = LeadboardQueryType.Everyone
-			};
-
-			var agents = new IAgentBadge[]
-			{
-				new AgentBadge
-				{
-					BadgeType = BadgeType.Adherence,
-					TotalAmount = 16, // 1 Gold, 1 Silver, 1 Bronze
-					Person = personId
-				}, 
-
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AnsweredCalls,
-					TotalAmount = 25, // 2 Gold, 1 Silver, 0 Bronze
-					Person = personId
-				},
-
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AverageHandlingTime,
-					TotalAmount = 32, // 3 Gold, 0 Silver, 2 Bronze
-					Person = personId
-				}
-			};
-			agentBadgeRepository.Stub(x=>x.GetAllAgentBadges()).Return(agents);
-
-			var agentsWithRankedBadge = new IAgentBadgeWithRank[]
-			{
-				new AgentBadgeWithRank
-				{
-					Person = personId,
-					BadgeType = BadgeType.Adherence,
-					GoldBadgeAmount = 0,
-					SilverBadgeAmount = 1,
-					BronzeBadgeAmount = 3
-				}, 
-				new AgentBadgeWithRank
-				{
-					Person = personId,
-					BadgeType = BadgeType.AnsweredCalls,
-					GoldBadgeAmount = 3,
-					SilverBadgeAmount = 2,
-					BronzeBadgeAmount = 1
-				}, 
-				new AgentBadgeWithRank
-				{
-					Person = personId,
-					BadgeType = BadgeType.AverageHandlingTime,
-					GoldBadgeAmount = 4,
-					SilverBadgeAmount = 0,
-					BronzeBadgeAmount = 9
-				} 
-			};
-			agentBadgeWithRankRepository.Stub(x => x.GetAllAgentBadges()).Return(agentsWithRankedBadge);
-
-			personRepository.Stub(x => x.FindPeople(agents.Select(item => item.Person).ToList())).IgnoreArguments().Return(persons);
-			permissionProvider.Stub(
-				x =>
-					x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, DateOnly.Today,
-						persons.ElementAt(0))).Return(true);
-
-			var result = target.GetPermittedAgents( DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option).ToArray();
-
-			result.Single().Gold.Should().Be(6);
-			result.Single().Silver.Should().Be(2);
-			result.Single().Bronze.Should().Be(3);
-		}
-
-		[Test]
-		public void ShouldReturnTotalBadgeCountWhenCalculateBadgeWithRank()
+		public void ShouldReturnTotalBadgeCount()
 		{
 			var personId = Guid.NewGuid();
 			var person = new Person();
@@ -373,19 +297,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, DateOnly.Today,
 						persons.ElementAt(0))).Return(true);
 
-			var newSettingProvider = MockRepository.GenerateMock<IBadgeSettingProvider>();
-			newSettingProvider.Stub(x => x.GetBadgeSettings()).Return(new AgentBadgeSettings
-			{
-				BadgeEnabled = true,
-				CalculateBadgeWithRank = true,
-				GoldToSilverBadgeRate = 2,
-				SilverToBronzeBadgeRate = 5
-			});
-
-			var provider = new LeaderboardAgentBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository, permissionProvider,
-				personRepository, newSettingProvider, personNameProvider, siteRepository, teamRepository);
-
-			var result = provider.GetPermittedAgents(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option).ToArray();
+			
+			var result = target.GetPermittedAgents(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option).ToArray();
 
 			result.Single().Gold.Should().Be(13);
 			result.Single().Silver.Should().Be(5);
