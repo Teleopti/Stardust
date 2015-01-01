@@ -238,7 +238,11 @@
 	$(CCNetWorkingDirectory)\Database\DBManager.exe"/>
 			<Database
 			Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\DBManager.exe;
-			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Teleopti.Ccc.DBManager.Library.dll"/>
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Teleopti.Ccc.DBManager.Library.dll;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Hangfire.Core.dll;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Hangfire.SqlServer.dll;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\$(Configuration)\Owin.dll
+			"/>
 
 			<!-- DemoDatabase -->
 			<DemoDatabase
