@@ -226,7 +226,9 @@
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.dll;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\CreateDatabase.xmla;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\drop, create, process.bat"
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\drop, create, process.bat;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe.config;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\log4net.dll"
 	/>
 
 			<!-- Database -->

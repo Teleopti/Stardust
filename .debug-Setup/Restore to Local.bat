@@ -399,6 +399,8 @@ GOTO :EOF
 
 :Finish
 CD "%ROOTDIR%"
+set /a bat=%random% %%17
+if %bat% EQU 7 (ECHO  & mode con: cols=80 lines=23 & more "\\a380\hangaren\#PROGRAM\Develop\bat.bat" & color 0E & ping 127.0.0.1 -n 5 >NUL & ECHO  & cls)
 GOTO :EOF
 
 :BRANCH
