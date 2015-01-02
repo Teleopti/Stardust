@@ -12,6 +12,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	public delegate void RebuildContainerDelegate();
+
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
 	public class IoCTestAttribute : Attribute, ITestAction
 	{
@@ -70,6 +72,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var configuration = new IocConfiguration(new IocArgs(), Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
+
+			RebuildContainerDelegate rebuildContainerDelegate = () =>
+			{
+				buildContainer();
+				injectMembers();
+			};
+			builder.RegisterInstance(rebuildContainerDelegate);
+
 			RegisterInContainer(builder, configuration);
 			_container = builder.Build();
 		}
