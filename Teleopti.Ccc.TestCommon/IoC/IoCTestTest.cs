@@ -1,3 +1,4 @@
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public class IoCTestTest
 	{
 		public IPersonRepository PersonRepository;
-		public RebuildContainerDelegate RebuildContainer;
+		public IIoCTestContext Context;
 
 		[Test]
 		public void ShouldInjectMembers()
@@ -22,9 +23,18 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void ShouldRecreateContainer()
 		{
 			var instance1 = PersonRepository;
-			RebuildContainer();
+			Context.RebuildContainer();
 			var instance2 = PersonRepository;
 			instance1.Should().Not.Be.SameInstanceAs(instance2);
+		}
+
+		[Test]
+		public void ShouldRecreateContainerWithTestRegistrations()
+		{
+			var instance1 = PersonRepository;
+			Context.RebuildContainer(b => b.RegisterInstance(instance1).As<IPersonRepository>());
+			var instance2 = PersonRepository;
+			instance1.Should().Be.SameInstanceAs(instance2);
 		}
 	}
 }

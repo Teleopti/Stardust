@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Core;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -12,10 +13,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	public delegate void RebuildContainerDelegate();
+	public interface IIoCTestContext
+	{
+		void RebuildContainer();
+		void RebuildContainer(Action<ContainerBuilder> registerInContainer);
+	};
 
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
-	public class IoCTestAttribute : Attribute, ITestAction
+	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
 		public ActionTargets Targets
 		{
@@ -49,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void BeforeTest(TestDetails testDetails)
 		{
 			fixture(testDetails);
-			buildContainer();
+			buildContainer(b => { });
 			injectMembers();
 			BeforeTest();
 		}
@@ -66,21 +71,15 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_fixtureType = _fixture.GetType();
 		}
 
-		private void buildContainer()
+		private void buildContainer(Action<ContainerBuilder> registerInContainer)
 		{
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(), Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
-
-			RebuildContainerDelegate rebuildContainerDelegate = () =>
-			{
-				buildContainer();
-				injectMembers();
-			};
-			builder.RegisterInstance(rebuildContainerDelegate);
-
+			builder.RegisterInstance(this).As<IIoCTestContext>();
 			RegisterInContainer(builder, configuration);
+			registerInContainer(builder);
 			_container = builder.Build();
 		}
 
@@ -105,6 +104,20 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected T Resolve<T>()
 		{
 			return _container.Resolve<T>();
+		}
+
+
+
+		public void RebuildContainer()
+		{
+			buildContainer(b => { });
+			injectMembers();
+		}
+
+		public void RebuildContainer(Action<ContainerBuilder> registerInContainer)
+		{
+			buildContainer(registerInContainer);
+			injectMembers();
 		}
 	}
 }
