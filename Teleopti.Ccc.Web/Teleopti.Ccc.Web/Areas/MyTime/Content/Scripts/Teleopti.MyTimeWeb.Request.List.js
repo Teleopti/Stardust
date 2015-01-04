@@ -134,26 +134,28 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         ko.eventAggregator.subscribe(function (cancelRequestMessage) {
         	 ko.utils.arrayFirst(self.Requests(), function (r) {
-	        	 if (r.Id() === cancelRequestMessage.id) {
+        	 	if (r.Id() === cancelRequestMessage.id) {
 	        	 	self.Delete(r);
 	        	 }
         	 });
         }, null, 'cancel_request');
 	    
         self.Delete = function (requestItemViewModel) {
-            var url = requestItemViewModel.Link();
-            ajax.Ajax({
-                url: url,
-                dataType: "json",
-                contentType: 'application/json; charset=utf-8',
-                type: "DELETE",
-                success: function () {
-                    self.Requests.remove(requestItemViewModel);
-                },
-                error: function (jqXHR, textStatus) {
-                    Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-                }
-            });
+        	if (confirm("It will delete this request, Continue?")) {
+		        var url = requestItemViewModel.Link();
+		        ajax.Ajax({
+			        url: url,
+			        dataType: "json",
+			        contentType: 'application/json; charset=utf-8',
+			        type: "DELETE",
+			        success: function() {
+				        self.Requests.remove(requestItemViewModel);
+			        },
+			        error: function(jqXHR, textStatus) {
+				        Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			        }
+		        });
+	        }
         };
 
         self.AddRequest = function (request,isProcessing) {
