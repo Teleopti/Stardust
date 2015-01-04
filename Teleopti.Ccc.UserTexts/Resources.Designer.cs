@@ -3225,6 +3225,87 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewBronzeBadgeForAdherence {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewBronzeBadgeForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new bronze badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewBronzeBadgeForAHT {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewBronzeBadgeForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new bronze badge! You have answered more than {0} calls in {1:yyyy-MM-dd}..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new gold badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewGoldBadgeForAdherence {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewGoldBadgeForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new gold badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewGoldBadgeForAHT {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewGoldBadgeForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new gold badge! You have answered more than {0} calls in {1:yyyy-MM-dd}..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new silver badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewSilverBadgeForAdherence {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewSilverBadgeForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new silver badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewSilverBadgeForAHT {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewSilverBadgeForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new silver badge! You have answered more than {0} calls in {1:yyyy-MM-dd}..
+        /// </summary>
+        public static string BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls {
+            get {
+                return ResourceManager.GetString("BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bags.
         /// </summary>
         public static string Bags {

@@ -12342,6 +12342,36 @@ Reduce the complexity to use these shifts.</value>
   <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
     <value>You got a new silver badge! You have answered {0} or more calls each day on {1} different days.</value>
   </data>
+  <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <comment>Agent badge notification content</comment>
+  </data>
+  <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>You got a new bronze badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>You got a new bronze badge! You have answered more than {0} calls in {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>You got a new gold badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <comment>Agent badge notification content</comment>
+  </data>
+  <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>You got a new gold badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>You got a new gold badge! You have answered more than {0} calls in {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>You got a new silver badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <comment>Agent badge notification content</comment>
+  </data>
+  <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>You got a new silver badge! Your average handling time in {1:yyyy-MM-dd} is below {0} seconds.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>You got a new silver badge! You have answered more than {0} calls in {1:yyyy-MM-dd}.</value>
+  </data>
   <data name="FilteredList" xml:space="preserve">
     <value>Filtered List</value>
     <comment>The filtered list is the result that the user constructed using the advance filter</comment>

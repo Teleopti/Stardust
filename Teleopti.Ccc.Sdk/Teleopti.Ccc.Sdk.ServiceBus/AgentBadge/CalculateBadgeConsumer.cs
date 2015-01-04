@@ -316,46 +316,61 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var bronzeBadgeMessageTemplate = string.Empty;
 				var silverBadgeMessageTemplate = string.Empty;
 				var goldBadgeMessageTemplate = string.Empty;
+
 				var threshold = string.Empty;
+				var bronzeBadgeThreshold = string.Empty;
+				var silverBadgeThreshold = string.Empty;
+				var goldBadgeThreshold = string.Empty;
 
 				switch (badgeType)
 				{
 					case BadgeType.AverageHandlingTime:
-						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAHT;
-						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAHT;
-						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAHT;
-						threshold = setting.AHTThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+						bronzeBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewBronzeBadgeForAHT;
+						silverBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewSilverBadgeForAHT;
+						goldBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewGoldBadgeForAHT;
+
+						bronzeBadgeThreshold = setting.AHTBronzeThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+						silverBadgeThreshold = setting.AHTSilverThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+						goldBadgeThreshold = setting.AHTGoldThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
 						break;
 					case BadgeType.AnsweredCalls:
-						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAnsweredCalls;
-						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAnsweredCalls;
-						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAnsweredCalls;
-						threshold = setting.AnsweredCallsThreshold.ToString(CultureInfo.InvariantCulture);
+						bronzeBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls;
+						silverBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls;
+						goldBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls;
+
+						bronzeBadgeThreshold = setting.AnsweredCallsBronzeThreshold.ToString(CultureInfo.InvariantCulture);
+						silverBadgeThreshold = setting.AnsweredCallsSilverThreshold.ToString(CultureInfo.InvariantCulture);
+						goldBadgeThreshold = setting.AnsweredCallsGoldThreshold.ToString(CultureInfo.InvariantCulture);
 						break;
 					case BadgeType.Adherence:
-						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAdherence;
-						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAdherence;
-						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAdherence;
-						threshold = setting.AdherenceThreshold.ToString();
+						bronzeBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewBronzeBadgeForAdherence;
+						silverBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewSilverBadgeForAdherence;
+						goldBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewGoldBadgeForAdherence;
+
+						bronzeBadgeThreshold = setting.AdherenceBronzeThreshold.ToString();
+						silverBadgeThreshold = setting.AdherenceSilverThreshold.ToString();
+						goldBadgeThreshold = setting.AdherenceGoldThreshold.ToString();
 						break;
 				}
 
 				if (existedBadge.IsBronzeBadgeAdded)
 				{
+					threshold = bronzeBadgeThreshold;
 					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
 					sendBronzeBadgeMessage(person, badgeType, message);
 				}
 
 				if (existedBadge.IsSilverBadgeAdded)
 				{
-					var message = string.Format(silverBadgeMessageTemplate, threshold, setting.SilverToBronzeBadgeRate);
+					threshold = silverBadgeThreshold;
+					var message = string.Format(silverBadgeMessageTemplate, threshold, calculateDate.Date);
 					sendSilverBadgeMessage(person, badgeType, message);
 				}
 
 				if (existedBadge.IsGoldBadgeAdded)
 				{
-					var message = string.Format(goldBadgeMessageTemplate, threshold,
-						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
+					threshold = goldBadgeThreshold;
+					var message = string.Format(goldBadgeMessageTemplate, threshold, calculateDate.Date);
 					sendGoldBadgeMessage(person, badgeType, message);
 				}
 			}
