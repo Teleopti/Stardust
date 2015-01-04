@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadge
 				{
-					Person = (Guid)person.Id,
+					Person = (Guid) person.Id,
 					TotalAmount = 0,
 					BadgeType = badgeType
 				};
@@ -245,6 +245,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var silverBadgeMessageTemplate = string.Empty;
 				var goldBadgeMessageTemplate = string.Empty;
 				var threshold = string.Empty;
+
+				BadgeRank badgeRank;
+				string message;
 
 				switch (badgeType)
 				{
@@ -270,21 +273,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				if (existedBadge.IsBronzeBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
-					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
-					sendBronzeBadgeMessage(person, badgeType, message);
-				}
+					badgeRank = BadgeRank.Bronze;
+					message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
 
+					sendBadgeMessage(person, badgeType, badgeRank, message);
+				}
+				
 				if (existedBadge.IsSilverBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
-					var message = string.Format(silverBadgeMessageTemplate, threshold, setting.SilverToBronzeBadgeRate);
-					sendSilverBadgeMessage(person, badgeType, message);
-				}
+					badgeRank = BadgeRank.Silver;
+					message = string.Format(silverBadgeMessageTemplate, threshold, setting.SilverToBronzeBadgeRate);
 
+					sendBadgeMessage(person, badgeType, badgeRank, message);
+				}
+				
 				if (existedBadge.IsGoldBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
-					var message = string.Format(goldBadgeMessageTemplate, threshold,
+					badgeRank = BadgeRank.Gold;
+					message = string.Format(goldBadgeMessageTemplate, threshold,
 						setting.SilverToBronzeBadgeRate * setting.GoldToSilverBadgeRate);
-					sendGoldBadgeMessage(person, badgeType, message);
+
+					sendBadgeMessage(person, badgeType, badgeRank, message);
 				}
 			}
 		}
@@ -322,6 +331,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var silverBadgeThreshold = string.Empty;
 				var goldBadgeThreshold = string.Empty;
 
+				var badgeRank = BadgeRank.Bronze;
+				var messageTemplate = string.Empty;
+
 				switch (badgeType)
 				{
 					case BadgeType.AverageHandlingTime:
@@ -355,48 +367,89 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				if (existedBadge.IsBronzeBadgeAdded)
 				{
+					badgeRank = BadgeRank.Bronze;
 					threshold = bronzeBadgeThreshold;
-					var message = string.Format(bronzeBadgeMessageTemplate, threshold, calculateDate.Date);
-					sendBronzeBadgeMessage(person, badgeType, message);
+					messageTemplate = bronzeBadgeMessageTemplate;
 				}
-
-				if (existedBadge.IsSilverBadgeAdded)
+				else if (existedBadge.IsSilverBadgeAdded)
 				{
+					badgeRank = BadgeRank.Silver;
 					threshold = silverBadgeThreshold;
-					var message = string.Format(silverBadgeMessageTemplate, threshold, calculateDate.Date);
-					sendSilverBadgeMessage(person, badgeType, message);
+					messageTemplate = silverBadgeMessageTemplate;
 				}
-
-				if (existedBadge.IsGoldBadgeAdded)
+				else if (existedBadge.IsGoldBadgeAdded)
 				{
+					badgeRank = BadgeRank.Gold;
 					threshold = goldBadgeThreshold;
-					var message = string.Format(goldBadgeMessageTemplate, threshold, calculateDate.Date);
-					sendGoldBadgeMessage(person, badgeType, message);
+					messageTemplate = goldBadgeMessageTemplate;
 				}
+
+				var message = string.Format(messageTemplate, threshold, calculateDate.Date);
+				sendBadgeMessage(person, badgeType, badgeRank, message);
 			}
 		}
 
-		private void sendBronzeBadgeMessage(IPerson person, BadgeType badgeType, string message)
+		private MessageType getMessageType(BadgeType badgeType, BadgeRank badgeRank)
+		{
+			var messageType = MessageType.Information;
+			switch (badgeRank)
+			{
+				case BadgeRank.Bronze:
+					switch (badgeType)
+					{
+						case BadgeType.Adherence:
+							messageType = MessageType.AdherenceBronzeBadge;
+							break;
+						case BadgeType.AverageHandlingTime:
+							messageType = MessageType.AHTBronzeBadge;
+							break;
+						case BadgeType.AnsweredCalls:
+							messageType = MessageType.AnsweredCallsBronzeBadge;
+							break;
+					}
+					break;
+				case BadgeRank.Silver:
+					switch (badgeType)
+					{
+						case BadgeType.Adherence:
+							messageType = MessageType.AdherenceSilverBadge;
+							break;
+						case BadgeType.AverageHandlingTime:
+							messageType = MessageType.AHTSilverBadge;
+							break;
+						case BadgeType.AnsweredCalls:
+							messageType = MessageType.AnsweredCallsSilverBadge;
+							break;
+					}
+					break;
+				case BadgeRank.Gold:
+					switch (badgeType)
+					{
+						case BadgeType.Adherence:
+							messageType = MessageType.AdherenceGoldBadge;
+							break;
+						case BadgeType.AverageHandlingTime:
+							messageType = MessageType.AHTGoldBadge;
+							break;
+						case BadgeType.AnsweredCalls:
+							messageType = MessageType.AnsweredCallsGoldBadge;
+							break;
+					}
+					break;
+			}
+
+			return messageType;
+		}
+
+		private void sendBadgeMessage(IPerson person, BadgeType badgeType, BadgeRank badgeRank, string message)
 		{
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Send bronze badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
-					badgeType);
+				Logger.DebugFormat("Send {3} badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
+					badgeType, badgeRank);
 			}
 
-			var messageType = MessageType.Information;
-			switch (badgeType)
-			{
-				case BadgeType.Adherence:
-					messageType = MessageType.AdherenceBronzeBadge;
-					break;
-				case BadgeType.AverageHandlingTime:
-					messageType = MessageType.AHTBronzeBadge;
-					break;
-				case BadgeType.AnsweredCalls:
-					messageType = MessageType.AnsweredCallsBronzeBadge;
-					break;
-			}
+			var messageType = getMessageType(badgeType, badgeRank);
 
 			SendPushMessageService
 				.CreateConversation(Resources.Congratulations, message, false, messageType)
@@ -404,60 +457,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				.SendConversation(_msgPersister);
 		}
 
-		private void sendSilverBadgeMessage(IPerson person, BadgeType badgeType, string message)
+		private enum BadgeRank
 		{
-			if (Logger.IsDebugEnabled)
-			{
-				Logger.DebugFormat("Send silver badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
-					badgeType);
-			}
-
-			var messageType = MessageType.Information;
-			switch (badgeType)
-			{
-				case BadgeType.Adherence:
-					messageType = MessageType.AdherenceSilverBadge;
-					break;
-				case BadgeType.AverageHandlingTime:
-					messageType = MessageType.AHTSilverBadge;
-					break;
-				case BadgeType.AnsweredCalls:
-					messageType = MessageType.AnsweredCallsSilverBadge;
-					break;
-			}
-
-			SendPushMessageService
-				.CreateConversation(Resources.Congratulations, message, false, messageType)
-				.To(person)
-				.SendConversation(_msgPersister);
-		}
-
-		private void sendGoldBadgeMessage(IPerson person, BadgeType badgeType, string message)
-		{
-			if (Logger.IsDebugEnabled)
-			{
-				Logger.DebugFormat("Send gold badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
-					badgeType);
-			}
-
-			var messageType = MessageType.Information;
-			switch (badgeType)
-			{
-				case BadgeType.Adherence:
-					messageType = MessageType.AdherenceGoldBadge;
-					break;
-				case BadgeType.AverageHandlingTime:
-					messageType = MessageType.AHTGoldBadge;
-					break;
-				case BadgeType.AnsweredCalls:
-					messageType = MessageType.AnsweredCallsGoldBadge;
-					break;
-			}
-
-			SendPushMessageService
-				.CreateConversation(Resources.Congratulations, message, false, messageType)
-				.To(person)
-				.SendConversation(_msgPersister);
+			Bronze = 0,
+			Silver = 1,
+			Gold = 2
 		}
 	}
 }
