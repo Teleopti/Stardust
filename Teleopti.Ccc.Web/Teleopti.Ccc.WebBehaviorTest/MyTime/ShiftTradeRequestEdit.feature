@@ -282,6 +282,7 @@ Scenario: Resend referred shifttrade
 	Then I should see that the existing request is processing
 	And I should not see resend shifttrade button for the request
 
+@ignore
 Scenario: Cancel referred shifttrade 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
