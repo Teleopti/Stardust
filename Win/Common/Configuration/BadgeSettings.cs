@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (!_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
 			{
 				checkBoxCalculateBadgeWithRank.Hide();
-				toggleDifferentLevelBadges(false);
+				toggleBadgeCalculationMethod(false);
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			numericUpDownGoldToSilverBadgeRate.Value = settings.GoldToSilverBadgeRate;
 
 			setControlsEnabled(settings.BadgeEnabled);
-			toggleDifferentLevelBadges(settings.CalculateBadgeWithRank);
+			toggleBadgeCalculationMethod(settings.CalculateBadgeWithRank);
 			timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 115;
 			timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 115;
 			timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 115;
@@ -350,65 +350,70 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private void toggleDifferentLevelBadges(bool differentLevelBadgesEnabled)
+		private void toggleBadgeCalculationMethod(bool calculateBadgeWithRank)
 		{
-			labelSetThresholdForAnsweredCalls.Visible = !differentLevelBadgesEnabled;
-			numericUpDownThresholdForAnsweredCalls.Visible = !differentLevelBadgesEnabled;
-			toggleRowDisplay(numericUpDownThresholdForAnsweredCalls, !differentLevelBadgesEnabled);
+			// SuspendLayout() and ResumeLayout() is to prevent screen flickering when switch control visible.
+			tableLayoutPanelBody.SuspendLayout();
 
-			labelSetBronzeThresholdForAnsweredCalls.Visible = differentLevelBadgesEnabled;
-			labelSetSilverThresholdForAnsweredCalls.Visible = differentLevelBadgesEnabled;
-			labelSetGoldThresholdForAnsweredCalls.Visible = differentLevelBadgesEnabled;
-			numericUpDownBronzeThresholdForAnsweredCalls.Visible = differentLevelBadgesEnabled;
-			numericUpDownSilverThresholdForAnsweredCalls.Visible = differentLevelBadgesEnabled;
-			numericUpDownGoldThresholdForAnsweredCalls.Visible = differentLevelBadgesEnabled;
-			toggleRowDisplay(numericUpDownBronzeThresholdForAnsweredCalls, differentLevelBadgesEnabled);
-			toggleRowDisplay(numericUpDownSilverThresholdForAnsweredCalls, differentLevelBadgesEnabled);
-			toggleRowDisplay(numericUpDownGoldThresholdForAnsweredCalls, differentLevelBadgesEnabled);
+			labelSetThresholdForAnsweredCalls.Visible = !calculateBadgeWithRank;
+			numericUpDownThresholdForAnsweredCalls.Visible = !calculateBadgeWithRank;
+			toggleRowDisplay(numericUpDownThresholdForAnsweredCalls, !calculateBadgeWithRank);
+
+			labelSetBronzeThresholdForAnsweredCalls.Visible = calculateBadgeWithRank;
+			labelSetSilverThresholdForAnsweredCalls.Visible = calculateBadgeWithRank;
+			labelSetGoldThresholdForAnsweredCalls.Visible = calculateBadgeWithRank;
+			numericUpDownBronzeThresholdForAnsweredCalls.Visible = calculateBadgeWithRank;
+			numericUpDownSilverThresholdForAnsweredCalls.Visible = calculateBadgeWithRank;
+			numericUpDownGoldThresholdForAnsweredCalls.Visible = calculateBadgeWithRank;
+			toggleRowDisplay(numericUpDownBronzeThresholdForAnsweredCalls, calculateBadgeWithRank);
+			toggleRowDisplay(numericUpDownSilverThresholdForAnsweredCalls, calculateBadgeWithRank);
+			toggleRowDisplay(numericUpDownGoldThresholdForAnsweredCalls, calculateBadgeWithRank);
 
 
-			labelSetThresholdForAHT.Visible = !differentLevelBadgesEnabled;
-			timeSpanTextBoxThresholdForAHT.Visible = !differentLevelBadgesEnabled;
-			toggleRowDisplay(timeSpanTextBoxThresholdForAHT, !differentLevelBadgesEnabled);
+			labelSetThresholdForAHT.Visible = !calculateBadgeWithRank;
+			timeSpanTextBoxThresholdForAHT.Visible = !calculateBadgeWithRank;
+			toggleRowDisplay(timeSpanTextBoxThresholdForAHT, !calculateBadgeWithRank);
 
-			labelSetBronzeThresholdForAHT.Visible = differentLevelBadgesEnabled;
-			labelSetSilverThresholdForAHT.Visible = differentLevelBadgesEnabled;
-			labelSetGoldThresholdForAHT.Visible = differentLevelBadgesEnabled;
-			timeSpanTextBoxBronzeThresholdForAHT.Visible = differentLevelBadgesEnabled;
-			timeSpanTextBoxSilverThresholdForAHT.Visible = differentLevelBadgesEnabled;
-			timeSpanTextBoxGoldThresholdForAHT.Visible = differentLevelBadgesEnabled;
-			toggleRowDisplay(timeSpanTextBoxBronzeThresholdForAHT, differentLevelBadgesEnabled);
-			toggleRowDisplay(timeSpanTextBoxSilverThresholdForAHT, differentLevelBadgesEnabled);
-			toggleRowDisplay(timeSpanTextBoxGoldThresholdForAHT, differentLevelBadgesEnabled);
+			labelSetBronzeThresholdForAHT.Visible = calculateBadgeWithRank;
+			labelSetSilverThresholdForAHT.Visible = calculateBadgeWithRank;
+			labelSetGoldThresholdForAHT.Visible = calculateBadgeWithRank;
+			timeSpanTextBoxBronzeThresholdForAHT.Visible = calculateBadgeWithRank;
+			timeSpanTextBoxSilverThresholdForAHT.Visible = calculateBadgeWithRank;
+			timeSpanTextBoxGoldThresholdForAHT.Visible = calculateBadgeWithRank;
+			toggleRowDisplay(timeSpanTextBoxBronzeThresholdForAHT, calculateBadgeWithRank);
+			toggleRowDisplay(timeSpanTextBoxSilverThresholdForAHT, calculateBadgeWithRank);
+			toggleRowDisplay(timeSpanTextBoxGoldThresholdForAHT, calculateBadgeWithRank);
 
-			labelSetThresholdForAdherence.Visible = !differentLevelBadgesEnabled;
-			doubleTextBoxThresholdForAdherence.Visible = !differentLevelBadgesEnabled;
-			toggleRowDisplay(doubleTextBoxThresholdForAdherence, !differentLevelBadgesEnabled);
+			labelSetThresholdForAdherence.Visible = !calculateBadgeWithRank;
+			doubleTextBoxThresholdForAdherence.Visible = !calculateBadgeWithRank;
+			toggleRowDisplay(doubleTextBoxThresholdForAdherence, !calculateBadgeWithRank);
 
-			labelSetBronzeThresholdForAdherence.Visible = differentLevelBadgesEnabled;
-			labelSetSilverThresholdForAdherence.Visible = differentLevelBadgesEnabled;
-			labelSetGoldThresholdForAdherence.Visible = differentLevelBadgesEnabled;
-			doubleTextBoxBronzeThresholdForAdherence.Visible = differentLevelBadgesEnabled;
-			doubleTextBoxSilverThresholdForAdherence.Visible = differentLevelBadgesEnabled;
-			doubleTextBoxGoldThresholdForAdherence.Visible = differentLevelBadgesEnabled;
-			toggleRowDisplay(doubleTextBoxBronzeThresholdForAdherence, differentLevelBadgesEnabled);
-			toggleRowDisplay(doubleTextBoxSilverThresholdForAdherence, differentLevelBadgesEnabled);
-			toggleRowDisplay(doubleTextBoxGoldThresholdForAdherence, differentLevelBadgesEnabled);
+			labelSetBronzeThresholdForAdherence.Visible = calculateBadgeWithRank;
+			labelSetSilverThresholdForAdherence.Visible = calculateBadgeWithRank;
+			labelSetGoldThresholdForAdherence.Visible = calculateBadgeWithRank;
+			doubleTextBoxBronzeThresholdForAdherence.Visible = calculateBadgeWithRank;
+			doubleTextBoxSilverThresholdForAdherence.Visible = calculateBadgeWithRank;
+			doubleTextBoxGoldThresholdForAdherence.Visible = calculateBadgeWithRank;
+			toggleRowDisplay(doubleTextBoxBronzeThresholdForAdherence, calculateBadgeWithRank);
+			toggleRowDisplay(doubleTextBoxSilverThresholdForAdherence, calculateBadgeWithRank);
+			toggleRowDisplay(doubleTextBoxGoldThresholdForAdherence, calculateBadgeWithRank);
 
-			labelSplitter4.Visible = !differentLevelBadgesEnabled;
-			labelOneSilverBadgeEqualsBronzeBadgeCount.Visible = !differentLevelBadgesEnabled;
-			labelOneGoldBadgeEqualsSilverBadgeCount.Visible = !differentLevelBadgesEnabled;
-			numericUpDownSilverToBronzeBadgeRate.Visible = !differentLevelBadgesEnabled;
-			numericUpDownGoldToSilverBadgeRate.Visible = !differentLevelBadgesEnabled;
-			toggleRowDisplay(labelSplitter4, !differentLevelBadgesEnabled);
-			toggleRowDisplay(labelOneSilverBadgeEqualsBronzeBadgeCount, !differentLevelBadgesEnabled);
-			toggleRowDisplay(labelOneGoldBadgeEqualsSilverBadgeCount, !differentLevelBadgesEnabled);
+			labelSplitter4.Visible = !calculateBadgeWithRank;
+			labelOneSilverBadgeEqualsBronzeBadgeCount.Visible = !calculateBadgeWithRank;
+			labelOneGoldBadgeEqualsSilverBadgeCount.Visible = !calculateBadgeWithRank;
+			numericUpDownSilverToBronzeBadgeRate.Visible = !calculateBadgeWithRank;
+			numericUpDownGoldToSilverBadgeRate.Visible = !calculateBadgeWithRank;
+			toggleRowDisplay(labelSplitter4, !calculateBadgeWithRank);
+			toggleRowDisplay(labelOneSilverBadgeEqualsBronzeBadgeCount, !calculateBadgeWithRank);
+			toggleRowDisplay(labelOneGoldBadgeEqualsSilverBadgeCount, !calculateBadgeWithRank);
+
+			tableLayoutPanelBody.ResumeLayout();
 		}
 
 		private void checkBoxCalculateBadgeWithRank_CheckedChanged(object sender, EventArgs e)
 		{
-			var differentLevelBadgesEnabled = ((CheckBox) sender).Checked;
-			toggleDifferentLevelBadges(differentLevelBadgesEnabled);
+			var calculateBadgeWithRank = ((CheckBox) sender).Checked;
+			toggleBadgeCalculationMethod(calculateBadgeWithRank);
 		}
 	}
 }
