@@ -84,6 +84,11 @@ AS
 			FROM dbo.ShiftExchangeOffer seo
 			INNER JOIN @TempList t
 				ON t.Person = seo.Person
+			INNER JOIN dbo.Request req
+				ON seo.Request = req.Id
+			INNER JOIN dbo.PersonRequest preq
+				ON req.Parent = preq.Id
+				AND preq.IsDeleted = 0
 			WHERE [Date] = @shiftTradeDate
 			AND [Status] = 0
 			AND @currentScheduleStart between seo.ShiftWithinStartDateTime and seo.ShiftWithinEndDateTime
