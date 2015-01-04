@@ -326,14 +326,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (result != DialogResult.OK) return;
 			try
 			{
-				if (checkBoxCalculateBadgeWithRank.Checked)
-				{
-					_agentBadgeWithRankTransactionRepository.ResetAgentBadges();
-				}
-				else
-				{
-					_agentBadgeTransactionRepository.ResetAgentBadges();
-				}
+				_agentBadgeTransactionRepository.ResetAgentBadges();
+				_agentBadgeWithRankTransactionRepository.ResetAgentBadges();
 			}
 			catch (Exception)
 			{
