@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public MutableNow now;
 		public FakeEventPublisher publisher;
 		public IRta target ;
+		public RtaTestAttribute context;
 
 		[Test]
 		public void ShouldPublishEventsForEachPerson()
@@ -53,6 +54,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Where(x => x.PersonId == personId1).Should().Have.Count.GreaterThan(0);
 			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Where(x => x.PersonId == personId2).Should().Have.Count.GreaterThan(0);
+		}
+
+		[Test, Ignore]
+		public void ShouldNotSendDuplicateAdherenceEventsAfterRestart()
+		{
+			now.Is("2014-10-20 9:00");
+			var activityId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
+				.WithAlarm("statecode1", activityId, 0)
+				.WithAlarm("statecode2", activityId, 0);
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode1"
+			});
+			context.SimulateRestartWith(now, database, publisher);
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode2"
+			});
+
+			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
 	}
 }
