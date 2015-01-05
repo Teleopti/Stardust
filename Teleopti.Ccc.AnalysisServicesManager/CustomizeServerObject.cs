@@ -11,12 +11,13 @@ namespace AnalysisServicesManager
 {
 	public class CustomizeServerObject
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (CustomizeServerObject));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(CustomizeServerObject));
 
-		private string _ASconnectionString;
-		private string _databaseName;
-		private string _SQLconnectionString;
-		private const string _cubeName = "Teleopti Analytics";
+		private readonly Repository _repository;
+		private readonly ServerConnectionInfo _analysisConnectionInfo;
+		private readonly ServerConnectionInfo _sqlConnectionInfo;
+		private readonly FolderInformation _folderInformation;
+		
 		private const string DataSourceViewName = "Teleopti Analytics";
 
 		private const string dimensions = "02 Dimensions";
@@ -24,16 +25,17 @@ namespace AnalysisServicesManager
 		private const string calculatedMembers = "04 Calculated Members";
 
 
-        public CustomizeServerObject(CommandLineArgument argument)
+        public CustomizeServerObject(Repository repository, ServerConnectionInfo analysisConnectionInfo, ServerConnectionInfo sqlConnectionInfo, FolderInformation folderInformation)
         {
-			_ASconnectionString = string.Format(CultureInfo.InvariantCulture, "Data Source={0};", argument.AnalysisServer);
-			_databaseName = argument.AnalysisDatabase;
-			_SQLconnectionString = ExtractConnectionString.sqlConnectionStringSet(argument);
+	        _repository = repository;
+	        _analysisConnectionInfo = analysisConnectionInfo;
+	        _sqlConnectionInfo = sqlConnectionInfo;
+	        _folderInformation = folderInformation;
         }
 
-		public void ApplyCustomization(CommandLineArgument argument)
+		public void ApplyCustomization()
 		{
-			var folderOrFilePath = argument.CustomFilePath;
+			var folderOrFilePath = _folderInformation.CustomFilePath;
 			string dataSourceFile = folderOrFilePath + "\\01 Datasource\\DatasourceViewDefinition.xml";
 
 			if(Directory.Exists(folderOrFilePath))
@@ -46,109 +48,57 @@ namespace AnalysisServicesManager
 					CreateDataSourceView(tableDefinitionList);
 				}
 
-				ForEachFileInSubFolder(argument, folderOrFilePath + "\\" + dimensions);
-				ForEachFileInSubFolder(argument, folderOrFilePath + "\\" + measures);
-				ForEachFileInCalculatedMembers(argument, folderOrFilePath + "\\" + calculatedMembers);
+				forEachFileInSubFolder(folderOrFilePath + "\\" + dimensions);
+				forEachFileInSubFolder(folderOrFilePath + "\\" + measures);
+				forEachFileInCalculatedMembers(folderOrFilePath + "\\" + calculatedMembers);
 
 			}
 			else if (File.Exists(folderOrFilePath))
 			{
-				Logger.Info("\tRunning single custom script : " + argument.CustomFilePath);
-				var repository = new Repository(argument);
-				repository.ExecuteAnyXmla(argument, folderOrFilePath);
+				Logger.Info("\tRunning single custom script : " + _folderInformation.CustomFilePath);
+				_repository.ExecuteAnyXmla(folderOrFilePath);
 			}
 			else
 				Logger.Info("\tNo custom action");
 
 		}
 
-		public string NameOfFile(FileInfo file, string extension)
+		private void forEachFileInSubFolder(string folder)
 		{
-			var name = file.Name.Replace("."+extension, "");
-			var fileName = Convert.ToString(name);
-			return fileName;
+			var cubeDimension = new CubeDimension(_analysisConnectionInfo);
+			Array.ForEach(FileConstants.FilesOfTypeFromFolder(folder, FileConstants.Xmla).ToArray(), scriptFile =>
+			{
+				Logger.Info("\t" + scriptFile.Name);
+				_repository.ExecuteAnyXmla(scriptFile.FullName);
+				if (!folder.EndsWith(dimensions)) return;
+				
+				cubeDimension.AddByFileName(Path.GetFileNameWithoutExtension(scriptFile.Name));
+			});
 		}
 
-		public void ForEachFileInSubFolder(CommandLineArgument argument, string folder)
+		private void forEachFileInCalculatedMembers(string folder)
 		{
-			if (!Directory.Exists(folder))
-				return;
-
-			var scriptsDirectoryInfo = new DirectoryInfo(folder);
-
-			const string extension = "xmla";
-			var scriptFiles = scriptsDirectoryInfo.GetFiles("*." + extension, SearchOption.TopDirectoryOnly);
-
-			var applicableScriptFiles = from f in scriptFiles
-										let name = NameOfFile(f, extension)
-										orderby name
-										select new { file = f };
-
-			foreach (var scriptFile in applicableScriptFiles)
+			var parser = new ParseDataFromXml<CalculatedMemberDefinition>();
+			Array.ForEach(FileConstants.FilesOfTypeFromFolder(folder, FileConstants.Xml).ToArray(), scriptFile =>
 			{
-				Logger.Info("\t" + scriptFile.file.Name);
-				var repository = new Repository(argument);
-				repository.ExecuteAnyXmla(argument, scriptFile.file.FullName);
-				if (folder.EndsWith(dimensions))
-				{
-					AddCubeDimensionByFileName(Path.GetFileNameWithoutExtension(scriptFile.file.Name));
-				}
-			}
-		}
-
-		public void ForEachFileInCalculatedMembers(CommandLineArgument argument, string folder)
-		{
-			if(!Directory.Exists(folder))
-				return;
-
-			var scriptsDirectoryInfo = new DirectoryInfo(folder);
-
-			const string extension = "xml";
-			var scriptFiles = scriptsDirectoryInfo.GetFiles("*." + extension, SearchOption.TopDirectoryOnly);
-
-			var applicableScriptFiles = from f in scriptFiles
-										let name = NameOfFile(f, extension)
-										orderby name
-										select new { file = f };
-
-			foreach (var scriptFile in applicableScriptFiles)
-			{
-				Logger.Info("\t" + scriptFile.file.Name);
-				var parser = new ParseDataFromXml<CalculatedMemberDefinition>();
-				var calculatedMemberDefinition = parser.Parse(scriptFile.file.FullName);
+				Logger.Info("\t" + scriptFile.Name);
+				var calculatedMemberDefinition = parser.Parse(scriptFile.FullName);
 
 				foreach (var calculatedMember in calculatedMemberDefinition.CalculatedMembers)
 				{
-					addCalculatedMeasure(argument.AnalysisServer,argument.AnalysisDatabase, calculatedMember);
+					addCalculatedMeasure(calculatedMember);
 				}
-			}
+			});
 		}
 
-		public void addCalculatedMeasure(string AsServer, string AsDatabase, CalculatedMember calculatedMember)
+		private void addCalculatedMeasure(CalculatedMember calculatedMember)
 		{
-			//add the member
-			MdxScriptUpdater updater = new MdxScriptUpdater(AsServer);
+			var updater = new MdxScriptUpdater(_analysisConnectionInfo.ServerName);
 			updater.MdxCommands.Add(calculatedMember.MdxString);
-			updater.Update(AsDatabase, _cubeName);
+			updater.Update(_analysisConnectionInfo.DatabaseName, Repository.CubeName);
 		}
 
-		public void AddCubeDimensionByFileName(string dimensionName)
-		{
-			using (var server = new Server())
-			{
-				server.Connect(_ASconnectionString);
-				using (var targetDb = server.Databases.GetByName(_databaseName))
-				{
-					Cube cube = targetDb.Cubes.FindByName(_cubeName);
-
-					Dimension dim = targetDb.Dimensions.GetByName(dimensionName);
-					cube.Dimensions.Add(dim.Name, dim.Name, dim.Name);
-					cube.Update(UpdateOptions.ExpandFull);
-				}
-			}
-		}
-
-		public void CreateDataSourceView(DatasourceViewDefinition datasourceViewDefinition)
+		private void CreateDataSourceView(DatasourceViewDefinition datasourceViewDefinition)
 		{
 			if (!verifyDatasourceView())
 			{
@@ -161,14 +111,14 @@ namespace AnalysisServicesManager
 			}
 		}
 
-		public void forEachTableInDatasourceview(RelationalTable table)
+		private void forEachTableInDatasourceview(RelationalTable table)
 		{
-			var adapter = new SqlDataAdapter(table.CommandText, _SQLconnectionString);
+			var adapter = new SqlDataAdapter(table.CommandText, _sqlConnectionInfo.ConnectionString);
 
 			using (var server = new Server())
 			{
-				server.Connect(_ASconnectionString);
-				using (var targetDb = server.Databases.GetByName(_databaseName))
+				server.Connect(_analysisConnectionInfo.ConnectionString);
+				using (var targetDb = server.Databases.GetByName(_analysisConnectionInfo.DatabaseName))
 				{
 					DataSourceView datasourceView = new DataSourceView();
 					var tempDataSourceView = targetDb.DataSourceViews.FindByName(DataSourceViewName);
@@ -181,29 +131,30 @@ namespace AnalysisServicesManager
 					dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
 					foreach (var con in table.Constraints)
 					{
-						AddRelation(tempDataSourceView, con.FkTableName, con.FkColumName, con.PkTableName, con.PkColumName);
+						AddRelation(tempDataSourceView, con);
 					}
 					tempDataSourceView.Update();
 				}
 			}
 		}
 
-		private void AddRelation(DataSourceView dsv, String fkTableName, String fkColumnName, String pkTableName, String pkColumnName)
+		private void AddRelation(DataSourceView dsv, TeleoptiContraints constraint)
 		{
 			DataColumn fkColumn
-				= dsv.Schema.Tables[fkTableName].Columns[fkColumnName];
+				= dsv.Schema.Tables[constraint.FkTableName].Columns[constraint.FkColumName];
 			DataColumn pkColumn
-				= dsv.Schema.Tables[pkTableName].Columns[pkColumnName];
-			dsv.Schema.Relations.Add("FK_" + fkTableName + "_"
-				+ fkColumnName, pkColumn, fkColumn, true);
+				= dsv.Schema.Tables[constraint.PkTableName].Columns[constraint.PkColumName];
+			dsv.Schema.Relations.Add(
+				string.Format(CultureInfo.InvariantCulture, "FK_{0}_{1}", constraint.FkTableName, constraint.FkColumName), pkColumn,
+				fkColumn, true);
 		}
 
-		public bool verifyDatasourceView()
+		private bool verifyDatasourceView()
         {
 			using (var server = new Server())
 			{
-				server.Connect(_ASconnectionString);
-				using (var targetDb = server.Databases.GetByName(_databaseName))
+				server.Connect(_analysisConnectionInfo.ConnectionString);
+				using (var targetDb = server.Databases.GetByName(_analysisConnectionInfo.DatabaseName))
 				{
 					return targetDb.DataSourceViews.Contains(DataSourceViewName);
 				}

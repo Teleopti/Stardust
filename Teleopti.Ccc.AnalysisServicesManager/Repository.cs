@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using log4net;
 using Microsoft.AnalysisServices.AdomdClient;
@@ -10,45 +8,40 @@ namespace AnalysisServicesManager
 {
     public class Repository
     {
-		private string _connectionString;
-		private string _databaseName;
-		private const string CubeName = "Teleopti Analytics";
+	    private readonly CubeSourceFormat _cubeSourceFormat;
+	    private readonly ServerConnectionInfo _analysisConnectionInfo;
+		public const string CubeName = "Teleopti Analytics";
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(Repository));
 
-        public Repository(CommandLineArgument connectionString)
+        public Repository(CubeSourceFormat cubeSourceFormat, ServerConnectionInfo analysisConnectionInfo)
         {
-            _connectionString = string.Format(CultureInfo.InvariantCulture, "Data Source={0};", connectionString.AnalysisServer);
-			_databaseName = connectionString.AnalysisDatabase;
-			
+	        _cubeSourceFormat = cubeSourceFormat;
+	        _analysisConnectionInfo = analysisConnectionInfo;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Xmla"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public void ExecuteAnyXmla(CommandLineArgument argument, string filePath)
-        {
-			if (argument != null)
-			{
-				string preScript = File.ReadAllText(filePath, Encoding.Unicode);
-				string postScript = new CubeSourceFormat(preScript).FindAndReplace(argument);
+	    public void ExecuteAnyXmla(string filePath)
+	    {
+		    string preScript = File.ReadAllText(filePath, Encoding.Unicode);
+			string postScript = _cubeSourceFormat.FindAndReplace(preScript);
 
-				using (AdomdConnection connection = new AdomdConnection(_connectionString))
-				{
-					connection.Open();
-					using (AdomdCommand cmd = connection.CreateCommand())
-					{
-						cmd.CommandText = postScript;
-						cmd.ExecuteNonQuery();
-					}
-				}
-			}
-        }
+		    using (var connection = new AdomdConnection(_analysisConnectionInfo.ConnectionString))
+		    {
+			    connection.Open();
+			    using (var cmd = connection.CreateCommand())
+			    {
+				    cmd.CommandText = postScript;
+				    cmd.ExecuteNonQuery();
+			    }
+		    }
+	    }
 
-		public void ProcessCube()
+	    public void ProcessCube()
 		{
 			using (Server server = new Server())
 			{
-				server.Connect(_connectionString);
-				Database database = server.Databases.FindByName(_databaseName);
+				server.Connect(_analysisConnectionInfo.ConnectionString);
+				Database database = server.Databases.FindByName(_analysisConnectionInfo.DatabaseName);
 				Cube cube = database.Cubes.FindByName(CubeName);
 				cube.Process(ProcessType.ProcessFull);
 			}
@@ -59,9 +52,9 @@ namespace AnalysisServicesManager
 		{
 			using (Server server = new Server())
 			{
-				server.Connect(_connectionString);
+				server.Connect(_analysisConnectionInfo.ConnectionString);
 
-				Database database = server.Databases.FindByName(_databaseName);
+				Database database = server.Databases.FindByName(_analysisConnectionInfo.DatabaseName);
 
 				if (database != null)
 				{

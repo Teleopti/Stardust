@@ -97,15 +97,19 @@
     <Compile Include="CalculatedMember.cs" />
     <Compile Include="CalculatedMemberDefinition.cs" />
     <Compile Include="CommandLineArgument.cs" />
+    <Compile Include="CubeDimension.cs" />
     <Compile Include="CustomizeServerObject.cs" />
     <Compile Include="DatasourceViewDefinition.cs" />
-    <Compile Include="ExtractConnectionString.cs" />
+    <Compile Include="FileConstants.cs" />
+    <Compile Include="FileExtensions.cs" />
+    <Compile Include="FolderInformation.cs" />
     <Compile Include="MdxScriptUpdater.cs" />
     <Compile Include="ParseDataViewInfoFromXml.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="RelationalTable.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="CubeSourceFormat.cs" />
+    <Compile Include="ServerConnectionInfo.cs" />
     <Compile Include="TeleoptiContraints.cs" />
   </ItemGroup>
   <ItemGroup>

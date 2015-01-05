@@ -6,28 +6,23 @@ namespace AnalysisServicesManager
 {
     public class CubeSourceFormat
     {
-        private string _pre;
+	    private readonly ServerConnectionInfo _analysisConnectionInfo;
+	    private readonly ServerConnectionInfo _sqlConnectionInfo;
         private const string versionCommand = "select convert(char(20), serverproperty('ProductVersion'))";
 
-        public CubeSourceFormat(string pre)
+		public CubeSourceFormat(ServerConnectionInfo analysisConnectionInfo, ServerConnectionInfo sqlConnectionInfo)
+		{
+			_analysisConnectionInfo = analysisConnectionInfo;
+			_sqlConnectionInfo = sqlConnectionInfo;
+		}
+
+	    public string FindAndReplace(string script)
         {
-            _pre = pre;
-        }
+			int dbVersion = version(_sqlConnectionInfo.ConnectionString);
+			string sqlConnectionStringWithProvide = AddSQLProvider(dbVersion, _sqlConnectionInfo.ConnectionString);
 
-        public string FindAndReplace(CommandLineArgument argument)
-        {
-			var SqlDatabaseName = argument.SqlDatabase;
-			var AnalysisDatabaseName = argument.AnalysisDatabase;
-            string sqlConnectionString;
-			string sqlConnectionStringWithProvide;
-			sqlConnectionString = ExtractConnectionString.sqlConnectionStringSet(argument);
-
-			int dbVersion = version(sqlConnectionString);
-			sqlConnectionStringWithProvide = AddSQLProvider(dbVersion, sqlConnectionString);
-
-            string post = _pre;
-			post = post.Replace(@"#(AS_DATABASE_NAME)", AnalysisDatabaseName);
-            post = post.Replace(@"#(SQL_DATABASE_NAME)", SqlDatabaseName);
+			var post = script.Replace(@"#(AS_DATABASE_NAME)", _analysisConnectionInfo.DatabaseName);
+            post = post.Replace(@"#(SQL_DATABASE_NAME)", _sqlConnectionInfo.DatabaseName);
 			post = post.Replace(@"#(SQL_CONN_STRING)", sqlConnectionStringWithProvide);
 
             return post;

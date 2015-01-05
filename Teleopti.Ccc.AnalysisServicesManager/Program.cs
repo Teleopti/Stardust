@@ -12,7 +12,6 @@ namespace AnalysisServicesManager
 	    private const int Success = 0;
 	    private const int Failure = -1;
 
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DropDatabase"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xmla")]
 		static int Main(string[] args)
 		{
@@ -28,9 +27,11 @@ namespace AnalysisServicesManager
 
                 var argument = new CommandLineArgument(args);
 
-				var repository = new Repository(argument);
+	            var repository =
+		            new Repository(new CubeSourceFormat(argument.AnalysisConnectionInfo, argument.SqlConnectionInfo),
+			            argument.AnalysisConnectionInfo);
 
-				switch (argument.FilePath)
+				switch (argument.FolderInformation.FilePath)
 				{
 					case Drop:
 						Logger.Info("Drop cube database ...");
@@ -44,19 +45,18 @@ namespace AnalysisServicesManager
 
 					case Create:
 						Logger.Info("Create Cube ...");
-						repository.ExecuteAnyXmla(argument, argument.CurrentDir + "\\" + Create);
-						var foo = new CustomizeServerObject(argument);
-						foo.ApplyCustomization(argument);
+						repository.ExecuteAnyXmla(argument.FolderInformation.CurrentDir + "\\" + Create);
+						var foo = new CustomizeServerObject(repository, argument.AnalysisConnectionInfo,argument.SqlConnectionInfo,argument.FolderInformation);
+						foo.ApplyCustomization();
 						break;
 				}
 
-				Logger.Info("action completed successfully");
+				Logger.Info("Action completed successfully");
 				return Success;
             }
             catch (Exception e)
             {
-                Logger.Error("Error message:");
-				Logger.Error(e);
+				Logger.Error("Error message:",e);
 				Thread.Sleep(4000);
 				return Failure;
             }
