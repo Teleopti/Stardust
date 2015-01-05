@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,28 +9,6 @@ using System.Data.SqlClient;
  
 namespace AnalysisServicesManager
 {
-	public class RelationalTable
-	{
-		public string DbSchemaName { get; set; }
-		public string DbTableName { get; set; }
-		public string TableType { get; set; }
-		public string CommandText { get; set; }
-		public List<TeleoptiContraints> ListOfConstraints { get; set; }
-	}
-
-	public class CalculatedMember
-	{
-		public string MdxString { get; set; }
-	}
-
-	public class TeleoptiContraints
-	{
-		public string FkTableName { get; set; }
-		public string FkColumName { get; set; }
-		public string PkTableName { get; set; }
-		public string PkColumName { get; set; }
-	}
-
 	public class CustomizeServerObject
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (CustomizeServerObject));
@@ -64,8 +41,8 @@ namespace AnalysisServicesManager
 				if (File.Exists(dataSourceFile))
 				{
 					Logger.Info("\tAdding custom data source view  ...");
-					var parser = new ParseDataViewInfoFromXml();
-					var tableDefinitionList = parser.ExtractDataViewInfo(dataSourceFile);
+					var parser = new ParseDataFromXml<DatasourceViewDefinition>();
+					var tableDefinitionList = parser.Parse(dataSourceFile);
 					CreateDataSourceView(tableDefinitionList);
 				}
 
@@ -137,10 +114,10 @@ namespace AnalysisServicesManager
 			foreach (var scriptFile in applicableScriptFiles)
 			{
 				Logger.Info("\t" + scriptFile.file.Name);
-				var parser = new ParseCalculatedMemberInfoFromXml();
-				var calculatedMemberList = parser.ExtractCalculatedMemberInfo(scriptFile.file.FullName);
+				var parser = new ParseDataFromXml<CalculatedMemberDefinition>();
+				var calculatedMemberDefinition = parser.Parse(scriptFile.file.FullName);
 
-				foreach (var calculatedMember in calculatedMemberList)
+				foreach (var calculatedMember in calculatedMemberDefinition.CalculatedMembers)
 				{
 					addCalculatedMeasure(argument.AnalysisServer,argument.AnalysisDatabase, calculatedMember);
 				}
@@ -171,14 +148,14 @@ namespace AnalysisServicesManager
 			}
 		}
 
-		public void CreateDataSourceView(IEnumerable<RelationalTable> tableDefinitionList)
+		public void CreateDataSourceView(DatasourceViewDefinition datasourceViewDefinition)
 		{
 			if (!verifyDatasourceView())
 			{
 				throw new ArgumentException("Can't find Datasource View!");
 			}
 
-			foreach (var table in tableDefinitionList)
+			foreach (var table in datasourceViewDefinition.DataTables)
 			{
 				forEachTableInDatasourceview(table);
 			}
@@ -202,12 +179,9 @@ namespace AnalysisServicesManager
 					dataTable.ExtendedProperties.Add("DbTableName", table.DbTableName);
 					dataTable.ExtendedProperties["DataSourceID"] = datasourceView.DataSourceID;
 					dataTable.ExtendedProperties.Add("FriendlyName", table.DbTableName);
-					if (table.ListOfConstraints != null)
+					foreach (var con in table.Constraints)
 					{
-						foreach (var con in table.ListOfConstraints)
-						{
-							AddRelation(tempDataSourceView, con.FkTableName, con.FkColumName, con.PkTableName, con.PkColumName);
-						}
+						AddRelation(tempDataSourceView, con.FkTableName, con.FkColumName, con.PkTableName, con.PkColumName);
 					}
 					tempDataSourceView.Update();
 				}
