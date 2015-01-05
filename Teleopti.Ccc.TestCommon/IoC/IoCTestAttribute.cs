@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using Autofac.Core;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void BeforeTest(TestDetails testDetails)
 		{
 			fixture(testDetails);
-			buildContainer(b => { });
+			buildContainer(b => {});
 			injectMembers();
 			BeforeTest();
 		}
@@ -119,5 +118,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			buildContainer(registerInContainer);
 			injectMembers();
 		}
+
 	}
 }

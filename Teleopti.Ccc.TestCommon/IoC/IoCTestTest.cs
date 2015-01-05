@@ -1,8 +1,10 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -11,12 +13,19 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public class IoCTestTest
 	{
 		public IPersonRepository PersonRepository;
+		public INow Now;
 		public IIoCTestContext Context;
 
 		[Test]
 		public void ShouldInjectMembers()
 		{
 			PersonRepository.Should().Be.InstanceOf<PersonRepository>();
+		}
+
+		[Test]
+		public void ShouldRegisterAndInjectMutableNow()
+		{
+			Now.Should().Be.InstanceOf<MutableNow>();
 		}
 
 		[Test]
@@ -29,12 +38,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 
 		[Test]
-		public void ShouldRecreateContainerWithTestRegistrations()
+		public void ShouldRebuildContainerWithTestRegistrations()
 		{
 			var instance1 = PersonRepository;
 			Context.RebuildContainer(b => b.RegisterInstance(instance1).As<IPersonRepository>());
 			var instance2 = PersonRepository;
 			instance1.Should().Be.SameInstanceAs(instance2);
 		}
+
 	}
 }
