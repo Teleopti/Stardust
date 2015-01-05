@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
@@ -32,7 +32,25 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void ShouldHaveSeriousUnderstaffingDaySetOnce()
         {
             target.SeriousUnderstaffingDays.Count().Should().Be.EqualTo(1);
-        }
+		}
+
+		[Test]
+		public void ShouldNotHaveDuplicateUnderstaffingDay()
+		{
+			var testDate = new DateOnly(2012, 12, 31);
+			target.AddUnderstaffingDay(testDate);
+			target.AddUnderstaffingDay(testDate);
+			target.UnderstaffingDays.Count(x => x == testDate).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotHaveDuplicateSeriousUnderstaffingDay()
+		{
+			var testDate = new DateOnly(2012, 12, 31);
+			target.AddSeriousUnderstaffingDay(testDate);
+			target.AddSeriousUnderstaffingDay(testDate);
+			target.SeriousUnderstaffingDays.Count(x => x == testDate).Should().Be.EqualTo(1);
+		}
 
         [Test]
         public void ShouldHaveUnderstaffingTimesSetTwice()

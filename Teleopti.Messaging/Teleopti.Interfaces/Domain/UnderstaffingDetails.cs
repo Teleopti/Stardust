@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -35,12 +34,18 @@ namespace Teleopti.Interfaces.Domain
 
         public void AddSeriousUnderstaffingDay(DateOnly date)
         {
-            _seriousUnderstaffingDays.Add(date);
+            if (!_seriousUnderstaffingDays.Contains(date))
+            {
+                _seriousUnderstaffingDays.Add(date);
+            }
         }
 
         public void AddUnderstaffingDay(DateOnly date)
         {
-            _understaffingDays.Add(date);
+            if (!_understaffingDays.Contains(date))
+            {
+                _understaffingDays.Add(date);
+            }
         }
 
         public void AddSeriousUnderstaffingTime(TimePeriod period)
