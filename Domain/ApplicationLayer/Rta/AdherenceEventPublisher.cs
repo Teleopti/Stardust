@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -8,47 +8,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class AdherenceEventPublisher : IAdherenceEventPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
-		private readonly IDictionary<Guid, Type> _sentEvents = new Dictionary<Guid, Type>();
 
 		public AdherenceEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info, DateTime time, bool inAdherence)
+		public void Publish(StateInfo info, DateTime time, Adherence adherence, Adherence previousAdherence)
 		{
-			var agentState = info.NewState;
-			
-			IEvent @event;
-			if (inAdherence)
-				@event = new PersonInAdherenceEvent
+			if (adherence == previousAdherence) return;
+
+			if (adherence == Adherence.In)
+				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{
-					PersonId = agentState.PersonId,
+					PersonId = info.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.NewState.BusinessUnitId,
+					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId,
-				};
-			else
-			{
-				@event = new PersonOutOfAdherenceEvent
+				});
+
+			if (adherence == Adherence.Out)
+				_eventPublisher.Publish(new PersonOutOfAdherenceEvent
 				{
-					PersonId = agentState.PersonId,
+					PersonId = info.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.NewState.BusinessUnitId,
+					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId,
+				});
 
-				};
-			}
-
-			Type current;
-			_sentEvents.TryGetValue(agentState.PersonId, out current);
-			var adherenceHasChanged = current == null || current != @event.GetType();
-			if (!adherenceHasChanged) return;
-
-			_eventPublisher.Publish(@event);
-			_sentEvents[agentState.PersonId] = @event.GetType();
 		}
 
 	}

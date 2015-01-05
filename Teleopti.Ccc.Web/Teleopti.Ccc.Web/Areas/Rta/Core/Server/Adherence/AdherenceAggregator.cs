@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 					NewState = actualAgentState,
 					TeamId = person.TeamId,
 					SiteId = person.SiteId,
-					InAdherence = StateInfo.AdherenceFor(actualAgentState)
+					Adherence = StateInfo.AdherenceFor(actualAgentState)
 				};
 				aggregate(adherenceAggregatorInfo, false);
 			}

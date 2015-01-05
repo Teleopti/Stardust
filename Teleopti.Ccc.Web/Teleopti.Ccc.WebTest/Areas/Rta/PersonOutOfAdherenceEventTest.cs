@@ -89,8 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode1", activityId, -1)
-				.WithAlarm("statecode2", activityId, 1)
-				.Make();
+				.WithAlarm("statecode2", activityId, 1);
 			now.Is("2014-10-20 9:00");
 
 			target.SaveState(state1);

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -28,10 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				StartTime = startTime,
 				Name = info.CurrentActivity.Name,
 				BusinessUnitId = info.NewState.BusinessUnitId,
-				InAdherence = info.InAdherenceWithNewActivity
+				InAdherence = info.AdherenceForPreviousStateAndCurrentActivity == Adherence.In
 			});
 
-			_adherenceEventPublisher.Publish(info, startTime, info.InAdherenceWithNewActivity);
+			_adherenceEventPublisher.Publish(info, startTime, info.AdherenceForPreviousStateAndCurrentActivity, info.AdherenceForPreviousState);
 		}
 	}
 }

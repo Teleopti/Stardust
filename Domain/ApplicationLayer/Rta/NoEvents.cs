@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 		}
 
-		public void Publish(StateInfo info, DateTime time, bool inAdherence)
+		public void Publish(StateInfo info, DateTime time, Adherence adherence, Adherence previousAdherence)
 		{
 		}
 	}

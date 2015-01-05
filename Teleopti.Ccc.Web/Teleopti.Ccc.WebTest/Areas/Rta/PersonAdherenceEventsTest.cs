@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Where(x => x.PersonId == personId2).Should().Have.Count.GreaterThan(0);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotSendDuplicateAdherenceEventsAfterRestart()
 		{
 			now.Is("2014-10-20 9:00");

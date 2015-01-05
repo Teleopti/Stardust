@@ -5,62 +5,33 @@ namespace Teleopti.Interfaces.Domain
 {
 	public class ActualAgentState : IActualAgentState
 	{
-		private DateTime _stateStart = new DateTime(1900, 1, 1);
-		private DateTime _nextStart = new DateTime(1900, 1, 1);
-		private DateTime _alarmStart = new DateTime(1900, 1, 1);
-		private string _stateCode = "";
-		private string _state = "";
-		private string _scheduled = "";
-		private string _scheduledNext = "";
-		private string _alarmName = "";
+		public ActualAgentState()
+		{
+			StateCode = "";
+			AlarmStart = new DateTime(1900, 1, 1);
+			AlarmName = "";
+			NextStart = new DateTime(1900, 1, 1);
+			ScheduledNext = "";
+			StateStart = new DateTime(1900, 1, 1);
+			Scheduled = "";
+			State = "";
+		}
 
 		public Guid PersonId { get; set; }
 		public Guid BusinessUnitId { get; set; }
-		public string State
-		{
-			get { return _state; }
-			set { _state = value; }
-		}
+		public string State { get; set; }
 		public Guid StateId { get; set; }
-		public string Scheduled
-		{
-			get { return _scheduled; }
-			set { _scheduled = value; }
-		}
-		public DateTime StateStart
-		{
-			get { return _stateStart; }
-			set { _stateStart = value; }
-		}
-		public string ScheduledNext
-		{
-			get { return _scheduledNext; }
-			set { _scheduledNext = value; }
-		}
+		public string Scheduled { get; set; }
+		public DateTime StateStart { get; set; }
+		public string ScheduledNext { get; set; }
 		public Guid ScheduledNextId { get; set; }
-		public DateTime NextStart
-		{
-			get { return _nextStart; }
-			set { _nextStart = value; }
-		}
-		public string AlarmName
-		{
-			get { return _alarmName; }
-			set { _alarmName = value; }
-		}
+		public DateTime NextStart { get; set; }
+		public string AlarmName { get; set; }
 		public Guid AlarmId { get; set; }
 		public int Color { get; set; }
-		public DateTime AlarmStart
-		{
-			get { return _alarmStart; }
-			set { _alarmStart = value; }
-		}
+		public DateTime AlarmStart { get; set; }
 		public double StaffingEffect { get; set; }
-		public string StateCode
-		{
-			get { return _stateCode; }
-			set { _stateCode = value; }
-		}
+		public string StateCode { get; set; }
 		public Guid ScheduledId { get; set; }
 		public Guid PlatformTypeId { get; set; }
 		public DateTime ReceivedTime { get; set; }
