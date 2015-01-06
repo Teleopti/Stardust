@@ -34,7 +34,7 @@
 					length="25"/>
 	  </component>
 						 
-	<property name="BadgeSettingRuleSet"				
+	<property name="GamificationSettingRuleSet"				
 				not-null="true" />
 
 	<property name="AnsweredCallsBadgeEnabled"

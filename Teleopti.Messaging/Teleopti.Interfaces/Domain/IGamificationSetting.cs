@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
 	public interface IGamificationSetting :IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit
 	{
 		Description Description { get; set; }
-		GamificationSettingRuleSet BadgeSettingRuleSet { get; set; }
+		GamificationSettingRuleSet GamificationSettingRuleSet { get; set; }
 		bool IsDeleted { get; }
 		
 		bool AnsweredCallsBadgeEnabled { get; set; }

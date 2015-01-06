@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
 	public class GamificationSetting : VersionedAggregateRootWithBusinessUnit, IGamificationSetting, IDeleteTag
 	{
 		private Description _description;
-		private GamificationSettingRuleSet _badgeSettingRuleSet;
+		private GamificationSettingRuleSet _gamificationSettingRuleSet;
 
 		private bool _answeredCallsBadgeEnabled = false;
 		private bool _aHTBadgeEnabled = false;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Common
 		/// <param name="name">Name of badge setting</param>
         public GamificationSetting(string name) : this()
         {
-			_badgeSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor;
+			_gamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor;
             _description = new Description(name);
         }
 
@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.Domain.Common
         /// <summary>
 		/// Type of AgentBadgeSettingRuleSet
         /// </summary>
-		public virtual GamificationSettingRuleSet BadgeSettingRuleSet
+		public virtual GamificationSettingRuleSet GamificationSettingRuleSet
         {
-			get { return _badgeSettingRuleSet; }
-			set { _badgeSettingRuleSet = value; }
+			get { return _gamificationSettingRuleSet; }
+			set { _gamificationSettingRuleSet = value; }
         }
 
 		public virtual bool IsDeleted

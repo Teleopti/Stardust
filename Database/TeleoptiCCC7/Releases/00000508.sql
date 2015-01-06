@@ -16,7 +16,7 @@ CREATE TABLE [dbo].[GamificationSetting](
 	[UpdatedOn] [datetime] NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	[ShortName] [nvarchar](25) NULL,
-	[BadgeSettingRuleSet] [int] NOT NULL,
+	[GamificationSettingRuleSet] [int] NOT NULL,
 	[BusinessUnit] [uniqueidentifier] NOT NULL,
 	[IsDeleted] [bit] NOT NULL,
 	[AnsweredCallsBadgeEnabled] [bit] NOT NULL,

@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (SelectedGamificationSetting == null) return;
 			textBoxDescription.Text = SelectedGamificationSetting.Description.ToString();
-			comboBoxAdvBadgeSettingRuleSets.SelectedValue =  SelectedGamificationSetting.BadgeSettingRuleSet;
+			comboBoxAdvBadgeSettingRuleSets.SelectedValue =  SelectedGamificationSetting.GamificationSettingRuleSet;
 
 			
 		}
