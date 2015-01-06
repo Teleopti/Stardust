@@ -50,7 +50,7 @@
 		RTA_NotifyViaSMS_31567,
 
 		MyTimeWeb_AgentBadge_28913,
-        MyTimeWeb_FullDayAbsenceConfiguration_30552,
+		MyTimeWeb_FullDayAbsenceConfiguration_30552,
 		Portal_ResetBadges_30544,
 		Badge_Leaderboard_30584,
 		Portal_NewLandingpage_29415,
@@ -65,6 +65,7 @@
 
 		ETL_SpeedUpETL_30791,
 		RTA_NoBroker_31237,
-		Gamification_NewBadgeCalculation_31185
+		Gamification_NewBadgeCalculation_31185,
+		Portal_DifferentiateBadgeSettingForAgents_31318
 	}
 }
