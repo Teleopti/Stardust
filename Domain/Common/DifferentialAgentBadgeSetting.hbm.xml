@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Common"
+                   default-access="field.camelcase-underscore">
+
+  <class name="DifferentialAgentBadgeSettings">
+    <!--IEntity-->
+    <id name="Id"
+            type="guid"
+		  				access="nosetter.camelcase-underscore"
+            unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <version name="Version"
+             unsaved-value ="null"/>
+    <many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true"
+                 foreign-key="FK_Contract_Person_UpdatedBy"/>
+    <property name="UpdatedOn"
+              type="UtcDateTime"
+              not-null="true"/>
+    <!--IEntity-->
+    
+    <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
+		  <property name="Name"
+					not-null="true"
+					type="string"
+					length="50"/>
+		  <property name="ShortName"
+					not-null="false"
+					type="string"
+					length="25"/>
+	  </component>
+						 
+	<property name="BadgeSettingRuleSet"				
+				not-null="true" />
+
+	<property name="AnsweredCallsBadgeEnabled"
+          type="boolean"
+          not-null="true"/>
+	<property name="AHTBadgeEnabled"
+          type="boolean"
+          not-null="true"/>
+	<property name="AdherenceBadgeEnabled"
+          type="boolean"
+          not-null="true"/>
+	
+	<property name="AnsweredCallsThreshold"
+          type="int"
+          not-null="true"/>
+	<property name="AnsweredCallsBronzeThreshold"
+          type="int"
+          not-null="true"/>
+	<property name="AnsweredCallsSilverThreshold"
+          type="int"
+          not-null="true"/>
+	<property name="AnsweredCallsGoldThreshold"
+          type="int"
+          not-null="true"/>
+
+	<property name="AHTThreshold"
+		  not-null="true"
+		  type="TimeSpan" />
+	<property name="AHTBronzeThreshold"
+		  not-null="true"
+		  type="TimeSpan" />
+	<property name="AHTSilverThreshold"
+		  not-null="true"
+		  type="TimeSpan" />
+	<property name="AHTGoldThreshold"
+		  not-null="true"
+		  type="TimeSpan" />
+
+	<component name="AdherenceThreshold"
+	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <property name="Value"
+				not-null="true" 
+				type="double" 
+				column="AdherenceThreshold" />
+	</component>
+	<component name="AdherenceBronzeThreshold"
+	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <property name="Value"
+				not-null="true" 
+				type="double" 
+				column="AdherenceBronzeThreshold" />
+	</component>
+	<component name="AdherenceSilverThreshold"
+	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <property name="Value"
+				not-null="true" 
+				type="double" 
+				column="AdherenceSilverThreshold" />
+	</component>
+	<component name="AdherenceGoldThreshold"
+	   class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+	  <property name="Value"
+				not-null="true" 
+				type="double" 
+				column="AdherenceGoldThreshold" />
+	</component>
+	
+	<property name="SilverToBronzeBadgeRate"
+          type="int"
+          not-null="true"/>
+	<property name="GoldToSilverBadgeRate"
+          type="int"
+          not-null="true"/>
+	
+	
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true"
+      foreign-key="FK_Contract_BusinessUnit"/>
+    <property name="IsDeleted"
+          type="boolean"
+          not-null="true"/>
+    <filter name="businessUnitFilter"
+        condition=":businessUnitParameter = BusinessUnit" />
+    <filter name="deletedFlagFilter"
+      condition="IsDeleted = 0" />
+  </class>
+</hibernate-mapping>

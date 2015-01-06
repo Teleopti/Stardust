@@ -127,6 +127,7 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\AgentBadgeSettingRuleSet.cs" />
     <Compile Include="Domain\FairnessType.cs" />
     <Compile Include="Domain\ForecastActualDifferNotification.cs" />
     <Compile Include="Domain\IAgentBadgeInfo.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
+    <Compile Include="Domain\IDifferentialAgentBadgeSettings.cs" />
     <Compile Include="Domain\IEtlToggleManager.cs" />
     <Compile Include="Domain\INotificationClient.cs" />
     <Compile Include="Domain\INotificationConfigReader.cs" />
