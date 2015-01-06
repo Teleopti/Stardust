@@ -3,6 +3,9 @@
 --Date: 2015-1-5
 --Desc: Add new table for gamification setting in PBI 31318
 ---------------- 
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[DifferentialAgentBadgeSettings]'))
+   DROP TABLE [dbo].[DifferentialAgentBadgeSettings]
+GO
 CREATE TABLE [dbo].[DifferentialAgentBadgeSettings](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Version] [int] NOT NULL,
@@ -28,8 +31,8 @@ CREATE TABLE [dbo].[DifferentialAgentBadgeSettings](
 	[AdherenceBronzeThreshold] [int] NOT NULL,
 	[AdherenceSilverThreshold] [int] NOT NULL,
 	[AdherenceGoldThreshold] [int] NOT NULL,
-	[SilverBadgeDaysThreshold] [int] NOT NULL,
-	[GoldBadgeDaysThreshold] [int] NOT NULL,
+	[SilverToBronzeBadgeRate] [int] NOT NULL,
+	[GoldToSilverBadgeRate] [int] NOT NULL,
  CONSTRAINT [PK_DifferentialAgentBadgeSettings] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
