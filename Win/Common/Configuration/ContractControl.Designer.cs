@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-			this.tableLayoutPanelBody.Size = new System.Drawing.Size(944, 566);
+			this.tableLayoutPanelBody.Size = new System.Drawing.Size(944, 780);
 			this.tableLayoutPanelBody.TabIndex = 55;
 			// 
 			// tableLayoutPanelSubHeader1
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// textBoxDescription
 			// 
 			this.textBoxDescription.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(251, 23);
+			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(115, 23);
 			this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxDescription.Location = new System.Drawing.Point(353, 41);
 			this.textBoxDescription.MaxLength = 50;
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel5.RowCount = 2;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 450F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(944, 256);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(944, 470);
 			this.tableLayoutPanel5.TabIndex = 2;
 			// 
 			// tableLayoutPanelSubHeader2
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxPlanningMax.TabIndex = 11;
 			this.timeSpanTextBoxPlanningMax.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxPlanningMax.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxPlanningMax.TimeSpanBoxWidth = 3625;
+			this.timeSpanTextBoxPlanningMax.TimeSpanBoxWidth = 4932;
 			// 
 			// timeSpanTextBoxPlanningMin
 			// 
@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxPlanningMin.TabIndex = 10;
 			this.timeSpanTextBoxPlanningMin.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxPlanningMin.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxPlanningMin.TimeSpanBoxWidth = 3625;
+			this.timeSpanTextBoxPlanningMin.TimeSpanBoxWidth = 4932;
 			// 
 			// labelTimeBankMax
 			// 
@@ -633,7 +633,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtMaxTimePerWeek.TabIndex = 6;
 			this.textBoxExtMaxTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtMaxTimePerWeek.TimeSpanBoxHeight = 23;
-			this.textBoxExtMaxTimePerWeek.TimeSpanBoxWidth = 3625;
+			this.textBoxExtMaxTimePerWeek.TimeSpanBoxWidth = 4932;
 			// 
 			// textBoxExtNightlyRestTime
 			// 
@@ -648,7 +648,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtNightlyRestTime.TabIndex = 7;
 			this.textBoxExtNightlyRestTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtNightlyRestTime.TimeSpanBoxHeight = 23;
-			this.textBoxExtNightlyRestTime.TimeSpanBoxWidth = 3625;
+			this.textBoxExtNightlyRestTime.TimeSpanBoxWidth = 4932;
 			// 
 			// textBoxExtWeeklyRestTime
 			// 
@@ -663,7 +663,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtWeeklyRestTime.TabIndex = 8;
 			this.textBoxExtWeeklyRestTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtWeeklyRestTime.TimeSpanBoxHeight = 23;
-			this.textBoxExtWeeklyRestTime.TimeSpanBoxWidth = 3625;
+			this.textBoxExtWeeklyRestTime.TimeSpanBoxWidth = 4932;
 			// 
 			// textBoxExMinTimeSchedulePeriod
 			// 
@@ -678,7 +678,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExMinTimeSchedulePeriod.TabIndex = 9;
 			this.textBoxExMinTimeSchedulePeriod.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxHeight = 23;
-			this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxWidth = 3625;
+			this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxWidth = 4932;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -713,7 +713,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxNegativeTolerance.TabIndex = 2;
 			this.timeSpanTextBoxNegativeTolerance.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxWidth = 3625;
+			this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxWidth = 4932;
 			// 
 			// timeSpanTextBoxPositiveTolerance
 			// 
@@ -729,7 +729,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxPositiveTolerance.TabIndex = 3;
 			this.timeSpanTextBoxPositiveTolerance.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxWidth = 3625;
+			this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxWidth = 4932;
 			// 
 			// autoLabel9
 			// 
@@ -833,7 +833,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtAvgWorkTimePerDay.TabIndex = 1;
 			this.textBoxExtAvgWorkTimePerDay.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxHeight = 23;
-			this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxWidth = 3625;
+			this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxWidth = 4932;
 			// 
 			// AutoLabelFullDayAbsence
 			// 
@@ -914,7 +914,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxExtMinTimePerWeek.TabIndex = 72;
 			this.textBoxExtMinTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 23;
-			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 3625;
+			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 4932;
 			// 
 			// tableLayoutPanelSubHeader3
 			// 
@@ -923,7 +923,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelSubHeader3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelSubHeader3.Controls.Add(this.labelSubHeader3, 0, 0);
 			this.tableLayoutPanelSubHeader3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelSubHeader3.Location = new System.Drawing.Point(3, 409);
+			this.tableLayoutPanelSubHeader3.Location = new System.Drawing.Point(3, 623);
 			this.tableLayoutPanelSubHeader3.Name = "tableLayoutPanelSubHeader3";
 			this.tableLayoutPanelSubHeader3.RowCount = 1;
 			this.tableLayoutPanelSubHeader3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
@@ -953,7 +953,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel9.Controls.Add(this.checkedListBoxMultiplicatorDefenitionSets, 1, 0);
 			this.tableLayoutPanel9.Controls.Add(this.labelConnectedMultiplicatorDefinitionSets, 0, 0);
 			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 446);
+			this.tableLayoutPanel9.Location = new System.Drawing.Point(0, 660);
 			this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
 			this.tableLayoutPanel9.RowCount = 1;
@@ -1035,7 +1035,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "ContractControl";
-			this.Size = new System.Drawing.Size(944, 628);
+			this.Size = new System.Drawing.Size(944, 842);
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.PerformLayout();

@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.numericUpDownGoldToSilverBadgeRate = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDownSilverToBronzeBadgeRate = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDownBronzeThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
+			this.timeSpanTextBoxBronzeThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.checkBoxEnableBadge = new System.Windows.Forms.CheckBox();
 			this.labelSplitter1 = new System.Windows.Forms.Label();
 			this.labelSplitter4 = new System.Windows.Forms.Label();
@@ -62,6 +63,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.numericUpDownGoldThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.labelSetSilverThresholdForAHT = new System.Windows.Forms.Label();
 			this.labelSetGoldThresholdForAHT = new System.Windows.Forms.Label();
+			this.timeSpanTextBoxSilverThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBoxGoldThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.labelSetSilverThresholdForAdherence = new System.Windows.Forms.Label();
 			this.labelSetGoldThresholdForAdherence = new System.Windows.Forms.Label();
 			this.doubleTextBoxSilverThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
@@ -69,15 +72,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetThresholdForAnsweredCalls = new System.Windows.Forms.Label();
 			this.numericUpDownThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.labelSetThresholdForAHT = new System.Windows.Forms.Label();
+			this.timeSpanTextBoxThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.labelSetThresholdForAdherence = new System.Windows.Forms.Label();
 			this.doubleTextBoxThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
-			this.timeSpanTextBoxBronzeThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxSilverThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxGoldThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.tableLayoutPanelBody.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxBronzeThresholdForAdherence)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldToSilverBadgeRate)).BeginInit();
@@ -331,6 +331,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.numericUpDownBronzeThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
 			this.numericUpDownBronzeThresholdForAnsweredCalls.TabIndex = 2;
 			// 
+			// timeSpanTextBoxBronzeThresholdForAHT
+			// 
+			this.timeSpanTextBoxBronzeThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxBronzeThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxBronzeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxBronzeThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxBronzeThresholdForAHT.Enabled = false;
+			this.timeSpanTextBoxBronzeThresholdForAHT.Location = new System.Drawing.Point(299, 347);
+			this.timeSpanTextBoxBronzeThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
+			this.timeSpanTextBoxBronzeThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
+			this.timeSpanTextBoxBronzeThresholdForAHT.Name = "timeSpanTextBoxBronzeThresholdForAHT";
+			this.timeSpanTextBoxBronzeThresholdForAHT.Size = new System.Drawing.Size(151, 25);
+			this.timeSpanTextBoxBronzeThresholdForAHT.TabIndex = 3;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 20792;
+			// 
 			// checkBoxEnableBadge
 			// 
 			this.checkBoxEnableBadge.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -449,7 +466,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.SetColumnSpan(this.checkBoxCalculateBadgeWithRank, 2);
 			this.checkBoxCalculateBadgeWithRank.Location = new System.Drawing.Point(299, 43);
 			this.checkBoxCalculateBadgeWithRank.Name = "checkBoxCalculateBadgeWithRank";
-			this.checkBoxCalculateBadgeWithRank.Size = new System.Drawing.Size(242, 19);
+			this.checkBoxCalculateBadgeWithRank.Size = new System.Drawing.Size(169, 19);
 			this.checkBoxCalculateBadgeWithRank.TabIndex = 25;
 			this.checkBoxCalculateBadgeWithRank.Text = "xxCalculateBadgeWithRank";
 			this.checkBoxCalculateBadgeWithRank.UseVisualStyleBackColor = true;
@@ -553,6 +570,40 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetGoldThresholdForAHT.Text = "xxSetBadgeGoldThresholdForAHT";
 			this.labelSetGoldThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// timeSpanTextBoxSilverThresholdForAHT
+			// 
+			this.timeSpanTextBoxSilverThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxSilverThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxSilverThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxSilverThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxSilverThresholdForAHT.Enabled = false;
+			this.timeSpanTextBoxSilverThresholdForAHT.Location = new System.Drawing.Point(299, 380);
+			this.timeSpanTextBoxSilverThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
+			this.timeSpanTextBoxSilverThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
+			this.timeSpanTextBoxSilverThresholdForAHT.Name = "timeSpanTextBoxSilverThresholdForAHT";
+			this.timeSpanTextBoxSilverThresholdForAHT.Size = new System.Drawing.Size(151, 29);
+			this.timeSpanTextBoxSilverThresholdForAHT.TabIndex = 3;
+			this.timeSpanTextBoxSilverThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 24257;
+			// 
+			// timeSpanTextBoxGoldThresholdForAHT
+			// 
+			this.timeSpanTextBoxGoldThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxGoldThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxGoldThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxGoldThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxGoldThresholdForAHT.Enabled = false;
+			this.timeSpanTextBoxGoldThresholdForAHT.Location = new System.Drawing.Point(299, 413);
+			this.timeSpanTextBoxGoldThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
+			this.timeSpanTextBoxGoldThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
+			this.timeSpanTextBoxGoldThresholdForAHT.Name = "timeSpanTextBoxGoldThresholdForAHT";
+			this.timeSpanTextBoxGoldThresholdForAHT.Size = new System.Drawing.Size(151, 33);
+			this.timeSpanTextBoxGoldThresholdForAHT.TabIndex = 3;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxWidth = 28299;
+			// 
 			// labelSetSilverThresholdForAdherence
 			// 
 			this.labelSetSilverThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -655,6 +706,23 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetThresholdForAHT.Text = "xxSetBadgeThresholdForAHT";
 			this.labelSetThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// timeSpanTextBoxThresholdForAHT
+			// 
+			this.timeSpanTextBoxThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxThresholdForAHT.Enabled = false;
+			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(299, 310);
+			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
+			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
+			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(151, 29);
+			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
+			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 24257;
+			// 
 			// labelSetThresholdForAdherence
 			// 
 			this.labelSetThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -729,74 +797,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHeader.Size = new System.Drawing.Size(214, 25);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxAgentBadgeSetting";
-			// 
-			// timeSpanTextBoxBronzeThresholdForAHT
-			// 
-			this.timeSpanTextBoxBronzeThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.timeSpanTextBoxBronzeThresholdForAHT.AllowNegativeValues = true;
-			this.timeSpanTextBoxBronzeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.timeSpanTextBoxBronzeThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxBronzeThresholdForAHT.Enabled = false;
-			this.timeSpanTextBoxBronzeThresholdForAHT.Location = new System.Drawing.Point(299, 347);
-			this.timeSpanTextBoxBronzeThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxBronzeThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
-			this.timeSpanTextBoxBronzeThresholdForAHT.Name = "timeSpanTextBoxBronzeThresholdForAHT";
-			this.timeSpanTextBoxBronzeThresholdForAHT.Size = new System.Drawing.Size(151, 25);
-			this.timeSpanTextBoxBronzeThresholdForAHT.TabIndex = 3;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 17822;
-			// 
-			// timeSpanTextBoxSilverThresholdForAHT
-			// 
-			this.timeSpanTextBoxSilverThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.timeSpanTextBoxSilverThresholdForAHT.AllowNegativeValues = true;
-			this.timeSpanTextBoxSilverThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.timeSpanTextBoxSilverThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxSilverThresholdForAHT.Enabled = false;
-			this.timeSpanTextBoxSilverThresholdForAHT.Location = new System.Drawing.Point(299, 380);
-			this.timeSpanTextBoxSilverThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxSilverThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
-			this.timeSpanTextBoxSilverThresholdForAHT.Name = "timeSpanTextBoxSilverThresholdForAHT";
-			this.timeSpanTextBoxSilverThresholdForAHT.Size = new System.Drawing.Size(151, 29);
-			this.timeSpanTextBoxSilverThresholdForAHT.TabIndex = 3;
-			this.timeSpanTextBoxSilverThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
-			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 20792;
-			// 
-			// timeSpanTextBoxGoldThresholdForAHT
-			// 
-			this.timeSpanTextBoxGoldThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.timeSpanTextBoxGoldThresholdForAHT.AllowNegativeValues = true;
-			this.timeSpanTextBoxGoldThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.timeSpanTextBoxGoldThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxGoldThresholdForAHT.Enabled = false;
-			this.timeSpanTextBoxGoldThresholdForAHT.Location = new System.Drawing.Point(299, 413);
-			this.timeSpanTextBoxGoldThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxGoldThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
-			this.timeSpanTextBoxGoldThresholdForAHT.Name = "timeSpanTextBoxGoldThresholdForAHT";
-			this.timeSpanTextBoxGoldThresholdForAHT.Size = new System.Drawing.Size(151, 33);
-			this.timeSpanTextBoxGoldThresholdForAHT.TabIndex = 3;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxWidth = 24257;
-			// 
-			// timeSpanTextBoxThresholdForAHT
-			// 
-			this.timeSpanTextBoxThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.timeSpanTextBoxThresholdForAHT.AllowNegativeValues = true;
-			this.timeSpanTextBoxThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.timeSpanTextBoxThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxThresholdForAHT.Enabled = false;
-			this.timeSpanTextBoxThresholdForAHT.Location = new System.Drawing.Point(299, 310);
-			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
-			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
-			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(151, 29);
-			this.timeSpanTextBoxThresholdForAHT.TabIndex = 3;
-			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 20792;
 			// 
 			// BadgeThresholdSettings
 			// 

@@ -183,6 +183,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new ScheduleTagControl()
 										};
 
+			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
+			{
+				allSupportedPages.Add(new AgentBadgeSettingControl(_toggleManager));
+			}
+
 			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913))
 			{
 				allSupportedPages.Add(new BadgeThresholdSettings(_toggleManager));
