@@ -12663,9 +12663,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Announcement</value>
     <comment>use in MyTimeWeb in request list the string for request type</comment>
   </data>
-  <data name="AreYouSureYouWantToDeleteBadgeSetting" xml:space="preserve">
-    <value>Are you sure to delete '{0}' badge setting ?</value>
-    <comment>confirmation text when deleting one badge setting in option</comment>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Are you sure to delete '{0}' gamification setting ?</value>
+    <comment>confirmation text when deleting one gamification setting in option</comment>
   </data>
   <data name="DeleteAgentBadgeSetting" xml:space="preserve">
     <value>Delete agent badge setting</value>
@@ -12675,9 +12675,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Gamification</value>
     <comment>Gamification option</comment>
   </data>
-  <data name="NewAgentBadgeSetting" xml:space="preserve">
-    <value>New agent badge setting</value>
-    <comment>tooltip notification for buttonNew in badge setting tab in option</comment>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>New gamification setting</value>
+    <comment>tooltip notification for buttonNew in gamification setting tab in option</comment>
   </data>
   <data name="NewBadgeSetting" xml:space="preserve">
     <value>New badge setting</value>

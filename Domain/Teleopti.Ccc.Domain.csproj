@@ -339,7 +339,7 @@
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
-    <Compile Include="Common\DifferentialAgentBadgeSettings.cs" />
+    <Compile Include="Common\GamificationSetting.cs" />
     <Compile Include="Common\AgentBadgeTransaction.cs" />
     <Compile Include="Common\AgentBadgeWithRank.cs" />
     <Compile Include="Common\AgentBadgeWithRankTransaction.cs" />
@@ -697,7 +697,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
-    <Compile Include="Repositories\IDifferentialAgentBadgeSettingRepository.cs" />
+    <Compile Include="Repositories\IGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
@@ -2231,7 +2231,7 @@
     <EmbeddedResource Include="Common\AgentBadgeWithRankTransaction.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\DifferentialAgentBadgeSetting.hbm.xml">
+    <EmbeddedResource Include="Common\GamificationSetting.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />

@@ -3,7 +3,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
 	/// Types of AgentBadgeSettingRuleSet
     /// </summary>
-   public enum AgentBadgeSettingRuleSet
+   public enum GamificationSettingRuleSet
 	{
 		/// <summary>
 		/// Rule with ratio convertor

@@ -19,28 +19,28 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-	public partial class AgentBadgeSettingControl : BaseUserControl, ISettingPage
+	public partial class GamificationSettingControl : BaseUserControl, ISettingPage
 	{
 		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 		private const short invalidItemIndex = -1;
 		private const short firstItemIndex = 0;
 	    private const short itemDiffernce = 1;                      
-		private List<IDifferentialAgentBadgeSettings> _agentBadgeSettingList;
-		private readonly IDictionary<AgentBadgeSettingRuleSet, string> _agentBadgeSettingRuleSetList = new Dictionary<AgentBadgeSettingRuleSet, string>();
+		private List<IGamificationSetting> _gamificationSettingList;
+		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
 		private readonly IToggleManager _toggleManager;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
-		public IDifferentialAgentBadgeSettingRepository Repository { get; private set; }
+		public IGamificationSettingRepository Repository { get; private set; }
 
 		private int LastItemIndex
 		{
-			get { return comboBoxAdvAgentBadgeSettings.Items.Count - itemDiffernce; }
+			get { return comboBoxAdvGamificationSettings.Items.Count - itemDiffernce; }
 		}
 
-		public IDifferentialAgentBadgeSettings SelectedBadgeSetting
+		public IGamificationSetting SelectedGamificationSetting
 		{
-			get { return (IDifferentialAgentBadgeSettings)comboBoxAdvAgentBadgeSettings.SelectedItem; }
+			get { return (IGamificationSetting)comboBoxAdvGamificationSettings.SelectedItem; }
 		}
 
 		public void InitializeDialogControl()
@@ -58,21 +58,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
-			string changed = _localizer.UpdatedByText(SelectedBadgeSetting, Resources.UpdatedByColon);
+			string changed = _localizer.UpdatedByText(SelectedGamificationSetting, Resources.UpdatedByColon);
 			autoLabelInfoAboutChanges.Text = changed;
 		}
 		
 		public void Unload()
 		{
 			// Disposes or flag anything possible.
-			_agentBadgeSettingList = null;
+			_gamificationSettingList = null;
 		}
 
 		public void LoadControl()
 		{
 			setUpTimeSpanBoxes();
-			loadBadgeSettingRuleSets();
-			loadBadgeSettings();
+			loadGamificationSettingRuleSets();
+			loadGamificationSettings();
 			
 		}
 		
@@ -87,53 +87,53 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void  SaveChanges()
 		{}
 
-		public AgentBadgeSettingControl(IToggleManager toggleManager)
+		public GamificationSettingControl(IToggleManager toggleManager)
 		{
 			_toggleManager = toggleManager;
 			
 			InitializeComponent();
 
-			comboBoxAdvAgentBadgeSettings.SelectedIndexChanging += comboBoxAdvBadgeSettingsSelectedIndexChanging;
-			comboBoxAdvAgentBadgeSettings.SelectedIndexChanged += comboBoxAdvBadgeSettingsSelectedIndexChanged;
-			comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += comboBoxAdvAgentBadgeSettingRuleSetSelectedIndexChanged;
+			comboBoxAdvGamificationSettings.SelectedIndexChanging += comboBoxAdvGamificationSettingSelectedIndexChanging;
+			comboBoxAdvGamificationSettings.SelectedIndexChanged += comboBoxAdvGamificationSettingSelectedIndexChanged;
+			comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged;
 			textBoxDescription.Validating += textBoxDescriptionValidating;
 			textBoxDescription.Validated += textBoxDescriptionValidated;
 
 			buttonNew.Click += buttonNewClick;
-			buttonDeleteBadgeSetting.Click += buttonDeleteBadgeSettingClick;
+			buttonDeleteGamificationSetting.Click += buttonDeleteGamificationSettingClick;
 
 		}
 
 
 		private void textBoxDescriptionValidated(object sender, EventArgs e)
 		{
-			changeBadgeSettingDescription();
+			changeGamificationSettingDescription();
 		}
 
 		private void textBoxDescriptionValidating(object sender, CancelEventArgs e)
 		{
-			if (SelectedBadgeSetting != null)
+			if (SelectedGamificationSetting != null)
 			{
-				validateBadgeSettingDescription();
+				validateGamificationSettingDescription();
 			}
 		}
 
 		private void buttonNewClick(object sender, EventArgs e)
 		{
 			//addNewBadgeSetting();
-			if (SelectedBadgeSetting == null) return;
+			if (SelectedGamificationSetting == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			addNewBadgeSetting();
+			addNewGamificationSetting();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void buttonDeleteBadgeSettingClick(object sender, EventArgs e)
+		private void buttonDeleteGamificationSettingClick(object sender, EventArgs e)
 		{
-			if (SelectedBadgeSetting == null) return;
+			if (SelectedGamificationSetting == null) return;
 			string text = string.Format(
 				CurrentCulture,
-				Resources.AreYouSureYouWantToDeleteBadgeSetting,
-				SelectedBadgeSetting.Description
+				Resources.AreYouSureYouWantToDeleteGamificationSetting,
+				SelectedGamificationSetting.Description
 				);
 
 			string caption = string.Format(CurrentCulture, Resources.ConfirmDelete);
@@ -141,20 +141,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
 			if (response != DialogResult.Yes) return;
 			Cursor.Current = Cursors.WaitCursor;
-			deleteBadgeSetting();
+			deleteGamificationSetting();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void comboBoxAdvBadgeSettingsSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvGamificationSettingSelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (SelectedBadgeSetting == null) return;
+			if (SelectedGamificationSetting == null) return;
 			Cursor.Current = Cursors.WaitCursor;
-			selectBadgeSetting();
+			selectGamificationSetting();
 			changedInfo();
 			Cursor.Current = Cursors.Default;
 		}
 
-		private void comboBoxAdvBadgeSettingsSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
+		private void comboBoxAdvGamificationSettingSelectedIndexChanging(object sender, SelectedIndexChangingArgs e)
 		{
 			e.Cancel = !isWithinRange(e.NewIndex);
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 			UnitOfWork = value;
-			Repository = new DifferentialAgentBadgeSettingsRepository(UnitOfWork);
+			Repository = new GamificationSettingRepository(UnitOfWork);
 		}
 
 		public void Persist()
@@ -187,30 +187,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		protected override void SetCommonTexts()
 		{
 			base.SetCommonTexts();
-			toolTip1.SetToolTip(buttonDeleteBadgeSetting, Resources.DeleteAgentBadgeSetting);
-			toolTip1.SetToolTip(buttonNew, Resources.NewAgentBadgeSetting);
+			toolTip1.SetToolTip(buttonDeleteGamificationSetting, Resources.DeleteAgentBadgeSetting);
+			toolTip1.SetToolTip(buttonNew, Resources.NewGamificationSetting);
 		}
 
-		private void changeBadgeSettingDescription()
+		private void changeGamificationSettingDescription()
 		{
-			SelectedBadgeSetting.Description = new Description(textBoxDescription.Text);
-			loadBadgeSettings();
+			SelectedGamificationSetting.Description = new Description(textBoxDescription.Text);
+			loadGamificationSettings();
 		}
 
-		private void validateBadgeSettingDescription()
+		private void validateGamificationSettingDescription()
 		{
 			bool failed = string.IsNullOrEmpty(textBoxDescription.Text);
 			if (failed)
 			{
-				textBoxDescription.SelectedText = SelectedBadgeSetting.Description.Name;
+				textBoxDescription.SelectedText = SelectedGamificationSetting.Description.Name;
 			}
 		}
 
-		private void deleteBadgeSetting()
+		private void deleteGamificationSetting()
 		{
-			Repository.Remove(SelectedBadgeSetting);
-			_agentBadgeSettingList.Remove(SelectedBadgeSetting);
-			loadBadgeSettings();
+			Repository.Remove(SelectedGamificationSetting);
+			_gamificationSettingList.Remove(SelectedGamificationSetting);
+			loadGamificationSettings();
 		}
 
 		private void setColors()
@@ -230,79 +230,79 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
 		
-		private void loadBadgeSettingRuleSets()
+		private void loadGamificationSettingRuleSets()
 		{
-			if (_agentBadgeSettingRuleSetList.Count > 0) return;
-			_agentBadgeSettingRuleSetList.Add(AgentBadgeSettingRuleSet.RuleWithRatioConvertor, Resources.RuleWithRatioConvertor);
+			if (_gamificationSettingRuleSetList.Count > 0) return;
+			_gamificationSettingRuleSetList.Add(GamificationSettingRuleSet.RuleWithRatioConvertor, Resources.RuleWithRatioConvertor);
 			if (_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
 			{
-				_agentBadgeSettingRuleSetList.Add(AgentBadgeSettingRuleSet.RuleWithDifferentThreshold, Resources.RuleWithDifferentThreshold);
+				_gamificationSettingRuleSetList.Add(GamificationSettingRuleSet.RuleWithDifferentThreshold, Resources.RuleWithDifferentThreshold);
 			}
 			
-			comboBoxAdvBadgeSettingRuleSets.DataSource = new BindingSource(_agentBadgeSettingRuleSetList, null);
+			comboBoxAdvBadgeSettingRuleSets.DataSource = new BindingSource(_gamificationSettingRuleSetList, null);
 			comboBoxAdvBadgeSettingRuleSets.DisplayMember = "Value";
 			comboBoxAdvBadgeSettingRuleSets.ValueMember = "Key";
 		}
 
-		private void selectBadgeSetting()
+		private void selectGamificationSetting()
 		{
-			if (SelectedBadgeSetting == null) return;
-			textBoxDescription.Text = SelectedBadgeSetting.Description.ToString();
-			comboBoxAdvBadgeSettingRuleSets.SelectedValue =  SelectedBadgeSetting.BadgeSettingRuleSet;
+			if (SelectedGamificationSetting == null) return;
+			textBoxDescription.Text = SelectedGamificationSetting.Description.ToString();
+			comboBoxAdvBadgeSettingRuleSets.SelectedValue =  SelectedGamificationSetting.BadgeSettingRuleSet;
 
 			
 		}
 
-		private void addNewBadgeSetting()
+		private void addNewGamificationSetting()
 		{
-			var newBadgeSetting = createBadgeSetting();
-			_agentBadgeSettingList.Add(newBadgeSetting);
+			var newBadgeSetting = createGamificationSetting();
+			_gamificationSettingList.Add(newBadgeSetting);
 
-			loadBadgeSettings();
-			comboBoxAdvAgentBadgeSettings.SelectedIndex = LastItemIndex;
+			loadGamificationSettings();
+			comboBoxAdvGamificationSettings.SelectedIndex = LastItemIndex;
 		}
 
-		private IDifferentialAgentBadgeSettings createBadgeSetting()
+		private IGamificationSetting createGamificationSetting()
 		{
 			// Formats the name.
-			Description description = PageHelper.CreateNewName(_agentBadgeSettingList, "Description.Name", Resources.NewBadgeSetting);
-			IDifferentialAgentBadgeSettings newBadgeSetting = new DifferentialAgentBadgeSettings(description.Name) { Description = description };
-			Repository.Add(newBadgeSetting);
+			Description description = PageHelper.CreateNewName(_gamificationSettingList, "Description.Name", Resources.NewGamificationSetting);
+			IGamificationSetting newGamificationSetting = new GamificationSetting(description.Name) { Description = description };
+			Repository.Add(newGamificationSetting);
 
-			return newBadgeSetting;
+			return newGamificationSetting;
 		}
 
-		private void loadBadgeSettings()
+		private void loadGamificationSettings()
 		{
 			if (Disposing) return;
-			if (_agentBadgeSettingList == null)
+			if (_gamificationSettingList == null)
 			{
-				_agentBadgeSettingList = new List<IDifferentialAgentBadgeSettings>();
+				_gamificationSettingList = new List<IGamificationSetting>();
 				//_agentBadgeSettingList.AddRange(Repository.FindAllBadgeSettingsByDescription());
 			}
 
-			if (_agentBadgeSettingList.IsEmpty())
+			if (_gamificationSettingList.IsEmpty())
 			{
-				_agentBadgeSettingList.Add(createBadgeSetting());
+				_gamificationSettingList.Add(createGamificationSetting());
 			}
 
-			int selected = comboBoxAdvAgentBadgeSettings.SelectedIndex;
+			int selected = comboBoxAdvGamificationSettings.SelectedIndex;
 			if (!isWithinRange(selected))
 			{
 				selected = firstItemIndex;
 			}
 
 			// Rebinds list to comboBox.
-			comboBoxAdvAgentBadgeSettings.DataSource = null;
-			comboBoxAdvAgentBadgeSettings.DataSource = _agentBadgeSettingList;
-			comboBoxAdvAgentBadgeSettings.DisplayMember = "Description";
+			comboBoxAdvGamificationSettings.DataSource = null;
+			comboBoxAdvGamificationSettings.DataSource = _gamificationSettingList;
+			comboBoxAdvGamificationSettings.DisplayMember = "Description";
 
-			comboBoxAdvAgentBadgeSettings.SelectedIndex = selected;
+			comboBoxAdvGamificationSettings.SelectedIndex = selected;
 		}
 
 		private bool isWithinRange(int index)
 		{
-			return index > invalidItemIndex && index < _agentBadgeSettingList.Count && comboBoxAdvAgentBadgeSettings.DataSource != null;
+			return index > invalidItemIndex && index < _gamificationSettingList.Count && comboBoxAdvGamificationSettings.DataSource != null;
 		}
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
@@ -315,12 +315,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return ViewType.Gamification; }
 		}
 
-		private void comboBoxAdvAgentBadgeSettingRuleSetSelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (comboBoxAdvBadgeSettingRuleSets.SelectedItem == null) return;
-			var kvp = ((KeyValuePair<AgentBadgeSettingRuleSet, string>)((ComboBoxAdv)sender).SelectedItem);
+			var kvp = ((KeyValuePair<GamificationSettingRuleSet, string>)((ComboBoxAdv)sender).SelectedItem);
 
-			var ruleWithRatioConvertorSelected = kvp.Key == AgentBadgeSettingRuleSet.RuleWithRatioConvertor;
+			var ruleWithRatioConvertorSelected = kvp.Key == GamificationSettingRuleSet.RuleWithRatioConvertor;
 
 			labelSetThresholdForAnsweredCalls.Visible = ruleWithRatioConvertorSelected;
 			numericUpDownThresholdForAnsweredCalls.Visible = ruleWithRatioConvertorSelected;

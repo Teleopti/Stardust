@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Common"
                    default-access="field.camelcase-underscore">
 
-  <class name="DifferentialAgentBadgeSettings">
+  <class name="GamificationSetting">
     <!--IEntity-->
     <id name="Id"
             type="guid"

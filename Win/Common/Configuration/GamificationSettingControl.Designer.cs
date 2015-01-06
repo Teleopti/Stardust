@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-	partial class AgentBadgeSettingControl
+	partial class GamificationSettingControl
     {
         private const int MaxHoursPerWeek = 168;
 
@@ -37,12 +37,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader1 = new System.Windows.Forms.Label();
-			this.buttonDeleteBadgeSetting = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonDeleteGamificationSetting = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonNew = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.autoLabelChangeInfo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel5 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-			this.comboBoxAdvAgentBadgeSettings = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.comboBoxAdvGamificationSettings = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.textBoxDescription = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -51,37 +51,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader2 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.reset = new System.Windows.Forms.Button();
-			this.doubleTextBoxGoldThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
 			this.numericUpDownSilverThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.comboBoxAdvBadgeSettingRuleSets = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.autoLabel2 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.CheckBoxUseBadgeForAnsweredCalls = new System.Windows.Forms.CheckBox();
 			this.labelSetThresholdForAnsweredCalls = new System.Windows.Forms.Label();
-			this.numericUpDownGoldThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
-			this.labelSetGoldThresholdForAnsweredCalls = new System.Windows.Forms.Label();
 			this.labelSetSilverThresholdForAnsweredCalls = new System.Windows.Forms.Label();
-			this.labelSetBronzeThresholdForAnsweredCalls = new System.Windows.Forms.Label();
 			this.checkBoxUseBadgeForAHT = new System.Windows.Forms.CheckBox();
 			this.labelSetBadgeThresholdForAHT = new System.Windows.Forms.Label();
-			this.labelSetBronzeBadgeThresholdForAHT = new System.Windows.Forms.Label();
 			this.labelSetSilverBadgeThresholdForAHT = new System.Windows.Forms.Label();
-			this.labelSetGoldBadgeThresholdForAHT = new System.Windows.Forms.Label();
 			this.checkBoxUseBadgeForAdherence = new System.Windows.Forms.CheckBox();
 			this.labelSetBadgeThresholdForAdherence = new System.Windows.Forms.Label();
-			this.labelSetBadgeBronzeThresholdForAdherence = new System.Windows.Forms.Label();
 			this.labelSetBadgeSilverThresholdForAdherence = new System.Windows.Forms.Label();
-			this.labelSetBadgeGoldThresholdForAdherence = new System.Windows.Forms.Label();
 			this.timeSpanTextBoxThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxBronzeThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.timeSpanTextBoxSilverThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
-			this.timeSpanTextBoxGoldThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
 			this.doubleTextBoxThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
-			this.doubleTextBoxBronzeThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount = new System.Windows.Forms.Label();
-			this.labelOneGoldBadgeEqualsSilverBadgeCount = new System.Windows.Forms.Label();
-			this.numericUpDownSilverToBronzeBadgeRate = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDownGoldToSilverBadgeRate = new System.Windows.Forms.NumericUpDown();
-			this.numericUpDownBronzeThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.numericUpDownThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
 			this.doubleTextBoxSilverThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
 			this.label11 = new System.Windows.Forms.Label();
@@ -89,6 +73,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.label13 = new System.Windows.Forms.Label();
 			this.labelRatioSplitter = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
+			this.labelSetBronzeThresholdForAnsweredCalls = new System.Windows.Forms.Label();
+			this.labelSetGoldThresholdForAnsweredCalls = new System.Windows.Forms.Label();
+			this.numericUpDownGoldThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownBronzeThresholdForAnsweredCalls = new System.Windows.Forms.NumericUpDown();
+			this.labelSetGoldBadgeThresholdForAHT = new System.Windows.Forms.Label();
+			this.labelSetBronzeBadgeThresholdForAHT = new System.Windows.Forms.Label();
+			this.timeSpanTextBoxGoldThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.timeSpanTextBoxBronzeThresholdForAHT = new Teleopti.Ccc.Win.Common.Controls.TimeSpanTextBox();
+			this.labelSetBadgeGoldThresholdForAdherence = new System.Windows.Forms.Label();
+			this.labelSetBadgeBronzeThresholdForAdherence = new System.Windows.Forms.Label();
+			this.doubleTextBoxGoldThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
+			this.doubleTextBoxBronzeThresholdForAdherence = new Syncfusion.Windows.Forms.Tools.DoubleTextBox();
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount = new System.Windows.Forms.Label();
+			this.labelOneGoldBadgeEqualsSilverBadgeCount = new System.Windows.Forms.Label();
+			this.numericUpDownGoldToSilverBadgeRate = new System.Windows.Forms.NumericUpDown();
+			this.numericUpDownSilverToBronzeBadgeRate = new System.Windows.Forms.NumericUpDown();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -96,22 +96,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBody.SuspendLayout();
 			this.tableLayoutPanelSubHeader1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAgentBadgeSettings)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvGamificationSettings)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanelSubHeader2.SuspendLayout();
 			this.tableLayoutPanel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxGoldThresholdForAdherence)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverThresholdForAnsweredCalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvBadgeSettingRuleSets)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldThresholdForAnsweredCalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxBronzeThresholdForAdherence)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverToBronzeBadgeRate)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldToSilverBadgeRate)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownBronzeThresholdForAnsweredCalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdForAnsweredCalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxSilverThresholdForAdherence)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldThresholdForAnsweredCalls)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownBronzeThresholdForAnsweredCalls)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxGoldThresholdForAdherence)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxBronzeThresholdForAdherence)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldToSilverBadgeRate)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverToBronzeBadgeRate)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonDeleteBadgeSetting, 2, 0);
+			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonDeleteGamificationSetting, 2, 0);
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonNew, 1, 0);
 			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
@@ -162,27 +162,27 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader1.Location = new System.Drawing.Point(3, 7);
 			this.labelSubHeader1.Name = "labelSubHeader1";
 			this.labelSubHeader1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelSubHeader1.Size = new System.Drawing.Size(210, 20);
+			this.labelSubHeader1.Size = new System.Drawing.Size(251, 20);
 			this.labelSubHeader1.TabIndex = 0;
-			this.labelSubHeader1.Text = "xxChooseBadgeSettingToChange";
+			this.labelSubHeader1.Text = "xxChooseGamificationSettingToChange";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// buttonDeleteBadgeSetting
+			// buttonDeleteGamificationSetting
 			// 
-			this.buttonDeleteBadgeSetting.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonDeleteBadgeSetting.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonDeleteBadgeSetting.BackColor = System.Drawing.Color.White;
-			this.buttonDeleteBadgeSetting.BeforeTouchSize = new System.Drawing.Size(28, 28);
-			this.buttonDeleteBadgeSetting.ForeColor = System.Drawing.Color.White;
-			this.buttonDeleteBadgeSetting.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup4;
-			this.buttonDeleteBadgeSetting.IsBackStageButton = false;
-			this.buttonDeleteBadgeSetting.Location = new System.Drawing.Point(903, 3);
-			this.buttonDeleteBadgeSetting.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
-			this.buttonDeleteBadgeSetting.Name = "buttonDeleteBadgeSetting";
-			this.buttonDeleteBadgeSetting.Size = new System.Drawing.Size(28, 28);
-			this.buttonDeleteBadgeSetting.TabIndex = 7;
-			this.buttonDeleteBadgeSetting.TabStop = false;
-			this.buttonDeleteBadgeSetting.UseVisualStyle = true;
+			this.buttonDeleteGamificationSetting.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonDeleteGamificationSetting.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonDeleteGamificationSetting.BackColor = System.Drawing.Color.White;
+			this.buttonDeleteGamificationSetting.BeforeTouchSize = new System.Drawing.Size(28, 28);
+			this.buttonDeleteGamificationSetting.ForeColor = System.Drawing.Color.White;
+			this.buttonDeleteGamificationSetting.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_temp_DeleteGroup4;
+			this.buttonDeleteGamificationSetting.IsBackStageButton = false;
+			this.buttonDeleteGamificationSetting.Location = new System.Drawing.Point(903, 3);
+			this.buttonDeleteGamificationSetting.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
+			this.buttonDeleteGamificationSetting.Name = "buttonDeleteGamificationSetting";
+			this.buttonDeleteGamificationSetting.Size = new System.Drawing.Size(28, 28);
+			this.buttonDeleteGamificationSetting.TabIndex = 7;
+			this.buttonDeleteGamificationSetting.TabStop = false;
+			this.buttonDeleteGamificationSetting.UseVisualStyle = true;
 			// 
 			// buttonNew
 			// 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Controls.Add(this.autoLabelChangeInfo, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel5, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.comboBoxAdvAgentBadgeSettings, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.comboBoxAdvGamificationSettings, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.textBoxDescription, 1, 1);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabel1, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.autoLabelInfoAboutChanges, 1, 2);
@@ -244,20 +244,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel5.Name = "autoLabel5";
 			this.autoLabel5.Size = new System.Drawing.Size(197, 24);
 			this.autoLabel5.TabIndex = 8;
-			this.autoLabel5.Text = "xxBadgeSettingColon";
+			this.autoLabel5.Text = "xxGamificationSettingColon";
 			this.autoLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// comboBoxAdvAgentBadgeSettings
+			// comboBoxAdvGamificationSettings
 			// 
-			this.comboBoxAdvAgentBadgeSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.comboBoxAdvAgentBadgeSettings.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvAgentBadgeSettings.BeforeTouchSize = new System.Drawing.Size(252, 23);
-			this.comboBoxAdvAgentBadgeSettings.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvAgentBadgeSettings.Location = new System.Drawing.Point(353, 7);
-			this.comboBoxAdvAgentBadgeSettings.Name = "comboBoxAdvAgentBadgeSettings";
-			this.comboBoxAdvAgentBadgeSettings.Size = new System.Drawing.Size(252, 23);
-			this.comboBoxAdvAgentBadgeSettings.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxAdvAgentBadgeSettings.TabIndex = 0;
+			this.comboBoxAdvGamificationSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxAdvGamificationSettings.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvGamificationSettings.BeforeTouchSize = new System.Drawing.Size(252, 23);
+			this.comboBoxAdvGamificationSettings.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxAdvGamificationSettings.Location = new System.Drawing.Point(353, 7);
+			this.comboBoxAdvGamificationSettings.Name = "comboBoxAdvGamificationSettings";
+			this.comboBoxAdvGamificationSettings.Size = new System.Drawing.Size(252, 23);
+			this.comboBoxAdvGamificationSettings.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxAdvGamificationSettings.TabIndex = 0;
 			// 
 			// textBoxDescription
 			// 
@@ -338,9 +338,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader2.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelSubHeader2.Location = new System.Drawing.Point(3, 8);
 			this.labelSubHeader2.Name = "labelSubHeader2";
-			this.labelSubHeader2.Size = new System.Drawing.Size(179, 17);
+			this.labelSubHeader2.Size = new System.Drawing.Size(220, 17);
 			this.labelSubHeader2.TabIndex = 0;
-			this.labelSubHeader2.Text = "xxEnterBadgeSettingDetails";
+			this.labelSubHeader2.Text = "xxEnterGamificationSettingDetails";
 			this.labelSubHeader2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// tableLayoutPanel6
@@ -430,25 +430,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.reset.Text = "xxResetBadges";
 			this.reset.UseVisualStyleBackColor = true;
 			// 
-			// doubleTextBoxGoldThresholdForAdherence
-			// 
-			this.doubleTextBoxGoldThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.doubleTextBoxGoldThresholdForAdherence.BackGroundColor = System.Drawing.SystemColors.Window;
-			this.doubleTextBoxGoldThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(115, 23);
-			this.doubleTextBoxGoldThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.doubleTextBoxGoldThresholdForAdherence.DoubleValue = 0D;
-			this.doubleTextBoxGoldThresholdForAdherence.Enabled = false;
-			this.doubleTextBoxGoldThresholdForAdherence.Location = new System.Drawing.Point(353, 491);
-			this.doubleTextBoxGoldThresholdForAdherence.MaxValue = 100D;
-			this.doubleTextBoxGoldThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.doubleTextBoxGoldThresholdForAdherence.MinValue = 0D;
-			this.doubleTextBoxGoldThresholdForAdherence.Name = "doubleTextBoxGoldThresholdForAdherence";
-			this.doubleTextBoxGoldThresholdForAdherence.NullString = "";
-			this.doubleTextBoxGoldThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
-			this.doubleTextBoxGoldThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
-			this.doubleTextBoxGoldThresholdForAdherence.TabIndex = 101;
-			this.doubleTextBoxGoldThresholdForAdherence.Text = "0.00";
-			// 
 			// numericUpDownSilverThresholdForAnsweredCalls
 			// 
 			this.numericUpDownSilverThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -474,7 +455,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.comboBoxAdvBadgeSettingRuleSets.Size = new System.Drawing.Size(252, 23);
 			this.comboBoxAdvBadgeSettingRuleSets.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvBadgeSettingRuleSets.TabIndex = 0;
-			this.comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAgentBadgeSettingRuleSetSelectedIndexChanged);
+			this.comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged);
 			// 
 			// autoLabel2
 			// 
@@ -485,7 +466,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.autoLabel2.Name = "autoLabel2";
 			this.autoLabel2.Size = new System.Drawing.Size(344, 24);
 			this.autoLabel2.TabIndex = 6;
-			this.autoLabel2.Text = "xxBadgeSettingRuleSetsColon";
+			this.autoLabel2.Text = "xxGamificationSettingRuleSetsColon";
 			this.autoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// CheckBoxUseBadgeForAnsweredCalls
@@ -511,31 +492,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetThresholdForAnsweredCalls.Text = "xxSetBadgeThresholdForAnsweredCalls";
 			this.labelSetThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// numericUpDownGoldThresholdForAnsweredCalls
-			// 
-			this.numericUpDownGoldThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownGoldThresholdForAnsweredCalls.Enabled = false;
-			this.numericUpDownGoldThresholdForAnsweredCalls.Location = new System.Drawing.Point(353, 121);
-			this.numericUpDownGoldThresholdForAnsweredCalls.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.numericUpDownGoldThresholdForAnsweredCalls.Name = "numericUpDownGoldThresholdForAnsweredCalls";
-			this.numericUpDownGoldThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
-			this.numericUpDownGoldThresholdForAnsweredCalls.TabIndex = 80;
-			// 
-			// labelSetGoldThresholdForAnsweredCalls
-			// 
-			this.labelSetGoldThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetGoldThresholdForAnsweredCalls.AutoSize = true;
-			this.labelSetGoldThresholdForAnsweredCalls.Location = new System.Drawing.Point(3, 125);
-			this.labelSetGoldThresholdForAnsweredCalls.Name = "labelSetGoldThresholdForAnsweredCalls";
-			this.labelSetGoldThresholdForAnsweredCalls.Size = new System.Drawing.Size(238, 15);
-			this.labelSetGoldThresholdForAnsweredCalls.TabIndex = 76;
-			this.labelSetGoldThresholdForAnsweredCalls.Text = "xxSetBadgeGoldThresholdForAnsweredCalls";
-			this.labelSetGoldThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// labelSetSilverThresholdForAnsweredCalls
 			// 
 			this.labelSetSilverThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -546,17 +502,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetSilverThresholdForAnsweredCalls.TabIndex = 75;
 			this.labelSetSilverThresholdForAnsweredCalls.Text = "xxSetBadgeSilverThresholdForAnsweredCalls";
 			this.labelSetSilverThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelSetBronzeThresholdForAnsweredCalls
-			// 
-			this.labelSetBronzeThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetBronzeThresholdForAnsweredCalls.AutoSize = true;
-			this.labelSetBronzeThresholdForAnsweredCalls.Location = new System.Drawing.Point(3, 195);
-			this.labelSetBronzeThresholdForAnsweredCalls.Name = "labelSetBronzeThresholdForAnsweredCalls";
-			this.labelSetBronzeThresholdForAnsweredCalls.Size = new System.Drawing.Size(249, 15);
-			this.labelSetBronzeThresholdForAnsweredCalls.TabIndex = 74;
-			this.labelSetBronzeThresholdForAnsweredCalls.Text = "xxSetBadgeBronzeThresholdForAnsweredCalls";
-			this.labelSetBronzeThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxUseBadgeForAHT
 			// 
@@ -581,17 +526,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetBadgeThresholdForAHT.Text = "xxSetBadgeThresholdForAHT";
 			this.labelSetBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// labelSetBronzeBadgeThresholdForAHT
-			// 
-			this.labelSetBronzeBadgeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetBronzeBadgeThresholdForAHT.AutoSize = true;
-			this.labelSetBronzeBadgeThresholdForAHT.Location = new System.Drawing.Point(3, 380);
-			this.labelSetBronzeBadgeThresholdForAHT.Name = "labelSetBronzeBadgeThresholdForAHT";
-			this.labelSetBronzeBadgeThresholdForAHT.Size = new System.Drawing.Size(196, 15);
-			this.labelSetBronzeBadgeThresholdForAHT.TabIndex = 83;
-			this.labelSetBronzeBadgeThresholdForAHT.Text = "xxSetBronzeBadgeThresholdForAHT";
-			this.labelSetBronzeBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// labelSetSilverBadgeThresholdForAHT
 			// 
 			this.labelSetSilverBadgeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -602,17 +536,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetSilverBadgeThresholdForAHT.TabIndex = 84;
 			this.labelSetSilverBadgeThresholdForAHT.Text = "xxSetSilverBadgeThresholdForAHT";
 			this.labelSetSilverBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelSetGoldBadgeThresholdForAHT
-			// 
-			this.labelSetGoldBadgeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetGoldBadgeThresholdForAHT.AutoSize = true;
-			this.labelSetGoldBadgeThresholdForAHT.Location = new System.Drawing.Point(3, 310);
-			this.labelSetGoldBadgeThresholdForAHT.Name = "labelSetGoldBadgeThresholdForAHT";
-			this.labelSetGoldBadgeThresholdForAHT.Size = new System.Drawing.Size(185, 15);
-			this.labelSetGoldBadgeThresholdForAHT.TabIndex = 85;
-			this.labelSetGoldBadgeThresholdForAHT.Text = "xxSetGoldBadgeThresholdForAHT";
-			this.labelSetGoldBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxUseBadgeForAdherence
 			// 
@@ -637,17 +560,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetBadgeThresholdForAdherence.Text = "xxSetBadgeThresholdForAdherence";
 			this.labelSetBadgeThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// labelSetBadgeBronzeThresholdForAdherence
-			// 
-			this.labelSetBadgeBronzeThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetBadgeBronzeThresholdForAdherence.AutoSize = true;
-			this.labelSetBadgeBronzeThresholdForAdherence.Location = new System.Drawing.Point(3, 565);
-			this.labelSetBadgeBronzeThresholdForAdherence.Name = "labelSetBadgeBronzeThresholdForAdherence";
-			this.labelSetBadgeBronzeThresholdForAdherence.Size = new System.Drawing.Size(229, 15);
-			this.labelSetBadgeBronzeThresholdForAdherence.TabIndex = 88;
-			this.labelSetBadgeBronzeThresholdForAdherence.Text = "xxSetBadgeBronzeThresholdForAdherence";
-			this.labelSetBadgeBronzeThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// labelSetBadgeSilverThresholdForAdherence
 			// 
 			this.labelSetBadgeSilverThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -658,17 +570,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetBadgeSilverThresholdForAdherence.TabIndex = 89;
 			this.labelSetBadgeSilverThresholdForAdherence.Text = "xxSetBadgeSilverThresholdForAdherence";
 			this.labelSetBadgeSilverThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelSetBadgeGoldThresholdForAdherence
-			// 
-			this.labelSetBadgeGoldThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSetBadgeGoldThresholdForAdherence.AutoSize = true;
-			this.labelSetBadgeGoldThresholdForAdherence.Location = new System.Drawing.Point(3, 495);
-			this.labelSetBadgeGoldThresholdForAdherence.Name = "labelSetBadgeGoldThresholdForAdherence";
-			this.labelSetBadgeGoldThresholdForAdherence.Size = new System.Drawing.Size(218, 15);
-			this.labelSetBadgeGoldThresholdForAdherence.TabIndex = 90;
-			this.labelSetBadgeGoldThresholdForAdherence.Text = "xxSetBadgeGoldThresholdForAdherence";
-			this.labelSetBadgeGoldThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// timeSpanTextBoxThresholdForAHT
 			// 
@@ -681,28 +582,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
-			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(584, 33);
+			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(585, 33);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 94;
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 65534;
-			// 
-			// timeSpanTextBoxBronzeThresholdForAHT
-			// 
-			this.timeSpanTextBoxBronzeThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.timeSpanTextBoxBronzeThresholdForAHT.AllowNegativeValues = true;
-			this.timeSpanTextBoxBronzeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.timeSpanTextBoxBronzeThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxBronzeThresholdForAHT.Enabled = false;
-			this.timeSpanTextBoxBronzeThresholdForAHT.Location = new System.Drawing.Point(353, 372);
-			this.timeSpanTextBoxBronzeThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxBronzeThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
-			this.timeSpanTextBoxBronzeThresholdForAHT.Name = "timeSpanTextBoxBronzeThresholdForAHT";
-			this.timeSpanTextBoxBronzeThresholdForAHT.Size = new System.Drawing.Size(584, 33);
-			this.timeSpanTextBoxBronzeThresholdForAHT.TabIndex = 95;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 65534;
+			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 65535;
 			// 
 			// timeSpanTextBoxSilverThresholdForAHT
 			// 
@@ -715,28 +599,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBoxSilverThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
 			this.timeSpanTextBoxSilverThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
 			this.timeSpanTextBoxSilverThresholdForAHT.Name = "timeSpanTextBoxSilverThresholdForAHT";
-			this.timeSpanTextBoxSilverThresholdForAHT.Size = new System.Drawing.Size(584, 33);
+			this.timeSpanTextBoxSilverThresholdForAHT.Size = new System.Drawing.Size(585, 33);
 			this.timeSpanTextBoxSilverThresholdForAHT.TabIndex = 96;
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 65534;
-			// 
-			// timeSpanTextBoxGoldThresholdForAHT
-			// 
-			this.timeSpanTextBoxGoldThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
-			this.timeSpanTextBoxGoldThresholdForAHT.AllowNegativeValues = true;
-			this.timeSpanTextBoxGoldThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.timeSpanTextBoxGoldThresholdForAHT.DefaultInterpretAsMinutes = true;
-			this.timeSpanTextBoxGoldThresholdForAHT.Enabled = false;
-			this.timeSpanTextBoxGoldThresholdForAHT.Location = new System.Drawing.Point(353, 302);
-			this.timeSpanTextBoxGoldThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
-			this.timeSpanTextBoxGoldThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
-			this.timeSpanTextBoxGoldThresholdForAHT.Name = "timeSpanTextBoxGoldThresholdForAHT";
-			this.timeSpanTextBoxGoldThresholdForAHT.Size = new System.Drawing.Size(584, 33);
-			this.timeSpanTextBoxGoldThresholdForAHT.TabIndex = 97;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxWidth = 65534;
+			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 65535;
 			// 
 			// doubleTextBoxThresholdForAdherence
 			// 
@@ -756,99 +623,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxThresholdForAdherence.TabIndex = 98;
 			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
-			// 
-			// doubleTextBoxBronzeThresholdForAdherence
-			// 
-			this.doubleTextBoxBronzeThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.doubleTextBoxBronzeThresholdForAdherence.BackGroundColor = System.Drawing.SystemColors.Window;
-			this.doubleTextBoxBronzeThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(115, 23);
-			this.doubleTextBoxBronzeThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
-			this.doubleTextBoxBronzeThresholdForAdherence.DoubleValue = 0D;
-			this.doubleTextBoxBronzeThresholdForAdherence.Enabled = false;
-			this.doubleTextBoxBronzeThresholdForAdherence.Location = new System.Drawing.Point(353, 561);
-			this.doubleTextBoxBronzeThresholdForAdherence.MaxValue = 100D;
-			this.doubleTextBoxBronzeThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
-			this.doubleTextBoxBronzeThresholdForAdherence.MinValue = 0D;
-			this.doubleTextBoxBronzeThresholdForAdherence.Name = "doubleTextBoxBronzeThresholdForAdherence";
-			this.doubleTextBoxBronzeThresholdForAdherence.NullString = "";
-			this.doubleTextBoxBronzeThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
-			this.doubleTextBoxBronzeThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
-			this.doubleTextBoxBronzeThresholdForAdherence.TabIndex = 99;
-			this.doubleTextBoxBronzeThresholdForAdherence.Text = "0.00";
-			// 
-			// labelOneSilverBadgeEqualsBronzeBadgeCount
-			// 
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.AutoSize = true;
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Location = new System.Drawing.Point(3, 610);
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Name = "labelOneSilverBadgeEqualsBronzeBadgeCount";
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Size = new System.Drawing.Size(236, 15);
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.TabIndex = 102;
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Text = "xxOneSilverBadgeEqualsBronzeBadgeCount";
-			this.labelOneSilverBadgeEqualsBronzeBadgeCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelOneGoldBadgeEqualsSilverBadgeCount
-			// 
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.AutoSize = true;
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.Location = new System.Drawing.Point(3, 645);
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.Name = "labelOneGoldBadgeEqualsSilverBadgeCount";
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.Size = new System.Drawing.Size(225, 15);
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.TabIndex = 106;
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.Text = "xxOneGoldBadgeEqualsSilverBadgeCount";
-			this.labelOneGoldBadgeEqualsSilverBadgeCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// numericUpDownSilverToBronzeBadgeRate
-			// 
-			this.numericUpDownSilverToBronzeBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownSilverToBronzeBadgeRate.Enabled = false;
-			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(353, 606);
-			this.numericUpDownSilverToBronzeBadgeRate.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			this.numericUpDownSilverToBronzeBadgeRate.Name = "numericUpDownSilverToBronzeBadgeRate";
-			this.numericUpDownSilverToBronzeBadgeRate.Size = new System.Drawing.Size(115, 23);
-			this.numericUpDownSilverToBronzeBadgeRate.TabIndex = 107;
-			this.numericUpDownSilverToBronzeBadgeRate.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			// 
-			// numericUpDownGoldToSilverBadgeRate
-			// 
-			this.numericUpDownGoldToSilverBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownGoldToSilverBadgeRate.Enabled = false;
-			this.numericUpDownGoldToSilverBadgeRate.Location = new System.Drawing.Point(353, 641);
-			this.numericUpDownGoldToSilverBadgeRate.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			this.numericUpDownGoldToSilverBadgeRate.Name = "numericUpDownGoldToSilverBadgeRate";
-			this.numericUpDownGoldToSilverBadgeRate.Size = new System.Drawing.Size(115, 23);
-			this.numericUpDownGoldToSilverBadgeRate.TabIndex = 108;
-			this.numericUpDownGoldToSilverBadgeRate.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-			// 
-			// numericUpDownBronzeThresholdForAnsweredCalls
-			// 
-			this.numericUpDownBronzeThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.numericUpDownBronzeThresholdForAnsweredCalls.Enabled = false;
-			this.numericUpDownBronzeThresholdForAnsweredCalls.Location = new System.Drawing.Point(353, 191);
-			this.numericUpDownBronzeThresholdForAnsweredCalls.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-			this.numericUpDownBronzeThresholdForAnsweredCalls.Name = "numericUpDownBronzeThresholdForAnsweredCalls";
-			this.numericUpDownBronzeThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
-			this.numericUpDownBronzeThresholdForAnsweredCalls.TabIndex = 81;
 			// 
 			// numericUpDownThresholdForAnsweredCalls
 			// 
@@ -941,6 +715,232 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.label15.TabIndex = 113;
 			this.label15.Text = "label15";
 			// 
+			// labelSetBronzeThresholdForAnsweredCalls
+			// 
+			this.labelSetBronzeThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSetBronzeThresholdForAnsweredCalls.AutoSize = true;
+			this.labelSetBronzeThresholdForAnsweredCalls.Location = new System.Drawing.Point(3, 195);
+			this.labelSetBronzeThresholdForAnsweredCalls.Name = "labelSetBronzeThresholdForAnsweredCalls";
+			this.labelSetBronzeThresholdForAnsweredCalls.Size = new System.Drawing.Size(249, 15);
+			this.labelSetBronzeThresholdForAnsweredCalls.TabIndex = 74;
+			this.labelSetBronzeThresholdForAnsweredCalls.Text = "xxSetBadgeBronzeThresholdForAnsweredCalls";
+			this.labelSetBronzeThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelSetGoldThresholdForAnsweredCalls
+			// 
+			this.labelSetGoldThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSetGoldThresholdForAnsweredCalls.AutoSize = true;
+			this.labelSetGoldThresholdForAnsweredCalls.Location = new System.Drawing.Point(3, 125);
+			this.labelSetGoldThresholdForAnsweredCalls.Name = "labelSetGoldThresholdForAnsweredCalls";
+			this.labelSetGoldThresholdForAnsweredCalls.Size = new System.Drawing.Size(238, 15);
+			this.labelSetGoldThresholdForAnsweredCalls.TabIndex = 76;
+			this.labelSetGoldThresholdForAnsweredCalls.Text = "xxSetBadgeGoldThresholdForAnsweredCalls";
+			this.labelSetGoldThresholdForAnsweredCalls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// numericUpDownGoldThresholdForAnsweredCalls
+			// 
+			this.numericUpDownGoldThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownGoldThresholdForAnsweredCalls.Enabled = false;
+			this.numericUpDownGoldThresholdForAnsweredCalls.Location = new System.Drawing.Point(353, 121);
+			this.numericUpDownGoldThresholdForAnsweredCalls.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.numericUpDownGoldThresholdForAnsweredCalls.Name = "numericUpDownGoldThresholdForAnsweredCalls";
+			this.numericUpDownGoldThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
+			this.numericUpDownGoldThresholdForAnsweredCalls.TabIndex = 80;
+			// 
+			// numericUpDownBronzeThresholdForAnsweredCalls
+			// 
+			this.numericUpDownBronzeThresholdForAnsweredCalls.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownBronzeThresholdForAnsweredCalls.Enabled = false;
+			this.numericUpDownBronzeThresholdForAnsweredCalls.Location = new System.Drawing.Point(353, 191);
+			this.numericUpDownBronzeThresholdForAnsweredCalls.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+			this.numericUpDownBronzeThresholdForAnsweredCalls.Name = "numericUpDownBronzeThresholdForAnsweredCalls";
+			this.numericUpDownBronzeThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 23);
+			this.numericUpDownBronzeThresholdForAnsweredCalls.TabIndex = 81;
+			// 
+			// labelSetGoldBadgeThresholdForAHT
+			// 
+			this.labelSetGoldBadgeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSetGoldBadgeThresholdForAHT.AutoSize = true;
+			this.labelSetGoldBadgeThresholdForAHT.Location = new System.Drawing.Point(3, 310);
+			this.labelSetGoldBadgeThresholdForAHT.Name = "labelSetGoldBadgeThresholdForAHT";
+			this.labelSetGoldBadgeThresholdForAHT.Size = new System.Drawing.Size(185, 15);
+			this.labelSetGoldBadgeThresholdForAHT.TabIndex = 85;
+			this.labelSetGoldBadgeThresholdForAHT.Text = "xxSetGoldBadgeThresholdForAHT";
+			this.labelSetGoldBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelSetBronzeBadgeThresholdForAHT
+			// 
+			this.labelSetBronzeBadgeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSetBronzeBadgeThresholdForAHT.AutoSize = true;
+			this.labelSetBronzeBadgeThresholdForAHT.Location = new System.Drawing.Point(3, 380);
+			this.labelSetBronzeBadgeThresholdForAHT.Name = "labelSetBronzeBadgeThresholdForAHT";
+			this.labelSetBronzeBadgeThresholdForAHT.Size = new System.Drawing.Size(196, 15);
+			this.labelSetBronzeBadgeThresholdForAHT.TabIndex = 83;
+			this.labelSetBronzeBadgeThresholdForAHT.Text = "xxSetBronzeBadgeThresholdForAHT";
+			this.labelSetBronzeBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// timeSpanTextBoxGoldThresholdForAHT
+			// 
+			this.timeSpanTextBoxGoldThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxGoldThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxGoldThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxGoldThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxGoldThresholdForAHT.Enabled = false;
+			this.timeSpanTextBoxGoldThresholdForAHT.Location = new System.Drawing.Point(353, 302);
+			this.timeSpanTextBoxGoldThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
+			this.timeSpanTextBoxGoldThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
+			this.timeSpanTextBoxGoldThresholdForAHT.Name = "timeSpanTextBoxGoldThresholdForAHT";
+			this.timeSpanTextBoxGoldThresholdForAHT.Size = new System.Drawing.Size(585, 33);
+			this.timeSpanTextBoxGoldThresholdForAHT.TabIndex = 97;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxWidth = 65535;
+			// 
+			// timeSpanTextBoxBronzeThresholdForAHT
+			// 
+			this.timeSpanTextBoxBronzeThresholdForAHT.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Left;
+			this.timeSpanTextBoxBronzeThresholdForAHT.AllowNegativeValues = true;
+			this.timeSpanTextBoxBronzeThresholdForAHT.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.timeSpanTextBoxBronzeThresholdForAHT.DefaultInterpretAsMinutes = true;
+			this.timeSpanTextBoxBronzeThresholdForAHT.Enabled = false;
+			this.timeSpanTextBoxBronzeThresholdForAHT.Location = new System.Drawing.Point(353, 372);
+			this.timeSpanTextBoxBronzeThresholdForAHT.Margin = new System.Windows.Forms.Padding(3, 2, 0, 0);
+			this.timeSpanTextBoxBronzeThresholdForAHT.MaximumValue = System.TimeSpan.Parse("01:00:00");
+			this.timeSpanTextBoxBronzeThresholdForAHT.Name = "timeSpanTextBoxBronzeThresholdForAHT";
+			this.timeSpanTextBoxBronzeThresholdForAHT.Size = new System.Drawing.Size(585, 33);
+			this.timeSpanTextBoxBronzeThresholdForAHT.TabIndex = 95;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 65535;
+			// 
+			// labelSetBadgeGoldThresholdForAdherence
+			// 
+			this.labelSetBadgeGoldThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSetBadgeGoldThresholdForAdherence.AutoSize = true;
+			this.labelSetBadgeGoldThresholdForAdherence.Location = new System.Drawing.Point(3, 495);
+			this.labelSetBadgeGoldThresholdForAdherence.Name = "labelSetBadgeGoldThresholdForAdherence";
+			this.labelSetBadgeGoldThresholdForAdherence.Size = new System.Drawing.Size(218, 15);
+			this.labelSetBadgeGoldThresholdForAdherence.TabIndex = 90;
+			this.labelSetBadgeGoldThresholdForAdherence.Text = "xxSetBadgeGoldThresholdForAdherence";
+			this.labelSetBadgeGoldThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelSetBadgeBronzeThresholdForAdherence
+			// 
+			this.labelSetBadgeBronzeThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelSetBadgeBronzeThresholdForAdherence.AutoSize = true;
+			this.labelSetBadgeBronzeThresholdForAdherence.Location = new System.Drawing.Point(3, 565);
+			this.labelSetBadgeBronzeThresholdForAdherence.Name = "labelSetBadgeBronzeThresholdForAdherence";
+			this.labelSetBadgeBronzeThresholdForAdherence.Size = new System.Drawing.Size(229, 15);
+			this.labelSetBadgeBronzeThresholdForAdherence.TabIndex = 88;
+			this.labelSetBadgeBronzeThresholdForAdherence.Text = "xxSetBadgeBronzeThresholdForAdherence";
+			this.labelSetBadgeBronzeThresholdForAdherence.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// doubleTextBoxGoldThresholdForAdherence
+			// 
+			this.doubleTextBoxGoldThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.doubleTextBoxGoldThresholdForAdherence.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.doubleTextBoxGoldThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(115, 23);
+			this.doubleTextBoxGoldThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.doubleTextBoxGoldThresholdForAdherence.DoubleValue = 0D;
+			this.doubleTextBoxGoldThresholdForAdherence.Enabled = false;
+			this.doubleTextBoxGoldThresholdForAdherence.Location = new System.Drawing.Point(353, 491);
+			this.doubleTextBoxGoldThresholdForAdherence.MaxValue = 100D;
+			this.doubleTextBoxGoldThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.doubleTextBoxGoldThresholdForAdherence.MinValue = 0D;
+			this.doubleTextBoxGoldThresholdForAdherence.Name = "doubleTextBoxGoldThresholdForAdherence";
+			this.doubleTextBoxGoldThresholdForAdherence.NullString = "";
+			this.doubleTextBoxGoldThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
+			this.doubleTextBoxGoldThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
+			this.doubleTextBoxGoldThresholdForAdherence.TabIndex = 101;
+			this.doubleTextBoxGoldThresholdForAdherence.Text = "0.00";
+			// 
+			// doubleTextBoxBronzeThresholdForAdherence
+			// 
+			this.doubleTextBoxBronzeThresholdForAdherence.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.doubleTextBoxBronzeThresholdForAdherence.BackGroundColor = System.Drawing.SystemColors.Window;
+			this.doubleTextBoxBronzeThresholdForAdherence.BeforeTouchSize = new System.Drawing.Size(115, 23);
+			this.doubleTextBoxBronzeThresholdForAdherence.Cursor = System.Windows.Forms.Cursors.IBeam;
+			this.doubleTextBoxBronzeThresholdForAdherence.DoubleValue = 0D;
+			this.doubleTextBoxBronzeThresholdForAdherence.Enabled = false;
+			this.doubleTextBoxBronzeThresholdForAdherence.Location = new System.Drawing.Point(353, 561);
+			this.doubleTextBoxBronzeThresholdForAdherence.MaxValue = 100D;
+			this.doubleTextBoxBronzeThresholdForAdherence.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
+			this.doubleTextBoxBronzeThresholdForAdherence.MinValue = 0D;
+			this.doubleTextBoxBronzeThresholdForAdherence.Name = "doubleTextBoxBronzeThresholdForAdherence";
+			this.doubleTextBoxBronzeThresholdForAdherence.NullString = "";
+			this.doubleTextBoxBronzeThresholdForAdherence.Size = new System.Drawing.Size(115, 23);
+			this.doubleTextBoxBronzeThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
+			this.doubleTextBoxBronzeThresholdForAdherence.TabIndex = 99;
+			this.doubleTextBoxBronzeThresholdForAdherence.Text = "0.00";
+			// 
+			// labelOneSilverBadgeEqualsBronzeBadgeCount
+			// 
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.AutoSize = true;
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Location = new System.Drawing.Point(3, 610);
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Name = "labelOneSilverBadgeEqualsBronzeBadgeCount";
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Size = new System.Drawing.Size(236, 15);
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.TabIndex = 102;
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.Text = "xxOneSilverBadgeEqualsBronzeBadgeCount";
+			this.labelOneSilverBadgeEqualsBronzeBadgeCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelOneGoldBadgeEqualsSilverBadgeCount
+			// 
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.AutoSize = true;
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Location = new System.Drawing.Point(3, 645);
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Name = "labelOneGoldBadgeEqualsSilverBadgeCount";
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Size = new System.Drawing.Size(225, 15);
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.TabIndex = 106;
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.Text = "xxOneGoldBadgeEqualsSilverBadgeCount";
+			this.labelOneGoldBadgeEqualsSilverBadgeCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// numericUpDownGoldToSilverBadgeRate
+			// 
+			this.numericUpDownGoldToSilverBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownGoldToSilverBadgeRate.Enabled = false;
+			this.numericUpDownGoldToSilverBadgeRate.Location = new System.Drawing.Point(353, 641);
+			this.numericUpDownGoldToSilverBadgeRate.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			this.numericUpDownGoldToSilverBadgeRate.Name = "numericUpDownGoldToSilverBadgeRate";
+			this.numericUpDownGoldToSilverBadgeRate.Size = new System.Drawing.Size(115, 23);
+			this.numericUpDownGoldToSilverBadgeRate.TabIndex = 108;
+			this.numericUpDownGoldToSilverBadgeRate.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			// 
+			// numericUpDownSilverToBronzeBadgeRate
+			// 
+			this.numericUpDownSilverToBronzeBadgeRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.numericUpDownSilverToBronzeBadgeRate.Enabled = false;
+			this.numericUpDownSilverToBronzeBadgeRate.Location = new System.Drawing.Point(353, 606);
+			this.numericUpDownSilverToBronzeBadgeRate.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			this.numericUpDownSilverToBronzeBadgeRate.Name = "numericUpDownSilverToBronzeBadgeRate";
+			this.numericUpDownSilverToBronzeBadgeRate.Size = new System.Drawing.Size(115, 23);
+			this.numericUpDownSilverToBronzeBadgeRate.TabIndex = 107;
+			this.numericUpDownSilverToBronzeBadgeRate.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+			// 
 			// gradientPanelHeader
 			// 
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -980,11 +980,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHeader.Location = new System.Drawing.Point(3, 6);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(240, 25);
+			this.labelHeader.Size = new System.Drawing.Size(297, 25);
 			this.labelHeader.TabIndex = 0;
-			this.labelHeader.Text = "xxManageBadgeSettings";
+			this.labelHeader.Text = "xxManageGamificationSettings";
 			// 
-			// AgentBadgeSettingControl
+			// GamificationSettingControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -992,31 +992,31 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.Controls.Add(this.tableLayoutPanelBody);
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Name = "AgentBadgeSettingControl";
+			this.Name = "GamificationSettingControl";
 			this.Size = new System.Drawing.Size(944, 1019);
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader1.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAgentBadgeSettings)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvGamificationSettings)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).EndInit();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.PerformLayout();
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.tableLayoutPanel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxGoldThresholdForAdherence)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverThresholdForAnsweredCalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvBadgeSettingRuleSets)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldThresholdForAnsweredCalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxThresholdForAdherence)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxBronzeThresholdForAdherence)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverToBronzeBadgeRate)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldToSilverBadgeRate)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDownBronzeThresholdForAnsweredCalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdForAnsweredCalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxSilverThresholdForAdherence)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldThresholdForAnsweredCalls)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownBronzeThresholdForAnsweredCalls)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxGoldThresholdForAdherence)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.doubleTextBoxBronzeThresholdForAdherence)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownGoldToSilverBadgeRate)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDownSilverToBronzeBadgeRate)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -1030,7 +1030,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxDescription;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel1;
-		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvAgentBadgeSettings;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvGamificationSettings;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
         private System.Windows.Forms.Label labelHeader;
@@ -1044,7 +1044,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader2;
         private Syncfusion.Windows.Forms.ButtonAdv buttonNew;
-		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteBadgeSetting;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteGamificationSetting;
 		private System.Windows.Forms.ToolTip toolTip1;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;

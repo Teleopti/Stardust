@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				allSupportedPages.Add(new AgentBadgeSettingControl(_toggleManager));
+				allSupportedPages.Add(new GamificationSettingControl(_toggleManager));
 			}
 
 			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913))

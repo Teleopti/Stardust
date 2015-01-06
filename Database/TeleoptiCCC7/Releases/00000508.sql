@@ -6,7 +6,10 @@
 IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[DifferentialAgentBadgeSettings]'))
    DROP TABLE [dbo].[DifferentialAgentBadgeSettings]
 GO
-CREATE TABLE [dbo].[DifferentialAgentBadgeSettings](
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[GamificationSetting]'))
+   DROP TABLE [dbo].[GamificationSetting]
+GO
+CREATE TABLE [dbo].[GamificationSetting](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Version] [int] NOT NULL,
 	[UpdatedBy] [uniqueidentifier] NOT NULL,
@@ -33,25 +36,25 @@ CREATE TABLE [dbo].[DifferentialAgentBadgeSettings](
 	[AdherenceGoldThreshold] [int] NOT NULL,
 	[SilverToBronzeBadgeRate] [int] NOT NULL,
 	[GoldToSilverBadgeRate] [int] NOT NULL,
- CONSTRAINT [PK_DifferentialAgentBadgeSettings] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_GamificationSetting] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)ON [PRIMARY]
+)
 ) ON [PRIMARY]
 
 GO
 
-ALTER TABLE [dbo].[DifferentialAgentBadgeSettings]  WITH CHECK ADD  CONSTRAINT [FK_DifferentialAgentBadgeSettings_BusinessUnit] FOREIGN KEY([BusinessUnit])
+ALTER TABLE [dbo].[GamificationSetting]  WITH CHECK ADD  CONSTRAINT [FK_GamificationSetting_BusinessUnit] FOREIGN KEY([BusinessUnit])
 REFERENCES [dbo].[BusinessUnit] ([Id]);
 Go
 
-ALTER TABLE [dbo].[DifferentialAgentBadgeSettings] CHECK CONSTRAINT [FK_DifferentialAgentBadgeSettings_BusinessUnit]
+ALTER TABLE [dbo].[GamificationSetting] CHECK CONSTRAINT [FK_GamificationSetting_BusinessUnit]
 GO
 
-ALTER TABLE [dbo].[DifferentialAgentBadgeSettings]  WITH CHECK ADD  CONSTRAINT [FK_DifferentialAgentBadgeSettings_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
+ALTER TABLE [dbo].[GamificationSetting]  WITH CHECK ADD  CONSTRAINT [FK_GamificationSetting_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
 REFERENCES [dbo].[Person] ([Id])
 GO
 
-ALTER TABLE [dbo].[DifferentialAgentBadgeSettings] CHECK CONSTRAINT [FK_DifferentialAgentBadgeSettings_Person_UpdatedBy]
+ALTER TABLE [dbo].[GamificationSetting] CHECK CONSTRAINT [FK_GamificationSetting_Person_UpdatedBy]
 GO
 

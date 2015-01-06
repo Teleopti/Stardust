@@ -8,10 +8,10 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.Common
 {
 	[Serializable]
-	public class DifferentialAgentBadgeSettings : VersionedAggregateRootWithBusinessUnit, IDifferentialAgentBadgeSettings, IDeleteTag
+	public class GamificationSetting : VersionedAggregateRootWithBusinessUnit, IGamificationSetting, IDeleteTag
 	{
 		private Description _description;
-		private AgentBadgeSettingRuleSet _badgeSettingRuleSet;
+		private GamificationSettingRuleSet _badgeSettingRuleSet;
 
 		private bool _answeredCallsBadgeEnabled = false;
 		private bool _aHTBadgeEnabled = false;
@@ -40,16 +40,16 @@ namespace Teleopti.Ccc.Domain.Common
         /// Creates a new instance of badge setting
         /// </summary>
 		/// <param name="name">Name of badge setting</param>
-        public DifferentialAgentBadgeSettings(string name) : this()
+        public GamificationSetting(string name) : this()
         {
-			_badgeSettingRuleSet = AgentBadgeSettingRuleSet.RuleWithRatioConvertor;
+			_badgeSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor;
             _description = new Description(name);
         }
 
         /// <summary>
         /// Constructor for NHibernate
         /// </summary>
-		protected DifferentialAgentBadgeSettings()
+		protected GamificationSetting()
         {
         }
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// <summary>
 		/// Type of AgentBadgeSettingRuleSet
         /// </summary>
-		public virtual AgentBadgeSettingRuleSet BadgeSettingRuleSet
+		public virtual GamificationSettingRuleSet BadgeSettingRuleSet
         {
 			get { return _badgeSettingRuleSet; }
 			set { _badgeSettingRuleSet = value; }

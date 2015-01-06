@@ -2449,15 +2449,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure to delete &apos;{0}&apos; badge setting ?.
-        /// </summary>
-        public static string AreYouSureYouWantToDeleteBadgeSetting {
-            get {
-                return ResourceManager.GetString("AreYouSureYouWantToDeleteBadgeSetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &apos;{0}&apos; contract?.
         /// </summary>
         public static string AreYouSureYouWantToDeleteContract {
@@ -2490,6 +2481,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AreYouSureYouWantToDeleteDefinitionSet {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToDeleteDefinitionSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete &apos;{0}&apos; gamification setting ?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeleteGamificationSetting {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeleteGamificationSetting", resourceCulture);
             }
         }
         
@@ -14641,15 +14641,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New agent badge setting.
-        /// </summary>
-        public static string NewAgentBadgeSetting {
-            get {
-                return ResourceManager.GetString("NewAgentBadgeSetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create new alarm.
         /// </summary>
         public static string NewAlarm {
@@ -14754,6 +14745,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewExportThreeDots {
             get {
                 return ResourceManager.GetString("NewExportThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New gamification setting.
+        /// </summary>
+        public static string NewGamificationSetting {
+            get {
+                return ResourceManager.GetString("NewGamificationSetting", resourceCulture);
             }
         }
         

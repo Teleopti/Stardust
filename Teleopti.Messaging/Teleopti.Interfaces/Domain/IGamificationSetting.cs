@@ -2,10 +2,10 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IDifferentialAgentBadgeSettings :IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit
+	public interface IGamificationSetting :IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit
 	{
 		Description Description { get; set; }
-		AgentBadgeSettingRuleSet BadgeSettingRuleSet { get; set; }
+		GamificationSettingRuleSet BadgeSettingRuleSet { get; set; }
 		bool IsDeleted { get; }
 		
 		bool AnsweredCallsBadgeEnabled { get; set; }
