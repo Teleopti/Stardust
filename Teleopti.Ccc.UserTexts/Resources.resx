@@ -12691,12 +12691,32 @@ Reduce the complexity to use these shifts.</value>
     <value>Badge awarded rule with ratio convetor</value>
     <comment>Badge awarded rule with ratio convetor</comment>
   </data>
-   <data name="ConfirmDeleteRequest" xml:space="preserve">
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
     <value>Are you sure you want to delete this request?</value>
     <comment>use in MyTimeWeb a confirm message when agent try to delete a request.</comment>
   </data>
   <data name="ShiftExchangeAnnouncement" xml:space="preserve">
     <value>Shift Exchange Announcement</value>
     <comment>use in MyTimeWeb a kind of subject of request</comment>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Choose gamification setting to edit</value>
+    <comment>Choose gamification setting to edit</comment>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Enter gamification setting details</value>
+    <comment>Enter gamification setting details</comment>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Gamification setting:</value>
+    <comment>Gamification setting:</comment>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Gamification Setting Rule Sets:</value>
+    <comment>Gamification Setting Rule Sets:</comment>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Manage Gamification Settings</value>
+    <comment>Use for Gamification header</comment>
   </data>
 </root>

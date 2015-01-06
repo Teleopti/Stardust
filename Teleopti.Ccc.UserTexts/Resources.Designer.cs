@@ -4742,6 +4742,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose gamification setting to edit.
+        /// </summary>
+        public static string ChooseGamificationSettingToChange {
+            get {
+                return ResourceManager.GetString("ChooseGamificationSettingToChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose optional column to change.
         /// </summary>
         public static string ChooseOptionalColumnToChange {
@@ -8140,6 +8149,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter gamification setting details.
+        /// </summary>
+        public static string EnterGamificationSettingDetails {
+            get {
+                return ResourceManager.GetString("EnterGamificationSettingDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter name here.
         /// </summary>
         public static string EnterNameHere {
@@ -10027,6 +10045,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Gamification {
             get {
                 return ResourceManager.GetString("Gamification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gamification setting:.
+        /// </summary>
+        public static string GamificationSettingColon {
+            get {
+                return ResourceManager.GetString("GamificationSettingColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gamification Setting Rule Sets:.
+        /// </summary>
+        public static string GamificationSettingRuleSetsColon {
+            get {
+                return ResourceManager.GetString("GamificationSettingRuleSetsColon", resourceCulture);
             }
         }
         
@@ -12674,6 +12710,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ManageDefinitionSets {
             get {
                 return ResourceManager.GetString("ManageDefinitionSets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Gamification Settings.
+        /// </summary>
+        public static string ManageGamificationSettings {
+            get {
+                return ResourceManager.GetString("ManageGamificationSettings", resourceCulture);
             }
         }
         

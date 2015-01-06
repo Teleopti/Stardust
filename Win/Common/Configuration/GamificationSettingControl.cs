@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private List<IGamificationSetting> _gamificationSettingList;
 		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
 		private readonly IToggleManager _toggleManager;
+		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
+		private IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
@@ -41,6 +43,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public IGamificationSetting SelectedGamificationSetting
 		{
 			get { return (IGamificationSetting)comboBoxAdvGamificationSettings.SelectedItem; }
+		}
+
+		public GamificationSettingControl(IToggleManager toggleManager)
+		{
+			_toggleManager = toggleManager;
+
+			InitializeComponent();
+
+			comboBoxAdvGamificationSettings.SelectedIndexChanging += comboBoxAdvGamificationSettingSelectedIndexChanging;
+			comboBoxAdvGamificationSettings.SelectedIndexChanged += comboBoxAdvGamificationSettingSelectedIndexChanged;
+			comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged;
+			textBoxDescription.Validating += textBoxDescriptionValidating;
+			textBoxDescription.Validated += textBoxDescriptionValidated;
+
+			buttonNew.Click += buttonNewClick;
+			buttonDeleteGamificationSetting.Click += buttonDeleteGamificationSettingClick;
 		}
 
 		public void InitializeDialogControl()
@@ -87,23 +105,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void  SaveChanges()
 		{}
 
-		public GamificationSettingControl(IToggleManager toggleManager)
-		{
-			_toggleManager = toggleManager;
-			
-			InitializeComponent();
-
-			comboBoxAdvGamificationSettings.SelectedIndexChanging += comboBoxAdvGamificationSettingSelectedIndexChanging;
-			comboBoxAdvGamificationSettings.SelectedIndexChanged += comboBoxAdvGamificationSettingSelectedIndexChanged;
-			comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged;
-			textBoxDescription.Validating += textBoxDescriptionValidating;
-			textBoxDescription.Validated += textBoxDescriptionValidated;
-
-			buttonNew.Click += buttonNewClick;
-			buttonDeleteGamificationSetting.Click += buttonDeleteGamificationSettingClick;
-
-		}
-
+		
 
 		private void textBoxDescriptionValidated(object sender, EventArgs e)
 		{
@@ -163,6 +165,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			UnitOfWork = value;
 			Repository = new GamificationSettingRepository(UnitOfWork);
+			_agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(UnitOfWork);
+			_agentBadgeWithRankTransactionRepository = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
 		}
 
 		public void Persist()
@@ -417,6 +421,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			                    numericUpDownThresholdForAnsweredCalls.Enabled);
 			numericUpDownGoldToSilverBadgeRate.Enabled = isAnyTypeEnabled;
 			numericUpDownSilverToBronzeBadgeRate.Enabled = isAnyTypeEnabled;
+		}
+
+		private void reset_Click(object sender, EventArgs e)
+		{
+			var result = ViewBase.ShowOkCancelMessage(Resources.ResetBadgesConfirm, Resources.ResetBadges);
+			if (result != DialogResult.OK) return;
+			try
+			{
+				_agentBadgeTransactionRepository.ResetAgentBadges();
+				_agentBadgeWithRankTransactionRepository.ResetAgentBadges();
+			}
+			catch (Exception)
+			{
+				ViewBase.ShowErrorMessage(Resources.ResetBadgesFailed, Resources.ResetBadges);
+			}
 		}
 	}
 }

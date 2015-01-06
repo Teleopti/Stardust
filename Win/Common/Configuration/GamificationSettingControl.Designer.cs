@@ -429,6 +429,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.reset.TabIndex = 114;
 			this.reset.Text = "xxResetBadges";
 			this.reset.UseVisualStyleBackColor = true;
+			this.reset.Click += new System.EventHandler(this.reset_Click);
 			// 
 			// numericUpDownSilverThresholdForAnsweredCalls
 			// 
@@ -534,7 +535,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetSilverBadgeThresholdForAHT.Name = "labelSetSilverBadgeThresholdForAHT";
 			this.labelSetSilverBadgeThresholdForAHT.Size = new System.Drawing.Size(188, 15);
 			this.labelSetSilverBadgeThresholdForAHT.TabIndex = 84;
-			this.labelSetSilverBadgeThresholdForAHT.Text = "xxSetSilverBadgeThresholdForAHT";
+			this.labelSetSilverBadgeThresholdForAHT.Text = "xxSetBadgeSilverThresholdForAHT";
 			this.labelSetSilverBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkBoxUseBadgeForAdherence
@@ -773,7 +774,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetGoldBadgeThresholdForAHT.Name = "labelSetGoldBadgeThresholdForAHT";
 			this.labelSetGoldBadgeThresholdForAHT.Size = new System.Drawing.Size(185, 15);
 			this.labelSetGoldBadgeThresholdForAHT.TabIndex = 85;
-			this.labelSetGoldBadgeThresholdForAHT.Text = "xxSetGoldBadgeThresholdForAHT";
+			this.labelSetGoldBadgeThresholdForAHT.Text = "xxSetBadgeGoldThresholdForAHT";
 			this.labelSetGoldBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelSetBronzeBadgeThresholdForAHT
@@ -784,7 +785,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSetBronzeBadgeThresholdForAHT.Name = "labelSetBronzeBadgeThresholdForAHT";
 			this.labelSetBronzeBadgeThresholdForAHT.Size = new System.Drawing.Size(196, 15);
 			this.labelSetBronzeBadgeThresholdForAHT.TabIndex = 83;
-			this.labelSetBronzeBadgeThresholdForAHT.Text = "xxSetBronzeBadgeThresholdForAHT";
+			this.labelSetBronzeBadgeThresholdForAHT.Text = "xxSetBadgeBronzeThresholdForAHT";
 			this.labelSetBronzeBadgeThresholdForAHT.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// timeSpanTextBoxGoldThresholdForAHT
