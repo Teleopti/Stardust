@@ -105,15 +105,25 @@
 			</div>
 			<div class="request-list" data-bind="foreach: ColumnRequests">
 				<div class="row" data-bind="foreach: Items">
-					<div class="request col-xxs-12 col-md-6">
+					<div class="request col-md-6">
 						<div class="well well-small">
 							<div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
 								<div data-bind="if: CanDelete">
-									<button class="request-delete close" data-bind="click: $root.Delete,clickBubble: false" title="@Resources.Delete">&times;</button>
+									<button class="request-delete close" data-bind="click: $root.SwitchDeleteConfirmationVisibility, clickBubble: false, disable: IsDeletePending()" title="@Resources.Delete">&times;</button>
 								</div>
 								<div class="request-subject">
 									<h5 class="request-data-subject" data-bind="text: Subject"></h5>
 								</div>
+
+								<div class="alert alert-warning" role="alert" data-bind="visible: IsDeletePending()">
+									<span>@Resources.ConfirmDeleteRequest</span>
+									<span class="pull-right">
+										<a href="#" class="alert-link" data-bind="click: $root.SwitchDeleteConfirmationVisibility, clickBubble: false">@Resources.Cancel</a>
+										<a id="request-list-delete" href="#" class="alert-link" data-bind="click: $root.Delete, clickBubble: false">@Resources.Delete</a>
+									</span>
+								</div>
+
+
 								<div class="request-details">
 									<div>
 										<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>

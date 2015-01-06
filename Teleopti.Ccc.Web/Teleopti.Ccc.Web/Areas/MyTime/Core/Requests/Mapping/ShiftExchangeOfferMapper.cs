@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			IPersonRequest ret = new PersonRequest(loggedOnUser) {Request = offer};
 
-			//RobTodo: add resouces instead hard code
-			ret.Subject = "Shift Exchange Announcement";
+			ret.Subject = UserTexts.Resources.ShiftExchangeAnnouncement;
 			ret.TrySetMessage("");
 			return ret;
 		}

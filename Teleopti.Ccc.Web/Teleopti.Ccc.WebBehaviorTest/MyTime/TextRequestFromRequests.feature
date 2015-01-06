@@ -54,7 +54,6 @@ Scenario: Edit text request
 	And I submit my changes for the existing text request
 	Then I should see the existing text request in the list with subject 'my new subject'
 
-@ignore
 Scenario: Delete new text request
 	Given I am an agent
 	And I have an existing text request
@@ -62,7 +61,6 @@ Scenario: Delete new text request
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
-@ignore
 Scenario: Delete pending text request
 	Given I am an agent
 	And I have a pending text request

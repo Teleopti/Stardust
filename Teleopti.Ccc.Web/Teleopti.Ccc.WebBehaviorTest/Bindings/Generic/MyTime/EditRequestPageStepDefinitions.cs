@@ -204,6 +204,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIDeleteTheExistingRequestInTheList()
 		{
 			Browser.Interactions.Click(".request-list .request .request-delete");
+			Browser.Interactions.Click(".request-list .request #request-list-delete");
 		}
 	}
 }

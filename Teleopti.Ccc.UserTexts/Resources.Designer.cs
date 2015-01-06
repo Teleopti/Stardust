@@ -5076,6 +5076,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this request?.
+        /// </summary>
+        public static string ConfirmDeleteRequest {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Deletion.
         /// </summary>
         public static string ConfirmDeletion {
@@ -23065,6 +23074,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftEndingMessage {
             get {
                 return ResourceManager.GetString("ShiftEndingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift Exchange Announcement.
+        /// </summary>
+        public static string ShiftExchangeAnnouncement {
+            get {
+                return ResourceManager.GetString("ShiftExchangeAnnouncement", resourceCulture);
             }
         }
         

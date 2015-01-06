@@ -295,7 +295,6 @@ Scenario: Edit absence request
 	| Absence       | Illness        |
 	| Subject       | my new subject |
 
-@ignore
 Scenario: Delete absence request
 	Given I am an agent
 	And I have an existing absence request

@@ -34,6 +34,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.IsLoading = ko.observable(false);
         self.CanDelete = ko.observable(true);
         self.IsEditable = ko.observable(false);
+        self.IsDeletePending = ko.observable(false);
         self.StatusClass = ko.observable();
         self.DetailItem = undefined;
         self.parent = requestPageViewModel;
@@ -140,25 +141,34 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         	 });
         }, null, 'cancel_request');
 	    
-        self.Delete = function (requestItemViewModel) {
-        	if (confirm("It will delete this request, Continue?")) {
-		        var url = requestItemViewModel.Link();
-		        ajax.Ajax({
-			        url: url,
-			        dataType: "json",
-			        contentType: 'application/json; charset=utf-8',
-			        type: "DELETE",
-			        success: function() {
-				        self.Requests.remove(requestItemViewModel);
-			        },
-			        error: function(jqXHR, textStatus) {
-				        Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			        }
-		        });
-	        }
+        self.SwitchDeleteConfirmationVisibility = function (requestItemViewModel) {
+        	requestItemViewModel.IsDeletePending(!requestItemViewModel.IsDeletePending());
+
+        	ko.utils.arrayForEach(self.Requests(), function (request) {
+        		if (request !== requestItemViewModel) {
+			        request.IsDeletePending(false);
+		        }
+	        });
+
         };
 
-        self.AddRequest = function (request,isProcessing) {
+        self.Delete = function (requestItemViewModel) {
+			var url = requestItemViewModel.Link();
+			ajax.Ajax({
+				url: url,
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: "DELETE",
+				success: function () {
+					self.Requests.remove(requestItemViewModel);
+				},
+				error: function (jqXHR, textStatus) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				}
+			});
+		}
+
+	    self.AddRequest = function (request,isProcessing) {
             var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function (item) {
                 return item.Id() == request.Id;
             });

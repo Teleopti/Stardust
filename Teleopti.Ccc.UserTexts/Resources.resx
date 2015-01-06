@@ -12691,4 +12691,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Badge awarded rule with ratio convetor</value>
     <comment>Badge awarded rule with ratio convetor</comment>
   </data>
+   <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Are you sure you want to delete this request?</value>
+    <comment>use in MyTimeWeb a confirm message when agent try to delete a request.</comment>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Shift Exchange Announcement</value>
+    <comment>use in MyTimeWeb a kind of subject of request</comment>
+  </data>
 </root>

@@ -5,7 +5,9 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -22,9 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IHeaderViewModelFactory> _headerViewModelFactory;
 		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
+		private readonly IToggleManager _toggleManager;
 		private readonly Func<INow> _now;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<ILoggedOnUser> loggedOnUser, Func<INow> now)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<ILoggedOnUser> loggedOnUser, Func<INow> now, IToggleManager toggleManager)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
@@ -33,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_scheduleColorProvider = scheduleColorProvider;
 			_loggedOnUser = loggedOnUser;
 			_now = now;
+			_toggleManager = toggleManager;
 		}
 		
 		protected override void Configure()
@@ -99,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						var overtimeAvailabilityPeriodViewModels = periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability, s.OvertimeAvailabilityYesterday, s.MinMaxTime);
 						return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels);
 					}))
-				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
+				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest || (r.Request is ShiftExchangeOffer && _toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639))))))
 				.ForMember(d => d.ProbabilityClass, c => c.MapFrom(s => s.ProbabilityClass))
 				.ForMember(d => d.ProbabilityText, c => c.MapFrom(s => s.ProbabilityText))
 
