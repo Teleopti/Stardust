@@ -13,10 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		Guid GetBusinessUnitId(string teamId);
 
-		int PollAdherenceForTeam(Guid teamId);
-
-		int PollAdherenceForSite(Guid siteId);
-
 		IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites(Guid businessUnitId);
 	}
 }

@@ -67,16 +67,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return team.BusinessUnitExplicit.Id.GetValueOrDefault();
 		}
 
-		public int PollAdherenceForTeam(Guid teamId)
-		{
-			return _teamAdherencePersister.Get(teamId).AgentsOutOfAdherence;
-		}
-
-		public int PollAdherenceForSite(Guid siteId)
-		{
-			return _siteAdherencePersister.Get(siteId).AgentsOutOfAdherence;
-		}
-
 		public IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites(Guid businessUnitId)
 		{
 			return
