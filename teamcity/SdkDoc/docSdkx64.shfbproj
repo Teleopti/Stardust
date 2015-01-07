@@ -20,10 +20,10 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <FrameworkVersion>4.0</FrameworkVersion>
     <DocumentationSources>
-      <DocumentationSource sourceFile="$(WorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\$(Configuration)\Teleopti.Ccc.Sdk.Common.dll" />
-      <DocumentationSource sourceFile="$(WorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\$(Configuration)\Teleopti.Ccc.Sdk.Common.XML" />
+      <DocumentationSource sourceFile="$(SdkHostPath)\Teleopti.Ccc.Sdk.Common.dll" />
+      <DocumentationSource sourceFile="$(SdkHostPath)\Teleopti.Ccc.Sdk.Common.XML" />
 	  <!-- rk: don't know what this is but it existed before so I'll keep it-->
-      <DocumentationSource sourceFile="$(WorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\$(Configuration)\ProjectSummary.xml" />
+      <DocumentationSource sourceFile="$(SdkHostPath)\ProjectSummary.xml" />
     </DocumentationSources>
     <HelpTitle>SDK documentation</HelpTitle>
     <CopyrightHref>www.teleopti.com</CopyrightHref>
@@ -47,7 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Teleopti.Interfaces">
-      <HintPath>$(WorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\bin\$(Configuration)\Teleopti.Interfaces.dll</HintPath>
+      <HintPath>$(SdkHostPath)\Teleopti.Interfaces.dll</HintPath>
     </Reference>
   </ItemGroup>
   <!-- Import the SHFB build targets -->
