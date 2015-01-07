@@ -127,6 +127,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldResolveBadgeLeaderBoardRpeortController()
+		{
+				requestContainer.Resolve<BadgeLeaderBoardReportController>()
+					.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ControllersShouldBeenRegistered()
 		{
 			requestContainer.Resolve<AuthenticationController>()

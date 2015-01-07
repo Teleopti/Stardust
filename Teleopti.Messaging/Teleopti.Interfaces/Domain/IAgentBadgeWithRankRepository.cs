@@ -34,17 +34,5 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="badgeType">Badge type.</param>
 		/// <returns></returns>
 		IAgentBadgeWithRank Find(IPerson person, BadgeType badgeType);
-
-		/// <summary>
-		/// Get all agent badges 
-		/// </summary>
-		/// <returns></returns>
-		ICollection<IAgentBadgeWithRank> GetAllAgentBadges();
-
-		/// <summary>
-		/// Get all agent badges by specific badge type
-		/// </summary>
-		/// <returns></returns>
-		ICollection<IAgentBadgeWithRank> GetAllAgentBadges(BadgeType badgeType);
 	}
 }

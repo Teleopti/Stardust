@@ -419,6 +419,8 @@
     <Compile Include="Areas\Messages\Models\SendMessageViewModel.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportController.cs" />
+    <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\BadgeLeaderBoardReportOptionFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportOptionFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftExchangeOfferMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftExchangeOfferMapper.cs" />
     <Compile Include="Areas\MyTime\Models\BadgeLeaderBoardReport\LeaderboardQuery.cs" />

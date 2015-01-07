@@ -27,23 +27,21 @@ namespace Teleopti.Ccc.Web.Core
 		public string BuildNameFromSetting(string firstName, string lastName)
 		{
 			string firstLast = firstName + " " + lastName;
-			string lastFirst = lastName + " " + firstName;
-			string name = firstLast;
-
+			
 			var persistedNameFormatSettings = _nameFormatSettings.Get();
 			if (persistedNameFormatSettings != null)
 			{
 				if (persistedNameFormatSettings.NameFormatId == 0)
 				{
-					name = firstLast;
+					return firstLast;
 				}
-				else if (persistedNameFormatSettings.NameFormatId == 1)
+				if (persistedNameFormatSettings.NameFormatId == 1)
 				{
-					name = lastFirst;
+					return lastName + " " + firstName;
 				}
 			}
 
-			return name;
+			return firstLast;
 		}
 	}
 }

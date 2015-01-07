@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
@@ -25,33 +26,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IAgentBadgeRepository _agentBadgeRepository;
 		private readonly IAgentBadgeWithRankRepository _agentBadgeWithRankRepository;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPersonRepository _personRepository;
 		private readonly IBadgeSettingProvider _agentBadgeSettingsProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IToggleManager _toggleManager;
+		private readonly IGroupingReadOnlyRepository _groupingRepository;
 		private bool toggleEnabled;
 
-		private IPerson[] permittedPersonList;
+		private static readonly Guid PageMain = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
+
+		private ReadOnlyGroupDetail[] permittedPersonList;
 
 		public LeaderboardAgentBadgeProvider(IAgentBadgeRepository agentBadgeRepository,
 			IAgentBadgeWithRankRepository agentBadgeWithRankRepository,
-			IPermissionProvider permissionProvider,
-			IPersonRepository personRepository, IBadgeSettingProvider agentBadgeSettingsProvider,
+			IPermissionProvider permissionProvider, IBadgeSettingProvider agentBadgeSettingsProvider,
 			IPersonNameProvider personNameProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository,
-			IToggleManager toggleManager)
+			IToggleManager toggleManager, IGroupingReadOnlyRepository groupingRepository)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
 			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
 			_permissionProvider = permissionProvider;
-			_personRepository = personRepository;
 			_agentBadgeSettingsProvider = agentBadgeSettingsProvider;
 			_personNameProvider = personNameProvider;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
 			_toggleManager = toggleManager;
+			_groupingRepository = groupingRepository;
 		}
 
 		public IEnumerable<AgentBadgeOverview> GetPermittedAgents(string functionPath, LeaderboardQuery query)
@@ -66,17 +68,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				case LeadboardQueryType.Everyone:
 				case LeadboardQueryType.MyOwn:
 				{
-					// Handling of Everyone and MyOwn is different with Site or Team, this is to get best performance.
-					permittedAgentBadgeList = getAllPermittedAgentBadgeList(functionPath, setting, queryDate);
+					var detailsForPage = _groupingRepository.AvailableGroups(new ReadOnlyGroupPage {PageId = PageMain}, queryDate);
+					var agentsInSite = new List<ReadOnlyGroupDetail>();
+					detailsForPage.ForEach(
+						x => agentsInSite.AddRange(_groupingRepository.DetailsForGroup(x.GroupId, queryDate)));
+
+					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInSite, queryDate, setting);
 					break;
 				}
 				case LeadboardQueryType.Site:
 				{
 					var site = _siteRepository.Get(query.SelectedId);
 					var teamsInSite = site.TeamCollection;
-					var agentsInSite = new List<IPerson>();
+					var agentsInSite = new List<ReadOnlyGroupDetail>();
 					teamsInSite.ForEach(
-						x => agentsInSite.AddRange(_personRepository.FindPeopleBelongTeam(x, new DateOnlyPeriod(queryDate.AddDays(-1), queryDate))));
+						x => agentsInSite.AddRange(_groupingRepository.DetailsForGroup(x.Id.GetValueOrDefault(), queryDate)));
 
 					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInSite, queryDate, setting);
 					break;
@@ -84,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				case LeadboardQueryType.Team:
 				{
 					var team = _teamRepository.Get(query.SelectedId);
-					var agentsInTeam = _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(queryDate.AddDays(-1), queryDate));
+					var agentsInTeam = _groupingRepository.DetailsForGroup(team.Id.GetValueOrDefault(), queryDate);
 
 					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInTeam, queryDate, setting);
 					break;
@@ -92,35 +98,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			}
 
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
-		}
-
-		//this is only used for handling cases of Everyone and MyOwn to get best performance, to be confirmed for why
-		//returns total gold/silver/bronze badge number for each agent.
-		private IEnumerable<AgentWithBadge> getAllPermittedAgentBadgeList(string functionPath, IAgentBadgeSettings setting, DateOnly date)
-		{
-			//get agents' bronze badges and convert to silver/gold badges based on conversion rate
-			//this is for the case of badge calculation method1: accumulative awarding
-			var agentBadges = _agentBadgeRepository.GetAllAgentBadges() ?? new IAgentBadge[] {};
-			var agentWithBadges =
-				getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate).ToList();
-		
-			//get agents' bronze/silver/gold badges that are directly awarded without converion from bronze badge
-			//this is for the case of badge calcualtion method2: direct awarding
-			if (toggleEnabled)
-			{
-				var agentBadgeWithRank = _agentBadgeWithRankRepository.GetAllAgentBadges() ?? new IAgentBadgeWithRank[] {};
-				var agentWithRankedBadges = getAgentWithBadges(agentBadgeWithRank).ToList();
-				agentWithBadges = mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges).ToList();
-			}
-
-			var personGuidList = agentWithBadges.Select(item => item.Person).ToList();
-			var personList = _personRepository.FindPeople(personGuidList);
-			permittedPersonList = getPermittedAgents(functionPath, personList, date);
-
-			var result = from a in agentWithBadges
-				join p in permittedPersonList on a.Person equals p.Id
-				select a;
-			return result;
 		}
 
 		//combine badge number by gold/silver/bronze regardless of badge types£¨call, adherence, AHT)
@@ -144,13 +121,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		//gets all badges (gold/silver/bronze) for each agent by aggregating all types of badges
  		//returns total gold/silver/bronze badge number for each agent.
-		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeList(string functionPath, IEnumerable<IPerson> allAgents,
+		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeList(string functionPath, IEnumerable<ReadOnlyGroupDetail> allAgents,
 			DateOnly date, IAgentBadgeSettings setting)
 		{
 			permittedPersonList = getPermittedAgents(functionPath, allAgents, date);
-			var permittedPersonIdList = permittedPersonList.Select(x => x.Id.Value).ToList();
+			var permittedPersonIdList = permittedPersonList.Select(x => x.PersonId).ToList();
 
-			var agentBadges = _agentBadgeRepository.Find(permittedPersonIdList) ?? new List<IAgentBadge>();
+			var agentBadges = _agentBadgeRepository.Find(permittedPersonIdList);
 			var agentWithBadges = getAgentWithBadges(agentBadges, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate);
 			
 			if (toggleEnabled)
@@ -207,9 +184,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				}
 				else
 				{
+					var detail = permittedPersons.Single(p => p.PersonId == personId);
 					overview = new AgentBadgeOverview
 					{
-						AgentName = _personNameProvider.BuildNameFromSetting(permittedPersons.Single(p => p.Id == personId).Name)
+						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName,detail.LastName)
 					};
 					dic[personId] = overview;
 				}
@@ -221,10 +199,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return dic.Values;
 		}
 
-		private IPerson[] getPermittedAgents(string functionPath, IEnumerable<IPerson> personList, DateOnly date)
+		private ReadOnlyGroupDetail[] getPermittedAgents(string functionPath, IEnumerable<ReadOnlyGroupDetail> personList, DateOnly date)
 		{
 			return (from t in personList
-				where _permissionProvider.HasPersonPermission(functionPath, date, t)
+				where _permissionProvider.HasOrganisationDetailPermission(functionPath, date, t)
 				select t).ToArray();
 		}
 	}

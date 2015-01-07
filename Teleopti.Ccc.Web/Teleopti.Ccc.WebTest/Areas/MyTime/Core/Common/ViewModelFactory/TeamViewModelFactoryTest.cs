@@ -57,54 +57,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldCreateLeaderboardOptionsViewModel()
-		{
-			var teams = new[] { new Team() };
-			teams[0].SetId(Guid.NewGuid());
-			teams[0].Description = new Description("team");
-			teams[0].Site = new Site("site");
-			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
-			const string viewbadgeleaderboard = DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard;
-			var dateOnly = DateOnly.Today;
-
-			teamProvider.Stub(x => x.GetPermittedTeams(dateOnly, viewbadgeleaderboard)).Return(teams);
-
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			principalAuthorization.Stub(x => x.IsPermitted(viewbadgeleaderboard, dateOnly, teams[0].Site)).Return(true);
-			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator(), principalAuthorization);
-
-			var result = target.CreateLeaderboardOptionsViewModel(dateOnly, viewbadgeleaderboard).ToArray();
-
-			(result[0].text as string).Should().Be.EqualTo("Everyone");
-			(result[1].text as string).Should().Be.EqualTo("site");
-			(result[2].text as string).Should().Be.EqualTo("team");
-		}
-
-		[Test]
-		public void ShouldCreateLeaderboardOptionsViewModelIfHaveDataAvailableAsMyTeam()
-		{
-			var teams = new[] { new Team() };
-			teams[0].SetId(Guid.NewGuid());
-			teams[0].Description = new Description("team");
-			var site = new Site("site");
-			teams[0].Site = site;
-			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
-			const string viewbadgeleaderboard = DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard;
-			var dateOnly = DateOnly.Today;
-
-			teamProvider.Stub(x => x.GetPermittedTeams(dateOnly, viewbadgeleaderboard)).Return(teams);
-
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			principalAuthorization.Stub(x => x.IsPermitted(viewbadgeleaderboard, dateOnly, site)).Return(false);
-			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator(), principalAuthorization);
-
-			var result = target.CreateLeaderboardOptionsViewModel(dateOnly, viewbadgeleaderboard).ToArray();
-
-			(result[0].text as string).Should().Be.EqualTo("Everyone");
-			(result[1].text as string).Should().Be.EqualTo("team");
-		}
-
-		[Test]
 		public void ShouldCreateTeamOptionsViewModelIfNotHaveViewAllGroupPagesPermission()
 		{
 			var teams = new[] { new Team() };

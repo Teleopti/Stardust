@@ -220,6 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		private static void registerBadgeLeaderBoardReportTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<BadgeLeaderBoardReportViewModelFactory>().As<IBadgeLeaderBoardReportViewModelFactory>();
+			builder.RegisterType<BadgeLeaderBoardReportOptionFactory>().As<IBadgeLeaderBoardReportOptionFactory>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)

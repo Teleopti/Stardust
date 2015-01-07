@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -12,12 +14,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
     public class BadgeLeaderBoardReportController : Controller
     {
 	    private readonly IBadgeLeaderBoardReportViewModelFactory _badgeLeaderBoardReportViewModelFactory;
-		private readonly IUserCulture _userCulture;
+	    private readonly IBadgeLeaderBoardReportOptionFactory _viewModelFactory;
+	    private readonly IUserCulture _userCulture;
+	    private readonly INow _now;
 
-	    public BadgeLeaderBoardReportController(IBadgeLeaderBoardReportViewModelFactory badgeLeaderBoardReportViewModelFactory , IUserCulture userCulture)
+	    public BadgeLeaderBoardReportController(IBadgeLeaderBoardReportViewModelFactory badgeLeaderBoardReportViewModelFactory, IBadgeLeaderBoardReportOptionFactory viewModelFactory, IUserCulture userCulture, INow now)
 	    {
 		    _userCulture = userCulture;
+		    _now = now;
 		    _badgeLeaderBoardReportViewModelFactory = badgeLeaderBoardReportViewModelFactory;
+		    _viewModelFactory = viewModelFactory;
 	    }
 
 	    //
@@ -37,5 +43,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_badgeLeaderBoardReportViewModelFactory.CreateBadgeLeaderBoardReportViewModel(query), JsonRequestBehavior.AllowGet);
 		}
+
+	    [UnitOfWorkAction]
+	    public JsonResult OptionsForLeaderboard()
+	    {
+			return
+				Json(
+					_viewModelFactory.CreateLeaderboardOptions(_now.LocalDateOnly(), DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard),
+					JsonRequestBehavior.AllowGet);
+	    }
     }
 }

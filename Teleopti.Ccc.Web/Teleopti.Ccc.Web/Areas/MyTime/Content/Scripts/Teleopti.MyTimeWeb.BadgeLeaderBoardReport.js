@@ -40,20 +40,19 @@
 		self.loadOptions = function() {
 			self.isLoading(true);
 			ajax.Ajax({
-				url: 'Team/OptionsForLeaderboard',
+				url: 'BadgeLeaderBoardReport/OptionsForLeaderboard',
 				dataType: 'json',
-				data: { date: self.currentDate().clone().utc().toDate().toJSON() },
 				success: function (data) {
 					self.isLoading(false);
-					if (data.length === 1) {
+					if (data.options.length === 1) {
 						//MyOwn
 						self.showOptions(false);
 						self.selectedOptionType = 0;
 						self.loadData();
 					} else {
 						self.showOptions(true);
-						self.availableOptions(data);
-						self.selectedOptionId(data[0].id);
+						self.availableOptions(data.options);
+						self.selectedOptionId(data.defaultOptionId);
 					}
 				}
 			});

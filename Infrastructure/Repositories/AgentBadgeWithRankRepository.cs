@@ -2,6 +2,7 @@ using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
 		{
-			var idList = personIdList as Guid[] ?? personIdList.ToArray();
+			var idList = personIdList.ToArray();
 			if (!idList.Any())
 			{
 				return new List<IAgentBadgeWithRank>();
@@ -33,19 +34,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
 				+ "from AgentBadgeWithRank where BadgeType=:badgeType and Person in (:personIdList)";
-			var result = Session.CreateSQLQuery(query)
-				.SetParameterList("personIdList", idList)
-				.SetInt16("badgeType", (Int16)badgeType)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
-				.SetReadOnly(true)
-				.List<IAgentBadgeWithRank>();
+			
+			var result = new List<IAgentBadgeWithRank>();
+			var batch = idList.Batch(1000);
+			foreach (var batchOfPeopleId in batch)
+			{
+				result.AddRange(Session.CreateSQLQuery(query)
+					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
+					.SetInt16("badgeType", (Int16) badgeType)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentBadgeWithRank)))
+					.SetReadOnly(true)
+					.List<IAgentBadgeWithRank>());
+			}
 
 			return result;
 		}
 
 		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList)
 		{
-			var idList = personIdList as Guid[] ?? personIdList.ToArray();
+			var idList = personIdList.ToArray();
 			if (!idList.Any())
 			{
 				return new List<IAgentBadgeWithRank>();
@@ -53,11 +60,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
 				+ "from AgentBadgeWithRank where Person in (:personIdList)";
-			var result = Session.CreateSQLQuery(query)
-				.SetParameterList("personIdList", idList)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
-				.SetReadOnly(true)
-				.List<IAgentBadgeWithRank>();
+
+			var result = new List<IAgentBadgeWithRank>();
+			var batch = idList.Batch(1000);
+			foreach (var batchOfPeopleId in batch)
+			{
+				result.AddRange(Session.CreateSQLQuery(query)
+					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentBadgeWithRank)))
+					.SetReadOnly(true)
+					.List<IAgentBadgeWithRank>());
+			}
 
 			return result;
 		}
@@ -88,31 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadgeWithRank>();
-			return result;
-		}
-
-		public ICollection<IAgentBadgeWithRank> GetAllAgentBadges()
-		{
-			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
-				+ "from AgentBadgeWithRank";
-			
-			var result = Session.CreateSQLQuery(query)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
-					.SetReadOnly(true)
-					.List<IAgentBadgeWithRank>();
-			return result;
-		}
-
-		public ICollection<IAgentBadgeWithRank> GetAllAgentBadges(BadgeType badgeType)
-		{
-			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
-				+ "from AgentBadgeWithRank where BadgeType=:badgeType";
-
-			var result = Session.CreateSQLQuery(query)
-					.SetInt16("badgeType", (Int16)badgeType)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
-					.SetReadOnly(true)
-					.List<IAgentBadgeWithRank>();
 			return result;
 		}
 	}

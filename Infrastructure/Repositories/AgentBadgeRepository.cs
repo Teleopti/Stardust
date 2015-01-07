@@ -2,6 +2,7 @@ using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -24,39 +25,51 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IAgentBadge> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
 		{
-			var idList = personIdList as Guid[] ?? personIdList.ToArray();
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
+				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList)";
+			
+			var idList = personIdList.ToArray();
 			if (!idList.Any())
 			{
 				return new List<IAgentBadge>();
 			}
 
-			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
-				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList)";
-			var result = Session.CreateSQLQuery(query)
-				.SetParameterList("personIdList", idList)
-				.SetInt16("badgeType", (Int16)badgeType)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
-				.SetReadOnly(true)
-				.List<IAgentBadge>();
-
+			var result = new List<IAgentBadge>();
+			var batch = idList.Batch(1000);
+			foreach (var batchOfPeopleId in batch)
+			{
+				result.AddRange(Session.CreateSQLQuery(query)
+					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
+					.SetInt16("badgeType", (Int16) badgeType)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentBadge)))
+					.SetReadOnly(true)
+					.List<IAgentBadge>());
+			}
+			
 			return result;
 		}
 
 		public ICollection<IAgentBadge> Find(IEnumerable<Guid> personIdList)
 		{
-			var idList = personIdList as Guid[] ?? personIdList.ToArray();
+			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
+				+ "from AgentBadge where Person in (:personIdList)";
+
+			var idList = personIdList.ToArray();
 			if (!idList.Any())
 			{
 				return new List<IAgentBadge>();
 			}
 
-			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
-				+ "from AgentBadge where Person in (:personIdList)";
-			var result = Session.CreateSQLQuery(query)
-				.SetParameterList("personIdList", idList)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
-				.SetReadOnly(true)
-				.List<IAgentBadge>();
+			var result = new List<IAgentBadge>();
+			var batch = idList.Batch(1000);
+			foreach (var batchOfPeopleId in batch)
+			{
+				result.AddRange(Session.CreateSQLQuery(query)
+					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
+					.SetReadOnly(true)
+					.List<IAgentBadge>());
+			}
 
 			return result;
 		}
@@ -68,7 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
 				+ "from AgentBadge where Person = :person";
 			var result = Session.CreateSQLQuery(query)
-					.SetGuid("person", (Guid)person.Id)
+					.SetGuid("person", person.Id.GetValueOrDefault())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.List<IAgentBadge>();
@@ -82,34 +95,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
 				+ "from AgentBadge where Person = :person and BadgeType=:badgeType";
 			var result = Session.CreateSQLQuery(query)
-					.SetGuid("person", (Guid)person.Id)
+					.SetGuid("person", person.Id.GetValueOrDefault())
 					.SetInt16("badgeType", (Int16)badgeType)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadge>();
-			return result;
-		}
-
-		public ICollection<IAgentBadge> GetAllAgentBadges()
-		{
-			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate from AgentBadge";
-			
-			var result = Session.CreateSQLQuery(query)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
-					.SetReadOnly(true)
-					.List<IAgentBadge>();
-			return result;
-		}
-
-		public ICollection<IAgentBadge> GetAllAgentBadges(BadgeType badgeType)
-		{
-			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate from AgentBadge where BadgeType=:badgeType";
-
-			var result = Session.CreateSQLQuery(query)
-					.SetInt16("badgeType", (Int16)badgeType)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
-					.SetReadOnly(true)
-					.List<IAgentBadge>();
 			return result;
 		}
 	}
