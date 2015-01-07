@@ -85,14 +85,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites(Guid businessUnitId)
 		{
-			var sites = _siteRepository.LoadAll();
-			return sites.Select(x =>
-						new SiteOutOfAdherence
-						{
-							Id = Convert.ToString(x.Id),
-							OutOfAdherence =
-								_siteAdherencePersister.Get(x.Id.GetValueOrDefault()).AgentsOutOfAdherence
-						});
+			return
+				_siteAdherencePersister.GetAll(businessUnitId)
+					.Select(x => new SiteOutOfAdherence {Id = x.SiteId.ToString(), OutOfAdherence = x.AgentsOutOfAdherence});
 		}
 
 		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
