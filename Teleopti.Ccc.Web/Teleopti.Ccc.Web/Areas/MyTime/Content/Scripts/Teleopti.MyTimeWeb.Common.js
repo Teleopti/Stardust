@@ -102,6 +102,18 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		},
 		IsRtl: function () {
 			return $("html").attr("dir") == "rtl";
+		},
+		IsToggleEnabled: function(toggleName) {
+			var result = false;
+			var ajax = new Teleopti.MyTimeWeb.Ajax();
+			ajax.Ajax({
+				url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
+				async: false,
+				success: function (data) {
+					result = data.IsEnabled;
+				}
+			});
+			return result;
 		}
 	};
 

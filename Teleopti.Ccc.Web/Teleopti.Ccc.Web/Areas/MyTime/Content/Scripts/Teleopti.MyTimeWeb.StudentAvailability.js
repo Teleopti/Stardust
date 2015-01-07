@@ -21,15 +21,8 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var vm = null;
 	var periodFeedbackVM = null;
 	var toggleAvailabilityVerifyHours31654Enabled = (function () {
-		var result = false;
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AvailabilityVerifyHours_31654",
-			async: false,
-			success: function (data) {
-				result = data.IsEnabled;
-			},
-		});
-		return result;
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_AvailabilityVerifyHours_31654");
+		return toggleEnabled;
 	});
     
     var selectionViewModel = function() {

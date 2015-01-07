@@ -31,14 +31,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	};
 	self.IsEditMessageEnabled = ko.observable(false);
 	self.loadIsEditMessageEnabled = function () {
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341",
-			success: function (data) {
-				if (data.IsEnabled) {
-					self.IsEditMessageEnabled(true);
-				}
-			}
-		});
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341");
+		self.IsEditMessageEnabled(toggleEnabled);
 	};
 	self.UpdatedMessage = ko.observable();
 	self.PrefixAgentNameToMessage = function () {

@@ -493,29 +493,13 @@ $(document).ready(function () {
 	});
 
 	test("should load toggles", function () {
-		var ajax = {
-			Ajax: function (options) {
-				if (options.url == "../ToggleHandler/IsEnabled?toggle=Request_ShiftTradeRequestForMoreDays_20918") {
-					options.success({
-						IsEnabled: true
-					});
-				}
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			return toggleName == 'Request_ShiftTradeRequestForMoreDays_20918'
+				|| toggleName == 'Request_SeePossibleShiftTradesFromAllTeams_28770'
+				|| toggleName == 'Request_FilterPossibleShiftTradeByTime_24560';
+		};
 
-				if (options.url == "../ToggleHandler/IsEnabled?toggle=Request_SeePossibleShiftTradesFromAllTeams_28770") {
-					options.success({
-						IsEnabled: true
-					});
-				}
-
-				if (options.url == "../ToggleHandler/IsEnabled?toggle=Request_FilterPossibleShiftTradeByTime_24560") {
-					options.success({
-						IsEnabled: true
-					});
-				}
-			}
-		}
-
-		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.featureCheck();
 
 		equal(viewModel.isTradeForMultiDaysEnabled(), true);

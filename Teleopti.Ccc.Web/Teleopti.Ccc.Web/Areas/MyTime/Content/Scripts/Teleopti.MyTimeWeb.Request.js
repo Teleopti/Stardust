@@ -65,15 +65,8 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
     function _initNavigationViewModel() {
     	requestNavigationViewModel = new RequestNavigationViewModel();
-    	var ajax = new Teleopti.MyTimeWeb.Ajax();
-    	    ajax.Ajax({
-    	    	url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_ShiftTradeExchangeBulletin_31296",
-			        success: function (data) {
-    		           if (data.IsEnabled) {
-    			              requestNavigationViewModel.isShiftTradeBulletinBoardEnabled(true);
-    			           }
-    		        }
-    	    });
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296");
+		requestNavigationViewModel.isShiftTradeBulletinBoardEnabled(toggleEnabled);
 		ko.applyBindings(requestNavigationViewModel, $('div.navbar.subnavbar')[0]);
 	}
 

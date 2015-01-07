@@ -245,14 +245,8 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			}
 		});
 
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_AgentBadge_28913",
-			success: function (data) {
-				if (data.IsEnabled) {
-					vm.isBadgeFeatureEnabled(true);
-				}
-			}
-		});
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_AgentBadge_28913");
+		vm.isBadgeFeatureEnabled(toggleEnabled);
 	}
 
 	function _hasMoreToLoad() {

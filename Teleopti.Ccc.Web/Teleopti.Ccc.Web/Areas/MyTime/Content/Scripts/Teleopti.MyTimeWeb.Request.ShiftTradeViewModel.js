@@ -968,32 +968,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	};
 
 	self.featureCheck = function() {
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=Request_ShiftTradeRequestForMoreDays_20918",
-			success: function(data) {
-				if (data.IsEnabled) {
-					self.isTradeForMultiDaysEnabled(true);
-				}
-			}
-		});
+		var tradeForMultiDaysEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_ShiftTradeRequestForMoreDays_20918");
+		self.isTradeForMultiDaysEnabled(tradeForMultiDaysEnabled);
 
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=Request_SeePossibleShiftTradesFromAllTeams_28770",
-			success: function(data) {
-				if (data.IsEnabled) {
-					self.isPossibleSchedulesForAllEnabled(true);
-				}
-			}
-		});
-
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=Request_FilterPossibleShiftTradeByTime_24560",
-			success: function(data) {
-				if (data.IsEnabled) {
-					self.isFilterByTimeEnabled(true);
-				}
-			}
-		});
+		var possibleSchedulesForAllEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_SeePossibleShiftTradesFromAllTeams_28770");
+		self.isPossibleSchedulesForAllEnabled(possibleSchedulesForAllEnabled);
+		
+		var filterByTimeEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_FilterPossibleShiftTradeByTime_24560");
+		self.isFilterByTimeEnabled(filterByTimeEnabled);
 	};
 
 	self.setTimeFilters = function(hourTexts) {

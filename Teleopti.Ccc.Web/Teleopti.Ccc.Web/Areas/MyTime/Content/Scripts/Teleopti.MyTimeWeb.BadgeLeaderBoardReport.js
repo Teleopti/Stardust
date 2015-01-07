@@ -93,21 +93,15 @@
 	}
 
 	function featureCheck() {
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=MyTimeWeb_OrganisationalBasedLeaderboard_31184",
-			success: function (data) {
-				if (data.IsEnabled) {
-					vm.showOptions(true);
-					vm.loadOptions();
-				} else {
-					vm.showOptions(false);
-					vm.selectedOptionType = 3;
-					vm.loadData();
-				}
-			}
-		});
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OrganisationalBasedLeaderboard_31184");
+		vm.showOptions(toggleEnabled);
+		if (toggleEnabled) {
+			vm.loadOptions();
+		} else {
+			vm.selectedOptionType = 3;
+			vm.loadData();
+		}
 	}
-
 
 	return {
 		Init: function () {

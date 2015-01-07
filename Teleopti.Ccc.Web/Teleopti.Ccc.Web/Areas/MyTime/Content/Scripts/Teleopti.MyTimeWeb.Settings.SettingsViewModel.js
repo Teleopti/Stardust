@@ -140,13 +140,7 @@ Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	};
 
 	self.featureCheck = function () {
-		ajax.Ajax({
-			url: "../ToggleHandler/IsEnabled?toggle=Settings_SetAgentDescription_23257",
-			success: function (data) {
-				if (data.IsEnabled) {
-					self.isSetAgentDescriptionEnabled(true);
-				}
-			}
-		});
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Settings_SetAgentDescription_23257");
+		self.isSetAgentDescriptionEnabled(toggleEnabled);
 	};
 };
