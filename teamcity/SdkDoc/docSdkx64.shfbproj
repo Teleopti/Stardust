@@ -17,7 +17,7 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <OutputPath>$(WorkingDirectory)\SDKoutput\</OutputPath>
-    <HtmlHelpName>Documentation</HtmlHelpName>
+    <HtmlHelpName>SdkDoc</HtmlHelpName>
     <FrameworkVersion>4.0</FrameworkVersion>
     <DocumentationSources>
       <DocumentationSource sourceFile="$(SdkHostPath)\Teleopti.Ccc.Sdk.Common.dll" />
