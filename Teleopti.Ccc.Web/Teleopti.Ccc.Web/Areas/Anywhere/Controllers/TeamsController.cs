@@ -40,16 +40,5 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(_getAdherence.GetBusinessUnitId(teamId), JsonRequestBehavior.AllowGet);
 		}
 
-		[ReadModelUnitOfWork, HttpGet]
-		public virtual int PollAdherenceForTeam(Guid teamId)
-		{
-			return _getAdherence.PollAdherenceForTeam(teamId);
-		}
-
-		[ReadModelUnitOfWork, HttpGet]
-		public virtual int PollAdherenceForSite(Guid siteId)
-		{
-			return _getAdherence.PollAdherenceForSite(siteId);
-		}
 	}
 }

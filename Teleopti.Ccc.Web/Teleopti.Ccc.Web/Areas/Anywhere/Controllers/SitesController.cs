@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -15,12 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 		private readonly ISiteAdherenceAggregator _siteAdherenceAggregator;
+		private readonly IGetAdherence _getAdherence;
 
-		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader, ISiteAdherenceAggregator siteAdherenceAggregator)
+		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader, ISiteAdherenceAggregator siteAdherenceAggregator, IGetAdherence getAdherence)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
 			_siteAdherenceAggregator = siteAdherenceAggregator;
+			_getAdherence = getAdherence;
 		}
 
 		[UnitOfWork, HttpGet]
@@ -57,19 +60,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				Name = site.Description.Name
 			}, JsonRequestBehavior.AllowGet);
 		}
-
-
-		[UnitOfWorkAction, HttpGet]
-		public virtual JsonResult GetOutOfAdherenceForAllSites()
-		{
-			var sites = _siteRepository.LoadAll();
-			return Json(sites.Select(site =>
-				new SiteOutOfAdherence
-				{
-					Id = site.Id.Value.ToString(),
-					OutOfAdherence = _siteAdherenceAggregator.Aggregate(site.Id.Value)
-				}), JsonRequestBehavior.AllowGet);
-		}
 		
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult GetOutOfAdherence(string siteId)
@@ -87,6 +77,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			var site = _siteRepository.Get(new Guid(siteId));
 			return Json(site.BusinessUnit.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
+		}
+
+		[ReadModelUnitOfWork, HttpGet]
+		public virtual JsonResult GetOutOfAdherenceForAllSites()
+		{
+			return Json(_getAdherence.ReadAdherenceForAllSites(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

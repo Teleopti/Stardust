@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
-			var target = new SitesController(siteRepository, numberOfAgentsQuery,null);
+			var target = new SitesController(siteRepository, numberOfAgentsQuery,null, null);
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] { site });
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
-			var target = new SitesController(siteRepository, numberOfAgentsQuery, null);
+			var target = new SitesController(siteRepository, numberOfAgentsQuery, null, null);
 
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var expected = Guid.NewGuid().ToString();
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, null);
+			var target = new SitesController(siteRepository, null, null, null);
 			var site = new Site(expected);
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var siteAdherenceAggregator = MockRepository.GenerateMock<ISiteAdherenceAggregator>();
 			siteAdherenceAggregator.Stub(x => x.Aggregate(siteId)).Return(expected);
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, siteAdherenceAggregator);
+			var target = new SitesController(siteRepository, null, siteAdherenceAggregator, null);
 
 			var result = target.GetOutOfAdherence(siteId.ToString()).Data as SiteOutOfAdherence;
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldReturnAnEmptySiteWhenNoDataInBu()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, null);
+			var target = new SitesController(siteRepository, null, null, null);
 
 			var result = target.Index().Data as SiteViewModel;
 			result.Id.Should().Be("");
@@ -104,30 +104,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			site.SetBusinessUnit(bu);
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			siteRepository.Stub(x => x.Get(site.Id.GetValueOrDefault())).Return(site);
-			var target = new SitesController(siteRepository, null, null);
+			var target = new SitesController(siteRepository, null, null, null);
 
 			var result = target.GetBusinessUnitId(site.Id.ToString());
 			result.Data.Should().Be(bu.Id.GetValueOrDefault());
 		}
 
 		[Test]
-		public void ShouldGetAdherenceForAllSites()
+		public void ShouldGetFromReadModel()
 		{
-			var site1 = new Site("1");
-			site1.SetId(Guid.NewGuid());
-			var site2 = new Site("2");
-			site2.SetId(Guid.NewGuid());
-			var siteAdherenceAggregator = MockRepository.GenerateMock<ISiteAdherenceAggregator>();
-			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, siteAdherenceAggregator);
-			siteRepository.Stub(x => x.LoadAll()).Return(new[] {site1, site2});
-			siteAdherenceAggregator.Stub(x => x.Aggregate(site1.Id.Value)).Return(1);
-			siteAdherenceAggregator.Stub(x => x.Aggregate(site2.Id.Value)).Return(2);
+			var getAdherence = MockRepository.GenerateMock<IGetAdherence>();
+			var target = new SitesController(null, null, null, getAdherence);
+
+			var sites = new List<SiteOutOfAdherence>()
+						{
+							new SiteOutOfAdherence(){Id="Site1",OutOfAdherence = 2},
+							new SiteOutOfAdherence(){Id="Site2",OutOfAdherence = 5}
+						};
+
+			getAdherence.Stub(g => g.ReadAdherenceForAllSites()).Return(sites);
 
 			var result = target.GetOutOfAdherenceForAllSites().Data as IEnumerable<SiteOutOfAdherence>;
 
-			result.Single(x => x.Id == site1.Id.Value.ToString()).OutOfAdherence.Should().Be(1);
-			result.Single(x => x.Id == site2.Id.Value.ToString()).OutOfAdherence.Should().Be(2);
+			result.Single(x => x.Id == sites[0].Id).OutOfAdherence.Should().Be(2);
+			result.Single(x => x.Id == sites[1].Id).OutOfAdherence.Should().Be(5);
+
 		}
 	}
 }

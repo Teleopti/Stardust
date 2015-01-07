@@ -134,45 +134,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Data.Should().Be(bu.Id.GetValueOrDefault());
 		}
 
-		[Test]
-		public void ShouldPollTeamAdherenceFromReadModel()
-		{
-			var teamId = Guid.NewGuid();
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
-
-			var target = new setup()
-					{
-						TeamAdherencePersister = teamAdherencePersister
-			        }
-					.CreateController();
-
-			teamAdherencePersister.Expect(t => t.Get(teamId))
-				.Return(new TeamAdherenceReadModel() {TeamId = teamId, AgentsOutOfAdherence = 7});
-
-			target.PollAdherenceForTeam(teamId).Should().Be(7);
-
-			teamAdherencePersister.VerifyAllExpectations();
-		}
-
-		[Test]
-		public void ShouldPollSiteAdherenceFromReadModel()
-		{
-			var siteId = Guid.NewGuid();
-			var siteAdherencePersister = MockRepository.GenerateMock<ISiteAdherencePersister>();
-			siteAdherencePersister.Expect(t => t.Get(siteId))
-				.Return(new SiteAdherenceReadModel() { SiteId = siteId, AgentsOutOfAdherence = 12 });
-
-			var target = new setup()
-					{
-						SiteAdherencePersister= siteAdherencePersister
-					}
-					.CreateController();
-
-			target.PollAdherenceForSite(siteId).Should().Be(12);
-
-			siteAdherencePersister.VerifyAllExpectations();
-		}
-
 		private static Guid addNewTeamOnSite(ISite site, string teamName)
 		{
 			var teamId = Guid.NewGuid();

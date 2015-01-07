@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
@@ -80,6 +81,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public int PollAdherenceForSite(Guid siteId)
 		{
 			return _siteAdherencePersister.Get(siteId).AgentsOutOfAdherence;
+		}
+
+		public IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites()
+		{
+			var sites = _siteRepository.LoadAll();
+			return sites.Select(x =>
+						new SiteOutOfAdherence
+						{
+							Id = Convert.ToString(x.Id),
+							OutOfAdherence =
+								_siteAdherencePersister.Get(x.Id.GetValueOrDefault()).AgentsOutOfAdherence
+						});
 		}
 
 		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)
