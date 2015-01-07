@@ -91,27 +91,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldGetOutOfAdherencerForAllTeams()
 		{
-			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var site = addNewSiteToRepository(siteRepository);
-			var teamId1 = addNewTeamOnSite(site);
-			var teamId2 = addNewTeamOnSite(site);
-			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();
-			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId1)).Return(1);
-			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId2)).Return(2);
+			var team1 = Guid.NewGuid().ToString();
+			var team2 = Guid.NewGuid().ToString();
 
-			var target = new setup()
-			             {
-				             SiteRepository = siteRepository,
-				             TeamAdherenceAggregator = teamAdherenceAggregator
-			             }
-				.CreateController();
-		
-			var result = target.GetOutOfAdherenceForTeamsOnSite(site.Id.Value.ToString()).Data as IEnumerable<TeamOutOfAdherence>;
 
-			result.Single(x => x.Id == teamId1.ToString()).OutOfAdherence.Should().Be(1);
-			result.Single(x => x.Id == teamId2.ToString()).OutOfAdherence.Should().Be(2);
+			var getAdherence = MockRepository.GenerateMock<IGetAdherence>();
+			var target = new TeamsController(getAdherence);
+			var siteId = Guid.NewGuid();
+
+			getAdherence.Expect(g => g.GetOutOfAdherenceForTeamsOnSite(siteId.ToString()))
+				.Return(new List<TeamOutOfAdherence>()
+				        {
+					        new TeamOutOfAdherence() { Id = team1, OutOfAdherence = 1},
+					        new TeamOutOfAdherence() { Id = team2, OutOfAdherence = 2},
+				        });
+
+			var result = target.GetOutOfAdherenceForTeamsOnSite(siteId.ToString()).Data as IEnumerable<TeamOutOfAdherence>;
+
+			result.Single(x => x.Id == team1).OutOfAdherence.Should().Be(1);
+			result.Single(x => x.Id == team2).OutOfAdherence.Should().Be(2);
 		}
-
 
 		[Test]
 		public void ShouldGetBusinessUnitIdFromTeamId()
