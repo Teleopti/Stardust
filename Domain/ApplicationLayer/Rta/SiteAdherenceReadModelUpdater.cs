@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			var model = getModel(@event.SiteId);
+			var model = getModel(@event.SiteId, @event.BusinessUnitId);
 			model.AgentsOutOfAdherence++;
 			_siteAdherencePersister.Persist(model);
 		}
@@ -26,17 +26,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			var model = getModel(@event.SiteId);
+			var model = getModel(@event.SiteId, @event.BusinessUnitId);
 			if (model.AgentsOutOfAdherence > 0)
 			{
 				model.AgentsOutOfAdherence--;
-				_siteAdherencePersister.Persist(model);
 			}
+			_siteAdherencePersister.Persist(model);
 		}
 
-		private SiteAdherenceReadModel getModel(Guid siteId)
+		private SiteAdherenceReadModel getModel(Guid siteId, Guid businessUnitId)
 		{
-			return _siteAdherencePersister.Get(siteId) ?? new SiteAdherenceReadModel() { SiteId = siteId };
+			return _siteAdherencePersister.Get(siteId) ?? new SiteAdherenceReadModel() { SiteId = siteId, BusinessUnitId = businessUnitId };
 		}
 	}
 }

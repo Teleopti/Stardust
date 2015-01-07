@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldSaveReadModelForSite()
 		{
 			var siteId = Guid.NewGuid();
-			var model = new SiteAdherenceReadModel() { AgentsOutOfAdherence = 21, SiteId = siteId };
+			var model = new SiteAdherenceReadModel() { AgentsOutOfAdherence = 21, SiteId = siteId};
 
 			Target.Persist(model);
 

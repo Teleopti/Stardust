@@ -55,6 +55,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.Get(siteId).AgentsOutOfAdherence.Should().Be(0);
 		}
 
+		[Test]
+		public void PersonOutOfAdherenceEvent_ShouldSetTheBusinessUnitOnReadModel()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var outOfAdherenceEvent = new PersonOutOfAdherenceEvent() { SiteId = siteId, BusinessUnitId = businessUnitId };
+			var persister = new fakeSiteAdherencePersister();
+			var target = new SiteAdherenceReadModelUpdater(persister);
+
+			target.Handle(outOfAdherenceEvent);
+			
+			persister.GetAll(businessUnitId).Count().Should().Be(1);
+
+		}
+
+		[Test]
+		public void PersonInAdherenceEvent_ShouldSetTheBusinessUnitOnReadModel()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var inAdherence = new PersonInAdherenceEvent() { SiteId = siteId, BusinessUnitId = businessUnitId };
+			var persister = new fakeSiteAdherencePersister();
+			var target = new SiteAdherenceReadModelUpdater(persister);
+
+			target.Handle(inAdherence);
+
+			persister.GetAll(businessUnitId).Count().Should().Be(1);
+		}
+		
 		private class fakeSiteAdherencePersister : ISiteAdherencePersister
 		{
 			private readonly List<SiteAdherenceReadModel> _models = new List<SiteAdherenceReadModel>();
@@ -76,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			public IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId)
 			{
-				throw new NotImplementedException();
+				return _models.Where(m => m.BusinessUnitId == businessUnitId);
 			}
 		}
 	}
