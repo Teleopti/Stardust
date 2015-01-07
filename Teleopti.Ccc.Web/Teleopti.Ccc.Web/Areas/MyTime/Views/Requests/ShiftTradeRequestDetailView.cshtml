@@ -24,7 +24,7 @@
 	<!-- ko foreach: DetailedDays-->
 	<div class="trade-day-detail">
 		<div id="tooltipContainer" class="detailTooltipContainer"></div>
-		<div class="trade-date" data-bind="text: TradeDate, visible: $parent.DetailedDays().length > 1"></div>
+		<div class="trade-date" data-bind="text: TradeDate, visible: $parent.DetailedDays().length > 0"></div>
 		<div>
 			<div class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !$parent.showInfo()">
 				<span data-bind="style: { width : hourWidth}, css: { 'shift-trade-swap-detail-timeline-line': isTimeLineVisible,  'shift-trade-swap-detail-timeline-line-no-border': !isTimeLineVisible}">
