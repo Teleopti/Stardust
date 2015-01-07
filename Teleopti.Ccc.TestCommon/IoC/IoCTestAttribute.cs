@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public interface IIoCTestContext
 	{
-		void RebuildContainer();
-		void RebuildContainer(Action<ContainerBuilder> registerInContainer);
+		void Reset();
+		void Reset(Action<ContainerBuilder> registerInContainer);
 	};
 
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
@@ -107,13 +107,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 
 
-		public void RebuildContainer()
+		public void Reset()
 		{
 			buildContainer(b => { });
 			injectMembers();
 		}
 
-		public void RebuildContainer(Action<ContainerBuilder> registerInContainer)
+		public void Reset(Action<ContainerBuilder> registerInContainer)
 		{
 			buildContainer(registerInContainer);
 			injectMembers();

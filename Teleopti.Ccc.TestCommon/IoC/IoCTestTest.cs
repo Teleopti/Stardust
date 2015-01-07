@@ -29,19 +29,19 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 
 		[Test]
-		public void ShouldRecreateContainer()
+		public void ShouldRecreateContainerAndReinjectMembersOnReset()
 		{
 			var instance1 = PersonRepository;
-			Context.RebuildContainer();
+			Context.Reset();
 			var instance2 = PersonRepository;
 			instance1.Should().Not.Be.SameInstanceAs(instance2);
 		}
 
 		[Test]
-		public void ShouldRebuildContainerWithTestRegistrations()
+		public void ShouldResetWithTestRegistrations()
 		{
 			var instance1 = PersonRepository;
-			Context.RebuildContainer(b => b.RegisterInstance(instance1).As<IPersonRepository>());
+			Context.Reset(b => b.RegisterInstance(instance1).As<IPersonRepository>());
 			var instance2 = PersonRepository;
 			instance1.Should().Be.SameInstanceAs(instance2);
 		}

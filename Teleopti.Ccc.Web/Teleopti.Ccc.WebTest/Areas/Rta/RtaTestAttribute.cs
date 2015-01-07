@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public void SimulateRestartWith(MutableNow now, FakeRtaDatabase database, FakeEventPublisher publisher)
 		{
-			RebuildContainer(b =>
+			Reset(b =>
 			{
 				registerFakeDatabase(b, database);
 				registerFakePublisher(b, publisher);
