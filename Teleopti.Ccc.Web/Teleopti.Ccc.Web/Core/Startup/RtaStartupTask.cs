@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
