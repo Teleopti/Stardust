@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				InAdherence = info.AdherenceForPreviousStateAndCurrentActivity == Adherence.In
 			});
 
-			_adherenceEventPublisher.Publish(info, startTime, info.AdherenceForPreviousStateAndCurrentActivity, info.AdherenceForPreviousState);
+			_adherenceEventPublisher.Publish(info, startTime, info.AdherenceForPreviousState, info.AdherenceForPreviousStateAndCurrentActivity);
 		}
 	}
 }
