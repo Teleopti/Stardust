@@ -1,6 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Web.UI;
 using Autofac;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;

@@ -2,12 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using log4net;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Messaging.Client.Http
 {
