@@ -1,6 +1,7 @@
 ﻿Teleopti.MyTimeWeb.BadgeLeaderBoardReport = (function () {
 	var vm;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var tempBadgeComparator = { Gold: '0', Silver: '0', Bronze: '0' };
 
 	function BadgeLeaderBoardReportViewModel() {
 		var self = this;
@@ -26,6 +27,8 @@
 				},
 				success: function (data) {
 					self.isLoading(false);
+					if(data.Agents[0])
+						UpdateBadgeComparator(data.Agents[0]);
 					$.each(data.Agents, function (index, item) {
 						var badgeViewModel = new BadgeViewModel(index, item);
 						self.agentBadges.push(badgeViewModel);
@@ -67,6 +70,30 @@
 
 	}
 
+	function BadgeComparator(data) {
+
+		if (data.Gold == tempBadgeComparator.Gold)
+			if (data.Silver == tempBadgeComparator.Silver)
+				if (data.Bronze == tempBadgeComparator.Bronze) {
+					return 0;
+				} else {
+					UpdateBadgeComparator(data);
+					return 1;
+			} else {
+				UpdateBadgeComparator(data);
+				return 1;
+		} else {
+			UpdateBadgeComparator(data);
+			return 1;
+		}
+	}
+
+	function UpdateBadgeComparator(data) {
+		tempBadgeComparator.Gold = data.Gold;
+		tempBadgeComparator.Silver = data.Silver;
+		tempBadgeComparator.Bronze = data.Bronze;
+	}
+
 	function BadgeViewModel(index, data) {
 		var self = this;
 
@@ -74,7 +101,7 @@
 		self.gold = data.Gold;
 		self.silver = data.Silver;
 		self.bronze = data.Bronze;
-		self.rank = ++index;
+		self.rank = index == 0 ? 1 : BadgeComparator(data) + index;
 	}
 
 	function bindData() {

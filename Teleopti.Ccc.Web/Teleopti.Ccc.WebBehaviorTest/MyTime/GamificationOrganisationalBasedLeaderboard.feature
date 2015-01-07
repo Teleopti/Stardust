@@ -83,3 +83,25 @@ Scenario: Should view correct leader board when selecting another group from dif
 		| Rank | Agent        |
 		| 1    | Pierre Baldi |
 
+Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the same
+	Given I have a role with
+		| Field                 | Value |
+		| Access to Leaderboard | true  |
+		| Access to my site     | true  |
+	And Ashley Andeen has a person period with
+		| Field      | Value      |
+		| Team       | Team red   |
+		| Start Date | 2014-01-06 |
+	And Ashley Andeen has badges with
+		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
+		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
+		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
+	When I am viewing leaderboard report
+	Then I should see the ranks are
+		| Rank | Agent         |
+		| 1    | I             |
+		| 1    | Ashley Andeen |
+		| 3    | Pierre Baldi  |
+
+

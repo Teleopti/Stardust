@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			foreach (var rankInfo in ranks)
 			{
 				Browser.Interactions.AssertExistsUsingJQuery(
-					string.Format(".badge-leader-board-report :nth-child({0}) .agent-name:contains('{1}')", rankInfo.Rank,
+					string.Format(".agent-rank:contains('{0}')+.agent-name:contains('{1}')", rankInfo.Rank,
 						rankInfo.Agent));
 			}
 		}
