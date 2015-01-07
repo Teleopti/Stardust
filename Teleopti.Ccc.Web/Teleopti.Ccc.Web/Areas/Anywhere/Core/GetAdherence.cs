@@ -57,14 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId)
 		{
-			var teams = _siteRepository.Get(new Guid(siteId)).TeamCollection;
-			return teams.Select(team =>
-				new TeamOutOfAdherence
-				{
-					Id = team.Id.Value.ToString(),
-					OutOfAdherence = _teamAdherenceAggregator.Aggregate(team.Id.Value)
-				}
-				);
+			var result = _teamAdherencePersister.GetForSite(Guid.Parse(siteId));
+			return result.Select(r => new TeamOutOfAdherence() {Id = r.TeamId.ToString(), OutOfAdherence = r.AgentsOutOfAdherence});
 		}
 
 		public Guid GetBusinessUnitId(string teamId)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
@@ -33,6 +34,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var ret = getModel(teamId);
 			return ret ?? new TeamAdherenceReadModel(){TeamId = teamId};
+		}
+
+		public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)
+		{
+			throw new NotImplementedException();
 		}
 
 		private TeamAdherenceReadModel getModel(Guid teamId)
