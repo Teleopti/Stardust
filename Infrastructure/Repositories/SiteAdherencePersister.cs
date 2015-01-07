@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
@@ -29,13 +32,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public SiteAdherenceReadModel Get(Guid teamId)
+		public SiteAdherenceReadModel Get(Guid siteId)
 		{
-			var ret = getModel(teamId);
-			return ret ?? new SiteAdherenceReadModel() { SiteId = teamId };
+			var ret = getModel(siteId);
+			return ret ?? new SiteAdherenceReadModel() { SiteId = siteId };
 		}
 
-		private SiteAdherenceReadModel getModel(Guid teamId)
+		public IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId)
+		{
+			var result = _unitOfWork.Current().CreateSqlQuery(
+			"SELECT " +
+			"	SiteId," +
+			"	AgentsOutOfAdherence " +
+			"FROM ReadModel.SiteAdherence WHERE" +
+			"	BusinessUnitId =:BusinessUnitId ")
+			.AddScalar("SiteId", NHibernateUtil.Guid)
+			.AddScalar("AgentsOutOfAdherence", NHibernateUtil.Int16)
+			.SetGuid("BusinessUnitId", businessUnitId)
+			.SetResultTransformer(Transformers.AliasToBean(typeof(SiteAdherenceReadModel))).List();
+			return result.Cast<SiteAdherenceReadModel>();
+		}
+
+		private SiteAdherenceReadModel getModel(Guid siteId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
@@ -45,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	SiteId =:SiteId ")
 				.AddScalar("SiteId", NHibernateUtil.Guid)
 				.AddScalar("AgentsOutOfAdherence", NHibernateUtil.Int16)
-				.SetGuid("SiteId", teamId)
+				.SetGuid("SiteId", siteId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteAdherenceReadModel))).List();
 			return (SiteAdherenceReadModel)result.FirstOrNull();
 		}
@@ -65,7 +83,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void saveReadModel(SiteAdherenceReadModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.SiteAdherence (SiteId, AgentsOutOfAdherence) VALUES (:SiteId, :AgentsOutOfAdherence)")
+				"INSERT INTO ReadModel.SiteAdherence (BusinessUnitId, SiteId, AgentsOutOfAdherence) VALUES (:BusinessUnitId, :SiteId, :AgentsOutOfAdherence)")
+				.SetGuid("BusinessUnitId", model.BusinessUnitId)
 				.SetGuid("SiteId", model.SiteId)
 				.SetParameter("AgentsOutOfAdherence", model.AgentsOutOfAdherence)
 				.ExecuteUpdate();

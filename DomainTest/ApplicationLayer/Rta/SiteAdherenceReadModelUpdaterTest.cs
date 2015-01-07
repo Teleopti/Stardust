@@ -73,6 +73,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				return _models.FirstOrDefault(m => m.SiteId == siteId);
 			}
+
+			public IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }
