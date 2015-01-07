@@ -17,6 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		int PollAdherenceForSite(Guid siteId);
 
-		IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites();
+		IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites(Guid businessUnitId);
 	}
 }

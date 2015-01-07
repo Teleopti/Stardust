@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return _siteAdherencePersister.Get(siteId).AgentsOutOfAdherence;
 		}
 
-		public IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites()
+		public IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites(Guid businessUnitId)
 		{
 			var sites = _siteRepository.LoadAll();
 			return sites.Select(x =>
