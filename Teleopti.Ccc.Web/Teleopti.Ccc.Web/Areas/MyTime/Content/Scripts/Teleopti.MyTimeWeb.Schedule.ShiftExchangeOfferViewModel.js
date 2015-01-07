@@ -28,7 +28,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	//Interface....
 	this.DateFrom = function (date) {
 		self.loadPeriod(date);
-
 	};
 
 	this.DateTo = ko.observable();
@@ -89,7 +88,13 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
-			data: { Date: self.DateTo().format(self.DateFormat()), OfferValidTo: self.OfferValidTo().format(self.DateFormat()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
+			data: {
+				Date: self.DateTo().format(self.DateFormat()),
+				OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
+				StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
+				EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
+				EndTimeNextDay: self.EndTimeNextDay()
+			},
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				doneCallback(data);
