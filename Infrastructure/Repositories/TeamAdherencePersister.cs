@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
@@ -38,7 +39,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)
 		{
-			throw new NotImplementedException();
+			var result = _unitOfWork.Current().CreateSqlQuery(
+				"SELECT " +
+				"	TeamId," +
+				"	AgentsOutOfAdherence " +
+				"FROM ReadModel.TeamAdherence WHERE" +
+				"	SiteId =:SiteId ")
+				.AddScalar("TeamId", NHibernateUtil.Guid)
+				.AddScalar("AgentsOutOfAdherence", NHibernateUtil.Int16)
+				.SetGuid("SiteId", siteId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamAdherenceReadModel))).List();
+			return result.Cast<TeamAdherenceReadModel>();
 		}
 
 		private TeamAdherenceReadModel getModel(Guid teamId)
@@ -71,7 +82,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void saveReadModel(TeamAdherenceReadModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.TeamAdherence (TeamId, AgentsOutOfAdherence) VALUES (:TeamId, :AgentsOutOfAdherence)")
+				"INSERT INTO ReadModel.TeamAdherence (SiteId, TeamId, AgentsOutOfAdherence) VALUES (:SiteId, :TeamId, :AgentsOutOfAdherence)")
+				.SetGuid("SiteId", model.SiteId)
 				.SetGuid("TeamId", model.TeamId)
 				.SetParameter("AgentsOutOfAdherence", model.AgentsOutOfAdherence)
 				.ExecuteUpdate();

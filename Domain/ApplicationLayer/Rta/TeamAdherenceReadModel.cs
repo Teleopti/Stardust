@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public Guid TeamId;
 		public int AgentsOutOfAdherence;
+		public Guid SiteId { get; set; }
 	}
 }

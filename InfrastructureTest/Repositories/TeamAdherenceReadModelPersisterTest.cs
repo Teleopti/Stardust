@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -46,6 +47,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			model.AgentsOutOfAdherence.Should().Be.EqualTo(0);
 			model.TeamId.Should().Be.EqualTo(teamId);
+		}
+
+		[Test]
+		public void ShouldGetTeamsForSite()
+		{
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var model1 = new TeamAdherenceReadModel {SiteId = siteId1, TeamId = teamId, AgentsOutOfAdherence = 1};
+			var model2 = new TeamAdherenceReadModel {SiteId = siteId2, TeamId = teamId, AgentsOutOfAdherence = 1};
+			Target.Persist(model1);
+			Target.Persist(model2);
+			var readModel = Target.GetForSite(siteId1);
+			readModel.Single().AgentsOutOfAdherence.Should().Be(1);
+			readModel.Single().TeamId.Should().Be(teamId);
 		}
 	}
 }

@@ -83,6 +83,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.Get(teamId1).AgentsOutOfAdherence.Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldUpdateTeamInAdherenceWithSiteId()
+		{
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var persister = new fakeTeamAdherencePersister();
+			var target = new TeamAdherenceReadModelUpdater(persister);
+
+			target.Handle(new PersonInAdherenceEvent() { TeamId = teamId, SiteId = siteId});
+
+			persister.GetForSite(siteId).Single().TeamId.Should().Be(teamId);
+		}
+
+		[Test]
+		public void ShouldUpdateTeamOutOfAdherenceWithSiteId()
+		{
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var persister = new fakeTeamAdherencePersister();
+			var target = new TeamAdherenceReadModelUpdater(persister);
+
+			target.Handle(new PersonOutOfAdherenceEvent{ TeamId = teamId, SiteId = siteId});
+
+			persister.GetForSite(siteId).Single().TeamId.Should().Be(teamId);
+		}
+
+
 		private class fakeTeamAdherencePersister : ITeamAdherencePersister
 		{
 
@@ -101,6 +128,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			public TeamAdherenceReadModel Get(Guid teamId)
 			{
 				return _models.FirstOrDefault(m => m.TeamId == teamId);
+			}
+
+			public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)
+			{
+				return _models.Where(x => x.SiteId == siteId);
 			}
 		}
 	}

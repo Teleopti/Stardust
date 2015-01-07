@@ -22,11 +22,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (current != null)
 			{
 				current.AgentsOutOfAdherence = Math.Max(current.AgentsOutOfAdherence - 1, 0);
+				current.SiteId = @event.SiteId;
 				_persister.Persist(current);
 			}
 			else
 			{
-				_persister.Persist(new TeamAdherenceReadModel() { TeamId = @event.TeamId });
+				_persister.Persist(new TeamAdherenceReadModel() { TeamId = @event.TeamId, SiteId = @event.SiteId});
 
 			}
 		}
@@ -38,11 +39,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (current != null)
 			{
 				current.AgentsOutOfAdherence++;
+				current.SiteId = @event.SiteId;
 				_persister.Persist(current);
 			}
 			else
 			{
-				_persister.Persist(new TeamAdherenceReadModel() { TeamId = @event.TeamId, AgentsOutOfAdherence = 1 });
+				_persister.Persist(new TeamAdherenceReadModel() { TeamId = @event.TeamId, AgentsOutOfAdherence = 1,SiteId = @event.SiteId});
 			}
 		}
 	}
