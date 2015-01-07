@@ -6,7 +6,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
-	[UseOnToggle(Toggles.RTA_HangfireEventProcessing_31593)]
+	[UseOnToggle(Toggles.RTA_HangfireEventProcessing_31237)]
 	[TaskPriority(100)]
 	public class HangfireServerStartupTask : IBootstrapperTask
 	{

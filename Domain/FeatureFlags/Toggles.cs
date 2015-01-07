@@ -38,8 +38,9 @@
 		RTA_ChangeScheduleInAgentStateView_29934,
 		RTA_SeePercentageAdherenceForOneAgent_30783,
 		RTA_SeeAdherenceDetailsForOneAgent_31285,
-		RTA_HangfireEventProcessing_31593,
-		RTA_HangfireEventProcessinUsingMsmq_31593,
+		RTA_HangfireEventProcessing_31237,
+		RTA_HangfireEventProcessinUsingMsmq_31237,
+		RTA_NoBroker_31237,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
@@ -65,7 +66,6 @@
 		Messaging_HttpSender_29205,
 
 		ETL_SpeedUpETL_30791,
-		RTA_NoBroker_31237,
 		Gamification_NewBadgeCalculation_31185,
 		Portal_DifferentiateBadgeSettingForAgents_31318
 	}

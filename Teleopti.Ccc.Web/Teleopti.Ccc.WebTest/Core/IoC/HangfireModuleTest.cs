@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveHangfireMsmqStorageConfigurationIfToggleEnabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessinUsingMsmq_31593, true))
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessinUsingMsmq_31237, true))
 			{
 				container.Resolve<IHangfireServerStorageConfiguration>().Should().Be.OfType<MsmqStorageConfiguration>();
 			}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveHangfireSqlStorageConfigurationIfToggleDisabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessinUsingMsmq_31593, false))
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessinUsingMsmq_31237, false))
 			{
 				container.Resolve<IHangfireServerStorageConfiguration>().Should().Be.OfType<SqlStorageConfiguration>();
 			}

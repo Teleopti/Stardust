@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireEventPublisher>().As<IHangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31593))
+			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31237))
 			{
 				builder.RegisterType<HangfireOrBusEventPublisher>().As<IEventPublisher>().SingleInstance();
 			}

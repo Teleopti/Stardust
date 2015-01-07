@@ -654,7 +654,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveHangfireServerStartupTaskIfToggleEnabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31593, true))
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31237, true))
 			{
 				container.Resolve<IEnumerable<IBootstrapperTask>>()
 					.Select(x => x.GetType())
@@ -666,7 +666,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldNotResolveHangfireServerStartupTaskIfToggleDisabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31593, false))
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31237, false))
 			{
 				container.Resolve<IEnumerable<IBootstrapperTask>>()
 					.Select(x => x.GetType())

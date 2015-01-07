@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<HangfireServerStarter>().As<IHangfireServerStarter>().SingleInstance();
-			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessinUsingMsmq_31593))
+			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessinUsingMsmq_31237))
 				builder.RegisterType<MsmqStorageConfiguration>().As<IHangfireServerStorageConfiguration>().SingleInstance();
 			else
 				builder.RegisterType<SqlStorageConfiguration>().As<IHangfireServerStorageConfiguration>().SingleInstance();

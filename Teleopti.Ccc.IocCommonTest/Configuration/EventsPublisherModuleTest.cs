@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveHangfireOrBusPublisherIfToggleEnabled()
 		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31593, true))
+			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31237, true))
 			{
 				container.Resolve<IEventPublisher>().Should().Be.OfType<HangfireOrBusEventPublisher>();
 			}
