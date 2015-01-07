@@ -138,11 +138,6 @@
     <Compile Include="StatusEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DataBaseConverter\Teleopti.Ccc.DataBaseConversionTools.csproj">
       <Project>{E42304EB-5261-48BE-A3AE-4D7C4B565FD7}</Project>
       <Name>Teleopti.Ccc.DataBaseConversionTools</Name>

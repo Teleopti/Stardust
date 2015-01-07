@@ -147,9 +147,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\..\..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
     <Content Include="Css\persianDatepicker-default.css" />
     <Content Include="images\down.png" />
     <Content Include="images\favicon.ico" />

@@ -173,9 +173,6 @@
     <None Include="Upgrade BU.bat" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
     <Content Include="RtaStates.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

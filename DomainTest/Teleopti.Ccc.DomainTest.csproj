@@ -1382,11 +1382,6 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="DayOffPlanning\FreeWeekendValidatorTestCases.xls" />
     <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <Content Include="NotificationConfig.xml.notinuse">

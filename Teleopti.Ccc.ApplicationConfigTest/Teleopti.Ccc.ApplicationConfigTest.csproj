@@ -121,9 +121,6 @@
     <Compile Include="Creators\ApplicationRoleCreatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
     <Content Include="Common\Test.xml" />
   </ItemGroup>
   <ItemGroup>

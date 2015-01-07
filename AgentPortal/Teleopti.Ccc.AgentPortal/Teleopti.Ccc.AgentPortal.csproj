@@ -726,11 +726,6 @@
     <Compile Include="Main\ViewConstructor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Client\Teleopti.Ccc.Sdk.Client.csproj">
       <Project>{FE264E1E-50FF-4A59-A297-AD9A565C632C}</Project>
       <Name>Teleopti.Ccc.Sdk.Client</Name>

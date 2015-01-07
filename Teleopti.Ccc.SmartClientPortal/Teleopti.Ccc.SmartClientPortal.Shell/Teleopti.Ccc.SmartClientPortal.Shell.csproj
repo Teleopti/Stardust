@@ -324,9 +324,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
     <None Include="Resources\TeleoptiWFM.ico" />
     <None Include="Resources\NotifyOK.ico" />
     <None Include="Resources\NotifyWarning.ico" />

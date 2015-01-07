@@ -1836,11 +1836,6 @@
     <EmbeddedResource Include="Common\ContractScheduleWeek.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Forecasting\SkillDataPeriod.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

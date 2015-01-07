@@ -314,11 +314,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\ccc_Cancel_32x32.png" />
     <Content Include="Resources\ccc_ForecastValidate.png" />
   </ItemGroup>

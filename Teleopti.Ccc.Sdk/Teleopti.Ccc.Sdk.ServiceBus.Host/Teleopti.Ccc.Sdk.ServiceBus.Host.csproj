@@ -196,11 +196,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Teleopti-WFM-main-icon.ico" />
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>

@@ -180,11 +180,6 @@
     <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">
-      <Link>CodeAnalysisDictionary.xml</Link>
-    </CodeAnalysisDictionary>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus\log4net.config">
       <Link>log4net.config</Link>
     </None>
