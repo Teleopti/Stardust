@@ -13,8 +13,12 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	this.EndTime = ko.observable(dateFormat.defaultTimes.defaultEndTime);
 	this.EndTimeNextDay = ko.observable(false);
 	self.IsTimeLegal = ko.computed(function() {
-		if (self.EndTime() < self.StartTime() && !self.EndTimeNextDay()) return false;
-		return true;
+		var startMoment = moment('1900-01-01 ' + self.StartTime());
+		var endMoment = moment('1900-01-01 ' + self.EndTime());
+		if (self.EndTimeNextDay()) {
+			endMoment.add(1, 'days');
+		}
+		return startMoment.isBefore(endMoment);
 	});
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
