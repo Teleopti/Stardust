@@ -18,6 +18,8 @@ GO
 CREATE PROCEDURE [mart].[etl_data_mart_maintenance]
 AS
 BEGIN
+	DECLARE @confMinDate smalldatetime
+	DECLARE @minDimDate smalldatetime
 	DECLARE @daysToKeepETLError INT
 	DECLARE @daysToKeepETLExecution INT
 	DECLARE @daysToKeepRTAEvents INT
@@ -56,106 +58,148 @@ BEGIN
 	DELETE FROM RTA.ExternalAgentState
 	WHERE TimestampValue < dateadd(day, -@daysToKeepRTAEvents, getdate())
 
+	--------------- Fact tables ---------------------
+	SELECT @minDimDate =  MIN(date_date) FROM mart.dim_date WHERE date_id>-1
+
 	--fact_agent
-	delete mart.fact_agent
-	from mart.fact_agent f
-	inner join mart.dim_date d on f.date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 4 
-						and configuration_name = 'YearsToKeepFactAgent'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_agent f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) FROM [mart].[etl_maintenance_configuration] 
+			WHERE configuration_id = 4 AND configuration_name = 'YearsToKeepFactAgent'),100),getdate())
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_agent
+		from mart.fact_agent f
+		inner join mart.dim_date d on f.date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_agent f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	END
 
 	--fact_agent_queue
-	delete mart.fact_agent_queue
-	from mart.fact_agent_queue f
-	inner join mart.dim_date d on f.date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 5 
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 5 
 						and configuration_name = 'YearsToKeepFactAgentQueue'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_agent_queue f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_agent_queue
+		from mart.fact_agent_queue f
+		inner join mart.dim_date d on f.date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_agent_queue f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	END
 
 	--fact_forecast_workload
-	delete mart.fact_forecast_workload
-	from mart.fact_forecast_workload f
-	inner join mart.dim_date d on f.date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 6
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 6
 						and configuration_name = 'YearsToKeepFactForecastWorkload'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_forecast_workload f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_forecast_workload
+		from mart.fact_forecast_workload f
+		inner join mart.dim_date d on f.date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_forecast_workload f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	END
 
 	--fact_queue
-	delete mart.fact_queue
-	from mart.fact_queue f
-	inner join mart.dim_date d on f.date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 7
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 7
 						and configuration_name = 'YearsToKeepFactQueue'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_queue f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_queue
+		from mart.fact_queue f
+		inner join mart.dim_date d on f.date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_queue f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	END
 
 	--fact_request
-	delete mart.fact_request
-	from mart.fact_request f
-	inner join mart.dim_date d on f.request_start_date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 8
-						and configuration_name = 'YearsToKeepFactRequest'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_request f2 inner join mart.dim_date d2 on f2.request_start_date_id = d2.date_id)
-					
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 8
+							and configuration_name = 'YearsToKeepFactRequest'),100),getdate())
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_request
+		from mart.fact_request f
+		inner join mart.dim_date d on f.request_start_date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_request f2 inner join mart.dim_date d2 on f2.request_start_date_id = d2.date_id)
+	END
+			
 	--fact_schedule
-	delete mart.fact_schedule
-	from mart.fact_schedule f
-	inner join mart.dim_date d on f.schedule_date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 9
-						and configuration_name = 'YearsToKeepFactSchedule'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 9
+							and configuration_name = 'YearsToKeepFactSchedule'),100),getdate())
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_schedule
+		from mart.fact_schedule f
+		inner join mart.dim_date d on f.schedule_date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_schedule f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
+	END
 
 	--fact_schedule_day_count
-	delete mart.fact_schedule_day_count
-	from mart.fact_schedule_day_count f
-	inner join mart.dim_date d on f.shift_startdate_local_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 10
-						and configuration_name = 'YearsToKeepFactScheduleDayCount'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule_day_count f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 10
+							and configuration_name = 'YearsToKeepFactScheduleDayCount'),100),getdate())
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_schedule_day_count
+		from mart.fact_schedule_day_count f
+		inner join mart.dim_date d on f.shift_startdate_local_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_schedule_day_count f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
+	END
 
 	--fact_schedule_deviation
-	delete mart.fact_schedule_deviation
-	from mart.fact_schedule_deviation f
-	inner join mart.dim_date d on f.shift_startdate_local_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 11
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 11
 						and configuration_name = 'YearsToKeepFactScheduleDeviation'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule_deviation f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_schedule_deviation
+		from mart.fact_schedule_deviation f
+		inner join mart.dim_date d on f.shift_startdate_local_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_schedule_deviation f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
+	END
 
 	--fact_schedule_forecast_skill
-	delete mart.fact_schedule_forecast_skill
-	from mart.fact_schedule_forecast_skill f
-	inner join mart.dim_date d on f.date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 12
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 12
 						and configuration_name = 'YearsToKeepFactScheduleForecastSkill'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule_forecast_skill f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_schedule_forecast_skill
+		from mart.fact_schedule_forecast_skill f
+		inner join mart.dim_date d on f.date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_schedule_forecast_skill f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	END
 
 	--fact_schedule_preference
-	delete mart.fact_schedule_preference
-	from mart.fact_schedule_preference f
-	inner join mart.dim_date d on f.date_id = d.date_id
-	where 1=1
-	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 13
-						and configuration_name = 'YearsToKeepFactSchedulePreferences'),100),getdate())
-	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule_preference f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
-
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 13
+							and configuration_name = 'YearsToKeepFactSchedulePreferences'),100),getdate())
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete mart.fact_schedule_preference
+		from mart.fact_schedule_preference f
+		inner join mart.dim_date d on f.date_id = d.date_id
+		where 1=1
+		and d.date_date < @confMinDate
+		and d.date_date < (select dateadd(day,10,min(d2.date_date))
+							from mart.fact_schedule_preference f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+	END
 	--External Agg tables, but only if mapped 1:1 via crossDb-views. If any custom views exists, then skip it
 	IF not exists (
 		select 1
@@ -164,23 +208,29 @@ BEGIN
 	exec mart.etl_data_mart_maintenance_aggTables
 
 	--Internal Agg Queue_Logg
-	delete dbo.queue_logg
-	from dbo.queue_logg f
-	where 1=1
-	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 14
-						and configuration_name = 'YearsToKeepAggQueueStats'),100),getdate())
-	and f.date_from < (select dateadd(day,10,min(f2.date_from))
-						from dbo.queue_logg f2)
-
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 14
+							and configuration_name = 'YearsToKeepAggQueueStats'),100),getdate())
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete dbo.queue_logg
+		from dbo.queue_logg f
+		where 1=1
+		and f.date_from < @confMinDate
+		and f.date_from < (select dateadd(day,10,min(f2.date_from))
+							from dbo.queue_logg f2)
+	END
 	--Internal Agg Agent_Logg
-	delete dbo.agent_logg
-	from dbo.agent_logg f
-	where 1=1
-	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 15
+	SET @confMinDate = dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 15
 						and configuration_name = 'YearsToKeepAggAgentStats'),100),getdate())
-	and f.date_from < (select dateadd(day,10,min(f2.date_from))
-						from dbo.agent_logg f2)
-
+	IF @confMinDate >= @minDimDate
+	BEGIN
+		delete dbo.agent_logg
+		from dbo.agent_logg f
+		where 1=1
+		and f.date_from < @confMinDate
+		and f.date_from < (select dateadd(day,10,min(f2.date_from))
+							from dbo.agent_logg f2)
+	END
 END
 
 GO
