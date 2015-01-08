@@ -1,7 +1,6 @@
 ﻿Teleopti.MyTimeWeb.BadgeLeaderBoardReport = (function () {
 	var vm;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	var tempBadgeComparator = { Gold: '0', Silver: '0', Bronze: '0' };
 
 	function BadgeLeaderBoardReportViewModel() {
 		var self = this;
@@ -25,14 +24,23 @@
 					Type: self.selectedOptionType,
 					SelectedId: self.selectedOptionId()
 				},
-				success: function (data) {
+				success: function(data) {
 					self.isLoading(false);
-					if(data.Agents[0])
-						UpdateBadgeComparator(data.Agents[0]);
 
-					var index = 0;
+					var previousItem;
+					var rankPosition = {
+						rank: 1,
+						index: 0
+					};
 					var newItems = ko.utils.arrayMap(data.Agents, function (item) {
-						return new BadgeViewModel(index++, item);
+						if (rankPosition.index > 0) {
+							rankPosition.rank = haveSameRank(previousItem, item) ? rankPosition.rank : rankPosition.index + 1;
+						}
+						previousItem = item;
+						var model = new BadgeViewModel(rankPosition, item);
+						
+						rankPosition.index++;
+						return model;
 					});
 					self.agentBadges.push.apply(self.agentBadges, newItems);
 				}
@@ -71,38 +79,19 @@
 
 	}
 
-	function BadgeComparator(data) {
 
-		if (data.Gold == tempBadgeComparator.Gold)
-			if (data.Silver == tempBadgeComparator.Silver)
-				if (data.Bronze == tempBadgeComparator.Bronze) {
-					return 0;
-				} else {
-					UpdateBadgeComparator(data);
-					return 1;
-			} else {
-				UpdateBadgeComparator(data);
-				return 1;
-		} else {
-			UpdateBadgeComparator(data);
-			return 1;
-		}
+	function haveSameRank(item1, item2) {
+		return (item1.Gold == item2.Gold) && (item1.Silver == item2.Silver) && (item1.Bronze == item2.Bronze);
 	}
 
-	function UpdateBadgeComparator(data) {
-		tempBadgeComparator.Gold = data.Gold;
-		tempBadgeComparator.Silver = data.Silver;
-		tempBadgeComparator.Bronze = data.Bronze;
-	}
-
-	function BadgeViewModel(index, data) {
+	function BadgeViewModel(rankPosition, data) {
 		var self = this;
 
 		self.name = data.AgentName;
 		self.gold = data.Gold;
 		self.silver = data.Silver;
 		self.bronze = data.Bronze;
-		self.rank = index == 0 ? 1 : BadgeComparator(data) + index;
+		self.rank = rankPosition.rank;
 	}
 
 	function bindData() {
