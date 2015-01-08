@@ -26,6 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			registerFakePublisher(builder, new FakeEventPublisher());
 			registerFakeDatabase(builder, new FakeRtaDatabase());
 
+			builder.RegisterInstance(new FakeTeamAdherencePersister()).As<ITeamAdherencePersister>().AsSelf();
+			builder.RegisterInstance(new FakeSiteAdherencePersister()).As<ISiteAdherencePersister>().AsSelf();
+			builder.RegisterInstance(new FakeAdherenceDetailsReadModelPersister()).As<IAdherenceDetailsReadModelPersister>().AsSelf();
+
 			builder.RegisterInstance(this);
 		}
 

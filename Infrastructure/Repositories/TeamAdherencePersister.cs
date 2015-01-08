@@ -52,6 +52,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Cast<TeamAdherenceReadModel>();
 		}
 
+		public bool HasData()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Clear()
+		{
+			throw new NotImplementedException();
+		}
+
 		private TeamAdherenceReadModel getModel(Guid teamId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(

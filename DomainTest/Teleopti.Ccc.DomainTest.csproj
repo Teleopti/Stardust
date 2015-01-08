@@ -176,6 +176,8 @@
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeSiteAdherencePersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeTeamAdherencePersister.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDateHandlerTest.cs" />

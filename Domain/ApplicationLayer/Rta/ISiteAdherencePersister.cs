@@ -8,5 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		void Persist(SiteAdherenceReadModel model);
 		SiteAdherenceReadModel Get(Guid siteId);
 		IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId);
+		void Clear();
+		bool HasData();
 	}
 }

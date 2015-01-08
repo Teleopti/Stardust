@@ -249,7 +249,10 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityPeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceReportPersisterTest.cs" />
     <Compile Include="Areas\Rta\AdherenceAggregatorInitializeTest.cs" />
+    <Compile Include="Areas\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Areas\Rta\FakeMbCacheFactory.cs" />
+    <Compile Include="Areas\Rta\FakeSiteAdherencePersister.cs" />
+    <Compile Include="Areas\Rta\FakeTeamAdherencePersister.cs" />
     <Compile Include="Areas\Rta\NoBrokerTest.cs" />
     <Compile Include="Areas\Rta\RtaTestAttribute.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />
@@ -277,6 +280,10 @@
     <Compile Include="Areas\Rta\SnapshotTests.cs" />
     <Compile Include="Areas\Rta\StateControllerTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithStateTest.cs" />
+    <Compile Include="Areas\Rta\StateStreamSynchronizerAdherenceDetailsTest.cs" />
+    <Compile Include="Areas\Rta\StateStreamSynchronizerIndividualModelsTest.cs" />
+    <Compile Include="Areas\Rta\StateStreamSynchronizerSiteAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\StateStreamSynchronizerTeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\RtaModuleTest.cs" />

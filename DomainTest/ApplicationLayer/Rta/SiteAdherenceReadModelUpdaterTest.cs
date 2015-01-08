@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -17,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var siteId = Guid.NewGuid();
 			var anotherId = Guid.NewGuid();
 			var inAdherence = new PersonOutOfAdherenceEvent() { SiteId = siteId };
-			var persister = new fakeSiteAdherencePersister();
+			var persister = new FakeSiteAdherencePersister();
 			var target = new SiteAdherenceReadModelUpdater(persister);
 
 			target.Handle(inAdherence);
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void PersonInAdherenceEvent_WhenThereAreAgentsOutOfAdherenceForSite_ShouldDecreaseAgentsOutOfAdherence()
 		{
-			var persister = new fakeSiteAdherencePersister();
+			var persister = new FakeSiteAdherencePersister();
 			var target = new SiteAdherenceReadModelUpdater(persister);
 			var siteId = Guid.NewGuid();
 
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void PersonInAdherenceEvent_WhenNoOneInSiteIsOutOfAdherence_ShouldStillBeZero()
 		{
-			var persister = new fakeSiteAdherencePersister();
+			var persister = new FakeSiteAdherencePersister();
 			var target = new SiteAdherenceReadModelUpdater(persister);
 			var siteId = Guid.NewGuid();
 			persister.Persist(new SiteAdherenceReadModel() { SiteId = siteId });
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			persister.Get(siteId).AgentsOutOfAdherence.Should().Be(0);
 		}
-
 		[Test]
 		public void PersonOutOfAdherenceEvent_ShouldSetTheBusinessUnitOnReadModel()
 		{
@@ -84,29 +81,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.GetAll(businessUnitId).Count().Should().Be(1);
 		}
 		
-		private class fakeSiteAdherencePersister : ISiteAdherencePersister
-		{
-			private readonly List<SiteAdherenceReadModel> _models = new List<SiteAdherenceReadModel>();
-
-			public void Persist(SiteAdherenceReadModel model)
-			{
-				var existing = _models.FirstOrDefault(m => m.SiteId == model.SiteId);
-				if (existing != null)
-				{
-					existing.AgentsOutOfAdherence = model.AgentsOutOfAdherence;
-				}
-				else _models.Add(model);
-			}
-
-			public SiteAdherenceReadModel Get(Guid siteId)
-			{
-				return _models.FirstOrDefault(m => m.SiteId == siteId);
 			}
 
 			public IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId)
 			{
 				return _models.Where(m => m.BusinessUnitId == businessUnitId);
-			}
-		}
 	}
 }

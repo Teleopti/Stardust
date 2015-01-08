@@ -52,6 +52,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Cast<SiteAdherenceReadModel>();
 		}
 
+		public void Clear()
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool HasData()
+		{
+			throw new NotImplementedException();
+		}
+
+
 		private SiteAdherenceReadModel getModel(Guid siteId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(

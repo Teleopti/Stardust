@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, string start, string end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState);
+		IFakeDataBuilder WithExistingState(Guid personId, int staffingEffect);
+		IFakeDataBuilder WithExistingState(Guid personId, Guid activityId);
 		FakeRtaDatabase Make();
 	}
 
@@ -154,6 +156,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return this;
 		}
 
+		public IFakeDataBuilder WithExistingState(Guid personId, int staffingEffect)
+		{
+			PersistActualAgentState(new ActualAgentState{PersonId = personId, StaffingEffect = staffingEffect});
+			return this;
+		}
+
+		public IFakeDataBuilder WithExistingState(Guid personId, Guid activityId)
+		{
+			PersistActualAgentState(new ActualAgentState {PersonId = personId, ScheduledId = activityId});
+			return this;
+		}
+
+		public FakeRtaDatabase Make()
+		{
+			return this;
+		}
+
+
+
+
+
+
 		private RtaStateGroupLight getOrAddState(string stateCode, string name, bool isLoggedOutState, Guid platformTypeIdGuid)
 		{
 			var stateGroupId = Guid.NewGuid();
@@ -178,13 +202,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			_stateGroups.Add(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states);
 			return states.Single();
 		}
-
-		public FakeRtaDatabase Make()
-		{
-			return this;
-		}
-
-
 
 		public IActualAgentState GetCurrentActualAgentState(Guid personId)
 		{
