@@ -367,12 +367,16 @@
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
-    <Compile Include="Areas\Anywhere\Core\GetAdherence.cs" />
-    <Compile Include="Areas\Anywhere\Core\IGetAdherence.cs" />
+    <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
+    <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
+    <Compile Include="Areas\Anywhere\Core\GetTeamAdherence.cs" />
+    <Compile Include="Areas\Anywhere\Core\IGetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
+    <Compile Include="Areas\Anywhere\Core\IGetBusinessUnitId.cs" />
+    <Compile Include="Areas\Anywhere\Core\IGetTeamAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportUrl.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportUrl.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />

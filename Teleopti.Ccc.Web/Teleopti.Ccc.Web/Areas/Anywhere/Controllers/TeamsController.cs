@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -8,37 +7,38 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class TeamsController : Controller
 	{
-		private readonly IGetAdherence _getAdherence;
+		private readonly IGetTeamAdherence _getTeamAdherence;
+		private readonly IGetBusinessUnitId _getBusinessUnitId;
 
-		public TeamsController(IGetAdherence getAdherence)
+		public TeamsController(IGetTeamAdherence getTeamAdherence, IGetBusinessUnitId getBusinessUnitId)
 		{
-			_getAdherence = getAdherence;
+			_getTeamAdherence = getTeamAdherence;
+			_getBusinessUnitId = getBusinessUnitId;
 		}
 
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult ForSite(string siteId)
 		{
-			return Json(_getAdherence.ForSite(siteId), JsonRequestBehavior.AllowGet);
+			return Json(_getTeamAdherence.ForSite(siteId), JsonRequestBehavior.AllowGet);
 		}
 
 	
 		[ReadModelUnitOfWork, HttpGet]
 		public virtual JsonResult GetOutOfAdherence(string teamId)
 		{
-			return Json(_getAdherence.GetOutOfAdherence(teamId), JsonRequestBehavior.AllowGet);
+			return Json(_getTeamAdherence.GetOutOfAdherence(teamId), JsonRequestBehavior.AllowGet);
 		}
 
 		[ReadModelUnitOfWork, HttpGet]
 		public virtual JsonResult GetOutOfAdherenceForTeamsOnSite(string siteId)
 		{
-			return Json(_getAdherence.GetOutOfAdherenceForTeamsOnSite(siteId), JsonRequestBehavior.AllowGet);
+			return Json(_getTeamAdherence.GetOutOfAdherenceForTeamsOnSite(siteId), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult GetBusinessUnitId(string teamId)
 		{
-			return Json(_getAdherence.GetBusinessUnitId(teamId), JsonRequestBehavior.AllowGet);
+			return Json(_getBusinessUnitId.Get(teamId), JsonRequestBehavior.AllowGet);
 		}
-
 	}
 }

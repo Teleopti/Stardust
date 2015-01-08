@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			httpContext.SetRequest(request);
 			var currentHttpContext = new FakeCurrentHttpContext(httpContext);
 
-			var getAdherence = MockRepository.GenerateMock<IGetAdherence>();
+			var getAdherence = MockRepository.GenerateMock<IGetSiteAdherence>();
 			var target = new SitesController(null, null, null, getAdherence, currentHttpContext);
 
 			var sites = new List<SiteOutOfAdherence>()

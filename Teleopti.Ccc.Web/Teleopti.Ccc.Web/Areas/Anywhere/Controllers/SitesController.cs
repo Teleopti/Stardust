@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 		private readonly ISiteAdherenceAggregator _siteAdherenceAggregator;
-		private readonly IGetAdherence _getAdherence;
+		private readonly IGetSiteAdherence _getAdherence;
 		private readonly ICurrentHttpContext _currentHttpContext;
 
-		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader, ISiteAdherenceAggregator siteAdherenceAggregator, IGetAdherence getAdherence, ICurrentHttpContext currentHttpContext)
+		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader, ISiteAdherenceAggregator siteAdherenceAggregator, IGetSiteAdherence getAdherence, ICurrentHttpContext currentHttpContext)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;

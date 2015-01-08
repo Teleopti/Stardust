@@ -73,11 +73,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			const int expected = 1;
 			var teamId = Guid.NewGuid().ToString();
-			var getAdherence = MockRepository.GenerateMock<IGetAdherence>();
+			var getAdherence = MockRepository.GenerateMock<IGetTeamAdherence>();
 			var teamOutOfAdherence = new TeamOutOfAdherence {Id = teamId, OutOfAdherence = 1};
 			getAdherence.Stub(x => x.GetOutOfAdherence(teamId)).Return(teamOutOfAdherence);
 
-			var target = new TeamsController(getAdherence);
+			var target = new TeamsController(getAdherence, null);
 			var result = target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
 
 			result.Id.Should().Be(teamId);
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var team2 = Guid.NewGuid().ToString();
 
 
-			var getAdherence = MockRepository.GenerateMock<IGetAdherence>();
-			var target = new TeamsController(getAdherence);
+			var getAdherence = MockRepository.GenerateMock<IGetTeamAdherence>();
+			var target = new TeamsController(getAdherence,null);
 			var siteId = Guid.NewGuid();
 
 			getAdherence.Expect(g => g.GetOutOfAdherenceForTeamsOnSite(siteId.ToString()))
@@ -119,11 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			teamRepository.Stub(x => x.Get(team.Id.GetValueOrDefault())).Return(team);
 		
-			var target = new setup()
-			             {
-				             TeamRepository = teamRepository
-			             }
-				.CreateController();
+			var target = new setup {GetBusinessUnitId = new GetBusinessUnitId(teamRepository)}.CreateController();
 
 			var result = target.GetBusinessUnitId(team.Id.ToString());
 			result.Data.Should().Be(bu.Id.GetValueOrDefault());
@@ -138,11 +134,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			return teamId;
 		}
 
-		private static Guid addNewTeamOnSite(ISite site)
-		{
-			return addNewTeamOnSite(site, RandomName.Make());
-		}
-
 		private static Site addNewSiteToRepository(ISiteRepository siteRepository)
 		{
 			var site = new Site(" ");
@@ -155,16 +146,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			public ISiteRepository SiteRepository { get; set; }
 			public INumberOfAgentsInTeamReader NumberOfAgentsInTeamReader { get; set; }
-			public ITeamAdherenceAggregator TeamAdherenceAggregator { get; set; }
-			public ITeamRepository TeamRepository { get; set; }
 			public ITeamAdherencePersister TeamAdherencePersister { get; set; }
-			public ISiteAdherencePersister SiteAdherencePersister { get; set; }
+			public IGetBusinessUnitId GetBusinessUnitId { get; set; }
 
 			public TeamsController CreateController()
 			{
-				var logic = new GetAdherence(SiteRepository, NumberOfAgentsInTeamReader, TeamAdherenceAggregator,
-				TeamRepository, TeamAdherencePersister, SiteAdherencePersister);
-				return new TeamsController(logic);
+				var logic = new GetTeamAdherence(SiteRepository, NumberOfAgentsInTeamReader,
+				TeamAdherencePersister);
+				return new TeamsController(logic, GetBusinessUnitId);
 			}
 		} 
 	}
