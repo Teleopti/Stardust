@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 	
-		[ReadModelUnitOfWork, UnitOfWorkAction, HttpGet]
+		[UnitOfWorkAction, HttpGet]
 		public virtual JsonResult GetOutOfAdherence(string teamId)
 		{
 			return Json(_getAdherence.GetOutOfAdherence(teamId), JsonRequestBehavior.AllowGet);
