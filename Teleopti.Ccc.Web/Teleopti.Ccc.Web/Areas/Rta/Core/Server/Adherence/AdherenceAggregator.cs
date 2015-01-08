@@ -55,11 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 				PersonOrganizationData person;
 				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))
 					continue;
-				var adherenceAggregatorInfo = new AdherenceAggregatorInfo
+				var adherenceAggregatorInfo = new AdherenceAggregatorInfo(actualAgentState, person)
 				{
-					NewState = actualAgentState,
-					TeamId = person.TeamId,
-					SiteId = person.SiteId,
 					Adherence = StateInfo.AdherenceFor(actualAgentState)
 				};
 				aggregate(adherenceAggregatorInfo, false);

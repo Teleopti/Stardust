@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				_eventPublisher.Publish(new PersonShiftStartEvent
 				{
-					PersonId = info.NewState.PersonId,
+					PersonId = info.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
 					ShiftEndTime = info.CurrentShiftEndTime,
-					BusinessUnitId = info.NewState.BusinessUnitId
+					BusinessUnitId = info.BusinessUnitId
 				});
 			}
 		}
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				_eventPublisher.Publish(new PersonShiftEndEvent
 				{
-					PersonId = info.NewState.PersonId,
+					PersonId = info.PersonId,
 					ShiftStartTime = info.ShiftStartTimeForPreviousState,
 					ShiftEndTime = info.ShiftEndTimeForPreviousState,
-					BusinessUnitId = info.NewState.BusinessUnitId
+					BusinessUnitId = info.BusinessUnitId
 				});
 			}
 

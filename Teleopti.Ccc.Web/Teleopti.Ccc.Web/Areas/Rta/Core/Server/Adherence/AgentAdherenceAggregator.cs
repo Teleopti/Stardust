@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			var agentStates = actualAgentStateForTeam.Select(mapFrom);
 			return
 				agentStates.Batch(40)
-					.Select(s => createAgentsNotification(s, state.NewState.BusinessUnitId, state.TeamId));
+					.Select(s => createAgentsNotification(s, state.BusinessUnitId, state.TeamId));
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)

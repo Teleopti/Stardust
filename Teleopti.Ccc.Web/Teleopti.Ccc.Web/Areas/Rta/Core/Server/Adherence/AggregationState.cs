@@ -14,12 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		public bool Update(IAdherenceAggregatorInfo state)
 		{
 			var adherenceChanged = false;
-			_aggregationDatas.AddOrUpdate(state.NewState.PersonId, guid =>
+			var actualAgentState = state.MakeActualAgentState();
+			_aggregationDatas.AddOrUpdate(state.PersonId, guid =>
 			{
 				adherenceChanged = true;
 				return new rtaAggregationData
 				{
-					ActualAgentState = state.NewState,
+					ActualAgentState = actualAgentState,
 					SiteId = state.SiteId,
 					TeamId = state.TeamId
 				};
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			, (guid, data) =>
 			{
 				adherenceChanged = !StateInfo.AdherenceFor(data.ActualAgentState).Equals(state.Adherence);
-				data.ActualAgentState = state.NewState;
+				data.ActualAgentState = actualAgentState;
 				data.TeamId = state.TeamId;
 				data.SiteId = state.SiteId;
 				return data;

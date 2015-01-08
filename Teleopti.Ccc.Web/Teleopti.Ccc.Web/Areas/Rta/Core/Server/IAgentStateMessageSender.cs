@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public void Send(StateInfo state)
 		{
-			var actualAgentState = state.NewState;
+			var actualAgentState = state.MakeActualAgentState();
 
 			var type = typeof(IActualAgentState);
 			var notification = new Notification

@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				_now.UtcDateTime()
 				);
 
-			_databaseWriter.PersistActualAgentState(info.NewState);
+			_databaseWriter.PersistActualAgentState(info.MakeActualAgentState());
 
 			if (info.Send)
 				_messageSender.Send(info);

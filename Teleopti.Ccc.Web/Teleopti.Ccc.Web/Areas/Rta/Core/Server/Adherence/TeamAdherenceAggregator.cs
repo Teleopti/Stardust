@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		{
 			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForTeam(state.TeamId);
 			return createTeamNotification(numberOfOutOfAdherence, 
-				state.NewState.BusinessUnitId, 
+				state.BusinessUnitId, 
 				state.TeamId, 
 				state.SiteId);
 		}

@@ -15,18 +15,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public void Publish(StateInfo info)
 		{
-			if (info.NewState.StateId == info.PreviousState.StateId) return;
+			if (info.CurrentStateId == info.PreviousStateId) return;
 
 			_eventPublisher.Publish(new PersonStateChangedEvent
 			{
-				PersonId = info.NewState.PersonId,
-				Timestamp = info.NewState.ReceivedTime,
-				BusinessUnitId = info.NewState.BusinessUnitId,
+				PersonId = info.PersonId,
+				Timestamp = info.CurrentTime,
+				BusinessUnitId = info.BusinessUnitId,
 				InAdherence = info.Adherence == Adherence.In,
 				InAdherenceWithPreviousActivity = info.AdherenceForNewStateAndPreviousActivity == Adherence.In
 			});
 
-			_adherenceEventPublisher.Publish(info, info.NewState.ReceivedTime, info.AdherenceForPreviousStateAndCurrentActivity, info.Adherence);
+			_adherenceEventPublisher.Publish(info, info.CurrentTime, info.AdherenceForPreviousStateAndCurrentActivity, info.Adherence);
 		}
 	}
 }
