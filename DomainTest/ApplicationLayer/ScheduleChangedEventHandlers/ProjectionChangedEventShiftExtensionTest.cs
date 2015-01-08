@@ -93,6 +93,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			layers[0].WorkTime.TotalMinutes.Should().Be.EqualTo(5);
 		}
 
+		[Test]
+		public void ShouldSetOvertimeCorrect()
+		{
+			var start = new DateTime(2014, 12, 01, 8, 0, 0, DateTimeKind.Utc);
+			var list = createLayers(start.AddMinutes(10), new[] { 20 });
+
+			var shift = new ProjectionChangedEventShift { Layers = list };
+			var layers = shift.FilterLayers(new DateTimePeriod(start, start.AddMinutes(15))).ToList();
+
+			layers.Count().Should().Be.EqualTo(1);
+			layers[0].Overtime.TotalMinutes.Should().Be.EqualTo(5);
+		}
+
 
 		[Test]
 		public void ShouldSetPropertiesCorrect()
@@ -126,6 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						EndDateTime = startOfShift.AddMinutes(accStart).AddMinutes(length),
 						ContractTime = new TimeSpan(0,0,length), 
 						WorkTime = new TimeSpan(0,0,length),
+						Overtime = new TimeSpan(0,0,length),
 						DisplayColor = Color.Brown.ToArgb(),
 						IsAbsence = true,
 						IsAbsenceConfidential = true,

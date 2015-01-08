@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_rep.Stub(x => x.Absences()).Return(_absences);
 			var result = _target.Handle(layer, 12, 22);
 
+			result.ShiftCategoryId.Should().Be.EqualTo(-1);
 			result.AbsenceId.Should().Be.EqualTo(1);
 			result.ActivityId.Should().Be.EqualTo(-1);
 			result.PaidTimeMinutes.Should().Be.EqualTo(10);

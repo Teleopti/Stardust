@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				WorkTimeMinutes = (int) layer.WorkTime.TotalMinutes,
 				OverTimeMinutes = (int) layer.Overtime.TotalMinutes,
 				OverTimeId = MapOvertimeId(layer.MultiplicatorDefinitionSetId),
-				ShiftCategoryId = shiftCategoryId,
 				ScenarioId = scenarioId
 				
 			};
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			ret.ScheduledMinutes = layerMinutes;
 			if (!layer.IsAbsence)
 			{
+				ret.ShiftCategoryId = shiftCategoryId;
 				var activities = _repository.Activities();
 				var act = activities.FirstOrDefault(a => a.ActivityCode.Equals(layer.PayloadId));
 				if (act == null) return ret;
