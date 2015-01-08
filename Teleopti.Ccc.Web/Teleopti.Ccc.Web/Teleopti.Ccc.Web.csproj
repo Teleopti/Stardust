@@ -556,6 +556,7 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
+    <Compile Include="Areas\Rta\Core\Server\AlarmFinder.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAgentStateMessageSender.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />

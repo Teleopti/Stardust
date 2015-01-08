@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
@@ -48,13 +49,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<Adherence> _adherenceForPreviousStateAndCurrentActivity;
 		private readonly Lazy<Adherence> _adherenceForNewStateAndPreviousActivity;
 
-		private readonly IActualAgentAssembler _actualAgentStateAssembler;
 		private readonly PersonOrganizationData _person;
 		private readonly DateTime _currentTime;
+		private readonly IAlarmFinder _alarmFinder;
 
 		public StateInfo(
 			IDatabaseReader databaseReader,
 			IActualAgentAssembler actualAgentStateAssembler,
+			IAlarmFinder alarmFinder,
 			PersonOrganizationData person,
 			ExternalUserStateInputModel input,
 			DateTime currentTime)
@@ -62,8 +64,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 			_input = input;
 			_person = person;
-			_actualAgentStateAssembler = actualAgentStateAssembler;
 			_currentTime = currentTime;
+			_alarmFinder = alarmFinder;
 
 			_newState = new Lazy<IActualAgentState>(() => actualAgentStateAssembler.GetAgentState(
 				input,
@@ -157,11 +159,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private Adherence adherenceFor(string stateCode, Guid activityId)
 		{
-			var stateGroup = _actualAgentStateAssembler.GetStateGroup(
+			var stateGroup = _alarmFinder.GetStateGroup(
 				stateCode,
 				_input.ParsedPlatformTypeId(),
 				_person.BusinessUnitId);
-			var alarm = _actualAgentStateAssembler.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
+			var alarm = _alarmFinder.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
 			if (alarm == null)
 				return Adherence.None;
 			return adherenceFor(alarm);
@@ -221,4 +223,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 	}
+
 }

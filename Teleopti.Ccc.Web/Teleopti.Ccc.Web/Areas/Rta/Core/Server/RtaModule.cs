@@ -12,8 +12,6 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
@@ -31,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<TeleoptiRtaService>().AsSelf().As<ITeleoptiRtaService>().SingleInstance();
 			builder.RegisterType<Rta>().As<IRta>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>().SingleInstance();
+			builder.RegisterType<AlarmFinder>().As<IAlarmFinder>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();

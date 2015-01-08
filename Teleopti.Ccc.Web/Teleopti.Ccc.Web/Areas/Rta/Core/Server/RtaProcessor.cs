@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IDatabaseReader _databaseReader;
 		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IActualAgentAssembler _agentAssembler;
+		private readonly IAlarmFinder _alarmFinder;
 		private readonly IAgentStateMessageSender _messageSender;
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IDatabaseReader databaseReader,
 			IDatabaseWriter databaseWriter,
 			IActualAgentAssembler agentAssembler,
+			IAlarmFinder alarmFinder,
 			IAgentStateMessageSender messageSender,
 			IAdherenceAggregator adherenceAggregator,
 			IShiftEventPublisher shiftEventPublisher,
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_databaseReader = databaseReader;
 			_databaseWriter = databaseWriter;
 			_agentAssembler = agentAssembler;
+			_alarmFinder = alarmFinder;
 			_messageSender = messageSender;
 			_adherenceAggregator = adherenceAggregator;
 			_shiftEventPublisher = shiftEventPublisher;
@@ -59,6 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var info = new StateInfo(
 				_databaseReader,
 				_agentAssembler,
+				_alarmFinder,
 				person,
 				input,
 				_now.UtcDateTime()
