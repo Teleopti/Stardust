@@ -76,3 +76,4 @@ MyTimeWeb_AvailabilityVerifyHours_31654 = RC
 MyTeam_AbsenceBackToWork_31478 = RC
 Gamification_NewBadgeCalculation_31185 = RC
 MyTimeWeb_OrganisationalBasedLeaderboard_31184 = RC
+MyTimeWeb_TradeWithDayOffAndEmptyDay_31317 = false

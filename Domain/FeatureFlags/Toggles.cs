@@ -60,6 +60,7 @@
 		MyTimeWeb_SeeAnnouncedShifts_31639,
 		MyTimeWeb_AvailabilityVerifyHours_31654,
 		MyTimeWeb_OrganisationalBasedLeaderboard_31184,
+		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
 
 		Messaging_HttpSender_29205,
 
