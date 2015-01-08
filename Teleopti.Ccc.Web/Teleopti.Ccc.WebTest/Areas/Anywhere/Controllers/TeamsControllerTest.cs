@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			getAdherence.Stub(x => x.GetOutOfAdherence(teamId)).Return(teamOutOfAdherence);
 
 			var target = new TeamsController(getAdherence, null);
-			var result = target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
+			var result = target.GetOutOfAdherence(teamId).Data as TeamOutOfAdherence;
 
 			result.Id.Should().Be(teamId);
 			result.OutOfAdherence.Should().Be(expected);
@@ -147,11 +147,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			public ISiteRepository SiteRepository { get; set; }
 			public INumberOfAgentsInTeamReader NumberOfAgentsInTeamReader { get; set; }
 			public ITeamAdherencePersister TeamAdherencePersister { get; set; }
+			public ITeamAdherenceAggregator TeamAdherenceAggregator { get; set; }
 			public IGetBusinessUnitId GetBusinessUnitId { get; set; }
 
 			public TeamsController CreateController()
 			{
-				var logic = new GetTeamAdherence(SiteRepository, NumberOfAgentsInTeamReader,
+				var logic = new GetTeamAdherence(SiteRepository, NumberOfAgentsInTeamReader,TeamAdherenceAggregator,
 				TeamAdherencePersister);
 				return new TeamsController(logic, GetBusinessUnitId);
 			}

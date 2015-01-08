@@ -22,11 +22,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(_getTeamAdherence.ForSite(siteId), JsonRequestBehavior.AllowGet);
 		}
 
-	
-		[ReadModelUnitOfWork, HttpGet]
+
+		[UnitOfWorkAction, HttpGet]
 		public virtual JsonResult GetOutOfAdherence(string teamId)
 		{
 			return Json(_getTeamAdherence.GetOutOfAdherence(teamId), JsonRequestBehavior.AllowGet);
+		}
+		
+		[ReadModelUnitOfWork, HttpGet]
+		public virtual JsonResult GetOutOfAdherenceLite(string teamId)
+		{
+			return Json(_getTeamAdherence.GetOutOfAdherenceLite(teamId), JsonRequestBehavior.AllowGet);
 		}
 
 		[ReadModelUnitOfWork, HttpGet]

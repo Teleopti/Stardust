@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
 			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null, teamAdherencePersister);
+			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
 			var siteId = Guid.NewGuid();
 			var teamsOutOfAdherence = new List<TeamAdherenceReadModel>()
 			{
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
 			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null, teamAdherencePersister);
+			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
 			var teamsOutOfAdherence = new TeamAdherenceReadModel { TeamId = teamId, AgentsOutOfAdherence = 3 };
 			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(teamsOutOfAdherence);
-			var result = target.GetOutOfAdherence(teamId.ToString());
+			var result = target.GetOutOfAdherenceLite(teamId.ToString());
 			result.Id.Should().Be(teamId.ToString());
 			result.OutOfAdherence.Should().Be(3);
 		}

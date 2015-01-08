@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
+		private readonly ITeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly ITeamAdherencePersister _teamAdherencePersister;
 
-		public GetTeamAdherence(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,ITeamAdherencePersister teamAdherencePersister)
+		public GetTeamAdherence(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,ITeamAdherenceAggregator teamAdherenceAggregator, ITeamAdherencePersister teamAdherencePersister)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
+			_teamAdherenceAggregator = teamAdherenceAggregator;
 			_teamAdherencePersister = teamAdherencePersister;
 		}
 
@@ -42,10 +44,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			return numberOfAgents != null && numberOfAgents.ContainsKey(team.Id.Value) ? numberOfAgents[team.Id.Value] : 0;
 		}
+
 		public TeamOutOfAdherence GetOutOfAdherence(string teamId)
 		{
+			var outOfAdherence = _teamAdherenceAggregator.Aggregate(Guid.Parse(teamId));
+			return new TeamOutOfAdherence
+			{
+				Id = teamId,
+				OutOfAdherence = outOfAdherence
+			};
+		}
+
+		public TeamOutOfAdherence GetOutOfAdherenceLite(string teamId)
+		{
 			var model = _teamAdherencePersister.Get(Guid.Parse(teamId));
-			return new TeamOutOfAdherence { Id = model.TeamId.ToString(), OutOfAdherence = model.AgentsOutOfAdherence };
+			return new TeamOutOfAdherence {Id = model.TeamId.ToString(), OutOfAdherence = model.AgentsOutOfAdherence};
 		}
 
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId)

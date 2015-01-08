@@ -74,7 +74,8 @@
 			});
 
 			var checkFeature = function() {
-				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
+				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates('Teams/GetOutOfAdherence') });
+				toggleQuerier('RTA_NoBroker_31237', { enabled: loadLastStates('Teams/GetOutOfAdherenceLite') });
 			}
 			
 			var checkDetailFeature = function () {
@@ -93,11 +94,11 @@
 				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function () { viewModel.agentStatesForMultipleTeams(true); } });
 			}
 
-			var loadLastStates = function () {
+			var loadLastStates = function (url) {
 				for (var i = 0; i < viewModel.teams().length; i++) {
 					(function (team) {
 						ajax.ajax({
-							url: "Teams/GetOutOfAdherence?teamId=" + team.Id,
+							url: url+"?teamId=" + team.Id,
 							success: function (d) {
 								viewModel.update(d);
 							}
