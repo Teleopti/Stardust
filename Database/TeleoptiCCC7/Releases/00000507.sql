@@ -4,8 +4,8 @@
 --Desc: Add new column for table ShiftExchangeOffer to reference request
 ---------------- 
 
-IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[ShiftExchangeOffer]'))
-   DROP TABLE [dbo].[ShiftExchangeOffer]
+
+DROP TABLE [dbo].[ShiftExchangeOffer]
 GO
 
 CREATE TABLE [dbo].[ShiftExchangeOffer](
