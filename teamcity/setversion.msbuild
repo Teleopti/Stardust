@@ -16,6 +16,9 @@
 			<Output TaskParameter="Lines" PropertyName="minorVersion" />
 		</ReadLinesFromFile>
 		
+		<!-- just for backward compatibility - remove later -->
 		<Message Text="##teamcity[setParameter name='teleopti_version' value='$(majorVersion).$(minorVersion).$(RevisionNumber)']" />
+		
+		<Message Text="##teamcity[setParameter name='system.ApplicationVersion' value='$(majorVersion).$(minorVersion).$(RevisionNumber)']" />		
 	</Target>
 </Project>
