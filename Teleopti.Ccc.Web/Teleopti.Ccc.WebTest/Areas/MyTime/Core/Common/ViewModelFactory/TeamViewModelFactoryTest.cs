@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var pageId = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
 			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxMain" };
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
-			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "team", GroupId = teamId } });
+			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(null,DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "team", GroupId = teamId } });
 			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var pageId = Guid.NewGuid();
 			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxContract" };
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
-			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "full time", GroupId = teamId } });
+			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(null,DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "full time", GroupId = teamId } });
 			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(), MockRepository.GenerateMock<IPrincipalAuthorization>());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;

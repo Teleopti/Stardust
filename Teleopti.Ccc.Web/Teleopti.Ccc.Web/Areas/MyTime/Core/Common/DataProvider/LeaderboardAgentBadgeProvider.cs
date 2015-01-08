@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					var agentsInSite = new List<ReadOnlyGroupDetail>();
 					detailsForPage.ForEach(
 						x => agentsInSite.AddRange(_groupingRepository.DetailsForGroup(x.GroupId, queryDate)));
-
 					permittedAgentBadgeList = getPermittedAgentBadgeList(functionPath, agentsInSite, queryDate, setting);
 					break;
 				}
@@ -178,20 +177,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var personId = agentBadge.Person;
 
 				AgentBadgeOverview overview;
-				if (dic.ContainsKey(personId))
+				if (!dic.TryGetValue(personId, out overview))
 				{
-					overview = dic[personId];
-				}
-				else
-				{
-					var detail = permittedPersons.Single(p => p.PersonId == personId);
+					var detail = permittedPersons.First(p => p.PersonId == personId);
 					overview = new AgentBadgeOverview
 					{
-						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName,detail.LastName)
+						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName, detail.LastName)
 					};
-					dic[personId] = overview;
+					dic.Add(personId, overview);
 				}
-
+				
 				overview.Gold += agentBadge.GoldBadgeAmount;
 				overview.Silver += agentBadge.SilverBadgeAmount;
 				overview.Bronze += agentBadge.BronzeBadgeAmount;

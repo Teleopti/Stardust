@@ -10,6 +10,8 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.WebReports;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
@@ -51,6 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 {
 	public class MyTimeAreaModule : Module
 	{
+		private readonly IIocConfiguration _config;
+
+		public MyTimeAreaModule(IIocConfiguration config)
+		{
+			_config = config;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			registerCommonTypes(builder);
@@ -81,13 +90,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PushMessageDialoguePersister>().As<IPushMessageDialoguePersister>();
 		}
 
-		private static void registerSettingsTypes(ContainerBuilder builder)
+		private void registerSettingsTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
 			builder.RegisterType<SettingsPermissionViewModelFactory>().As<ISettingsPermissionViewModelFactory>();
 			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<CalendarLinkSettings>>().SingleInstance();
-			builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
+
+			_config.Args().CacheBuilder
+				.For<NameFormatSettingsPersisterAndProvider>()
+				.CacheMethod(x => x.Get())
+				.As<ISettingsPersisterAndProvider<NameFormatSettings>>();
+			builder.RegisterMbCacheComponent<NameFormatSettingsPersisterAndProvider, ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
+
 			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();

@@ -101,6 +101,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing leaderboard report")]
 		public void WhenIAmViewingLeaderboardReport()
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GoToLeaderboardReport();
 		}

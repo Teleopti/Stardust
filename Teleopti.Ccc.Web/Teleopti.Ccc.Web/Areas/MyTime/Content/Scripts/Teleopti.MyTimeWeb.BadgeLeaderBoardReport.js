@@ -14,7 +14,7 @@
 		self.showOptions = ko.observable(false);
 		self.isLoading = ko.observable(false);
 		
-		self.loadData = function() {
+		self.loadData = function () {
 			self.agentBadges([]);
 			self.isLoading(true);
 			ajax.Ajax({
@@ -29,10 +29,12 @@
 					self.isLoading(false);
 					if(data.Agents[0])
 						UpdateBadgeComparator(data.Agents[0]);
-					$.each(data.Agents, function (index, item) {
-						var badgeViewModel = new BadgeViewModel(index, item);
-						self.agentBadges.push(badgeViewModel);
+
+					var index = 0;
+					var newItems = ko.utils.arrayMap(data.Agents, function (item) {
+						return new BadgeViewModel(index++, item);
 					});
+					self.agentBadges.push.apply(self.agentBadges, newItems);
 				}
 			});
 		}

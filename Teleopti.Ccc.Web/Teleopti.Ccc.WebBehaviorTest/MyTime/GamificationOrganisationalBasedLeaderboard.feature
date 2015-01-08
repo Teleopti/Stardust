@@ -8,9 +8,14 @@ Background:
 	Given there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
 	And there is a team named 'Team red' on 'The site'
+	And there is a team named 'Team orange' on 'The site'
 	And Pierre Baldi has a person period with
 		| Field      | Value      |
 		| Team       | Team red   |
+		| Start Date | 2014-01-06 |
+	And Ashley Andeen has a person period with
+		| Field      | Value      |
+		| Team       | Team orange   |
 		| Start Date | 2014-01-06 |
 	And I have a person period with
 		| Field      | Value      |
@@ -84,16 +89,13 @@ Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the
 		| Field                 | Value |
 		| Access to Leaderboard | true  |
 		| Access to my site     | true  |
-	And Ashley Andeen has a person period with
-		| Field      | Value      |
-		| Team       | Team red   |
-		| Start Date | 2014-01-06 |
 	And Ashley Andeen has badges with
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
 		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
 	When I am viewing leaderboard report
+	And I select 'Everyone' in the hierarchy-picker
 	Then I should see the ranks are
 		| Rank | Agent         |
 		| 1    | I             |

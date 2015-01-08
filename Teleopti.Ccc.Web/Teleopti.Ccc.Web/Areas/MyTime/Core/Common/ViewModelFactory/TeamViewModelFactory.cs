@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IUserTextTranslator _userTextTranslator;
 		private readonly IPrincipalAuthorization _principalAuthorization;
-		private const string pageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
+		private static readonly Guid pageMain = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
 
 		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator, IPrincipalAuthorization principalAuthorization)
 		{
@@ -106,23 +106,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		{
 			var pages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
 			var groupPages = pages
-							.Where(p => p.PageId.ToString().ToUpperInvariant() != pageMain)
+							.Where(p => p.PageId != pageMain)
 							.Select(p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId })
 							.OrderBy(x => x.text).ToList();
-			if (pages.Any(p => p.PageId.ToString().ToUpperInvariant() == pageMain))
+			if (pages.Any(p => p.PageId == pageMain))
 			{
 				groupPages.Insert(0, pages
-							.Where(p => p.PageId.ToString().ToUpperInvariant() == pageMain)
+							.Where(p => p.PageId == pageMain)
 							.Select(p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).Single());
 			}
-
-			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
 
 			foreach (var page in groupPages)
 			{
 				var pageId = page.PageId;
-
-				if (pageId.ToString().ToUpperInvariant() == pageMain)
+				var details = _groupingReadOnlyRepository.AvailableGroups(new ReadOnlyGroupPage { PageId = pageId }, date).ToArray();
+				
+				if (pageId == pageMain)
 				{
 					constructOptions(date, page, details, pageId, "");
 				}

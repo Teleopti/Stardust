@@ -9,7 +9,7 @@
 		<div class="container">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
 				<li class="ie8style col-xs-12 col-sm-3" data-bind="if: showOptions">
-					<select id="Hierarchy-Picker" data-bind="foreach: availableOptions, select2: { value: selectedOptionId } ">
+					<select id="Hierarchy-Picker" data-bind="foreach: availableOptions, select2: { value: selectedOptionId }, disable:isLoading ">
 						<option data-bind="text: text, value: id, css:{'site-option':  type == 2, 'team-option': type == 1}"></option>
 					</select>
 				</li>
