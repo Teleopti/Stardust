@@ -72,19 +72,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldGetOutOfAdherenceForTeam()
 		{
 			const int expected = 1;
-			var teamId = Guid.NewGuid();
-			var teamAdherenceAggregator = MockRepository.GenerateMock<ITeamAdherenceAggregator>();
-			teamAdherenceAggregator.Stub(x => x.Aggregate(teamId)).Return(expected);
-			
-			var target = new setup()
-			             {
-				             TeamAdherenceAggregator = teamAdherenceAggregator
-			             }
-				.CreateController();
+			var teamId = Guid.NewGuid().ToString();
+			var getAdherence = MockRepository.GenerateMock<IGetAdherence>();
+			var teamOutOfAdherence = new TeamOutOfAdherence {Id = teamId, OutOfAdherence = 1};
+			getAdherence.Stub(x => x.GetOutOfAdherence(teamId)).Return(teamOutOfAdherence);
 
+			var target = new TeamsController(getAdherence);
 			var result = target.GetOutOfAdherence(teamId.ToString()).Data as TeamOutOfAdherence;
 
-			result.Id.Should().Be(teamId.ToString());
+			result.Id.Should().Be(teamId);
 			result.OutOfAdherence.Should().Be(expected);
 		}
 

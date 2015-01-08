@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -47,12 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public TeamOutOfAdherence GetOutOfAdherence(string teamId)
 		{
-			var outOfAdherence = _teamAdherenceAggregator.Aggregate(Guid.Parse(teamId));
-			return new TeamOutOfAdherence
-			       {
-				       Id = teamId,
-				       OutOfAdherence = outOfAdherence
-			       };
+			var model = _teamAdherencePersister.Get(Guid.Parse(teamId));
+			return new TeamOutOfAdherence {Id = model.TeamId.ToString(), OutOfAdherence = model.AgentsOutOfAdherence};
 		}
 
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId)

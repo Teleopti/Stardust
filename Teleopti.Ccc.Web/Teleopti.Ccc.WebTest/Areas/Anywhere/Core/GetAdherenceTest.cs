@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
@@ -56,6 +57,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 
 			result.Single().OutOfAdherence.Should().Be(3);
 			result.Single().Id.Should().Be(teamId.ToString());
+		}
+
+		[Test]
+		public void ShouldGetTeamAdherenceForSingleTeam()
+		{
+			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
+			var teamId = Guid.NewGuid();
+			var target = new GetAdherence(null, null, null, null, teamAdherencePersister, null);
+			var teamsOutOfAdherence = new TeamAdherenceReadModel {TeamId = teamId, AgentsOutOfAdherence = 3};
+			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(teamsOutOfAdherence);
+			var result = target.GetOutOfAdherence(teamId.ToString());
+			result.Id.Should().Be(teamId.ToString());
+			result.OutOfAdherence.Should().Be(3);
 		}
 	}
 }
