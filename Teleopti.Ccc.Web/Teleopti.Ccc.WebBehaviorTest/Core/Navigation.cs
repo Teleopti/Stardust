@@ -411,6 +411,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted("MyTime#BadgeLeaderBoardReport/Index", new ApplicationStartupTimeout());
 		}
+
+		public static void GoToRtaTool()
+		{
+			GoToWaitForUrlAssert("RtaTool", new ApplicationStartupTimeout());
+		}
 	}
 
 	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor

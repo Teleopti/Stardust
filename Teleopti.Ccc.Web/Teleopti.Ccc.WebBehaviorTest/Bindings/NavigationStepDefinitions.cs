@@ -198,6 +198,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToHealthCheck();
 		}
 
+		[When(@"I am viewing the RTA Tool")]
+		public void WhenIAmViewingTheRtaTool()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToRtaTool();
+		}
+
 		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)'")]

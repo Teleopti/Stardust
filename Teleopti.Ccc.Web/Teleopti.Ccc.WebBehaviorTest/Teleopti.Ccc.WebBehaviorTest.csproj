@@ -282,6 +282,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RtaTool\RtaTool.feature.cs">
+      <DependentUpon>RtaTool.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="SessionAnywhere.feature.cs">
       <DependentUpon>SessionAnywhere.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -913,6 +918,10 @@
     <None Include="MessageBrokerTool\MessageBrokerTool.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MessageBrokerTool.feature.cs</LastGenOutput>
+    </None>
+    <None Include="RtaTool\RtaTool.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RtaTool.feature.cs</LastGenOutput>
     </None>
     <None Include="SessionAnywhere.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -19,7 +19,9 @@
 	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
 	<script src="Areas/RtaTool/Content/Scripts/require/configuration.js"></script>
     <script data-main="Areas/RtaTool/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
-
+	<style>
+		.agent-name{}
+	</style>
 </head>
 
 <body >
@@ -32,7 +34,7 @@
 			<tbody data-bind="foreach: agents">
 				<tr>
 					<td>
-						<div data-bind="text: name"></div>
+						<div class="agent-name" data-bind="text: name"></div>
 					</td>
 					<td data-bind="foreach: $data.statecodes">
 							<button class="btn btn-danger btn-sm" data-bind="click: $data.sendState, text: $data.code"></button>	
