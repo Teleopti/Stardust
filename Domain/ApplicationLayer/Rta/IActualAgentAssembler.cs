@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -11,5 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId);
 
 		RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit);
+
+		IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchid, string sourceId);
 	}
 }

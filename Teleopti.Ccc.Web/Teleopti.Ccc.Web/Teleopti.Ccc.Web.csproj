@@ -561,6 +561,7 @@
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaProcessor.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\Rta\TeleoptiRtaService.cs" />

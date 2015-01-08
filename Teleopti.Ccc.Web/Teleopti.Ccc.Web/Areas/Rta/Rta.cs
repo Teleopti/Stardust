@@ -36,30 +36,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		private readonly DataSourceResolver _dataSourceResolver;
 
 		public Rta(
-			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader, 
-			IDatabaseWriter databaseWriter, 
-			IMbCacheFactory cacheFactory, 
-			IShiftEventPublisher shiftEventPublisher, 
-			IActivityEventPublisher activityEventPublisher, 
-			IStateEventPublisher stateEventPublisher,
+			IActualAgentAssembler actualAgentAssembler, 
+			IMbCacheFactory mbCacheFactory,
 			INow now, 
 			IConfigReader configReader,
-			IPersonOrganizationProvider personOrganizationProvider)
+			RtaProcessor processor)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_rtaDataHandler = new RtaDataHandler(
-				messageSender,
 				adherenceAggregator,
 				databaseReader,
-				databaseWriter,
-				cacheFactory,
-				shiftEventPublisher,
-				activityEventPublisher,
-				stateEventPublisher,
-				now,
-				personOrganizationProvider);
+				actualAgentAssembler,
+				mbCacheFactory,
+				processor
+				);
 			_now = now;
 
 			Log.Info("The real time adherence service is now started");
