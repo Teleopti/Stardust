@@ -146,20 +146,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void handleDetails()
 		{
-			var agentState = _reader2.GetActualAgentStates().First();
-			var personActivity = _reader2.GetCurrentSchedule(agentState.PersonId).First();
+			
+			var agentStates = _reader2.GetActualAgentStates();
+			if (!agentStates.Any()) return;
+			var personActivities = _reader2.GetCurrentSchedule(agentStates.First().PersonId);
+			if (!personActivities.Any()) return;
 
 			_detailsPresister.Add(new AdherenceDetailsReadModel
 			{
 				Date = _now.UtcDateTime().Date,
-				PersonId = agentState.PersonId,
+				PersonId = agentStates.First().PersonId,
 				Model = new AdherenceDetailsModel
 				{
 					Details = new List<AdherenceDetailModel>(new[]
 					{
 						new AdherenceDetailModel
 						{
-							StartTime = personActivity.StartDateTime
+							StartTime = personActivities.First().StartDateTime
 						}
 					})
 				}
