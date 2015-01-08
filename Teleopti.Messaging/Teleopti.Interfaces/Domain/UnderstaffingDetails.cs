@@ -7,8 +7,8 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public class UnderstaffingDetails
     {
-        private readonly IList<DateOnly> _seriousUnderstaffingDays = new List<DateOnly>();
-        private readonly IList<DateOnly> _understaffingDays = new List<DateOnly>();
+		private readonly HashSet<DateOnly> _seriousUnderstaffingDays = new HashSet<DateOnly>();
+		private readonly HashSet<DateOnly> _understaffingDays = new HashSet<DateOnly>();
         private readonly IList<TimePeriod> _seriousUnderstaffingTimes = new List<TimePeriod>();
         private readonly IList<TimePeriod> _understaffingTimes = new List<TimePeriod>();
 
@@ -34,18 +34,12 @@ namespace Teleopti.Interfaces.Domain
 
         public void AddSeriousUnderstaffingDay(DateOnly date)
         {
-            if (!_seriousUnderstaffingDays.Contains(date))
-            {
-                _seriousUnderstaffingDays.Add(date);
-            }
+			_seriousUnderstaffingDays.Add(date);
         }
 
         public void AddUnderstaffingDay(DateOnly date)
         {
-            if (!_understaffingDays.Contains(date))
-            {
-                _understaffingDays.Add(date);
-            }
+			_understaffingDays.Add(date);
         }
 
         public void AddSeriousUnderstaffingTime(TimePeriod period)
