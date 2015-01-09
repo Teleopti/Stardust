@@ -424,8 +424,16 @@ BEGIN
 		INNER JOIN mart.bridge_acd_login_person b
 			ON b.acd_login_id = fa.acd_login_id
 			AND b.business_unit_id=@business_unit_id
-		INNER JOIN mart.dim_person p
-			ON p.person_id = b.person_id
+		INNER JOIN 
+			mart.dim_person p
+		ON 
+		p.person_id = b.person_id
+		AND
+			(
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
+					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
+			)
 		WHERE (date_id between @from_date_id_utc+1 AND @now_date_id_utc)
 		OR
 		(
