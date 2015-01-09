@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			return agentsNotAlreadyLoggedOut;
 		}
 
-		public IActualAgentState GetAgentState(ExternalUserStateInputModel input, PersonOrganizationData person, ScheduleLayer currentLayer, ScheduleLayer nextLayer, IActualAgentState previousState, DateTime currentTime)
+		public IActualAgentState GetAgentState(ExternalUserStateInputModel input, PersonOrganizationData person, ScheduleLayer currentLayer, ScheduleLayer nextLayer, IRtaAgentState previousState, DateTime currentTime)
 		{
 			var batchId = input.IsSnapshot
 				? input.BatchId
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			if (stateCode == null)
 				stateCode = previousState.StateCode;
 			if (originalSourceId == null)
-				originalSourceId = previousState.OriginalDataSourceId;
+				originalSourceId = previousState.SourceId;
 
 			var activityId = currentLayer != null ? currentLayer.PayloadId : Guid.Empty;
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			}
 
 			if (previousState.AlarmId == newState.AlarmId)
-				newState.StateStart = previousState.StateStart;
+				newState.StateStart = previousState.AlarmStartTime;
 
 			if (currentLayer != null)
 			{

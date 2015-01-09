@@ -70,8 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			_databaseWriter.PersistActualAgentState(info.MakeActualAgentState());
 
-			if (info.Send)
-				_messageSender.Send(info);
+			_messageSender.Send(info);
 
 			_adherenceAggregator.Aggregate(info);
 

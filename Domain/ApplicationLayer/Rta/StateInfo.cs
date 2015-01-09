@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -12,47 +13,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		Guid TeamId { get; }
 		Guid SiteId { get; }
 		Guid BusinessUnitId { get; }
-		IActualAgentState MakeActualAgentState();
 		Adherence Adherence { get; }
+		IActualAgentState MakeActualAgentState();
 	}
 
 	public class AdherenceAggregatorInfo : IAdherenceAggregatorInfo
 	{
 		private readonly IActualAgentState _actualAgentState;
-		private readonly PersonOrganizationData _person;
 
 		public AdherenceAggregatorInfo(IActualAgentState actualAgentState, PersonOrganizationData person)
 		{
 			_actualAgentState = actualAgentState;
-			_person = person;
+			PersonId = person.PersonId;
+			TeamId = person.TeamId;
+			SiteId = person.SiteId;
+			BusinessUnitId = person.BusinessUnitId;
 		}
 
-		public Guid PersonId
-		{
-			get { return _person.PersonId; }
-		}
-
-		public Guid TeamId
-		{
-			get { return _person.TeamId; }
-		}
-
-		public Guid SiteId
-		{
-			get { return _person.SiteId; }
-		}
-
-		public Guid BusinessUnitId
-		{
-			get { return _person.BusinessUnitId; }
-		}
+		public Guid PersonId { get; private set; }
+		public Guid TeamId { get; private set; }
+		public Guid SiteId { get; private set; }
+		public Guid BusinessUnitId { get; private set; }
+		public Adherence Adherence { get; set; }
 
 		public IActualAgentState MakeActualAgentState()
 		{
 			return _actualAgentState;
 		}
 
-		public Adherence Adherence { get; set; }
 	}
 
 	public enum Adherence
@@ -62,19 +50,103 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		Out
 	}
 
+	public interface IRtaAgentState
+	{
+		DateTime? BatchId { get; }
+		Guid PlatformTypeId { get; }
+		string SourceId { get; }
+
+		DateTime ReceivedTime { get; }
+		string StateCode { get; }
+		Guid StateGroupId { get; }
+		Guid ActivityId { get; }
+
+		Guid NextActivityId { get; }
+		DateTime NextActivityStartTime { get; }
+
+		Guid AlarmId { get; }
+		DateTime AlarmStartTime { get; }
+		double StaffingEffect { get; }
+
+		IActualAgentState MakeActualAgentState();
+	}
+
+	// vänd på steken!
+	public class RtaAgentState : IRtaAgentState
+	{
+		private static IActualAgentState _state;
+
+		public static RtaAgentState Make(Guid personId, IActualAgentState state)
+		{
+			if (state == null)
+				return new RtaAgentState()
+				{
+					PersonId = personId,
+					StateGroupId = Guid.NewGuid()
+				};
+			_state = state;
+			return new RtaAgentState(state);
+		}
+
+		private RtaAgentState()
+		{
+		}
+
+		private RtaAgentState(IActualAgentState state)
+		{
+			PersonId = state.PersonId;
+			BatchId = state.BatchId;
+			PlatformTypeId = state.PlatformTypeId;
+			SourceId = state.OriginalDataSourceId;
+			ReceivedTime = state.ReceivedTime;
+			StateCode = state.StateCode;
+			StateGroupId = state.StateId;
+			ActivityId = state.ScheduledId;
+			NextActivityId = state.ScheduledNextId;
+			NextActivityStartTime = state.NextStart;
+			AlarmId = state.AlarmId;
+			AlarmStartTime = state.StateStart;
+			StaffingEffect = state.StaffingEffect;
+		}
+
+		public Guid PersonId { get; private set; }
+
+		public DateTime? BatchId { get; private set; }
+		public Guid PlatformTypeId { get; private set; }
+		public string SourceId { get; private set; }
+
+		public DateTime ReceivedTime { get; private set; }
+		public string StateCode { get; private set; }
+		public Guid StateGroupId { get; private set; }
+		public Guid ActivityId { get; private set; }
+
+		public Guid NextActivityId { get; private set; }
+		public DateTime NextActivityStartTime { get; private set; }
+
+		public Guid AlarmId { get; private set; }
+		public DateTime AlarmStartTime { get; private set; }
+
+		public double StaffingEffect { get; private set; }
+
+		public IActualAgentState MakeActualAgentState()
+		{
+			return _state;
+		}
+	}
+
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly Lazy<IEnumerable<ScheduleLayer>> _scheduleLayers;
 		private readonly Lazy<ScheduleLayer> _currentActivity;
 		private readonly Lazy<ScheduleLayer> _nextActivityInShift;
-		private readonly Lazy<IActualAgentState> _previousState;
-		private readonly Lazy<bool> _hasPreviousState;
+		private readonly Lazy<IRtaAgentState> _previousState;
+		private readonly Lazy<bool> _personIsKnown;
 		private readonly Lazy<DateTime> _currentShiftStartTime;
 		private readonly Lazy<DateTime> _currentShiftEndTime;
 		private readonly Lazy<DateTime> _shiftStartTimeForPreviousState;
 		private readonly Lazy<DateTime> _shiftEndTimeForPreviousState;
-		private readonly Lazy<IActualAgentState> _newState;
+		private readonly Lazy<IRtaAgentState> _newState;
 		private readonly Lazy<Adherence> _adherence;
 		private readonly Lazy<Adherence> _adherenceForPreviousState;
 		private readonly Lazy<Adherence> _adherenceForPreviousStateAndCurrentActivity;
@@ -98,23 +170,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_currentTime = currentTime;
 			_alarmFinder = alarmFinder;
 
-			_newState = new Lazy<IActualAgentState>(() => actualAgentStateAssembler.GetAgentState(
+			var previousActualAgentState = new Lazy<IActualAgentState>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
+			_previousState = new Lazy<IRtaAgentState>(() => RtaAgentState.Make(person.PersonId, previousActualAgentState.Value));
+			_personIsKnown = new Lazy<bool>(() => previousActualAgentState.Value != null);
+
+			_newState = new Lazy<IRtaAgentState>(() => RtaAgentState.Make(person.PersonId, actualAgentStateAssembler.GetAgentState(
 				input,
 				person,
 				CurrentActivity,
 				NextActivityInShift,
 				_previousState.Value,
-				currentTime));
-
-			var currentActualAgentState = new Lazy<IActualAgentState>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
-			_previousState = new Lazy<IActualAgentState>(() => currentActualAgentState.Value ??
-															   new ActualAgentState
-															   {
-																   PersonId = person.PersonId,
-																   BusinessUnitId = Guid.Empty,
-																   StateId = Guid.NewGuid(),
-															   });
-			_hasPreviousState = new Lazy<bool>(() => currentActualAgentState.Value != null);
+				currentTime)));
 
 			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(person.PersonId));
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
@@ -126,13 +192,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_shiftEndTimeForPreviousState = new Lazy<DateTime>(() => endTimeOfShift(activityForPreviousState.Value));
 
 			_adherence = new Lazy<Adherence>(() => AdherenceFor(_newState.Value));
-			_adherenceForPreviousState = new Lazy<Adherence>(() =>
-			{
-				if (_hasPreviousState.Value)
-					AdherenceFor(_previousState.Value);
-				return Adherence.None;
-			});
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(_previousState.Value.StateCode, _newState.Value.ScheduledId));
+			_adherenceForPreviousState = new Lazy<Adherence>(() => !_personIsKnown.Value ? Adherence.None : AdherenceFor(_previousState.Value));
+			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(_previousState.Value.StateCode, _newState.Value.ActivityId));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<Adherence>(() =>
 			{
 				var previousActivity = (from l in ScheduleLayers where l.EndDateTime < currentTime select l).LastOrDefault();
@@ -143,8 +204,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public IEnumerable<ScheduleLayer> ScheduleLayers { get { return _scheduleLayers.Value; } }
 
-		public bool IsScheduled { get { return _newState.Value.ScheduledId != Guid.Empty; } }
-		public bool WasScheduled { get { return _previousState.Value.ScheduledId != Guid.Empty; }}
+		public bool IsScheduled { get { return _newState.Value.ActivityId != Guid.Empty; } }
+		public bool WasScheduled { get { return _previousState.Value.ActivityId != Guid.Empty; } }
 
 		public ScheduleLayer CurrentActivity { get { return _currentActivity.Value; } }
 		public ScheduleLayer NextActivityInShift { get { return _nextActivityInShift.Value; } }
@@ -161,35 +222,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
-		public Guid TeamId { get { return _person.TeamId; }}
+		public Guid TeamId { get { return _person.TeamId; } }
 		public Guid SiteId { get { return _person.SiteId; } }
 
 		public DateTime CurrentTime { get { return _newState.Value.ReceivedTime; } }
 		public DateTime PreviousStateTime { get { return _previousState.Value.ReceivedTime; } }
-		public Guid CurrentStateId { get { return _newState.Value.StateId; } }
-		public Guid PreviousStateId { get { return _previousState.Value.StateId; } }
-		public Guid CurrentActivityId { get { return _newState.Value.ScheduledId; } }
-		public Guid PreviousActivityId { get { return _previousState.Value.ScheduledId; } }
+		public Guid CurrentStateId { get { return _newState.Value.StateGroupId; } }
+		public Guid PreviousStateId { get { return _previousState.Value.StateGroupId; } }
+		public Guid CurrentActivityId { get { return _newState.Value.ActivityId; } }
+		public Guid PreviousActivityId { get { return _previousState.Value.ActivityId; } }
 
 		public bool Send
 		{
 			get
 			{
-				return !_newState.Value.ScheduledId.Equals(_previousState.Value.ScheduledId) ||
-					   !_newState.Value.ScheduledNextId.Equals(_previousState.Value.ScheduledNextId) ||
-					   !_newState.Value.AlarmId.Equals(_previousState.Value.AlarmId) ||
-					   !_newState.Value.StateId.Equals(_previousState.Value.StateId) ||
-					   !_newState.Value.NextStart.Equals(_previousState.Value.NextStart) ||
-					   _newState.Value.ScheduledNext != _previousState.Value.ScheduledNext
+				return !_newState.Value.ActivityId.Equals(_previousState.Value.ActivityId) ||
+					   !_newState.Value.StateGroupId.Equals(_previousState.Value.StateGroupId) ||
+					   !_newState.Value.NextActivityId.Equals(_previousState.Value.NextActivityId) ||
+					   !_newState.Value.NextActivityStartTime.Equals(_previousState.Value.NextActivityStartTime)
 					;
 			}
 		}
 
-
-
 		public IActualAgentState MakeActualAgentState()
 		{
-			return _newState.Value;
+			return _newState.Value.MakeActualAgentState();
 		}
 
 		private Adherence adherenceFor(string stateCode, ScheduleLayer activity)
@@ -209,6 +266,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (alarm == null)
 				return Adherence.None;
 			return adherenceFor(alarm);
+		}
+
+		public static Adherence AdherenceFor(IRtaAgentState state)
+		{
+			return adherenceFor(state.StaffingEffect);
 		}
 
 		public static Adherence AdherenceFor(IActualAgentState state)
