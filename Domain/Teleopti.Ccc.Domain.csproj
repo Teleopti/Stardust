@@ -191,12 +191,15 @@
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ActivityEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceAggregatorInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsPercentageModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentState.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentStateAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetails.cs" />
     <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ControllableLiteTransactionSyncronization.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
+    <Compile Include="ApplicationLayer\Rta\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />

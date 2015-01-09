@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IDatabaseReader _databaseReader;
-		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IAlarmFinder _alarmFinder;
+		private readonly AgentStateAssembler _agentStateAssembler;
 		private readonly IAgentStateMessageSender _messageSender;
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			INow now,
 			IPersonOrganizationProvider personOrganizationProvider, 
 			IDatabaseReader databaseReader,
-			IActualAgentAssembler agentAssembler,
 			IAlarmFinder alarmFinder,
+			AgentStateAssembler agentStateAssembler,
 			IAgentStateMessageSender messageSender,
 			IAdherenceAggregator adherenceAggregator,
 			IShiftEventPublisher shiftEventPublisher,
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_now = now;
 			_personOrganizationProvider = personOrganizationProvider;
 			_databaseReader = databaseReader;
-			_agentAssembler = agentAssembler;
 			_alarmFinder = alarmFinder;
+			_agentStateAssembler = agentStateAssembler;
 			_messageSender = messageSender;
 			_adherenceAggregator = adherenceAggregator;
 			_shiftEventPublisher = shiftEventPublisher;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			var info = new StateInfo(
 				_databaseReader,
-				_agentAssembler,
+				_agentStateAssembler, 
 				_alarmFinder,
 				person,
 				input,
