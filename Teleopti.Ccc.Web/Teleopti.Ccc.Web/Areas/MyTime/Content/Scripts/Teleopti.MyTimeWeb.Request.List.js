@@ -46,35 +46,15 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	    self.isReferred = ko.observable(false);
 	    self.isCreatedByUser = ko.observable(false);
-        self.ShowDetails = function (viewmodel, event) {
-            if (self.IsSelected()) {
-                self.IsSelected(false);
-                return;
-            }
-            if (self.DetailItem === undefined) {
-                ajax.Ajax({
-                    url: self.Link(),
-                    dataType: "json",
-                    type: 'GET',
-                    beforeSend: function() {
-                        self.IsLoading(true);
-                    },
-                    complete: function() {
-                        self.IsLoading(false);
-                    },
-                    success: function(data) {
-                        self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
-                        self.DetailItem.AddRequestCallback = self.successUpdatingRequest;
-                        self.IsSelected(true);
-                    }
-                });
-            } else {
-                self.IsSelected(true);
-            }
+		
+        self.ShowDetails = function () {
+        	self.IsSelected(!self.IsSelected());
+	        
         };
+
         self.successUpdatingRequest = function(data) {
-            self.IsSelected(false);
-            self.DetailItem = undefined;
+        	self.IsSelected(false);
+			self.DetailItem = undefined;
             self.parent.AddRequest(data, false);
         };
 
@@ -116,7 +96,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         };
 
         self.ColumnRequests = ko.computed(function() {
-            //var list = self.Requests();
         	var list = ko.utils.arrayFilter(self.Requests(), function (request) {
         		return request.isValid();
         	});
@@ -241,14 +220,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         return 'label-warning';
     };
-
-	//_setAgentName = function(message, name) {
-	//	if (message.indexOf(":") > 0) {
-	//		return message.replace(message.substr(0, message.indexOf(":")), name);
-	//	}
-	//	return message;
-	//};
-
+	
     _setAgentName = function (message, name) {
 		// replace agent name (as a work-around is inside [] so they can be found inside the message SLOB)
 	    var idx = message.indexOf("]");
@@ -274,6 +246,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			    }
 		    });
 
+			//RobToDo: review and refactor
 		    var self = this;
 	        self.isProcessing(isProcessing);
             self.Subject(data.Subject == null ? '' : data.Subject);
@@ -293,7 +266,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	        self.isCreatedByUser(data.IsCreatedByUser);
 	        self.isReferred(data.IsReferred);
 	        self.IsSelected(false);
-            if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);
+	        if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);
+
+    		//RobTODO: review
+	        self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
+	        self.DetailItem.AddRequestCallback = self.successUpdatingRequest;
         }
     });
 

@@ -100,7 +100,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var arr = $.grep(self.days(), function(item, index) {
 				return item.fixedDate() == fixedDate;
 			});
-			arr[0].textRequestCount(arr[0].textRequestCount() + 1);
+			if (arr.length > 0) {
+				arr[0].textRequestCount(arr[0].textRequestCount() + 1);
+			}
 		};
 
 		self.setCurrentDate = function (date) {
@@ -215,8 +217,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var addOvertimeModel = { model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability), type: function () { return 'overtime'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 		var innerRequestModel = createRequestViewModel();
 		var addRequestModel = { model: innerRequestModel, type: innerRequestModel.TypeEnum, CancelAddingNewRequest: self.CancelAddingNewRequest };
-		var addShiftOfferModel = { model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, _displayRequest, {format: self.datePickerFormat, defaultTimes: defaultDateTimes }), type: function () { return 'shiftOffer'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
-		//var addShiftOfferModel = { model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, self.CancelAddingNewRequest, {format: self.datePickerFormat, defaultTimes: defaultDateTimes }), type: function () { return 'shiftOffer'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
+		var addShiftOfferModel = { model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _displayRequest).Create(defaultDateTimes), type: function () { return 'shiftOffer'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 		var addAbsenceReportModel = { model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule), type: function () { return 'absenceReport'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 
 		self.showAddShiftExchangeOfferForm = function(data) {

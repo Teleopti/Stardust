@@ -8,7 +8,7 @@
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek, defaultDateTimes) {
 	var self = this;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
+	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template", "shiftexchangeoffer-request-detail-template"];
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
 	self.DateFrom = ko.observable(moment().startOf('day'));
@@ -24,19 +24,19 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 			}
 			return self.TimeFromInternal();
 		},
-		write: function (value) {
+		write: function(value) {
 			if (self.IsFullDay()) return;
 			self.TimeFromInternal(value);
 		}
 	});
 	self.TimeTo = ko.computed({
-		read: function () {
+		read: function() {
 			if (self.IsFullDay()) {
 				return defaultDateTimes.defaultFulldayEndTime;
 			}
 			return self.TimeToInternal();
 		},
-		write: function (value) {
+		write: function(value) {
 			if (self.IsFullDay()) return;
 			self.TimeToInternal(value);
 		}
@@ -61,14 +61,27 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.DenyReason = ko.observable();
 	self.IsEditable = ko.observable(true);
 	self.IsNewInProgress = ko.observable(false);
-	self.weekStart = ko.observable(firstDayOfWeek); 
-	self.IsTimeInputEnabled = ko.computed(function () {
+	self.weekStart = ko.observable(firstDayOfWeek);
+	self.IsTimeInputEnabled = ko.computed(function() {
 		return !self.IsFullDay() && self.IsEditable();
 	});
-	self.IsTimeInputVisible = ko.computed(function () {
-        return !self.IsFullDay();
-    });
+	self.IsTimeInputVisible = ko.computed(function() {
+		return !self.IsFullDay();
+	});
 
+	self.Initialize = function(data) {
+		self.Subject(data.Subject);
+		self.Message(data.Text);
+		self.DateFrom(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
+		self.TimeFrom(data.RawTimeFrom);
+		self.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
+		self.TimeTo(data.RawTimeTo);
+		self.EntityId(data.Id);
+		self.AbsenceId(data.PayloadId);
+		self.DenyReason(data.DenyReason);
+		self.IsFullDay(data.IsFullDay);
+		self.TypeEnum(data.TypeEnum);
+	};
 
 	self.readAbsenceAccount = function(data) {
 		if (data) {

@@ -116,6 +116,16 @@
 	word-wrap: break-word;	
 }
 
+.shift-exchange-out-of-open-period {
+	margin-top: 5px !important;	
+	margin-bottom: 10px !important;	
+}
+
+.shift-exchange-offer-footer {
+	overflow: auto;
+	margin-top: 5px;
+}
+
 .absence-type-input-label 
 {
 	width: 8em;
@@ -433,4 +443,9 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
 .request-body .alert-warning{
 	margin-top: 10px;
+}
+
+.btn-datepicker {
+	border: 0;
+	outline: none;
 }

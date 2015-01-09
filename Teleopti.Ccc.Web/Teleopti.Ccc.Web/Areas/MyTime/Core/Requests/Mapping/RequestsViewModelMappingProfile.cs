@@ -73,6 +73,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						}
 						return ret;
 					}))
+				.ForMember (d => d.IsNextDay, o => o.ResolveUsing ((s =>
+				{
+					var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
+					if (shiftExchangeOffer != null)
+					{
+						return !shiftExchangeOffer.Period.StartDateTime.Date.Equals(shiftExchangeOffer.Period.EndDateTime.Date);
+					}
+					return false;
+
+				})))
 				.ForMember(d => d.IsReferred, o => o.ResolveUsing(s =>
 																	  {
 																		  if (!s.IsPending) return false;
@@ -152,15 +162,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																			_linkProvider.RequestDetailLink(s.Id.Value) :
 																			null))
 				.ForMember(d => d.Methods, o => o.ResolveUsing(s =>
-																			{
-																				var stateId = PersonRequest.GetUnderlyingStateId(s);
-																				//0: Pending
-																				//1: Denied
-																				//2: Approved
-																				//3: New
-																				return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
-																			}))
-				;
+				{
+					//0: Pending
+					//1: Denied
+					//2: Approved
+					//3: New
+					var stateId = PersonRequest.GetUnderlyingStateId(s);
+					if (s.Request is ShiftExchangeOffer)
+					{
+						return new[] {0, 3}.Contains (stateId) ? "GET, DELETE, PUT" : "GET, DELETE";
+					}
+					
+					return new[] {0, 3}.Contains (stateId) ? "GET, DELETE, PUT" : "GET";
+					
+				}));
 		}
 
 		private Boolean IsRequestFullDay (IPersonRequest personRequest)

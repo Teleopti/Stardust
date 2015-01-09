@@ -1329,7 +1329,7 @@ select.time-input {
 }
 
 .loading-gradient {
-	background-image: url(../Images/alpha-gradient.png);
+	/*background-image: url(../Images/alpha-gradient.png);*/
 	background-repeat: no-repeat;
 	background-position: center;
 }

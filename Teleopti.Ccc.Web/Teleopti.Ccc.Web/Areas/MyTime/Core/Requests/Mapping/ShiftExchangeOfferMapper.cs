@@ -13,31 +13,48 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private IPerson _currentPerson;
 
 		public ShiftExchangeOfferMapper(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, 
 			ICurrentTeleoptiPrincipal principal)
 		{
 			_loggedOnUser = loggedOnUser;
+			//_currentPerson = loggedOnUser.CurrentUser();
 			_scheduleRepository = scheduleRepository;
 			_currentScenario = currentScenario;
 			_principal = principal;
 		}
 
-		public IPersonRequest Map(ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
+		public IPersonRequest Map (ShiftExchangeOfferForm form, IPersonRequest personRequest)
 		{
-			var loggedOnUser = _loggedOnUser.CurrentUser();
-			var date = new DateOnly(form.Date);
-			var schedule = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(loggedOnUser,
-					new ScheduleDictionaryLoadOptions(false, false) { LoadDaysAfterLeft = false, LoadNotes = false, LoadRestrictions = false },
-					new DateOnlyPeriod(date, date), _currentScenario.Current());
-			var offer = new ShiftExchangeOffer(schedule[loggedOnUser].ScheduledDay(date),
-				new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), createOptionalDateTimePeriod(form, date)), status);
+			_currentPerson = _loggedOnUser.CurrentUser();
+			var offer = personRequest.Request as ShiftExchangeOffer;
+			if (offer!=null)
+			{
+				mapOffer(form, personRequest, offer.Status);	
+			}
+			return personRequest;
+		}
 
-			IPersonRequest ret = new PersonRequest(loggedOnUser) {Request = offer};
-
+		public IPersonRequest Map (ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
+		{
+			_currentPerson = _loggedOnUser.CurrentUser();
+			IPersonRequest ret = new PersonRequest(_currentPerson);
+			mapOffer (form, ret, status);
 			ret.Subject = UserTexts.Resources.ShiftExchangeAnnouncement;
 			ret.TrySetMessage("");
 			return ret;
+		}
+
+		private void mapOffer(ShiftExchangeOfferForm form, IPersonRequest request, ShiftExchangeOfferStatus status)
+		{
+			var date = new DateOnly(form.Date);
+			var schedule = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(_currentPerson,
+					new ScheduleDictionaryLoadOptions(false, false) { LoadDaysAfterLeft = false, LoadNotes = false, LoadRestrictions = false },
+					new DateOnlyPeriod(date, date), _currentScenario.Current());
+			var offer = new ShiftExchangeOffer(schedule[_currentPerson].ScheduledDay(date),
+				new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), createOptionalDateTimePeriod(form, date)), status);
+			request.Request = offer;
 		}
 
 		private DateTimePeriod? createOptionalDateTimePeriod(ShiftExchangeOfferForm form, DateOnly date)

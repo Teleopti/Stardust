@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			// RobTODO - What request period should we use?
 			var start = new DateTime(_date.Year, _date.Month, _date.Day, 0, 0, 0, DateTimeKind.Utc);
-			SetPeriod(criteria.ShiftWithin ?? new DateTimePeriod(start, start.AddDays(1)));
+			SetPeriod(criteria.ShiftWithin ?? new DateTimePeriod(start, start.AddDays(1).AddSeconds (-1)));
 		}
 
 		protected ShiftExchangeOffer()

@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public interface IShiftExchangeOfferMapper
 	{
 		IPersonRequest Map(ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status);
+		IPersonRequest Map(ShiftExchangeOfferForm form, IPersonRequest request);
 	}
 }

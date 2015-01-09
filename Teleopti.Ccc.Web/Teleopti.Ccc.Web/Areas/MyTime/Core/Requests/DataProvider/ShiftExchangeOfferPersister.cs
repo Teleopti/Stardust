@@ -22,10 +22,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public RequestViewModel Persist(ShiftExchangeOfferForm form, ShiftExchangeOfferStatus status)
 		{
-			var personRequest = _shiftExchangeOfferMapper.Map(form, status);
 
-			_personRequestRepository.Add(personRequest);
+			IPersonRequest personRequest = null;
+			if (form.Id.HasValue)
+			{
+				personRequest = _personRequestRepository.Find(form.Id.Value);
+			}
 
+			if (personRequest != null)
+			{
+				_shiftExchangeOfferMapper.Map(form, personRequest);
+			}
+			else
+			{
+				personRequest = _shiftExchangeOfferMapper.Map(form, status);
+				_personRequestRepository.Add (personRequest);
+			}
 			return _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 	}

@@ -12,19 +12,21 @@
 		</tr>
 		<tr>
 			<td>
-				<div class="col-md-3 col-xs-12 annouonce-shift-matching-date" >
+				<div class="announce-shift-matching-date" data-bind="css: ColumnSizings()">
 					<div class="input-group">
-						<input class="form-control" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }" />
-						<span class="input-group-addon" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }">
-							<i class="glyphicon glyphicon-calendar"></i>
+						<input class="form-control" data-bind="enable: IsEditable(), datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }" />
+						<span class="input-group-addon">
+							<button class="btn-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat()}, enable: IsEditable">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
 						</span>
 					</div>
 				</div>
-				
-				<div class="col-md-3 col-xs-12 annouonce-shift-matching-date">
+
+				<div class="announce-shift-matching-date" data-bind="css: ColumnSizings()">
 					<div class="bootstrap-timepicker">
 						<div class="input-group" title="@Resources.StartTime">
-							<input type="text" class="shift-exchange-offer-start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+							<input type="text" class="shift-exchange-offer-start-time form-control" data-bind="enable: IsEditable(), timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-time"></i>
 							</span>
@@ -32,10 +34,10 @@
 					</div>
 				</div>
 
-				<div class="col-md-3 col-xs-12 annouonce-shift-matching-date">
+				<div class="announce-shift-matching-date" data-bind="css: ColumnSizings()">
 					<div class="bootstrap-timepicker">
 						<div class="input-group" title="@Resources.EndTime">
-							<input type="text" class="shift-exchange-offer-end-time form-control" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+							<input type="text" class="shift-exchange-offer-end-time form-control" data-bind="enable: IsEditable(), timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-time"></i>
 							</span>
@@ -43,8 +45,8 @@
 					</div>
 				</div>
 
-				<div class="col-md-3 col-xs-12 annouonce-shift-next-date">
-					<input type="checkbox" class="shift-exchange-offer-next-day" data-bind="checked: EndTimeNextDay" /> @Resources.NextDay
+				<div class="announce-shift-next-date" data-bind="css: ColumnSizings()">
+					<input type="checkbox" class="shift-exchange-offer-next-day" data-bind="checked: EndTimeNextDay, enable: IsEditable()" /> @Resources.NextDay
 				</div>
 			</td>
 		</tr>
@@ -55,11 +57,13 @@
 		</tr>
 		<tr>
 			<td>
-				<div class="col-md-3 col-xs-12">
+				<div data-bind="css: ColumnSizings()">
 					<div class="input-group">
-						<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }" />
-						<span class="input-group-addon" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }">
-							<i class="glyphicon glyphicon-calendar"></i>
+						<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="enable: IsEditable(), datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }" />
+						<span class="input-group-addon">
+							<button class="btn-datepicker" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }, enable: IsEditable">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
 						</span>
 					</div>
 				</div>
@@ -69,15 +73,18 @@
 	<div data-bind="if: ShowError">
 		<div class="shift-exchange-offer-error alert alert-danger" data-bind="html: ErrorMessage" />
 	</div>
-	<div class="pull-right">
-		<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
-		<button class="request-new-send btn btn-primary" data-bind="click: SaveShiftExchangeOffer, enable: SaveEnabled">@Resources.Save</button>
-	</div>
-	<div class="pull-left shift-exchange-out-of-open-period alert alert-danger" data-bind="visible: !SaveEnabled()">
+	<div class="shift-exchange-out-of-open-period alert alert-danger" data-bind="visible: !IsValid()">
 		<div data-bind="visible: !IsSelectedDateInShiftTradePeriod()">@Resources.AnnounceShiftDateOutPeriod</div>
 		<div data-bind="visible: !IsValidToLegal()">@Resources.AnnounceShiftValidToNotLegal</div>
 		<div data-bind="visible: !IsTimeLegal()">@Resources.EndTimeMustBeGreaterOrEqualToStartTime</div>
 		<div data-bind="visible: !IsNotAbsence()">@Resources.PublishAnnouncementNoAbsence</div>
+	</div>
+	<div class="shift-exchange-offer-footer">
+		<div class="pull-right">
+			<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest, visible : !IsUpdating()">@Resources.Cancel</button>
+			<button class="request-new-send btn btn-primary" data-bind="click: SaveShiftExchangeOffer, enable: SaveEnabled">@Resources.Save</button>
+		</div>
+
 	</div>
 </div>
 

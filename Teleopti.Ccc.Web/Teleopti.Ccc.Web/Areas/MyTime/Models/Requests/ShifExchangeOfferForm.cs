@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public TimeSpan? EndTime { get; set; }
 		public DateTime OfferValidTo { get; set; }
 		public bool EndTimeNextDay { get; set; }
+		public Guid? Id { get; set; }
 	}
 }
