@@ -71,7 +71,7 @@
 		</tr>
 	</table>
 	<div data-bind="if: ShowError">
-		<div class="shift-exchange-offer-error alert alert-danger" data-bind="html: ErrorMessage" />
+		<div class="shift-exchange-offer-error alert alert-danger" data-bind="html: ErrorMessage, visible: IsEditable" />
 	</div>
 	<div class="shift-exchange-out-of-open-period alert alert-danger" data-bind="visible: !IsValid()">
 		<div data-bind="visible: !IsSelectedDateInShiftTradePeriod()">@Resources.AnnounceShiftDateOutPeriod</div>
@@ -82,7 +82,7 @@
 	<div class="shift-exchange-offer-footer">
 		<div class="pull-right">
 			<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest, visible : !IsUpdating()">@Resources.Cancel</button>
-			<button class="request-new-send btn btn-primary" data-bind="click: SaveShiftExchangeOffer, enable: SaveEnabled">@Resources.Save</button>
+			<button class="request-new-send btn btn-primary" data-bind="click: SaveShiftExchangeOffer, visible: IsEditable, enable: SaveEnabled">@Resources.Save</button>
 		</div>
 
 	</div>

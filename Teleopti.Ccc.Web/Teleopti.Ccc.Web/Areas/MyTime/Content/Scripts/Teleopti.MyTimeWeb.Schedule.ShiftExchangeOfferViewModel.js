@@ -55,10 +55,9 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		self.Id(offer.Id);
 	};
 
-	self.IsEditable = ko.observable();
+	self.IsEditable = ko.observable(true);
 	self.EndTimeNextDay = ko.observable(false);
 	self.IsTimeLegal = ko.computed(function () {
-		//return !(self.EndTime() < self.StartTime() && !self.EndTimeNextDay());
 		var startMoment = moment('1900-01-01 ' + self.StartTime());
 		var endMoment = moment('1900-01-01 ' + self.EndTime());
 		if (self.EndTimeNextDay()) {
@@ -127,7 +126,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
-			//data: { Date: self.DateTo().format(self.DateFormat()), OfferValidTo: self.OfferValidTo().format(self.DateFormat()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
 			data: { Date: self.DateTo().format(self.DateFormat()),
 				OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
 				StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
