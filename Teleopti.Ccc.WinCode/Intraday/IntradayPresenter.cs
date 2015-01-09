@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly OnEventMeetingMessageCommand _onEventMeetingMessageCommand;
         private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
         private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
-
+	    private readonly Poller _poller = new Poller();
         public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
             IMessageBroker messageBroker,
@@ -122,35 +122,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                     typeof(IForecastData),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
-
-            if (!_realTimeAdherenceEnabled || HistoryOnly) return;
-
-            if (SchedulerStateHolder.FilteredPersonDictionary.Count>100)
-            {
-                    _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-                                                            typeof(IActualAgentState),
-                                                            DateTime.UtcNow,
-                                                            DateTime.UtcNow.AddDays(1));
-            }
-            else
-            {
-                foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
-                {
-                    _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-                                                            person.Id.GetValueOrDefault(),
-                                                            typeof(IActualAgentState),
-                                                            DateTime.UtcNow,
-                                                            DateTime.UtcNow.AddDays(1));
-                }
-            }
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
-        {
-            if (e.Message.ModuleId == _instanceId) return;
-
-            ThreadPool.QueueUserWorkItem(handleIncomingExternalEvent, e.Message.DomainObject);
         }
 
         private void handleIncomingExternalEvent(object state)
@@ -298,13 +269,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.RegisteringWithMessageBrokerThreeDots);
             listenForMessageBroker();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingInitialStatesThreeDots);
-            loadExternalAgentStates();
+	        if (_realTimeAdherenceEnabled)
+				_poller.Poll(loadExternalAgentStates);
         }
 
         private void loadExternalAgentStates()
         {
-            if (!_realTimeAdherenceEnabled) return; //If RTA isn't enabled, we don't need the rest of the stuff...
-
             var statisticRepository = _repositoryFactory.CreateStatisticRepository();
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
             {
@@ -366,7 +336,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void UnregisterMessageBrokerEvents()
         {
             if (_messageBroker == null) return;
-            _messageBroker.UnregisterEventSubscription(OnEventActualAgentStateMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventForecastDataMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventScheduleMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventStatisticMessageHandler);
@@ -517,6 +486,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _rtaStateHolder = null;
             _schedulingResultLoader = null;
             _unitOfWorkFactory = null;
+			_poller.Dispose();
         }
 
         private class MessageForRetryCommand

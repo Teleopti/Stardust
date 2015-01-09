@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			_target.UnregisterMessageBrokerEvents();
 
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventActualAgentStateMessageHandler));
 			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler));
 			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventMeetingMessageHandler));
 			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler));
@@ -259,15 +258,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         }
 
         [Test]
-        public void VerifyOnEventExternalAgentStateMessageHandlerSameModuleId()
-        {
-            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
-            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
-
-            _target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
-        }
-
-        [Test]
         public void VerifyOnEventStatisticMessageHandlerSameModuleId()
         {
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
@@ -323,35 +313,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(message));
             
             _scheduleCommand.AssertWasCalled(x => x.Execute(message));
-        }
-
-        [Test]
-        public void VerifyOnLoadWithMoreThanOneHundredPeople()
-        {
-            var uow = MockRepository.GenerateMock<IUnitOfWork>();
-
-            var agentState = new ActualAgentState();
-            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-
-            _rtaStateHolder.Stub(r => r.ActualAgentStates)
-                           .Return(new Dictionary<Guid, IActualAgentState> {{Guid.NewGuid(), agentState}});
-            _repositoryFactory.Stub(x => x.CreateStatisticRepository())
-                              .Return(_statisticRepository);
-            _statisticRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<IActualAgentState> {agentState});
-
-            Enumerable.Range(0, 101)
-                      .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
-
-            _schedulerStateHolder.RequestedPeriod =
-                new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
-                                                   TimeZoneInfo.Utc);
-            _target.Initialize();
-
-            Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
-            _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o=> o.IgnoreArguments().Repeat.Twice());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments().Repeat.Times(2));
         }
 
         [Test]
