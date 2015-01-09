@@ -141,6 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				.Return(new [] { groupDetail });
 			groupingRepository.Stub(x => x.DetailsForGroup(groupDetail.GroupId, date)).Return(new[] {personDetail});
 			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail.PersonId})).Return(new Collection<IAgentBadge>());
+			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail.PersonId })).Return(new Collection<IAgentBadgeWithRank>());
 			permissionProvider.Stub(
 				x =>
 					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, date, personDetail))
@@ -178,6 +179,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				.Return(new[] { new ReadOnlyGroupDetail() });
 			groupingRepository.Stub(x => x.DetailsForGroup(Guid.Empty, date)).Return(persons);
 			agentBadgeRepository.Stub(x => x.Find(new[] { personDetail2.PersonId })).Return(agentBadges.Where(b => b.Person == personDetail2.PersonId).ToArray());
+			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail2.PersonId })).Return(new List<IAgentBadgeWithRank>());
 			permissionProvider.Stub(
 				x =>
 					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, date, personDetail1))
