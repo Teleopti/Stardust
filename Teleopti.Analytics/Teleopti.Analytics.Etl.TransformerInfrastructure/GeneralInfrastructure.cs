@@ -154,6 +154,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					case "PBI30787OnlyLatestQueueAgentStatistics":
 						etlToggleManager.AddToggle(key, bool.Parse(value));
 						break;
+					case "ETL_SpeedUpETL_30791":
+						etlToggleManager.AddToggle(key, bool.Parse(value));
+						break;
 					default:
 						_logger.InfoFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
 						break;

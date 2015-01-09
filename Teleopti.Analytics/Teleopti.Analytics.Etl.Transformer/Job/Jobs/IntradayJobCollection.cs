@@ -12,9 +12,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			// STAGE TABLES
 			Add(new StageDateJobStep(jobParameters));                    // BU independent
 			Add(new DimDateJobStep(jobParameters));                     // BU independent
-            //Add(new StageTimeZoneJobStep(jobParameters));               // BU independent //removed 2014-11-25 to reduce duration/Load
-            //Add(new DimTimeZoneJobStep(jobParameters));                 // BU independent //removed 2014-11-25 to reduce duration/Load
-            //Add(new StageTimeZoneBridgeJobStep(jobParameters));         // BU independent //removed 2014-11-25 to reduce duration/Load
 			Add(new StageBusinessUnitJobStep(jobParameters));            // BU independent
 			Add(new DimQueueJobStep(jobParameters));                    // BU independent
 			Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
@@ -28,9 +25,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
-			Add(new IntradayStageScheduleJobStep(jobParameters));
-			//Add(new StageScheduleForecastSkillJobStep(jobParameters)); //removed 2010-02-24 to reduce duration/Load (scheduling resource calculation)
-			Add(new IntradayStageScheduleDayOffCountJobStep(jobParameters));
+			if (!jobParameters.EtlToggleManager.IsEnabled("ETL_SpeedUpETL_30791"))
+			{
+				Add(new IntradayStageScheduleJobStep(jobParameters));
+				Add(new IntradayStageScheduleDayOffCountJobStep(jobParameters));
+			}
 			Add(new IntradayStageSchedulePreferenceJobStep(jobParameters));
 			Add(new IntradayStageAvailabilityJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
@@ -47,7 +46,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new IntradayStageRequestJobStep(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
-            //Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent //removed 2014-11-25 to reduce duration/Load
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
 			Add(new DimSiteJobStep(jobParameters));
@@ -73,20 +71,24 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 
 			// FACT TABLES
-			Add(new FactScheduleJobStep(jobParameters,true));
-			Add(new FactScheduleDayCountJobStep(jobParameters,true));
+			if (!jobParameters.EtlToggleManager.IsEnabled("ETL_SpeedUpETL_30791"))
+			{
+				Add(new FactScheduleJobStep(jobParameters, true));
+				Add(new FactScheduleDayCountJobStep(jobParameters, true));
+			}
 			Add(new FactSchedulePreferenceJobStep(jobParameters, true));
 			Add(new FactAvailabilityJobStep(jobParameters, true));
-			
 			var agentQueueIntradayEnabled = jobParameters.EtlToggleManager.IsEnabled("PBI30787OnlyLatestQueueAgentStatistics");
-			if(agentQueueIntradayEnabled)
-				Add(new IntradayFactQueueJobStep(jobParameters)); 
-			else 
-				Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			if (agentQueueIntradayEnabled)
+			{
+				Add(new IntradayFactQueueJobStep(jobParameters));
 				Add(new IntradayFactAgentJobStep(jobParameters));                   // BU independent
-			else 
+			}
+			else
+			{
+				Add(new FactQueueJobStep(jobParameters));                   // BU independent
 				Add(new FactAgentJobStep(jobParameters));                   // BU independent
+			}
 			
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
 			
@@ -105,12 +107,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new FactAgentSkillJobStep(jobParameters));
 			Add(new PermissionReportJobStep(jobParameters,true));
 
-			// If PM is installed then show ETL job step for synchronizing PM permissions
 			if (jobParameters.IsPmInstalled)
 				Add(new PmPermissionJobStep(jobParameters));
-
-			// WEB SERVICE TO ANALYZER
-			//Add(new PerformanceManagerPermissionJobStep(jobParameters));
 		}
 	}
 
