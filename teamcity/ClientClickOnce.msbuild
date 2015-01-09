@@ -7,7 +7,7 @@
 		<SourceDirectory>$(WorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDirectory>
 		<OutputDirectory>d:\temp\output</OutputDirectory>
 		<NameOfClickOnceItem>Teleopti.Ccc.SmartClientPortal.Shell</NameOfClickOnceItem>
-		<CCCVersion>7.7.7.7</CCCVersion>
+		<CCCVersion>x.x.x.x</CCCVersion>
 		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<IconFile>Teleopti.Ccc.SmartClientPortal.Shell.ico</IconFile>
 	</PropertyGroup>
