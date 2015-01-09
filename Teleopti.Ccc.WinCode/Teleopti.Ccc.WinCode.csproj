@@ -461,6 +461,7 @@
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
     <Compile Include="Intraday\OnEventMeetingMessageCommand.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
+    <Compile Include="Intraday\Poller.cs" />
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
     <Compile Include="Main\IDataSourceHandler.cs" />

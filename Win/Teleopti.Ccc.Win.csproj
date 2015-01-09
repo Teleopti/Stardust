@@ -285,18 +285,14 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Budgeting\AddShrinkageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Budgeting\AddShrinkageForm.cs" />
     <Compile Include="Budgeting\AddShrinkageForm.Designer.cs">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Budgeting\Events\BudgetGroupNeedsRefresh.cs" />
     <Compile Include="Budgeting\Events\BudgetGroupTreeNeedsRefresh.cs" />
     <Compile Include="Budgeting\Events\GridSelectionChanged.cs" />
-    <Compile Include="Budgeting\SetEfficiencyShrinkageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Budgeting\SetEfficiencyShrinkageForm.cs" />
     <Compile Include="Budgeting\SetEfficiencyShrinkageForm.Designer.cs">
       <DependentUpon>SetEfficiencyShrinkageForm.cs</DependentUpon>
     </Compile>
@@ -374,9 +370,7 @@
     <Compile Include="Budgeting\Events\ExitEditMode.cs" />
     <Compile Include="Budgeting\Events\UpdateClipboardStatus.cs" />
     <Compile Include="Budgeting\Events\ViewsClipboardAction.cs" />
-    <Compile Include="Budgeting\EditShrinkageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Budgeting\EditShrinkageForm.cs" />
     <Compile Include="Budgeting\EditShrinkageForm.Designer.cs">
       <DependentUpon>EditShrinkageForm.cs</DependentUpon>
     </Compile>
@@ -391,9 +385,7 @@
     <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
     <Compile Include="Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
-    <Compile Include="Common\BaseDialogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\BaseDialogForm.cs" />
     <Compile Include="Common\BaseDialogForm.Designer.cs">
       <DependentUpon>BaseDialogForm.cs</DependentUpon>
     </Compile>
@@ -666,29 +658,21 @@
     <Compile Include="Common\Controls\TupleItem.cs" />
     <Compile Include="Common\GridSchedulesExtractor.cs" />
     <Compile Include="Common\IHelpForm.cs" />
-    <Compile Include="Common\MessageBoxWithListView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\MessageBoxWithListView.cs" />
     <Compile Include="Common\MessageBoxWithListView.Designer.cs">
       <DependentUpon>MessageBoxWithListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Budgeting\PromptDoubleBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Budgeting\PromptDoubleBox.cs" />
     <Compile Include="Budgeting\PromptDoubleBox.Designer.cs">
       <DependentUpon>PromptDoubleBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\IHelpHelper.cs" />
     <Compile Include="Common\MessageDialogs.cs" />
-    <Compile Include="Common\ModifySelectionView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\ModifySelectionView.cs" />
     <Compile Include="Common\ModifySelectionView.Designer.cs">
       <DependentUpon>ModifySelectionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
@@ -705,25 +689,19 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
-    <Compile Include="Scheduling\PublishScheduleDateView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\PublishScheduleDateView.cs" />
     <Compile Include="Scheduling\PublishScheduleDateView.Designer.cs">
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\ISikuliValidator.cs" />
-    <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs" />
     <Compile Include="Sikuli\SikuliEnterValidatorDialog.Designer.cs">
       <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\SikuliResultView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Scheduling\FilterMultiplePersons.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\FilterMultiplePersons.cs" />
     <Compile Include="Scheduling\FilterMultiplePersons.Designer.cs">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
     </Compile>
@@ -745,9 +723,7 @@
     <Compile Include="Scheduling\PropertyPanel\AgentInfoControl.Designer.cs">
       <DependentUpon>AgentInfoControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\SearchPerson.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\SearchPerson.cs" />
     <Compile Include="Common\SearchPerson.Designer.cs">
       <DependentUpon>SearchPerson.cs</DependentUpon>
     </Compile>
@@ -755,23 +731,17 @@
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
     <Compile Include="DayViewNew.cs" />
-    <Compile Include="ExceptionHandling\SimpleExceptionHandlerView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="ExceptionHandling\SimpleExceptionHandlerView.cs" />
     <Compile Include="ExceptionHandling\SimpleExceptionHandlerView.Designer.cs">
       <DependentUpon>SimpleExceptionHandlerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExceptionHandling\ExceptionHandlerView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="ExceptionHandling\ExceptionHandlerView.cs" />
     <Compile Include="ExceptionHandling\ExceptionHandlerView.Designer.cs">
       <DependentUpon>ExceptionHandlerView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forecasting\ForecasterModule.cs" />
     <Compile Include="Forecasting\ForecasterSettings.cs" />
-    <Compile Include="Forecasting\Forms\CopyToSkillView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\CopyToSkillView.cs" />
     <Compile Include="Forecasting\Forms\CopyToSkillView.Designer.cs">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
     </Compile>
@@ -800,15 +770,11 @@
     <Compile Include="Forecasting\Forms\ExportPages\SelectDateAndScenario.Designer.cs">
       <DependentUpon>SelectDateAndScenario.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.cs" />
     <Compile Include="Forecasting\Forms\ExportPages\JobStatusView.Designer.cs">
       <DependentUpon>JobStatusView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ExportPages\MapDestinationBuSkill.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\ExportPages\MapDestinationBuSkill.cs" />
     <Compile Include="Forecasting\Forms\ExportPages\MapDestinationBuSkill.Designer.cs">
       <DependentUpon>MapDestinationBuSkill.cs</DependentUpon>
     </Compile>
@@ -836,9 +802,7 @@
     <Compile Include="Forecasting\Forms\ExportPages\SelectSkills.Designer.cs">
       <DependentUpon>SelectSkills.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.cs" />
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.Designer.cs">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
     </Compile>
@@ -880,9 +844,7 @@
     <Compile Include="Forecasting\Forms\IForecastWorkflowDataService.cs" />
     <Compile Include="Forecasting\Forms\SaveForecastToScenarioCommand.cs" />
     <Compile Include="Forecasting\Forms\WFControls\FilterDataToChartEventArgs.cs" />
-    <Compile Include="Forecasting\Forms\WFControls\FilterDataView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\WFControls\FilterDataView.cs" />
     <Compile Include="Forecasting\Forms\WFControls\FilterDataView.Designer.cs">
       <DependentUpon>FilterDataView.cs</DependentUpon>
     </Compile>
@@ -958,21 +920,15 @@
     <Compile Include="Intraday\Reforecast\SelectWorkload.Designer.cs">
       <DependentUpon>SelectWorkload.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\ActiveAgents.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\ActiveAgents.cs" />
     <Compile Include="Main\ActiveAgents.Designer.cs">
       <DependentUpon>ActiveAgents.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\Legal.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\Legal.cs" />
     <Compile Include="Main\Legal.Designer.cs">
       <DependentUpon>Legal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LicenseAgreementForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\LicenseAgreementForm.cs" />
     <Compile Include="Main\LicenseAgreementForm.Designer.cs">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </Compile>
@@ -982,9 +938,7 @@
     <Compile Include="Main\LogonScreens\SelectBuScreen.Designer.cs">
       <DependentUpon>SelectBuScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogonView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\LogonView.cs" />
     <Compile Include="Main\LogonView.Designer.cs">
       <DependentUpon>LogonView.cs</DependentUpon>
     </Compile>
@@ -1039,15 +993,11 @@
     <Compile Include="Meetings\MeetingImpactView.Designer.cs">
       <DependentUpon>MeetingImpactView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meetings\Overview\ExportMeetingView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Meetings\Overview\ExportMeetingView.cs" />
     <Compile Include="Meetings\Overview\ExportMeetingView.Designer.cs">
       <DependentUpon>ExportMeetingView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meetings\Overview\MeetingOverviewFilter.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Meetings\Overview\MeetingOverviewFilter.cs" />
     <Compile Include="Meetings\Overview\MeetingOverviewFilter.Designer.cs">
       <DependentUpon>MeetingOverviewFilter.cs</DependentUpon>
     </Compile>
@@ -1091,9 +1041,7 @@
     <Compile Include="Optimization\GeneralPreferencesPanel.Designer.cs">
       <DependentUpon>GeneralPreferencesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Optimization\OptimizationPreferencesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Optimization\OptimizationPreferencesDialog.cs" />
     <Compile Include="Optimization\OptimizationPreferencesDialog.Designer.cs">
       <DependentUpon>OptimizationPreferencesDialog.cs</DependentUpon>
     </Compile>
@@ -1134,9 +1082,7 @@
       <DependentUpon>PersonsSelectionView.cs</DependentUpon>
     </Compile>
     <Compile Include="Payroll\Forms\PayrollExportPages\SdkAuthentication.cs" />
-    <Compile Include="Payroll\Overtime\ManageMultiplicatorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Payroll\Overtime\ManageMultiplicatorForm.cs" />
     <Compile Include="Payroll\Overtime\ManageMultiplicatorForm.Designer.cs">
       <DependentUpon>ManageMultiplicatorForm.cs</DependentUpon>
     </Compile>
@@ -1179,15 +1125,11 @@
     <Compile Include="Common\ViewBase.cs" />
     <Compile Include="Forecasting\Forms\ForecastingTemplateRefresher.cs" />
     <Compile Include="Forecasting\Forms\TaskOwnerDayGridHelper.cs" />
-    <Compile Include="Main\ApplyProductActivationKey.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\ApplyProductActivationKey.cs" />
     <Compile Include="Main\ApplyProductActivationKey.Designer.cs">
       <DependentUpon>ApplyProductActivationKey.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\About.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\About.cs" />
     <Compile Include="Main\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
@@ -1197,9 +1139,7 @@
     <Compile Include="Meetings\WeeklyRecurrenceView.Designer.cs">
       <DependentUpon>WeeklyRecurrenceView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Meetings\MeetingRecurrenceView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Meetings\MeetingRecurrenceView.cs" />
     <Compile Include="Meetings\MeetingRecurrenceView.Designer.cs">
       <DependentUpon>MeetingRecurrenceView.cs</DependentUpon>
     </Compile>
@@ -1233,9 +1173,7 @@
     <Compile Include="Payroll\DefinitionSets\DefinitionSetSettings.Designer.cs">
       <DependentUpon>DefinitionSetSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Payroll\DefinitionSets\ManageDefinitionSetForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Payroll\DefinitionSets\ManageDefinitionSetForm.cs" />
     <Compile Include="Payroll\DefinitionSets\ManageDefinitionSetForm.Designer.cs">
       <DependentUpon>ManageDefinitionSetForm.cs</DependentUpon>
     </Compile>
@@ -1278,9 +1216,7 @@
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateService.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeopleAdminConstants.cs" />
     <Compile Include="PeopleAdmin\Views\GeneralGridView.cs" />
-    <Compile Include="PeopleAdmin\Views\PersonFinderView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="PeopleAdmin\Views\PersonFinderView.cs" />
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </Compile>
@@ -1290,9 +1226,7 @@
     <Compile Include="PeopleAdmin\Views\ShiftCategoryLimitationView.Designer.cs">
       <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs" />
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.Designer.cs">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </Compile>
@@ -1304,9 +1238,7 @@
     </Compile>
     <Compile Include="Permissions\PermissionsModule.cs" />
     <Compile Include="Permissions\PermissionsDataHolder.cs" />
-    <Compile Include="Permissions\PermissionViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Permissions\PermissionViewer.cs" />
     <Compile Include="Permissions\PermissionViewer.Designer.cs">
       <DependentUpon>PermissionViewer.cs</DependentUpon>
     </Compile>
@@ -1386,16 +1318,12 @@
     <Compile Include="Reporting\ReportSettingsHostView.Designer.cs">
       <DependentUpon>ReportSettingsHostView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Reporting\SchedulerReportsViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Reporting\SchedulerReportsViewer.cs" />
     <Compile Include="Reporting\SchedulerReportsViewer.Designer.cs">
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
-    <Compile Include="Scheduling\AgentPreferenceView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\AgentPreferenceView.cs" />
     <Compile Include="Scheduling\AgentPreferenceView.Designer.cs">
       <DependentUpon>AgentPreferenceView.cs</DependentUpon>
     </Compile>
@@ -1419,34 +1347,24 @@
     <Compile Include="Scheduling\AgentSkillExplorer.Designer.cs">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\AgentStudentAvailabilityView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\AgentStudentAvailabilityView.Designer.cs">
       <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\AuditHistoryView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\AuditHistoryView.cs" />
     <Compile Include="Scheduling\AuditHistoryView.Designer.cs">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ClipboardControlBuilder.cs" />
-    <Compile Include="Scheduling\AgentOvertimeAvailabilityView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\AgentOvertimeAvailabilityView.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityView.Designer.cs">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\FilterHourlyAvailabilityView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\FilterHourlyAvailabilityView.cs" />
     <Compile Include="Scheduling\FilterHourlyAvailabilityView.Designer.cs">
       <DependentUpon>FilterHourlyAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\FilterOvertimeAvailabilityView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\FilterOvertimeAvailabilityView.cs" />
     <Compile Include="Scheduling\FilterOvertimeAvailabilityView.Designer.cs">
       <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
     </Compile>
@@ -1462,9 +1380,7 @@
     <Compile Include="Scheduling\LockMenuBuilders\LockAbsencesMenuBuilder.cs" />
     <Compile Include="Scheduling\LockMenuBuilders\LockDaysOffMenuBuilder.cs" />
     <Compile Include="Scheduling\LockMenuBuilders\LockShiftCategoriesMenuBuilder.cs" />
-    <Compile Include="Scheduling\OvertimePreferencesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\OvertimePreferencesDialog.cs" />
     <Compile Include="Scheduling\OvertimePreferencesDialog.Designer.cs">
       <DependentUpon>OvertimePreferencesDialog.cs</DependentUpon>
     </Compile>
@@ -1529,9 +1445,7 @@
     <Compile Include="Scheduling\SkillResult\SkillMonthGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Scheduling\PersonsFilterView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\PersonsFilterView.cs" />
     <Compile Include="Scheduling\SkillResult\SkillResultGridControlBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1542,9 +1456,7 @@
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\RequestHistoryModule.cs" />
-    <Compile Include="Scheduling\RequestHistoryView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\RequestHistoryView.cs" />
     <Compile Include="Scheduling\RequestHistoryView.Designer.cs">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>
     </Compile>
@@ -1555,18 +1467,14 @@
       <DependentUpon>SchedulerNavigator.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\DrawRestrictionIcon.cs" />
-    <Compile Include="Scheduling\ExportToScenarioResultView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\ExportToScenarioResultView.cs" />
     <Compile Include="Scheduling\ExportToScenarioResultView.Designer.cs">
       <DependentUpon>ExportToScenarioResultView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
-    <Compile Include="Scheduling\PersistConflictView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\PersistConflictView.cs" />
     <Compile Include="Scheduling\PersistConflictView.Designer.cs">
       <DependentUpon>PersistConflictView.cs</DependentUpon>
     </Compile>
@@ -1576,9 +1484,7 @@
     <Compile Include="Scheduling\RequestAllowanceGridControl.Designer.cs">
       <DependentUpon>RequestAllowanceGridControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\RequestAllowanceView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\RequestAllowanceView.cs" />
     <Compile Include="Scheduling\RequestAllowanceView.Designer.cs">
       <DependentUpon>RequestAllowanceView.cs</DependentUpon>
     </Compile>
@@ -1599,9 +1505,7 @@
     </Compile>
     <Compile Include="Scheduling\AddScheduleLayers.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfScheduleDayOffOvertime.cs" />
-    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalView.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialogGraphicalView.Designer.cs">
       <DependentUpon>ScheduleReportDialogGraphicalView.cs</DependentUpon>
     </Compile>
@@ -1644,9 +1548,7 @@
     <Compile Include="Scheduling\ScheduleReporting\PdfScheduleFullDayAbsence.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfScheduleNotScheduled.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfScheduleTemplate.cs" />
-    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialog.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDialog.Designer.cs">
       <DependentUpon>ScheduleReportDialog.cs</DependentUpon>
     </Compile>
@@ -1662,22 +1564,16 @@
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ScheduleViewBase.cs" />
-    <Compile Include="Scheduling\SchedulingResult.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\SchedulingResult.cs" />
     <Compile Include="Scheduling\SchedulingResult.Designer.cs">
       <DependentUpon>SchedulingResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.cs" />
     <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionWeekHeaderViewCellModel.cs" />
-    <Compile Include="Scheduling\SkillSummary.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\SkillSummary.cs" />
     <Compile Include="Scheduling\SkillSummary.Designer.cs">
       <DependentUpon>SkillSummary.cs</DependentUpon>
     </Compile>
@@ -1751,9 +1647,7 @@
     <Compile Include="Common\Configuration\OptionalColumnsControl.Designer.cs">
       <DependentUpon>OptionalColumnsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Configuration\OptionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\Configuration\OptionDialog.cs" />
     <Compile Include="Common\Configuration\OptionDialog.Designer.cs">
       <DependentUpon>OptionDialog.cs</DependentUpon>
     </Compile>
@@ -1877,9 +1771,7 @@
     </Compile>
     <Compile Include="Common\Controls\Rows\SkillDayGridRowMinMaxIssues.cs" />
     <Compile Include="Common\Controls\Rows\SkillStaffPeriodGridRowSchedulerMinMaxIssues.cs" />
-    <Compile Include="Common\Controls\FindAndReplaceForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\FindAndReplaceForm.cs" />
     <Compile Include="Common\Controls\FindAndReplaceForm.Designer.cs">
       <DependentUpon>FindAndReplaceForm.cs</DependentUpon>
     </Compile>
@@ -1889,9 +1781,7 @@
     <Compile Include="Common\Controls\EditControl.Designer.cs">
       <DependentUpon>EditControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\OpenScenarioForPeriod.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\OpenScenarioForPeriod.cs" />
     <Compile Include="Common\Controls\OpenScenarioForPeriod.Designer.cs">
       <DependentUpon>OpenScenarioForPeriod.cs</DependentUpon>
     </Compile>
@@ -1914,9 +1804,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\Controls\Tooltip\GridExcelTipStyleProperties.cs" />
-    <Compile Include="Common\PromptTextBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\PromptTextBox.cs" />
     <Compile Include="Common\PromptTextBox.Designer.cs">
       <DependentUpon>PromptTextBox.cs</DependentUpon>
     </Compile>
@@ -2028,9 +1916,7 @@
     <Compile Include="Common\MoreOrLessState.cs" />
     <Compile Include="Common\PropertyPagesHelper.cs" />
     <Compile Include="Common\SchedulePasteAction.cs" />
-    <Compile Include="Common\TimedWarningDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\TimedWarningDialog.cs" />
     <Compile Include="Common\TimedWarningDialog.Designer.cs">
       <DependentUpon>TimedWarningDialog.cs</DependentUpon>
     </Compile>
@@ -2047,9 +1933,7 @@
     <Compile Include="Forecasting\Forms\ChildSkillDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\EditOutlier.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\EditOutlier.cs" />
     <Compile Include="Forecasting\Forms\EditOutlier.Designer.cs">
       <DependentUpon>EditOutlier.cs</DependentUpon>
     </Compile>
@@ -2078,9 +1962,7 @@
     <Compile Include="Forecasting\Forms\MultisiteSkillDetailView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\EditWorkloadDayTemplate.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\EditWorkloadDayTemplate.cs" />
     <Compile Include="Forecasting\Forms\EditWorkloadDayTemplate.Designer.cs">
       <DependentUpon>EditWorkloadDayTemplate.cs</DependentUpon>
     </Compile>
@@ -2115,9 +1997,7 @@
     <Compile Include="Forecasting\Forms\SkillIntradayTemplateGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\ForecastWorkflow.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\ForecastWorkflow.cs" />
     <Compile Include="Forecasting\Forms\ForecastWorkflow.Designer.cs">
       <DependentUpon>ForecastWorkflow.cs</DependentUpon>
     </Compile>
@@ -2216,21 +2096,15 @@
     <Compile Include="Forecasting\Forms\ZoomButtonsEventArgs.cs" />
     <Compile Include="Forecasting\TabHandler.cs" />
     <Compile Include="Grouping\GroupingConstants.cs" />
-    <Compile Include="Grouping\GroupPagePreviewScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Grouping\GroupPagePreviewScreen.cs" />
     <Compile Include="Grouping\GroupPagePreviewScreen.designer.cs">
       <DependentUpon>GroupPagePreviewScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Grouping\GroupPageSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Grouping\GroupPageSettings.cs" />
     <Compile Include="Grouping\GroupPageSettings.designer.cs">
       <DependentUpon>GroupPageSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Grouping\NameDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Grouping\NameDialog.cs" />
     <Compile Include="Grouping\NameDialog.designer.cs">
       <DependentUpon>NameDialog.cs</DependentUpon>
     </Compile>
@@ -2245,9 +2119,7 @@
     </Compile>
     <Compile Include="Main\EntityEventAggregator.cs">
     </Compile>
-    <Compile Include="Meetings\AddressBookView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Meetings\AddressBookView.cs" />
     <Compile Include="Meetings\AddressBookView.Designer.cs">
       <DependentUpon>AddressBookView.cs</DependentUpon>
     </Compile>
@@ -2311,22 +2183,16 @@
     <Compile Include="PeopleAdmin\Controls\Columns\TrackerDescriptionTextOrDropDownColumnComparer.cs" />
     <Compile Include="Permissions\ApplicationRoleAdapter.cs" />
     <Compile Include="Permissions\PermissionsExplorerHelper.cs" />
-    <Compile Include="Scheduling\RequestReplyStatusChangeDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\RequestReplyStatusChangeDialog.cs" />
     <Compile Include="Scheduling\RequestReplyStatusChangeDialog.Designer.cs">
       <DependentUpon>RequestReplyStatusChangeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\MeetingPicker.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\MeetingPicker.cs" />
     <Compile Include="Scheduling\MeetingPicker.Designer.cs">
       <DependentUpon>MeetingPicker.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\Views\RolesGridView.cs" />
-    <Compile Include="Permissions\PeopleInsertScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Permissions\PeopleInsertScreen.cs" />
     <Compile Include="Permissions\PeopleInsertScreen.Designer.cs">
       <DependentUpon>PeopleInsertScreen.cs</DependentUpon>
     </Compile>
@@ -2362,21 +2228,15 @@
     </Compile>
     <Compile Include="Common\ISelfDataHandling.cs" />
     <Compile Include="Common\GridHelper.cs" />
-    <Compile Include="Common\PropertyPageAndWizard\PropertiesPages.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\PropertyPageAndWizard\PropertiesPages.cs" />
     <Compile Include="Common\PropertyPageAndWizard\PropertiesPages.Designer.cs">
       <DependentUpon>PropertiesPages.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\PropertyPageAndWizard\Wizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\PropertyPageAndWizard\Wizard.cs" />
     <Compile Include="Common\PropertyPageAndWizard\Wizard.designer.cs">
       <DependentUpon>Wizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\HandleBusinessRuleResponse.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\HandleBusinessRuleResponse.cs" />
     <Compile Include="Common\HandleBusinessRuleResponse.Designer.cs">
       <DependentUpon>HandleBusinessRuleResponse.cs</DependentUpon>
     </Compile>
@@ -2405,9 +2265,7 @@
     <Compile Include="Forecasting\Forms\TaskOwnerMonthGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\WorkloadPages\OpenHourDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forecasting\Forms\WorkloadPages\OpenHourDialog.cs" />
     <Compile Include="Forecasting\Forms\WorkloadPages\OpenHourDialog.Designer.cs">
       <DependentUpon>OpenHourDialog.cs</DependentUpon>
     </Compile>
@@ -2417,9 +2275,7 @@
     <Compile Include="Scheduling\DateChangedEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellEventArgs.cs" />
     <Compile Include="Forecasting\Forms\ModifyCellOption.cs" />
-    <Compile Include="Scheduling\FormClipboardSpecial.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Scheduling\FormClipboardSpecial.cs" />
     <Compile Include="Scheduling\FormClipboardSpecial.Designer.cs">
       <DependentUpon>FormClipboardSpecial.cs</DependentUpon>
     </Compile>
@@ -2469,9 +2325,7 @@
     <Compile Include="Common\Configuration\ScorecardSettings.Designer.cs">
       <DependentUpon>ScorecardSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Configuration\SettingsScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Common\Configuration\SettingsScreen.cs" />
     <Compile Include="Common\Configuration\SettingsScreen.Designer.cs">
       <DependentUpon>SettingsScreen.cs</DependentUpon>
     </Compile>
@@ -2502,15 +2356,11 @@
     <Compile Include="Shifts\NavigationView.Designer.cs">
       <DependentUpon>NavigationView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shifts\PromptDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Shifts\PromptDialog.cs" />
     <Compile Include="Shifts\PromptDialog.Designer.cs">
       <DependentUpon>PromptDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shifts\ShiftGenerationStatus.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Shifts\ShiftGenerationStatus.cs" />
     <Compile Include="Shifts\ShiftGenerationStatus.Designer.cs">
       <DependentUpon>ShiftGenerationStatus.cs</DependentUpon>
     </Compile>
