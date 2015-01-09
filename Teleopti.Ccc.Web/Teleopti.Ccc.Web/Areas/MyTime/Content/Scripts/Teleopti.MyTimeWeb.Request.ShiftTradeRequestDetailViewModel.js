@@ -155,6 +155,7 @@ ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prot
 		self.To(data.To);
 		self.IsPending(data.IsPending);
 		self.isReferred(data.IsReferred);
+		self.DenyReason("");
 	}
 });
 

@@ -66,7 +66,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		return startMoment.isBefore(endMoment);
 	});
 
-	//ROBTODO: Revisit for refactoring?
 	self.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	self.Absence = ko.observable();
 	self.OpenPeriodRelativeStart = ko.observable(1);
