@@ -73,9 +73,8 @@ Scenario: Should show my shift and other shift in bulletin board
 	| End time		| 17:00 |
 	And I should see a possible schedule trade with 'OtherAgent'
 
-@Ignore
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-Scenario: Should possible make shift trade in Bulletin board
+Scenario Outline: Should possible make shift trade in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -102,6 +101,59 @@ Scenario: Should possible make shift trade in Bulletin board
 	And I click send button in bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
+	Examples: 
+	|x|
+	|1|
+|2|
+|3|
+|4|
+|5|
+|6|
+|7|
+|8|
+|9|
+|10|
+|11|
+|12|
+|13|
+|14|
+|15|
+|16|
+|17|
+|18|
+|19|
+|20|
+|21|
+|22|
+|23|
+|24|
+|25|
+|26|
+|27|
+|28|
+|29|
+|30|
+|31|
+|32|
+|33|
+|34|
+|35|
+|36|
+|37|
+|38|
+|39|
+|40|
+|41|
+|42|
+|43|
+|44|
+|45|
+|46|
+|47|
+|48|
+|49|
+|50|
+
 
 @OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
 Scenario: Should list announced shift
