@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var outOfAdherenceEvent = new PersonOutOfAdherenceEvent() { SiteId = siteId, BusinessUnitId = businessUnitId };
-			var persister = new fakeSiteAdherencePersister();
+			var persister = new FakeSiteAdherencePersister();
 			var target = new SiteAdherenceReadModelUpdater(persister);
 
 			target.Handle(outOfAdherenceEvent);
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var inAdherence = new PersonInAdherenceEvent() { SiteId = siteId, BusinessUnitId = businessUnitId };
-			var persister = new fakeSiteAdherencePersister();
+			var persister = new FakeSiteAdherencePersister();
 			var target = new SiteAdherenceReadModelUpdater(persister);
 
 			target.Handle(inAdherence);
@@ -81,10 +82,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.GetAll(businessUnitId).Count().Should().Be(1);
 		}
 		
-			}
-
-			public IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId)
-			{
-				return _models.Where(m => m.BusinessUnitId == businessUnitId);
 	}
 }

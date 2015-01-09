@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Policy;
 using NUnit.Framework;
 using Rhino.Mocks.Constraints;
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new fakeTeamAdherencePersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent() { TeamId = teamId, SiteId = siteId});
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new fakeTeamAdherencePersister();
+			var persister = new FakeTeamAdherencePersister();
 			var target = new TeamAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent{ TeamId = teamId, SiteId = siteId});
@@ -107,12 +108,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			persister.GetForSite(siteId).Single().TeamId.Should().Be(teamId);
 		}
 
-
-		
-			}
-
-			public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)
-			{
-				return _models.Where(x => x.SiteId == siteId);
 	}
 }

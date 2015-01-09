@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class FakeTeamAdherencePersister : ITeamAdherencePersister
 	{
-
 		private readonly List<TeamAdherenceReadModel> _models = new List<TeamAdherenceReadModel>();
 
 		public void Persist(TeamAdherenceReadModel model)
@@ -23,6 +22,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public TeamAdherenceReadModel Get(Guid teamId)
 		{
 			return _models.FirstOrDefault(m => m.TeamId == teamId);
+		}
+
+		public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)
+		{
+			return _models.Where(x => x.SiteId == siteId);
+		}
+
+		public bool HasData()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Clear()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
