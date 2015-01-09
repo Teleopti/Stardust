@@ -2383,7 +2383,7 @@
     <value>Categorias de Turno por Dia</value>
   </data>
   <data name="MultiplicatorTypeOBTime" xml:space="preserve">
-    <value>Permissão de Turno</value>
+    <value>Abono de Turno</value>
   </data>
   <data name="CannotFindAValidPeriodAccordingToTheBusinessRules" xml:space="preserve">
     <value>Não posso localizar um período de acordo com as regras de negócio</value>
@@ -9393,5 +9393,286 @@ Por favor, reduza a complexidade desses turnos.</value>
   </data>
   <data name="ShowDuplicateRecipient" xml:space="preserve">
     <value>Mostrar Destinatários Duplicados</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Aplicar Chave de Ativação do Produto</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Instruções:
+* Adquira uma licença (mais informações em www.teleopti.com)
+* Receba um arquivo com a chave de ativação do produto (por e-mail por exemplo)
+* Salve a chave de ativação do produto no seu computador
+* Caso necessário, salve qualquer trabalho que você esteja fazendo na aplicação antes de aplicar a chave de ativação do produto
+* Localize o arquivo com a chave de ativação do produto através do botão "procurar" abaixo
+* Aplique a chave de ativação do produto
+* A aplicação será fechada
+* Reinicie o MyTime para obter as novas opções licenciadas
+* Reinicie a aplicação</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>A Chave de Ativação do Produto "{0}" não pôde ser acessada
+Detalhes do erro:
+{1}</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Ocorreu um erro no armazenamento da chave de ativação do produto no banco de dados.
+Detalhes do erro:
+{0}</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>Forneça um nome e um caminho de arquivo válidos</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>A chave de ativação do produto foi aplicada com sucesso.
+Parabéns! Você é agora um usuário licenciado dessa premiada solução de gerenciamento da força de trabalho.
+Essa aplicação será fechada.
+
+Importante:
+Para que todos os serviços e aplicações web tenham acesso à todas as novas funcionalidades que foram licenciadas e para que eles funcionem corretamente, você precisa pedir à sua equipe de TI, para que eles executem o script "Restart Telepti WFM" na pasta Teleopti dentro do menu iniciar do servidor.</value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>A sua chave de ativação do produto expirou, por favor aplique uma nova.</value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>A sua chave de ativação do produto está inválida, ela pode ter sido modificada. Por favor aplique uma nova chave.</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>A chave de ativação do produto "{0}" é antiga e já expirou.</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>A chave de ativação do produto "{0}" é inválida e pode não ser verdadeira.</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>A chave de ativação do produto "{0}" não está em um formato válido (xml)
+Detalhes do erro:
+{1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>Você ainda não aplicou a chave de ativação do produto, por favor faça isso</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>A aplicação da chave de ativação do produto falhou</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>A sua chave de ativação do produto só é válida até {0}, por favor não esqueça de renová-la a tempo</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>Selecione o arquivo com a chave de ativação do produto</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>Esse sistema está licençado para "{0}" de acordo com os termos e condições do acordo de licença e a chave de ativação do produto irá expirar em {1}.
+
+A chave de ativação do produto aceita no máximo {2} agentes ativos.
+
+O tipo dessa chave de ativação do produto é: "{3}"
+As opções ativadas são:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>Você tem {0} agentes ativos, no entanto você está licenciado para ter somente {1}. Por favor atualize a sua chave de ativação do produto logo</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>Você tem {0} agentes ativos, no entanto você está licenciado para ter somente {1}. Você precisa atualizar a sua chave de ativação do produto antes de continuar.</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>Essa chave de ativação do produto aceita no máximo {0} agentes ativos, no entanto você possui {1} agentes ativos. Você precisa obter uma chave de ativação do produto que aceite um número suficiente de agentes ativos.</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Essa chave de ativação do produto aceita no máximo {0} PAs. Você precisa obter uma chave de ativação do produto que aceite um número suficiente de PAs.</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>Esse sistema está licençado para "{0}" de acordo com os termos e condições do acordo de licença e a chave de ativação do produto irá expirar em {1}.
+
+A chave de ativação do produto aceita no máximo {2} PAs.
+
+O tipo dessa chave de ativação do produto é: "{3}"
+As opções ativadas são:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Você está próximo do limite de {0} PAs para o qual você está licenciado. Por favor atualize a sua chave de ativação do produto logo.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Você está utilizando PAs demais, você está licenciado para somente {0}. Você precisa atualizar a sua chave de ativação do produto antes de continuar.</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Você está usando mais agentes ({0}) do que é permitido pela sua licença ({1}). Você tem {2} dias para reduzir o número de agentes ou aplicar uma nova chave de ativação do produto que suporte esse número de agentes.</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Configure de qual coluna será obtido o número de telefone para o qual as mensagens SMS serão enviadas:</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Visualizar Medalhas</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Visualizar Ranking das Medalhas</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Nome] [Sobrenome]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Sobrenome] [Nome]</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Descrição do Agente</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Múltiplos</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Único</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Apagar Medalhas</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Isso irá remover todas as medalhas de todos os agentes! Se você clicar em OK, as medalhas serão removidas e não poderão ser recuperadas. Você tem certeza que deseja continuar?</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Ajustar turnos de acordo com a cesta de turnos</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>Utilizar</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>Não foram achados turnos válidos na cesta de turnos</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Houve uma falha ao apagar as medalhas, por favor tente de novo mais tarde!</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} não pode ser antes de {1}</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Tempo final</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Tempo inicial</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Configurações de Ausências de Dia Inteiro</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>A opção de otimização "Tempo entre os dias" não pode ser executada quando agendamento de bloco e mesmo turno estão selecionados.</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Configurações de E-mail</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Gerenciar Configurações de Notificações</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Configurações de Notificações</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Tipo de Notificação</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Enviar e-mail de:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Testar envio para:</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Problema com o balanceamento intra-intervalo</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Filtrar intra-intervalo</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Ranking</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Por favor habilite pelo menos um tipo de medalha.</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Posição</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>A preferência não pode ser adicionada, pois o item selecionado não está mais disponível.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Balanceamento intra-intervalo</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Não foi possível obter as configurações das preferências.</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Menor balanceamento intra-intervalo</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Reportar Ausência</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Ausências que podem ser reportadas</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Essa ausência não pode ser reportada</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Quadro de Avisos de Trocas de Turnos</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publicar...</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Publicar escalas para:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Publicar escalas para:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Publicar Escala</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>O tempo inicial deve ser maior que o tempo final</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Reportar ausência para</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Não há agentes disponíveis no quadro de avisos</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>Filtrar pelo horário de abertura</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Voltar ao Trabalho</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Aplicar para</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Planejada</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Atualizando ausência para</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>O tempo de voltar ao trabalho não pode ser maior do que o horário de término da ausência</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>voltou mais cedo da ausência em: </value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Anunciar Turno</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Oferta de troca de turno válida até</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>Eu quero um turno que atende as seguintes condições</value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>A data que você deseja trocar deve estar dentro do período aberto!</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>A data final deve estar entre hoje e o um dia antes da data da troca!</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>Não é possível publicar um anuncio em um dia em que há uma ausência!</value>
   </data>
 </root>
