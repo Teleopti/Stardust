@@ -290,7 +290,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.isReferred(data.IsReferred);
 			self.IsSelected(false);
 			if (data.TypeEnum == 2) {
-				self.CanDelete(!data.IsCreatedByUser);
+				self.CanDelete(data.IsCreatedByUser);
 			} else {
 				// can load non-shift trade requests detail here, as we already have the data.
 				self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
