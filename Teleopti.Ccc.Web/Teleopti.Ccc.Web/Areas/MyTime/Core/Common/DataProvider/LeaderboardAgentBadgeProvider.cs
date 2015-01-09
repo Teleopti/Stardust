@@ -131,8 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			
 			if (toggleEnabled)
 			{				
-				var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(permittedPersonIdList) ??
-				                          new List<IAgentBadgeWithRank>();
+				var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(permittedPersonIdList);
 				var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
 				return mergeAgentWithBadges(agentWithBadges, agentWithRankedBadges);
 			}

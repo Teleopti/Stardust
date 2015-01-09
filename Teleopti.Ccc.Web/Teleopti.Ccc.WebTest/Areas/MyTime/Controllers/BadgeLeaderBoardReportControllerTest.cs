@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
@@ -46,65 +48,128 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 
-		[Test]
-		public void ShouldCreateLeaderboardOptionWithOneTeamPermitted()
+		public class ShouldCreateLeaderboardOptionWithOneTeamPermitted :OptionsForLeaderboardTest
 		{
-			var target = setUpControllerForOrganizationalOptions();
-
-			var result = target.OptionsForLeaderboard();
-
-			dynamic data = result.Data;
-			(data.options[0].text as string).Should().Be.EqualTo("Everyone");
-			(data.options[1].text as string).Should().Be.EqualTo("site");
-			(data.options[2].text as string).Should().Be.EqualTo("team");
+			protected override void Assert(dynamic result)
+			{
+				dynamic data = result.Data;
+				(data.options[0].text as string).Should().Be.EqualTo("Everyone");
+				(data.options[1].text as string).Should().Be.EqualTo("site");
+				(data.options[2].text as string).Should().Be.EqualTo("team");
+			}
 		}
 
-		[Test]
-		public void ShouldCreateLeaderboardOptionWithMyTeamPermitted()
+		public class ShouldCreateLeaderboardOptionWithMyTeamPermitted:OptionsForLeaderboardTest
 		{
-			var target = setUpControllerForOrganizationalOptions(false);
+			protected override void Assert(dynamic result)
+			{
+				dynamic data = result.Data;
+				(data.options[0].text as string).Should().Be.EqualTo("Everyone");
+				(data.options[1].text as string).Should().Be.EqualTo("team");
+			}
 
-			var result = target.OptionsForLeaderboard();
-
-			dynamic data = result.Data;
-			(data.options[0].text as string).Should().Be.EqualTo("Everyone");
-			(data.options[1].text as string).Should().Be.EqualTo("team");
+			protected override bool IsSitePermitted
+			{
+				get { return false; }
+			}
+		}
+		
+		public class ShouldHaveMyTeamAsDefaultOptionId : OptionsForLeaderboardTest
+		{
+			protected override void Assert(dynamic result)
+			{
+				dynamic data = result.Data;
+				((Guid)data.defaultOptionId).Should().Be.EqualTo(Guid.Parse("235D8D6D-E46E-44D7-B9EA-92D7B85BE49E"));
+			}
 		}
 
-		[Test]
-		public void ShouldHaveMyTeamAsDefaultOptionId()
+		public class ShouldHaveEveryoneAsDefaultOptionIdWhenNotPermittedForMyOwnTeam:OptionsForLeaderboardTest
 		{
-			var target = setUpControllerForOrganizationalOptions();
+			protected override void Assert(dynamic result)
+			{
+				dynamic data = result.Data;
+				((Guid)data.defaultOptionId).Should().Be.EqualTo(Guid.Empty);
+			}
 
-			var result = target.OptionsForLeaderboard();
-
-			dynamic data = result.Data;
-			((Guid)data.defaultOptionId).Should().Be.EqualTo(Guid.Parse("235D8D6D-E46E-44D7-B9EA-92D7B85BE49E"));
+			protected override IList<ITeam> PermittedTeams(ITeam team)
+			{
+				return new ITeam[]{};
+			}
 		}
 
-		private static BadgeLeaderBoardReportController setUpControllerForOrganizationalOptions(bool isSitePermitted = true)
+		public class ShouldHaveEveryoneAsDefaultOptionIdWhenIDontBelongToAnyTeam : OptionsForLeaderboardTest
 		{
-			var team = new Team();
-			team.SetId(Guid.Parse("235D8D6D-E46E-44D7-B9EA-92D7B85BE49E"));
-			team.Description = new Description("team");
-			team.Site = new Site("site");
-			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
-			const string viewbadgeleaderboard = DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard;
+			protected override void Assert(dynamic result)
+			{
+				dynamic data = result.Data;
+				((Guid)data.defaultOptionId).Should().Be.EqualTo(Guid.Empty);
+			}
 
-			var dateOnly = DateOnly.Today;
-			var now = MockRepository.GenerateMock<INow>();
-			now.Stub(x => x.UtcDateTime()).Return(dateOnly);
+			protected override IPerson CurrentUser(Team team)
+			{
+				return PersonFactory.CreatePersonWithId();
+			}
+		}
 
-			teamProvider.Stub(x => x.GetPermittedTeams(dateOnly, viewbadgeleaderboard)).Return(new[] { team });
+		public abstract class OptionsForLeaderboardTest
+		{
+			private DateOnly date = DateOnly.Today;
+			private const string raptorMytimewebViewbadgeleaderboard = DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard;
 
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			principalAuthorization.Stub(x => x.IsPermitted(viewbadgeleaderboard, dateOnly, team.Site)).Return(isSitePermitted);
+			[Test]
+			public void RunTest()
+			{
+				var target = setUpControllerForOrganizationalOptions();
 
-			var currentLoggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			currentLoggedOnUser.Stub(x => x.CurrentUser()).Return(PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2000, 1, 1), team));
-			var factory = new BadgeLeaderBoardReportOptionFactory(teamProvider, principalAuthorization, currentLoggedOnUser);
+				var result = target.OptionsForLeaderboard();
 
-			return new BadgeLeaderBoardReportController(null, factory, null, now);
+				Assert(result);
+			}
+
+			protected abstract void Assert(dynamic result);
+
+			protected virtual IPerson CurrentUser(Team team)
+			{
+				return PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2000, 1, 1), team);
+			}
+
+			protected virtual IList<ITeam> PermittedTeams(ITeam team)
+			{
+				return new[] {team};
+			}
+
+			protected virtual bool IsSitePermitted
+			{
+				get { return true; }
+			}
+
+			private BadgeLeaderBoardReportController setUpControllerForOrganizationalOptions()
+			{
+				var team = createTeam();
+				var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+
+				var now = MockRepository.GenerateMock<INow>();
+				now.Stub(x => x.UtcDateTime()).Return(date);
+
+				teamProvider.Stub(x => x.GetPermittedTeams(date, raptorMytimewebViewbadgeleaderboard)).Return(PermittedTeams(team));
+
+				var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+				principalAuthorization.Stub(x => x.IsPermitted(raptorMytimewebViewbadgeleaderboard, date, team.Site)).Return(IsSitePermitted);
+
+				var currentLoggedOnUser = new FakeLoggedOnUser(CurrentUser(team)); 
+				var factory = new BadgeLeaderBoardReportOptionFactory(teamProvider, principalAuthorization, currentLoggedOnUser);
+
+				return new BadgeLeaderBoardReportController(null, factory, null, now);
+			}
+
+			private static Team createTeam()
+			{
+				var team = new Team();
+				team.SetId(Guid.Parse("235D8D6D-E46E-44D7-B9EA-92D7B85BE49E"));
+				team.Description = new Description("team");
+				team.Site = new Site("site");
+				return team;
+			}
 		}
 	}
 }

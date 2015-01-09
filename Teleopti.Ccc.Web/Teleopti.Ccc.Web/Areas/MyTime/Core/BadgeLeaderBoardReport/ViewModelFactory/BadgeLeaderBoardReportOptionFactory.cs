@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 		{
 			var myTeam = _currentLoggedOnUser.CurrentUser().MyTeam(date);
 			var teams = _teamProvider.GetPermittedTeams(date, functionPath).ToList();
+			var isMyTeamPermitted = teams.Contains(myTeam);
 			var sites = teams
 				.Select(t => t.Site)
 				.Distinct()
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 								  };
 				options.AddRange(teamOptions);
 			});
-			return new { options, defaultOptionId = myTeam == null ? Guid.Empty : myTeam.Id };
+			return new { options, defaultOptionId = isMyTeamPermitted ? myTeam.Id : Guid.Empty };
 		}
 	}
 }
