@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			ICurrentTeleoptiPrincipal principal)
 		{
 			_loggedOnUser = loggedOnUser;
-			//_currentPerson = loggedOnUser.CurrentUser();
 			_scheduleRepository = scheduleRepository;
 			_currentScenario = currentScenario;
 			_principal = principal;

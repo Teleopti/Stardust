@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -38,8 +34,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_form = new ShiftExchangeOfferForm
 			{
 				Date = new DateTime(1547, 12, 1),
-				StartTime = new TimeSpan(08),
-				EndTime = new TimeSpan(09),
+				StartTime = TimeSpan.FromHours(9),
+				EndTime = TimeSpan.FromHours(18),
 				OfferValidTo = new DateTime(1547, 12, 3),
 				EndTimeNextDay = false
 			};
@@ -49,30 +45,55 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(currentUser);
 			var _mocks = new MockRepository();
 			var schedule = _mocks.StrictMock<IScheduleDictionary>();
-			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, currentUser);
+			_principal.Expect(x => x.Current()).Return(teleoptiPrincipal);
+			var scheduleDay = ScheduleDayFactory.Create(date);
 			using (_mocks.Record())
 			{
-
 				Expect.Call(schedule[currentUser].ScheduledDay(date)).Return(scheduleDay);
 			}
 
-			//RobTodo: need make it same instance as called in target
-			Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(currentUser,
+			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(currentUser,
 				new ScheduleDictionaryLoadOptions(false, false)
 				{
 					LoadDaysAfterLeft = false,
 					LoadNotes = false,
 					LoadRestrictions = false
 				},
-				new DateOnlyPeriod(date, date), _currentScenario.Current())).Return(schedule);
+				new DateOnlyPeriod(date, date), _currentScenario.Current())
+				).Return(schedule).IgnoreArguments();
 		}
 
-		[Test, Ignore]
+		[Test]
+		public void ShouldMapStatus()
+		{
+			var res = _target.Map(_form, ShiftExchangeOfferStatus.Pending);
+			((IShiftExchangeOffer) res.Request).Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Pending);
+		}		
+		
+		[Test]
 		public void ShouldMapSubject()
 		{
 			var res = _target.Map(_form, ShiftExchangeOfferStatus.Pending);
 			res.GetSubject(new NoFormatting()).Should().Be.EqualTo(_subject);
+		}		
+		
+		[Test]
+		public void ShouldMapMessage()
+		{
+			var res = _target.Map(_form, ShiftExchangeOfferStatus.Pending);
+			res.GetMessage(new NoFormatting()).Should().Be.EqualTo("");
 		}
 
+		[Test]
+		public void ShouldMapForUpdate()
+		{
+			var expected = MockRepository.GenerateMock<IPersonRequest>();
+			expected.Stub(x => x.Request).Return(MockRepository.GenerateMock<IShiftExchangeOffer>());
+
+			var res = _target.Map(_form, expected);
+			res.Should().Be.SameInstanceAs(expected);	
+		}
 	}
 }
