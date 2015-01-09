@@ -1,4 +1,4 @@
-﻿@Ignore
+﻿
 Feature: Team schedule for groups
 In order to know when my colleagues work
 As an agent

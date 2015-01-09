@@ -116,11 +116,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 							.Select(p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).Single());
 			}
 
+			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
+
 			foreach (var page in groupPages)
 			{
 				var pageId = page.PageId;
-				var details = _groupingReadOnlyRepository.AvailableGroups(new ReadOnlyGroupPage { PageId = pageId }, date).ToArray();
-				
 				if (pageId == pageMain)
 				{
 					constructOptions(date, page, details, pageId, "");

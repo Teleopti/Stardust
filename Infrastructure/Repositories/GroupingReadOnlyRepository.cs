@@ -27,6 +27,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupPage>();
 		}
+		
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
+		{
+			return _currentUnitOfWork.Session().CreateSQLQuery(
+					"SELECT PageId, GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
+					.SetGuid("businessUnitId", getBusinessUnitId())
+					.SetDateTime("currentDate", queryDate.Date)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
+					.SetReadOnly(true)
+					.List<ReadOnlyGroupDetail>();
+		}
 
 		private Guid getBusinessUnitId()
 		{
