@@ -545,6 +545,7 @@
     <Compile Include="Areas\Rta\Controllers\ActivityChangeController.cs" />
     <Compile Include="Areas\Rta\Controllers\StateController.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\ActualAgentStateUpdater.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceMessage.cs" />
@@ -557,6 +558,7 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\AlarmFinder.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IActualAgentStateUpdater.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAgentStateMessageSender.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />

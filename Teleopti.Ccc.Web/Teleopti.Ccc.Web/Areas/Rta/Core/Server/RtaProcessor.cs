@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IDatabaseReader _databaseReader;
-		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IAlarmFinder _alarmFinder;
 		private readonly IAgentStateMessageSender _messageSender;
@@ -19,25 +18,25 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
+		private readonly IActualAgentStateUpdater _actualAgentStateUpdater;
 
 		public RtaProcessor(
 			INow now,
 			IPersonOrganizationProvider personOrganizationProvider, 
 			IDatabaseReader databaseReader,
-			IDatabaseWriter databaseWriter,
 			IActualAgentAssembler agentAssembler,
 			IAlarmFinder alarmFinder,
 			IAgentStateMessageSender messageSender,
 			IAdherenceAggregator adherenceAggregator,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
-			IStateEventPublisher stateEventPublisher
+			IStateEventPublisher stateEventPublisher,
+			IActualAgentStateUpdater actualAgentStateUpdater
 			)
 		{
 			_now = now;
 			_personOrganizationProvider = personOrganizationProvider;
 			_databaseReader = databaseReader;
-			_databaseWriter = databaseWriter;
 			_agentAssembler = agentAssembler;
 			_alarmFinder = alarmFinder;
 			_messageSender = messageSender;
@@ -45,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
+			_actualAgentStateUpdater = actualAgentStateUpdater;
 		}
 
 		public void Process(
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				_now.UtcDateTime()
 				);
 
-			_databaseWriter.PersistActualAgentState(info.MakeActualAgentState());
+			_actualAgentStateUpdater.Update(info);
 
 			_messageSender.Send(info);
 

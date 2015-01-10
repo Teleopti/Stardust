@@ -1,6 +1,8 @@
 using System;
+using System.Data.SqlTypes;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -61,5 +63,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			database.PersistedActualAgentState.PersonId.Should().Be(personId);
 		}
+
+		[Test]
+		public void ShouldPersistWithValidDataBecauseDatabaseWriterCantHandleIt()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var database = new FakeRtaDatabase()
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId)
+				.Make();
+			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"));
+
+			target.CheckForActivityChange(personId, businessUnitId);
+
+			var persisted = database.PersistedActualAgentState;
+			database.PersistedActualAgentState.StateCode.Should().Not.Be.Null();
+			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.AlarmStart.ToString()));
+			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.ReceivedTime.ToString()));
+			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.StateStart.ToString()));
+			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.NextStart.ToString()));
+		}
+
 	}
 }

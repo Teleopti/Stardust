@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>().SingleInstance();
 			builder.RegisterType<AlarmFinder>().As<IAlarmFinder>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
+			builder.RegisterType<ActualAgentStateUpdater>().As<IActualAgentStateUpdater>().SingleInstance();
 
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
