@@ -121,15 +121,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			foreach (var page in groupPages)
 			{
 				var pageId = page.PageId;
-				if (pageId == pageMain)
-				{
-					constructOptions(date, page, details, pageId, "");
-				}
-				else
-				{
-					var prefix = page.text + "/";
-					constructOptions(date, page, details, pageId, prefix);
-				}
+				var prefix = pageId == pageMain ? string.Empty : string.Concat(page.text, "/");
+
+				constructOptions(date, page, details, pageId, prefix);
 			}
 
 			return groupPages;

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
@@ -19,43 +18,55 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         }
 
 		private static IPrincipalAuthorization _principalAuthorization;
-		public static IPrincipalAuthorization Instance() { return _principalAuthorization ?? (_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal())); }
-		public static void SetInstance(IPrincipalAuthorization principalAuthorization) { _principalAuthorization = principalAuthorization; }
+
+		public static IPrincipalAuthorization Instance()
+		{
+			return _principalAuthorization ??
+			       (_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal()));
+		}
+
+		public static void SetInstance(IPrincipalAuthorization principalAuthorization)
+		{
+			_principalAuthorization = principalAuthorization;
+		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
         {
             return CheckPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, person));
         }
 
-        private bool CheckPermitted(string functionPath, Func<IAuthorizeAvailableData,bool> availableDataCheck)
-        {
-            foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
-            {
-                if (claimSet.FindClaims(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", functionPath), Rights.PossessProperty).Any())
-                {
-                    var availableData =
-                        claimSet.FindClaims(
-                            string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-                                          "/AvailableData"), Rights.PossessProperty);
-                    foreach (var claim in availableData)
-                    {
-                        IAuthorizeAvailableData authorizeAvailableData = claim.Resource as IAuthorizeAvailableData;
-                        if (authorizeAvailableData == null) continue;
+		private bool CheckPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
+		{
+			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
+				functionPath);
+			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+				"/AvailableData");
+			foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
+			{
+				if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
+				{
+					var availableData =
+						claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
+					foreach (var claim in availableData)
+					{
+						var authorizeAvailableData = claim.Resource as IAuthorizeAvailableData;
+						if (authorizeAvailableData == null) continue;
 
-                        if (availableDataCheck(authorizeAvailableData))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            
-            return false;
-        }
+						if (availableDataCheck(authorizeAvailableData))
+						{
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
-			return CheckPermitted(functionPath, a => a.Check((IOrganisationMembershipWithId)_teleoptiPrincipal.Current().Organisation, dateOnly, authorizeOrganisationDetail));
+			var organisation = (IOrganisationMembershipWithId) _teleoptiPrincipal.Current().Organisation;
+			return CheckPermitted(functionPath, a => a.Check(organisation, dateOnly, authorizeOrganisationDetail));
 		}
 
         public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
@@ -108,6 +119,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
                     permittedPeriods.Add(new DateOnlyPeriod(currentDate,uniqueDatesArray[i+1].AddDays(-1)));
                 }
             }
+
             var lastDate = uniqueDatesArray[i];
         	if (IsPermitted(functionPath, lastDate, person))
             {
@@ -174,36 +186,39 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             _functionPath = functionPath;
         }
 
-        public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
-        {
-            var principal = TeleoptiPrincipal.Current;
-            var identity = (ITeleoptiIdentity)principal.Identity;
+	    public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
+	    {
+		    var principal = TeleoptiPrincipal.Current;
+		    var identity = (ITeleoptiIdentity) principal.Identity;
 
-            foreach (var claimSet in obj)
-            {
-                if (claimSet.FindClaims(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", _functionPath), Rights.PossessProperty).Any())
-                {
-                    var foundClaims = claimSet.FindClaims(
-                        string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-                                      "/AvailableData"), Rights.PossessProperty);
-                    foreach (var foundClaim in foundClaims)
-                    {
-                        var authorizeMyBusinessUnit = foundClaim.Resource as AuthorizeMyBusinessUnit;
-                        var authorizeEveryone = foundClaim.Resource as AuthorizeEveryone;
-                        var authorizeExternalAvailableData = foundClaim.Resource as AuthorizeExternalAvailableData;
+		    var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
+			    _functionPath);
+		    var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+			    "/AvailableData");
 
-                        if (authorizeEveryone != null || authorizeMyBusinessUnit != null)
-                            return true;
+		    foreach (var claimSet in obj)
+		    {
+			    if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
+			    {
+				    var foundClaims = claimSet.FindClaims(dataClaimType, Rights.PossessProperty);
+				    foreach (var foundClaim in foundClaims)
+				    {
+					    var authorizeMyBusinessUnit = foundClaim.Resource as AuthorizeMyBusinessUnit;
+					    var authorizeEveryone = foundClaim.Resource as AuthorizeEveryone;
+					    var authorizeExternalAvailableData = foundClaim.Resource as AuthorizeExternalAvailableData;
 
-                        if (authorizeExternalAvailableData!=null)
-                        {
-                            if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnit))
-                                return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
+					    if (authorizeEveryone != null || authorizeMyBusinessUnit != null)
+						    return true;
+
+					    if (authorizeExternalAvailableData != null)
+					    {
+						    if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnit))
+							    return true;
+					    }
+				    }
+			    }
+		    }
+		    return false;
+	    }
     }
 }
