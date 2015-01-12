@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			var timePeriod = new DateOnlyPeriod(today, today);
 			personIds.AddRange(_personRepository.FindPeopleBelongTeam(team, timePeriod).Select(x => x.Id.GetValueOrDefault()));
 			var lastStates = _statisticRepository.LoadLastAgentState(personIds);
-			return lastStates.Count(x => !x.StaffingEffect.Equals(0));
+			return lastStates.Count(x => StateInfo.AdherenceFor(x) == Adherence.Out);
 		}
 	}
 }
