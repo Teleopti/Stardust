@@ -44,7 +44,7 @@
 
 		<property name="Status"
          not-null="true"
-         type="int"/>
+         />
 
 
 	</joined-subclass>
