@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -7,6 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
+	/// RK: My guess is that this test fails on sql server 2005...
 	public class DoNotReuseTransactionLevelTest : DatabaseTest
 	{
 		[Test]
