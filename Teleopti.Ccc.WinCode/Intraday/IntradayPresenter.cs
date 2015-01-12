@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly OnEventMeetingMessageCommand _onEventMeetingMessageCommand;
         private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
         private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
-	    private readonly Poller _poller = new Poller();
+	    private readonly IPoller _poller;
         public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
             IMessageBrokerComposite messageBroker,
@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             OnEventForecastDataMessageCommand onEventForecastDataMessageCommand,
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
             OnEventMeetingMessageCommand onEventMeetingMessageCommand,
-            LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand)
+            LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand,
+			IPoller poller)
         {
             _eventAggregator = eventAggregator;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _schedulingResultLoader = schedulingResultLoader;
 
             _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
+			_poller = poller;
         }
 
         public bool EarlyWarningEnabled
