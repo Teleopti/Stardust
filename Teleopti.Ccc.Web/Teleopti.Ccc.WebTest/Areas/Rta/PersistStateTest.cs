@@ -65,25 +65,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldPersistWithValidDataBecauseDatabaseWriterCantHandleIt()
+		public void ShouldPersistActualAgentStateWithNextStartSetToNull()
 		{
+
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
+			var state = new ExternalUserStateForTest();
 			var database = new FakeRtaDatabase()
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId)
+				.WithSource(state.SourceId)
+				.WithUser(state.UserCode, personId, businessUnitId)
 				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"));
+			var target = RtaForTest.MakeBasedOnState(state, database);
 
 			target.CheckForActivityChange(personId, businessUnitId);
 
-			var persisted = database.PersistedActualAgentState;
-			database.PersistedActualAgentState.StateCode.Should().Not.Be.Null();
-			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.AlarmStart.ToString()));
-			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.ReceivedTime.ToString()));
-			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.StateStart.ToString()));
-			Assert.DoesNotThrow(() => SqlDateTime.Parse(persisted.NextStart.ToString()));
+			database.PersistedActualAgentState.NextStart.Should().Be(null);
 		}
-
 	}
 }

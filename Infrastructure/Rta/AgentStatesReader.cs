@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				                                                                                                 NextActivityStartTime = state.NextStart,
 				                                                                                                 Alarm = state.AlarmName,
 				                                                                                                 AlarmStart = state.AlarmStart,
-																												 AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(state.Color))
+																												 AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(state.Color ?? 0))
 			                                                                                                 });
 
 			return agentAdherenceStateInfo;

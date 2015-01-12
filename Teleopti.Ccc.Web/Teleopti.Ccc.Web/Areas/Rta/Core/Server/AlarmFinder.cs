@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_mbCacheFactory = mbCacheFactory;
 		}
 
-		public RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit)
+		public RtaAlarmLight GetAlarm(Guid? activityId, Guid stateGroupId, Guid businessUnit)
 		{
-			return findAlarmForActivity(activityId, stateGroupId, businessUnit, _databaseReader.ActivityAlarms());
+			return findAlarmForActivity(activityId ?? Guid.Empty, stateGroupId, businessUnit, _databaseReader.ActivityAlarms());
 		}
 
 		private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId, Guid businessUnit,

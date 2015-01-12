@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return _nextActivityInShift.Value;
 		}
 
-		public Guid CurrentActivityId()
+		public Guid? CurrentActivityId()
 		{
-			return _currentActivity.Value == null ? Guid.Empty : _currentActivity.Value.PayloadId;
+			return _currentActivity.Value == null ? (Guid?)null : _currentActivity.Value.PayloadId;
 		}
 
 		public string CurrentActivityName()
@@ -56,18 +56,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return _currentActivity.Value == null ? null : _currentActivity.Value.Name;
 		}
 
-		public Guid NextActivityId()
+		public Guid? NextActivityId()
 		{
-			return _nextActivityInShift.Value == null ? Guid.Empty : _nextActivityInShift.Value.PayloadId;
+			return _nextActivityInShift.Value == null ? (Guid?)null : _nextActivityInShift.Value.PayloadId;
 		}
 
-		public DateTime NextActivityStartTime()
+		public DateTime? NextActivityStartTime()
 		{
 			if (_nextActivityInShift.Value != null)
 				return _nextActivityInShift.Value.StartDateTime;
 			if (_currentActivity.Value != null)
 				return _currentActivity.Value.EndDateTime;
-			return default (DateTime);
+			return null;
 		}
 
 		public string NextActivityName()

@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			agentStateResult.NextActivityStartTime.Should().Be(agentState1.NextStart);
 			agentStateResult.Alarm.Should().Be(agentState1.AlarmName);
 			agentStateResult.AlarmStart.Should().Be(agentState1.AlarmStart);
-			agentStateResult.AlarmColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(agentState1.Color)));
+			agentStateResult.AlarmColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(agentState1.Color.Value)));
 		}
 
 		[Test]

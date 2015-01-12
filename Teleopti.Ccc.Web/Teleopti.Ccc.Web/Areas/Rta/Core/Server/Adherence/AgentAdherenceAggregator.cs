@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 				PersonId = actualAgentState.PersonId,
 				Activity = actualAgentState.Scheduled,
 				Alarm = actualAgentState.AlarmName,
-				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(actualAgentState.Color)),
+				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(actualAgentState.Color ?? 0)),
 				AlarmStart = actualAgentState.AlarmStart,
 				NextActivity = actualAgentState.ScheduledNext,
 				NextActivityStartTime = actualAgentState.NextStart,

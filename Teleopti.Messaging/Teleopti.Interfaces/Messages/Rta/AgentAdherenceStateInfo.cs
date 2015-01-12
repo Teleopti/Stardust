@@ -8,10 +8,10 @@ namespace Teleopti.Interfaces.Messages.Rta
 		public string State { get; set; }
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
-		public DateTime NextActivityStartTime { get; set; }
+		public DateTime? NextActivityStartTime { get; set; }
 		public string Alarm { get; set; }
-		public DateTime AlarmStart { get; set; }
-		public DateTime StateStart { get; set; }
+		public DateTime? AlarmStart { get; set; }
+		public DateTime? StateStart { get; set; }
 		public string AlarmColor { get; set; }
 
 		public override bool Equals(object obj)

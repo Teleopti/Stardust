@@ -106,32 +106,26 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					{
 						yield return new ActualAgentState
 						{
-							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-							BusinessUnitId = !reader.IsDBNull(reader.GetOrdinal("BusinessUnitId"))
-								? reader.GetGuid(reader.GetOrdinal("BusinessUnitId"))
-								: Guid.Empty,
-							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
-							StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-							State = reader.GetString(reader.GetOrdinal("State")),
-							ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
-							Scheduled = reader.GetString(reader.GetOrdinal("Scheduled")),
-							ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
-							ScheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext")),
-							ReceivedTime = reader.GetDateTime(reader.GetOrdinal("ReceivedTime")),
-							Color = reader.GetInt32(reader.GetOrdinal("Color")),
-							AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
-							AlarmName = reader.GetString(reader.GetOrdinal("AlarmName")),
-							StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
-							NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
-							BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
-								? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-								: (DateTime?) null,
-							OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-								? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-								: null,
-							AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
-							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
+							PlatformTypeId = reader.Guid("PlatformTypeId"),
+							BusinessUnitId = reader.NullableGuid("BusinessUnitId") ?? Guid.Empty,
+							StateCode = reader.String("StateCode"),
+							StateId = reader.NullableGuid("StateId"),
+							State = reader.String("State"),
+							ScheduledId = reader.NullableGuid("ScheduledId"),
+							Scheduled = reader.String("Scheduled"),
+							ScheduledNextId = reader.NullableGuid("ScheduledNextId"),
+							ScheduledNext = reader.String("ScheduledNext"),
+							ReceivedTime = reader.DateTime("ReceivedTime"),
+							Color = reader.NullableInt("Color"),
+							AlarmId = reader.NullableGuid("AlarmId"),
+							AlarmName = reader.String("AlarmName"),
+							StateStart = reader.NullableDateTime("StateStart"),
+							NextStart = reader.NullableDateTime("NextStart"),
+							BatchId = reader.NullableDateTime("BatchId"),
+							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
+							AlarmStart = reader.NullableDateTime("AlarmStart"),
+							PersonId = reader.Guid("PersonId"),
+							StaffingEffect = reader.NullableDouble("StaffingEffect")
 						};
 					}
 				}
@@ -336,5 +330,62 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 			return dictionary;
 		}
+	}
+
+	public static class SqlDataReaderExtensions
+	{
+
+		public static Guid Guid(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return reader.GetGuid(ordinal);
+		}
+
+		public static int? NullableInt(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return !reader.IsDBNull(ordinal)
+				? reader.GetInt32(ordinal)
+				: (int?)null;
+		}
+
+		public static double? NullableDouble(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return !reader.IsDBNull(ordinal)
+				? reader.GetDouble(ordinal)
+				: (double?)null;
+		}
+
+		public static string String(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return !reader.IsDBNull(ordinal)
+				? reader.GetString(ordinal)
+				: null;
+		}
+
+		public static Guid? NullableGuid(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return !reader.IsDBNull(ordinal)
+				? reader.GetGuid(ordinal)
+				: (Guid?)null;
+		}
+
+		public static DateTime? NullableDateTime(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return !reader.IsDBNull(ordinal)
+				? reader.GetDateTime(ordinal)
+				: (DateTime?)null;
+		}
+
+		public static DateTime DateTime(this IDataReader reader, string name)
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return reader.GetDateTime(ordinal);
+		}
+
 	}
 }

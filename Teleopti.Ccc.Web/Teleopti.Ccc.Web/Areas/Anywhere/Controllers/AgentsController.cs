@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -52,15 +53,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				PersonId = x.PersonId,
 				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription( _personRepository.Get(x.PersonId)),
 				State = x.State,
-				StateStart = DateTime.SpecifyKind(x.StateStart, DateTimeKind.Utc),
+				StateStart = getNullableUtcDatetime(x.StateStart ),
 				Activity = x.Activity,
 				NextActivity = x.NextActivity,
-				NextActivityStartTime = DateTime.SpecifyKind(x.NextActivityStartTime, DateTimeKind.Utc),
+				NextActivityStartTime = getNullableUtcDatetime(x.NextActivityStartTime),
 				Alarm = x.Alarm,
-				AlarmStart = DateTime.SpecifyKind(x.AlarmStart, DateTimeKind.Utc),
+				AlarmStart = getNullableUtcDatetime(x.AlarmStart),
 				AlarmColor = x.AlarmColor
 			}), JsonRequestBehavior.AllowGet);
 		}
+
+		private static DateTime? getNullableUtcDatetime(DateTime? dateTime)
+		{
+			return dateTime == null ? (DateTime?)null : DateTime.SpecifyKind(dateTime.Value, DateTimeKind.Utc);
+		}
+
 
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult ForTeam(Guid teamId)

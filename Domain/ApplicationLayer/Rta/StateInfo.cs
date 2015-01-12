@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		}
 
-		public bool IsScheduled { get { return _newState.Value.ActivityId != Guid.Empty; } }
-		public bool WasScheduled { get { return _previousState.Value.ActivityId != Guid.Empty; } }
+		public bool IsScheduled { get { return _newState.Value.ActivityId != null; } }
+		public bool WasScheduled { get { return _previousState.Value.ActivityId != null; } }
 
 		public ScheduleLayer CurrentActivity { get { return _scheduleInfo.CurrentActivity(); } }
 		public ScheduleLayer NextActivityInShift { get { return _scheduleInfo.NextActivityInShift(); } }
@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public DateTime CurrentTime { get { return _newState.Value.ReceivedTime; } }
 		public DateTime PreviousStateTime { get { return _previousState.Value.ReceivedTime; } }
-		public Guid CurrentStateId { get { return _newState.Value.StateGroupId; } }
-		public Guid PreviousStateId { get { return _previousState.Value.StateGroupId; } }
-		public Guid CurrentActivityId { get { return _newState.Value.ActivityId; } }
-		public Guid PreviousActivityId { get { return _previousState.Value.ActivityId; } }
+		public Guid? CurrentStateId { get { return _newState.Value.StateGroupId; } }
+		public Guid? PreviousStateId { get { return _previousState.Value.StateGroupId; } }
+		public Guid? CurrentActivityId { get { return _newState.Value.ActivityId; } }
+		public Guid? PreviousActivityId { get { return _previousState.Value.ActivityId; } }
 
 		public bool Send
 		{
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return adherenceFor(stateCode, activity.PayloadId);
 		}
 
-		private Adherence adherenceFor(string stateCode, Guid activityId)
+		private Adherence adherenceFor(string stateCode, Guid? activityId)
 		{
 			var stateGroup = _alarmFinder.GetStateGroup(
 				stateCode,
@@ -132,9 +132,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return adherenceFor(alarm.StaffingEffect);
 		}
 
-		private static Adherence adherenceFor(double staffingEffect)
+		private static Adherence adherenceFor(double? staffingEffect)
 		{
-			return staffingEffect.Equals(0) ? Adherence.In : Adherence.Out;
+			if (staffingEffect.HasValue)
+				return staffingEffect.Value.Equals(0) ? Adherence.In : Adherence.Out;
+			return Adherence.None;
 		}
 
 	}

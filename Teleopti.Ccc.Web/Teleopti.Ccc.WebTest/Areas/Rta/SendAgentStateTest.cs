@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
-			sent.ScheduledId.Should().Be(Guid.Empty);
+			sent.ScheduledId.Should().Be(null);
 		}
 
 		[Test]
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
-			sent.ScheduledId.Should().Be(Guid.Empty);
+			sent.ScheduledId.Should().Be(null);
 		}
 
 		[Test]
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(state);
 
 			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
-			sent.ScheduledNextId.Should().Be(Guid.Empty);
+			sent.ScheduledNextId.Should().Be(null);
 		}
 
 		[Test]
