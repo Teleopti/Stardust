@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventScheduleMessageCommand scheduleCommand;
         private OnEventForecastDataMessageCommand forecastCommand;
         private OnEventMeetingMessageCommand meetingCommand;
+		private IToggleManager toggleManger;
 
         [SetUp]
         public void Setup()
@@ -38,8 +40,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			forecastCommand = mocks.StrictMock < OnEventForecastDataMessageCommand>();
 			scheduleCommand = mocks.StrictMock < OnEventScheduleMessageCommand>();
 			meetingCommand = mocks.StrictMock < OnEventMeetingMessageCommand>();
+			toggleManger = mocks.StrictMock<IToggleManager>();
             target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, unitOfWorkFactory, null,
-                                           null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null, new Poller(1));
+                                           null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null, new Poller(1), toggleManger);
         }
 
         [Test]

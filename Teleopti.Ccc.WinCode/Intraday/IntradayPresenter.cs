@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Microsoft.Practices.Composite.Events;
@@ -17,6 +18,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -52,7 +54,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
         private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 	    private readonly IPoller _poller;
-        public IntradayPresenter(IIntradayView view,
+	    private readonly IToggleManager _toggleManger;
+	    private bool? _pollingEnabled;
+
+	    public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
             IMessageBrokerComposite messageBroker,
             IRtaStateHolder rtaStateHolder,
@@ -66,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
             OnEventMeetingMessageCommand onEventMeetingMessageCommand,
             LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand,
-			IPoller poller)
+			IPoller poller, IToggleManager toggleManger)
         {
             _eventAggregator = eventAggregator;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -90,11 +95,17 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _intradayDate = HistoryOnly ? SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate : DateOnly.Today;
 			_poller = poller;
+		    _toggleManger = toggleManger;
         }
 
         public bool EarlyWarningEnabled
         {
             get { return _earlyWarningEnabled; }
+        }
+
+        public bool? PollingEnabled
+        {
+	        get { return _pollingEnabled ?? (_pollingEnabled = _toggleManger.IsEnabled(Toggles.RTA_NoBroker_31237)); }
         }
 
         public bool RealTimeAdherenceEnabled
@@ -126,9 +137,37 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                     typeof(IForecastData),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
-        }
 
-        private void handleIncomingExternalEvent(object state)
+			if (!_realTimeAdherenceEnabled || HistoryOnly || PollingEnabled.Equals(true)) return;
+
+			if (SchedulerStateHolder.FilteredPersonDictionary.Count > 100)
+			{
+				_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
+														typeof(IActualAgentState),
+														DateTime.UtcNow,
+														DateTime.UtcNow.AddDays(1));
+			}
+			else
+			{
+				foreach (var person in SchedulerStateHolder.FilteredPersonDictionary.Values)
+				{
+					_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
+															person.Id.GetValueOrDefault(),
+															typeof(IActualAgentState),
+															DateTime.UtcNow,
+															DateTime.UtcNow.AddDays(1));
+				}
+			}
+        }
+		
+		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
+        {
+            if (e.Message.ModuleId == _instanceId) return;
+
+            ThreadPool.QueueUserWorkItem(handleIncomingExternalEvent, e.Message.DomainObject);
+         }
+
+		private void handleIncomingExternalEvent(object state)
         {
             var stateBytes = state as byte[];
             if (stateBytes == null)
@@ -273,8 +312,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.RegisteringWithMessageBrokerThreeDots);
             listenForMessageBroker();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingInitialStatesThreeDots);
-	        if (_realTimeAdherenceEnabled)
-				_poller.Poll(loadExternalAgentStates);
+	        if (!_realTimeAdherenceEnabled) return;
+	        if (PollingEnabled.Equals(true))
+		         _poller.Poll(loadExternalAgentStates);
+	        else
+				loadExternalAgentStates();
         }
 
         private void loadExternalAgentStates()
@@ -344,6 +386,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			_messageBroker.UnregisterSubscription(OnEventScheduleMessageHandler);
 			_messageBroker.UnregisterSubscription(OnEventStatisticMessageHandler);
 			_messageBroker.UnregisterSubscription(OnEventMeetingMessageHandler);
+	        if (PollingEnabled.Equals(false))
+		        _messageBroker.UnregisterSubscription(OnEventActualAgentStateMessageHandler);
         }
 
         public void Save()

@@ -9,6 +9,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -56,8 +58,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private LoadStatisticsAndActualHeadsCommand _loadStatisticCommand;
         private OnEventMeetingMessageCommand _meetingCommand;
 		private IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
+	    private IToggleManager _toggleManger;
 
-				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 				public void Setup()
 				{
 					_eventAggregator = new EventAggregator();
@@ -79,14 +82,14 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_forecastCommand = MockRepository.GenerateMock<OnEventForecastDataMessageCommand>();
 					_statisticCommand = MockRepository.GenerateMock<OnEventStatisticMessageCommand>();
 					_loadStatisticCommand = MockRepository.GenerateMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
-
+					_toggleManger = MockRepository.GenerateMock<IToggleManager>();
 					_schedulingResultLoader.Stub(x => x.SchedulerState).Return(_schedulerStateHolder);
 
 					_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
 																					_rtaStateHolder, _eventAggregator,
 																					_scheduleDictionarySaver, _unitOfWorkFactory,
 																					_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1));
+																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1), _toggleManger);
 				}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -98,7 +101,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 																						_scheduleDictionarySaver, _unitOfWorkFactory, 
                                             _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand,null);
+                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand,null, _toggleManger);
 
             Assert.AreEqual(DateOnly.Today, _target.IntradayDate);
             Assert.IsFalse(_target.HistoryOnly);
@@ -107,13 +110,48 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[Test]
 		public void ShouldUnregisterMessageBrokerCallbacks()
 		{
+			_toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(true);
+			_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
+																					   _scheduleDictionarySaver, _unitOfWorkFactory,
+										   _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
+										   _scheduleCommand, _meetingCommand, _loadStatisticCommand, null, _toggleManger);
 			_target.UnregisterMessageBrokerEvents();
-
 			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventForecastDataMessageHandler));
 			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventMeetingMessageHandler));
 			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventScheduleMessageHandler));
 			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventStatisticMessageHandler));
+			_messageBroker.AssertWasNotCalled(x => x.UnregisterSubscription(_target.OnEventActualAgentStateMessageHandler));
 		}
+
+		[Test]
+		public void ShouldUnregisterMessageBrokerCallbacksWhenPollingDisabled()
+		{
+			_toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(false);
+			_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
+																					   _scheduleDictionarySaver, _unitOfWorkFactory,
+										   _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
+										   _scheduleCommand, _meetingCommand, _loadStatisticCommand, null, _toggleManger);
+			_target.UnregisterMessageBrokerEvents();
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventForecastDataMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventMeetingMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventScheduleMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventStatisticMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventActualAgentStateMessageHandler));
+		}
+
+		[Test]
+        public void VerifyOnEventExternalAgentStateMessageHandlerSameModuleId()
+        {
+            var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
+			
+			var target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
+				_rtaStateHolder, _eventAggregator,
+				_scheduleDictionarySaver, _unitOfWorkFactory,
+				_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
+				_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1), _toggleManger);
+            target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
+        }
 
         [Test]
         public void VerifyMultiplicatorDefinitionSetsCanBeRead()
@@ -320,6 +358,37 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _scheduleCommand.AssertWasCalled(x => x.Execute(message));
         }
 
+		[Test]
+		public void VerifyOnLoadWithMoreThanOneHundredPeople()
+        {
+            var uow = MockRepository.GenerateMock<IUnitOfWork>();
+
+            var agentState = new ActualAgentState();
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+
+            _rtaStateHolder.Stub(r => r.ActualAgentStates)
+                           .Return(new Dictionary<Guid, IActualAgentState> {{Guid.NewGuid(), agentState}});
+            _repositoryFactory.Stub(x => x.CreateStatisticRepository())
+                              .Return(_statisticRepository);
+			_repositoryFactory.Stub(x => x.CreateRtaRepository())
+							  .Return(_rtaRepository);
+			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<IActualAgentState> { agentState });
+
+            Enumerable.Range(0, 101)
+                      .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
+
+            _schedulerStateHolder.RequestedPeriod =
+                new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
+                                                   TimeZoneInfo.Utc);
+            _target.Initialize();
+
+            Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
+            _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o=> o.IgnoreArguments().Repeat.Twice());
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments().Repeat.Times(2));
+        }
+
         [Test]
         public void VerifyOnLoad()
         {
@@ -362,7 +431,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
 												_eventAggregator, null, _unitOfWorkFactory, _repositoryFactory, _differenceService,
-												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand,null);
+												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand,null, _toggleManger);
 				_target.Initialize();
 			}
 
@@ -373,7 +442,23 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
         }
 
-        [Test]
+	    [Test]
+	    public void ShouldUsePollForRtaStatesWhenFeatureEnabled()
+	    {
+		    var poller = MockRepository.GenerateMock<IPoller>();
+
+		    _toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(true);
+
+		    _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
+			    _eventAggregator, null, _unitOfWorkFactory, _repositoryFactory, _differenceService,
+			    _statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand, poller,
+			    _toggleManger);
+		    _target.Initialize();
+
+		    poller.AssertWasCalled(x => x.Poll(null), o => o.IgnoreArguments());
+	    }
+
+	    [Test]
         public void VerifySave()
         {
             IUnitOfWork uow = MockRepository.GenerateMock<IUnitOfWork>();
