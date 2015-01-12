@@ -2132,7 +2132,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Announcement.
+        ///   Looks up a localized string similar to Shift Trade Post.
         /// </summary>
         public static string Announcement {
             get {
@@ -2141,7 +2141,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Announcement Invalid.
+        ///   Looks up a localized string similar to Shift Trade Post Invalid.
         /// </summary>
         public static string AnnouncementInvalid {
             get {
@@ -2150,7 +2150,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your announcement becomes invalid due to your shift has been changed. The announcement was on {0}..
+        ///   Looks up a localized string similar to Your shift trade post of {0} is invalid because your shift has changed..
         /// </summary>
         public static string AnnouncementInvalidMessage {
             get {
@@ -2159,7 +2159,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Announce Shift.
+        ///   Looks up a localized string similar to Post Shift for Trade.
         /// </summary>
         public static string AnnounceShift {
             get {
@@ -2177,7 +2177,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The date for the exchange must be in the open period!.
+        ///   Looks up a localized string similar to The date for the shift trade post must be within the shift trade open period!.
         /// </summary>
         public static string AnnounceShiftDateOutPeriod {
             get {
@@ -2186,7 +2186,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Valid to date must be between today and the day before exchange date!.
+        ///   Looks up a localized string similar to Valid to date must be between today and the day before the shift trade post date!.
         /// </summary>
         public static string AnnounceShiftValidToNotLegal {
             get {
@@ -15409,7 +15409,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No agents available for bulletin board.
+        ///   Looks up a localized string similar to No agents available for shift trade board.
         /// </summary>
         public static string NoAgentsAvailableForBulletinBoard {
             get {
@@ -18846,7 +18846,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot publish an announcement on an absence day!.
+        ///   Looks up a localized string similar to Cannot post a shift for trade on an absence day!.
         /// </summary>
         public static string PublishAnnouncementNoAbsence {
             get {
@@ -23123,7 +23123,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Exchange Announcement.
+        ///   Looks up a localized string similar to Shift Trade Post.
         /// </summary>
         public static string ShiftExchangeAnnouncement {
             get {
@@ -23132,7 +23132,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift exchange offer valid to.
+        ///   Looks up a localized string similar to Shift trade post valid to.
         /// </summary>
         public static string ShiftExchangeOfferValidTo {
             get {
@@ -23242,7 +23242,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Trade Bulletin Board.
+        ///   Looks up a localized string similar to Shift Trade Board.
         /// </summary>
         public static string ShiftTradeBulletinBoard {
             get {

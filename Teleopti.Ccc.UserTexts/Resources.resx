@@ -12555,7 +12555,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Absence can not be reported.</value>
   </data>
   <data name="ShiftTradeBulletinBoard" xml:space="preserve">
-    <value>Shift Trade Bulletin Board</value>
+    <value>Shift Trade Board</value>
     <comment>use in MyTimeWeb request model, a new board for shift trade bulletin</comment>
   </data>
   <data name="Publish" xml:space="preserve">
@@ -12581,7 +12581,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for MyTimeWeb</comment>
   </data>
   <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
-    <value>No agents available for bulletin board</value>
+    <value>No agents available for shift trade board</value>
     <comment>use for MyTime Request Bulletin board, warning message</comment>
   </data>
   <data name="FilterOnOpenHours" xml:space="preserve">
@@ -12612,11 +12612,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Text prompt on the back to work form on the delete absence form</comment>
   </data>
   <data name="AnnounceShift" xml:space="preserve">
-    <value>Announce Shift</value>
+    <value>Post Shift for Trade</value>
     <comment>used for publish shift trade in MyTime Schedule</comment>
   </data>
   <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
-    <value>Shift exchange offer valid to</value>
+    <value>Shift trade post valid to</value>
     <comment>used for shift exchange in MyTime Schedule, a hint for Valid To calander</comment>
   </data>
   <data name="AnnounceShiftConditions" xml:space="preserve">
@@ -12624,15 +12624,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>use for MyTime Announce Shift view</comment>
   </data>
   <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
-    <value>The date for the exchange must be in the open period!</value>
+    <value>The date for the shift trade post must be within the shift trade open period!</value>
     <comment>use as a warning in MyTime AnnounceShift when exchange date is out of open period</comment>
   </data>
   <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
-    <value>Valid to date must be between today and the day before exchange date!</value>
+    <value>Valid to date must be between today and the day before the shift trade post date!</value>
     <comment>use as a warning in MyTime AnnounceShift when valid to date is not legal</comment>
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
-    <value>Cannot publish an announcement on an absence day!</value>
+    <value>Cannot post a shift for trade on an absence day!</value>
     <comment>use for MyTime/Schedule/ publish announcement, a warning message for making an shift exchange offer on an absence day</comment>
   </data>
   <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
@@ -12640,11 +12640,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>All team members must be loaded</comment>
   </data>
   <data name="AnnouncementInvalid" xml:space="preserve">
-    <value>Announcement Invalid</value>
+    <value>Shift Trade Post Invalid</value>
     <comment>use for message title when agent's shift has been changed, the announcement for shift exchange will become invalid.</comment>
   </data>
   <data name="AnnouncementInvalidMessage" xml:space="preserve">
-    <value>Your announcement becomes invalid due to your shift has been changed. The announcement was on {0}.</value>
+    <value>Your shift trade post of {0} is invalid because your shift has changed.</value>
     <comment>message body for "AnnouncementInvalid"</comment>
   </data>
   <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
@@ -12660,7 +12660,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Everyone option in business hierarchy picker in leaderboard</comment>
   </data>
   <data name="Announcement" xml:space="preserve">
-    <value>Announcement</value>
+    <value>Shift Trade Post</value>
     <comment>use in MyTimeWeb in request list the string for request type</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
@@ -12696,7 +12696,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>use in MyTimeWeb a confirm message when agent try to delete a request.</comment>
   </data>
   <data name="ShiftExchangeAnnouncement" xml:space="preserve">
-    <value>Shift Exchange Announcement</value>
+    <value>Shift Trade Post</value>
     <comment>use in MyTimeWeb a kind of subject of request</comment>
   </data>
   <data name="ChooseGamificationSettingToChange" xml:space="preserve">
