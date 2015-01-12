@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	[TestFixture]
 	public class ShiftExchangeOfferMapperTest
 	{
-		private static string _subject = "Shift Exchange Announcement";
+		private static string _subject = "Shift Trade Post";
 		private IShiftExchangeOfferMapper _target;
 		private ShiftExchangeOfferForm _form;
 		private ILoggedOnUser _loggedOnUser;
