@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 																					_rtaStateHolder, _eventAggregator,
 																					_scheduleDictionarySaver, _unitOfWorkFactory,
 																					_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-																					_scheduleCommand, _meetingCommand, _loadStatisticCommand);
+																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1));
 				}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 																						_scheduleDictionarySaver, _unitOfWorkFactory, 
                                             _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand);
+                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand,null);
 
             Assert.AreEqual(DateOnly.Today, _target.IntradayDate);
             Assert.IsFalse(_target.HistoryOnly);
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
 												_eventAggregator, null, _unitOfWorkFactory, _repositoryFactory, _differenceService,
-												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand);
+												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand,null);
 				_target.Initialize();
 			}
 

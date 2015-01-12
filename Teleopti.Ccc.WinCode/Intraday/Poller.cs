@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Timers;
-using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
-	public class Poller : IDisposable
+	public interface IPoller : IDisposable
+	{
+		void Poll(Action action);
+	}
+	public class Poller : IPoller
 	{
 		private readonly Timer _timer;
 
-		public Poller()
+		public Poller(int millisecondsInterval)
 		{
-			_timer = new Timer(Convert.ToInt32(StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["RtaPollingInterval"]));
+			_timer = new Timer(millisecondsInterval);
 		}
 
 		public void Poll(Action action)
