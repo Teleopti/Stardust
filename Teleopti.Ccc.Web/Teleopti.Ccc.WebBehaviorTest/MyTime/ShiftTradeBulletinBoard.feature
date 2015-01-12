@@ -117,7 +117,7 @@ Scenario: Should list announced shift
 	| StartTime | 2030-01-01 06:00 |
 	| EndTime   | 2030-01-01 14:00 |
 	When I am viewing requests
-	Then I should see the request of type 'Announcement' in the list
+	Then I should see the request of type 'Shift Trade Post' in the list
 
 @OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
 Scenario: Delete shift exchange offer in request list
