@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
 			builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
 			builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
-			builder.RegisterType<SignalSender>().As<IMessageSender>().WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"])).SingleInstance();
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
 			builder.RegisterType<PersonResolver>().As<IPersonResolver>();

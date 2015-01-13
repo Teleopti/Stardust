@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net.Sockets;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Ccc.Rta.Server
 {
@@ -22,49 +13,18 @@ namespace Teleopti.Ccc.Rta.Server
 		
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IDatabaseWriter _databaseWriter;
-		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
-		private readonly IList<MessageRepeater> _messageRepeaterTempFor390Only = new List<MessageRepeater>();
 
-		public RtaDataHandler(IMessageSender asyncMessageSender,
-		                      IDataSourceResolver dataSourceResolver,
+		public RtaDataHandler(IDataSourceResolver dataSourceResolver,
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
 													IDatabaseWriter databaseWriter)
 		{
-			//hack - fix nicer when merged to default
-			int repeatInterval;
-			if (int.TryParse(ConfigurationManager.AppSettings[MinuteTrigger.RepeatIntervalKey], out repeatInterval))
-			{
-				int numberOfRepeaters;
-				if(!int.TryParse(ConfigurationManager.AppSettings[MinuteTrigger.RepeatNumberOfTimes], out numberOfRepeaters))
-					numberOfRepeaters = 1;
-				for (var i = 0; i < numberOfRepeaters; i++)
-				{
-					_messageRepeaterTempFor390Only.Add(new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()),
-						new CreateNotification()));
-				}
-			}
-
-			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
 			_databaseWriter = databaseWriter;
-
-			if (_asyncMessageSender == null) return;
-
-			try
-			{
-				_asyncMessageSender.StartBrokerService(useLongPolling:true);
-			}
-			catch (BrokerNotInstantiatedException ex)
-			{
-				LoggingSvc.Error(
-					"The message broker will be unavailable until this service is restarted and initialized with correct parameters",
-					ex);
-			}
 		}
 
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
@@ -78,15 +38,6 @@ namespace Teleopti.Ccc.Rta.Server
 					return;
 
 				_databaseWriter.AddOrUpdate(agentState);
-				sendRtaState(agentState);
-			}
-			catch (SocketException exception)
-			{
-				LoggingSvc.Error("The message broker seems to be down.", exception);
-			}
-			catch (BrokerNotInstantiatedException exception)
-			{
-				LoggingSvc.Error("The message broker seems to be down.", exception);
 			}
 			catch (Exception exception)
 			{
@@ -96,7 +47,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public bool IsAlive
 		{
-			get { return _asyncMessageSender.IsAlive; }
+			get { return true; }
 		}
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
@@ -158,8 +109,6 @@ namespace Teleopti.Ccc.Rta.Server
 					LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode,
 						agentState);
 					_databaseWriter.AddOrUpdate(agentState);
-					if (agentState.SendOverMessageBroker)
-						sendRtaState(agentState);
 				}
 			}
 			catch (Exception e)
@@ -174,27 +123,6 @@ namespace Teleopti.Ccc.Rta.Server
 			foreach (var agent in missingAgents.Where(agent => agent != null))
 			{
 				_databaseWriter.AddOrUpdate(agent);
-				sendRtaState(agent);
-			}
-		}
-
-		private void sendRtaState(IActualAgentState agentState)
-		{
-			try
-			{
-				LoggingSvc.InfoFormat("Adding message to message broker queue AgentState: {0} ", agentState);
-
-				var notification = NotificationFactory.CreateNotification(agentState);
-
-			_asyncMessageSender.SendNotification(notification);
-
-				//hack - remove when merged to default
-				if(_messageRepeaterTempFor390Only!=null)
-					_messageRepeaterTempFor390Only.ForEach(x => x.Invoke(agentState));
-			}
-			catch (Exception exception)
-			{
-				LoggingSvc.Error("An error occured while handling RTA-Event", exception);
 			}
 		}
 	}
