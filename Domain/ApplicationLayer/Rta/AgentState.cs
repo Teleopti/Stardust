@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 
 		
-		private Func<IActualAgentState> _assemble;
+		private Func<AgentStateReadModel> _assemble;
 
-		public void UseAssembleMethod(Func<IActualAgentState> assembleFunc)
+		public void UseAssembleMethod(Func<AgentStateReadModel> assembleFunc)
 		{
 			_assemble = assembleFunc;
 		}
 
-		public IActualAgentState MakeActualAgentState()
+		public AgentStateReadModel MakeActualAgentState()
 		{
 			return _assemble.Invoke();
 		}

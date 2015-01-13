@@ -116,7 +116,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Domain\ActualAgentState.cs" />
+    <Compile Include="Domain\AgentStateReadModel.cs" />
     <Compile Include="Domain\AlarmTypeMode.cs" />
     <Compile Include="Domain\AxisLocation.cs" />
     <Compile Include="Domain\BadgeType.cs" />
@@ -161,7 +161,6 @@
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\SchedulingServiceFailedEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
-    <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IAggregateRootBrokerConditions.cs" />
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />

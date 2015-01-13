@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.AlarmId.Should().Be(alarmId);
 		}
 

@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.Rta
 		ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> ActivityAlarms();
 
 		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
-		IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
+		IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
 	}
 
 	public interface IReadActualAgentStates
 	{
-		IActualAgentState GetCurrentActualAgentState(Guid personId);
-		IEnumerable<IActualAgentState> GetActualAgentStates();
+		AgentStateReadModel GetCurrentActualAgentState(Guid personId);
+		IEnumerable<AgentStateReadModel> GetActualAgentStates();
 	}
 }

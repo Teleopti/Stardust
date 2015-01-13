@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
                 };
         }
 
-        public void PersistActualAgentState(IActualAgentState actualAgentState)
+        public void PersistActualAgentState(AgentStateReadModel agentStateReadModel)
         {
             using (
                 var connection =
@@ -80,135 +80,135 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		            ParameterName = "@PersonId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.PersonId
+		            Value = agentStateReadModel.PersonId
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@StateCode",
 		            SqlDbType = SqlDbType.NVarChar,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.StateCode
+		            Value = agentStateReadModel.StateCode
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@PlatformTypeId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.PlatformTypeId
+		            Value = agentStateReadModel.PlatformTypeId
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@State",
 		            SqlDbType = SqlDbType.NVarChar,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.State
+		            Value = agentStateReadModel.State
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@AlarmName",
 		            SqlDbType = SqlDbType.NVarChar,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.AlarmName
+		            Value = agentStateReadModel.AlarmName
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@StateId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.StateId
+		            Value = agentStateReadModel.StateId
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@Scheduled",
 		            SqlDbType = SqlDbType.NVarChar,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.Scheduled
+		            Value = agentStateReadModel.Scheduled
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@ScheduledId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.ScheduledId
+		            Value = agentStateReadModel.ScheduledId
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@AlarmId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.AlarmId
+		            Value = agentStateReadModel.AlarmId
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@ScheduledNext",
 		            SqlDbType = SqlDbType.NVarChar,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.ScheduledNext
+		            Value = agentStateReadModel.ScheduledNext
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@ScheduledNextId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.ScheduledNextId
+		            Value = agentStateReadModel.ScheduledNextId
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@StateStart",
 		            SqlDbType = SqlDbType.DateTime,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.StateStart
+		            Value = agentStateReadModel.StateStart
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@NextStart",
 		            SqlDbType = SqlDbType.DateTime,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.NextStart
+		            Value = agentStateReadModel.NextStart
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@AlarmStart",
 		            SqlDbType = SqlDbType.DateTime,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.AlarmStart
+		            Value = agentStateReadModel.AlarmStart
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@Color",
 		            SqlDbType = SqlDbType.Int,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.Color
+		            Value = agentStateReadModel.Color
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@StaffingEffect",
 		            SqlDbType = SqlDbType.Float,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.StaffingEffect
+		            Value = agentStateReadModel.StaffingEffect
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@ReceivedTime",
 		            SqlDbType = SqlDbType.DateTime,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.ReceivedTime
+		            Value = agentStateReadModel.ReceivedTime
 	            });
 	            command.Parameters.Add(new SqlParameter
 	            {
 		            ParameterName = "@BusinessUnitId",
 		            SqlDbType = SqlDbType.UniqueIdentifier,
 		            Direction = ParameterDirection.Input,
-		            Value = actualAgentState.BusinessUnitId
+		            Value = agentStateReadModel.BusinessUnitId
 	            });
-	            if (actualAgentState.BatchId != null)
+	            if (agentStateReadModel.BatchId != null)
 	            {
 		            command.Parameters.Add(new SqlParameter
 		            {
 			            ParameterName = "@BatchId",
 			            SqlDbType = SqlDbType.DateTime,
 			            Direction = ParameterDirection.Input,
-			            Value = actualAgentState.BatchId
+			            Value = agentStateReadModel.BatchId
 		            });
 	            }
 	            else
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			            Direction = ParameterDirection.Input,
 			            Value = DBNull.Value
 		            });
-	            if (actualAgentState.OriginalDataSourceId == null)
+	            if (agentStateReadModel.OriginalDataSourceId == null)
 	            {
 					command.Parameters.Add(new SqlParameter
 					{
@@ -235,12 +235,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						ParameterName = "@OriginalDataSourceId",
 						SqlDbType = SqlDbType.NVarChar,
 						Direction = ParameterDirection.Input,
-						Value = actualAgentState.OriginalDataSourceId
+						Value = agentStateReadModel.OriginalDataSourceId
 					});
 				}
 
 	            command.ExecuteNonQuery();
-	            LoggingSvc.DebugFormat("Saved state: {0} to database", actualAgentState);
+	            LoggingSvc.DebugFormat("Saved state: {0} to database", agentStateReadModel);
             }
         }
 

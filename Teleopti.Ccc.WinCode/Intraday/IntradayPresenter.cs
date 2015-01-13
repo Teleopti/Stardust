@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			if (SchedulerStateHolder.FilteredPersonDictionary.Count > 100)
 			{
 				_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-														typeof(IActualAgentState),
+														typeof(AgentStateReadModel),
 														DateTime.UtcNow,
 														DateTime.UtcNow.AddDays(1));
 			}
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 				{
 					_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
 															person.Id.GetValueOrDefault(),
-															typeof(IActualAgentState),
+															typeof(AgentStateReadModel),
 															DateTime.UtcNow,
 															DateTime.UtcNow.AddDays(1));
 				}
@@ -172,10 +172,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
             var stateBytes = state as byte[];
             if (stateBytes == null)
                 return;
-            IActualAgentState agentState = JsonConvert.DeserializeObject<ActualAgentState>(Encoding.UTF8.GetString(stateBytes));
+            AgentStateReadModel agentStateReadModel = JsonConvert.DeserializeObject<AgentStateReadModel>(Encoding.UTF8.GetString(stateBytes));
 
-            Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start {2}", agentState.State, agentState.PersonId, agentState.StateStart);
-            _rtaStateHolder.SetActualAgentState(agentState);
+            Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start {2}", agentStateReadModel.State, agentStateReadModel.PersonId, agentStateReadModel.StateStart);
+            _rtaStateHolder.SetActualAgentState(agentStateReadModel);
             if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, EventArgs.Empty);
         }
 
@@ -333,10 +333,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 foreach (var actualAgentState in tmp)
                 {
 					// if we have recieved an RTA event that is more recent than what we get from DB
-	                IActualAgentState outState;
-	                if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outState))
-		                _rtaStateHolder.SetActualAgentState(outState.ReceivedTime > actualAgentState.ReceivedTime
-			                                                    ? outState
+	                AgentStateReadModel outStateReadModel;
+	                if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outStateReadModel))
+		                _rtaStateHolder.SetActualAgentState(outStateReadModel.ReceivedTime > actualAgentState.ReceivedTime
+			                                                    ? outStateReadModel
 			                                                    : actualAgentState);
 	                else
 		                _rtaStateHolder.SetActualAgentState(actualAgentState);

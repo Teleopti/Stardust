@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_person = person;
 			_alarmFinder = alarmFinder;
 
-			var previousActualAgentState = new Lazy<IActualAgentState>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
+			var previousActualAgentState = new Lazy<AgentStateReadModel>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
 			_previousState = new Lazy<AgentState>(() => agentStateAssembler.MakePreviousState(person.PersonId, previousActualAgentState.Value));
 			_personIsKnown = new Lazy<bool>(() => previousActualAgentState.Value != null);
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			}
 		}
 
-		public IActualAgentState MakeActualAgentState()
+		public AgentStateReadModel MakeActualAgentState()
 		{
 			return _newState.Value.MakeActualAgentState();
 		}
@@ -122,9 +122,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return adherenceFor(state.StaffingEffect);
 		}
 
-		public static Adherence AdherenceFor(IActualAgentState state)
+		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
 		{
-			return adherenceFor(state.StaffingEffect);
+			return adherenceFor(stateReadModel.StaffingEffect);
 		}
 
 		private static Adherence adherenceFor(RtaAlarmLight alarm)

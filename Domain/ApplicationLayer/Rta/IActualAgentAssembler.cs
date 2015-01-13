@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IActualAgentAssembler
 	{
-		IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchid, string sourceId);
+		IEnumerable<AgentStateReadModel> GetAgentStatesForMissingAgents(DateTime batchid, string sourceId);
 	}
 }

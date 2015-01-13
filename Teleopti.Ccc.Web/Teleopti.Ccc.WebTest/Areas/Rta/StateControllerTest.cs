@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				StateCode = "statecode"
 			});
 
-			fakeMessageSender.NotificationOfType<IActualAgentState>()
+			fakeMessageSender.NotificationOfType<AgentStateReadModel>()
 				.DeseralizeActualAgentState()
 				.PersonId.Should().Be(personId);
 		}

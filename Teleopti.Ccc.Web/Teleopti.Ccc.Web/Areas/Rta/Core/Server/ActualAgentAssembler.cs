@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_alarmFinder = alarmFinder;
 		}
 
-		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchid, string sourceId)
+		public IEnumerable<AgentStateReadModel> GetAgentStatesForMissingAgents(DateTime batchid, string sourceId)
 		{
 			var missingAgents = _databaseReader.GetMissingAgentStatesFromBatch(batchid, sourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents

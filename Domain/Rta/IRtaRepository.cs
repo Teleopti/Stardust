@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Rta
 {
     public interface IRtaRepository
     {
-        IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons);
-        IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids);
+        IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons);
+        IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids);
     }
 }

@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		    }
 	    }
 
-	    private void rtaStateHolderOnAgentstateUpdated(object sender, CustomEventArgs<IActualAgentState> customEventArgs)
+	    private void rtaStateHolderOnAgentstateUpdated(object sender, CustomEventArgs<AgentStateReadModel> customEventArgs)
 		{
 			var agentState = customEventArgs.Value;
 			var dayLayerModel = Models.FirstOrDefault(m => m.Person.Id == agentState.PersonId);
@@ -140,31 +140,31 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			ModelEditable.Dispatcher.BeginInvoke(new Action(() => updateAgentState(dayLayerModel, agentState)));
 		}
 
-		private void updateAgentState(DayLayerModel dayLayerModel, IActualAgentState agentState)
+		private void updateAgentState(DayLayerModel dayLayerModel, AgentStateReadModel agentStateReadModel)
 		{
 
 			ModelEditable.EditItem(dayLayerModel);
-			dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
-			dayLayerModel.EnteredCurrentState = agentState.StateStart ?? DateTime.MinValue;
-			dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
-			dayLayerModel.NextActivityStartDateTime = agentState.NextStart ?? DateTime.MinValue;
-			dayLayerModel.CurrentStateDescription = agentState.State;
-			dayLayerModel.AlarmStart = agentState.AlarmStart ?? DateTime.MinValue;
-			dayLayerModel.HasAlarm = agentState.AlarmId != Guid.Empty;
-			dayLayerModel.StaffingEffect = agentState.StaffingEffect ?? 0;
-			dayLayerModel.ColorValue = agentState.Color ?? 0;
-			dayLayerModel.AlarmDescription = agentState.AlarmName;
+			dayLayerModel.CurrentActivityDescription = agentStateReadModel.Scheduled;
+			dayLayerModel.EnteredCurrentState = agentStateReadModel.StateStart ?? DateTime.MinValue;
+			dayLayerModel.NextActivityDescription = agentStateReadModel.ScheduledNext;
+			dayLayerModel.NextActivityStartDateTime = agentStateReadModel.NextStart ?? DateTime.MinValue;
+			dayLayerModel.CurrentStateDescription = agentStateReadModel.State;
+			dayLayerModel.AlarmStart = agentStateReadModel.AlarmStart ?? DateTime.MinValue;
+			dayLayerModel.HasAlarm = agentStateReadModel.AlarmId != Guid.Empty;
+			dayLayerModel.StaffingEffect = agentStateReadModel.StaffingEffect ?? 0;
+			dayLayerModel.ColorValue = agentStateReadModel.Color ?? 0;
+			dayLayerModel.AlarmDescription = agentStateReadModel.AlarmName;
 			
 			ModelEditable.CommitEdit();
 		}
 
-		private IActualAgentState getActualAgentState(DayLayerModel dayLayerModel)
+		private AgentStateReadModel getActualAgentState(DayLayerModel dayLayerModel)
 		{
-			IActualAgentState agentState;
+			AgentStateReadModel agentStateReadModel;
 			if (dayLayerModel.Person.Id == null ||
-				!_rtaStateHolder.ActualAgentStates.TryGetValue((Guid)dayLayerModel.Person.Id, out agentState))
+				!_rtaStateHolder.ActualAgentStates.TryGetValue((Guid)dayLayerModel.Person.Id, out agentStateReadModel))
 				return null;
-			return agentState;
+			return agentStateReadModel;
 		}
 
         public void RefreshProjection(IPerson person)

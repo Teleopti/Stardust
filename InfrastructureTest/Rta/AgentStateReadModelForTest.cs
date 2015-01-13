@@ -3,9 +3,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-	public class ActualAgentStateForTest : ActualAgentState
+	public class AgentStateReadModelForTest : AgentStateReadModel
 	{
-		public ActualAgentStateForTest()
+		public AgentStateReadModelForTest()
 		{
 			ReceivedTime = DateTime.UtcNow;
 			OriginalDataSourceId = "0";

@@ -20,15 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 				adherenceChanged = true;
 				return new rtaAggregationData
 				{
-					ActualAgentState = actualAgentState,
+					AgentStateReadModel = actualAgentState,
 					SiteId = state.SiteId,
 					TeamId = state.TeamId
 				};
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !StateInfo.AdherenceFor(data.ActualAgentState).Equals(state.Adherence);
-				data.ActualAgentState = actualAgentState;
+				adherenceChanged = !StateInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.Adherence);
+				data.AgentStateReadModel = actualAgentState;
 				data.TeamId = state.TeamId;
 				data.SiteId = state.SiteId;
 				return data;
@@ -40,28 +40,28 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		{
 			return _aggregationDatas
 					.Where(k => k.Value.TeamId == teamId)
-					.Count(x => StateInfo.AdherenceFor(x.Value.ActualAgentState).Equals(Domain.ApplicationLayer.Rta.Adherence.Out));
+					.Count(x => StateInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(Domain.ApplicationLayer.Rta.Adherence.Out));
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)
 		{
 			return _aggregationDatas
 				.Where(k => k.Value.SiteId == siteId)
-				.Count(x => StateInfo.AdherenceFor(x.Value.ActualAgentState).Equals(Domain.ApplicationLayer.Rta.Adherence.Out));
+				.Count(x => StateInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(Domain.ApplicationLayer.Rta.Adherence.Out));
 		}
 
-		public IEnumerable<IActualAgentState> GetActualAgentStateForTeam(Guid teamId)
+		public IEnumerable<AgentStateReadModel> GetActualAgentStateForTeam(Guid teamId)
 		{
 			return _aggregationDatas
 				.Where(k => k.Value.TeamId == teamId)
-				.Select(k => k.Value.ActualAgentState);
+				.Select(k => k.Value.AgentStateReadModel);
 		}
 
 		private class rtaAggregationData
 		{
 			public Guid SiteId { get; set; }
 			public Guid TeamId { get; set; }
-			public IActualAgentState ActualAgentState { get; set; }
+			public AgentStateReadModel AgentStateReadModel { get; set; }
 		}
 
 	}

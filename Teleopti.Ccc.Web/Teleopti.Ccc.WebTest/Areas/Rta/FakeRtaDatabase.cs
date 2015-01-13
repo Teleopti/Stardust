@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
 	{
-		private readonly List<IActualAgentState> _actualAgentStates = new List<IActualAgentState>();
+		private readonly List<AgentStateReadModel> _actualAgentStates = new List<AgentStateReadModel>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		//private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			public ScheduleLayer ScheduleLayer { get; set; }
 		}
 
-		public IActualAgentState PersistedActualAgentState { get; set; }
+		public AgentStateReadModel PersistedAgentStateReadModel { get; set; }
 
 		private Guid _businessUnitId;
 		private string _platformTypeId;
@@ -158,13 +158,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IFakeDataBuilder WithExistingState(Guid personId, int staffingEffect)
 		{
-			PersistActualAgentState(new ActualAgentState{PersonId = personId, StaffingEffect = staffingEffect});
+			PersistActualAgentState(new AgentStateReadModel{PersonId = personId, StaffingEffect = staffingEffect});
 			return this;
 		}
 
 		public IFakeDataBuilder WithExistingState(Guid personId, Guid activityId)
 		{
-			PersistActualAgentState(new ActualAgentState {PersonId = personId, ScheduledId = activityId});
+			PersistActualAgentState(new AgentStateReadModel {PersonId = personId, ScheduledId = activityId});
 			return this;
 		}
 
@@ -203,12 +203,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return states.Single();
 		}
 
-		public IActualAgentState GetCurrentActualAgentState(Guid personId)
+		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
 			return _actualAgentStates.FirstOrDefault(x => x.PersonId == personId);
 		}
 
-		public IEnumerable<IActualAgentState> GetActualAgentStates()
+		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
 		{
 			return _actualAgentStates;
 		}
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return new List<ScheduleLayer>(layers);
 		}
 
-		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
 			return from s in _actualAgentStates.ToList()
 				where s.OriginalDataSourceId == dataSourceId &&
@@ -255,13 +255,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return getOrAddState(stateCode, null, false, platformTypeId);
 		}
 
-		public void PersistActualAgentState(IActualAgentState actualAgentState)
+		public void PersistActualAgentState(AgentStateReadModel agentStateReadModel)
 		{
-			var previousState = (from s in _actualAgentStates where s.PersonId == actualAgentState.PersonId select s).FirstOrDefault();
+			var previousState = (from s in _actualAgentStates where s.PersonId == agentStateReadModel.PersonId select s).FirstOrDefault();
 			if (previousState != null)
 				_actualAgentStates.Remove(previousState);
-			_actualAgentStates.Add(actualAgentState);
-			PersistedActualAgentState = actualAgentState;
+			_actualAgentStates.Add(agentStateReadModel);
+			PersistedAgentStateReadModel = agentStateReadModel;
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()

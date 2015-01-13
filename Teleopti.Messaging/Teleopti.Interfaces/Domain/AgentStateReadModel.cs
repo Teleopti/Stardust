@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
 {
-	public class ActualAgentState : IActualAgentState
+	public class AgentStateReadModel
 	{
 		public Guid PlatformTypeId { get; set; }
 		public string OriginalDataSourceId { get; set; }

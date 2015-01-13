@@ -35,13 +35,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var person3 = createPerson(team);
 			person3.SetId(personId3);
 
-			var inAdherence1 = new ActualAgentState {StaffingEffect = 0};
-			var inAdherence2 = new ActualAgentState {StaffingEffect = 0};
-			var outOfAdherence = new ActualAgentState {StaffingEffect = 1};
+			var inAdherence1 = new AgentStateReadModel {StaffingEffect = 0};
+			var inAdherence2 = new AgentStateReadModel {StaffingEffect = 0};
+			var outOfAdherence = new AgentStateReadModel {StaffingEffect = 1};
 
 			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
 			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
-				.Return(new List<IActualAgentState> {inAdherence1, inAdherence2, outOfAdherence});
+				.Return(new List<AgentStateReadModel> {inAdherence1, inAdherence2, outOfAdherence});
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			teamRepository.Stub(x => x.Get(teamId)).Return(team);
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var person3 = createPerson(team);
 			person3.SetId(personId3);
 
-			var inAdherence1 = new ActualAgentState {StaffingEffect = 0};
-			var inAdherence2 = new ActualAgentState {StaffingEffect = 0};
-			var outOfAdherence = new ActualAgentState {StaffingEffect = -1};
+			var inAdherence1 = new AgentStateReadModel {StaffingEffect = 0};
+			var inAdherence2 = new AgentStateReadModel {StaffingEffect = 0};
+			var outOfAdherence = new AgentStateReadModel {StaffingEffect = -1};
 
 			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
 			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
-				.Return(new List<IActualAgentState> {inAdherence1, inAdherence2, outOfAdherence});
+				.Return(new List<AgentStateReadModel> {inAdherence1, inAdherence2, outOfAdherence});
 			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			teamRepository.Stub(x => x.Get(teamId)).Return(team);
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();

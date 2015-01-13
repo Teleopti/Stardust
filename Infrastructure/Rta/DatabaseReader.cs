@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return layers.OrderBy(l => l.EndDateTime).ToList();
 		}
 
-		public IActualAgentState GetCurrentActualAgentState(Guid personId)
+		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
 			LoggingSvc.DebugFormat("Getting old state for person: {0}", personId);
 
@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return agentState;
 		}
 
-		public IEnumerable<IActualAgentState> GetActualAgentStates()
+		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
 		{
 			return queryActualAgentStates(null);
 		}
 
-		private IEnumerable<IActualAgentState> queryActualAgentStates(Guid? personId)
+		private IEnumerable<AgentStateReadModel> queryActualAgentStates(Guid? personId)
 		{
 			var query = "SELECT * FROM RTA.ActualAgentState";
 			if (personId.HasValue)
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				{
 					while (reader.Read())
 					{
-						yield return new ActualAgentState
+						yield return new AgentStateReadModel
 						{
 							PlatformTypeId = reader.Guid("PlatformTypeId"),
 							BusinessUnitId = reader.NullableGuid("BusinessUnitId") ?? Guid.Empty,
@@ -132,9 +132,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public IEnumerable<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
-			var missingUsers = new List<IActualAgentState>();
+			var missingUsers = new List<AgentStateReadModel>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
 				var command = connection.CreateCommand();
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader != null && reader.Read())
 				{
-					missingUsers.Add(new ActualAgentState
+					missingUsers.Add(new AgentStateReadModel
 						{
 							BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
 							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),

@@ -119,22 +119,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<object>();
         }
 
-        public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
+        public IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons)
         {
-            return new List<IActualAgentState>();
+            return new List<AgentStateReadModel>();
         }
 
-	    public IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids)
+	    public IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids)
 	    {
-			return new List<IActualAgentState>();
+			return new List<AgentStateReadModel>();
 	    }
 
-	    public IActualAgentState LoadOneActualAgentState(Guid value)
+	    public AgentStateReadModel LoadOneActualAgentState(Guid value)
         {
-            return new ActualAgentState();
+            return new AgentStateReadModel();
         }
 
-        public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
+        public void AddOrUpdateActualAgentState(AgentStateReadModel agentStateReadModel)
         {
         }
 

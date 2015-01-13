@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		private static void AddTypeFilterExceptions(IDictionary<Type, IList<Type>> aggregateRoots)
 		{
 			aggregateRoots.Add(typeof (IStatisticTask), new List<Type> {typeof (IStatisticTask)});
-			aggregateRoots.Add(typeof (IActualAgentState), new List<Type> {typeof (IActualAgentState)});
+			aggregateRoots.Add(typeof (AgentStateReadModel), new List<Type> {typeof (AgentStateReadModel)});
 			aggregateRoots.Add(typeof (IJobResultProgress), new List<Type> {typeof (IJobResultProgress)});
 			aggregateRoots.Add(typeof (IMeetingChangedEntity), new List<Type> {typeof (IMeetingChangedEntity)});
 			aggregateRoots.Add(typeof (MeetingChangedEntity), new List<Type> {typeof (IMeetingChangedEntity)});

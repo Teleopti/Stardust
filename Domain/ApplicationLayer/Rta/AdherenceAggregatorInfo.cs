@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		Guid SiteId { get; }
 		Guid BusinessUnitId { get; }
 		Adherence Adherence { get; }
-		IActualAgentState MakeActualAgentState();
+		AgentStateReadModel MakeActualAgentState();
 	}
 
 	public class AdherenceAggregatorInfo : IAdherenceAggregatorInfo
 	{
-		private readonly IActualAgentState _actualAgentState;
+		private readonly AgentStateReadModel _agentStateReadModel;
 
-		public AdherenceAggregatorInfo(IActualAgentState actualAgentState, PersonOrganizationData person)
+		public AdherenceAggregatorInfo(AgentStateReadModel agentStateReadModel, PersonOrganizationData person)
 		{
-			_actualAgentState = actualAgentState;
+			_agentStateReadModel = agentStateReadModel;
 			PersonId = person.PersonId;
 			TeamId = person.TeamId;
 			SiteId = person.SiteId;
@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public Guid BusinessUnitId { get; private set; }
 		public Adherence Adherence { get; set; }
 
-		public IActualAgentState MakeActualAgentState()
+		public AgentStateReadModel MakeActualAgentState()
 		{
-			return _actualAgentState;
+			return _agentStateReadModel;
 		}
 
 	}

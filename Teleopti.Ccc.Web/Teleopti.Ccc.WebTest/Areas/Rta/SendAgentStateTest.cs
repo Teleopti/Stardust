@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.Should().Not.Be.Null();
 		}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.CheckForActivityChange(personId, businessUnitId);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.Should().Not.Be.Null();
 		}
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledId.Should().Be(activityId);
 		}
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledId.Should().Be(null);
 		}
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledId.Should().Be(null);
 		}
 
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(activityId);
 		}
 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(null);
 		}
 
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.ScheduledNextId.Should().Be(activityId);
 		}
 	}

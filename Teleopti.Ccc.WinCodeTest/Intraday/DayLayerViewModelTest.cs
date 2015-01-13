@@ -123,11 +123,11 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		public void VerifyCanRefreshAgentState()
 		{
 			rtaStateHolder.BackToRecord();
-			IActualAgentState agentState = new ActualAgentState();
-			agentState.AlarmStart = DateTime.UtcNow.AddMinutes(-45);
-			agentState.State = "MyCurrentStateDescription";
-			agentState.AlarmName = "MyAlarmName";
-			var dictionary = new Dictionary<Guid, IActualAgentState> { { (Guid)person.Id, agentState } };
+			AgentStateReadModel agentStateReadModel = new AgentStateReadModel();
+			agentStateReadModel.AlarmStart = DateTime.UtcNow.AddMinutes(-45);
+			agentStateReadModel.State = "MyCurrentStateDescription";
+			agentStateReadModel.AlarmName = "MyAlarmName";
+			var dictionary = new Dictionary<Guid, AgentStateReadModel> { { (Guid)person.Id, agentStateReadModel } };
 
 			target.Models.Add(new DayLayerModel(person, new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date),
 												new Team(), new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null), new CommonNameDescriptionSetting()));
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			mocks.VerifyAll();
 
 			Assert.That(target.Models.First().Person.Id, Is.EqualTo(person.Id));
-			Assert.That(target.Models.First().AlarmDescription, Is.EqualTo(agentState.AlarmName));
+			Assert.That(target.Models.First().AlarmDescription, Is.EqualTo(agentStateReadModel.AlarmName));
 		}
 		
         [Test]
@@ -208,14 +208,14 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[Test]
 		public void ShouldUpdateAgentState()
 		{
-			var actualAgentState = new ActualAgentState
+			var actualAgentState = new AgentStateReadModel
 				{
 					PersonId = guid,
 					ScheduledNext = "New Next Activity",
 					AlarmStart = DateTime.UtcNow.AddMinutes(-10),
 					AlarmName = "New Alarm Name"
 				};
-			var customEventArgs = new CustomEventArgs<IActualAgentState>(actualAgentState);
+			var customEventArgs = new CustomEventArgs<AgentStateReadModel>(actualAgentState);
 			person.SetId(guid);
 
 			daylayerModel.NextActivityDescription = "New Next Activity";
@@ -232,15 +232,15 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		public void ShouldUpdateAgentState_EmptyUpdate()
 		{
 			rtaStateHolder.Raise(r => r.AgentstateUpdated += null, this,
-			                     new CustomEventArgs<IActualAgentState>(new ActualAgentState()));
+			                     new CustomEventArgs<AgentStateReadModel>(new AgentStateReadModel()));
 		}
 
 		[Test]
 		public void ShouldInitializeRows()
 		{
 			target.Models.Add(daylayerModel);
-			IActualAgentState actualAgentState;
-			rtaStateHolder.Expect(r => r.ActualAgentStates.TryGetValue(guid, out actualAgentState)).Return(false);
+			AgentStateReadModel agentStateReadModel;
+			rtaStateHolder.Expect(r => r.ActualAgentStates.TryGetValue(guid, out agentStateReadModel)).Return(false);
 			target.InitializeRows();
 		}
 
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
-			var actualAgentState = new ActualAgentState
+			var actualAgentState = new AgentStateReadModel
 			{
 				PersonId = person.Id.Value,
 				AlarmId = Guid.NewGuid()
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
-			var actualAgentState = new ActualAgentState
+			var actualAgentState = new AgentStateReadModel
 			{
 				PersonId = person.Id.Value,
 			};

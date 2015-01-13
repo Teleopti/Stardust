@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
         private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
-		private readonly ConcurrentDictionary<Guid, IActualAgentState> _actualAgentStates = new ConcurrentDictionary<Guid, IActualAgentState>();
+		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _actualAgentStates = new ConcurrentDictionary<Guid, AgentStateReadModel>();
 		
         public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository)
         {
@@ -42,28 +42,28 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             get { return _schedulingResultStateHolder; }
         }
 
-	    public event EventHandler<CustomEventArgs<IActualAgentState>> AgentstateUpdated;
+	    public event EventHandler<CustomEventArgs<AgentStateReadModel>> AgentstateUpdated;
 
-        public IDictionary<Guid, IActualAgentState> ActualAgentStates
+        public IDictionary<Guid, AgentStateReadModel> ActualAgentStates
         {
-            get { return new ReadOnlyDictionary<Guid, IActualAgentState>(_actualAgentStates); }
+            get { return new ReadOnlyDictionary<Guid, AgentStateReadModel>(_actualAgentStates); }
         }
 
-        public void SetActualAgentState(IActualAgentState actualAgentState)
+        public void SetActualAgentState(AgentStateReadModel agentStateReadModel)
         {
-	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == actualAgentState.PersonId);
+	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == agentStateReadModel.PersonId);
 	        if (person == null || person.Id == null)
                 return;
-	        _actualAgentStates.AddOrUpdate((Guid) person.Id, actualAgentState, (key, oldState) =>
+	        _actualAgentStates.AddOrUpdate((Guid) person.Id, agentStateReadModel, (key, oldState) =>
 		        {
-			        if (oldState.ReceivedTime > actualAgentState.ReceivedTime)
+			        if (oldState.ReceivedTime > agentStateReadModel.ReceivedTime)
 				        return oldState;
 
-			        return actualAgentState;
+			        return agentStateReadModel;
 		        });
 	        var handler = AgentstateUpdated;
 			if (handler != null)
-				handler.Invoke(this, new CustomEventArgs<IActualAgentState>(actualAgentState));
+				handler.Invoke(this, new CustomEventArgs<AgentStateReadModel>(agentStateReadModel));
         }
 
         public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)

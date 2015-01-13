@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				StateCode = "statecode"
 			});
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.State.Should().Be("my state");
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.SaveState(state);
 			target.SaveState(state);
 
-			var sent = sender.AllNotifications.Where(n => n.DomainType == typeof(IActualAgentState).Name);
+			var sent = sender.AllNotifications.Where(n => n.DomainType == typeof(AgentStateReadModel).Name);
 			sent.Should().Have.Count.EqualTo(1);
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			var sent = sender.NotificationOfType<IActualAgentState>().DeseralizeActualAgentState();
+			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
 			sent.StateStart.Should().Be.EqualTo("2014-10-20 10:01".Utc());
 		}
 

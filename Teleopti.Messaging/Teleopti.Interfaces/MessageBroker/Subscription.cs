@@ -14,7 +14,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		// DO NOT USE THIS, PLEASE MAKE SURE THE SUBSCRIPTION DOES NOT CONTAIN THE DATASOURCE INSTEAD!
 		private static readonly StringCollection TypesWithDatasourceException = new StringCollection
 		{
-			typeof (IActualAgentState).Name,
+			typeof (AgentStateReadModel).Name,
 			"SiteAdherenceMessage",
 			"TeamAdherenceMessage",
 			"AgentsAdherenceMessage"

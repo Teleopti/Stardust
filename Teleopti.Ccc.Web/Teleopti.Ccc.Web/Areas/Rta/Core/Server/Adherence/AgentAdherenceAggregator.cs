@@ -31,19 +31,19 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 					.Select(s => createAgentsNotification(s, state.BusinessUnitId, state.TeamId));
 		}
 
-		private static AgentAdherenceStateInfo mapFrom(IActualAgentState actualAgentState)
+		private static AgentAdherenceStateInfo mapFrom(AgentStateReadModel agentStateReadModel)
 		{
 			return new AgentAdherenceStateInfo
 			{
-				PersonId = actualAgentState.PersonId,
-				Activity = actualAgentState.Scheduled,
-				Alarm = actualAgentState.AlarmName,
-				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(actualAgentState.Color ?? 0)),
-				AlarmStart = actualAgentState.AlarmStart,
-				NextActivity = actualAgentState.ScheduledNext,
-				NextActivityStartTime = actualAgentState.NextStart,
-				State = actualAgentState.State,
-				StateStart = actualAgentState.StateStart
+				PersonId = agentStateReadModel.PersonId,
+				Activity = agentStateReadModel.Scheduled,
+				Alarm = agentStateReadModel.AlarmName,
+				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(agentStateReadModel.Color ?? 0)),
+				AlarmStart = agentStateReadModel.AlarmStart,
+				NextActivity = agentStateReadModel.ScheduledNext,
+				NextActivityStartTime = agentStateReadModel.NextStart,
+				State = agentStateReadModel.State,
+				StateStart = agentStateReadModel.StateStart
 			};
 		}
 

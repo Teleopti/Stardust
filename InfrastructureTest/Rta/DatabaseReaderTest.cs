@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
-			var state = new ActualAgentStateForTest { PersonId = Guid.NewGuid() };
+			var state = new AgentStateReadModelForTest { PersonId = Guid.NewGuid() };
 			createWriter().PersistActualAgentState(state);
 			var target = createReader();
 
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var writer = createWriter();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			writer.PersistActualAgentState(new ActualAgentStateForTest { PersonId = personId1 });
-			writer.PersistActualAgentState(new ActualAgentStateForTest { PersonId = personId2 });
+			writer.PersistActualAgentState(new AgentStateReadModelForTest { PersonId = personId1 });
+			writer.PersistActualAgentState(new AgentStateReadModelForTest { PersonId = personId2 });
 			var target = createReader();
 
 			var result = target.GetActualAgentStates();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldGetCurrentActualAgentStatesWithAllData()
 		{
 			var writer = createWriter();
-			var state = new ActualAgentStateForTest
+			var state = new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
 				AlarmId = Guid.NewGuid(),
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadActualAgentStateWithoutBusinessUnit()
 		{
 			var writer = createWriter();
-			writer.PersistActualAgentState(new ActualAgentStateForTest());
+			writer.PersistActualAgentState(new AgentStateReadModelForTest());
 			setBusinessUnitInDbToNull();
 			var reader = createReader();
 

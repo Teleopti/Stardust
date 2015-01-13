@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				},
 			});
 
-			sender.NotificationsOfType<IActualAgentState>()
+			sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("CCC Logged out");
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				}
 			});
 
-			sender.NotificationsOfType<IActualAgentState>()
+			sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode1");
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				},
 			});
 
-			sender.NotificationsOfType<IActualAgentState>()
+			sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode2");
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				},
 			});
 
-			sender.NotificationsOfType<IActualAgentState>()
+			sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);

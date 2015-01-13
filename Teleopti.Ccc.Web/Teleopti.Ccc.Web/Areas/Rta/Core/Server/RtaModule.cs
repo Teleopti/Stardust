@@ -219,15 +219,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			}));
 		}
 
-		private static int countOutOfAdherence(IEnumerable<IActualAgentState> states)
+		private static int countOutOfAdherence(IEnumerable<AgentStateReadModel> states)
 		{
 			return states.Count(s => StateInfo.AdherenceFor(s) == Domain.ApplicationLayer.Rta.Adherence.Out);
 		}
 
-		private PersonOrganizationData organizationalData(IActualAgentState actualAgentState)
+		private PersonOrganizationData organizationalData(AgentStateReadModel agentStateReadModel)
 		{
 			return (from d in _reader.PersonOrganizationData()
-					where d.PersonId == actualAgentState.PersonId
+					where d.PersonId == agentStateReadModel.PersonId
 					select d).Single();
 		}
 

@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			var persons = new List<IPerson>{person};
 			_target.SetFilteredPersons(persons);
 			Assert.AreEqual(0, _target.ActualAgentStates.Count);
-			var state = new ActualAgentState {PersonId = id};
-			var state2 = new ActualAgentState {PersonId = Guid.NewGuid()};
+			var state = new AgentStateReadModel {PersonId = id};
+			var state2 = new AgentStateReadModel {PersonId = Guid.NewGuid()};
 			
 			_target.SetActualAgentState(state);
 			Assert.That(_target.ActualAgentStates.Count,Is.EqualTo(1));
@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(0, _target.ActualAgentStates.Count);
 
             var time = DateTime.UtcNow;
-            var state = new ActualAgentState { PersonId = id, ReceivedTime = time.AddSeconds(15)};
-            var state2 = new ActualAgentState { PersonId = id, ReceivedTime = time};
+            var state = new AgentStateReadModel { PersonId = id, ReceivedTime = time.AddSeconds(15)};
+            var state2 = new AgentStateReadModel { PersonId = id, ReceivedTime = time};
 
             _target.SetActualAgentState(state);
             Assert.That(_target.ActualAgentStates.Count, Is.EqualTo(1));

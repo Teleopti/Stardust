@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 			target.CheckForActivityChange(personId, businessUnitId);
 
-			var sent = sender.NotificationsOfType<IActualAgentState>().Last().DeseralizeActualAgentState();
+			var sent = sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState();
 			sent.StateCode.Should().Be("phone");
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 			target.CheckForActivityChange(personId, businessUnitId);
 
-			var sent = sender.NotificationsOfType<IActualAgentState>().Last().DeseralizeActualAgentState();
+			var sent = sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState();
 			sent.State.Should().Be("alarm");
 		}
 

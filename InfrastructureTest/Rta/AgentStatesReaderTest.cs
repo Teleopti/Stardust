@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var person1 = createPersonInTeam(team);
 			var person2 = createPersonInTeam(team);
 
-			var agentState1 = new ActualAgentState { PersonId = person1.Id.GetValueOrDefault() };
-			var agentState2 = new ActualAgentState { PersonId = person2.Id.GetValueOrDefault() };
+			var agentState1 = new AgentStateReadModel { PersonId = person1.Id.GetValueOrDefault() };
+			var agentState2 = new AgentStateReadModel { PersonId = person2.Id.GetValueOrDefault() };
 
 			var teamRepository = createTeamRepositoryForTeam(team);
 			var personRepository = createPersonRepositoryWithPeopleInTeam(team, teamPeriod, new[] {person1,person2});
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			person.Name = new Name("Ashley", "Andeen");
 
 			var utcDateTime = now.UtcDateTime();
-			var agentState1 = new ActualAgentState
+			var agentState1 = new AgentStateReadModel
 			                  {
 				                  PersonId = person.Id.GetValueOrDefault(),
 				                  State = "Ready",
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 
 			var teamRepository = createTeamRepositoryForTeam(teamWithoutPeople);
-			var statisticsRepository = createStatisticRepositoryWithAgentStates(new[] {new ActualAgentState() });
+			var statisticsRepository = createStatisticRepositoryWithAgentStates(new[] {new AgentStateReadModel() });
 			var personRepository = createPersonRepositoryWithPeopleInTeam(teamWithoutPeople, teamPeriod, new List<IPerson>());
 
 			var target = new AgentStatesReader(statisticsRepository, teamRepository, personRepository, now);
@@ -131,26 +131,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			return personRepository;
 		}
 
-		private static IRtaRepository createStatisticRepositoryWithAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
+		private static IRtaRepository createStatisticRepositoryWithAgentStates(IEnumerable<AgentStateReadModel> actualAgentStates)
 		{
 			return fakeStatisticRepo.WithAddAgentStates(actualAgentStates);
 		}
 
 		private class fakeStatisticRepo : IRtaRepository
 		{
-			private IEnumerable<IActualAgentState> _actualAgentStates;
+			private IEnumerable<AgentStateReadModel> _actualAgentStates;
 
-			public static IRtaRepository WithAddAgentStates(IEnumerable<IActualAgentState> actualAgentStates)
+			public static IRtaRepository WithAddAgentStates(IEnumerable<AgentStateReadModel> actualAgentStates)
 			{
 				return new fakeStatisticRepo{_actualAgentStates = actualAgentStates};
 			}
 
-			public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
+			public IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons)
 			{
 				throw new NotImplementedException();
 			}
 
-			public IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids)
+			public IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids)
 			{
 				var states = from a in _actualAgentStates
 					where personGuids.Contains(a.PersonId)
@@ -158,12 +158,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				return states.ToList();
 			}
 
-			public IActualAgentState LoadOneActualAgentState(Guid value)
+			public AgentStateReadModel LoadOneActualAgentState(Guid value)
 			{
 				throw new NotImplementedException();
 			}
 
-			public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
+			public void AddOrUpdateActualAgentState(AgentStateReadModel agentStateReadModel)
 			{
 				throw new NotImplementedException();
 			}

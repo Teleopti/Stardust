@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         IEnumerable<IRtaStateGroup> RtaStateGroups { get; }
         IEnumerable<IStateGroupActivityAlarm> StateGroupActivityAlarms { get; }
         ISchedulingResultStateHolder SchedulingResultStateHolder { get; }
-        IDictionary<Guid, IActualAgentState> ActualAgentStates { get; }
+        IDictionary<Guid, AgentStateReadModel> ActualAgentStates { get; }
         void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
         void VerifyDefaultStateGroupExists();
         void Initialize();
         IEnumerable<IPerson> FilteredPersons { get; }
-        void SetActualAgentState(IActualAgentState actualAgentState);
-		event EventHandler<CustomEventArgs<IActualAgentState>> AgentstateUpdated;
+        void SetActualAgentState(AgentStateReadModel agentStateReadModel);
+		event EventHandler<CustomEventArgs<AgentStateReadModel>> AgentstateUpdated;
     }
 }

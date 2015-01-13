@@ -8,15 +8,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public static class ActualAgentStateExtension
 	{
-		public static ActualAgentState DeseralizeActualAgentState(this Notification notification)
+		public static AgentStateReadModel DeseralizeActualAgentState(this Notification notification)
 		{
 			var stateBytes = Convert.FromBase64String(notification.BinaryData);
-			return JsonConvert.DeserializeObject<ActualAgentState>(Encoding.UTF8.GetString(stateBytes));
+			return JsonConvert.DeserializeObject<AgentStateReadModel>(Encoding.UTF8.GetString(stateBytes));
 		}
 
-		public static void SeralizeActualAgentState(this Notification notification, IActualAgentState actualAgentState)
+		public static void SeralizeActualAgentState(this Notification notification, AgentStateReadModel agentStateReadModel)
 		{
-			var domainObject = JsonConvert.SerializeObject(actualAgentState);
+			var domainObject = JsonConvert.SerializeObject(agentStateReadModel);
 			notification.BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject));
 		}
 

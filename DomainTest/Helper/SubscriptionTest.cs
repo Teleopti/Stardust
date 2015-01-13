@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void ShouldIgnoreBusinessUnitIdAndDataSourceForBatchEnd()
 		{
-			target.DomainType = typeof(IActualAgentState).Name;
+			target.DomainType = typeof(AgentStateReadModel).Name;
 			target.DomainId = Subscription.IdToString(Guid.Empty);
 			target.Route().Should().Be.EqualTo("/"+Subscription.IdToString(Guid.Empty)+ "/" + target.DomainType + "/id/" + target.DomainId);
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void ShouldIncludeBusinessUnitIdAndDataSourceForExternalAgentState()
 		{
-			target.DomainType = typeof (IActualAgentState).Name;
+			target.DomainType = typeof (AgentStateReadModel).Name;
 			target.Route().Should().Be.EqualTo("/" + target.BusinessUnitId + "/" + target.DomainType + "/id/" +
 			                                   domainId);
 		}

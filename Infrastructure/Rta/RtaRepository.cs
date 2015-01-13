@@ -15,38 +15,38 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
     public class RtaRepository : IRtaRepository
     {
-        public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
+        public IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons)
         {
             var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
-                var ret = new List<IActualAgentState>();
+                var ret = new List<AgentStateReadModel>();
                 foreach (var personList in guids.Batch(400))
                 {
                     ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
                         "SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
                         .SetParameterList("persons", personList)
-                        .SetResultTransformer(Transformers.AliasToBean(typeof(ActualAgentState)))
+                        .SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
                         .SetReadOnly(true)
-                        .List<IActualAgentState>());
+                        .List<AgentStateReadModel>());
                 }
                 return ret;
             }
         }
 
-        public IList<IActualAgentState> LoadLastAgentState(IEnumerable<Guid> personGuids)
+        public IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids)
         {
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
-                var ret = new List<IActualAgentState>();
+                var ret = new List<AgentStateReadModel>();
 				foreach (var personList in personGuids.Batch(400))
 				{
 					ret.AddRange(((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
 						"SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
 						.SetParameterList("persons", personList)
-						.SetResultTransformer(Transformers.AliasToBean(typeof (ActualAgentState)))
+						.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 						.SetReadOnly(true)
-						.List<IActualAgentState>().GroupBy(x => x.PersonId, (key, group) => group.First()));
+						.List<AgentStateReadModel>().GroupBy(x => x.PersonId, (key, group) => group.First()));
 				}
                 return ret;
             }

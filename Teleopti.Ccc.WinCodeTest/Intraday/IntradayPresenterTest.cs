@@ -363,16 +363,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             var uow = MockRepository.GenerateMock<IUnitOfWork>();
 
-            var agentState = new ActualAgentState();
+            var agentState = new AgentStateReadModel();
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 
             _rtaStateHolder.Stub(r => r.ActualAgentStates)
-                           .Return(new Dictionary<Guid, IActualAgentState> {{Guid.NewGuid(), agentState}});
+                           .Return(new Dictionary<Guid, AgentStateReadModel> {{Guid.NewGuid(), agentState}});
             _repositoryFactory.Stub(x => x.CreateStatisticRepository())
                               .Return(_statisticRepository);
 			_repositoryFactory.Stub(x => x.CreateRtaRepository())
 							  .Return(_rtaRepository);
-			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<IActualAgentState> { agentState });
+			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<AgentStateReadModel> { agentState });
 
             Enumerable.Range(0, 101)
                       .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
@@ -393,16 +393,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void VerifyOnLoad()
         {
             var uow = MockRepository.GenerateMock<IUnitOfWork>();
-            var agentState = new ActualAgentState();
+            var agentState = new AgentStateReadModel();
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
             
             _rtaStateHolder.Stub(r => r.ActualAgentStates)
-                           .Return(new Dictionary<Guid, IActualAgentState> { { Guid.NewGuid(), agentState } });
+                           .Return(new Dictionary<Guid, AgentStateReadModel> { { Guid.NewGuid(), agentState } });
             _repositoryFactory.Stub(x => x.CreateStatisticRepository())
                               .Return(_statisticRepository);
             _repositoryFactory.Stub(x => x.CreateRtaRepository())
                               .Return(_rtaRepository);
-			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<IActualAgentState> { agentState });
+			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<AgentStateReadModel> { agentState });
             _schedulerStateHolder.RequestedPeriod =
                 new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
                                                    TimeZoneInfo.Utc);

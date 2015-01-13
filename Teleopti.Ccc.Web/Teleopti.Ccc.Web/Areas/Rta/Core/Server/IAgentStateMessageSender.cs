@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			var actualAgentState = state.MakeActualAgentState();
 
-			var type = typeof(IActualAgentState);
+			var type = typeof(AgentStateReadModel);
 			var notification = new Notification
 			{
 				StartDate = Subscription.DateToString(actualAgentState.ReceivedTime),

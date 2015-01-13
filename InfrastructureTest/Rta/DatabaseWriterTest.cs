@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldPersistActualAgentState()
 		{
-			var state = new ActualAgentStateForTest();
+			var state = new AgentStateReadModelForTest();
 			var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
 
-			target.PersistActualAgentState(new ActualAgentStateForTest());
+			target.PersistActualAgentState(new AgentStateReadModelForTest());
 
 			var result = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now()).GetCurrentActualAgentState(state.PersonId);
 			result.Should().Not.Be.Null();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldPersistActualAgentStateWithBusinessUnit()
 		{
 			var businessUnitId = Guid.NewGuid();
-			var state = new ActualAgentStateForTest {BusinessUnitId = businessUnitId};
+			var state = new AgentStateReadModelForTest {BusinessUnitId = businessUnitId};
 			var target = createDatabaseWriter();
 
 			target.PersistActualAgentState(state);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var personId = Guid.NewGuid();
 			var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
 
-			target.PersistActualAgentState(new ActualAgentState
+			target.PersistActualAgentState(new AgentStateReadModel
 			{
 				PersonId = personId,
 				BusinessUnitId = Guid.NewGuid(),

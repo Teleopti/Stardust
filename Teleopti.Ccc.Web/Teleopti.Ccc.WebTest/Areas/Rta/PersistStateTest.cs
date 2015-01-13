@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.SaveState(state);
 
-			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode);
+			database.PersistedAgentStateReadModel.StateCode.Should().Be(state.StateCode);
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
 			target.SaveState(state);
 
-			database.PersistedActualAgentState.StateCode.Should().Be(state.StateCode.Substring(0, 25));
+			database.PersistedAgentStateReadModel.StateCode.Should().Be(state.StateCode.Substring(0, 25));
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			state.IsLoggedOn = false;
 			target.SaveState(state);
 
-			database.PersistedActualAgentState.StateCode.Should().Be(Web.Areas.Rta.Rta.LogOutStateCode);
+			database.PersistedAgentStateReadModel.StateCode.Should().Be(Web.Areas.Rta.Rta.LogOutStateCode);
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.CheckForActivityChange(personId, businessUnitId);
 
-			database.PersistedActualAgentState.PersonId.Should().Be(personId);
+			database.PersistedAgentStateReadModel.PersonId.Should().Be(personId);
 		}
 
 		[Test]
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			target.CheckForActivityChange(personId, businessUnitId);
 
-			database.PersistedActualAgentState.NextStart.Should().Be(null);
+			database.PersistedAgentStateReadModel.NextStart.Should().Be(null);
 		}
 	}
 }
