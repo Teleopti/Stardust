@@ -33,12 +33,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	<SkipSearch>false</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388822</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
-		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
+		<api_id>{2}</api_id>
+		<to>{3}</to>
+		<from>{4}</from>
+		<text>{5}</text>
+		<unicode>{6}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";
@@ -135,12 +136,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	<from>Teleopti WFM</from>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388480</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
-		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
+		<api_id>{2}</api_id>
+		<to>{3}</to>
+		<from>{4}</from>
+		<text>{5}</text>
+		<unicode>{6}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";
@@ -169,12 +171,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	<SkipSearch>true</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388822</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
-		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
+		<api_id>{2}</api_id>
+		<to>{3}</to>
+		<from>{4}</from>
+		<text>{5}</text>
+		<unicode>{6}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";
@@ -203,12 +206,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	<SkipSearch>false</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388822</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
-		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
+		<api_id>{2}</api_id>
+		<to>{3}</to>
+		<from>{4}</from>
+		<text>{5}</text>
+		<unicode>{6}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";
@@ -249,12 +253,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	<SkipSearch>false</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388822</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
-		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
+		<api_id>{2}</api_id>
+		<to>{3}</to>
+		<from>{4}</from>
+		<text>{5}</text>
+		<unicode>{6}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 </Config>";

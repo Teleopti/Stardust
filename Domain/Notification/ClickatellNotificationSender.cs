@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Notification
 																 .ToUpper();
 
 				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
-																		_notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
+																		_notificationConfigReader.Password, _notificationConfigReader.Api, mobileNumber, _notificationConfigReader.From,
 																		smsMessage, containUnicode ? 1 : 0);
 
 				Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);

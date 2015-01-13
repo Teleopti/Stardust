@@ -15,13 +15,13 @@
 	<SkipSearch>false</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
-		<api_id>3388822</api_id>
 		<user>{0}</user>
 		<password>{1}</password>
-		<to>{2}</to>
-		<from>{3}</from>
-		<text>{4}</text>
-		<unicode>{5}</unicode>
+		<api_id>{2}</api_id>
+		<to>{3}</to>
+		<from>{4}</from>
+		<text>{5}</text>
+		<unicode>{6}</unicode>
 		</sendMsg></clickAPI>]]>
 	</data>
 	<SmtpHost>smtp.domain.com</SmtpHost>
