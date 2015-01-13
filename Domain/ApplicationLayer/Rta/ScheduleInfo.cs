@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<ScheduleLayer> _previousActivity;
 		private readonly Lazy<DateTime> _currentShiftStartTime;
 		private readonly Lazy<DateTime> _currentShiftEndTime;
-		private readonly Lazy<DateTime> _shiftStartTimeForPreviousState;
-		private readonly Lazy<DateTime> _shiftEndTimeForPreviousState;
+		private readonly Lazy<DateTime> _shiftStartTimeForPreviousActivity;
+		private readonly Lazy<DateTime> _shiftEndTimeForPreviousActivity;
 
-		public ScheduleInfo(IDatabaseReader databaseReader, Guid personId, DateTime currentTime, DateTime previousTime)
+		public ScheduleInfo(IDatabaseReader databaseReader, Guid personId, DateTime currentTime)
 		{
 			_currentTime = currentTime;
 			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(personId));
@@ -26,9 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers.Value where l.EndDateTime < currentTime select l).LastOrDefault());
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
-			var activityForPreviousState = new Lazy<ScheduleLayer>(() => activityForTime(previousTime));
-			_shiftStartTimeForPreviousState = new Lazy<DateTime>(() => startTimeOfShift(activityForPreviousState.Value));
-			_shiftEndTimeForPreviousState = new Lazy<DateTime>(() => endTimeOfShift(activityForPreviousState.Value));
+			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
+			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 		}
 
 		public ScheduleLayer CurrentActivity()
@@ -78,8 +77,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime CurrentShiftStartTime { get { return _currentShiftStartTime.Value; } }
 		public DateTime CurrentShiftEndTime { get { return _currentShiftEndTime.Value; } }
 
-		public DateTime ShiftStartTimeForPreviousState { get { return _shiftStartTimeForPreviousState.Value; } }
-		public DateTime ShiftEndTimeForPreviousState { get { return _shiftEndTimeForPreviousState.Value; } }
+		public DateTime ShiftStartTimeForPreviousActivity { get { return _shiftStartTimeForPreviousActivity.Value; } }
+		public DateTime ShiftEndTimeForPreviousActivity { get { return _shiftEndTimeForPreviousActivity.Value; } }
 
 		private DateTime startTimeOfShift(ScheduleLayer activity)
 		{

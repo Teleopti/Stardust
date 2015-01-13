@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_previousState = new Lazy<AgentState>(() => agentStateAssembler.MakePreviousState(person.PersonId, previousActualAgentState.Value));
 			_personIsKnown = new Lazy<bool>(() => previousActualAgentState.Value != null);
 
-			_scheduleInfo = new ScheduleInfo(databaseReader, person.PersonId, currentTime, _previousState.Value.ReceivedTime);
+			_scheduleInfo = new ScheduleInfo(databaseReader, person.PersonId, currentTime);
 
 			_newState = new Lazy<AgentState>(() => agentStateAssembler.MakeCurrentState(_scheduleInfo, input, person, _previousState.Value, currentTime));
 
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime CurrentShiftStartTime { get { return _scheduleInfo.CurrentShiftStartTime; } }
 		public DateTime CurrentShiftEndTime { get { return _scheduleInfo.CurrentShiftEndTime; } }
 
-		public DateTime ShiftStartTimeForPreviousState { get { return _scheduleInfo.ShiftStartTimeForPreviousState; } }
-		public DateTime ShiftEndTimeForPreviousState { get { return _scheduleInfo.ShiftEndTimeForPreviousState; } }
+		public DateTime ShiftStartTimeForPreviousActivity { get { return _scheduleInfo.ShiftStartTimeForPreviousActivity; } }
+		public DateTime ShiftEndTimeForPreviousActivity { get { return _scheduleInfo.ShiftEndTimeForPreviousActivity; } }
 
 		public Adherence Adherence { get { return _adherence.Value; } }
 		public Adherence AdherenceForPreviousState { get { return _adherenceForPreviousState.Value; } }
