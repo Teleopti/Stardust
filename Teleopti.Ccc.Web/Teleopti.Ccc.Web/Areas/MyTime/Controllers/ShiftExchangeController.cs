@@ -1,9 +1,10 @@
 using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -42,6 +43,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult GetAbsence(DateOnly date)
 		{
 			return Json(_viewModelFactory.CreateViewModel((Guid)_loggedOnUser.CurrentUser().Id, date), JsonRequestBehavior.AllowGet);
+		}
+
+		[HttpGet]
+		public JsonResult GetAllWishShiftOptions()
+		{
+			return Json(new[]
+			{
+				new
+				{
+					Id = "working-shift",
+					Description = Resources.OptionWorkingDay
+				},
+				new
+				{
+					Id = "day-off",
+					Description = Resources.OptionDayOff
+				},
+				new
+				{
+					Id = "empty-day",
+					Description = Resources.OptionEmptyDay
+				},
+				new
+				{
+					Id = "day-off-or-empty-day",
+					Description = Resources.OptionDayOffOrEmptyDay
+				}
+			}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

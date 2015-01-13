@@ -31,9 +31,25 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.DateFormat = ko.observable();
 	self.Id = ko.observable(null);
 
+	self.Toggle31317Enabled = ko.observable(false);
+
+	var defaultShiftType = null;
+	self.AllShiftTypes = ko.observable([]);
+
+	self.WishShiftType = ko.observable(defaultShiftType);	
+	self.RequireDetails = ko.computed(function() {
+		return !self.Toggle31317Enabled() || self.WishShiftType() === defaultShiftType;
+	});
+
+	self.ChangeShiftType = function (selection) {
+		self.WishShiftType(selection);
+	};
+
 	self.LoadDefaultData = function (defaultData) {
 		self.StartTime(defaultData.defaultStartTime);
 		self.EndTime(defaultData.defaultEndTime);
+		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
+		self.getWishShiftTypes();
 	}
 
 	// interface called externally from schedule.js
@@ -113,7 +129,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.ColumnSizings = ko.computed(function () {
-		return self.IsUpdating() ? "col-md-6 col-xs-12" : "col-md-3 col-xs-12";
+		return self.IsUpdating() ? "col-md-6" : "col-md-3";
 	});
 
 	self.ErrorMessage = ko.observable('');
@@ -178,6 +194,18 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		});
 	};
 
+	self.getWishShiftTypes = function () {
+		ajax.Ajax({
+			url: "ShiftExchange/GetAllWishShiftOptions",
+			dataType: "json",
+			type: 'GET',
+			success: function (data, textStatus, jqXHR) {
+				self.AllShiftTypes = data;				
+				defaultShiftType = data[0];
+				self.WishShiftType(defaultShiftType);
+			}
+		});
+	}
 };
 
 

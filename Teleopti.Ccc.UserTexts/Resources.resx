@@ -12719,4 +12719,20 @@ Reduce the complexity to use these shifts.</value>
     <value>Manage Gamification Settings</value>
     <comment>Use for Gamification header</comment>
   </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Day Off</value>
+    <comment>Option in shift exchange offer</comment>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Day Off or Empty Day</value>
+    <comment>Option in shift exchange offer</comment>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>Empty Day</value>
+    <comment>Option in shift exchange offer</comment>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Working Day</value>
+    <comment>Option in shift exchange offer</comment>
+  </data>
 </root>

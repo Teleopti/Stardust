@@ -16814,11 +16814,47 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day Off.
+        /// </summary>
+        public static string OptionDayOff {
+            get {
+                return ResourceManager.GetString("OptionDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day Off or Empty Day.
+        /// </summary>
+        public static string OptionDayOffOrEmptyDay {
+            get {
+                return ResourceManager.GetString("OptionDayOffOrEmptyDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty Day.
+        /// </summary>
+        public static string OptionEmptyDay {
+            get {
+                return ResourceManager.GetString("OptionEmptyDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working Day.
+        /// </summary>
+        public static string OptionWorkingDay {
+            get {
+                return ResourceManager.GetString("OptionWorkingDay", resourceCulture);
             }
         }
         

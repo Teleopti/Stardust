@@ -56,11 +56,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
-		[When(@"I click add new shift exchange offer")]
+		[When(@"I add new shift exchange offer for current day")]
 		public void WhenIClickAddNewShiftExchangeOffer()
 		{
 			Browser.Interactions.Click(".shift-exchange-offer-add");
 			Browser.Interactions.AssertExists("#Request-add-section");
+		}
+
+		[When(@"I am looking for an empty day")]
+		public void WhenIAmLookingForAnEmptyDay()
+		{
+			Browser.Interactions.Click("#wish-list");
+			Browser.Interactions.Click("#empty-day");
+		}
+
+		[Then(@"no shift detail is needed")]
+		public void ThenNoShiftDetailIsNeeded()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".shift-exchange-offer-start-time");
 		}
 
 		[When(@"I unchecked the full day checkbox")]

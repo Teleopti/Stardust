@@ -213,6 +213,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature.cs">
+      <DependentUpon>ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature.cs">
       <DependentUpon>AbsenceReportFromMobileWeekSchedule.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -874,6 +879,10 @@
     <None Include="Messages\NotifyAgents.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>NotifyAgents.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\AbsenceReportFromMobileWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

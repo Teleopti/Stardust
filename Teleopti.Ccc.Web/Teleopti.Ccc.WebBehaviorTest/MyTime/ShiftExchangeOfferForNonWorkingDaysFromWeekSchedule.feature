@@ -1,6 +1,6 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
-Feature: Publish shift exchange offer
-	In order to trade for a shift that I rather want
+Feature: Publish shift exchange offer for non-working day
+	In order to trade for a non-working day 
 	As an agent 
 	I want to announce my current shift to trade with others
 
@@ -26,9 +26,10 @@ Background:
 	| Length     | 1          |
 	And I have a person period with 
 	| Field      | Value      |
-	| Start date | 2022-08-19 |
+	| Start date | 2022-08-19 |	
 
-Scenario: Add shift trade exchange offer for a shift
+
+Scenario: Add shift trade exchange offer for an empty shift
 	Given I have the role 'Full access to mytime'
 	And I have a shift with
 	| Field            | Value            |
@@ -39,10 +40,6 @@ Scenario: Add shift trade exchange offer for a shift
 	And I view my week schedule for date '2022-08-20'
 	When I click on the day summary for date '2022-08-20'
 	And I add new shift exchange offer for current day
-	Then I should see add shift exchange offer form with
-	| Field          | Value      |
-	| Offer end date | 2022-08-19 |
-	| Start time     | 8:00       |
-	| End time       | 17:00      |
-
+	And I am looking for an empty day
+	Then no shift detail is needed
 	
