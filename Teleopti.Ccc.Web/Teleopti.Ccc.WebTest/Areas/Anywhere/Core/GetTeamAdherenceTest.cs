@@ -45,5 +45,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 			result.OutOfAdherence.Should().Be(3);
 		}
 
+		[Test]
+		public void ShouldHaveZeroAdherenceIfReadModelDoesNotExists()
+		{
+			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
+			var teamId = Guid.NewGuid();
+			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
+			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(null);
+			var result = target.GetOutOfAdherenceLite(teamId.ToString());
+			result.Id.Should().Be(teamId.ToString());
+			result.OutOfAdherence.Should().Be(0);
+		}
+		
 	}
+
 }

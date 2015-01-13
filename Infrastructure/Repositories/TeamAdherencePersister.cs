@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public TeamAdherenceReadModel Get(Guid teamId)
 		{
-			var ret = getModel(teamId);
-			return ret ?? new TeamAdherenceReadModel(){TeamId = teamId};
+			return getModel(teamId);
 		}
 
 		public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)

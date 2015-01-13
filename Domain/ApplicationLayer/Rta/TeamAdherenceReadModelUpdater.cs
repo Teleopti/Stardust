@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			else
 			{
 				_persister.Persist(new TeamAdherenceReadModel() { TeamId = @event.TeamId, SiteId = @event.SiteId});
-
 			}
 		}
 

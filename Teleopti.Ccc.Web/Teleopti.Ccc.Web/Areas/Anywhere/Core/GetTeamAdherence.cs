@@ -58,6 +58,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public TeamOutOfAdherence GetOutOfAdherenceLite(string teamId)
 		{
 			var model = _teamAdherencePersister.Get(Guid.Parse(teamId));
+			if (model == null)
+			{
+				return new TeamOutOfAdherence { Id = teamId, OutOfAdherence = 0 };
+			} 
 			return new TeamOutOfAdherence {Id = model.TeamId.ToString(), OutOfAdherence = model.AgentsOutOfAdherence};
 		}
 
