@@ -270,6 +270,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
+			if (period.StartDateTime.Equals(period.EndDateTime)) return;
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
@@ -339,6 +340,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index,
 		                                IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
+
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
 			_shiftLayers.Insert(index,layer);

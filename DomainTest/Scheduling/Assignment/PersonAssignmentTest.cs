@@ -714,5 +714,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.That(expectedLayer.Period,Is.EqualTo(period));
 			Assert.That(expectedLayer is OvertimeShiftLayer);
 		}
+
+		[Test]
+		public void ShouldNotAddZeroLengthOvertimeShifts()
+		{
+			var overtime = new  Activity("overtime");
+			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(dateTime, dateTime);
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("multiplicatorset", MultiplicatorType.Overtime);
+			target.AddOvertimeActivity(overtime,period,multiplicatorDefinitionSet);
+			Assert.AreEqual(0, target.OvertimeActivities().Count());
+		}
 	}
 }
