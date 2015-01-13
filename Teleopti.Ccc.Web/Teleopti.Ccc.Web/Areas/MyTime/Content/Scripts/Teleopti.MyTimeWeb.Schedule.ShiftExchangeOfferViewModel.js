@@ -146,7 +146,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
 				EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
 				EndTimeNextDay: self.EndTimeNextDay(),
-				Id: self.Id()
+				Id: self.Id(),
+				WishShiftType: self.WishShiftType().Id
 			},
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
