@@ -232,6 +232,7 @@
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />
     <Compile Include="Areas\Messages\Controllers\ApplicationControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\ShiftExchangeOfferPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TimeFilterHelperTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\BadgeLeaderBoardReportControllerTest.cs" />
@@ -297,6 +298,8 @@
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
+    <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
+    <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\IoC\HangfireModuleTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerControllerTest.cs" />
@@ -411,7 +414,6 @@
     <Compile Include="Core\RequestContext\WebRequestPrincipalContextTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersisterTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\VisualLayerCalendarDayExtractorTest.cs" />
-    <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />

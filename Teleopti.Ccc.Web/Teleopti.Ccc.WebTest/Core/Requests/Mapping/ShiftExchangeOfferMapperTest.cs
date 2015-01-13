@@ -2,12 +2,12 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -19,18 +19,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IShiftExchangeOfferMapper _target;
 		private ShiftExchangeOfferForm _form;
 		private ILoggedOnUser _loggedOnUser;
-		private IScheduleRepository _scheduleRepository;
-		private ICurrentScenario _currentScenario;
-		private ICurrentTeleoptiPrincipal _principal;
+		private IScheduleProvider _scheduleProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			_currentScenario = MockRepository.GenerateMock<ICurrentScenario>();
-			_principal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			_target = new ShiftExchangeOfferMapper(_loggedOnUser, _scheduleRepository, _currentScenario, _principal);
+			_target = new ShiftExchangeOfferMapper(_loggedOnUser, _scheduleProvider);
 			_form = new ShiftExchangeOfferForm
 			{
 				Date = new DateTime(1547, 12, 1),
@@ -39,30 +34,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				OfferValidTo = new DateTime(1547, 12, 3),
 				EndTimeNextDay = false
 			};
-
 			var date = new DateOnly(_form.Date);
+			var scheduleDay = ScheduleDayFactory.Create(date);
+			_scheduleProvider = new FakeScheduleProvider(scheduleDay);
+
 			var currentUser = PersonFactory.CreatePerson();
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(currentUser);
-			var _mocks = new MockRepository();
-			var schedule = _mocks.StrictMock<IScheduleDictionary>();
-			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, currentUser);
-			_principal.Expect(x => x.Current()).Return(teleoptiPrincipal);
-			var scheduleDay = ScheduleDayFactory.Create(date);
-			using (_mocks.Record())
+			var mocks = new MockRepository();
+			var schedule = mocks.StrictMock<IScheduleDictionary>();
+			using (mocks.Record())
 			{
 				Expect.Call(schedule[currentUser].ScheduledDay(date)).Return(scheduleDay);
 			}
-
-			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(currentUser,
-				new ScheduleDictionaryLoadOptions(false, false)
-				{
-					LoadDaysAfterLeft = false,
-					LoadNotes = false,
-					LoadRestrictions = false
-				},
-				new DateOnlyPeriod(date, date), _currentScenario.Current())
-				).Return(schedule).IgnoreArguments();
 		}
 
 		[Test]

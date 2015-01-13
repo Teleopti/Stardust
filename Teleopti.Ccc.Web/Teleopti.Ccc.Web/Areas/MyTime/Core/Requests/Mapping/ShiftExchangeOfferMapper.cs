@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -9,19 +10,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftExchangeOfferMapper : IShiftExchangeOfferMapper
 	{
-		private readonly IScheduleRepository _scheduleRepository;
-		private readonly ICurrentScenario _currentScenario;
-		private readonly ICurrentTeleoptiPrincipal _principal;
+		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private IPerson _currentPerson;
 
-		public ShiftExchangeOfferMapper(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario currentScenario, 
-			ICurrentTeleoptiPrincipal principal)
+		public ShiftExchangeOfferMapper(ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider)
 		{
 			_loggedOnUser = loggedOnUser;
-			_scheduleRepository = scheduleRepository;
-			_currentScenario = currentScenario;
-			_principal = principal;
+			_scheduleProvider = scheduleProvider;
 		}
 
 		public IPersonRequest Map (ShiftExchangeOfferForm form, IPersonRequest personRequest)
@@ -48,10 +44,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private void mapOffer(ShiftExchangeOfferForm form, IPersonRequest request, ShiftExchangeOfferStatus status)
 		{
 			var date = new DateOnly(form.Date);
-			var schedule = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(_currentPerson,
-					new ScheduleDictionaryLoadOptions(false, false) { LoadDaysAfterLeft = false, LoadNotes = false, LoadRestrictions = false },
-					new DateOnlyPeriod(date, date), _currentScenario.Current());
-			var offer = new ShiftExchangeOffer(schedule[_currentPerson].ScheduledDay(date),
+			var options = new ScheduleDictionaryLoadOptions(false, false)
+			{
+				LoadDaysAfterLeft = false
+			};
+			var schedule = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date), options);
+					
+			var offer = new ShiftExchangeOffer(schedule.First(),
 				new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), createOptionalDateTimePeriod(form, date)), status);
 			request.Request = offer;
 		}
@@ -61,8 +60,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (form.StartTime.HasValue && form.EndTime.HasValue)
 				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.Add(form.StartTime.Value),
 					date.Date.Add(form.EndTime.Value.Add((form.EndTimeNextDay ? TimeSpan.FromDays(1) : TimeSpan.Zero))),
-					_principal.Current().Regional.TimeZone);
-
+					_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			
 			return null;
 		}
 	}
