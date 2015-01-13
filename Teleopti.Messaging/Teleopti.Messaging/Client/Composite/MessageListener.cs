@@ -63,10 +63,6 @@ namespace Teleopti.Messaging.Client.Composite
 			DateTime startDate,
 			DateTime endDate)
 		{
-			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
-			if (!domainObjectType.IsInterface)
-				throw new NotInterfaceTypeException();
-
 			var subscription = new Subscription
 			{
 				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
