@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			res.GetSubject(new NoFormatting()).Should().Be.EqualTo(expected);
 		}
 
-		//RobTodo: need check the type cast from request to offer
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapPersonRequestFromOffer()
 		{
 			const string expected = "hejhej";

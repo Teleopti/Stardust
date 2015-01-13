@@ -320,7 +320,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		private static void OpenExtendedTooltip(DateTime date)
 		{
-			//ROBTODO: I must do something
 			var extendedIndication = ExtendedIndication(date);
 			Browser.Interactions.AssertVisibleUsingJQuery(extendedIndication);
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());

@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class ShiftExchangeOfferHandlerTest
 	{
-		//RobTodo: need check the type cast from request to offer
-		[Test, Ignore]
+		[Test]
 		public void ShouldSetOfferInvalid()
 		{
 			const int checksum = 12345678;

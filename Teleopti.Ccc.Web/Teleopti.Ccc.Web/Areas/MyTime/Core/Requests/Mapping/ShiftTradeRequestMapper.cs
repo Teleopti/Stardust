@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var personTo = _personRepository.Get(form.PersonToId);
 			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
-			ShiftExchangeOffer offer = null;
+			IShiftExchangeOffer offer = null;
 			if (form.ShiftExchangeOfferId != null)
 			{
 				var personRequest = _personRequestRepository.FindPersonRequestByRequestId(form.ShiftExchangeOfferId.Value);
-				offer = (ShiftExchangeOffer) personRequest.Request;
+				offer = personRequest.Request as IShiftExchangeOffer;
 			}
 			foreach (var date in form.Dates)
 			{
