@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 																					_rtaStateHolder, _eventAggregator,
 																					_scheduleDictionarySaver, _unitOfWorkFactory,
 																					_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1));
+																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller());
 				}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

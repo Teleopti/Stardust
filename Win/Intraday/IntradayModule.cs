@@ -29,13 +29,10 @@ namespace Teleopti.Ccc.Win.Intraday
 	        builder.RegisterType<noMessageQueueRemoval>().As<IMessageQueueRemoval>().InstancePerLifetimeScope();
 	        builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().InstancePerLifetimeScope();
 	        builder.RegisterModule(SchedulePersistModule.ForOtherModules());
-
-	        builder.Register(c => new Poller(Convert.ToInt32(StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["RtaPollingInterval"])))
-		        .As<IPoller>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<Poller>().As<IPoller>().InstancePerLifetimeScope();
         }
 
-        private static void intradayGlobalWiring(ContainerBuilder builder)
+	    private static void intradayGlobalWiring(ContainerBuilder builder)
         {
             builder.RegisterType<SchedulingResultLoader>().As<ISchedulingResultLoader>().InstancePerLifetimeScope();
             builder.RegisterType<RtaStateHolder>().As<IRtaStateHolder>().InstancePerLifetimeScope();

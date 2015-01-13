@@ -5,19 +5,21 @@ namespace Teleopti.Ccc.WinCode.Intraday
 {
 	public interface IPoller : IDisposable
 	{
-		void Poll(Action action);
+		void Poll(int millisecondsInterval, Action action);
 	}
+
 	public class Poller : IPoller
 	{
 		private readonly Timer _timer;
 
-		public Poller(int millisecondsInterval)
+		public Poller()
 		{
-			_timer = new Timer(millisecondsInterval);
+			_timer = new Timer();
 		}
 
-		public void Poll(Action action)
+		public void Poll(int millisecondsInterval, Action action)
 		{
+			_timer.Interval = millisecondsInterval;
 			_timer.Elapsed += (s, e) =>
 			{
 				action();
