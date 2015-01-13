@@ -9584,9 +9584,9 @@ Period</comment>
     <value>Scheduled Overtime per Agent</value>
     <comment>Scheduled Overtime per Agent</comment>
   </data>
-  <data name="Illegal" xml:space="preserve">
+  <data name="Invalid" xml:space="preserve">
     <value>Invalid</value>
-    <comment>Illegal</comment>
+    <comment>Invalid </comment>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>The entered {0} is invalid</value>
@@ -12718,6 +12718,14 @@ Reduce the complexity to use these shifts.</value>
   <data name="ManageGamificationSettings" xml:space="preserve">
     <value>Manage Gamification Settings</value>
     <comment>Use for Gamification header</comment>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+    <comment>use in MyTime Web for shift exchange offer status in request list</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Expired</value>
+    <comment>use in MyTime Web for shift exchange offer status in request list</comment>
   </data>
   <data name="OptionDayOff" xml:space="preserve">
     <value>Day Off</value>

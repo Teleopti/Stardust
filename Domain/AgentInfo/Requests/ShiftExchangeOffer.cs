@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -26,14 +28,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_person = scheduleDay.Person;
 			_checksum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum();
 			_status = status;
-			
-			var start = new DateTime(_date.Year, _date.Month, _date.Day, 0, 0, 0, DateTimeKind.Utc);
-			SetPeriod(criteria.ShiftWithin ?? new DateTimePeriod(start, start.AddDays(1).AddSeconds (-1)));
+
+			SetPeriod(criteria.ShiftWithin ?? scheduleDay.DateOnlyAsPeriod.Period());
 		}
 
 		protected ShiftExchangeOffer()
 		{
-			_typeDescription = UserTexts.Resources.Announcement;
+			_typeDescription = Resources.Announcement;
 		}
 
 		public virtual DateOnly Date
@@ -99,6 +100,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			set { _status = value; }
 		}
 
+		public virtual string GetStatusText()
+		{
+			if (Status == ShiftExchangeOfferStatus.Pending)
+			{
+				return IsExpired() ? Resources.Expired : Resources.Pending;
+			}
+			if (Status == ShiftExchangeOfferStatus.Completed)
+			{
+				return Resources.Completed;
+			}
+
+			return Resources.Invalid;
+		}		
+
 		public virtual bool IsWantedSchedule(IScheduleDay scheduleToCheck)
 		{
 			var period = scheduleToCheck.ProjectionService().CreateProjection().Period();
@@ -115,6 +130,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					ChecksumTo = _checksum
 				}
 			}) { Offer = this });
+		}
+
+		public virtual bool IsExpired()
+		{
+			return Date <= DateOnly.Today;
 		}
 	}
 }

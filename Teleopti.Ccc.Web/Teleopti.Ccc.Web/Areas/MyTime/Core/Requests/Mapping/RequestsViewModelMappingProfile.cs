@@ -45,35 +45,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										 {
 											 if (s.Request.RequestType == RequestType.ShiftTradeRequest)
 											 {
-												 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod (_userTimeZone.TimeZone());
+												 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
 												 return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate
-													 ? dateOnlyPeriod.StartDate.ToShortDateString (_userCulture.GetCulture())
-													 : dateOnlyPeriod.ToShortDateString (_userCulture.GetCulture());
+													 ? dateOnlyPeriod.StartDate.ToShortDateString(_userCulture.GetCulture())
+													 : dateOnlyPeriod.ToShortDateString(_userCulture.GetCulture());
 											 }
 											 else
 											 {
-												 if (IsRequestFullDay (s))
+												 if (IsRequestFullDay(s))
 												 {
-													 return s.Request.Period.ToShortDateOnlyString (_userTimeZone.TimeZone());
-												 } 
-												 
-												 return s.Request.Period.ToShortDateTimeString (_userTimeZone.TimeZone());
+													 return s.Request.Period.ToShortDateOnlyString(_userTimeZone.TimeZone());
+												 }
+
+												 return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
 											 }
 										 }))
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 					{
-						var ret = s.StatusText;
-						if (s.IsPending)
-						{
-							var shiftTradeRequest = s.Request as IShiftTradeRequest;
-							if (shiftTradeRequest != null)
-							{
-								ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker).ToText(isCreatedByUser(s.Request, _loggedOnUser));
-							}
-						}
-						return ret;
+						return getStatusText(s);
 					}))
-				.ForMember (d => d.IsNextDay, o => o.ResolveUsing ((s =>
+				.ForMember(d => d.IsNextDay, o => o.ResolveUsing((s =>
 				{
 					var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
 					if (shiftExchangeOffer != null)
@@ -143,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s => IsRequestFullDay(s)))
 				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request, _loggedOnUser)))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : _personNameProvider.BuildNameFromSetting(s.Request.PersonFrom.Name)))
-				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty :  _personNameProvider.BuildNameFromSetting(s.Request.PersonTo.Name)))
+				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : _personNameProvider.BuildNameFromSetting(s.Request.PersonTo.Name)))
 				.ForMember(d => d.DenyReason, o => o.ResolveUsing(s =>
 																											{
 																												Resources.ResourceManager.IgnoreCase = true;
@@ -170,23 +161,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var stateId = PersonRequest.GetUnderlyingStateId(s);
 					if (s.Request is ShiftExchangeOffer)
 					{
-						return new[] {0, 3}.Contains (stateId) ? "GET, DELETE, PUT" : "GET, DELETE";
+						return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET, DELETE";
 					}
-					
-					return new[] {0, 3}.Contains (stateId) ? "GET, DELETE, PUT" : "GET";
-					
+
+					return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
+
 				}));
 		}
 
-		private Boolean IsRequestFullDay (IPersonRequest personRequest)
+		private string getStatusText(IPersonRequest s)
+		{
+			var ret = s.StatusText;
+			if (s.IsPending)
+			{
+				var shiftTradeRequest = s.Request as IShiftTradeRequest;
+				if (shiftTradeRequest != null)
+				{
+					ret += ", " +
+						   shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)
+							   .ToText(isCreatedByUser(s.Request, _loggedOnUser));
+					return ret;
+				}
+			}
+
+			var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
+			if (shiftExchangeOffer != null)
+			{
+				ret = shiftExchangeOffer.GetStatusText();
+			}
+			return ret;
+		}
+
+		private Boolean IsRequestFullDay(IPersonRequest personRequest)
 		{
 			var start =
-				TimeZoneInfo.ConvertTimeFromUtc (
+				TimeZoneInfo.ConvertTimeFromUtc(
 					personRequest.Request.Period.StartDateTime, _userTimeZone.TimeZone());
 			var end =
-				TimeZoneInfo.ConvertTimeFromUtc (
+				TimeZoneInfo.ConvertTimeFromUtc(
 					personRequest.Request.Period.EndDateTime, _userTimeZone.TimeZone());
-			var allDayEndDateTime = start.AddDays (1).AddMinutes (-1);
+			var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
 			return start.TimeOfDay == TimeSpan.Zero &&
 				   end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 		}

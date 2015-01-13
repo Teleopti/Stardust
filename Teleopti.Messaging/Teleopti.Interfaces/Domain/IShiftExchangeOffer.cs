@@ -20,5 +20,10 @@ namespace Teleopti.Interfaces.Domain
 		bool IsWantedSchedule(IScheduleDay scheduleToCheck);
 
 		IPersonRequest MakeShiftTradeRequest(IScheduleDay scheduleToTrade);
+
+		string GetStatusText();
+
+		bool IsExpired();
+
 	}
 }

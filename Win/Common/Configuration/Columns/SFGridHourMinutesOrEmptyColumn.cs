@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
 					e.Style.CellValue = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
 
 					string message = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.TheEnteredIsIllegal, HeaderText);
-					string header = UserTexts.Resources.Illegal + HeaderText;
+					string header = UserTexts.Resources.Invalid + HeaderText;
 
 					ViewBase.ShowErrorMessage(message, header);
 				}

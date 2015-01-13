@@ -29,16 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					var offerPersonRequests = _personRequestRepository.FindByStatus<ShiftExchangeOffer>(person, projectionChangedEventScheduleDay.Date, 0);
 					foreach (var offerPersonRequest in offerPersonRequests)
 					{
-						//var offer = (ShiftExchangeOffer)offerPersonRequest.Request;
-						var offer = offerPersonRequest.Request as IShiftExchangeOffer;
+						var offer = offerPersonRequest.Request as ShiftExchangeOffer;
 						if (projectionChangedEventScheduleDay.CheckSum != offer.Checksum)
 						{
 							offer.Status = ShiftExchangeOfferStatus.Invalid;
-							//RobToDo: PersonRequestCheckAuthorization?
-							//offerPersonRequest.Deny(null, 
-							//	string.Format(UserTexts.Resources.AnnouncementInvalidMessage,
-							//	offer.Date.ToShortDateString()),
-							//	new PersonRequestCheckAuthorization());
 
 							SendPushMessageService.CreateConversation(UserTexts.Resources.AnnouncementInvalid,
 							string.Format(UserTexts.Resources.AnnouncementInvalidMessage, offer.Date.ToShortDateString()), false)

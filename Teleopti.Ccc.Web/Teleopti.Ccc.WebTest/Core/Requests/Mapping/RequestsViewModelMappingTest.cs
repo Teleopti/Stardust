@@ -411,6 +411,40 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
+		public void ShouldMapShiftExchangeOfferStatusInPending()
+		{
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Pending);
+			requestViewModel.Status.Should().Contain(Resources.Pending);
+		}
+
+		[Test]
+		public void ShouldMapShiftExchangeOfferStatusCompleted()
+		{
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Completed);
+			requestViewModel.Status.Should().Contain(Resources.Completed);
+		}
+
+		[Test]
+		public void ShouldMapShiftExchangeOfferStatusInvalid()
+		{
+
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Invalid);
+			requestViewModel.Status.Should().Contain(Resources.Invalid);
+		}
+
+		[Test]
+		public void ShouldMapShiftExchangeOfferStatusExpired()
+		{
+			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Pending);
+			shiftExchangeOffer.Expect (x => x.IsExpired()).Return (true);
+
+			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			result.Status.Should().Contain(Resources.Expired);
+		}
+
+		[Test]
 		public void ShouldMapShiftTradeStatusOkByMeWhenUserHasCreatedTheShiftTradeRequest()
 		{
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
@@ -421,7 +455,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForOtherPart);
-		}
+		}		
 
 		[Test]
 		public void ShouldMapShiftTradeStatusOkByMeWhenUserHasRecievedTheShiftTradeRequest()
@@ -606,6 +640,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
 			personRequest.SetId(new Guid());
 			return personRequest;
+		}
+
+		private RequestViewModel  createRequestViewModelWithShiftExchangeOffer (ShiftExchangeOfferStatus status)
+		{
+			var shiftExchangeOffer = createShiftExchangeOffer(status);
+			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			return result;
+
+		}
+
+		
+		private ShiftExchangeOffer createShiftExchangeOffer (ShiftExchangeOfferStatus status)
+		{
+			var str = MockRepository.GenerateMock<ShiftExchangeOffer>();
+			str.Expect (c => c.Status).Return (status);
+			str.Expect (c => c.PersonFrom).Return (_loggedOnPerson);
+			return str;
 		}
 	}
 }
