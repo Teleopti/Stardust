@@ -42,13 +42,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void AgentsOutOfAdherenceShouldBeZeroIfReadModelDoesNotExist()
+		public void ShouldBeNullIfNotExists()
 		{
-			var siteId = Guid.NewGuid();
-			var model = Target.Get(siteId);
+			var model = Target.Get(Guid.NewGuid());
 
-			model.AgentsOutOfAdherence.Should().Be.EqualTo(0);
-			model.SiteId.Should().Be.EqualTo(siteId);
+			model.Should().Be.Null();
 		}
 
 		[Test]

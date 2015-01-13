@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public SiteAdherenceReadModel Get(Guid siteId)
 		{
-			var ret = getModel(siteId);
-			return ret ?? new SiteAdherenceReadModel() { SiteId = siteId };
+			return getModel(siteId);
 		}
 
 		public IEnumerable<SiteAdherenceReadModel> GetAll(Guid businessUnitId)
