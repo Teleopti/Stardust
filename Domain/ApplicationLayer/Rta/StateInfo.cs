@@ -11,49 +11,68 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		Out
 	}
 
+	public class AgentStateInfo
+	{
+		private readonly Lazy<AgentState> _previousState;
+		private readonly Lazy<AgentState> _currentState;
+
+		public AgentStateInfo(
+			ExternalUserStateInputModel input,
+			PersonOrganizationData person,
+			ScheduleInfo scheduleInfo, 
+			AgentStateAssembler agentStateAssembler,
+			IDatabaseReader databaseReader,
+			DateTime currentTime
+			)
+		{
+			var previousActualAgentState = new Lazy<AgentStateReadModel>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
+			_previousState = new Lazy<AgentState>(() => agentStateAssembler.MakePreviousState(person.PersonId, previousActualAgentState.Value));
+			_currentState = new Lazy<AgentState>(() => agentStateAssembler.MakeCurrentState(scheduleInfo, input, person, _previousState.Value, currentTime));
+		}
+
+		public AgentState CurrentState()
+		{
+			return _currentState.Value;
+		}
+
+		public AgentState PreviousState()
+		{
+			return _previousState.Value;
+		}
+	}
+
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
+		private readonly PersonOrganizationData _person;
 		private readonly Lazy<AgentState> _previousState;
-		private readonly Lazy<bool> _personIsKnown;
-		private readonly Lazy<AgentState> _newState;
+		private readonly Lazy<AgentState> _currentState;
+		private readonly ScheduleInfo _scheduleInfo;
+
+		private readonly IAlarmFinder _alarmFinder;
+
 		private readonly Lazy<Adherence> _adherence;
 		private readonly Lazy<Adherence> _adherenceForPreviousState;
 		private readonly Lazy<Adherence> _adherenceForPreviousStateAndCurrentActivity;
 		private readonly Lazy<Adherence> _adherenceForNewStateAndPreviousActivity;
 
-		private readonly PersonOrganizationData _person;
-		private readonly IAlarmFinder _alarmFinder;
-		private readonly ScheduleInfo _scheduleInfo;
-
-		public StateInfo(
-			IDatabaseReader databaseReader,
-			AgentStateAssembler agentStateAssembler,
-			IAlarmFinder alarmFinder,
-			PersonOrganizationData person,
-			ExternalUserStateInputModel input,
-			DateTime currentTime)
+		public StateInfo(ExternalUserStateInputModel input, PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, IAlarmFinder alarmFinder)
 		{
 			_input = input;
 			_person = person;
+			_scheduleInfo = scheduleInfo;
 			_alarmFinder = alarmFinder;
 
-			var previousActualAgentState = new Lazy<AgentStateReadModel>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
-			_previousState = new Lazy<AgentState>(() => agentStateAssembler.MakePreviousState(person.PersonId, previousActualAgentState.Value));
-			_personIsKnown = new Lazy<bool>(() => previousActualAgentState.Value != null);
+			_previousState = new Lazy<AgentState>(agentState.PreviousState);
+			_currentState = new Lazy<AgentState>(agentState.CurrentState);
 
-			_scheduleInfo = new ScheduleInfo(databaseReader, person.PersonId, currentTime);
-
-			_newState = new Lazy<AgentState>(() => agentStateAssembler.MakeCurrentState(_scheduleInfo, input, person, _previousState.Value, currentTime));
-
-			_adherence = new Lazy<Adherence>(() => AdherenceFor(_newState.Value));
-			_adherenceForPreviousState = new Lazy<Adherence>(() => !_personIsKnown.Value ? Adherence.None : AdherenceFor(_previousState.Value));
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(_previousState.Value.StateCode, _newState.Value.ActivityId));
+			_adherence = new Lazy<Adherence>(() => AdherenceFor(_currentState.Value));
+			_adherenceForPreviousState = new Lazy<Adherence>(() => AdherenceFor(_previousState.Value));
+			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(_previousState.Value.StateCode, _currentState.Value.ActivityId));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<Adherence>(() => adherenceFor(_input.StateCode, _scheduleInfo.PreviousActivity()));
-
 		}
 
-		public bool IsScheduled { get { return _newState.Value.ActivityId != null; } }
+		public bool IsScheduled { get { return _currentState.Value.ActivityId != null; } }
 		public bool WasScheduled { get { return _previousState.Value.ActivityId != null; } }
 
 		public ScheduleLayer CurrentActivity { get { return _scheduleInfo.CurrentActivity(); } }
@@ -74,28 +93,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public Guid TeamId { get { return _person.TeamId; } }
 		public Guid SiteId { get { return _person.SiteId; } }
 
-		public DateTime CurrentTime { get { return _newState.Value.ReceivedTime; } }
+		public DateTime CurrentTime { get { return _currentState.Value.ReceivedTime; } }
 		public DateTime PreviousStateTime { get { return _previousState.Value.ReceivedTime; } }
-		public Guid? CurrentStateId { get { return _newState.Value.StateGroupId; } }
+		public Guid? CurrentStateId { get { return _currentState.Value.StateGroupId; } }
 		public Guid? PreviousStateId { get { return _previousState.Value.StateGroupId; } }
-		public Guid? CurrentActivityId { get { return _newState.Value.ActivityId; } }
+		public Guid? CurrentActivityId { get { return _currentState.Value.ActivityId; } }
 		public Guid? PreviousActivityId { get { return _previousState.Value.ActivityId; } }
 
 		public bool Send
 		{
 			get
 			{
-				return !_newState.Value.ActivityId.Equals(_previousState.Value.ActivityId) ||
-					   !_newState.Value.StateGroupId.Equals(_previousState.Value.StateGroupId) ||
-					   !_newState.Value.NextActivityId.Equals(_previousState.Value.NextActivityId) ||
-					   !_newState.Value.NextActivityStartTime.Equals(_previousState.Value.NextActivityStartTime)
+				return !_currentState.Value.ActivityId.Equals(_previousState.Value.ActivityId) ||
+					   !_currentState.Value.StateGroupId.Equals(_previousState.Value.StateGroupId) ||
+					   !_currentState.Value.NextActivityId.Equals(_previousState.Value.NextActivityId) ||
+					   !_currentState.Value.NextActivityStartTime.Equals(_previousState.Value.NextActivityStartTime)
 					;
 			}
 		}
 
 		public AgentStateReadModel MakeActualAgentState()
 		{
-			return _newState.Value.MakeActualAgentState();
+			return _currentState.Value.MakeActualAgentState();
 		}
 
 		private Adherence adherenceFor(string stateCode, ScheduleLayer activity)

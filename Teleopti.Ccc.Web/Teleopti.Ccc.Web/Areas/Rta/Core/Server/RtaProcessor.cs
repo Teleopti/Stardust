@@ -53,20 +53,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			Guid businessUnitId
 			)
 		{
+			var currentTime = _now.UtcDateTime();
 
 			PersonOrganizationData person;
 			if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out person))
 				return;
 			person.BusinessUnitId = businessUnitId;
 
-			var info = new StateInfo(
-				_databaseReader,
-				_agentStateAssembler, 
-				_alarmFinder,
-				person,
-				input,
-				_now.UtcDateTime()
-				);
+			var scheduleInfo = new ScheduleInfo(_databaseReader, person.PersonId, currentTime);
+
+			var agentStateInfo = new AgentStateInfo(input, person, scheduleInfo, _agentStateAssembler, _databaseReader, currentTime);
+
+			var info = new StateInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
 
 			_actualAgentStateUpdater.Update(info);
 

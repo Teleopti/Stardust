@@ -13,29 +13,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_alarmFinder = alarmFinder;
 		}
 
-		public AgentState MakePreviousState(Guid personId, AgentStateReadModel stateReadModel)
+		public AgentState MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
 		{
-			if (stateReadModel == null)
-				return new AgentState()
+			if (fromStorage == null)
+				return new AgentState
 				{
 					PersonId = personId,
 					StateGroupId = Guid.NewGuid()
 				};
 			return new AgentState
 			{
-				PersonId = stateReadModel.PersonId,
-				BatchId = stateReadModel.BatchId,
-				PlatformTypeId = stateReadModel.PlatformTypeId,
-				SourceId = stateReadModel.OriginalDataSourceId,
-				ReceivedTime = stateReadModel.ReceivedTime,
-				StateCode = stateReadModel.StateCode,
-				StateGroupId = stateReadModel.StateId,
-				ActivityId = stateReadModel.ScheduledId,
-				NextActivityId = stateReadModel.ScheduledNextId,
-				NextActivityStartTime = stateReadModel.NextStart,
-				AlarmTypeId = stateReadModel.AlarmId,
-				AlarmTypeStartTime = stateReadModel.StateStart,
-				StaffingEffect = stateReadModel.StaffingEffect
+				PersonId = fromStorage.PersonId,
+				BatchId = fromStorage.BatchId,
+				PlatformTypeId = fromStorage.PlatformTypeId,
+				SourceId = fromStorage.OriginalDataSourceId,
+				ReceivedTime = fromStorage.ReceivedTime,
+				StateCode = fromStorage.StateCode,
+				StateGroupId = fromStorage.StateId,
+				ActivityId = fromStorage.ScheduledId,
+				NextActivityId = fromStorage.ScheduledNextId,
+				NextActivityStartTime = fromStorage.NextStart,
+				AlarmTypeId = fromStorage.AlarmId,
+				AlarmTypeStartTime = fromStorage.StateStart,
+				StaffingEffect = fromStorage.StaffingEffect
 			};
 		}
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var stateCode = input.StateCode ?? previous.StateCode;
 			var stateGroup = _alarmFinder.GetStateGroup(stateCode, platformTypeId, person.BusinessUnitId);
 			var alarm = _alarmFinder.GetAlarm(scheduleInfo.CurrentActivityId(), stateGroup.StateGroupId, person.BusinessUnitId) ?? new RtaAlarmLight();
-			var rtaAgentState = new AgentState
+			var agentState = new AgentState
 			{
 				PersonId = person.PersonId,
 				BatchId = input.IsSnapshot ? input.BatchId : previous.BatchId,
@@ -61,30 +61,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				NextActivityStartTime = scheduleInfo.NextActivityStartTime(),
 				StaffingEffect = alarm.StaffingEffect
 			};
-			rtaAgentState.UseAssembleMethod(() => new AgentStateReadModel
+			agentState.UseAssembleMethod(() => new AgentStateReadModel
 			{
 				AlarmId = alarm.AlarmTypeId,
 				AlarmName = alarm.Name,
-				BatchId = rtaAgentState.BatchId,
+				BatchId = agentState.BatchId,
 				AlarmStart = currentTime.AddTicks(alarm.ThresholdTime),
 				BusinessUnitId = person.BusinessUnitId,
 				Color = alarm.DisplayColor,
-				NextStart = rtaAgentState.NextActivityStartTime,
-				OriginalDataSourceId = rtaAgentState.SourceId,
-				PersonId = rtaAgentState.PersonId,
-				PlatformTypeId = rtaAgentState.PlatformTypeId,
-				ReceivedTime = rtaAgentState.ReceivedTime,
+				NextStart = agentState.NextActivityStartTime,
+				OriginalDataSourceId = agentState.SourceId,
+				PersonId = agentState.PersonId,
+				PlatformTypeId = agentState.PlatformTypeId,
+				ReceivedTime = agentState.ReceivedTime,
 				Scheduled = scheduleInfo.CurrentActivityName(),
 				ScheduledId = scheduleInfo.CurrentActivityId(),
 				ScheduledNext = scheduleInfo.NextActivityName(),
 				ScheduledNextId = scheduleInfo.NextActivityId(),
-				StaffingEffect = rtaAgentState.StaffingEffect,
+				StaffingEffect = agentState.StaffingEffect,
 				State = stateGroup.StateGroupName,
-				StateCode = rtaAgentState.StateCode,
-				StateId = rtaAgentState.StateGroupId,
-				StateStart = rtaAgentState.AlarmTypeStartTime
+				StateCode = agentState.StateCode,
+				StateId = agentState.StateGroupId,
+				StateStart = agentState.AlarmTypeStartTime
 			});
-			return rtaAgentState;
+			return agentState;
 		}
 	}
 }
