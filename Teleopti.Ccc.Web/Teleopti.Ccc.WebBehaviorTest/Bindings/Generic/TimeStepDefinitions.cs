@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenCurrentTimeIs(DateTime time)
 		{
 			CurrentTime.Set(time);
-			var featuresCheckActivityChanges = new List<string> {"Real time adherence percentage", "Manage Adherence"};
+			var featuresCheckActivityChanges = new List<string> { "Real time adherence percentage", "Real time adherence details" };
 			if (featuresCheckActivityChanges.Contains(FeatureContext.Current.FeatureInfo.Title))
 				PhoneStateStepDefinitions.CheckForActivityChange();
 		}

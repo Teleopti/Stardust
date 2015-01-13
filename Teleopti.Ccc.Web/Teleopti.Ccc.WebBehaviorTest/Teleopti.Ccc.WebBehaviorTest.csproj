@@ -128,8 +128,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\ManageAdherence.feature.cs">
-      <DependentUpon>ManageAdherence.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherenceDetails.feature.cs">
+      <DependentUpon>RealTimeAdherenceDetails.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -812,9 +812,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RealTimeAdherencePercentage.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\ManageAdherence.feature">
+    <None Include="Anywhere\RealTimeAdherenceDetails.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ManageAdherence.feature.cs</LastGenOutput>
+      <LastGenOutput>RealTimeAdherenceDetails.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ScheduleChangePermissionControl.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

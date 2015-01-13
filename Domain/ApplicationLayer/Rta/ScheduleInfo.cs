@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(personId));
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
-			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers.Value where l.EndDateTime < currentTime select l).LastOrDefault());
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));
 			_currentShiftEndTime = new Lazy<DateTime>(() => endTimeOfShift(_currentActivity.Value));
+			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers.Value where l.EndDateTime <= currentTime select l).LastOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private DateTime endTimeOfShift(ScheduleLayer activity)
 		{
 			if (activity == null)
-				return _currentTime;// ????
+				return DateTime.MinValue;
 			return activitiesThisShift(activity).Select(x => x.EndDateTime).Max();
 		}
 

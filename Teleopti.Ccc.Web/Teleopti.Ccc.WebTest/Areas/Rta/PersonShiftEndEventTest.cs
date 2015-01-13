@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
@@ -126,7 +127,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldSetShiftEndTimeToRecievedTimeWhenScheduleIsRemoved()
+		public void ShouldPublishOnTheEndingMinute()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			database
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
+				;
+
+			now.Is("2014-10-20 8:00");
+			target.CheckForActivityChange(personId, businessUnitId);
+			now.Is("2014-10-20 10:00");
+			target.CheckForActivityChange(personId, businessUnitId);
+
+			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
+			@event.ShiftStartTime.Should().Be("2014-10-20 8:00".Utc());
+			@event.ShiftEndTime.Should().Be("2014-10-20 10:00".Utc());
+		}
+
+		[Test, Ignore]
+		public void ShouldPublishWithCurrentTimeAsShiftEndTimeWhenShiftIsRemoved()
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
@@ -144,6 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
+			@event.ShiftStartTime.Should().Be("2014-10-20 10:00".Utc());
 			@event.ShiftEndTime.Should().Be("2014-10-20 10:30".Utc());
 		}
 
@@ -180,7 +204,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "2014-10-19 10:00", "2014-10-19 11:00")
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
-			dataSource.FakeName("datasource");
 
 			now.Is("2014-10-19 10:30");
 			target.CheckForActivityChange(personId, businessUnitId);
@@ -190,6 +213,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var @event = publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Last();
 			@event.ShiftEndTime.Should().Be("2014-10-20 11:00".Utc());
 		}
+
+
 	}
 
 }
