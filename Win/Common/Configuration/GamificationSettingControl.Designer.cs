@@ -139,6 +139,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonDeleteGamificationSetting.TabIndex = 7;
 			this.buttonDeleteGamificationSetting.TabStop = false;
 			this.buttonDeleteGamificationSetting.UseVisualStyle = true;
+			this.buttonDeleteGamificationSetting.Click += new System.EventHandler(this.buttonDeleteGamificationSettingClick);
 			// 
 			// buttonNew
 			// 
@@ -157,6 +158,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.buttonNew.TabIndex = 0;
 			this.buttonNew.UseVisualStyle = true;
 			this.buttonNew.UseVisualStyleBackColor = false;
+			this.buttonNew.Click += new System.EventHandler(this.buttonNewClick);
 			// 
 			// tableLayoutPanel3
 			// 
@@ -214,11 +216,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.comboBoxAdvGamificationSettings.Size = new System.Drawing.Size(252, 23);
 			this.comboBoxAdvGamificationSettings.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvGamificationSettings.TabIndex = 0;
+			this.comboBoxAdvGamificationSettings.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvGamificationSettingSelectedIndexChanged);
+			this.comboBoxAdvGamificationSettings.SelectedIndexChanging += new Syncfusion.Windows.Forms.Tools.SelectedIndexChangingHandler(this.comboBoxAdvGamificationSettingSelectedIndexChanging);
 			// 
 			// textBoxDescription
 			// 
 			this.textBoxDescription.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(115, 23);
+			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(251, 23);
 			this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxDescription.Location = new System.Drawing.Point(353, 41);
 			this.textBoxDescription.MaxLength = 50;
@@ -229,6 +233,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.textBoxDescription.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.textBoxDescription.TabIndex = 1;
 			this.textBoxDescription.WordWrap = false;
+			this.textBoxDescription.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDescriptionValidating);
+			this.textBoxDescription.Validated += new System.EventHandler(this.textBoxDescriptionValidated);
 			// 
 			// autoLabel1
 			// 

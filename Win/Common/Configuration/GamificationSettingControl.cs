@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly IToggleManager _toggleManager;
 		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
 		private IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
-
 		private Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
 		private Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
 
@@ -54,7 +53,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			InitializeComponent();
 
-			gamificationSettingRuleWithDifferentThresholdControl = new Lazy<GamificationSettingRuleWithDifferentThresholdControl>(
+			gamificationSettingRuleWithDifferentThresholdControl = new Lazy<GamificationSettingRuleWithDifferentThresholdControl>
+				(
 				() =>
 				{
 					var ctrl = new GamificationSettingRuleWithDifferentThresholdControl();
@@ -68,15 +68,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					ctrl.Dock = DockStyle.Fill;
 					return ctrl;
 				});
-
-			comboBoxAdvGamificationSettings.SelectedIndexChanging += comboBoxAdvGamificationSettingSelectedIndexChanging;
-			comboBoxAdvGamificationSettings.SelectedIndexChanged += comboBoxAdvGamificationSettingSelectedIndexChanged;
-			comboBoxAdvBadgeSettingRuleSets.SelectedIndexChanged += comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged;
-			textBoxDescription.Validating += textBoxDescriptionValidating;
-			textBoxDescription.Validated += textBoxDescriptionValidated;
-
-			buttonNew.Click += buttonNewClick;
-			buttonDeleteGamificationSetting.Click += buttonDeleteGamificationSettingClick;
 		}
 
 		public void InitializeDialogControl()
@@ -85,7 +76,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				reset.Hide();
 			}
-			
 			setColors();
 			SetTexts();
 		}
@@ -108,7 +98,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			loadGamificationSettingRuleSets();
 			loadGamificationSettings();
-			
 		}
 
 		public void  SaveChanges()
@@ -291,7 +280,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (_gamificationSettingList == null)
 			{
 				_gamificationSettingList = new List<IGamificationSetting>();
-				//_agentBadgeSettingList.AddRange(Repository.FindAllBadgeSettingsByDescription());
 			}
 
 			if (_gamificationSettingList.IsEmpty())
@@ -345,15 +333,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				tableLayoutPanel6.Controls.Add(gamificationSettingRuleWithDifferentThresholdControl.Value, 0, 2);
 			}
 			tableLayoutPanel6.SetColumnSpan(tableLayoutPanel6.GetControlFromPosition(0, 2), 2);
-		}
-
-		private void toggleRowDisplay(Control control, bool display, int height = 35)
-		{
-			var rowIndex = tableLayoutPanel6.GetRow(control);
-			if (rowIndex > 0)
-			{
-				tableLayoutPanel6.RowStyles[rowIndex].Height = display ? height : 0;
-			}
 		}
 
 		private void reset_Click(object sender, EventArgs e)
