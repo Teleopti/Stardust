@@ -68,35 +68,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public int CloseSnapshot(ExternalUserStateInputModel input, int dataSourceId)
 		{
-			var sourceId = input.SourceId;
-			var batchId = input.BatchId;
+			loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", input.BatchId, input.SourceId);
 
-			loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId, sourceId);
-			var missingAgents = getAgentStatesForMissingAgents(batchId, sourceId);
-			foreach (var agent in missingAgents)
-			{
-				input.StateCode = "CCC Logged out";
-				input.PlatformTypeId = Guid.Empty.ToString();
-				process(input, agent.PersonId, agent.BusinessUnitId);
-			}
-			return 1;
-		}
-
-		private IEnumerable<AgentStateReadModel> getAgentStatesForMissingAgents(DateTime batchid, string sourceId)
-		{
-			var missingAgents = _databaseReader.GetMissingAgentStatesFromBatch(batchid, sourceId);
+			input.StateCode = "CCC Logged out";
+			input.PlatformTypeId = Guid.Empty.ToString();
+			var missingAgents = _databaseReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
-											where !isAgentLoggedOut(a.StateCode,
-												a.PlatformTypeId,
-												a.BusinessUnitId)
+											let state = _alarmFinder.GetStateGroup(a.StateCode, a.PlatformTypeId, a.BusinessUnitId)
+											where !state.IsLogOutState
 											select a;
-			return agentsNotAlreadyLoggedOut;
-		}
-
-		private bool isAgentLoggedOut(string stateCode, Guid platformTypeId, Guid businessUnitId)
-		{
-			var state = _alarmFinder.GetStateGroup(stateCode, platformTypeId, businessUnitId);
-			return state != null && state.IsLogOutState;
+			foreach (var agent in agentsNotAlreadyLoggedOut)
+				process(input, agent.PersonId, agent.BusinessUnitId);
+			return 1;
 		}
 
 		private void process(
