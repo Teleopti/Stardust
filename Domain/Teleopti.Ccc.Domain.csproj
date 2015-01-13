@@ -206,7 +206,6 @@
     <Compile Include="ApplicationLayer\Rta\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\IActualAgentAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\IAlarmFinder.cs" />
     <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\INotificationCreator.cs" />

@@ -545,7 +545,6 @@
     <Compile Include="Areas\Rta\CheckForActivityChangeInputModel.cs" />
     <Compile Include="Areas\Rta\Controllers\ActivityChangeController.cs" />
     <Compile Include="Areas\Rta\Controllers\StateController.cs" />
-    <Compile Include="Areas\Rta\Core\Server\ActualAgentAssembler.cs" />
     <Compile Include="Areas\Rta\Core\Server\ActualAgentStateUpdater.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentAdherenceAggregator.cs" />

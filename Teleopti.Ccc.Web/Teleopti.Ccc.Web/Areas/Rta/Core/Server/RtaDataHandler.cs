@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -15,8 +16,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
 		private readonly IAdherenceAggregator _adherenceAggregator;
 
-		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IMbCacheFactory _mbCacheFactory;
+		private readonly IAlarmFinder _alarmFinder;
 		private readonly RtaProcessor _processor;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly PersonResolver _personResolver;
@@ -24,17 +25,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public RtaDataHandler(
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
-			IActualAgentAssembler agentAssembler,
+			IAlarmFinder alarmFinder,
 			IMbCacheFactory mbCacheFactory,
 			RtaProcessor processor
 			)
 		{
 			_databaseReader = databaseReader;
+			_alarmFinder = alarmFinder;
 			_personResolver = new PersonResolver(databaseReader);
 			_mbCacheFactory = mbCacheFactory;
 			_processor = processor;
 			_adherenceAggregator = adherenceAggregator;
-			_agentAssembler = agentAssembler;
 		}
 
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var batchId = input.BatchId;
 
 			loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId, sourceId);
-			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
+			var missingAgents = getAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents)
 			{
 				input.StateCode = "CCC Logged out";
@@ -79,6 +80,23 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				process(input, agent.PersonId, agent.BusinessUnitId);
 			}
 			return 1;
+		}
+
+		private IEnumerable<AgentStateReadModel> getAgentStatesForMissingAgents(DateTime batchid, string sourceId)
+		{
+			var missingAgents = _databaseReader.GetMissingAgentStatesFromBatch(batchid, sourceId);
+			var agentsNotAlreadyLoggedOut = from a in missingAgents
+											where !isAgentLoggedOut(a.StateCode,
+												a.PlatformTypeId,
+												a.BusinessUnitId)
+											select a;
+			return agentsNotAlreadyLoggedOut;
+		}
+
+		private bool isAgentLoggedOut(string stateCode, Guid platformTypeId, Guid businessUnitId)
+		{
+			var state = _alarmFinder.GetStateGroup(stateCode, platformTypeId, businessUnitId);
+			return state != null && state.IsLogOutState;
 		}
 
 		private void process(
