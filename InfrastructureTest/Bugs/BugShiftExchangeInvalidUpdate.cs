@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class BugShiftExchangeUpdate : DatabaseTest
+	public class BugShiftExchangeInvalidUpdate : DatabaseTest
 	{
 		private IPersonRequestRepository personRequestRepository;
 
