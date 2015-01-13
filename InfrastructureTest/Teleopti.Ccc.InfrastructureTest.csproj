@@ -174,6 +174,7 @@
     <Compile Include="ApplicationLayer\HangfireEventProcessorTest.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisherTest.cs" />
+    <Compile Include="Bugs\BugScheduleExchangeUpdate.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
