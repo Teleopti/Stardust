@@ -3,9 +3,6 @@
 --Date: 2015-1-5
 --Desc: Add new table for gamification setting in PBI 31318
 ---------------- 
-IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[DifferentialAgentBadgeSettings]'))
-   DROP TABLE [dbo].[DifferentialAgentBadgeSettings]
-GO
 IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[GamificationSetting]'))
    DROP TABLE [dbo].[GamificationSetting]
 GO
@@ -25,10 +22,10 @@ CREATE TABLE [dbo].[GamificationSetting](
 	[AnsweredCallsSilverThreshold] [int] NOT NULL,
 	[AnsweredCallsGoldThreshold] [int] NOT NULL,
 	[AHTBadgeEnabled] [bit] NOT NULL,
-	[AHTThreshold] [int] NOT NULL,
-	[AHTBronzeThreshold] [int] NOT NULL,
-	[AHTSilverThreshold] [int] NOT NULL,
-	[AHTGoldThreshold] [int] NOT NULL,
+	[AHTThreshold] [bigint] NOT NULL,
+	[AHTBronzeThreshold] [bigint] NOT NULL,
+	[AHTSilverThreshold] [bigint] NOT NULL,
+	[AHTGoldThreshold] [bigint] NOT NULL,
 	[AdherenceBadgeEnabled] [bit] NOT NULL,
 	[AdherenceThreshold] [int] NOT NULL,
 	[AdherenceBronzeThreshold] [int] NOT NULL,

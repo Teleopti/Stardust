@@ -199,6 +199,7 @@
     <Compile Include="Repositories\AgentBadgeWithRankTransactionRepositoryTest.cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
+    <Compile Include="Repositories\GamificationSettingtRepositoryTest.cs" />
     <Compile Include="Repositories\SiteAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Rta\ActualAgentStateForTest.cs" />
