@@ -415,6 +415,18 @@
     <Compile Include="Common\Configuration\GamificationSettingControl.Designer.cs">
       <DependentUpon>GamificationSettingControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Configuration\GamificationSettingRuleWithDifferentThresholdControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\GamificationSettingRuleWithDifferentThresholdControl.Designer.cs">
+      <DependentUpon>GamificationSettingRuleWithDifferentThresholdControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Configuration\GamificationSettingRuleWithRatioConvertorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\GamificationSettingRuleWithRatioConvertorControl.Designer.cs">
+      <DependentUpon>GamificationSettingRuleWithRatioConvertorControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Configuration\NotificationSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2422,6 +2434,12 @@
     <EmbeddedResource Include="Common\Configuration\GamificationSettingControl.resx">
       <DependentUpon>GamificationSettingControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\GamificationSettingRuleWithDifferentThresholdControl.resx">
+      <DependentUpon>GamificationSettingRuleWithDifferentThresholdControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\GamificationSettingRuleWithRatioConvertorControl.resx">
+      <DependentUpon>GamificationSettingRuleWithRatioConvertorControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\NotificationSettingsControl.resx">
       <DependentUpon>NotificationSettingsControl.cs</DependentUpon>

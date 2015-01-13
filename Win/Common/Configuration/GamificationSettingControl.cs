@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
 		private IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
 
+		private Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
+		private Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
+
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IGamificationSettingRepository Repository { get; private set; }
@@ -50,6 +53,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_toggleManager = toggleManager;
 
 			InitializeComponent();
+
+			gamificationSettingRuleWithDifferentThresholdControl = new Lazy<GamificationSettingRuleWithDifferentThresholdControl>(
+				() =>
+				{
+					var ctrl = new GamificationSettingRuleWithDifferentThresholdControl();
+					ctrl.Dock = DockStyle.Fill;
+					return ctrl;
+				});
+			gamificationSettingRuleWithRatioConvertorControl = new Lazy<GamificationSettingRuleWithRatioConvertorControl>(
+				() =>
+				{
+					var ctrl = new GamificationSettingRuleWithRatioConvertorControl();
+					ctrl.Dock = DockStyle.Fill;
+					return ctrl;
+				});
 
 			comboBoxAdvGamificationSettings.SelectedIndexChanging += comboBoxAdvGamificationSettingSelectedIndexChanging;
 			comboBoxAdvGamificationSettings.SelectedIndexChanged += comboBoxAdvGamificationSettingSelectedIndexChanged;
@@ -88,18 +106,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			setUpTimeSpanBoxes();
 			loadGamificationSettingRuleSets();
 			loadGamificationSettings();
 			
-		}
-		
-		private void setUpTimeSpanBoxes()
-		{
-			timeSpanTextBoxThresholdForAHT.SetSize(115, 33);
-			timeSpanTextBoxBronzeThresholdForAHT.SetSize(115, 33);
-			timeSpanTextBoxSilverThresholdForAHT.SetSize(115, 33);
-			timeSpanTextBoxGoldThresholdForAHT.SetSize(115, 33);
 		}
 
 		public void  SaveChanges()
@@ -326,57 +335,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			var ruleWithRatioConvertorSelected = kvp.Key == GamificationSettingRuleSet.RuleWithRatioConvertor;
 
-			labelSetThresholdForAnsweredCalls.Visible = ruleWithRatioConvertorSelected;
-			numericUpDownThresholdForAnsweredCalls.Visible = ruleWithRatioConvertorSelected;
-			toggleRowDisplay(numericUpDownThresholdForAnsweredCalls, ruleWithRatioConvertorSelected);
-
-			labelSetBadgeThresholdForAHT.Visible = ruleWithRatioConvertorSelected;
-			timeSpanTextBoxThresholdForAHT.Visible = ruleWithRatioConvertorSelected;
-			toggleRowDisplay(timeSpanTextBoxThresholdForAHT, ruleWithRatioConvertorSelected);
-
-			labelSetBadgeThresholdForAdherence.Visible = ruleWithRatioConvertorSelected;
-			doubleTextBoxThresholdForAdherence.Visible = ruleWithRatioConvertorSelected;
-			toggleRowDisplay(doubleTextBoxThresholdForAdherence, ruleWithRatioConvertorSelected);
-
-			labelRatioSplitter.Visible = ruleWithRatioConvertorSelected;
-			toggleRowDisplay(labelRatioSplitter, ruleWithRatioConvertorSelected, 10);
-			labelOneSilverBadgeEqualsBronzeBadgeCount.Visible = ruleWithRatioConvertorSelected;
-			numericUpDownSilverToBronzeBadgeRate.Visible = ruleWithRatioConvertorSelected;
-			toggleRowDisplay(numericUpDownSilverToBronzeBadgeRate, ruleWithRatioConvertorSelected);
-			labelOneGoldBadgeEqualsSilverBadgeCount.Visible = ruleWithRatioConvertorSelected;
-			numericUpDownGoldToSilverBadgeRate.Visible = ruleWithRatioConvertorSelected;
-			toggleRowDisplay(numericUpDownGoldToSilverBadgeRate, ruleWithRatioConvertorSelected);
-
-			labelSetBronzeThresholdForAnsweredCalls.Visible = !ruleWithRatioConvertorSelected;
-			labelSetSilverThresholdForAnsweredCalls.Visible = !ruleWithRatioConvertorSelected;
-			labelSetGoldThresholdForAnsweredCalls.Visible = !ruleWithRatioConvertorSelected;
-			numericUpDownBronzeThresholdForAnsweredCalls.Visible = !ruleWithRatioConvertorSelected;
-			numericUpDownSilverThresholdForAnsweredCalls.Visible = !ruleWithRatioConvertorSelected;
-			numericUpDownGoldThresholdForAnsweredCalls.Visible = !ruleWithRatioConvertorSelected;
-			toggleRowDisplay(numericUpDownBronzeThresholdForAnsweredCalls, !ruleWithRatioConvertorSelected);
-			toggleRowDisplay(numericUpDownSilverThresholdForAnsweredCalls, !ruleWithRatioConvertorSelected);
-			toggleRowDisplay(numericUpDownGoldThresholdForAnsweredCalls, !ruleWithRatioConvertorSelected);
-
-			labelSetBronzeBadgeThresholdForAHT.Visible = !ruleWithRatioConvertorSelected;
-			labelSetSilverBadgeThresholdForAHT.Visible = !ruleWithRatioConvertorSelected;
-			labelSetGoldBadgeThresholdForAHT.Visible = !ruleWithRatioConvertorSelected;
-			timeSpanTextBoxBronzeThresholdForAHT.Visible = !ruleWithRatioConvertorSelected;
-			timeSpanTextBoxSilverThresholdForAHT.Visible = !ruleWithRatioConvertorSelected;
-			timeSpanTextBoxGoldThresholdForAHT.Visible = !ruleWithRatioConvertorSelected;
-			toggleRowDisplay(timeSpanTextBoxBronzeThresholdForAHT, !ruleWithRatioConvertorSelected);
-			toggleRowDisplay(timeSpanTextBoxSilverThresholdForAHT, !ruleWithRatioConvertorSelected);
-			toggleRowDisplay(timeSpanTextBoxGoldThresholdForAHT, !ruleWithRatioConvertorSelected);
-
-			labelSetBadgeBronzeThresholdForAdherence.Visible = !ruleWithRatioConvertorSelected;
-			labelSetBadgeSilverThresholdForAdherence.Visible = !ruleWithRatioConvertorSelected;
-			labelSetBadgeGoldThresholdForAdherence.Visible = !ruleWithRatioConvertorSelected;
-			doubleTextBoxBronzeThresholdForAdherence.Visible = !ruleWithRatioConvertorSelected;
-			doubleTextBoxSilverThresholdForAdherence.Visible = !ruleWithRatioConvertorSelected;
-			doubleTextBoxGoldThresholdForAdherence.Visible = !ruleWithRatioConvertorSelected;
-			toggleRowDisplay(doubleTextBoxBronzeThresholdForAdherence, !ruleWithRatioConvertorSelected);
-			toggleRowDisplay(doubleTextBoxSilverThresholdForAdherence, !ruleWithRatioConvertorSelected);
-			toggleRowDisplay(doubleTextBoxGoldThresholdForAdherence, !ruleWithRatioConvertorSelected);
-
+			tableLayoutPanel6.Controls.Remove(tableLayoutPanel6.GetControlFromPosition(0,2));
+			if (ruleWithRatioConvertorSelected)
+			{
+				tableLayoutPanel6.Controls.Add(gamificationSettingRuleWithRatioConvertorControl.Value, 0, 2);
+			}
+			else
+			{
+				tableLayoutPanel6.Controls.Add(gamificationSettingRuleWithDifferentThresholdControl.Value, 0, 2);
+			}
+			tableLayoutPanel6.SetColumnSpan(tableLayoutPanel6.GetControlFromPosition(0, 2), 2);
 		}
 
 		private void toggleRowDisplay(Control control, bool display, int height = 35)
@@ -386,41 +354,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				tableLayoutPanel6.RowStyles[rowIndex].Height = display ? height : 0;
 			}
-		}
-
-		private void checkBoxUseBadgeForAnsweredCalls_CheckedChanged(object sender, EventArgs e)
-		{
-			numericUpDownThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
-			numericUpDownBronzeThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
-			numericUpDownSilverThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
-			numericUpDownGoldThresholdForAnsweredCalls.Enabled = ((CheckBox)sender).Checked;
-			updateRatioSettingsState();
-		}
-
-		private void checkBoxUseBadgeForAHT_CheckedChanged(object sender, EventArgs e)
-		{
-			timeSpanTextBoxThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
-			timeSpanTextBoxBronzeThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
-			timeSpanTextBoxSilverThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
-			timeSpanTextBoxGoldThresholdForAHT.Enabled = ((CheckBox)sender).Checked;
-			updateRatioSettingsState();
-		}
-
-		private void checkBoxUseBadgeForAdherence_CheckedChanged(object sender, EventArgs e)
-		{
-			doubleTextBoxThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
-			doubleTextBoxBronzeThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
-			doubleTextBoxSilverThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
-			doubleTextBoxGoldThresholdForAdherence.Enabled = ((CheckBox)sender).Checked;
-			updateRatioSettingsState();
-		}
-
-		private void updateRatioSettingsState()
-		{
-			var isAnyTypeEnabled = (doubleTextBoxThresholdForAdherence.Enabled || timeSpanTextBoxThresholdForAHT.Enabled ||
-			                    numericUpDownThresholdForAnsweredCalls.Enabled);
-			numericUpDownGoldToSilverBadgeRate.Enabled = isAnyTypeEnabled;
-			numericUpDownSilverToBronzeBadgeRate.Enabled = isAnyTypeEnabled;
 		}
 
 		private void reset_Click(object sender, EventArgs e)
