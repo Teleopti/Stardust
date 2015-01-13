@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
-			analyticsDataFactory.Setup(new FactAgent(Today.DateId, 1, AcdLoginId, readyTimeIntervalOne, 1, 1, 1, 1, 1, 1, 1, 1));
-			analyticsDataFactory.Setup(new FactAgent(Today.DateId, 2, AcdLoginId, readyTimeIntervalTwo, 1, 1, 1, 1, 1, 1, 1, 1));
-			analyticsDataFactory.Setup(new FactSchedule(PersonId, Today.DateId, Today.DateId, 0, scheduledReadyTimeOneMinutes, 1, ScenarioId));
-			analyticsDataFactory.Setup(new FactSchedule(PersonId, Today.DateId, Today.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
+			analyticsDataFactory.Setup(new FactAgent(TheDate.DateId, 1, AcdLoginId, readyTimeIntervalOne, 1, 1, 1, 1, 1, 1, 1, 1));
+			analyticsDataFactory.Setup(new FactAgent(TheDate.DateId, 2, AcdLoginId, readyTimeIntervalTwo, 1, 1, 1, 1, 1, 1, 1, 1));
+			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeOneMinutes, 1, ScenarioId));
+			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DailyMetricsForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(Today.Date)
+				.Execute(TheDate.Date)
 				.ReadyTimePerScheduledReadyTime.Should().Be.EqualTo(expectedPercentage);
 		}
 	}

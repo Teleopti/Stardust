@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
-			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId,1, 1, AcdLoginId, talkTimeQueueOne, afterCallWorkQueueOne, answeredCallsQueueOne, 1));
-			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId, 1, 2, AcdLoginId, talkTimeQueueTwo, afterCallWorkQueueTwo, answeredCallsQueueTwo, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(TheDate.DateId,1, 1, AcdLoginId, talkTimeQueueOne, afterCallWorkQueueOne, answeredCallsQueueOne, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(TheDate.DateId, 1, 2, AcdLoginId, talkTimeQueueTwo, afterCallWorkQueueTwo, answeredCallsQueueTwo, 1));
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DailyMetricsForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(Today.Date)
+				.Execute(TheDate.Date)
 				.HandlingTimeAverage.Should().Be.EqualTo(expectedPercentage);
 		}
 	}

@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["windows_username"] = "";
 			row["to_be_deleted"] = toBeDeleted;
 			row["valid_to_date_id_maxDate"] = validToDateId;
-			row["valid_to_interval_id_maxDate"] = 0;
+            row["valid_to_interval_id_maxDate"] = 95;
 			row["valid_from_date_id_local"]= validFromDateId;
 			row["valid_to_date_id_local"]= validToDateId;
 			row["valid_from_date_local"]= validFrom;

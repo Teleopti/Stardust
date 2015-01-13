@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
-			analyticsDataFactory.Setup(new FactSchedule(PersonId, Today.DateId, Today.DateId, 0, scheduledReadyTimeOneMinutes, 1, ScenarioId));
-			analyticsDataFactory.Setup(new FactSchedule(PersonId, Today.DateId, Today.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(Today.DateId, Today.DateId, 1, PersonId, 0, 0, deviationScheduleReadyOneSeconds, 0, true));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(Today.DateId, Today.DateId, 2, PersonId, 0, 0, deviationScheduleReadyTwoSeconds, 0, true));
+			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeOneMinutes, 1, ScenarioId));
+			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 1, PersonId, 0, 0, deviationScheduleReadyOneSeconds, 0, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 2, PersonId, 0, 0, deviationScheduleReadyTwoSeconds, 0, true));
 		}
 
 		[Test]
@@ -32,14 +32,14 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 			var minTarget = Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository));
-			var ex = minTarget.Execute(Today.Date).First();
+			var ex = minTarget.Execute(TheDate.Date).First();
 			ex.IntervalId.Should().Be.EqualTo(expectedLocalIntervalId());
 		}
 
 		private int expectedLocalIntervalId()
 		{
 			var cetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var localIntervalTime = TimeZoneHelper.ConvertFromUtc(Today.Date.Date.AddMinutes(15), cetTimeZone);
+			var localIntervalTime = TimeZoneHelper.ConvertFromUtc(TheDate.Date.Date.AddMinutes(15), cetTimeZone);
 			return getIdFromDateTime(localIntervalTime);
 		}
 

@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
-			analyticsDataFactory.Setup(new FactScheduleDeviation(Today.DateId, Today.DateId, 1, PersonId, contractTimeOneSeconds, 0, 0, deviationContractOneSeconds, true));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(Today.DateId, Today.DateId, 2, PersonId, contractTimeOTwoSeconds, 0, 0, deviationContractTwoSeconds, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 1, PersonId, contractTimeOneSeconds, 0, 0, deviationContractOneSeconds, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 2, PersonId, contractTimeOTwoSeconds, 0, 0, deviationContractTwoSeconds, true));
 		}
 
 		[Test]
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DailyMetricsForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(Today.Date)
+				.Execute(TheDate.Date)
 				.Adherence.Should().Be.EqualTo(expectedPercentage);
 		}
 	}

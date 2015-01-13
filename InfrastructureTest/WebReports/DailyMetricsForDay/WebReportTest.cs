@@ -18,96 +18,107 @@ using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture]
-	public abstract class WebReportTest : DatabaseTest
-	{
-		private AnalyticsDataFactory _analyticsDataFactory;
-		private IPerson _loggedOnUser;
-		private ExistingDatasources _datasource;
-		private IBusinessUnit _currentBusinessUnit;
-		protected int PersonId;
-		protected int AcdLoginId;
-		protected int ScenarioId;
-		protected TodayDate Today;
+    [TestFixture]
+    public abstract class WebReportTest : DatabaseTest
+    {
+        private AnalyticsDataFactory _analyticsDataFactory;
+        private IPerson _loggedOnUser;
+        private ExistingDatasources _datasource;
+        private IBusinessUnit _currentBusinessUnit;
+        protected int PersonId;
+        protected int AcdLoginId;
+        protected int ScenarioId;
+        protected SpecificDate TheDate;
 
-		protected override void SetupForRepositoryTest()
-		{
-			DataSourceHelper.ClearAnalyticsData();
-			_analyticsDataFactory = new AnalyticsDataFactory();
-			insertCommonData();
-		}
+        protected override void SetupForRepositoryTest()
+        {
+            DataSourceHelper.ClearAnalyticsData();
+            _analyticsDataFactory = new AnalyticsDataFactory();
+            insertCommonData();
+        }
 
-		private void insertCommonData()
-		{
-			var timeZones = new UtcAndCetTimeZones();
-			Today = new TodayDate();
-			var intervals = new QuarterOfAnHourInterval();
-			_datasource = new ExistingDatasources(timeZones);
+        private void insertCommonData()
+        {
+            var timeZones = new UtcAndCetTimeZones();
+            TheDate = new SpecificDate
+            {
+                Date = new DateOnly(2014, 2, 7),
+                DateId = 1
+            };
+            var yesterDay = new SpecificDate
+            {
+                Date = new DateOnly(2014, 2, 6),
+                DateId = 0
+            };
+            var intervals = new QuarterOfAnHourInterval();
+            _datasource = new ExistingDatasources(timeZones);
 
-			_loggedOnUser = new Domain.Common.Person();
-			_loggedOnUser.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			PersistAndRemoveFromUnitOfWork(_loggedOnUser);
+            _loggedOnUser = new Domain.Common.Person();
+            _loggedOnUser.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+            PersistAndRemoveFromUnitOfWork(_loggedOnUser);
 
-			_currentBusinessUnit = new Domain.Common.BusinessUnit("for test");
-			PersistAndRemoveFromUnitOfWork(_currentBusinessUnit);
+            _currentBusinessUnit = new Domain.Common.BusinessUnit("for test");
+            PersistAndRemoveFromUnitOfWork(_currentBusinessUnit);
 
-			PersonId = 76;
-			AcdLoginId = 123;
-			ScenarioId = 12;
+            PersonId = 76;
+            AcdLoginId = 123;
+            ScenarioId = 12;
 
-			var agent = new Person(_loggedOnUser, _datasource, PersonId, new DateTime(2010, 1, 1),
-						 new DateTime(2059, 12, 31), 0, -2, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
-			var scenario = Scenario.DefaultScenarioFor(ScenarioId, _currentBusinessUnit.Id.Value);
+            var agent = new Person(_loggedOnUser, _datasource, PersonId, new DateTime(2010, 1, 1),
+                         new DateTime(2059, 12, 31), yesterDay.DateId, TheDate.DateId, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+            var scenario = Scenario.DefaultScenarioFor(ScenarioId, _currentBusinessUnit.Id.Value);
 
-			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
-			_analyticsDataFactory.Setup(timeZones);
-			_analyticsDataFactory.Setup(Today);
-			_analyticsDataFactory.Setup(intervals);
-			_analyticsDataFactory.Setup(_datasource);
-			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(Today, intervals, timeZones, _datasource));
-			_analyticsDataFactory.Setup(agent);
-			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
-			_analyticsDataFactory.Setup(scenario);
+            _analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
+            _analyticsDataFactory.Setup(timeZones);
+            _analyticsDataFactory.Setup(TheDate);
+            _analyticsDataFactory.Setup(yesterDay);
+            _analyticsDataFactory.Setup(intervals);
+            _analyticsDataFactory.Setup(_datasource);
+            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(TheDate, intervals, timeZones, _datasource));
+            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(yesterDay, intervals, timeZones, _datasource));
+            _analyticsDataFactory.Setup(agent);
+            _analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
+            _analyticsDataFactory.Setup(scenario);
 
-			persistAdherenceSetting();
+            persistAdherenceSetting();
 
-			InsertTestSpecificData(_analyticsDataFactory);
-			_analyticsDataFactory.Persist();
-		}
+            InsertTestSpecificData(_analyticsDataFactory);
+            _analyticsDataFactory.Persist();
+        }
 
-		private void persistAdherenceSetting()
-		{
-			if (AdherenceSetting.HasValue)
-			{
-				var globalSettingRep = new GlobalSettingDataRepository(UnitOfWork);
-				var adherenceSetting = new GlobalSettingDataRepository(UnitOfWork).FindValueByKey(AdherenceReportSetting.Key,
-					new AdherenceReportSetting());
-				adherenceSetting.CalculationMethod = AdherenceSetting.Value;
-				globalSettingRep.PersistSettingValue(adherenceSetting);
-				UnitOfWork.Flush();
-			}
-		}
+        private void persistAdherenceSetting()
+        {
+            if (AdherenceSetting.HasValue)
+            {
+                var globalSettingRep = new GlobalSettingDataRepository(UnitOfWork);
+                var adherenceSetting = new GlobalSettingDataRepository(UnitOfWork).FindValueByKey(AdherenceReportSetting.Key,
+                    new AdherenceReportSetting());
+                adherenceSetting.CalculationMethod = AdherenceSetting.Value;
+                globalSettingRep.PersistSettingValue(adherenceSetting);
+                UnitOfWork.Flush();
+            }
+        }
 
-		protected abstract void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory);
+        protected abstract void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory);
 
-		protected T Target<T>(Func<ILoggedOnUser, ICurrentDataSource, ICurrentBusinessUnit, IGlobalSettingDataRepository ,T> createTarget )
-		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Expect(x => x.CurrentUser()).Return(_loggedOnUser);
+        protected T Target<T>(Func<ILoggedOnUser, ICurrentDataSource, ICurrentBusinessUnit, IGlobalSettingDataRepository, T> createTarget)
+        {
+            var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+            loggedOnUser.Expect(x => x.CurrentUser()).Return(_loggedOnUser);
 
-			var currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
-			currentBu.Expect(x => x.Current()).Return(_currentBusinessUnit);
+            var currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+            currentBu.Expect(x => x.Current()).Return(_currentBusinessUnit);
 
 
-			return createTarget(loggedOnUser, 
-				CurrentDataSource.Make(),	
-				currentBu,
-				new GlobalSettingDataRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
-		}
+            return createTarget(loggedOnUser,
+                CurrentDataSource.Make(),
+                currentBu,
+                new GlobalSettingDataRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
+        }
 
-		protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting
-		{
-			get { return null; }
-		}
-	}
+        protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting
+        {
+            get { return null; }
+        }
+    }
 }

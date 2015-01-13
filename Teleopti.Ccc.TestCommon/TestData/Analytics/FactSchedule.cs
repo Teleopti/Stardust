@@ -125,9 +125,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_scheduledReadyTimeM = scheduledReadyTimeMinutes;
 			_intervalId = intervalId;
 			_scenarioId = scenarioId;
+            _shiftStartdateId = shiftStartdateLocalId;
+            _shiftEnddateId = shiftStartdateLocalId;
 			_activityStarttime = DateTime.Now;
 			_activityEndtime = DateTime.Now;
-			_shiftStarttime = DateTime.Now;
+            _shiftStarttime = DateTime.Now;
 			_shiftEndtime = DateTime.Now;
 		}
 
