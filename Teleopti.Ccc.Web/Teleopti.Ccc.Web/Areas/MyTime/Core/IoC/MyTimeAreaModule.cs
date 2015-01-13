@@ -242,9 +242,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>();
-			builder.RegisterType<DefaultScenarioScheduleProvider>()
-				.As<IScheduleProvider>()
-				.As<IStudentAvailabilityProvider>();
+			builder.RegisterType<DefaultScenarioScheduleProvider>().As<IScheduleProvider>();
+			builder.RegisterType<DefaultScenarioForStudentAvailabilityScheduleProvider>().As<IStudentAvailabilityProvider>();
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<LinkProvider>().As<ILinkProvider>();
