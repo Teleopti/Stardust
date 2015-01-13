@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			meetingCommand = mocks.StrictMock < OnEventMeetingMessageCommand>();
 			toggleManger = mocks.StrictMock<IToggleManager>();
             target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, unitOfWorkFactory, null,
-                                           null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null, new Poller(1), toggleManger);
+                                           null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null, new Poller(), toggleManger);
         }
 
         [Test]

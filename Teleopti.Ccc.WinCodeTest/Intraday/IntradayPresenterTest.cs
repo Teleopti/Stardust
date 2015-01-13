@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 																					_rtaStateHolder, _eventAggregator,
 																					_scheduleDictionarySaver, _unitOfWorkFactory,
 																					_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1), _toggleManger);
+																					_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(), _toggleManger);
 				}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				_rtaStateHolder, _eventAggregator,
 				_scheduleDictionarySaver, _unitOfWorkFactory,
 				_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
-				_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(1), _toggleManger);
+				_scheduleCommand, _meetingCommand, _loadStatisticCommand, new Poller(), _toggleManger);
             target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
         }
 
@@ -445,17 +445,15 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	    [Test]
 	    public void ShouldUsePollForRtaStatesWhenFeatureEnabled()
 	    {
-		    var poller = MockRepository.GenerateMock<IPoller>();
-
 		    _toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(true);
-
+		    var poller = MockRepository.GenerateMock<IPoller>();
 		    _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
 			    _eventAggregator, null, _unitOfWorkFactory, _repositoryFactory, _differenceService,
 			    _statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand, poller,
 			    _toggleManger);
 		    _target.Initialize();
 
-		    poller.AssertWasCalled(x => x.Poll(null), o => o.IgnoreArguments());
+		    poller.AssertWasCalled(x => x.Poll(1, null), o => o.IgnoreArguments());
 	    }
 
 	    [Test]
