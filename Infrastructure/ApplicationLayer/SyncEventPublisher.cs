@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class SyncEventPublisher : ISyncEventPublisher
+	public class SyncEventPublisher : ISyncEventPublisher, ICurrentEventPublisher
 	{
 		private readonly IResolve _resolver;
 
@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			mgr.DoFixups(); // ObjectManager calls SetObjectData
 
 			// voila, e is unmodified save for _remoteStackTraceString
+		}
+
+		public IEventPublisher Current()
+		{
+			return this;
 		}
 	}
 }

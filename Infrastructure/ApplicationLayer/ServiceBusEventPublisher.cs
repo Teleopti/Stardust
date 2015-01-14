@@ -1,8 +1,9 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class ServiceBusEventPublisher : IServiceBusEventPublisher
+	public class ServiceBusEventPublisher : IServiceBusEventPublisher, ICurrentEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
 
@@ -14,6 +15,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public void Publish(IEvent @event)
 		{
 			_sender.Send(@event, true);
+		}
+
+		public IEventPublisher Current()
+		{
+			return this;
 		}
 	}
 }
