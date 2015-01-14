@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	public class Rta : IRta
 	{
 		private readonly RtaDataHandler _rtaDataHandler;
-		private readonly INow _nowx;
 		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
