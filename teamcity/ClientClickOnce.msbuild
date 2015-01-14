@@ -2,14 +2,14 @@
 
 <Project DefaultTargets="ClientClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
+		<WorkingDirectory>WillBeSetByTC</WorkingDirectory>
+		<OutputDirectory>WillBeSetByTC</OutputDirectory>
+		<CCCVersion>WillBeSetByTC</CCCVersion>
+		
 		<MageTool>\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server\mage.exe</MageTool>
-		<WorkingDirectory>c:\stuff\ccc\teleopticcc</WorkingDirectory>
 		<SourceDirectory>$(WorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\Release</SourceDirectory>
-		<OutputDirectory>d:\temp\output</OutputDirectory>
 		<NameOfClickOnceItem>Teleopti.Ccc.SmartClientPortal.Shell</NameOfClickOnceItem>
-		<CCCVersion>x.x.x.x</CCCVersion>
 		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
-		<IconFile>Teleopti.Ccc.SmartClientPortal.Shell.ico</IconFile>
 	</PropertyGroup>
 	
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -19,6 +19,7 @@
 			<ManifestFile>$(OutputDirectory)\$(NameOfClickOnceItem).exe.manifest</ManifestFile>
 			<ApplicationName>$(NameOfClickOnceItem).application</ApplicationName>
 			<ApplicationFile>$(OutputDirectory)\$(ApplicationName)</ApplicationFile>
+			<IconFile>Teleopti.Ccc.SmartClientPortal.Shell.ico</IconFile>
 		</PropertyGroup>
 	
 		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)" -IconFile "$(IconFile)"'/>
