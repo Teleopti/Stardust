@@ -44,20 +44,22 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 
 		private IDisposable overrideBusinessUnitFilter()
 		{
-			if (_context.Current() == null) return null;
+			var id = BusinessUnitIdForRequest(_context);
+			return id.HasValue ? _overrider.OverrideWith(id.Value) : null;
+		}
+
+		public static Guid? BusinessUnitIdForRequest(ICurrentHttpContext context)
+		{
+			if (context.Current() == null) return null;
 			var buId = string.Empty;
-			var queryString = _context.Current().Request.QueryString;
+			var queryString = context.Current().Request.QueryString;
 			if (queryString != null)
 				buId = queryString["BusinessUnitId"];
-			var headers = _context.Current().Request.Headers;
+			var headers = context.Current().Request.Headers;
 			if (headers != null)
-			{
 				buId = headers["X-Business-Unit-Filter"] ?? buId;
-			}
-
 			if (string.IsNullOrEmpty(buId)) return null;
-			var id = Guid.Parse(buId);
-			return _overrider.OverrideWith(id);
+			return Guid.Parse(buId);
 		}
 
 		private void diposeBusinessUnitFilterOverride()
@@ -67,4 +69,5 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 			_businessUnitOverrideScope = null;
 		}
 	}
+
 }

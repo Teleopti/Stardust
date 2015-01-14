@@ -85,21 +85,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, HttpGet]
 		public virtual JsonResult GetOutOfAdherenceForAllSites()
 		{
-			if (_currentHttpContext.Current() == null) return null;
-			var buId = string.Empty;
-			var queryString = _currentHttpContext.Current().Request.QueryString;
-			if (queryString != null)
-				buId = queryString["BusinessUnitId"];
-			var headers = _currentHttpContext.Current().Request.Headers;
-			if (headers != null)
-			{
-				buId = headers["X-Business-Unit-Filter"] ?? buId;
-			}
-
-			if (string.IsNullOrEmpty(buId)) return null;
-			var id = Guid.Parse(buId);
-		
-			return Json(_getAdherence.ReadAdherenceForAllSites(id), JsonRequestBehavior.AllowGet);
+			var id = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
+			return Json(_getAdherence.ReadAdherenceForAllSites(id.Value), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
