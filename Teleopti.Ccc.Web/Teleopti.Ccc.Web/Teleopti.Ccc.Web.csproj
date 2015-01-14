@@ -426,6 +426,7 @@
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\BadgeLeaderBoardReportOptionFactory.cs" />
     <Compile Include="Areas\MyTime\Core\BadgeLeaderBoardReport\ViewModelFactory\IBadgeLeaderBoardReportOptionFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\EnumByStringModelBinder.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftExchangeOfferMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftExchangeOfferMapper.cs" />
     <Compile Include="Areas\MyTime\Models\BadgeLeaderBoardReport\LeaderboardQuery.cs" />

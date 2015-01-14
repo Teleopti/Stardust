@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual bool IsWantedSchedule(IScheduleDay scheduleToCheck)
 		{
 			var period = scheduleToCheck.ProjectionService().CreateProjection().Period();
-			return _criteria.IsValid(period);
+			return _criteria.IsValid(period, scheduleToCheck.HasDayOff());
 		}
 
 		public virtual IPersonRequest MakeShiftTradeRequest(IScheduleDay scheduleToTrade)

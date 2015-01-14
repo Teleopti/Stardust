@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Owin;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var nullableTimeSpanModelBinder = new TimeSpanModelBinder(nullable:true);
 			var authenticationModelBinder = new AuthenticationModelBinder(_authenticatorTypes);
 			var ssoSuthenticationModelBinder = new SsoAuthenticationModelBinder(_applicationAuthenticationType);
+			var shiftExchangeLookingForDayModelBinder = new EnumByStringModelBinder<ShiftExchangeLookingForDay>();
 
 			binders[typeof (DateOnly?)] = dateOnlyModelBinder;
 			binders[typeof (DateOnly)] = dateOnlyModelBinder;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			binders[typeof(TimeSpan?)] = nullableTimeSpanModelBinder;
 			binders[typeof(IAuthenticationModel)] = authenticationModelBinder;
 			binders[typeof(ApplicationAuthenticationModel)] = ssoSuthenticationModelBinder;
+			binders[typeof(ShiftExchangeLookingForDay)] = shiftExchangeLookingForDayModelBinder;
 		}
 	}
 }

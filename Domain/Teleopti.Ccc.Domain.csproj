@@ -132,7 +132,9 @@
     <Compile Include="AgentInfo\Requests\EmptyShiftTradeRequestChecker.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
+    <Compile Include="AgentInfo\Requests\ScheduleDayFilterCriteria.cs" />
     <Compile Include="AgentInfo\Requests\ShiftExchangeCriteria.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftExchangeLookingForDay.cs" />
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />

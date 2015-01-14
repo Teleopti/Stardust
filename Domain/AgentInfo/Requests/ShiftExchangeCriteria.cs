@@ -6,33 +6,44 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	public struct ShiftExchangeCriteria
 	{
 		private readonly DateOnly _validTo;
-		private readonly DateTimePeriod? _shiftWithin;
-
+		private readonly ScheduleDayFilterCriteria _criteria;
+	
 		public DateTimePeriod? ShiftWithin
 		{
-			get { return _shiftWithin; }
+			get { return _criteria.ShiftWithin; }
 		}
 
-		public ShiftExchangeCriteria(DateOnly validTo, DateTimePeriod? shiftWithin)
-		{
+		public ShiftExchangeCriteria(DateOnly validTo, ScheduleDayFilterCriteria criteria)
+		{			
 			_validTo = validTo;
-			_shiftWithin = shiftWithin;
+			_criteria = criteria;
 		}
 
 		[Pure]
-		public bool IsValid(DateTimePeriod? period)
+		public bool IsValid(DateTimePeriod? targetShiftPeriod, bool targetDayOff = false)
 		{
-			return DateOnly.Today <= _validTo && (bothAreDayOff(period,_shiftWithin) || (bothAreMatchingShifts(period,_shiftWithin)));
+			return DateOnly.Today <= _validTo && matchingWithDayOff(targetDayOff)
+			       || matchingWithEmptyDay(targetShiftPeriod, targetDayOff)
+			       || matchingWithWorkingShift(targetShiftPeriod);
 		}
 
-		private bool bothAreDayOff(DateTimePeriod? shift, DateTimePeriod? shiftCriteria)
+		private bool matchingWithDayOff(bool targetDayOff)
 		{
-			return !shift.HasValue && !shiftCriteria.HasValue;
+			return targetDayOff &&  (_criteria.DayType == ShiftExchangeLookingForDay.DayOff 
+				|| _criteria.DayType == ShiftExchangeLookingForDay.DayOffOrEmptyDay) ;
 		}
 
-		private bool bothAreMatchingShifts(DateTimePeriod? shift, DateTimePeriod? shiftCriteria)
+		private bool matchingWithEmptyDay(DateTimePeriod? targetShiftPeriod, bool targetDayOff)
 		{
-			return shift.HasValue && shiftCriteria.HasValue && shiftCriteria.Value.Contains(shift.Value);
+			return !(targetDayOff || targetShiftPeriod.HasValue) &&
+			       (_criteria.DayType == ShiftExchangeLookingForDay.EmtpyDay ||
+			        _criteria.DayType == ShiftExchangeLookingForDay.DayOffOrEmptyDay);
+		}
+
+		private bool matchingWithWorkingShift(DateTimePeriod? targetShiftPeriod)
+		{
+			return targetShiftPeriod.HasValue && (_criteria.DayType == ShiftExchangeLookingForDay.WorkingShift) &&
+			       _criteria.ShiftWithin.HasValue && _criteria.ShiftWithin.Value.Contains(targetShiftPeriod.Value);
 		}
 	}
 }

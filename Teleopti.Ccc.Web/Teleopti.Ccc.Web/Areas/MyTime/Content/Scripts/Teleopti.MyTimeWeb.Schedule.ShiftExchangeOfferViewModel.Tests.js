@@ -13,10 +13,10 @@ $(document).ready(function() {
 		};
 		
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function() {});
-		viewModel.WishShiftType({ Id: 'empty-day', Description: 'Empty Day' });
+		viewModel.WishShiftType({ Id: 'working-shift', Description: 'Empty Day' });
 		viewModel.DateTo(moment('2015-01-15'));
 		viewModel.OfferValidTo(moment('2015-01-10'));
 		viewModel.SaveShiftExchangeOffer();
-		equal(ajaxPostData.WishShiftType, "empty-day");
+		equal(ajaxPostData.WishShiftType, 'working-shift');
 	});
 });

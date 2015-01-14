@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -56,11 +55,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 	    private IPersonRequest createAbsenceRequestAndBusinessUnit()
 	    {
+		    var period = new DateTimePeriod(
+			    new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+			    new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
 		    IPersonRequest request = new PersonRequest(_person);
-		    IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
-		                                                        new DateTimePeriod(
-			                                                        new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
-			                                                        new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc)));
+		    IAbsenceRequest absenceRequest = new AbsenceRequest(_absence, period);
 
 		    request.Request = absenceRequest;
 		    request.Pending();
@@ -74,9 +73,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    IPersonRequest request = new PersonRequest(_person);
 			var currentShift = ScheduleDayFactory.Create(new DateOnly(2008, 5, 1), _person);
 
-			IShiftExchangeOffer offer = new ShiftExchangeOffer (currentShift, new ShiftExchangeCriteria(new DateOnly(2008,7, 9),
-																new DateTimePeriod( startDate, startDate.AddDays (1))),
-																ShiftExchangeOfferStatus.Pending);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift,
+				new DateTimePeriod(startDate, startDate.AddDays(1)));
+			var offer = new ShiftExchangeOffer(currentShift,
+				new ShiftExchangeCriteria(new DateOnly(2008, 7, 9), dayFilterCriteria), ShiftExchangeOfferStatus.Pending);
 
 			request.Request = offer;
 		    request.Pending();
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                         new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 19),
                                                  new DateOnly(2008, 7, 19))
                     });
-            foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+            foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
             {
                 shiftTradeSwapDetail.ChecksumFrom = 50;
                 shiftTradeSwapDetail.ChecksumTo = 57;
@@ -136,10 +136,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             return new PersonRequestRepository(unitOfWork);
         }
-
-
-		
-
 
 		[Test]
 		public void FindNonExistingShouldReturnNull()
@@ -200,7 +196,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest2);
 
-			
 			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftExchangeOffer>(_person, startDate);
 
 			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
@@ -408,8 +403,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
     	private void SetUpdatedOnForRequest(IPersonRequest personRequest,int minutes)
     	{
-    		Session.CreateSQLQuery("UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;").SetGuid(
-    			"Id", personRequest.Id.GetValueOrDefault()).SetInt32("Minutes",minutes).ExecuteUpdate();
+    		const string sql = "UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;";
+    		Session.CreateSQLQuery(sql)
+    			.SetGuid("Id", personRequest.Id.GetValueOrDefault())
+    			.SetInt32("Minutes", minutes)
+    			.ExecuteUpdate();
     	}
 
     	[Test]
@@ -437,10 +435,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
             IPersonRequest pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
-            IPersonRequest shiftTradePersonRequest;
-            IPersonRequest pendingShiftTradePersonRequest;
 
-            IPerson personTo = PersonFactory.CreatePerson("vjiosd");
+			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
             personTo.Name = new Name("mala", "mala");
             PersistAndRemoveFromUnitOfWork(personTo);
 
@@ -458,8 +454,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                                  new DateOnly(2008, 7, 16))
                     });
 
-            pendingShiftTradePersonRequest = new PersonRequest(personTo);
-            shiftTradePersonRequest = new PersonRequest(personTo);
+            IPersonRequest pendingShiftTradePersonRequest = new PersonRequest(personTo);
+            IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
             shiftTradePersonRequest.Request = shiftTradeRequest;
             shiftTradePersonRequest.Pending();
             pendingShiftTradePersonRequest.Request = shiftTradeRequest2;

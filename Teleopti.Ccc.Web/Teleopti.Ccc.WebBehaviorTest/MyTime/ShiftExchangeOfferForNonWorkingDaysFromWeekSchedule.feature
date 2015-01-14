@@ -29,7 +29,7 @@ Background:
 	| Start date | 2022-08-19 |	
 
 
-Scenario: Add shift trade exchange offer for an empty shift
+Scenario: Add shift trade exchange offer for an empty day
 	Given I have the role 'Full access to mytime'
 	And I have a shift with
 	| Field            | Value            |

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIAmLookingForAnEmptyDay()
 		{
 			Browser.Interactions.Click("#wish-list");
-			Browser.Interactions.Click("#empty-day");
+			Browser.Interactions.Click("#EmtpyDay");
 		}
 
 		[Then(@"no shift detail is needed")]

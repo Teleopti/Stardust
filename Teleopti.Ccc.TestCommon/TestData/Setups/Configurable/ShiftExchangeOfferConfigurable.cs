@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var startTimeUtc = timeZone.SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = timeZone.SafeConvertTimeToUtc(EndTime);
 			var shiftWithin = new DateTimePeriod(startTimeUtc, endTimeUtc);
-			var shiftExchangeCrie = new ShiftExchangeCriteria(new DateOnly(ValidTo), shiftWithin);
+			var criteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, shiftWithin);
+			var shiftExchangeCrie = new ShiftExchangeCriteria(new DateOnly(ValidTo), criteria);
 
 			var date = new DateOnly(startTimeUtc.Year, startTimeUtc.Month, startTimeUtc.Day);
 			var scheduleDay = ScheduleDayFactory.Create(date);

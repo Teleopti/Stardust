@@ -38,7 +38,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 
 	self.WishShiftType = ko.observable(defaultShiftType);	
 	self.RequireDetails = ko.computed(function() {
-		return !self.Toggle31317Enabled() || self.WishShiftType() === defaultShiftType;
+		return !self.Toggle31317Enabled() || (self.WishShiftType() && self.WishShiftType().RequireDetails);
 	});
 
 	self.ChangeShiftType = function (selection) {
@@ -138,6 +138,16 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
+		console.log("WishShiftType:", self.WishShiftType().Id);
+		console.log({
+			Date: self.DateTo().format(self.DateFormat()),
+			OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
+			StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
+			EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
+			EndTimeNextDay: self.EndTimeNextDay(),
+			Id: self.Id(),
+			WishShiftType: self.WishShiftType().Id
+		});
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",

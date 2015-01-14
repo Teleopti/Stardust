@@ -5,47 +5,58 @@
                    default-access="field.camelcase-underscore">
 
 
-	<joined-subclass name="ShiftExchangeOffer"
-					 extends="Request">
-		<key column="Request" foreign-key="FK_ShiftExchangeOffer_Request"/>
+  <joined-subclass name="ShiftExchangeOffer"
+				   extends="Request">
+	<key column="Request"
+		 foreign-key="FK_ShiftExchangeOffer_Request"/>
 
-		<many-to-one name="Person"
-                 class="Teleopti.Ccc.Domain.Common.Person"
-                 not-null="true" foreign-key="FK_ShiftExchangeOffer_Person"/>
+	<many-to-one name="Person"
+				 class="Teleopti.Ccc.Domain.Common.Person"
+				 not-null="true"
+				 foreign-key="FK_ShiftExchangeOffer_Person"/>
 
-		<property name="MyShiftPeriod"
-               type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.NullableDateTimePeriodCompositeUserType, Teleopti.Ccc.Infrastructure">
-			<column name="MyShiftStartDateTime" />
-			<column name="MyShiftEndDateTime" />
+	<property name="MyShiftPeriod"
+			  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.NullableDateTimePeriodCompositeUserType, Teleopti.Ccc.Infrastructure">
+	  <column name="MyShiftStartDateTime" />
+	  <column name="MyShiftEndDateTime" />
+	</property>
+
+	<property name="Date"
+			  not-null="true"
+			  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+
+	<property name="Checksum"
+			  not-null="true"
+			  type="long"/>
+
+	<component access="field"
+			   name="_criteria"
+			   class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftExchangeCriteria, Teleopti.Ccc.Domain">
+	  <property name="_validTo"
+				access="field"
+				column="ValidTo"
+				not-null="true"
+				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+
+	  <component name="_criteria"
+				 access="field"
+				 class="Teleopti.Ccc.Domain.AgentInfo.Requests.ScheduleDayFilterCriteria, Teleopti.Ccc.Domain">
+		<property name="_dayType"
+				  access="field"
+				  column="WishShiftType"
+				  not-null="true"
+					  />
+		<property name="_shiftWithin"
+				  access="field"
+				  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.NullableDateTimePeriodCompositeUserType, Teleopti.Ccc.Infrastructure">
+		  <column name="ShiftWithinStartDateTime" />
+		  <column name="ShiftWithinEndDateTime" />
 		</property>
+	  </component>
+	</component>
 
-		<property name="Date"
-         not-null="true"
-         type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+	<property name="Status"
+			  not-null="true"/>
 
-		<property name="Checksum"
-         not-null="true"
-         type="long"/>
-
-		<component access="field" name="_criteria"
-               class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftExchangeCriteria, Teleopti.Ccc.Domain">
-			<property name="_validTo"
-								access="field"
-								column="ValidTo"
-         not-null="true"
-         type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
-			<property name="_shiftWithin"
-								access="field"
-								 type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.NullableDateTimePeriodCompositeUserType, Teleopti.Ccc.Infrastructure">
-				<column name="ShiftWithinStartDateTime" />
-				<column name="ShiftWithinEndDateTime" />
-			</property>
-		</component>
-
-		<property name="Status"
-         not-null="true"
-         />
-
-
-	</joined-subclass>
+  </joined-subclass>
 </hibernate-mapping>

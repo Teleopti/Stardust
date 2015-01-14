@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			var period = new DateTimePeriod (new DateTime (2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
 				new DateTime (2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-			var criteria = new ShiftExchangeCriteria (validTo: new DateOnly (2026, 12, 25), shiftWithin: period);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
+			var criteria = new ShiftExchangeCriteria (new DateOnly (2026, 12, 25), dayFilterCriteria);
 
 			var target = new ShiftExchangeOffer (ScheduleDayFactory.Create (new DateOnly (2007, 1, 1)), criteria,
 				ShiftExchangeOfferStatus.Pending);
@@ -98,7 +99,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void ShouldMatchMyDayOffCriteriaForShiftExchangeWhenDayOffChecked()
 		{
-			var criteria = new ShiftExchangeCriteria (validTo: new DateOnly (2026, 12, 25), shiftWithin: null);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.DayOff, null);
+			var criteria = new ShiftExchangeCriteria(new DateOnly(2026, 12, 25), dayFilterCriteria);
 
 			var target = new ShiftExchangeOffer (ScheduleDayFactory.Create (new DateOnly (2007, 1, 1)), criteria,
 				ShiftExchangeOfferStatus.Pending);
@@ -113,7 +115,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			var period = new DateTimePeriod (new DateTime (2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
 				new DateTime (2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-			var criteria = new ShiftExchangeCriteria (validTo: new DateOnly (2026, 12, 25), shiftWithin: period);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
+			var criteria = new ShiftExchangeCriteria (new DateOnly (2026, 12, 25), dayFilterCriteria);
 
 			var target = new ShiftExchangeOffer (ScheduleDayFactory.Create (new DateOnly (2007, 1, 1)), criteria,
 				ShiftExchangeOfferStatus.Pending);
@@ -130,7 +133,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			var period = new DateTimePeriod (new DateTime (2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
 				new DateTime (2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-			var criteria = new ShiftExchangeCriteria (validTo: new DateOnly (2026, 12, 25), shiftWithin: period);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
+			var criteria = new ShiftExchangeCriteria (new DateOnly (2026, 12, 25), dayFilterCriteria);
 
 			var target = new ShiftExchangeOffer (ScheduleDayFactory.Create (new DateOnly (2007, 1, 1)), criteria,
 				ShiftExchangeOfferStatus.Pending);
@@ -145,7 +149,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			var period = new DateTimePeriod (new DateTime (2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
 				new DateTime (2007, 1, 1, 15, 0, 0, DateTimeKind.Utc));
-			var criteria = new ShiftExchangeCriteria (validTo: new DateOnly (2006, 12, 25), shiftWithin: period);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
+			var criteria = new ShiftExchangeCriteria (new DateOnly (2006, 12, 25), dayFilterCriteria);
 
 			var target = new ShiftExchangeOffer (ScheduleDayFactory.Create (new DateOnly (2007, 1, 1)), criteria,
 				ShiftExchangeOfferStatus.Pending);

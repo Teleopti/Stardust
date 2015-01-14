@@ -1,5 +1,5 @@
-using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -42,33 +42,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult GetAbsence(DateOnly date)
 		{
-			return Json(_viewModelFactory.CreateViewModel((Guid)_loggedOnUser.CurrentUser().Id, date), JsonRequestBehavior.AllowGet);
+			return Json(_viewModelFactory.CreateViewModel(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), date), JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet]
 		public JsonResult GetAllWishShiftOptions()
 		{
+			
 			return Json(new[]
 			{
 				new
 				{
-					Id = "working-shift",
-					Description = Resources.OptionWorkingDay
+					Id = ShiftExchangeLookingForDay.WorkingShift.ToString(),
+					Description = Resources.OptionWorkingDay,
+					RequireDetails = true
 				},
 				new
 				{
-					Id = "day-off",
-					Description = Resources.OptionDayOff
+					Id = ShiftExchangeLookingForDay.DayOff.ToString(),
+					Description = Resources.OptionDayOff,
+					RequireDetails = false
 				},
 				new
 				{
-					Id = "empty-day",
-					Description = Resources.OptionEmptyDay
+					Id = ShiftExchangeLookingForDay.EmtpyDay.ToString(),
+					Description = Resources.OptionEmptyDay,
+					RequireDetails = false
 				},
 				new
 				{
-					Id = "day-off-or-empty-day",
-					Description = Resources.OptionDayOffOrEmptyDay
+					Id = ShiftExchangeLookingForDay.DayOffOrEmptyDay.ToString(),
+					Description = Resources.OptionDayOffOrEmptyDay,
+					RequireDetails = false
 				}
 			}, JsonRequestBehavior.AllowGet);
 		}

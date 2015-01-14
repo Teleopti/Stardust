@@ -49,9 +49,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				LoadDaysAfterLeft = false
 			};
 			var schedule = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date), options);
-					
-			var offer = new ShiftExchangeOffer(schedule.First(),
-				new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), createOptionalDateTimePeriod(form, date)), status);
+
+			var timePeriod = (form.WishShiftType == (int)ShiftExchangeLookingForDay.WorkingShift) ? createOptionalDateTimePeriod(form, date) : null;
+			var dayFilterCriteria = new ScheduleDayFilterCriteria((ShiftExchangeLookingForDay) form.WishShiftType, timePeriod);
+			var criteria = new ShiftExchangeCriteria(new DateOnly(form.OfferValidTo), dayFilterCriteria);
+			var offer = new ShiftExchangeOffer(schedule.First(), criteria, status);
 			request.Request = offer;
 		}
 

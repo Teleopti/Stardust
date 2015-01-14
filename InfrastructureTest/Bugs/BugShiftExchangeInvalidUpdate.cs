@@ -84,8 +84,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			var startDateTime  = new DateTime (2007, 01, 01, 12, 0, 0).ToUniversalTime();
 			var endDateTime = new DateTime (2007, 01, 01, 22, 0, 0).ToUniversalTime();
 
-			IShiftExchangeOffer offer = new ShiftExchangeOffer(currentShift, 
-				new ShiftExchangeCriteria(new DateOnly(2013, 12, 31), new DateTimePeriod (startDateTime, endDateTime)), ShiftExchangeOfferStatus.Pending);
+			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift,
+				new DateTimePeriod(startDateTime, endDateTime));
+			
+			var offer = new ShiftExchangeOffer(currentShift,
+				new ShiftExchangeCriteria(new DateOnly(2013, 12, 31), dayFilterCriteria), ShiftExchangeOfferStatus.Pending);
 			
 			request.Request = offer;
 			return request;
