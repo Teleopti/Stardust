@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		[Pure]
 		public bool IsValid(DateTimePeriod? targetShiftPeriod, bool targetDayOff = false)
 		{
-			return DateOnly.Today <= _validTo && matchingWithDayOff(targetDayOff)
+			return DateOnly.Today <= _validTo && (matchingWithDayOff(targetDayOff)
 			       || matchingWithEmptyDay(targetShiftPeriod, targetDayOff)
-			       || matchingWithWorkingShift(targetShiftPeriod);
+			       || matchingWithWorkingShift(targetShiftPeriod));
 		}
 
 		private bool matchingWithDayOff(bool targetDayOff)
