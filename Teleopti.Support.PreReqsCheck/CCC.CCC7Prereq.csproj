@@ -69,6 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Checks\DatabaseCheck.cs" />
     <Compile Include="Checks\HardwareCheck.cs" />
     <Compile Include="Checks\V6Check.cs" />
@@ -90,7 +93,6 @@
     <Compile Include="InteropServices\SystemMetric.cs" />
     <Compile Include="MinimumRequirements.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
