@@ -63,6 +63,7 @@
 		public const string AutomaticScheduling = "Raptor/Scheduler/AutomaticScheduling";
 		public const string RequestScheduler = "Raptor/Scheduler/Request";
 		public const string RequestSchedulerApprove = "Raptor/Scheduler/Request/Approve";
+		public const string RequestSchedulerViewAllowance = "Raptor/Scheduler/Request/RequestSchedulerViewAllowance";
 
 		// Forecaster
 		public const string ExportForecastToOtherBusinessUnit = "Raptor/Forecaster/ExportForecastToOtherBusinessUnit";

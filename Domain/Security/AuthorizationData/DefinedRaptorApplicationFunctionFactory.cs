@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AutomaticScheduling, "xxAutomaticScheduling", DefinedRaptorApplicationFunctionForeignIds.AutomaticScheduling, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestScheduler, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.RequestScheduler, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove, "xxApprove", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerApprove, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance, "xxViewAllowance", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerViewAllowance, null);
 
 			// Forecaster
 			CreateAndAddApplicationFunction(applicationFunctionList,
