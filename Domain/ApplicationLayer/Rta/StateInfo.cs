@@ -43,33 +43,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
-		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
 		private readonly Lazy<AgentState> _previousState;
 		private readonly Lazy<AgentState> _currentState;
 		private readonly ScheduleInfo _scheduleInfo;
+		private readonly AdherenceInfo _adherenceInfo;
 
-		private readonly IAlarmFinder _alarmFinder;
-
-		private readonly Lazy<Adherence> _adherence;
-		private readonly Lazy<Adherence> _adherenceForPreviousState;
-		private readonly Lazy<Adherence> _adherenceForPreviousStateAndCurrentActivity;
-		private readonly Lazy<Adherence> _adherenceForNewStateAndPreviousActivity;
-
-		public StateInfo(ExternalUserStateInputModel input, PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, IAlarmFinder alarmFinder)
+		public StateInfo(PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, AdherenceInfo adherenceInfo)
 		{
-			_input = input;
 			_person = person;
 			_scheduleInfo = scheduleInfo;
-			_alarmFinder = alarmFinder;
+			_adherenceInfo = adherenceInfo;
 
 			_previousState = new Lazy<AgentState>(agentState.PreviousState);
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
-
-			_adherence = new Lazy<Adherence>(() => AdherenceFor(_currentState.Value));
-			_adherenceForPreviousState = new Lazy<Adherence>(() => AdherenceFor(_previousState.Value));
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(_previousState.Value.StateCode, _currentState.Value.ActivityId));
-			_adherenceForNewStateAndPreviousActivity = new Lazy<Adherence>(() => adherenceFor(_input.StateCode, _scheduleInfo.PreviousActivity()));
 		}
 
 		public bool IsScheduled { get { return _currentState.Value.ActivityId != null; } }
@@ -82,11 +69,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public DateTime ShiftStartTimeForPreviousActivity { get { return _scheduleInfo.ShiftStartTimeForPreviousActivity; } }
 		public DateTime ShiftEndTimeForPreviousActivity { get { return _scheduleInfo.ShiftEndTimeForPreviousActivity; } }
-
-		public Adherence Adherence { get { return _adherence.Value; } }
-		public Adherence AdherenceForPreviousState { get { return _adherenceForPreviousState.Value; } }
-		public Adherence AdherenceForPreviousStateAndCurrentActivity { get { return _adherenceForPreviousStateAndCurrentActivity.Value; } }
-		public Adherence AdherenceForNewStateAndPreviousActivity { get { return _adherenceForNewStateAndPreviousActivity.Value; } }
+		
+		public Adherence Adherence { get { return _adherenceInfo.CurrentAdherence(); } }
+		public Adherence AdherenceForPreviousState { get { return _adherenceInfo.AdherenceForPreviousState(); } }
+		public Adherence AdherenceForPreviousStateAndCurrentActivity { get { return _adherenceInfo.AdherenceForPreviousStateAndCurrentActivity(); } }
+		public Adherence AdherenceForNewStateAndPreviousActivity { get { return _adherenceInfo.AdherenceForNewStateAndPreviousActivity(); } }
 
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
@@ -117,47 +104,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return _currentState.Value.MakeActualAgentState();
 		}
 
-		private Adherence adherenceFor(string stateCode, ScheduleLayer activity)
-		{
-			if (activity == null)
-				return Adherence.None;
-			return adherenceFor(stateCode, activity.PayloadId);
-		}
-
-		private Adherence adherenceFor(string stateCode, Guid? activityId)
-		{
-			var stateGroup = _alarmFinder.GetStateGroup(
-				stateCode,
-				_input.ParsedPlatformTypeId(),
-				_person.BusinessUnitId);
-			var alarm = _alarmFinder.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
-			if (alarm == null)
-				return Adherence.None;
-			return adherenceFor(alarm);
-		}
-
-		public static Adherence AdherenceFor(AgentState state)
-		{
-			return adherenceFor(state.StaffingEffect);
-		}
-
+		// TODO: ????
 		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
 		{
-			return adherenceFor(stateReadModel.StaffingEffect);
+			return AdherenceInfo.AdherenceFor(stateReadModel.StaffingEffect);
 		}
-
-		private static Adherence adherenceFor(RtaAlarmLight alarm)
-		{
-			return adherenceFor(alarm.StaffingEffect);
-		}
-
-		private static Adherence adherenceFor(double? staffingEffect)
-		{
-			if (staffingEffect.HasValue)
-				return staffingEffect.Value.Equals(0) ? Adherence.In : Adherence.Out;
-			return Adherence.None;
-		}
-
 	}
 
 }

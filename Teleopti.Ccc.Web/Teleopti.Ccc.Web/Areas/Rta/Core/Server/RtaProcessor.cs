@@ -64,8 +64,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			var agentStateInfo = new AgentStateInfo(input, person, scheduleInfo, _agentStateAssembler, _databaseReader, currentTime);
 
-			var info = new StateInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
+			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
 
+			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
+			
 			_actualAgentStateUpdater.Update(info);
 
 			_messageSender.Send(info);
