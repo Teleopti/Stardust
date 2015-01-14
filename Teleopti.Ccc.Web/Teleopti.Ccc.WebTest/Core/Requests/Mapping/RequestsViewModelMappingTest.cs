@@ -76,6 +76,63 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.Link.Methods.Should().Contain("GET");
 			result.Link.Methods.Should().Contain("DELETE");
 			result.Link.Methods.Should().Contain("PUT");
+		}		
+		
+		[Test]
+		public void ShouldMapLinkForOfferStatusPending()
+		{
+			var result = stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus.Pending, false);
+
+			result.Link.rel.Should().Be("self");
+			result.Link.href.Should().Be("aLink");
+			result.Link.Methods.Should().Contain("GET");
+			result.Link.Methods.Should().Contain("DELETE");
+			result.Link.Methods.Should().Contain("PUT");
+		}		
+		
+		[Test]
+		public void ShouldMapLinkForOfferStatusExpired()
+		{
+			var result = stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus.Pending, true);
+
+			assertLinkForShiftExchageOfferWhenReadOnly(result);
+		}		
+		
+		[Test]
+		public void ShouldMapLinkForOfferStatusCompleted()
+		{
+			var result = stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus.Completed, false);
+
+			assertLinkForShiftExchageOfferWhenReadOnly(result);
+		}		
+		
+		[Test]
+		public void ShouldMapLinkForOfferStatusInvalid()
+		{
+			var result = stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus.Invalid, true);
+
+			assertLinkForShiftExchageOfferWhenReadOnly(result);
+		}
+
+		private static void assertLinkForShiftExchageOfferWhenReadOnly(RequestViewModel result)
+		{
+			result.Link.rel.Should().Be("self");
+			result.Link.href.Should().Be("aLink");
+			result.Link.Methods.Should().Contain("GET");
+			result.Link.Methods.Should().Contain("DELETE");
+			result.Link.Methods.Should().Not.Contain("PUT");
+		}
+
+		private RequestViewModel stubRequestLinkForShiftExchangeOffer(ShiftExchangeOfferStatus status, bool isExpired)
+		{
+			var offer = createShiftExchangeOffer(status, isExpired);
+			var request = new PersonRequest(new Person(), offer);
+			request.SetId(Guid.NewGuid());
+
+			_linkProvider.Stub(x => x.RequestDetailLink(request.Id.Value)).Return("aLink");
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+			return result;
 		}
 
 		[Test]

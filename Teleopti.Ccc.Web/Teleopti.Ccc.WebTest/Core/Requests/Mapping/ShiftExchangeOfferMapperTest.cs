@@ -40,12 +40,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var currentUser = PersonFactory.CreatePerson();
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(currentUser);
-			var mocks = new MockRepository();
-			var schedule = mocks.StrictMock<IScheduleDictionary>();
-			using (mocks.Record())
-			{
-				Expect.Call(schedule[currentUser].ScheduledDay(date)).Return(scheduleDay);
-			}
 		}
 
 		[Test]

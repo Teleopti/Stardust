@@ -161,7 +161,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var stateId = PersonRequest.GetUnderlyingStateId(s);
 					if (s.Request is ShiftExchangeOffer)
 					{
-						return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET, DELETE";
+						var offer = s.Request as IShiftExchangeOffer;
+						var isRealPending = (offer.Status == ShiftExchangeOfferStatus.Pending) && !offer.IsExpired();
+						return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
 					}
 
 					return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
