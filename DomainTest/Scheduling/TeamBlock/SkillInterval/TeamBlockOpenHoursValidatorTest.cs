@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -34,6 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		private IList<ISkillIntervalData> _skillIntervalDatas1;
 		private IList<ISkillIntervalData> _skillIntervalDatas2;
 		private IActivity _activity;
+		private IScheduleDictionary _scheduleDictionary;
+		private IScheduleRange _scheduleRange;
+		private IScheduleDay _scheduleDay;
 
 		[SetUp]
 		public void SetUp()
@@ -64,6 +68,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			_dateOnlyDictionary = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 			_dateOnlyDictionary.Add(_startDate,_activityDictionary1);
 			_dateOnlyDictionary.Add(_endDate, _activityDictionary2);
+			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
+			_scheduleRange = _mock.StrictMock<IScheduleRange>();
+			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 		}
 
 		[Test]
@@ -75,6 +82,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			using (_mock.Record())
 			{
 				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate.AddDays(1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas1, _startDate)).Return(timePeriod1);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas2, _endDate)).Return(timePeriod2);
 			}
@@ -95,6 +110,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			using (_mock.Record())
 			{
 				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate.AddDays(1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas1, _startDate)).Return(timePeriod1);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas2, _endDate)).Return(timePeriod2);
 			}
@@ -114,6 +137,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			using (_mock.Record())
 			{
 				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate.AddDays(1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas1, _startDate)).Return(timePeriod1);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas2, _endDate)).Return(null);
 			}
@@ -131,8 +162,42 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 			using (_mock.Record())
 			{
 				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate.AddDays(1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas1, _startDate)).Return(null);
 				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas2, _endDate)).Return(null);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Validate(_teamBlockInfo, _schedulingResultStateHolder);
+				Assert.IsTrue(result);
+			}
+		}
+
+		[Test]
+		public void ShouldNotConsiderDaysOff()
+		{
+			TimePeriod? timePeriod1 = new TimePeriod(8, 0, 17, 0);
+
+			using (_mock.Record())
+			{
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder)).Return(_dateOnlyDictionary);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_startDate.AddDays(1))).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.HasDayOff()).Return(true);
+				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDatas1, _startDate)).Return(timePeriod1);
 			}
 
 			using (_mock.Playback())

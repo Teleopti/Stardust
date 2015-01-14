@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
 		private readonly IDisallowedShiftProjectionCashesFilter _disallowedShiftProjectionCashesFilter;
-		private readonly ITeamBlockOpenHoursFilter _teamBlockOpenHoursFilter;
 
 		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
@@ -53,8 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
 			IShiftProjectionCacheManager shiftProjectionCacheManager,
 			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,
-			IDisallowedShiftProjectionCashesFilter disallowedShiftProjectionCashesFilter,
-			ITeamBlockOpenHoursFilter teamBlockOpenHoursFilter)
+			IDisallowedShiftProjectionCashesFilter disallowedShiftProjectionCashesFilter)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -75,7 +73,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_ruleSetPersonalSkillsActivityFilter = ruleSetPersonalSkillsActivityFilter;
 			_disallowedShiftProjectionCashesFilter = disallowedShiftProjectionCashesFilter;
-			_teamBlockOpenHoursFilter = teamBlockOpenHoursFilter;
 		}
 
 		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
@@ -124,11 +121,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
 						person, matrixList, isSameOpenHoursInBlock);
 				shiftList = runFiltersForRoleModel2(shiftList, teamBlockInfo, finderResult);
-			}
-
-			if (schedulingOptions.BlockSameShift)
-			{
-				shiftList = _teamBlockOpenHoursFilter.Filter(shiftList, teamBlockInfo, finderResult);
 			}
 
 			if (shiftList == null)

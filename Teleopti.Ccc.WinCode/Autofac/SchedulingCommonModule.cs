@@ -476,7 +476,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<CreateSkillIntervalDatasPerActivtyForDate>().As<ICreateSkillIntervalDatasPerActivtyForDate>();
 			builder.RegisterType<CalculateAggregatedDataForActivtyAndDate>().As<ICalculateAggregatedDataForActivtyAndDate>();
 			builder.RegisterType<CreateSkillIntervalDataPerDateAndActivity>().As<ICreateSkillIntervalDataPerDateAndActivity>();
-			builder.RegisterType<TeamBlockOpenHourService>().As<ITeamBlockOpenHourService>();
 			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>();
 			builder.RegisterType<ActivityIntervalDataCreator>().As<IActivityIntervalDataCreator>();
 			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>();
@@ -547,7 +546,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>();
-			builder.RegisterType<TeamBlockOpenHoursFilter>().As<ITeamBlockOpenHoursFilter>();
 			
 
 			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<DisallowedShiftProjectionCashesFilter>();
