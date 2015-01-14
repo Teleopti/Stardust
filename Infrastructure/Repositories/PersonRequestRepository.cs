@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return findRequestsByRequestPeriod(person, requestForPeriod);
 		}
 
-		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T : IRequest
+		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T : Request
 		{
 			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
 			return findRequestsByRequestPeriod(person, requestForPeriod, status);
