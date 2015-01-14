@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					var offerPersonRequests = _personRequestRepository.FindByStatus<ShiftExchangeOffer>(person, projectionChangedEventScheduleDay.Date, 0);
 					foreach (var offerPersonRequest in offerPersonRequests)
 					{
-						var offer = offerPersonRequest.Request as ShiftExchangeOffer;
+						var offer = offerPersonRequest.Request as IShiftExchangeOffer;
 						if (projectionChangedEventScheduleDay.CheckSum != offer.Checksum)
 						{
 							offer.Status = ShiftExchangeOfferStatus.Invalid;
