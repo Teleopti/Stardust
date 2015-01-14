@@ -46,5 +46,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				_persister.Persist(new TeamAdherenceReadModel() { TeamId = @event.TeamId, AgentsOutOfAdherence = 1,SiteId = @event.SiteId});
 			}
 		}
+
 	}
 }

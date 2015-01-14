@@ -1,5 +1,6 @@
 using Autofac;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
@@ -10,7 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
+using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			registerFakePublisher(builder, new FakeEventPublisher());
 			registerFakeDatabase(builder, new FakeRtaDatabase());
 
+			builder.RegisterInstance(new FakeReadModelUnitOfWorkAspect()).As<IReadModelUnitOfWorkAspect>();
 			builder.RegisterInstance(new FakeTeamAdherencePersister()).As<ITeamAdherencePersister>().AsSelf();
 			builder.RegisterInstance(new FakeSiteAdherencePersister()).As<ISiteAdherencePersister>().AsSelf();
 			builder.RegisterInstance(new FakeAdherenceDetailsReadModelPersister()).As<IAdherenceDetailsReadModelPersister>().AsSelf();

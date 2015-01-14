@@ -545,7 +545,7 @@
     <Compile Include="Areas\Rta\CheckForActivityChangeInputModel.cs" />
     <Compile Include="Areas\Rta\Controllers\ActivityChangeController.cs" />
     <Compile Include="Areas\Rta\Controllers\StateController.cs" />
-    <Compile Include="Areas\Rta\Core\Server\ActualAgentStateUpdater.cs" />
+    <Compile Include="Areas\Rta\Core\Server\AgentStateReadModelUpdater.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\AgentsAdherenceMessage.cs" />
@@ -558,13 +558,15 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\AlarmFinder.cs" />
-    <Compile Include="Areas\Rta\Core\Server\IActualAgentStateUpdater.cs" />
+    <Compile Include="Areas\Rta\Core\Server\DontUpdateAgentStateReadModel.cs" />
+    <Compile Include="Areas\Rta\Core\Server\IAgentStateReadModelUpdater.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAgentStateMessageSender.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\DataSourceResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaProcessor.cs" />
+    <Compile Include="Areas\Rta\Core\Server\StateStreamSynchronizer.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\Rta\TeleoptiRtaService.cs" />

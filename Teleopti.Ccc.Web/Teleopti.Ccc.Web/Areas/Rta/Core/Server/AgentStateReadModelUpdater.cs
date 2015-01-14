@@ -4,11 +4,11 @@ using Teleopti.Ccc.Domain.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
-	public class ActualAgentStateUpdater : IActualAgentStateUpdater
+	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
 	{
 		private readonly IDatabaseWriter _databaseWriter;
 
-		public ActualAgentStateUpdater(IDatabaseWriter databaseWriter)
+		public AgentStateReadModelUpdater(IDatabaseWriter databaseWriter)
 		{
 			_databaseWriter = databaseWriter;
 		}
@@ -18,6 +18,5 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var state = info.MakeActualAgentState();
 			_databaseWriter.PersistActualAgentState(state);
 		}
-
 	}
 }

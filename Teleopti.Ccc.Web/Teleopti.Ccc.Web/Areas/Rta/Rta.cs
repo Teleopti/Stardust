@@ -7,6 +7,7 @@ using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	public class Rta : IRta
 	{
 		private readonly RtaDataHandler _rtaDataHandler;
-		private readonly INow _now;
+		private readonly INow _nowx;
 		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
@@ -42,7 +43,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IAlarmFinder alarmFinder,
 			INow now, 
 			IConfigReader configReader,
-			RtaProcessor processor)
+			IAgentStateReadModelUpdater agentStateReadModelUpdater,
+			IAgentStateMessageSender agentStateMessageSender,
+			IPersonOrganizationProvider personOrganizationProvider,
+			RtaProcessor processor,
+			AgentStateAssembler agentStateAssembler,
+			ICurrentEventPublisher eventPublisher
+			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_rtaDataHandler = new RtaDataHandler(
@@ -50,9 +57,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				databaseReader,
 				alarmFinder,
 				mbCacheFactory,
-				processor
+				processor,
+				agentStateReadModelUpdater,
+				agentStateMessageSender,
+				now,
+				personOrganizationProvider,
+				agentStateAssembler,
+				eventPublisher
 				);
-			_now = now;
 
 			Log.Info("The real time adherence service is now started");
 			_authenticationKey = configReader.AppSettings["AuthenticationKey"];
@@ -172,7 +184,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
-			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Time: {2}", input.PersonId, input.BusinessUnitId, _now.UtcDateTime());
+			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}}", input.PersonId, input.BusinessUnitId);
 
 			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId);
 		}

@@ -5,6 +5,7 @@ using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
@@ -19,15 +20,27 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IMbCacheFactory _mbCacheFactory;
 		private readonly IAlarmFinder _alarmFinder;
 		private readonly RtaProcessor _processor;
+		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
+		private readonly IAgentStateMessageSender _messageSender;
+		private readonly INow _now;
+		private readonly IPersonOrganizationProvider _personOrganizationProvider;
+		private readonly AgentStateAssembler _agentStateAssembler;
+		private readonly ICurrentEventPublisher _currentEventPublisher;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly PersonResolver _personResolver;
-		
+
 		public RtaDataHandler(
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
 			IAlarmFinder alarmFinder,
 			IMbCacheFactory mbCacheFactory,
-			RtaProcessor processor
+			RtaProcessor processor, 
+			IAgentStateReadModelUpdater agentStateReadModelUpdater,
+			IAgentStateMessageSender messageSender,
+			INow now,
+			IPersonOrganizationProvider personOrganizationProvider,
+			AgentStateAssembler agentStateAssembler,
+			ICurrentEventPublisher currentEventPublisher
 			)
 		{
 			_databaseReader = databaseReader;
@@ -35,6 +48,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_personResolver = new PersonResolver(databaseReader);
 			_mbCacheFactory = mbCacheFactory;
 			_processor = processor;
+			_agentStateReadModelUpdater = agentStateReadModelUpdater;
+			_messageSender = messageSender;
+			_now = now;
+			_personOrganizationProvider = personOrganizationProvider;
+			_agentStateAssembler = agentStateAssembler;
+			_currentEventPublisher = currentEventPublisher;
 			_adherenceAggregator = adherenceAggregator;
 		}
 
@@ -42,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
 			process(
-				new ExternalUserStateInputModel(),
+				null,
 				personId,
 				businessUnitId
 				);
@@ -88,7 +107,21 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			Guid businessUnitId
 			)
 		{
-			_processor.Process(input, personId, businessUnitId);
+			_processor.Process(
+				new RtaProcessContext(
+					input, 
+					personId, 
+					businessUnitId, 
+					_now.UtcDateTime(), 
+					_personOrganizationProvider, 
+					_agentStateReadModelUpdater, 
+					_messageSender, 
+					_adherenceAggregator,
+					_databaseReader,
+					_agentStateAssembler,
+					_currentEventPublisher,
+					null
+					));
 		}
 
 		public void Initialize()

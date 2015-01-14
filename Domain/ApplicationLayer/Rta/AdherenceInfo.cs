@@ -4,6 +4,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
+	public enum Adherence
+	{
+		None,
+		In,
+		Out
+	}
+
 	public class AdherenceInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
@@ -27,8 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 			_adherence = new Lazy<Adherence>(() => AdherenceFor(agentState.CurrentState()));
 			_adherenceForPreviousState = new Lazy<Adherence>(() => AdherenceFor(agentState.PreviousState()));
-			_adherenceForPreviousStateAndCurrentActivity =
-				new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));
+			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<Adherence>(() => adherenceFor(_input.StateCode, scheduleInfo.PreviousActivity()));
 		}
 

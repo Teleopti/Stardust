@@ -22,7 +22,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
@@ -314,26 +313,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			return thread;
 		}
 
-	}
-
-	public class FakeDataSourcesProvider : IAvailableDataSourcesProvider
-	{
-		private IEnumerable<IDataSource> _dataSources;
-
-		public void SetAvailableDataSources(IEnumerable<IDataSource> dataSources)
-		{
-			_dataSources = dataSources;
-		}
-
-		public IEnumerable<IDataSource> AvailableDataSources()
-		{
-			return _dataSources;
-		}
-
-		public IEnumerable<IDataSource> UnavailableDataSources()
-		{
-			return null;
-		}
 	}
 
 	public static class Extensions

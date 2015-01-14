@@ -4,43 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public enum Adherence
-	{
-		None,
-		In,
-		Out
-	}
-
-	public class AgentStateInfo
-	{
-		private readonly Lazy<AgentState> _previousState;
-		private readonly Lazy<AgentState> _currentState;
-
-		public AgentStateInfo(
-			ExternalUserStateInputModel input,
-			PersonOrganizationData person,
-			ScheduleInfo scheduleInfo, 
-			AgentStateAssembler agentStateAssembler,
-			IDatabaseReader databaseReader,
-			DateTime currentTime
-			)
-		{
-			var previousActualAgentState = new Lazy<AgentStateReadModel>(() => databaseReader.GetCurrentActualAgentState(person.PersonId));
-			_previousState = new Lazy<AgentState>(() => agentStateAssembler.MakePreviousState(person.PersonId, previousActualAgentState.Value));
-			_currentState = new Lazy<AgentState>(() => agentStateAssembler.MakeCurrentState(scheduleInfo, input, person, _previousState.Value, currentTime));
-		}
-
-		public AgentState CurrentState()
-		{
-			return _currentState.Value;
-		}
-
-		public AgentState PreviousState()
-		{
-			return _previousState.Value;
-		}
-	}
-
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
 		private readonly PersonOrganizationData _person;

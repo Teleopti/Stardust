@@ -201,6 +201,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentState.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateAssembler.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetails.cs" />
     <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ControllableLiteTransactionSyncronization.cs" />

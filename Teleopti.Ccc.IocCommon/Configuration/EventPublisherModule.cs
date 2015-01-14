@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.Register(c => c.Resolve<IServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
 			}
 
+			builder.RegisterType<CurrentEventPublisher>().As<ICurrentEventPublisher>().SingleInstance();
+
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>();
 			builder.RegisterType<CannotPublishEventsFromEventHandlers>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();

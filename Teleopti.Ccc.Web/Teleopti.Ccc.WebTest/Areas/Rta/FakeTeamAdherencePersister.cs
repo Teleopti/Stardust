@@ -11,12 +11,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public void Persist(TeamAdherenceReadModel model)
 		{
-			var existing = _models.FirstOrDefault(m => m.TeamId == model.TeamId);
-			if (existing != null)
-			{
-				existing.AgentsOutOfAdherence = model.AgentsOutOfAdherence;
-			}
-			else _models.Add(model);
+			_models.RemoveAll(x => x.TeamId == model.TeamId);
+			_models.Add(model);
 		}
 
 		public TeamAdherenceReadModel Get(Guid teamId)

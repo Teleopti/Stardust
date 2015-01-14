@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -31,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<AgentStateAssembler>().SingleInstance();
 			builder.RegisterType<AlarmFinder>().As<IAlarmFinder>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
-			builder.RegisterType<ActualAgentStateUpdater>().As<IActualAgentStateUpdater>().SingleInstance();
+			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
 
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
@@ -101,134 +98,5 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
 				.SingleInstance().As<IPersonOrganizationReader>();
 		}
-	}
-
-	public interface IStateStreamSynchronizer
-	{
-		void Sync();
-		void Initialize();
-	}
-
-	public class StateStreamSynchronizer : IStateStreamSynchronizer
-	{
-		private readonly ITeamAdherencePersister _teamPersister;
-		private readonly ISiteAdherencePersister _sitePersister;
-		private readonly IAdherenceDetailsReadModelPersister _detailsPresister;
-
-		private readonly IPersonOrganizationReader _reader;
-		private readonly IDatabaseReader _reader2;
-		private readonly INow _now;
-
-		public StateStreamSynchronizer(ITeamAdherencePersister teamPersister, ISiteAdherencePersister sitePersister, 
-						IAdherenceDetailsReadModelPersister detailsPresister,  IPersonOrganizationReader reader, IDatabaseReader reader2, INow now)
-		{
-			_teamPersister = teamPersister;
-			_sitePersister = sitePersister;
-			_detailsPresister = detailsPresister;
-			_reader = reader;
-			_reader2 = reader2;
-			_now = now;
-		}
-
-		public void Sync()
-		{
-			_teamPersister.Clear();
-			persistReadModelForTeam();
-			_sitePersister.Clear();
-			persistReadModelForSite();
-
-		}
-
-		public void Initialize()
-		{
-			handleTeam();
-			handleSite();
-			handleDetails();
-		}
-
-		private void handleDetails()
-		{
-			
-			var agentStates = _reader2.GetActualAgentStates();
-			if (!agentStates.Any()) return;
-			var personActivities = _reader2.GetCurrentSchedule(agentStates.First().PersonId);
-			if (!personActivities.Any()) return;
-
-			_detailsPresister.Add(new AdherenceDetailsReadModel
-			{
-				Date = _now.UtcDateTime().Date,
-				PersonId = agentStates.First().PersonId,
-				Model = new AdherenceDetailsModel
-				{
-					Details = new List<AdherenceDetailModel>(new[]
-					{
-						new AdherenceDetailModel
-						{
-							StartTime = personActivities.First().StartDateTime
-						}
-					})
-				}
-			});
-		}
-
-		private void handleTeam()
-		{
-			if (!_teamPersister.HasData())
-				persistReadModelForTeam();
-		}
-
-		private void handleSite()
-		{
-			if (!_sitePersister.HasData())
-				persistReadModelForSite();
-		}
-
-		private void persistReadModelForSite()
-		{
-			var data = from s in _reader2.GetActualAgentStates()
-					   group s by organizationalData(s).SiteId
-						   into states
-						   select new
-						   {
-							   siteId = states.Key,
-							   outOfAdherence = countOutOfAdherence(states)
-						   };
-
-			data.ForEach(s => _sitePersister.Persist(new SiteAdherenceReadModel
-			{
-				SiteId = s.siteId,
-				AgentsOutOfAdherence = s.outOfAdherence
-			}));
-		}
-
-		private void persistReadModelForTeam()
-		{
-			var data = from s in _reader2.GetActualAgentStates()
-					   group s by organizationalData(s).TeamId
-						   into states
-						   select new
-						   {
-							   teamId = states.Key,
-							   outOfAdherence = countOutOfAdherence(states)
-						   };
-			data.ForEach(s => _teamPersister.Persist(new TeamAdherenceReadModel
-			{
-				TeamId = s.teamId,
-				AgentsOutOfAdherence = s.outOfAdherence
-			}));
-		}
-
-		private static int countOutOfAdherence(IEnumerable<AgentStateReadModel> states)
-		{
-			return states.Count(s => StateInfo.AdherenceFor(s) == Domain.ApplicationLayer.Rta.Adherence.Out);
-		}
-
-		private PersonOrganizationData organizationalData(AgentStateReadModel agentStateReadModel)
-		{
-			return (from d in _reader.PersonOrganizationData()
-					where d.PersonId == agentStateReadModel.PersonId
-					select d).Single();
-		}
-
 	}
 }

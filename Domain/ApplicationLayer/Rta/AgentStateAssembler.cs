@@ -13,6 +13,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_alarmFinder = alarmFinder;
 		}
 
+		public AgentState MakeEmpty(Guid personId)
+		{
+			return new AgentState
+			{
+				PersonId = personId,
+				StateGroupId = Guid.NewGuid()
+			};
+		}
+
+		public AgentState MakeCurrentStateFromPrevious(AgentStateReadModel fromStorage)
+		{
+			return new AgentState
+			{
+				PersonId = fromStorage.PersonId,
+				BatchId = fromStorage.BatchId,
+				PlatformTypeId = fromStorage.PlatformTypeId,
+				SourceId = fromStorage.OriginalDataSourceId,
+				ReceivedTime = fromStorage.ReceivedTime,
+				StateCode = fromStorage.StateCode,
+				StateGroupId = fromStorage.StateId,
+				ActivityId = fromStorage.ScheduledId,
+				NextActivityId = fromStorage.ScheduledNextId,
+				NextActivityStartTime = fromStorage.NextStart,
+				AlarmTypeId = fromStorage.AlarmId,
+				AlarmTypeStartTime = fromStorage.StateStart,
+				StaffingEffect = fromStorage.StaffingEffect
+			};
+		}
+
 		public AgentState MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
 		{
 			if (fromStorage == null)

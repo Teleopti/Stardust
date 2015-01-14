@@ -111,8 +111,10 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="FakeDataSourcesProvider.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
+    <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
     <Compile Include="IoC\IoCTestTest.cs" />
