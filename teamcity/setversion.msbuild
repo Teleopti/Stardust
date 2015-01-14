@@ -2,10 +2,8 @@
 
 <Project DefaultTargets="SetVersion" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
-		<RootFolder>$(teamcity_build_checkoutDir)</RootFolder>
-		<MajorFile>$(RootFolder)\ActiveMajorVersion.txt</MajorFile>
-		<MinorFile>$(RootFolder)\ActiveBranchVersion.txt</MinorFile>
-		<RevisionNumber>XXX</RevisionNumber> <!--must be set from caller -->
+		<MajorFile>$(WorkingDirectory)\ActiveMajorVersion.txt</MajorFile>
+		<MinorFile>$(WorkingDirectory)\ActiveBranchVersion.txt</MinorFile>
 	</PropertyGroup>
 
 	<Target Name="SetVersion">
@@ -15,10 +13,7 @@
 		<ReadLinesFromFile File="$(MinorFile)" >
 			<Output TaskParameter="Lines" PropertyName="minorVersion" />
 		</ReadLinesFromFile>
-		
-		<!-- remove me later -->
-		<Message Text="##teamcity[setParameter name='ApplicationVersion' value='$(majorVersion).$(minorVersion).$(RevisionNumber)']" />
-		
+
 		<Message Text="##teamcity[setParameter name='MajorVersion' value='$(majorVersion)']" />
 		<Message Text="##teamcity[setParameter name='MinorVersion' value='$(minorVersion)']" />
 	</Target>
