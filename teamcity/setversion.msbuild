@@ -16,6 +16,10 @@
 			<Output TaskParameter="Lines" PropertyName="minorVersion" />
 		</ReadLinesFromFile>
 		
-		<Message Text="##teamcity[setParameter name='ApplicationVersion' value='$(majorVersion).$(minorVersion).$(RevisionNumber)']" />		
+		<!-- remove me later -->
+		<Message Text="##teamcity[setParameter name='ApplicationVersion' value='$(majorVersion).$(minorVersion).$(RevisionNumber)']" />
+		
+		<Message Text="##teamcity[setParameter name='MajorVersion' value='$(majorVersion)']" />
+		<Message Text="##teamcity[setParameter name='MinorVersion' value='$(minorVersion)']" />
 	</Target>
 </Project>
