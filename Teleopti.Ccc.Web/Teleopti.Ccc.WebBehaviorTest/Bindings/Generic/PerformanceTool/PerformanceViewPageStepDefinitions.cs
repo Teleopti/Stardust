@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
@@ -89,6 +91,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
+
+		[When(@"I input a configuration for (.*) states and (.*) of (.*) persons can poll per second on datasource (.*)")]
+		public void WhenIInputAConfigurationForEveryoneAndOfPersonsCanPollPerSecond(int stateCount, Decimal percent, int personCount, int datasource)
+		{
+			var configuration = new
+			{
+				PlatformTypeId = Guid.Empty,
+				SourceId = datasource,
+				Persons = new List<object>(),
+				States = new List<object>(),
+				Timestamp = CurrentTime.Value(),
+				PollPerSecond = percent*personCount
+			};
+
+			for (var i = 0; i < stateCount; i++)
+			{
+				var state = "State" + i;
+				configuration.States.Add(state);
+			}
+			for (var i = 0; i < personCount; i++)
+			{
+				var personName = "Person" + i;
+				var personId = DataMaker.Person(personName).Person.Id.Value;
+				configuration.Persons.Add(new { ExternalLogOn = personName, PersonId = personId});
+			}
+			
+			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
+		}
+
 
 
 		[Then(@"I should see a count of (.*) messages received for '(.*)'")]

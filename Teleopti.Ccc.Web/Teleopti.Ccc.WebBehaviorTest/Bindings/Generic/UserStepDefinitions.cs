@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -63,6 +64,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
 		}
 
+		[Given(@"there are (.*) persons belong to '(.*)' with own external logon on datasource (.*)")]
+		public void GivenThereArePersonsBelongToWithOwnExternalLogonOnDatasource(int personCount, string teamName, int dataSourceId)
+		{
+			for (var i = 0; i < personCount; i++)
+			{
+				var personName = "Person" + i;
+				DataMaker.Data().Apply(new ExternalLogonConfigurable
+				{
+					AcdLogOnName = personName,
+					DataSourceId = dataSourceId,
+					AcdLogOnOriginalId = personName
+				});
+				DataMaker.Person(personName).Apply(new PersonPeriodConfigurable
+				{
+					StartDate = new DateTime(2015, 1, 1),
+					Team = teamName,
+					ExternalLogon = personName
+				});
+			}
+		}
 
 
 
