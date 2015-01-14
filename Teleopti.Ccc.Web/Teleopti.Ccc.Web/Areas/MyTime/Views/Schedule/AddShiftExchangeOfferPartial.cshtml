@@ -22,8 +22,9 @@
 						</span>
 					</div>
 				</div>
-
-				<div class="col-sm-6 btn-group" data-bind="visible: Toggle31317Enabled">
+				
+				<!--ko if: Toggle31317Enabled-->
+				<div class="col-sm-6 btn-group">
 					<button id="wish-list" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						<span data-bind="text: WishShiftType().Description"></span><span class="caret"></span>
 					</button>
@@ -31,6 +32,7 @@
 						<li><a data-bind="attr:{id: Id}, click: $parent.ChangeShiftType, text: Description"></a></li>
 					</ul>
 				</div>
+				<!--/ko-->
 			</td>
 		</tr>
 		<tr>
