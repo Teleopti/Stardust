@@ -1,15 +1,14 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
-	public class AdherencePercentageReadModelPersisterTest : IReadModelReadWriteTest
+	[ReadModelTest]
+	public class AdherencePercentageReadModelPersisterTest
 	{
 		public IAdherencePercentageReadModelPersister Target { get; set; }
 
@@ -141,24 +140,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var savedModel = Target.Get(dateOnly, personGuid);
 			savedModel.IsLastTimeInAdherence.Should().Be(null);
 			savedModel.LastTimestamp.Should().Be(null);
-		}
-	}
-
-	[ReadModelReadWriteTest]
-	public interface IReadModelReadWriteTest
-	{
-	}
-
-	public class ReadModelReadWriteTestAttribute : IoCTestAttribute
-	{
-		protected override void BeforeTest()
-		{
-			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvokation();
-		}
-
-		protected override void AfterTest()
-		{
-			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvokation(null);
 		}
 	}
 }

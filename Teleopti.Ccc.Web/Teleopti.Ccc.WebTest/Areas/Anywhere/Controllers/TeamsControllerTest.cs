@@ -146,14 +146,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			public ISiteRepository SiteRepository { get; set; }
 			public INumberOfAgentsInTeamReader NumberOfAgentsInTeamReader { get; set; }
-			public ITeamAdherencePersister TeamAdherencePersister { get; set; }
+			public ITeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModelPersister { get; set; }
 			public ITeamAdherenceAggregator TeamAdherenceAggregator { get; set; }
 			public IGetBusinessUnitId GetBusinessUnitId { get; set; }
 
 			public TeamsController CreateController()
 			{
 				var logic = new GetTeamAdherence(SiteRepository, NumberOfAgentsInTeamReader,TeamAdherenceAggregator,
-				TeamAdherencePersister);
+				TeamOutOfAdherenceReadModelPersister);
 				return new TeamsController(logic, GetBusinessUnitId);
 			}
 		} 

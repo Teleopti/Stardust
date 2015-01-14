@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
-	public class SiteAdherenceReadModelPersisterTest : IReadModelReadWriteTest
+	[ReadModelTest]
+	public class SiteAdherenceReadModelPersisterTest
 	{
 		public ISiteAdherencePersister Target { get; set; }
 		[Test]

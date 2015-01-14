@@ -217,7 +217,7 @@
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ISiteAdherencePersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ITeamAdherencepersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
@@ -238,8 +238,8 @@
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChanged.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonActivityChangePulseLoop.cs" />
-    <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\TeamOutOfAdherenceReadModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\TeamOutOfAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCount.cs" />

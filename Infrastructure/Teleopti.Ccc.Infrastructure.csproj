@@ -212,7 +212,7 @@
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
     <Compile Include="Repositories\SiteAdherencePersister.cs" />
-    <Compile Include="Repositories\TeamAdherencePersister.cs" />
+    <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Rta\ActualAgentStateExtension.cs" />
     <Compile Include="Rta\DatabaseConnectionFactory.cs" />
     <Compile Include="Rta\DatabaseConnectionStringHandler.cs" />

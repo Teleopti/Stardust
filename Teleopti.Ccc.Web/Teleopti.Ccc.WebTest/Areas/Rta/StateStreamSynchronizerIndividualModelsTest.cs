@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
 		public FakeSiteAdherencePersister SiteAdherence;
-		public FakeTeamAdherencePersister TeamAdherence;
+		public FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModel;
 
 		[Test]
 		public void ShouldInitializeModelsWithoutData()
@@ -26,10 +27,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			TeamAdherence.Persist(new TeamAdherenceReadModel
+			TeamOutOfAdherenceReadModel.Persist(new TeamOutOfAdherenceReadModel
 			{
 				TeamId = teamId,
-				AgentsOutOfAdherence = 3
+				Count = 3
 			});
 			Database
 				.WithExistingState(personId, 1)
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Initialize();
 
-			TeamAdherence.Get(teamId).AgentsOutOfAdherence.Should().Be(3);
+			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);
 			SiteAdherence.Get(siteId).AgentsOutOfAdherence.Should().Be(1);
 		}
 

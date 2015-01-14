@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 	public class StateStreamSynchronizer : IStateStreamSynchronizer
 	{
-		private readonly ITeamAdherencePersister _teamPersister;
+		private readonly ITeamOutOfAdherenceReadModelPersister _teamOutOfReadModelPersister;
 		private readonly ISiteAdherencePersister _sitePersister;
 		private readonly IAdherenceDetailsReadModelPersister _detailsPresister;
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IResolve _resolve;
 
 		public StateStreamSynchronizer(
-			ITeamAdherencePersister teamPersister, 
+			ITeamOutOfAdherenceReadModelPersister teamOutOfReadModelPersister, 
 			ISiteAdherencePersister sitePersister, 
 			IAdherenceDetailsReadModelPersister detailsPresister,  
 			IPersonOrganizationReader reader, 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IResolve resolve
 			)
 		{
-			_teamPersister = teamPersister;
+			_teamOutOfReadModelPersister = teamOutOfReadModelPersister;
 			_sitePersister = sitePersister;
 			_detailsPresister = detailsPresister;
 			_reader = reader;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public void Sync()
 		{
-			_teamPersister.Clear();
+			_teamOutOfReadModelPersister.Clear();
 			persistReadModelForTeam();
 			_sitePersister.Clear();
 			persistReadModelForSite();
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void handleTeam()
 		{
-			if (!_teamPersister.HasData())
+			if (!_teamOutOfReadModelPersister.HasData())
 				persistReadModelForTeam();
 		}
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 						);
 					context.SetPreviousMakeMethodToReturnEmptyState();
 					context.SetCurrentMakeMethodToReturnPreviousState(s);
-					context.PublisEventsTo(new TeamAdherenceReadModelUpdater(_teamPersister));
+					context.PublisEventsTo(new TeamOutOfAdherenceReadModelUpdater(_teamOutOfReadModelPersister));
 					_processor.Process(context);
 				});
 		}

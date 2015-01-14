@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ITeamAdherenceAggregator _teamAdherenceAggregator;
-		private readonly ITeamAdherencePersister _teamAdherencePersister;
+		private readonly ITeamOutOfAdherenceReadModelPersister _teamOutOfAdherenceReadModelPersister;
 
-		public GetTeamAdherence(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,ITeamAdherenceAggregator teamAdherenceAggregator, ITeamAdherencePersister teamAdherencePersister)
+		public GetTeamAdherence(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,ITeamAdherenceAggregator teamAdherenceAggregator, ITeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_teamAdherenceAggregator = teamAdherenceAggregator;
-			_teamAdherencePersister = teamAdherencePersister;
+			_teamOutOfAdherenceReadModelPersister = teamOutOfAdherenceReadModelPersister;
 		}
 
 		public IEnumerable<TeamViewModel> ForSite(string siteId)
@@ -57,18 +57,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public TeamOutOfAdherence GetOutOfAdherenceLite(string teamId)
 		{
-			var model = _teamAdherencePersister.Get(Guid.Parse(teamId));
+			var model = _teamOutOfAdherenceReadModelPersister.Get(Guid.Parse(teamId));
 			if (model == null)
 			{
 				return new TeamOutOfAdherence { Id = teamId, OutOfAdherence = 0 };
 			} 
-			return new TeamOutOfAdherence {Id = model.TeamId.ToString(), OutOfAdherence = model.AgentsOutOfAdherence};
+			return new TeamOutOfAdherence {Id = model.TeamId.ToString(), OutOfAdherence = model.Count};
 		}
 
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId)
 		{
-			var result = _teamAdherencePersister.GetForSite(Guid.Parse(siteId));
-			return result.Select(r => new TeamOutOfAdherence() { Id = r.TeamId.ToString(), OutOfAdherence = r.AgentsOutOfAdherence });
+			var result = _teamOutOfAdherenceReadModelPersister.GetForSite(Guid.Parse(siteId));
+			return result.Select(r => new TeamOutOfAdherence() { Id = r.TeamId.ToString(), OutOfAdherence = r.Count });
 		}
 
 	}

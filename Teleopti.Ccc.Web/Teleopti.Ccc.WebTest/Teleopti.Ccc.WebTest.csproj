@@ -255,7 +255,6 @@
     <Compile Include="Areas\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Areas\Rta\FakeMbCacheFactory.cs" />
     <Compile Include="Areas\Rta\FakeSiteAdherencePersister.cs" />
-    <Compile Include="Areas\Rta\FakeTeamAdherencePersister.cs" />
     <Compile Include="Areas\Rta\NoBrokerTest.cs" />
     <Compile Include="Areas\Rta\RtaTestAttribute.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithAlarmTest.cs" />

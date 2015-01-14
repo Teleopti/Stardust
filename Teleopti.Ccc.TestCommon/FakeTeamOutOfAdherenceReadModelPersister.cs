@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
-namespace Teleopti.Ccc.WebTest.Areas.Rta
+namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeTeamAdherencePersister : ITeamAdherencePersister
+	public class FakeTeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister
 	{
-		private readonly List<TeamAdherenceReadModel> _models = new List<TeamAdherenceReadModel>();
+		private readonly List<TeamOutOfAdherenceReadModel> _models = new List<TeamOutOfAdherenceReadModel>();
 
-		public void Persist(TeamAdherenceReadModel model)
+		public void Persist(TeamOutOfAdherenceReadModel model)
 		{
 			_models.RemoveAll(x => x.TeamId == model.TeamId);
 			_models.Add(model);
 		}
 
-		public TeamAdherenceReadModel Get(Guid teamId)
+		public TeamOutOfAdherenceReadModel Get(Guid teamId)
 		{
 			return _models.FirstOrDefault(m => m.TeamId == teamId);
 		}
 
-		public IEnumerable<TeamAdherenceReadModel> GetForSite(Guid siteId)
+		public IEnumerable<TeamOutOfAdherenceReadModel> GetForSite(Guid siteId)
 		{
 			return _models.Where(x => x.SiteId == siteId);
 		}

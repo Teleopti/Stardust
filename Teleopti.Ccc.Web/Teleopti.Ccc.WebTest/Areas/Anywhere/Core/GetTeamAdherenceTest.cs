@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		[Test]
 		public void GetOutOfAdherenceForTeamsOnSite_ShouldGetTeamsFromReadModel()
 		{
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
+			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
 			var teamId = Guid.NewGuid();
 			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
 			var siteId = Guid.NewGuid();
-			var teamsOutOfAdherence = new List<TeamAdherenceReadModel>()
+			var teamsOutOfAdherence = new List<TeamOutOfAdherenceReadModel>()
 			{
-				new TeamAdherenceReadModel(){ TeamId = teamId ,AgentsOutOfAdherence= 3}
+				new TeamOutOfAdherenceReadModel(){ TeamId = teamId ,Count= 3}
 			};
 
 			teamAdherencePersister.Stub(t => t.GetForSite(siteId)).Return(teamsOutOfAdherence);
@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		[Test]
 		public void ShouldGetTeamAdherenceForSingleTeam()
 		{
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
+			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
 			var teamId = Guid.NewGuid();
 			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
-			var teamsOutOfAdherence = new TeamAdherenceReadModel { TeamId = teamId, AgentsOutOfAdherence = 3 };
+			var teamsOutOfAdherence = new TeamOutOfAdherenceReadModel { TeamId = teamId, Count = 3 };
 			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(teamsOutOfAdherence);
 			var result = target.GetOutOfAdherenceLite(teamId.ToString());
 			result.Id.Should().Be(teamId.ToString());
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		[Test]
 		public void ShouldHaveZeroAdherenceIfReadModelDoesNotExists()
 		{
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamAdherencePersister>();
+			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
 			var teamId = Guid.NewGuid();
 			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
 			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(null);

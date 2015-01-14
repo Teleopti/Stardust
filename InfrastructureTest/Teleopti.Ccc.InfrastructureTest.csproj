@@ -200,8 +200,9 @@
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Repositories\GamificationSettingtRepositoryTest.cs" />
+    <Compile Include="Repositories\ReadModelTestAttribute.cs" />
     <Compile Include="Repositories\SiteAdherenceReadModelPersisterTest.cs" />
-    <Compile Include="Repositories\TeamAdherenceReadModelPersisterTest.cs" />
+    <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\DatabaseWriterTest.cs" />

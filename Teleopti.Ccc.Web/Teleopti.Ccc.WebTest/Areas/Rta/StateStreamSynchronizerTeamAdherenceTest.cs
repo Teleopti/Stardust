@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
-		public FakeTeamAdherencePersister Model;
+		public FakeTeamOutOfAdherenceReadModelPersister Model;
 
 		[Test]
 		public void ShouldInitializeTeamAdherence()
@@ -48,8 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Initialize();
 
-			Model.Get(teamIdA).AgentsOutOfAdherence.Should().Be(2);
-			Model.Get(teamIdB).AgentsOutOfAdherence.Should().Be(1);
+			Model.Get(teamIdA).Count.Should().Be(2);
+			Model.Get(teamIdB).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -58,9 +59,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var existingTeam = Guid.NewGuid();
 			var stateTeam = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Model.Persist(new TeamAdherenceReadModel
+			Model.Persist(new TeamOutOfAdherenceReadModel
 			{
-				AgentsOutOfAdherence = 3,
+				Count = 3,
 				TeamId = existingTeam
 			});
 			Database
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Initialize();
 
-			Model.Get(existingTeam).AgentsOutOfAdherence.Should().Be(3);
+			Model.Get(existingTeam).Count.Should().Be(3);
 			Model.Get(stateTeam).Should().Be.Null();
 		}
 
@@ -79,14 +80,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Model.Persist(new TeamAdherenceReadModel
+			Model.Persist(new TeamOutOfAdherenceReadModel
 			{
-				AgentsOutOfAdherence = 3,
+				Count = 3,
 				TeamId = teamId1
 			});
-			Model.Persist(new TeamAdherenceReadModel
+			Model.Persist(new TeamOutOfAdherenceReadModel
 			{
-				AgentsOutOfAdherence = 3,
+				Count = 3,
 				TeamId = teamId2
 			});
 			Database
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Sync();
 
-			Model.Get(teamId1).AgentsOutOfAdherence.Should().Be(1);
+			Model.Get(teamId1).Count.Should().Be(1);
 			Model.Get(teamId2).Should().Be.Null();
 		}
 
