@@ -410,21 +410,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.To.Should().Be.Empty();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapShiftExchangeOfferStatusInPending()
 		{
 			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Pending);
 			requestViewModel.Status.Should().Contain(Resources.Pending);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapShiftExchangeOfferStatusCompleted()
 		{
 			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Completed);
 			requestViewModel.Status.Should().Contain(Resources.Completed);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapShiftExchangeOfferStatusInvalid()
 		{
 
@@ -432,12 +432,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			requestViewModel.Status.Should().Contain(Resources.Invalid);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapShiftExchangeOfferStatusExpired()
 		{
-			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Pending);
-			shiftExchangeOffer.Expect (x => x.IsExpired()).Return (true);
-
+			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Pending, true);
+			
 			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
@@ -644,19 +643,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 		private RequestViewModel  createRequestViewModelWithShiftExchangeOffer (ShiftExchangeOfferStatus status)
 		{
-			var shiftExchangeOffer = createShiftExchangeOffer(status);
+			var shiftExchangeOffer = createShiftExchangeOffer(status, false);
 			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			return result;
 
 		}
-
 		
-		private IShiftExchangeOffer createShiftExchangeOffer (ShiftExchangeOfferStatus status)
+		private ShiftExchangeOffer createShiftExchangeOffer (ShiftExchangeOfferStatus status, bool isExpired)
 		{
-			var str = MockRepository.GenerateMock<IShiftExchangeOffer>();
-			str.Expect (c => c.Status).Return (status);
-			str.Expect (c => c.PersonFrom).Return (_loggedOnPerson);
+			var currentShift = ScheduleDayFactory.Create( isExpired? DateOnly.Today : DateOnly.Today.AddDays (1));
+			var str = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), status );	
 			return str;
 		}
 	}
