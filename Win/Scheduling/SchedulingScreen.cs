@@ -2363,9 +2363,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupRequestViewButtonStates()
 		{
-			toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted;
-			toolStripMenuItemViewAllowance.Visible = _budgetPermissionService.IsAllowancePermitted;
-			toolStripMenuItemViewAllowance.Enabled = _budgetPermissionService.IsAllowancePermitted;
+			var view = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
+			toolStripButtonViewAllowance.Available = _budgetPermissionService.IsAllowancePermitted || PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
+			toolStripMenuItemViewAllowance.Visible = _budgetPermissionService.IsAllowancePermitted || PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance); ;
+			toolStripMenuItemViewAllowance.Enabled = _budgetPermissionService.IsAllowancePermitted || PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance);
 		}
 
 		private bool stateHolderExceptionOccurred(RunWorkerCompletedEventArgs e)
