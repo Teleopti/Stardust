@@ -11,12 +11,17 @@ $(document).ready(function() {
 				ajaxPostData = options.data;
 			}
 		};
-		
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function() {});
-		viewModel.WishShiftTypeOption({ Id: 'working-shift', Description: 'Empty Day' });
+
+		var option1 = { Id: 'working-shift', Description: 'Woking Shift' };
+		var option2 = { Id: 'empty-day', Description: 'Empty Day' };
+
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, function () { });
+		viewModel.Toggle31317Enabled(true);
+		viewModel.WishShiftTypeOption(option2);
+		viewModel.AllShiftTypes([option1, option2]);
 		viewModel.DateTo(moment('2015-01-15'));
 		viewModel.OfferValidTo(moment('2015-01-10'));
 		viewModel.SaveShiftExchangeOffer();
-		equal(ajaxPostData.WishShiftType, 'working-shift');
+		equal(ajaxPostData.WishShiftType, option2.Id);
 	});
 });

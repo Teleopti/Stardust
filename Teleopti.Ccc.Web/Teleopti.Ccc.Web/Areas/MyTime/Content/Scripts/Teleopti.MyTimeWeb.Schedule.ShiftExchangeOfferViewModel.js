@@ -149,8 +149,10 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
-		var wishShiftTypeId = 0;
-		if (self.Toggle31317Enabled()) wishShiftTypeId = self.WishShiftTypeOption().Id;
+		console.log("self.Toggle31317Enabled(): ", self.Toggle31317Enabled());
+		var wishShiftTypeId = self.Toggle31317Enabled() 
+			? self.WishShiftTypeOption().Id
+			: self.AllShiftTypes()[0].Id;
 
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
