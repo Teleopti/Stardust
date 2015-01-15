@@ -7,7 +7,7 @@ DROP TABLE [ReadModel].[SiteAdherence]
 GO
 
 CREATE TABLE [ReadModel].[SiteOutOfAdherence](
-	[SiteId] [uniqueidentifier] NULL,
+	[SiteId] [uniqueidentifier] NOT NULL,
 	[BusinessUnitId] [uniqueidentifier] NULL,
 	[Count] [int] NULL,
 	[PersonIds] [varchar](MAX) NULL,

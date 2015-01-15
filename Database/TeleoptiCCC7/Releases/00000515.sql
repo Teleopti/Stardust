@@ -7,7 +7,7 @@ DROP TABLE [ReadModel].[TeamAdherence]
 GO
 
 CREATE TABLE [ReadModel].[TeamOutOfAdherence](
-	[TeamId] [uniqueidentifier] NULL,
+	[TeamId] [uniqueidentifier] NOT NULL,
 	[SiteId] [uniqueidentifier] NULL,
 	[Count] [int] NULL,
 	[PersonIds] [varchar](MAX) NULL,
