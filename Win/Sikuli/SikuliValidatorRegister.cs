@@ -16,6 +16,7 @@
 		public const string None = "None";
 		public const string DeleteAll = "DeleteAll";
 		public const string Schedule = "Schedule";
+		public const string ScheduleOvertime = "ScheduleOvertime";
 		public const string Optimize = "Optimize";
 		public const string OptimizeDaysOff = "OptimizeDaysOff";
 		public const string OptimizeBetweenDays = "OptimizeBetweenDays";

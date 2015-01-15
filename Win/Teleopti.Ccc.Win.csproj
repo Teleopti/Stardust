@@ -2546,6 +2546,7 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
+    <Compile Include="Sikuli\Validators\ScheduleOvertimeValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBetweenDaysValidator.cs" />

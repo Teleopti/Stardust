@@ -59,6 +59,24 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			}
 		}
 
+		public static double? GetStandardDeviationForDay(ISchedulerStateHolder stateHolder, ISkill singleSkill, DateOnly requestedDay)
+		{
+			try
+			{
+				var dailyPeriods = getSkillStaffPeriodsOnDay(stateHolder, singleSkill, requestedDay);
+
+				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(new List<IEnumerable<ISkillStaffPeriod>> {dailyPeriods});
+				if (result.HasValue)
+					return Math.Round(result.Value, 3);
+				return null;
+			}
+			catch
+			{
+				return null;
+			}
+		}
+
+
 		public static double GetDailySumOfStandardDeviationsFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
 		{
 			double result = 0d;
@@ -103,6 +121,21 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriodsOnDay);
 			}
 			return dailySkillStaffPeriodsForFullPeriod;
+		}
+
+		private static IEnumerable<ISkillStaffPeriod> getSkillStaffPeriodsOnDay(ISchedulerStateHolder stateHolder, ISkill singleSkill, DateOnly requestedDay)
+		{
+
+			var requestedUtcPeriod = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
+			var requestedDayPeriodPlusMinusOneDay = new DateOnlyPeriod(requestedDay.AddDays(-1), requestedDay.AddDays(1)).ToDateTimePeriod(stateHolder.TimeZoneInfo);
+			var intersectionPeriod = requestedUtcPeriod.Intersection(requestedDayPeriodPlusMinusOneDay);
+			if (!intersectionPeriod.HasValue)
+				return new List<ISkillStaffPeriod>();
+
+			var skillStaffPeriods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { singleSkill }, intersectionPeriod.Value);
+			var requestedDayUtcPeriod = new DateOnlyPeriod(requestedDay, requestedDay).ToDateTimePeriod(stateHolder.TimeZoneInfo);
+			var skillStaffPeriodsOnDay = skillStaffPeriods.Where(x => requestedDayUtcPeriod.Contains(x.Period)).ToList();
+			return skillStaffPeriodsOnDay;
 		}
 	}
 }

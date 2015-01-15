@@ -36,11 +36,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			private set { StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = value; }
 		}
 
-		public static string CurrentValidator
-		{
-			get { return StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator; }
-			private set { StateHolderReader.Instance.StateReader.SessionScopeData.SikuliValidator = value; }
-		}
+		public static string CurrentValidator { get; private set; }
 
 		public static void SetTestMode(bool mode)
 		{
