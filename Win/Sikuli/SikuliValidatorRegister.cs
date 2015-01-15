@@ -24,7 +24,5 @@
 		public const string OptimizeBlockTeam = "OptimizeBlockTeam";
 		public const string OptimizeIntervalBalanceBefore = "OptimizeIntervalBalanceBefore";
 		public const string OptimizeIntervalBalanceAfter = "OptimizeIntervalBalanceAfter";
-
-
 	}
 }
