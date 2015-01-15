@@ -11,7 +11,7 @@ CREATE TABLE [ReadModel].[TeamOutOfAdherence](
 	[SiteId] [uniqueidentifier] NULL,
 	[Count] [int] NULL,
 	[PersonIds] [varchar](MAX) NULL,
-	CONSTRAINT [PK_Team] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_TeamOutOfAdherence] PRIMARY KEY CLUSTERED 
 	(
 		[TeamId] ASC
 	)
