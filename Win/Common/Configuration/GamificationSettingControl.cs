@@ -30,10 +30,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly List<GamificationSettingView> _gamificationSettingList = new List<GamificationSettingView>();
 		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
 		private readonly IToggleManager _toggleManager;
-		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
-		private IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
-		private Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
-		private Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
+		private readonly Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
+		private readonly Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
 		private readonly List<GamificationSettingView> _gamificationSettingListToBeDeleted;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
