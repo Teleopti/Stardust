@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.Authentication
+namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public interface IApplicationAuthentication
 	{
