@@ -2,9 +2,11 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
@@ -19,16 +21,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
 		public FakeSiteOutOfAdherenceReadModelPersister Model;
+		public IRta Rta;
+		public MutableNow Now;
 
 		[Test]
 		public void ShouldInitializeSiteAdherence()
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			Database
-				.WithExistingState(personId, 1)
-				.WithUser("", personId, null, null, siteId)
-				;
+				.WithUser("user", personId, null, null, siteId)
+				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
+				.WithAlarm("break", phone, 1);
+			Now.Is("2015-01-15 08:00");
+			Rta.SaveState(new ExternalUserStateForTest { UserCode = "user", StateCode = "break" });
 
 			Target.Initialize();
 
@@ -41,15 +48,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var existingSite = Guid.NewGuid();
 			var stateSite = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Model.Persist(new SiteOutOfAdherenceReadModel
+			var phone = Guid.NewGuid();
+			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = existingSite
 			});
 			Database
-				.WithExistingState(personId, 1)
-				.WithUser("", personId, null, null, stateSite);
-
+				.WithUser("user", personId, null, null, stateSite)
+				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
+				.WithAlarm("break", phone, 1);
+			Now.Is("2015-01-15 08:00");
+			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "break"});
+			
 			Target.Initialize();
 
 			Model.Get(existingSite).Count.Should().Be(3);
@@ -62,7 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Model.Persist(new SiteOutOfAdherenceReadModel
+			var phone = Guid.NewGuid();
+			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = siteId1
@@ -73,9 +85,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 				SiteId = siteId2
 			});
 			Database
-				.WithExistingState(personId, 1)
-				.WithUser("", personId, null, null, siteId1);
-
+				.WithUser("user", personId, null, null, siteId1)
+				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
+				.WithAlarm("break", phone, 1);
+			Now.Is("2015-01-15 08:00");
+			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "break"});
+			
 			Target.Sync();
 
 			Model.Get(siteId1).Count.Should().Be(1);

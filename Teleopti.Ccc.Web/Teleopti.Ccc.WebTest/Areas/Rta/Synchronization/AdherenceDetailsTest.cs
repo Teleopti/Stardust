@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
 
@@ -23,18 +24,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		public IStateStreamSynchronizer Target;
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public MutableNow Now;
+		public IRta Rta;
 
 		[Test]
 		public void ShouldInitializeAdherenceDetails()
 		{
 			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			Now.Is("2015-01-08 12:00");
 			Database
-				.WithExistingState(personId, activityId)
-				.WithSchedule(personId, activityId, "2015-01-08 11:00", "2015-01-08 13:00")
-				.WithUser("", personId)
-				;
+				.WithUser("user", personId)
+				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
+				.WithAlarm("phone", phone, 0);
+			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "phone"});
 
 			Target.Initialize();
 
@@ -46,13 +48,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		public void ShouldNotReinitializeAdherenceDetails()
 		{
 			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			Now.Is("2015-01-08 12:00");
 			Database
-				.WithExistingState(personId, activityId)
-				.WithSchedule(personId, activityId, "2015-01-08 11:00", "2015-01-08 13:00")
-				.WithUser("", personId)
-				;
+				.WithUser("user", personId)
+				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
+				.WithAlarm("phone", phone, 0);
+			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "phone"});
 			Persister.Add(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,

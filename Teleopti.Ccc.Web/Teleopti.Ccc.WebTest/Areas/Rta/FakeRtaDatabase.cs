@@ -5,8 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -20,8 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, string start, string end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold);
-		IFakeDataBuilder WithExistingState(Guid personId, int staffingEffect);
-		IFakeDataBuilder WithExistingState(Guid personId, Guid activityId);
 		FakeRtaDatabase Make();
 	}
 
@@ -154,18 +150,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				}
 			};
 			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroup.StateGroupId, _businessUnitId), alarms));
-			return this;
-		}
-
-		public IFakeDataBuilder WithExistingState(Guid personId, int staffingEffect)
-		{
-			PersistActualAgentState(new AgentStateReadModel{PersonId = personId, StaffingEffect = staffingEffect});
-			return this;
-		}
-
-		public IFakeDataBuilder WithExistingState(Guid personId, Guid activityId)
-		{
-			PersistActualAgentState(new AgentStateReadModel {PersonId = personId, ScheduledId = activityId});
 			return this;
 		}
 

@@ -2,9 +2,11 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
@@ -20,6 +22,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		public IStateStreamSynchronizer Target;
 		public FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModel;
 		public FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModel;
+		public IRta Rta;
+		public MutableNow Now;
 
 		[Test]
 		public void ShouldInitializeModelsWithoutData()
@@ -27,15 +31,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			TeamOutOfAdherenceReadModel.Persist(new TeamOutOfAdherenceReadModel
 			{
 				TeamId = teamId,
 				Count = 3
 			});
 			Database
-				.WithExistingState(personId, 1)
-				.WithUser("", personId, null, teamId, siteId)
-				;
+				.WithUser("user", personId, null, null, siteId)
+				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
+				.WithAlarm("break", phone, 1);
+			Now.Is("2015-01-15 08:00");
+			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "break"});
+
 
 			Target.Initialize();
 
