@@ -154,6 +154,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Analytics\Tables\fact_schedule.cs" />
     <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\CannotPublishToHangfire.cs" />

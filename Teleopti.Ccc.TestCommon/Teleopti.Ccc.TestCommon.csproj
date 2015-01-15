@@ -280,7 +280,6 @@
     <Compile Include="TestData\Analytics\Tables\fact_schedule_deviation.cs" />
     <Compile Include="TestData\Analytics\Tables\fact_agent.cs" />
     <Compile Include="TestData\Analytics\Tables\fact_agent_queue.cs" />
-    <Compile Include="TestData\Analytics\Tables\fact_schedule.cs" />
     <Compile Include="TestData\Analytics\Tables\stg_request.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_person.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_business_unit.cs" />

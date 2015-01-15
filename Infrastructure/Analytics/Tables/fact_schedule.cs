@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
+namespace Teleopti.Ccc.Infrastructure.Analytics.Tables
 {
 	public static class fact_schedule
 	{
