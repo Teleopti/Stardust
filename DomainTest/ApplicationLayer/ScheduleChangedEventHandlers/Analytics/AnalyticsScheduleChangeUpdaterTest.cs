@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric> { cat });
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_timeHandler.Stub(
-				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66)))
+				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Equal(55), Arg<int>.Is.Equal(66), Arg<int>.Is.Anything))
 				.Return(timePart);
 			_dateHandler.Stub(
 				x =>
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_dateHandler.Stub(
 				x => x.MapDateId(Arg.Is(new DateOnly(scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_timeHandler.Stub(
-				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything))
+				x => x.Handle(Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything))
 				.Return(timePart);
 			_target.Handle(@event);
 

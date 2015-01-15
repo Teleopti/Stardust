@@ -17,6 +17,8 @@ namespace Teleopti.Interfaces.Infrastructure
 		IList<IAnalyticsGeneric> ShiftCategories();
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		IList<IAnalyticsGeneric> Overtimes();
+		IList<IAnalyticsShiftLength> ShiftLengths();
+		int ShiftLengthId(int shiftLength);
 	}
 
 	public interface IAnalyticsFactScheduleDayCount
@@ -53,7 +55,7 @@ namespace Teleopti.Interfaces.Infrastructure
 		int PaidTimeMinutes { get; set; }  
 		int PaidTimeActivityMinutes { get; set; }
 		int PaidTimeAbsenceMinutes { get; set; }
-		int ShiftLength { get; set; }
+		int ShiftLengthId { get; set; }
 	}
 
 	public interface IAnalyticsFactScheduleDate
@@ -105,5 +107,11 @@ namespace Teleopti.Interfaces.Infrastructure
 	{
 		int PersonId { get; set; }
 		int BusinessUnitId { get; set; }
+	}
+
+	public interface IAnalyticsShiftLength
+	{
+		int Id { get; set; }
+		int ShiftLength { get; set; }
 	}
 }

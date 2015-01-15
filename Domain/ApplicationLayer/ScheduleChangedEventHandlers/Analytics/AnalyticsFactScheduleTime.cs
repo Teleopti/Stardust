@@ -31,6 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		public int PaidTimeMinutes { get; set; }
 		public int PaidTimeActivityMinutes { get; set; }
 		public int PaidTimeAbsenceMinutes { get; set; }
-		public int ShiftLength { get; set; }
+		public int ShiftLengthId { get; set; }
 	}
 }

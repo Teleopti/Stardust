@@ -70,8 +70,20 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(abs);
 			analyticsDataFactory.Persist();
 
-			var acts = _target.Absences();
-			acts.Count.Should().Be.EqualTo(1);
+			var absences = _target.Absences();
+			absences.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldLoadShiftLengths()
+		{
+			var sl = new ShiftLength(33, 240, _datasource);
+
+			analyticsDataFactory.Setup(sl);
+			analyticsDataFactory.Persist();
+
+			var shiftLengths = _target.ShiftLengths();
+			shiftLengths.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -124,6 +136,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			
 			var absEmpty = new Absence(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
 			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
+
+			var shiftLength = new ShiftLength(4, 480, _datasource);
 			 
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Setup(actEmpty);
@@ -131,6 +145,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(absEmpty);
 			analyticsDataFactory.Setup(new CurrentWeekDates());
 			analyticsDataFactory.Setup(new QuarterOfAnHourInterval());
+			analyticsDataFactory.Setup(shiftLength);
 
 			analyticsDataFactory.Persist();
 			var datePart = new AnalyticsFactScheduleDate
@@ -167,7 +182,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ScheduledAbsenceMinutes = 0,
 				ScheduledActivityMinutes = 15,
 				ScenarioId = 10,
-				ShiftLength = (int) TimeSpan.FromHours(8).TotalMinutes,
+				ShiftLengthId = 4,
 				WorkTimeMinutes = 15,
 				WorkTimeAbsenceMinutes = 0,
 				WorkTimeActivityMinutes = 15
@@ -215,6 +230,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public void ScholdBeAbleToDeleteADay()
 		{
 			_target.DeleteFactSchedule(1, 1, 1);
+		}
+
+		[Test]
+		public void ShouldCreateNewShiftLengthIfNotExist()
+		{
+			var shiftLengthId = _target.ShiftLengthId(120);
+			shiftLengthId.Should().Be.GreaterThan(0);
 		}
 
 	}

@@ -26,7 +26,7 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_insert]
 	@shift_startinterval_id smallint,
 	@shift_endinterval_id smallint,
 	@shift_category_id int,
-	@shift_length_m int,
+	@shift_length_id int,
 	@scheduled_time_m int,
 	@scheduled_time_absence_m int,
 	@scheduled_time_activity_m int,
@@ -47,22 +47,6 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_insert]
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	-- Get or create shift_length_id from @shift_length_m
-	DECLARE @shift_length_id int
-
-	SELECT @shift_length_id = shift_length_id
-	FROM mart.dim_shift_length
-	WHERE shift_length_m = @shift_length_m
-
-	IF @shift_length_id IS NULL
-	BEGIN
-		INSERT INTO mart.dim_shift_length (shift_length_m, shift_length_h)
-		VALUES (@shift_length_m, CONVERT(decimal(10,2), @shift_length_m / 60))
-
-		SET @shift_length_id = @@IDENTITY
-	END
-
 
 	INSERT INTO mart.fact_schedule
            (shift_startdate_local_id

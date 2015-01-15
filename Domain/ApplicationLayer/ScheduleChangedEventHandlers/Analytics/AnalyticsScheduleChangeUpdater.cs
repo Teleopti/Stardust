@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 							_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 							break;
 						}
-						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId );
-						timePart.ShiftLength = (int)(shiftEnd - shiftStart).TotalMinutes;
+						var shiftLength = (int) (shiftEnd - shiftStart).TotalMinutes;
+						var timePart = _analyticsFactScheduleTimeHandler.Handle(intervalLayer, shiftCategoryId, scenarioId, shiftLength);
 
 						_analyticsScheduleRepository.PersistFactScheduleRow(timePart, datePart, personPart);
 					}

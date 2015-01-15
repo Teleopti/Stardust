@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_repository = repository;
 		}
 
-		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId)
+		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLength)
 		{
 			var ret = new AnalyticsFactScheduleTime
 			{
@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				WorkTimeMinutes = (int) layer.WorkTime.TotalMinutes,
 				OverTimeMinutes = (int) layer.Overtime.TotalMinutes,
 				OverTimeId = MapOvertimeId(layer.MultiplicatorDefinitionSetId),
-				ScenarioId = scenarioId
+				ScenarioId = scenarioId,
+				ShiftLengthId = MapShiftLengthId(shiftLength)
 				
 			};
 			var layerMinutes = (int)(layer.EndDateTime - layer.StartDateTime).TotalMinutes;
@@ -29,36 +30,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			if (!layer.IsAbsence)
 			{
 				ret.ShiftCategoryId = shiftCategoryId;
-				var activities = _repository.Activities();
-				var act = activities.FirstOrDefault(a => a.ActivityCode.Equals(layer.PayloadId));
-				if (act == null) return ret;
-				ret.ActivityId = act.ActivityId;
+
+				var activity = mapActivityId(layer.PayloadId);
+				if (activity == null) return ret;
+				ret.ActivityId = activity.ActivityId;
 				ret.ContractTimeActivityMinutes = (int)layer.ContractTime.TotalMinutes;
 				ret.WorkTimeActivityMinutes = (int)layer.WorkTime.TotalMinutes;
 				ret.ScheduledActivityMinutes = layerMinutes;
-				if (act.InPaidTime)
+				if (activity.InPaidTime)
 				{
 					ret.PaidTimeMinutes = layerMinutes;
 					ret.PaidTimeActivityMinutes = layerMinutes;
 				}
-				if (act.InReadyTime)
+				if (activity.InReadyTime)
 					ret.ReadyTimeMinues = layerMinutes;
 			}
 			else
 			{
-				var abs = MapAbsenceId(layer.PayloadId);
-				if (abs == null) return ret;
-				ret.AbsenceId = abs.AbsenceId;
+				var absence = MapAbsenceId(layer.PayloadId);
+				if (absence == null) return ret;
+				ret.AbsenceId = absence.AbsenceId;
 				ret.ContractTimeAbsenceMinutes = (int)layer.ContractTime.TotalMinutes;
 				ret.WorkTimeAbsenceMinutes = (int)layer.WorkTime.TotalMinutes;
 				ret.ScheduledAbsenceMinutes = layerMinutes;
-				if (abs.InPaidTime)
+				if (absence.InPaidTime)
 				{
 					ret.PaidTimeMinutes = layerMinutes;
 					ret.PaidTimeAbsenceMinutes = layerMinutes;
 				}
 			}
 			return ret;
+		}
+
+		public int MapShiftLengthId(int shiftLength)
+		{
+			var shiftLengths = _repository.ShiftLengths();
+			var sl = shiftLengths.FirstOrDefault(a => a.ShiftLength.Equals(shiftLength));
+			return sl == null ? _repository.ShiftLengthId(shiftLength) : sl.Id;
+		}
+
+		private IAnalyticsActivity mapActivityId(Guid activityCode)
+		{
+			var activities = _repository.Activities();
+			var act = activities.FirstOrDefault(a => a.ActivityCode.Equals(activityCode));
+			return act ?? null;
 		}
 
 		public IAnalyticsAbsence MapAbsenceId(Guid absenceCode)

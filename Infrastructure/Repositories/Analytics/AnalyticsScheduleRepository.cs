@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 @activity_id=:ActivityId, @absence_id=:AbsenceId, @activity_startdate_id=:ActivityStartdateId, @activity_enddate_id=:ActivityEnddateId,
 @activity_endtime=:ActivityEndtime, @shift_startdate_id=:ShiftStartdateId, @shift_starttime=:ShiftStarttime, @shift_enddate_id=:ShiftEnddateId,
 @shift_endtime=:ShiftEndtime, @shift_startinterval_id=:ShiftStartintervalId, @shift_endinterval_id=:ShiftEndintervalId,
-@shift_category_id=:ShiftCategoryId, @shift_length_m=:ShiftLength, @scheduled_time_m=:ScheduledTimeM, @scheduled_time_absence_m=:ScheduledTimeAbsence,
+@shift_category_id=:ShiftCategoryId, @shift_length_id=:ShiftLengthId, @scheduled_time_m=:ScheduledTimeM, @scheduled_time_absence_m=:ScheduledTimeAbsence,
 @scheduled_time_activity_m=:ScheduledTimeActivity, @scheduled_contract_time_m=:ContractTime, @scheduled_contract_time_activity_m=:ContractTimeActivity,
 @scheduled_contract_time_absence_m=:ContractTimeAbsence, @scheduled_work_time_m=:WorkTime, @scheduled_work_time_activity_m=:WorkTimeActivity,
 @scheduled_work_time_absence_m=:WorkTimeAbsence, @scheduled_over_time_m=:OverTime, @scheduled_ready_time_m=:ReadyTime,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetInt32("ShiftStartintervalId", datePart.ShiftStartIntervalId)
 					.SetInt32("ShiftEndintervalId", datePart.ShiftEndIntervalId)
 					.SetInt32("ShiftCategoryId", timePart.ShiftCategoryId)
-					.SetInt32("ShiftLength", timePart.ShiftLength)
+					.SetInt32("ShiftLengthId", timePart.ShiftLengthId)
 					.SetInt32("ScheduledTimeM", timePart.ScheduledMinutes)
 					.SetInt32("ScheduledTimeAbsence", timePart.ScheduledAbsenceMinutes)
 					.SetInt32("ScheduledTimeActivity", timePart.ScheduledActivityMinutes)
@@ -195,6 +195,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public IList<IAnalyticsShiftLength> ShiftLengths()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select shift_length_id Id, shift_length_m ShiftLength from mart.dim_shift_length")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftLength)))
+					.SetReadOnly(true)
+					.List<IAnalyticsShiftLength>();
+			}
+		}
+
+		public int ShiftLengthId(int shiftLength)
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(@"mart.etl_dim_shift_length_id_get @shift_length_m=:ShiftLength")
+					.SetInt32("ShiftLength", shiftLength)
+					.UniqueResult<int>();
+			}
+		}
+
 		private IUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
@@ -227,6 +249,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public int AbsenceId { get; set; }
 		public Guid AbsenceCode { get; set; }
 		public bool InPaidTime { get; set; }
+	}
+
+	public class AnalyticsShiftLength : IAnalyticsShiftLength
+	{
+		public int Id { get; set; }
+		public int ShiftLength { get; set; }
 	}
 
 	public class CustomDictionaryTransformer : IResultTransformer

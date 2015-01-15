@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private readonly Guid _guidAbsNotPaid = Guid.NewGuid();
 		private List<IAnalyticsAbsence> _absences;
 		private List<IAnalyticsGeneric> _overtimes;
+		private List<IAnalyticsShiftLength> _shiftLengths;
 
 		[SetUp]
 		public void Setup()
@@ -47,8 +49,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			_overtimes = new List<IAnalyticsGeneric>
 			{
-				new AnalyticsGeneric { Id = 3, 
-					Code = Guid.NewGuid() }
+				new AnalyticsGeneric { Id = 3, Code = Guid.NewGuid() }
+			};
+			_shiftLengths = new List<IAnalyticsShiftLength>
+			{
+				new AnalyticsShiftLength{ Id = 6, ShiftLength = 120 }
 			};
 		}
 
@@ -67,7 +72,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Activities()).Return(_activities);
-			var result = _target.Handle(layer, 12, 22);
+			_rep.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
+			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(1);
@@ -84,6 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			result.OverTimeId.Should().Be.EqualTo(-1);
 			result.ScenarioId.Should().Be.EqualTo(22);
 			result.ShiftCategoryId.Should().Be.EqualTo(12);
+			result.ShiftLengthId.Should().Be.EqualTo(_shiftLengths.First().Id);
 		}
 
 		[Test]
@@ -102,7 +109,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Activities()).Return(_activities);
-			var result = _target.Handle(layer, 12, 22);
+			_rep.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
+			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(3);
@@ -130,7 +138,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Absences()).Return(_absences);
-			var result = _target.Handle(layer, 12, 22);
+			_rep.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
+			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.ShiftCategoryId.Should().Be.EqualTo(-1);
 			result.AbsenceId.Should().Be.EqualTo(1);
@@ -164,8 +173,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			
 			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
 			_rep.Stub(x => x.Activities()).Return(_activities);
+			_rep.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
 
-			var result = _target.Handle(layer, 12, 22);
+			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
 			result.OverTimeMinutes.Should().Be.EqualTo(10);
 			result.OverTimeId.Should().Be.EqualTo(_overtimes[0].Id);
@@ -198,10 +208,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldFailToMapOvertimeId()
 		{
-			var overtimes = new List<IAnalyticsGeneric>();
-			_rep.Stub(x => x.Overtimes()).Return(overtimes);
+			_rep.Stub(x => x.Overtimes()).Return(new List<IAnalyticsGeneric>());
 			var overtimeId = _target.MapOvertimeId(Guid.NewGuid());
 			overtimeId.Should().Be.EqualTo(-1);
+		}
+
+		[Test]
+		public void ShouldMapNewShiftLengthId()
+		{
+			_rep.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
+			_rep.Stub(x => x.ShiftLengthId(30)).Return(77);
+
+			var shiftLengthId = _target.MapShiftLengthId(30);
+
+			shiftLengthId.Should().Be.EqualTo(77);
 		}
 	}
 }
