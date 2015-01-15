@@ -174,7 +174,6 @@
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetailsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModelUpdaterTest.cs" />

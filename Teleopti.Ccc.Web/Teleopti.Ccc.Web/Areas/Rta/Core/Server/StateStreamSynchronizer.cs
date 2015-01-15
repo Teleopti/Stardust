@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly ISiteOutOfAdherenceReadModelPersister _siteOutOfReadModelPersister;
 		private readonly IAdherenceDetailsReadModelPersister _detailsPresister;
 
-		private readonly IPersonOrganizationReader _reader;
-		private readonly IDatabaseReader _reader2;
 		private readonly INow _now;
 		private readonly RtaProcessor _processor;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
@@ -37,8 +35,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			ITeamOutOfAdherenceReadModelPersister teamOutOfReadModelPersister, 
 			ISiteOutOfAdherenceReadModelPersister siteOutOfReadModelPersister, 
 			IAdherenceDetailsReadModelPersister detailsPresister,  
-			IPersonOrganizationReader reader, 
-			IDatabaseReader reader2, 
 			INow now,
 			RtaProcessor processor,
 			IPersonOrganizationProvider personOrganizationProvider,
@@ -53,8 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_teamOutOfReadModelPersister = teamOutOfReadModelPersister;
 			_siteOutOfReadModelPersister = siteOutOfReadModelPersister;
 			_detailsPresister = detailsPresister;
-			_reader = reader;
-			_reader2 = reader2;
 			_now = now;
 			_processor = processor;
 			_personOrganizationProvider = personOrganizationProvider;
@@ -69,88 +63,33 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public void Sync()
 		{
 			_teamOutOfReadModelPersister.Clear();
-			persistReadModelForTeam();
+			processStates(new TeamOutOfAdherenceReadModelUpdater(_teamOutOfReadModelPersister));
 			_siteOutOfReadModelPersister.Clear();
-			persistReadModelForSite();
-
+			processStates(new SiteOutOfAdherenceReadModelUpdater(_siteOutOfReadModelPersister));
 		}
 
 		public void Initialize()
 		{
-			handleTeam();
-			handleSite();
-			handleDetails();
-		}
-
-		private void handleDetails()
-		{
-			
-			var agentStates = _reader2.GetActualAgentStates();
-			if (!agentStates.Any()) return;
-			var personActivities = _reader2.GetCurrentSchedule(agentStates.First().PersonId);
-			if (!personActivities.Any()) return;
-
-			_detailsPresister.Add(new AdherenceDetailsReadModel
-			{
-				Date = _now.UtcDateTime().Date,
-				PersonId = agentStates.First().PersonId,
-				Model = new AdherenceDetailsModel
-				{
-					Details = new List<AdherenceDetailModel>(new[]
-					{
-						new AdherenceDetailModel
-						{
-							StartTime = personActivities.First().StartDateTime
-						}
-					})
-				}
-			});
-		}
-
-		private void handleTeam()
-		{
 			if (!_teamOutOfReadModelPersister.HasData())
-				persistReadModelForTeam();
-		}
-
-		private void handleSite()
-		{
+				processStates(new TeamOutOfAdherenceReadModelUpdater(_teamOutOfReadModelPersister));
 			if (!_siteOutOfReadModelPersister.HasData())
-				persistReadModelForSite();
+				processStates(new SiteOutOfAdherenceReadModelUpdater(_siteOutOfReadModelPersister));
+			if(!_detailsPresister.HasData())
+				processStates(new AdherenceDetailsReadModelUpdater(_detailsPresister));
 		}
 
-		private void persistReadModelForSite()
+		private void processStates(object handler)
 		{
-			var data = from s in _reader2.GetActualAgentStates()
-				group s by organizationalData(s).SiteId
-				into states
-				select new
-				{
-					siteId = states.Key,
-					outOfAdherence = countOutOfAdherence(states)
-				};
-
-			data.ForEach(s => _siteOutOfReadModelPersister.Persist(new SiteOutOfAdherenceReadModel
-			{
-				SiteId = s.siteId,
-				Count = s.outOfAdherence
-			}));
-		}
-
-		private void persistReadModelForTeam()
-		{
-			_reader2.GetActualAgentStates()
-				.OrderBy(s => StateInfo.AdherenceFor(s) == Domain.ApplicationLayer.Rta.Adherence.In ? 0 : 1)
-				.ToList()
+			_databaseReader.GetActualAgentStates()
 				.ForEach(s =>
 				{
 					var context = new RtaProcessContext(
 						null,
 						s.PersonId,
 						s.BusinessUnitId,
-						s.ReceivedTime,
+						_now.UtcDateTime(),
 						_personOrganizationProvider,
-						new DontUpdateAgentStateReadModel(), 
+						new DontUpdateAgentStateReadModel(),
 						_agentStateMessageSender,
 						_adherenceAggregator,
 						_databaseReader,
@@ -160,22 +99,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 						);
 					context.SetPreviousMakeMethodToReturnEmptyState();
 					context.SetCurrentMakeMethodToReturnPreviousState(s);
-					context.PublisEventsTo(new TeamOutOfAdherenceReadModelUpdater(_teamOutOfReadModelPersister));
+					context.PublisEventsTo(handler);
 					_processor.Process(context);
 				});
 		}
-
-		private static int countOutOfAdherence(IEnumerable<AgentStateReadModel> states)
-		{
-			return states.Count(s => StateInfo.AdherenceFor(s) == Domain.ApplicationLayer.Rta.Adherence.Out);
-		}
-
-		private PersonOrganizationData organizationalData(AgentStateReadModel agentStateReadModel)
-		{
-			return (from d in _reader.PersonOrganizationData()
-				where d.PersonId == agentStateReadModel.PersonId
-				select d).Single();
-		}
-
 	}
 }

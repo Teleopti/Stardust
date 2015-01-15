@@ -92,6 +92,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			.ExecuteUpdate();
 		}
 
+		public bool HasData()
+		{
+			return false;
+		}
+
 		class adherenceDetailsReadModel
 		{
 			public Guid PersonId { get; set; }

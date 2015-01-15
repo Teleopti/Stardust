@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Rta
+namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
 	{
@@ -41,16 +41,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			Update(model);
 		}
 
+		public bool HasData()
+		{
+			return _data.Any();
+		}
+
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
 			return _data.Where(r => r.PersonId == personId && r.Date == date)
-				.Select(m => new AdherenceDetailsReadModel
+				.Select(m =>
 				{
-					PersonId = m.PersonId,
-					Date = m.Date,
-					Model = new AdherenceDetailsModel
+					AdherenceDetailsModel model = null;
+
+					if (m.Model != null)
 					{
-						Details = new List<AdherenceDetailModel>(
+						var details = new List<AdherenceDetailModel>(
 							from d in m.Model.Details
 							select new AdherenceDetailModel
 							{
@@ -60,12 +65,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 								LastStateChangedTime = d.LastStateChangedTime,
 								TimeInAdherence = d.TimeInAdherence,
 								TimeOutOfAdherence = d.TimeOutOfAdherence
-							}),
-						ShiftEndTime = m.Model.ShiftEndTime,
-						ActualEndTime = m.Model.ActualEndTime,
-						HasShiftEnded = m.Model.HasShiftEnded,
-						IsInAdherence = m.Model.IsInAdherence,
+							});
+						model = new AdherenceDetailsModel
+						{
+							Details = details,
+							ShiftEndTime = m.Model.ShiftEndTime,
+							ActualEndTime = m.Model.ActualEndTime,
+							HasShiftEnded = m.Model.HasShiftEnded,
+							IsInAdherence = m.Model.IsInAdherence,
+						};
 					}
+
+					return new AdherenceDetailsReadModel
+					{
+						PersonId = m.PersonId,
+						Date = m.Date,
+						Model = model
+					};
 				}).FirstOrDefault();
 		}
 	}
