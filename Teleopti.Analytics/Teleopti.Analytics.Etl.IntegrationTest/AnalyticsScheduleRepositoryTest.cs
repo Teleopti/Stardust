@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
