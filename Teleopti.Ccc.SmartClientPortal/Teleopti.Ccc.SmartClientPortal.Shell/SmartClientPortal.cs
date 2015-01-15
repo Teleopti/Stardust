@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
 		{
-			//_webViewLoaded = true;
+			_webViewLoaded = true;
 		}
 
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
