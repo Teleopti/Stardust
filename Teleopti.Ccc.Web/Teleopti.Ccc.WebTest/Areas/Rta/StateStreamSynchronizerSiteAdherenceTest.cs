@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
-		public FakeSiteAdherencePersister Model;
+		public FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister ModelReadModel;
 
 		[Test]
 		public void ShouldInitializeSiteAdherence()
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Initialize();
 
-			Model.Get(siteId).AgentsOutOfAdherence.Should().Be(1);
+			ModelReadModel.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -40,9 +41,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var existingSite = Guid.NewGuid();
 			var stateSite = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Model.Persist(new SiteAdherenceReadModel
+			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
 			{
-				AgentsOutOfAdherence = 3,
+				Count = 3,
 				SiteId = existingSite
 			});
 			Database
@@ -51,8 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Initialize();
 
-			Model.Get(existingSite).AgentsOutOfAdherence.Should().Be(3);
-			Model.Get(stateSite).Should().Be.Null();
+			ModelReadModel.Get(existingSite).Count.Should().Be(3);
+			ModelReadModel.Get(stateSite).Should().Be.Null();
 		}
 
 		[Test]
@@ -61,14 +62,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Model.Persist(new SiteAdherenceReadModel
+			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
 			{
-				AgentsOutOfAdherence = 3,
+				Count = 3,
 				SiteId = siteId1
 			});
-			Model.Persist(new SiteAdherenceReadModel
+			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
 			{
-				AgentsOutOfAdherence = 3,
+				Count = 3,
 				SiteId = siteId2
 			});
 			Database
@@ -77,8 +78,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Target.Sync();
 
-			Model.Get(siteId1).AgentsOutOfAdherence.Should().Be(1);
-			Model.Get(siteId2).Should().Be.Null();
+			ModelReadModel.Get(siteId1).Count.Should().Be(1);
+			ModelReadModel.Get(siteId2).Should().Be.Null();
 		}
 	}
 }

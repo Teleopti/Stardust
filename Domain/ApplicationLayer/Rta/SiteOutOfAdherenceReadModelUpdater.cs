@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -5,11 +6,11 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	[UseOnToggle(Toggles.RTA_NoBroker_31237)]
-	public class TeamOutOfAdherenceReadModelUpdater : IHandleEvent<PersonInAdherenceEvent>, IHandleEvent<PersonOutOfAdherenceEvent>
+	public class SiteOutOfAdherenceReadModelUpdater : IHandleEvent<PersonOutOfAdherenceEvent>, IHandleEvent<PersonInAdherenceEvent>
 	{
-		private readonly ITeamOutOfAdherenceReadModelPersister _persister;
+		private readonly ISiteOutOfAdherenceReadModelPersister _persister;
 
-		public TeamOutOfAdherenceReadModelUpdater(ITeamOutOfAdherenceReadModelPersister persister)
+		public SiteOutOfAdherenceReadModelUpdater(ISiteOutOfAdherenceReadModelPersister persister)
 		{
 			_persister = persister;
 		}
@@ -17,8 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			var model = _persister.Get(@event.TeamId) ??
-				new TeamOutOfAdherenceReadModel() { TeamId = @event.TeamId, SiteId = @event.SiteId };
+			var model = _persister.Get(@event.SiteId) ?? 
+				new SiteOutOfAdherenceReadModel {SiteId = @event.SiteId, BusinessUnitId = @event.BusinessUnitId};
 			model.PersonIds += @event.PersonId;
 			model.Count++;
 			_persister.Persist(model);
@@ -27,10 +28,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			var model = _persister.Get(@event.TeamId);
+			var model = _persister.Get(@event.SiteId);
 			if (model == null)
 			{
-				_persister.Persist(new TeamOutOfAdherenceReadModel() { TeamId = @event.TeamId, SiteId = @event.SiteId });
+				_persister.Persist(new SiteOutOfAdherenceReadModel() { SiteId = @event.SiteId, BusinessUnitId = @event.BusinessUnitId });
 				return;
 			}
 			if (!model.PersonIds.Contains(@event.PersonId.ToString()))

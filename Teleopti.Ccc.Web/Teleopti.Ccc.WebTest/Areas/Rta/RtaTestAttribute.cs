@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			builder.RegisterInstance(new FakeReadModelUnitOfWorkAspect()).As<IReadModelUnitOfWorkAspect>();
 			builder.RegisterInstance(new FakeTeamOutOfAdherenceReadModelPersister()).As<ITeamOutOfAdherenceReadModelPersister>().AsSelf();
-			builder.RegisterInstance(new FakeSiteAdherencePersister()).As<ISiteAdherencePersister>().AsSelf();
+			builder.RegisterInstance(new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister()).As<ISiteOutOfAdherenceReadModelPersister>().AsSelf();
 			builder.RegisterInstance(new FakeAdherenceDetailsReadModelPersister()).As<IAdherenceDetailsReadModelPersister>().AsSelf();
 
 			builder.RegisterInstance(this);

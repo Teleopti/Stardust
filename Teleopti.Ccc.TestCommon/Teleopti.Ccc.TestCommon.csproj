@@ -115,6 +115,7 @@
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />

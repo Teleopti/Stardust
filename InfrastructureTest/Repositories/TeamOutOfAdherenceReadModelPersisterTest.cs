@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.Count.Should().Be(3);
 			model.TeamId.Should().Be(teamId);
 			model.SiteId.Should().Be(siteId);
-			model.PersonIds.Should().Be.EqualTo(personIds);
+			model.PersonIds.Should().Be(personIds);
 		}
 
 		[Test]
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			var model = Target.Get(teamId);
-			model.Count.Should().Be.EqualTo(5);
-			model.SiteId.Should().Be.EqualTo(siteId);
-			model.PersonIds.Should().Be.EqualTo(personIds);
+			model.Count.Should().Be(5);
+			model.SiteId.Should().Be(siteId);
+			model.PersonIds.Should().Be(personIds);
 		}
 
 		[Test]

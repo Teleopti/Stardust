@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class StateStreamSynchronizer : IStateStreamSynchronizer
 	{
 		private readonly ITeamOutOfAdherenceReadModelPersister _teamOutOfReadModelPersister;
-		private readonly ISiteAdherencePersister _sitePersister;
+		private readonly ISiteOutOfAdherenceReadModelPersister _siteOutOfReadModelPersister;
 		private readonly IAdherenceDetailsReadModelPersister _detailsPresister;
 
 		private readonly IPersonOrganizationReader _reader;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public StateStreamSynchronizer(
 			ITeamOutOfAdherenceReadModelPersister teamOutOfReadModelPersister, 
-			ISiteAdherencePersister sitePersister, 
+			ISiteOutOfAdherenceReadModelPersister siteOutOfReadModelPersister, 
 			IAdherenceDetailsReadModelPersister detailsPresister,  
 			IPersonOrganizationReader reader, 
 			IDatabaseReader reader2, 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			)
 		{
 			_teamOutOfReadModelPersister = teamOutOfReadModelPersister;
-			_sitePersister = sitePersister;
+			_siteOutOfReadModelPersister = siteOutOfReadModelPersister;
 			_detailsPresister = detailsPresister;
 			_reader = reader;
 			_reader2 = reader2;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		{
 			_teamOutOfReadModelPersister.Clear();
 			persistReadModelForTeam();
-			_sitePersister.Clear();
+			_siteOutOfReadModelPersister.Clear();
 			persistReadModelForSite();
 
 		}
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void handleSite()
 		{
-			if (!_sitePersister.HasData())
+			if (!_siteOutOfReadModelPersister.HasData())
 				persistReadModelForSite();
 		}
 
@@ -130,10 +130,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					outOfAdherence = countOutOfAdherence(states)
 				};
 
-			data.ForEach(s => _sitePersister.Persist(new SiteAdherenceReadModel
+			data.ForEach(s => _siteOutOfReadModelPersister.Persist(new SiteOutOfAdherenceReadModel
 			{
 				SiteId = s.siteId,
-				AgentsOutOfAdherence = s.outOfAdherence
+				Count = s.outOfAdherence
 			}));
 		}
 

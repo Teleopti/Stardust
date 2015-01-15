@@ -44,24 +44,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
 			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId1 });
-			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId2 });
-			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId1 });
+			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId1, PersonId = Guid.NewGuid() });
+			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId2, PersonId = Guid.NewGuid() });
+			target.Handle(new PersonOutOfAdherenceEvent() { TeamId = teamId1, PersonId = Guid.NewGuid() });
 
 			persister.Get(teamId1).Count.Should().Be(2);
 			persister.Get(teamId2).Count.Should().Be(1);
 		}
 
 		[Test]
-		public void ShouldSummarizeOutOfAdherenceForTeamInAndOut()
+		public void ShouldSummarizeOutOfAdherence()
 		{
 			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
 			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonOutOfAdherenceEvent {TeamId = teamId});
-			target.Handle(new PersonOutOfAdherenceEvent {TeamId = teamId});
-			target.Handle(new PersonInAdherenceEvent {TeamId = teamId});
+			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
+			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = personId });
+
+			persister.Get(teamId).Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldSummarizeOutOfAdherenceFor2Persons()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
+			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
+
+			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
+			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
+			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = personId });
 
 			persister.Get(teamId).Count.Should().Be(1);
 		}

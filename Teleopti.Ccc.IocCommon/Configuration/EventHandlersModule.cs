@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AdherencePercentageReadModelPersister>().SingleInstance().As<IAdherencePercentageReadModelPersister>();
 			builder.RegisterType<AdherenceDetailsReadModelPersister>().SingleInstance().As<IAdherenceDetailsReadModelPersister>();
 			builder.RegisterType<TeamOutOfAdherenceReadModelPersister>().SingleInstance().As<ITeamOutOfAdherenceReadModelPersister>();
-			builder.RegisterType<SiteAdherencePersister>().SingleInstance().As<ISiteAdherencePersister>();
+			builder.RegisterType<SiteOutOfAdherenceReadModelPersister>().SingleInstance().As<ISiteOutOfAdherenceReadModelPersister>();
 			builder.RegisterType<IntervalLengthFetcher>().SingleInstance().As<IIntervalLengthFetcher>();
 			builder.RegisterType<AnalyticsFactScheduleTimeHandler>().SingleInstance().As<IAnalyticsFactScheduleTimeHandler>();
 			builder.RegisterType<AnalyticsFactScheduleDateHandler>().SingleInstance().As<IAnalyticsFactScheduleDateHandler>();

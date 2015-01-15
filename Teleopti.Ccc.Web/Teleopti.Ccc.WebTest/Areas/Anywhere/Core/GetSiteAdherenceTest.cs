@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var buId = Guid.NewGuid();
 			var site = new Site("s").WithId();
-			var siteAdherencePersister = MockRepository.GenerateMock<ISiteAdherencePersister>();
-			siteAdherencePersister.Stub(x => x.GetAll(buId))
-				.Return(new List<SiteAdherenceReadModel>()
+			var siteAdherencePersister = MockRepository.GenerateMock<ISiteOutOfAdherenceReadModelPersister>();
+			siteAdherencePersister.Stub(x => x.GetForBusinessUnit(buId))
+				.Return(new List<SiteOutOfAdherenceReadModel>()
 			          {
-				          new SiteAdherenceReadModel()
+				          new SiteOutOfAdherenceReadModel()
 				          {
 					          SiteId = site.Id.GetValueOrDefault(),
-					          AgentsOutOfAdherence = 1
+					          Count = 1
 				          }
 			          });
 

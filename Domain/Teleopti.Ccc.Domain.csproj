@@ -215,7 +215,7 @@
     <Compile Include="ApplicationLayer\Rta\IPersonOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ISiteAdherencePersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\ISiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
@@ -225,8 +225,8 @@
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\SiteOutOfAdherenceReadModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\SiteOutOfAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherencePercent.cs" />
