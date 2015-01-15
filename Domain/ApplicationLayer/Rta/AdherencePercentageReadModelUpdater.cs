@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class AdherencePercentageReadModelUpdater :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
-		IHandleEvent<PersonShiftEndEvent>
+		IHandleEvent<PersonShiftEndEvent>,
+		IInitializeble
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
 
@@ -71,5 +72,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			model.LastTimestamp = time;
 		}
 
+		public bool Initialized()
+		{
+			return _persister.HasData();
+		}
 	}
 }

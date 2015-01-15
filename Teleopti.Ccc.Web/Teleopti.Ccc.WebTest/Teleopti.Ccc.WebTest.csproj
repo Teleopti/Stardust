@@ -281,6 +281,7 @@
     <Compile Include="Areas\Rta\StateControllerTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithStateTest.cs" />
     <Compile Include="Areas\Rta\StateStreamSynchronizerAdherenceDetailsTest.cs" />
+    <Compile Include="Areas\Rta\StateStreamSynchronizerAdherencePercentageTest.cs" />
     <Compile Include="Areas\Rta\StateStreamSynchronizerIndividualModelsTest.cs" />
     <Compile Include="Areas\Rta\StateStreamSynchronizerSiteAdherenceTest.cs" />
     <Compile Include="Areas\Rta\StateStreamSynchronizerTeamAdherenceTest.cs" />

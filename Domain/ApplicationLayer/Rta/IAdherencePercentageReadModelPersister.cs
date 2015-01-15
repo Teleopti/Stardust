@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		void Persist(AdherencePercentageReadModel model);
 		AdherencePercentageReadModel Get(DateOnly date, Guid personId);
+		bool HasData();
 	}
 }

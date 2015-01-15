@@ -111,6 +111,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return (AdherencePercentageReadModel)result.FirstOrNull();
 		}
 
-
+		public bool HasData()
+		{
+			return false;
+		}
 	}
 }
