@@ -178,13 +178,16 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 		});
 	};
 
+	self.keepSelectedAgentVisible = function() {
+		if (self.agentChoosed() != null && self.possibleTradeSchedules() != null) {
+			$.each(self.possibleTradeSchedules(), function(index, value) {
+				value.isVisible(value.agentName == self.agentChoosed().agentName);
+			});
+		}
+	}
+
 	self.chooseAgent = function (agent) {
-		//hide or show all agents
-		$.each(self.possibleTradeSchedules(), function (index, value) {
-			value.isVisible(agent == null);
-		});
 		if (agent != null) {
-			agent.isVisible(true);
 			self.redrawLayers();
 			//rk - don't really like to put DOM stuff here...
 			window.scrollTo(0, 0);
@@ -518,6 +521,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 					self._createMySchedule(data.MySchedule);
 
 					self._createPossibleTradeSchedules(data.PossibleTradeSchedules);
+					self.keepSelectedAgentVisible();
 					self.isReadyLoaded(true);
 
 					// Redraw layers after data loaded
@@ -560,6 +564,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 					self._createMySchedule(data.MySchedule);
 
 					self._createPossibleTradeSchedules(data.PossibleTradeSchedules);
+					self.keepSelectedAgentVisible();
 					self.isReadyLoaded(true);
 
 					// Redraw layers after data loaded
