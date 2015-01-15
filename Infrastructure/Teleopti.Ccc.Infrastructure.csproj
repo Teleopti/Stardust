@@ -175,6 +175,7 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\SyncPublishToSingleHandler.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
+    <Compile Include="Foundation\ApplicationAuthentication.cs" />
     <Compile Include="Foundation\AvailableApplicationIdentityDataSources.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
