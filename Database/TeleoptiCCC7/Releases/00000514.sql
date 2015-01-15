@@ -4,7 +4,7 @@
 --Desc: remove Version column
 ---------------- 
 IF EXISTS(SELECT * FROM sys.columns 
-   WHERE [name] = N'[Version]' AND [object_id] = OBJECT_ID(N'[dbo].[GamificationSetting]'))
+   WHERE [name] = N'Version' AND [object_id] = OBJECT_ID(N'[dbo].[GamificationSetting]'))
 BEGIN
 	ALTER TABLE [dbo].[GamificationSetting]
 	DROP COLUMN [Version]
