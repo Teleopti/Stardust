@@ -6,7 +6,11 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	[UseOnToggle(Toggles.RTA_NoBroker_31237)]
-	public class SiteOutOfAdherenceReadModelUpdater : IHandleEvent<PersonOutOfAdherenceEvent>, IHandleEvent<PersonInAdherenceEvent>
+	public class SiteOutOfAdherenceReadModelUpdater : 
+		IHandleEvent<PersonOutOfAdherenceEvent>, 
+		IHandleEvent<PersonInAdherenceEvent>,
+		IInitializeble,
+		IRecreatable
 	{
 		private readonly ISiteOutOfAdherenceReadModelPersister _persister;
 
@@ -41,5 +45,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister.Persist(model);
 		}
 
+		public bool Initialized()
+		{
+			return _persister.HasData();
+		}
+
+		public void DeleteAll()
+		{
+			_persister.Clear();
+		}
 	}
 }

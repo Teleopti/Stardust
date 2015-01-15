@@ -156,6 +156,7 @@
     <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\CannotPublishToHangfire.cs" />
+    <Compile Include="ApplicationLayer\CurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisher.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
+    <Compile Include="ApplicationLayer\SyncPublishToSingleHandler.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Foundation\AvailableApplicationIdentityDataSources.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />

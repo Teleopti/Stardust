@@ -566,6 +566,7 @@
     <Compile Include="Areas\Rta\Core\Server\Resolvers\PersonResolver.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaModule.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaDataHandler.cs" />
+    <Compile Include="Areas\Rta\Core\Server\RtaProcessContext.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaProcessor.cs" />
     <Compile Include="Areas\Rta\Core\Server\StateStreamSynchronizer.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateInputModel.cs" />

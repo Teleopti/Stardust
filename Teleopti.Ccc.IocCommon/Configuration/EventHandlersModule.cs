@@ -31,9 +31,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterAssemblyTypes(typeof (IHandleEvent<>).Assembly)
-				.Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.As(t => t.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				.Where(t => t.EnabledByToggle(_config))
+				.Where(t =>
+				{
+					var matches = from i in t.GetInterfaces()
+						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
+						let toggleEnabled = t.EnabledByToggle(_config)
+						where isHandler && toggleEnabled
+						select i;
+					return matches.Any();
+				})
+				.As(t =>
+				{
+					return from i in t.GetInterfaces()
+						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)
+						let isInitializable = i == typeof (IInitializeble)
+						let isSynchronizable = i == typeof (IRecreatable)
+						where isHandler || isInitializable || isSynchronizable
+						select i;
+				})
 				.SingleInstance()
 				.EnableClassInterceptors().InterceptedBy(typeof (AspectInterceptor));
 			

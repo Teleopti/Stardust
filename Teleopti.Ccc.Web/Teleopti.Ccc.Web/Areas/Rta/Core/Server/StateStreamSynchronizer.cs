@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -17,10 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 	public class StateStreamSynchronizer : IStateStreamSynchronizer
 	{
-		private readonly ITeamOutOfAdherenceReadModelPersister _teamOutOfReadModelPersister;
-		private readonly ISiteOutOfAdherenceReadModelPersister _siteOutOfReadModelPersister;
-		private readonly IAdherenceDetailsReadModelPersister _detailsPresister;
-
 		private readonly INow _now;
 		private readonly RtaProcessor _processor;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
@@ -28,13 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AgentStateAssembler _agentStateAssembler;
-		private readonly ICurrentEventPublisher _currentEventPublisher;
-		private readonly IResolve _resolve;
+		private readonly ICurrentEventPublisherContext _eventPublisher;
+		private readonly IEnumerable<IInitializeble> _initializebles;
+		private readonly IEnumerable<IRecreatable> _recreatables;
 
 		public StateStreamSynchronizer(
-			ITeamOutOfAdherenceReadModelPersister teamOutOfReadModelPersister, 
-			ISiteOutOfAdherenceReadModelPersister siteOutOfReadModelPersister, 
-			IAdherenceDetailsReadModelPersister detailsPresister,  
 			INow now,
 			RtaProcessor processor,
 			IPersonOrganizationProvider personOrganizationProvider,
@@ -42,13 +37,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
 			AgentStateAssembler agentStateAssembler,
-			ICurrentEventPublisher currentEventPublisher,
-			IResolve resolve
+			ICurrentEventPublisherContext eventPublisher,
+			IEnumerable<IInitializeble> initializebles,
+			IEnumerable<IRecreatable> recreatables
 			)
 		{
-			_teamOutOfReadModelPersister = teamOutOfReadModelPersister;
-			_siteOutOfReadModelPersister = siteOutOfReadModelPersister;
-			_detailsPresister = detailsPresister;
 			_now = now;
 			_processor = processor;
 			_personOrganizationProvider = personOrganizationProvider;
@@ -56,52 +49,56 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_adherenceAggregator = adherenceAggregator;
 			_databaseReader = databaseReader;
 			_agentStateAssembler = agentStateAssembler;
-			_currentEventPublisher = currentEventPublisher;
-			_resolve = resolve;
+			_eventPublisher = eventPublisher;
+			_initializebles = initializebles;
+			_recreatables = recreatables;
 		}
 
 		public void Sync()
 		{
-			_teamOutOfReadModelPersister.Clear();
-			processStates(new TeamOutOfAdherenceReadModelUpdater(_teamOutOfReadModelPersister));
-			_siteOutOfReadModelPersister.Clear();
-			processStates(new SiteOutOfAdherenceReadModelUpdater(_siteOutOfReadModelPersister));
+			var currentTime = _now.UtcDateTime();
+			var states = _databaseReader.GetActualAgentStates();
+			_recreatables.ForEach(s =>
+			{
+				s.DeleteAll();
+				processStatesTo(s, states, currentTime);
+			});
 		}
 
 		public void Initialize()
 		{
-			if (!_teamOutOfReadModelPersister.HasData())
-				processStates(new TeamOutOfAdherenceReadModelUpdater(_teamOutOfReadModelPersister));
-			if (!_siteOutOfReadModelPersister.HasData())
-				processStates(new SiteOutOfAdherenceReadModelUpdater(_siteOutOfReadModelPersister));
-			if(!_detailsPresister.HasData())
-				processStates(new AdherenceDetailsReadModelUpdater(_detailsPresister));
+			var currentTime = _now.UtcDateTime();
+			var states = _databaseReader.GetActualAgentStates();
+			_initializebles.ForEach(s =>
+			{
+				if (!s.Initialized())
+					processStatesTo(s, states, currentTime);
+			});
 		}
 
-		private void processStates(object handler)
+		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime)
 		{
-			_databaseReader.GetActualAgentStates()
-				.ForEach(s =>
+			states.ForEach(s =>
 				{
 					var context = new RtaProcessContext(
 						null,
 						s.PersonId,
 						s.BusinessUnitId,
-						_now.UtcDateTime(),
+						currentTime,
 						_personOrganizationProvider,
-						new DontUpdateAgentStateReadModel(),
+						null,
 						_agentStateMessageSender,
 						_adherenceAggregator,
 						_databaseReader,
 						_agentStateAssembler,
-						_currentEventPublisher,
-						_resolve
+						_eventPublisher
 						);
 					context.SetPreviousMakeMethodToReturnEmptyState();
 					context.SetCurrentMakeMethodToReturnPreviousState(s);
-					context.PublisEventsTo(handler);
+					context.PublishEventsTo(handler);
 					_processor.Process(context);
 				});
 		}
 	}
+
 }

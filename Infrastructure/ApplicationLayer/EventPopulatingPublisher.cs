@@ -21,29 +21,4 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventPublisher.Current().Publish(@event);
 		}
 	}
-
-	public interface ICurrentEventPublisher
-	{
-		IEventPublisher Current();
-	}
-
-	public class CurrentEventPublisher : ICurrentEventPublisher
-	{
-		private IEventPublisher _eventPublisher;
-
-		public CurrentEventPublisher(IEventPublisher eventPublisher)
-		{
-			_eventPublisher = eventPublisher;
-		}
-
-		public void UseThisPlease(IEventPublisher eventPublisher)
-		{
-			_eventPublisher = eventPublisher;
-		}
-
-		public IEventPublisher Current()
-		{
-			return _eventPublisher;
-		}
-	}
 }

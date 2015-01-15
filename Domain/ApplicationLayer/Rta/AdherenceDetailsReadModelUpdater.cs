@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class AdherenceDetailsReadModelUpdater :
 		IHandleEvent<PersonActivityStartEvent>,
 		IHandleEvent<PersonStateChangedEvent>,
-		IHandleEvent<PersonShiftEndEvent>
+		IHandleEvent<PersonShiftEndEvent>,
+		IInitializeble
 	{
 		private readonly IAdherenceDetailsReadModelPersister _persister;
 
@@ -191,6 +192,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				detailModel.TimeInAdherence += timeToAdd.Value;
 			else
 				detailModel.TimeOutOfAdherence += timeToAdd.Value;
+		}
+
+		public bool Initialized()
+		{
+			return _persister.HasData();
 		}
 	}
 }

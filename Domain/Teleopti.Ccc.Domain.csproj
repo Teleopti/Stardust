@@ -210,6 +210,7 @@
     <Compile Include="ApplicationLayer\Rta\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IAlarmFinder.cs" />
+    <Compile Include="ApplicationLayer\Rta\IInitializeble.cs" />
     <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\IPersonOrganizationReader.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ISiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\IRecreatable.cs" />
     <Compile Include="ApplicationLayer\Rta\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />

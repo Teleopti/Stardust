@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly AgentStateAssembler _agentStateAssembler;
-		private readonly ICurrentEventPublisher _currentEventPublisher;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly PersonResolver _personResolver;
 
@@ -39,8 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IAgentStateMessageSender messageSender,
 			INow now,
 			IPersonOrganizationProvider personOrganizationProvider,
-			AgentStateAssembler agentStateAssembler,
-			ICurrentEventPublisher currentEventPublisher
+			AgentStateAssembler agentStateAssembler
 			)
 		{
 			_databaseReader = databaseReader;
@@ -53,7 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_now = now;
 			_personOrganizationProvider = personOrganizationProvider;
 			_agentStateAssembler = agentStateAssembler;
-			_currentEventPublisher = currentEventPublisher;
 			_adherenceAggregator = adherenceAggregator;
 		}
 
@@ -119,7 +116,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					_adherenceAggregator,
 					_databaseReader,
 					_agentStateAssembler,
-					_currentEventPublisher,
 					null
 					));
 		}

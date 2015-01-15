@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			IAgentStateMessageSender agentStateMessageSender,
 			IPersonOrganizationProvider personOrganizationProvider,
 			RtaProcessor processor,
-			AgentStateAssembler agentStateAssembler,
-			ICurrentEventPublisher eventPublisher
+			AgentStateAssembler agentStateAssembler
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
@@ -61,8 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				agentStateMessageSender,
 				now,
 				personOrganizationProvider,
-				agentStateAssembler,
-				eventPublisher
+				agentStateAssembler
 				);
 
 			Log.Info("The real time adherence service is now started");
