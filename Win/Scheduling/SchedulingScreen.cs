@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				Sikuli.SikuliHelper.EnterValidator(this);
+				SikuliHelper.EnterValidator(this);
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{

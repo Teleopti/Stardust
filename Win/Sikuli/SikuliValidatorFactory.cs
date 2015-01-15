@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Win.Sikuli
 			{
 				switch (SikuliHelper.CurrentValidator)
 				{
-					case SikuliValidatorRegister.Schedule:
-						return new SchedulerValidator(schedulerState, totalSkill);
+					case SikuliValidatorRegister.DeleteAll:
+						return new DeleteAllValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.Optimize:
 						return new OptimizerValidator(schedulerState, totalSkill);
@@ -31,14 +31,17 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.OptimizeBlockTeam:
 						return new OptimizeBlockTeamValidator(schedulerState, totalSkill);
 
-					case SikuliValidatorRegister.DeleteAll:
-						return new DeleteAllValidator(schedulerState, totalSkill);
-
 					case SikuliValidatorRegister.OptimizeIntervalBalanceBefore:
 						return new IntervalBalanceBeforeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceAfter:
 						return new IntervalBalanceAfterValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.Schedule:
+						return new SchedulerValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.ScheduleOvertimePeriod:
+						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.Pass:
 						return new PassValidator();
