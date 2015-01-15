@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.Schedule:
 						return new SchedulerValidator(schedulerState, totalSkill);
 
-					case SikuliValidatorRegister.ScheduleOvertime:
-						return new ScheduleOvertimeValidator(schedulerState, totalSkill);
+					case SikuliValidatorRegister.ScheduleOvertimePeriod:
+						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.Pass:
 						return new PassValidator();
