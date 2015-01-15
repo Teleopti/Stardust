@@ -1,5 +1,4 @@
-﻿
-/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
@@ -12,6 +11,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory = function ShiftE
 	self.Update = function (offer) {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, doneCallback);
 		vm.LoadOffer(offer);
+		vm.LoadOptions();
 		return vm;
 	};
 	self.Create = function (defaultData) {
@@ -33,23 +33,34 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 
 	self.Toggle31317Enabled = ko.observable(false);
 
-	var defaultShiftType = null;
 	self.AllShiftTypes = ko.observable([]);
 
-	self.WishShiftType = ko.observable(defaultShiftType);	
+	self.WishShiftTypeOption = ko.observable();
+
+	self.WishShiftType = ko.computed(function () {
+		var wishShift = self.WishShiftTypeOption();
+		return (wishShift != undefined) ? wishShift.Description : '';
+	});
+
 	self.RequireDetails = ko.computed(function() {
-		return !self.Toggle31317Enabled() || (self.WishShiftType() && self.WishShiftType().RequireDetails);
+		return !self.Toggle31317Enabled() || (self.WishShiftTypeOption() && self.WishShiftTypeOption().RequireDetails);
 	});
 
 	self.ChangeShiftType = function (selection) {
-		self.WishShiftType(selection);
+		self.WishShiftTypeOption(selection);
 	};
+
+	self.LoadOptions = function (setShiftType) {
+		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
+		self.getWishShiftTypes(setShiftType);
+	}
 
 	self.LoadDefaultData = function (defaultData) {
 		self.StartTime(defaultData.defaultStartTime);
 		self.EndTime(defaultData.defaultEndTime);
-		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
-		self.getWishShiftTypes();
+		self.LoadOptions(function() {
+			self.WishShiftTypeOption(self.AllShiftTypes()[0]);
+		});
 	}
 
 	// interface called externally from schedule.js
@@ -138,16 +149,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
-		console.log("WishShiftType:", self.WishShiftType().Id);
-		console.log({
-			Date: self.DateTo().format(self.DateFormat()),
-			OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
-			StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
-			EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
-			EndTimeNextDay: self.EndTimeNextDay(),
-			Id: self.Id(),
-			WishShiftType: self.WishShiftType().Id
-		});
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
@@ -157,7 +158,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
 				EndTimeNextDay: self.EndTimeNextDay(),
 				Id: self.Id(),
-				WishShiftType: self.WishShiftType().Id
+				WishShiftType: self.WishShiftTypeOption().Id
 			},
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
@@ -205,15 +206,16 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		});
 	};
 
-	self.getWishShiftTypes = function () {
+	self.getWishShiftTypes = function (setWishShiftType) {
 		ajax.Ajax({
 			url: "ShiftExchange/GetAllWishShiftOptions",
 			dataType: "json",
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
-				self.AllShiftTypes = data;				
-				defaultShiftType = data[0];
-				self.WishShiftType(defaultShiftType);
+				self.AllShiftTypes(data);
+				if (typeof setWishShiftType === 'function') {
+					setWishShiftType(data[0]);
+				}
 			}
 		});
 	}
