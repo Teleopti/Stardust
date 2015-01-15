@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IGamificationSetting :IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit
+	public interface IGamificationSetting : IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit, ICloneableEntity<IGamificationSetting>
 	{
 		Description Description { get; set; }
 		GamificationSettingRuleSet GamificationSettingRuleSet { get; set; }

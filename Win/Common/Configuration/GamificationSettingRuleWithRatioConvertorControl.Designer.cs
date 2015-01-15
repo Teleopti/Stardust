@@ -120,6 +120,7 @@
             0,
             0,
             0});
+			this.numericUpDownGoldToSilverBadgeRate.Validated += new System.EventHandler(this.numericUpDownBadgeRateConvertor_Validated);
 			// 
 			// CheckBoxUseBadgeForAnsweredCalls
 			// 
@@ -157,6 +158,7 @@
 			this.numericUpDownThresholdForAnsweredCalls.Name = "numericUpDownThresholdForAnsweredCalls";
 			this.numericUpDownThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 20);
 			this.numericUpDownThresholdForAnsweredCalls.TabIndex = 2;
+			this.numericUpDownThresholdForAnsweredCalls.Validated += new System.EventHandler(this.numericUpDownThresholdsForAnsweredCalls_Validated);
 			// 
 			// label12
 			// 
@@ -209,6 +211,7 @@
 			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 65534;
+			this.timeSpanTextBoxThresholdForAHT.Validated += new System.EventHandler(this.timeSpanTextBoxThresholdsForAHT_Validated);
 			// 
 			// checkBoxUseBadgeForAdherence
 			// 
@@ -275,6 +278,7 @@
 			this.doubleTextBoxThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxThresholdForAdherence.TabIndex = 6;
 			this.doubleTextBoxThresholdForAdherence.Text = "0.00";
+			this.doubleTextBoxThresholdForAdherence.Validated += new System.EventHandler(this.doubleTextBoxThresholdsForAdherence_Validated);
 			// 
 			// labelOneSilverBadgeEqualsBronzeBadgeCount
 			// 
@@ -305,6 +309,7 @@
             0,
             0,
             0});
+			this.numericUpDownSilverToBronzeBadgeRate.Validated += new System.EventHandler(this.numericUpDownBadgeRateConvertor_Validated);
 			// 
 			// GamificationSettingRuleWithRatioConvertorControl
 			// 

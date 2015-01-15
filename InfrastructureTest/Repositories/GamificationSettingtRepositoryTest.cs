@@ -85,6 +85,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new GamificationSettingRepository(unitOfWork);
 		}
-
 	}
 }

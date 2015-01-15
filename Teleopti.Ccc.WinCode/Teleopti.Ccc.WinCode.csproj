@@ -1035,6 +1035,7 @@
     <Compile Include="Security\PasswordPolicyServiceViewModel.cs" />
     <Compile Include="Services\StateManager.cs" />
     <Compile Include="Settings\AbsenceView.cs" />
+    <Compile Include="Settings\GamificationSettingView.cs" />
     <Compile Include="Settings\PageHelper.cs" />
     <Compile Include="Settings\StateGroupActivityAlarmModel.cs" />
     <Compile Include="Settings\TrackerView.cs" />

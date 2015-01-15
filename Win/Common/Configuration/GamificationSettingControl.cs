@@ -9,8 +9,10 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Settings;
@@ -24,14 +26,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 		private const short invalidItemIndex = -1;
 		private const short firstItemIndex = 0;
-	    private const short itemDiffernce = 1;                      
-		private List<IGamificationSetting> _gamificationSettingList;
+	    private const short itemDiffernce = 1;
+		private readonly List<GamificationSettingView> _gamificationSettingList = new List<GamificationSettingView>();
 		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
 		private readonly IToggleManager _toggleManager;
 		private IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
 		private IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
 		private Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
 		private Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
+		private readonly List<GamificationSettingView> _gamificationSettingListToBeDeleted;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
@@ -42,14 +45,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			get { return comboBoxAdvGamificationSettings.Items.Count - itemDiffernce; }
 		}
 
-		public IGamificationSetting SelectedGamificationSetting
+		public GamificationSettingView SelectedGamificationSetting
 		{
-			get { return (IGamificationSetting)comboBoxAdvGamificationSettings.SelectedItem; }
+			get { return (GamificationSettingView)comboBoxAdvGamificationSettings.SelectedItem; }
+		}
+
+		public GamificationSettingRuleSet SelectedGamificationSettingRuleSet
+		{
+			get { return (GamificationSettingRuleSet) comboBoxAdvBadgeSettingRuleSets.SelectedValue; }
 		}
 
 		public GamificationSettingControl(IToggleManager toggleManager)
 		{
 			_toggleManager = toggleManager;
+			_gamificationSettingListToBeDeleted = new List<GamificationSettingView>();
 
 			InitializeComponent();
 
@@ -59,6 +68,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				{
 					var ctrl = new GamificationSettingRuleWithDifferentThresholdControl();
 					ctrl.Dock = DockStyle.Fill;
+					ctrl.Validated += gamificationSettingRuleWithDifferentThreshold_Validated;
 					return ctrl;
 				});
 			gamificationSettingRuleWithRatioConvertorControl = new Lazy<GamificationSettingRuleWithRatioConvertorControl>(
@@ -66,8 +76,45 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				{
 					var ctrl = new GamificationSettingRuleWithRatioConvertorControl();
 					ctrl.Dock = DockStyle.Fill;
+					ctrl.Validated += gamificationSettingRuleWithRatioConvertor_Validated;
 					return ctrl;
 				});
+		}
+
+		private void gamificationSettingRuleWithRatioConvertor_Validated(object sender, EventArgs e)
+		{
+			var ruleSettingWithRatioConvertor = gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting;
+
+			SelectedGamificationSetting.AHTBadgeEnabled = ruleSettingWithRatioConvertor.AHTBadgeEnabled;
+			SelectedGamificationSetting.AHTThreshold = ruleSettingWithRatioConvertor.AHTThreshold;
+
+			SelectedGamificationSetting.AdherenceBadgeEnabled = ruleSettingWithRatioConvertor.AdherenceBadgeEnabled;
+			SelectedGamificationSetting.AdherenceThreshold = ruleSettingWithRatioConvertor.AdherenceThreshold;
+
+			SelectedGamificationSetting.AnsweredCallsBadgeEnabled = ruleSettingWithRatioConvertor.AnsweredCallsBadgeEnabled;
+			SelectedGamificationSetting.AnsweredCallsThreshold = ruleSettingWithRatioConvertor.AnsweredCallsThreshold;
+
+			SelectedGamificationSetting.GoldToSilverBadgeRate = ruleSettingWithRatioConvertor.GoldToSilverBadgeRate;
+			SelectedGamificationSetting.SilverToBronzeBadgeRate = ruleSettingWithRatioConvertor.SilverToBronzeBadgeRate;
+		}
+
+		private void gamificationSettingRuleWithDifferentThreshold_Validated(object sender, EventArgs e)
+		{
+			var ruleSettingWithDifferentThreshold = gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting;
+			SelectedGamificationSetting.AHTBadgeEnabled = ruleSettingWithDifferentThreshold.AHTBadgeEnabled;
+			SelectedGamificationSetting.AHTBronzeThreshold = ruleSettingWithDifferentThreshold.AHTBronzeThreshold;
+			SelectedGamificationSetting.AHTSilverThreshold = ruleSettingWithDifferentThreshold.AHTSilverThreshold;
+			SelectedGamificationSetting.AHTGoldThreshold = ruleSettingWithDifferentThreshold.AHTGoldThreshold;
+
+			SelectedGamificationSetting.AdherenceBadgeEnabled = ruleSettingWithDifferentThreshold.AdherenceBadgeEnabled;
+			SelectedGamificationSetting.AdherenceBronzeThreshold = ruleSettingWithDifferentThreshold.AdherenceBronzeThreshold;
+			SelectedGamificationSetting.AdherenceGoldThreshold = ruleSettingWithDifferentThreshold.AdherenceGoldThreshold;
+			SelectedGamificationSetting.AdherenceSilverThreshold = ruleSettingWithDifferentThreshold.AdherenceSilverThreshold;
+
+			SelectedGamificationSetting.AnsweredCallsBadgeEnabled = ruleSettingWithDifferentThreshold.AnsweredCallsBadgeEnabled;
+			SelectedGamificationSetting.AnsweredCallsBronzeThreshold = ruleSettingWithDifferentThreshold.AnsweredCallsBronzeThreshold;
+			SelectedGamificationSetting.AnsweredCallsGoldThreshold = ruleSettingWithDifferentThreshold.AnsweredCallsGoldThreshold;
+			SelectedGamificationSetting.AnsweredCallsSilverThreshold = ruleSettingWithDifferentThreshold.AnsweredCallsSilverThreshold;
 		}
 
 		public void InitializeDialogControl()
@@ -84,14 +131,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
-			string changed = _localizer.UpdatedByText(SelectedGamificationSetting, Resources.UpdatedByColon);
+			string changed = _localizer.UpdatedByText(SelectedGamificationSetting.ContainedEntity, Resources.UpdatedByColon);
 			autoLabelInfoAboutChanges.Text = changed;
 		}
 		
 		public void Unload()
 		{
 			// Disposes or flag anything possible.
-			_gamificationSettingList = null;
+			_gamificationSettingList.Clear();
 		}
 
 		public void LoadControl()
@@ -100,10 +147,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			loadGamificationSettings();
 		}
 
-		public void  SaveChanges()
-		{}
-
-		
+		public void SaveChanges()
+		{
+			Persist();
+		}
 
 		private void textBoxDescriptionValidated(object sender, EventArgs e)
 		{
@@ -120,7 +167,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void buttonNewClick(object sender, EventArgs e)
 		{
-			//addNewBadgeSetting();
 			if (SelectedGamificationSetting == null) return;
 			Cursor.Current = Cursors.WaitCursor;
 			addNewGamificationSetting();
@@ -160,16 +206,37 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void SetUnitOfWork(IUnitOfWork value)
-		{
-			UnitOfWork = value;
-			Repository = new GamificationSettingRepository(UnitOfWork);
-			_agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(UnitOfWork);
-			_agentBadgeWithRankTransactionRepository = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
-		}
+		{}
 
 		public void Persist()
 		{
-			SaveChanges();
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var repo = new GamificationSettingRepository(uow);
+
+				foreach (var settingView in _gamificationSettingListToBeDeleted)
+				{
+					repo.Remove(settingView.ContainedOriginalEntity);
+				}
+				foreach (var settingView in _gamificationSettingList)
+				{
+					if (!settingView.Id.HasValue)
+					{
+						repo.Add(settingView.ContainedEntity);
+						settingView.UpdateAfterMerge(settingView.ContainedEntity);
+					}
+					else
+					{
+						var updatedSetting = uow.Merge(settingView.ContainedEntity);
+						LazyLoadingManager.Initialize(updatedSetting.UpdatedBy);
+						settingView.UpdateAfterMerge(updatedSetting);
+					}
+
+					
+				}
+				uow.PersistAll();
+			}
+			_gamificationSettingListToBeDeleted.Clear();
 		}
 
 		public TreeFamily TreeFamily()
@@ -183,8 +250,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void OnShow()
-		{
-		}
+		{}
 
 		protected override void SetCommonTexts()
 		{
@@ -210,9 +276,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void deleteGamificationSetting()
 		{
-			Repository.Remove(SelectedGamificationSetting);
+			if (SelectedGamificationSetting.Id.HasValue)
+			{
+				_gamificationSettingListToBeDeleted.Add(new GamificationSettingView(SelectedGamificationSetting.ContainedEntity));
+			}
 			_gamificationSettingList.Remove(SelectedGamificationSetting);
-			loadGamificationSettings();
+			bindSettingListToComboBox();
 		}
 
 		private void setColors()
@@ -251,42 +320,85 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (SelectedGamificationSetting == null) return;
 			textBoxDescription.Text = SelectedGamificationSetting.Description.ToString();
 			comboBoxAdvBadgeSettingRuleSets.SelectedValue =  SelectedGamificationSetting.GamificationSettingRuleSet;
+			if (SelectedGamificationSetting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor)
+			{
+				var selectedSetting = new RuleSettingWithRatioConvertor()
+				{
+					AnsweredCallsBadgeEnabled = SelectedGamificationSetting.AnsweredCallsBadgeEnabled,
+					AHTBadgeEnabled = SelectedGamificationSetting.AHTBadgeEnabled,
+					AdherenceBadgeEnabled = SelectedGamificationSetting.AdherenceBadgeEnabled,
 
-			
+					AnsweredCallsThreshold = SelectedGamificationSetting.AnsweredCallsThreshold,
+
+					AHTThreshold = SelectedGamificationSetting.AHTThreshold,
+
+					AdherenceThreshold = SelectedGamificationSetting.AdherenceThreshold,
+
+					GoldToSilverBadgeRate = SelectedGamificationSetting.GoldToSilverBadgeRate,
+					SilverToBronzeBadgeRate = SelectedGamificationSetting.SilverToBronzeBadgeRate
+				};
+				gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting = selectedSetting;
+			}
+			else
+			{
+				var selectedSetting = new RuleSettingWithDifferentThreshold()
+				{
+					AnsweredCallsBadgeEnabled = SelectedGamificationSetting.AnsweredCallsBadgeEnabled,
+					AHTBadgeEnabled = SelectedGamificationSetting.AHTBadgeEnabled,
+					AdherenceBadgeEnabled = SelectedGamificationSetting.AdherenceBadgeEnabled,
+
+					AnsweredCallsBronzeThreshold = SelectedGamificationSetting.AnsweredCallsBronzeThreshold,
+					AnsweredCallsSilverThreshold = SelectedGamificationSetting.AnsweredCallsSilverThreshold,
+					AnsweredCallsGoldThreshold = SelectedGamificationSetting.AnsweredCallsGoldThreshold,
+
+					AHTBronzeThreshold = SelectedGamificationSetting.AHTBronzeThreshold,
+					AHTSilverThreshold = SelectedGamificationSetting.AHTSilverThreshold,
+					AHTGoldThreshold = SelectedGamificationSetting.AHTGoldThreshold,
+
+					AdherenceBronzeThreshold = SelectedGamificationSetting.AdherenceBronzeThreshold,
+					AdherenceSilverThreshold = SelectedGamificationSetting.AdherenceSilverThreshold,
+					AdherenceGoldThreshold = SelectedGamificationSetting.AdherenceGoldThreshold
+				};
+				gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting = selectedSetting;
+			}
 		}
 
 		private void addNewGamificationSetting()
 		{
 			var newBadgeSetting = createGamificationSetting();
 			_gamificationSettingList.Add(newBadgeSetting);
-
-			loadGamificationSettings();
+			bindSettingListToComboBox();
 			comboBoxAdvGamificationSettings.SelectedIndex = LastItemIndex;
 		}
 
-		private IGamificationSetting createGamificationSetting()
+		private GamificationSettingView createGamificationSetting()
 		{
 			// Formats the name.
 			Description description = PageHelper.CreateNewName(_gamificationSettingList, "Description.Name", Resources.NewGamificationSetting);
 			IGamificationSetting newGamificationSetting = new GamificationSetting(description.Name) { Description = description };
-			Repository.Add(newGamificationSetting);
 
-			return newGamificationSetting;
+			return new GamificationSettingView(newGamificationSetting);
 		}
 
 		private void loadGamificationSettings()
 		{
 			if (Disposing) return;
-			if (_gamificationSettingList == null)
+			using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_gamificationSettingList = new List<IGamificationSetting>();
+				var gamificationSettingRepo = new GamificationSettingRepository(myUow);
+				var gamificationSettings = gamificationSettingRepo.FindAllGamificationSettingsSortedByDescription();
+
+				foreach (var setting in gamificationSettings)
+				{
+					LazyLoadingManager.Initialize(setting.UpdatedBy);
+					_gamificationSettingList.Add(new GamificationSettingView(setting));
+				}
 			}
 
 			if (_gamificationSettingList.IsEmpty())
 			{
 				_gamificationSettingList.Add(createGamificationSetting());
 			}
-
 			int selected = comboBoxAdvGamificationSettings.SelectedIndex;
 			if (!isWithinRange(selected))
 			{
@@ -294,11 +406,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			// Rebinds list to comboBox.
+			bindSettingListToComboBox();
+
+			comboBoxAdvGamificationSettings.SelectedIndex = selected;
+		}
+
+		private void bindSettingListToComboBox()
+		{
 			comboBoxAdvGamificationSettings.DataSource = null;
 			comboBoxAdvGamificationSettings.DataSource = _gamificationSettingList;
 			comboBoxAdvGamificationSettings.DisplayMember = "Description";
-
-			comboBoxAdvGamificationSettings.SelectedIndex = selected;
 		}
 
 		private bool isWithinRange(int index)
@@ -333,6 +450,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				tableLayoutPanel6.Controls.Add(gamificationSettingRuleWithDifferentThresholdControl.Value, 0, 2);
 			}
 			tableLayoutPanel6.SetColumnSpan(tableLayoutPanel6.GetControlFromPosition(0, 2), 2);
+
+			if(SelectedGamificationSetting == null) return;
+			SelectedGamificationSetting.GamificationSettingRuleSet = SelectedGamificationSettingRuleSet;
 		}
 
 		private void reset_Click(object sender, EventArgs e)
@@ -341,8 +461,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (result != DialogResult.OK) return;
 			try
 			{
-				_agentBadgeTransactionRepository.ResetAgentBadges();
-				_agentBadgeWithRankTransactionRepository.ResetAgentBadges();
+				using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					var agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(myUow);
+					var agentBadgeWithRankTransactionRepository = new AgentBadgeWithRankTransactionRepository(myUow);
+					agentBadgeTransactionRepository.ResetAgentBadges();
+					agentBadgeWithRankTransactionRepository.ResetAgentBadges();
+					myUow.PersistAll();
+				}
 			}
 			catch (Exception)
 			{

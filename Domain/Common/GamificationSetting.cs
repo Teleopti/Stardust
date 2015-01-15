@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.Common
 {
 	[Serializable]
-	public class GamificationSetting : VersionedAggregateRootWithBusinessUnit, IGamificationSetting, IDeleteTag
+	public class GamificationSetting : NonversionedAggregateRootWithBusinessUnit, IGamificationSetting, IDeleteTag
 	{
 		private Description _description;
 		private GamificationSettingRuleSet _gamificationSettingRuleSet;
@@ -179,6 +179,21 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual void SetDeleted()
 		{
 			_isDeleted = true;
+		}
+
+		public virtual object Clone()
+		{
+			return MemberwiseClone();
+		}
+
+		public virtual IGamificationSetting NoneEntityClone()
+		{
+			return (IGamificationSetting) MemberwiseClone();
+		}
+
+		public virtual IGamificationSetting EntityClone()
+		{
+			return (IGamificationSetting)MemberwiseClone();
 		}
 	}
 }

@@ -12,8 +12,6 @@
             unsaved-value="null">
       <generator class="guid.comb" />
     </id>
-    <version name="Version"
-             unsaved-value ="null"/>
     <many-to-one name="UpdatedBy"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true"
