@@ -159,3 +159,32 @@ Scenario: View shift trade post details
 	| Offer end date | 2029-12-31 |
 	| Start time     | 6:00       |
 	| End time       | 14:00      |
+
+@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+Scenario: Should modify shift trade post
+	Given  I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 09:00 |
+	| EndTime               | 2030-01-01 17:00 |
+	| Shift category		| Day	           |
+	And I have a shift exchange for bulletin
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 06:00 |
+	| EndTime   | 2030-01-01 14:00 |
+	And I am viewing requests
+	When I click on the existing request in the list
+	And I change the shift trade post value with
+	| Field          | Value      |
+	| Offer end date | 2029-12-31 |
+	| Start time     | 8:00       |
+	| End time       | 16:00      |
+	And I submit my changes for the existing shift trade post
+	And I click on the existing request in the list
+	Then I should see the updated values of the shift trade post
+	| Field          | Value      |
+	| Offer end date | 2029-12-31 |
+	| Start time     | 8:00       |
+	| End time       | 16:00      |

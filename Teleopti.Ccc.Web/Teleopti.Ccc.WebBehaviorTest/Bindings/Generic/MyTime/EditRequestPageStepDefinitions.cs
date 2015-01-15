@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		[Then(@"I should see the values of the shift trade post")]
 		[Then(@"I should see add shift exchange offer form with")]
+		[Then(@"I should see the updated values of the shift trade post")]
 		public void ThenIShouldSeeAddShiftExchangeOfferFormWith(Table table)
 		{
 			var exchangeOffer = table.CreateInstance<ShiftExchangeOfferFields>();

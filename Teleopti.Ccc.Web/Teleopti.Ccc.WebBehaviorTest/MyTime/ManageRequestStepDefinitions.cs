@@ -84,5 +84,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.Click(".request-list .request .request-edit-update");
 		}
+
+		[When(@"I submit my changes for the existing shift trade post")]
+		public void WhenISubmitMyChangesForTheExistingShiftTradePost()
+		{
+			Browser.Interactions.ClickUsingJQuery(".request-list .request .request-new-send");
+		}
+
 	}
 }

@@ -149,6 +149,9 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
+		var wishShiftTypeId = 0;
+		if (self.Toggle31317Enabled()) wishShiftTypeId = self.WishShiftTypeOption().Id;
+
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
@@ -158,7 +161,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
 				EndTimeNextDay: self.EndTimeNextDay(),
 				Id: self.Id(),
-				WishShiftType: self.WishShiftTypeOption().Id
+				WishShiftType: wishShiftTypeId
 			},
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
