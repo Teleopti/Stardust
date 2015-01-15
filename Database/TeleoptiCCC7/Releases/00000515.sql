@@ -7,9 +7,20 @@ DROP TABLE [ReadModel].[TeamAdherence]
 GO
 
 CREATE TABLE [ReadModel].[TeamOutOfAdherence](
-	[SiteId] [uniqueidentifier] NULL,
 	[TeamId] [uniqueidentifier] NULL,
+	[SiteId] [uniqueidentifier] NULL,
 	[Count] [int] NULL,
-	[PersonIds] [varchar](MAX) NULL
+	[PersonIds] [varchar](MAX) NULL,
+	CONSTRAINT [PK_Team] PRIMARY KEY CLUSTERED 
+	(
+		[TeamId] ASC
+	)
 )
 GO
+
+CREATE NONCLUSTERED INDEX [IX_TeamOutOfAdherence_SiteId] ON [ReadModel].[TeamOutOfAdherence] 
+(
+	[SiteId] ASC
+)
+GO
+
