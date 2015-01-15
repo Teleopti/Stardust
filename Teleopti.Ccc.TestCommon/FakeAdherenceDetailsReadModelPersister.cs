@@ -10,6 +10,15 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly IList<AdherenceDetailsReadModel> _data = new List<AdherenceDetailsReadModel>();
 
+		public FakeAdherenceDetailsReadModelPersister()
+		{
+		}
+
+		public FakeAdherenceDetailsReadModelPersister(IList<AdherenceDetailsReadModel> data)
+		{
+			_data = data;
+		}
+
 		public AdherenceDetailsModel Model
 		{
 			get { return _data.Single().Model; }

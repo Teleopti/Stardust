@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -173,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldReturnEmptyResultIfNoDataIsFound()
 		{
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(null), new ThreadCulture(), new UtcTimeZone());
+				new FakeAdherenceDetailsReadModelPersister(), new ThreadCulture(), new UtcTimeZone());
 
 			var result = target.ForDetails(Guid.NewGuid());
 
@@ -441,39 +439,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.Last().AdherencePercent.Should().Be(null);
 		}
 
-		public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
-		{
-			private readonly IList<AdherenceDetailsReadModel> _models;
-
-			public FakeAdherenceDetailsReadModelPersister(IList<AdherenceDetailsReadModel> models)
-			{
-				_models = models;
-			}
-
-			public void Add(AdherenceDetailsReadModel model)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void Update(AdherenceDetailsReadModel model)
-			{
-				throw new NotImplementedException();
-			}
-
-			public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
-			{
-				return _models == null ? null : _models.FirstOrDefault(m => date.Equals(m.BelongsToDate) && m.PersonId == personId);
-			}
-
-			public void Remove(Guid personId, DateOnly date)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void ClearDetails(AdherenceDetailsReadModel model)
-			{
-				throw new NotImplementedException();
-			}
-		}
 	}
 }
