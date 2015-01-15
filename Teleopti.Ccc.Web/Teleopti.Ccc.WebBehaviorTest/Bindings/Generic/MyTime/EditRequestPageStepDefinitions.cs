@@ -141,12 +141,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				                                             ? ".overtime-availability-next-day:checked"
 				                                             : ".overtime-availability-next-day:not(:checked)");
 		}
-		
+
+
+		[Then(@"I should see the values of the shift trade post")]
 		[Then(@"I should see add shift exchange offer form with")]
 		public void ThenIShouldSeeAddShiftExchangeOfferFormWith(Table table)
 		{
 			var exchangeOffer = table.CreateInstance<ShiftExchangeOfferFields>();
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .shift-exchange-offer-end-date",
+			Browser.Interactions.AssertInputValueUsingJQuery(".shift-exchange-offer-end-date",
 															 exchangeOffer.OfferEndDate.ToShortDateString(
 																 DataMaker.Data().MyCulture));
 
@@ -155,9 +157,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var end = exchangeOffer.EndTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
 
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .shift-exchange-offer-start-time",
+			Browser.Interactions.AssertInputValueUsingJQuery(".shift-exchange-offer-start-time",
 												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .shift-exchange-offer-end-time",
+			Browser.Interactions.AssertInputValueUsingJQuery(".shift-exchange-offer-end-time",
 												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertExistsUsingJQuery(exchangeOffer.EndTimeNextDay
 															 ? ".shift-exchange-offer-next-day:checked"

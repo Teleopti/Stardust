@@ -136,3 +136,26 @@ Scenario: Delete shift exchange offer in request list
 	And I am viewing requests
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
+
+@OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
+Scenario: View shift trade post details
+	Given  I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 09:00 |
+	| EndTime               | 2030-01-01 17:00 |
+	| Shift category		| Day	           |
+	And I have a shift exchange for bulletin
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 06:00 |
+	| EndTime   | 2030-01-01 14:00 |
+	And I am viewing requests
+	When I click on the existing request in the list
+	Then I should see the detail form for the existing request in the list
+	And I should see the values of the shift trade post
+	| Field          | Value      |
+	| Offer end date | 2029-12-31 |
+	| Start time     | 6:00       |
+	| End time       | 14:00      |
