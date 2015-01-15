@@ -1374,7 +1374,6 @@
     <Compile Include="Security\Authentication\FindApplicationUser.cs" />
     <Compile Include="Security\Authentication\FindUserDetail.cs" />
     <Compile Include="Security\Authentication\FuncTimeZone.cs" />
-    <Compile Include="Security\Authentication\IApplicationAuthentication.cs" />
     <Compile Include="Security\Authentication\IApplicationDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\IAvailableDataSourcesProvider.cs" />
     <Compile Include="Security\Authentication\ICheckBruteForce.cs" />
@@ -1385,14 +1384,12 @@
     <Compile Include="Security\Authentication\ICheckUserDetail.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IDataSourceProvider.cs" />
-    <Compile Include="Security\Authentication\IdentificationResult.cs" />
     <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
     <Compile Include="Security\Authentication\LogonLogger.cs" />
-    <Compile Include="Security\Authentication\LogonResult.cs" />
     <Compile Include="Security\Authentication\SpecificTimeZone.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\UtcTimeZone.cs" />
