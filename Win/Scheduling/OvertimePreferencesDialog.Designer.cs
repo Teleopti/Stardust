@@ -331,7 +331,7 @@
 			this.buttonOK.TabIndex = 10;
 			this.buttonOK.Text = "xxOk";
 			this.buttonOK.UseVisualStyle = true;
-			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
+			this.buttonOK.Click += new System.EventHandler(this.buttonOkClick);
 			// 
 			// buttonCancel
 			// 

@@ -635,9 +635,11 @@
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityCommand.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
+    <Compile Include="Scheduling\IOvertimePreferencesDialog.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
     <Compile Include="Scheduling\ISchedulingScreenPersister.cs" />
     <Compile Include="Scheduling\MultiplicatorsetForPasteSpecialFilter.cs" />
+    <Compile Include="Scheduling\OvertimePreferencesDialogPresenter.cs" />
     <Compile Include="Scheduling\PasteAsOvertime.cs" />
     <Compile Include="Scheduling\PublishScheduleCommand.cs" />
     <Compile Include="Scheduling\PublishScheduleDatePresenter.cs" />

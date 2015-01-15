@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using System.Linq;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class OvertimePreferencesDialog : BaseDialogForm
+	public partial class OvertimePreferencesDialog : BaseDialogForm, IOvertimePreferencesDialog
 	{
 		private OvertimePreferencesGeneralPersonalSetting _defaultOvertimeGeneralSettings;
 		private readonly IOvertimePreferences _overtimePreferences;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly int _resolution;
 		private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
+		private readonly OvertimePreferencesDialogPresenter _presenter;
 
 		public OvertimePreferencesDialog(IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
 			: this()
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_resolution = resolution;
 			_definitionSets = definitionSets;
 			_overtimePreferences = new OvertimePreferences();
+			_presenter = new OvertimePreferencesDialogPresenter(this);
 			
 			loadPersonalSettings();
 			initTags();
@@ -38,6 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setDefaultTimePeriod();
 			setDefaultSpecificPeriod();
 			setInitialValues();
+			_presenter.SetStateButtons(_definitionSets);
 		}
 
 		public void UseSpecifiedPeriod(bool use)
@@ -186,7 +191,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				SetTexts();
 		}
 
-		private void savePersonalSettings()
+		public void SavePersonalSettings()
 		{
 			if (hasMissedloadingSettings()) return;
 			_defaultOvertimeGeneralSettings.MapFrom(_overtimePreferences);
@@ -227,14 +232,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return _defaultOvertimeGeneralSettings == null;
 		}
 
-		private void buttonOK_Click(object sender, EventArgs e)
+		private void buttonOkClick(object sender, EventArgs e)
 		{
-			getDataFromControls();
-			savePersonalSettings();
+			_presenter.ButtonOkClick();
 			Close();
 		}
 
-		private void getDataFromControls()
+		public void GetDataFromControls()
 		{
 			if (comboBoxAdvTag.SelectedText != "<None>")
 			{
@@ -254,6 +258,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_overtimePreferences.SelectedSpecificTimePeriod = selectedSpecificPeriod;
 
 			_overtimePreferences.AvailableAgentsOnly = checkBoxOnAvailableAgentsOnly.Checked;
+		}
+
+		public void SetStateOkButtonDisabled()
+		{
+			buttonOK.Enabled = false;
+			label4.BackColor = Color.Red;
 		}
 	}
 }
