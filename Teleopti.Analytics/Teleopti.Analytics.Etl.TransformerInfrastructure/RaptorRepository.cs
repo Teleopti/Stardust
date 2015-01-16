@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using NHibernate.Transform;
+using NHibernate.Util;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -1731,6 +1732,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+
 				var repository = new SkillRepository(uow);
 				return new List<ISkill>(repository.FindAllWithSkillDays(period));
 			}
@@ -1775,6 +1777,36 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_queue_load_intraday", parameters,
 				_dataMartConnectionString);
+		}
+
+		public int PerformIndexMaintenance()
+		{
+			var appConnectionString = UnitOfWorkFactory.Current.ConnectionString;
+
+			var initCatString = "Initial Catalog=";
+			var appNameString = ";Application Name";
+
+			var firstIndex = _dataMartConnectionString.IndexOf(initCatString) + initCatString.Length;
+			var lastIndex = _dataMartConnectionString.IndexOf(appNameString);
+
+			var aggName = getAggName();
+
+			string aggConnectionString = _dataMartConnectionString.Substring(0, firstIndex) + aggName +
+			                             _dataMartConnectionString.Substring(lastIndex);
+
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, _dataMartConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, appConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, aggConnectionString);
+
+			return 0;
+		}
+
+		private string getAggName()
+		{
+			var dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
+																 "mart.etl_job_get_aggdatabase", null,
+																 _dataMartConnectionString).Tables[0];
+			return dataTable.Rows[0]["target_customName"].ToString();
 		}
 	}
 }

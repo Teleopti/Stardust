@@ -112,6 +112,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 
 			// MORE CLEAN UP!
 			Add(new PurgeJobStep(jobParameters));     // BU independent
+
+			Add(new IndexMaintenanceJobStep(jobParameters));
         }
     }
 

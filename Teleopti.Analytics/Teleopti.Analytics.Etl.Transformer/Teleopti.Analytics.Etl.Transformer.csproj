@@ -98,6 +98,7 @@
     <Compile Include="AbsenceTransformer.cs" />
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="Job\Steps\IndexMaintenanceJobStep.cs" />
     <Compile Include="Job\Steps\IntradayFactAgentQueueJobStep.cs" />
     <Compile Include="Job\Steps\IntradayFactAgentJobStep.cs" />
     <Compile Include="Job\Steps\IntradayFactQueueJobStep.cs" />

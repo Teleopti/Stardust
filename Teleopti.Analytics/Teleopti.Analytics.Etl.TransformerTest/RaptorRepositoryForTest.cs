@@ -800,6 +800,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			throw new NotImplementedException();
 		}
 
+		public int PerformIndexMaintenance()
+		{
+			throw new NotImplementedException();
+		}
+
 		public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);
