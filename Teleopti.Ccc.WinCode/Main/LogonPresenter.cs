@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -9,6 +8,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Main
 	public class LogonPresenter : ILogonPresenter
 	{
 		private readonly ILogonView _view;
-		private readonly LogonModel _model;
+		private readonly ILogonModel _model;
 		private readonly ILoginInitializer _initializer;
 		private readonly ILogonLogger _logonLogger;
 		private readonly ILogOnOff _logOnOff;
@@ -226,8 +226,16 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
+			IApplicationLogon applogon = new ApplicationLogon();
+
+			//on inte  flaggan är satt
+			var authenticationResult = applogon.Logon(_model);
+			
+			//else
+			//applogon = new MultiTenancyApplicationLogon(new RepositoryFactory());
+			//authenticationResult = applogon.Logon(_model);
+			
 			var choosenDataSource = _model.SelectedDataSourceContainer;
-			var authenticationResult = choosenDataSource.LogOn(_model.UserName, _model.Password);
 
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
@@ -306,4 +314,5 @@ namespace Teleopti.Ccc.WinCode.Main
 		Loading = 4, // not used
 		Ready = 5 // not used
 	}
+
 }

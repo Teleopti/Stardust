@@ -1357,6 +1357,9 @@
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
+    <Compile Include="Security\ApplicationLogon.cs" />
+    <Compile Include="Security\IApplicationLogon.cs" />
+    <Compile Include="Security\MultiTenancyApplicationLogon.cs" />
     <Compile Include="Security\Authentication\ApplicationDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
@@ -1387,6 +1390,7 @@
     <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
+    <Compile Include="Security\Authentication\ILogonModel.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
     <Compile Include="Security\Authentication\LogonLogger.cs" />

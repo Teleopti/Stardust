@@ -472,6 +472,75 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, userRetOk.PersonPeriodCollection.Count);
         }
 
+		  [Test]
+		  public void ShouldLoadPermissionDataOnLoadOne()
+		  {
+			  string okLogon = @"okDomain\ok";
+			  IPerson userRetOk;
+			  IPerson userOk = PersonFactory.CreatePersonWithIdentityPermissionInfo(okLogon);
+			  userOk.PermissionInformation.AddApplicationRole(createAndPersistApplicationRole());
+
+			  // CreateProjection Team belong to a  site 
+			  ITeam team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			  PersistAndRemoveFromUnitOfWork(team.Site);
+			  PersistAndRemoveFromUnitOfWork(team);
+
+			  //  CreateProjection Activity with GroupActivity
+
+			  IActivity activity = new Activity("dummy activity");
+			  PersistAndRemoveFromUnitOfWork(activity);
+
+			  // CreateProjection Skill Type
+			  ISkill skill = SkillFactory.CreateSkill("dummy skill");
+			  skill.Activity = activity;
+			  var skill2 = skill.NoneEntityClone();
+			  PersistAndRemoveFromUnitOfWork(skill.SkillType);
+			  PersistAndRemoveFromUnitOfWork(skill);
+			  PersistAndRemoveFromUnitOfWork(skill2);
+
+			  IRuleSetBag rsBag = new RuleSetBag();
+			  rsBag.Description = new Description("for test");
+			  PersistAndRemoveFromUnitOfWork(rsBag);
+
+			  // create Person Contract for testing person
+			  IPersonContract personContract = PersonContractFactory.CreatePersonContract();
+
+			  IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
+												  personContract,
+												  team);
+			  userOk.AddPersonPeriod(personPeriod);
+			  userOk.AddSkill(new PersonSkill(skill, new Percent(0.44)), personPeriod);
+			  userOk.AddSkill(new PersonSkill(skill2, new Percent(0.54)), personPeriod);
+			  personPeriod.RuleSetBag = rsBag;
+
+			  personPeriod.BudgetGroup = new BudgetGroup() { Name = "BG", TimeZone = userOk.PermissionInformation.DefaultTimeZone() };
+
+			  PersistAndRemoveFromUnitOfWork(personContract.Contract);
+			  PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
+			  PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
+			  PersistAndRemoveFromUnitOfWork(personPeriod.BudgetGroup);
+
+			  // Persist the Person
+			  PersistAndRemoveFromUnitOfWork(userOk);
+
+			  userRetOk = target.LoadOne(userOk.Id.GetValueOrDefault());
+			  Session.Close();
+			  Assert.AreEqual(userOk, userRetOk);
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation.ApplicationRoleCollection[0].BusinessUnit));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team.Site));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team.BusinessUnitExplicit));
+			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PersonPeriodCollection[0].Team.Site.TeamCollection));
+
+			  Assert.AreEqual(1, userRetOk.PermissionInformation.ApplicationRoleCollection.Count);
+			  Assert.AreEqual(2, userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection.Count);
+			  Assert.AreEqual(1, userRetOk.PersonPeriodCollection[0].Team.Site.TeamCollection.Count);
+			  Assert.AreEqual(1, userRetOk.PersonPeriodCollection.Count);
+		  }
 		[Test]
 		public void VerifyNoHitOnWindowsAuthenticationIfTerminalDate()
 		{
