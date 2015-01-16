@@ -29,6 +29,8 @@ using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.Authentication;
+using Teleopti.Ccc.Web.Areas.Authentication.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -49,6 +51,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+using Teleopti.Ccc.Web.Areas.Tennant;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Hangfire;
@@ -144,6 +147,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldRegisterAsmController()
 		{
 			requestContainer.Resolve<AsmController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterTennantController()
+		{
+			requestContainer.Resolve<TennantController>()
 				.Should().Not.Be.Null();
 		}
 

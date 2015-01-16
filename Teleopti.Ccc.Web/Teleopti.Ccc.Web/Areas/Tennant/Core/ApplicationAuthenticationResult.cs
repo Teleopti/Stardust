@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Areas.Authentication.Core
+namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
 	public class ApplicationAuthenticationResult
 	{

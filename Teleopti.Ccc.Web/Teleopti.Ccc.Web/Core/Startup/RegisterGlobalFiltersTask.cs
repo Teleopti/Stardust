@@ -8,6 +8,7 @@ using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.RtaTool.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Areas.Tennant;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(StateController),
 																		typeof(ActivityChangeController),
 																		typeof(MessageBrokerController),
-																		typeof(ApplicationController)
+																		typeof(ApplicationController),
+																		typeof(TennantController)
 			                                                    	}));
 		}
 	}
