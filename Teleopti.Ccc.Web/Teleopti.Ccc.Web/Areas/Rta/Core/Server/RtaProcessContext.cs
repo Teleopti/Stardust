@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AgentStateAssembler _agentStateAssembler;
-		private readonly ICurrentEventPublisherContext _publishingContext;
+		private readonly Func<AgentState> _previousState;
+		private readonly Func<ScheduleInfo, RtaProcessContext, AgentState> _currentState;
 		private readonly PersonOrganizationData _person;
-
-		private Lazy<AgentState> _previousState;
+		private AgentState _madePreviousState;
 
 		public RtaProcessContext(
 			ExternalUserStateInputModel input,
@@ -27,23 +27,26 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
 			AgentStateAssembler agentStateAssembler,
-			ICurrentEventPublisherContext publishingContext
+			Func<AgentState> previousState,
+			Func<ScheduleInfo, RtaProcessContext, AgentState> currentState 
 			)
 		{
 			_databaseReader = databaseReader;
 			_agentStateAssembler = agentStateAssembler;
-			_publishingContext = publishingContext;
+			_previousState = previousState;
+			_currentState = currentState;
 			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out _person))
 				return;
 			_person.BusinessUnitId = businessUnitId;
-			Input = input ?? new ExternalUserStateInputModel();
+
 			CurrentTime = currentTime;
-
+			Input = input ?? new ExternalUserStateInputModel();
 			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
-			MessageSender = messageSender;
-			AdherenceAggregator = adherenceAggregator;
-
-			_previousState = new Lazy<AgentState>(() => _agentStateAssembler.MakePreviousState(Person.PersonId, _databaseReader.GetCurrentActualAgentState(Person.PersonId)));
+			MessageSender = messageSender ?? new NoMessagge();
+			AdherenceAggregator = adherenceAggregator ?? new NoAggregation();
+			
+			//_previousState = new Lazy<AgentState>(() => _agentStateAssembler.MakePreviousState(Person.PersonId, _databaseReader.GetCurrentActualAgentState(Person.PersonId)));
+			//_currentState = new Lazy<AgentState>(() => currentState.Invoke(previousState));
 		}
 
 		public ExternalUserStateInputModel Input { get; private set; }
@@ -56,31 +59,24 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public AgentState MakePreviousState(ScheduleInfo scheduleInfo)
 		{
-			return _previousState.Value;
+			if (_madePreviousState != null)
+				return _madePreviousState;
+			_madePreviousState = _previousState.Invoke();
+			return _madePreviousState;
 		}
-
-		private Func<AgentState> _makeCurrentState; 
 
 		public AgentState MakeCurrentState(ScheduleInfo scheduleInfo)
 		{
-			if (_makeCurrentState == null)
-				_makeCurrentState = () => _agentStateAssembler.MakeCurrentState(scheduleInfo, Input, Person, _previousState.Value, CurrentTime);
-			return _makeCurrentState.Invoke();
+			return _currentState.Invoke(scheduleInfo, this);
+			//if (_makeCurrentState == null)
+			//	_makeCurrentState = () => _agentStateAssembler.MakeCurrentState(scheduleInfo, Input, Person, _previousState.Value, CurrentTime);
+			//return _makeCurrentState.Invoke();
 		}
 
-		public void SetPreviousMakeMethodToReturnEmptyState()
-		{
-			_previousState = new Lazy<AgentState>(() => _agentStateAssembler.MakeEmpty(Person.PersonId));
-		}
-
-		public void SetCurrentMakeMethodToReturnPreviousState(AgentStateReadModel previousState)
-		{
-			_makeCurrentState = () => _agentStateAssembler.MakeCurrentStateFromPrevious(previousState);
-		}
-
-		public void PublishEventsTo(object handler)
-		{
-			_publishingContext.PublishTo(new SyncPublishToSingleHandler(handler));
-		}
+		//public void SetStuffUp(AgentStateReadModel previousState)
+		//{
+		//	_previousState = new Lazy<AgentState>(() => _agentStateAssembler.MakeEmpty(Person.PersonId));
+		//	_makeCurrentState = () => _agentStateAssembler.MakeCurrentStateFromPrevious(previousState);
+		//}
 	}
 }

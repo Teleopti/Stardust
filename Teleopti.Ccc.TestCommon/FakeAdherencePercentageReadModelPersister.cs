@@ -35,5 +35,10 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public AdherencePercentageReadModel PersistedModel { get; private set; }
+
+		public void Clear()
+		{
+			PersistedModel = null;
+		}
 	}
 }

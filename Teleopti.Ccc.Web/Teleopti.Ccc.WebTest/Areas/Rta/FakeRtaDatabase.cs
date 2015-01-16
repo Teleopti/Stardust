@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<AgentStateReadModel> _actualAgentStates = new List<AgentStateReadModel>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
-		//private readonly List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>> _stateGroups = new List<KeyValuePair<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>>();
 		private readonly Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> _stateGroups = new Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
 		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
@@ -195,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
 		{
-			return _actualAgentStates;
+			return _actualAgentStates.ToList();
 		}
 
 		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()

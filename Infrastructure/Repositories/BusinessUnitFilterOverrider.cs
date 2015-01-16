@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,25 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     }
 
     public interface IBusinessUnitFilterOverrider
-
     {
         IDisposable OverrideWith(Guid buId);
-    }
-
-
-    public class GenericDisposable : IDisposable
-    {
-        private Action _disposeAction;
-
-        public GenericDisposable(Action disposeAction)
-        {
-            _disposeAction = disposeAction;
-        }
-
-        public void Dispose()
-        {
-            _disposeAction.Invoke();
-            _disposeAction = null;
-        }
     }
 }

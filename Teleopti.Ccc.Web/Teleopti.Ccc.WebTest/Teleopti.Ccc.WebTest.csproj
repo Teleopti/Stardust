@@ -287,6 +287,7 @@
     <Compile Include="Areas\Rta\Synchronization\AdherencePercentageTest.cs" />
     <Compile Include="Areas\Rta\Synchronization\IndividualModelsTest.cs" />
     <Compile Include="Areas\Rta\Synchronization\SiteAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Synchronization\InitializeProcessTest.cs" />
     <Compile Include="Areas\Rta\Synchronization\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />

@@ -458,6 +458,7 @@
     <Compile Include="Aop\Core\IResolvedAspect.cs" />
     <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="GenericDisposable.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\CustomNotificationSenderFactory.cs" />

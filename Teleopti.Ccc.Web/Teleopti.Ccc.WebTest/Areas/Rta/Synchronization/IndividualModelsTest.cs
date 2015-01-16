@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 				StateCode = "break"
 			});
 
-
 			Target.Initialize();
 
 			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);

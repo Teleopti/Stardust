@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.Domain
 {
 	public class GenericDisposable : IDisposable
 	{

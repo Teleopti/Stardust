@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentEventPublisher>()
 				.As<ICurrentEventPublisher>()
-				.As<ICurrentEventPublisherContext>()
+				.As<ICurrentEventPublisherScope>()
 				.SingleInstance();
 
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>();

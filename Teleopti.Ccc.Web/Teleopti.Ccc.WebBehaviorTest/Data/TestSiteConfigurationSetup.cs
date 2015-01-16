@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using IISExpressAutomation;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data

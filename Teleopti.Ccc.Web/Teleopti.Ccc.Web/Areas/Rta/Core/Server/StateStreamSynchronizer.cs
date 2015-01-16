@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
@@ -21,11 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly INow _now;
 		private readonly RtaProcessor _processor;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
-		private readonly IAgentStateMessageSender _agentStateMessageSender;
-		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AgentStateAssembler _agentStateAssembler;
-		private readonly ICurrentEventPublisherContext _eventPublisher;
+		private readonly ICurrentEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly IEnumerable<IRecreatable> _recreatables;
 
@@ -33,11 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			INow now,
 			RtaProcessor processor,
 			IPersonOrganizationProvider personOrganizationProvider,
-			IAgentStateMessageSender agentStateMessageSender,
-			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
 			AgentStateAssembler agentStateAssembler,
-			ICurrentEventPublisherContext eventPublisher,
+			ICurrentEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
 			IEnumerable<IRecreatable> recreatables
 			)
@@ -45,11 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_now = now;
 			_processor = processor;
 			_personOrganizationProvider = personOrganizationProvider;
-			_agentStateMessageSender = agentStateMessageSender;
-			_adherenceAggregator = adherenceAggregator;
 			_databaseReader = databaseReader;
 			_agentStateAssembler = agentStateAssembler;
-			_eventPublisher = eventPublisher;
+			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_recreatables = recreatables;
 		}
@@ -78,7 +72,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime)
 		{
-			states.ForEach(s =>
+			using (_eventPublisherScope.PublishTo(new SyncPublishToSingleHandler(handler)))
+			{
+				states.ForEach(s =>
 				{
 					var context = new RtaProcessContext(
 						null,
@@ -87,17 +83,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 						currentTime,
 						_personOrganizationProvider,
 						null,
-						_agentStateMessageSender,
-						_adherenceAggregator,
+						null, 
+						null,
 						_databaseReader,
 						_agentStateAssembler,
-						_eventPublisher
+						() => _agentStateAssembler.MakeEmpty(s.PersonId),
+						(a, b) => _agentStateAssembler.MakeCurrentStateFromPrevious(s)
 						);
-					context.SetPreviousMakeMethodToReturnEmptyState();
-					context.SetCurrentMakeMethodToReturnPreviousState(s);
-					context.PublishEventsTo(handler);
 					_processor.Process(context);
 				});
+			}
 		}
 	}
 

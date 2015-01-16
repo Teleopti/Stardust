@@ -165,7 +165,6 @@
     <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeScenarioRepository.cs" />
     <Compile Include="FakeTime.cs" />
-    <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />
     <Compile Include="DataSourceHelper.cs" />

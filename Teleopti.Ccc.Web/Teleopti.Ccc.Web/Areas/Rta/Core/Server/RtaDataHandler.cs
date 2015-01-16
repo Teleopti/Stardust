@@ -104,19 +104,21 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			Guid businessUnitId
 			)
 		{
+			var currentTime = _now.UtcDateTime();
 			_processor.Process(
 				new RtaProcessContext(
 					input, 
 					personId, 
 					businessUnitId, 
-					_now.UtcDateTime(), 
+					currentTime, 
 					_personOrganizationProvider, 
 					_agentStateReadModelUpdater, 
 					_messageSender, 
 					_adherenceAggregator,
 					_databaseReader,
 					_agentStateAssembler,
-					null
+					() => _agentStateAssembler.MakePreviousState(personId, _databaseReader.GetCurrentActualAgentState(personId)),
+					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.MakePreviousState(scheduleInfo), currentTime)
 					));
 		}
 
