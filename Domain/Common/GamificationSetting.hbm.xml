@@ -15,7 +15,7 @@
     <many-to-one name="UpdatedBy"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true"
-                 foreign-key="FK_Contract_Person_UpdatedBy"/>
+                 foreign-key="FK_GamificationSetting_Person_UpdatedBy"/>
     <property name="UpdatedOn"
               type="UtcDateTime"
               not-null="true"/>
@@ -112,7 +112,7 @@
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"
       access="nosetter.camelcase-underscore"
       not-null="true"
-      foreign-key="FK_Contract_BusinessUnit"/>
+      foreign-key="FK_GamificationSetting_BusinessUnit"/>
     <property name="IsDeleted"
           type="boolean"
           not-null="true"/>
