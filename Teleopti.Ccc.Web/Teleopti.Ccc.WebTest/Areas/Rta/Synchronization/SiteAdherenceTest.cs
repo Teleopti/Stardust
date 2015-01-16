@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var stateSite = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
+			Model.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = existingSite
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var siteId2 = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
+			Model.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = siteId1
