@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateSiteAdherence()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent() { SiteId = siteId });
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateSiteOutOfAdherence()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent() { SiteId = siteId });
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = personId });
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldSummarizeOufOfAdherenceFor2Persons()
 		{
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
 
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent() { SiteId = siteId1, PersonId = Guid.NewGuid() });
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldNeverSetNegativeAdherence()
 		{
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 			var siteId = Guid.NewGuid();
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldUpdateAgentsOutOfAdherenceWhenFirstStateIsInAdherence()
 		{
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId, PersonId = Guid.NewGuid() });
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonOutOfAdherenceEvent() {SiteId = siteId, BusinessUnitId = businessUnitId});
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var persister = new FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister();
+			var persister = new FakeSiteOutOfAdherenceReadModelPersister();
 			var target = new SiteOutOfAdherenceReadModelUpdater(persister);
 
 			target.Handle(new PersonInAdherenceEvent() { SiteId = siteId, BusinessUnitId = businessUnitId });

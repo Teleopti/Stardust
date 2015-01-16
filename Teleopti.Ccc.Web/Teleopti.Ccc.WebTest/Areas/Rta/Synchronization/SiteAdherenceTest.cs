@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 	{
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
-		public FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister ModelReadModel;
+		public FakeSiteOutOfAdherenceReadModelPersister Model;
 
 		[Test]
 		public void ShouldInitializeSiteAdherence()
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 
 			Target.Initialize();
 
-			ModelReadModel.Get(siteId).Count.Should().Be(1);
+			Model.Get(siteId).Count.Should().Be(1);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var existingSite = Guid.NewGuid();
 			var stateSite = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
+			Model.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = existingSite
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 
 			Target.Initialize();
 
-			ModelReadModel.Get(existingSite).Count.Should().Be(3);
-			ModelReadModel.Get(stateSite).Should().Be.Null();
+			Model.Get(existingSite).Count.Should().Be(3);
+			Model.Get(stateSite).Should().Be.Null();
 		}
 
 		[Test]
@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
+			Model.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = siteId1
 			});
-			ModelReadModel.Persist(new SiteOutOfAdherenceReadModel
+			Model.Persist(new SiteOutOfAdherenceReadModel
 			{
 				Count = 3,
 				SiteId = siteId2
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 
 			Target.Sync();
 
-			ModelReadModel.Get(siteId1).Count.Should().Be(1);
-			ModelReadModel.Get(siteId2).Should().Be.Null();
+			Model.Get(siteId1).Count.Should().Be(1);
+			Model.Get(siteId2).Should().Be.Null();
 		}
 	}
 }

@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister : ISiteOutOfAdherenceReadModelPersister
+	public class FakeSiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister
 	{
 		private readonly List<SiteOutOfAdherenceReadModel> _models = new List<SiteOutOfAdherenceReadModel>();
 

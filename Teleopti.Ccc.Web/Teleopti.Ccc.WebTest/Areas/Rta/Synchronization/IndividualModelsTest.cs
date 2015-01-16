@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 	{
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
-		public FakeSiteOutOfOutOfAdherenceReadModelReadModelPersister SiteOutOfOutOfAdherenceReadModelReadModel;
+		public FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModel;
 		public FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModel;
 
 		[Test]
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			Target.Initialize();
 
 			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);
-			SiteOutOfOutOfAdherenceReadModelReadModel.Get(siteId).Count.Should().Be(1);
+			SiteOutOfAdherenceReadModel.Get(siteId).Count.Should().Be(1);
 		}
 
 	}
