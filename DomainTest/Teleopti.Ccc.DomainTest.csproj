@@ -1072,7 +1072,6 @@
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
     <Compile Include="Security\Authentication\LogonLoggerTest.cs" />
-    <Compile Include="Security\Authentication\MultiTenancyAuthentication\ApplicationAuthenticationTest.cs" />
     <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />

@@ -12,8 +12,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		private const string sql = @"
-select Person, Password from ApplicationAuthenticationInfo
-where ApplicationLogonName=:userName";
+select auth.Person, auth.Password from ApplicationAuthenticationInfo auth
+inner join Person p on p.Id=auth.Person
+where ApplicationLogonName=:userName
+and (p.TerminalDate is null or p.TerminalDate>getdate())";
 
 
 		//when moving - we cannot have these dependencies. need to change to something else

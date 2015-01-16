@@ -226,6 +226,7 @@
     <Compile Include="Areas\Anywhere\Hubs\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Authentication\Core\ApplicationAuthenticationTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
