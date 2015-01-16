@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {

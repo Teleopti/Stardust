@@ -146,6 +146,8 @@
     <Compile Include="Domain\INotificationConfigReader.cs" />
     <Compile Include="Domain\INotificationMessage.cs" />
     <Compile Include="Domain\INotificationSender.cs" />
+    <Compile Include="Domain\IScheduleDayFilterCriteria.cs" />
+    <Compile Include="Domain\IShiftExchangeCriteria.cs" />
     <Compile Include="Domain\IShiftExchangeOffer.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
     <Compile Include="Domain\IStaffingCalculatorServiceFacade.cs" />
@@ -615,6 +617,7 @@
     <Compile Include="Domain\ReportLevelDetail.cs" />
     <Compile Include="Domain\SendNotificationException.cs" />
     <Compile Include="Domain\SettingsExtensions.cs" />
+    <Compile Include="Domain\ShiftExchangeLookingForDay.cs" />
     <Compile Include="Domain\ShiftTradeRequestStatusException.cs" />
     <Compile Include="Domain\ShiftExchangeOfferStatus.cs" />
     <Compile Include="Domain\ShiftTradeStatus.cs" />

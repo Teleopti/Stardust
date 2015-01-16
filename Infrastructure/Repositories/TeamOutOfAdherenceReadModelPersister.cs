@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NHibernate.Transform;
+using NHibernate.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Transform;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var result = _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM ReadModel.TeamOutOfAdherence WHERE SiteId =:SiteId")
 				.SetParameter("SiteId", siteId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamOutOfAdherenceReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (TeamOutOfAdherenceReadModel)))
 				.List();
 			return result.Cast<TeamOutOfAdherenceReadModel>();
 		}
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.CreateSqlQuery("SELECT * FROM ReadModel.TeamOutOfAdherence WHERE TeamId =:TeamId")
 				.SetParameter("TeamId", teamId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (TeamOutOfAdherenceReadModel))).List();
-			return (TeamOutOfAdherenceReadModel)result.FirstOrNull();
+			return (TeamOutOfAdherenceReadModel) result.FirstOrNull();
 		}
 
 		private void updateReadModel(TeamOutOfAdherenceReadModel model)

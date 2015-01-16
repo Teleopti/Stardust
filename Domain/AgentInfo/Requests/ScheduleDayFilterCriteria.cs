@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public struct ScheduleDayFilterCriteria
+	public struct ScheduleDayFilterCriteria : IScheduleDayFilterCriteria
 	{
 		private readonly ShiftExchangeLookingForDay _dayType;
 		private readonly DateTimePeriod? _shiftWithin;
@@ -19,27 +19,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					_shiftWithin = shiftWithin;
 					_dayType = dayType;
 					break;
-				case ShiftExchangeLookingForDay.EmtpyDay:					
-				case ShiftExchangeLookingForDay.DayOff:					
+				case ShiftExchangeLookingForDay.EmtpyDay:
+				case ShiftExchangeLookingForDay.DayOff:
 				case ShiftExchangeLookingForDay.DayOffOrEmptyDay:
 					if (shiftWithin.HasValue)
 					{
 						throw new ArgumentException("Must not specify the shift period for empty day or day off.");
 					}
 					_dayType = dayType;
-					break;			
+					break;
 				default:
 					throw new ArgumentException("Invalid day type.");
-			}							
+			}
 		}
 
-		public DateTimePeriod? ShiftWithin {
+		public DateTimePeriod? ShiftWithin
+		{
 			get { return _shiftWithin; }
 		}
 
 		public ShiftExchangeLookingForDay DayType
 		{
-			get { return _dayType;  }
+			get { return _dayType; }
 		}
 	}
 }

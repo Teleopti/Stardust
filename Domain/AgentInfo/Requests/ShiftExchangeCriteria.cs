@@ -3,18 +3,41 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public struct ShiftExchangeCriteria
+	public struct ShiftExchangeCriteria : IShiftExchangeCriteria
 	{
-		private readonly DateOnly _validTo;
-		private readonly ScheduleDayFilterCriteria _criteria;
-	
+		private DateOnly _validTo;
+		private IScheduleDayFilterCriteria _criteria;
+
 		public DateTimePeriod? ShiftWithin
 		{
 			get { return _criteria.ShiftWithin; }
 		}
 
-		public ShiftExchangeCriteria(DateOnly validTo, ScheduleDayFilterCriteria criteria)
-		{			
+		public IScheduleDayFilterCriteria Criteria
+		{
+			get { return _criteria; }
+			set { _criteria = value; }
+		}
+
+		public DateOnly ValidTo
+		{
+			get
+			{
+				return _validTo;
+			}
+			set
+			{
+				_validTo = value;
+			}
+		}
+
+		public IScheduleDayFilterCriteria DayFilterCriteria
+		{
+			get { return _criteria; }
+		}
+
+		public ShiftExchangeCriteria(DateOnly validTo, IScheduleDayFilterCriteria criteria)
+		{
 			_validTo = validTo;
 			_criteria = criteria;
 		}
@@ -23,14 +46,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public bool IsValid(DateTimePeriod? targetShiftPeriod, bool targetDayOff = false)
 		{
 			return DateOnly.Today <= _validTo && (matchingWithDayOff(targetDayOff)
-			       || matchingWithEmptyDay(targetShiftPeriod, targetDayOff)
-			       || matchingWithWorkingShift(targetShiftPeriod));
+			                                      || matchingWithEmptyDay(targetShiftPeriod, targetDayOff)
+			                                      || matchingWithWorkingShift(targetShiftPeriod));
 		}
 
 		private bool matchingWithDayOff(bool targetDayOff)
 		{
-			return targetDayOff &&  (_criteria.DayType == ShiftExchangeLookingForDay.DayOff 
-				|| _criteria.DayType == ShiftExchangeLookingForDay.DayOffOrEmptyDay) ;
+			return targetDayOff && (_criteria.DayType == ShiftExchangeLookingForDay.DayOff
+			                        || _criteria.DayType == ShiftExchangeLookingForDay.DayOffOrEmptyDay);
 		}
 
 		private bool matchingWithEmptyDay(DateTimePeriod? targetShiftPeriod, bool targetDayOff)

@@ -17,6 +17,8 @@ namespace Teleopti.Interfaces.Domain
 
 		ShiftExchangeOfferStatus Status { get; set; }
 
+		IShiftExchangeCriteria Criteria { get; set; }
+
 		bool IsWantedSchedule(IScheduleDay scheduleToCheck);
 
 		IPersonRequest MakeShiftTradeRequest(IScheduleDay scheduleToTrade);
@@ -24,6 +26,5 @@ namespace Teleopti.Interfaces.Domain
 		string GetStatusText();
 
 		bool IsExpired();
-
 	}
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class ShiftExchangeOffer : Request, IShiftExchangeOffer
 	{
-		private readonly ShiftExchangeCriteria _criteria;
+		private IShiftExchangeCriteria _criteria;
 		private DateOnly _date;
 		private DateTimePeriod? _myShiftPeriod;
 		private IPerson _person;
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override void Deny(IPerson denyPerson)
 		{
-			TextForNotification = string.Format(UserTexts.Resources.AnnouncementInvalidMessage, _date.ToShortDateString());
+			TextForNotification = string.Format(Resources.AnnouncementInvalidMessage, _date.ToShortDateString());
 		}
 
 		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
@@ -98,6 +97,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			get { return _status; }
 			set { _status = value; }
+		}
+
+		public virtual IShiftExchangeCriteria Criteria {
+			get { return _criteria; }
+			set { _criteria = value; }
 		}
 
 		public virtual string GetStatusText()

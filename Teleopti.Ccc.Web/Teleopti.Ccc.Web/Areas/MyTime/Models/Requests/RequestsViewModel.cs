@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Models.Shared;
 using Teleopti.Interfaces.Domain;
@@ -45,5 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public int DateToMonth { get; set; }
 		public int DateToDayOfMonth { get; set; }
 		public bool IsReferred { get; set; }
+		public ShiftExchangeOfferRequestViewModel ExchangeOffer { get; set; }
+	}
+
+	public class ShiftExchangeOfferRequestViewModel
+	{
+		public string WishShiftType { get; set; }
+		public DateTime ValidTo { get; set; }
 	}
 }

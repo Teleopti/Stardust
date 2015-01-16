@@ -11,7 +11,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory = function ShiftE
 	self.Update = function (offer) {
 		var vm = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(ajax, doneCallback);
 		vm.LoadOffer(offer);
-		vm.LoadOptions();
 		return vm;
 	};
 	self.Create = function (defaultData) {
@@ -80,6 +79,22 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		self.EndTime(offer.RawTimeTo);
 		self.EndTimeNextDay(offer.IsNextDay);
 		self.Id(offer.Id);
+
+		if (offer.ExchangeOffer) {
+			self.OfferValidTo(moment(offer.ExchangeOffer.ValidTo));
+
+			self.LoadOptions(function () {
+				var allOptions = self.AllShiftTypes();
+				var wishShiftType = offer.ExchangeOffer.WishShiftType;
+				for (var i = 0; i < allOptions.length; i++) {
+					var option = allOptions[i];
+					if (option.Id === wishShiftType) {
+						self.WishShiftTypeOption(option);
+						break;
+					}
+				}
+			});
+		}
 	};
 
 	self.IsEditable = ko.observable(true);
@@ -106,7 +121,9 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		write: function (date) {
 			self.DateTo(date);
 			self.getAbsence(date.format(self.DateFormat()));
-			self.OfferValidTo(moment(date).add('days', -1));
+			if (!self.IsUpdating() || (self.IsUpdating() && self.OfferValidTo() >= (moment(date)))) {
+				self.OfferValidTo(moment(date).add('days', -1));
+			}
 		}
 	});
 
@@ -149,7 +166,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
-		console.log("self.Toggle31317Enabled(): ", self.Toggle31317Enabled());
 		var wishShiftTypeId = self.Toggle31317Enabled() 
 			? self.WishShiftTypeOption().Id
 			: self.AllShiftTypes()[0].Id;
@@ -225,5 +241,3 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		});
 	}
 };
-
-
