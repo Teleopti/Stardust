@@ -1,54 +1,73 @@
 @ECHO off
 SETLOCAL
 COLOR A
-SET version=%1
-SET DESTSERVER=%2
-SET AZUREADMINUSER=%3
-set AZUREADMINPWD=%4
 
-set /A ERRORLEV=0
-set SOURCEUSER=bcpUser
-set SOURCEPWD=abc123456
-set DESTUSER=TeleoptiDemoUser
-set DESTPWD=TeleoptiDemoPwd2
-set workingdir=c:\temp\AzureRestore
-set ROOTDIR_LOCAL=%~dp0
-set ROOTDIR_LOCAL=%ROOTDIR_LOCAL:~0,-1%
-cls
-echo note: You should first update your hg repo to a known Tag
-ECHO that corresponds to the version to deploy
-echo done?
+SET SRCCCC7=%1
+SET SRCANALYTICS=%2
+SET SRCAGG=%3
+SET DESTSERVER=%4
+SET DESTCCC=%5
+SET DESTANALYTICS=%6
+SET AZUREADMINUSER=%7
+SET AZUREADMINPWD=%8
+
+SET /A ERRORLEV=0
+SET SOURCEUSER=bcpUser
+SET SOURCEPWD=abc123456
+SET DESTUSER=TeleoptiDemoUser
+SET DESTPWD=TeleoptiDemoPwd2
+SET workingdir=c:\temp\AzureRestore
+SET ROOTDIR_LOCAL=%~dp0
+SET ROOTDIR_LOCAL=%ROOTDIR_LOCAL:~0,-1%
+CLS
+
+ECHO This batch file merge a local Teleopti WFM install
+ECHO with 3 databases to an Azure install with 2 databases.
+ECHO If the destination server is a local server use the function
+ECHO Export Data-tier Application to from SQL Management Studio
+ECHO to generate .bacpac files to use in Azure.
+ECHO.
+
 PAUSE
 
-IF "%DESTSERVER%"=="" (
-SET /P DESTSERVER=Provide the SQL Azure destination server:
-)
+IF "%SRCCCC7%"=="" (SET /P SRCCCC7=Source App database:)
+IF "%SRCCCC7%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%SRCANALYTICS%"=="" (SET /P SRCANALYTICS=Source Analytics database:)
+IF "%SRCANALYTICS%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%SRCAGG%"=="" (SET /P SRCAGG=Source Agg database:)
+IF "%SRCAGG%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%DESTSERVER%"=="" (SET /P DESTSERVER=Destination server:)
 IF "%DESTSERVER%"=="" SET ERRORLEV=1 & GOTO :error
 
-IF "%AZUREADMINUSER%"=="" (
-SET /P AZUREADMINUSER=Provide the SQL Azure admin SQL Login:
-)
+IF "%DESTCCC%"=="" (SET /P DESTCCC=Destination application database:)
+IF "%DESTCCC%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%DESTANALYTICS%"=="" (SET /P DESTANALYTICS=Destination analytics database:)
+IF "%DESTANALYTICS%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%AZUREADMINUSER%"=="" (SET /P AZUREADMINUSER=Destination server admin SQL Login:)
 IF "%AZUREADMINUSER%"=="" SET ERRORLEV=1 & GOTO :error
 
-IF "%AZUREADMINPWD%"=="" (
-SET /P AZUREADMINPWD=Provide the SQL Azure admin SQL password:
-)
+IF "%AZUREADMINPWD%"=="" (SET /P AZUREADMINPWD=Destination server admin SQL password:)
 IF "%AZUREADMINPWD%"=="" SET ERRORLEV=1 & GOTO :error
 
-
-For /F "tokens=1* delims=." %%A IN ("%DESTSERVER%") DO (
-    set DESTSERVERPREFIX=%%A
+FOR /F "tokens=1* delims=." %%A IN ("%DESTSERVER%") DO (
+    SET DESTSERVERPREFIX=%%A
+	SET DESTSERVERLONGNAME=%%B
 )
-CALL "..\..\..\.debug-Setup\Restore to Local.bat" DemoSales
-::note! 3 parameters in this script depend on parameters set inside the "Restore To Local" batch script
-SET SRCANALYTICS=%TELEOPTIANALYTICS%
-set SRCCCC7=%TELEOPTICCC%
-set SRCAGG=%TELEOPTIAGG%
 
-set DESTANALYTICS=Baseline_TeleoptiAnalytics
-set DESTCCC=Baseline_TeleoptiApp
-SET DBMANAGER=%ROOTDIR_LOCAL%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\debug\DBManager.exe
-SET SECURITY=%ROOTDIR_LOCAL%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe
+SET ISAZURE=0
+SET DESTSERVERADMINUSER=%AZUREADMINUSER%
+IF "%DESTSERVERLONGNAME%"=="database.windows.net" (
+	SET ISAZURE=1
+	SET DESTSERVERADMINUSER=%AZUREADMINUSER%@%DESTSERVERPREFIX%
+)
+
+SET DBMANAGER=%ROOTDIR_LOCAL%\..\..\DBManager.exe
+SET SECURITY=%ROOTDIR_LOCAL%\..\..\Enrypted\Teleopti.Support.Security.exe
 
 ::--------
 ::Local database
@@ -57,16 +76,29 @@ SET SECURITY=%ROOTDIR_LOCAL%\..\..\..\Teleopti.Support.Security\bin\debug\Teleop
 SQLCMD -S. -E -i"%ROOTDIR_LOCAL%\Allow_XP_cmdShell.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 
+::Patch source databases
+ECHO.
+ECHO Patching source databases ...
+ECHO.
+"%DBMANAGER%" -S%DESTSERVER% -D%DESTCCC% -OTeleoptiCCC7 -E -T 
+"%DBMANAGER%" -S%DESTSERVER% -D%DESTANALYTICS% -OTeleoptiAnalytics -E -T 
+"%SECURITY%"  -DS. -DD%SRCCCC7% -EE 
+"%SECURITY%"  -DS. -DD%SRCANALYTICS% -CD%SRCAGG% -EE 
+
+ECHO.
+ECHO Patching source databases ... Done!
+ECHO.
+
 ::Generate BCP in+out batch files
 ::CCC7
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :error
-SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%@%DESTSERVERPREFIX%" DESTPWD = "%AZUREADMINPWD%"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=14 & GOTO :error
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=15 & GOTO :error
 ::Analytics
-SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%@%DESTSERVERPREFIX%" DESTPWD = "%AZUREADMINPWD%"
+SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=16 & GOTO :error
 
 ::Execute bcp export from local databases
@@ -80,8 +112,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=18 & GOTO :error
 ::--------
 ::Drop current Demo in Azure
 echo dropping Azure Dbs...
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE [%DESTANALYTICS%]"
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE [%DESTCCC%]"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE [%DESTANALYTICS%]"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE [%DESTCCC%]"
 echo dropping Azure. Done!
 
 ::Create Azure Demo
@@ -92,26 +124,26 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=22 & GOTO :error
 
 ::Prepare Azure DB = totally clean in out!
 ECHO Dropping Circular FKs, Delete All Azure data. Working ...
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\DropCircularFKs.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=23 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -Q"DROP VIEW [dbo].[v_ExternalLogon]"
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\DeleteAllData.sql"
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\..\..\TeleoptiCCC7\Programmability\01Views\dbo.v_ExternalLogon.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTCCC% -Q"DROP VIEW [dbo].[v_ExternalLogon]"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\DeleteAllData.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\..\..\TeleoptiCCC7\Programmability\01Views\dbo.v_ExternalLogon.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=24 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\CreateCircularFKs.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTCCC% -i"%ROOTDIR_LOCAL%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=25 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\DeleteAllData.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\DeleteAllData.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=26 & GOTO :error
 ECHO Dropping Circular FKs, Delete All Azure data. Done!
 
 ::Import To Azure Demo
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\AzureAnalyticsPreBcp.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\AzureAnalyticsPreBcp.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=31 & GOTO :error
 ECHO Running BcpIn on Azure Analytics ....
 CMD /C "%workingdir%\%SRCANALYTICS%\In.bat"
 if exist "%workingdir%\%SRCANALYTICS%\Logs\*.log" SET /A ERRORLEV=27 & GOTO :error
 ECHO Running BcpIn on Azure Analytics. Done!
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\AzureAnalyticsPostBcp.sql"
+SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\AzureAnalyticsPostBcp.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=32 & GOTO :error
 
 ECHO Running BcpIn on Azure ccc7 ....
@@ -119,13 +151,24 @@ CMD /C "%workingdir%\%SRCCCC7%\in.bat"
 if exist "%workingdir%\%SRCCCC7%\Logs\*log" SET /A ERRORLEV=28 & GOTO :error
 ECHO Running BcpIn on Azure ccc7. Done!
 
-::Re-add Agg-views in Azure
-"%SECURITY%"  -DS%DESTSERVER% -DU%AZUREADMINUSER% -DP%AZUREADMINPWD% -DD%DESTANALYTICS% -CD%DESTANALYTICS% 
+::Security stuff in Azure databases
+"%SECURITY%"  -DS%DESTSERVER% -DU%DESTSERVERADMINUSER% -DP%AZUREADMINPWD% -DD%DESTCCC% 
+"%SECURITY%"  -DS%DESTSERVER% -DU%DESTSERVERADMINUSER% -DP%AZUREADMINPWD% -DD%DESTANALYTICS% -CD%DESTANALYTICS% 
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
+
+::Drop Extended property so that .bacpac file can be generated
+IF "%ISAZURE%"=="0" (
+	ECHO Dropping Extended Properties in Azure databases. 
+	SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTCCC% -Q"EXEC sp_dropextendedproperty @name = N'DatabaseType'"
+	SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -Q"EXEC sp_dropextendedproperty @name = N'DatabaseType'"
+)
+
 
 ::------------
 ::Done
 ::------------
+ECHO.
+ECHO Export to 2 Azure databases done!
 PAUSE
 GOTO :Finish
 
