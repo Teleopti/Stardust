@@ -10,14 +10,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Rta
+namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 {
 	[RtaTest]
 	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	[Toggle(Toggles.RTA_NoBroker_31237)]
 	[TestFixture]
-	public class StateStreamSynchronizerAdherenceDetailsTest
+	public class AdherenceDetailsTest
 	{
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;

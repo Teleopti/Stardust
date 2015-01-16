@@ -280,11 +280,11 @@
     <Compile Include="Areas\Rta\SnapshotTests.cs" />
     <Compile Include="Areas\Rta\StateControllerTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateWithStateTest.cs" />
-    <Compile Include="Areas\Rta\StateStreamSynchronizerAdherenceDetailsTest.cs" />
-    <Compile Include="Areas\Rta\StateStreamSynchronizerAdherencePercentageTest.cs" />
-    <Compile Include="Areas\Rta\StateStreamSynchronizerIndividualModelsTest.cs" />
-    <Compile Include="Areas\Rta\StateStreamSynchronizerSiteAdherenceTest.cs" />
-    <Compile Include="Areas\Rta\StateStreamSynchronizerTeamAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Synchronization\AdherenceDetailsTest.cs" />
+    <Compile Include="Areas\Rta\Synchronization\AdherencePercentageTest.cs" />
+    <Compile Include="Areas\Rta\Synchronization\IndividualModelsTest.cs" />
+    <Compile Include="Areas\Rta\Synchronization\SiteAdherenceTest.cs" />
+    <Compile Include="Areas\Rta\Synchronization\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\TeamAdherenceTest.cs" />
     <Compile Include="Areas\Rta\PersonInAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\RtaModuleTest.cs" />
