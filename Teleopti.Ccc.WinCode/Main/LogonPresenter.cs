@@ -37,13 +37,15 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogOnOff _logOnOff;
 		private readonly IServerEndpointSelector _serverEndpointSelector;
 		private readonly IMessageBrokerComposite _messageBroker;
+		private readonly IApplicationLogon _applicationLogon;
 		private readonly IDataSourceHandler _dataSourceHandler;
 
 		public LogonPresenter(ILogonView view, LogonModel model,
-		                      IDataSourceHandler dataSourceHandler, ILoginInitializer initializer,
-		                      ILogonLogger logonLogger, ILogOnOff logOnOff,
-		                      IServerEndpointSelector serverEndpointSelector,
-								IMessageBrokerComposite messageBroker
+			IDataSourceHandler dataSourceHandler, ILoginInitializer initializer,
+			ILogonLogger logonLogger, ILogOnOff logOnOff,
+			IServerEndpointSelector serverEndpointSelector,
+			IMessageBrokerComposite messageBroker,
+			IApplicationLogon applicationLogon
 			)
 		{
 			_view = view;
@@ -54,9 +56,10 @@ namespace Teleopti.Ccc.WinCode.Main
 			_logOnOff = logOnOff;
 			_serverEndpointSelector = serverEndpointSelector;
 			_messageBroker = messageBroker;
+			_applicationLogon = applicationLogon;
 			if (ConfigurationManager.AppSettings["GetConfigFromWebService"] != null)
 				_model.GetConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
-				                                                   CultureInfo.InvariantCulture);
+					CultureInfo.InvariantCulture);
 		}
 
 		public LoginStep CurrentStep { get; set; }
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		public bool Start()
 		{
 			CurrentStep = LoginStep.SelectSdk;
-			return _view.StartLogon();
+			return _view.StartLogon(_applicationLogon.ShowDataSourceSelection);
 		}
 
 		public void Initialize()
@@ -228,16 +231,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			IApplicationLogon applogon;
-
-			//on inte  flaggan är satt
-			applogon = new ApplicationLogon();
-			var authenticationResult = applogon.Logon(_model);
-			
-			//else
-			//applogon = new MultiTenancyApplicationLogon(new RepositoryFactory(), new AuthenticationQuerier());
-			//var authenticationResult = applogon.Logon(_model);
-			
+			var authenticationResult = _applicationLogon.Logon(_model);
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
 			if (authenticationResult.HasMessage)

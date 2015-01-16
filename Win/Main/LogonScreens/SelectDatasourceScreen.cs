@@ -12,14 +12,16 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	{
 		private readonly ILogonView _logonView;
 		private LogonModel _model;
+		private readonly bool _showDataSourceSelection;
 		private List<IDataSourceContainer> _logonableWindowsDataSources;
 		private List<IDataSourceContainer> _availableApplicationDataSources;
 
-		public SelectDatasourceScreen(ILogonView logonView, LogonModel model)
+		public SelectDatasourceScreen(ILogonView logonView, LogonModel model, bool showDataSourceSelection)
 		{
-		    _logonView = logonView;
-		    _model = model;
-            InitializeComponent();
+			_logonView = logonView;
+			_model = model;
+			_showDataSourceSelection = showDataSourceSelection;
+			InitializeComponent();
 			if (!DesignMode)
 				runTimeDesign();
 		}
@@ -43,18 +45,20 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			}
 
 			comboBoxAdvDataSource.Select();
+			comboBoxAdvDataSource.Visible = _showDataSourceSelection;
+			labelChooseDataSource.Visible = _showDataSourceSelection;
 		}
 
 		public void GetData()
-	    {
-            _model.SelectedDataSourceContainer = (IDataSourceContainer)comboBoxAdvDataSource.SelectedItem;
-	    }
+		{
+			_model.SelectedDataSourceContainer = (IDataSourceContainer)comboBoxAdvDataSource.SelectedItem;
+		}
 
-	    public void Release()
-	    {
-	        _model = null;
+		public void Release()
+		{
+			_model = null;
 			comboBoxAdvDataSource.DataSource = null;
-	    }
+		}
 
 		public void SetBackButtonVisible(bool visible)
 		{
@@ -63,18 +67,18 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(ActiveControl == null)
+			if (ActiveControl == null)
 			{
 				_logonView.HandleKeyPress(msg, keyData, true);
 				return base.ProcessCmdKey(ref msg, keyData);
 			}
 
 			var controlType = ActiveControl.GetType();
-			if (controlType == typeof (ComboBoxAdv) || controlType == typeof(RadioButtonAdv))
+			if (controlType == typeof(ComboBoxAdv) || controlType == typeof(RadioButtonAdv))
 			{
 				_logonView.HandleKeyPress(msg, keyData, true);
 			}
-			
+
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 

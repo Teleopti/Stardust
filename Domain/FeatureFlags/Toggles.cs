@@ -68,6 +68,7 @@
 
 		ETL_SpeedUpETL_30791,
 		Gamification_NewBadgeCalculation_31185,
-		Portal_DifferentiateBadgeSettingForAgents_31318
+		Portal_DifferentiateBadgeSettingForAgents_31318,
+		MultiTenancy_Logon_17461
 	}
 }

@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
@@ -16,8 +20,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
     public class StartupModule : Module
     {
+	    private readonly IIocConfiguration _configuration;
+
+	    public StartupModule(IIocConfiguration configuration)
+	    {
+		    _configuration = configuration;
+	    }
+
 	    protected override void Load(ContainerBuilder builder)
 	    {
+			 //var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)));
 		    //builder.RegisterType<LogOnScreen>()
 		    //       .SingleInstance();
 		    builder.RegisterType<ApplicationStartup>()
@@ -28,6 +40,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    builder.RegisterType<CheckMessageBroker>().As<ISystemCheck>();
 		    builder.RegisterType<SystemCheckerValidator>();
 		    builder.RegisterType<OutlookPanelContentWorker>();
+
+			 builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
+			 if (_configuration.Toggle(Toggles.MultiTenancy_Logon_17461))
+			 {
+				 builder.RegisterType<MultiTenancyApplicationLogon>().As<IApplicationLogon>().SingleInstance();
+			 }
+			 else
+			 {
+				 builder.RegisterType<ApplicationLogon>().As<IApplicationLogon>().SingleInstance();
+			 }
 
 			builder.RegisterType<LogonModel>().SingleInstance();
             builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();

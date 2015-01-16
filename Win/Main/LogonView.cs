@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Win.Main
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 		}
 
-		public bool StartLogon()
+		public bool StartLogon(bool showDataSourceSelection)
 		{
 			_logonSteps = new List<ILogonStep>
 				{
 					new SelectSdkScreen(this, _model),
-					new SelectDatasourceScreen(this, _model),
+					new SelectDatasourceScreen(this, _model, showDataSourceSelection),
 					new LoginScreen(this, _model),
 					new SelectBuScreen(this, _model)
 				};

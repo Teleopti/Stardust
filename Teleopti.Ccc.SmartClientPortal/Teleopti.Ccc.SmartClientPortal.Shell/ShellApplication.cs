@@ -44,279 +44,280 @@ using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Application=System.Windows.Forms.Application;
+using Application = System.Windows.Forms.Application;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
-    /// <summary>
-    /// Main application entry point class.
-    /// Note that the class derives from CAB supplied base class FormSmartClientShellApplication, and the 
-    /// main form will be SmartClientShellForm, also created by default by this solution template
-    /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
-    {
-	    
-	    /// <summary>
-	    /// Shell application entry point.
-	    /// </summary>
-	    [STAThread]
-	    private static void Main()
-	    {
-				EO.WebBrowser.Runtime.AddLicense(
-													"cqvm8fbNn6/c9gQU7qe0psPZr1uXs8+4iVmXpLHnrprj8AAivUaBpLHLn3Xm" +
-													"9vUQ8YLl6gDL45rr6c7NtWiqs8PbsG2ZpAcQ8azg8//ooWuZpMDpjEOXpLHL" +
-													"u6zg6/8M867p6c8j9ZDYtdLy1LDLs+DktYHGtPgUwZ/uwc7nrqzg6/8M867p" +
-													"6c+4iXWm8PoO5Kfq6c+4iXXj7fQQ7azcwp61n1mXpM0X6Jzc8gQQyJ21usPd" +
-													"tG2vuMrgtHWm8PoO5Kfq6doPvUaBpLHLn3Xj7fQQ7azc6c/nrqXg5/YZ8p7c" +
-													"wp61n1mXpM0M66Xm+8+4iVmXpLHLn1mXwPIP41nr/QEQvFu807/u5w==");
+	/// <summary>
+	/// Main application entry point class.
+	/// Note that the class derives from CAB supplied base class FormSmartClientShellApplication, and the 
+	/// main form will be SmartClientShellForm, also created by default by this solution template
+	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
+	{
 
-		    XmlConfigurator.Configure();
+		/// <summary>
+		/// Shell application entry point.
+		/// </summary>
+		[STAThread]
+		private static void Main()
+		{
+			EO.WebBrowser.Runtime.AddLicense(
+												"cqvm8fbNn6/c9gQU7qe0psPZr1uXs8+4iVmXpLHnrprj8AAivUaBpLHLn3Xm" +
+												"9vUQ8YLl6gDL45rr6c7NtWiqs8PbsG2ZpAcQ8azg8//ooWuZpMDpjEOXpLHL" +
+												"u6zg6/8M867p6c8j9ZDYtdLy1LDLs+DktYHGtPgUwZ/uwc7nrqzg6/8M867p" +
+												"6c+4iXWm8PoO5Kfq6c+4iXXj7fQQ7azcwp61n1mXpM0X6Jzc8gQQyJ21usPd" +
+												"tG2vuMrgtHWm8PoO5Kfq6doPvUaBpLHLn3Xj7fQQ7azc6c/nrqXg5/YZ8p7c" +
+												"wp61n1mXpM0M66Xm+8+4iVmXpLHLn1mXwPIP41nr/QEQvFu807/u5w==");
 
-		    Application.EnableVisualStyles();
-		    Application.SetCompatibleTextRenderingDefault(false);
-			
-		    // WPF should use CurrentCulture
-		    FrameworkElement.LanguageProperty.OverrideMetadata(
-			    typeof (FrameworkElement),
-			    new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+			XmlConfigurator.Configure();
 
-		    IContainer container = configureContainer();
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+
+			// WPF should use CurrentCulture
+			FrameworkElement.LanguageProperty.OverrideMetadata(
+				typeof(FrameworkElement),
+				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
+			IContainer container = configureContainer();
 #if (!DEBUG)
-		    //NHibernateProfiler.Initialize();
-		    SetReleaseMode();
+			 //NHibernateProfiler.Initialize();
+			 SetReleaseMode();
 			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
-		    var applicationStarter = container.Resolve<ApplicationStartup>();
-		    if (applicationStarter.LogOn())
-		    {
-			    try
-			    {
+			 var applicationStarter = container.Resolve<ApplicationStartup>();
+			 if (applicationStarter.LogOn())
+			 {
+				 try
+				 {
 
 			killNotNeededSessionFactories();
 
-				    applicationStarter.LoadShellApplication();
-			    }
-			    catch (Exception exception)
-			    {
-				    HandleException(exception);
-			    }
-		    }
+					 applicationStarter.LoadShellApplication();
+				 }
+				 catch (Exception exception)
+				 {
+					 HandleException(exception);
+				 }
+			 }
 
 #endif
 
 #if (DEBUG)
-			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container); 
+			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
 			var applicationStarter = container.Resolve<ApplicationStartup>();
-				if (applicationStarter.LogOn())
-            {
-				
-                killNotNeededSessionFactories();
+			if (applicationStarter.LogOn())
+			{
 
-			
+				killNotNeededSessionFactories();
+
+
 				applicationStarter.LoadShellApplication();
-            }
+			}
 #endif
-				
-	    }
 
-			private static void populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(IContainer container)
+		}
+
+		private static void populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(IContainer container)
+		{
+			try
+			{
+				var toggleFiller = container.ResolveOptional<IToggleFiller>();
+				if (toggleFiller != null)
+					toggleFiller.FillAllToggles();
+			}
+			catch (Exception ex)
+			{
+				using (var view = new SimpleExceptionHandlerView(ex, UserTexts.Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder()))
+				{
+					view.ShowDialog();
+				}
+				//if exception -> replace with a toggle manager returning false for everything
+				var updater = new ContainerBuilder();
+				updater.RegisterType<FalseToggleManager>().SingleInstance().As<IToggleManager>();
+				updater.Update(container);
+			}
+		}
+
+		private static string toggleExceptionMessageBuilder()
+		{
+			var ret = new StringBuilder();
+			ret.AppendLine(UserTexts.Resources.WebServerDown);
+
+			foreach (var toggle in Enum.GetValues(typeof(Toggles)))
+			{
+				var x = (Toggles)toggle;
+				if (x != Toggles.TestToggle)
+					ret.AppendLine(x.ToString());
+			}
+
+			return ret.ToString();
+		}
+
+		private static void killNotNeededSessionFactories()
+		{
+			//kan man inte f?tag p?datasource p?nåt lättare sätt?
+			var loggedOnDataSource = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource;
+			StateHolder.Instance.StateReader.ApplicationScopeData.DisposeAllDataSourcesExcept(loggedOnDataSource);
+		}
+
+		public SmartClientShellApplication(IComponentContext container)
+			: base(container)
+		{ }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private static IContainer configureContainer()
+		{
+			using (PerformanceOutput.ForOperation("Building Ioc container"))
+			{
+
+				var builder = new ContainerBuilder();
+
+				var configuration = new IocConfiguration(
+							new IocArgs { MessageBrokerListeningEnabled = true },
+							CommonModule.ToggleManagerForIoc());
+
+				builder.RegisterModule(
+				new CommonModule(configuration)
+					{
+						RepositoryConstructorType = typeof(IUnitOfWorkFactory)
+					});
+				builder.RegisterModule(new EncryptionModule());
+				builder.RegisterModule(new EventAggregatorModule());
+				builder.RegisterModule(new StartupModule(configuration));
+				builder.RegisterModule(new NavigationModule());
+				builder.RegisterModule(new BudgetModule());
+				builder.RegisterModule<IntradayModule>();
+				builder.RegisterModule<ForecasterModule>();
+				builder.RegisterModule(new PersonAccountModule());
+				builder.RegisterModule(new ScheduleScreenRefresherModule());
+				builder.RegisterModule(new MeetingOverviewModule());
+				builder.RegisterModule(new SchedulingServiceModule());
+				builder.RegisterModule(new ShiftsModule());
+				builder.RegisterModule(new PersonSelectorModule());
+				builder.RegisterModule(new PermissionsModule());
+				builder.RegisterModule(new RequestHistoryModule());
+				builder.RegisterModule(new MainModule());
+				builder.RegisterModule(new SchedulingCommonModule(configuration));
+				//hack to get old behavior work
+				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
+				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
+				//////
+				return builder.Build();
+			}
+		}
+
+		/// <summary>
+		/// Runs the application in release mode.
+		/// </summary>
+		private static void SetReleaseMode()
+		{
+			AppDomain.CurrentDomain.UnhandledException += AppDomainUnhandledException;
+			Application.ThreadException += ApplicationThreadException;
+		}
+
+		/// <summary>
+		/// Sets the extension site registration after the SmartClientShell has been created.
+		/// </summary>
+		protected override void AfterShellCreated()
+		{
+			base.AfterShellCreated();
+
+			RootWorkItem.UIExtensionSites.RegisterSite(UIExtensionSiteNames.MainStatus, Shell.MainStatusStrip);
+		}
+
+		/// <summary>
+		/// Handles the unhandled exception event in the application.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The <see cref="System.UnhandledExceptionEventArgs"/> instance containing the event data.</param>
+		private static void AppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			HandleException(e.ExceptionObject as Exception);
+		}
+
+		private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
+		{
+			HandleException(e.Exception);
+		}
+
+		/// <summary>
+		/// Handles the exception.
+		/// </summary>
+		/// <param name="ex">The ex.</param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		private static void HandleException(Exception ex)
+		{
+			if (ex == null) return;
+
+			Application.ThreadException -= ApplicationThreadException;
+			AppDomain.CurrentDomain.UnhandledException -= AppDomainUnhandledException;
+			string fallBack = string.Empty;
+
+
+			try
+			{
+				var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
+				log.Error(ex.Message, ex);
+			}
+			catch (Exception)
+			{
+				//do nothing
+			}
+
+
+			StringSetting emailSetting = new StringSetting();
+			if (StateHolderReader.IsInitialized)
 			{
 				try
 				{
-					var toggleFiller = container.ResolveOptional<IToggleFiller>();
-					if(toggleFiller!=null)
-						toggleFiller.FillAllToggles();
-				}
-				catch (Exception ex)
-				{
-					using (var view = new SimpleExceptionHandlerView(ex, UserTexts.Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder()))
+					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
-						view.ShowDialog();
+						ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+						emailSetting = settingDataRepository.FindValueByKey("SupportEmailSetting",
+																							 new StringSetting());
 					}
-					//if exception -> replace with a toggle manager returning false for everything
-					var updater = new ContainerBuilder();
-					updater.RegisterType<FalseToggleManager>().SingleInstance().As<IToggleManager>();
-					updater.Update(container);
 				}
-			}
-
-			private static string toggleExceptionMessageBuilder()
-			{
-				var ret = new StringBuilder();
-				ret.AppendLine(UserTexts.Resources.WebServerDown);
-
-				foreach (var toggle in Enum.GetValues(typeof(Toggles)))
+				catch (Exception)
 				{
-					var x = (Toggles)toggle;
-					if (x != Toggles.TestToggle)
-						ret.AppendLine(x.ToString());
+					fallBack = " ";
 				}
-
-				return ret.ToString();
 			}
 
-	    private static void killNotNeededSessionFactories()
-    	{
-			//kan man inte f?tag p?datasource p?nåt lättare sätt?
-    		var loggedOnDataSource = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource;
-    		StateHolder.Instance.StateReader.ApplicationScopeData.DisposeAllDataSourcesExcept(loggedOnDataSource);
-    	}
+			string defaultEmail = !string.IsNullOrEmpty(emailSetting.StringValue)
+											  ? emailSetting.StringValue
+											  : fallBack;
+			IWriteToFile fileWriter = new WriteStringToFile();
+			IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
-    	public SmartClientShellApplication(IComponentContext container) : base(container)
-    	{}
-
-				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private static IContainer configureContainer()
-        {
-            using (PerformanceOutput.ForOperation("Building Ioc container"))
-            {
-
-                var builder = new ContainerBuilder();
-
-				var configuration = new IocConfiguration(
-			            new IocArgs {MessageBrokerListeningEnabled = true},
-			            CommonModule.ToggleManagerForIoc());
-
-	            builder.RegisterModule(
-					new CommonModule(configuration)
-		            {
-			            RepositoryConstructorType = typeof (IUnitOfWorkFactory)
-		            });
-				builder.RegisterModule(new EncryptionModule());
-                builder.RegisterModule(new EventAggregatorModule());
-                builder.RegisterModule(new StartupModule());
-                builder.RegisterModule(new NavigationModule());
-                builder.RegisterModule(new BudgetModule());
-                builder.RegisterModule<IntradayModule>();
-                builder.RegisterModule<ForecasterModule>();
-                builder.RegisterModule(new PersonAccountModule());
-                builder.RegisterModule(new ScheduleScreenRefresherModule());
-                builder.RegisterModule(new MeetingOverviewModule());
-                builder.RegisterModule(new SchedulingServiceModule());
-                builder.RegisterModule(new ShiftsModule());
-                builder.RegisterModule(new PersonSelectorModule());
-                builder.RegisterModule(new PermissionsModule());
-                builder.RegisterModule(new RequestHistoryModule());
-				builder.RegisterModule(new MainModule());
-				builder.RegisterModule(new SchedulingCommonModule(configuration));
-							//hack to get old behavior work
-	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
-							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
-							//////
-                return builder.Build();
-            }
-        }
-
-        /// <summary>
-        /// Runs the application in release mode.
-        /// </summary>
-        private static void SetReleaseMode()
-        {
-            AppDomain.CurrentDomain.UnhandledException += AppDomainUnhandledException;
-            Application.ThreadException += ApplicationThreadException;
-        }
-
-        /// <summary>
-        /// Sets the extension site registration after the SmartClientShell has been created.
-        /// </summary>
-        protected override void AfterShellCreated()
-        {
-            base.AfterShellCreated();
-
-            RootWorkItem.UIExtensionSites.RegisterSite(UIExtensionSiteNames.MainStatus, Shell.MainStatusStrip);
-        }
-
-        /// <summary>
-        /// Handles the unhandled exception event in the application.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.UnhandledExceptionEventArgs"/> instance containing the event data.</param>
-        private static void AppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            HandleException(e.ExceptionObject as Exception);
-        }
-
-        private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
-        {
-            HandleException(e.Exception);
-        }
-
-        /// <summary>
-        /// Handles the exception.
-        /// </summary>
-        /// <param name="ex">The ex.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private static void HandleException(Exception ex)
-        {
-            if (ex == null) return;
-
-            Application.ThreadException -= ApplicationThreadException;
-            AppDomain.CurrentDomain.UnhandledException -= AppDomainUnhandledException;
-            string fallBack = string.Empty;
-
-
-	        try
-	        {
-				var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
-				log.Error(ex.Message, ex);
-	        }
-	        catch (Exception)
-	        {
-		        //do nothing
-	        }
-
-
-            StringSetting emailSetting = new StringSetting();
-            if (StateHolderReader.IsInitialized)
-            {
-                try
-                {
-                    using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                    {
-                        ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
-                        emailSetting = settingDataRepository.FindValueByKey("SupportEmailSetting",
-                                                                            new StringSetting());
-                    }
-                }
-                catch (Exception)
-                {
-                    fallBack = " ";
-                }
-            }
-            
-            string defaultEmail = !string.IsNullOrEmpty(emailSetting.StringValue)
-                                      ? emailSetting.StringValue
-                                      : fallBack;
-            IWriteToFile fileWriter = new WriteStringToFile();
-            IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
-
-	        var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
+			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
 			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), CommonModule.ToggleManagerForIoc())));
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
-	        {
-				exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail,message, fileWriter, container.Resolve<ITogglesActive>());
-	        }
-	        using (var view = new ExceptionHandlerView(exceptionHandlerModel))
-            {
-                view.ShowDialog();
-            }
-            KillOpenForms();
-            Application.Exit();
+			{
+				exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail, message, fileWriter, container.Resolve<ITogglesActive>());
+			}
+			using (var view = new ExceptionHandlerView(exceptionHandlerModel))
+			{
+				view.ShowDialog();
+			}
+			KillOpenForms();
+			Application.Exit();
 
-        }
+		}
 
-        private static void KillOpenForms()
-        {
-            ArrayList forms = new ArrayList(Application.OpenForms);
-            for (int i = 0; i < forms.Count; i++)
-            {
-                BaseRibbonForm baseRibbonFormToClose =forms[i] as BaseRibbonForm;
-                if (baseRibbonFormToClose != null)
-                {
-                    baseRibbonFormToClose.FormKill();
-                }
-            }
-        }
-    }
+		private static void KillOpenForms()
+		{
+			ArrayList forms = new ArrayList(Application.OpenForms);
+			for (int i = 0; i < forms.Count; i++)
+			{
+				BaseRibbonForm baseRibbonFormToClose = forms[i] as BaseRibbonForm;
+				if (baseRibbonFormToClose != null)
+				{
+					baseRibbonFormToClose.FormKill();
+				}
+			}
+		}
+	}
 }
