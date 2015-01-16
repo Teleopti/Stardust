@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 {
@@ -21,9 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 		private static IContainer buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<TennantModule>();
-			//temp - remove later -> this will be a seperate app
-			builder.RegisterModule(CommonModule.ForTest());
+			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(), null)));
 
 			return builder.Build();
 		}

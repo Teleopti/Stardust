@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 {
-	public class ApplicationUserQueryTest : DatabaseTest
+	public class ApplicationUserQueryTest : DatabaseTestWithoutTransaction
 	{
 		private Guid personId;
 		private string correctUserName;
@@ -34,9 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[Test]
 		public void ShouldFindTennant()
 		{
-			var expected_shouldBeChangedLater = UnitOfWorkFactory.Current.Name;
 			var result = target.FindUserData(correctUserName);
-			result.Tennant.Should().Be.EqualTo(expected_shouldBeChangedLater);
+			result.Tennant.Should().Be.EqualTo("FIX LATER");
 		}
 
 		[Test]
@@ -67,11 +66,27 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[SetUp]
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
-			correctUserName = "arna";
-			var personInDatabase = PersonFactory.CreatePersonWithBasicPermissionInfo(correctUserName, "something");
-			PersistAndRemoveFromUnitOfWork(personInDatabase);
-			personId = personInDatabase.Id.Value;
-			target= new ApplicationUserQuery(new FixedCurrentUnitOfWork(UnitOfWork), new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				correctUserName = "arna";
+				var personInDatabase = PersonFactory.CreatePersonWithBasicPermissionInfo(correctUserName, "something");
+				new PersonRepository(uow).Add(personInDatabase);
+				uow.PersistAll();
+				personId = personInDatabase.Id.Value;
+			}
+			target= new ApplicationUserQuery(() => new TennantDatabaseConnectionFactory(UnitOfWorkFactory.Current.ConnectionString));
+		}
+
+		[TearDown]
+		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new PersonRepository(uow);
+				var personInDatabase = rep.Get(personId);
+				rep.Remove(personInDatabase);
+				uow.PersistAll();
+			}
 		}
 	}
 }

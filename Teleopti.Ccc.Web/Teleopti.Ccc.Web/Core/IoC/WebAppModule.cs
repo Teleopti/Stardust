@@ -26,6 +26,7 @@ using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.IoC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Tennant.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -123,6 +124,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
+			builder.RegisterModule<TennantModule>();
 		}
 	}
 }

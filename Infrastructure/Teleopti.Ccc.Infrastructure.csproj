@@ -197,6 +197,8 @@
     <Compile Include="MultiTenancy\ApplicationUserQueryResult.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\IApplicationUserQuery.cs" />
+    <Compile Include="MultiTenancy\ITennantDatabaseConnectionFactory.cs" />
+    <Compile Include="MultiTenancy\TennantDatabaseConnectionFactory.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />
