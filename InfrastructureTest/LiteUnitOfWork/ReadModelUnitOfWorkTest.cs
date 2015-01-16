@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			builder.RegisterType<Outer>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
-			builder.RegisterType<Inner1>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
-			builder.RegisterType<Inner2>().AsSelf().As<ReadModelUnitOfWorkInnerTester>().SingleInstance();
+			builder.RegisterType<TheService>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
+			builder.RegisterType<NestedService>().AsSelf().As<NestedBase>().SingleInstance();
+			builder.RegisterType<NestedService2>().AsSelf().As<NestedBase>().SingleInstance();
 
 			var httpContext = new MutableFakeCurrentHttpContext();
 			builder.RegisterInstance(httpContext).AsSelf().As<ICurrentHttpContext>().SingleInstance();
@@ -64,9 +64,9 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	[ReadModelUnitOfWorkTest]
 	public class ReadModelUnitOfWorkTest
 	{
-		public Outer Outer;
-		public Inner1 Inner1;
-		public Inner2 Inner2;
+		public TheService TheService;
+		public NestedService NestedService;
+		public NestedService2 NestedService2;
 		public MutableFakeCurrentHttpContext HttpContext;
 		public ICurrentReadModelUnitOfWork UnitOfWork;
 		public MutableFakeCurrentTeleoptiPrincipal Principal;
@@ -75,159 +75,145 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public FakeConfigReader ConfigReader;
 
 		[Test]
+		[TestTable("TestTable")]
 		public void ShouldProduceWorkingUnitOfWork()
 		{
-			using (new TestTable("TestTable"))
-			{
-				var value = new Random().Next(-10000, -2).ToString();
+			var value = new Random().Next(-10000, -2).ToString();
 
-				Outer.DoUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
+			TheService.DoesUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
 
-				TestTable.Values("TestTable").Single().Should().Be(value);
-			}
+			TestTable.Values("TestTable").Single().Should().Be(value);
 		}
 
 		[Test]
+		[TestTable("TestTable")]
 		public void ShouldRollbackTransaction()
 		{
-			using (new TestTable("TestTable"))
+			Assert.Throws<TestException>(() =>
 			{
-				Assert.Throws<TestException>(() =>
+				TheService.Does(uow =>
 				{
-					Outer.DoAction(uow =>
-					{
-						uow.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
-						throw new TestException();
-					});
+					uow.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+					throw new TestException();
 				});
+			});
 
-				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
-			}
+			TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldProduceUnitOfWorkToInnerObjects()
 		{
 			string result = null;
-			Inner1.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
+			NestedService.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
 
-			Outer.ExecuteInners();
+			TheService.CallNestedServices();
 
 			result.Should().Contain("SQL");
 		}
 
 		[Test]
+		[TestTable("TestTable")]
 		public void ShouldRollbackTransactionForInnerObject()
 		{
-			using (new TestTable("TestTable"))
+			NestedService.Action = s =>
 			{
-				Inner1.Action = s =>
-				{
-					s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
-					throw new TestException();
-				};
+				s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+				throw new TestException();
+			};
 
-				Assert.Throws<TestException>(Outer.ExecuteInners);
+			Assert.Throws<TestException>(TheService.CallNestedServices);
 
-				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
-			}
+			TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
+		[TestTable("TestTable")]
 		public void ShouldSpanTransactionOverAllInnerObjects()
 		{
-			using (new TestTable("TestTable"))
+			NestedService.Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+			NestedService2.Action = s =>
 			{
-				Inner1.Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
-				Inner2.Action = s =>
-				{
-					s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
-					throw new TestException();
-				};
-				Assert.Throws<TestException>(Outer.ExecuteInners);
+				s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
+				throw new TestException();
+			};
+			Assert.Throws<TestException>(TheService.CallNestedServices);
 
-				TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
-			}
+			TestTable.Values("TestTable").Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
+		[TestTable("TestTable1")]
+		[TestTable("TestTable2")]
 		public void ShouldProduceUnitOfWorkForEachThread()
 		{
-			using (new TestTable("TestTable1"))
-			using (new TestTable("TestTable2"))
+			var thread1 = onAnotherThread(() =>
 			{
-				var thread1 = onAnotherThread(() =>
+				TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+			});
+			var thread2 = onAnotherThread(() =>
+			{
+				TheService.Does(uow =>
 				{
-					Outer.DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
+					throw new TestException();
 				});
-				var thread2 = onAnotherThread(() =>
-				{
-					Outer.DoAction(uow =>
-					{
-						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
-						throw new TestException();
-					});
-				});
-				thread1.Join();
-				thread2.Join();
+			});
+			thread1.Join();
+			thread2.Join();
 
-				TestTable.Values("TestTable1").Count().Should().Be(1000);
-				TestTable.Values("TestTable2").Count().Should().Be(0);
-			}
+			TestTable.Values("TestTable1").Count().Should().Be(1000);
+			TestTable.Values("TestTable2").Count().Should().Be(0);
 		}
 
 		[Test]
+		[TestTable("TestTable")]
 		public void ShouldProduceUnitOfWorkForWebRequestSpanning2Threads()
 		{
-			using (new TestTable("TestTable"))
+			HttpContext.SetContext(new FakeHttpContext());
+			TheService.Does(uow =>
 			{
-				HttpContext.SetContext(new FakeHttpContext());
-				Outer.DoAction(uow =>
+				onAnotherThread(() =>
 				{
-					onAnotherThread(() =>
-					{
-						UnitOfWork.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
-					}).Join();
-				});
+					UnitOfWork.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+				}).Join();
+			});
 
-				TestTable.Values("TestTable").Count().Should().Be(1);
-			}
+			TestTable.Values("TestTable").Count().Should().Be(1);
 		}
 
 		[Test]
+		[TestTable("TestTable1")]
+		[TestTable("TestTable2")]
 		public void ShouldProduceUnitOfWorkForEachWebRequest()
 		{
-			using (new TestTable("TestTable1"))
-			using (new TestTable("TestTable2"))
+			var thread1 = onAnotherThread(() =>
 			{
-				var thread1 = onAnotherThread(() =>
+				HttpContext.SetContextOnThread(new FakeHttpContext());
+				TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+			});
+			var thread2 = onAnotherThread(() =>
+			{
+				HttpContext.SetContextOnThread(new FakeHttpContext());
+				TheService.Does(uow =>
 				{
-					HttpContext.SetContextOnThread(new FakeHttpContext());
-					Outer.DoAction(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
+					throw new TestException();
 				});
-				var thread2 = onAnotherThread(() =>
-				{
-					HttpContext.SetContextOnThread(new FakeHttpContext());
-					Outer.DoAction(uow =>
-					{
-						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
-						throw new TestException();
-					});
-				});
-				thread1.Join();
-				thread2.Join();
+			});
+			thread1.Join();
+			thread2.Join();
 
-				TestTable.Values("TestTable1").Count().Should().Be(1000);
-				TestTable.Values("TestTable2").Count().Should().Be(0);
-			}
+			TestTable.Values("TestTable1").Count().Should().Be(1000);
+			TestTable.Values("TestTable2").Count().Should().Be(0);
 		}
 
 		[Test]
 		public void ShouldReturnNullWhenNoCurrentUnitOfWork()
 		{
-			var target = Outer;
+			var target = TheService;
 
-			target.DoAction(uow => { });
+			target.Does(uow => { });
 
 			UnitOfWork.Current().Should().Be.Null();
 		}
@@ -243,10 +229,10 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 
 				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
-				Outer.DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+				TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
-				Outer.DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+				TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1);
@@ -254,39 +240,37 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		}
 
 		[Test]
+		[TestTable("TestTable")]
 		public void ShouldProduceUnitOfWorkForDataSourceMatchingRtaConnectionStringIfNoPrincipal()
 		{
 			// ConfigurationManager.ConnectionStrings["RtaApplication"]
-			using (new TestTable("TestTable"))
-			{
-				var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
-				rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
-				ConfigReader.ConnectionStrings = new ConnectionStringSettingsCollection
+			var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
+			rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
+			ConfigReader.ConnectionStrings = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix),
 					new ConnectionStringSettings("RtaApplication", rtaConnectionString)
 				};
 
-				var factory = DataSourcesFactory;
-				var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
-				var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				DataSourcesProvider.SetAvailableDataSources(new[] { dataSource1, dataSource2 }.Randomize());
+			var factory = DataSourcesFactory;
+			var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
+			var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+			DataSourcesProvider.SetAvailableDataSources(new[] { dataSource1, dataSource2 }.Randomize());
 
-				Principal.SetPrincipal(null);
+			Principal.SetPrincipal(null);
 
-				Outer.DoUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+			TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
-				TestTable.Values("TestTable").Count().Should().Be(1);
-			}
+			TestTable.Values("TestTable").Count().Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldExecuteCodeAfterSuccessfulCommit()
 		{
 			string result = null;
-			Inner1.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
+			NestedService.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
 
-			Outer.ExecuteInners();
+			TheService.CallNestedServices();
 
 			result.Should().Be("success");
 		}
@@ -295,13 +279,13 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public void ShouldNotExecuteCodeAfterFailedCommit()
 		{
 			var result = "failed";
-			Inner1.ActionWSync = (uow, sync) =>
+			NestedService.ActionWSync = (uow, sync) =>
 			{
 				sync.OnSuccessfulTransaction(() => result = "success");
 				throw new TestException();
 			};
 
-			Assert.Throws<TestException>(Outer.ExecuteInners);
+			Assert.Throws<TestException>(TheService.CallNestedServices);
 
 			result.Should().Be("failed");
 		}
@@ -322,15 +306,15 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			Enumerable.Range(0, times).ForEach(action);
 		}
 
-		public static void DoUpdate(this Outer instance, string query)
+		public static void DoesUpdate(this TheService instance, string query)
 		{
-			instance.DoAction(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
+			instance.Does(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
 		}
 
-		public static T DoSelect<T>(this Outer instance, string query, Func<ISQLQuery, T> queryAction)
+		public static T MakesQuery<T>(this TheService instance, string query, Func<ISQLQuery, T> queryAction)
 		{
 			var result = default(T);
-			instance.DoAction(uow =>
+			instance.Does(uow =>
 			{
 				result = queryAction(uow.CreateSqlQuery(query));
 			});
@@ -342,52 +326,52 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 	{
 	}
 
-	public class Outer
+	public class TheService
 	{
-		private readonly IEnumerable<ReadModelUnitOfWorkInnerTester> _inners;
+		private readonly IEnumerable<NestedBase> _nested;
 		private readonly ICurrentReadModelUnitOfWork _uow;
 
-		public Outer(IEnumerable<ReadModelUnitOfWorkInnerTester> inners, ICurrentReadModelUnitOfWork uow)
+		public TheService(IEnumerable<NestedBase> nested, ICurrentReadModelUnitOfWork uow)
 		{
-			_inners = inners;
+			_nested = nested;
 			_uow = uow;
 		}
 
 		[ReadModelUnitOfWork]
-		public virtual void DoAction(Action<ILiteUnitOfWork> action)
+		public virtual void Does(Action<ILiteUnitOfWork> action)
 		{
 			action(_uow.Current());
 		}
 
 		[ReadModelUnitOfWork]
-		public virtual void ExecuteInners()
+		public virtual void CallNestedServices()
 		{
-			_inners.ForEach(i => i.ExecuteAction());
+			_nested.ForEach(i => i.ExecuteAction());
 		}
 	}
 
-	public class Inner1 : ReadModelUnitOfWorkInnerTester
+	public class NestedService : NestedBase
 	{
-		public Inner1(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
+		public NestedService(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
 			: base(uow, syncronization)
 		{
 		}
 	}
 
-	public class Inner2 : ReadModelUnitOfWorkInnerTester
+	public class NestedService2 : NestedBase
 	{
-		public Inner2(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
+		public NestedService2(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
 			: base(uow, syncronization)
 		{
 		}
 	}
 
-	public class ReadModelUnitOfWorkInnerTester
+	public class NestedBase
 	{
 		private readonly ICurrentReadModelUnitOfWork _uow;
 		private readonly ILiteTransactionSyncronization _syncronization;
 
-		public ReadModelUnitOfWorkInnerTester(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
+		public NestedBase(ICurrentReadModelUnitOfWork uow, ILiteTransactionSyncronization syncronization)
 		{
 			_uow = uow;
 			_syncronization = syncronization;
@@ -401,6 +385,32 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			Action.Invoke(_uow.Current());
 			ActionWSync.Invoke(_uow.Current(), _syncronization);
 		}
+	}
+
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+	public class TestTableAttribute : Attribute, ITestAction
+	{
+		private readonly string _name;
+		private TestTable _table;
+
+		public TestTableAttribute(string name)
+		{
+			_name = name;
+		}
+
+		public ActionTargets Targets { get { return ActionTargets.Test; } }
+
+		public void BeforeTest(TestDetails testDetails)
+		{
+			_table = new TestTable(_name);
+		}
+
+		public void AfterTest(TestDetails testDetails)
+		{
+			_table.Dispose();
+			_table = null;
+		}
+
 	}
 
 	public class TestTable : IDisposable
