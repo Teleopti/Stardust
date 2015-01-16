@@ -34,21 +34,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		    var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
             var ret = new NewBusinessRuleCollection
                           {
-                              new NewShiftCategoryLimitationRule(
-                                  new ShiftCategoryLimitationChecker(schedulingResultStateHolder),
-                                  new VirtualSchedulePeriodExtractor()),
-                              new WeekShiftCategoryLimitationRule(
-                                  new ShiftCategoryLimitationChecker(schedulingResultStateHolder),
-                                  new VirtualSchedulePeriodExtractor(), new WeeksFromScheduleDaysExtractor()),
-                              new NewNightlyRestRule(new WorkTimeStartEndExtractor()),
-                              new NewMaxWeekWorkTimeRule(
-                                  new WeeksFromScheduleDaysExtractor()),
-                              new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekVoilatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),new VerifyWeeklyRestAroundDayOffSpecification(),ensureWeeklyRestRule )),
-                              new NewDayOffRule(new WorkTimeStartEndExtractor()),
-                              new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts),
-                              new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor())
-
-							  
+								new NewShiftCategoryLimitationRule(
+								new ShiftCategoryLimitationChecker(schedulingResultStateHolder),
+                                new VirtualSchedulePeriodExtractor()),
+								new WeekShiftCategoryLimitationRule(
+                                new ShiftCategoryLimitationChecker(schedulingResultStateHolder),
+								new VirtualSchedulePeriodExtractor(), new WeeksFromScheduleDaysExtractor()),
+								new NewNightlyRestRule(new WorkTimeStartEndExtractor()),
+								new NewMaxWeekWorkTimeRule(
+								new WeeksFromScheduleDaysExtractor()),
+								new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekVoilatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),new VerifyWeeklyRestAroundDayOffSpecification(),ensureWeeklyRestRule )),
+								new NewDayOffRule(new WorkTimeStartEndExtractor()),
+								new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+                             
 							  //This one takes to long time tu run first time when caches are empty, so put on hold for now
 							  //new NewLegalStateRule(
 							  //    new ScheduleMatrixListCreator(schedulingResultStateHolder),
@@ -56,21 +54,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 							  //    new WorkShiftMinMaxLengthCalculatorFactory())
                           };
 
+			if(schedulingResultStateHolder.UseMinWeekWorkTime)
+				ret.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+
 			if(!schedulingResultStateHolder.TeamLeaderMode)
 				ret.Add(new OpenHoursRule(schedulingResultStateHolder));
 			{
 				
 			}
             return ret;
-        }
-
-        public void ActivateMinWeekWorkTimeRule()
-        {
-            var rule = Item(typeof (MinWeekWorkTimeRule));
-            if (rule != null)
-            {
-                ((MinWeekWorkTimeRule) rule).ShouldValidate = true;
-            }
         }
 
         public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)

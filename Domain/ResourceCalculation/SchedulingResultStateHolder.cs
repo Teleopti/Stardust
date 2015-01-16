@@ -182,7 +182,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    if (UseValidation)
 		    {
                 var rules = NewBusinessRuleCollection.All(this);
-                if(UseMinWeekWorkTime) rules.ActivateMinWeekWorkTimeRule();
                 return rules;
 		    }
 				

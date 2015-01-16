@@ -46,9 +46,5 @@ namespace Teleopti.Interfaces.Domain
         ///</summary>
         CultureInfo UICulture { get; }
 
-        /// <summary>
-        /// Activate rule for min work time per week
-        /// </summary>
-        void ActivateMinWeekWorkTimeRule();
     }
 }

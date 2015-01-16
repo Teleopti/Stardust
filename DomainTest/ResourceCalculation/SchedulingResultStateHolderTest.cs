@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var target = new SchedulingResultStateHolder {UseMinWeekWorkTime = true, UseValidation = true};
             var rules = target.GetRulesToRun();
             var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
-            Assert.IsTrue(rule.ShouldValidate);
+            Assert.IsNotNull(rule);
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var target = new SchedulingResultStateHolder { UseValidation = true };
             var rules = target.GetRulesToRun();
             var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
-            Assert.IsFalse(rule.ShouldValidate);
+            Assert.IsNull(rule);
         }
     }
 }

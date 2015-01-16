@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(schedulePart.Person).Return(person).Repeat.Any();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_stateHolder.UseMinWeekWorkTime).Return(false).Repeat.AtLeastOnce();
             }
 
             using (_mocks.Playback())
@@ -166,8 +167,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).Return(validationList).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
-                //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
-                //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
+	            Expect.Call(_stateHolder.UseMinWeekWorkTime).Return(false).Repeat.AtLeastOnce();
+	            //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
+	            //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
             }
 
             using (_mocks.Playback())
@@ -205,6 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).Return(validationList).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
                 Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_stateHolder.UseMinWeekWorkTime).Return(false).Repeat.AtLeastOnce();
                 //Expect.Call(person.Name).Return(new Name()).Repeat.Once();
                 //Expect.Call(schedulePart.DateOnlyAsPeriod).Return((new DateOnlyAsDateTimePeriod(new DateOnly(2008, 1, 1), (TimeZoneInfo.Utc)))).Repeat.Once();
             }
@@ -248,6 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				.IgnoreArguments()
 				.Return(validationList);
 			Expect.Call(_stateHolder.UseValidation).Return(true).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.UseMinWeekWorkTime).Return(false).Repeat.AtLeastOnce();
 			Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
 			_mocks.ReplayAll();
 

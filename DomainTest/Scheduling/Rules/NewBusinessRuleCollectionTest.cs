@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
     public class NewBusinessRuleCollectionTest
     {
         private INewBusinessRuleCollection _target;
-        private const int totalNumberOfRules = 10;
+        private const int totalNumberOfRules = 9;
     	private ISchedulingResultStateHolder _state;
 
         [SetUp]
@@ -107,16 +107,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _state.UseValidation = false;
             allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
             Assert.AreEqual(NewBusinessRuleCollection.Minimum().Count + 1, allForScheduling.Count);
+			Assert.IsFalse((collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule))));
         }
 
-        [Test]
-	    public void ShouldActivateMinWeekWorkTimeRule()
-	    {
-            var rule = (MinWeekWorkTimeRule)_target.Item(typeof(MinWeekWorkTimeRule));
-            Assert.IsFalse(rule.ShouldValidate);
-	        _target.ActivateMinWeekWorkTimeRule();
-            Assert.IsTrue(rule.ShouldValidate);
-	    }
+		[Test]
+		public void ShouldConsiderUseMinWorktimePerWeek()
+		{
+			_state = new SchedulingResultStateHolder();
+			_state.UseMinWeekWorkTime = true;
+			_state.UseValidation = true;
+			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
+			Assert.AreEqual(totalNumberOfRules + 1, allForScheduling.Count);
+			Assert.IsTrue(collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule)));
+		}
 
         private static bool collectionContainsType(IEnumerable<INewBusinessRule> businessRuleCollection, Type type)
         {

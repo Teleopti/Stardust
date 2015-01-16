@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _target.HaltModify = false;
             Assert.IsFalse(_target.HaltModify);
             Assert.AreEqual("", _target.ErrorMessage);
-            Assert.IsFalse(_target.ShouldValidate);
         }
 
         [Test]
@@ -131,7 +130,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                _target.ShouldValidate = true;
                 var ret = _target.Validate(dic, lstOfDays);
                 Assert.AreEqual(0, ret.Count());
             }
@@ -193,7 +191,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                _target.ShouldValidate = true;
                 var ret = _target.Validate(dic, lstOfDays);
                 Assert.AreEqual(7, ret.Count());
             }
@@ -257,7 +254,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                _target.ShouldValidate = true;
                 var ret = _target.Validate(dic, lstOfDays);
                 Assert.AreEqual(0, ret.Count());
             }
@@ -319,7 +315,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                _target.ShouldValidate = true;
                 var ret = _target.Validate(dic, lstOfDays);
                 Assert.AreEqual(0, ret.Count());
             }
@@ -361,41 +356,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Playback())
             {
-                _target.ShouldValidate = true;
                 var ret = _target.Validate(dic, lstOfDays);
                 Assert.AreEqual(0, ret.Count());
             }
-        }
-
-        [Test]
-        public void ShouldReturnEmptyListWhenSkippingValidation()
-        {
-            var person = _mocks.StrictMock<IPerson>();
-            var range = _mocks.StrictMock<IScheduleRange>();
-            var dic = new Dictionary<IPerson, IScheduleRange> { { person, range } };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var lstOfDays = new List<IScheduleDay> { scheduleDay };
-
-            var weekPeriod = new DateOnlyPeriod(2010, 8, 23, 2010, 8, 29);
-            var personWeek = new PersonWeek(person, weekPeriod);
-
-            var personWeeks = new List<PersonWeek> { personWeek };
-            var oldResponses = new List<IBusinessRuleResponse>();
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(lstOfDays)).Return(personWeeks);
-                Expect.Call(range.BusinessRuleResponseInternalCollection).Return(oldResponses);
-                Expect.Call(person.PermissionInformation).Return(_permissionInformation).Repeat.AtLeastOnce();
-                Expect.Call(_permissionInformation.DefaultTimeZone()).Return(_timeZone).Repeat.AtLeastOnce();    
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.ShouldValidate = false;
-                var ret = _target.Validate(dic, lstOfDays);
-                Assert.AreEqual(0, ret.Count());
-            }
-        }
+        }     
     }
 }
