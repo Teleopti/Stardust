@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.Domain.Security
 	public interface IApplicationLogon
 	{
 		AuthenticationResult Logon(ILogonModel logonModel);
+		bool ShowDataSourceSelection { get; }
 	}
 }

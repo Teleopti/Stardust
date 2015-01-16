@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Security
 		{
 			return logonModel.SelectedDataSourceContainer.LogOn(logonModel.UserName, logonModel.Password);
 		}
+		public bool ShowDataSourceSelection { get { return true; } }
 	}
 }

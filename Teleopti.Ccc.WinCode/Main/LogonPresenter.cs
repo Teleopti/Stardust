@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -226,14 +228,15 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			IApplicationLogon applogon = new ApplicationLogon();
+			IApplicationLogon applogon;
 
 			//on inte  flaggan är satt
-			var authenticationResult = applogon.Logon(_model);
+			//applogon = new ApplicationLogon();
+			//var authenticationResult = applogon.Logon(_model);
 			
 			//else
-			//applogon = new MultiTenancyApplicationLogon(new RepositoryFactory());
-			//authenticationResult = applogon.Logon(_model);
+			applogon = new MultiTenancyApplicationLogon(new RepositoryFactory(), new AuthenticationQuerier());
+			var authenticationResult = applogon.Logon(_model);
 			
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
