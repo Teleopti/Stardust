@@ -36,7 +36,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 				.WithUser("user", personId)
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
 				.WithAlarm("phone", phone, 0);
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "phone"});
+			Rta.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "user", 
+				StateCode = "phone"
+			});
 
 			Target.Initialize();
 
@@ -54,7 +58,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 				.WithUser("user", personId)
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
 				.WithAlarm("phone", phone, 0);
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "phone"});
+			Rta.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "user", 
+				StateCode = "phone"
+			});
 			Persister.Add(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,

@@ -90,7 +90,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 				.WithSchedule(personId, phone, "2015-01-15 08:00", "2015-01-15 10:00")
 				.WithAlarm("break", phone, 1);
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest { UserCode = "user", StateCode = "break" });
+			Rta.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "user", 
+				StateCode = "break"
+			});
 
 			Target.Initialize();
 
@@ -120,7 +124,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 				.WithSchedule(personId, phone, "2015-01-15 08:00", "2015-01-15 10:00")
 				.WithAlarm("break", phone, 1);
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "user", StateCode = "break"});
+			Rta.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "user", 
+				StateCode = "break"
+			});
 			Target.Sync();
 
 			Model.Get(teamId1).Count.Should().Be(1);
