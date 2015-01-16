@@ -176,6 +176,7 @@
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisherTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
+    <Compile Include="MultiTenancy\FindApplicationUserQueryTest.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\EventPublisherTest.cs" />
