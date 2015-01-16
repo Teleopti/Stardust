@@ -231,12 +231,12 @@ namespace Teleopti.Ccc.WinCode.Main
 			IApplicationLogon applogon;
 
 			//on inte  flaggan är satt
-			//applogon = new ApplicationLogon();
-			//var authenticationResult = applogon.Logon(_model);
+			applogon = new ApplicationLogon();
+			var authenticationResult = applogon.Logon(_model);
 			
 			//else
-			applogon = new MultiTenancyApplicationLogon(new RepositoryFactory(), new AuthenticationQuerier());
-			var authenticationResult = applogon.Logon(_model);
+			//applogon = new MultiTenancyApplicationLogon(new RepositoryFactory(), new AuthenticationQuerier());
+			//var authenticationResult = applogon.Logon(_model);
 			
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
