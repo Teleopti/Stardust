@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			base.Load(builder);
 
 			builder.RegisterApiControllers(typeof(WebAppModule).Assembly).EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
-			builder.RegisterControllers(typeof(WebAppModule).Assembly).EnableClassInterceptors();//.InterceptedBy(typeof(AspectInterceptor));
+			builder.RegisterControllers(typeof(WebAppModule).Assembly).EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterHubs(typeof(WebAppModule).Assembly).EnableClassInterceptors();
 
 			if (_httpConfiguration != null)
