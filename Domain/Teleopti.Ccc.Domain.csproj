@@ -1431,6 +1431,8 @@
     <Compile Include="Security\Matrix\MatrixPermissionHolder.cs" />
     <Compile Include="Security\Matrix\PersonRoleResolver.cs" />
     <Compile Include="Security\ModifyPassword.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQueryResult.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
     <Compile Include="Security\OneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>
