@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		}
 
 		[Test]
-		public void ShouldProduceUnitOfWorkToInnerObjects()
+		public void ShouldProduceUnitOfWorkToNestedServices()
 		{
 			string result = null;
 			NestedService.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 		[Test]
 		[TestTable("TestTable")]
-		public void ShouldRollbackTransactionForInnerObject()
+		public void ShouldRollbackTransactionForNestedServices()
 		{
 			NestedService.Action = s =>
 			{
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 		[Test]
 		[TestTable("TestTable")]
-		public void ShouldSpanTransactionOverAllInnerObjects()
+		public void ShouldSpanTransactionOverAllNestedServices()
 		{
 			NestedService.Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
 			NestedService2.Action = s =>
@@ -243,7 +243,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		[TestTable("TestTable")]
 		public void ShouldProduceUnitOfWorkForDataSourceMatchingRtaConnectionStringIfNoPrincipal()
 		{
-			// ConfigurationManager.ConnectionStrings["RtaApplication"]
 			var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
 			rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
 			ConfigReader.ConnectionStrings = new ConnectionStringSettingsCollection
