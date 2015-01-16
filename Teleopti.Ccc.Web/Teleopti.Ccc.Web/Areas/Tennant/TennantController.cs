@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 				Response.StatusCode = 401;
 			}
 
-			return Json(res);
+			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
