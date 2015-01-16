@@ -10,7 +10,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public DateTimePeriod? ShiftWithin
 		{
-			get { return _criteria.ShiftWithin; }
+			get
+			{
+				return _criteria == null
+					? null
+					: _criteria.ShiftWithin;
+			}
 		}
 
 		public IScheduleDayFilterCriteria Criteria
