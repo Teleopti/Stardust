@@ -335,6 +335,13 @@ namespace Teleopti.Ccc.WinCode.Autofac
 				: c.Resolve<EffectiveRestrictionCreator>())
 				.As<IEffectiveRestrictionCreator>();
 
+			builder.RegisterType<MinWeekWorkTimeRule>().As<MinWeekWorkTimeRule>();
+			builder.RegisterType<MinWeekWorkTimeRuleToggle31992Off>().As<MinWeekWorkTimeRuleToggle31992Off>();
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992)
+				? (INewBusinessRule)c.Resolve<MinWeekWorkTimeRule>()
+				: c.Resolve<MinWeekWorkTimeRuleToggle31992Off>())
+				.As<INewBusinessRule>();
+
 			//IOvertimeRelativeDifferenceCalculator
 		}
 
