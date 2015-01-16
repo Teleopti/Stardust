@@ -182,6 +182,7 @@
     <Compile Include="Foundation\IAvailableApplicationTokenDataSource.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
+    <Compile Include="Foundation\JsonExtensions.cs" />
     <Compile Include="Foundation\NewtonsoftJsonDeserializer.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />

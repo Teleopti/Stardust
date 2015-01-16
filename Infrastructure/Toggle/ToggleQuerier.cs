@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Web;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {
@@ -28,33 +26,13 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 			query["toggle"] = toggle.ToString();
 			uriBuilder.Query = query.ToString();
-			var url = uriBuilder.ToString();
-
-			var jsonString = downloadString(url);
-			return JsonConvert.DeserializeObject<ToggleEnabledResult>(jsonString).IsEnabled;
+			return uriBuilder.ExecuteJsonRequest<ToggleEnabledResult>().IsEnabled;
 		}
 
 		public void FillAllToggles()
 		{
 			var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/AllToggles");
-			var url = uriBuilder.ToString();
-
-			var jsonString = downloadString(url);
-			_loadedToggles = JsonConvert.DeserializeObject<IDictionary<Toggles, bool>>(jsonString);
+			_loadedToggles = uriBuilder.ExecuteJsonRequest<IDictionary<Toggles, bool>>();
 		}
-
-		private static string downloadString(string url)
-		{
-			var request = (HttpWebRequest)HttpWebRequest.Create(url);
-			request.AllowAutoRedirect = false;
-			using (var response = request.GetResponse())
-			{
-				using (var reader = new StreamReader(response.GetResponseStream()))
-				{
-					return reader.ReadToEnd();
-				}
-			}
-		}
-
 	}
 }
