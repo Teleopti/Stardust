@@ -6,6 +6,15 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
 	{
+		public FakeAdherencePercentageReadModelPersister()
+		{
+		}
+
+		public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model)
+		{
+			Persist(model);
+		}
+
 		public void Persist(AdherencePercentageReadModel model)
 		{
 			PersistedModel = model;

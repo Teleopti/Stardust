@@ -205,27 +205,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.LastTimestamp.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(model.LastTimestamp.Value, new HawaiiTimeZone().TimeZone()).ToShortTimeString());
 		}
 
-		public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
-		{
-			private readonly AdherencePercentageReadModel _model;
-
-			public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model)
-			{
-				_model = model;
-			}
-
-			public void Persist(AdherencePercentageReadModel model)
-			{
-			}
-
-			public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
-			{
-				if (_model == null)
-					return null;
-				return date.Equals(_model.BelongsToDate) && _model.PersonId == personId ?
-					_model :
-					null;
-			}
-		}
 	}
 }
