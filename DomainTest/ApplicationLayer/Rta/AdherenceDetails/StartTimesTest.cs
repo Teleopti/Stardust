@@ -1,9 +1,11 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 
@@ -16,7 +18,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersist()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -32,7 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistEachActivityStarted()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -54,7 +58,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistActivitiesStartTime()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -71,7 +76,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
 
 			target.Handle(new PersonStateChangedEvent
 			{
@@ -95,7 +101,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -117,7 +125,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
@@ -131,7 +141,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
@@ -148,7 +160,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister,null, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
@@ -160,7 +173,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 
@@ -176,7 +191,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
@@ -190,7 +207,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			var personId = Guid.NewGuid();
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 
 			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
 			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });

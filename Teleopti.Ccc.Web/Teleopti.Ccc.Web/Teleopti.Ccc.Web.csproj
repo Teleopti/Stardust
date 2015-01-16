@@ -556,6 +556,7 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\PerformanceTool\Core\PerformanceCounter.cs" />
     <Compile Include="Areas\RtaTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\RtaTool\RtaToolAreaRegistration.cs" />
     <Compile Include="Areas\Rta\CheckForActivityChangeInputModel.cs" />

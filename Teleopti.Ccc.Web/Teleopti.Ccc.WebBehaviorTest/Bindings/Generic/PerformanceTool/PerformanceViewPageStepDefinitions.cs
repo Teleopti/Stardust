@@ -92,17 +92,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
-		[When(@"I input a configuration for (.*) states and (.*) of (.*) persons can poll per second on datasource (.*)")]
-		public void WhenIInputAConfigurationForEveryoneAndOfPersonsCanPollPerSecond(int stateCount, Decimal percent, int personCount, int datasource)
+		[When(@"I input a configuration for (.*) with (.*) states and (.*) poll per second on datasource (.*)")]
+		public void WhenIInputAConfigurationForStatesAndPollPerSecondOnDatasource(string personName, int stateCount, int pollingRequests, int datasource)
 		{
+			var personId = DataMaker.Person(personName).Person.Id.Value;
 			var configuration = new
 			{
 				PlatformTypeId = Guid.Empty,
 				SourceId = datasource,
-				Persons = new List<object>(),
+				Persons = new[]
+				{
+					new
+					{
+						ExternalLogOn = personName,
+						PersonId = personId
+					}
+				},
 				States = new List<object>(),
 				Timestamp = CurrentTime.Value(),
-				PollPerSecond = percent*personCount
+				PollingPerSecond = pollingRequests
 			};
 
 			for (var i = 0; i < stateCount; i++)
@@ -110,19 +118,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 				var state = "State" + i;
 				configuration.States.Add(state);
 			}
-			for (var i = 0; i < personCount; i++)
-			{
-				var personName = "Person" + i;
-				var personId = DataMaker.Person(personName).Person.Id.Value;
-				configuration.Persons.Add(new { ExternalLogOn = personName, PersonId = personId});
-			}
-			
+
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
-
-
-
+		
 		[Then(@"I should see a count of (.*) messages received for '(.*)'")]
 		public void ThenIShouldSeeACountOfMessagesReceivedForEachApplicableModelUpdated(int messages, string model)
 		{

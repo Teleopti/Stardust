@@ -221,6 +221,8 @@
     <Compile Include="ApplicationLayer\Rta\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
+    <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCountDone.cs" />
+    <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
     <Compile Include="ApplicationLayer\Rta\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />

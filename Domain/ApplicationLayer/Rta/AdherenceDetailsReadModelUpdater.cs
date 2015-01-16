@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
@@ -16,10 +17,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		IInitializeble
 	{
 		private readonly IAdherenceDetailsReadModelPersister _persister;
+		private readonly ILiteTransactionSyncronization _liteTransactionSyncronization;
+		private readonly IPerformanceCounter _performanceCounter;
 
-		public AdherenceDetailsReadModelUpdater(IAdherenceDetailsReadModelPersister persister)
+		public AdherenceDetailsReadModelUpdater(IAdherenceDetailsReadModelPersister persister,
+			ILiteTransactionSyncronization liteTransactionSyncronization,
+			IPerformanceCounter performanceCounter)
 		{
 			_persister = persister;
+			_liteTransactionSyncronization = liteTransactionSyncronization;
+			_performanceCounter = performanceCounter;
 		}
 
 		[ReadModelUnitOfWork]
@@ -87,6 +94,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					}
 				};
 				_persister.Add(model);
+
+				if (_performanceCounter.IsEnabled)
+					_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
+
 				return;
 			}
 
@@ -119,6 +130,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				}
 				_persister.Update(readModel);
 			}
+
+			if (_performanceCounter.IsEnabled)
+				_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
 		}
 
 		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,

@@ -1,8 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 
@@ -15,7 +17,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistFirstOutOfAdherenceStateChangeInLastActivity()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -45,7 +49,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistFirstOutOfAdherenceStateChangeInLastActivity_WhenOnlyOutOfAdherenceStates()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -82,7 +88,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistLastStateChangeThatCausedOutOfAdherence()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
@@ -129,7 +137,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldNotSetActualEndTimeIfActualStartNeverOccured()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 			var personId = Guid.NewGuid();
 
 			target.Handle(new PersonActivityStartEvent
@@ -174,7 +184,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistLastStateChangeAfterShiftEnds()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonStateChangedEvent
 			{
@@ -223,7 +235,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		public void ShouldPersistShiftEndTime()
 		{
 			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var target = new AdherenceDetailsReadModelUpdater(persister);
+			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
+			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
+			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
 			var personId = Guid.NewGuid();
 			target.Handle(new PersonActivityStartEvent
 			{
