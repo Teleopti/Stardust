@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		// TODO: ????
 		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
 		{
-			return AdherenceInfo.AdherenceFor(stateReadModel.StaffingEffect);
+			return AdherenceInfo.AdherenceFor(stateReadModel);
 		}
 	}
 

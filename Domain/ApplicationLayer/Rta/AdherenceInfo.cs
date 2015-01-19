@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_person = person;
 			_alarmFinder = alarmFinder;
 
-			_adherence = new Lazy<Adherence>(() => AdherenceFor(agentState.CurrentState()));
-			_adherenceForPreviousState = new Lazy<Adherence>(() => AdherenceFor(agentState.PreviousState()));
+			_adherence = new Lazy<Adherence>(() => adherenceFor(agentState.CurrentState()));
+			_adherenceForPreviousState = new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState()));
 			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<Adherence>(() => adherenceFor(_input.StateCode, scheduleInfo.PreviousActivity()));
 		}
@@ -57,6 +57,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return _adherenceForNewStateAndPreviousActivity.Value;
 		}
 		
+		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
+		{
+			return adherenceFor(stateReadModel.StaffingEffect);
+		}
+
+
+		private static Adherence adherenceFor(AgentState state)
+		{
+			return adherenceFor(state.StaffingEffect);
+		}
+
+		private static Adherence adherenceFor(RtaAlarmLight alarm)
+		{
+			return adherenceFor(alarm.StaffingEffect);
+		}
+
+		private static Adherence adherenceFor(double? staffingEffect)
+		{
+			if (staffingEffect.HasValue)
+				return staffingEffect.Value.Equals(0) ? Adherence.In : Adherence.Out;
+			return Adherence.None;
+		}
+
 		private Adherence adherenceFor(string stateCode, ScheduleLayer activity)
 		{
 			if (activity == null)
@@ -74,28 +97,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (alarm == null)
 				return Adherence.None;
 			return adherenceFor(alarm);
-		}
-
-		public static Adherence AdherenceFor(AgentState state)
-		{
-			return AdherenceFor(state.StaffingEffect);
-		}
-
-		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
-		{
-			return AdherenceFor(stateReadModel.StaffingEffect);
-		}
-
-		private static Adherence adherenceFor(RtaAlarmLight alarm)
-		{
-			return AdherenceFor(alarm.StaffingEffect);
-		}
-
-		public static Adherence AdherenceFor(double? staffingEffect)
-		{
-			if (staffingEffect.HasValue)
-				return staffingEffect.Value.Equals(0) ? Adherence.In : Adherence.Out;
-			return Adherence.None;
 		}
 
 	}
