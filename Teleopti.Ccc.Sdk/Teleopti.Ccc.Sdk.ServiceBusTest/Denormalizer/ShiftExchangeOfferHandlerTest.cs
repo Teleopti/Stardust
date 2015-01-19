@@ -27,9 +27,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var person = PersonFactory.CreatePerson();
 			person.SetId(personId);
 			var dateTime = new DateTime();
-			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			personRequest.Stub(x => x.Request).Return(shiftExchangeOffer);
-			personRequestRepository.Stub(x => x.FindByStatus<ShiftExchangeOffer>(person, dateTime, 0)).Return(new[] { personRequest });
+			var date = new DateOnly(dateTime.Year, dateTime.Month, dateTime.Day);
+			personRequestRepository.Stub(x => x.FindOfferByStatus(person, date, 0)).Return(new[] { shiftExchangeOffer });
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
 			var target = new ShiftExchangeOfferHandler(personRepository,

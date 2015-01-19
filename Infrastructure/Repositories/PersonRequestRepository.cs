@@ -49,16 +49,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return findRequestsByRequestPeriod(person, requestForPeriod);
 		}
 
-		public IList<IPersonRequest> Find<T>(IPerson person, DateTime startDateTime) where T : Request
-		{
-			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
-			return findRequestsByRequestPeriod(person, requestForPeriod);
-		}
-
 		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T : Request
 		{
 			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
 			return findRequestsByRequestPeriod(person, requestForPeriod, status);
+		}		
+
+		public IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status)
+		{
+			return Session.CreateCriteria<IShiftExchangeOffer>()
+				.Add(Restrictions.Eq("Date", date))
+				.Add(Restrictions.Eq("Person", person))
+				.Add(Restrictions.Eq("Status", status))
+				.List<IShiftExchangeOffer>();
 		}
 
 		public IPersonRequest FindPersonRequestByRequestId(Guid id)
