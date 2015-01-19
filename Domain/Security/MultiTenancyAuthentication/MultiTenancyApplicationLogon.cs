@@ -24,15 +24,32 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 				logonModel.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application)
 					.ToList();
 			var result = _authenticationQuerier.TryLogon(logonModel.UserName, logonModel.Password);
+			if (!result.Success)
+				return new AuthenticationResult
+				{
+					Successful = false
+				};
+
 			var dataSourceName = result.Tennant;
 			var personId = result.PersonId;
 
-			logonModel.SelectedDataSourceContainer = allAppContainers.Where(d => d.DataSourceName.Equals(dataSourceName)).FirstOrDefault();
+			logonModel.SelectedDataSourceContainer = allAppContainers.FirstOrDefault(d => d.DataSourceName.Equals(dataSourceName));
 			// if null error
+			if (logonModel.SelectedDataSourceContainer == null)
+				return new AuthenticationResult
+				{
+					Successful = false
+				};
+
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-
-				logonModel.SelectedDataSourceContainer.SetUser(_repositoryFactory.CreatePersonRepository(uow).LoadOne(personId));
+				var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personId);
+				if(person == null)
+					return new AuthenticationResult
+					{
+						Successful = false
+					};
+				logonModel.SelectedDataSourceContainer.SetUser(person);
 				logonModel.SelectedDataSourceContainer.LogOnName = logonModel.UserName;
 			}
 

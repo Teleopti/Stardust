@@ -29,9 +29,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 	    protected override void Load(ContainerBuilder builder)
 	    {
-			 //var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)));
-		    //builder.RegisterType<LogOnScreen>()
-		    //       .SingleInstance();
 		    builder.RegisterType<ApplicationStartup>()
 		           .SingleInstance();
 		    builder.RegisterType<EnvironmentWindowsUserProvider>()

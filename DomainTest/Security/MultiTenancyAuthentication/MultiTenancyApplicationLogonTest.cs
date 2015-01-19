@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		private IAuthenticationQuerier _authenticationQuerier;
 		private IPersonRepository _personRepository;
 		private IPerson _person;
+		private IDataSourceContainer _dataSourceCont;
+		private IDataSource _dataSource;
+		private IUnitOfWork _uow;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private logonModel _model;
+		private Guid _personId;
 
 		[SetUp]
 		public void Setup()
@@ -28,37 +34,80 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			_authenticationQuerier = MockRepository.GenerateMock<IAuthenticationQuerier>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_person = PersonFactory.CreatePerson("kalle");
+			_dataSourceCont = MockRepository.GenerateMock<IDataSourceContainer>();
+			_dataSource = MockRepository.GenerateMock<IDataSource>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_model = new logonModel { DataSourceContainers = new List<IDataSourceContainer> { _dataSourceCont }, UserName = "kalle", Password = "kula" };
+			_personId = Guid.NewGuid();
+
 			_target = new MultiTenancyApplicationLogon(_repositoryFactory, _authenticationQuerier);
 		}
 
 		[Test]
 		public void ShouldReturnSuccessOnSuccess()
 		{
-			var dataSourceCont = MockRepository.GenerateMock<IDataSourceContainer>();
-			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var model = new logonModel {DataSourceContainers = new List<IDataSourceContainer> {dataSourceCont}, UserName = "kalle", Password = "kula"};
-			var personId = Guid.NewGuid();
-
-			dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
-				.Return(new AuthenticationQueryResult {PersonId = personId, Success = true, Tennant = "WFM"});
-			dataSourceCont.Stub(x => x.DataSourceName).Return("WFM");
-			dataSourceCont.Stub(x => x.DataSource).Return(dataSource);
-			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(_personRepository);
-			_personRepository.Stub(x => x.LoadOne(personId)).Return(_person);
-			dataSourceCont.Expect(x => x.SetUser(_person));
-			var result = _target.Logon(model);
+				.Return(new AuthenticationQueryResult {PersonId = _personId, Success = true, Tennant = "WFM"});
+			_dataSourceCont.Stub(x => x.DataSourceName).Return("WFM");
+			_dataSourceCont.Stub(x => x.DataSource).Return(_dataSource);
+			_dataSource.Stub(x => x.Application).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+			_personRepository.Stub(x => x.LoadOne(_personId)).Return(_person);
+			_dataSourceCont.Expect(x => x.SetUser(_person));
+			var result = _target.Logon(_model);
 
 			result.Successful.Should().Be.True();
-			model.SelectedDataSourceContainer.Should().Be.EqualTo(dataSourceCont);
-			model.UserName.Should().Be.EqualTo("kalle");
-
+			_model.SelectedDataSourceContainer.Should().Be.EqualTo(_dataSourceCont);
+			_model.UserName.Should().Be.EqualTo("kalle");
 		}
 
+		[Test]
+		public void ShouldReturnFailureOnNoSuccess()
+		{
+			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+				.Return(new AuthenticationQueryResult { Success = false });
+
+			var result = _target.Logon(_model);
+
+			result.Successful.Should().Be.False();
+			_model.SelectedDataSourceContainer.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnFailureIfNoMatchingDatasource()
+		{
+			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+				.Return(new AuthenticationQueryResult { PersonId = _personId, Success = true, Tennant = "WFM" });
+			_dataSourceCont.Stub(x => x.DataSourceName).Return("Not WFM");
+			_dataSourceCont.Stub(x => x.DataSource).Return(_dataSource);
+			var result = _target.Logon(_model);
+
+			result.Successful.Should().Be.False();
+			_model.SelectedDataSourceContainer.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnFailureIfNoPerson()
+		{
+			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+				.Return(new AuthenticationQueryResult { PersonId = _personId, Success = true, Tennant = "WFM" });
+			_dataSourceCont.Stub(x => x.DataSourceName).Return("WFM");
+			_dataSourceCont.Stub(x => x.DataSource).Return(_dataSource);
+			_dataSource.Stub(x => x.Application).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
+			_personRepository.Stub(x => x.LoadOne(_personId)).Return(null);
+			var result = _target.Logon(_model);
+
+			result.Successful.Should().Be.False();
+			
+		}
 
 		class logonModel :ILogonModel
 		{
