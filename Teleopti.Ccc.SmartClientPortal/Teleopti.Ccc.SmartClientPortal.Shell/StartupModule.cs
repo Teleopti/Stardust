@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    builder.RegisterType<SystemCheckerValidator>();
 		    builder.RegisterType<OutlookPanelContentWorker>();
 
-			 builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
 			 if (_configuration.Toggle(Toggles.MultiTenancy_Logon_17461))
 			 {
 				 builder.RegisterType<MultiTenancyApplicationLogon>().As<IApplicationLogon>().SingleInstance();
