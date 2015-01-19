@@ -84,6 +84,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		private DateTimePeriod? openOvertimePeriod(DateTimePeriod overtimePeriod, IEnumerable<DateTimePeriod> openHoursList)
 		{
+			if (openHoursList == null || !openHoursList.Any())
+				return null;
 			foreach (var period in openHoursList)
 			{
 				var intersection = overtimePeriod.Intersection(period);
