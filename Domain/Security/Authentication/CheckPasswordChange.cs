@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
     public class CheckPasswordChange : ICheckPasswordChange
     {
-        private readonly IPasswordPolicy _passwordPolicy;
+        private readonly Func<IPasswordPolicy> _passwordPolicy;
 
-	    public CheckPasswordChange(IPasswordPolicy passwordPolicy)
+	    public CheckPasswordChange(Func<IPasswordPolicy> passwordPolicy)
 	    {
 		    _passwordPolicy = passwordPolicy;
 	    }
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 	    public AuthenticationResult Check(IUserDetail userDetail)
         {
         	var lastPasswordChange = userDetail.LastPasswordChange;
-        	var passwordValidForDayCount = _passwordPolicy.PasswordValidForDayCount;
+        	var passwordValidForDayCount = _passwordPolicy().PasswordValidForDayCount;
         	var maxDays = DateTime.MaxValue.Subtract(lastPasswordChange);
             var result = new AuthenticationResult{Successful = true, Person = userDetail.Person};
 		    var utcNow = DateTime.UtcNow;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 				result.Message = UserTexts.Resources.LogOnFailedPasswordExpired;
                 return result;
             }
-            var warningDate = expirationDate.AddDays(-_passwordPolicy.PasswordExpireWarningDayCount);
+            var warningDate = expirationDate.AddDays(-_passwordPolicy().PasswordExpireWarningDayCount);
 			if (warningDate <= utcNow)
             {
                 result.HasMessage = true;

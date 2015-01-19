@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
     	}
     }
 
+
+	//note to Ola & Roger - don't forget this one when converting SDK to use new authentication!
 	public class CheckPasswordWithToken : CheckPassword
 	{
 		private readonly IPassphraseProvider _passphraseProvider;

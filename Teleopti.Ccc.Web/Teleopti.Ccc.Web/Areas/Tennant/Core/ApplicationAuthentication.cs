@@ -8,11 +8,13 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 	{
 		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly IOneWayEncryption _oneWayEncryption;
+		private readonly IPasswordPolicyCheck _passwordPolicyCheck;
 
-		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery, IOneWayEncryption oneWayEncryption)
+		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery, IOneWayEncryption oneWayEncryption, IPasswordPolicyCheck passwordPolicyCheck)
 		{
 			_applicationUserQuery = applicationUserQuery;
 			_oneWayEncryption = oneWayEncryption;
+			_passwordPolicyCheck = passwordPolicyCheck;
 		}
 
 		public ApplicationAuthenticationResult Logon(string userName, string password)
@@ -24,12 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			if (foundUser.Password != _oneWayEncryption.EncryptString(password))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
-
-			/////move away - continue later
 			if (foundUser.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
-			/////
+			string passwordPolicyFailureReason;
+			if (!_passwordPolicyCheck.Verify(foundUser.InvalidAttempts, foundUser.InvalidAttemptsSequenceStart, foundUser.LastPasswordChange, out passwordPolicyFailureReason))
+				return createFailingResult(passwordPolicyFailureReason);
+	
 
 			return new ApplicationAuthenticationResult
 			{
