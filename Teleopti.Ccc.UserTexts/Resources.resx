@@ -12555,7 +12555,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Absence can not be reported.</value>
   </data>
   <data name="ShiftTradeBulletinBoard" xml:space="preserve">
-    <value>Shift Trade Board</value>
+    <value>Bulletin Board</value>
     <comment>use in MyTimeWeb request model, a new board for shift trade bulletin</comment>
   </data>
   <data name="Publish" xml:space="preserve">
@@ -12581,7 +12581,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for MyTimeWeb</comment>
   </data>
   <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
-    <value>No agents available for shift trade board</value>
+    <value>No agents available for bulletin board</value>
     <comment>use for MyTime Request Bulletin board, warning message</comment>
   </data>
   <data name="FilterOnOpenHours" xml:space="preserve">
