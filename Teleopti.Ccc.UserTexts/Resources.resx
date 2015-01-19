@@ -12616,7 +12616,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>used for publish shift trade in MyTime Schedule</comment>
   </data>
   <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
-    <value>Shift trade post valid to</value>
+    <value>Shift trade offer valid to</value>
     <comment>used for shift exchange in MyTime Schedule, a hint for Valid To calander</comment>
   </data>
   <data name="AnnounceShiftConditions" xml:space="preserve">

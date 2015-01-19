@@ -23186,7 +23186,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift trade post valid to.
+        ///   Looks up a localized string similar to Shift trade offer valid to.
         /// </summary>
         public static string ShiftExchangeOfferValidTo {
             get {
