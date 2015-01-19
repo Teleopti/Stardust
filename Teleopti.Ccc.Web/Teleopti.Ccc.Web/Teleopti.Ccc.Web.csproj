@@ -1127,6 +1127,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\manageadherence\result.js" />
     <Content Include="Areas\Tennant\these_files_will_probably_be_moved.txt" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\main.js" />
     <Content Include="Areas\MessageBrokerTool\Content\Scripts\require\configuration.js" />

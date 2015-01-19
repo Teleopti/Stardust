@@ -9,7 +9,6 @@ define(["knockout"
 
 		this.Start = function () {
 			self.StateSentCompletedPromise = $.Deferred();
-			self.ReadModelUpdatedCount = 0;
 			self.SendRtaExternalState();
 		};
 
@@ -37,16 +36,6 @@ define(["knockout"
 					self.StateSentCompletedPromise.resolve();
 				}
 			});
-		};
-
-		this.Done = function() {
-			return self.ReadModelUpdatedCount === data.ExpectedUpdates;
-		};
-
-		this.NotifyReadModelUpdatedDone = function () {
-			if (self.Done()) {
-				data.ReadModelUpdatedDone();
-			}
 		};
 	};
 });

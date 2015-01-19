@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				};
 				_persister.Add(model);
 
-				if (_performanceCounter.IsEnabled)
+				if (_performanceCounter!= null && _performanceCounter.IsEnabled)
 					_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
 
 				return;
@@ -129,10 +129,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					readModel.Model.ActualEndTime = calculateActualEndTimeBeforeActivityEnds(readModel, @event);
 				}
 				_persister.Update(readModel);
-			}
 
-			if (_performanceCounter.IsEnabled)
-				_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
+				if (_performanceCounter != null && _performanceCounter.IsEnabled)
+					_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
+			}
 		}
 
 		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,

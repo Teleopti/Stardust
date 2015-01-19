@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 		[Test]
 		public void ShouldReturnDefaultViewInDefaultAction()
 		{
-			var target = new ApplicationController(null);
+			var target = new ApplicationController(null,null,null);
 			var result = target.Index();
 			result.ViewName.Should().Be.Empty();
 		}

@@ -67,31 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
-		[When(@"I input an manage adherence configuration scenario for '(.*)' in json format on datasource (.*)")]
-		public void WhenIInputAnManageAdherenceConfigurationScenarioForInJsonFormatOnDatasource(string personName, int datasource)
-		{
-			var personId = DataMaker.Person(personName).Person.Id.Value;
-			var configuration = new
-			{
-				PlatformTypeId = Guid.Empty,
-				SourceId = datasource,
-				Persons = new[]
-				{
-					new
-					{
-						ExternalLogOn = personName,
-						PersonId = personId
-					}
-				},
-				States = new[] { "Phone" },
-				ExpectedUpdates = 1,
-				Timestamp = CurrentTime.Value()
-			};
-
-			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
-		}
-
 		[When(@"I input a configuration for (.*) with (.*) states and (.*) poll per second on datasource (.*)")]
 		public void WhenIInputAConfigurationForStatesAndPollPerSecondOnDatasource(string personName, int stateCount, int pollingRequests, int datasource)
 		{
@@ -109,7 +84,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 					}
 				},
 				States = new List<object>(),
-				Timestamp = CurrentTime.Value(),
+				TeamId = DataMaker.Data().Data().Data<TeamConfigurable>().Team.Id.ToString(),
 				PollingPerSecond = pollingRequests
 			};
 

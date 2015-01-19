@@ -1,13 +1,11 @@
 
 define([
 		'knockout',
-		'progressitem-count',
 		'manageadherence/iteration',
-		'result',
+		'manageadherence/result',
 		'messagebroker'
 ], function (
 		ko,
-		ProgressItemCountViewModel,
 		Iteration,
 		ResultViewModel,
 		messagebroker
@@ -41,15 +39,12 @@ define([
 			}
 		});
 
-		var expectedReadModelUpdates = ko.observable(0);
-		var forceReevaluateOfIterations = ko.observable();
 		this.Iterations = ko.computed(function() {
 			var configuration = self.ConfigurationObject();
 			if (!configuration)
 				return undefined;
 
 			var iterations = [];
-			forceReevaluateOfIterations();
 			for (var s = 0; s < configuration.States.length; s++) {
 				for (var p = 0; p < configuration.Persons.length; p++) {
 
@@ -59,12 +54,7 @@ define([
 						Person: configuration.Persons[p],
 						StateCode: configuration.States[s],
 						IsEndingIteration: s === configuration.States.length - 1,
-						Timestamp: configuration.Timestamp,
-						ExpectedUpdates: configuration.ExpectedUpdates,
-						ReadModelUpdatedDone: function () {
-							progressItemReadModel.Success();
-							calculateRunDone();
-						},
+						Timestamp: configuration.Timestamp
 					}));
 
 					if (iterations.length > 2000)
@@ -72,13 +62,11 @@ define([
 				}
 			}
 
-			expectedReadModelUpdates(iterations.length * configuration.ExpectedUpdates);
-
 			return iterations;
 
 		});
 
-		this.IterationsExpected = ko.computed(function () {
+		self.IterationsExpected = ko.computed(function () {
 			var iterations = self.Iterations();
 			if (iterations)
 				return iterations.length;
@@ -86,14 +74,6 @@ define([
 				return 0;
 		});
 
-		var progressItemReadModel = new ProgressItemCountViewModel(
-			"Successful Read Model Updates",
-			expectedReadModelUpdates
-		);
-
-		this.ProgressItems = [
-			progressItemReadModel
-		];
 
 		this.ConfigurationError = ko.computed(function () {
 			if (!self.ConfigurationObject())
@@ -111,73 +91,68 @@ define([
 			Persons: [
 				{
 					ExternalLogOn: "2001",
-					PersonId: "B46A2588-8861-42E3-AB03-9B5E015B257C"
+					PersonId: "B46A2588-8861-42E3-AB03-9B5E015B257C",
 				}
 			],
 			States: ["Ready", "OFF"],
-			ExpectedUpdates: 1,
-			ReadModel: "AdherenceDetailsReadModel"
+			TeamId: "34590A63-6331-4921-BC9F-9B5E015AB495",
+			PollingPerSecond: 1
 		}, null, 4));
 
-
-		var calculateRunDone = function () {
-			var calculatedInterationsDone = progressItemReadModel.Count();
-			if (calculatedInterationsDone > result.IterationsDone()) {
-				result.IterationsDone(calculatedInterationsDone);
-				if (result.IterationsDone() >= self.IterationsExpected()) {
-					result.RunDone(true);
-					result = null;
-					messagebroker.unsubscribe(manageAdherenceSubscription);
-					manageAdherenceSubscription = null;
-				}
-			}
-		};
-
 		this.Run = function () {
-
-			var iterations = self.Iterations();
-
-			progressItemReadModel.Reset();
 			result = new ResultViewModel();
 
-			startPromise.done(function () {
-
-				manageAdherenceSubscription = messagebroker.subscribe({
-					domainType: self.ConfigurationObject().ReadModel + 'UpdatedMessage',
-					callback: function () {
-						for (var i = 0; i < iterations.length; i++) {
-							var iteration = iterations[i];
-							if (!iteration.Done()) {
-								iteration.ReadModelUpdatedCount++;
-								iteration.NotifyReadModelUpdatedDone();
-								break;
-							}
-						}
-					}
-				});
-
-				$.when(
-					manageAdherenceSubscription.promise
-				).done(function () {
-
-					$.each(iterations, function (i, e) {
-						e.Start();
-					});
-
-					var commandsSentPromises = $.map(iterations, function (e) {
-						return e.AllCommandsCompletedPromise;
-					});
-					$.when.apply($, commandsSentPromises).then(function () {
-						result.CommandsDone(true);
-					});
-
-				});
-
+			$.ajax({
+				url: "performancetool/application/adherencetest?limit=" + self.IterationsExpected(),
+				success: function () {
+					self.runIterations();
+				}
 			});
-
+			$.ajax({
+				url: "Anywhere/BusinessUnit/Current",
+				success: function (bu) {
+					setInterval(self.Poll(bu.Id), 1000);
+				}
+			});
 			return result;
 		};
 
+		self.Poll = function(buId) {
+			for (var i = 0; i < self.PollingPerSecond; i++) {
+				$.ajax({
+					headers: { 'X-Business-Unit-Filter': buId },
+					url: "Anywhere/Agents/GetStates?teamId=" + self.TeamId,
+				});
+			}
+		}
+
+		self.runIterations = function() {
+			var iterations = self.Iterations();
+			startPromise.done(function() {
+				manageAdherenceSubscription = messagebroker.subscribe({
+					domainType: 'PerformanceCountDone',
+					callback: function(notification) {
+						result.RunDone(true);
+						result.IterationsDone(self.IterationsExpected());
+						var data = JSON.parse(notification.BinaryData);
+						result.EndTime(moment(data.EndTime));
+					}
+				});
+
+				$.when(manageAdherenceSubscription.promise).done(function() {
+					$.each(iterations, function(i, e) {
+						e.Start();
+					});
+
+					var commandsSentPromises = $.map(iterations, function(e) {
+						return e.AllCommandsCompletedPromise;
+					});
+					$.when.apply($, commandsSentPromises).then(function() {
+						result.CommandsDone(true);
+					});
+				});
+			});
+		};
 
 	};
 });

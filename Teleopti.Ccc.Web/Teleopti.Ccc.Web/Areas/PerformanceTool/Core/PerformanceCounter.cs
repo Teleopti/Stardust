@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Core
 
 		public bool IsEnabled { get { return Limit > 0; } }
 		public int Limit { get; set; }
+		public Guid BusinessUnitId { get; set; }
+		public string DataSource { get; set; }
 		public DateTime FirstTimestamp { get; set; }
 		public DateTime LastTimestamp { get; set; }
 
@@ -36,8 +38,11 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Core
 				_messageSender.Send(new Notification
 				{
 					BinaryData = JsonConvert.SerializeObject(message),
-					DomainType = message.GetType().Name
+					DomainType = message.GetType().Name,
+					BusinessUnitId = BusinessUnitId.ToString(),
+					DataSource = DataSource
 				});
+				_count = 0;
 			}
 		}
 	}
