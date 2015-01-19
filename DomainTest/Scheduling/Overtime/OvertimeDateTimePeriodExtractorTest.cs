@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(2, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(1, result[1].DateTimePeriods.Count);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(expectedAfter, result[0].DateTimePeriods[0]);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(expectedAfter, result[0].DateTimePeriods[0]);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(0, result.Count);	
 			}	
 		}
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(2, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(1, result[1].DateTimePeriods.Count);
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(0, result.Count);	
 			}	
 		}
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod);
+				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, null);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
 				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);	

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface ICalculateBestOvertime
     {
-        IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod,  IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility);
+		IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IEnumerable<DateTimePeriod> openHoursList);
     }
 
     public class CalculateBestOvertime : ICalculateBestOvertime
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		    _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
 	    }
 
-		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
+		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IEnumerable<DateTimePeriod> openHoursList)
         {
 			var periods = new List<DateTimePeriod>();
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			if (((VisualLayer)lastLayer).HighestPriorityAbsence != null) return periods;
 
             var possibleOvertimeDurationsToCalculate = new List<TimeSpan>();
-            for (int minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
+            for (int minutes = minimumResolution; minutes <= overtimeDuration.Maximum.TotalMinutes; minutes += minimumResolution)
             {
                 var duration = TimeSpan.FromMinutes(minutes);
                 possibleOvertimeDurationsToCalculate.Add(duration);
@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             var calculatedOvertimePeriods = new Dictionary<TimeSpan, double>();
             foreach (var duration in possibleOvertimeDurationsToCalculate)
             {
-				if (duration < overtimeDurantion.Minimum) continue;
+				if (duration < overtimeDuration.Minimum) continue;
                 var period = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(duration));
 				if(period.EndDateTime > max) continue;
 
-	            if (onlyOvertimeAvaialbility)
+	            if (onlyAvailableAgents)
 				{
 					var timeZoneInfo = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 					var adjustedPeriods = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, new List<DateTimePeriod> { period });

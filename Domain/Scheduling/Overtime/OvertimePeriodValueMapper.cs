@@ -2,8 +2,13 @@
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-    public class OvertimePeriodValueMapper
-    {
+	public interface IOvertimePeriodValueMapper
+	{
+		IList<OvertimePeriodValue> Map(IEnumerable<IOvertimeSkillIntervalData> dataList);
+	}
+
+	public class OvertimePeriodValueMapper : IOvertimePeriodValueMapper
+	{
         public IList<OvertimePeriodValue> Map(IEnumerable<IOvertimeSkillIntervalData> dataList)
         {
             var listOfOvertimePeriodValue = new List<OvertimePeriodValue>();

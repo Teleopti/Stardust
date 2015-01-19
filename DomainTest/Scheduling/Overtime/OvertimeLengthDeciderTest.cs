@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         private IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 	    private IScheduleDay _scheduleDay;
 	    private MinMax<TimeSpan> _overtimeSpecifiedPeriod;
+		private ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
+		private OvertimeSkillIntervalDataToSkillIntervalDataMapper _skillIntervalDataMapper; 
 		
 		[SetUp]
         public void Setup()
@@ -44,12 +47,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _skill1, _skill2 });
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _overtimeSkillIntervalDataAggregator = _mocks.StrictMock<IOvertimeSkillIntervalDataAggregator>();
+			_skillIntervalDataOpenHour = _mocks.StrictMock<ISkillIntervalDataOpenHour>();
+			_skillIntervalDataMapper = _mocks.StrictMock<OvertimeSkillIntervalDataToSkillIntervalDataMapper>();
             _calculateBestOvertime = _mocks.StrictMock<ICalculateBestOvertime>();
             _overtimePeriodValueMapper = new OvertimePeriodValueMapper();
 			_overtimeSpecifiedPeriod = new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
             _target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                                 _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder, 
-												_calculateBestOvertime, _overtimePeriodValueMapper,_overtimeSkillIntervalDataAggregator  );
+												_calculateBestOvertime, _overtimePeriodValueMapper,
+												_overtimeSkillIntervalDataAggregator, _skillIntervalDataOpenHour,
+												_skillIntervalDataMapper);
         }
 
 		[Test]
@@ -92,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
 						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
 				Expect.Call(_skillDay1.Skill).Return(_skill1);
-				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false, null))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
 				Expect.Call(
@@ -128,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(
 					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
 						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false, null))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
 
@@ -160,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(
 					_overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(
 						new List<IList<IOvertimeSkillIntervalData>>())).IgnoreArguments().Return(skillIntervalDataList);
-				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false))
+				Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, _overtimeSpecifiedPeriod, new List<OvertimePeriodValue>(), _scheduleDay, 15, false, null))
 					  .IgnoreArguments()
 					  .Return(new List<DateTimePeriod>());
 			}
