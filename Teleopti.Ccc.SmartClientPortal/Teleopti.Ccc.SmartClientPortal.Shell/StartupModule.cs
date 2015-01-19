@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;

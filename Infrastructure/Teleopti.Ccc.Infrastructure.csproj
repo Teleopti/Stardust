@@ -196,6 +196,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQueryResult.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
+    <Compile Include="MultiTenancy\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\ITennantDatabaseConnectionFactory.cs" />
     <Compile Include="MultiTenancy\TennantDatabaseConnectionFactory.cs" />

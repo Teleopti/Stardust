@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ServiceBusModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
+			builder.RegisterModule(new TennantClientModule(_configuration));
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

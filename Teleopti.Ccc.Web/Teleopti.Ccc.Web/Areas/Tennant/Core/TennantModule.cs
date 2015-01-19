@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
+	//To be moved out to seperate application
 	public class TennantModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)

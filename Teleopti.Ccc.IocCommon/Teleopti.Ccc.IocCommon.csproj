@@ -143,6 +143,7 @@
     <Compile Include="Configuration\ForecasterModule.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="Configuration\EventPublisherModule.cs" />
+    <Compile Include="Configuration\TennantClientModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />
     <Compile Include="IocArgs.cs" />
