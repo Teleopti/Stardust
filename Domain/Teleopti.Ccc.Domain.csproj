@@ -1358,7 +1358,6 @@
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
-    <Compile Include="Security\Authentication\ApplicationLogon.cs" />
     <Compile Include="Security\IApplicationLogon.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyApplicationLogon.cs" />
     <Compile Include="Security\Authentication\ApplicationDataSourceProvider.cs" />
@@ -1439,6 +1438,7 @@
     <Compile Include="Security\ModifyPassword.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQueryResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyWindowsLogon.cs" />
     <Compile Include="Security\OneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>

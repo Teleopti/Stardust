@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			return !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password);
 		}
+
+		public AuthenticationTypeOption AuthenticationType { get; set; }
 	}
 }

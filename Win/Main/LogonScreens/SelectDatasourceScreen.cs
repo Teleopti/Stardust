@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 			comboBoxAdvDataSource.Select();
 			comboBoxAdvDataSource.Visible = _showDataSourceSelection;
-			labelChooseDataSource.Visible = _showDataSourceSelection;
+			//labelChooseDataSource.Visible = _showDataSourceSelection;
 		}
 
 		public void GetData()
@@ -98,10 +98,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			comboBoxAdvDataSource.DisplayMember = "DataSourceName";
 			if (radioButtonAdvWindows.Checked)
 			{
+				_model.AuthenticationType = AuthenticationTypeOption.Windows;
 				comboBoxAdvDataSource.DataSource = _logonableWindowsDataSources;
 			}
 			else
 			{
+				_model.AuthenticationType = AuthenticationTypeOption.Application;
 				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 

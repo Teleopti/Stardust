@@ -42,14 +42,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			 if (_configuration.Toggle(Toggles.MultiTenancy_Logon_17461))
 			 {
 				 builder.RegisterType<MultiTenancyApplicationLogon>().As<IApplicationLogon>().SingleInstance();
+				 builder.RegisterType<MultiTenancyWindowsLogon>().As<IMultiTenancyWindowsLogon>().SingleInstance();
+				 builder.RegisterType<MultiTenancyLogonPresenter>().As<ILogonPresenter>().SingleInstance();
 			 }
 			 else
 			 {
-				 builder.RegisterType<ApplicationLogon>().As<IApplicationLogon>().SingleInstance();
+				 builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
 			 }
 
 			builder.RegisterType<LogonModel>().SingleInstance();
-            builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
+            
 
             builder.RegisterType<LogonLicenseChecker>().As<ILogonLicenseChecker>();
             builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>();

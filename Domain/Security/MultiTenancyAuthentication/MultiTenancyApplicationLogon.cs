@@ -1,12 +1,10 @@
 ﻿using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
-	[UseOnToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	public class MultiTenancyApplicationLogon : IApplicationLogon
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
@@ -55,6 +53,5 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			};
 		}
 
-		public bool ShowDataSourceSelection { get { return false; }  }
 	}
 }
