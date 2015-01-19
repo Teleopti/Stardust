@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.TestCommon
