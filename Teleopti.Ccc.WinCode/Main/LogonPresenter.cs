@@ -189,7 +189,8 @@ namespace Teleopti.Ccc.WinCode.Main
 				}
 				_model.DataSourceContainers = logonableDataSources;
 			}
-			if (_model.DataSourceContainers.Count == 1)
+
+			if (_model.DataSourceContainers.Count == 1 && _applicationLogon.ShowDataSourceSelection)
 			{
 				if (goingBack)
 					CurrentStep--;
