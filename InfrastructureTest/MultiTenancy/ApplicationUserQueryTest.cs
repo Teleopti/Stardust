@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 
 
 			var result = target.FindUserData(correctUserName);
-			result.LastPasswordChange.Should().Be.IncludedIn(userDetails.LastPasswordChange.AddMinutes(-1), userDetails.LastPasswordChange.AddMinutes(1));
-			result.InvalidAttemptsSequenceStart.Should().Be.IncludedIn(userDetails.InvalidAttemptsSequenceStart.AddMinutes(-1), userDetails.InvalidAttemptsSequenceStart.AddMinutes(1));
+			result.LastPasswordChange.Value.Should().Be.IncludedIn(userDetails.LastPasswordChange.AddMinutes(-1), userDetails.LastPasswordChange.AddMinutes(1));
+			result.InvalidAttemptsSequenceStart.Value.Should().Be.IncludedIn(userDetails.InvalidAttemptsSequenceStart.AddMinutes(-1), userDetails.InvalidAttemptsSequenceStart.AddMinutes(1));
 			result.InvalidAttempts.Should().Be.EqualTo(userDetails.InvalidAttempts);
 			result.IsLocked.Should().Be.EqualTo(userDetails.IsLocked);
 		}

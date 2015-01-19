@@ -40,9 +40,11 @@ and (p.TerminalDate is null or p.TerminalDate>getdate())";
 								PersonId = reader.GetGuid(reader.GetOrdinal("Person")),
 								Tennant = "Teleopti WFM", //will be changed and read from db later
 								Password = reader.GetString(reader.GetOrdinal("Password")),
-								LastPasswordChange = new DateTime(reader.GetDateTime(reader.GetOrdinal("LastPasswordChange")).Ticks, DateTimeKind.Utc),
-								InvalidAttemptsSequenceStart = new DateTime(reader.GetDateTime(reader.GetOrdinal("InvalidAttemptsSequenceStart")).Ticks, DateTimeKind.Utc),
-								InvalidAttempts = reader.GetInt32(reader.GetOrdinal("InvalidAttempts"))
+								LastPasswordChange = reader.IsDBNull(reader.GetOrdinal("LastPasswordChange")) ? 
+										(DateTime?)null : new DateTime(reader.GetDateTime(reader.GetOrdinal("LastPasswordChange")).Ticks, DateTimeKind.Utc),
+								InvalidAttemptsSequenceStart = reader.IsDBNull(reader.GetOrdinal("InvalidAttemptsSequenceStart")) ? 
+										(DateTime?)null : new DateTime(reader.GetDateTime(reader.GetOrdinal("InvalidAttemptsSequenceStart")).Ticks, DateTimeKind.Utc),
+								InvalidAttempts = reader.IsDBNull(reader.GetOrdinal("InvalidAttempts")) ? 0 : reader.GetInt32(reader.GetOrdinal("InvalidAttempts"))
 							};
 						}
 						return new ApplicationUserQueryResult { Success = false };
