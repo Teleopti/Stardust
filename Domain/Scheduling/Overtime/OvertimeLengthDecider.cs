@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IOvertimeLengthDecider
     {
-		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyOvertimeAvailability);
+		IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents);
     }
 
     public class OvertimeLengthDecider : IOvertimeLengthDecider
@@ -19,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
+
+	    //private readonly IOvertimeOpenHourForDate _openHourForDate;
 
 
         public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _calculateBestOvertime = calculateBestOvertime;
         }
 
-		public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyOvertimeAvailability)
+		public IList<DateTimePeriod> Decide(IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, IActivity activity, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents)
         {
 			IList<DateTimePeriod> result = new List<DateTimePeriod>();
 
@@ -47,25 +50,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly, nextDayDateOnly });
             if (skillDays == null) return result;
             
-            IList<IList<IOvertimeSkillIntervalData>> nestedList = new List<IList<IOvertimeSkillIntervalData>>();
-            foreach (var personsActiveSkill in skills)
-            {
-                var filteredSkillDays = skillDays.Where(x => x.Skill == personsActiveSkill ).ToList();
-                if (filteredSkillDays.Count == 0) continue;
-                var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(filteredSkillDays.SelectMany(x => x.SkillStaffPeriodCollection));
-                if (mappedData.Count > 0)
-                    mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
-                if(mappedData.Count > 0)
-                    nestedList.Add(mappedData);
-            }
+            var overtimeSkillIntervalDataList = createOvertimeSkillIntervalDataList(skills, skillDays, minimumResolution);
+			var overtimeSkillIntervalDataAggregatedList = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(overtimeSkillIntervalDataList);
+			var mappedAggregatedList = _overtimePeriodValueMapper.Map(overtimeSkillIntervalDataAggregatedList);
 
-            var aggregatedMappedData  = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(nestedList);
+			// take the opening hours into account
+			
 
-			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, _overtimePeriodValueMapper.Map(aggregatedMappedData), scheduleDay, minimumResolution, onlyOvertimeAvailability);
+			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay, minimumResolution, onlyAvailableAgents);
 	        return result;
         }
 
-        private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
+	    private IList<IList<IOvertimeSkillIntervalData>> createOvertimeSkillIntervalDataList(List<ISkill> skills, IList<ISkillDay> skillDays, int minimumResolution)
+	    {
+		    IList<IList<IOvertimeSkillIntervalData>> nestedList = new List<IList<IOvertimeSkillIntervalData>>();
+		    foreach (var personsActiveSkill in skills)
+		    {
+			    var filteredSkillDays = skillDays.Where(x => x.Skill == personsActiveSkill).ToList();
+			    if (filteredSkillDays.Count == 0) continue;
+			    var mappedData =
+				    _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
+					    filteredSkillDays.SelectMany(x => x.SkillStaffPeriodCollection));
+			    if (mappedData.Count > 0)
+				    mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
+			    if (mappedData.Count > 0)
+				    nestedList.Add(mappedData);
+		    }
+		    return nestedList;
+	    }
+
+	    private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
         {
             var ret = new List<ISkill>();
             var personPeriod = person.Period(dateOnly);

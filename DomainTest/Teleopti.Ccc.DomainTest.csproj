@@ -579,6 +579,7 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeServiceTest.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRuleTest.cs" />

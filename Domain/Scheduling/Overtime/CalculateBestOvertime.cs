@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface ICalculateBestOvertime
     {
-        IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod,  IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility);
+        IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod,  IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents);
     }
 
     public class CalculateBestOvertime : ICalculateBestOvertime
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		    _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
 	    }
 
-		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
+		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents)
         {
 			var periods = new List<DateTimePeriod>();
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 var period = new DateTimePeriod(shiftEndingTime, shiftEndingTime.Add(duration));
 				if(period.EndDateTime > max) continue;
 
-	            if (onlyOvertimeAvaialbility)
+	            if (onlyAvailableAgents)
 				{
 					var timeZoneInfo = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 					var adjustedPeriods = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, new List<DateTimePeriod> { period });
