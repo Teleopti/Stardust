@@ -2,10 +2,12 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -44,6 +46,26 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var result = target.FindUserData(correctUserName);
 			result.Password.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldFindUserDetails()
+		{
+			var personInDatabase = Session.Get<Person>(personId);
+			var userDetails = new UserDetail(personInDatabase)
+			{
+				LastPasswordChange = DateTime.UtcNow,
+				InvalidAttemptsSequenceStart = DateTime.UtcNow.AddHours(-1),
+				InvalidAttempts = 73
+			};
+			PersistAndRemoveFromUnitOfWork(userDetails);
+
+
+			var result = target.FindUserData(correctUserName);
+			result.LastPasswordChange.Should().Be.IncludedIn(userDetails.LastPasswordChange.AddMinutes(-1), userDetails.LastPasswordChange.AddMinutes(1));
+			result.InvalidAttemptsSequenceStart.Should().Be.IncludedIn(userDetails.InvalidAttemptsSequenceStart.AddMinutes(-1), userDetails.InvalidAttemptsSequenceStart.AddMinutes(1));
+			result.InvalidAttempts.Should().Be.EqualTo(userDetails.InvalidAttempts);
+			result.IsLocked.Should().Be.EqualTo(userDetails.IsLocked);
 		}
 		
 		[Test]
@@ -97,6 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				var rep = new PersonRepository(uow);
 				var personInDatabase = rep.Get(personId);
 				rep.Remove(personInDatabase);
+				uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
 				uow.PersistAll();
 			}
 		}

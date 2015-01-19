@@ -10,8 +10,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private readonly Func<ITennantDatabaseConnectionFactory> _tennantDatabaseConnectionFactory;
 
 		private const string sql = @"
-select auth.Person, auth.Password from ApplicationAuthenticationInfo auth
+select auth.Person, auth.Password, ud.LastPasswordChange, ud.InvalidAttemptsSequenceStart, ud.InvalidAttempts
+from ApplicationAuthenticationInfo auth
 inner join Person p on p.Id=auth.Person
+left outer join UserDetail ud on p.Id=ud.Person
 where ApplicationLogonName=@userName
 and (p.TerminalDate is null or p.TerminalDate>getdate())";
 
@@ -37,7 +39,10 @@ and (p.TerminalDate is null or p.TerminalDate>getdate())";
 								Success = true,
 								PersonId = reader.GetGuid(reader.GetOrdinal("Person")),
 								Tennant = "Teleopti WFM", //will be changed and read from db later
-								Password = reader.GetString(reader.GetOrdinal("Password"))
+								Password = reader.GetString(reader.GetOrdinal("Password")),
+								LastPasswordChange = new DateTime(reader.GetDateTime(reader.GetOrdinal("LastPasswordChange")).Ticks, DateTimeKind.Utc),
+								InvalidAttemptsSequenceStart = new DateTime(reader.GetDateTime(reader.GetOrdinal("InvalidAttemptsSequenceStart")).Ticks, DateTimeKind.Utc),
+								InvalidAttempts = reader.GetInt32(reader.GetOrdinal("InvalidAttempts"))
 							};
 						}
 						return new ApplicationUserQueryResult { Success = false };
