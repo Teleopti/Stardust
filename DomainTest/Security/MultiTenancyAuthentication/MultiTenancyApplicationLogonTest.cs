@@ -91,24 +91,6 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			_model.SelectedDataSourceContainer.Should().Be.Null();
 		}
 
-		[Test]
-		public void ShouldReturnFailureIfNoPerson()
-		{
-			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
-				.Return(new AuthenticationQueryResult { PersonId = _personId, Success = true, Tennant = "WFM" });
-			_dataSourceCont.Stub(x => x.DataSourceName).Return("WFM");
-			_dataSourceCont.Stub(x => x.DataSource).Return(_dataSource);
-			_dataSource.Stub(x => x.Application).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
-			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
-			_personRepository.Stub(x => x.LoadOne(_personId)).Return(null);
-			var result = _target.Logon(_model);
-
-			result.Successful.Should().Be.False();
-			
-		}
-
 		class logonModel :ILogonModel
 		{
 			public bool GetConfigFromWebService { get; set; }

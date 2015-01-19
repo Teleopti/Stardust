@@ -44,11 +44,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personId);
-				if(person == null)
-					return new AuthenticationResult
-					{
-						Successful = false
-					};
 				logonModel.SelectedDataSourceContainer.SetUser(person);
 				logonModel.SelectedDataSourceContainer.LogOnName = logonModel.UserName;
 			}

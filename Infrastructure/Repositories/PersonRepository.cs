@@ -822,11 +822,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IPerson LoadOne(Guid id)
 		{
 			var foundPerson = Session.CreateCriteria(typeof(Person), "person")
-					 .Add(Restrictions.Eq("Id",id))
-					 .Add(Restrictions.Disjunction()
-								 .Add(Restrictions.IsNull("TerminalDate"))
-								 .Add(Restrictions.Ge("TerminalDate", DateOnly.Today))).UniqueResult<IPerson>();
-			
+					.Add(Restrictions.Eq("Id",id))
+					.UniqueResult<IPerson>();
 
 			if (foundPerson != null)
 			{
