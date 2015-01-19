@@ -64,6 +64,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				.Success.Should().Be.False();
 		}
 
+		[Test]
+		public void DeletedUserShouldFail()
+		{
+			var personInDatabase = Session.Get<Person>(personId);
+			personInDatabase.SetDeleted();
+			PersistAndRemoveFromUnitOfWork(personInDatabase);
+
+			target.FindUserData(correctUserName)
+				.Success.Should().Be.False();
+		}
+
 		[SetUp]
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
