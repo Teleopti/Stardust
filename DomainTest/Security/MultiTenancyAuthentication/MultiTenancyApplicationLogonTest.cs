@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,28 +18,19 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		private MultiTenancyApplicationLogon _target;
 		private IRepositoryFactory _repositoryFactory;
 		private IAuthenticationQuerier _authenticationQuerier;
-		private IPersonRepository _personRepository;
-		private IPerson _person;
-		private IDataSourceContainer _dataSourceCont;
 		private IDataSource _dataSource;
-		private IUnitOfWork _uow;
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private DataSourceContainer _dataSourceCont;
 		private logonModel _model;
-		private Guid _personId;
 
 		[SetUp]
 		public void Setup()
 		{
 			_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			_authenticationQuerier = MockRepository.GenerateMock<IAuthenticationQuerier>();
-			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_person = PersonFactory.CreatePerson("kalle");
-			_dataSourceCont = MockRepository.GenerateMock<IDataSourceContainer>();
 			_dataSource = MockRepository.GenerateMock<IDataSource>();
-			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_dataSource.Expect(x => x.DataSourceName).Return("Teleopti WFM");
+			_dataSourceCont = new DataSourceContainer(_dataSource, _repositoryFactory, null, AuthenticationTypeOption.Application);
 			_model = new logonModel { DataSourceContainers = new List<IDataSourceContainer> { _dataSourceCont }, UserName = "kalle", Password = "kula" };
-			_personId = Guid.NewGuid();
 
 			_target = new MultiTenancyApplicationLogon(_repositoryFactory, _authenticationQuerier);
 		}
@@ -47,16 +38,17 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		[Test]
 		public void ShouldReturnSuccessOnSuccess()
 		{
-			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var personId = Guid.NewGuid();
+			var person = new Person();
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
-				.Return(new AuthenticationQueryResult {PersonId = _personId, Success = true, Tennant = "WFM"});
-			_dataSourceCont.Stub(x => x.DataSourceName).Return("WFM");
-			_dataSourceCont.Stub(x => x.DataSource).Return(_dataSource);
-			_dataSource.Stub(x => x.Application).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
-			_repositoryFactory.Stub(x => x.CreatePersonRepository(_uow)).Return(_personRepository);
-			_personRepository.Stub(x => x.LoadOne(_personId)).Return(_person);
-			_dataSourceCont.Expect(x => x.SetUser(_person));
+				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM" });
+			_dataSource.Stub(x => x.Application).Return(uowFactory);
+			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			personRepository.Stub(x => x.LoadOne(personId)).Return(person);
 			var result = _target.Logon(_model);
 
 			result.Successful.Should().Be.True();
@@ -67,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		[Test]
 		public void ShouldReturnFailureOnNoSuccess()
 		{
-			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
 				.Return(new AuthenticationQueryResult { Success = false });
 
@@ -80,11 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		[Test]
 		public void ShouldReturnFailureIfNoMatchingDatasource()
 		{
-			_dataSourceCont.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
-				.Return(new AuthenticationQueryResult { PersonId = _personId, Success = true, Tennant = "WFM" });
-			_dataSourceCont.Stub(x => x.DataSourceName).Return("Not WFM");
-			_dataSourceCont.Stub(x => x.DataSource).Return(_dataSource);
+				.Return(new AuthenticationQueryResult { PersonId = Guid.NewGuid(), Success = true, Tennant = "Wrong tennant" });
 			var result = _target.Logon(_model);
 
 			result.Successful.Should().Be.False();
@@ -104,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			public string Password { get; set; }
 			public bool HasValidLogin()
 			{
-				throw new System.NotImplementedException();
+				throw new NotImplementedException();
 			}
 		}
 	}
