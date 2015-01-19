@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[Test]
 		public void ShouldFindTennant()
 		{
+			//this will change in the future
 			var result = target.FindUserData(correctUserName);
-			result.Tennant.Should().Be.EqualTo("FIX LATER");
+			result.Tennant.Should().Be.EqualTo("Teleopti WFM");
 		}
 
 		[Test]

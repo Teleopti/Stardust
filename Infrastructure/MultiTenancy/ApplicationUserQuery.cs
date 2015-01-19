@@ -36,7 +36,7 @@ and (p.TerminalDate is null or p.TerminalDate>getdate())";
 							{
 								Success = true,
 								PersonId = reader.GetGuid(reader.GetOrdinal("Person")),
-								Tennant = "FIX LATER",
+								Tennant = "Teleopti WFM", //will be changed and read from db later
 								Password = reader.GetString(reader.GetOrdinal("Password"))
 							};
 						}
