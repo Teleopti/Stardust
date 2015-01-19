@@ -317,6 +317,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>();
 			builder.RegisterType<OvertimePeriodValueMapper>();
 			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>();
+			builder.RegisterType<OvertimeSkillIntervalDataToSkillIntervalDataMapper>().As<IOvertimeSkillIntervalDataToSkillIntervalDataMapper>();
 			
 			builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();

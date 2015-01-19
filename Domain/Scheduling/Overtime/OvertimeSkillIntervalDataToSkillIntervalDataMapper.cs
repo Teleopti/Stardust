@@ -2,7 +2,12 @@
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public class OvertimeSkillIntervalDataToSkillIntervalDataMapper
+	public interface IOvertimeSkillIntervalDataToSkillIntervalDataMapper
+	{
+		ISkillIntervalData Map(IOvertimeSkillIntervalData source);
+	}
+
+	public class OvertimeSkillIntervalDataToSkillIntervalDataMapper : IOvertimeSkillIntervalDataToSkillIntervalDataMapper
 	{
 		public ISkillIntervalData Map(IOvertimeSkillIntervalData source)
 		{

@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IOvertimeDateTimePeriodExtractor
 	{
-		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDurantion, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod);
+		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod, IEnumerable<DateTimePeriod> openHoursList);
 	}
 
 	public class OvertimeDateTimePeriodExtractor : IOvertimeDateTimePeriodExtractor
 	{
-		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDurantion, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod)
+		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod, IEnumerable<DateTimePeriod> openHoursList)
 		{
 			IList<IOvertimeDateTimePeriodHolder>  dateTimePeriodHolders = new List<IOvertimeDateTimePeriodHolder>();
 			var shiftPeriod = visualLayerCollection.Period().GetValueOrDefault();
@@ -23,44 +23,74 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var intersection = specificPeriod.Intersection(shiftPeriod);
 			if (intersection == null && !specificPeriod.AdjacentTo(shiftPeriod)) return dateTimePeriodHolders;
 
-			for (var minutes = minimumResolution; minutes <= overtimeDurantion.Maximum.TotalMinutes; minutes += minimumResolution)
+			for (var minutes = minimumResolution; minutes <= overtimeDuration.Maximum.TotalMinutes; minutes += minimumResolution)
 			{
 				var duration = TimeSpan.FromMinutes(minutes);
-				if (duration < overtimeDurantion.Minimum) continue;
+				if (duration < overtimeDuration.Minimum) continue;
 
 				var periodBefore = new DateTimePeriod(shiftStart.Add(-duration), shiftStart);
+				var openPeriodBefore = openOvertimePeriod(periodBefore, openHoursList);
 
-				if (specificPeriod.Contains(periodBefore))
+				if (openPeriodBefore.HasValue)
 				{
-					var firstLayer = visualLayerCollection.First();
-					var firstLayerDefinitionSet = firstLayer.DefinitionSet;
-					var firstLayerIsAbsence = ((VisualLayer) firstLayer).HighestPriorityAbsence != null;
-
-					if (!firstLayerIsAbsence && (firstLayerDefinitionSet == null || firstLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+					if(openPeriodBefore.Value.ElapsedTime() >= overtimeDuration.Minimum)
 					{
-						var dateTimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-						dateTimePeriodHolderBefore.Add(periodBefore);
-						dateTimePeriodHolders.Add(dateTimePeriodHolderBefore);
+						if (specificPeriod.Contains(openPeriodBefore.Value))
+						{
+							var firstLayer = visualLayerCollection.First();
+							var firstLayerDefinitionSet = firstLayer.DefinitionSet;
+							var firstLayerIsAbsence = ((VisualLayer) firstLayer).HighestPriorityAbsence != null;
+
+							if (!firstLayerIsAbsence &&
+							    (firstLayerDefinitionSet == null || firstLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+							{
+								var dateTimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
+								dateTimePeriodHolderBefore.Add(periodBefore);
+								dateTimePeriodHolders.Add(dateTimePeriodHolderBefore);
+							}
+						}
 					}
 				}
 
 				var periodAfter = new DateTimePeriod(shiftEnd, shiftEnd.Add(duration));
-				if (specificPeriod.Contains(periodAfter))
-				{
-					var lastLayer = visualLayerCollection.Last();
-					var lastLayerDefinitionSet = lastLayer.DefinitionSet;
-					var lastLayerIsAbsence = ((VisualLayer)lastLayer).HighestPriorityAbsence != null;
+				var openPeriodAfter = openOvertimePeriod(periodAfter, openHoursList);
 
-					if (!lastLayerIsAbsence && (lastLayerDefinitionSet == null || lastLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+				if (openPeriodAfter.HasValue)
+				{
+					if (openPeriodAfter.Value.ElapsedTime() >= overtimeDuration.Minimum)
 					{
-						var dateTimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
-						dateTimePeriodHolderAfter.Add(periodAfter);
-						dateTimePeriodHolders.Add(dateTimePeriodHolderAfter);
+						if (specificPeriod.Contains(openPeriodAfter.Value))
+						{
+							var lastLayer = visualLayerCollection.Last();
+							var lastLayerDefinitionSet = lastLayer.DefinitionSet;
+							var lastLayerIsAbsence = ((VisualLayer) lastLayer).HighestPriorityAbsence != null;
+
+							if (!lastLayerIsAbsence &&
+							    (lastLayerDefinitionSet == null || lastLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+							{
+								var dateTimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
+								dateTimePeriodHolderAfter.Add(periodAfter);
+								dateTimePeriodHolders.Add(dateTimePeriodHolderAfter);
+							}
+						}
 					}
 				}	
 			}
 
 			return dateTimePeriodHolders;
+		}
+
+
+
+		private DateTimePeriod? openOvertimePeriod(DateTimePeriod overtimePeriod, IEnumerable<DateTimePeriod> openHoursList)
+		{
+			foreach (var period in openHoursList)
+			{
+				var intersection = overtimePeriod.Intersection(period);
+				if (intersection.HasValue)
+					return intersection; // enough to return the first found period
+			}
+			return null;
 		}
 	}
 }

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 	        using (_mock.Playback())
 	        {
-				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false).First().ElapsedTime(), oneHourTimeSpan);	   
+				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null).First().ElapsedTime(), oneHourTimeSpan);	   
 	        }   
         }
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false);
+				var result = _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
 				Assert.AreEqual(0, result.Count);
 			}
 	    }
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false);
+				var result = _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
 				Assert.AreEqual(0, result.Count);
 			}    
 	    }
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 	        using (_mock.Playback())
 	        {
-				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false).First().ElapsedTime(), oneHourTimeSpan.Add(TimeSpan.FromHours(1)));   
+				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null).First().ElapsedTime(), oneHourTimeSpan.Add(TimeSpan.FromHours(1)));   
 	        }     
         }
 
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion,_overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false).First().ElapsedTime(), overtimeLimitEndTimeSpan);
+				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null).First().ElapsedTime(), overtimeLimitEndTimeSpan);
 			}    
         }
 
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(new TimeSpan(0, 1, 30, 0), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false).First().ElapsedTime());
+				Assert.AreEqual(new TimeSpan(0, 1, 30, 0), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null).First().ElapsedTime());
 			}
         }
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null).Count);
 			}    
         }
 
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).Count);
 			}    
         }
 
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).Count);
 			}     
         }
 
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(TimeSpan.FromMinutes(15), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).First().ElapsedTime());
+				Assert.AreEqual(TimeSpan.FromMinutes(15), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).First().ElapsedTime());
 			}  
         }
 
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).Count);
 			}      
 	    }
 
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).Count);
 			}
         }
 
@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(TimeSpan.FromHours(1), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).First().ElapsedTime());
+				Assert.AreEqual(TimeSpan.FromHours(1), _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).First().ElapsedTime());
 			}
         }
 
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, mappedData, _scheduleDay, 15, false, null).Count);
 			}
         }
 
@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, true).First(), dateTimePeriod);
+				Assert.AreEqual(_target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, true, null).First(), dateTimePeriod);
 			}       
 		}
 
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false).Count);
+				Assert.AreEqual(0, _target.GetBestOvertime(overtimeDurantion, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null).Count);
 			}   
 	    }
     }

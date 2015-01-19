@@ -82,13 +82,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 
-				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _visualLayerCollection, _specifiedPeriod)).Return(_overtimePeriodHolders);
+				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _visualLayerCollection, _specifiedPeriod, null)).Return(_overtimePeriodHolders);
 				Expect.Call(_overtimeRelativeDifferenceCalculator.Calculate(_overtimePeriodHolders, _mappedData, false, _scheduleDay)).Return(_overtimePeriodValues);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false);
+				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(expected, result.First());
 			}
@@ -113,13 +113,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Expect.Call(_scheduleDay.Period).Return(_scheduleDayPeriod);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 
-				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _visualLayerCollection, _specifiedPeriod)).Return(_overtimePeriodHolders);
+				Expect.Call(_overtimeDateTimePeriodExtractor.Extract(15, _overtimeDuration, _visualLayerCollection, _specifiedPeriod, null)).Return(_overtimePeriodHolders);
 				Expect.Call(_overtimeRelativeDifferenceCalculator.Calculate(_overtimePeriodHolders, _mappedData, false, _scheduleDay)).Return(_overtimePeriodValues);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false);
+				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
 				Assert.AreEqual(0, result.Count);
 			}
 		}

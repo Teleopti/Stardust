@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -20,19 +20,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
-
-	    //private readonly IOvertimeOpenHourForDate _openHourForDate;
+	    private readonly ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
+	    private readonly IOvertimeSkillIntervalDataToSkillIntervalDataMapper _skillIntervalDataMapper; 
 
 
         public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
                                      IOvertimeSkillStaffPeriodToSkillIntervalDataMapper overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
                                      ISchedulingResultStateHolder schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
-                                        IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator)
+                                     IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator,
+									 ISkillIntervalDataOpenHour skillIntervalDataOpenHour,
+									 IOvertimeSkillIntervalDataToSkillIntervalDataMapper skillIntervalDataMapper
+			)
         {
             _overtimePeriodValueMapper = overtimePeriodValueMapper;
             _overtimeSkillIntervalDataAggregator = overtimeSkillIntervalDataAggregator;
-            _skillResolutionProvider = skillResolutionProvider;
+	        _skillIntervalDataOpenHour = skillIntervalDataOpenHour;
+	        _skillIntervalDataMapper = skillIntervalDataMapper;
+	        _skillResolutionProvider = skillResolutionProvider;
             _overtimeSkillStaffPeriodToSkillIntervalDataMapper = overtimeSkillStaffPeriodToSkillIntervalDataMapper;
             _overtimeSkillIntervalDataDivider = overtimeSkillIntervalDataDivider;
             _schedulingResultStateHolder = schedulingResultStateHolder;
@@ -54,10 +59,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSkillIntervalDataAggregatedList = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(overtimeSkillIntervalDataList);
 			var mappedAggregatedList = _overtimePeriodValueMapper.Map(overtimeSkillIntervalDataAggregatedList);
 
-			// take the opening hours into account
-			
+			var openHoursList = new List<DateTimePeriod>(); 
+			var skillIntervalDataList = 
+				overtimeSkillIntervalDataAggregatedList.Select(i => _skillIntervalDataMapper.Map(i)).ToList();
+			var openHours = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, dateOnly);
+			DateTimePeriod period = 
+				new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHours.Value.StartTime).ToUniversalTime(), dateOnly.Date.ToLocalTime().Add(openHours.Value.EndTime).ToUniversalTime());
+			openHoursList.Add(period);
+			var openHoursNextDay = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, nextDayDateOnly);
+			DateTimePeriod periodNextDay =
+				new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHoursNextDay.Value.StartTime).ToUniversalTime(), dateOnly.Date.Add(openHoursNextDay.Value.EndTime).ToUniversalTime());
+			openHoursList.Add(periodNextDay);
 
-			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay, minimumResolution, onlyAvailableAgents);
+			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay, minimumResolution, onlyAvailableAgents, openHoursList);
 	        return result;
         }
 
