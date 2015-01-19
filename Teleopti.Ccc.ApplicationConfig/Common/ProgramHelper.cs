@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 								      new CheckSuperUser(
 									  new FindUserDetail(
 									      new CheckUserDetail(
-										  new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy), new CheckPasswordChange(passwordPolicy))),
+										  new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy), new CheckPasswordChange(() => passwordPolicy))),
 									      repositoryFactory), new SystemUserSpecification(),
 									  new SystemUserPasswordSpecification())), repositoryFactory));
 			DataSourceContainer dataSourceContainer = applicationDataSourceProvider.DataSourceList().First();

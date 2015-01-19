@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             passwordPolicy = mocks.StrictMock<IPasswordPolicy>();
             userDetail = mocks.StrictMock<IUserDetail>();
             person = mocks.StrictMock<IPerson>();
-		    target = new CheckPasswordChange(passwordPolicy);
+		    target = new CheckPasswordChange(() => passwordPolicy);
         }
 
         [Test]

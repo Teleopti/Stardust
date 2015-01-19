@@ -111,7 +111,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 									new FindUserDetail(
 										new CheckUserDetail(new CheckPassword(new OneWayEncryption(),
 																			  new CheckBruteForce(passwordPolicy),
-																			  new CheckPasswordChange(passwordPolicy))),
+																			  new CheckPasswordChange(() => passwordPolicy))),
 										_repositoryFactory), new SystemUserSpecification(),
 									new SystemUserPasswordSpecification())), _repositoryFactory)), _logOnOff);
 		}
