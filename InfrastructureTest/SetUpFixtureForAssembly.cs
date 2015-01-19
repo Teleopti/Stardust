@@ -5,10 +5,6 @@ using System.Configuration;
 using System.Linq;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
-using log4net.Appender;
-using log4net.Config;
-using log4net.Core;
-using log4net.Layout;
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -167,6 +163,18 @@ in what infrastructuretest this has happened - it is unknown for me.";
 
 				uow.PersistAll();
 			}
+
+			BackupCcc7Database();
+		}
+
+		public static void BackupCcc7Database()
+		{
+			DataSourceHelper.BackupCcc7Database(123);
+		}
+
+		public static void RestoreCcc7Database()
+		{
+			DataSourceHelper.RestoreCcc7Database(123);
 		}
 
 		internal static IDictionary<string, string> Sql2005conf(string connString, int? timeout)

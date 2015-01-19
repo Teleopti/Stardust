@@ -1,5 +1,4 @@
 ﻿using NHibernate.Transform;
-using NHibernate.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,31 +32,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool HasData()
 		{
-			return ((int) _unitOfWork.Current() .CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult()) > 0;
+			return (int) _unitOfWork.Current() .CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult() > 0;
 		}
 
 		public void Clear()
 		{
-			throw new NotImplementedException();
+			_unitOfWork.Current().CreateSqlQuery("DELETE FROM ReadModel.TeamOutOfAdherence ").ExecuteUpdate();
 		}
 
 		public IEnumerable<TeamOutOfAdherenceReadModel> GetForSite(Guid siteId)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM ReadModel.TeamOutOfAdherence WHERE SiteId =:SiteId")
 				.SetParameter("SiteId", siteId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (TeamOutOfAdherenceReadModel)))
-				.List();
-			return result.Cast<TeamOutOfAdherenceReadModel>();
+				.List()
+				.Cast<TeamOutOfAdherenceReadModel>();
 		}
 
 		private TeamOutOfAdherenceReadModel getModel(Guid teamId)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM ReadModel.TeamOutOfAdherence WHERE TeamId =:TeamId")
 				.SetParameter("TeamId", teamId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (TeamOutOfAdherenceReadModel))).List();
-			return (TeamOutOfAdherenceReadModel) result.FirstOrNull();
+				.SetResultTransformer(Transformers.AliasToBean(typeof (TeamOutOfAdherenceReadModel)))
+				.List()
+				.Cast<TeamOutOfAdherenceReadModel>()
+				.SingleOrDefault();
 		}
 
 		private void updateReadModel(TeamOutOfAdherenceReadModel model)

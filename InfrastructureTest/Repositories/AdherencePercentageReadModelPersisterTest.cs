@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.HasData().Should().Be.True();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldKnowIfThereIsNoData()
 		{
 			Target.HasData().Should().Be.False();

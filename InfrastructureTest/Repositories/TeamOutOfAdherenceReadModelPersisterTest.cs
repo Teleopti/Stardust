@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldKnowIfThereIsData()
 		{
-			Target.Persist(new TeamOutOfAdherenceReadModel {TeamId = Guid.NewGuid(), Count = 1});
+			Target.Persist(new TeamOutOfAdherenceReadModel());
 
 			Target.HasData().Should().Be.True();
 		}
@@ -93,6 +93,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldKnowIfThereIsNoData()
 		{
+			Target.HasData().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldClear()
+		{
+			Target.Persist(new TeamOutOfAdherenceReadModel());
+
+			Target.Clear();
+
 			Target.HasData().Should().Be.False();
 		}
 

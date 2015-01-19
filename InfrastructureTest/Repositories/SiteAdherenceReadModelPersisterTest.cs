@@ -87,15 +87,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldKnowIfThereIsData()
 		{
-			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = Guid.NewGuid()});
+			Target.Persist(new SiteOutOfAdherenceReadModel ());
 
 			Target.HasData().Should().Be.True();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldKnowIfThereIsNoData()
 		{
 			Target.HasData().Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldClear()
+		{
+			Target.Persist(new SiteOutOfAdherenceReadModel());
+
+			Target.Clear();
+
+			Target.HasData().Should().Be.False();
+		}
+
 	}
 }

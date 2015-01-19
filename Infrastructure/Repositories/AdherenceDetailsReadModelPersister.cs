@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
-			var readModel = new AdherenceDetailsReadModel();
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
 				"	PersonId," +
@@ -67,43 +66,44 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("Model", NHibernateUtil.String)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
-				.SetReadOnly(true)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(adherenceDetailsReadModel)))
-				.List<adherenceDetailsReadModel>().FirstOrDefault();
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.List<internalModel>()
+				.FirstOrDefault();
+
 			if (result == null) return null;
-			readModel.PersonId = result.PersonId;
-			readModel.Date = result.Date;
-			readModel.Model = new NewtonsoftJsonDeserializer().DeserializeObject<AdherenceDetailsModel>(result.Model);
-			return readModel;
+
+			return new AdherenceDetailsReadModel
+			{
+				PersonId = result.PersonId,
+				Date = result.Date,
+				Model = new NewtonsoftJsonDeserializer().DeserializeObject<AdherenceDetailsModel>(result.Model)
+			};
 		}
 
 		public void ClearDetails(AdherenceDetailsReadModel model)
 		{
 			model.Model.Details.Clear();
 			_unitOfWork.Current().CreateSqlQuery(
-			"UPDATE ReadModel.AdherenceDetails SET" +
-			"			Model = :Model " +
-			"WHERE " +
-			"	PersonId = :PersonId AND " +
-			"	BelongsToDate =:Date")
-			.SetGuid("PersonId", model.PersonId)
-			.SetDateTime("Date", model.BelongsToDate)
-			.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
-			.ExecuteUpdate();
+				"UPDATE ReadModel.AdherenceDetails SET" +
+				"			Model = :Model " +
+				"WHERE " +
+				"	PersonId = :PersonId AND " +
+				"	BelongsToDate =:Date")
+				.SetGuid("PersonId", model.PersonId)
+				.SetDateTime("Date", model.BelongsToDate)
+				.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
+				.ExecuteUpdate();
 		}
 
 		public bool HasData()
 		{
-			var result = (int)_unitOfWork.Current()
-				.CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherenceDetails ").UniqueResult();
-			return result > 0;
+			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.AdherenceDetails ").UniqueResult() > 0;
 		}
 
-		class adherenceDetailsReadModel
+		private class internalModel
 		{
 			public Guid PersonId { get; set; }
 			public DateTime Date { get; set; }
-			public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
 			public string Model { get; set; }
 		}
 	}

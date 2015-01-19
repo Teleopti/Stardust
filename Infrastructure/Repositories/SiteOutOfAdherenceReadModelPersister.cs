@@ -34,32 +34,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<SiteOutOfAdherenceReadModel> GetForBusinessUnit(Guid businessUnitId)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM ReadModel.SiteOutOfAdherence WHERE BusinessUnitId =:BusinessUnitId")
 				.SetParameter("BusinessUnitId", businessUnitId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel))).List();
-			return result.Cast<SiteOutOfAdherenceReadModel>();
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
+				.List()
+				.Cast<SiteOutOfAdherenceReadModel>();
 		}
 
 		private SiteOutOfAdherenceReadModel getModel(Guid siteId)
 		{
-			var result = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM ReadModel.SiteOutOfAdherence WHERE SiteId =:SiteId")
 				.SetParameter("SiteId", siteId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel))).List();
-			return (SiteOutOfAdherenceReadModel)result.FirstOrNull();
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
+				.List()
+				.Cast<SiteOutOfAdherenceReadModel>()
+				.SingleOrDefault();
 		}
 
 		public void Clear()
 		{
-			throw new NotImplementedException();
+			_unitOfWork.Current().CreateSqlQuery("DELETE FROM ReadModel.SiteOutOfAdherence ").ExecuteUpdate();
 		}
 
 		public bool HasData()
 		{
-			var result = (int)_unitOfWork.Current()
-				.CreateSqlQuery("SELECT count(*) FROM ReadModel.SiteOutOfAdherence ").UniqueResult();
-			return result > 0;
+			return (int) _unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.SiteOutOfAdherence ").UniqueResult() > 0;
 		}
 
 		private void updateReadModel(SiteOutOfAdherenceReadModel model)

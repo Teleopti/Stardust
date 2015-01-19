@@ -109,6 +109,11 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
+		public static void RestoreCcc7Database(int dataHash)
+		{
+			RestoreCcc7Database(dataHash, null);
+		}
+
 		public static void RestoreCcc7Database(int dataHash, Action beforeRestore)
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);

@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.LastStateChangedTime.Should().Be(detailModel.LastStateChangedTime);
 		}
 
-
 		[Test]
 		public void ShouldSaveWithNullables()
 		{
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.HasData().Should().Be.True();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldKnowIfThereIsNoData()
 		{
 			Target.HasData().Should().Be.False();

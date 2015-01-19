@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		protected override void BeforeTest()
 		{
+			SetupFixtureForAssembly.RestoreCcc7Database();
 			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvokation();
 		}
 
 		protected override void AfterTest()
 		{
 			Resolve<IReadModelUnitOfWorkAspect>().OnAfterInvokation(null);
-			DataSourceHelper.RestoreCcc7Database(0, () => {});
 		}
 	}
 }

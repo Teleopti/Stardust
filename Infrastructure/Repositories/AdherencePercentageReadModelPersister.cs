@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using NHibernate.Util;
@@ -21,13 +22,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var existingReadModel = Get(model.BelongsToDate, model.PersonId);
 			if (existingReadModel == null)
-			{
 				saveReadModel(model);
-			}
 			else
-			{
 				updateReadModel(model);
-			}
 		}
 
 		private void updateReadModel(AdherencePercentageReadModel model)
@@ -85,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			var result = _unitOfWork.Current().CreateSqlQuery(
+			return _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
 				"	PersonId," +
 				"	BelongsToDate AS Date," +
@@ -106,16 +103,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AdherencePercentageReadModel)))
-				.List<AdherencePercentageReadModel>();
-			return (AdherencePercentageReadModel)result.FirstOrNull();
+				.SetResultTransformer(Transformers.AliasToBean(typeof (AdherencePercentageReadModel)))
+				.List<AdherencePercentageReadModel>()
+				.SingleOrDefault();
 		}
 
 		public bool HasData()
 		{
-			var result = (int)_unitOfWork.Current()
-				.CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherencePercentage ").UniqueResult();
-			return result > 0;
+			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherencePercentage ").UniqueResult() > 0;
 		}
 	}
 }
