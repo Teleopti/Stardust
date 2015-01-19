@@ -11,13 +11,13 @@ namespace Teleopti.Interfaces.Domain
 	{
 		DateOnly Date { get; }
 
+		DateOnly ValidTo { get; }
+
 		DateTimePeriod? MyShiftPeriod { get; }
 
 		long Checksum { get; }
 
 		ShiftExchangeOfferStatus Status { get; set; }
-
-		IShiftExchangeCriteria Criteria { get; set; }
 
 		bool IsWantedSchedule(IScheduleDay scheduleToCheck);
 
@@ -26,5 +26,7 @@ namespace Teleopti.Interfaces.Domain
 		string GetStatusText();
 
 		bool IsExpired();
+
+		ShiftExchangeLookingForDay DayType { get; }
 	}
 }

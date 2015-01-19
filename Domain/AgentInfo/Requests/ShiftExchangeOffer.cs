@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class ShiftExchangeOffer : Request, IShiftExchangeOffer
 	{
-		private IShiftExchangeCriteria _criteria;
+		private readonly ShiftExchangeCriteria _criteria;
 		private DateOnly _date;
 		private DateTimePeriod? _myShiftPeriod;
 		private IPerson _person;
@@ -39,6 +39,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual DateOnly Date
 		{
 			get { return _date; }
+		}
+
+		public virtual DateOnly ValidTo
+		{
+			get { return _criteria.ValidTo; }
+		}
+
+		public virtual ShiftExchangeLookingForDay DayType
+		{
+			get { return _criteria.DayType; }
 		}
 
 		public virtual DateTimePeriod? MyShiftPeriod
@@ -97,11 +107,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			get { return _status; }
 			set { _status = value; }
-		}
-
-		public virtual IShiftExchangeCriteria Criteria {
-			get { return _criteria; }
-			set { _criteria = value; }
 		}
 
 		public virtual string GetStatusText()

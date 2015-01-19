@@ -3,48 +3,35 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public struct ShiftExchangeCriteria : IShiftExchangeCriteria
+	public struct ShiftExchangeCriteria
 	{
-		private DateOnly _validTo;
-		private IScheduleDayFilterCriteria _criteria;
+		private readonly DateOnly _validTo;
+		private readonly ScheduleDayFilterCriteria _criteria;
 
-		public DateTimePeriod? ShiftWithin
+		public ShiftExchangeCriteria(DateOnly validTo, ScheduleDayFilterCriteria criteria)
 		{
-			get
-			{
-				return _criteria == null
-					? null
-					: _criteria.ShiftWithin;
-			}
-		}
-
-		public IScheduleDayFilterCriteria Criteria
-		{
-			get { return _criteria; }
-			set { _criteria = value; }
+			_validTo = validTo;
+			_criteria = criteria;
 		}
 
 		public DateOnly ValidTo
 		{
-			get
-			{
-				return _validTo;
-			}
-			set
-			{
-				_validTo = value;
-			}
+			get { return _validTo; }
 		}
 
-		public IScheduleDayFilterCriteria DayFilterCriteria
+		public ShiftExchangeLookingForDay DayType
+		{
+			get { return _criteria.DayType; }
+		}
+
+		public ScheduleDayFilterCriteria DayFilterCriteria
 		{
 			get { return _criteria; }
 		}
 
-		public ShiftExchangeCriteria(DateOnly validTo, IScheduleDayFilterCriteria criteria)
+		public DateTimePeriod? ShiftWithin
 		{
-			_validTo = validTo;
-			_criteria = criteria;
+			get { return _criteria.ShiftWithin; }
 		}
 
 		[Pure]

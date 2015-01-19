@@ -168,14 +168,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				}))
 				.ForMember(d => d.ExchangeOffer, o => o.ResolveUsing((s =>
 				{
-					var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
-					return shiftExchangeOffer != null
-						? new ShiftExchangeOfferRequestViewModel
+					if (s.Request.RequestType == RequestType.ShiftExchangeOffer)
+					{
+						var offer = s.Request as IShiftExchangeOffer;
+						return new ShiftExchangeOfferRequestViewModel
 						{
-							WishShiftType = shiftExchangeOffer.Criteria.Criteria.DayType.ToString(),
-							ValidTo = shiftExchangeOffer.Criteria.ValidTo.Date
-						}
-						: null;
+							WishShiftType = offer.DayType.ToString(),
+							ValidTo = offer.ValidTo
+						};
+					}
+					
+					return null;
 				})));
 
 			CreateMap<IPersonRequest, Link>()
@@ -216,9 +219,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				}
 			}
 
-			var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
-			if (shiftExchangeOffer != null)
+			if (s.Request.RequestType == RequestType.ShiftExchangeOffer)
 			{
+				var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
 				ret = shiftExchangeOffer.GetStatusText();
 			}
 			return ret;

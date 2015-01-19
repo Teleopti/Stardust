@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public struct ScheduleDayFilterCriteria : IScheduleDayFilterCriteria
+	public struct ScheduleDayFilterCriteria
 	{
 		private readonly ShiftExchangeLookingForDay _dayType;
 		private readonly DateTimePeriod? _shiftWithin;
