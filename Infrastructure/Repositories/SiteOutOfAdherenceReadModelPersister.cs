@@ -57,7 +57,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool HasData()
 		{
-			throw new NotImplementedException();
+			var result = (int)_unitOfWork.Current()
+				.CreateSqlQuery("SELECT count(*) FROM ReadModel.SiteOutOfAdherence ").UniqueResult();
+			return result > 0;
 		}
 
 		private void updateReadModel(SiteOutOfAdherenceReadModel model)

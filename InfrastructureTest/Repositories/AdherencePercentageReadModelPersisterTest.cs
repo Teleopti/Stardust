@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -140,6 +141,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var savedModel = Target.Get(dateOnly, personGuid);
 			savedModel.IsLastTimeInAdherence.Should().Be(null);
 			savedModel.LastTimestamp.Should().Be(null);
+		}
+
+
+		[Test]
+		public void ShouldKnowIfThereIsData()
+		{
+			Target.Persist(new AdherencePercentageReadModel {PersonId = Guid.NewGuid(), Date = "2015-01-19".Utc()});
+
+			Target.HasData().Should().Be.True();
+		}
+
+		[Test, Ignore]
+		public void ShouldKnowIfThereIsNoData()
+		{
+			Target.HasData().Should().Be.False();
 		}
 	}
 }

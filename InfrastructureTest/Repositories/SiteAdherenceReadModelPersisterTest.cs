@@ -83,5 +83,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var models = Target.GetForBusinessUnit(buId1);
 			models.Select(x => x.SiteId).Should().Have.SameValuesAs(new[] {site1, site2});
 		}
+
+		[Test]
+		public void ShouldKnowIfThereIsData()
+		{
+			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = Guid.NewGuid()});
+
+			Target.HasData().Should().Be.True();
+		}
+
+		[Test, Ignore]
+		public void ShouldKnowIfThereIsNoData()
+		{
+			Target.HasData().Should().Be.False();
+		}
 	}
 }

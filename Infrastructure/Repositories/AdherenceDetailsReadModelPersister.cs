@@ -94,7 +94,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool HasData()
 		{
-			return false;
+			var result = (int)_unitOfWork.Current()
+				.CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherenceDetails ").UniqueResult();
+			return result > 0;
 		}
 
 		class adherenceDetailsReadModel

@@ -113,7 +113,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool HasData()
 		{
-			return false;
+			var result = (int)_unitOfWork.Current()
+				.CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherencePercentage ").UniqueResult();
+			return result > 0;
 		}
 	}
 }

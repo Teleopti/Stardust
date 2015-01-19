@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -242,6 +243,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Name = activityName,
 				StartTime = startTime,
 			};
+		}
+
+		[Test]
+		public void ShouldKnowIfThereIsData()
+		{
+			Target.Add(new AdherenceDetailsReadModel{ PersonId = Guid.NewGuid(), Date = "2015-01-19".Utc()});
+
+			Target.HasData().Should().Be.True();
+		}
+
+		[Test, Ignore]
+		public void ShouldKnowIfThereIsNoData()
+		{
+			Target.HasData().Should().Be.False();
 		}
 	}
 
