@@ -82,5 +82,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			readModel.Single().TeamId.Should().Be(teamId1);
 		}
 
+		[Test]
+		public void ShouldKnowIfThereIsData()
+		{
+			Target.Persist(new TeamOutOfAdherenceReadModel {TeamId = Guid.NewGuid(), Count = 1});
+
+			Target.HasData().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldKnowIfThereIsNoData()
+		{
+			Target.HasData().Should().Be.False();
+		}
+
 	}
 }

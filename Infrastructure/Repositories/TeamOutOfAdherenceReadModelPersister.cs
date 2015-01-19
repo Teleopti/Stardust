@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool HasData()
 		{
-			throw new NotImplementedException();
+			return ((int) _unitOfWork.Current() .CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult()) > 0;
 		}
 
 		public void Clear()

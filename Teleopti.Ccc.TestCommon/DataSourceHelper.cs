@@ -15,9 +15,6 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		private const string backupFileDbWithoutDataFileExtension = ".backup";
-		private const string backupFileDbWithDataFileExtension = ".backupWithData";
-
 		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
@@ -25,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon
 			if (!tryRestoreDatabase(ccc7))
 			{
 				createCcc7(ccc7);
-				backupDatabase(ccc7, 0, backupFileDbWithoutDataFileExtension);
+				backupDatabase(ccc7, 0);
 			}
 			setupAnalytics();
 			return CreateDataSource(dataSourceFactory, name);
@@ -75,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon
 				return;
 
 			createDatabase(analytics);
-			backupDatabase(analytics, 0, backupFileDbWithoutDataFileExtension);
+			backupDatabase(analytics, 0);
 		}
 
 		private static void createDatabase(DatabaseHelper database)
@@ -100,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon
 						return false;
 
 					var backupName = DataSourceHelper.backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, 0);
-					var fileName = backupName + backupFileDbWithoutDataFileExtension;
+					var fileName = backupName + ".backup";
 					if (!File.Exists(fileName))
 						return false;
 
@@ -116,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
 			var backupName = DataSourceHelper.backupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
-			var fileName = backupName + backupFileDbWithDataFileExtension;
+			var fileName = backupName + ".backup";
 			var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(fileName));
 			if(beforeRestore!=null)
 				beforeRestore();
@@ -126,25 +123,25 @@ namespace Teleopti.Ccc.TestCommon
 		public static void BackupCcc7Database(int dataHash)
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			backupDatabase(ccc7, dataHash, backupFileDbWithDataFileExtension);
+			backupDatabase(ccc7, dataHash);
 		}
 
 		public static bool Ccc7BackupExists(int dataHash)
 		{
 			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
 			var backupName = DataSourceHelper.backupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
-			var fileName = backupName + backupFileDbWithDataFileExtension;
+			var fileName = backupName + ".backup";
 			return File.Exists(fileName);
 		}
 
-		private static void backupDatabase(DatabaseHelper database, int dataHash, string fileExtension)
+		private static void backupDatabase(DatabaseHelper database, int dataHash)
 		{
 			exceptionToConsole(
 				() =>
 				{
 					var backupName = DataSourceHelper.backupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
 					var backup = database.BackupByFileCopy(backupName);
-					var fileName = backupName + fileExtension;
+					var fileName = backupName + ".backup";
 					File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
 				},
 				"Failed to backup database {0}!", database.ConnectionString
