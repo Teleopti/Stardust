@@ -24,6 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			if (foundUser.Password != _oneWayEncryption.EncryptString(password))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
+
+			/////move away - continue later
+			if (foundUser.IsLocked)
+				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
+
+			/////
+
 			return new ApplicationAuthenticationResult
 			{
 				Success = true,

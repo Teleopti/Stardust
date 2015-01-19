@@ -33,11 +33,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 				Password = "thePassword"
 			});
 
-			var target = new ApplicationAuthentication(MockRepository.GenerateMock<IApplicationUserQuery>(), new OneWayEncryption());
-			var res = target.Logon(userName, "validPassword");
+			var target = new ApplicationAuthentication(findApplicationQuery, new OneWayEncryption());
+			var res = target.Logon(userName, "invalidPassword");
 
 			res.Success.Should().Be.False();
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
+		}
+
+		[Test]
+		public void LockedUserShouldFail()
+		{
+			const string userName = "validUserName";
+			const string password = "somePassword";
+
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new ApplicationUserQueryResult
+			{
+				Success = true,
+				Password = encryptPasswordToDbFormat(password),
+				IsLocked = true
+			});
+
+			var target = new ApplicationAuthentication(findApplicationQuery, new OneWayEncryption());
+			var res = target.Logon(userName, password);
+
+			res.Success.Should().Be.False();
+			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedAccountIsLocked);
 		}
 
 		[Test]
