@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		private XmlDocument _configXml;
 
 		public NotificationConfigReader()
-			: this("NotificationConfig.xml")
+			: this("../ServiceBus/NotificationConfig.xml")
 		{ }
 
 		public NotificationConfigReader(string configFile)
