@@ -2,7 +2,6 @@
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces.Domain;

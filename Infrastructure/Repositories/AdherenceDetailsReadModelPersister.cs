@@ -3,8 +3,8 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -12,10 +12,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class AdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _jsonSerializer;
+		private readonly IJsonDeserializer _jsonDeserializer;
 
-		public AdherenceDetailsReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
+		public AdherenceDetailsReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IJsonSerializer jsonSerializer, IJsonDeserializer jsonDeserializer)
 		{
 			_unitOfWork = unitOfWork;
+			_jsonSerializer = jsonSerializer;
+			_jsonDeserializer = jsonDeserializer;
 		}
 
 		public void Add(AdherenceDetailsReadModel model)
@@ -33,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
+				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model))
 				.ExecuteUpdate();
 		}
 
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	BelongsToDate =:Date")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.BelongsToDate)
-				.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
+				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model))
 				.ExecuteUpdate();
 		}
 
@@ -76,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				PersonId = result.PersonId,
 				Date = result.Date,
-				Model = new NewtonsoftJsonDeserializer().DeserializeObject<AdherenceDetailsModel>(result.Model)
+				Model = _jsonDeserializer.DeserializeObject<AdherenceDetailsModel>(result.Model)
 			};
 		}
 
@@ -91,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	BelongsToDate =:Date")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.BelongsToDate)
-				.SetParameter("Model", new NewtonsoftJsonSerializer().SerializeObject(model.Model))
+				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model))
 				.ExecuteUpdate();
 		}
 
