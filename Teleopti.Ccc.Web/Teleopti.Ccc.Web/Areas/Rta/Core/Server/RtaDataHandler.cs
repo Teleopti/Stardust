@@ -5,7 +5,6 @@ using log4net;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
@@ -115,10 +114,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					_agentStateReadModelUpdater, 
 					_messageSender, 
 					_adherenceAggregator,
-					_databaseReader,
-					_agentStateAssembler,
 					() => _agentStateAssembler.MakePreviousState(personId, _databaseReader.GetCurrentActualAgentState(personId)),
-					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.MakePreviousState(scheduleInfo), currentTime)
+					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.PreviousState(scheduleInfo), currentTime)
 					));
 		}
 

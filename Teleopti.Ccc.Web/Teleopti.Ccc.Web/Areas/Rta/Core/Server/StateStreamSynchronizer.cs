@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 						null,
 						null, 
 						null,
-						_databaseReader,
-						_agentStateAssembler,
 						() => _agentStateAssembler.MakeEmpty(s.PersonId),
 						(a, b) => _agentStateAssembler.MakeCurrentStateFromPrevious(s)
 						);

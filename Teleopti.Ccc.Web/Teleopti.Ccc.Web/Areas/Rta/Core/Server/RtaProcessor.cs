@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var input = context.Input;
 
 			var scheduleInfo = new ScheduleInfo(_databaseReader, context.Person.PersonId, context.CurrentTime);
-			var agentStateInfo = new AgentStateInfo(() => context.MakePreviousState(scheduleInfo), () => context.MakeCurrentState(scheduleInfo));
+			var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
 			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
 			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
 			
