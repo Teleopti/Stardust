@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 		[Test]
 		public void NonExistingUserShouldFail()
 		{
-			var target = new ApplicationAuthentication(MockRepository.GenerateMock<IApplicationUserQuery>(), new OneWayEncryption(), new successfulPasswordPolicy());
+			var target = new ApplicationAuthentication(MockRepository.GenerateMock<IApplicationUserQuery>(), new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon("nonExisting", string.Empty);
 			
 			res.Success.Should().Be.False();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 				Password = "thePassword"
 			});
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new OneWayEncryption(), new successfulPasswordPolicy());
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon(userName, "invalidPassword");
 
 			res.Success.Should().Be.False();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			checkPasswordChange.Expect(x => x.Check(theUserDetail))
 				.Return(new AuthenticationResult {HasMessage = true, Message = "THEMESSAGE", Successful = false});
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new OneWayEncryption(), new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange));
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange));
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 				IsLocked = true
 			});
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new OneWayEncryption(), new successfulPasswordPolicy());
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon(userName, password);
 
 			res.Success.Should().Be.False();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(queryResult);
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new OneWayEncryption(), new successfulPasswordPolicy());
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon(userName, password);
 
 			res.Success.Should().Be.True();

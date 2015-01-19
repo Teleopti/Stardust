@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.RegisterType<ConvertDataToOldUserDetailDomain>().As<IConvertDataToOldUserDetailDomain>().SingleInstance();
+			builder.RegisterType<PasswordVerifier>().As<IPasswordVerifier>().SingleInstance();
 			//ta första appdb för nu
 			builder.Register(c =>
 			{

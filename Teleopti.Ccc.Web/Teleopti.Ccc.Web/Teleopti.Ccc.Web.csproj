@@ -401,7 +401,9 @@
     <Compile Include="Areas\Tennant\Core\ConvertDataToOldUserDetailDomain.cs" />
     <Compile Include="Areas\Tennant\Core\IConvertDataToOldUserDetailDomain.cs" />
     <Compile Include="Areas\Tennant\Core\IPasswordPolicyCheck.cs" />
+    <Compile Include="Areas\Tennant\Core\IPasswordVerifier.cs" />
     <Compile Include="Areas\Tennant\Core\PasswordPolicyCheck.cs" />
+    <Compile Include="Areas\Tennant\Core\PasswordVerifier.cs" />
     <Compile Include="Areas\Tennant\Core\TennantModule.cs" />
     <Compile Include="Areas\Tennant\TennantController.cs" />
     <Compile Include="Areas\Tennant\Core\ApplicationAuthentication.cs" />
