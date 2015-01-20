@@ -102,6 +102,7 @@ Scenario: Should possible make shift trade in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 	
+@ignore
 @OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
 Scenario: Should list announced shift
 	Given  I have the role 'Full access to mytime'
