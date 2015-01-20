@@ -4278,6 +4278,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not find datasource with name: {0}.
+        /// </summary>
+        public static string CannotFindDataSourceWithName {
+            get {
+                return ResourceManager.GetString("CannotFindDataSourceWithName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not find the service end point.
         /// </summary>
         public static string CanNotFindTheServiceEndPoint {

@@ -12747,4 +12747,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Log on failed! No account connected to {0}.</value>
     <comment>used when identity not found, for example the windows account is not connected to a person</comment>
   </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>Can not find datasource with name: {0}</value>
+    <comment>used when the tennant in the database has no datasource</comment>
+  </data>
 </root>

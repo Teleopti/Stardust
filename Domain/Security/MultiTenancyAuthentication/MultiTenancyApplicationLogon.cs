@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
@@ -25,7 +26,9 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			if (!result.Success)
 				return new AuthenticationResult
 				{
-					Successful = false
+					Successful = false, 
+					HasMessage = true,
+					Message = result.FailReason
 				};
 
 			var dataSourceName = result.Tennant;
@@ -36,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			if (logonModel.SelectedDataSourceContainer == null)
 				return new AuthenticationResult
 				{
-					Successful = false
+					Successful = false,
+					HasMessage = true,
+					Message = string.Format(Resources.CannotFindDataSourceWithName, dataSourceName)
 				};
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())

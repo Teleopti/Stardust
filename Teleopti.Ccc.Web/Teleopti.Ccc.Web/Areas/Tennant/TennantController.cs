@@ -18,11 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 		public JsonResult ApplicationLogon(string userName, string password)
 		{
 			var res = _applicationAuthentication.Logon(userName, password);
-			if (!res.Success)
-			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 401;
-			}
+			// for now we don't use the statuscode
+			//if (!res.Success)
+			//{
+			//	Response.TrySkipIisCustomErrors = true;
+			//	Response.StatusCode = 401;
+			//}
 
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
@@ -31,11 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 		public JsonResult IdentityLogon(string identity)
 		{
 			var res = _identityAuthentication.Logon(identity);
-			if (!res.Success)
-			{
-				Response.TrySkipIisCustomErrors = true;
-				Response.StatusCode = 401;
-			}
+			// for now we don't use the statuscode
+			//if (!res.Success)
+			//{
+			//	Response.TrySkipIisCustomErrors = true;
+			//	Response.StatusCode = 401;
+			//}
 		
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}

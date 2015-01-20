@@ -2,8 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
@@ -15,7 +13,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 		[Test]
 		public void NonExistingUserShouldFail()
 		{
-			var target = new IdentityAuthentication(MockRepository.GenerateMock<IIdentityUserQuery>());
+			var queryResult = new ApplicationUserQueryResult
+			{
+				Success = false,
+				PersonId = Guid.Empty,
+				Tennant = ""
+			};
+
+			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
+			identityUserQuery.Stub(x => x.FindUserData("nonExisting")).Return(queryResult);
+			var target = new IdentityAuthentication(identityUserQuery);
 			var res = target.Logon("nonExisting");
 			
 			res.Success.Should().Be.False();

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private LogonModel _model;
 		private IDataSourceHandler _dataSourceHandler;
 		private ILoginInitializer _initializer;
-		private ILogonLogger _logonLogger;
 		private ILogOnOff _logOnOff;
 		private MultiTenancyLogonPresenter _target;
 		private IServerEndpointSelector _endPointSelector;
@@ -37,12 +35,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model = new LogonModel();
 			_dataSourceHandler = MockRepository.GenerateMock<IDataSourceHandler>();
 			_initializer = MockRepository.GenerateMock<ILoginInitializer>();
-			_logonLogger = MockRepository.GenerateMock<ILogonLogger>();
 			_logOnOff = MockRepository.GenerateMock<ILogOnOff>();
 			_endPointSelector = MockRepository.GenerateMock<IServerEndpointSelector>();
 			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
-			_target = new MultiTenancyLogonPresenter(_view, _model, _dataSourceHandler, _initializer, _logonLogger, _logOnOff,
+			_target = new MultiTenancyLogonPresenter(_view, _model, _dataSourceHandler, _initializer,  _logOnOff,
 				_endPointSelector, MockRepository.GenerateMock<IMessageBrokerComposite>(), _appLogon, _winLogon);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
@@ -123,25 +120,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.BackButtonClicked();
 		}
 
-		[Test]
-		public void ShouldSaveLoginAttempOnLogin()
-		{
-			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
-			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_model.SelectedDataSourceContainer = dataSourceContainer;
-			_model.UserName = "USER";
-			_model.Password = "PASS";
-			_model.AuthenticationType = AuthenticationTypeOption.Application;
-			_appLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult { HasMessage = true, Message = "ERRRRROR" });
-			_view.Stub(x => x.ShowErrorMessage("ERRRRROR  ", Resources.ErrorMessage));
-			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
-			dataSource.Stub(x => x.Application).Return(uowFact);
-			_logonLogger.Stub(x => x.SaveLogonAttempt(new LoginAttemptModel(), uowFact)).IgnoreArguments();
-			_target.CurrentStep = LoginStep.Login;
-			_target.OkbuttonClicked();
-		}
-
+		
 		[Test]
 		public void ShouldGetBusAfterLogin()
 		{
@@ -230,7 +209,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(uowFact);
-			_logonLogger.Stub(x => x.SaveLogonAttempt(new LoginAttemptModel(), uowFact)).IgnoreArguments();
 			_initializer.Stub(x => x.InitializeApplication(dataSourceContainer)).Return(true);
 			_view.Stub(x => x.Exit(DialogResult.OK));
 
@@ -257,7 +235,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(uowFact);
-			_logonLogger.Stub(x => x.SaveLogonAttempt(new LoginAttemptModel(), uowFact)).IgnoreArguments();
 			_initializer.Stub(x => x.InitializeApplication(dataSourceContainer)).Return(false);
 			_view.Stub(x => x.Exit(DialogResult.Cancel));
 

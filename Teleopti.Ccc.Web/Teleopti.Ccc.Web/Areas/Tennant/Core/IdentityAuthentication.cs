@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		public ApplicationAuthenticationResult Logon(string identity)
 		{
 			var foundUser = _identityUserQuery.FindUserData(identity);
-			if (foundUser == null)
+			if (!foundUser.Success)
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
 			return new ApplicationAuthenticationResult

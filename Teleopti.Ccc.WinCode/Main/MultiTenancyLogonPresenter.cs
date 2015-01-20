@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -23,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogonView _view;
 		private readonly ILogonModel _model;
 		private readonly ILoginInitializer _initializer;
-		private readonly ILogonLogger _logonLogger;
+		//private readonly ILogonLogger _logonLogger;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IServerEndpointSelector _serverEndpointSelector;
 		private readonly IMessageBrokerComposite _messageBroker;
@@ -33,7 +29,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model,
 			IDataSourceHandler dataSourceHandler, ILoginInitializer initializer,
-			ILogonLogger logonLogger, ILogOnOff logOnOff,
+			//ILogonLogger logonLogger, 
+			ILogOnOff logOnOff,
 			IServerEndpointSelector serverEndpointSelector,
 			IMessageBrokerComposite messageBroker,
 			IMultiTenancyApplicationLogon applicationLogon,
@@ -44,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_model = model;
 			_dataSourceHandler = dataSourceHandler;
 			_initializer = initializer;
-			_logonLogger = logonLogger;
+			//_logonLogger = logonLogger;
 			_logOnOff = logOnOff;
 			_serverEndpointSelector = serverEndpointSelector;
 			_messageBroker = messageBroker;
@@ -235,16 +232,6 @@ namespace Teleopti.Ccc.WinCode.Main
 				choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
 				return true;
 			}
-			var model = new LoginAttemptModel
-				{
-					ClientIp = ipAdress(),
-					Client = "WIN",
-					UserCredentials = _model.UserName,
-					Provider = AuthenticationTypeOption.Windows.ToString(),
-					Result = "LogonFailed"
-				};
-
-			_logonLogger.SaveLogonAttempt(model, choosenDataSource.DataSource.Application);
 
 			return false;
 		}
@@ -252,28 +239,14 @@ namespace Teleopti.Ccc.WinCode.Main
 		private bool winLogin()
 		{
 			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model);
-			var choosenDataSource = _model.SelectedDataSourceContainer;
-
+			
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
 
 			if (authenticationResult.Successful)
 			{
-				//To use for silent background log on
-				//choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
 				return true;
 			}
-			var model = new LoginAttemptModel
-			{
-				ClientIp = ipAdress(),
-				Client = "WIN",
-				UserCredentials = _model.UserName,
-				Provider = AuthenticationTypeOption.Windows.ToString(),
-				Result = "LogonFailed"
-			};
-
-			_logonLogger.SaveLogonAttempt(model, choosenDataSource.DataSource.Application);
-
 			return false;
 		}
 
@@ -296,30 +269,30 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 
-			var model = new LoginAttemptModel
-				{
-					ClientIp = ipAdress(),
-					Client = "WIN",
-					UserCredentials = _model.UserName,
-					Provider = _model.AuthenticationType.ToString(),
-					Result = "LogonSuccess"
-				};
-			if (_model.SelectedDataSourceContainer.User != null) model.PersonId = _model.SelectedDataSourceContainer.User.Id;
+			//var model = new LoginAttemptModel
+			//	{
+			//		ClientIp = ipAdress(),
+			//		Client = "WIN",
+			//		UserCredentials = _model.UserName,
+			//		Provider = _model.AuthenticationType.ToString(),
+			//		Result = "LogonSuccess"
+			//	};
+			//if (_model.SelectedDataSourceContainer.User != null) model.PersonId = _model.SelectedDataSourceContainer.User.Id;
 
-			_logonLogger.SaveLogonAttempt(model, _model.SelectedDataSourceContainer.DataSource.Application);
+			//_logonLogger.SaveLogonAttempt(model, _model.SelectedDataSourceContainer.DataSource.Application);
 
 			StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption =
 				_model.SelectedDataSourceContainer.AuthenticationTypeOption;
 		}
 
-		private static string ipAdress()
-		{
-			var ips = Dns.GetHostEntry(Dns.GetHostName());
-			var ip = "";
-			foreach (var adress in ips.AddressList.Where(adress => adress.AddressFamily == AddressFamily.InterNetwork))
-				ip = adress.ToString();
-			return ip;
-		}
+		//private static string ipAdress()
+		//{
+		//	var ips = Dns.GetHostEntry(Dns.GetHostName());
+		//	var ip = "";
+		//	foreach (var adress in ips.AddressList.Where(adress => adress.AddressFamily == AddressFamily.InterNetwork))
+		//		ip = adress.ToString();
+		//	return ip;
+		//}
 	}
 
 	
