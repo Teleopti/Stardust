@@ -3,7 +3,7 @@ using Teleopti.Ccc.Infrastructure.DistributedLock;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class DistributedLockModule : Module
+	internal class DistributedLockModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
