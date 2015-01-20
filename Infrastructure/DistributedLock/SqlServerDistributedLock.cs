@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			var lockResult = (int) command.Parameters["@Result"].Value;
 
 			if (lockResult < 0)
-				throw new Exception(string.Format("Could not place a lock on the resource " + _resource));
+				throw new DistributedLockException(string.Format("Could not place a lock on the resource " + _resource));
 		}
 
 		public void Dispose()
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			var releaseResult = (int)command.Parameters["@Result"].Value;
 
 			if (releaseResult < 0)
-				throw new Exception(string.Format("Could not release a lock on the resource " + _resource));
+				throw new DistributedLockException(string.Format("Could not release a lock on the resource " + _resource));
 		}
 	}
 }

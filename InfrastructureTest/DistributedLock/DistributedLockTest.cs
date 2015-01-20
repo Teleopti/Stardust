@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					oneRunning.Set();
-					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromSeconds(1));
+					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			var two = onAnotherThread(() =>
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					oneRunning.Set();
-					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromSeconds(1));
+					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			var two = onAnotherThread(() =>
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock2()))
 				{
 					twoRunning.Set();
-					oneRanWhileTwoWasRunning = oneRunning.WaitOne(TimeSpan.FromSeconds(1));
+					oneRanWhileTwoWasRunning = oneRunning.WaitOne(TimeSpan.FromMilliseconds(500));
 				}
 			});
 			one.Join();
@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		{
 			ConfigReader.AppSettings.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
 			var isLocking = new ManualResetEvent(false);
-			var timedout = new ManualResetEvent(false);
 			var ran = false;
 
 			var locking = onAnotherThread(() =>
@@ -87,20 +86,54 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				using (Target.LockForTypeOf(new Lock1()))
 				{
 					isLocking.Set();
-					timedout.WaitOne(TimeSpan.FromSeconds(1));
+					Thread.Sleep(500);
 				}
 			});
 			var timingout = onAnotherThread(() =>
 			{
-				isLocking.WaitOne(TimeSpan.FromSeconds(1));
+				isLocking.WaitOne(TimeSpan.FromMilliseconds(500));
 				using (Target.LockForTypeOf(new Lock1()))
 					ran = true;
-				timedout.Set();
 			});
 			locking.Join();
 			timingout.Join();
 
 			ran.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldThrowOnTimeout()
+		{
+			ConfigReader.AppSettings.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
+			var isLocking = new ManualResetEvent(false);
+
+			var locking = onAnotherThread(() =>
+			{
+				using (Target.LockForTypeOf(new Lock1()))
+				{
+					isLocking.Set();
+					Thread.Sleep(500);
+				}
+			});
+			Exception exception = null;
+			var timingout = onAnotherThread(() =>
+			{
+				isLocking.WaitOne(TimeSpan.FromMilliseconds(500));
+				try
+				{
+					using (Target.LockForTypeOf(new Lock1()))
+					{
+					}
+				}
+				catch (Exception e)
+				{
+					exception = e;
+				}
+			});
+			locking.Join();
+			timingout.Join();
+
+			exception.Should().Be.OfType<DistributedLockException>();
 		}
 
 		private class Lock1
