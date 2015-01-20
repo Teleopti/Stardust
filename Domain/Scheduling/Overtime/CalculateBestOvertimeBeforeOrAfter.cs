@@ -16,19 +16,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_overtimeRelativeDifferenceCalculator = overtimeRelativeDifferenceCalculator;
 		}
 
-		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDurantion, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyOvertimeAvaialbility)
+		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData,
+			IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IEnumerable<DateTimePeriod> openHoursList)
 		{
-			var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
 			var scheduleDayPeriodStart = scheduleDay.Period.StartDateTime;
 			var start = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Minimum);
 			var end = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Maximum);
+
 			var specifiedPeriod = new DateTimePeriod(start, end);
+
+			var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+			var result = _overtimeDateTimePeriodExtractor.Extract(minimumResolution, overtimeDuration, visualLayerCollection, specifiedPeriod, openHoursList);
+			var possibleOvertimePeriods = _overtimeRelativeDifferenceCalculator.Calculate(result, overtimePeriodValueMappedData, onlyAvailableAgents, scheduleDay);
 			var lowestRelativeDifferenceSum = double.MaxValue;
 			IOvertimePeriodValues lowestPeriodValues = new OvertimePeriodValues();
-
-			var result = _overtimeDateTimePeriodExtractor.Extract(minimumResolution, overtimeDurantion, visualLayerCollection, specifiedPeriod);
-			var possibleOvertimePeriods = _overtimeRelativeDifferenceCalculator.Calculate(result, overtimePeriodValueMappedData, onlyOvertimeAvaialbility, scheduleDay);
-			
 			foreach (var overtimePeriodValues in possibleOvertimePeriods)
 			{
 				var totalValue = overtimePeriodValues.TotalValue();
@@ -40,5 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			return lowestPeriodValues.PeriodValues.Select(overtimePeriodValue => overtimePeriodValue.Period).ToList();
 		}
+
 	}
 }

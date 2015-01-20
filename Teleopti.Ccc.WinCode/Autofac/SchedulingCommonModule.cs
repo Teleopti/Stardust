@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -318,6 +317,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>();
 			builder.RegisterType<OvertimePeriodValueMapper>();
 			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>();
+			builder.RegisterType<OvertimeSkillIntervalDataToSkillIntervalDataMapper>().As<IOvertimeSkillIntervalDataToSkillIntervalDataMapper>();
 			
 			builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
