@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -59,21 +60,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSkillIntervalDataAggregatedList = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(overtimeSkillIntervalDataList);
 			var mappedAggregatedList = _overtimePeriodValueMapper.Map(overtimeSkillIntervalDataAggregatedList);
 
-			var openHoursList = new List<DateTimePeriod>(); 
+			
 			var skillIntervalDataList = 
 				overtimeSkillIntervalDataAggregatedList.Select(i => _skillIntervalDataMapper.Map(i)).ToList();
-			var openHours = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, dateOnly);
-			DateTimePeriod period = 
-				new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHours.Value.StartTime).ToUniversalTime(), dateOnly.Date.ToLocalTime().Add(openHours.Value.EndTime).ToUniversalTime());
-			openHoursList.Add(period);
-			var openHoursNextDay = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, nextDayDateOnly);
-			DateTimePeriod periodNextDay =
-				new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHoursNextDay.Value.StartTime).ToUniversalTime(), dateOnly.Date.Add(openHoursNextDay.Value.EndTime).ToUniversalTime());
-			openHoursList.Add(periodNextDay);
+
+			var openHoursList = getOpenHours(dateOnly, skillIntervalDataList);
 
 			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay, minimumResolution, onlyAvailableAgents, openHoursList);
 	        return result;
         }
+
+	    private IEnumerable<DateTimePeriod> getOpenHours(DateOnly dateOnly, IList<ISkillIntervalData> skillIntervalDataList)
+	    {
+		    var openHoursList = new List<DateTimePeriod>();
+		    var openHours = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, dateOnly);
+		    if (openHours.HasValue)
+		    {
+			    var period =
+				    new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHours.Value.StartTime).ToUniversalTime(),
+					    dateOnly.Date.ToLocalTime().Add(openHours.Value.EndTime).ToUniversalTime());
+			    openHoursList.Add(period);
+		    }
+		    var nextDayDateOnly = dateOnly.AddDays(1);
+		    var openHoursNextDay = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, nextDayDateOnly);
+		    if (openHoursNextDay.HasValue)
+		    {
+			    var periodNextDay =
+				    new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHoursNextDay.Value.StartTime).ToUniversalTime(),
+					    dateOnly.Date.Add(openHoursNextDay.Value.EndTime).ToUniversalTime());
+			    openHoursList.Add(periodNextDay);
+		    }
+		    return openHoursList;
+	    }
 
 	    private IList<IList<IOvertimeSkillIntervalData>> createOvertimeSkillIntervalDataList(List<ISkill> skills, IList<ISkillDay> skillDays, int minimumResolution)
 	    {
