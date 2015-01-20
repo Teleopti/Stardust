@@ -11904,7 +11904,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>kom åter från frånvaron i förtid:</value>
   </data>
   <data name="AnnounceShift" xml:space="preserve">
-    <value>Annonsera skift</value>
+    <value>Posta skift för byte</value>
   </data>
   <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
     <value>Erbjudandet om skiftbyte giltigt till</value>
@@ -11919,6 +11919,81 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Datumet skiftbyteserbjudandet är giltigt till måste vara mellan idag och dagen före bytesdagen!</value>
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
-    <value>Kan inte publicera ett erbjudande om skiftbyte för en dag med frånvaro.</value>
+    <value>Kan inte posta ett erbjudande om skiftbyte för en dag med frånvaro.</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Använd för</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>Postningen av skiftbytet är ogiltig</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>Din skiftbytespost för {0} är ogiltig eftersom ditt skift har ändrats.</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>Personen {0} har en personlig aktivitet, en övertidsaktivitet eller ett möte i skiftet den {1}.</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Meddela agenten</value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Alla</value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Skiftbytespost</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort spelifieringsinställningen '{0}'?</value>
+  </data>
+  <data name="DeleteAgentBadgeSetting" xml:space="preserve">
+    <value>Ta bort agentmedaljsinställningen</value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>Spelifiering</value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>Ny spelifieringsinställning</value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>Ny medaljinställning</value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort den här förfrågan?</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Skiftbytespost</value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Välj spelifieringsinställning att ändra</value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Ange detaljer i spelifieringsinställningarna</value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Spelifieringsinställning:</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Regeluppsättningar för spelifiering:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Hantera spelifieringsinställningar</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Avslutad</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Utgången</value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Fridag</value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Fridag eller tom dag</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>Tom dag</value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Arbetsdag</value>
   </data>
 </root>

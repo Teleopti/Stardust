@@ -11074,4 +11074,300 @@ Teleopti R&amp;D</value>
   <data name="OneGoldBadgeEqualsSilverBadgeCount" xml:space="preserve">
     <value>Для получения золотого уровня небходимо набрать:</value>
   </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Применить ключ активации продукта</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Инструкция:
+* Купите лицензию (контактная информация на www.teleopti.com)
+* Получите файл с ключом активации продукта (например, с помощью эл. почты)
+* Сохраните файл ключа активации продукта на диск
+* Если у вас в приложении есть работа, результат которой необходимо сохранить, то сделайте это прежде, чем применять ключ активации
+* С помощью кнопки загрузить откройте файл ключа активации
+* Примените ключ активации продукта
+* Приложение закроется
+* Перезагрузите MyTime
+* Отройте клиент снова</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>Не удалось получить доступ к ключу активации "{0}"
+Подробности ошибки:
+{1}</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>При попытке сохранить ключ активации в базе данных возникла ошибка.
+Подробности ошибки:
+{0}</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>Укажите правильное имя файла, включая путь к нему</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>Ключ активации продукта успешно применен.
+Поздравляем! Теперь вы являетесь лицензированным пользователем этого WFM решения.
+Сейчас приложение закроется.
+
+Важно:
+Для корректной работы всех сервисов и приложений, пожалуйста, обратитесь в IT, чтобы запустить "Restart Teleopti WFM" из папки телеопти в меню пуск на сервере.</value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>Ваш ключ активации продукта истек, пожалуйста, примените новый</value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>Ваш ключ активации неверный, возможно он был изменен, пожалуйста, примените новый</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>Ключ активации "{0}", который вы пытаетесь применить, истек.</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>Ключ активации "{0}" неверный, возможно он был подделан</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>Ключ активации "{0}" имеет неверный формат (xml)
+Подробности ошибки:
+{1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>Вы еще не применили ключ активации продукта, пожалуйста, примените</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>Не удалось применить ключ активации продукта</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>Ваш ключ активации действует до {0}, не забудьте вовремя обновить его</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>Выберите файл ключа активации продукта</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>Система лицензирована "{0}" в соответствии с правилами и условиями лицензионного соглашения и ключ активации продукта истекает {1}.
+
+Ключ активации продукта рассчитан на максимум {2} активных операторов.
+
+Схема ключа - {3}.
+Активированы следующие опции:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>У вас {0} активных операторов, но лицензия рассчитана только на {1}. Пожалуйста, обновите ключ активации продукта</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>У вас {0} активных операторов, но лицензия рассчитана только на {1}. Вам необходимо обновить ключ активации продукта, чтобы продолжить</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>Данный ключ активации рассчитан только на {0} активных операторов, но у вас {1}. Вам необходимо получить ключ активации продукта, рассчитанный на достаточное количество активных операторов</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Исключение ключа активации продукта Teleopti </value>
+  </data>
+  <data name="HoursPerWeekIsInvalid" xml:space="preserve">
+    <value>Количество часов в неделю неверное, возможная причина: максимум часов в неделю меньше, чем минимум.</value>
+  </data>
+  <data name="BlockFinderTypeBetweenDayOff" xml:space="preserve">
+    <value>Между выходными днями</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Ключ активации продукта рассчитан на {0} рабочих мест. Вам необходимо получить ключ активации продукта, рассчитанный на достаточное количество рабочих мест.</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>Система лицензирована "{0}" в соответствии с правилами и условиями лицензионного соглашения и ключ активации продукта истекает {1}.
+
+Ключ активации продукта рассчитан на максимум {2} рабочих мест.
+
+Схема ключа - {3}.
+Активированы следующие опции:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Вы почти достигли лимита {0} рабочих мест. Пожалуйста, обновите ключ активации продукта.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Вы используете слишком много рабочих мест, но лицензия рассчитана только на {0}. Вам необходимо обновить ключ активации продукта, чтобы продолжить</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>У вас больше операторов ({0}), чем позволяет лицензия ({1}). У вас есть {2} дня(-ей), чтобы снизить количество операторов или применить новый ключ активации продукта.</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Выберите какой столбец содержит номер телефона для отправики SMS:</value>
+  </data>
+  <data name="ValidateUnsupportedRestrictions" xml:space="preserve">
+    <value>Ограничения категорий смен не используются, если выбрано планирование блоками или по группе.</value>
+  </data>
+  <data name="UnsupportedOptimizationSteps" xml:space="preserve">
+    <value>Шаги оптимизации "смены для гибкого рабочего времени", "выходные для гибкого рабочего времени"  и "ограничение категорий смен" не выполняются, если выбрано планирование блоками или по группе.</value>
+  </data>
+  <data name="ViewBadge" xml:space="preserve">
+    <value>Просмотр уровней</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>Просмотр доски лидеров</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[Имя] [Фамилия]</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[Фамилия] [Имя]</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>Описание оператора</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Множественный</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>Одиночный</value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>Сброс уровней</value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>Это действие сбросит уровни всех операторов! Если вы нажмете ОК, то все уровни будут удалены без возможности восстановления. Продолжить?</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>Скорректировать смены, чтобы соответствовать контейнеру смен</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>Использовать</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>Невозможно найти правильные смены в контейнере смен</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>Невозможно сбросить уровни, попробуйте позже!</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} не может быть раньше, чем {1}</value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>Время окончания</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>Время начала</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>Настройки отсутствия на полный день</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>Шаг оптимизации "время между днями" не выполняется, если выбрано планирование блоками одна и та же смена.</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>Настройки эл. почты</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>Управление настройками уведомлений</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>Настройки уведомлений</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Тип уведомления</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>Отправить email c:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>Тест отправляется:</value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>Проблема баланса внутри интервала</value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>Фильтр по содержанию интервалов</value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>Доска лидеров</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>Пожалуйста, включите хотя бы один тип уровней.</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Степень</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>Предпочтение не может быть добавлено, так как выбранный предмет более недоступен.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Баланс внутри интервала</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>Невозможно получить настройки предпочтения.</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Самый низкий баланс внутри интервала</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>Отчет об отсутствии</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Разрешенные отсутствия для отчета</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Отсутствие не может быть внесено.</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Сводка обменов сменами</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Публикация...</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Опубликовать расписание для:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Публикация расписания до:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Опубликовать расписание</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Время начала должно быть раньше, чем время окончания</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Сообщить об отсутствии</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Нет доступных операторов в сводке</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>Фильтр по часам работы</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Возвращение на работу</value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Применить к</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>Запланировано</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Обновление отсутствия для</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>Возвращение на работу не может быть больше, чем время завершения отсутствия</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>возвращение из отсутствия:</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Сообщить о смене</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Предложение на обмен сменами действительно до</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>Я хочу смену, соответствующую следующим параметрам</value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>Дата, которую вы хотите обменять, должна быть в открытом периоде!</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>Дата действия предложения должна быть днем между сегодняшней датой и датой обмена!</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>Невозможно опубликовать сообщение о смене на день отсутствия!</value>
+  </data>
 </root>
