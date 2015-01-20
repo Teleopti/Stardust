@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogOnOff _logOnOff;
 		private readonly IServerEndpointSelector _serverEndpointSelector;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IApplicationLogon _applicationLogon;
+		private readonly IMultiTenancyApplicationLogon _applicationLogon;
 		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
 		private readonly IDataSourceHandler _dataSourceHandler;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			ILogonLogger logonLogger, ILogOnOff logOnOff,
 			IServerEndpointSelector serverEndpointSelector,
 			IMessageBrokerComposite messageBroker,
-			IApplicationLogon applicationLogon,
+			IMultiTenancyApplicationLogon applicationLogon,
 			IMultiTenancyWindowsLogon multiTenancyWindowsLogon
 			)
 		{
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (ConfigurationManager.AppSettings["GetConfigFromWebService"] != null)
 				_model.GetConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
 					CultureInfo.InvariantCulture);
+			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
 		public LoginStep CurrentStep { get; set; }
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				_view.ShowWarningMessage(message, Resources.LogOn);
 				return false;
 			}
-			if (_model.SelectedDataSourceContainer == null || !_model.DataSourceContainers.Any())
+			if (!_model.DataSourceContainers.Any())
 			{
 				_view.ShowErrorMessage(Resources.NoAvailableDataSourcesHasBeenFound, Resources.LogOn);
 				return false;
@@ -238,7 +239,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				{
 					ClientIp = ipAdress(),
 					Client = "WIN",
-					UserCredentials = choosenDataSource.LogOnName,
+					UserCredentials = _model.UserName,
 					Provider = AuthenticationTypeOption.Windows.ToString(),
 					Result = "LogonFailed"
 				};
@@ -259,14 +260,14 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (authenticationResult.Successful)
 			{
 				//To use for silent background log on
-				choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
+				//choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
 				return true;
 			}
 			var model = new LoginAttemptModel
 			{
 				ClientIp = ipAdress(),
 				Client = "WIN",
-				UserCredentials = choosenDataSource.LogOnName,
+				UserCredentials = _model.UserName,
 				Provider = AuthenticationTypeOption.Windows.ToString(),
 				Result = "LogonFailed"
 			};
@@ -299,8 +300,8 @@ namespace Teleopti.Ccc.WinCode.Main
 				{
 					ClientIp = ipAdress(),
 					Client = "WIN",
-					UserCredentials = _model.SelectedDataSourceContainer.LogOnName,
-					Provider = _model.SelectedDataSourceContainer.AuthenticationTypeOption.ToString(),
+					UserCredentials = _model.UserName,
+					Provider = _model.AuthenticationType.ToString(),
 					Result = "LogonSuccess"
 				};
 			if (_model.SelectedDataSourceContainer.User != null) model.PersonId = _model.SelectedDataSourceContainer.User.Id;

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			comboBoxAdvDataSource.DisplayMember = "DataSourceName";
 			comboBoxAdvDataSource.DataSource = _logonableWindowsDataSources;
 
-			if (_logonableWindowsDataSources.Count < 1)
+			if (_logonableWindowsDataSources.Count < 1 && _showDataSourceSelection)
 			{
 				radioButtonAdvApplication.Visible = false;
 				radioButtonAdvWindows.Visible = false;

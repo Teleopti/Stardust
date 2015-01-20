@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			{
 				throw new NotImplementedException();
 			}
+
+			public AuthenticationTypeOption AuthenticationType { get; set; }
 		}
 	}
 }

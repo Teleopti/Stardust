@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Security
 {
-	public interface IApplicationLogon
+	public interface IMultiTenancyApplicationLogon
 	{
 		AuthenticationResult Logon(ILogonModel logonModel);
 	}

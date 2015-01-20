@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
-	public class MultiTenancyApplicationLogon : IApplicationLogon
+	public class MultiTenancyApplicationLogon : IMultiTenancyApplicationLogon
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;

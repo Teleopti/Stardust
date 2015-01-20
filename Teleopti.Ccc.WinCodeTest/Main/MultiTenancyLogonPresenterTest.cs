@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private ILogOnOff _logOnOff;
 		private MultiTenancyLogonPresenter _target;
 		private IServerEndpointSelector _endPointSelector;
-		private IApplicationLogon _appLogon;
+		private IMultiTenancyApplicationLogon _appLogon;
 		private IMultiTenancyWindowsLogon _winLogon;
 
 		[SetUp]
@@ -40,10 +40,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_logonLogger = MockRepository.GenerateMock<ILogonLogger>();
 			_logOnOff = MockRepository.GenerateMock<ILogOnOff>();
 			_endPointSelector = MockRepository.GenerateMock<IServerEndpointSelector>();
-			_appLogon = MockRepository.GenerateMock<IApplicationLogon>();
+			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _dataSourceHandler, _initializer, _logonLogger, _logOnOff,
 				_endPointSelector, MockRepository.GenerateMock<IMessageBrokerComposite>(), _appLogon, _winLogon);
+			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
 		[Test]
@@ -132,7 +133,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.UserName = "USER";
 			_model.Password = "PASS";
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
-			//dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			_appLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult { HasMessage = true, Message = "ERRRRROR" });
 			_view.Stub(x => x.ShowErrorMessage("ERRRRROR  ", Resources.ErrorMessage));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
 			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
 			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
-
+			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			var bu = new BusinessUnit("Bu One");
 			var bu2 = new BusinessUnit("Bu two");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			_dataSourceHandler.Stub(x => x.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
+			_winLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult {Successful = true});
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
 			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
 			_view.Stub(x => x.ShowStep(true));
