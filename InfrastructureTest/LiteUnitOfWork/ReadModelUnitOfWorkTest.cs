@@ -17,25 +17,21 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
-	public class ReadModelUnitOfWorkTestAttribute : IoCTestAttribute
+	public class ReadModelUnitOfWorkTestAttribute : InfrastructureIoCTestAttribute
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
+			base.RegisterInContainer(builder, configuration);
+
 			builder.RegisterType<TheService>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
 			builder.RegisterType<NestedService>().AsSelf().As<NestedBase>().SingleInstance();
 			builder.RegisterType<NestedService2>().AsSelf().As<NestedBase>().SingleInstance();
-
-			var httpContext = new MutableFakeCurrentHttpContext();
-			builder.RegisterInstance(httpContext).AsSelf().As<ICurrentHttpContext>().SingleInstance();
 
 			builder.Register(c =>
 			{
@@ -44,19 +40,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				dataSourcesProvider.SetAvailableDataSources(new[] { dataSource });
 				return dataSourcesProvider;
 			}).AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
-
-			var currentPrincipal = new MutableFakeCurrentTeleoptiPrincipal();
-			currentPrincipal.SetPrincipal(null);
-			builder.RegisterInstance(currentPrincipal).AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
-
-			var configReader = new FakeConfigReader
-			{
-				ConnectionStrings = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
-				}
-			};
-			builder.RegisterInstance(configReader).As<IConfigReader>().AsSelf().SingleInstance();
 		}
 	}
 

@@ -175,7 +175,9 @@
     <Compile Include="ApplicationLayer\HangfireEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisherTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
+    <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
+    <Compile Include="InfrastructureIoCTestAttribute.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\TennantDatabaseConnectionStringTest.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />

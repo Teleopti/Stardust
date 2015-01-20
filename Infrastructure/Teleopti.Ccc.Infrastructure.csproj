@@ -175,6 +175,9 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\SyncPublishToSingleHandler.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
+    <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
+    <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
+    <Compile Include="DistributedLock\SqlServerDistributedLock.cs" />
     <Compile Include="Foundation\AvailableApplicationIdentityDataSources.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
