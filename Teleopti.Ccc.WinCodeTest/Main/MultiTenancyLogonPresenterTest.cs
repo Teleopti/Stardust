@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -253,7 +254,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var bu2 = new BusinessUnit("Bu two");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
-			_model.Sdks = new List<string> { "test sdk", "test sdk2" };
 
 			_dataSourceHandler.Stub(x => x.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
@@ -264,6 +264,24 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			_target.CurrentStep = LoginStep.SelectDatasource;
 			_target.OkbuttonClicked();
+		}
+
+		[Test]
+		public void ShouldGoToAppLoginIfWindowsFails()
+		{
+			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
+			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
+			_model.AuthenticationType = AuthenticationTypeOption.Windows;
+			_model.DataSourceContainers = new List<IDataSourceContainer>{ dataSourceContainer };
+			_dataSourceHandler.Stub(x => x.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
+			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
+			_winLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult { Successful = false });
+			_view.Stub(x => x.ShowStep(true));
+
+			_target.CurrentStep = LoginStep.SelectDatasource;
+			_target.OkbuttonClicked();
+			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
+			_target.CurrentStep.Should().Be.EqualTo(LoginStep.Login);
 		}
 	}
 

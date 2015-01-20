@@ -198,6 +198,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (!winLogin())
 				{
 					CurrentStep--;
+					_view.ShowStep(true);
 					return;
 				}
 			}
@@ -247,6 +248,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				return true;
 			}
+			// windows does not work we need to use application
+			_model.AuthenticationType = AuthenticationTypeOption.Application;
 			return false;
 		}
 
