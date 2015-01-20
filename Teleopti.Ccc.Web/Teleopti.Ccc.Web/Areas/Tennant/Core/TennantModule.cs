@@ -11,7 +11,9 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
+			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
+			builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.RegisterType<ConvertDataToOldUserDetailDomain>().As<IConvertDataToOldUserDetailDomain>().SingleInstance();
 			builder.RegisterType<PasswordVerifier>().As<IPasswordVerifier>().SingleInstance();

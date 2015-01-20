@@ -3,5 +3,6 @@
 	public interface IAuthenticationQuerier
 	{
 		AuthenticationQueryResult TryLogon(string userName, string password);
+		AuthenticationQueryResult TryIdentityLogon(string identity);
 	}
 }

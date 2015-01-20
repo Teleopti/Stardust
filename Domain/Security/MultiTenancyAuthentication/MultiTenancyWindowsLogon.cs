@@ -27,22 +27,38 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 
 		public AuthenticationResult Logon(ILogonModel logonModel)
 		{
-			var userId = _windowsUserProvider.UserName;
-			var domain = _windowsUserProvider.DomainName;
-			logonModel.UserName = domain + "\\" + userId;
-			// fejkar att vi fått datasource från web service
-			// we should not have any "windows" datasources now
 			var allAppContainers =
 				logonModel.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application)
 					.ToList();
-			var dataSourceName = "Teleopti WFM";
-			var personId = new Guid("10957AD5-5489-48E0-959A-9B5E015B2B5C");
 
-			logonModel.SelectedDataSourceContainer = allAppContainers.Where(d => d.DataSourceName.Equals(dataSourceName)).FirstOrDefault();
+			var userId = _windowsUserProvider.UserName;
+			var domain = _windowsUserProvider.DomainName;
+			logonModel.UserName = domain + "\\" + userId;
+			var result = _authenticationQuerier.TryIdentityLogon(logonModel.UserName);
+			if (!result.Success)
+				return new AuthenticationResult
+				{
+					Successful = false,
+					HasMessage = true,
+					Message = result.FailReason			
+				};
+
+			var dataSourceName = result.Tennant;
+			var personId = result.PersonId;
+
+			logonModel.SelectedDataSourceContainer = allAppContainers.FirstOrDefault(d => d.DataSourceName.Equals(dataSourceName));
 			// if null error
+			if (logonModel.SelectedDataSourceContainer == null)
+				return new AuthenticationResult
+				{
+					Successful = false
+				};
+
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				logonModel.SelectedDataSourceContainer.SetUser(_repositoryFactory.CreatePersonRepository(uow).LoadOne(personId));
+				var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personId);
+				logonModel.SelectedDataSourceContainer.SetUser(person);
+				logonModel.SelectedDataSourceContainer.LogOnName = logonModel.UserName;
 			}
 
 			return new AuthenticationResult

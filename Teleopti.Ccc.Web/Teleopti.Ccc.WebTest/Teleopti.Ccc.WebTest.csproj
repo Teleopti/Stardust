@@ -226,6 +226,7 @@
     <Compile Include="Areas\Anywhere\Hubs\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Tennant\Core\IdentityAuthenticationTest.cs" />
     <Compile Include="Areas\Tennant\Core\IoCTest.cs" />
     <Compile Include="Areas\Tennant\TennantControllerTest.cs" />
     <Compile Include="Areas\Tennant\Core\ApplicationAuthenticationTest.cs" />

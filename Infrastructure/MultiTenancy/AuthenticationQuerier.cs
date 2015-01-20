@@ -24,5 +24,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			uriBuilder.Query = query.ToString();
 			return uriBuilder.ExecuteJsonRequest<AuthenticationQueryResult>();
 		}
+
+		public AuthenticationQueryResult TryIdentityLogon(string identity)
+		{
+			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tennant/IdentityLogon");
+			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+			query["identity"] = identity;
+			uriBuilder.Query = query.ToString();
+			return uriBuilder.ExecuteJsonRequest<AuthenticationQueryResult>();
+		}
 	}
 }
