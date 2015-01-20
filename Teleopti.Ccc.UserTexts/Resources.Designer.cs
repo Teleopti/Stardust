@@ -22484,6 +22484,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select setting to use for teams.
+        /// </summary>
+        public static string SelectSettingForTeams {
+            get {
+                return ResourceManager.GetString("SelectSettingForTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Shift Category.
         /// </summary>
         public static string SelectShiftCategory {
@@ -22966,6 +22975,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetScorecards {
             get {
                 return ResourceManager.GetString("SetScorecards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Setting Targets.
+        /// </summary>
+        public static string SetSettingTargets {
+            get {
+                return ResourceManager.GetString("SetSettingTargets", resourceCulture);
             }
         }
         

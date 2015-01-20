@@ -12751,4 +12751,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Can not find datasource with name: {0}</value>
     <comment>used when the tennant in the database has no datasource</comment>
   </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Set Setting Targets</value>
+    <comment>Apply setting to team in Gamification option</comment>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Select setting to use for teams</value>
+    <comment>Select setting to use for teams in gamification option</comment>
+  </data>
 </root>
