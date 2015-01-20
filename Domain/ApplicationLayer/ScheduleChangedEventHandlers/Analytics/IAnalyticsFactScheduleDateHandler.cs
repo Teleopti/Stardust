@@ -1,6 +1,6 @@
 using System;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	{
 		bool MapDateId(DateOnly date, out int dateId);
 
-		AnalyticsFactScheduleDate Handle(
+		IAnalyticsFactScheduleDate Handle(
 			DateTime shiftStartDateUtc, 
 			DateTime shiftEndDateUtc, 
 			DateOnly shiftStartDateLocal,

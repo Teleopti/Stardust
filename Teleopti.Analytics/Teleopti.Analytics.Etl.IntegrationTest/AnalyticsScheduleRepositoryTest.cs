@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -6,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytic
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -195,8 +195,15 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				PersonId = 10
 			};
 
-
-			_target.PersistFactScheduleRow(timePart,datePart,personPart);
+			_target.PersistFactScheduleBatch(new List<IFactScheduleRow>
+			{
+				new FactScheduleRow
+				{
+					PersonPart = personPart, 
+					DatePart = datePart, 
+					TimePart = timePart
+				}
+			});
 
 		}
 

@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			container.Resolve<IAnalyticsFactScheduleTimeHandler>().Should().Not.Be.Null();
 			container.Resolve<IAnalyticsFactScheduleDateHandler>().Should().Not.Be.Null();
 			container.Resolve<IAnalyticsFactSchedulePersonHandler>().Should().Not.Be.Null();
+			container.Resolve<IAnalyticsFactScheduleHandler>().Should().Not.Be.Null();
 			container.Resolve<IAnalyticsFactScheduleDayCountHandler>().Should().Not.Be.Null();
 			container.Resolve<IAnalyticsScheduleRepository>().Should().Not.Be.Null();
 			

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			return true;
 		}
 
-		public AnalyticsFactScheduleDate Handle(
+		public IAnalyticsFactScheduleDate Handle(
 			DateTime shiftStartDateUtc, 
 			DateTime shiftEndDateUtc, 
 			DateOnly shiftStartDateLocal, 

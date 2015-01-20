@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 {
 	public interface IAnalyticsScheduleRepository
 	{
-		void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart, IAnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart);
+		void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows);
 		void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount);
 		void DeleteFactSchedule(int date, int personId, int scenarioId);
 		IList<KeyValuePair<DateOnly, int>> Dates();

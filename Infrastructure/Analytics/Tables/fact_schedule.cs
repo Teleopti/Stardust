@@ -86,7 +86,8 @@ namespace Teleopti.Ccc.Infrastructure.Analytics.Tables
 			int scheduled_paid_time_m,
 			int scheduled_paid_time_activity_m,
 			int scheduled_paid_time_absence_m,
-			int business_unit_id)
+			int business_unit_id,
+			int overtime_id = -1)
 		{
 			var row = dataTable.NewRow();
 
@@ -124,11 +125,11 @@ namespace Teleopti.Ccc.Infrastructure.Analytics.Tables
 			row["scheduled_paid_time_activity_m"] = scheduled_paid_time_activity_m;
 			row["scheduled_paid_time_absence_m"] = scheduled_paid_time_absence_m;
 			row["business_unit_id"] = business_unit_id;
-			row["datasource_id"] = 10;
+			row["datasource_id"] = 1;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			row["datasource_update_date"] = DateTime.Now;
-			row["overtime_id"] = 0;
+			row["overtime_id"] = overtime_id;
 			dataTable.Rows.Add(row);
 		}
 	}

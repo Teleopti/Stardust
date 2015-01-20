@@ -651,6 +651,7 @@
     <Compile Include="Infrastructure\Analytics\IAnalyticsGeneric.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsPersonBusinessUnit.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsShiftLength.cs" />
+    <Compile Include="Infrastructure\Analytics\IFactScheduleRow.cs" />
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsScheduleRepository.cs" />

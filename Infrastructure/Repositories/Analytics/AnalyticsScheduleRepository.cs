@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using NHibernate;
+using System.Data;
+using System.Data.SqlClient;
 using NHibernate.Transform;
+using Teleopti.Ccc.Infrastructure.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,64 +14,109 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
-
-		public void PersistFactScheduleRow(IAnalyticsFactScheduleTime timePart,
-			IAnalyticsFactScheduleDate datePart, IAnalyticsFactSchedulePerson personPart)
+		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
-			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var connection = new SqlConnection(statisticUnitOfWorkFactory().ConnectionString))
 			{
-				uow.Session().CreateSQLQuery(
-					@"exec mart.[etl_fact_schedule_insert] @shift_startdate_local_id=:LocalId, @schedule_date_id=:ScheduleDateId, 
-@person_id=:PersonId, @interval_id=:IntervalId, @activity_starttime=:ActivityStarttime, @scenario_id=:ScenarioId,
-@activity_id=:ActivityId, @absence_id=:AbsenceId, @activity_startdate_id=:ActivityStartdateId, @activity_enddate_id=:ActivityEnddateId,
-@activity_endtime=:ActivityEndtime, @shift_startdate_id=:ShiftStartdateId, @shift_starttime=:ShiftStarttime, @shift_enddate_id=:ShiftEnddateId,
-@shift_endtime=:ShiftEndtime, @shift_startinterval_id=:ShiftStartintervalId, @shift_endinterval_id=:ShiftEndintervalId,
-@shift_category_id=:ShiftCategoryId, @shift_length_id=:ShiftLengthId, @scheduled_time_m=:ScheduledTimeM, @scheduled_time_absence_m=:ScheduledTimeAbsence,
-@scheduled_time_activity_m=:ScheduledTimeActivity, @scheduled_contract_time_m=:ContractTime, @scheduled_contract_time_activity_m=:ContractTimeActivity,
-@scheduled_contract_time_absence_m=:ContractTimeAbsence, @scheduled_work_time_m=:WorkTime, @scheduled_work_time_activity_m=:WorkTimeActivity,
-@scheduled_work_time_absence_m=:WorkTimeAbsence, @scheduled_over_time_m=:OverTime, @scheduled_ready_time_m=:ReadyTime,
-@scheduled_paid_time_m=:PaidTime, @scheduled_paid_time_activity_m=:PaidTimeActivity, @scheduled_paid_time_absence_m=:PaidTimeAbsence,
-@business_unit_id=:BusinessUnitId, @datasource_update_date=:UpdateDate, @overtime_id=:OvertimeId")
-					.SetInt32("LocalId", datePart.ScheduleStartDateLocalId)
-					.SetInt32("ScheduleDateId", datePart.ScheduleDateId)
-					.SetInt32("PersonId", personPart.PersonId)
-					.SetInt32("IntervalId", datePart.IntervalId)
-					.SetDateTime("ActivityStarttime", datePart.ActivityStartTime)
-					.SetInt32("ScenarioId", timePart.ScenarioId)
-					.SetInt32("ActivityId", timePart.ActivityId)
-					.SetInt32("AbsenceId", timePart.AbsenceId)
-					.SetInt32("ActivityStartdateId", datePart.ActivityStartDateId)
-					.SetInt32("ActivityEnddateId", datePart.ActivityEndDateId)
-					.SetDateTime("ActivityEndtime", datePart.ActivityEndTime)
-					.SetInt32("ShiftStartdateId", datePart.ShiftStartDateId)
-					.SetDateTime("ActivityEndtime", datePart.ActivityEndTime)
-					.SetDateTime("ShiftStarttime", datePart.ShiftStartTime)
-					.SetInt32("ShiftEnddateId", datePart.ShiftEndDateId)
-					.SetDateTime("ShiftEndtime", datePart.ShiftEndTime)
-					.SetInt32("ShiftStartintervalId", datePart.ShiftStartIntervalId)
-					.SetInt32("ShiftEndintervalId", datePart.ShiftEndIntervalId)
-					.SetInt32("ShiftCategoryId", timePart.ShiftCategoryId)
-					.SetInt32("ShiftLengthId", timePart.ShiftLengthId)
-					.SetInt32("ScheduledTimeM", timePart.ScheduledMinutes)
-					.SetInt32("ScheduledTimeAbsence", timePart.ScheduledAbsenceMinutes)
-					.SetInt32("ScheduledTimeActivity", timePart.ScheduledActivityMinutes)
-					.SetInt32("ContractTime", timePart.ContractTimeMinutes)
-					.SetInt32("ContractTimeActivity", timePart.ContractTimeActivityMinutes)
-					.SetInt32("ContractTimeAbsence", timePart.ContractTimeAbsenceMinutes)
-					.SetInt32("WorkTime", timePart.WorkTimeMinutes)
-					.SetInt32("WorkTimeActivity", timePart.WorkTimeActivityMinutes)
-					.SetInt32("WorkTimeAbsence", timePart.WorkTimeAbsenceMinutes)
-					.SetInt32("OverTime", timePart.OverTimeMinutes)
-					.SetInt32("ReadyTime", timePart.ReadyTimeMinues)
-					.SetInt32("PaidTime", timePart.PaidTimeMinutes)
-					.SetInt32("PaidTimeActivity", timePart.PaidTimeActivityMinutes)
-					.SetInt32("PaidTimeAbsence", timePart.PaidTimeAbsenceMinutes)
-					.SetInt32("BusinessUnitId", personPart.BusinessUnitId)
-					.SetDateTime("UpdateDate", DateTime.Now)
-					.SetInt32("OvertimeId", timePart.OverTimeId)
+				var table = getTable(factScheduleRows);
+				var adapter = new SqlDataAdapter
+				{
+					InsertCommand = new SqlCommand("mart.etl_fact_schedule_insert", connection)
+					{
+						CommandType = CommandType.StoredProcedure,
+						UpdatedRowSource = UpdateRowSource.None
+					}
+				};
 
-					.ExecuteUpdate();
+				adapter.InsertCommand.Parameters.Add("@shift_startdate_local_id", SqlDbType.Int, 4, table.Columns[0].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@schedule_date_id", SqlDbType.Int, 4, table.Columns[1].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@person_id", SqlDbType.Int, 4, table.Columns[2].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@interval_id", SqlDbType.SmallInt, 2, table.Columns[3].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@activity_starttime", SqlDbType.SmallDateTime, 4, table.Columns[4].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scenario_id", SqlDbType.Int, 4, table.Columns[5].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@activity_id", SqlDbType.Int, 4, table.Columns[6].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@absence_id", SqlDbType.Int, 4, table.Columns[7].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@activity_startdate_id", SqlDbType.Int, 4, table.Columns[8].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@activity_enddate_id", SqlDbType.Int, 4, table.Columns[9].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@activity_endtime", SqlDbType.SmallDateTime, 4, table.Columns[10].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_startdate_id", SqlDbType.Int, 4, table.Columns[11].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_starttime", SqlDbType.SmallDateTime, 4, table.Columns[12].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_enddate_id", SqlDbType.Int, 4, table.Columns[13].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_endtime", SqlDbType.SmallDateTime, 4, table.Columns[14].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_startinterval_id", SqlDbType.SmallInt, 2, table.Columns[15].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_endinterval_id", SqlDbType.SmallInt, 2, table.Columns[16].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_category_id", SqlDbType.Int, 4, table.Columns[17].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@shift_length_id", SqlDbType.Int, 4, table.Columns[18].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_time_m", SqlDbType.Int, 4, table.Columns[19].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_time_absence_m", SqlDbType.Int, 4, table.Columns[20].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_time_activity_m", SqlDbType.Int, 4, table.Columns[21].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_contract_time_m", SqlDbType.Int, 4, table.Columns[22].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_contract_time_activity_m", SqlDbType.Int, 4, table.Columns[23].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_contract_time_absence_m", SqlDbType.Int, 4, table.Columns[24].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_work_time_m", SqlDbType.Int, 4, table.Columns[25].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_work_time_activity_m", SqlDbType.Int, 4, table.Columns[26].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_work_time_absence_m", SqlDbType.Int, 4, table.Columns[27].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_over_time_m", SqlDbType.Int, 4, table.Columns[28].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_ready_time_m", SqlDbType.Int, 4, table.Columns[29].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_paid_time_m", SqlDbType.Int, 4, table.Columns[30].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_paid_time_activity_m", SqlDbType.Int, 4, table.Columns[31].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@scheduled_paid_time_absence_m", SqlDbType.Int, 4, table.Columns[32].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@business_unit_id", SqlDbType.Int, 4, table.Columns[33].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@datasource_update_date", SqlDbType.SmallDateTime, 4, table.Columns[37].ColumnName);
+				adapter.InsertCommand.Parameters.Add("@overtime_id", SqlDbType.Int, 4, table.Columns[38].ColumnName);
+
+				adapter.UpdateBatchSize = 20;
+
+				connection.Open();
+				adapter.Update(table);
 			}
+		}
+
+		private DataTable getTable(IEnumerable<IFactScheduleRow> factScheduleRows)
+		{
+			var table = fact_schedule.CreateTable();
+			
+			foreach (var row in factScheduleRows)
+			{
+				table.AddFactSchedule(
+					row.DatePart.ScheduleStartDateLocalId, 
+					row.DatePart.ScheduleDateId, 
+					row.PersonPart.PersonId,
+					row.DatePart.IntervalId,
+					row.DatePart.ActivityStartTime,
+					row.TimePart.ScenarioId,
+					row.TimePart.ActivityId,
+					row.TimePart.AbsenceId,
+					row.DatePart.ActivityStartDateId,
+					row.DatePart.ActivityEndDateId,
+					row.DatePart.ActivityEndTime,
+					row.DatePart.ShiftStartDateId,
+					row.DatePart.ShiftStartTime,
+					row.DatePart.ShiftEndDateId,
+					row.DatePart.ShiftEndTime,
+					row.DatePart.ShiftStartIntervalId,
+					row.DatePart.ShiftEndIntervalId,
+					row.TimePart.ShiftCategoryId,
+					row.TimePart.ShiftLengthId,
+					row.TimePart.ScheduledMinutes,
+					row.TimePart.ScheduledAbsenceMinutes,
+					row.TimePart.ScheduledActivityMinutes,
+					row.TimePart.ContractTimeMinutes,
+					row.TimePart.ContractTimeActivityMinutes,
+					row.TimePart.ContractTimeAbsenceMinutes,
+					row.TimePart.WorkTimeMinutes,
+					row.TimePart.WorkTimeActivityMinutes,
+					row.TimePart.WorkTimeAbsenceMinutes,
+					row.TimePart.OverTimeMinutes,
+					row.TimePart.ReadyTimeMinues,
+					row.TimePart.PaidTimeMinutes,
+					row.TimePart.PaidTimeActivityMinutes,
+					row.TimePart.PaidTimeAbsenceMinutes,
+					row.PersonPart.BusinessUnitId,
+					row.TimePart.OverTimeId);
+			}
+
+			return table;
 		}
 
 		public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
