@@ -7,8 +7,11 @@ $(document).ready(function() {
 		var ajaxPostData;
 
 		var ajax = {
-			Ajax: function(options) {
-				ajaxPostData = options.data;
+			Ajax: function (options) {
+				if (options.url === "ShiftExchange/GetAbsence") {
+					options.success( "" );
+				};
+				if (options.url === "ShiftExchange/NewOffer") ajaxPostData = options.data;
 			}
 		};
 

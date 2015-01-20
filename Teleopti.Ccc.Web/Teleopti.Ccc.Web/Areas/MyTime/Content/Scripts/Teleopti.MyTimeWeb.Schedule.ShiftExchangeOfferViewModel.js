@@ -120,7 +120,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		},
 		write: function (date) {
 			self.DateTo(date);
-			self.getAbsence(date.format(self.DateFormat()));
+			self.Absence(null);
 			if (!self.IsUpdating() || (self.IsUpdating() && self.OfferValidTo() >= (moment(date)))) {
 				self.OfferValidTo(moment(date).add('days', -1));
 			}
@@ -166,14 +166,30 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
-		var wishShiftTypeId = self.Toggle31317Enabled() 
+		ajax.Ajax({
+			url: "ShiftExchange/GetAbsence",
+			dataType: "json",
+			type: 'GET',
+			data: {
+				Date: self.DateTo().format(self.DateFormat())
+			},
+			success: function (data, textStatus, jqXHR) {
+				self.Absence(data.PersonAbsences);
+				if (self.IsNotAbsence()) self.saveOfferData();
+			}
+		});
+	};
+
+	self.saveOfferData = function() {
+		var wishShiftTypeId = self.Toggle31317Enabled()
 			? self.WishShiftTypeOption().Id
 			: self.AllShiftTypes()[0].Id;
 
 		ajax.Ajax({
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
-			data: { Date: self.DateTo().format(self.DateFormat()),
+			data: {
+				Date: self.DateTo().format(self.DateFormat()),
 				OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
 				StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
 				EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
@@ -182,10 +198,10 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				WishShiftType: wishShiftTypeId
 			},
 			type: 'POST',
-			success: function (data, textStatus, jqXHR) {
+			success: function(data, textStatus, jqXHR) {
 				doneCallback(data);
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.ErrorMessage(data.Errors.join('</br>'));
@@ -208,21 +224,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 					self.OpenPeriodRelativeEnd(data.OpenPeriodRelativeEnd);
 				}
 				self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
-			}
-		});
-	};
-
-	self.getAbsence = function (date) {
-		ajax.Ajax({
-			url: "ShiftExchange/GetAbsence",
-			dataType: "json",
-			type: 'GET',
-			data: {
-				Date: date
-			},
-			success: function (data, textStatus, jqXHR) {
-				self.Absence(null);
-				self.Absence(data.PersonAbsences);
 			}
 		});
 	};
