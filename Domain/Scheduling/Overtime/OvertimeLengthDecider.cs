@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -21,23 +19,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
-	    private readonly ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
-	    private readonly IOvertimeSkillIntervalDataToSkillIntervalDataMapper _skillIntervalDataMapper; 
 
 
         public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
                                      IOvertimeSkillStaffPeriodToSkillIntervalDataMapper overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
                                      ISchedulingResultStateHolder schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
-                                     IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator,
-									 ISkillIntervalDataOpenHour skillIntervalDataOpenHour,
-									 IOvertimeSkillIntervalDataToSkillIntervalDataMapper skillIntervalDataMapper
+                                     IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator
 			)
         {
             _overtimePeriodValueMapper = overtimePeriodValueMapper;
             _overtimeSkillIntervalDataAggregator = overtimeSkillIntervalDataAggregator;
-	        _skillIntervalDataOpenHour = skillIntervalDataOpenHour;
-	        _skillIntervalDataMapper = skillIntervalDataMapper;
 	        _skillResolutionProvider = skillResolutionProvider;
             _overtimeSkillStaffPeriodToSkillIntervalDataMapper = overtimeSkillStaffPeriodToSkillIntervalDataMapper;
             _overtimeSkillIntervalDataDivider = overtimeSkillIntervalDataDivider;
@@ -60,38 +52,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSkillIntervalDataAggregatedList = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(overtimeSkillIntervalDataList);
 			var mappedAggregatedList = _overtimePeriodValueMapper.Map(overtimeSkillIntervalDataAggregatedList);
 
-			
-			var skillIntervalDataList = 
-				overtimeSkillIntervalDataAggregatedList.Select(i => _skillIntervalDataMapper.Map(i)).ToList();
-
-			var openHoursList = getOpenHours(dateOnly, skillIntervalDataList);
-
-			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay, minimumResolution, onlyAvailableAgents, openHoursList);
+			result = _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, mappedAggregatedList, scheduleDay,
+				minimumResolution, onlyAvailableAgents, overtimeSkillIntervalDataAggregatedList);
 	        return result;
         }
-
-	    private IEnumerable<DateTimePeriod> getOpenHours(DateOnly dateOnly, IList<ISkillIntervalData> skillIntervalDataList)
-	    {
-		    var openHoursList = new List<DateTimePeriod>();
-		    var openHours = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, dateOnly);
-		    if (openHours.HasValue)
-		    {
-			    var period =
-				    new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHours.Value.StartTime).ToUniversalTime(),
-					    dateOnly.Date.ToLocalTime().Add(openHours.Value.EndTime).ToUniversalTime());
-			    openHoursList.Add(period);
-		    }
-		    var nextDayDateOnly = dateOnly.AddDays(1);
-		    var openHoursNextDay = _skillIntervalDataOpenHour.GetOpenHours(skillIntervalDataList, nextDayDateOnly);
-		    if (openHoursNextDay.HasValue)
-		    {
-			    var periodNextDay =
-				    new DateTimePeriod(dateOnly.Date.ToLocalTime().Add(openHoursNextDay.Value.StartTime).ToUniversalTime(),
-					    dateOnly.Date.Add(openHoursNextDay.Value.EndTime).ToUniversalTime());
-			    openHoursList.Add(periodNextDay);
-		    }
-		    return openHoursList;
-	    }
 
 	    private IList<IList<IOvertimeSkillIntervalData>> createOvertimeSkillIntervalDataList(List<ISkill> skills, IList<ISkillDay> skillDays, int minimumResolution)
 	    {

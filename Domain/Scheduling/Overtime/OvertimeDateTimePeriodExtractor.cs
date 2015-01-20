@@ -8,14 +8,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IOvertimeDateTimePeriodExtractor
 	{
-		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod, IEnumerable<DateTimePeriod> openHoursList);
+		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration,
+			IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod,
+			IList<IOvertimeSkillIntervalData> skillIntervalDataList);
 	}
 
 	public class OvertimeDateTimePeriodExtractor : IOvertimeDateTimePeriodExtractor
 	{
-		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration, IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod, IEnumerable<DateTimePeriod> openHoursList)
+		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration,
+			IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod,
+			IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
-			IList<IOvertimeDateTimePeriodHolder>  dateTimePeriodHolders = new List<IOvertimeDateTimePeriodHolder>();
+			IList<IOvertimeDateTimePeriodHolder> dateTimePeriodHolders = new List<IOvertimeDateTimePeriodHolder>();
 			var shiftPeriod = visualLayerCollection.Period().GetValueOrDefault();
 			var shiftStart = shiftPeriod.StartDateTime;
 			var shiftEnd = shiftPeriod.EndDateTime;
@@ -29,20 +33,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				if (duration < overtimeDuration.Minimum) continue;
 
 				var periodBefore = new DateTimePeriod(shiftStart.Add(-duration), shiftStart);
-				var openPeriodBefore = openOvertimePeriod(periodBefore, openHoursList);
+				//var openPeriodBefore = openOvertimePeriod(periodBefore, openHoursList);
 
-				if (openPeriodBefore.HasValue)
+				if (periodBefore.ElapsedTime() >= overtimeDuration.Minimum)
 				{
-					if(openPeriodBefore.Value.ElapsedTime() >= overtimeDuration.Minimum)
+					if (specificPeriod.Contains(periodBefore))
 					{
-						if (specificPeriod.Contains(openPeriodBefore.Value))
-						{
-							var firstLayer = visualLayerCollection.First();
-							var firstLayerDefinitionSet = firstLayer.DefinitionSet;
-							var firstLayerIsAbsence = ((VisualLayer) firstLayer).HighestPriorityAbsence != null;
+						var firstLayer = visualLayerCollection.First();
+						var firstLayerDefinitionSet = firstLayer.DefinitionSet;
+						var firstLayerIsAbsence = ((VisualLayer) firstLayer).HighestPriorityAbsence != null;
 
-							if (!firstLayerIsAbsence &&
-							    (firstLayerDefinitionSet == null || firstLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+						if (!firstLayerIsAbsence &&
+						    (firstLayerDefinitionSet == null || firstLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+						{
+							if (checkIfInsideOpenHour(periodBefore, skillIntervalDataList))
 							{
 								var dateTimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
 								dateTimePeriodHolderBefore.Add(periodBefore);
@@ -53,20 +57,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				}
 
 				var periodAfter = new DateTimePeriod(shiftEnd, shiftEnd.Add(duration));
-				var openPeriodAfter = openOvertimePeriod(periodAfter, openHoursList);
+				//var openPeriodAfter = openOvertimePeriod(periodAfter, openHoursList);
 
-				if (openPeriodAfter.HasValue)
+				if (periodAfter.ElapsedTime() >= overtimeDuration.Minimum)
 				{
-					if (openPeriodAfter.Value.ElapsedTime() >= overtimeDuration.Minimum)
+					if (specificPeriod.Contains(periodAfter))
 					{
-						if (specificPeriod.Contains(openPeriodAfter.Value))
-						{
-							var lastLayer = visualLayerCollection.Last();
-							var lastLayerDefinitionSet = lastLayer.DefinitionSet;
-							var lastLayerIsAbsence = ((VisualLayer) lastLayer).HighestPriorityAbsence != null;
+						var lastLayer = visualLayerCollection.Last();
+						var lastLayerDefinitionSet = lastLayer.DefinitionSet;
+						var lastLayerIsAbsence = ((VisualLayer) lastLayer).HighestPriorityAbsence != null;
 
-							if (!lastLayerIsAbsence &&
-							    (lastLayerDefinitionSet == null || lastLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+						if (!lastLayerIsAbsence &&
+						    (lastLayerDefinitionSet == null || lastLayerDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime))
+						{
+							if (checkIfInsideOpenHour(periodAfter, skillIntervalDataList))
 							{
 								var dateTimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
 								dateTimePeriodHolderAfter.Add(periodAfter);
@@ -74,25 +78,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 							}
 						}
 					}
-				}	
+				}
 			}
 
 			return dateTimePeriodHolders;
 		}
 
-
-
-		private DateTimePeriod? openOvertimePeriod(DateTimePeriod overtimePeriod, IEnumerable<DateTimePeriod> openHoursList)
+		private bool checkIfInsideOpenHour(DateTimePeriod period, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
-			if (openHoursList == null || !openHoursList.Any())
-				return null;
-			foreach (var period in openHoursList)
+			var startOfPeriodToCheck = period.StartDateTime;
+			while (startOfPeriodToCheck < period.EndDateTime)
 			{
-				var intersection = overtimePeriod.Intersection(period);
-				if (intersection.HasValue)
-					return intersection; // enough to return the first found period
+				var found = false;
+				foreach (var overtimeSkillIntervalData in skillIntervalDataList)
+				{
+					if (overtimeSkillIntervalData.Period.Contains(startOfPeriodToCheck))
+					{
+						found = true;
+						break;
+					}
+				}
+				startOfPeriodToCheck = startOfPeriodToCheck.AddMinutes(5);
+
+				if (!found)
+					return false;
 			}
-			return null;
+
+			return true;
 		}
 	}
 }
