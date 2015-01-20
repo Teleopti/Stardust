@@ -4,10 +4,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -18,19 +20,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		private Guid personId;
 		private string correctUserName;
 		private IApplicationUserQuery target;
-
-		[Test]
-		public void ShouldSucceed()
-		{
-			var result = target.FindUserData(correctUserName);
-			result.Success.Should().Be.True();
-		}
+		private TennantSessionManager tennantSessionManager;
 
 		[Test]
 		public void ShouldFindPersonId()
 		{
 			var result = target.FindUserData(correctUserName);
-			result.PersonId.Should().Be.EqualTo(personId);
+			result.PersonInfo.Id.Should().Be.EqualTo(personId);
 		}
 
 		[Test]
@@ -38,14 +34,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			//this will change in the future
 			var result = target.FindUserData(correctUserName);
-			result.Tennant.Should().Be.EqualTo("Teleopti WFM");
+			result.PersonInfo.Tennant.Should().Be.EqualTo("Teleopti WFM");
 		}
 
 		[Test]
 		public void ShouldFindPassword()
 		{
 			var result = target.FindUserData(correctUserName);
-			result.Password.Should().Not.Be.Null();
+			result.PersonInfo.Password.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -62,17 +58,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 
 
 			var result = target.FindUserData(correctUserName);
-			result.LastPasswordChange.Value.Should().Be.IncludedIn(userDetails.LastPasswordChange.AddMinutes(-1), userDetails.LastPasswordChange.AddMinutes(1));
-			result.InvalidAttemptsSequenceStart.Value.Should().Be.IncludedIn(userDetails.InvalidAttemptsSequenceStart.AddMinutes(-1), userDetails.InvalidAttemptsSequenceStart.AddMinutes(1));
-			result.InvalidAttempts.Should().Be.EqualTo(userDetails.InvalidAttempts);
-			result.IsLocked.Should().Be.EqualTo(userDetails.IsLocked);
+			result.PasswordPolicy.LastPasswordChange.Should().Be.IncludedIn(userDetails.LastPasswordChange.AddMinutes(-1), userDetails.LastPasswordChange.AddMinutes(1));
+			result.PasswordPolicy.InvalidAttemptsSequenceStart.Should().Be.IncludedIn(userDetails.InvalidAttemptsSequenceStart.AddMinutes(-1), userDetails.InvalidAttemptsSequenceStart.AddMinutes(1));
+			result.PasswordPolicy.InvalidAttempts.Should().Be.EqualTo(userDetails.InvalidAttempts);
+			result.PasswordPolicy.IsLocked.Should().Be.EqualTo(userDetails.IsLocked);
 		}
 		
 		[Test]
 		public void NonExistingUserShouldFail()
 		{
 			var result = target.FindUserData("incorrectUserName");
-			result.Success.Should().Be.False();
+			result.Should().Be.Null();
 		}
 
 		[Test]
@@ -83,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			PersistAndRemoveFromUnitOfWork(personInDatabase);
 
 			target.FindUserData(correctUserName)
-				.Success.Should().Be.False();
+				.Should().Be.Null();
 		}
 
 		[Test]
@@ -94,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			PersistAndRemoveFromUnitOfWork(personInDatabase);
 
 			target.FindUserData(correctUserName)
-				.Success.Should().Be.False();
+				.Should().Be.Null();
 		}
 
 		[SetUp]
@@ -108,12 +104,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				uow.PersistAll();
 				personId = personInDatabase.Id.Value;
 			}
-			target= new ApplicationUserQuery(() => new TennantDatabaseConnectionFactory(UnitOfWorkFactory.Current.ConnectionString));
+			tennantSessionManager = TennantSessionManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new ApplicationUserQuery(tennantSessionManager);
+			tennantSessionManager.StartTransaction();
 		}
 
 		[TearDown]
 		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
+			tennantSessionManager.EndTransaction();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRepository(uow);

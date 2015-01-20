@@ -206,8 +206,15 @@
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\IApplicationUserQuery.cs" />
-    <Compile Include="MultiTenancy\ITennantDatabaseConnectionFactory.cs" />
-    <Compile Include="MultiTenancy\TennantDatabaseConnectionFactory.cs" />
+    <Compile Include="MultiTenancy\NHibernate\TennantUnitOfWorkAspect.cs" />
+    <Compile Include="MultiTenancy\NHibernate\TennantUnitOfWorkAttribute.cs" />
+    <Compile Include="MultiTenancy\PersonInfo.cs" />
+    <Compile Include="MultiTenancy\NHibernate\ICurrentTennantSession.cs" />
+    <Compile Include="MultiTenancy\NHibernate\ITennantSessionFactory.cs" />
+    <Compile Include="MultiTenancy\NHibernate\PasswordPolicyForUserMapping.cs" />
+    <Compile Include="MultiTenancy\NHibernate\PersonInfoMapping.cs" />
+    <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />
+    <Compile Include="MultiTenancy\NHibernate\TennantSessionManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />

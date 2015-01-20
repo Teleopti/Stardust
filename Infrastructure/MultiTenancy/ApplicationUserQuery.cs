@@ -1,56 +1,47 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class ApplicationUserQuery : IApplicationUserQuery
 	{
-		//remove "func" when moving out rest of code
-		private readonly Func<ITennantDatabaseConnectionFactory> _tennantDatabaseConnectionFactory;
+		private readonly Func<ICurrentTennantSession> _currentTennantSession;
 
-		private const string sql = @"
-select auth.Person, auth.Password, ud.LastPasswordChange, ud.InvalidAttemptsSequenceStart, ud.InvalidAttempts
-from ApplicationAuthenticationInfo auth
-inner join Person p on p.Id=auth.Person
-left outer join UserDetail ud on p.Id=ud.Person
-where ApplicationLogonName=@userName
-and (p.TerminalDate is null or p.TerminalDate>getdate())";
+		private const string hqlPersonInfo = @"
+select pi from PersonInfo pi
+where pi.applicationLogonName=:userName
+and (pi.terminalDate is null or pi.terminalDate>getdate())
+";
+		private const string hqlPasswordPolicy = @"
+select pp from PasswordPolicyForUser pp
+where personInfo=:personInfo
+";
 
-		public ApplicationUserQuery(Func<ITennantDatabaseConnectionFactory> tennantDatabaseConnectionFactory)
+		//remove "func" when we later move away from list of datasources
+		public ApplicationUserQuery(Func<ICurrentTennantSession> currentTennantSession)
 		{
-			_tennantDatabaseConnectionFactory = tennantDatabaseConnectionFactory;
+			_currentTennantSession = currentTennantSession;
 		}
 
 		public ApplicationUserQueryResult FindUserData(string userName)
 		{
-			using (var conn = _tennantDatabaseConnectionFactory().CreateConnection())
+			var session = _currentTennantSession().Session();
+			var readPersonInfo = session.CreateQuery(hqlPersonInfo)
+				.SetString("userName", userName)
+				.UniqueResult<PersonInfo>();
+			if (readPersonInfo == null)
 			{
-				using (var cmd = new SqlCommand(sql, conn))
-				{
-					cmd.Parameters.Add(new SqlParameter("@userName", userName));
-					using (var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection | CommandBehavior.SingleResult))
-					{
-						if (reader.HasRows)
-						{
-							reader.Read();
-							return new ApplicationUserQueryResult
-							{
-								Success = true,
-								PersonId = reader.GetGuid(reader.GetOrdinal("Person")),
-								Tennant = "Teleopti WFM", //will be changed and read from db later
-								Password = reader.GetString(reader.GetOrdinal("Password")),
-								LastPasswordChange = reader.IsDBNull(reader.GetOrdinal("LastPasswordChange")) ? 
-										(DateTime?)null : new DateTime(reader.GetDateTime(reader.GetOrdinal("LastPasswordChange")).Ticks, DateTimeKind.Utc),
-								InvalidAttemptsSequenceStart = reader.IsDBNull(reader.GetOrdinal("InvalidAttemptsSequenceStart")) ? 
-										(DateTime?)null : new DateTime(reader.GetDateTime(reader.GetOrdinal("InvalidAttemptsSequenceStart")).Ticks, DateTimeKind.Utc),
-								InvalidAttempts = reader.IsDBNull(reader.GetOrdinal("InvalidAttempts")) ? 0 : reader.GetInt32(reader.GetOrdinal("InvalidAttempts"))
-							};
-						}
-						return new ApplicationUserQueryResult { Success = false };
-					}
-				}
+				return null;
 			}
+			var readPasswordPolicy = session.CreateQuery(hqlPasswordPolicy)
+				.SetEntity("personInfo", readPersonInfo)
+				.UniqueResult<PasswordPolicyForUser>();
+			var ret = new ApplicationUserQueryResult
+			{
+				PersonInfo = readPersonInfo,
+				PasswordPolicy = readPasswordPolicy
+			};
+			return ret;
 		}
 	}
 }

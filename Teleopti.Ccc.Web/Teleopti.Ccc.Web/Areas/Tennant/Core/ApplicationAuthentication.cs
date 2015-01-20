@@ -1,5 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
@@ -23,22 +23,22 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			if (foundUser == null)
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
-			if (!_passwordVerifier.Check(password, foundUser.Password))
+			if (!_passwordVerifier.Check(password, foundUser.PersonInfo.Password))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
-			if (foundUser.IsLocked)
+			if (foundUser.PasswordPolicy.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
 			string passwordPolicyFailureReason;
-			if (!_passwordPolicyCheck.Verify(foundUser.InvalidAttempts, foundUser.InvalidAttemptsSequenceStart, foundUser.LastPasswordChange, out passwordPolicyFailureReason))
+			if (!_passwordPolicyCheck.Verify(foundUser.PasswordPolicy.InvalidAttempts, foundUser.PasswordPolicy.InvalidAttemptsSequenceStart, foundUser.PasswordPolicy.LastPasswordChange, out passwordPolicyFailureReason))
 				return createFailingResult(passwordPolicyFailureReason);
 	
 
 			return new ApplicationAuthenticationResult
 			{
 				Success = true,
-				PersonId = foundUser.PersonId,
-				Tennant = foundUser.Tennant
+				PersonId = foundUser.PersonInfo.Id,
+				Tennant = foundUser.PersonInfo.Tennant
 			};
 		}
 

@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant
@@ -15,7 +16,8 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 		}
 
 		[HttpGet]
-		public JsonResult ApplicationLogon(string userName, string password)
+		[TennantUnitOfWork]
+		public virtual JsonResult ApplicationLogon(string userName, string password)
 		{
 			var res = _applicationAuthentication.Logon(userName, password);
 			// for now we don't use the statuscode

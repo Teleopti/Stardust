@@ -2,6 +2,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
@@ -17,14 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.RegisterType<ConvertDataToOldUserDetailDomain>().As<IConvertDataToOldUserDetailDomain>().SingleInstance();
 			builder.RegisterType<PasswordVerifier>().As<IPasswordVerifier>().SingleInstance();
-			//ta första appdb för nu
+			//ta första appdb för nu!
 			builder.Register(c =>
 			{
 				var allDataSources = c.Resolve<IAvailableDataSourcesProvider>().AvailableDataSources();
-				return new TennantDatabaseConnectionFactory(allDataSources.First().Application.ConnectionString);
+				return TennantSessionManager.CreateInstanceForWeb(allDataSources.First().Application.ConnectionString);
 			})
-				.As<ITennantDatabaseConnectionFactory>()
+				.AsImplementedInterfaces()
 				.SingleInstance();
+			builder.RegisterType<TennantUnitOfWorkAspect>().SingleInstance();
 		}
 	}
 }
