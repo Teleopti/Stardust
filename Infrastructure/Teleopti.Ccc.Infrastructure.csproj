@@ -239,6 +239,7 @@
     <Compile Include="Repositories\LogObjectDetail.cs" />
     <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
     <Compile Include="Rta\ActualAgentStateExtension.cs" />
     <Compile Include="Rta\DatabaseConnectionFactory.cs" />
     <Compile Include="Rta\DatabaseConnectionStringHandler.cs" />

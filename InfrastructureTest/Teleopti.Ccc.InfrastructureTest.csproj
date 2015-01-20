@@ -209,6 +209,7 @@
     <Compile Include="Repositories\ReadModelTestAttribute.cs" />
     <Compile Include="Repositories\SiteAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersisterTest.cs" />
+    <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\DatabaseWriterTest.cs" />

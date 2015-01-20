@@ -373,6 +373,7 @@
     <Compile Include="Common\PersonIsActiveSpecification.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
+    <Compile Include="Common\TeamGamificationSetting.cs" />
     <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
     <Compile Include="Common\Time\MutableNow.cs" />
@@ -710,6 +711,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="PreserveStack.cs" />
+    <Compile Include="Repositories\ITeamGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
@@ -2246,6 +2248,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\GamificationSetting.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\TeamGamificationSetting.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />
