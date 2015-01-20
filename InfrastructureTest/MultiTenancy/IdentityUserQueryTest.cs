@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 	{
 		private Guid personId;
 		private string correctIdentity;
-		private IApplicationUserQuery target;
+		private IIdentityUserQuery target;
 
 		[Test]
 		public void ShouldSucceed()
