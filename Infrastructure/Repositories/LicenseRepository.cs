@@ -105,7 +105,7 @@ where (p.TerminalDate is null or p.TerminalDate>=GETDATE())
 and p.IsDeleted = 0 
 and p.id in(SELECT distinct Person from PersonAssignment pa inner join Scenario s ON pa.Scenario = s.Id
 where s.DefaultScenario = 1 AND pa.ShiftCategory is not null)
-GROUP BY b.Name, FirstName, LastName, Email, EmploymentNumber, p.TerminalDate
+GROUP BY b.Name, FirstName, LastName, Email, EmploymentNumber, p.TerminalDate, p.Id
 ORDER BY LastName, FirstName";
 
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
