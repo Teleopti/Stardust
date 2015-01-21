@@ -1,8 +1,6 @@
-﻿using System.Web.Script.Serialization;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Areas.Tennant;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -30,10 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_identityAuthentication = identityAuthentication;
 		}
 
+		[TennantUnitOfWork]
 		public AuthenticateResult AuthenticateWindowsUser(string dataSourceName)
 		{
 			var winAccount = _tokenIdentityProvider.RetrieveToken();
-			var result = _identityAuthentication.Logon(winAccount.UserIdentifier)
+			var result = _identityAuthentication.Logon(winAccount.UserIdentifier);
 			if (result.Success)
 			{
 				IDataSource dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
@@ -66,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			return null;
 		}
 
+		[TennantUnitOfWork]
 		public AuthenticateResult AuthenticateApplicationUser(string dataSourceName, string userName, string password)
 		{
 			var result = _applicationAuthentication.Logon(userName, password);
